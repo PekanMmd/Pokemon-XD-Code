@@ -1,18 +1,15 @@
 //
-//  XGStringTableReference.swift
-//  XG Tool
+//  PBRStringTable.swift
+//  XGCommandLineTools
 //
-//  Created by The Steez on 19/05/2015.
-//  Copyright (c) 2015 Ovation International. All rights reserved.
+//  Created by The Steez on 05/03/2016.
+//  Copyright © 2016 Ovation International. All rights reserved.
 //
 
 import Foundation
 
-let kNumberOfStringsOffset = 0x04
-let kEndOfHeader		   = 0x10
+class PBRStringTable: NSObject {
 
-class XGStringTable: NSObject, XGDictionaryRepresentable {
-	
 	var file = XGFiles.nameAndFolder("", .Documents)
 	var startOffset = 0x0
 	var stringTable = XGMutableData()
@@ -20,7 +17,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 	var numberOfEntries : Int {
 		get {
-			return stringTable.get2BytesAtOffset(kNumberOfStringsOffset)
+			return Int(stringTable.get4BytesAtOffset(kNumberOfStringsOffset))
 		}
 	}
 	
@@ -53,52 +50,8 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	class func common_rel() -> XGStringTable {
-		
-		return XGStringTable(file: .common_rel, startOffset: 0x04E274, fileSize: 0x0DC70)
-		
-	}
-	
-	class func tableres2() -> XGStringTable {
-		
-		return XGStringTable(file: .tableres2, startOffset: 0x048F88, fileSize: 0x16E84)
-		
-	}
-	
-	class func dol() -> XGStringTable {
-		
-		return  XGStringTable(file: .dol, startOffset: 0x374FC0, fileSize: 0x178BE)
-		
-	}
-	
-	class func dol2() -> XGStringTable {
-		
-		return  XGStringTable(file: .dol, startOffset: 0x38c7c4, fileSize: 0x41c)
-		
-	}
-	
-	class func common_relOriginal() -> XGStringTable {
-		
-		return XGStringTable(file: .original(.common_rel), startOffset: 0x04E274, fileSize: 0x0DC70)
-		
-	}
-	
-	class func tableres2Original() -> XGStringTable {
-		
-		return XGStringTable(file: .original(.tableres2), startOffset: 0x048F88, fileSize: 0x16E84)
-		
-	}
-	
-	class func dolOriginal() -> XGStringTable {
-		
-		return  XGStringTable(file: .original(.dol), startOffset: 0x374FC0, fileSize: 0x178BE)
-		
-	}
-	
-	class func dol2Original() -> XGStringTable {
-		
-		return  XGStringTable(file: .original(.dol), startOffset: 0x38c7c4, fileSize: 0x41c)
-		
+	class func common() -> PBRStringTable {
+		return PBRStringTable(file: XGFiles.stringTable("common.msg"), startOffset: 0, fileSize: 0xb605e)
 	}
 	
 	init(file: XGFiles, startOffset: Int, fileSize: Int) {
@@ -128,11 +81,9 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 		var currentOffset = kEndOfHeader
 		
-		for _ in 0 ..< numberOfEntries {
+		for i in 0 ..< numberOfEntries {
 			
-			let id = stringTable.get4BytesAtOffset(currentOffset)
-			
-			currentOffset += 4
+			let id = i + 1
 			
 			let offset = stringTable.get4BytesAtOffset(currentOffset)
 			
@@ -170,9 +121,80 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
+	func replaceString(_ string: XGString, alert: Bool) -> Bool {
+		
+		let copyStream = self.stringTable.getCharStreamFromOffset(0, length: self.stringOffsets[string.id]!)
+		
+		let dataCopy = XGMutableData(byteStream: copyStream, file: self.file)
+		
+		let oldText = self.stringWithID(string.id)!
+		let difference = string.length - oldText.length
+		
+		if difference <= self.extraCharacters {
+			
+			let stream = string.byteStream
+			
+			dataCopy.appendBytes(stream)
+			
+			
+			let oldEnd = self.endOffsetForStringId(string.id)
+			
+			let newEnd = stringTable.getCharStreamFromOffset(oldEnd, length: fileSize - oldEnd)
+			
+			let endData = XGMutableData(byteStream: newEnd, file: self.file)
+			
+			dataCopy.appendBytes(endData.charStream)
+			
+			if string.length > oldText.length {
+				
+				for _ in 0 ..< difference {
+					
+					let currentOff = dataCopy.length - 1
+					let range = NSMakeRange(currentOff, 1)
+					
+					dataCopy.deleteBytesInRange(range)
+					
+				}
+				
+				self.increaseOffsetsAfter(stringOffsets[string.id]!, byCharacters: difference)
+			}
+			
+			if string.length < oldText.length {
+				
+				let difference = oldText.length - string.length
+				var emptyByte : UInt8 = 0x0
+				
+				for _ in 0 ..< difference {
+					
+					dataCopy.data.append(&emptyByte, length: 1)
+					
+				}
+				
+				self.decreaseOffsetsAfter(stringOffsets[string.id]!, byCharacters: difference)
+			}
+			
+			self.stringTable = dataCopy
+			
+			self.updateOffsets()
+			self.save()
+			
+			if alert {
+				//				XGAlertView(title: "String Replacement", message: "The string replacement was successful.", doneButtonTitle: "Sweet", otherButtonTitles: nil, buttonAction: nil).show()
+			}
+			
+			return true
+			
+		} else {
+			if alert {
+				//				XGAlertView(title: "String Replacement", message: "The new string was too long. String replacement was aborted.", doneButtonTitle: "Cool", otherButtonTitles: nil, buttonAction: nil).show()
+			}
+		}
+		
+		return false
+	}
 	
 	
-	func decreaseOffsetsAfter(_ offset: Int, byCharacters characters: Int) {
+	fileprivate func decreaseOffsetsAfter(_ offset: Int, byCharacters characters: Int) {
 		
 		for (sid, off) in self.stringOffsets {
 			
@@ -183,7 +205,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	func increaseOffsetsAfter(_ offset: Int, byCharacters characters: Int) {
+	fileprivate func increaseOffsetsAfter(_ offset: Int, byCharacters characters: Int) {
 		
 		for (sid, off) in self.stringOffsets {
 			
@@ -216,7 +238,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		var currChar = 0x0
 		var nextChar = 0x1
 		
-		let string = XGString(string: "", file: self.file, sid: 0)
+		var string = XGString(string: "", file: self.file, sid: 0)
 		
 		while (nextChar != 0x00) {
 			
@@ -233,18 +255,31 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 			// It is to be hoped that we'll be able to figure out what they all mean eventually.
 			if currChar == 0xFFFF {
 				
-				let sp = XGSpecialCharacters(rawValue: stringTable.getByteAtOffset(currentOffset))!
-				currentOffset += 1
+				let sp = stringTable.get2BytesAtOffset(currentOffset)
 				
-				let extra = sp.extraBytes
+				if sp == 0xFFFF {
+					return string
+				}
 				
-				let stream = stringTable.getByteStreamFromOffset(currentOffset, length: extra)
-				currentOffset += extra
+				if sp == 0xFFFE {
+					string = XGString(string: (string.string + "{newline}"), file: self.file, sid: 0)
+				} else {
+					string = XGString(string: (string.string + String(format: "{%x}", sp)), file: self.file, sid: 0)
+				}
 				
-				string.append(.special(sp, stream))
+				currentOffset += 2
+//				let sp = XGSpecialCharacters(rawValue: stringTable.getByteAtOffset(currentOffset))!
+//				currentOffset++
+//				
+//				let extra = sp.extraBytes
+//				
+//				let stream = stringTable.getByteStreamFromOffset(currentOffset, length: extra)
+//				currentOffset += extra
+//				
+//				string.append(.Special(sp, stream))
 				
 			} else {
-			// This is a regular character so read normally.
+				// This is a regular character so read normally.
 				
 				string.append(.unicode(currChar))
 			}
@@ -281,7 +316,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 	func containsStringWithId(_ stringID: Int) -> Bool {
 		
-			return stringOffsets.index(forKey: stringID) != nil
+		return stringOffsets.index(forKey: stringID) != nil
 		
 	}
 	
@@ -362,16 +397,12 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 			
 		}
 		
+		
 		self.save()
+		
 		print("Purged Table")
 		
 		
-	}
-	
-	func printAllStrings() {
-		for string in self.allStrings() {
-			print(string.string,"\n")
-		}
 	}
 	
 	class func jsonFromTrainerNames() {
@@ -438,63 +469,8 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 			
 		}
 		
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			let strings = self.allStrings()
-			
-			var strArray = [ [String : String] ]()
-			
-			for str in strings {
-				
-				strArray.append(["\(str.id)" : str.string])
-				
-			}
-			
-			var dictRep = [String : AnyObject]()
-			
-			dictRep["fileName"] = self.file.fileName as AnyObject
-			dictRep["numberOfStrings"] = self.numberOfEntries as AnyObject
-			dictRep["spareCharacters"] = self.extraCharacters as AnyObject?
-			
-			return ["metadata" : dictRep as AnyObject, "strings" : strArray as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			let strings = self.allStrings()
-			
-			var strArray = [ [String : String] ]()
-			
-			for str in strings {
-				
-				strArray.append([String(format: "0x%x", str.id) : str.string])
-				
-			}
-			
-			var dictRep = [String : AnyObject]()
-			
-			dictRep["fileName"] = self.file.fileName as AnyObject
-			dictRep["numberOfStrings"] = self.numberOfEntries as AnyObject
-			dictRep["spareCharacters"] = self.extraCharacters as AnyObject?
-			
-			let rep = [ ["metadata" : dictRep as AnyObject], ["strings" : strArray as AnyObject] ]
-			
-			return [self.file.fileName : rep as AnyObject]
-		}
+		
+		
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-
-

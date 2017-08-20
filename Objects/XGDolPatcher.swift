@@ -39,31 +39,66 @@ let kNameRaterOffset1 = 0x149DE4
 let kNameRaterOffset2 = 0x149DE8
 let kNameRaterOffset3 = 0x1B964C
 
-//let kNameRaterInstruction1 = kNopInstruction
-let kNameRaterInstruction2 : UInt32 = 38600001
-let kNameRaterInstruction3 : UInt32 = 38600000
 
-let kUnlimitedTutorMovesBranchOffset	= 0x0B8590
-let kUnlimitedTutorMovesInjectionOffset = 0x2C55B4
-let kTutorMovesBranchInstruction		: UInt32 = 0x4820D025
-let kTutorMovesOriginalInstruction		: UInt32 = 0x7F03C378
+// let kNameRaterInstruction1 = kNopInstruction
+let kNameRaterInstruction2 : UInt32 = 0x38600001
+let kNameRaterInstruction3 : UInt32 = 0x38600000
+
+// version 1
+let kUnlimitedTutorMovesJumpInstruction = 0x0C
+let kUnlimitedTutorMovesJumpOffsets		= [0x02DC, 0x0290]
+
+// version 2
+let kUnlimitedTutorMovesJumpInstructions = [0x006B,0x007D]
+let kUnlimitedTutorMovesJumpOffsets2	 = [0x02B6, 0x0302]
 
 let kShinyCalcPIDOffset1				= 0x147EE0
 let kShinyCalcChanceOffset1				= 0x147EE6
 let kShinyCalcPIDOffset2				= 0x1410CC
 let kShinyCalcChanceOffset2				= 0x1410D2
-let kShinyCalcRerollOffset1				= 0x13E5AC
-let kShinyCalcRerollOffset2				= 0x1f7900
 
 let kShinyCalcOriginalPIDInstruction		: UInt32 = 0x7CA30278
 let kShinyCalcOriginalChanceInstruction		= 0x0008
-let kShinyCalcOriginalRerollInstruction1	: UInt32 = 0x4181ff30
-let kShinyCalcOriginalRerollInstruction2	: UInt32 = 0x57a0063E
 
 let kShinyCalcNewPIDInstruction				: UInt32 = 0x38600000
-//let kShinyCalcRerollInstruction1			= kNopInstruction
-let kShinyCalcRerollInstruction2			: UInt32 = 0x5460063E
 
+let kNumberOfDolPatches = 12
+
+enum XGDolPatches : Int {
+	
+	case physicalSpecialSplitApply = 0
+	case physicalSpecialSplitRemove
+	case type9IndependentApply
+	case betaStartersApply
+	case betaStartersRemove
+	case renameAllPokemonApply
+	case unlimitedTutorMovesApply
+	case shinyChanceEditingApply
+	case shinyChanceEditingRemove
+	case zeroForeignStringTables
+	case decapitaliseNames
+	case tradeEvolutions
+	
+	var name : String {
+		get {
+			switch self {
+				case .physicalSpecialSplitApply : return "Apply the gen IV physical/special split."
+				case .physicalSpecialSplitRemove : return "Remove the physical/special split."
+				case .type9IndependentApply : return "Removes the dependecy on the ??? type allowing 1 additional type."
+				case .betaStartersApply : return "Allows the player to start with 2 pokemon."
+				case .betaStartersRemove : return "Revert to starting with 1 pokemon."
+				case .renameAllPokemonApply	: return "Allows the name rater to rename all pokemon - Crashes parts of game"
+				case .unlimitedTutorMovesApply : return "Allows the move tutor moves to be relearned."
+				case .shinyChanceEditingApply : return "Removes shiny purification glitch by generating based on a fixed trainer ID."
+				case .shinyChanceEditingRemove : return "shininess will be determined by trainer ID as usual."
+				case .zeroForeignStringTables : return "Foreign string tables will be zeroed out for smaller compressed sizes."
+				case .decapitaliseNames : return "Decapitalises a lot of text."
+				case .tradeEvolutions : return "Trade Evolutions become level 40"
+			}
+		}
+	}
+	
+}
 
 
 class XGDolPatcher: NSObject {
@@ -72,10 +107,10 @@ class XGDolPatcher: NSObject {
 	
 	class func isClassSplitImplemented() -> Bool {
 		
-		var dol = XGFiles.Dol.data
+		let dol = XGFiles.dol.data
 		
 		for offset in kClassPatchOffsets {
-			var machineInstruction = dol.get4BytesAtOffset(offset)
+			let machineInstruction = dol.get4BytesAtOffset(offset)
 			
 			if machineInstruction == kNopInstruction {
 				return true
@@ -88,7 +123,7 @@ class XGDolPatcher: NSObject {
 	
 	class func applyPhysicalSpecialSplitPatch() {
 		
-		var dol = XGFiles.Dol.data
+		let dol = XGFiles.dol.data
 		
 		for offset in kClassPatchOffsets {
 			
@@ -106,7 +141,7 @@ class XGDolPatcher: NSObject {
 	
 	class func removePhysicalSpecialSplitPatch() {
 		
-		var dol = XGFiles.Dol.data
+		let dol = XGFiles.dol.data
 		
 		for offset in kClassPatchOffsets {
 			
@@ -130,18 +165,19 @@ class XGDolPatcher: NSObject {
 	//Allows the safe changing of type 9 (?) to another type, e.g. fairy.
 	
 	class func isType9Independent() -> Bool {
-		var dol = XGFiles.Dol.data
+		let dol = XGFiles.dol.data
 		return dol.get4BytesAtOffset(0x2C55B0) == kBranchInstruction9
 	}
 	
 	class func removeType9Dependencies() {
 		
-		var dol = XGFiles.Dol.data
+		let dol = XGFiles.dol.data
 		
 		dol.replace4BytesAtOffset(0x2C55B0, withBytes: kBranchInstruction9)
+		dol.replace4BytesAtOffset(0x031230, withBytes: 0x3B400000)
 		
 		
-		var nopOffsets = [0x2C59FC, 0x2C5D8C, 0x2C8870, 0x2C895C]
+		let nopOffsets = [0x2C59FC, 0x2C5D8C, 0x2C8870, 0x2C895C]
 		
 		for offset in nopOffsets {
 			dol.replace4BytesAtOffset(offset, withBytes: kNopInstruction)
@@ -154,17 +190,17 @@ class XGDolPatcher: NSObject {
 	// Changes the starters from eevee to the beta jolteon and vaporeon which can be edited.
 	
 	class func areBetaStartersEnabled() -> Bool {
-		var dol = XGFiles.Dol.data
+		let dol = XGFiles.dol.data
 		return dol.get4BytesAtOffset(kBetaStartersFirstOffset) == kBetaStartersInstruction1
 	}
 	
 	class func enableBetaStarters() {
 		
-		var dol = XGFiles.Dol.data
+		let dol = XGFiles.dol.data
 		
 		let instructions = [kBetaStartersInstruction1, kBetaStartersInstruction2, kBetaStartersInstruction3]
 		
-		for var i = 0; i < 3; i++ {
+		for i in 0 ..< 3 {
 			let offset = i * 4
 			dol.replace4BytesAtOffset(kBetaStartersFirstOffset + offset, withBytes: instructions[i])
 		}
@@ -174,11 +210,11 @@ class XGDolPatcher: NSObject {
 	
 	class func disableBetaStarters() {
 		
-		var dol = XGFiles.Dol.data
+		let dol = XGFiles.dol.data
 		
 		let instructions = [kOriginalStartersInstruction1, kOriginalStartersInstruction2, kOriginalStartersInstruction3]
 		
-		for var i = 0; i < 3; i++ {
+		for i in 0 ..< 3 {
 			let offset = i * 4
 			dol.replace4BytesAtOffset(kBetaStartersFirstOffset + offset, withBytes: instructions[i])
 		}
@@ -186,96 +222,77 @@ class XGDolPatcher: NSObject {
 		dol.save()
 	}
 	
+	// Clashes with move tutor somehow
 	// Allows the name rater to nickname any pokemon
 	
-	class func canRenameAnyPokemon() -> Bool {
-		var dol = XGFiles.Dol.data
-		return dol.get4BytesAtOffset(kNameRaterOffset1) == kNopInstruction
-	}
-	
+//	class func canRenameAnyPokemon() -> Bool {
+//		let dol = XGFiles.Dol.data
+//		return dol.get4BytesAtOffset(kNameRaterOffset1) == kNopInstruction
+//	}
+//	
 	class func allowRenamingAnyPokemon() {
-		var dol = XGFiles.Dol.data
-		
-		dol.replace4BytesAtOffset(kNameRaterOffset1, withBytes: kNopInstruction)
-		dol.replace4BytesAtOffset(kNameRaterOffset2, withBytes: kNameRaterInstruction2)
-		dol.replace4BytesAtOffset(kNameRaterOffset3, withBytes: kNameRaterInstruction3)
-		
-		dol.save()
+//		let dol = XGFiles.Dol.data
+//		
+//		dol.replace4BytesAtOffset(kNameRaterOffset1, withBytes: kNopInstruction)
+//		dol.replace4BytesAtOffset(kNameRaterOffset2, withBytes: kNameRaterInstruction2)
+//		dol.replace4BytesAtOffset(kNameRaterOffset3, withBytes: kNameRaterInstruction3)
+//		
+//		dol.save()
 	}
 	
-	
-	// Allows Tutor Moves to be learned as many times as you like.
-	
-	class func areUnlimitedTutorsImplemented() -> Bool {
-		var dol = XGFiles.Dol.data
-		return dol.get4BytesAtOffset(kUnlimitedTutorMovesBranchOffset) == kTutorMovesBranchInstruction
-	}
 	
 	class func implementUnlimitedTutors() {
-		var dol = XGFiles.Dol.data
 		
-		dol.replace4BytesAtOffset(kUnlimitedTutorMovesBranchOffset, withBytes: kTutorMovesBranchInstruction)
+		let script = XGFiles.script("M3_cave_1F_2.scd").data
+//		for i in [0,1] {
+//			script.replaceByteAtOffset(kUnlimitedTutorMovesJumpOffsets[i], withByte: kUnlimitedTutorMovesJumpInstruction)
+//			
+//		}
 		
-		let instructions : [UInt32] = [0x806DB8D8, 0x28030000, 0x41820014, 0x3C630001, 0xA0030922, 0x7000F000, 0xB0030922, 0x7F03C378, 0x60000000, 0x4E800020]
-		
-		for var i = 0; i < instructions.count; i++ {
-			var value = instructions[i]
-			dol.data.appendBytes(&value, length: 4)
+		for i in [0,1] {
+			script.replace2BytesAtOffset(kUnlimitedTutorMovesJumpOffsets2[i], withBytes: kUnlimitedTutorMovesJumpInstructions[i])
 		}
 		
-		dol.save()
-	}
-	
-	class func oneTimeTutorMoves() {
-		if !areUnlimitedTutorsImplemented() {
-			return
-		}
-		var dol = XGFiles.Dol.data
-		dol.replace4BytesAtOffset(kUnlimitedTutorMovesBranchOffset, withBytes: kTutorMovesOriginalInstruction)
-		dol.deleteBytesInRange(NSMakeRange(kUnlimitedTutorMovesInjectionOffset, 40))
+		script.save()
 	}
 	
 	// Used to change the probability of finding shinies and allows them to be generated decently.
 	
-	func isShinyLockRemoved() -> Bool {
-		var dol = XGFiles.Dol.data
-		return dol.get4BytesAtOffset(kShinyCalcRerollOffset1) == kNopInstruction
-	}
-	
-	func removeShinyLock() {
-		var dol = XGFiles.Dol.data
+	class func removeShinyLock() {
+		let dol = XGFiles.dol.data
 		
-		dol.replace4BytesAtOffset(kShinyCalcRerollOffset1, withBytes: kNopInstruction)
-		dol.replace4BytesAtOffset(kShinyCalcRerollOffset2, withBytes: kShinyCalcRerollInstruction2)
 		dol.replace4BytesAtOffset(kShinyCalcPIDOffset1, withBytes: kShinyCalcNewPIDInstruction)
 		dol.replace4BytesAtOffset(kShinyCalcPIDOffset2, withBytes: kShinyCalcNewPIDInstruction)
 		
 		dol.save()
 	}
 	
-	func placeShinyLock() {
-		var dol = XGFiles.Dol.data
+	class func placeShinyLock() {
+		let dol = XGFiles.dol.data
 		
-		dol.replace4BytesAtOffset(kShinyCalcRerollOffset1, withBytes: kShinyCalcOriginalRerollInstruction1)
-		dol.replace4BytesAtOffset(kShinyCalcRerollOffset2, withBytes: kShinyCalcOriginalRerollInstruction2)
 		dol.replace4BytesAtOffset(kShinyCalcPIDOffset1, withBytes: kShinyCalcOriginalPIDInstruction)
 		dol.replace4BytesAtOffset(kShinyCalcPIDOffset2, withBytes: kShinyCalcOriginalPIDInstruction)
 		
 		dol.save()
 	}
 	
-	func getShinyChance() -> Float {
-		var dol = XGFiles.Dol.data
+	class func getShinyChance() -> Float {
+		let dol = XGFiles.dol.data
 		
-		var val = Float(dol.get2BytesAtOffset(kShinyCalcChanceOffset1))
-		return val / 0xFFFF
+		let val = Float(dol.get2BytesAtOffset(kShinyCalcChanceOffset1))
+		return val / 0xFFFF * 100
 		
 	}
 	
-	func changeShinyChance(newValue: Float) {
+	class func changeShinyChancePercentage(_ newValue: Float) {
 		// Input the shiny chance as a percentage
 		
-		var dol = XGFiles.Dol.data
+		guard newValue < 50 else {
+			print("Shiny value can't be more than 50 because the number will be treated as negative")
+			return
+		}
+		
+		let dol = XGFiles.dol.data
 		
 		var val = Int(newValue * 0xFFFF) / 100
 		
@@ -291,10 +308,96 @@ class XGDolPatcher: NSObject {
 		dol.replace2BytesAtOffset(kShinyCalcChanceOffset2, withBytes: val)
 		
 		dol.save()
+		
+//		XGAlertView(title: "Patch Complete", message: "The Patch has been applied", doneButtonTitle: "Swag", otherButtonTitles: nil, buttonAction: nil).show()
+	}
+	
+	class func zeroForeignStringTables() {
+		
+//		var data = XGFiles.Common_rel.data
+		
+		//		let tableOffsetsAndSizes = [(0x9534E,0xD317)]
+		let tableOffsetsAndSizes = [(0x7AAFC,0xD484), (0x87F80,0xD3BC), (0x9533C,0xD334), (0x6D874,0xD288) ]
+		
+		for i in 0 ..< tableOffsetsAndSizes.count {
+			XGStringTable(file: .common_rel, startOffset: tableOffsetsAndSizes[i].0, fileSize: tableOffsetsAndSizes[i].1).purge()
+		}
+		
+		
+	}
+	
+	class func decapitalise() {
+		
+		for i in 0 ..< kNumberOfMoves {
+			let name = XGMoves.move(i).name
+			name.duplicateWithString(name.string.capitalized).replace()
+		}
+		
+		for i in 0 ..< kNumberOfItems {
+			let name = XGItems.item(i).name
+			name.duplicateWithString(name.string.capitalized).replace()
+		}
+		
+		for i in 0 ..< kNumberOfPokemon {
+			let name = XGPokemon.pokemon(i).name
+			name.duplicateWithString(name.string.capitalized).replace()
+		}
+		
+		for i in 0 ..< kNumberOfTrainerClasses {
+			let name = XGTrainerClasses(rawValue: i)!.name
+			name.duplicateWithString(name.string.capitalized).replace()
+		}
+		
+		for i in 0 ..< kNumberOfAbilities {
+			let name = XGAbilities.ability(i).name
+			name.duplicateWithString(name.string.capitalized).replace()
+		}
+		
+		
+	}
+	
+	class func removeTradeEvolutions() {
+		
+		for i in 0 ..< kNumberOfPokemon {
+			
+			let stats = XGPokemonStats(index: i)
+			
+			for j in 0 ..< kNumberOfEvolutions {
+				if (stats.evolutions[j].evolutionMethod == XGEvolutionMethods.trade) || (stats.evolutions[j].evolutionMethod == XGEvolutionMethods.tradeWithItem) {
+					stats.evolutions[j].evolutionMethod = .levelUp
+					stats.evolutions[j].condition = 40
+					stats.save()
+				}
+			}
+			
+		}
+		
 	}
 	
 	
-
+	class func applyPatch(_ patch: XGDolPatches) {
+		
+		switch patch {
+			case .betaStartersApply				: XGDolPatcher.enableBetaStarters()
+			case .betaStartersRemove			: XGDolPatcher.disableBetaStarters()
+			case .physicalSpecialSplitApply		: XGDolPatcher.applyPhysicalSpecialSplitPatch()
+			case .physicalSpecialSplitRemove	: XGDolPatcher.removePhysicalSpecialSplitPatch()
+			case .renameAllPokemonApply			: XGDolPatcher.allowRenamingAnyPokemon()
+			case .shinyChanceEditingApply		: XGDolPatcher.removeShinyLock()
+			case .shinyChanceEditingRemove		: XGDolPatcher.placeShinyLock()
+			case .type9IndependentApply			: XGDolPatcher.removeType9Dependencies()
+			case .unlimitedTutorMovesApply		: XGDolPatcher.implementUnlimitedTutors()
+			case .zeroForeignStringTables		: XGDolPatcher.zeroForeignStringTables()
+			case .decapitaliseNames				: XGDolPatcher.decapitalise()
+			case .tradeEvolutions				: XGDolPatcher.removeTradeEvolutions()
+		}
+		
+//		XGAlertView(title: "Patch Complete", message: "The Patch has been applied", doneButtonTitle: "Swag", otherButtonTitles: nil, buttonAction: nil).show()
+		print("patch applied: ", patch.name)
+		
+	}
+	
+	
 }
 
 
