@@ -330,7 +330,7 @@ class XGMoveViewController: XGTableViewController, UISearchResultsUpdating, UISe
 		cell?.detailTextLabel?.backgroundColor = UIColor.clear
 		
 		if XGMoves.move(index).isShadowMove {
-			cell?.background = XGFiles.nameAndFolder("shadow.png", .Types).image
+			cell?.background = XGFiles.nameAndFolder("type_shadow.png", .Types).image
 		}
 		
 		return cell!

@@ -8,6 +8,8 @@
 
 import Foundation
 
+let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/GoD-Tool"
+
 extension XGStringTable {
 	func replaceString(_ string: XGString, alert: Bool) -> Bool {
 		

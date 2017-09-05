@@ -296,22 +296,22 @@ class XGDeckViewController: XGTableViewController, UISearchResultsUpdating, UISe
 		speed.title.textColor = UIColor.black
 		
 		shadow1 = XGPopoverButton(title: "", colour: UIColor.clear, textColour: UIColor.white, popover: movePopover, viewController: self)
-		shadow1.setBackgroundImage(XGFiles.nameAndFolder("shadow.png", .Types).image, for: UIControlState())
+		shadow1.setBackgroundImage(XGFiles.nameAndFolder("type_shadow.png", .Types).image, for: UIControlState())
 		self.addSubview(shadow1, name: "s1")
 		self.addConstraintSize(view: shadow1, height: 40, width: 100)
 		
 		shadow2 = XGPopoverButton(title: "", colour: UIColor.clear, textColour: UIColor.white, popover: movePopover, viewController: self)
-		shadow2.setBackgroundImage(XGFiles.nameAndFolder("shadow.png", .Types).image, for: UIControlState())
+		shadow2.setBackgroundImage(XGFiles.nameAndFolder("type_shadow.png", .Types).image, for: UIControlState())
 		self.addSubview(shadow2, name: "s2")
 		self.addConstraintSize(view: shadow2, height: 40, width: 100)
 		
 		shadow3 = XGPopoverButton(title: "", colour: UIColor.clear, textColour: UIColor.white, popover: movePopover, viewController: self)
-		shadow3.setBackgroundImage(XGFiles.nameAndFolder("shadow.png", .Types).image, for: UIControlState())
+		shadow3.setBackgroundImage(XGFiles.nameAndFolder("type_shadow.png", .Types).image, for: UIControlState())
 		self.addSubview(shadow3, name: "s3")
 		self.addConstraintSize(view: shadow3, height: 40, width: 100)
 		
 		shadow4 = XGPopoverButton(title: "", colour: UIColor.clear, textColour: UIColor.white, popover: movePopover, viewController: self)
-		shadow4.setBackgroundImage(XGFiles.nameAndFolder("shadow.png", .Types).image, for: UIControlState())
+		shadow4.setBackgroundImage(XGFiles.nameAndFolder("type_shadow.png", .Types).image, for: UIControlState())
 		self.addSubview(shadow4, name: "s4")
 		self.addConstraintSize(view: shadow4, height: 40, width: 100)
 		
@@ -470,7 +470,7 @@ class XGDeckViewController: XGTableViewController, UISearchResultsUpdating, UISe
 		cell?.textLabel?.textColor = UIColor.blue
 		
 		if trainer.hasShadow {
-			cell?.background = XGFiles.nameAndFolder("shadow.png", .Types).image
+			cell?.background = XGFiles.nameAndFolder("type_shadow.png", .Types).image
 		}
 		
 		return cell!

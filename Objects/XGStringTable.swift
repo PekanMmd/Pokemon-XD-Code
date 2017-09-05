@@ -106,7 +106,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 		self.file = file
 		self.startOffset = startOffset
-		self.stringTable = file.data
+		self.stringTable = XGMutableData(byteStream: file.data.charStream, file: file)
 		
 		stringTable.deleteBytesInRange(NSMakeRange(0, startOffset))
 		stringTable.deleteBytesInRange(NSMakeRange(fileSize, stringTable.length - fileSize))
@@ -431,7 +431,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 			print("\(data)")
 			
 			for d in data {
-				XGStringTable.common_rel().replaceString(XGString(string: d[0], file: .common_rel, sid: Int(d[1]) ), alert: false)
+				XGFiles.common_rel.stringTable.replaceString(XGString(string: d[0], file: .common_rel, sid: Int(d[1]) ), alert: false)
 			}
 			
 		} catch {

@@ -131,7 +131,7 @@ class XGMovePopover: XGPopover, UISearchResultsUpdating, UISearchBarDelegate {
 		cell.background = XGMoveTypes(rawValue: move.1)!.image
 		
 		if moves[indexPath.row].3 {
-			cell.background = UIImage(contentsOfFile: XGFolders.Types.path + "/shadow.png")!
+			cell.background = UIImage(contentsOfFile: XGFolders.Types.path + "/type_shadow.png")!
 		}
 		
 		return cell

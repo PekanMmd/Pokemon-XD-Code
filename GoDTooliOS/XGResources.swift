@@ -6,7 +6,7 @@
 ////  Copyright (c) 2015 Ovation International. All rights reserved.
 ////
 //
-import UIKit
+import Foundation
 
 enum XGResources {
 	
@@ -67,11 +67,7 @@ enum XGResources {
 		}
 	}
 	
-	var image : UIImage {
-		get {
-			return UIImage(contentsOfFile: self.path) ?? UIImage()
-		}
-	}
+	
 	
 	
 }

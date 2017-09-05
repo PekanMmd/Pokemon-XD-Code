@@ -16,7 +16,7 @@ class XGUtility {
 		
 		let compressFolders = [XGFolders.Common, XGFolders.Decks, XGFolders.Output, XGFolders.StringTables, XGFolders.Scripts]
 		
-		for folder in compressFolders {
+		for folder in compressFolders where folder.exists {
 			for file in folder.files {
 				print("compressing file: " + file.fileName)
 				file.compress()
@@ -42,13 +42,13 @@ class XGUtility {
 		XGFsys.fsys(.fsys("deck_archive.fsys")).replaceFileWithIndex(13, withFile: .lzss("DeckData_Story.bin.lzss"))
 		XGFsys.fsys(.fsys("deck_archive.fsys")).replaceFileWithIndex(14, withFile: .lzss("DeckData_Virtual.bin.lzss"))
 		XGFsys.fsys(.fsys("deck_archive.fsys")).replaceFileWithIndex(15, withFile: .lzss("DeckData_Virtual.bin.lzss"))
-		XGFsys.fsys(.fsys("field_common.fsys")).replaceFileWithIndex(8, withFile: .lzss("uv_icn_type_big_00.fdat.lzss"))
-		XGFsys.fsys(.fsys("field_common.fsys")).replaceFileWithIndex(9, withFile: .lzss("uv_icn_type_small_00.fdat.lzss"))
+//		XGFsys.fsys(.fsys("field_common.fsys")).replaceFileWithIndex(8, withFile: .lzss("uv_icn_type_big_00.fdat.lzss"))
+//		XGFsys.fsys(.fsys("field_common.fsys")).replaceFileWithIndex(9, withFile: .lzss("uv_icn_type_small_00.fdat.lzss"))
 		XGFsys.fsys(.fsys("fight_common.fsys")).replaceFileWithIndex(0, withFile: .lzss("fight.msg.lzss"))
-		XGFsys.fsys(.fsys("fight_common.fsys")).replaceFileWithIndex(15, withFile: .lzss("uv_icn_type_big_00.fdat.lzss"))
-		XGFsys.fsys(.fsys("fight_common.fsys")).replaceFileWithIndex(16, withFile: .lzss("uv_icn_type_small_00.fdat.lzss"))
-		XGFsys.fsys(.nameAndFolder("title.fsys",.MenuFSYS)).replaceFileWithIndex(4, withFile: .lzss("title_start_bg.fdat.lzss"))
-		XGFsys.fsys(.nameAndFolder("title.fsys",.MenuFSYS)).replaceFileWithIndex(12, withFile: .lzss("title_start_00.fdat.lzss"))
+//		XGFsys.fsys(.fsys("fight_common.fsys")).replaceFileWithIndex(15, withFile: .lzss("uv_icn_type_big_00.fdat.lzss"))
+//		XGFsys.fsys(.fsys("fight_common.fsys")).replaceFileWithIndex(16, withFile: .lzss("uv_icn_type_small_00.fdat.lzss"))
+//		XGFsys.fsys(.nameAndFolder("title.fsys",.MenuFSYS)).replaceFileWithIndex(4, withFile: .lzss("title_start_bg.fdat.lzss"))
+//		XGFsys.fsys(.nameAndFolder("title.fsys",.MenuFSYS)).replaceFileWithIndex(12, withFile: .lzss("title_start_00.fdat.lzss"))
 		XGFsys.fsys(.nameAndFolder("pocket_menu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: .lzss("pocket_menu.fdat.lzss"))
 		
 	}
@@ -146,15 +146,18 @@ class XGUtility {
 		data.save()
 	}
 	
-	class func prepareForCompilation() {
+	class func prepareXG() {
 		shadowLugiaDPKMLevel()
+		shadowMadnessAnimation()
+	}
+	
+	class func prepareForCompilation() {
 		updateShadowMoves()
 		updateValidItems()
 		updateHealingItems()
 		updateTutorMoves()
 		updatePokeSpots()
 		updateShadowMonitor()
-		shadowMadnessAnimation()
 		compressFiles()
 		importFsys()
 	}
@@ -174,8 +177,15 @@ class XGUtility {
 		XGISO().importDol()
 	}
 	
+	class func compileForRandomiser() {
+		prepareForCompilation()
+		
+		XGISO().importRandomiserFiles()
+	}
+	
 	class func compileAllFiles() {
 		
+		prepareXG()
 		prepareForCompilation()
 		
 		importStringTables()
@@ -740,9 +750,9 @@ class XGUtility {
 		let surskits = [0x0B9A,0x0D62]
 		let woopers = [0x0BEA,0x0DA6]
 		
-		let trapinch = XGPokeSpotPokemon(index: 2, pokespot: .rock).pokemon.index
-		let surskit = XGPokeSpotPokemon(index: 2, pokespot: .oasis).pokemon.index
-		let wooper = XGPokeSpotPokemon(index: 2, pokespot: .cave).pokemon.index
+		let trapinch = XGPokeSpotPokemon(index: 2, pokespot: .rock).pokemon.stats.nationalIndex
+		let surskit = XGPokeSpotPokemon(index: 2, pokespot: .oasis).pokemon.stats.nationalIndex
+		let wooper = XGPokeSpotPokemon(index: 2, pokespot: .cave).pokemon.stats.nationalIndex
 		
 		for offset in trapinches {
 			script.replace2BytesAtOffset(offset, withBytes: trapinch)
@@ -756,36 +766,26 @@ class XGUtility {
 			script.replace2BytesAtOffset(offset, withBytes: wooper)
 		}
 		
-		if trapinch <= 251 {
-			script.replace2BytesAtOffset(0x0D3A, withBytes: trapinch + 1000)
-			script.replace2BytesAtOffset(0x1756, withBytes: trapinch + 1000)
-		}
+		script.replace2BytesAtOffset(0x0D3A, withBytes: trapinch + 1000)
+		script.replace2BytesAtOffset(0x1756, withBytes: trapinch + 1000)
 		
-		if surskit <= 251 {
-			script.replace2BytesAtOffset(0x0D7E, withBytes: surskit + 1000)
-			script.replace2BytesAtOffset(0x175E, withBytes: surskit + 1000)
-		}
 		
-		if wooper <= 251 {
-			script.replace2BytesAtOffset(0x0DC2, withBytes: wooper + 1000)
-			script.replace2BytesAtOffset(0x1766, withBytes: wooper + 1000)
-		}
+		script.replace2BytesAtOffset(0x0D7E, withBytes: surskit + 1000)
+		script.replace2BytesAtOffset(0x175E, withBytes: surskit + 1000)
 		
-		let meditite = XGTradePokemon(index: 1).species.index
-		let shuckle = XGTradePokemon(index: 2).species.index
-		let larvitar = XGTradePokemon(index: 3).species.index
 		
-		if meditite <= 251 {
-			script.replace2BytesAtOffset(0x0D32, withBytes: meditite + 1000)
-		}
+		script.replace2BytesAtOffset(0x0DC2, withBytes: wooper + 1000)
+		script.replace2BytesAtOffset(0x1766, withBytes: wooper + 1000)
 		
-		if shuckle <= 251 {
-			script.replace2BytesAtOffset(0x0D76, withBytes: shuckle + 1000)
-		}
 		
-		if larvitar <= 251 {
-			script.replace2BytesAtOffset(0x0DBA, withBytes: larvitar + 1000)
-		}
+		let meditite = XGTradePokemon(index: 1).species.stats.nationalIndex
+		let shuckle = XGTradePokemon(index: 2).species.stats.nationalIndex
+		let larvitar = XGTradePokemon(index: 3).species.stats.nationalIndex
+		
+		script.replace2BytesAtOffset(0x0D32, withBytes: meditite + 1000)
+		script.replace2BytesAtOffset(0x0D76, withBytes: shuckle + 1000)
+		script.replace2BytesAtOffset(0x0DBA, withBytes: larvitar + 1000)
+		
 		
 		
 		script.save()

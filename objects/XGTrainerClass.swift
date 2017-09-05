@@ -25,7 +25,7 @@ class XGTrainerClass: NSObject {
 	
 	var name : XGString {
 		get {
-			return XGStringTable.common_rel().stringSafelyWithID(self.nameID)
+			return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
 		}
 	}
 	

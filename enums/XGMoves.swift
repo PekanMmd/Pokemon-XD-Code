@@ -45,7 +45,7 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var name : XGString {
 		get {
-			return XGStringTable.common_rel().stringSafelyWithID(nameID)
+			return XGFiles.common_rel.stringTable.stringSafelyWithID(nameID)
 		}
 	}
 	
@@ -63,7 +63,7 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var mdescription : XGString {
 		get {
-			return XGStringTable.dol().stringSafelyWithID(descriptionID)
+			return XGFiles.dol.stringTable.stringSafelyWithID(descriptionID)
 		}
 	}
 	
@@ -113,6 +113,26 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 		return moves
 	}
 	
+	static func random() -> XGMoves {
+		var rand = 0
+		while (XGMoves.move(rand).name.length < 2) || (XGMoves.move(rand).isShadowMove) {
+			rand = Int(arc4random_uniform(UInt32(kNumberOfMoves - 1))) + 1
+		}
+		return XGMoves.move(rand)
+	}
+	
+	static func randomShadow() -> XGMoves {
+		var rand = 0
+		while (!XGMoves.move(rand).isShadowMove) || (XGMoves.move(rand).name.length < 2)  {
+			rand = Int(arc4random_uniform(UInt32(kNumberOfMoves - 1))) + 1
+		}
+		return XGMoves.move(rand)
+	}
+	
+	static func randomMoveset() -> [XGMoves] {
+		return [XGMoves.random(),XGMoves.random(),XGMoves.random(),XGMoves.random()]
+	}
+	
 }
 
 enum XGOriginalMoves {
@@ -147,7 +167,7 @@ enum XGOriginalMoves {
 	
 	var name : XGString {
 		get {
-			let table = XGStringTable.common_relOriginal()
+			let table = XGFiles.original(.common_rel).stringTable
 			return table.stringSafelyWithID(nameID)
 		}
 	}

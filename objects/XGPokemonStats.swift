@@ -18,6 +18,8 @@ let kGenderRatioOffset		= 0x02
 let kBaseEXPOffset			= 0x05
 let kBaseHappinessOffset	= 0x07
 
+let kNationalIndexOffset	= 0x0E
+
 let kType1Offset			= 0x30
 let kType2Offset			= 0x31
 
@@ -107,9 +109,11 @@ class XGPokemonStats: NSObject {
 	var tutorMoves		= [Bool]()
 	var evolutions		= [XGEvolution]()
 	
+	var nationalIndex	= 0
+	
 	var name : XGString {
 		get {
-			return XGStringTable.common_rel().stringSafelyWithID(self.nameID)
+			return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
 		}
 	}
 	
@@ -143,6 +147,8 @@ class XGPokemonStats: NSObject {
 			return evolutions.filter{ $0.isSet() }.count
 		}
 	}
+	
+	
 	
 	init(index : Int!) {
 		super.init()
@@ -185,6 +191,7 @@ class XGPokemonStats: NSObject {
 		self.specialDefense	= rel.getByteAtOffset(startOffset + kSpecialDefenseOffset)
 		self.speed			= rel.getByteAtOffset(startOffset + kSpeedOffset)
 		
+		self.nationalIndex	= rel.get2BytesAtOffset(startOffset + kNationalIndexOffset)
 		
 		for i in 0 ..< kNumberOfTMsAndHMs  {
 			self.learnableTMs.append(rel.getByteAtOffset(startOffset + kFirstTMOffset + i) == 1)

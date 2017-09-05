@@ -15,9 +15,9 @@ func loadAllStrings() {
 	
 	if !stringsLoaded {
 		
-		allStrings += XGStringTable.common_rel().allStrings()
-		allStrings += XGStringTable.dol().allStrings()
-		allStrings += XGStringTable.tableres2().allStrings()
+		allStrings += XGFiles.common_rel.stringTable.allStrings()
+		allStrings += XGFiles.dol.stringTable.allStrings()
+		allStrings += XGFiles.tableres2.stringTable.allStrings()
 		
 		XGFolders.StringTables.map{ (file: XGFiles) -> Void in
 			allStrings += file.stringTable.allStrings()

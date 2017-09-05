@@ -51,7 +51,7 @@ enum XGAbilities : XGDictionaryRepresentable {
 	
 	var name : XGString {
 		get {
-			return XGStringTable.common_rel().stringSafelyWithID(nameID)
+			return XGFiles.common_rel.stringTable.stringSafelyWithID(nameID)
 		}
 	}
 	
@@ -68,7 +68,7 @@ enum XGAbilities : XGDictionaryRepresentable {
 	
 	var adescription : XGString {
 		get {
-			return XGStringTable.common_rel().stringSafelyWithID(descriptionID)
+			return XGFiles.common_rel.stringTable.stringSafelyWithID(descriptionID)
 		}
 	}
 	
@@ -102,6 +102,14 @@ enum XGAbilities : XGDictionaryRepresentable {
 			abs.append(.ability(i))
 		}
 		return abs
+	}
+	
+	static func random() -> XGAbilities {
+		var rand = 0
+		while (XGAbilities.ability(rand).nameID == 0) {
+			rand = Int(arc4random_uniform(UInt32(kNumberOfAbilities - 1))) + 1
+		}
+		return XGAbilities.ability(rand)
 	}
 	
 }

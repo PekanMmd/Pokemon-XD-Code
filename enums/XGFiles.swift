@@ -15,8 +15,8 @@ func ==(lhs: XGFiles, rhs: XGFiles) -> Bool {
 var loadedFiles = [String : XGMutableData]()
 var loadedStringTables = [String : XGStringTable]()
 
-let loadableFiles = [XGFiles.common_rel.path,XGFiles.dol.path,XGDecks.DeckStory.file.path,XGDecks.DeckDarkPokemon.file.path, XGFiles.iso.path]
-let loadableStringTables = [XGFiles.tableres2.path,XGFiles.stringTable("pocket_menu.msg").path,XGFiles.common_rel.path,XGFiles.dol.path]
+let loadableFiles = [XGFiles.common_rel.path,XGFiles.dol.path,XGDecks.DeckStory.file.path,XGDecks.DeckDarkPokemon.file.path, XGFiles.iso.path,XGFiles.original(.common_rel).path,XGFiles.original(.dol).path,XGFiles.original(.tableres2).path]
+let loadableStringTables = [XGFiles.tableres2.path,XGFiles.stringTable("pocket_menu.msg").path,XGFiles.common_rel.path,XGFiles.dol.path,XGFiles.original(.common_rel).path,XGFiles.original(.dol).path,XGFiles.original(.tableres2).path]
 
 indirect enum XGFiles {
 	
@@ -58,10 +58,10 @@ indirect enum XGFiles {
 				case .tableres2				: return "tableres2.fdat"
 				case .pocket_menu			: return "pocket_menu.fdat"
 				case .deck(let deck)		: return deck.fileName
-				case .pokeFace(let id)		: return String(format: "%03d", id) + ".png"
-				case .pokeBody(let id)		: return String(format: "%03d", id) + ".png"
-				case .typeImage(let id)		: return String(id) + ".png"
-				case .trainerFace(let id)	: return String(id) + ".png"
+				case .pokeFace(let id)		: return "face_" + String(format: "%03d", id) + ".png"
+				case .pokeBody(let id)		: return "body_" + String(format: "%03d", id) + ".png"
+				case .typeImage(let id)		: return "type_" + String(id) + ".png"
+				case .trainerFace(let id)	: return "trainer_" + String(id) + ".png"
 				case .stringTable(let s)	: return s
 				case .original(let o)		: return o.fileName
 				case .fsys(let s)			: return s
@@ -260,8 +260,8 @@ enum XGFolders : String {
 	
 	var path : String {
 		get {
-			var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-			path += "/GoD-Tool"
+			
+			var path = documentsPath
 			
 			switch self {
 				
@@ -320,6 +320,13 @@ enum XGFolders : String {
 				xgfs.append(xgf)
 			}
 			return xgfs
+		}
+	}
+	
+	var exists : Bool {
+		get {
+			let fm = FileManager.default
+			return fm.fileExists(atPath: self.path)
 		}
 	}
 	
@@ -399,6 +406,51 @@ enum XGFolders : String {
 			.TOC,
 			.AutoFSYS,
 			.MenuFSYS,
+			]
+		
+		for folder in folders {
+			folder.createDirectory()
+		}
+		
+		var images = [XGFiles]()
+		for i in 0 ... 17 {
+			images.append(.typeImage(i))
+		}
+		for i in 0 ... 414 {
+			images.append(.pokeBody(i))
+			images.append(.pokeFace(i))
+		}
+		for i in 0 ... 67 {
+			images.append(.trainerFace(i))
+		}
+		images.append(.nameAndFolder("type_shadow.png", .Types))
+		
+		for image in images {
+			if !image.exists {
+				let resource = XGResources.png(image.fileName.replacingOccurrences(of: ".png", with: ""))
+				let data = resource.data
+				data.file = image
+				data.save()
+			}
+		}
+		
+	}
+	
+	static func setUpFolderFormatForRandomiser() {
+		
+		let folders : [XGFolders] = [
+			.Documents,
+			.Common,
+			.DOL,
+			.Decks,
+			.StringTables,
+			.FSYS,
+			.LZSS,
+			.ISO,
+			.TOC,
+			.MenuFSYS,
+			.AutoFSYS,
+			.Scripts
 			]
 		
 		for folder in folders {

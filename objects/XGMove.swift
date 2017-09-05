@@ -92,7 +92,7 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		super.init()
 		
 		let rel   = XGFiles.common_rel.data
-//		var table = XGStringTable.common_rel()
+//		var table = XGFiles.common_rel.stringTable
 		
 		self.moveIndex       = index
 		self.startOffset     = kFirstMoveOffset + (index * kSizeOfMoveData)

@@ -33,7 +33,7 @@ enum XGMoveTypes : Int, XGDictionaryRepresentable {
 		get {
 			let stringID = data.nameID
 			
-			return XGStringTable.common_rel().stringSafelyWithID(stringID).string
+			return XGFiles.common_rel.stringTable.stringSafelyWithID(stringID).string
 		}
 	}
 	
@@ -73,6 +73,11 @@ enum XGMoveTypes : Int, XGDictionaryRepresentable {
 			}
 			return t
 		}
+	}
+	
+	static func random() -> XGMoveTypes {
+		let rand = Int(arc4random_uniform(UInt32(kNumberOfTypes)))
+		return XGMoveTypes(rawValue: rand) ?? .normal
 	}
 	
 }

@@ -19,9 +19,19 @@
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
+		<key>XD Randomiser.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>B2ACE82C1F5E34FA00D87B22</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>B2F5EB821F49A11A0075C6D2</key>
 		<dict>
 			<key>primary</key>

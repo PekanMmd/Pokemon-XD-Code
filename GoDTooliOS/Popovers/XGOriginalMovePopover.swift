@@ -26,7 +26,7 @@ class XGOriginalMovePopover: XGPopover, UISearchResultsUpdating, UISearchBarDele
 		searchController.searchBar.delegate = self
 		
 		let data  = XGFiles.original(.common_rel).data
-		let table = XGStringTable.common_relOriginal()
+		let table = XGFiles.original(.common_rel).stringTable
 		
 		var offset = kFirstMoveOffset
 		
@@ -119,7 +119,7 @@ class XGOriginalMovePopover: XGPopover, UISearchResultsUpdating, UISearchBarDele
 		cell.background = XGMoveTypes(rawValue: move.1)!.image
 		
 		if moves[indexPath.row].3 {
-			cell.background = XGFiles.nameAndFolder("shadow.png", .Types).image
+			cell.background = XGFiles.nameAndFolder("type_shadow.png", .Types).image
 		}
 		
 		return cell

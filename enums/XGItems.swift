@@ -48,7 +48,7 @@ enum XGItems : XGDictionaryRepresentable {
 	
 	var name : XGString {
 		get {
-			let table = XGStringTable.common_rel()
+			let table = XGFiles.common_rel.stringTable
 			return table.stringSafelyWithID(nameID)
 		}
 	}
@@ -115,7 +115,7 @@ enum XGOriginalItems {
 	
 	var name : XGString {
 		get {
-			let table = XGStringTable.common_relOriginal()
+			let table = XGFiles.original(.common_rel).stringTable
 			return table.stringSafelyWithID(nameID)
 		}
 	}

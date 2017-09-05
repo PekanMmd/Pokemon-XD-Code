@@ -69,6 +69,12 @@ class XGISO: NSObject {
 		
 	}
 	
+	func importRandomiserFiles() {
+		var files = XGFolders.FSYS.files ?? [XGFiles]()
+		files.append(.dol)
+		importFiles(files)
+	}
+	
 	func importAllFiles() {
 		var files = XGFolders.FSYS.files ?? [XGFiles]()
 		files += XGFolders.AutoFSYS.files ?? [XGFiles]()
@@ -494,11 +500,7 @@ class XGISO: NSObject {
 		
 	}
 	
-	func extractStringTables() {
-		let fight = XGFsys.fsys(.fsys("fight_common.fsys")).decompressedDataForFileWithIndex(index: 0)!
-		fight.file = .stringTable("fight.msg")
-		fight.save()
-		
+	func extractAutoStringTables() {
 		for file in XGFolders.AutoFSYS.filenames {
 			let msg = file.replacingOccurrences(of: ".fsys", with: ".msg")
 			let fsys = XGFsys.fsys(.nameAndFolder(file, .AutoFSYS))
@@ -506,6 +508,13 @@ class XGISO: NSObject {
 			data.file = .stringTable(msg)
 			data.save()
 		}
+	}
+	
+	func extractSpecificStringTables() {
+		let fight = XGFsys.fsys(.fsys("fight_common.fsys")).decompressedDataForFileWithIndex(index: 0)!
+		fight.file = .stringTable("fight.msg")
+		fight.save()
+		
 		
 		let pocket_menu = XGFiles.stringTable("pocket_menu.msg")
 		let nameentrymenu = XGFiles.stringTable("name_entry_menu.msg")
@@ -548,6 +557,11 @@ class XGISO: NSObject {
 		let wm = XGFsys.fsys(.nameAndFolder("worldmap.fsys",.MenuFSYS)).decompressedDataForFileWithIndex(index: 1)!
 		wm.file = world_map
 		wm.save()
+	}
+	
+	func extractStringTables() {
+		extractAutoStringTables()
+		extractSpecificStringTables()
 		
 	}
 	
@@ -564,6 +578,26 @@ class XGISO: NSObject {
 		let dol = dataForFile(filename: "Start.dol")!
 		dol.file = .dol
 		dol.save()
+	}
+	
+	class func extractRandomiserFiles() {
+		extractTOC()
+		let iso = XGISO()
+		iso.extractDOL()
+		iso.extractFSYS()
+		iso.extractMenuFSYS()
+		iso.extractCommon()
+		iso.extractDecks()
+		iso.extractSpecificStringTables()
+		
+		// for pokespots
+		for file in ["M2_guild_1F_2.fsys"] {
+			let data = iso.dataForFile(filename: file)!
+			data.file = XGFiles.nameAndFolder(file, .AutoFSYS)
+			data.save()
+		}
+		
+		iso.extractScripts()
 	}
 	
 	 class func extractAllFiles() {

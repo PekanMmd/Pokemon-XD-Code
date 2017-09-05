@@ -56,7 +56,7 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var name : XGString {
 		get {
-			let table = XGStringTable.common_rel()
+			let table = XGFiles.common_rel.stringTable
 			return table.stringSafelyWithID(nameID)
 		}
 	}
@@ -146,6 +146,14 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 		return moves
 	}
 	
+	static func random() -> XGPokemon {
+		var rand = 0
+		while (rand == 0) || ((rand > 251) && (rand < 277)) || (rand > 411) {
+			rand = Int(arc4random_uniform(UInt32(kNumberOfPokemon - 1))) + 1
+		}
+		return XGPokemon.pokemon(rand)
+	}
+	
 	var dictionaryRepresentation: [String : AnyObject] {
 		get {
 			return ["Value" : self.index as AnyObject]
@@ -194,7 +202,7 @@ enum XGOriginalPokemon {
 	
 	var name : String {
 		get {
-			let table = XGStringTable.common_relOriginal()
+			let table = XGFiles.original(.common_rel).stringTable
 			return table.stringSafelyWithID(nameID).string
 		}
 	}
