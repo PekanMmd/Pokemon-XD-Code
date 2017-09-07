@@ -10,7 +10,7 @@ import Cocoa
 
 class GoDHomeViewController: GoDTableViewController {
 	
-	let tools = ["Pokemon Stats Editor", "Move Editor"]
+	let tools = ["Pokemon Stats Editor"]
 	let segues = ["toStatsVC"]
 
     override func viewDidLoad() {

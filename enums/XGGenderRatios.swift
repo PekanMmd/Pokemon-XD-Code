@@ -61,6 +61,10 @@ enum XGGenderRatios : Int, XGDictionaryRepresentable {
 		}
 	}
 	
+	static func allRatios() -> [XGGenderRatios] {
+		return [.maleOnly,.male87,.male75,.male50,.female75,.female87,.femaleOnly,.genderless]
+	}
+	
 }
 
 

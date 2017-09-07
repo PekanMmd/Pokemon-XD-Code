@@ -17,6 +17,16 @@ class GoDStatsViewController: GoDTableViewController {
 	@IBOutlet var spdefField: NSTextField!
 	@IBOutlet var speedField: NSTextField!
 	
+	@IBOutlet var nameField: NSTextField!
+	@IBOutlet var nameIDField: NSTextField!
+	@IBOutlet var indexField: NSTextField!
+	@IBOutlet var hexField: NSTextField!
+	@IBOutlet var startField: NSTextField!
+	
+	@IBOutlet var saveButton: NSButton!
+	
+	@IBOutlet var type1PopUp: NSPopUpButton!
+	
 	
 	let mons = allPokemonArray().map { (mon) -> (name: String, type1 : XGMoveTypes, index : Int) in
 		return (mon.name.string, mon.type1, mon.index)
@@ -31,6 +41,9 @@ class GoDStatsViewController: GoDTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
+		
+		
+		
 		
 		reloadView()
     }
@@ -75,54 +88,108 @@ class GoDStatsViewController: GoDTableViewController {
 		self.spdefField.integerValue = self.pokemon.specialDefense
 		self.speedField.integerValue = self.pokemon.speed
 		
+		self.nameField.stringValue = self.pokemon.name.string
+		self.nameIDField.integerValue = self.pokemon.nameID
+		self.indexField.integerValue = self.pokemon.index
+		self.hexField.stringValue = self.pokemon.index.hexString()
+		self.startField.stringValue = self.pokemon.startOffset.hexString()
+		
+		
+		self.type1PopUp.selectItem(at: self.pokemon.type1.rawValue)
+		
 	}
 	
 	@IBAction func setHP(_ sender: NSTextField) {
-		let value = sender.integerValue
-		if value > 0 && value <= 255 {
-			self.pokemon.hp = value
-		}
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.hp = value
 		self.reloadView()
 	}
 	
 	@IBAction func setAtk(_ sender: NSTextField) {
-		let value = sender.integerValue
-		if value > 0 && value <= 255 {
-			self.pokemon.attack = value
-		}
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.attack = value
+		
 		self.reloadView()
 	}
 	
 	@IBAction func setDef(_ sender: NSTextField) {
-		let value = sender.integerValue
-		if value > 0 && value <= 255 {
-			self.pokemon.defense = value
-		}
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.defense = value
+		
 		self.reloadView()
 	}
 	
 	@IBAction func setSpAtk(_ sender: NSTextField) {
-		let value = sender.integerValue
-		if value > 0 && value <= 255 {
-			self.pokemon.specialAttack = value
-		}
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.specialAttack = value
+		
 		self.reloadView()
 	}
 	
 	@IBAction func setSpDef(_ sender: NSTextField) {
-		let value = sender.integerValue
-		if value > 0 && value <= 255 {
-			self.pokemon.specialDefense = value
-		}
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.specialDefense = value
+		
 		self.reloadView()
 	}
 	
 	@IBAction func setSpped(_ sender: NSTextField) {
-		let value = sender.integerValue
-		if value > 0 && value <= 255 {
-			self.pokemon.speed = value
-		}
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.speed = value
+		
 		self.reloadView()
+	}
+	
+	@IBAction func setName(_ sender: NSTextField) {
+		if pokemon.nameID == 0 {
+			return
+		}
+		let value = sender.stringValue
+		self.pokemon.name.duplicateWithString(value).replace()
+		self.reloadView()
+	}
+	
+	@IBAction func setNameID(_ sender: NSTextField) {
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 0xFFFF ? 0xFFFF : value
+		
+		self.pokemon.nameID = value
+		
+		self.reloadView()
+	}
+	
+	
+	
+	
+	
+	@IBAction func setType1(_ sender: NSPopUpButton) {
+		self.pokemon.type1 = XGMoveTypes(rawValue: sender.indexOfSelectedItem) ?? .normal
+		
+		self.reloadView()
+	}
+	
+	
+	@IBAction func save(_ sender: NSButton) {
+		self.pokemon.save()
 	}
 	
 }

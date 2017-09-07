@@ -90,6 +90,14 @@ enum XGNatures : Int, XGDictionaryRepresentable {
 		}
 	}
 	
+	static func allNatures() -> [XGNatures] {
+		var n = [XGNatures]()
+		for i in 0 ... 24 {
+			n.append(XGNatures(rawValue: i)!)
+		}
+		return n
+	}
+	
 }
 
 
