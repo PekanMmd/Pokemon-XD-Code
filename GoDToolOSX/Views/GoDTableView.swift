@@ -60,5 +60,17 @@ class GoDTableView: NSScrollView {
 		self.delegate.tableView(self, didSelectRow: self.tableView.selectedRow)
 		
 	}
+	
+	func reloadData() {
+		self.tableView.reloadData()
+	}
+	
+	func reloadIndex(_ index: Int) {
+		self.tableView.reloadData(forRowIndexes: [index], columnIndexes: [0])
+	}
     
 }
+
+
+
+

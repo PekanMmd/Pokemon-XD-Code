@@ -28,7 +28,7 @@ let kAbility2Offset			= 0x33
 
 let kFirstTMOffset			= 0x34
 let kFirstTutorMoveOffset	= 0x6E
-let kFirstEVYieldOffset		= 0x9B // 1 byte between each one.
+let kFirstEVYieldOffset		= 0x9A
 let kFirstEvolutionOffset	= 0xA6
 let kFirstLevelUpMoveOffset	= 0xC4
 let kFirstEggMoveOffset		= 0x7E
@@ -111,6 +111,14 @@ class XGPokemonStats: NSObject {
 	
 	var nationalIndex	= 0
 	
+	var hpYield				= 0x0
+	var speedYield			= 0x0
+	var attackYield			= 0x0
+	var defenseYield		= 0x0
+	var specialAttackYield	= 0x0
+	var specialDefenseYield	= 0x0
+	
+	
 	var name : XGString {
 		get {
 			return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
@@ -191,6 +199,13 @@ class XGPokemonStats: NSObject {
 		self.specialDefense	= rel.getByteAtOffset(startOffset + kSpecialDefenseOffset)
 		self.speed			= rel.getByteAtOffset(startOffset + kSpeedOffset)
 		
+		self.hpYield				= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x0)
+		self.attackYield			= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x2)
+		self.defenseYield			= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x4)
+		self.specialAttackYield		= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x6)
+		self.specialDefenseYield	= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x8)
+		self.speedYield				= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0xa)
+		
 		self.nationalIndex	= rel.get2BytesAtOffset(startOffset + kNationalIndexOffset)
 		
 		for i in 0 ..< kNumberOfTMsAndHMs  {
@@ -260,6 +275,13 @@ class XGPokemonStats: NSObject {
 		rel.replaceByteAtOffset(startOffset + kSpecialDefenseOffset, withByte: specialDefense)
 		rel.replaceByteAtOffset(startOffset + kSpeedOffset, withByte: speed)
 		
+		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x0, withBytes: self.hpYield)
+		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x2, withBytes: self.attackYield)
+		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x4, withBytes: self.defenseYield)
+		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x6, withBytes: self.specialAttackYield)
+		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x8, withBytes: self.specialDefenseYield)
+		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0xa, withBytes: self.speedYield)
+		
 		
 		var currentOffset = startOffset + kFirstTMOffset
 		
@@ -326,6 +348,12 @@ class XGPokemonStats: NSObject {
 			dictRep["sp.attack"] = self.specialAttack as AnyObject?
 			dictRep["sp.defense"] = self.specialDefense as AnyObject?
 			dictRep["speed"] = self.speed as AnyObject?
+			dictRep["hpEV"] = self.hpYield as AnyObject?
+			dictRep["attackEV"] = self.attackYield as AnyObject?
+			dictRep["defenseEV"] = self.defenseYield as AnyObject?
+			dictRep["sp.attackEV"] = self.specialAttackYield as AnyObject?
+			dictRep["sp.defenseEV"] = self.specialDefenseYield as AnyObject?
+			dictRep["speedEV"] = self.speedYield as AnyObject?
 			
 			var levelUpMovesArray = [AnyObject]()
 			for a in levelUpMoves {
@@ -383,6 +411,17 @@ class XGPokemonStats: NSObject {
 			stats["sp.defense"] = self.specialDefense as AnyObject?
 			stats["speed"] = self.speed as AnyObject?
 			dictRep["BaseStats"] = stats as AnyObject?
+			
+			var EVYields = [String : AnyObject]()
+			EVYields["hp"] = self.hpYield as AnyObject?
+			EVYields["attack"] = self.attackYield as AnyObject?
+			EVYields["defense"] = self.defenseYield as AnyObject?
+			EVYields["sp.attack"] = self.specialAttackYield as AnyObject?
+			EVYields["sp.defense"] = self.specialDefenseYield as AnyObject?
+			EVYields["speed"] = self.speedYield as AnyObject?
+			dictRep["EVYields"] = EVYields as AnyObject?
+			
+			
 			
 			var levelUpMovesArray = [AnyObject]()
 			for a in levelUpMoves {

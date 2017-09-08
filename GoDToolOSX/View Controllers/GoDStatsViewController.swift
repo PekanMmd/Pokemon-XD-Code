@@ -17,6 +17,8 @@ class GoDStatsViewController: GoDTableViewController {
 	@IBOutlet var spdefField: NSTextField!
 	@IBOutlet var speedField: NSTextField!
 	
+	
+	@IBOutlet var nameContainer: NSView!
 	@IBOutlet var nameField: NSTextField!
 	@IBOutlet var nameIDField: NSTextField!
 	@IBOutlet var indexField: NSTextField!
@@ -28,24 +30,20 @@ class GoDStatsViewController: GoDTableViewController {
 	@IBOutlet var type1PopUp: NSPopUpButton!
 	
 	
-	let mons = allPokemonArray().map { (mon) -> (name: String, type1 : XGMoveTypes, index : Int) in
+	var mons = allPokemonArray().map { (mon) -> (name: String, type1 : XGMoveTypes, index : Int) in
 		return (mon.name.string, mon.type1, mon.index)
 	}
 	
 	var pokemon = XGPokemonStats(index: 0) {
 		didSet {
-			self.reloadView()
+			self.reloadViewWithActivity()
 		}
 	}
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do view setup here.
 		
-		
-		
-		
-		reloadView()
+		reloadViewWithActivity()
     }
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
@@ -79,6 +77,13 @@ class GoDStatsViewController: GoDTableViewController {
 		}
 	}
 	
+	func reloadViewWithActivity() {
+		self.showActivityView {
+			self.reloadView()
+			self.hideActivityView()
+		}
+	}
+	
 	func reloadView() {
 		
 		self.HPField.integerValue = self.pokemon.hp
@@ -89,7 +94,7 @@ class GoDStatsViewController: GoDTableViewController {
 		self.speedField.integerValue = self.pokemon.speed
 		
 		self.nameField.stringValue = self.pokemon.name.string
-		self.nameIDField.integerValue = self.pokemon.nameID
+		self.nameIDField.stringValue = self.pokemon.nameID.string
 		self.indexField.integerValue = self.pokemon.index
 		self.hexField.stringValue = self.pokemon.index.hexString()
 		self.startField.stringValue = self.pokemon.startOffset.hexString()
@@ -163,7 +168,8 @@ class GoDStatsViewController: GoDTableViewController {
 			return
 		}
 		let value = sender.stringValue
-		self.pokemon.name.duplicateWithString(value).replace()
+		let success = self.pokemon.name.duplicateWithString(value).replace()
+		
 		self.reloadView()
 	}
 	
@@ -177,10 +183,6 @@ class GoDStatsViewController: GoDTableViewController {
 		self.reloadView()
 	}
 	
-	
-	
-	
-	
 	@IBAction func setType1(_ sender: NSPopUpButton) {
 		self.pokemon.type1 = XGMoveTypes(rawValue: sender.indexOfSelectedItem) ?? .normal
 		
@@ -190,6 +192,12 @@ class GoDStatsViewController: GoDTableViewController {
 	
 	@IBAction func save(_ sender: NSButton) {
 		self.pokemon.save()
+		
+		let current = self.mons[self.pokemon.index]
+		self.mons[self.pokemon.index] = (self.pokemon.name.string, self.pokemon.type1, current.index)
+		
+		self.reloadViewWithActivity()
+		self.table.reloadIndex(current.index)
 	}
 	
 }

@@ -14,6 +14,10 @@ class GoDTypePopUpButton: GoDPopUpButton {
 		return XGMoveTypes(rawValue: self.indexOfSelectedItem) ?? .normal
 	}
 	
+	func selectType(type: XGMoveTypes) {
+		self.selectItem(withTitle: type.name)
+	}
+	
 	override func setUpItems() {
 		let values = XGMoveTypes.allTypes.map { (t) -> String in
 			return t.name

@@ -188,7 +188,23 @@ enum XGFsys {
 		
 	}
 	
-	func replaceFileWithIndex(_ index: Int, withFile newFile : XGFiles) {
+	func indexForFile(filename: String) -> Int? {
+		return self.fileNames.index(of: filename)
+	}
+	
+	func replaceFileWithName(name: String, withFile newFile: XGFiles) {
+		let index = self.indexForFile(filename: name)
+		
+		if index != nil {
+			self.replaceFileWithIndex(index!, withFile: newFile)
+		}
+	}
+	
+	func replaceFile(file: XGFiles) {
+		self.replaceFileWithName(name: file.fileName.replacingOccurrences(of: ".lzss", with: ""), withFile: file)
+	}
+	
+	func replaceFileWithIndex(_ index: Int, withFile newFile: XGFiles) {
 		if !self.file.exists {
 			print("file doesn't exist: ", self.file.path)
 			return

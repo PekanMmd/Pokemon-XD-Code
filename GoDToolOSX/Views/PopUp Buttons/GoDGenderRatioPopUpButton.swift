@@ -14,6 +14,10 @@ class GoDGenderRatioPopUpButton: GoDPopUpButton {
 		return XGGenderRatios.allRatios()[self.indexOfSelectedItem]
 	}
 	
+	func selectGenderRatio(ratio: XGGenderRatios) {
+		self.selectItem(withTitle: ratio.string)
+	}
+	
 	override func setUpItems() {
 		var values = [String]()
 		

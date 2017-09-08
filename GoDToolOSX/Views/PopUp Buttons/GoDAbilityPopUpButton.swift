@@ -20,6 +20,10 @@ class GoDAbilityPopUpButton: GoDPopUpButton {
 		return abilitiesAlphabetical[self.indexOfSelectedItem]
 	}
 	
+	func selectAbility(ability: XGAbilities) {
+		self.selectItem(withTitle: ability.name.string)
+	}
+	
 	override func setUpItems() {
 		let values = abilitiesAlphabetical.map { (a) -> String in
 			return a.name.string

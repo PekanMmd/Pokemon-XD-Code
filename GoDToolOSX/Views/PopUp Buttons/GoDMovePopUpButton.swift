@@ -31,6 +31,10 @@ class GoDMovePopUpButton: GoDPopUpButton {
 		return movesOrdered[self.indexOfSelectedItem]
 	}
 	
+	func selectMove(move: XGMoves) {
+		self.selectItem(withTitle: move.name.string)
+	}
+	
 	override func setUpItems() {
 		let values = movesOrdered.map { (m) -> String in
 			return m.name.string

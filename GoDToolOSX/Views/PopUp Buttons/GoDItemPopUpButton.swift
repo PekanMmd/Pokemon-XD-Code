@@ -20,6 +20,10 @@ class GoDItemPopUpButton: GoDPopUpButton {
 		return itemsOrdered[self.indexOfSelectedItem]
 	}
 	
+	func selectItem(item: XGItems) {
+		self.selectItem(withTitle: item.name.string)
+	}
+	
 	override func setUpItems() {
 		let values = itemsOrdered.map { (item) -> String in
 			return item.name.string

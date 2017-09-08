@@ -18,6 +18,7 @@
 		B205E0CB1F60AE7F00A5F075 /* GoDItemPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205E0CA1F60AE7F00A5F075 /* GoDItemPopUpButton.swift */; };
 		B205E0CD1F60B24F00A5F075 /* GoDGenderPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205E0CC1F60B24F00A5F075 /* GoDGenderPopUpButton.swift */; };
 		B205E0CF1F60B32400A5F075 /* GoDNaturePopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205E0CE1F60B32400A5F075 /* GoDNaturePopUpButton.swift */; };
+		B205E0D11F616BDB00A5F075 /* GoDContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205E0D01F616BDB00A5F075 /* GoDContainerView.swift */; };
 		B2ACE8301F5E34FB00D87B22 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ACE82F1F5E34FB00D87B22 /* AppDelegate.swift */; };
 		B2ACE8321F5E34FB00D87B22 /* XDRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ACE8311F5E34FB00D87B22 /* XDRViewController.swift */; };
 		B2ACE8341F5E34FB00D87B22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2ACE8331F5E34FB00D87B22 /* Assets.xcassets */; };
@@ -2302,6 +2303,7 @@
 		B205E0CA1F60AE7F00A5F075 /* GoDItemPopUpButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDItemPopUpButton.swift; sourceTree = "<group>"; };
 		B205E0CC1F60B24F00A5F075 /* GoDGenderPopUpButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDGenderPopUpButton.swift; sourceTree = "<group>"; };
 		B205E0CE1F60B32400A5F075 /* GoDNaturePopUpButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDNaturePopUpButton.swift; sourceTree = "<group>"; };
+		B205E0D01F616BDB00A5F075 /* GoDContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDContainerView.swift; sourceTree = "<group>"; };
 		B2ACE82D1F5E34FA00D87B22 /* XD Randomiser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "XD Randomiser.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2ACE82F1F5E34FB00D87B22 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B2ACE8311F5E34FB00D87B22 /* XDRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDRViewController.swift; sourceTree = "<group>"; };
@@ -4793,6 +4795,7 @@
 				B2F5F8941F49CD050075C6D2 /* GoDButton.swift */,
 				B2F5F8951F49CD050075C6D2 /* GoDTableCellView.swift */,
 				B2F5F8961F49CD050075C6D2 /* GoDTableView.swift */,
+				B205E0D01F616BDB00A5F075 /* GoDContainerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -7197,6 +7200,7 @@
 				B2F5EC111F49A1FE0075C6D2 /* XGBattleBingoPanel.swift in Sources */,
 				B2F5F8A51F49CD050075C6D2 /* GoDHomeViewController.swift in Sources */,
 				B2F5EC0B1F49A1FE0075C6D2 /* XGAbilities.swift in Sources */,
+				B205E0D11F616BDB00A5F075 /* GoDContainerView.swift in Sources */,
 				B2F5EC1D1F49A1FE0075C6D2 /* XGEvolutionMethods.swift in Sources */,
 				B205E0CF1F60B32400A5F075 /* GoDNaturePopUpButton.swift in Sources */,
 				B2F5EC801F49A1FF0075C6D2 /* XGDemoStarterPokemon.swift in Sources */,

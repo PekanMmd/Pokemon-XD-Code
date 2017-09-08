@@ -14,6 +14,10 @@ class GoDGenderPopUpButton: GoDPopUpButton {
 		return XGGenders(rawValue: self.indexOfSelectedItem) ?? .genderless
 	}
 	
+	func selectGender(gender: XGGenders) {
+		self.selectItem(withTitle: gender.string)
+	}
+	
 	override func setUpItems() {
 		var values = [String]()
 		

@@ -14,6 +14,10 @@ class GoDNaturePopUpButton: GoDPopUpButton {
 		return XGNatures.allNatures()[self.indexOfSelectedItem]
 	}
 	
+	func selectNature(nature: XGNatures) {
+		selectItem(withTitle: nature.string)
+	}
+	
 	override func setUpItems() {
 		let values = XGNatures.allNatures().map { (nature) -> String in
 			return nature.string

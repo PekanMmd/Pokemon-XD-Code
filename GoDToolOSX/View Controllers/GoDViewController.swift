@@ -9,10 +9,9 @@
 import AppKit
 
 class GoDViewController: NSViewController {
-//
-//	var activityView = XGActivityView()
-//	
-//	var popoverPresenter = XGPopoverButton()
+
+	var activityView = NSImageView()
+	
 	var selectedItem	 : Any	= 0
 	
 	var views    : [String : NSView ] = [String : NSView ]()
@@ -27,48 +26,43 @@ class GoDViewController: NSViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
+		self.activityView.setBackgroundColour(GoDDesign.colourBlack())
+		
 		self.addMetric(value: self.mainView.frame.height, name: "screenHeight")
 		self.addMetric(value: self.mainView.frame.width , name: "screenWidth" )
 		
 	}
 	
-//	func openPopover(sender: XGPopoverButton) {
-//		self.popoverPresenter = sender
-//		
-//		sender.showPopover()
-//		
-//	}
-	
-//	func popoverDidDismiss() {
-//		self.popoverPresenter.popover.dismissPopoverAnimated(true)
-//	}
-	
 	func showActivityView() {
 		self.showActivityView(nil)
 	}
 	
-	func showActivityView(_ completion: ( (Bool) -> Void)! ) {
+	func showActivityView(_ completion: ( () -> Void)! ) {
 		
-//		self.view.addSubview(activityView)
-//		let views = ["av" : activityView]
-//		self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[av]|", options: [], metrics: nil, views: views))
-//		self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[av]|", options: [], metrics: nil, views: views))
-//		NSView.animateWithDuration(0.25, animations: {
-//			self.activityView.alpha = 1.0
-//			}, completion : { (done: Bool) -> Void in
-//				if completion != nil {
-//					completion(done)
-//				}
-//		})
+		self.activityView.alphaValue = 0
+		self.addSubview(activityView, name: "av")
+		self.addConstraintAlignCenters(view1: activityView, view2: self.view)
+		self.addConstraintEqualSizes(view1: activityView, view2: self.view)
+		
+		NSAnimationContext.runAnimationGroup({ (context) in
+			context.duration = 0.25
+			self.activityView.animator().alphaValue = 0.5
+		}) {
+			if completion != nil {
+				completion()
+			}
+		}
 		
 	}
 	
 	func hideActivityView() {
-//		NSView.animateWithDuration(0.25, animations: {
-//			self.activityView.alpha = 0
-//			}, completion: { (Bool) -> Void in
-//				self.activityView.removeFromSuperview()
-//		})
+		NSAnimationContext.runAnimationGroup({ (context) in
+			context.duration = 0.25
+			self.activityView.animator().alphaValue = 0
+		}) {
+			self.activityView.removeFromSuperview()
+		}
+		
 	}
 	
 	func dispatchAfter(dispatchTime: Double, closure: @escaping () -> Void) {

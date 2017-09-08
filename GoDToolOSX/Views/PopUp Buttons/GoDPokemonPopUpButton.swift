@@ -18,6 +18,10 @@ class GoDPokemonPopUpButton: GoDPopUpButton {
 		return pokemonFiltered[self.indexOfSelectedItem]
 	}
 	
+	func selectPokemon(pokemon: XGPokemon) {
+		self.selectItem(withTitle: pokemon.name.string)
+	}
+	
 	override func setUpItems() {
 		let values = pokemonFiltered.map { (p) -> String in
 			return p.name.string

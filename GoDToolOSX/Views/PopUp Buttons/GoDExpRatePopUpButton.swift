@@ -14,6 +14,10 @@ class GoDExpRatePopUpButton: GoDPopUpButton {
 		return XGExpRate(rawValue: self.indexOfSelectedItem) ?? .standard
 	}
 	
+	func selectExpRate(rate: XGExpRate) {
+		self.selectItem(withTitle: rate.string)
+	}
+	
 	override func setUpItems() {
 		var values = [String]()
 		for i in 0 ... 5 {

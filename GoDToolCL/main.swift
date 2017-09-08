@@ -9,8 +9,33 @@
 import Foundation
 
 
+//let faces = XGFiles.fsys("poke_face.fsys").fsysData
+//let marowak = XGFiles.nameAndFolder("face048.fdat", .Output).compress()
+//let ninetails = XGFiles.nameAndFolder("face162.fdat", .Output).compress()
+//faces.replaceFile(file: marowak)
+//faces.replaceFile(file: ninetails)
 
-//extractFilesFromISO()
+//let people = XGFiles.fsys("people_archive.fsys").fsysData
+//let shade = XGFiles.nameAndFolder("ball_dive.fdat", .TextureImporter).compress()
+//people.replaceFile(file: shade)
+
+//let wak = XGPokemon.pokemon(265).stats
+//let tails = XGPokemon.pokemon(264).stats
+//wak.faceIndex = 48
+//tails.faceIndex = 162
+//wak.save()
+//tails.save()
+
+//let replacements = [("alolan_marowak","kongpang"),("alolan_ninetales","ootachi")]
+//for (new,old) in replacements {
+//	let oldFile = "pkx_" + old + ".fsys"
+//	let oldFsys = iso.dataForFile(filename: oldFile)!
+//	let fsys = XGFiles.fsys(oldFile)
+//	oldFsys.file = fsys
+//	oldFsys.save()
+//	fsys.fsysData.replaceFileWithIndex(0, withFile: XGFiles.nameAndFolder(new + ".fdat", .TextureImporter).compress())
+//	iso.importFiles([fsys])
+//}
 
 //// shadow shake
 //let shakeBranch = 0x80216d94 - kDOLtoRAMOffsetDifference
@@ -79,8 +104,6 @@ import Foundation
 //	0x7fe3fb78, // mr	r3, r31 (overwritten code)
 //	createBranchFrom(offset: suckerStart + 0x60, toOffset: suckerEnd)
 //])
-
-
 
 //// skill link
 //let skillBranch1 = 0x80221d70 - kDOLtoRAMOffsetDifference
