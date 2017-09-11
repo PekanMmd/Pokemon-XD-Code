@@ -29,27 +29,38 @@ class XGUtility {
 		
 		print("importing files to .fsys archives")
 		
-		XGFsys.fsys(.fsys("common.fsys")).replaceFileWithIndex(0, withFile: .lzss("common_rel.fdat.lzss"))
-		//	XGFsys.Fsys(.FSYS("common.fsys")).replaceFileWithIndex(2, withFile: .LZSS("DeckData_DarkPokemon.bin.lzss")) EU file
-		XGFsys.fsys(.fsys("common.fsys")).replaceFileWithIndex(4, withFile: .lzss("DeckData_DarkPokemon.bin.lzss"))
-		XGFsys.fsys(.fsys("common_dvdeth.fsys")).replaceFileWithIndex(0, withFile: .lzss("tableres2.fdat.lzss"))
-		XGFsys.fsys(.fsys("deck_archive.fsys")).replaceFileWithIndex(2, withFile: .lzss("DeckData_Colosseum.bin.lzss"))
-		XGFsys.fsys(.fsys("deck_archive.fsys")).replaceFileWithIndex(3, withFile: .lzss("DeckData_Colosseum.bin.lzss"))
-		XGFsys.fsys(.fsys("deck_archive.fsys")).replaceFileWithIndex(4, withFile: .lzss("DeckData_DarkPokemon.bin.lzss"))
-		//	XGFsys.Fsys(.FSYS("deck_archive.fsys")).replaceFileWithIndex(5, withFile: .LZSS("DeckData_DarkPokemon.bin.lzss")) EU file
-		XGFsys.fsys(.fsys("deck_archive.fsys")).replaceFileWithIndex(6, withFile: .lzss("DeckData_Hundred.bin.lzss"))
-		XGFsys.fsys(.fsys("deck_archive.fsys")).replaceFileWithIndex(12, withFile: .lzss("DeckData_Story.bin.lzss"))
-		XGFsys.fsys(.fsys("deck_archive.fsys")).replaceFileWithIndex(13, withFile: .lzss("DeckData_Story.bin.lzss"))
-		XGFsys.fsys(.fsys("deck_archive.fsys")).replaceFileWithIndex(14, withFile: .lzss("DeckData_Virtual.bin.lzss"))
-		XGFsys.fsys(.fsys("deck_archive.fsys")).replaceFileWithIndex(15, withFile: .lzss("DeckData_Virtual.bin.lzss"))
-//		XGFsys.fsys(.fsys("field_common.fsys")).replaceFileWithIndex(8, withFile: .lzss("uv_icn_type_big_00.fdat.lzss"))
-//		XGFsys.fsys(.fsys("field_common.fsys")).replaceFileWithIndex(9, withFile: .lzss("uv_icn_type_small_00.fdat.lzss"))
-		XGFsys.fsys(.fsys("fight_common.fsys")).replaceFileWithIndex(0, withFile: .lzss("fight.msg.lzss"))
-//		XGFsys.fsys(.fsys("fight_common.fsys")).replaceFileWithIndex(15, withFile: .lzss("uv_icn_type_big_00.fdat.lzss"))
-//		XGFsys.fsys(.fsys("fight_common.fsys")).replaceFileWithIndex(16, withFile: .lzss("uv_icn_type_small_00.fdat.lzss"))
-//		XGFsys.fsys(.nameAndFolder("title.fsys",.MenuFSYS)).replaceFileWithIndex(4, withFile: .lzss("title_start_bg.fdat.lzss"))
-//		XGFsys.fsys(.nameAndFolder("title.fsys",.MenuFSYS)).replaceFileWithIndex(12, withFile: .lzss("title_start_00.fdat.lzss"))
-		XGFsys.fsys(.nameAndFolder("pocket_menu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: .lzss("pocket_menu.fdat.lzss"))
+		if !DeckDataEmptyLZSS.file.exists {
+			DeckDataEmptyLZSS.save()
+		}
+		
+		let common = XGFiles.fsys("common.fsys").fsysData
+		common.shiftAndReplaceFileWithIndex(2, withFile: .lzss("DeckData_Empty.bin.lzss")) //EU file
+		common.shiftAndReplaceFileWithIndex(4, withFile: .lzss("DeckData_DarkPokemon.bin.lzss"))
+		common.shiftAndReplaceFileWithIndex(0, withFile: .lzss("common_rel.fdat.lzss"))
+		
+		XGFiles.fsys("common_dvdeth.fsys").fsysData.shiftAndReplaceFileWithIndex(0, withFile: .lzss("tableres2.fdat.lzss"))
+		
+		let deckArchive = XGFiles.fsys("deck_archive.fsys").fsysData
+		
+		for i in 0 ..< deckArchive.numberOfEntries {
+			// remove eu files to make space for increased file sizes assuming they're all the odd ones
+			//	XGFiles.FSYS("deck_archive.fsys").fsysData.shiftAndReplaceFileWithIndex(5, withFile: .LZSS("DeckData_DarkPokemon.bin.lzss")) EU file
+			if i % 2 == 1 {
+				deckArchive.shiftAndReplaceFileWithIndex(i, withFile: .lzss("DeckData_Empty.bin.lzss"))
+			}
+		}
+		
+		deckArchive.shiftAndReplaceFileWithIndex(2, withFile: .lzss("DeckData_Colosseum.bin.lzss"))
+//		deckArchive.shiftAndReplaceFileWithIndex(3, withFile: .lzss("DeckData_Colosseum.bin.lzss"))
+		deckArchive.shiftAndReplaceFileWithIndex(4, withFile: .lzss("DeckData_DarkPokemon.bin.lzss"))
+//		deckArchive.shiftAndReplaceFileWithIndex(6, withFile: .lzss("DeckData_Hundred.bin.lzss"))
+		deckArchive.shiftAndReplaceFileWithIndex(12, withFile: .lzss("DeckData_Story.bin.lzss"))
+//		deckArchive.shiftAndReplaceFileWithIndex(13, withFile: .lzss("DeckData_Story.bin.lzss"))
+		deckArchive.shiftAndReplaceFileWithIndex(14, withFile: .lzss("DeckData_Virtual.bin.lzss"))
+//		deckArchive.shiftAndReplaceFileWithIndex(15, withFile: .lzss("DeckData_Virtual.bin.lzss"))
+		
+		XGFiles.fsys("fight_common.fsys").fsysData.shiftAndReplaceFileWithIndex(0, withFile: .lzss("fight.msg.lzss"))
+		XGFiles.nameAndFolder("pocket_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: .lzss("pocket_menu.fdat.lzss"))
 		
 	}
 	
@@ -168,8 +179,7 @@ class XGUtility {
 	}
 	
 	class func compileCommonRel() {
-		compressFiles()
-		XGFsys.fsys(.fsys("common.fsys")).replaceFileWithIndex(0, withFile: .lzss("common_rel.fdat.lzss"))
+		XGFiles.fsys("common.fsys").fsysData.shiftAndReplaceFileWithIndex(0, withFile: XGFiles.common_rel.compress())
 		XGISO().importFiles([.fsys("common.fsys")])
 	}
 	
@@ -185,7 +195,6 @@ class XGUtility {
 	
 	class func compileAllFiles() {
 		
-		prepareXG()
 		prepareForCompilation()
 		
 		importStringTables()
@@ -194,8 +203,9 @@ class XGUtility {
 		XGISO().importAllFiles()
 	}
 	
-	class func compileForRelease() {
+	class func compileForRelease(XG: Bool) {
 		prepareForRelease()
+		if XG { prepareXG() }
 		compileAllFiles()
 	}
 	
@@ -211,7 +221,7 @@ class XGUtility {
 			let lzssFile = XGFiles.nameAndFolder(lzssName, XGFolders.LZSS)
 			
 			if fsysFile.exists {
-				XGFsys.fsys(fsysFile).replaceFileWithIndex(1, withFile: lzssFile)
+				fsysFile.fsysData.shiftAndReplaceFileWithIndex(1, withFile: lzssFile)
 			}
 		}
 	}
@@ -228,7 +238,7 @@ class XGUtility {
 			let lzssFile = XGFiles.nameAndFolder(lzssName, XGFolders.LZSS)
 			
 			if fsysFile.exists {
-				XGFsys.fsys(fsysFile).replaceFileWithIndex(2, withFile: lzssFile)
+				fsysFile.fsysData.shiftAndReplaceFileWithIndex(2, withFile: lzssFile)
 			}
 		}
 		
@@ -248,38 +258,37 @@ class XGUtility {
 		let p_exchange = XGFiles.lzss("p_exchange.msg.lzss")
 		let world_map = XGFiles.lzss("world_map.msg.lzss")
 		
-		XGFsys.fsys(.nameAndFolder("battle_disk.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: pocket_menu)
-		XGFsys.fsys(.nameAndFolder("battle_disk.fsys",.MenuFSYS)).replaceFileWithIndex(1, withFile: m5labo2f)
-		XGFsys.fsys(.nameAndFolder("battle_disk.fsys",.MenuFSYS)).replaceFileWithIndex(2, withFile: d4tower1f3)
-		XGFsys.fsys(.nameAndFolder("bingo_menu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: d4tower1f2)
-		XGFsys.fsys(.nameAndFolder("carde_menu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: system_tool)
-		XGFsys.fsys(.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: pocket_menu)
-		XGFsys.fsys(.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS)).replaceFileWithIndex(2, withFile: nameentrymenu)
-		XGFsys.fsys(.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS)).replaceFileWithIndex(3, withFile: system_tool)
-		XGFsys.fsys(.nameAndFolder("hologram_menu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: m3shrine1frl)
-		XGFsys.fsys(.nameAndFolder("hologram_menu.fsys",.MenuFSYS)).replaceFileWithIndex(1, withFile: relivehall_menu)
-		XGFsys.fsys(.nameAndFolder("mailopen_menu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: pda_menu)
-		XGFsys.fsys(.nameAndFolder("mewwaza.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: d2pc1f)
-		XGFsys.fsys(.nameAndFolder("name_entry_menu.fsys",.MenuFSYS)).replaceFileWithIndex(1, withFile:nameentrymenu)
-		XGFsys.fsys(.nameAndFolder("orre_menu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: d7out)
-		XGFsys.fsys(.nameAndFolder("orre_menu.fsys",.MenuFSYS)).replaceFileWithIndex(1, withFile: pocket_menu)
-		XGFsys.fsys(.nameAndFolder("orre_menu.fsys",.MenuFSYS)).replaceFileWithIndex(2, withFile: system_tool)
-		XGFsys.fsys(.nameAndFolder("pcbox_menu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: system_tool)
-		XGFsys.fsys(.nameAndFolder("pcbox_menu.fsys",.MenuFSYS)).replaceFileWithIndex(1, withFile: pocket_menu)
-		XGFsys.fsys(.nameAndFolder("pcbox_name_entry_menu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: nameentrymenu)
-		XGFsys.fsys(.nameAndFolder("pcbox_pocket_menu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: pocket_menu)
-		XGFsys.fsys(.nameAndFolder("pda_menu.fsys",.MenuFSYS)).replaceFileWithIndex(2, withFile: pda_menu)
-		XGFsys.fsys(.nameAndFolder("pocket_menu.fsys",.MenuFSYS)).replaceFileWithIndex(1, withFile: pocket_menu)
-		XGFsys.fsys(.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: system_tool)
-		XGFsys.fsys(.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS)).replaceFileWithIndex(1, withFile: pocket_menu)
-		XGFsys.fsys(.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS)).replaceFileWithIndex(2, withFile: p_exchange)
-		XGFsys.fsys(.nameAndFolder("relivehall_menu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: relivehall_menu)
-		XGFsys.fsys(.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: system_tool)
-		XGFsys.fsys(.nameAndFolder("title.fsys",.MenuFSYS)).replaceFileWithIndex(1, withFile: system_tool)
-		XGFsys.fsys(.nameAndFolder("topmenu.fsys",.MenuFSYS)).replaceFileWithIndex(0, withFile: system_tool)
-		XGFsys.fsys(.nameAndFolder("waza_menu.fsys",.MenuFSYS)).replaceFileWithIndex(1, withFile: pocket_menu)
-		XGFsys.fsys(.nameAndFolder("worldmap.fsys",.MenuFSYS)).replaceFileWithIndex(1, withFile: world_map)
-		
+		XGFiles.nameAndFolder("battle_disk.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: pocket_menu)
+		XGFiles.nameAndFolder("battle_disk.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: m5labo2f)
+		XGFiles.nameAndFolder("battle_disk.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(2, withFile: d4tower1f3)
+		XGFiles.nameAndFolder("bingo_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: d4tower1f2)
+		XGFiles.nameAndFolder("carde_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: system_tool)
+		XGFiles.nameAndFolder("hologram_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: m3shrine1frl)
+		XGFiles.nameAndFolder("hologram_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: relivehall_menu)
+		XGFiles.nameAndFolder("mailopen_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: pda_menu)
+		XGFiles.nameAndFolder("mewwaza.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: d2pc1f)
+		XGFiles.nameAndFolder("name_entry_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile:nameentrymenu)
+		XGFiles.nameAndFolder("orre_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: d7out)
+		XGFiles.nameAndFolder("orre_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: pocket_menu)
+		XGFiles.nameAndFolder("orre_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(2, withFile: system_tool)
+		XGFiles.nameAndFolder("pcbox_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: system_tool)
+		XGFiles.nameAndFolder("pcbox_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: pocket_menu)
+		XGFiles.nameAndFolder("pcbox_name_entry_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: nameentrymenu)
+		XGFiles.nameAndFolder("pcbox_pocket_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: pocket_menu)
+		XGFiles.nameAndFolder("pda_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(2, withFile: pda_menu)
+		XGFiles.nameAndFolder("pocket_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: pocket_menu)
+		XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: system_tool)
+		XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: pocket_menu)
+		XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(2, withFile: p_exchange)
+		XGFiles.nameAndFolder("relivehall_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: relivehall_menu)
+		XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: system_tool)
+		XGFiles.nameAndFolder("title.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: system_tool)
+		XGFiles.nameAndFolder("topmenu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: system_tool)
+		XGFiles.nameAndFolder("waza_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: pocket_menu)
+		XGFiles.nameAndFolder("worldmap.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: world_map)
+		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.replaceFileWithIndex(0, withFile: pocket_menu, saveWhenDone: true)
+		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.replaceFileWithIndex(2, withFile: nameentrymenu, saveWhenDone: true)
+		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.replaceFileWithIndex(3, withFile: system_tool, saveWhenDone: true)
 		
 	}
 	
@@ -2337,27 +2346,6 @@ class XGUtility {
 		return XGMutableData(byteStream: rawBytes, file: .nameAndFolder("", .Documents))
 	}
 	
-	class func extractPKXFromFSYS(fsysName: String) -> XGMutableData? {
-		let iso = XGISO()
-		let fsysData = iso.dataForFile(filename: fsysName)
-		if fsysData != nil {
-			let fsys = XGFsys.nameAndData(fsysName, fsysData!)
-			let model = fsys.decompressedDataForFileWithIndex(index: 0)
-			return model
-		} else {
-			print("file not found: " + fsysName)
-			return nil
-		}
-	}
-	
-	class func savePKXFromFSYS(fsysName: String) {
-		let data = extractPKXFromFSYS(fsysName: fsysName)
-		if data != nil {
-			data!.save()
-		} else {
-			print("file not found: " + fsysName)
-		}
-	}
 	
 	//MARK: - pokespot
 	class func relocatePokespots(startOffset: UInt32, numberOfEntries n: UInt32) {

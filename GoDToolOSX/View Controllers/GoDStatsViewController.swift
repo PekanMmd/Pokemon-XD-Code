@@ -27,8 +27,25 @@ class GoDStatsViewController: GoDTableViewController {
 	
 	@IBOutlet var saveButton: NSButton!
 	
-	@IBOutlet var type1PopUp: NSPopUpButton!
+	@IBOutlet var type1PopUp: GoDTypePopUpButton!
+	@IBOutlet var type2PopUp: GoDTypePopUpButton!
+	@IBOutlet var ability1PopUp: GoDAbilityPopUpButton!
+	@IBOutlet var ability2PopUp: GoDAbilityPopUpButton!
+	@IBOutlet var item1PopUp: GoDItemPopUpButton!
+	@IBOutlet var item2PopUp: GoDItemPopUpButton!
 	
+	@IBOutlet var catchRateField: NSTextField!
+	@IBOutlet var happinessField: NSTextField!
+	@IBOutlet var ExpYieldField: NSTextField!
+	
+	@IBOutlet var ExpRatePopUp: GoDExpRatePopUpButton!
+	@IBOutlet var genderPopUp: GoDGenderRatioPopUpButton!
+	
+	@IBOutlet var evo1: GoDEvolutionView!
+	@IBOutlet var evo2: GoDEvolutionView!
+	@IBOutlet var evo3: GoDEvolutionView!
+	@IBOutlet var evo4: GoDEvolutionView!
+	@IBOutlet var evo5: GoDEvolutionView!
 	
 	var mons = allPokemonArray().map { (mon) -> (name: String, type1 : XGMoveTypes, index : Int) in
 		return (mon.name.string, mon.type1, mon.index)
@@ -36,12 +53,18 @@ class GoDStatsViewController: GoDTableViewController {
 	
 	var pokemon = XGPokemonStats(index: 0) {
 		didSet {
-			self.reloadViewWithActivity()
+			self.reloadView()
 		}
 	}
 	
     override func viewDidLoad() {
         super.viewDidLoad()
+		
+		let evos = [evo1,evo2,evo3,evo4,evo5]
+		for i in 0 ..< evos.count {
+			evos[i]!.index = i
+			evos[i]!.delegate = self
+		}
 		
 		reloadViewWithActivity()
     }
@@ -67,6 +90,7 @@ class GoDStatsViewController: GoDTableViewController {
 		cell.identifier = "cell"
 		cell.translatesAutoresizingMaskIntoConstraints = false
 		
+		cell.alphaValue = self.table.selectedRow == row ? 1 : 0.75
 		
 		return cell
 	}
@@ -75,6 +99,8 @@ class GoDStatsViewController: GoDTableViewController {
 		if row >= 0 {
 			self.pokemon = XGPokemonStats(index: row)
 		}
+		self.table.reloadData()
+		self.table.tableView.selectRowIndexes([row], byExtendingSelection: false)
 	}
 	
 	func reloadViewWithActivity() {
@@ -93,14 +119,37 @@ class GoDStatsViewController: GoDTableViewController {
 		self.spdefField.integerValue = self.pokemon.specialDefense
 		self.speedField.integerValue = self.pokemon.speed
 		
+//		self.HPEVField.integerValue = self.pokemon.hpYield
+//		self.attackEVField.integerValue = self.pokemon.attackYield
+//		self.defEVField.integerValue = self.pokemon.defenseYield
+//		self.spatkEVField.integerValue = self.pokemon.specialAttackYield
+//		self.spdefEVField.integerValue = self.pokemon.specialDefenseYield
+//		self.speedEVField.integerValue = self.pokemon.speedYield
+		
+		self.catchRateField.integerValue = self.pokemon.catchRate
+		self.ExpYieldField.integerValue = self.pokemon.baseExp
+		self.happinessField.integerValue = self.pokemon.baseHappiness
+		
 		self.nameField.stringValue = self.pokemon.name.string
 		self.nameIDField.stringValue = self.pokemon.nameID.string
 		self.indexField.integerValue = self.pokemon.index
 		self.hexField.stringValue = self.pokemon.index.hexString()
 		self.startField.stringValue = self.pokemon.startOffset.hexString()
 		
+		self.type1PopUp.selectType(type: self.pokemon.type1)
+		self.type2PopUp.selectType(type: self.pokemon.type2)
+		self.ability1PopUp.selectAbility(ability: self.pokemon.ability1)
+		self.ability2PopUp.selectAbility(ability: self.pokemon.ability2)
+		self.item1PopUp.selectItem(item: self.pokemon.heldItem1)
+		self.item2PopUp.selectItem(item: self.pokemon.heldItem2)
 		
-		self.type1PopUp.selectItem(at: self.pokemon.type1.rawValue)
+		self.ExpRatePopUp.selectExpRate(rate: self.pokemon.levelUpRate)
+		self.genderPopUp.selectGenderRatio(ratio: self.pokemon.genderRatio)
+		
+		let evos = [evo1,evo2,evo3,evo4,evo5]
+		for evo in evos {
+			evo?.reloadData()
+		}
 		
 	}
 	
@@ -153,12 +202,71 @@ class GoDStatsViewController: GoDTableViewController {
 		self.reloadView()
 	}
 	
-	@IBAction func setSpped(_ sender: NSTextField) {
+	@IBAction func setSpeed(_ sender: NSTextField) {
 		var value = sender.integerValue
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
 		self.pokemon.speed = value
+		
+		self.reloadView()
+	}
+	
+	@IBAction func setHPEV(_ sender: NSTextField) {
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.hpYield = value
+		self.reloadView()
+	}
+	
+	@IBAction func setAtkEV(_ sender: NSTextField) {
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.attackYield = value
+		
+		self.reloadView()
+	}
+	
+	@IBAction func setDefEV(_ sender: NSTextField) {
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.defenseYield = value
+		
+		self.reloadView()
+	}
+	
+	@IBAction func setSpAtkEV(_ sender: NSTextField) {
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.specialAttackYield = value
+		
+		self.reloadView()
+	}
+	
+	@IBAction func setSpDefEV(_ sender: NSTextField) {
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.specialDefenseYield = value
+		
+		self.reloadView()
+	}
+	
+	@IBAction func setSpeedEV(_ sender: NSTextField) {
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.speedYield = value
 		
 		self.reloadView()
 	}
@@ -183,11 +291,84 @@ class GoDStatsViewController: GoDTableViewController {
 		self.reloadView()
 	}
 	
-	@IBAction func setType1(_ sender: NSPopUpButton) {
-		self.pokemon.type1 = XGMoveTypes(rawValue: sender.indexOfSelectedItem) ?? .normal
+	@IBAction func setType1(_ sender: GoDTypePopUpButton) {
+		self.pokemon.type1 = sender.selectedValue
 		
 		self.reloadView()
 	}
+	
+	@IBAction func setType2(_ sender: GoDTypePopUpButton) {
+		self.pokemon.type2 = sender.selectedValue
+		
+		self.reloadView()
+	}
+	
+	@IBAction func setAbility1(_ sender: GoDAbilityPopUpButton) {
+		self.pokemon.ability1 = sender.selectedValue
+		
+		self.reloadView()
+	}
+	
+	@IBAction func setAbility2(_ sender: GoDAbilityPopUpButton) {
+		self.pokemon.ability2 = sender.selectedValue
+		
+		self.reloadView()
+	}
+	
+	@IBAction func setItem1(_ sender: GoDItemPopUpButton) {
+		self.pokemon.heldItem1 = sender.selectedValue
+		
+		self.reloadView()
+	}
+	
+	@IBAction func setItem2(_ sender: GoDItemPopUpButton) {
+		self.pokemon.heldItem2 = sender.selectedValue
+		
+		self.reloadView()
+	}
+	
+	@IBAction func setExpRate(_ sender: GoDExpRatePopUpButton) {
+		self.pokemon.levelUpRate = sender.selectedValue
+		
+		self.reloadView()
+	}
+	
+	@IBAction func setGenderRatio(_ sender: GoDGenderRatioPopUpButton) {
+		self.pokemon.genderRatio = sender.selectedValue
+		
+		self.reloadView()
+	}
+	
+	@IBAction func setCatchRate(_ sender: NSTextField) {
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.catchRate = value
+		
+		self.reloadView()
+	}
+	
+	@IBAction func setHappiness(_ sender: NSTextField) {
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.baseHappiness = value
+		
+		self.reloadView()
+	}
+	
+	@IBAction func setBaseExp(_ sender: NSTextField) {
+		var value = sender.integerValue
+		value = value < 0 ? 0 : value
+		value = value > 255 ? 255 : value
+		
+		self.pokemon.baseExp = value
+		
+		self.reloadView()
+	}
+	
 	
 	
 	@IBAction func save(_ sender: NSButton) {

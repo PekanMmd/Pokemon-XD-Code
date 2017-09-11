@@ -8,13 +8,24 @@
 
 import Cocoa
 
-class XDRHomeViewController: XDRViewController {
+class XDRHomeViewController: GoDViewController {
 
 	var buttons = [NSButton]()
+	
+	@IBOutlet var isoLabel: NSTextField!
+	@IBOutlet var headerImage: NSImageView!
+	
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
+		
+		if XGFiles.iso.exists {
+			isoLabel.stringValue = ""
+			isoLabel.isHidden = true
+			headerImage.isHidden = false
+			
+		}
 		
 		let names = ["Randomise Pokemon", "Randomise Moves", "Randomise Abilities", "Randomise Types", "Randomise Evolutions", "Remove Trade Evolutions", "Randomise Battle Bingo", "Save"]
 		let actions : [Selector] = [ #selector(randomisePokemon), #selector(randomiseMoves), #selector(randomiseAbilities), #selector(randomiseTypes), #selector(randomiseEvolutions), #selector(removeTradeEvolutions), #selector(randomiseBattleBingo), #selector(save)]
@@ -31,12 +42,6 @@ class XDRHomeViewController: XDRViewController {
 		
 	}
 	
-	override func activeSet() {
-		for b in buttons {
-			b.isEnabled = !active
-		}
-	}
-	
 	override var representedObject: Any? {
 		didSet {
 			// Update the view, if already loaded.
@@ -48,6 +53,7 @@ class XDRHomeViewController: XDRViewController {
 		b.title = name
 		b.action = action
 		b.target = self
+		b.isEnabled = XGFiles.iso.exists
 		self.view.addSubview(b)
 		return b
 	}
@@ -80,19 +86,8 @@ class XDRHomeViewController: XDRViewController {
 	func randomisePokemon() {
 		self.showActivityView { (Bool) -> Void in
 			
-			var entries = 0
-			
-			for deck in MainDecksArray {
-				entries += deck.DPKMEntries
-			}
-			
-			var counter = entries - 1
-			
 			for deck in MainDecksArray {
 				for pokemon in deck.allActivePokemon {
-					
-					self.progressBar.doubleValue = Double(entries - counter) / Double(entries) * 100
-					if counter > 0 { counter -= 1 }
 					
 					if pokemon.species.index == 0 {
 						continue
@@ -156,19 +151,8 @@ class XDRHomeViewController: XDRViewController {
 		
 		self.showActivityView { (Bool) -> Void in
 			
-			var entries = 0
-			
-			for deck in MainDecksArray {
-				entries += deck.DPKMEntries
-			}
-			
-			var counter = entries - 1
-			
 			for deck in MainDecksArray {
 				for pokemon in deck.allActivePokemon {
-					
-					self.progressBar.doubleValue = Double(entries - counter) / Double(entries) * 100
-					if counter > 0 { counter -= 1 }
 					
 					if pokemon.species.index == 0 {
 						continue
@@ -227,8 +211,7 @@ class XDRHomeViewController: XDRViewController {
 	
 	func randomiseAbilities() {
 		self.showActivityView { (Bool) -> Void in
-			for i in 1 ... kNumberOfPokemon {
-				self.progressBar.doubleValue = Double(i) / Double(kNumberOfPokemon) * 100
+			for i in 1 ..< kNumberOfPokemon {
 				
 				if XGPokemon.pokemon(i).nameID == 0 {
 					continue
@@ -252,8 +235,7 @@ class XDRHomeViewController: XDRViewController {
 	
 	func randomiseTypes() {
 		self.showActivityView { (Bool) -> Void in
-			for i in 1 ... kNumberOfPokemon {
-				self.progressBar.doubleValue = Double(i) / Double(kNumberOfPokemon) * 100
+			for i in 1 ..< kNumberOfPokemon {
 				
 				if XGPokemon.pokemon(i).nameID == 0 {
 					continue
@@ -275,8 +257,7 @@ class XDRHomeViewController: XDRViewController {
 	
 	func randomiseEvolutions() {
 		self.showActivityView { (Bool) -> Void in
-			for i in 1 ... kNumberOfPokemon {
-				self.progressBar.doubleValue = Double(i) / Double(kNumberOfPokemon) * 100
+			for i in 1 ..< kNumberOfPokemon {
 				
 				let pokemon = XGPokemon.pokemon(i)
 				if pokemon.nameID > 0 {
@@ -297,14 +278,15 @@ class XDRHomeViewController: XDRViewController {
 	}
 	
 	func removeTradeEvolutions() {
-		removeTradeEvs(40)
+		self.showActivityView { (b) in
+			self.removeTradeEvs(40)
+		}
+		
 	}
 	
 	func removeTradeEvs(_ level: Int) {
 		self.showActivityView { (Bool) -> Void in
-			for i in 1 ... kNumberOfPokemon {
-				
-				self.progressBar.doubleValue = Double(i) / Double(kNumberOfPokemon) * 100
+			for i in 1 ..< kNumberOfPokemon {
 				
 				let pokemon = XGPokemon.pokemon(i)
 				if pokemon.nameID > 0 {
@@ -327,9 +309,7 @@ class XDRHomeViewController: XDRViewController {
 	
 	func save() {
 		self.showActivityView { (Bool) -> Void in
-			self.progressBar.doubleValue = 50
 			XGUtility.compileForRandomiser()
-			self.progressBar.doubleValue = 100
 			self.hideActivityView()
 		}
 	}

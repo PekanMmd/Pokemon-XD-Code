@@ -216,6 +216,16 @@ class XGMutableData: NSObject {
 		data.replaceBytes(in: range, withBytes: nil, length: 0)
 	}
 	
+	func deleteBytes(start: Int, count: Int) {
+		let range = NSMakeRange(start, count)
+		self.deleteBytesInRange(range)
+	}
+	
+	func nullBytes(start: Int, length: Int) {
+		let null = [Int](repeating: 0, count: length)
+		self.replaceBytesFromOffset(start, withByteStream: null)
+	}
+	
 	func setFolder(_ folder: XGFolders) {
 		self.file = .nameAndFolder(self.file.fileName, folder)
 	}

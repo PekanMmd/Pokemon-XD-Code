@@ -11,7 +11,7 @@ import Cocoa
 class GoDLevelPopUpButton: GoDPopUpButton {
 	
 	var selectedValue : Int {
-		return self.indexOfSelectedItem + 1
+		return self.indexOfSelectedItem
 	}
 	
 	func selectLevel(level: Int) {
@@ -21,11 +21,11 @@ class GoDLevelPopUpButton: GoDPopUpButton {
 	override func setUpItems() {
 		var values = [String]()
 		
-		for i in 1 ... 100 {
-			values.append(i.string)
+		for i in 0 ... 100 {
+			values.append("Lv. " + i.string)
 		}
 		
-		self.addItems(withTitles: values)
+		self.setTitles(values: values)
 	}
 
 }

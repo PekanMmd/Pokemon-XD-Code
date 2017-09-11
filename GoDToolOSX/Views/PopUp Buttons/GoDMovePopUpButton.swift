@@ -40,7 +40,7 @@ class GoDMovePopUpButton: GoDPopUpButton {
 			return m.name.string
 		}
 		
-		self.addItems(withTitles: values)
+		self.setTitles(values: values)
 	}
 	
 }

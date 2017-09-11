@@ -23,7 +23,7 @@ class GoDNaturePopUpButton: GoDPopUpButton {
 			return nature.string
 		}
 		
-		self.addItems(withTitles: values)
+		self.setTitles(values: values)
 	}
 	
 }

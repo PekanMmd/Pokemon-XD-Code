@@ -22,12 +22,21 @@ let kLZSSCompressedSizeOffset		= 0x08
 
 let kSizeOfLZSSHeader				= 0x10
 
-enum XGFsys {
+let kLZSSbytes : UInt32				= 0x4C5A5353
+
+class XGFsys : NSObject {
 	
-	case fsys(XGFiles)
-	case nameAndData(String, XGMutableData)
+	var file : XGFiles!
+	var data : XGMutableData!
 	
-	var description : String {
+	init(file: XGFiles) {
+		super.init()
+		
+		self.file = file
+		self.data = self.file.data
+	}
+	
+	override var description : String {
 		get {
 			var s = "\(self.fileName) - contains \(self.numberOfEntries) files\n"
 			let f = self.fileNames
@@ -36,24 +45,6 @@ enum XGFsys {
 					s += "\(i):\t\(offset)\t\t\(f[i])\n"
 			}
 			return s
-		}
-	}
-	
-	var file : XGFiles {
-		get{
-			switch self {
-				case .fsys(let file) : return file
-				case .nameAndData(let name, _)    : return XGFiles.nameAndFolder(name, .FSYS)
-			}
-		}
-	}
-	
-	var data : XGMutableData {
-		get {
-			switch self {
-				case .fsys(let file) : return file.data
-				case .nameAndData(_, let d)    : return d
-			}
 		}
 	}
 	
@@ -121,6 +112,10 @@ enum XGFsys {
 		}
 	}
 	
+	var dataEnd : Int {
+		return self.data.length - 0x4
+	}
+	
 	func startOffsetForFileDetails(_ index : Int) -> Int {
 		return firstEntryDetailOffset + (index * kSizeOfArchiveEntry)
 	}
@@ -130,24 +125,23 @@ enum XGFsys {
 		return Int(data.get4BytesAtOffset(start))
 	}
 	
+	func setStartOffsetForFile(index: Int, newStart: Int) {
+		let start = startOffsetForFileDetails(index) + kFileStartPointerOffset
+		data.replace4BytesAtOffset(start, withBytes: UInt32(newStart))
+	}
+	
 	func sizeForFile(index: Int) -> Int {
 		let start = startOffsetForFileDetails(index) + kCompressedSizeOffset
 		return Int(data.get4BytesAtOffset(start))
 	}
 	
 	func dataForFileWithIndex(index: Int) -> XGMutableData? {
-		switch self {
-		case .fsys(let file) :
-			if !file.exists {
-				print("file doesn't exist: ", self.file.path)
-				return nil
-			}
-		default:
-			break
-			
+		
+		if !file.exists {
+			print("file doesn't exist: ", self.file.path)
+			return nil
 		}
 		
-		let data = self.data
 		let start = self.startOffsetForFile(index)
 		let length = self.sizeForFile(index: index)
 		
@@ -159,20 +153,13 @@ enum XGFsys {
 	
 	func decompressedDataForFileWithIndex(index: Int) -> XGMutableData? {
 		
-		switch self {
-		case .fsys(let file) :
-			if !file.exists {
-				print("file doesn't exist: ", self.file.path)
-				return nil
-			}
-		default:
-			break
-
+		if !file.exists {
+			print("file doesn't exist: ", self.file.path)
+			return nil
 		}
 		
 		let filename = fileNames[index] + ".fdat"
 		let fileData = dataForFileWithIndex(index: index)!
-//		let compressedSize = fileData.get4BytesAtOffset(kLZSSCompressedSizeOffset)
 		let decompressedSize = Int32(fileData.get4BytesAtOffset(kLZSSUncompressedSizeOffset))
 		
 		
@@ -196,15 +183,55 @@ enum XGFsys {
 		let index = self.indexForFile(filename: name)
 		
 		if index != nil {
-			self.replaceFileWithIndex(index!, withFile: newFile)
+			self.shiftAndReplaceFileWithIndex(index!, withFile: newFile)
 		}
 	}
 	
-	func replaceFile(file: XGFiles) {
-		self.replaceFileWithName(name: file.fileName.replacingOccurrences(of: ".lzss", with: ""), withFile: file)
+	func replaceFile(file: XGFiles, removeFileExtension: Bool) {
+		let filename = removeFileExtension ? file.fileName.removeFileExtensions() : file.fileName
+		self.replaceFileWithName(name: filename, withFile: file)
 	}
 	
-	func replaceFileWithIndex(_ index: Int, withFile newFile: XGFiles) {
+	func replaceFile(file: XGFiles) {
+		// only use if filename in fsys doesn't have any '.' characters (and no file extension)
+		self.replaceFile(file: file, removeFileExtension: true)
+	}
+	
+	func shiftAndReplaceFileWithIndex(_ index: Int, withFile newFile: XGFiles) {
+		if !(index < self.numberOfEntries) {
+			print("index doesn't exist:", index)
+			return
+		}
+		
+		let shift = (newFile.fileSize != sizeForFile(index: index)) && (self.numberOfEntries > 1)
+		
+		
+		if shift {
+			for i in 0 ..< self.numberOfEntries {
+				self.shiftUpFileWithIndex(index: i)
+			}
+			
+			var rev = [Int]()
+			for i in (index + 1) ..< self.numberOfEntries {
+				rev.append(i)
+			}
+			for i in rev.reversed() {
+				self.shiftDownFileWithIndex(index: i)
+			}
+		}
+		
+		self.replaceFileWithIndex(index, withFile: newFile, saveWhenDone: false)
+		
+		if shift {
+			for i in 0 ..< self.numberOfEntries {
+				self.shiftUpFileWithIndex(index: i)
+			}
+		}
+	
+		self.save()
+	}
+	
+	func replaceFileWithIndex(_ index: Int, withFile newFile: XGFiles, saveWhenDone: Bool) {
 		if !self.file.exists {
 			print("file doesn't exist: ", self.file.path)
 			return
@@ -214,18 +241,111 @@ enum XGFsys {
 			return
 		}
 		
-		let data = self.data
+		if !(index < self.numberOfEntries) {
+			print("index doesn't exist:", index)
+			return
+		}
+		
+		let fileStart = startOffsetForFile(index)
+		let fileEnd = fileStart + newFile.fileSize
+		
+		if index < self.numberOfEntries - 1 {
+			if fileEnd > startOffsetForFile(index + 1) {
+				print("file too large to replace: ", newFile.fileName, self.file.fileName)
+				return
+			}
+		}
+		
+		if fileEnd > self.dataEnd {
+			print("file too large to replace: ", newFile.fileName, self.file.fileName)
+			return
+		}
+		
+		
+		let lzssCheck = self.data.get4BytesAtOffset(fileStart) == kLZSSbytes
+		
+		eraseDataForFile(index: index)
+		
 		let fileSize = UInt32(newFile.data.length + kSizeOfLZSSHeader)
 		
 		let detailsStart = startOffsetForFileDetails(index)
 		data.replace4BytesAtOffset(detailsStart + kCompressedSizeOffset, withBytes: fileSize)
 		
+		if lzssCheck { data.replace4BytesAtOffset(fileStart  + kLZSSCompressedSizeOffset, withBytes: fileSize) }
+		data.replaceBytesFromOffset(fileStart + (lzssCheck ? kSizeOfLZSSHeader : 0), withByteStream: newFile.data.byteStream)
+		
+		if saveWhenDone {
+			save()
+		}
+	}
+	
+	func eraseDataForFile(index: Int) {
+		
 		let fileStart = startOffsetForFile(index)
-		data.replace4BytesAtOffset(fileStart  + kLZSSCompressedSizeOffset, withBytes: fileSize)
-		data.replaceBytesFromOffset(fileStart + kSizeOfLZSSHeader, withByteStream: newFile.data.byteStream)
+		let lzssCheck = self.data.get4BytesAtOffset(fileStart) == kLZSSbytes
 		
-		data.save()
+		let start = startOffsetForFile(index) + (lzssCheck ? kSizeOfLZSSHeader : 0)
+		let size = sizeForFile(index: index) - (lzssCheck ? kSizeOfLZSSHeader : 0)
 		
+		data.nullBytes(start: start, length: size)
+	}
+	
+	func eraseData(start: Int, length: Int) {
+		data.nullBytes(start: start, length: length)
+	}
+	
+	func shiftUpFileWithIndex(index: Int) {
+		// used to push a file closer to the file above it and create more space for other files
+		if !(index < self.numberOfEntries) { return }
+		
+		var previousEnd = 0x0
+		if index == 0 {
+			previousEnd = self.startOffsetForFileDetails(self.numberOfEntries - 1) + kSizeOfArchiveEntry
+		} else {
+			previousEnd = self.startOffsetForFile(index - 1) + sizeForFile(index: index - 1)
+		}
+		
+		while (previousEnd % 16) != 0 {
+			previousEnd += 1
+		}
+		
+		self.moveFile(index: index, toOffset: previousEnd)
+		
+	}
+	
+	func shiftDownFileWithIndex(index: Int) {
+		// used to push a file closer to the file above it and create more space for other files
+		if !(index < self.numberOfEntries) { return }
+		
+		let size = sizeForFile(index: index)
+		
+		var nextStart = 0x0
+		
+		if index == self.numberOfEntries - 1 {
+			nextStart = self.dataEnd
+		} else {
+			nextStart = startOffsetForFile(index + 1)
+		}
+		
+		var start = nextStart - size
+		while (start % 16) != 0 {
+			start -= 1
+		}
+		self.moveFile(index: index, toOffset: start)
+		
+	}
+	
+	func moveFile(index: Int, toOffset startOffset: Int) {
+		let bytes = self.dataForFileWithIndex(index: index)!.byteStream
+		
+		self.eraseData(start: startOffsetForFile(index), length: sizeForFile(index: index))
+		self.setStartOffsetForFile(index: index, newStart: startOffset)
+		
+		data.replaceBytesFromOffset(startOffset, withByteStream: bytes)
+	}
+	
+	func save() {
+		self.data.save()
 	}
 	
 }

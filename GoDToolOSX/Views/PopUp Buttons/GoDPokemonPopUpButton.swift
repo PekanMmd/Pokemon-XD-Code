@@ -27,7 +27,7 @@ class GoDPokemonPopUpButton: GoDPopUpButton {
 			return p.name.string
 		}
 		
-		self.addItems(withTitles: values)
+		self.setTitles(values: values)
 	}
 	
 }

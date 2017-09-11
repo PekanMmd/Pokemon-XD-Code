@@ -17,6 +17,7 @@ let kShadowMaskOffset				= 0x04
 let kTrainerClassNameOffset			= 0x05
 let kTrainerNameIDOffset			= 0x06
 let kTrainerClassModelOffset		= 0x11
+let kTrainerCameraEffectOffset		= 0x12
 let kTrainerPreBattleTextIDOffset	= 0x14
 let kTrainerVictoryTextIDOffset		= 0x16
 let kTrainerDefeatTextIDOffset		= 0x18
@@ -29,6 +30,7 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 	var deck				= XGDecks.DeckStory
 	
 	var nameID				= 0x0
+	var trainerStringID		= 0x0
 	var trainerString		= ""
 	var preBattleTextID		= 0x0
 	var victoryTextID		= 0x0
@@ -38,6 +40,7 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 	var trainerClass		= XGTrainerClasses.michael1
 	var trainerModel		= XGTrainerModels.michael1WithoutSnagMachine
 	var AI					= 0
+	var cameraEffects		= 0 // some models have unique animations at the start of battle which require special cameras
 	
 	var locationString : String {
 		get {
@@ -214,9 +217,9 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		let start = startOffset
 		let deck = deck.data
 		
-		let nameCodeStart = deck.get2BytesAtOffset(start + kStringOffset)
+		self.trainerStringID = deck.get2BytesAtOffset(start + kStringOffset)
 		
-		var currentOff = self.deck.DSTRDataOffset + nameCodeStart
+		var currentOff = self.deck.DSTRDataOffset + self.trainerStringID
 		var name = ""
 		var currentChar = 1
 		
@@ -236,9 +239,6 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		self.defeatTextID = deck.get2BytesAtOffset(start + kTrainerDefeatTextIDOffset)
 		
 		self.shadowMask = deck.getByteAtOffset(start + kShadowMaskOffset)
-		
-//		var ddpk = XGDecks.DeckDarkPokemon.data
-//		var ddpkstart = XGDecks.DeckDarkPokemon.DDPKDataOffset
 		
 		var mask = self.shadowMask
 		
@@ -262,6 +262,9 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		
 		self.AI = deck.get2BytesAtOffset(start + kTrainerAIOffset)
 		
+		self.cameraEffects = deck.get2BytesAtOffset(start + kTrainerCameraEffectOffset)
+
+		
 	}
 	
 	func save() {
@@ -269,10 +272,12 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		let start = startOffset
 		let deck = self.deck.data
 		
+		deck.replace2BytesAtOffset(start + kTrainerCameraEffectOffset, withBytes: self.cameraEffects)
+		
 		deck.replace2BytesAtOffset(start + kTrainerNameIDOffset, withBytes: self.nameID)
-//		deck.replace2BytesAtOffset(start + kTrainerPreBattleTextIDOffset, withBytes: self.preBattleTextID)
-//		deck.replace2BytesAtOffset(start + kTrainerVictoryTextIDOffset, withBytes: self.victoryTextID)
-//		deck.replace2BytesAtOffset(start + kTrainerDefeatTextIDOffset, withBytes: self.defeatTextID)
+		deck.replace2BytesAtOffset(start + kTrainerPreBattleTextIDOffset, withBytes: self.preBattleTextID)
+		deck.replace2BytesAtOffset(start + kTrainerVictoryTextIDOffset, withBytes: self.victoryTextID)
+		deck.replace2BytesAtOffset(start + kTrainerDefeatTextIDOffset, withBytes: self.defeatTextID)
 		
 		deck.replaceByteAtOffset(start + kTrainerClassNameOffset , withByte: self.trainerClass.rawValue)
 		deck.replaceByteAtOffset(start + kTrainerClassModelOffset, withByte: self.trainerModel.rawValue)
@@ -297,6 +302,7 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		}
 		
 		deck.replace2BytesAtOffset(start + kTrainerAIOffset, withBytes: self.AI)
+		deck.replace2BytesAtOffset(start + kTrainerCameraEffectOffset, withBytes: self.cameraEffects)
 		
 		deck.save()
 	}

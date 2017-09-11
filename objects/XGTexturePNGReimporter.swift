@@ -26,6 +26,9 @@ class XGTexturePNGReimporter: NSObject {
 	var blockWidth  = 0
 	var blockHeight = 0
 	
+	// number of pixels needed to be appended for width to be multiple of 8
+	var requiredPixelsPerRow = 0
+	
 	var indexed = false
 	
 	init(oldTextureData: XGMutableData, newImage: UIImage) {
@@ -56,9 +59,11 @@ class XGTexturePNGReimporter: NSObject {
 		let imageWidth  = imageAsCGRef!.width
 		let imageHeight = imageAsCGRef!.height
 		
+		requiredPixelsPerRow = (imageWidth % 8) == 0 ? 0 : 8 - (imageWidth % 8)
+		
 		let numberOfPixels = imageWidth * imageHeight
 		
-		self.horizontalTiles = Int(imageWidth / blockWidth)
+		self.horizontalTiles = Int( (imageWidth + requiredPixelsPerRow) / blockWidth)
 		
 		var pixels = [UInt32](repeating: 0, count: numberOfPixels)
 		
@@ -78,7 +83,9 @@ class XGTexturePNGReimporter: NSObject {
 		
 		var pngblock = [XGPNGBlock]()
 		
-		for _ in 0 ..< numberOfPixels / (blockWidth * blockHeight) {
+		let totalPixelCount = numberOfPixels + (imageHeight * requiredPixelsPerRow)
+		
+		for _ in 0 ..< ( totalPixelCount  / (blockWidth * blockHeight)) {
 			pngblock.append(XGPNGBlock())
 		}
 		
@@ -100,12 +107,21 @@ class XGTexturePNGReimporter: NSObject {
 			
 			let pixelColour = XGColour(red: red, green: green, blue: blue, alpha: alpha)
 			
-			let row		= i / (horizontalTiles * blockWidth * blockHeight)
-			let column  = (i / blockWidth) % horizontalTiles
+			let pixelColumn = i % imageWidth
+			
+			let row		= i / (imageWidth * blockHeight)
+			let column  = pixelColumn / blockWidth
 			
 			let index = (row * horizontalTiles) + column
 			
 			pngblock[index].append(pixelColour)
+			
+			// if width isn't divisible by block size, extra transparent pixels are added
+			if pixelColumn == (imageWidth - 1) {
+				for _ in 0 ..< requiredPixelsPerRow {
+					pngblock[index].append(XGColour.none())
+				}
+			}
 			
 		}
 		
@@ -121,7 +137,6 @@ class XGTexturePNGReimporter: NSObject {
 			let tex = XGTextureBlock()
 			
 			for i in 0 ..< (blockWidth * blockHeight) {
-				
 				
 				var index = Palette.indexForColour(block[i])
 				if index == nil {

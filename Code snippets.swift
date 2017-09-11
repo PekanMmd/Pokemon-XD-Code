@@ -960,7 +960,7 @@ import Foundation
 //	let fsys = XGFiles.fsys(oldFile)
 //	oldFsys.file = fsys
 //	oldFsys.save()
-//	fsys.fsysData.replaceFileWithIndex(0, withFile: XGFiles.nameAndFolder(new + ".fdat", .TextureImporter).compress())
+//	fsys.fsysData.shiftAndReplaceFileWithIndex(0, withFile: XGFiles.nameAndFolder(new + ".fdat", .TextureImporter).compress())
 //	iso.importFiles([fsys])
 //}
 
@@ -2907,14 +2907,53 @@ import Foundation
 //])
 
 
+//let suicune = XGISO().dataForFile(filename: "pkx_suikun.fsys")!
+//let entei = XGISO().dataForFile(filename: "pkx_entei.fsys")!
+//let raikou = XGISO().dataForFile(filename: "pkx_raikou.fsys")!
+//
+//let shedinja = XGISO().dataForFile(filename: "pkx_nukenin.fsys")!
+//
+//let models = [suicune,entei,raikou, shedinja]
+//
+//for model in models {
+//	model.save()
+//	let fsys = model.file.fsysData
+//	let pkx = fsys.decompressedDataForFileWithIndex(index: 0)!
+//	pkx.save()
+//	let file = pkx.file.data
+//	let ow = XGUtility.convertFromPKXToOverWorldModel(pkx: file)
+//	ow.file = .nameAndFolder(pkx.file.fileName + " OW", .Documents)
+//	ow.save()
+//
+//}
 
+//let shade = XGFiles.nameAndFolder("diveball_open.fdat", .TextureImporter).compress()
+//XGFiles.fsys("wzx_diveball_open.fsys").fsysData.replaceFile(file: shade)
+//XGUtility.compileForRelease(XG: true)
 
+//let faces = XGFiles.fsys("poke_face.fsys").fsysData
+//let marowak = XGFiles.nameAndFolder("face048.fdat", .Output).compress()
+//let ninetails = XGFiles.nameAndFolder("face162.fdat", .Output).compress()
+//faces.replaceFile(file: marowak)
+//faces.replaceFile(file: ninetails)
+//
+//
+//let wak = XGPokemon.pokemon(265).stats
+//let tails = XGPokemon.pokemon(264).stats
+//wak.faceIndex = 48
+//tails.faceIndex = 162
+//wak.save()
+//tails.save()
+//
 
+//		XGFiles.fsys("field_common.fsys").fsysData.shiftAndReplaceFileWithIndex(8, withFile: .lzss("uv_icn_type_big_00.fdat.lzss"))
+//		XGFiles.fsys("field_common.fsys").fsysData.shiftAndReplaceFileWithIndex(9, withFile: .lzss("uv_icn_type_small_00.fdat.lzss"))
 
+//		XGFiles.fsys("fight_common.fsys").fsysData.shiftAndReplaceFileWithIndex(15, withFile: .lzss("uv_icn_type_big_00.fdat.lzss"))
+//		XGFiles.fsys("fight_common.fsys").fsysData.shiftAndReplaceFileWithIndex(16, withFile: .lzss("uv_icn_type_small_00.fdat.lzss"))
 
-
-
-
+//		XGFiles.nameAndFolder("title.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(4, withFile: .lzss("title_start_bg.fdat.lzss"))
+//		XGFiles.nameAndFolder("title.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(12, withFile: .lzss("title_start_00.fdat.lzss"))
 
 
 

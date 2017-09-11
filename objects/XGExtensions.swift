@@ -39,7 +39,11 @@ extension String {
 		return spaces + self
 	}
 	
-	
+	func removeFileExtensions() -> String {
+		let extensionIndex = self.characters.index(of: ".") ?? self.endIndex
+		
+		return self.substring(to: extensionIndex)
+	}
 }
 
 extension Bool {

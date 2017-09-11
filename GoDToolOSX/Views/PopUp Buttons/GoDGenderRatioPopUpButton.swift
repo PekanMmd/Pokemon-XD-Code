@@ -25,7 +25,7 @@ class GoDGenderRatioPopUpButton: GoDPopUpButton {
 			values.append(gr.string)
 		}
 		
-		self.addItems(withTitles: values)
+		self.setTitles(values: values)
 	}
 	
 }

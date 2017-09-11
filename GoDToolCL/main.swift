@@ -6,36 +6,104 @@
 //  Copyright © 2015 Ovation International. All rights reserved.
 //
 
-import Foundation
 
+//// shadow pokemon can't be battled after being captured
+//let checkCaught = 0x14b024 - kDOLtoRAMOffsetDifference
+//
+//let shadowBattleBranch1 = 0x1fabf0 - kDOLtoRAMOffsetDifference
+//let shadowBattleStart1  = 0x220ed0 - kDOLtoRAMOffsetDifference
+//// r20 stored shadow data start
+////
+//replaceASM(startOffset: shadowBattleBranch1, newASM: [
+//	XGUtility.createBranchFrom(offset: shadowBattleBranch1, toOffset: shadowBattleStart1),
+//])
+//replaceASM(startOffset: shadowBattleStart1, newASM: [
+//	0x7e83a378, // mr r3, r20
+//	XGUtility.createBranchAndLinkFrom(offset: shadowBattleStart1 + 0x4, toOffset: checkCaught),
+//	0x5460063f, //rlwinm.	r0, r3, 0, 24, 31 (000000ff)
+//	XGUtility.powerPCBranchEqualFromOffset(from: 0x0, to: 0x8),
+//	0x3B200000, // li r25, 0
+//	0x7f03c378, // mr r3, r24 (overwritten code)
+//	XGUtility.createBranchFrom(offset: shadowBattleStart1 + 0x18, toOffset: shadowBattleBranch1 + 0x4)// branch back
+//])
 
-//let faces = XGFiles.fsys("poke_face.fsys").fsysData
-//let marowak = XGFiles.nameAndFolder("face048.fdat", .Output).compress()
-//let ninetails = XGFiles.nameAndFolder("face162.fdat", .Output).compress()
-//faces.replaceFile(file: marowak)
-//faces.replaceFile(file: ninetails)
+//XGUtility.compileMainFiles()
 
-//let people = XGFiles.fsys("people_archive.fsys").fsysData
-//let shade = XGFiles.nameAndFolder("ball_dive.fdat", .TextureImporter).compress()
-//people.replaceFile(file: shade)
-
-//let wak = XGPokemon.pokemon(265).stats
-//let tails = XGPokemon.pokemon(264).stats
-//wak.faceIndex = 48
-//tails.faceIndex = 162
-//wak.save()
-//tails.save()
-
-//let replacements = [("alolan_marowak","kongpang"),("alolan_ninetales","ootachi")]
-//for (new,old) in replacements {
-//	let oldFile = "pkx_" + old + ".fsys"
-//	let oldFsys = iso.dataForFile(filename: oldFile)!
-//	let fsys = XGFiles.fsys(oldFile)
-//	oldFsys.file = fsys
-//	oldFsys.save()
-//	fsys.fsysData.replaceFileWithIndex(0, withFile: XGFiles.nameAndFolder(new + ".fdat", .TextureImporter).compress())
-//	iso.importFiles([fsys])
+//let diveballfsys = ["wzx_snatch_attack_dive.fsys","wzx_snatch_ball_land_dive.fsys","wzx_snatch_miss_dive.fsys","wzx_snatch_shake_dive.fsys","wzx_throw_dive.fsys","wzx_yasei_ball_land_dive.fsys","wzx_yasei_get_dive.fsys","wzx_yasei_poke_out_dive.fsys","wzx_yasei_shake_dive.fsys"]
+//let diveballfdat = ["snatch_attack_dive.fdat","snatch_ball_land_dive.fdat","snatch_miss_dive.fdat","snatch_shake_dive.fdat","throw_dive.fdat","yasei_ball_land_dive.fdat","yasei_get_dive.fdat","yasei_poke_out_dive.fdat","yasei_shake_dive.fdat"]
+//for i in 0 ..< diveballfsys.count {
+//	let fsys = XGFiles.fsys(diveballfsys[i]).fsysData
+//	let fdat = XGFiles.nameAndFolder(diveballfdat[i], .TextureImporter).compress()
+//	fsys.replaceFile(file: fdat)
 //}
+
+//let a = XGFiles.nameAndFolder("esaba_A.fsys", .AutoFSYS).fsysData
+//let b = XGFiles.nameAndFolder("esaba_B.fsys", .AutoFSYS).fsysData
+//let c = XGFiles.nameAndFolder("esaba_C.fsys", .AutoFSYS).fsysData
+//
+////let ta = XGFiles.stringTable("esaba_A.msg").stringTable
+////let tb = XGFiles.stringTable("esaba_B.msg").stringTable
+////let tc = XGFiles.stringTable("esaba_C.msg").stringTable
+////ta.purge()
+////tb.purge()
+////tc.purge()
+//
+//let shedinja = XGFiles.nameAndFolder("shedinja.fdat", .TextureImporter).compress()
+//for i in [5,6,7,8,9,10] {
+//	a.shiftAndReplaceFileWithIndex(i, withFile: shedinja)
+//	c.shiftAndReplaceFileWithIndex(i, withFile: shedinja)
+//}
+//for i in [5,6,7,8] {
+//	b.shiftAndReplaceFileWithIndex(i, withFile: shedinja)
+//}
+//
+//let suicune = XGFiles.nameAndFolder("suikun_ow.fdat", .TextureImporter).compress()
+//let entei   = XGFiles.nameAndFolder("entei_ow.fdat", .TextureImporter).compress()
+//let raikou  = XGFiles.nameAndFolder("raikou_ow.fdat", .TextureImporter).compress()
+//a.shiftAndReplaceFileWithIndex(10, withFile: entei)
+//b.shiftAndReplaceFileWithIndex(8, withFile: suicune)
+//c.shiftAndReplaceFileWithIndex(10, withFile: raikou)
+//
+//XGUtility.compileAllFiles()
+
+// ---------------
+//let a = XGFiles.nameAndFolder("esaba_A.fsys", .AutoFSYS).fsysData
+//let b = XGFiles.nameAndFolder("esaba_B.fsys", .AutoFSYS).fsysData
+//let c = XGFiles.nameAndFolder("esaba_C.fsys", .AutoFSYS).fsysData
+//let shedinja = XGFiles.nameAndFolder("nukenin_ow.fdat", .TextureImporter).compress()
+//for i in [5,6,10] {
+//	a.replaceFileWithIndex(i, withFile: shedinja)
+//	c.replaceFileWithIndex(i, withFile: shedinja)
+//}
+//for i in [5,6,8] {
+//	b.replaceFileWithIndex(i, withFile: shedinja)
+//}
+//
+//for file in [a,b,c] {
+//	file.shiftUpFileWithIndex(index: 2)
+//}
+//for i in 5 ... 10 {
+//	a.shiftUpFileWithIndex(index: i)
+//	c.shiftUpFileWithIndex(index: i)
+//	if i < 9 {
+//		b.shiftUpFileWithIndex(index: i)
+//	}
+//}
+//let suicune = XGFiles.nameAndFolder("suikun_ow.fdat", .TextureImporter).compress()
+//let entei   = XGFiles.nameAndFolder("entei_ow.fdat", .TextureImporter).compress()
+//let raikou  = XGFiles.nameAndFolder("raikou_ow.fdat", .TextureImporter).compress()
+//a.replaceFileWithIndex(10, withFile: entei)
+//b.replaceFileWithIndex(8, withFile: suicune)
+//c.replaceFileWithIndex(10, withFile: raikou)
+
+//let x = a.sizeForFile(index: 10)
+//let y = a.startOffsetForFile(10)
+//x.string.println()
+//y.string.println()
+//print(x + y)
+//a.startOffsetForFile(11).string.println()
+//print(suicune.fileSize + y)
+
 
 //// shadow shake
 //let shakeBranch = 0x80216d94 - kDOLtoRAMOffsetDifference

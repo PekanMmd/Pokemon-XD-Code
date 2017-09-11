@@ -162,11 +162,6 @@ class XGISO: NSObject {
 		return fileSizes[fileName]
 	}
 	
-	func fsysForFile(filename: String) -> XGFsys? {
-		let data = dataForFile(filename: filename)
-		return data == nil ? nil : XGFsys.nameAndData(filename, data!)
-	}
-	
 	func dataForFile(filename: String) -> XGMutableData? {
 		
 		let start = self.locationForFile(filename)
@@ -468,20 +463,20 @@ class XGISO: NSObject {
 	}
 	
 	func extractCommon() {
-		let rel = XGFsys.fsys(.fsys("common.fsys")).decompressedDataForFileWithIndex(index: 0)!
+		let rel = XGFiles.fsys("common.fsys").fsysData.decompressedDataForFileWithIndex(index: 0)!
 		rel.file = .common_rel
 		rel.save()
-		let tableres2 = XGFsys.fsys(.fsys("common_dvdeth.fsys")).decompressedDataForFileWithIndex(index: 0)!
+		let tableres2 = XGFiles.fsys("common_dvdeth.fsys").fsysData.decompressedDataForFileWithIndex(index: 0)!
 		tableres2.file = .tableres2
 		tableres2.save()
-		let pocket = XGFsys.fsys(.nameAndFolder("pocket_menu.fsys",.MenuFSYS)).decompressedDataForFileWithIndex(index: 0)!
+		let pocket = XGFiles.nameAndFolder("pocket_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
 		pocket.file = .nameAndFolder("pocket_menu.fdat", .Common)
 		pocket.save()
 		
 	}
 	
 	func extractDecks() {
-		let deck = XGFsys.fsys(.fsys("deck_archive.fsys"))
+		let deck = XGFiles.fsys("deck_archive.fsys").fsysData
 		let colosseum = deck.decompressedDataForFileWithIndex(index: 2)!
 		let dark = deck.decompressedDataForFileWithIndex(index: 4)!
 		let hundred = deck.decompressedDataForFileWithIndex(index: 6)!
@@ -503,7 +498,7 @@ class XGISO: NSObject {
 	func extractAutoStringTables() {
 		for file in XGFolders.AutoFSYS.filenames {
 			let msg = file.replacingOccurrences(of: ".fsys", with: ".msg")
-			let fsys = XGFsys.fsys(.nameAndFolder(file, .AutoFSYS))
+			let fsys = XGFiles.nameAndFolder(file, .AutoFSYS).fsysData
 			let data = fsys.decompressedDataForFileWithIndex(index: 2)!
 			data.file = .stringTable(msg)
 			data.save()
@@ -511,7 +506,7 @@ class XGISO: NSObject {
 	}
 	
 	func extractSpecificStringTables() {
-		let fight = XGFsys.fsys(.fsys("fight_common.fsys")).decompressedDataForFileWithIndex(index: 0)!
+		let fight = XGFiles.fsys("fight_common.fsys").fsysData.decompressedDataForFileWithIndex(index: 0)!
 		fight.file = .stringTable("fight.msg")
 		fight.save()
 		
@@ -526,35 +521,35 @@ class XGISO: NSObject {
 		let world_map = XGFiles.stringTable("world_map.msg")
 		
 		
-		let pm = XGFsys.fsys(.nameAndFolder("pcbox_pocket_menu.fsys",.MenuFSYS)).decompressedDataForFileWithIndex(index: 0)!
+		let pm = XGFiles.nameAndFolder("pcbox_pocket_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
 		pm.file = pocket_menu
 		pm.save()
 		
-		let nem = XGFsys.fsys(.nameAndFolder("pcbox_name_entry_menu.fsys",.MenuFSYS)).decompressedDataForFileWithIndex(index: 0)!
+		let nem = XGFiles.nameAndFolder("pcbox_name_entry_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
 		nem.file = nameentrymenu
 		nem.save()
 		
-		let st = XGFsys.fsys(.nameAndFolder("pcbox_menu.fsys",.MenuFSYS)).decompressedDataForFileWithIndex(index: 0)!
+		let st = XGFiles.nameAndFolder("pcbox_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
 		st.file = system_tool
 		st.save()
 		
-		let m3rl = XGFsys.fsys(.nameAndFolder("hologram_menu.fsys",.MenuFSYS)).decompressedDataForFileWithIndex(index: 0)!
+		let m3rl = XGFiles.nameAndFolder("hologram_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
 		m3rl.file = m3shrine1frl
 		m3rl.save()
 		
-		let rh = XGFsys.fsys(.nameAndFolder("relivehall_menu.fsys",.MenuFSYS)).decompressedDataForFileWithIndex(index: 0)!
+		let rh = XGFiles.nameAndFolder("relivehall_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
 		rh.file = relivehall_menu
 		rh.save()
 		
-		let pda = XGFsys.fsys(.nameAndFolder("pda_menu.fsys",.MenuFSYS)).decompressedDataForFileWithIndex(index: 2)!
+		let pda = XGFiles.nameAndFolder("pda_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 2)!
 		pda.file = pda_menu
 		pda.save()
 		
-		let pex = XGFsys.fsys(.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS)).decompressedDataForFileWithIndex(index: 2)!
+		let pex = XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 2)!
 		pex.file = p_exchange
 		pex.save()
 		
-		let wm = XGFsys.fsys(.nameAndFolder("worldmap.fsys",.MenuFSYS)).decompressedDataForFileWithIndex(index: 1)!
+		let wm = XGFiles.nameAndFolder("worldmap.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 1)!
 		wm.file = world_map
 		wm.save()
 	}
@@ -567,7 +562,7 @@ class XGISO: NSObject {
 	
 	func extractScripts() {
 		for file in XGFolders.AutoFSYS.files {
-			let fsys = XGFsys.fsys(file)
+			let fsys = file.fsysData
 			let data = fsys.decompressedDataForFileWithIndex(index: 1)!
 			data.file = .script(file.fileName.replacingOccurrences(of: ".fsys", with: ".scd"))
 			data.save()

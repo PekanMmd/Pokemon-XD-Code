@@ -15,6 +15,8 @@ class XGColour: NSObject {
 	var blue	= 0
 	var alpha	= false
 	
+	var include = true
+	
 	init(red: Int, green: Int, blue: Int, alpha: Int) {
 		super.init()
 		
@@ -102,6 +104,12 @@ class XGColour: NSObject {
 	
 	class func none() -> XGColour {
 		return XGColour(red: 0, green: 0, blue: 0, alpha: 0)
+	}
+	
+	class func paddingPixel() -> XGColour {
+		let colour = XGColour.none()
+		colour.include = false
+		return colour
 	}
 	
 	

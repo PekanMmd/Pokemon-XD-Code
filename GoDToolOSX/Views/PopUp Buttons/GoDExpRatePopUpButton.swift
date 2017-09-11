@@ -24,7 +24,7 @@ class GoDExpRatePopUpButton: GoDPopUpButton {
 			values.append(XGExpRate(rawValue: i)!.string)
 		}
 		
-		self.addItems(withTitles: values)
+		self.setTitles(values: values)
 	}
 	
 }

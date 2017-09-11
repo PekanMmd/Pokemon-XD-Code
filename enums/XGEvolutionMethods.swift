@@ -23,6 +23,7 @@ enum XGEvolutionMethods : Int, XGDictionaryRepresentable {
 	case moreDefense		= 0x0A
 	case silcoon			= 0x0B
 	case cascoon			= 0x0C
+	case ninjask			= 0x0D
 	case shedinja			= 0x0E
 	case maxBeauty			= 0x0F
 	case levelUpWithKeyItem	= 0x10
@@ -42,9 +43,10 @@ enum XGEvolutionMethods : Int, XGDictionaryRepresentable {
 				case .moreAttack			:	return "Atk > Def"
 				case .equalAttack			:	return "Atk = Def"
 				case .moreDefense			:	return "Atk < Def"
-				case .silcoon				:	return "Silcoon"
-				case .cascoon				:	return "Cascoon"
-				case .shedinja				:	return "Shedinja"
+				case .silcoon				:	return "Silcoon evolution method"
+				case .cascoon				:	return "Cascoon evolution method"
+				case .ninjask				:	return "Ninjask evolution method"
+				case .shedinja				:	return "Shedinja evolution method"
 				case .maxBeauty				:	return "Max Beauty"
 				case .levelUpWithKeyItem	:	return "Level Up With Key Item"
 				case .Gen4					:	return "Evolves in Generation 4"

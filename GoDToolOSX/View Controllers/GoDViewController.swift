@@ -7,10 +7,12 @@
 //
 
 import AppKit
+import Cocoa
 
 class GoDViewController: NSViewController {
 
 	var activityView = NSImageView()
+	var activityIndicator = NSProgressIndicator()
 	
 	var selectedItem	 : Any	= 0
 	
@@ -27,6 +29,12 @@ class GoDViewController: NSViewController {
 		super.viewDidLoad()
 		
 		self.activityView.setBackgroundColour(GoDDesign.colourBlack())
+		self.activityView.addSubview(self.activityIndicator)
+		self.activityIndicator.style = .spinningStyle
+		self.activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+		self.activityView.addConstraintAlignCenters(view1: self.activityIndicator, view2: self.activityView)
+		self.activityView.addConstraintSize(view: self.activityIndicator, height: 50, width: 50)
+		self.activityIndicator.startAnimation(self)
 		
 		self.addMetric(value: self.mainView.frame.height, name: "screenHeight")
 		self.addMetric(value: self.mainView.frame.width , name: "screenWidth" )

@@ -29,7 +29,7 @@ class GoDAbilityPopUpButton: GoDPopUpButton {
 			return a.name.string
 		}
 		
-		self.addItems(withTitles: values)
+		self.setTitles(values: values)
 	}
 	
 }

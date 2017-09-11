@@ -25,7 +25,7 @@ class GoDGenderPopUpButton: GoDPopUpButton {
 			values.append(g.string)
 		}
 		
-		self.addItems(withTitles: values)
+		self.setTitles(values: values)
 	}
 	
 }

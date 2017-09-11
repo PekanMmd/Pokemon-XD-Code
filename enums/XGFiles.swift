@@ -18,6 +18,8 @@ var loadedStringTables = [String : XGStringTable]()
 let loadableFiles = [XGFiles.common_rel.path,XGFiles.dol.path,XGDecks.DeckStory.file.path,XGDecks.DeckDarkPokemon.file.path, XGFiles.iso.path,XGFiles.original(.common_rel).path,XGFiles.original(.dol).path,XGFiles.original(.tableres2).path]
 let loadableStringTables = [XGFiles.tableres2.path,XGFiles.stringTable("pocket_menu.msg").path,XGFiles.common_rel.path,XGFiles.dol.path,XGFiles.original(.common_rel).path,XGFiles.original(.dol).path,XGFiles.original(.tableres2).path]
 
+let DeckDataEmptyLZSS = XGMutableData(byteStream: [0xAF, 0x44, 0x45, 0x43, 0x4B, 0xEB, 0xF0, 0xD0, 0xEB, 0xF0, 0x02, 0xAE, 0xEA, 0xF2, 0x54, 0x4E, 0x52, 0xEB, 0xF0, 0x48, 0xEB, 0xF0, 0x01, 0x70, 0xDC, 0xFF, 0x1B, 0x0F, 0x2D, 0x0F, 0xE8, 0xF4, 0x50, 0x4B, 0x4D, 0xEB, 0xF0, 0x31, 0x30, 0x06, 0x0F, 0x5F, 0x0F, 0xFA, 0xF3, 0x41, 0x49, 0x4A, 0x0F, 0x8B, 0x0F, 0xD6, 0xE6, 0xF6, 0x53, 0x54, 0x01, 0x01, 0x18, 0xE6, 0xF5, 0x4E, 0x55, 0x03, 0x4C, 0x4C, 0x94, 0x01], file: .lzss("DeckData_Empty.bin.lzss"))
+
 indirect enum XGFiles {
 	
 	case dol
@@ -140,7 +142,7 @@ indirect enum XGFiles {
 	
 	var fsysData : XGFsys {
 		get {
-			return XGFsys.fsys(self)
+			return XGFsys(file: self)
 		}
 	}
 	
@@ -423,6 +425,7 @@ enum XGFolders : String {
 		for i in 0 ... 67 {
 			images.append(.trainerFace(i))
 		}
+		images.append(.nameAndFolder("type_fairy.png", .Types))
 		images.append(.nameAndFolder("type_shadow.png", .Types))
 		
 		for image in images {
@@ -433,6 +436,11 @@ enum XGFolders : String {
 				data.save()
 			}
 		}
+		
+		if !DeckDataEmptyLZSS.file.exists {
+			DeckDataEmptyLZSS.save()
+		}
+		
 		
 	}
 	

@@ -19,8 +19,19 @@
 		B205E0CD1F60B24F00A5F075 /* GoDGenderPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205E0CC1F60B24F00A5F075 /* GoDGenderPopUpButton.swift */; };
 		B205E0CF1F60B32400A5F075 /* GoDNaturePopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205E0CE1F60B32400A5F075 /* GoDNaturePopUpButton.swift */; };
 		B205E0D11F616BDB00A5F075 /* GoDContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205E0D01F616BDB00A5F075 /* GoDContainerView.swift */; };
+		B205E0D31F6246ED00A5F075 /* type_fairy.png in Resources */ = {isa = PBXBuildFile; fileRef = B205E0D21F6246ED00A5F075 /* type_fairy.png */; };
+		B205E0D41F6246ED00A5F075 /* type_fairy.png in Resources */ = {isa = PBXBuildFile; fileRef = B205E0D21F6246ED00A5F075 /* type_fairy.png */; };
+		B205E0D51F63815200A5F075 /* GoDViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8911F49CD050075C6D2 /* GoDViewController.swift */; };
+		B205E0D61F63821200A5F075 /* GoDDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F88B1F49CD050075C6D2 /* GoDDesign.swift */; };
+		B205E0D81F63857F00A5F075 /* GoDEvolutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205E0D71F63857F00A5F075 /* GoDEvolutionView.swift */; };
+		B205E0D91F63857F00A5F075 /* GoDEvolutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205E0D71F63857F00A5F075 /* GoDEvolutionView.swift */; };
+		B205E0DB1F6387FA00A5F075 /* GoDEvolutionMethodPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205E0DA1F6387FA00A5F075 /* GoDEvolutionMethodPopUpButton.swift */; };
+		B205E0DC1F6387FA00A5F075 /* GoDEvolutionMethodPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205E0DA1F6387FA00A5F075 /* GoDEvolutionMethodPopUpButton.swift */; };
+		B205E0DE1F63891E00A5F075 /* GoDEvolutionConditionPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205E0DD1F63891E00A5F075 /* GoDEvolutionConditionPopUpButton.swift */; };
+		B205E0DF1F63891E00A5F075 /* GoDEvolutionConditionPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205E0DD1F63891E00A5F075 /* GoDEvolutionConditionPopUpButton.swift */; };
+		B205E0E01F6426AD00A5F075 /* launch 2.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F5ED8D1F49AF0E0075C6D2 /* launch 2.png */; };
+		B205E0E11F6426B100A5F075 /* launch.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F5ED8C1F49AF0E0075C6D2 /* launch.png */; };
 		B2ACE8301F5E34FB00D87B22 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ACE82F1F5E34FB00D87B22 /* AppDelegate.swift */; };
-		B2ACE8321F5E34FB00D87B22 /* XDRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ACE8311F5E34FB00D87B22 /* XDRViewController.swift */; };
 		B2ACE8341F5E34FB00D87B22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2ACE8331F5E34FB00D87B22 /* Assets.xcassets */; };
 		B2ACE8371F5E34FB00D87B22 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2ACE8351F5E34FB00D87B22 /* Main.storyboard */; };
 		B2ACE83D1F5E368900D87B22 /* GoDViewLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8BE1F4C4ED10075C6D2 /* GoDViewLayoutManager.swift */; };
@@ -2277,6 +2288,9 @@
 		B2F5F8BD1F4C4E680075C6D2 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8BB1F4C4E680075C6D2 /* UIViewExtensions.swift */; };
 		B2F5F8C01F4C4EDD0075C6D2 /* GoDViewLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8BE1F4C4ED10075C6D2 /* GoDViewLayoutManager.swift */; };
 		B2F5F8C21F4C58CF0075C6D2 /* GoDImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */; };
+		B2F911681F6606E900129DC2 /* DeckData_Empty.bin in Resources */ = {isa = PBXBuildFile; fileRef = B2F911671F6606E900129DC2 /* DeckData_Empty.bin */; };
+		B2F911691F6606E900129DC2 /* DeckData_Empty.bin in Resources */ = {isa = PBXBuildFile; fileRef = B2F911671F6606E900129DC2 /* DeckData_Empty.bin */; };
+		B2F9116A1F6606E900129DC2 /* DeckData_Empty.bin in Resources */ = {isa = PBXBuildFile; fileRef = B2F911671F6606E900129DC2 /* DeckData_Empty.bin */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -2304,9 +2318,12 @@
 		B205E0CC1F60B24F00A5F075 /* GoDGenderPopUpButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDGenderPopUpButton.swift; sourceTree = "<group>"; };
 		B205E0CE1F60B32400A5F075 /* GoDNaturePopUpButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDNaturePopUpButton.swift; sourceTree = "<group>"; };
 		B205E0D01F616BDB00A5F075 /* GoDContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDContainerView.swift; sourceTree = "<group>"; };
+		B205E0D21F6246ED00A5F075 /* type_fairy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = type_fairy.png; sourceTree = "<group>"; };
+		B205E0D71F63857F00A5F075 /* GoDEvolutionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDEvolutionView.swift; sourceTree = "<group>"; };
+		B205E0DA1F6387FA00A5F075 /* GoDEvolutionMethodPopUpButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDEvolutionMethodPopUpButton.swift; sourceTree = "<group>"; };
+		B205E0DD1F63891E00A5F075 /* GoDEvolutionConditionPopUpButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDEvolutionConditionPopUpButton.swift; sourceTree = "<group>"; };
 		B2ACE82D1F5E34FA00D87B22 /* XD Randomiser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "XD Randomiser.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2ACE82F1F5E34FB00D87B22 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B2ACE8311F5E34FB00D87B22 /* XDRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDRViewController.swift; sourceTree = "<group>"; };
 		B2ACE8331F5E34FB00D87B22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B2ACE8361F5E34FB00D87B22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B2ACE8381F5E34FB00D87B22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -3414,6 +3431,7 @@
 		B2F5F8BB1F4C4E680075C6D2 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		B2F5F8BE1F4C4ED10075C6D2 /* GoDViewLayoutManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDViewLayoutManager.swift; sourceTree = "<group>"; };
 		B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GoDImageExtensions.swift; path = GoDToolOSX/GoDImageExtensions.swift; sourceTree = "<group>"; };
+		B2F911671F6606E900129DC2 /* DeckData_Empty.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = DeckData_Empty.bin; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3462,6 +3480,8 @@
 				B205E0CA1F60AE7F00A5F075 /* GoDItemPopUpButton.swift */,
 				B205E0CC1F60B24F00A5F075 /* GoDGenderPopUpButton.swift */,
 				B205E0CE1F60B32400A5F075 /* GoDNaturePopUpButton.swift */,
+				B205E0DA1F6387FA00A5F075 /* GoDEvolutionMethodPopUpButton.swift */,
+				B205E0DD1F63891E00A5F075 /* GoDEvolutionConditionPopUpButton.swift */,
 			);
 			path = "PopUp Buttons";
 			sourceTree = "<group>";
@@ -3470,7 +3490,6 @@
 			isa = PBXGroup;
 			children = (
 				B2ACE82F1F5E34FB00D87B22 /* AppDelegate.swift */,
-				B2ACE8311F5E34FB00D87B22 /* XDRViewController.swift */,
 				B2ACE88C1F5E399A00D87B22 /* XDRHomeViewController.swift */,
 				B2ACE8331F5E34FB00D87B22 /* Assets.xcassets */,
 				B2ACE8351F5E34FB00D87B22 /* Main.storyboard */,
@@ -4419,6 +4438,7 @@
 				B2F5071E1F4C5FAA0075C6D2 /* type_7.png */,
 				B2F5071F1F4C5FAA0075C6D2 /* type_8.png */,
 				B2F507201F4C5FAA0075C6D2 /* type_9.png */,
+				B205E0D21F6246ED00A5F075 /* type_fairy.png */,
 				B2F507211F4C5FAA0075C6D2 /* type_shadow.png */,
 			);
 			path = Types;
@@ -4443,6 +4463,7 @@
 				B2F5EBE41F49A1FE0075C6D2 /* XGISO.swift */,
 				B2F5EBE81F49A1FE0075C6D2 /* XGLZSSWrapper.h */,
 				B2F5EBE91F49A1FE0075C6D2 /* XGLZSSWrapper.m */,
+				B2F911661F6606C600129DC2 /* game files */,
 				B2F5ED8A1F49AF0E0075C6D2 /* images */,
 				B2F5ED0B1F49AE950075C6D2 /* JSON */,
 				B2F5EBB51F49A1FE0075C6D2 /* enums */,
@@ -4796,8 +4817,17 @@
 				B2F5F8951F49CD050075C6D2 /* GoDTableCellView.swift */,
 				B2F5F8961F49CD050075C6D2 /* GoDTableView.swift */,
 				B205E0D01F616BDB00A5F075 /* GoDContainerView.swift */,
+				B205E0D71F63857F00A5F075 /* GoDEvolutionView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		B2F911661F6606C600129DC2 /* game files */ = {
+			isa = PBXGroup;
+			children = (
+				B2F911671F6606E900129DC2 /* DeckData_Empty.bin */,
+			);
+			name = "game files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -4933,6 +4963,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B205E0E11F6426B100A5F075 /* launch.png in Resources */,
+				B2F9116A1F6606E900129DC2 /* DeckData_Empty.bin in Resources */,
+				B205E0E01F6426AD00A5F075 /* launch 2.png in Resources */,
 				B2ACE8341F5E34FB00D87B22 /* Assets.xcassets in Resources */,
 				B2ACE8371F5E34FB00D87B22 /* Main.storyboard in Resources */,
 			);
@@ -5102,6 +5135,7 @@
 				B2F507921F4C5FAB0075C6D2 /* body_056.png in Resources */,
 				B2F50CC41F4C5FAC0075C6D2 /* face_306.png in Resources */,
 				B2F50ACA1F4C5FAC0075C6D2 /* face_053.png in Resources */,
+				B2F911681F6606E900129DC2 /* DeckData_Empty.bin in Resources */,
 				B2F507CA1F4C5FAB0075C6D2 /* body_084.png in Resources */,
 				B2F509BA1F4C5FAB0075C6D2 /* body_332.png in Resources */,
 				B2F50B721F4C5FAC0075C6D2 /* face_137.png in Resources */,
@@ -5837,6 +5871,7 @@
 				B2F507361F4C5FAA0075C6D2 /* body_010.png in Resources */,
 				B2F50B141F4C5FAC0075C6D2 /* face_090.png in Resources */,
 				B2F5082E1F4C5FAB0075C6D2 /* body_134.png in Resources */,
+				B205E0D31F6246ED00A5F075 /* type_fairy.png in Resources */,
 				B2F50B561F4C5FAC0075C6D2 /* face_123.png in Resources */,
 				B2F5080E1F4C5FAB0075C6D2 /* body_118.png in Resources */,
 				B2F5085A1F4C5FAB0075C6D2 /* body_156.png in Resources */,
@@ -6226,6 +6261,7 @@
 				B2F509CF1F4C5FAB0075C6D2 /* body_342.png in Resources */,
 				B2F508311F4C5FAB0075C6D2 /* body_135.png in Resources */,
 				B2F50A911F4C5FAB0075C6D2 /* face_024.png in Resources */,
+				B205E0D41F6246ED00A5F075 /* type_fairy.png in Resources */,
 				B2F50C871F4C5FAC0075C6D2 /* face_275.png in Resources */,
 				B2F508C31F4C5FAB0075C6D2 /* body_208.png in Resources */,
 				B2F507AD1F4C5FAB0075C6D2 /* body_069.png in Resources */,
@@ -6245,6 +6281,7 @@
 				B2F50D091F4C5FAC0075C6D2 /* face_340.png in Resources */,
 				B2F5086F1F4C5FAB0075C6D2 /* body_166.png in Resources */,
 				B2F50AA31F4C5FAC0075C6D2 /* face_033.png in Resources */,
+				B2F911691F6606E900129DC2 /* DeckData_Empty.bin in Resources */,
 				B2F50C571F4C5FAC0075C6D2 /* face_251.png in Resources */,
 				B2F50E0F1F4C5FAD0075C6D2 /* trainer_6.png in Resources */,
 				B2F507F71F4C5FAB0075C6D2 /* body_106.png in Resources */,
@@ -6843,16 +6880,17 @@
 				B2ACE8601F5E36C200D87B22 /* XGTrainerClasses.swift in Sources */,
 				B2ACE8761F5E36CA00D87B22 /* XGPokeSpotPokemon.swift in Sources */,
 				B2ACE84D1F5E36C200D87B22 /* XGFontColours.swift in Sources */,
+				B205E0D61F63821200A5F075 /* GoDDesign.swift in Sources */,
 				B2ACE87E1F5E36CA00D87B22 /* XGTradePokemon.swift in Sources */,
 				B2ACE8741F5E36CA00D87B22 /* XGPNGManipulator.swift in Sources */,
 				B2ACE8701F5E36CA00D87B22 /* XGMove.swift in Sources */,
 				B2ACE8501F5E36C200D87B22 /* XGGenders.swift in Sources */,
+				B205E0D51F63815200A5F075 /* GoDViewController.swift in Sources */,
 				B2ACE8421F5E36A200D87B22 /* XGISO.swift in Sources */,
 				B2ACE8861F5E36CA00D87B22 /* XGDictionaryRepresentableExtension.swift in Sources */,
 				B2ACE8551F5E36C200D87B22 /* XGMoveTargets.swift in Sources */,
 				B2ACE87C1F5E36CA00D87B22 /* XGString.swift in Sources */,
 				B2ACE85F1F5E36C200D87B22 /* XGTMs.swift in Sources */,
-				B2ACE8321F5E34FB00D87B22 /* XDRViewController.swift in Sources */,
 				B2ACE87D1F5E36CA00D87B22 /* XGStringTable.swift in Sources */,
 				B2ACE8781F5E36CA00D87B22 /* XGScriptClass.swift in Sources */,
 				B2ACE8721F5E36CA00D87B22 /* XGMutableData.swift in Sources */,
@@ -7048,6 +7086,7 @@
 				B2F5EC1F1F49A1FE0075C6D2 /* XGExpRate.swift in Sources */,
 				B2F5ED691F49AEBC0075C6D2 /* XGTutorMovesPopover.swift in Sources */,
 				B2F5ECC71F49A1FF0075C6D2 /* XGStringTable.swift in Sources */,
+				B205E0D81F63857F00A5F075 /* GoDEvolutionView.swift in Sources */,
 				B2F5EC491F49A1FE0075C6D2 /* XGPokeSpots.swift in Sources */,
 				B2F5EC641F49A1FF0075C6D2 /* XGTrainerModels.swift in Sources */,
 				B2F5ED5E1F49AEBC0075C6D2 /* XGMoveEffectPopover.swift in Sources */,
@@ -7057,6 +7096,7 @@
 				B2F5EC521F49A1FE0075C6D2 /* XGScriptOps.swift in Sources */,
 				B2F5ED741F49AEBC0075C6D2 /* XGMoveViewController.swift in Sources */,
 				B2F5ED781F49AEBC0075C6D2 /* XGStringSearchViewController.swift in Sources */,
+				B205E0DE1F63891E00A5F075 /* GoDEvolutionConditionPopUpButton.swift in Sources */,
 				B2F5EC401F49A1FE0075C6D2 /* XGMoveTypes.swift in Sources */,
 				B2F5ED6A1F49AEBC0075C6D2 /* XGTypePopover.swift in Sources */,
 				B2F5EC9A1F49A1FF0075C6D2 /* XGLZSSWrapper.m in Sources */,
@@ -7138,6 +7178,7 @@
 				B2F5EC6A1F49A1FF0075C6D2 /* XGUnicodeCharacters.swift in Sources */,
 				B2F5EC821F49A1FF0075C6D2 /* XGDolPatcher.swift in Sources */,
 				B2F5EC281F49A1FE0075C6D2 /* XGFsys.swift in Sources */,
+				B205E0DB1F6387FA00A5F075 /* GoDEvolutionMethodPopUpButton.swift in Sources */,
 				B2F5ED6D1F49AEBC0075C6D2 /* XGDeckPickerViewController.swift in Sources */,
 				B2F5ECB21F49A1FF0075C6D2 /* XGPokeSpotPokemon.swift in Sources */,
 			);
@@ -7194,8 +7235,10 @@
 				B2F5EC171F49A1FE0075C6D2 /* XGDecks.swift in Sources */,
 				B2F5F8A41F49CD050075C6D2 /* GoDTableViewDelegate.swift in Sources */,
 				B2F5F8741F49B3BC0075C6D2 /* XGStringManager.swift in Sources */,
+				B205E0DF1F63891E00A5F075 /* GoDEvolutionConditionPopUpButton.swift in Sources */,
 				B2F5F8A81F49CD050075C6D2 /* GoDViewController.swift in Sources */,
 				B2F5EC141F49A1FE0075C6D2 /* XGDeckPokemon.swift in Sources */,
+				B205E0D91F63857F00A5F075 /* GoDEvolutionView.swift in Sources */,
 				B2F5F8891F49CCD10075C6D2 /* NSViewExtensions.swift in Sources */,
 				B2F5EC111F49A1FE0075C6D2 /* XGBattleBingoPanel.swift in Sources */,
 				B2F5F8A51F49CD050075C6D2 /* GoDHomeViewController.swift in Sources */,
@@ -7228,6 +7271,7 @@
 				B2F5EC5F1F49A1FF0075C6D2 /* XGTMs.swift in Sources */,
 				B2F5EC681F49A1FF0075C6D2 /* XGTutorFlags.swift in Sources */,
 				B2F50E4F1F4C64310075C6D2 /* XGResources.swift in Sources */,
+				B205E0DC1F6387FA00A5F075 /* GoDEvolutionMethodPopUpButton.swift in Sources */,
 				B2F5ECA71F49A1FF0075C6D2 /* XGNature.swift in Sources */,
 				B2F5ECB91F49A1FF0075C6D2 /* XGScriptClass.swift in Sources */,
 				B2F5ECD71F49A1FF0075C6D2 /* XGTradeShadowPokemon.swift in Sources */,

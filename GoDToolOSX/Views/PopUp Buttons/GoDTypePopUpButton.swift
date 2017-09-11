@@ -23,7 +23,7 @@ class GoDTypePopUpButton: GoDPopUpButton {
 			return t.name
 		}
 		
-		self.addItems(withTitles: values)
+		self.setTitles(values: values)
 	}
 	
 }
