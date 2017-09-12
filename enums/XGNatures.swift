@@ -2,7 +2,7 @@
 //  Nature.swift
 //  Mausoleum Tool
 //
-//  Created by The Steez on 11/01/2015.
+//  Created by StarsMmd on 11/01/2015.
 //  Copyright (c) 2015 Steezy. All rights reserved.
 //
 

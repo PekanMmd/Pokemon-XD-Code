@@ -2,8 +2,8 @@
 //  XGDecks.swift
 //  XG Tool
 //
-//  Created by The Steez on 30/05/2015.
-//  Copyright (c) 2015 Ovation International. All rights reserved.
+//  Created by StarsMmd on 30/05/2015.
+//  Copyright (c) 2015 StarsMmd. All rights reserved.
 //
 
 import Foundation
@@ -137,6 +137,12 @@ indirect enum XGFiles {
 	var json : AnyObject {
 		get {
 			return try! JSONSerialization.jsonObject(with: self.data.data as Data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+		}
+	}
+	
+	var texture : GoDTexture {
+		get {
+			return GoDTexture(file: self)
 		}
 	}
 	

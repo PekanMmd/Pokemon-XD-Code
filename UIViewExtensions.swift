@@ -2,7 +2,7 @@
 //  UIViewExtensions.swift
 //  TrackerPlus
 //
-//  Created by The Steez on 01/03/2017.
+//  Created by StarsMmd on 01/03/2017.
 //  Copyright © 2017 UCL. All rights reserved.
 //
 

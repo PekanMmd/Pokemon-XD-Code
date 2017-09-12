@@ -2,7 +2,7 @@
 //  XDRHomeViewController.swift
 //  GoD Tool
 //
-//  Created by The Steez on 05/09/2017.
+//  Created by StarsMmd on 05/09/2017.
 //
 //
 

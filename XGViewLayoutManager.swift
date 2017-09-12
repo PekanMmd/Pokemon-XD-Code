@@ -2,7 +2,7 @@
 //  TAViewLayoutManager.swift
 //  TileApp
 //
-//  Created by The Steez on 15/08/2017.
+//  Created by StarsMmd on 15/08/2017.
 //  Copyright © 2017 Stars. All rights reserved.
 //
 

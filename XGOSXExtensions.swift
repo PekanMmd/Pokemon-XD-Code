@@ -2,13 +2,19 @@
 //  XGOSXExtensions.swift
 //  GoD Tool
 //
-//  Created by The Steez on 20/08/2017.
+//  Created by StarsMmd on 20/08/2017.
 //
 //
 
-import Foundation
+import Cocoa
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/GoD-Tool"
+
+extension GoDTexture {
+	func importImage(file: XGFiles) {
+		GoDTextureImporter.replaceTextureData(texture: self, withImage: file)
+	}
+}
 
 extension XGStringTable {
 	func replaceString(_ string: XGString, alert: Bool) -> Bool {

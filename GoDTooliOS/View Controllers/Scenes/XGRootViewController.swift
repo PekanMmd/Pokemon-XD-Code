@@ -2,8 +2,8 @@
 //  XGRootViewController.swift
 //  XG Tool
 //
-//  Created by The Steez on 26/05/2015.
-//  Copyright (c) 2015 Ovation International. All rights reserved.
+//  Created by StarsMmd on 26/05/2015.
+//  Copyright (c) 2015 StarsMmd. All rights reserved.
 //
 
 import UIKit

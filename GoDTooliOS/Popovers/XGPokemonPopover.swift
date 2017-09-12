@@ -2,7 +2,7 @@
 //  pokemonTableViewController.swift
 //  Mausoleum Tool
 //
-//  Created by The Steez on 22/10/2014.
+//  Created by StarsMmd on 22/10/2014.
 //  Copyright (c) 2014 Steezy. All rights reserved.
 //
 

@@ -2,8 +2,8 @@
 //  XGDictionaryRepresentableExtension.swift
 //  XGCommandLineTools
 //
-//  Created by The Steez on 17/11/2016.
-//  Copyright © 2016 Ovation International. All rights reserved.
+//  Created by StarsMmd on 17/11/2016.
+//  Copyright © 2016 StarsMmd. All rights reserved.
 //
 
 import Foundation

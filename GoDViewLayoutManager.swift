@@ -2,7 +2,7 @@
 //  GoDViewLayoutManager.swift
 //  GoD Tool
 //
-//  Created by The Steez on 22/08/2017.
+//  Created by StarsMmd on 22/08/2017.
 //
 //
 

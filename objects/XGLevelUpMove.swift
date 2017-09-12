@@ -2,8 +2,8 @@
 //  LevelUpMove.swift
 //  Mausoleum Stats Tool
 //
-//  Created by The Steez on 26/12/2014.
-//  Copyright (c) 2014 Ovation International. All rights reserved.
+//  Created by StarsMmd on 26/12/2014.
+//  Copyright (c) 2014 StarsMmd. All rights reserved.
 //
 
 import Foundation

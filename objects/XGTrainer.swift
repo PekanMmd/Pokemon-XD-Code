@@ -2,7 +2,7 @@
 //  Trainer.swift
 //  Mausoleum Tool
 //
-//  Created by The Steez on 25/09/2014.
+//  Created by StarsMmd on 25/09/2014.
 //  Copyright (c) 2014 Steezy. All rights reserved.
 //
 

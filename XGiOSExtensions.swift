@@ -2,7 +2,7 @@
 //  XGiOSExtensions.swift
 //  GoD Tool
 //
-//  Created by The Steez on 20/08/2017.
+//  Created by StarsMmd on 20/08/2017.
 //
 //
 

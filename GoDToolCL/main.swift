@@ -2,135 +2,159 @@
 //  main.swift
 //  XGCommandLineTools
 //
-//  Created by The Steez on 13/11/2015.
-//  Copyright © 2015 Ovation International. All rights reserved.
+//  Created by StarsMmd on 13/11/2015.
+//  Copyright © 2015 StarsMmd. All rights reserved.
 //
 
-let tmList : [[Int]] = [
-	[12,83,178,], // tailwind
-	[20,24,40,108,203,],	// fire blast
-	[12,20,108,178,203,206,],	// light pulse
-	[12,178,],	// hurricane
-	[12,20,24,47,],	// sludgewave
-	[12,40,108,203,206,],	// dazzling gleam
-	[20,24,40,83,108,203,206,],	// foul play
-	[108,203,],	// flash cannon
-	[12,20,24,40,83,108,178,203,206,],	// thunder wave
-	[20,40,108,203,206,],	// ice beam
-	[178,203,],	// will-o-wisp
-	[20,108,203,],	// wild charge
-	[12,178,203,],	// trick room
-	[],	// scald
-	[20,24,40,108,203,],	// flamethrower
-	[12,20,24,40,47,83,108,178,203,],	// iron head
-	[20,40,108,203,],	// thunderbolt
-	[],	// freeze dry
-	[12,20,24,47,108,],	// sludgebomb
-	[12,47,108,178,203,],	// energy ball
-	[12,47,],	// bug buzz
-	[24,],	// dragon pulse
-	[20,24,108,],	// super power
-	[108,203,],	// earthquake
-	[],	// earth power
-	[83,178,],	// heat wave
-	[20,40,108,203,],	// blizzard
-	[12,20,24,83,108,203,],	// sucker punch
-	[20,24,47,108,],	// gunk shot
-	[12,40,178,203,],	// psyshock
-	[12,20,24,40,108,178,203,],	// shadow ball
-	[20,108,],	// rock slide
-	[12,20,40,47,108,203,],	// solar beam
-	[12,20,40,108,178,203,],	// focus blast
-	[47,83,],	// x-scissor
-	[20,40,108,203,],	// thunder
-	[12,24,83,178,],	// acrobatics
-	[108,],	// waterfall
-	[],	// dragon claw
-	[],	// toxic all except ditto
-	[20,108,203,],	// wild flare
-	[12,20,24,47,83,108,],	// poison jab
-	[20,47,83,],	// night slash
-	[12,40,108,178,203,],	// reflect
-	[12,40,108,178,203,],	// light screen
-	[40,108,203,],	// surf
-	[20,],	// stone edge
-	[12,40,108,178,203,],	// psychic
-	[24,108,178,203,],	// dark pulse
+XGFiles.nameAndFolder("face048.fdat", .FDAT).texture.importImage(file: .nameAndFolder("face048.png", .PNG))
 
-]
+//let deck = XGDecks.DeckStory
+//let new = deck.unusedPokemonCount(14)
+//
+//let species = [12,20,24,40,47,83,108,178,203,206,219,226,289,292,308,312,316,348,349,389]
+//
+//for i in 0 ... 13 {
+//	let dd = XGDeckPokemon.ddpk(108 + i)
+//	dd.setDPKMIndexForDDPK(newIndex: new[i].DPKMIndex)
+//	let d = dd.data
+//	d.shadowAggression = 1
+//	d.shadowCounter = 5000
+//	d.shadowFleeValue = 0
+//	d.level = 60
+//	d.shadowCatchRate = 30
+//	d.ShadowDataInUse = true
+//	d.shadowUnknown2 = XGDeckPokemon.ddpk(80).data.shadowUnknown2
+//	d.shadowMoves[0] = move("shadow rush")
+//	d.species = .pokemon(species[i])
+//	d.moves[0] = move("latent power")
+//	d.save()
+//}
 
-let tutList : [[Int]] = [
-	[], // draco meteor
-	[],	// protect ------------------------------
-	[],	// substitute --------------------------
-	[40,108,],	// fire punch
-	[40,108,],// thunder punch
-	[40,108,],	// ice punch
-	[40,108,203,],	// icy wind
-	[108,203,],	// snarl
-	[12,24,40,47,83,108,178,203,],	// taunt
-	[12,24,40,47,83,108,178,203,], // rain dance
-	[12,24,40,47,83,108,178,203,], // sunny day
-
-]
-
-for i in tmList {
-	for t in i {
-		if t > 415 {
-			print("tm typo: ", i, t)
-		}
-	}
-}
-
-for i in tutList {
-	for t in i {
-		if t > 415 {
-			print("tutor typo: ", i, t)
-		}
-	}
-}
-
-let tmMons = [12,20,24,40,47,83,108,178,203,206,]
-
-for tut in 0 ..< tutList.count {
-	for i in tmMons {
-		let mon = XGPokemonStats(index: i)
-
-		if (tut == 2) || (tut == 1) {
-			mon.tutorMoves[tut] = (mon.index != 132) && (mon.index != 398)
-		} else if tut == 0 {
-			mon.tutorMoves[tut] = (mon.type1 == .dragon) || (mon.type2 == .dragon)
-		} else {
-			mon.tutorMoves[tut] = tutList[tut].contains(i)
-		}
-
-		mon.save()
-	}
-}
-
-for tm in 0 ..< tmList.count {
-	for i in tmMons {
-		let mon = XGPokemonStats(index: i)
-
-		if tm == 40 {
-			mon.learnableTMs[tm] = (mon.index != 132) && (mon.index != 398)
-		} else {
-			mon.learnableTMs[tm] = tmList[tm].contains(i)
-		}
-
-		mon.save()
-	}
-}
-
-// copy level up moves
-for (to, from) in [(1,3),(2,3),(7,9),(8,9),(16,18),(17,18),(19,20),(23,24),(30,31),(33,34),(39,40),(41,42),(43,44),(46,47),(50,51),(52,53),(56,57),(58,59),(60,61),(66,67),(74,75),(98,99),(100,101),(109,110),(111,112),(137,0),(152,153),(155,156),(158,159),(163,164),(170,171),(177,178),(179,180),(188,189),(204,205),] {
-	let f = XGPokemonStats(index: from)
-	let t = XGPokemonStats(index: to)
-	t.levelUpMoves = f.levelUpMoves
-	t.learnableTMs = f.learnableTMs
-	t.tutorMoves = f.tutorMoves
-	t.save()
-}
+//let tmList : [[Int]] = [
+//	[12,83,178,226,292,312,], // tailwind
+//	[20,24,40,108,203,219,289,308,316,349,],	// fire blast
+//	[12,20,108,178,203,206,289,292,308,316,348,349,],	// light pulse
+//	[12,178,226,292,312,],	// hurricane
+//	[12,20,24,47,219,289,389,],	// sludgewave
+//	[12,40,108,203,206,292,316,348,349,],	// dazzling gleam
+//	[20,24,40,83,108,203,206,289,308,316,],	// foul play
+//	[108,203,292,348,349,],	// flash cannon
+//	[12,20,24,40,83,108,178,203,206,219,226,289,292,308,312,316,348,349,389,],	// thunder wave
+//	[20,40,108,203,206,226,289,308,316,348,],	// ice beam
+//	[178,203,219,348,349,],	// will-o-wisp
+//	[20,108,203,289,308,316,],	// wild charge
+//	[12,178,203,348,349,],	// trick room
+//	[226,312,],	// scald
+//	[20,24,40,108,203,206,219,289,308,316,349,],	// flamethrower
+//	[12,20,24,40,47,83,108,178,203,206,219,289,308,312,316,348,349,389,],	// iron head
+//	[20,40,108,203,206,289,308,316,348,349,],	// thunderbolt
+//	[316,],	// freeze dry
+//	[12,20,24,47,108,206,219,289,292,308,312,316,389,],	// sludgebomb
+//	[12,47,108,178,203,206,219,292,312,316,348,349,389,],	// energy ball
+//	[12,47,206,292,312,],	// bug buzz
+//	[24,206,],	// dragon pulse
+//	[20,24,108,289,308,],	// super power
+//	[108,203,219,308,348,349,389,],	// earthquake
+//	[206,219,348,349,389,],	// earth power
+//	[83,178,206,219,349,],	// heat wave
+//	[20,40,108,203,206,226,289,308,316,348,],	// blizzard
+//	[12,20,24,83,108,203,289,308,316,],	// sucker punch
+//	[20,24,47,108,219,289,316,389,],	// gunk shot
+//	[12,40,178,203,206,292,312,316,348,349,],	// psyshock
+//	[12,20,24,40,108,178,203,206,219,289,308,312,316,348,349,],	// shadow ball
+//	[20,108,206,219,289,308,316,348,349,389,],	// rock slide
+//	[12,20,40,47,108,203,206,219,289,292,308,316,349,389,],	// solar beam
+//	[12,20,40,108,178,203,289,308,316,],	// focus blast
+//	[47,83,312,],	// x-scissor
+//	[20,40,108,203,206,289,308,316,],	// thunder
+//	[12,24,83,178,206,226,289,292,308,312,316,],	// acrobatics
+//	[108,226,289,312,316,],	// waterfall
+//	[289,],	// dragon claw
+//	[],	// toxic all except ditto
+//	[20,108,203,219,289,308,316,349,],	// wild flare
+//	[12,20,24,47,83,108,206,289,292,308,316,389,],	// poison jab
+//	[20,47,83,289,316,],	// night slash
+//	[12,40,108,178,203,206,219,226,292,308,312,316,348,349,389,],	// reflect
+//	[12,40,108,178,203,206,219,226,292,308,312,316,348,349,389,],	// light screen
+//	[40,108,203,226,289,308,312,316,],	// surf
+//	[20,219,289,308,348,349,389,],	// stone edge
+//	[12,40,108,178,203,206,292,312,316,348,349,],	// psychic
+//	[24,108,178,203,289,316,348,349,],	// dark pulse
+//
+//]
+//
+//let tutList : [[Int]] = [
+//	[], // draco meteor
+//	[],	// protect ------------------------------
+//	[],	// substitute --------------------------
+//	[40,108,308,],	// fire punch
+//	[40,108,308,],// thunder punch
+//	[40,108,308,],	// ice punch
+//	[40,108,203,206,226,289,308,312,348,],	// icy wind
+//	[108,203,289,],	// snarl
+//	[12,24,40,47,83,108,178,203,219,226,289,292,308,312,348,349,389,],	// taunt
+//	[12,24,40,47,83,108,178,203,206,226,289,292,308,312,348,389,], // rain dance
+//	[12,24,40,47,83,108,178,203,206,219,289,292,308,312,348,349,389,], // sunny day
+//
+//]
+//
+//for i in tmList {
+//	for t in i {
+//		if t > 415 {
+//			print("tm typo: ", i, t)
+//		}
+//	}
+//}
+//
+//for i in tutList {
+//	for t in i {
+//		if t > 415 {
+//			print("tutor typo: ", i, t)
+//		}
+//	}
+//}
+//
+//let tmMons = [12,20,24,40,47,83,108,178,203,206,219,226,289,292,308,312,316,348,349,389,]
+//
+//for tut in 0 ..< tutList.count {
+//	for i in tmMons {
+//		let mon = XGPokemonStats(index: i)
+//
+//		if (tut == 2) || (tut == 1) {
+//			mon.tutorMoves[tut] = (mon.index != 132) && (mon.index != 398)
+//		} else if tut == 0 {
+//			mon.tutorMoves[tut] = (mon.type1 == .dragon) || (mon.type2 == .dragon)
+//		} else {
+//			mon.tutorMoves[tut] = tutList[tut].contains(i)
+//		}
+//
+//		mon.save()
+//	}
+//}
+//
+//for tm in 0 ..< tmList.count {
+//	for i in tmMons {
+//		let mon = XGPokemonStats(index: i)
+//
+//		if tm == 40 {
+//			mon.learnableTMs[tm] = (mon.index != 132) && (mon.index != 398)
+//		} else {
+//			mon.learnableTMs[tm] = tmList[tm].contains(i)
+//		}
+//
+//		mon.save()
+//	}
+//}
+//
+//// copy level up moves
+//for (to, from) in [(1,3),(2,3),(7,9),(8,9),(16,18),(17,18),(19,20),(23,24),(30,31),(33,34),(39,40),(41,42),(43,44),(46,47),(50,51),(52,53),(56,57),(58,59),(60,61),(66,67),(74,75),(98,99),(100,101),(109,110),(111,112),(137,233),(152,153),(155,156),(158,159),(163,164),(170,171),(177,178),(179,180),(188,189),(204,205),(209,210),(216,217),(218,219),(288,289),(295,297),(296,297),(309,310),(313,314),(315,316),(318,319),(335,336),(341,343),(342,343),(364,366),(365,366),(370,372),(371,372),(382,384),(383,384),(388,389),(390,391),] {
+//	let f = XGPokemonStats(index: from)
+//	let t = XGPokemonStats(index: to)
+//	t.levelUpMoves = f.levelUpMoves
+//	t.learnableTMs = f.learnableTMs
+//	t.tutorMoves = f.tutorMoves
+//	t.save()
+//}
 
 
 //// shadow pokemon can't be battled after being captured

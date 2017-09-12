@@ -2,7 +2,7 @@
 //  GoDEvolutionConditionPopUpButton.swift
 //  GoD Tool
 //
-//  Created by The Steez on 09/09/2017.
+//  Created by StarsMmd on 09/09/2017.
 //
 //
 

@@ -2,7 +2,7 @@
 //  natureTableViewController.swift
 //  Mausoleum Tool
 //
-//  Created by The Steez on 25/01/2015.
+//  Created by StarsMmd on 25/01/2015.
 //  Copyright (c) 2015 Steezy. All rights reserved.
 //
 

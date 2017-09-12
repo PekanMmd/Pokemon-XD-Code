@@ -2,8 +2,8 @@
 //  Pokemon.swift
 //  Mausoleum Stats Tool
 //
-//  Created by The Steez on 26/12/2014.
-//  Copyright (c) 2014 Ovation International. All rights reserved.
+//  Created by StarsMmd on 26/12/2014.
+//  Copyright (c) 2014 StarsMmd. All rights reserved.
 // 475c4 4e258 cc77-56d cc85-56e cd1d-14d8
 
 import Foundation

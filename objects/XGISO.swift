@@ -2,8 +2,8 @@
 //  XGISO.swift
 //  XGCommandLineTools
 //
-//  Created by The Steez on 15/04/2016.
-//  Copyright © 2016 Ovation International. All rights reserved.
+//  Created by StarsMmd on 15/04/2016.
+//  Copyright © 2016 StarsMmd. All rights reserved.
 //
 
 import Foundation

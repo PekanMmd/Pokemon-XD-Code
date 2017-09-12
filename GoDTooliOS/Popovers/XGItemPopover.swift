@@ -2,7 +2,7 @@
 //  itemTableViewController.swift
 //  Mausoleum Tool
 //
-//  Created by The Steez on 03/11/2014.
+//  Created by StarsMmd on 03/11/2014.
 //  Copyright (c) 2014 Steezy. All rights reserved.
 //
 

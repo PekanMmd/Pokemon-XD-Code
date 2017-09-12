@@ -2,8 +2,8 @@
 //  MoveEffectTableViewController.swift
 //  Mausoleum Move Tool
 //
-//  Created by The Steez on 28/12/2014.
-//  Copyright (c) 2014 Ovation International. All rights reserved.
+//  Created by StarsMmd on 28/12/2014.
+//  Copyright (c) 2014 StarsMmd. All rights reserved.
 //
 
 import UIKit

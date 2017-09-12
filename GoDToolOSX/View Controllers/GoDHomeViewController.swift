@@ -2,7 +2,7 @@
 //  GoDHomeViewController.swift
 //  GoD Tool
 //
-//  Created by The Steez on 01/07/2016.
+//  Created by StarsMmd on 01/07/2016.
 //  Copyright © 2016 StarsMmd. All rights reserved.
 //
 

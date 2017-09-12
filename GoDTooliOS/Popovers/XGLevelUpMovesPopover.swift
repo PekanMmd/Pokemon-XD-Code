@@ -2,8 +2,8 @@
 //  XGLevelUpMovesPopover.swift
 //  XG Tool
 //
-//  Created by The Steez on 06/08/2015.
-//  Copyright (c) 2015 Ovation International. All rights reserved.
+//  Created by StarsMmd on 06/08/2015.
+//  Copyright (c) 2015 StarsMmd. All rights reserved.
 //
 
 import UIKit

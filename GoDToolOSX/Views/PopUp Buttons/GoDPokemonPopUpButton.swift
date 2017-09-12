@@ -2,7 +2,7 @@
 //  GoDPokemonPopUpButton.swift
 //  GoD Tool
 //
-//  Created by The Steez on 06/09/2017.
+//  Created by StarsMmd on 06/09/2017.
 //
 //
 

@@ -2,8 +2,8 @@
 //  XGAssemblyCode.swift
 //  XGCommandLineTools
 //
-//  Created by The Steez on 02/03/2017.
-//  Copyright © 2017 Ovation International. All rights reserved.
+//  Created by StarsMmd on 02/03/2017.
+//  Copyright © 2017 StarsMmd. All rights reserved.
 //
 
 import Foundation

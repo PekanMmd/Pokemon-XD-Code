@@ -1,25 +1,22 @@
-////
-////  XGTexturePNGReimporter.swift
-////  XG Tool
-////
-////  Created by StarsMmd on 22/05/2015.
-////  Copyright (c) 2015 StarsMmd. All rights reserved.
+//
+//  GoDTextureImporter.swift
+//  GoD Tool
+//
+//  Created by The Steez on 12/09/2017.
+//
 //
 
-import UIKit
 
-//let kTexturePointerOffset = 0x28
-//let kPalettePointerOffset = 0x48
+import Cocoa
 
-class XGTexturePNGReimporter: NSObject {
+
+class GoDTextureImporter: NSObject {
 	
-	var texture  = XGMutableData()
-	var newImage = UIImage()
+	var texture  : GoDTexture!
+	var newImage = NSImage()
 	
 	var Palette  = XGTexturePalette()
 	
-	var textureDataStartOffset = 0x80
-	var PaletteDataStartOffset = 0x00
 	
 	// number of blocks that tile horizontally across the image
 	var horizontalTiles = 0
@@ -31,17 +28,15 @@ class XGTexturePNGReimporter: NSObject {
 	
 	var indexed = false
 	
-	init(oldTextureData: XGMutableData, newImage: UIImage) {
+	init(oldTextureData: GoDTexture, newImage: NSImage) {
 		super.init()
 		
 		self.texture  = oldTextureData
-		self.texture.file = XGFiles.nameAndFolder(texture.file.fileName, .Output)
+		self.texture.data.file = XGFiles.nameAndFolder(texture.file.fileName, .Output)
 		self.newImage = newImage
 		
-		self.textureDataStartOffset = Int(texture.get4BytesAtOffset(kTexturePointerOffset))
-		self.PaletteDataStartOffset = Int(texture.get4BytesAtOffset(kPalettePointerOffset))
 		
-		if PaletteDataStartOffset != 0 {
+		if texture.paletteStart != 0 {
 			self.blockWidth  = 8
 			self.blockHeight = 4
 			indexed = true
@@ -54,10 +49,10 @@ class XGTexturePNGReimporter: NSObject {
 	
 	private func pixelsFromPNGImage() -> [XGPNGBlock] {
 		
-		let imageAsCGRef = self.newImage.cgImage
 		
-		let imageWidth  = imageAsCGRef!.width
-		let imageHeight = imageAsCGRef!.height
+		
+		let imageWidth  = texture.width
+		let imageHeight = texture.height
 		
 		requiredPixelsPerRow = (imageWidth % 8) == 0 ? 0 : 8 - (imageWidth % 8)
 		
@@ -70,16 +65,18 @@ class XGTexturePNGReimporter: NSObject {
 		let bytesPerPixel = 4
 		let bytesPerRow = bytesPerPixel * imageWidth
 		let bitsPerComponent = 8
+		var rect = CGRect(x: 0, y: 0, width: imageWidth, height: imageHeight)
 		
 		let colourSpace = CGColorSpaceCreateDeviceRGB()
 		let info = CGBitmapInfo.byteOrder32Big.union(CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)).rawValue
 		
-		let context = CGContext(data: &pixels, width: imageWidth, height: imageHeight, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colourSpace, bitmapInfo: info)
+		let context = CGContext(data: &pixels, width: imageWidth, height: imageHeight, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colourSpace, bitmapInfo: info)!
 		
-		let rect = CGRect(x: 0, y: 0, width: imageWidth, height: imageHeight)
+		let graphicsContext = NSGraphicsContext(cgContext: context, flipped: false)
 		
-		context?.draw(imageAsCGRef!, in: rect)
-		//		CGContextDrawImage(context, CGRect(0, 0, CGFloat(imageWidth), CGFloat(imageHeight)), imageAsCGRef)
+		let imageAsCGRef = self.newImage.cgImage(forProposedRect: &rect, context: graphicsContext, hints: nil)!
+		
+		context.draw(imageAsCGRef, in: rect)
 		
 		var pngblock = [XGPNGBlock]()
 		
@@ -205,7 +202,7 @@ class XGTexturePNGReimporter: NSObject {
 			pixelBytes = self.byteStreamFromPNGPixels(pixels: pngPixels)
 		}
 		
-		texture.replaceBytesFromOffset(self.textureDataStartOffset, withByteStream: pixelBytes)
+		texture.replaceTextureData(newBytes: pixelBytes)
 	}
 	
 	func updatePalette() {
@@ -226,20 +223,20 @@ class XGTexturePNGReimporter: NSObject {
 			bytes.append(byte2)
 		}
 		
-		texture.replaceBytesFromOffset(PaletteDataStartOffset, withByteStream: bytes)
+		texture.replacePaletteData(newBytes: bytes)
 		
 	}
 	
-	class func replaceTextureData(textureFile: XGFiles, withImage newImageFile: XGFiles) {
+	class func replaceTextureData(texture: GoDTexture, withImage newImageFile: XGFiles) {
 		
-		if !textureFile.exists || !newImageFile.exists {
+		if !newImageFile.exists {
 			return
 		}
 		
-		let data  = textureFile.data
+		let texture  = texture
 		let image = newImageFile.image
 		
-		let importer = XGTexturePNGReimporter(oldTextureData: data, newImage: image)
+		let importer = GoDTextureImporter(oldTextureData: texture, newImage: image)
 		importer.replaceTextureData()
 		
 		importer.texture.save()
@@ -247,6 +244,7 @@ class XGTexturePNGReimporter: NSObject {
 	
 	
 }
+
 
 
 

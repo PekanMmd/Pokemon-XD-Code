@@ -114,6 +114,18 @@
 		B2ACE88D1F5E399A00D87B22 /* XDRHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ACE88C1F5E399A00D87B22 /* XDRHomeViewController.swift */; };
 		B2ACE88F1F5EBE3500D87B22 /* XGRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ACE88E1F5EBE3500D87B22 /* XGRootViewController.swift */; };
 		B2ACE8901F5EC8FA00D87B22 /* XGResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F87D1F49BB0C0075C6D2 /* XGResources.swift */; };
+		B2D1DF4B1F6870EE0023A876 /* GoDTextureImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */; };
+		B2D1DF4C1F68714F0023A876 /* XGColour.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8751F49B4530075C6D2 /* XGColour.swift */; };
+		B2D1DF4D1F6871500023A876 /* XGColour.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8751F49B4530075C6D2 /* XGColour.swift */; };
+		B2D1DF4E1F6871550023A876 /* XGPNGBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEE1F49A1FE0075C6D2 /* XGPNGBlock.swift */; };
+		B2D1DF4F1F6871560023A876 /* XGPNGBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEE1F49A1FE0075C6D2 /* XGPNGBlock.swift */; };
+		B2D1DF501F6871660023A876 /* GoDTextureImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */; };
+		B2D1DF511F68717D0023A876 /* XGTexturePalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBFA1F49A1FE0075C6D2 /* XGTexturePalette.swift */; };
+		B2D1DF521F68717E0023A876 /* XGTexturePalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBFA1F49A1FE0075C6D2 /* XGTexturePalette.swift */; };
+		B2D1DF541F6872740023A876 /* GoDTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF531F6872740023A876 /* GoDTexture.swift */; };
+		B2D1DF551F6872740023A876 /* GoDTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF531F6872740023A876 /* GoDTexture.swift */; };
+		B2D1DF561F6876380023A876 /* GoDTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF531F6872740023A876 /* GoDTexture.swift */; };
+		B2D1DF571F687B520023A876 /* GoDImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */; };
 		B2F507221F4C5FAA0075C6D2 /* body_000.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F5038A1F4C5FA80075C6D2 /* body_000.png */; };
 		B2F507231F4C5FAA0075C6D2 /* body_000.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F5038A1F4C5FA80075C6D2 /* body_000.png */; };
 		B2F507241F4C5FAA0075C6D2 /* body_001.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F5038B1F4C5FA80075C6D2 /* body_001.png */; };
@@ -2330,6 +2342,8 @@
 		B2ACE8871F5E372E00D87B22 /* XDRExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XDRExtensions.swift; sourceTree = "<group>"; };
 		B2ACE88C1F5E399A00D87B22 /* XDRHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XDRHomeViewController.swift; sourceTree = "<group>"; };
 		B2ACE88E1F5EBE3500D87B22 /* XGRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGRootViewController.swift; sourceTree = "<group>"; };
+		B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDTextureImporter.swift; sourceTree = "<group>"; };
+		B2D1DF531F6872740023A876 /* GoDTexture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDTexture.swift; sourceTree = "<group>"; };
 		B2F5038A1F4C5FA80075C6D2 /* body_000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = body_000.png; sourceTree = "<group>"; };
 		B2F5038B1F4C5FA80075C6D2 /* body_001.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = body_001.png; sourceTree = "<group>"; };
 		B2F5038C1F4C5FA80075C6D2 /* body_002.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = body_002.png; sourceTree = "<group>"; };
@@ -4793,6 +4807,8 @@
 			children = (
 				B2F5F88B1F49CD050075C6D2 /* GoDDesign.swift */,
 				B2F5F88C1F49CD050075C6D2 /* GoDTableViewDelegate.swift */,
+				B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */,
+				B2D1DF531F6872740023A876 /* GoDTexture.swift */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -6993,6 +7009,8 @@
 				B2F5F8731F49B3BC0075C6D2 /* XGStringManager.swift in Sources */,
 				B2F5EC961F49A1FF0075C6D2 /* XGLZSS.swift in Sources */,
 				B2F5EC511F49A1FE0075C6D2 /* XGScriptOps.swift in Sources */,
+				B2D1DF511F68717D0023A876 /* XGTexturePalette.swift in Sources */,
+				B2D1DF4C1F68714F0023A876 /* XGColour.swift in Sources */,
 				B2F5ECAB1F49A1FF0075C6D2 /* XGPNGManipulator.swift in Sources */,
 				B2F5ECC61F49A1FF0075C6D2 /* XGStringTable.swift in Sources */,
 				B2F5ECD51F49A1FF0075C6D2 /* XGTradeShadowPokemon.swift in Sources */,
@@ -7002,6 +7020,7 @@
 				B2F5EC811F49A1FF0075C6D2 /* XGDolPatcher.swift in Sources */,
 				B2ACE8901F5EC8FA00D87B22 /* XGResources.swift in Sources */,
 				B2F5ECC91F49A1FF0075C6D2 /* XGTextureBlock.swift in Sources */,
+				B2D1DF501F6871660023A876 /* GoDTextureImporter.swift in Sources */,
 				B2F5EC061F49A1FE0075C6D2 /* Code snippets.swift in Sources */,
 				B2F5EC721F49A1FF0075C6D2 /* XGBattleBingoCard.swift in Sources */,
 				B2F5EC361F49A1FE0075C6D2 /* XGMoveCategory.swift in Sources */,
@@ -7014,8 +7033,10 @@
 				B2F5EC991F49A1FF0075C6D2 /* XGLZSSWrapper.m in Sources */,
 				B2F5EC5D1F49A1FE0075C6D2 /* XGTMs.swift in Sources */,
 				B2F5EC0F1F49A1FE0075C6D2 /* XGBattleBingoPanel.swift in Sources */,
+				B2D1DF571F687B520023A876 /* GoDImageExtensions.swift in Sources */,
 				B2F5EC211F49A1FE0075C6D2 /* XGFiles.swift in Sources */,
 				B2F5ECA21F49A1FF0075C6D2 /* XGMutableData.swift in Sources */,
+				B2D1DF4E1F6871550023A876 /* XGPNGBlock.swift in Sources */,
 				B2F5EC6F1F49A1FF0075C6D2 /* PBRStringTable.swift in Sources */,
 				B2F5ECE41F49A1FF0075C6D2 /* XGUtility.swift in Sources */,
 				B2F5ECBA1F49A1FF0075C6D2 /* XGScriptClassFunctionsData.swift in Sources */,
@@ -7023,6 +7044,7 @@
 				B2F5ECB71F49A1FF0075C6D2 /* XGScriptClass.swift in Sources */,
 				B2F5EC8D1F49A1FF0075C6D2 /* XGISO.swift in Sources */,
 				B2F5EC331F49A1FE0075C6D2 /* XGMaps.swift in Sources */,
+				B2D1DF541F6872740023A876 /* GoDTexture.swift in Sources */,
 				B2F5EC541F49A1FE0075C6D2 /* XGShinyValues.swift in Sources */,
 				B2F5EC631F49A1FF0075C6D2 /* XGTrainerModels.swift in Sources */,
 				B2F5EC121F49A1FE0075C6D2 /* XGDeckPokemon.swift in Sources */,
@@ -7100,6 +7122,7 @@
 				B2F5EC401F49A1FE0075C6D2 /* XGMoveTypes.swift in Sources */,
 				B2F5ED6A1F49AEBC0075C6D2 /* XGTypePopover.swift in Sources */,
 				B2F5EC9A1F49A1FF0075C6D2 /* XGLZSSWrapper.m in Sources */,
+				B2D1DF561F6876380023A876 /* GoDTexture.swift in Sources */,
 				B2F5ED5F1F49AEBC0075C6D2 /* XGMovePopover.swift in Sources */,
 				B2F5EC881F49A1FF0075C6D2 /* XGExtensions.swift in Sources */,
 				B2F5ED771F49AEBC0075C6D2 /* XGShinyChanceViewController.swift in Sources */,
@@ -7191,6 +7214,7 @@
 				B2F5ECB01F49A1FF0075C6D2 /* XGPokemonStats.swift in Sources */,
 				B2F5EC8F1F49A1FF0075C6D2 /* XGISO.swift in Sources */,
 				B2F5EC261F49A1FE0075C6D2 /* XGFontColours.swift in Sources */,
+				B2D1DF4B1F6870EE0023A876 /* GoDTextureImporter.swift in Sources */,
 				B2F5EC561F49A1FE0075C6D2 /* XGShinyValues.swift in Sources */,
 				B2F5F8C01F4C4EDD0075C6D2 /* GoDViewLayoutManager.swift in Sources */,
 				B2F5EC3B1F49A1FE0075C6D2 /* XGMoves.swift in Sources */,
@@ -7279,10 +7303,14 @@
 				B2F5EC231F49A1FE0075C6D2 /* XGFiles.swift in Sources */,
 				B2F5ECC51F49A1FF0075C6D2 /* XGString.swift in Sources */,
 				B2F5EBA81F49A1980075C6D2 /* AppDelegate.swift in Sources */,
+				B2D1DF521F68717E0023A876 /* XGTexturePalette.swift in Sources */,
+				B2D1DF551F6872740023A876 /* GoDTexture.swift in Sources */,
+				B2D1DF4F1F6871560023A876 /* XGPNGBlock.swift in Sources */,
 				B205E0C51F60AA0D00A5F075 /* GoDPokemonPopUpButton.swift in Sources */,
 				B2F5ECDD1F49A1FF0075C6D2 /* XGTrainerClass.swift in Sources */,
 				B2F5ECBC1F49A1FF0075C6D2 /* XGScriptClassFunctionsData.swift in Sources */,
 				B2F5F8A31F49CD050075C6D2 /* GoDDesign.swift in Sources */,
+				B2D1DF4D1F6871500023A876 /* XGColour.swift in Sources */,
 				B2F5EC441F49A1FE0075C6D2 /* XGNatures.swift in Sources */,
 				B205E0C71F60ABB200A5F075 /* GoDGenderRatioPopUpButton.swift in Sources */,
 				B205E0C01F60A9D300A5F075 /* GoDExpRatePopUpButton.swift in Sources */,
