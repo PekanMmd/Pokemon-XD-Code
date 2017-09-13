@@ -6,7 +6,7 @@
 //
 //
 
-import Cocoa
+import Foundation
 
 let kTextureWidthOffset = 0x00
 let kTextureHeightOffset = 0x02

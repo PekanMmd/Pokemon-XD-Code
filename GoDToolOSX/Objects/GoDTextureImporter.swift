@@ -32,7 +32,6 @@ class GoDTextureImporter: NSObject {
 		super.init()
 		
 		self.texture  = oldTextureData
-		self.texture.data.file = XGFiles.nameAndFolder(texture.file.fileName, .Output)
 		self.newImage = newImage
 		
 		
@@ -48,8 +47,6 @@ class GoDTextureImporter: NSObject {
 	}
 	
 	private func pixelsFromPNGImage() -> [XGPNGBlock] {
-		
-		
 		
 		let imageWidth  = texture.width
 		let imageHeight = texture.height

@@ -45,7 +45,8 @@ class XGFilePickerPopover: XGPopover {
 		cell.title = files[indexPath.row].fileName
 		
 		switch self.folder {
-			case .PNG: cell.picture = folder.files[indexPath.row].image
+			case .Import: cell.picture = folder.files[indexPath.row].image
+			case .Export: cell.picture = folder.files[indexPath.row].image
 			case .PokeBody: cell.picture = folder.files[indexPath.row].image
 			case .PokeFace: cell.picture = folder.files[indexPath.row].image
 			case .Types: cell.picture = folder.files[indexPath.row].image

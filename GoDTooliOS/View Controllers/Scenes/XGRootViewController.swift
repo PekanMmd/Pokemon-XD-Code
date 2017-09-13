@@ -37,9 +37,9 @@ class XGRootViewController: UITableViewController {
 		XGFolders.LZSS.createDirectory()
 		
 		// subdirectories
-		XGFolders.PNG.createDirectory()
-		XGFolders.FDAT.createDirectory()
-		XGFolders.Output.createDirectory()
+		XGFolders.Import.createDirectory()
+		XGFolders.Textures.createDirectory()
+		XGFolders.Export.createDirectory()
 		XGFolders.PokeFace.createDirectory()
 		XGFolders.PokeBody.createDirectory()
 		XGFolders.Types.createDirectory()

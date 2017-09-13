@@ -10,9 +10,83 @@ import Cocoa
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/GoD-Tool"
 
+extension XGColour {
+	var NSColour : NSColor {
+		return NSColor(calibratedRed: CGFloat(red) / 31, green: CGFloat(green) / 31, blue: CGFloat(blue) / 31, alpha: CGFloat(alpha ? 1 : 0))
+	}
+}
+
 extension GoDTexture {
 	func importImage(file: XGFiles) {
 		GoDTextureImporter.replaceTextureData(texture: self, withImage: file)
+	}
+	
+	func palette() -> [Int] {
+		return self.data.getShortStreamFromOffset(paletteStart, length: 0x200)
+	}
+	
+	func pixels() -> [Int] {
+		return self.data.getByteStreamFromOffset(textureStart, length: paletteStart - textureStart)
+	}
+	
+	func saveImage(file: XGFiles) {
+		
+		let palette = self.palette().map { (rgba16) -> NSColor in
+			return XGColour(bytes: rgba16).NSColour
+		}
+		
+		let colourPixels = self.pixels().map { (index) -> NSColor in
+			return palette[index]
+		}
+		
+		
+		var pixelsPerRow = width
+		while pixelsPerRow % 8 != 0 {
+			pixelsPerRow += 1
+		}
+		let bytesPerRow = pixelsPerRow * 4
+		
+		let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: width, pixelsHigh: height, bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: NSDeviceRGBColorSpace, bitmapFormat: NSBitmapFormat(rawValue: UInt(CGBitmapInfo.byteOrder32Big.union(CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)).rawValue)), bytesPerRow: bytesPerRow, bitsPerPixel: 32)!
+
+		
+		for index in 0 ..< pixelsPerRow * height {
+		
+			let rowsPerBlock = 4
+			let columnsPerBlock = 8
+			let pixelsPerBlock = rowsPerBlock * columnsPerBlock
+			let blocksPerRow = pixelsPerRow / columnsPerBlock
+			
+			let indexOfBlock = index / pixelsPerBlock
+			let indexInBlock = index % pixelsPerBlock
+			let rowInBlock = indexInBlock / columnsPerBlock
+			let columnInBlock = indexInBlock % columnsPerBlock
+			let rowOfBlock = indexOfBlock / blocksPerRow
+			let columnOfBlock = indexOfBlock % blocksPerRow
+			
+			let colour = colourPixels[index]
+			let x = (columnOfBlock * columnsPerBlock) + columnInBlock
+			let y = (rowOfBlock * rowsPerBlock) + rowInBlock
+			
+			bitmap.setColor(colour, atX: x, y: y)
+			
+		}
+		
+//		for row in 0 ..< pixelsPerRow {
+//			for column in 0 ..< height {
+//				let index = row * pixelsPerRow + column
+//				bitmap.setColor(colourPixels[index], atX: row, y: column)
+//			}
+//		}
+//		
+		let image = bitmap.representation(using: NSPNGFileType, properties: [:])!
+		
+		do {
+			try image.write(to: URL(fileURLWithPath: file.path))
+		} catch {
+			
+		}
+		
+		
 	}
 }
 

@@ -6,7 +6,9 @@
 //  Copyright © 2015 StarsMmd. All rights reserved.
 //
 
-XGFiles.nameAndFolder("face048.fdat", .FDAT).texture.importImage(file: .nameAndFolder("face048.png", .PNG))
+//XGFiles.fsys("fight_common.fsys").fsysData.extractFilesToFolder(folder: .TOC)
+
+XGUtility.exportTextures()
 
 //let deck = XGDecks.DeckStory
 //let new = deck.unusedPokemonCount(14)

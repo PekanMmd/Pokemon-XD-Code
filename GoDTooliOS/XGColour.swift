@@ -101,6 +101,11 @@ class XGColour: NSObject {
 		
 	}
 	
+	func RGBA32Representation() -> [UInt8] {
+		return [red, green, blue].map({ (i) -> UInt8 in
+			return UInt8(i) * 8
+		}) + [alpha ? 0xFF : 0]
+	}
 	
 	class func none() -> XGColour {
 		return XGColour(red: 0, green: 0, blue: 0, alpha: 0)

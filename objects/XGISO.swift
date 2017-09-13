@@ -434,25 +434,34 @@ class XGISO: NSObject {
 	
 	func extractAutoFSYS() {
 		for file in self.autoFsysList {
-			let data = dataForFile(filename: file)!
-			data.file = XGFiles.nameAndFolder(file, .AutoFSYS)
-			data.save()
+			let xgf = XGFiles.nameAndFolder(file, .AutoFSYS)
+			if !xgf.exists {
+				let data = dataForFile(filename: file)!
+				data.file = xgf
+				data.save()
+			}
 		}
 	}
 	
 	func extractMenuFSYS() {
 		for file in self.menuFsysList {
-			let data = dataForFile(filename: file)!
-			data.file = XGFiles.nameAndFolder(file, .MenuFSYS)
-			data.save()
+			let xgf = XGFiles.nameAndFolder(file, .AutoFSYS)
+			if !xgf.exists {
+				let data = dataForFile(filename: file)!
+				data.file = xgf
+				data.save()
+			}
 		}
 	}
 	
 	func extractFSYS() {
 		for file in self.fsysList {
-			let data = dataForFile(filename: file)!
-			data.file = XGFiles.nameAndFolder(file, .FSYS)
-			data.save()
+			let xgf = XGFiles.nameAndFolder(file, .AutoFSYS)
+			if !xgf.exists {
+				let data = dataForFile(filename: file)!
+				data.file = xgf
+				data.save()
+			}
 		}
 	}
 	
@@ -463,52 +472,80 @@ class XGISO: NSObject {
 	}
 	
 	func extractCommon() {
-		let rel = XGFiles.fsys("common.fsys").fsysData.decompressedDataForFileWithIndex(index: 0)!
-		rel.file = .common_rel
-		rel.save()
-		let tableres2 = XGFiles.fsys("common_dvdeth.fsys").fsysData.decompressedDataForFileWithIndex(index: 0)!
-		tableres2.file = .tableres2
-		tableres2.save()
-		let pocket = XGFiles.nameAndFolder("pocket_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
-		pocket.file = .nameAndFolder("pocket_menu.fdat", .Common)
-		pocket.save()
+		if !XGFiles.common_rel.exists {
+			let rel = XGFiles.fsys("common.fsys").fsysData.decompressedDataForFileWithIndex(index: 0)!
+			rel.file = .common_rel
+			rel.save()
+		}
+		if !XGFiles.tableres2.exists {
+			let tableres2 = XGFiles.fsys("common_dvdeth.fsys").fsysData.decompressedDataForFileWithIndex(index: 0)!
+			tableres2.file = .tableres2
+			tableres2.save()
+		}
+		if !XGFiles.nameAndFolder("pocket_menu.fdat", .Common).exists {
+			let pocket = XGFiles.nameAndFolder("pocket_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
+			pocket.file = .nameAndFolder("pocket_menu.fdat", .Common)
+			pocket.save()
+		}
 		
 	}
 	
 	func extractDecks() {
 		let deck = XGFiles.fsys("deck_archive.fsys").fsysData
-		let colosseum = deck.decompressedDataForFileWithIndex(index: 2)!
-		let dark = deck.decompressedDataForFileWithIndex(index: 4)!
-		let hundred = deck.decompressedDataForFileWithIndex(index: 6)!
-		let story = deck.decompressedDataForFileWithIndex(index: 12)!
-		let virtual = deck.decompressedDataForFileWithIndex(index: 14)!
-		colosseum.file = .deck(.DeckColosseum)
-		dark.file = .deck(.DeckDarkPokemon)
-		hundred.file = .deck(.DeckHundred)
-		story.file = .deck(.DeckStory)
-		virtual.file = .deck(.DeckVirtual)
-		colosseum.save()
-		dark.save()
-		hundred.save()
-		story.save()
-		virtual.save()
+		let deckFiles : [XGFiles] = [.deck(.DeckColosseum), .deck(.DeckDarkPokemon), .deck(.DeckHundred), .deck(.DeckStory), .deck(.DeckVirtual)]
+		
+		if !deckFiles[0].exists {
+			let deckFile = deck.decompressedDataForFileWithIndex(index: 2)!
+			deckFile.file = deckFiles[0]
+			deckFile.save()
+		}
+		
+		if !deckFiles[1].exists {
+			let deckFile = deck.decompressedDataForFileWithIndex(index: 4)!
+			deckFile.file = deckFiles[1]
+			deckFile.save()
+		}
+		
+		if !deckFiles[2].exists {
+			let deckFile = deck.decompressedDataForFileWithIndex(index: 6)!
+			deckFile.file = deckFiles[2]
+			deckFile.save()
+		}
+		
+		if !deckFiles[3].exists {
+			let deckFile = deck.decompressedDataForFileWithIndex(index: 12)!
+			deckFile.file = deckFiles[3]
+			deckFile.save()
+		}
+		
+		if !deckFiles[4].exists {
+			let deckFile = deck.decompressedDataForFileWithIndex(index: 14)!
+			deckFile.file = deckFiles[4]
+			deckFile.save()
+		}
 		
 	}
 	
 	func extractAutoStringTables() {
 		for file in XGFolders.AutoFSYS.filenames {
 			let msg = file.replacingOccurrences(of: ".fsys", with: ".msg")
-			let fsys = XGFiles.nameAndFolder(file, .AutoFSYS).fsysData
-			let data = fsys.decompressedDataForFileWithIndex(index: 2)!
-			data.file = .stringTable(msg)
-			data.save()
+			if !XGFiles.stringTable(msg).exists {
+				let fsys = XGFiles.nameAndFolder(file, .AutoFSYS).fsysData
+				let data = fsys.decompressedDataForFileWithIndex(index: 2)!
+				data.file = .stringTable(msg)
+				data.save()
+			}
 		}
 	}
 	
 	func extractSpecificStringTables() {
-		let fight = XGFiles.fsys("fight_common.fsys").fsysData.decompressedDataForFileWithIndex(index: 0)!
-		fight.file = .stringTable("fight.msg")
-		fight.save()
+		
+		let fightFile = XGFiles.stringTable("fight.msg")
+		if !fightFile.exists {
+			let fight = XGFiles.fsys("fight_common.fsys").fsysData.decompressedDataForFileWithIndex(index: 0)!
+			fight.file = fightFile
+			fight.save()
+		}
 		
 		
 		let pocket_menu = XGFiles.stringTable("pocket_menu.msg")
@@ -520,38 +557,53 @@ class XGISO: NSObject {
 		let p_exchange = XGFiles.stringTable("p_exchange.msg")
 		let world_map = XGFiles.stringTable("world_map.msg")
 		
+		if !pocket_menu.exists {
+			let pm = XGFiles.nameAndFolder("pcbox_pocket_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
+			pm.file = pocket_menu
+			pm.save()
+		}
 		
-		let pm = XGFiles.nameAndFolder("pcbox_pocket_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
-		pm.file = pocket_menu
-		pm.save()
+		if !nameentrymenu.exists {
+			let nem = XGFiles.nameAndFolder("pcbox_name_entry_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
+			nem.file = nameentrymenu
+			nem.save()
+		}
 		
-		let nem = XGFiles.nameAndFolder("pcbox_name_entry_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
-		nem.file = nameentrymenu
-		nem.save()
+		if !system_tool.exists {
+			let st = XGFiles.nameAndFolder("pcbox_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
+			st.file = system_tool
+			st.save()
+		}
 		
-		let st = XGFiles.nameAndFolder("pcbox_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
-		st.file = system_tool
-		st.save()
+		if !m3shrine1frl.exists {
+			let m3rl = XGFiles.nameAndFolder("hologram_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
+			m3rl.file = m3shrine1frl
+			m3rl.save()
+		}
 		
-		let m3rl = XGFiles.nameAndFolder("hologram_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
-		m3rl.file = m3shrine1frl
-		m3rl.save()
+		if !relivehall_menu.exists {
+			let rh = XGFiles.nameAndFolder("relivehall_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
+			rh.file = relivehall_menu
+			rh.save()
+		}
 		
-		let rh = XGFiles.nameAndFolder("relivehall_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
-		rh.file = relivehall_menu
-		rh.save()
+		if !pda_menu.exists {
+			let pda = XGFiles.nameAndFolder("pda_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 2)!
+			pda.file = pda_menu
+			pda.save()
+		}
 		
-		let pda = XGFiles.nameAndFolder("pda_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 2)!
-		pda.file = pda_menu
-		pda.save()
+		if !p_exchange.exists {
+			let pex = XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 2)!
+			pex.file = p_exchange
+			pex.save()
+		}
 		
-		let pex = XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 2)!
-		pex.file = p_exchange
-		pex.save()
-		
-		let wm = XGFiles.nameAndFolder("worldmap.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 1)!
-		wm.file = world_map
-		wm.save()
+		if !world_map.exists {
+			let wm = XGFiles.nameAndFolder("worldmap.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 1)!
+			wm.file = world_map
+			wm.save()
+		}
 	}
 	
 	func extractStringTables() {
@@ -562,17 +614,22 @@ class XGISO: NSObject {
 	
 	func extractScripts() {
 		for file in XGFolders.AutoFSYS.files {
-			let fsys = file.fsysData
-			let data = fsys.decompressedDataForFileWithIndex(index: 1)!
-			data.file = .script(file.fileName.replacingOccurrences(of: ".fsys", with: ".scd"))
-			data.save()
+			let scd = XGFiles.script(file.fileName.replacingOccurrences(of: ".fsys", with: ".scd"))
+			if !scd.exists {
+				let fsys = file.fsysData
+				let data = fsys.decompressedDataForFileWithIndex(index: 1)!
+				data.file = scd
+				data.save()
+			}
 		}
 	}
 	
 	func extractDOL() {
-		let dol = dataForFile(filename: "Start.dol")!
-		dol.file = .dol
-		dol.save()
+		if !XGFiles.dol.exists {
+			let dol = dataForFile(filename: "Start.dol")!
+			dol.file = .dol
+			dol.save()
+		}
 	}
 	
 	class func extractRandomiserFiles() {

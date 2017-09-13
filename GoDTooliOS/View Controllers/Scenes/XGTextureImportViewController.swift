@@ -33,8 +33,8 @@ class XGTextureImportViewController: XGViewController {
 	
 	func setUpUI() {
 	
-		self.textureButton = XGPopoverButton(title: "", colour: UIColor.black, textColour: UIColor.white, popover: XGFilePickerPopover(folder: .FDAT), viewController: self)
-		self.imageButton   = XGPopoverButton(title: "", colour: UIColor.black, textColour: UIColor.white,popover: XGFilePickerPopover(folder: .PNG ), viewController: self)
+		self.textureButton = XGPopoverButton(title: "", colour: UIColor.black, textColour: UIColor.white, popover: XGFilePickerPopover(folder: .Textures), viewController: self)
+		self.imageButton   = XGPopoverButton(title: "", colour: UIColor.black, textColour: UIColor.white,popover: XGFilePickerPopover(folder: .Import ), viewController: self)
 		self.importButton  = XGButton(title: "Import", colour: UIColor.blue, textColour: UIColor.white, action: {self.importTexture()})
 		self.autoButton	   = XGButton(title: "Auto Import", colour: UIColor.red, textColour: UIColor.white, action: {})
 		

@@ -242,9 +242,9 @@ enum XGFolders : String {
 	case JSON				= "JSON"
 	case StringTables		= "String Tables"
 	case TextureImporter	= "Texture Importer"
-	case PNG				= "PNG"
-	case FDAT				= "FDAT"
-	case Output				= "Output"
+	case Import				= "Import"
+	case Export				= "Export"
+	case Textures			= "Textures"
 	case Images				= "Images"
 	case PokeFace			= "PokeFace"
 	case PokeBody			= "PokeBody"
@@ -274,9 +274,9 @@ enum XGFolders : String {
 			switch self {
 				
 				case .Documents	: return path
-				case .PNG		: path = XGFolders.TextureImporter.path
-				case .FDAT		: path = XGFolders.TextureImporter.path
-				case .Output	: path = XGFolders.TextureImporter.path
+				case .Import	: path = XGFolders.TextureImporter.path
+				case .Export	: path = XGFolders.TextureImporter.path
+				case .Textures	: path = XGFolders.TextureImporter.path
 				case .PokeFace	: path = XGFolders.Images.path
 				case .PokeBody	: path = XGFolders.Images.path
 				case .Trainers	: path = XGFolders.Images.path
@@ -296,9 +296,9 @@ enum XGFolders : String {
 			switch self {
 				
 			case .Documents	: return path
-			case .PNG		: path = XGFolders.TextureImporter.resourcePath
-			case .FDAT		: path = XGFolders.TextureImporter.resourcePath
-			case .Output	: path = XGFolders.TextureImporter.resourcePath
+			case .Import	: path = XGFolders.TextureImporter.resourcePath
+			case .Export	: path = XGFolders.TextureImporter.resourcePath
+			case .Textures	: path = XGFolders.TextureImporter.resourcePath
 			case .PokeFace	: path = XGFolders.Images.resourcePath
 			case .PokeBody	: path = XGFolders.Images.resourcePath
 			case .Trainers	: path = XGFolders.Images.resourcePath
@@ -397,9 +397,9 @@ enum XGFolders : String {
 			.JSON,
 			.StringTables,
 			.TextureImporter,
-			.PNG,
-			.FDAT,
-			.Output,
+			.Import,
+			.Export,
+			.Textures,
 			.Images,
 			.PokeFace,
 			.PokeBody,

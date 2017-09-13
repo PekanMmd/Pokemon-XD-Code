@@ -35,7 +35,6 @@ class XGTexturePNGReimporter: NSObject {
 		super.init()
 		
 		self.texture  = oldTextureData
-		self.texture.file = XGFiles.nameAndFolder(texture.file.fileName, .Output)
 		self.newImage = newImage
 		
 		self.textureDataStartOffset = Int(texture.get4BytesAtOffset(kTexturePointerOffset))

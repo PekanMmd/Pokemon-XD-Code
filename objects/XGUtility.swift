@@ -14,7 +14,7 @@ class XGUtility {
 	
 	class func compressFiles() {
 		
-		let compressFolders = [XGFolders.Common, XGFolders.Decks, XGFolders.Output, XGFolders.StringTables, XGFolders.Scripts]
+		let compressFolders = [XGFolders.Common, XGFolders.Decks, XGFolders.Textures, XGFolders.StringTables, XGFolders.Scripts]
 		
 		for folder in compressFolders where folder.exists {
 			for file in folder.files {
@@ -44,20 +44,15 @@ class XGUtility {
 		
 		for i in 0 ..< deckArchive.numberOfEntries {
 			// remove eu files to make space for increased file sizes assuming they're all the odd ones
-			//	XGFiles.FSYS("deck_archive.fsys").fsysData.shiftAndReplaceFileWithIndex(5, withFile: .LZSS("DeckData_DarkPokemon.bin.lzss")) EU file
 			if i % 2 == 1 {
 				deckArchive.shiftAndReplaceFileWithIndex(i, withFile: .lzss("DeckData_Empty.bin.lzss"))
 			}
 		}
 		
 		deckArchive.shiftAndReplaceFileWithIndex(2, withFile: .lzss("DeckData_Colosseum.bin.lzss"))
-//		deckArchive.shiftAndReplaceFileWithIndex(3, withFile: .lzss("DeckData_Colosseum.bin.lzss"))
 		deckArchive.shiftAndReplaceFileWithIndex(4, withFile: .lzss("DeckData_DarkPokemon.bin.lzss"))
-//		deckArchive.shiftAndReplaceFileWithIndex(6, withFile: .lzss("DeckData_Hundred.bin.lzss"))
 		deckArchive.shiftAndReplaceFileWithIndex(12, withFile: .lzss("DeckData_Story.bin.lzss"))
-//		deckArchive.shiftAndReplaceFileWithIndex(13, withFile: .lzss("DeckData_Story.bin.lzss"))
 		deckArchive.shiftAndReplaceFileWithIndex(14, withFile: .lzss("DeckData_Virtual.bin.lzss"))
-//		deckArchive.shiftAndReplaceFileWithIndex(15, withFile: .lzss("DeckData_Virtual.bin.lzss"))
 		
 		XGFiles.fsys("fight_common.fsys").fsysData.shiftAndReplaceFileWithIndex(0, withFile: .lzss("fight.msg.lzss"))
 		XGFiles.nameAndFolder("pocket_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: .lzss("pocket_menu.fdat.lzss"))
@@ -195,10 +190,11 @@ class XGUtility {
 	
 	class func compileAllFiles() {
 		
-		prepareForCompilation()
-		
 		importStringTables()
 		importScripts()
+		
+		prepareForCompilation()
+		
 		
 		XGISO().importAllFiles()
 	}
@@ -290,6 +286,28 @@ class XGUtility {
 		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.replaceFileWithIndex(2, withFile: nameentrymenu, saveWhenDone: true)
 		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.replaceFileWithIndex(3, withFile: system_tool, saveWhenDone: true)
 		
+	}
+	
+	class func importTextures() {
+		for file in XGFolders.Textures.files {
+			var imageFile : XGFiles!
+			for image in XGFolders.Import.files {
+				if image.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
+					imageFile = image
+				}
+			}
+			if imageFile != nil {
+				file.texture.importImage(file: imageFile!)
+			}
+		}
+		
+	}
+	
+	class func exportTextures() {
+		for file in XGFolders.Textures.files {
+			let filename = file.fileName.removeFileExtensions() + ".png"
+			file.texture.saveImage(file: .nameAndFolder(filename, .Export))
+		}
 	}
 	
 	//MARK: - Saving to disk

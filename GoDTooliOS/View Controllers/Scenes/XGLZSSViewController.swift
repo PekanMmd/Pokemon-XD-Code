@@ -37,11 +37,11 @@ class XGLZSSViewController: XGTableViewController {
 			XGLZSS.Input(.deck(.DeckStory)).compress()
 			XGLZSS.Input(.deck(.DeckDarkPokemon)).compress()
 			XGLZSS.Input(.deck(.DeckVirtual)).compress()
-			XGLZSS.Input(.nameAndFolder("uv_icn_type_big_00.fdat", .Output)).compress()
-			XGLZSS.Input(.nameAndFolder("uv_icn_type_small_00.fdat", .Output)).compress()
+			XGLZSS.Input(.nameAndFolder("uv_icn_type_big_00.fdat", .Textures)).compress()
+			XGLZSS.Input(.nameAndFolder("uv_icn_type_small_00.fdat", .Textures)).compress()
 			XGLZSS.Input(.stringTable("fight.fdat")).compress()
 			XGLZSS.Input(.stringTable("pocket_menu.fdat")).compress()
-			XGLZSS.Input(.nameAndFolder("title_start_00.fdat", .Output)).compress()
+			XGLZSS.Input(.nameAndFolder("title_start_00.fdat", .Textures)).compress()
 			
 			
 			self.hideActivityView()

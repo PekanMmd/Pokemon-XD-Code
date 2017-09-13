@@ -10,6 +10,12 @@ import Foundation
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/XD-Randomiser"
 
+extension GoDTexture {
+	func importImage(file: XGFiles) {
+		return
+	}
+}
+
 extension XGStringTable {
 	func replaceString(_ string: XGString, alert: Bool) -> Bool {
 		
