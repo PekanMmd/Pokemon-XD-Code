@@ -36,6 +36,7 @@ indirect enum XGFiles {
 	case fsys(String)
 	case lzss(String)
 	case script(String)
+	case texture(String)
 	case iso
 	case toc
 	case nameAndFolder(String, XGFolders)
@@ -69,6 +70,7 @@ indirect enum XGFiles {
 				case .fsys(let s)			: return s
 				case .lzss(let s)			: return s
 				case .script(let s)			: return s
+				case .texture(let s)		: return s
 				case .iso					: return "XD.iso"
 				case .toc					: return "Game.toc"
 				case .nameAndFolder(let name, _) : return name
@@ -96,6 +98,7 @@ indirect enum XGFiles {
 				case .fsys				: folder = .FSYS
 				case .lzss				: folder = .LZSS
 				case .script			: folder = .Scripts
+				case .texture			: folder = .Textures
 				case .iso				: folder = .ISO
 				case .toc				: folder = .TOC
 				case .original(let f)	: folder = f.folder
