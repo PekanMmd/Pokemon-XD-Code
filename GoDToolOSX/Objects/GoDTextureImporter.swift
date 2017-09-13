@@ -17,32 +17,15 @@ class GoDTextureImporter: NSObject {
 	
 	var Palette  = XGTexturePalette()
 	
-	
-	// number of blocks that tile horizontally across the image
-	var horizontalTiles = 0
-	var blockWidth  = 0
-	var blockHeight = 0
-	
 	// number of pixels needed to be appended for width to be multiple of 8
 	var requiredPixelsPerRow = 0
-	
-	var indexed = false
+	var requiredPixelsPerCol = 0
 	
 	init(oldTextureData: GoDTexture, newImage: NSImage) {
 		super.init()
 		
 		self.texture  = oldTextureData
 		self.newImage = newImage
-		
-		
-		if texture.paletteStart != 0 {
-			self.blockWidth  = 8
-			self.blockHeight = 4
-			indexed = true
-		} else {
-			self.blockWidth  = 4
-			self.blockHeight = 4
-		}
 		
 	}
 	
@@ -51,11 +34,12 @@ class GoDTextureImporter: NSObject {
 		let imageWidth  = texture.width
 		let imageHeight = texture.height
 		
-		requiredPixelsPerRow = (imageWidth % 8) == 0 ? 0 : 8 - (imageWidth % 8)
+		requiredPixelsPerRow = (imageWidth % texture.blockWidth) == 0 ? 0 : texture.blockWidth - (imageWidth % texture.blockWidth)
+		requiredPixelsPerCol = (imageHeight % texture.blockHeight) == 0 ? 0 : texture.blockHeight - (imageHeight % texture.blockHeight)
 		
 		let numberOfPixels = imageWidth * imageHeight
 		
-		self.horizontalTiles = Int( (imageWidth + requiredPixelsPerRow) / blockWidth)
+		let horizontalTiles = (imageWidth + requiredPixelsPerRow) / texture.blockWidth
 		
 		var pixels = [UInt32](repeating: 0, count: numberOfPixels)
 		
@@ -77,9 +61,10 @@ class GoDTextureImporter: NSObject {
 		
 		var pngblock = [XGPNGBlock]()
 		
-		let totalPixelCount = numberOfPixels + (imageHeight * requiredPixelsPerRow)
+		var totalPixelCount = numberOfPixels + (imageHeight * requiredPixelsPerRow)
+		totalPixelCount += requiredPixelsPerCol * (imageWidth + requiredPixelsPerRow)
 		
-		for _ in 0 ..< ( totalPixelCount  / (blockWidth * blockHeight)) {
+		for _ in 0 ..< ( totalPixelCount  / (texture.blockWidth * texture.blockHeight)) {
 			pngblock.append(XGPNGBlock())
 		}
 		
@@ -87,24 +72,24 @@ class GoDTextureImporter: NSObject {
 			
 			var currentColour = pixels[i]
 			
-			let red		  = Int((currentColour % 0x100) / 8)
+			let red		  = Int(currentColour % 0x100)
 			
-			currentColour =  currentColour / 0x100
-			let green	  = Int((currentColour % 0x100) / 8)
+			currentColour =  currentColour >> 8
+			let green	  = Int(currentColour % 0x100)
 			
-			currentColour =  currentColour / 0x100
-			let blue	  = Int((currentColour % 0x100) / 8)
+			currentColour =  currentColour >> 8
+			let blue	  = Int(currentColour % 0x100)
 			
 			// alpha value is only 1 bit so anything over 0 is considered 100% opaque.
-			currentColour =  currentColour / 0x100
-			let alpha	  = Int((currentColour % 0x100))
+			currentColour =  currentColour >> 8
+			let alpha	  = Int(currentColour)
 			
 			let pixelColour = XGColour(red: red, green: green, blue: blue, alpha: alpha)
 			
 			let pixelColumn = i % imageWidth
 			
-			let row		= i / (imageWidth * blockHeight)
-			let column  = pixelColumn / blockWidth
+			let row		= i / (imageWidth * texture.blockHeight)
+			let column  = pixelColumn / texture.blockWidth
 			
 			let index = (row * horizontalTiles) + column
 			
@@ -119,6 +104,13 @@ class GoDTextureImporter: NSObject {
 			
 		}
 		
+		// fills bottom rows if height not divisible by block height
+		for block in pngblock {
+			while block.length < (texture.blockHeight * texture.blockWidth) {
+				block.append(XGColour.none())
+			}
+		}
+		
 		return pngblock
 	}
 	
@@ -130,24 +122,32 @@ class GoDTextureImporter: NSObject {
 			
 			let tex = XGTextureBlock()
 			
-			for i in 0 ..< (blockWidth * blockHeight) {
+			for i in 0 ..< (texture.blockWidth * texture.blockHeight) {
 				
-				var index = Palette.indexForColour(block[i])
-				if index == nil {
-					
-					if Palette.length < 256 {
-						Palette.append(block[i])
-						index = Palette.indexForColour(block[i])
-					} else {
-						index = 0
+				if texture.isIndexed {
+					var index = Palette.indexForColour(block[i])
+					if index == nil {
+						
+						if Palette.length < texture.paletteCount {
+							Palette.append(block[i])
+							index = Palette.indexForColour(block[i])
+						} else {
+							index = 0
+						}
 					}
+					
+					tex.append(index!)
+				} else {
+					tex.append(block[i].representation(format: texture.format))
 				}
-				
-				tex.append(index!)
 				
 			}
 			
 			textureBlock.append(tex)
+		}
+		
+		while Palette.length < texture.paletteCount {
+			Palette.append(XGColour.none())
 		}
 		
 		return textureBlock
@@ -176,10 +176,12 @@ class GoDTextureImporter: NSObject {
 			
 			for i in 0 ..< block.length {
 				
-				let (byte1, byte2) = block[i].convertTo16Bits()
+				let raw = block[i].representation(format: texture.format)
 				
-				bytes.append(byte1)
-				bytes.append(byte2)
+				if texture.BPP == 16 {
+					bytes.append(raw >> 8)
+					bytes.append(raw %  0x100)
+				}
 			}
 		}
 		
@@ -191,7 +193,7 @@ class GoDTextureImporter: NSObject {
 		
 		let pngPixels = self.pixelsFromPNGImage()
 		var pixelBytes = [Int]()
-		if indexed {
+		if texture.isIndexed {
 			let texPixels = self.convertPNGPixelsToIndexedPixels(pixels: pngPixels)
 			pixelBytes = byteStreamFromTexturePixels(pixels: texPixels)
 			self.updatePalette()
@@ -206,18 +208,28 @@ class GoDTextureImporter: NSObject {
 		
 		var bytes = [Int]()
 		
-		for i in 0 ..< 256  {
+		for i in 0 ..< texture.paletteCount  {
 			
 			var colour = XGColour.none()
 			
 			if i < Palette.length {
 				colour = Palette[i]
+				
+				var pFormat = GoDTextureFormats.RGB5A3
+				if texture.paletteFormat == 0 {
+					pFormat = .IA8
+				}
+				if texture.paletteFormat == 1 {
+					pFormat = .RGB565
+				}
+				
+				let raw = colour.representation(format: pFormat)
+				
+				bytes.append(raw >> 8)
+				bytes.append(raw %  0x100)
 			}
 			
-			let (byte1, byte2) = colour.convertTo16Bits()
 			
-			bytes.append(byte1)
-			bytes.append(byte2)
 		}
 		
 		texture.replacePaletteData(newBytes: bytes)

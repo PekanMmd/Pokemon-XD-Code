@@ -38,6 +38,13 @@ class XGFsys : NSObject {
 		self.data = self.file.data
 	}
 	
+	init(data: XGMutableData) {
+		super.init()
+		
+		self.data = data
+		self.file = self.data.file
+	}
+	
 	override var description : String {
 		get {
 			var s = "\(self.fileName) - contains \(self.numberOfEntries) files\n"
@@ -217,9 +224,17 @@ class XGFsys : NSObject {
 	
 	func replaceFileWithName(name: String, withFile newFile: XGFiles) {
 		let index = self.indexForFile(filename: name)
+		if !newFile.exists {
+			print("file doesn't exist:", newFile.path)
+			return
+		}
 		
 		if index != nil {
-			self.shiftAndReplaceFileWithIndex(index!, withFile: newFile)
+			if isFileCompressed(index: index!) && !newFile.fileName.contains(".lzss") {
+				self.shiftAndReplaceFileWithIndex(index!, withFile: newFile.compress())
+			} else {
+				self.shiftAndReplaceFileWithIndex(index!, withFile: newFile)
+			}
 		}
 	}
 	

@@ -310,6 +310,19 @@ class XGUtility {
 		}
 	}
 	
+	class func searchForFsysForFile(file: XGFiles) {
+		let iso = XGISO()
+		for name in iso.allFileNames where name.contains(".fsys") {
+			let fsys = XGFsys(data: iso.dataForFile(filename: name)!)
+			for index in 0 ..< fsys.numberOfEntries {
+				if fsys.fileNames[index].contains(file.fileName.removeFileExtensions()) {
+					print("fsys: ",name,", index: ", index, ",name: ", fsys.fileNames[index])
+				}
+			}
+			
+		}
+	}
+	
 	//MARK: - Saving to disk
 	class func saveObject(_ obj: AnyObject, toFile file: XGFiles) {
 		NSKeyedArchiver.archiveRootObject(obj, toFile: file.path)

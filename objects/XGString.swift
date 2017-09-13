@@ -164,7 +164,7 @@ class XGString: NSObject {
 	}
 	
 	func containsSubstring(_ sub: String) -> Bool {
-		return self.string.range(of: sub, options: .caseInsensitive, range: nil, locale: nil) != nil
+		return self.string.contains(sub)
 	}
 	
 	func replaceSubstring(_ sub: String, withString new: String, verbose: Bool) {

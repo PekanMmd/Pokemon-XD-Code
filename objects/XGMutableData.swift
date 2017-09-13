@@ -111,6 +111,18 @@ class XGMutableData: NSObject {
 		
 	}
 	
+	func getNibbleStreamFromOffset(_ offset: Int, length: Int) -> [Int] {
+		// length in bytes, not number of nibbles
+		var nibbles = [Int]()
+		
+		for byte in self.getByteStreamFromOffset(offset, length: length) {
+			nibbles.append(byte >> 4)
+			nibbles.append((byte << 4) >> 4)
+		}
+		
+		return nibbles
+	}
+	
 	func getByteStreamFromOffset(_ offset: Int, length: Int) -> [Int] {
 		
 		var byteStream = [Int]()
@@ -125,6 +137,7 @@ class XGMutableData: NSObject {
 	}
 	
 	func getShortStreamFromOffset(_ offset: Int, length: Int) -> [Int] {
+		// length in bytes, not number of shorts
 		
 		var byteStream = [Int]()
 		

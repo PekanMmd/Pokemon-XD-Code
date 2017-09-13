@@ -12,7 +12,7 @@ let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .use
 
 extension XGColour {
 	var NSColour : NSColor {
-		return NSColor(calibratedRed: CGFloat(red) / 31, green: CGFloat(green) / 31, blue: CGFloat(blue) / 31, alpha: CGFloat(alpha ? 1 : 0))
+		return NSColor(calibratedRed: CGFloat(red) / 0xFF, green: CGFloat(green) / 0xFF, blue: CGFloat(blue) / 0xFF, alpha: CGFloat(alpha) / 0xFF)
 	}
 }
 
@@ -22,27 +22,53 @@ extension GoDTexture {
 	}
 	
 	func palette() -> [Int] {
-		return self.data.getShortStreamFromOffset(paletteStart, length: 0x200)
+		return self.data.getShortStreamFromOffset(paletteStart, length: paletteLength)
 	}
 	
 	func pixels() -> [Int] {
-		return self.data.getByteStreamFromOffset(textureStart, length: paletteStart - textureStart)
+		
+		if BPP == 16 {
+			return self.data.getShortStreamFromOffset(textureStart, length: self.textureLength)
+		}
+		if BPP == 4 {
+			return self.data.getNibbleStreamFromOffset(textureStart, length: self.textureLength)
+		}
+		return self.data.getByteStreamFromOffset(textureStart, length: self.textureLength)
 	}
 	
 	var pngData : Data {
 		get {
-			let palette = self.palette().map { (rgba16) -> NSColor in
-				return XGColour(bytes: rgba16).NSColour
+			let palette = self.palette().map { (raw) -> NSColor in
+				var pFormat = GoDTextureFormats.RGB5A3
+				if self.paletteFormat == 0 {
+					pFormat = .IA8
+				}
+				if self.paletteFormat == 1 {
+					pFormat = .RGB565
+				}
+				return XGColour(raw: raw, format: pFormat).NSColour
 			}
 			
-			let colourPixels = self.pixels().map { (index) -> NSColor in
-				return palette[index]
+			var colourPixels = [NSColor]()
+			if isIndexed {
+				colourPixels = self.pixels().map { (index) -> NSColor in
+					return palette[index]
+				}
+			} else {
+				colourPixels = self.pixels().map({ (raw) -> NSColor in
+					return XGColour(raw: raw, format: self.format).NSColour
+				})
 			}
+			
 			
 			
 			var pixelsPerRow = width
-			while pixelsPerRow % 8 != 0 {
+			var pixelsPerCol = height
+			while pixelsPerRow % blockWidth != 0 {
 				pixelsPerRow += 1
+			}
+			while pixelsPerCol % blockHeight != 0 {
+				pixelsPerCol += 1
 			}
 			let bytesPerRow = pixelsPerRow * 4
 			
@@ -51,8 +77,9 @@ extension GoDTexture {
 			
 			for index in 0 ..< pixelsPerRow * height {
 				
-				let rowsPerBlock = 4
-				let columnsPerBlock = 8
+				let rowsPerBlock = self.blockHeight
+				let columnsPerBlock = self.blockWidth
+				
 				let pixelsPerBlock = rowsPerBlock * columnsPerBlock
 				let blocksPerRow = pixelsPerRow / columnsPerBlock
 				
