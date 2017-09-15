@@ -317,7 +317,7 @@ class XGDolPatcher: NSObject {
 //		var data = XGFiles.Common_rel.data
 		
 		//		let tableOffsetsAndSizes = [(0x9534E,0xD317)]
-		let tableOffsetsAndSizes = [(0x7AAFC,0xD484), (0x87F80,0xD3BC), (0x9533C,0xD334), (0x6D874,0xD288) ]
+		let tableOffsetsAndSizes = [ (0x7AAFC,0xD484), (0x87F80,0xD3BC), (0x9533C,0xD334), (0x6D874,0xD288) ]
 		
 		for i in 0 ..< tableOffsetsAndSizes.count {
 			XGStringTable(file: .common_rel, startOffset: tableOffsetsAndSizes[i].0, fileSize: tableOffsetsAndSizes[i].1).purge()

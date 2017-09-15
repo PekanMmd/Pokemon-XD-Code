@@ -17,7 +17,7 @@ class GoDViewController: NSViewController {
 	var selectedItem	 : Any	= 0
 	
 	var views    : [String : NSView ] = [String : NSView ]()
-	var metrics  : [String : CGFloat] = [String : CGFloat]()
+	var metrics  : [String : NSNumber] = [String : NSNumber]()
 	
 	var mainView : NSView! {
 		get {
@@ -36,8 +36,6 @@ class GoDViewController: NSViewController {
 		self.activityView.addConstraintSize(view: self.activityIndicator, height: 50, width: 50)
 		self.activityIndicator.startAnimation(self)
 		
-		self.addMetric(value: self.mainView.frame.height, name: "screenHeight")
-		self.addMetric(value: self.mainView.frame.width , name: "screenWidth" )
 		
 	}
 	
@@ -89,12 +87,12 @@ class GoDViewController: NSViewController {
 		
 	}
 	
-	func addMetric(value: CGFloat, name: String) {
+	func addMetric(value: NSNumber, name: String) {
 		self.metrics[name] = value
 	}
 	
 	func addConstraints(visualFormat: String, layoutFormat: NSLayoutFormatOptions) {
-		self.mainView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: visualFormat, options: layoutFormat, metrics: self.metrics as [String : NSNumber]?, views: self.views))
+		self.mainView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: visualFormat, options: layoutFormat, metrics: self.metrics , views: self.views))
 	}
 	
 	func addConstraintEqualWidths(view1: NSView, view2: NSView) {
@@ -154,19 +152,19 @@ class GoDViewController: NSViewController {
 		self.addConstraintAlignTopAndBottomEdges(view1: view1, view2: view2)
 	}
 	
-	func addConstraintHeight(view: NSView, height: CGFloat) {
+	func addConstraintHeight(view: NSView, height: NSNumber) {
 		let view = ["v" : view]
 		let metric = ["h" : height]
-		self.mainView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v(h)]", options: [], metrics: metric as [String : NSNumber]?, views: view))
+		self.mainView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v(h)]", options: [], metrics: metric , views: view))
 	}
 	
-	func addConstraintWidth( view: NSView, width : CGFloat) {
+	func addConstraintWidth( view: NSView, width : NSNumber) {
 		let view = ["v" : view]
 		let metric = ["w" : width]
-		self.mainView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v(w)]", options: [], metrics: metric as [String : NSNumber]?, views: view))
+		self.mainView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v(w)]", options: [], metrics: metric , views: view))
 	}
 	
-	func addConstraintSize( view: NSView, height: CGFloat, width : CGFloat) {
+	func addConstraintSize( view: NSView, height: NSNumber, width : NSNumber) {
 		self.addConstraintWidth( view: view, width : width)
 		self.addConstraintHeight(view: view, height: height)
 	}

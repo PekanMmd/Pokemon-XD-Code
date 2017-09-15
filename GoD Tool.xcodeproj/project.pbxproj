@@ -126,6 +126,7 @@
 		B2D1DF5A1F68AD800023A876 /* XGColour.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8751F49B4530075C6D2 /* XGColour.swift */; };
 		B2D1DF5D1F68DBF60023A876 /* GoDTextureFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */; };
 		B2D1DF5E1F68DBF60023A876 /* GoDTextureFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */; };
+		B2F1485D1F6C141A00FF9C94 /* GoDLevelUpMoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F1485C1F6C141A00FF9C94 /* GoDLevelUpMoveView.swift */; };
 		B2F507221F4C5FAA0075C6D2 /* body_000.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F5038A1F4C5FA80075C6D2 /* body_000.png */; };
 		B2F507231F4C5FAA0075C6D2 /* body_000.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F5038A1F4C5FA80075C6D2 /* body_000.png */; };
 		B2F507241F4C5FAA0075C6D2 /* body_001.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F5038B1F4C5FA80075C6D2 /* body_001.png */; };
@@ -2300,6 +2301,9 @@
 		B2F911681F6606E900129DC2 /* DeckData_Empty.bin in Resources */ = {isa = PBXBuildFile; fileRef = B2F911671F6606E900129DC2 /* DeckData_Empty.bin */; };
 		B2F911691F6606E900129DC2 /* DeckData_Empty.bin in Resources */ = {isa = PBXBuildFile; fileRef = B2F911671F6606E900129DC2 /* DeckData_Empty.bin */; };
 		B2F9116A1F6606E900129DC2 /* DeckData_Empty.bin in Resources */ = {isa = PBXBuildFile; fileRef = B2F911671F6606E900129DC2 /* DeckData_Empty.bin */; };
+		B2FEC0761F6C376C00AC263D /* randomiser.png in Resources */ = {isa = PBXBuildFile; fileRef = B2FEC0751F6C376C00AC263D /* randomiser.png */; };
+		B2FEC0771F6C37AC00AC263D /* GoDTextureFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */; };
+		B2FEC0781F6C4A0300AC263D /* GoDTextureFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -2342,6 +2346,7 @@
 		B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDTextureImporter.swift; sourceTree = "<group>"; };
 		B2D1DF531F6872740023A876 /* GoDTexture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDTexture.swift; sourceTree = "<group>"; };
 		B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDTextureFormats.swift; sourceTree = "<group>"; };
+		B2F1485C1F6C141A00FF9C94 /* GoDLevelUpMoveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDLevelUpMoveView.swift; sourceTree = "<group>"; };
 		B2F5038A1F4C5FA80075C6D2 /* body_000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = body_000.png; sourceTree = "<group>"; };
 		B2F5038B1F4C5FA80075C6D2 /* body_001.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = body_001.png; sourceTree = "<group>"; };
 		B2F5038C1F4C5FA80075C6D2 /* body_002.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = body_002.png; sourceTree = "<group>"; };
@@ -3443,6 +3448,7 @@
 		B2F5F8BE1F4C4ED10075C6D2 /* GoDViewLayoutManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDViewLayoutManager.swift; sourceTree = "<group>"; };
 		B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GoDImageExtensions.swift; path = GoDToolOSX/GoDImageExtensions.swift; sourceTree = "<group>"; };
 		B2F911671F6606E900129DC2 /* DeckData_Empty.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = DeckData_Empty.bin; sourceTree = "<group>"; };
+		B2FEC0751F6C376C00AC263D /* randomiser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = randomiser.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3500,6 +3506,7 @@
 		B2ACE82E1F5E34FA00D87B22 /* XD Randomiser */ = {
 			isa = PBXGroup;
 			children = (
+				B2FEC0751F6C376C00AC263D /* randomiser.png */,
 				B2ACE82F1F5E34FB00D87B22 /* AppDelegate.swift */,
 				B2ACE88C1F5E399A00D87B22 /* XDRHomeViewController.swift */,
 				B2ACE8331F5E34FB00D87B22 /* Assets.xcassets */,
@@ -4839,6 +4846,7 @@
 				B2F5F8961F49CD050075C6D2 /* GoDTableView.swift */,
 				B205E0D01F616BDB00A5F075 /* GoDContainerView.swift */,
 				B205E0D71F63857F00A5F075 /* GoDEvolutionView.swift */,
+				B2F1485C1F6C141A00FF9C94 /* GoDLevelUpMoveView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -4987,6 +4995,7 @@
 				B205E0E11F6426B100A5F075 /* launch.png in Resources */,
 				B2F9116A1F6606E900129DC2 /* DeckData_Empty.bin in Resources */,
 				B205E0E01F6426AD00A5F075 /* launch 2.png in Resources */,
+				B2FEC0761F6C376C00AC263D /* randomiser.png in Resources */,
 				B2ACE8341F5E34FB00D87B22 /* Assets.xcassets in Resources */,
 				B2ACE8371F5E34FB00D87B22 /* Main.storyboard in Resources */,
 			);
@@ -6954,6 +6963,7 @@
 				B2ACE84A1F5E36C200D87B22 /* XGEvolutionMethods.swift in Sources */,
 				B2ACE8481F5E36C200D87B22 /* XGDecks.swift in Sources */,
 				B2ACE8571F5E36C200D87B22 /* XGNatures.swift in Sources */,
+				B2FEC0771F6C37AC00AC263D /* GoDTextureFormats.swift in Sources */,
 				B2ACE86E1F5E36CA00D87B22 /* XGLevelUpMove.swift in Sources */,
 				B2ACE8581F5E36C200D87B22 /* XGPokemon.swift in Sources */,
 				B2ACE88B1F5E38C000D87B22 /* GoDImageExtensions.swift in Sources */,
@@ -7176,6 +7186,7 @@
 				B2F5ECA61F49A1FF0075C6D2 /* XGNature.swift in Sources */,
 				B2F5ECB81F49A1FF0075C6D2 /* XGScriptClass.swift in Sources */,
 				B2F5ED091F49ADAE0075C6D2 /* XGImageExtensions.swift in Sources */,
+				B2FEC0781F6C4A0300AC263D /* GoDTextureFormats.swift in Sources */,
 				B2F5ED5D1F49AEBC0075C6D2 /* XGLevelUpMovesPopover.swift in Sources */,
 				B2F5ECD61F49A1FF0075C6D2 /* XGTradeShadowPokemon.swift in Sources */,
 				B2F5ED601F49AEBC0075C6D2 /* XGNaturePopover.swift in Sources */,
@@ -7243,6 +7254,7 @@
 				B2F5ECA11F49A1FF0075C6D2 /* XGMtBattlePokemon.swift in Sources */,
 				B2F5EC741F49A1FF0075C6D2 /* XGBattleBingoCard.swift in Sources */,
 				B2F5EC201F49A1FE0075C6D2 /* XGExpRate.swift in Sources */,
+				B2F1485D1F6C141A00FF9C94 /* GoDLevelUpMoveView.swift in Sources */,
 				B2F5ECC81F49A1FF0075C6D2 /* XGStringTable.swift in Sources */,
 				B2F5F8A61F49CD050075C6D2 /* GoDStatsViewController.swift in Sources */,
 				B2F5EC4A1F49A1FE0075C6D2 /* XGPokeSpots.swift in Sources */,

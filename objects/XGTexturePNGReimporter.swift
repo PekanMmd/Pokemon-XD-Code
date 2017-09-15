@@ -181,7 +181,7 @@ class XGTexturePNGReimporter: NSObject {
 			
 			for i in 0 ..< block.length {
 				
-				let (byte1, byte2) = block[i].convertTo16Bits()
+				let (byte1, byte2) = (0,0)
 				
 				bytes.append(byte1)
 				bytes.append(byte2)
@@ -219,7 +219,7 @@ class XGTexturePNGReimporter: NSObject {
 				colour = Palette[i]
 			}
 			
-			let (byte1, byte2) = colour.convertTo16Bits()
+			let (byte1, byte2) = (0,0)
 			
 			bytes.append(byte1)
 			bytes.append(byte2)

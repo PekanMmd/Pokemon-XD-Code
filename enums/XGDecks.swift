@@ -358,7 +358,7 @@ enum XGDecks : String, XGDictionaryRepresentable {
 		for trainer in trainers {
 			
 			let name = trainer.trainerClass.name
-			if name.length > 1 {
+			if name.stringLength > 1 {
 				switch name.chars[0] {
 				case .special( _, _) : name.chars[0...1] = [name.chars[1]]
 				default: break

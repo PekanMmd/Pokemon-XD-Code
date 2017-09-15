@@ -15,7 +15,7 @@ class XGString: NSObject {
 	var table = XGFiles.nameAndFolder("", .Documents)
 	var id	  = 0
 	
-	var length : Int {
+	var dataLength : Int {
 		get {
 			var count = 0
 			for char in chars {
@@ -23,6 +23,10 @@ class XGString: NSObject {
 			}
 			return count
 		}
+	}
+	
+	var stringLength : Int {
+		return chars.count
 	}
 	
 	override var description : String {

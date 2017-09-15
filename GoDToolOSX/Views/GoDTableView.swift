@@ -13,25 +13,42 @@ class GoDTableView: NSScrollView {
 	var tableView : NSTableView!
 	var delegate : GoDTableViewDelegate!
 	
+	var width : NSNumber = 0
+	
 	var selectedRow : Int {
 		get {
 			return self.tableView.selectedRow
 		}
 	}
 	
-	init(width: CGFloat, rows: Int, rowHeight: CGFloat, delegate: GoDTableViewDelegate, dataSource: NSTableViewDataSource) {
-		super.init(frame: NSMakeRect(0, 0, 0, 0))
+	init(width: NSNumber, rows: Int, rowHeight: CGFloat, delegate: GoDTableViewDelegate, dataSource: NSTableViewDataSource) {
+		super.init(frame: .zero)
 		
+		self.setUp(width: width, rows: rows, rowHeight: rowHeight, delegate: delegate, dataSource: dataSource)
+		
+	}
+	
+	required init?(coder: NSCoder) {
+		super.init(coder: coder)
+	}
+	
+	func setUp(width: NSNumber, rows: Int, rowHeight: CGFloat, delegate: GoDTableViewDelegate, dataSource: NSTableViewDataSource) {
 		self.delegate = delegate
 		
-		self.tableView = NSTableView(frame: NSMakeRect(0,0,width,CGFloat(rows) * rowHeight))
+		self.width = width
+		
+		self.tableView = NSTableView(frame: NSMakeRect(0,0,0,CGFloat(rows) * rowHeight))
+		self.tableView.translatesAutoresizingMaskIntoConstraints = false
+		self.tableView.addConstraintWidth(view: self.tableView, width: width)
+		
+		self.tableView.intercellSpacing = NSSize(width: 0, height: 0)
 		
 		let column = NSTableColumn(identifier: "col")
-		column.minWidth = width
+		column.minWidth = CGFloat(width)
 		column.title = "XD:GoD"
 		self.tableView.addTableColumn(column)
 		
-		tableView.backgroundColor = NSColor.black
+		tableView.backgroundColor = GoDDesign.colourClear()
 		self.tableView.delegate = delegate
 		self.tableView.dataSource = dataSource
 		self.tableView.target = self
@@ -43,18 +60,10 @@ class GoDTableView: NSScrollView {
 		
 		self.hasVerticalScroller = true
 		self.hasHorizontalScroller = false
+		self.autohidesScrollers = true
+		self.scrollerStyle = .overlay
 		
 	}
-	
-	required init?(coder: NSCoder) {
-		super.init(coder: coder)
-	}
-
-    override func draw(_ dirtyRect: NSRect) {
-        super.draw(dirtyRect)
-
-        // Drawing code here.
-    }
 	
 	func didClickCell() {
 		self.delegate.tableView(self, didSelectRow: self.tableView.selectedRow)
@@ -67,6 +76,12 @@ class GoDTableView: NSScrollView {
 	
 	func reloadIndex(_ index: Int) {
 		self.tableView.reloadData(forRowIndexes: [index], columnIndexes: [0])
+	}
+	
+	override func setBackgroundColour(_ colour: NSColor) {
+		super.setBackgroundColour(colour)
+		self.tableView.backgroundColor = colour
+		self.tableView.enclosingScrollView?.drawsBackground = colour.alphaComponent > 0
 	}
     
 }

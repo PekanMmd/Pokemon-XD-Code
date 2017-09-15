@@ -117,8 +117,6 @@ extension GoDTexture {
 		} catch {
 			
 		}
-		
-		
 	}
 }
 
@@ -130,7 +128,7 @@ extension XGStringTable {
 		let dataCopy = XGMutableData(byteStream: copyStream, file: self.file)
 		
 		let oldText = self.stringWithID(string.id)!
-		let difference = string.length - oldText.length
+		let difference = string.dataLength - oldText.dataLength
 		
 		if difference <= self.extraCharacters {
 			
@@ -147,7 +145,7 @@ extension XGStringTable {
 			
 			dataCopy.appendBytes(endData.charStream)
 			
-			if string.length > oldText.length {
+			if string.dataLength > oldText.dataLength {
 				
 				for _ in 0 ..< difference {
 					
@@ -161,9 +159,9 @@ extension XGStringTable {
 				self.increaseOffsetsAfter(stringOffsets[string.id]!, byCharacters: difference)
 			}
 			
-			if string.length < oldText.length {
+			if string.dataLength < oldText.dataLength {
 				
-				let difference = oldText.length - string.length
+				let difference = oldText.dataLength - string.dataLength
 				var emptyByte : UInt8 = 0x0
 				
 				for _ in 0 ..< difference {

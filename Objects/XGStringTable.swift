@@ -205,7 +205,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 		let text = stringWithID(stringID)!
 		
-		return startOff + text.length
+		return startOff + text.dataLength
 		
 	}
 	
@@ -310,7 +310,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 			let dataCopy = XGMutableData(byteStream: copyStream, file: self.file)
 			
 			let oldText = self.stringWithID(str.id)!
-			let difference = string.length - oldText.length
+			let difference = string.dataLength - oldText.dataLength
 			
 			if difference <= self.extraCharacters {
 				
@@ -327,7 +327,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 				
 				dataCopy.appendBytes(endData.charStream)
 				
-				if string.length > oldText.length {
+				if string.dataLength > oldText.dataLength {
 					
 					for _ in 0 ..< difference {
 						
@@ -341,9 +341,9 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 					self.increaseOffsetsAfter(stringOffsets[string.id]!, byCharacters: difference)
 				}
 				
-				if string.length < oldText.length {
+				if string.dataLength < oldText.dataLength {
 					
-					let difference = oldText.length - string.length
+					let difference = oldText.dataLength - string.dataLength
 					var emptyByte : UInt8 = 0x0
 					
 					for _ in 0 ..< difference {

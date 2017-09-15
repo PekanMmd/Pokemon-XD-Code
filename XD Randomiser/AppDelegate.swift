@@ -18,9 +18,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		
 		XGFolders.setUpFolderFormatForRandomiser()
 		
-		if XGFiles.iso.exists {
-			XGISO.extractRandomiserFiles()
-		}
 	}
 
 	func applicationWillTerminate(_ aNotification: Notification) {

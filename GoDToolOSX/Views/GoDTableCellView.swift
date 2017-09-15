@@ -17,8 +17,10 @@ class GoDTableCellView: NSImageView {
         super.draw(dirtyRect)
     }
 	
-	init(title: String, colour: NSColor, showsImage: Bool, image: NSImage?, background: NSImage?, fontSize: CGFloat, width: CGFloat) {
-		super.init(frame: NSMakeRect(0,0,width,0))
+	init(title: String, colour: NSColor, showsImage: Bool, image: NSImage?, background: NSImage?, fontSize: CGFloat, width: NSNumber) {
+		super.init(frame: .zero)
+		
+		self.addConstraintWidth(view: self, width: width)
 		
 		self.identifier = "cell"
 		
@@ -43,7 +45,7 @@ class GoDTableCellView: NSImageView {
 		self.titleField.maximumNumberOfLines = 1
 		self.titleField.isBezeled         = false
 		self.titleField.isEditable        = false
-		self.titleField.drawsBackground = false
+		self.titleField.drawsBackground   = false
 		self.titleField.refusesFirstResponder = true
 		self.titleField.setBackgroundColour(GoDDesign.colourClear())
 		self.titleField.font = GoDDesign.fontOfSize(fontSize)

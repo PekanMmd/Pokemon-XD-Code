@@ -445,7 +445,7 @@ class XGISO: NSObject {
 	
 	func extractMenuFSYS() {
 		for file in self.menuFsysList {
-			let xgf = XGFiles.nameAndFolder(file, .AutoFSYS)
+			let xgf = XGFiles.nameAndFolder(file, .MenuFSYS)
 			if !xgf.exists {
 				let data = dataForFile(filename: file)!
 				data.file = xgf
@@ -456,7 +456,7 @@ class XGISO: NSObject {
 	
 	func extractFSYS() {
 		for file in self.fsysList {
-			let xgf = XGFiles.nameAndFolder(file, .AutoFSYS)
+			let xgf = XGFiles.nameAndFolder(file, .FSYS)
 			if !xgf.exists {
 				let data = dataForFile(filename: file)!
 				data.file = xgf
@@ -613,7 +613,7 @@ class XGISO: NSObject {
 	}
 	
 	func extractScripts() {
-		for file in XGFolders.AutoFSYS.files {
+		for file in XGFolders.AutoFSYS.files where autoFsysList.contains(file.fileName) {
 			let scd = XGFiles.script(file.fileName.replacingOccurrences(of: ".fsys", with: ".scd"))
 			if !scd.exists {
 				let fsys = file.fsysData
@@ -638,9 +638,16 @@ class XGISO: NSObject {
 		iso.extractDOL()
 		iso.extractFSYS()
 		iso.extractMenuFSYS()
-		iso.extractCommon()
 		iso.extractDecks()
 		iso.extractSpecificStringTables()
+		
+		if !XGFiles.common_rel.exists {
+			iso.extractCommon()
+			
+			// purges a foreign string table for compression size, 3 more are available but shouldn't be necessary
+			XGStringTable(file: .common_rel, startOffset: 0x9533C, fileSize: 0xD334).purge()
+			
+		}
 		
 		// for pokespots
 		for file in ["M2_guild_1F_2.fsys"] {

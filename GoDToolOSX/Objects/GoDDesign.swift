@@ -42,7 +42,7 @@ class GoDDesign: NSObject {
 	}
 	
 	class func colourClear() -> NSColor {
-		return NSColor.clear
+		return colourFromHex(0x00000000)
 	}
 	
 	class func colourBlack() -> NSColor {

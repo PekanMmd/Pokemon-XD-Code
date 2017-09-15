@@ -8,11 +8,20 @@
 
 import Cocoa
 
+var allItems2 = [String]()
+
 func allItemsList() -> [String] {
-	return XGItems.allItems().map({ (item) -> String in
-		return item.name.string
-	})
+	
+	if allItems2.isEmpty {
+		allItems2 = XGItems.allItems().map({ (item) -> String in
+			return item.name.string
+		})
+	}
+	
+	return allItems2
 }
+
+let levelPopUp = GoDLevelPopUpButton()
 
 class GoDEvolutionConditionPopUpButton: GoDPopUpButton {
 	
@@ -37,11 +46,11 @@ class GoDEvolutionConditionPopUpButton: GoDPopUpButton {
 		
 		switch method {
 		case .levelUp:
-			values = GoDLevelPopUpButton().itemTitles
+			values = levelPopUp.itemTitles
 		case .shedinja:
-			values = GoDLevelPopUpButton().itemTitles
+			values = levelPopUp.itemTitles
 		case .ninjask:
-			values = GoDLevelPopUpButton().itemTitles
+			values = levelPopUp.itemTitles
 		case .evolutionStone:
 			values = allItemsList()
 		case .levelUpWithKeyItem:

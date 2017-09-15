@@ -16,6 +16,7 @@ class GoDContainerView: NSView {
 		self.layer?.borderColor = GoDDesign.colourDarkGrey().cgColor
 		self.layer?.borderWidth = 1
 		self.layer?.cornerRadius = 6
+		self.translatesAutoresizingMaskIntoConstraints = false
 	}
     
 }

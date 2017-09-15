@@ -41,7 +41,7 @@ class GoDEvolutionView: NSView {
 			self.addConstraintEqualHeights(view1: self, view2: view)
 			self.addConstraintAlignCenterY(view1: self, view2: view)
 		}
-		self.addConstraints(visualFormat: "|[p]-(5)-[m]-(5)-[c]|", layoutFormat: [], metrics: nil, views: viewsDict)
+		self.addConstraints(visualFormat: "|[p]-(2)-[m]-(2)-[c]|", layoutFormat: [], metrics: nil, views: viewsDict)
 		self.addConstraintEqualWidths(view1: methodPopUp, view2: coniditionPopUp)
 		self.addConstraint(NSLayoutConstraint(item: pokemonPopUp, attribute: .width, relatedBy: .equal, toItem: methodPopUp, attribute: .width, multiplier: 1.5, constant: 0))
 		

@@ -15,21 +15,22 @@ class GoDHomeViewController: GoDTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+		self.table.reloadData()
     }
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
 		return tools.count
 	}
 	
-//	func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
-//		return 50
-//	}
+	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
+		return 50
+	}
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
 		let image = (row % 2 == 0 ? NSImage(named: "cell") : NSImage(named: "cell gold"))!
 		
-		let view = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: tools[row], colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: image, fontSize: 16, width: self.table.frame.width)) as! GoDTableCellView
+		let view = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: tools[row], colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: image, fontSize: 14, width: self.table.width)) as! GoDTableCellView
 		
 		
 		view.setTitle(tools[row])

@@ -38,7 +38,12 @@ class XDRHomeViewController: GoDViewController {
 			
 		}
 		
-		
+		self.showActivityView { 
+			if XGFiles.iso.exists {
+				XGISO.extractRandomiserFiles()
+			}
+			self.hideActivityView()
+		}
 		
 	}
 	

@@ -15,7 +15,7 @@ class GoDLevelPopUpButton: GoDPopUpButton {
 	}
 	
 	func selectLevel(level: Int) {
-		selectItem(withTitle: level.string)
+		selectItem(withTitle: "Lv. " + level.string)
 	}
 	
 	override func setUpItems() {

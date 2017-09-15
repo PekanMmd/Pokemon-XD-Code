@@ -16,4 +16,14 @@ extension NSView {
 		self.layer?.backgroundColor = colour.cgColor
 	}
 	
+	func addBorder(colour: NSColor, width: CGFloat) {
+		self.wantsLayer = true
+		self.layer?.borderWidth = width
+		self.layer?.borderColor = colour.cgColor
+	}
+	
+	func removeBorder() {
+		self.wantsLayer = true
+		self.layer?.borderWidth = 0
+	}
 }

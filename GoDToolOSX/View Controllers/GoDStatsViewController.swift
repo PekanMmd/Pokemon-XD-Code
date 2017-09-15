@@ -17,6 +17,12 @@ class GoDStatsViewController: GoDTableViewController {
 	@IBOutlet var spdefField: NSTextField!
 	@IBOutlet var speedField: NSTextField!
 	
+	@IBOutlet var HPEVField: NSTextField!
+	@IBOutlet var attackEVField: NSTextField!
+	@IBOutlet var defEVField: NSTextField!
+	@IBOutlet var spatkEVField: NSTextField!
+	@IBOutlet var spdefEVField: NSTextField!
+	@IBOutlet var speedEVField: NSTextField!
 	
 	@IBOutlet var nameContainer: NSView!
 	@IBOutlet var nameField: NSTextField!
@@ -47,13 +53,20 @@ class GoDStatsViewController: GoDTableViewController {
 	@IBOutlet var evo4: GoDEvolutionView!
 	@IBOutlet var evo5: GoDEvolutionView!
 	
+	@IBOutlet var TMsContainer: GoDContainerView!
+	@IBOutlet var LUMContainer: GoDContainerView!
+	
+	var TMTable : GoDTableView!
+	var LUMTable : GoDTableView!
+	
+	
 	var mons = allPokemonArray().map { (mon) -> (name: String, type1 : XGMoveTypes, index : Int) in
 		return (mon.name.string, mon.type1, mon.index)
 	}
 	
 	var pokemon = XGPokemonStats(index: 0) {
 		didSet {
-			self.reloadView()
+			self.reloadViewWithActivity()
 		}
 	}
 	
@@ -65,6 +78,30 @@ class GoDStatsViewController: GoDTableViewController {
 			evos[i]!.index = i
 			evos[i]!.delegate = self
 		}
+		
+		let tmwidth : NSNumber = (TMsContainer.frame.width - 10) as! NSNumber
+		let tmheight : NSNumber = 180
+		let tmdelegate = TMTableDelegate(delegate: self, width: tmwidth)
+		TMTable = GoDTableView(width: tmwidth, rows: kNumberOfTutorMoves + kNumberOfTMs, rowHeight: 30, delegate: tmdelegate, dataSource: tmdelegate)
+		TMTable.setBackgroundColour(GoDDesign.colourClear())
+		TMTable.tableView.intercellSpacing = NSSize(width: 0, height: 2)
+		self.addSubview(TMTable, name: "TMs")
+		self.addConstraintWidth(view: TMTable, width: tmwidth)
+		self.addConstraintHeight(view: TMTable, height: tmheight)
+		self.addConstraintAlignCenterX(view1: TMsContainer, view2: TMTable)
+		self.addConstraintAlignCenterY(view1: TMsContainer, view2: TMTable)
+		
+		let lumwidth : NSNumber = (LUMContainer.frame.width - 10) as! NSNumber
+		let lumheight : NSNumber = 180
+		let lumdelegate = LUMTableDelegate(delegate: self, width: lumwidth)
+		LUMTable = GoDTableView(width: tmwidth, rows: kNumberOfLevelUpMoves, rowHeight: 30, delegate: lumdelegate, dataSource: lumdelegate)
+		LUMTable.setBackgroundColour(GoDDesign.colourClear())
+		LUMTable.tableView.intercellSpacing = NSSize(width: 0, height: 2)
+		self.addSubview(LUMTable, name: "LUM")
+		self.addConstraintWidth(view: LUMTable, width: lumwidth)
+		self.addConstraintHeight(view: LUMTable, height: lumheight)
+		self.addConstraintAlignCenterX(view1: LUMContainer, view2: LUMTable)
+		self.addConstraintAlignCenterY(view1: LUMContainer, view2: LUMTable)
 		
 		reloadViewWithActivity()
     }
@@ -81,7 +118,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		let pokemon = mons[row]
 		
-		let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 16, width: self.table.frame.width)) as! GoDTableCellView
+		let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
 		cell.setBackgroundImage(pokemon.type1.image)
 		cell.setTitle(pokemon.name)
@@ -91,6 +128,11 @@ class GoDStatsViewController: GoDTableViewController {
 		cell.translatesAutoresizingMaskIntoConstraints = false
 		
 		cell.alphaValue = self.table.selectedRow == row ? 1 : 0.75
+		if self.table.selectedRow == row {
+			cell.addBorder(colour: GoDDesign.colourBlack(), width: 1)
+		} else {
+			cell.removeBorder()
+		}
 		
 		return cell
 	}
@@ -119,12 +161,12 @@ class GoDStatsViewController: GoDTableViewController {
 		self.spdefField.integerValue = self.pokemon.specialDefense
 		self.speedField.integerValue = self.pokemon.speed
 		
-//		self.HPEVField.integerValue = self.pokemon.hpYield
-//		self.attackEVField.integerValue = self.pokemon.attackYield
-//		self.defEVField.integerValue = self.pokemon.defenseYield
-//		self.spatkEVField.integerValue = self.pokemon.specialAttackYield
-//		self.spdefEVField.integerValue = self.pokemon.specialDefenseYield
-//		self.speedEVField.integerValue = self.pokemon.speedYield
+		self.HPEVField.integerValue = self.pokemon.hpYield
+		self.attackEVField.integerValue = self.pokemon.attackYield
+		self.defEVField.integerValue = self.pokemon.defenseYield
+		self.spatkEVField.integerValue = self.pokemon.specialAttackYield
+		self.spdefEVField.integerValue = self.pokemon.specialDefenseYield
+		self.speedEVField.integerValue = self.pokemon.speedYield
 		
 		self.catchRateField.integerValue = self.pokemon.catchRate
 		self.ExpYieldField.integerValue = self.pokemon.baseExp
@@ -150,6 +192,9 @@ class GoDStatsViewController: GoDTableViewController {
 		for evo in evos {
 			evo?.reloadData()
 		}
+		
+		self.TMTable.reloadData()
+		self.LUMTable.reloadData()
 		
 	}
 	
@@ -276,7 +321,7 @@ class GoDStatsViewController: GoDTableViewController {
 			return
 		}
 		let value = sender.stringValue
-		let success = self.pokemon.name.duplicateWithString(value).replace()
+		_ = self.pokemon.name.duplicateWithString(value).replace()
 		
 		self.reloadView()
 	}
@@ -370,8 +415,8 @@ class GoDStatsViewController: GoDTableViewController {
 	}
 	
 	
-	
 	@IBAction func save(_ sender: NSButton) {
+		
 		self.pokemon.save()
 		
 		let current = self.mons[self.pokemon.index]
@@ -379,6 +424,135 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.reloadViewWithActivity()
 		self.table.reloadIndex(current.index)
+	}
+	
+	
+	//MARK: - TMs Delegate
+	class TMTableDelegate: NSObject, GoDTableViewDelegate, NSTableViewDataSource {
+		var delegate : GoDStatsViewController!
+		
+		var TMs = [XGTMs]()
+		var Tutors = [XGTMs]()
+		
+		var width : NSNumber = 0
+		
+		init(delegate: GoDStatsViewController, width: NSNumber) {
+			super.init()
+			self.TMs = XGTMs.allTMs()
+			for i in 1 ... kNumberOfTutorMoves {
+				Tutors.append(XGTMs.tm(i))
+			}
+			
+			self.width = width
+			self.delegate = delegate
+			
+		}
+		
+		func numberOfRows(in tableView: NSTableView) -> Int {
+			return kNumberOfTMs + kNumberOfTutorMoves
+		}
+		
+		func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
+			return 30
+		}
+		
+		func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+			
+			let isTM = row < 50
+			let tm = isTM ? XGTMs.tm(row + 1) : XGTMs.tutor(row - 49)
+			
+			let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: nil, fontSize: 12, width: self.width)) as! GoDTableCellView
+			
+			cell.setBackgroundImage(tm.move.type.image)
+			cell.setTitle(tm.move.name.string)
+			cell.addBorder(colour: GoDDesign.colourBlack(), width: 1)
+			
+			cell.identifier = "cell"
+			cell.translatesAutoresizingMaskIntoConstraints = false
+			
+			if isTM {
+				cell.alphaValue = delegate.pokemon.learnableTMs[row] ? 1 : 0.5
+			} else {
+				cell.alphaValue = delegate.pokemon.tutorMoves[row - 50] ? 1 : 0.5
+			}
+			
+			
+			return cell
+		}
+		
+		func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+			if row >= 0 {
+				if row < 50 {
+					delegate.pokemon.learnableTMs[row]  = !delegate.pokemon.learnableTMs[row]
+				} else {
+					delegate.pokemon.tutorMoves[row - 50] = !delegate.pokemon.tutorMoves[row - 50]
+				}
+			}
+			tableView.reloadData()
+		}
+		
+		func tableView(tableView: NSTableView, didSelectRow row: Int) {
+			if row >= 0 {
+				if row < 50 {
+					delegate.pokemon.learnableTMs[row]  = !delegate.pokemon.learnableTMs[row]
+				} else {
+					delegate.pokemon.tutorMoves[row - 50] = !delegate.pokemon.tutorMoves[row - 50]
+				}
+			}
+			tableView.reloadData()
+		}
+		
+		func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+			self.tableView(tableView: tableView, didSelectRow: row)
+			return false
+		}
+	}
+	
+	//MARK: - Level Up Moves Delegate
+	class LUMTableDelegate: NSObject, GoDTableViewDelegate, NSTableViewDataSource {
+
+		var delegate : GoDStatsViewController!
+		
+		var width : NSNumber = 0
+		
+		init(delegate: GoDStatsViewController, width: NSNumber) {
+			super.init()
+			
+			self.width = width
+			self.delegate = delegate
+			
+		}
+		
+		func numberOfRows(in tableView: NSTableView) -> Int {
+			return kNumberOfLevelUpMoves
+		}
+		
+		func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
+			return 30
+		}
+		
+		func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+			
+			let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDLevelUpMoveView() ) as! GoDLevelUpMoveView
+			
+			cell.identifier = "cell"
+			cell.translatesAutoresizingMaskIntoConstraints = false
+			
+			cell.index = row
+			cell.delegate = self.delegate
+			
+			cell.reloadData()
+			
+			return cell
+		}
+		
+		func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+			return
+		}
+		
+		func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+			return false
+		}
 	}
 	
 }
