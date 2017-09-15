@@ -144,10 +144,28 @@ class XGFsys : NSObject {
 		return Int(data.get4BytesAtOffset(start))
 	}
 	
+	func dataForFileWithName(name: String) -> XGMutableData? {
+		let index = self.indexForFile(filename: name)
+		if index == nil {
+			print("file doesn't exist: ", name)
+			return nil
+		}
+		return dataForFileWithIndex(index: index!)
+	}
+	
+	func decompressedDataForFileWithName(name: String) -> XGMutableData? {
+		let index = self.indexForFile(filename: name)
+		if index == nil {
+			print("file doesn't exist: ", name)
+			return nil
+		}
+		return decompressedDataForFileWithIndex(index: index!)
+	}
+	
 	func dataForFileWithIndex(index: Int) -> XGMutableData? {
 		
 		if !file.exists {
-			print("file doesn't exist: ", self.file.path)
+			print("file doesn't exist: ", self.file.path, "index", index)
 			return nil
 		}
 		

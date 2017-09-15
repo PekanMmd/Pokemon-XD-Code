@@ -3797,7 +3797,30 @@ import Foundation
 //getFunctionPointerWithIndex(index: 96).hex().println()
 
 
-
+//let bodies = XGFolders.Textures.files.filter { (file) -> Bool in
+//	return file.fileName.contains("body")
+//}
+//for body in bodies {
+//	let fsys = XGFiles.fsys("poke_body.fsys").fsysData
+//	fsys.replaceFile(file: body)
+//}
+//
+//let faces = XGFolders.Textures.files.filter { (file) -> Bool in
+//	return file.fileName.contains("face")
+//}
+//for face in faces {
+//	let fsys = XGFiles.fsys("poke_face.fsys").fsysData
+//	fsys.replaceFile(file: face)
+//}
+//
+//let dancers = ["kongpang","ootachi"]
+//for dancer in dancers {
+//	let file1 = XGFiles.texture(dancer + ".fdat")
+//	let file2 = XGFiles.texture(dancer + "_c.fdat")
+//	let fsys = XGFiles.fsys("poke_dance.fsys").fsysData
+//	fsys.replaceFile(file: file1)
+//	fsys.replaceFile(file: file2)
+//}
 
 
 

@@ -68,6 +68,8 @@ let kPokemonCryIndexOffset	= 0x0C
 let kSpeciesNameIDOffset	= 0x1E
 
 let kPokemonModelIndexOffset = 0x2E // Same as pokemon's index
+let kPokemonBodyOffset		 = 0x118
+let kPokemonBodyShinyOffset	 = 0x120
 let kPokemonFaceIndexOffset	 = 0x116 // Same as Pokemon's national dex index
 
 class XGPokemonStats: NSObject {
@@ -80,6 +82,9 @@ class XGPokemonStats: NSObject {
 	var cryIndex		= 0x0
 	var modelIndex		= 0x0
 	var faceIndex		= 0x0
+	
+	var bodyID		: UInt32 = 0x0
+	var bodyShinyID  : UInt32 = 0x0
 	
 	var levelUpRate		= XGExpRate.standard
 	var genderRatio     = XGGenderRatios.maleOnly
@@ -171,6 +176,8 @@ class XGPokemonStats: NSObject {
 		self.cryIndex		= rel.get2BytesAtOffset(startOffset + kPokemonCryIndexOffset)
 		self.modelIndex		= rel.get2BytesAtOffset(startOffset + kPokemonModelIndexOffset)
 		self.faceIndex		= rel.get2BytesAtOffset(startOffset + kPokemonFaceIndexOffset)
+		self.bodyID		= rel.get4BytesAtOffset(startOffset + kPokemonBodyOffset)
+		self.bodyShinyID	= rel.get4BytesAtOffset(startOffset + kPokemonBodyShinyOffset)
 		
 		self.levelUpRate	= XGExpRate(rawValue: rel.getByteAtOffset(startOffset + kEXPRateOffset))!
 		self.genderRatio	= XGGenderRatios(rawValue: rel.getByteAtOffset(startOffset + kGenderRatioOffset))!
@@ -251,6 +258,8 @@ class XGPokemonStats: NSObject {
 		rel.replace2BytesAtOffset(startOffset + kPokemonCryIndexOffset, withBytes: cryIndex)
 		rel.replace2BytesAtOffset(startOffset + kPokemonModelIndexOffset, withBytes: modelIndex)
 		rel.replace2BytesAtOffset(startOffset + kPokemonFaceIndexOffset, withBytes: faceIndex)
+		rel.replace4BytesAtOffset(startOffset + kPokemonBodyOffset, withBytes: bodyID)
+		rel.replace4BytesAtOffset(startOffset + kPokemonBodyShinyOffset, withBytes: bodyShinyID)
 		
 		rel.replaceByteAtOffset(startOffset + kEXPRateOffset, withByte: levelUpRate.rawValue)
 		rel.replaceByteAtOffset(startOffset + kGenderRatioOffset, withByte: genderRatio.rawValue)

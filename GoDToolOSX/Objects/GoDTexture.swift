@@ -16,6 +16,10 @@ let kPaletteFormatOffset = 0xf
 let kTexturePointerOffset = 0x28
 let kPalettePointerOffset = 0x48
 
+// The textures in poke_dance.fsys start with this data so it can be used to identify them.
+// Those textures start at 0xA0 with some extra data added beforehand (probably used to animate it).
+let kDancerBytes = [0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x28, 0x00, 0x00, 0x32, 0x80, 0x00, 0x00, 0x00, 0xA0]
+let kDancerStartOffset = 0xA0
 
 class GoDTexture: NSObject {
 
@@ -64,6 +68,9 @@ class GoDTexture: NSObject {
 		}
 	}
 	
+	var isPokeDance = false
+	var startOffset = 0x0
+	
 	convenience init(file: XGFiles) {
 		self.init(data: file.data)
 	}
@@ -73,26 +80,29 @@ class GoDTexture: NSObject {
 		
 		self.data = data
 		
-		self.width = data.get2BytesAtOffset(kTextureWidthOffset)
-		self.height = data.get2BytesAtOffset(kTextureHeightOffset)
-		self.BPP = data.getByteAtOffset(kTextureBPPOffset)
-		self.textureStart = Int(data.get4BytesAtOffset(kTexturePointerOffset))
-		self.paletteStart = Int(data.get4BytesAtOffset(kPalettePointerOffset))
-		let formatIndex = data.getByteAtOffset(kTextureFormatOffset)
+		self.isPokeDance = data.getByteStreamFromOffset(0, length: kDancerBytes.count) == kDancerBytes
+		startOffset = isPokeDance ? kDancerStartOffset : 0x0
+		
+		self.width = data.get2BytesAtOffset(startOffset + kTextureWidthOffset)
+		self.height = data.get2BytesAtOffset(startOffset + kTextureHeightOffset)
+		self.BPP = data.getByteAtOffset(startOffset + kTextureBPPOffset)
+		self.textureStart = startOffset + Int(data.get4BytesAtOffset(startOffset + kTexturePointerOffset))
+		self.paletteStart = startOffset + Int(data.get4BytesAtOffset(startOffset + kPalettePointerOffset))
+		let formatIndex = data.getByteAtOffset(startOffset + kTextureFormatOffset)
 		self.format = GoDTextureFormats(rawValue: formatIndex) ?? .C8
-		self.paletteFormat = data.getByteAtOffset(kPaletteFormatOffset)
+		self.paletteFormat = data.getByteAtOffset(startOffset + kPaletteFormatOffset)
 		
 	}
 	
 	func save() {
 		
-		self.data.replace2BytesAtOffset(kTextureWidthOffset, withBytes: self.width)
-		self.data.replace2BytesAtOffset(kTextureHeightOffset, withBytes: self.height)
-		self.data.replaceByteAtOffset(kTextureBPPOffset, withByte: self.BPP)
-		self.data.replace4BytesAtOffset(kTexturePointerOffset, withBytes: UInt32(self.textureStart))
-		self.data.replace4BytesAtOffset(kPalettePointerOffset, withBytes: UInt32(self.paletteStart))
-		self.data.replaceByteAtOffset(kTextureFormatOffset, withByte: self.format.rawValue)
-		self.data.replaceByteAtOffset(kPaletteFormatOffset, withByte: self.paletteFormat)
+		self.data.replace2BytesAtOffset(startOffset + kTextureWidthOffset, withBytes: self.width)
+		self.data.replace2BytesAtOffset(startOffset + kTextureHeightOffset, withBytes: self.height)
+		self.data.replaceByteAtOffset(startOffset + kTextureBPPOffset, withByte: self.BPP)
+		self.data.replace4BytesAtOffset(startOffset + kTexturePointerOffset, withBytes: UInt32(self.textureStart - startOffset))
+		self.data.replace4BytesAtOffset(startOffset + kPalettePointerOffset, withBytes: UInt32(self.paletteStart - startOffset))
+		self.data.replaceByteAtOffset(startOffset + kTextureFormatOffset, withByte: self.format.rawValue)
+		self.data.replaceByteAtOffset(startOffset + kPaletteFormatOffset, withByte: self.paletteFormat)
 		
 		self.data.save()
 	}
