@@ -117,7 +117,7 @@ class XGMutableData: NSObject {
 		
 		for byte in self.getByteStreamFromOffset(offset, length: length) {
 			nibbles.append(byte >> 4)
-			nibbles.append((byte << 4) >> 4)
+			nibbles.append(byte % 16)
 		}
 		
 		return nibbles

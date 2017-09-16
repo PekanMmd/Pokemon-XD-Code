@@ -82,6 +82,16 @@ class GoDTexture: NSObject {
 		
 		self.isPokeDance = data.getByteStreamFromOffset(0, length: kDancerBytes.count) == kDancerBytes
 		startOffset = isPokeDance ? kDancerStartOffset : 0x0
+		self.setUp()
+		
+	}
+	
+	func setStartOffset(offset: Int) {
+		self.startOffset = offset
+		self.setUp()
+	}
+	
+	func setUp() {
 		
 		self.width = data.get2BytesAtOffset(startOffset + kTextureWidthOffset)
 		self.height = data.get2BytesAtOffset(startOffset + kTextureHeightOffset)
@@ -91,7 +101,6 @@ class GoDTexture: NSObject {
 		let formatIndex = data.getByteAtOffset(startOffset + kTextureFormatOffset)
 		self.format = GoDTextureFormats(rawValue: formatIndex) ?? .C8
 		self.paletteFormat = data.getByteAtOffset(startOffset + kPaletteFormatOffset)
-		
 	}
 	
 	func save() {

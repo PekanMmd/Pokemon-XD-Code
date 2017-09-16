@@ -9,6 +9,16 @@
 
 
 
+
+//XGUtility.compileAllFiles()
+
+//loadAllStrings()
+//for string in allStrings {
+//	if string.containsSubstring("Dr. C.") {
+//		string.stringPlusIDAndFile.println()
+//	}
+//}
+
 //XGUtility.compileMainFiles()
 
 //XGUtility.importTextures()

@@ -126,7 +126,8 @@ class XGFsys : NSObject {
 	}
 	
 	func startOffsetForFileDetails(_ index : Int) -> Int {
-		return firstEntryDetailOffset + (index * kSizeOfArchiveEntry)
+		return Int(data.get4BytesAtOffset(kFirstFileDetailsPointerOffset + (index * 4)))
+		
 	}
 	
 	func startOffsetForFile(_ index: Int) -> Int {
@@ -147,7 +148,7 @@ class XGFsys : NSObject {
 	func dataForFileWithName(name: String) -> XGMutableData? {
 		let index = self.indexForFile(filename: name)
 		if index == nil {
-			printg("file doesn't exist: ", name)
+			print("file doesn't exist: ", name)
 			return nil
 		}
 		return dataForFileWithIndex(index: index!)
@@ -156,7 +157,7 @@ class XGFsys : NSObject {
 	func decompressedDataForFileWithName(name: String) -> XGMutableData? {
 		let index = self.indexForFile(filename: name)
 		if index == nil {
-			printg("file doesn't exist: ", name)
+			print("file doesn't exist: ", name)
 			return nil
 		}
 		return decompressedDataForFileWithIndex(index: index!)
@@ -165,7 +166,7 @@ class XGFsys : NSObject {
 	func dataForFileWithIndex(index: Int) -> XGMutableData? {
 		
 		if !file.exists {
-			printg("file doesn't exist: ", self.file.path, "index", index)
+			print("file doesn't exist: ", self.file.path, "index", index)
 			return nil
 		}
 		
@@ -187,7 +188,7 @@ class XGFsys : NSObject {
 	func decompressedDataForFileWithIndex(index: Int) -> XGMutableData? {
 		
 		if !file.exists {
-			printg("file doesn't exist: ", self.file.path)
+			print("file doesn't exist: ", self.file.path)
 			return nil
 		}
 		
@@ -243,7 +244,7 @@ class XGFsys : NSObject {
 	func replaceFileWithName(name: String, withFile newFile: XGFiles) {
 		let index = self.indexForFile(filename: name)
 		if !newFile.exists {
-			printg("file doesn't exist:", newFile.path)
+			print("file doesn't exist:", newFile.path)
 			return
 		}
 		
@@ -268,7 +269,7 @@ class XGFsys : NSObject {
 	
 	func shiftAndReplaceFileWithIndex(_ index: Int, withFile newFile: XGFiles) {
 		if !(index < self.numberOfEntries) {
-			printg("index doesn't exist:", index)
+			print("index doesn't exist:", index)
 			return
 		}
 		
@@ -302,16 +303,16 @@ class XGFsys : NSObject {
 	
 	func replaceFileWithIndex(_ index: Int, withFile newFile: XGFiles, saveWhenDone: Bool) {
 		if !self.file.exists {
-			printg("file doesn't exist: ", self.file.path)
+			print("file doesn't exist: ", self.file.path)
 			return
 		}
 		if !newFile.exists {
-			printg("file doesn't exist: ", newFile.path)
+			print("file doesn't exist: ", newFile.path)
 			return
 		}
 		
 		if !(index < self.numberOfEntries) {
-			printg("index doesn't exist:", index)
+			print("index doesn't exist:", index)
 			return
 		}
 		
@@ -320,13 +321,13 @@ class XGFsys : NSObject {
 		
 		if index < self.numberOfEntries - 1 {
 			if fileEnd > startOffsetForFile(index + 1) {
-				printg("file too large to replace: ", newFile.fileName, self.file.fileName)
+				print("file too large to replace: ", newFile.fileName, self.file.fileName)
 				return
 			}
 		}
 		
 		if fileEnd > self.dataEnd {
-			printg("file too large to replace: ", newFile.fileName, self.file.fileName)
+			print("file too large to replace: ", newFile.fileName, self.file.fileName)
 			return
 		}
 		

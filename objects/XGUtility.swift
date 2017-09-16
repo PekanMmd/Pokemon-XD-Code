@@ -18,7 +18,7 @@ class XGUtility {
 		
 		for folder in compressFolders where folder.exists {
 			for file in folder.files {
-				printg("compressing file: " + file.fileName)
+				print("compressing file: " + file.fileName)
 				file.compress()
 			}
 		}
@@ -27,7 +27,7 @@ class XGUtility {
 	
 	class func importFsys() {
 		
-		printg("importing files to .fsys archives")
+		print("importing files to .fsys archives")
 		
 		if !DeckDataEmptyLZSS.file.exists {
 			DeckDataEmptyLZSS.save()
@@ -99,7 +99,7 @@ class XGUtility {
 		let itemListStart = 0x1fa40
 		let rel = XGFiles.common_rel.data
 		
-		printg("Updating items list...")
+		print("Updating items list...")
 		
 		for i in 1 ..< kNumberOfItems {
 			let currentOffset = itemListStart + (i * 2)
@@ -136,7 +136,7 @@ class XGUtility {
 	}
 	
 	class func shadowMadnessAnimation() {
-		printg("updating shadow madness animation")
+		print("updating shadow madness animation")
 		
 		let rel = XGFiles.common_rel.data
 		let offset = move("shadow madness").data.startOffset + kAnimation2IndexOffset
@@ -208,7 +208,7 @@ class XGUtility {
 	class func importScripts() {
 		for file in XGFolders.Scripts.files {
 			
-			printg("importing script: " + file.fileName)
+			print("importing script: " + file.fileName)
 			
 			let fsysName = file.fileName.replacingOccurrences(of: ".scd", with: ".fsys")
 			let lzssName = file.fileName + ".lzss"
@@ -225,7 +225,7 @@ class XGUtility {
 	class func importStringTables() {
 		for file in XGFolders.StringTables.files {
 			
-			printg("importing string table: " + file.fileName)
+			print("importing string table: " + file.fileName)
 			
 			let fsysName = file.fileName.replacingOccurrences(of: ".msg", with: ".fsys")
 			let lzssName = file.fileName + ".lzss"
@@ -238,7 +238,7 @@ class XGUtility {
 			}
 		}
 		
-		printg("importing menu string tables")
+		print("importing menu string tables")
 		
 		let pocket_menu = XGFiles.lzss("pocket_menu.msg.lzss")
 		let d4tower1f3 = XGFiles.lzss("D4_tower_1F_3.msg.lzss")
@@ -253,12 +253,14 @@ class XGUtility {
 		let d7out = XGFiles.lzss("D7_out.msg.lzss")
 		let p_exchange = XGFiles.lzss("p_exchange.msg.lzss")
 		let world_map = XGFiles.lzss("world_map.msg.lzss")
+		let fight = XGFiles.lzss("fight.msg.lzss")
 		
 		XGFiles.nameAndFolder("battle_disk.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: pocket_menu)
 		XGFiles.nameAndFolder("battle_disk.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: m5labo2f)
 		XGFiles.nameAndFolder("battle_disk.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(2, withFile: d4tower1f3)
 		XGFiles.nameAndFolder("bingo_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: d4tower1f2)
 		XGFiles.nameAndFolder("carde_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: system_tool)
+		XGFiles.fsys("fight_common.fsys").fsysData.shiftAndReplaceFileWithIndex(0, withFile: fight)
 		XGFiles.nameAndFolder("hologram_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: m3shrine1frl)
 		XGFiles.nameAndFolder("hologram_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: relivehall_menu)
 		XGFiles.nameAndFolder("mailopen_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: pda_menu)
@@ -285,6 +287,7 @@ class XGUtility {
 		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.replaceFileWithIndex(0, withFile: pocket_menu, saveWhenDone: true)
 		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.replaceFileWithIndex(2, withFile: nameentrymenu, saveWhenDone: true)
 		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.replaceFileWithIndex(3, withFile: system_tool, saveWhenDone: true)
+		
 		
 	}
 	
@@ -316,7 +319,7 @@ class XGUtility {
 			let fsys = XGFsys(data: iso.dataForFile(filename: name)!)
 			for index in 0 ..< fsys.numberOfEntries {
 				if fsys.fileNames[index].contains(file.fileName.removeFileExtensions()) {
-					printg("fsys: ",name,", index: ", index, ",name: ", fsys.fileNames[index])
+					print("fsys: ",name,", index: ", index, ",name: ", fsys.fileNames[index])
 				}
 			}
 			
@@ -340,7 +343,7 @@ class XGUtility {
 		do {
 			try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted).write(to: URL(fileURLWithPath: file.path), options: [.atomic])
 		} catch {
-			printg("couldn't save json to file: \(file.path)")
+			print("couldn't save json to file: \(file.path)")
 		}
 	}
 	
@@ -349,7 +352,7 @@ class XGUtility {
 			let json = try JSONSerialization.jsonObject(with: file.data.data as Data, options: [])
 			return json as AnyObject?
 		} catch {
-			printg("couldn't load json from file: \(file.path)")
+			print("couldn't load json from file: \(file.path)")
 			return nil
 		}
 	}
@@ -708,7 +711,7 @@ class XGUtility {
 	
 	class func updateShadowMonitor() {
 		
-		printg("updating shadow monitor")
+		print("updating shadow monitor")
 		
 		let start = 0x4014EA
 		
@@ -741,7 +744,7 @@ class XGUtility {
 		// Corresponds to each tutor move. This class function will set it so that it is in the same
 		// Order as the tutor moves indexes.
 		
-		printg("updating tutor moves")
+		print("updating tutor moves")
 		
 		let dol = XGFiles.dol.data
 		
@@ -782,7 +785,7 @@ class XGUtility {
 		// This code only does it for gen I-II since national id is same as index.
 		// Also need to get national ids for the pokemon you get from trade.
 		
-		printg("updating pokespots")
+		print("updating pokespots")
 		
 		let script = XGFiles.script("M2_guild_1F_2.scd").data
 		
@@ -845,7 +848,7 @@ class XGUtility {
 					if mon.moves.contains(where: { (m) -> Bool in
 						return m.index == search.index
 					}) {
-						printg(trainer.name, trainer.locationString)
+						print(trainer.name, trainer.locationString)
 					}
 				}
 			}
@@ -856,7 +859,7 @@ class XGUtility {
 			if mon.levelUpMoves.contains(where: { (m) -> Bool in
 				return m.move.index == search.index
 			}) {
-				printg(mon.name)
+				print(mon.name)
 			}
 		}
 		
@@ -866,7 +869,7 @@ class XGUtility {
 				switch panel {
 				case .pokemon(let mon):
 					if mon.move.index == search.index {
-						printg("Battle Bingo Card ", i)
+						print("Battle Bingo Card ", i)
 					}
 				default:
 					break
@@ -882,7 +885,7 @@ class XGUtility {
 					return p.data
 				}) {
 					if mon.species.index == search.index {
-						printg(trainer.name, trainer.locationString)
+						print(trainer.name, trainer.locationString)
 					}
 				}
 			}
@@ -899,361 +902,50 @@ class XGUtility {
 				st.duplicateWithString(st.string.replacingOccurrences(of: a, with: b, options: .literal)).replace()
 			}
 		}
-		printg("replaced \"\(a)\" with \"\(b)\"\n")
+		print("replaced \"\(a)\" with \"\(b)\"\n")
 	}
 	
 	class func valueContext(_ value: Int) {
-		printg("Value:", value, "can have the following meanings:\n")
+		print("Value:", value, "can have the following meanings:\n")
 		if value <= kNumberOfMoves {
-			printg("Move: ",XGMoves.move(value).name.string,"\n")
+			print("Move: ",XGMoves.move(value).name.string,"\n")
 		}
 		if value <= kNumberOfPokemon {
-			printg("Pokemon: ",XGPokemon.pokemon(value).name.string,"\n")
+			print("Pokemon: ",XGPokemon.pokemon(value).name.string,"\n")
 		}
 		
 		if value <= kNumberOfAbilities {
-			printg("Ability: ",XGAbilities.ability(value).name.string,"\n")
+			print("Ability: ",XGAbilities.ability(value).name.string,"\n")
 		}
 		
 		if value <= kNumberOfItems {
-			printg("Item: ",XGItems.item(value).name.string,"\n")
+			print("Item: ",XGItems.item(value).name.string,"\n")
 		}
 		
 		// Key items
 		if value > kNumberOfItems && value < 0x250 {
-			printg("Item: ",XGItems.item(value - (517 - 367)).name.string,"\n")
+			print("Item: ",XGItems.item(value - (517 - 367)).name.string,"\n")
 		}
 		
 		if value < kNumberOfTypes {
-			printg("Type: ",XGMoveTypes(rawValue: value)!,"\n")
+			print("Type: ",XGMoveTypes(rawValue: value)!,"\n")
 		}
 		
 		for i in 1 ..< kNumberOfItems {
 			let item = XGItems.item(i).data
 			if item.holdItemID == value {
-				printg("Hold item id: ",item.name.string,"\n")
+				print("Hold item id: ",item.name.string,"\n")
 			}
 			if item.inBattleUseID == value {
-				printg("In battle item id: ",item.name.string,"\n")
+				print("In battle item id: ",item.name.string,"\n")
 			}
 		}
 		
 		if value > 0x1000 {
 			loadAllStrings()
-			printg("String: ",getStringSafelyWithID(id: value),"\n")
+			print("String: ",getStringSafelyWithID(id: value),"\n")
 		}
 		
-		
-	}
-	
-	
-	//MARK: - dol programming
-	
-	class func createBranchAndLinkFrom(offset: Int, toOffset to: Int) -> UInt32 {
-		return createBranchFrom(offset: offset, toOffset: to) + 1
-	}
-	
-	class func printCreateBranchAndLinkFrom(offset: Int, toOffset to: Int) {
-		printg(String(format: "%x", createBranchAndLinkFrom(offset: offset, toOffset: to)))
-	}
-	
-	class func createBranchFrom(offset: Int, toOffset to: Int) -> UInt32 {
-		return UInt32(18 << 26) + UInt32((to - offset) & 0x3FFFFFF)
-	}
-	
-	class func printCreateBranchFrom(offset: Int, toOffset to: Int) {
-		printg(String(format: "%x", createBranchFrom(offset: offset, toOffset: to)))
-	}
-	
-	class func powerPCBranchAndLinkToOffset(to: Int) -> UInt32 {
-		return createBranchAndLinkFrom(offset: 0, toOffset: to) + 2
-	}
-	
-	class func powerPCBranchLinkReturn() -> UInt32 {
-		return 0x4e800020
-	}
-	
-	class func powerPCBranchConditionalFromOffset(from: Int, toOffset to: Int, BO: UInt32, BI: UInt32) -> UInt32 {
-		let difference =  (to - from)
-		if difference > 0x7FFF || difference < -0xFFFF {
-			printg("conditional branch overflow")
-		}
-		return UInt32(16 << 26) + (BO << 21) + (BI << 16) + UInt32(difference & 0xFFFF)
-	}
-	
-	class func powerPCBranchEqualFromOffset(from: Int, to: Int) -> UInt32 {
-		return powerPCBranchConditionalFromOffset(from: from, toOffset: to, BO: 12, BI: 2)
-	}
-	
-	class func powerPCBranchNotEqualFromOffset(from: Int, to: Int) -> UInt32 {
-		return powerPCBranchConditionalFromOffset(from: from, toOffset: to, BO: 4, BI: 2)
-	}
-	
-	class func powerPCBranchLessThanFromOffset(from: Int, to: Int) -> UInt32 {
-		let difference =  (to - from)
-		if difference > 0x7FFF || difference < -0xFFFF {
-			printg("conditional branch overflow")
-		}
-		return 0x41800000 + UInt32( (to - from) & 0xFFFF)
-	}
-	
-	class func powerPCBranchGreaterThanOrEqualFromOffset(from: Int, to: Int) -> UInt32 {
-		let difference =  (to - from)
-		if difference > 0x7FFF || difference < -0xFFFF {
-			printg("conditional branch overflow")
-		}
-		return 0x40800000 + UInt32( (to - from) & 0xFFFF)
-	}
-	
-	class func powerPCBranchLessThanOrEqualFromOffset(from: Int, to: Int) -> UInt32 {
-		let difference =  (to - from)
-		if difference > 0x7FFF || difference < -0xFFFF {
-			printg("conditional branch overflow")
-		}
-		return 0x40810000 + UInt32( (to - from) & 0xFFFF)
-	}
-	
-	
-	class func infiniteUseTMs() {
-		let dol = XGFiles.dol.data
-		dol.replace4BytesAtOffset(0x0a5158 - kDOLtoRAMOffsetDifference, withBytes: 0x38000000)
-		dol.save()
-	}
-	
-	class func increaseNumberOfAbilities() {
-		// only run this once!
-		
-		let dol = XGFiles.dol.data
-		let abilityStart = 0x3FCC50
-		
-		let newAbilityEntryMultiplier : UInt32 = 0x1c830008
-		let abilityMultiplierAddress = 0x1442b0 - kDOLtoRAMOffsetDifference
-		
-		let abilityGetName : UInt32 = 0x80630000
-		let abilityGetNameAddress = 0x144290 - kDOLtoRAMOffsetDifference
-		
-		let abilityGetDescription : UInt32 = 0x80630004
-		let abilityGetDescriptionAddress = 0x144278 - kDOLtoRAMOffsetDifference
-		
-		let sizeOfAbilityTable = 0x3A8
-		let newNumberOfEntries = sizeOfAbilityTable / 8
-		
-		dol.replace4BytesAtOffset(abilityMultiplierAddress, withBytes: newAbilityEntryMultiplier)
-		dol.replace4BytesAtOffset(abilityGetNameAddress, withBytes: abilityGetName)
-		dol.replace4BytesAtOffset(abilityGetDescriptionAddress, withBytes: abilityGetDescription)
-		
-		
-		var allabilities = [(UInt32,UInt32)]()
-		
-		for j in 0 ... kNumberOfAbilities {
-			
-			let offset = abilityStart + (j * 12)
-			allabilities.append((dol.get4BytesAtOffset(offset + 4),dol.get4BytesAtOffset(offset + 8)))
-			
-		}
-		
-		for i in 0 ..< newNumberOfEntries {
-			
-			let offset = abilityStart + (i * 8)
-			
-			if i < allabilities.count {
-				
-				dol.replace4BytesAtOffset(offset    , withBytes: allabilities[i].0)
-				dol.replace4BytesAtOffset(offset + 4, withBytes: allabilities[i].1)
-				
-			} else {
-				
-				dol.replace4BytesAtOffset(offset    , withBytes: 0)
-				dol.replace4BytesAtOffset(offset + 4, withBytes: 0)
-				
-			}
-		}
-		
-		dol.replace4BytesAtOffset(0x41db38, withBytes: 0x74)
-		
-		dol.save()
-		
-	}
-	
-	class func gen6CriticalHitMultiplier() {
-		
-		let dol = XGFiles.dol.data
-		
-		let critMultsTo3 = [0x22a7a3,0x22a803,0x22a927,0x22a987,0x229d23,0x229d83,0x229e2f,0x229e8f,0x2155fb,0x21701b]
-		let critMultsTo2  = [0x22a89b,0x22a9f3,0x229dfb,0x229edb,0x21702b,0x21703b]
-		let valsTo1 = [0x22a807,0x22a98b,0x229d87,0x229e93]
-		
-		for offie in critMultsTo3 {
-			dol.replaceByteAtOffset(offie - kDOLtoRAMOffsetDifference, withByte: 0x03)
-		}
-		
-		for offie in critMultsTo2 {
-			dol.replaceByteAtOffset(offie - kDOLtoRAMOffsetDifference, withByte: 0x02)
-		}
-		
-		for offie in valsTo1 {
-			dol.replaceByteAtOffset(offie - kDOLtoRAMOffsetDifference, withByte: 0x01)
-		}
-		
-		let off1 = 0x20dafc - kDOLtoRAMOffsetDifference
-		let instructions1 = [0x7F7F19D6,0x7f43d378,0x577BF87E]
-		
-		let off2 = 0x216d1c - kDOLtoRAMOffsetDifference
-		let instructions2 = [0x7F3E19D6,0x7fe3fb78,0x5739F87E]
-		
-		for i in 0 ... 2 {
-			
-			let offset1 = off1 + (i * 4)
-			dol.replace4BytesAtOffset(offset1, withBytes: UInt32(instructions1[i]))
-			
-			let offset2 = off2 + (i * 4)
-			dol.replace4BytesAtOffset(offset2, withBytes: UInt32(instructions2[i]))
-		}
-		
-		dol.save()
-		
-	}
-	
-	class func setDeoxysFormeToAttack() {
-		
-		let dol = XGFiles.dol.data
-		
-		for offset in [0x1D8F8C, 0x1D900C] {
-			
-			let off = offset - kDOLtoRAMOffsetDifference
-			
-			dol.replace4BytesAtOffset(off, withBytes: 0x54001838)
-			
-		}
-		
-		for offset in [0x1117F0,0x111840,0x1D8F88,0x1D9008] {
-			
-			let off = offset - kDOLtoRAMOffsetDifference
-			
-			dol.replace4BytesAtOffset(off, withBytes: 0x38000001)
-			
-		}
-		
-		dol.save()
-		
-	}
-	
-	class func shareEXPWithParty() {
-		
-		let dol = XGFiles.dol.data
-		
-		for offset in [0x212C48,0x212E04] {
-			
-			let off = offset - kDOLtoRAMOffsetDifference
-			
-			dol.replace4BytesAtOffset(off, withBytes: kNopInstruction)
-			
-		}
-		
-		dol.save()
-		
-	}
-	
-	class func determineShininessFrom0x1CForDeckPokemon() {
-		
-		let dol = XGFiles.dol.data
-		
-		// make 1d load 2 bytes from 1c using values from r27 instead of r3 (given that r27 now points to deck data)
-		dol.replace4BytesAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference, withBytes: 0xA0DB001C)
-		dol.replace4BytesAtOffset(0x28bb20 - kDOLtoRAMOffsetDifference, withBytes: 0x281B0000)
-		dol.replace4BytesAtOffset(0x28bb28 - kDOLtoRAMOffsetDifference, withBytes: 0x38C00000)
-		
-		// remove use of r27 so we can steal it >=D
-		dol.replace4BytesAtOffset(0x1fbee0 - kDOLtoRAMOffsetDifference, withBytes: kNopInstruction)
-		
-		// store the deck data pointer in r27 so we can use it again later
-		dol.replace4BytesAtOffset(0x1fbd00 - kDOLtoRAMOffsetDifference, withBytes: 0x7F5BD378)
-		
-		// load 1d into r6 before pid gen
-		let offsets = [0x1fbef4,0x1fbfb8,0x1fc2b0]
-		
-		for offset in offsets {
-			dol.replace4BytesAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: instructionToBranchToSameFunction(0x4808fdcd, originalOffset: 0x1fbd54, newOffset: UInt32(offset)))
-		}
-		
-		// where the game read from 1d, now read from 1f
-		dol.replace4BytesAtOffset(0x1fbd54 - kDOLtoRAMOffsetDifference, withBytes: instructionToBranchToSameFunction(0x4808fdc5, originalOffset: 0x1fbcec, newOffset: 0x1fbd54))
-		
-		// where the game read from 1f just load 0 instead
-		dol.replace4BytesAtOffset(0x1fbcec - kDOLtoRAMOffsetDifference, withBytes: 0x38600000)
-		
-		
-		dol.save()
-		
-	}
-	
-	class func instructionToBranchToSameFunction(_ inst: UInt32, originalOffset origin: UInt32, newOffset new: UInt32) -> UInt32 {
-		// creates a new branch instruction using an existing one as the base
-		// inst: the original instruction
-		// origin: the offset of the original instruction
-		// new: the offset where the new branch instruction will be located
-		return inst - (new - origin)
-		
-	}
-	
-	class func switchDPKMStructureToShinyStyle() {
-		// only do this once!
-		
-		let decks = [XGDecks.DeckStory,XGDecks.DeckColosseum,XGDecks.DeckVirtual,XGDecks.DeckHundred,XGDecks.DeckBingo,XGDecks.DeckImasugu,XGDecks.DeckSample]
-		
-		for deck in decks {
-			for p in deck.allPokemon {
-				
-				p.priority   = p.shinyness.rawValue
-				p.shinyness = .never
-				p.save()
-				
-			}
-		}
-		
-		replaceASM(startOffset: 0x28bac0 - kDOLtoRAMOffsetDifference, newASM: [0x8863001f, kNopInstruction])
-		
-	}
-	
-	class func switchNextPokemonAtEndOfTurn() {
-		// you no longer send in a new pokemon as soon as one faints. Now waits until end of turn. Still experimental!
-		
-		let switchlessStart = 0x229680 - kDOLtoRAMOffsetDifference
-		let switchlessBranch = 0x20e36c - kDOLtoRAMOffsetDifference
-		let executeCodeRoutine = 0x1f3bec - kDOLtoRAMOffsetDifference
-		let intimidateRoutine = 0x225c04 - kDOLtoRAMOffsetDifference
-		let unkownRoutine = 0x225ac8 - kDOLtoRAMOffsetDifference
-		let battleEntryEffects = 0x226474 - kDOLtoRAMOffsetDifference
-		let switchlessCode : ASM = [
-			0x9421fff0,
-			0x7c0802a6,
-			0x3c808022,
-			0x38600000,
-			0x90010014,
-			0x388475f8,
-			0x38a00000,
-			0x38c00000,
-			createBranchAndLinkFrom(offset: switchlessStart + 0x20, toOffset: executeCodeRoutine),
-			0x38600001,
-			createBranchAndLinkFrom(offset: switchlessStart + 0x28, toOffset: intimidateRoutine),
-			createBranchAndLinkFrom(offset: switchlessStart + 0x2c, toOffset: unkownRoutine),
-			0x3c808022,
-			0x38600000,
-			0x38847588,
-			0x38a00000,
-			0x38c00000,
-			createBranchAndLinkFrom(offset: switchlessStart + 0x44, toOffset: executeCodeRoutine),
-			createBranchAndLinkFrom(offset: switchlessStart + 0x48, toOffset: battleEntryEffects),
-			0x80010014,
-			0x7c0803a6,
-			0x38210010,
-			0x38000002,
-			0x980dbb14,
-			0x4e800020
-		]
-		
-		replaceASM(startOffset: switchlessStart, newASM: switchlessCode)
-		replaceASM(startOffset: switchlessBranch, newASM: [createBranchAndLinkFrom(offset: switchlessBranch, toOffset: switchlessStart)])
 		
 	}
 	
@@ -1268,7 +960,7 @@ class XGUtility {
 			let i = itemHexList[j]
 			
 			if i == 0x1FF {
-				printg("---------")
+				print("---------")
 				continue
 			}
 			let item = XGItems.item(i)
@@ -1280,7 +972,7 @@ class XGUtility {
 				}
 			}
 			
-			printg("\(0x300 + (j*2)):\t",item.index,item.name.string,tmName,"\n")
+			print("\(0x300 + (j*2)):\t",item.index,item.name.string,tmName,"\n")
 		}
 		
 	}
@@ -1367,7 +1059,7 @@ class XGUtility {
 		
 		string += "return [self.name.string : dictRep]\n}\n}\n\n"
 		
-		printg(string)
+		print(string)
 		
 	}
 	
@@ -1375,7 +1067,7 @@ class XGUtility {
 	class func documentPokemonStats(title: String, forXG: Bool) {
 		
 		let fileName = "Pokemon Stats"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1487,12 +1179,12 @@ class XGUtility {
 			raw_array.append(mon.dictionaryRepresentation as AnyObject)
 			hum_array.append(mon.readableDictionaryRepresentation as AnyObject)
 		}
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 		var dataRepresentation = [
 			
@@ -1693,7 +1385,7 @@ class XGUtility {
 	class func documentMoves(title: String, forXG: Bool) {
 		
 		let fileName = "Moves"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1705,12 +1397,12 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 		var indices = [String]()
 		var hexIndices = [String]()
@@ -1794,7 +1486,7 @@ class XGUtility {
 	class func documentBattleBingo() {
 		
 		let fileName = "Battle Bingo"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1806,19 +1498,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentItems() {
 		
 		let fileName = "Items"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1830,19 +1522,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentTrainers(title: String, forXG: Bool) {
 		
 		let fileName = "Trainers"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1857,12 +1549,12 @@ class XGUtility {
 			hum_array.append(deck.readableDictionaryRepresentation as AnyObject)
 			
 		}
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 		saveString(decksString, toFile: .nameAndFolder(title + ".txt", .Reference))
 	}
@@ -1870,17 +1562,17 @@ class XGUtility {
 	class func documentShadowPokemon(title: String, forXG: Bool) {
 		
 		let fileName = "Shadow Pokemon"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		let raw_array = XGDecks.DeckDarkPokemon.dictionaryRepresentation
 		let hum_array = XGDecks.DeckDarkPokemon.readableDictionaryRepresentation
 		
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 		var indices = [String]()
 		var hexIndices = [String]()
@@ -1936,7 +1628,7 @@ class XGUtility {
 	class func documentTMs() {
 		
 		let fileName = "TMs"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1948,19 +1640,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentTutorMoves() {
 		
 		let fileName = "Tutor Moves"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1972,19 +1664,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentTrainerClasses() {
 		
 		let fileName = "Trainer classes"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1996,19 +1688,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentStarterPokemon() {
 		
 		let fileName = "Starter Pokemon"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -2023,19 +1715,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentMtBattlePokemon() {
 		
 		let fileName = "Mt. Battle Prize Pokemon"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -2047,19 +1739,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentTrades() {
 		
 		let fileName = "In-Game Trades"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -2071,19 +1763,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentGiftShadowPokemon() {
 		
 		let fileName = "Shadow Pokemon Gift"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -2093,12 +1785,12 @@ class XGUtility {
 		raw_array.append(entry.dictionaryRepresentation as AnyObject)
 		hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 	}
 	
@@ -2108,7 +1800,7 @@ class XGUtility {
 		let itemHexList = dat.getShortStreamFromOffset(0x300, length: 0x170)
 		
 		let fileName = "Pokemarts"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -2128,19 +1820,19 @@ class XGUtility {
 			}
 			
 		}
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentPokespots() {
 		
 		let fileName = "Pokespots"
-		printg("documenting " + fileName + "...")
+		print("documenting " + fileName + "...")
 		
 		var raw_array1 = [AnyObject]()
 		var hum_array1 = [AnyObject]()
@@ -2162,12 +1854,12 @@ class XGUtility {
 			hum_array1.append([spot.string : hum_array] as AnyObject)
 		}
 		
-		printg("saving " + fileName + "...")
+		print("saving " + fileName + "...")
 		
 		saveJSON(raw_array1 as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array1 as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		printg("saved " + fileName + "!\n")
+		print("saved " + fileName + "!\n")
 		
 	}
 	

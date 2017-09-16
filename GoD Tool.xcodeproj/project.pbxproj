@@ -2308,6 +2308,7 @@
 		B2FEC07B1F6C608C00AC263D /* GoDAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0791F6C602A00AC263D /* GoDAlertViewController.swift */; };
 		B2FEC07E1F6D25BF00AC263D /* GoDToolExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC07C1F6D25BF00AC263D /* GoDToolExtensions.swift */; };
 		B2FEC0821F6D261700AC263D /* GoDToolCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0801F6D260100AC263D /* GoDToolCLExtensions.swift */; };
+		B2FEC0841F6D620F00AC263D /* MoveCategories.json in Resources */ = {isa = PBXBuildFile; fileRef = B2FEC0831F6D620F00AC263D /* MoveCategories.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -3456,6 +3457,7 @@
 		B2FEC0791F6C602A00AC263D /* GoDAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDAlertViewController.swift; sourceTree = "<group>"; };
 		B2FEC07C1F6D25BF00AC263D /* GoDToolExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDToolExtensions.swift; sourceTree = "<group>"; };
 		B2FEC0801F6D260100AC263D /* GoDToolCLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDToolCLExtensions.swift; sourceTree = "<group>"; };
+		B2FEC0831F6D620F00AC263D /* MoveCategories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MoveCategories.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4667,6 +4669,7 @@
 				B2F5ED0D1F49AE950075C6D2 /* Move Effects.json */,
 				B2F5ED0E1F49AE950075C6D2 /* Original Moves.json */,
 				B2F5ED0F1F49AE950075C6D2 /* Original Pokemon.json */,
+				B2FEC0831F6D620F00AC263D /* MoveCategories.json */,
 			);
 			path = JSON;
 			sourceTree = "<group>";
@@ -6290,6 +6293,7 @@
 				B2F508771F4C5FAB0075C6D2 /* body_170.png in Resources */,
 				B2F507CB1F4C5FAB0075C6D2 /* body_084.png in Resources */,
 				B2F50AFF1F4C5FAC0075C6D2 /* face_079.png in Resources */,
+				B2FEC0841F6D620F00AC263D /* MoveCategories.json in Resources */,
 				B2F509B91F4C5FAB0075C6D2 /* body_331.png in Resources */,
 				B2F50C8B1F4C5FAC0075C6D2 /* face_277.png in Resources */,
 				B2F50E471F4C5FAD0075C6D2 /* type_8.png in Resources */,
