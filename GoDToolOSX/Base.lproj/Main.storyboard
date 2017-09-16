@@ -102,7 +102,7 @@
                                     <items>
                                         <menuItem title="GoD Tool Help" keyEquivalent="?" id="FKE-Sm-Kum">
                                             <connections>
-                                                <action selector="showHelp:" target="Voe-Tx-rLC" id="kyD-nq-wCI"/>
+                                                <segue destination="JRm-IJ-Y9d" kind="modal" identifier="toHelpVC" id="NaH-4i-fmB"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -117,7 +117,78 @@
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="GoDToolOSX" customModuleProvider="target"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-154" y="-249"/>
+            <point key="canvasLocation" x="-176" y="92"/>
+        </scene>
+        <!--alert-->
+        <scene sceneID="bWh-Mo-N9R">
+            <objects>
+                <viewController title="alert" storyboardIdentifier="alert" id="NNe-8y-O4O" customClass="GoDAlertViewController" customModule="GoDToolOSX" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="EHI-FW-Uko">
+                        <rect key="frame" x="0.0" y="0.0" width="217" height="176"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="faq-vf-tKB" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="219" y="86"/>
+        </scene>
+        <!--Help-->
+        <scene sceneID="iRK-1C-rm3">
+            <objects>
+                <viewController title="Help" id="JRm-IJ-Y9d" sceneMemberID="viewController">
+                    <view key="view" id="MeS-Pn-Un2">
+                        <rect key="frame" x="0.0" y="0.0" width="360" height="480"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FhI-CA-wWf">
+                                <rect key="frame" x="20" y="20" width="320" height="440"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="320" id="437-rB-L8J"/>
+                                    <constraint firstAttribute="height" constant="440" id="xgt-1K-iJ9"/>
+                                </constraints>
+                                <textFieldCell key="cell" enabled="NO" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" drawsBackground="YES" id="UU2-ZD-1fv">
+                                    <font key="font" metaFont="system" size="11"/>
+                                    <mutableString key="title">Hey there :-)
+
+Whenever you open this app, it automatically creates a bunch of folders in: 
+"~/Documents/GoD-Tool"
+
+Simple pop your ISO of 
+"Pokémon XD: Gale of Darkness" (US version only)
+into the folder called "ISO". 
+Make sure you rename the ISO: "XD.iso".
+
+Once you've done this, come back to the app and click
+ISO -&gt; Extract ISO
+from the menu bar to extract the necessary files from the ISO .
+
+This will take a minute or two but afterwards you'll be able to use this tool to modify the game.
+
+When you're satisfied with the changes, click
+ISO -&gt; Rebuild ISO
+to put all the files back in the ISO. You won't see any changes to the game itself until you do this. 
+
+If you haven't changed anything like scripts, textures or game text you will probably be fine doing 
+ISO -&gt; Quick Build
+which just compiles the important files to save time.
+
+Twitter: @StarsMmd</mutableString>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="FhI-CA-wWf" firstAttribute="top" secondItem="MeS-Pn-Un2" secondAttribute="top" constant="20" id="2rG-lt-5Z9"/>
+                            <constraint firstItem="FhI-CA-wWf" firstAttribute="leading" secondItem="MeS-Pn-Un2" secondAttribute="leading" constant="20" id="NVO-uF-hEd"/>
+                            <constraint firstAttribute="bottom" secondItem="FhI-CA-wWf" secondAttribute="bottom" constant="20" id="ZKS-g2-bKW"/>
+                            <constraint firstAttribute="trailing" secondItem="FhI-CA-wWf" secondAttribute="trailing" constant="20" id="y0O-Zt-heC"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <customObject id="1mP-RA-cWJ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-839" y="262"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
@@ -141,16 +212,67 @@
             <objects>
                 <viewController title="GoD Tool Home" showSeguePresentationStyle="single" id="XfG-lQ-9wD" customClass="GoDHomeViewController" customModule="GoDToolOSX" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" autoresizesSubviews="NO" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="200" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <scrollView wantsLayer="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bfj-SI-Yap">
+                                <rect key="frame" x="200" y="0.0" width="440" height="460"/>
+                                <clipView key="contentView" id="mQC-q8-Jd2">
+                                    <rect key="frame" x="1" y="1" width="438" height="458"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textView importsGraphics="NO" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" smartInsertDelete="YES" id="PzZ-Jv-CN9">
+                                            <rect key="frame" x="0.0" y="0.0" width="438" height="458"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <size key="minSize" width="438" height="458"/>
+                                            <size key="maxSize" width="6198" height="10000000"/>
+                                            <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        </textView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="EMn-oZ-Jb1">
+                                    <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="C7E-oC-wyH">
+                                    <rect key="frame" x="423" y="1" width="16" height="458"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bpl-pp-3vQ">
+                                <rect key="frame" x="198" y="460" width="444" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="9Ho-sf-xk4"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Log" id="F6i-UV-KQf">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Bfj-SI-Yap" firstAttribute="top" secondItem="Bpl-pp-3vQ" secondAttribute="bottom" id="MkJ-L1-0ld"/>
+                            <constraint firstItem="Bpl-pp-3vQ" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="WPY-Tv-EAa"/>
+                            <constraint firstItem="Bfj-SI-Yap" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="200" id="bnK-gR-prm"/>
+                            <constraint firstItem="Bpl-pp-3vQ" firstAttribute="trailing" secondItem="Bfj-SI-Yap" secondAttribute="trailing" id="l0Z-uk-z4V"/>
+                            <constraint firstAttribute="bottom" secondItem="Bfj-SI-Yap" secondAttribute="bottom" id="oep-Gm-3bH"/>
+                            <constraint firstAttribute="trailing" secondItem="Bfj-SI-Yap" secondAttribute="trailing" id="u1G-Ac-z7i"/>
+                            <constraint firstItem="Bpl-pp-3vQ" firstAttribute="leading" secondItem="Bfj-SI-Yap" secondAttribute="leading" id="w6P-Rm-XBh"/>
+                        </constraints>
                     </view>
                     <connections>
-                        <segue destination="7OK-Av-0ny" kind="modal" identifier="toStatsVC" id="B9F-pI-6Cd"/>
+                        <outlet property="logView" destination="PzZ-Jv-CN9" id="fl6-iK-8pb"/>
+                        <segue destination="7OK-Av-0ny" kind="show" identifier="toStatsVC" id="B9F-pI-6Cd"/>
+                        <segue destination="JRm-IJ-Y9d" kind="modal" identifier="toHelpVC" id="PCr-YY-Lid"/>
+                        <segue destination="NNe-8y-O4O" kind="modal" id="KtO-3W-Do8"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-231" y="610"/>
+            <point key="canvasLocation" x="-417" y="664"/>
         </scene>
         <!--Pokemon Stats-->
         <scene sceneID="wTf-7Y-ZPw">
@@ -1263,7 +1385,10 @@
                 </viewController>
                 <customObject id="rna-RT-Qa5" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="342" y="610"/>
+            <point key="canvasLocation" x="701" y="603"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="PCr-YY-Lid"/>
+    </inferredMetricsTieBreakers>
 </document>

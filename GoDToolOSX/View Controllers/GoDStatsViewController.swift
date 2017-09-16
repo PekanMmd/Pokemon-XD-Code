@@ -424,6 +424,8 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.reloadViewWithActivity()
 		self.table.reloadIndex(current.index)
+		
+		printg("saved updated stats:",self.pokemon.name)
 	}
 	
 	

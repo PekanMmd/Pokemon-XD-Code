@@ -87,7 +87,7 @@ class XGString: NSObject {
 	}
 	
 	func println() {
-		print(self.string)
+		printg(self.string)
 	}
 	
 	init(string: String, file: XGFiles?, sid: Int?) {

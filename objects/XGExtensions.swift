@@ -10,7 +10,7 @@ import Foundation
 
 extension String {
 	func println() {
-		print(self)
+		printg(self)
 	}
 	
 	func spaceToLength(_ length: Int) -> String {

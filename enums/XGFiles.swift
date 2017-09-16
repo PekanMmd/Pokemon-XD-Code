@@ -39,6 +39,7 @@ indirect enum XGFiles {
 	case texture(String)
 	case iso
 	case toc
+	case log(Date)
 	case nameAndFolder(String, XGFolders)
 	
 	var path : String {
@@ -73,6 +74,7 @@ indirect enum XGFiles {
 				case .texture(let s)		: return s
 				case .iso					: return "XD.iso"
 				case .toc					: return "Game.toc"
+				case .log(let d)			: return d.description
 				case .nameAndFolder(let name, _) : return name
 				
 			}
@@ -101,6 +103,7 @@ indirect enum XGFiles {
 				case .texture			: folder = .Textures
 				case .iso				: folder = .ISO
 				case .toc				: folder = .TOC
+				case .log				: folder = .Logs
 				case .original(let f)	: folder = f.folder
 				case .nameAndFolder( _, let aFolder) : folder = aFolder
 				
@@ -112,6 +115,10 @@ indirect enum XGFiles {
 
 	var data : XGMutableData {
 		get {
+			if !self.exists {
+				printg("file doesn't exist:",self.path)
+			}
+			
 			var data : XGMutableData!
 			if loadableFiles.contains(self.path) {
 				data = loadedFiles[self.path]
@@ -262,6 +269,7 @@ enum XGFolders : String {
 	case TOC				= "TOC"
 	case AutoFSYS			= "AutoFSYS"
 	case MenuFSYS			= "MenuFSYS"
+	case Logs				= "Logs"
 	
 	var name : String {
 		get {
@@ -367,7 +375,7 @@ enum XGFolders : String {
 				try (fileURL as NSURL).setResourceValue(false, forKey: URLResourceKey.isExcludedFromBackupKey)
 			} catch let error1 as NSError {
 				error = error1
-				print(error)
+				printg(error)
 			}
 			
 		}
@@ -417,6 +425,7 @@ enum XGFolders : String {
 			.TOC,
 			.AutoFSYS,
 			.MenuFSYS,
+			.Logs,
 			]
 		
 		for folder in folders {
@@ -467,7 +476,8 @@ enum XGFolders : String {
 			.TOC,
 			.MenuFSYS,
 			.AutoFSYS,
-			.Scripts
+			.Scripts,
+			.Logs,
 			]
 		
 		for folder in folders {

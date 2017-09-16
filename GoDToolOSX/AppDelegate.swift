@@ -8,10 +8,12 @@
 
 import AppKit
 
+let appDelegate = (NSApp.delegate as! AppDelegate)
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 	
-	var currentViewController : GoDViewController!
+	var homeViewController : GoDHomeViewController!
 	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		// Insert code here to initialize your application
@@ -24,32 +26,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func extractISO(_ sender: Any) {
-		print("extracting iso")
+		printg("extracting iso")
 		guard XGFiles.iso.exists else {
-			print("file \"XD.iso\" not in ISO folder")
+			printg("file \"XD.iso\" not in ISO folder")
 			return
 		}
 		
+		XGFolders.setUpFolderFormat()
 		XGISO.extractAllFiles()
-		print("done")
+		GoDAlertViewController.alert(title: "ISO Extraction Complete", text: "Done.").show(sender: self.homeViewController)
 		
 	}
 	
 	@IBAction func quickBuildISO(_ sender: Any) {
-		print("quick build iso")
+		
+		XGUtility.compileMainFiles()
+		GoDAlertViewController.alert(title: "Quick Build Complete", text: "Done.").show(sender: self.homeViewController)
 	}
 	
 	@IBAction func rebuildISO(_ sender: AnyObject) {
-		print("rebuild iso")
-	}
-	
-	@IBAction func showHelp(_ sender: AnyObject) {
-		print("show help")
+		XGUtility.compileAllFiles()
+		GoDAlertViewController.alert(title: "ISO Rebuild Complete", text: "Done.").show(sender: self.homeViewController)
 	}
 	
 	
 	@IBAction func showAbout(_ sender: AnyObject) {
-		print("show about")
+		printg("show about")
 	}
 	
 	

@@ -41,6 +41,8 @@ let kShadowUnknown2Offset	= 0x15
 
 let kPurificationExperienceOffset = 0xA // Should always be 0. The value gets increased as the pokemon gains exp and it is all gained at once upon purification.
 
+let isShinyAvailable = XGFiles.dol.data.get4BytesAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference) == 0xa0db001c
+
 class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 	
 	var deckData	= XGDeckPokemon.dpkm(0, XGDecks.DeckStory)
@@ -271,6 +273,25 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 		let data = self.deckData.deck.data
 		let start = startOffset
 		
+		if self.isShadowPokemon {
+			
+			self.shinyness = .random
+			
+			let data = XGDecks.DeckDarkPokemon.data
+			
+			data.replaceByteAtOffset(shadowStartOffset + kShadowCatchRateOFfset, withByte: shadowCatchRate)
+			data.replaceByteAtOffset(shadowStartOffset + kShadowLevelOffset, withByte: level)
+			data.replace2BytesAtOffset(shadowStartOffset + kShadowCounterOffset, withBytes: shadowCounter)
+			data.replaceByteAtOffset(shadowStartOffset + kFleeAfterBattleOffset, withByte: shadowFleeValue)
+			data.replaceByteAtOffset(shadowStartOffset + kShadowAggressionOffset, withByte: shadowAggression)
+			data.replaceByteAtOffset(shadowStartOffset + kShadowInUseFlagOffset, withByte: ShadowDataInUse ? 0x80 : 0x00)
+			
+			for i in 0 ..< kNumberOfPokemonMoves {
+				data.replace2BytesAtOffset(shadowStartOffset + kFirstShadowMoveOFfset + (i * 2), withBytes: self.shadowMoves[i].index)
+			}
+			
+		}
+		
 		data.replace2BytesAtOffset(start + kPokemonIndexOffset, withBytes: species.index)
 		data.replace2BytesAtOffset(start + kPokemonItemOffset, withBytes: item.index)
 		data.replaceByteAtOffset(start + kPokemonHappinessOffset, withByte: happiness)
@@ -292,29 +313,14 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 			data.replace2BytesAtOffset(start + kFirstPokemonMoveOffset + (i * 2), withBytes: self.moves[i].index)
 		}
 		
-		data.replace2BytesAtOffset(start + kPokemonshinynessOffset, withBytes: self.shinyness.rawValue)
 		data.replaceByteAtOffset(start + kPokemonPriority2Offset, withByte: self.priority)
+		
+		if isShinyAvailable {
+			data.replace2BytesAtOffset(start + kPokemonshinynessOffset, withBytes: self.shinyness.rawValue)
+		}
 		
 		data.save()
 		
-		
-		if self.isShadowPokemon {
-			
-			let data = XGDecks.DeckDarkPokemon.data
-			
-			data.replaceByteAtOffset(shadowStartOffset + kShadowCatchRateOFfset, withByte: shadowCatchRate)
-			data.replaceByteAtOffset(shadowStartOffset + kShadowLevelOffset, withByte: level)
-			data.replace2BytesAtOffset(shadowStartOffset + kShadowCounterOffset, withBytes: shadowCounter)
-			data.replaceByteAtOffset(shadowStartOffset + kFleeAfterBattleOffset, withByte: shadowFleeValue)
-			data.replaceByteAtOffset(shadowStartOffset + kShadowAggressionOffset, withByte: shadowAggression)
-			data.replaceByteAtOffset(shadowStartOffset + kShadowInUseFlagOffset, withByte: ShadowDataInUse ? 0x80 : 0x00)
-			
-			for i in 0 ..< kNumberOfPokemonMoves {
-				data.replace2BytesAtOffset(shadowStartOffset + kFirstShadowMoveOFfset + (i * 2), withBytes: self.shadowMoves[i].index)
-			}
-			
-			data.save()
-		}
 	}
 	
 	func purge() {

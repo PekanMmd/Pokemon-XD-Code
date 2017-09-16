@@ -10,6 +10,14 @@ import Cocoa
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/XD-Randomiser"
 
+func printg(_ args: Any...) {
+	for arg in args {
+		print(arg, separator: " ", terminator: " ")
+	}
+	print("") // automatically adds new line
+	
+}
+
 extension GoDTexture {
 	func importImage(file: XGFiles) {
 		return

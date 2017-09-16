@@ -96,19 +96,19 @@ class XGISO: NSObject {
 			let filename = file.fileName
 			let data = file.data
 			
-			print("importing file to ISO: " + filename)
+			printg("importing file to ISO: " + filename)
 			
 			let start = self.locationForFile(filename)
 			let oldsize  = self.sizeForFile(filename)
 			let newsize = data.length
 			
 			if (start == nil) || (oldsize == nil) {
-				print("file not found in ISO's .toc: " + filename)
+				printg("file not found in ISO's .toc: " + filename)
 				continue
 			}
 			
 			if oldsize! < newsize {
-				print("file too large: " + filename)
+				printg("file too large: " + filename)
 				continue
 			}
 			
@@ -154,7 +154,7 @@ class XGISO: NSObject {
 	
 	func printFileLocations() {
 		for k in fileLocations.keys.sorted() {
-			print(k,"\t:\t\(fileLocations[k]!)")
+			printg(k,"\t:\t\(fileLocations[k]!)")
 		}
 	}
 	

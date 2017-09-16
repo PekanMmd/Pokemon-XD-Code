@@ -288,7 +288,7 @@ class XGDolPatcher: NSObject {
 		// Input the shiny chance as a percentage
 		
 		guard newValue < 50 else {
-			print("Shiny value can't be more than 50 because the number will be treated as negative")
+			printg("Shiny value can't be more than 50 because the number will be treated as negative")
 			return
 		}
 		
@@ -393,7 +393,7 @@ class XGDolPatcher: NSObject {
 		}
 		
 //		XGAlertView(title: "Patch Complete", message: "The Patch has been applied", doneButtonTitle: "Swag", otherButtonTitles: nil, buttonAction: nil).show()
-		print("patch applied: ", patch.name)
+		printg("patch applied: ", patch.name)
 		
 	}
 	

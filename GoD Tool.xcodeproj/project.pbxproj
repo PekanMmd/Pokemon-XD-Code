@@ -2304,6 +2304,10 @@
 		B2FEC0761F6C376C00AC263D /* randomiser.png in Resources */ = {isa = PBXBuildFile; fileRef = B2FEC0751F6C376C00AC263D /* randomiser.png */; };
 		B2FEC0771F6C37AC00AC263D /* GoDTextureFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */; };
 		B2FEC0781F6C4A0300AC263D /* GoDTextureFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */; };
+		B2FEC07A1F6C602A00AC263D /* GoDAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0791F6C602A00AC263D /* GoDAlertViewController.swift */; };
+		B2FEC07B1F6C608C00AC263D /* GoDAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0791F6C602A00AC263D /* GoDAlertViewController.swift */; };
+		B2FEC07E1F6D25BF00AC263D /* GoDToolExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC07C1F6D25BF00AC263D /* GoDToolExtensions.swift */; };
+		B2FEC0821F6D261700AC263D /* GoDToolCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0801F6D260100AC263D /* GoDToolCLExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -3449,6 +3453,9 @@
 		B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GoDImageExtensions.swift; path = GoDToolOSX/GoDImageExtensions.swift; sourceTree = "<group>"; };
 		B2F911671F6606E900129DC2 /* DeckData_Empty.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = DeckData_Empty.bin; sourceTree = "<group>"; };
 		B2FEC0751F6C376C00AC263D /* randomiser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = randomiser.png; sourceTree = "<group>"; };
+		B2FEC0791F6C602A00AC263D /* GoDAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDAlertViewController.swift; sourceTree = "<group>"; };
+		B2FEC07C1F6D25BF00AC263D /* GoDToolExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDToolExtensions.swift; sourceTree = "<group>"; };
+		B2FEC0801F6D260100AC263D /* GoDToolCLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDToolCLExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3528,6 +3535,8 @@
 				B2F5F8811F49C2FE0075C6D2 /* XGiOSExtensions.swift */,
 				B2F5F87F1F49C2EC0075C6D2 /* XGOSXExtensions.swift */,
 				B2ACE8871F5E372E00D87B22 /* XDRExtensions.swift */,
+				B2FEC07C1F6D25BF00AC263D /* GoDToolExtensions.swift */,
+				B2FEC0801F6D260100AC263D /* GoDToolCLExtensions.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -4833,6 +4842,7 @@
 				B2F5F8901F49CD050075C6D2 /* GoDTableViewController.swift */,
 				B2F5F8911F49CD050075C6D2 /* GoDViewController.swift */,
 				B2F5F8921F49CD050075C6D2 /* ViewController.swift */,
+				B2FEC0791F6C602A00AC263D /* GoDAlertViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -6973,6 +6983,7 @@
 				B2D1DF581F68A2890023A876 /* GoDTexture.swift in Sources */,
 				B2ACE83D1F5E368900D87B22 /* GoDViewLayoutManager.swift in Sources */,
 				B2ACE8401F5E369C00D87B22 /* XGAssemblyCode.swift in Sources */,
+				B2FEC07B1F6C608C00AC263D /* GoDAlertViewController.swift in Sources */,
 				B2ACE8491F5E36C200D87B22 /* XGEffectivenessValues.swift in Sources */,
 				B2ACE8521F5E36C200D87B22 /* XGMaps.swift in Sources */,
 				B2ACE86C1F5E36CA00D87B22 /* XGGiftPokemon.swift in Sources */,
@@ -7050,6 +7061,7 @@
 				B2F5EC0F1F49A1FE0075C6D2 /* XGBattleBingoPanel.swift in Sources */,
 				B2D1DF571F687B520023A876 /* GoDImageExtensions.swift in Sources */,
 				B2F5EC211F49A1FE0075C6D2 /* XGFiles.swift in Sources */,
+				B2FEC0821F6D261700AC263D /* GoDToolCLExtensions.swift in Sources */,
 				B2F5ECA21F49A1FF0075C6D2 /* XGMutableData.swift in Sources */,
 				B2D1DF4E1F6871550023A876 /* XGPNGBlock.swift in Sources */,
 				B2F5EC6F1F49A1FF0075C6D2 /* PBRStringTable.swift in Sources */,
@@ -7234,6 +7246,7 @@
 				B2F5ECE31F49A1FF0075C6D2 /* XGType.swift in Sources */,
 				B2F5EC471F49A1FE0075C6D2 /* XGPokemon.swift in Sources */,
 				B2D1DF5E1F68DBF60023A876 /* GoDTextureFormats.swift in Sources */,
+				B2FEC07A1F6C602A00AC263D /* GoDAlertViewController.swift in Sources */,
 				B2F5F8861F49C3440075C6D2 /* XGOSXExtensions.swift in Sources */,
 				B205E0C21F60A9D300A5F075 /* GoDPopUpButton.swift in Sources */,
 				B2F5EC5C1F49A1FE0075C6D2 /* XGStatusEffects.swift in Sources */,
@@ -7265,6 +7278,7 @@
 				B205E0CB1F60AE7F00A5F075 /* GoDItemPopUpButton.swift in Sources */,
 				B2F5EC531F49A1FE0075C6D2 /* XGScriptOps.swift in Sources */,
 				B2F5EC411F49A1FE0075C6D2 /* XGMoveTypes.swift in Sources */,
+				B2FEC07E1F6D25BF00AC263D /* GoDToolExtensions.swift in Sources */,
 				B2F5EC9B1F49A1FF0075C6D2 /* XGLZSSWrapper.m in Sources */,
 				B2F5EC891F49A1FF0075C6D2 /* XGExtensions.swift in Sources */,
 				B2F5ECEC1F49A1FF0075C6D2 /* XGDictionaryRepresentable.swift in Sources */,

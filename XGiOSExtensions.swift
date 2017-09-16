@@ -10,6 +10,13 @@ import Foundation
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
 
+func printg(_ args: Any...) {
+	for arg in args {
+		print(arg, separator: " ", terminator: " ")
+	}
+	print("") // automatically adds new line
+}
+
 extension GoDTexture {
 	func importImage(file: XGFiles) {
 		XGTexturePNGReimporter.replaceTextureData(textureFile: self.file, withImage: file)

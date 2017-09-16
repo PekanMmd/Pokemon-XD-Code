@@ -66,7 +66,7 @@ enum XGLZSS {
 	
 	func compress() {
 		if !self.input.exists {
-			print("file doesn't exist: ", self.input.path)
+			printg("file doesn't exist: ", self.input.path)
 			return
 		}
 		compressedData.save()
@@ -74,7 +74,7 @@ enum XGLZSS {
 	
 	func decompress(file: XGFiles) {
 		if !self.input.exists {
-			print("file doesn't exist: ", self.input.path)
+			printg("file doesn't exist: ", self.input.path)
 			return
 		}
 		let d = decompressedData

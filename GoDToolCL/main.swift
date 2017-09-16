@@ -18,7 +18,8 @@
 //XGFiles.nameAndFolder("bingo_menu.fsys", .MenuFSYS).fsysData.replaceFile(file: bingotex.compress())
 
 
-XGUtility.compileForRelease(XG: true)
+
+//XGUtility.compileForRelease(XG: true)
 
 
 

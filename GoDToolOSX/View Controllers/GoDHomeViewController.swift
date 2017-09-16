@@ -10,13 +10,28 @@ import Cocoa
 
 class GoDHomeViewController: GoDTableViewController {
 	
+	
+	@IBOutlet var logView: NSTextView!
+	
 	let tools = ["Pokemon Stats Editor"]
 	let segues = ["toStatsVC"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
 		self.table.reloadData()
+		
     }
+	
+	override func viewDidAppear() {
+		super.viewDidAppear()
+		
+		(NSApp.delegate as! AppDelegate).homeViewController = self
+		
+		if !XGFiles.iso.exists {
+			self.performSegue(withIdentifier: "toHelpVC", sender: self)
+		}
+		
+	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
 		return tools.count
@@ -39,9 +54,16 @@ class GoDHomeViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
-		if row < segues.count && row >= 0 {
+		if !XGFiles.iso.exists || !XGFiles.common_rel.exists || !XGFiles.dol.exists {
+			self.performSegue(withIdentifier: "toHelpVC", sender: self)
+		} else if row < segues.count && row >= 0 {
 			performSegue(withIdentifier: segues[row], sender: self)
 		}
 	}
     
 }
+
+
+
+
+

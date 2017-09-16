@@ -363,7 +363,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		}
 		
 		self.save()
-		print("Purged Table")
+		printg("Purged String Table:",self.file.fileName)
 		
 		
 	}
