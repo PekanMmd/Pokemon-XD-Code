@@ -13,8 +13,8 @@ class GoDHomeViewController: GoDTableViewController {
 	
 	@IBOutlet var logView: NSTextView!
 	
-	let tools = ["Pokemon Stats Editor"]
-	let segues = ["toStatsVC"]
+	let tools = ["Pokemon Stats Editor","Patches"]
+	let segues = ["toStatsVC","toPatchVC"]
 
     override func viewDidLoad() {
         super.viewDidLoad()

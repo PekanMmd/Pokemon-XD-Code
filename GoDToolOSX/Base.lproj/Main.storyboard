@@ -207,6 +207,19 @@ Twitter: @StarsMmd</mutableString>
             </objects>
             <point key="canvasLocation" x="-231" y="213"/>
         </scene>
+        <!--GoD Patch View Controller-->
+        <scene sceneID="c9d-9X-HLi">
+            <objects>
+                <viewController id="OJE-ty-xWI" customClass="GoDPatchViewController" customModule="GoDToolOSX" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="qKs-78-5L8">
+                        <rect key="frame" x="0.0" y="0.0" width="300" height="480"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="3WO-PF-Rku" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1330" y="700"/>
+        </scene>
         <!--GoD Tool Home-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
@@ -268,6 +281,7 @@ Twitter: @StarsMmd</mutableString>
                         <segue destination="7OK-Av-0ny" kind="show" identifier="toStatsVC" id="B9F-pI-6Cd"/>
                         <segue destination="JRm-IJ-Y9d" kind="modal" identifier="toHelpVC" id="PCr-YY-Lid"/>
                         <segue destination="NNe-8y-O4O" kind="modal" id="KtO-3W-Do8"/>
+                        <segue destination="OJE-ty-xWI" kind="modal" identifier="toPatchVC" id="ON3-p7-AdR"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

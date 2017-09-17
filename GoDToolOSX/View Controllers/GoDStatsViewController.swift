@@ -73,6 +73,8 @@ class GoDStatsViewController: GoDTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+		self.title = "Pokemon Stats Editor"
+		
 		let evos = [evo1,evo2,evo3,evo4,evo5]
 		for i in 0 ..< evos.count {
 			evos[i]!.index = i

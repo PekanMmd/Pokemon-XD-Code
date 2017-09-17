@@ -2315,6 +2315,9 @@
 		B2FEC08D1F6EA2EC00AC263D /* XGCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC08B1F6E9BB800AC263D /* XGCommon.swift */; };
 		B2FEC08E1F6EA2F400AC263D /* XGCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC08B1F6E9BB800AC263D /* XGCommon.swift */; };
 		B2FEC08F1F6EA2F400AC263D /* XGCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC08B1F6E9BB800AC263D /* XGCommon.swift */; };
+		B2FEC0901F6EDA5000AC263D /* MoveCategories.json in Resources */ = {isa = PBXBuildFile; fileRef = B2FEC0831F6D620F00AC263D /* MoveCategories.json */; };
+		B2FEC0911F6EDA5400AC263D /* MoveCategories.json in Resources */ = {isa = PBXBuildFile; fileRef = B2FEC0831F6D620F00AC263D /* MoveCategories.json */; };
+		B2FEC0931F6EE81900AC263D /* GoDPatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0921F6EE81900AC263D /* GoDPatchViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -3467,6 +3470,7 @@
 		B2FEC0851F6DAD9B00AC263D /* GoDMovesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDMovesViewController.swift; sourceTree = "<group>"; };
 		B2FEC0871F6DADAE00AC263D /* GoDSpotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDSpotViewController.swift; sourceTree = "<group>"; };
 		B2FEC08B1F6E9BB800AC263D /* XGCommon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGCommon.swift; sourceTree = "<group>"; };
+		B2FEC0921F6EE81900AC263D /* GoDPatchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDPatchViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4858,6 +4862,7 @@
 				B2FEC0791F6C602A00AC263D /* GoDAlertViewController.swift */,
 				B2FEC0851F6DAD9B00AC263D /* GoDMovesViewController.swift */,
 				B2FEC0871F6DADAE00AC263D /* GoDSpotViewController.swift */,
+				B2FEC0921F6EE81900AC263D /* GoDPatchViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -5018,6 +5023,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B205E0E11F6426B100A5F075 /* launch.png in Resources */,
+				B2FEC0901F6EDA5000AC263D /* MoveCategories.json in Resources */,
 				B2F9116A1F6606E900129DC2 /* DeckData_Empty.bin in Resources */,
 				B205E0E01F6426AD00A5F075 /* launch 2.png in Resources */,
 				B2FEC0761F6C376C00AC263D /* randomiser.png in Resources */,
@@ -5316,6 +5322,7 @@
 				B2F50D7C1F4C5FAC0075C6D2 /* face_398.png in Resources */,
 				B2F50A3C1F4C5FAB0075C6D2 /* body_397.png in Resources */,
 				B2F507241F4C5FAA0075C6D2 /* body_001.png in Resources */,
+				B2FEC0911F6EDA5400AC263D /* MoveCategories.json in Resources */,
 				B2F50BD01F4C5FAC0075C6D2 /* face_184.png in Resources */,
 				B2F508E61F4C5FAB0075C6D2 /* body_226.png in Resources */,
 				B2F50CC21F4C5FAC0075C6D2 /* face_305.png in Resources */,
@@ -7351,6 +7358,7 @@
 				B2F5EC231F49A1FE0075C6D2 /* XGFiles.swift in Sources */,
 				B2F5ECC51F49A1FF0075C6D2 /* XGString.swift in Sources */,
 				B2F5EBA81F49A1980075C6D2 /* AppDelegate.swift in Sources */,
+				B2FEC0931F6EE81900AC263D /* GoDPatchViewController.swift in Sources */,
 				B2D1DF521F68717E0023A876 /* XGTexturePalette.swift in Sources */,
 				B2D1DF551F6872740023A876 /* GoDTexture.swift in Sources */,
 				B2D1DF4F1F6871560023A876 /* XGPNGBlock.swift in Sources */,

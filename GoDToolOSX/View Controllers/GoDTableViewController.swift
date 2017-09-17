@@ -17,25 +17,30 @@ class GoDTableViewController: GoDViewController, GoDTableViewDelegate, NSTableVi
 		super.viewDidLoad()
 		
 
-		self.table = GoDTableView(width: 200, rows: 100, rowHeight: 75, delegate: self, dataSource: self)
+		self.table = GoDTableView(width: self.widthForTable(), rows: 0, rowHeight: 0, delegate: self, dataSource: self)
 		self.table.translatesAutoresizingMaskIntoConstraints = false
 		self.view.addSubview(table)
 		self.views["table"] = table
+		self.metrics["tableWidth"] = self.widthForTable()
 		
-		self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[table(200)]", options: [.alignAllTop, .alignAllBottom], metrics: nil, views: views))
+		self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[table(tableWidth)]", options: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views))
 		self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[table]|", options: [], metrics: nil, views: views))
 		
 		table.backgroundColor = NSColor.black
+		table.reloadData()
 		
 	}
 	
+	func widthForTable() -> NSNumber {
+		return 200
+	}
 	
 	func numberOfRows(in tableView: NSTableView) -> Int {
-		return 100
+		return 0
 	}
 	
 	func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
-		return 75
+		return 40
 	}
 	
 	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {

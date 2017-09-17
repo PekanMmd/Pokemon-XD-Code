@@ -66,7 +66,9 @@ class GoDTableView: NSScrollView {
 	}
 	
 	func didClickCell() {
-		self.delegate.tableView(self, didSelectRow: self.tableView.selectedRow)
+		if self.selectedRow >= 0 {
+			self.delegate.tableView(self, didSelectRow: self.tableView.selectedRow)
+		}
 		
 	}
 	

@@ -27,8 +27,8 @@ class XDRHomeViewController: GoDViewController {
 			
 		}
 		
-		let names = ["Randomise Pokemon", "Randomise Moves", "Randomise Abilities", "Randomise Types", "Randomise Evolutions", "Remove Trade Evolutions", "Randomise Battle Bingo", "Save"]
-		let actions : [Selector] = [ #selector(randomisePokemon), #selector(randomiseMoves), #selector(randomiseAbilities), #selector(randomiseTypes), #selector(randomiseEvolutions), #selector(removeTradeEvolutions), #selector(randomiseBattleBingo), #selector(save)]
+		let names = ["Randomise Pokemon", "Randomise Moves", "Randomise Abilities", "Randomise Types", "Randomise Evolutions", "Remove Trade Evolutions", "Randomise Battle Bingo", "Gen 4 Class Split","Save"]
+		let actions : [Selector] = [ #selector(randomisePokemon), #selector(randomiseMoves), #selector(randomiseAbilities), #selector(randomiseTypes), #selector(randomiseEvolutions), #selector(removeTradeEvolutions), #selector(randomiseBattleBingo), #selector(gen4PhysicalSpecialSplit), #selector(save)]
 		
 		for i in 0 ..< names.count {
 			let b = button(names[i], action: actions[i])
@@ -312,6 +312,16 @@ class XDRHomeViewController: GoDViewController {
 		}
 	}
 	
+	func gen4PhysicalSpecialSplit() {
+		self.showActivityView { 
+			XGDolPatcher.applyPhysicalSpecialSplitPatch()
+			XGUtility.defaultMoveCategories()
+			
+			self.hideActivityView()
+		}
+		
+	}
+	
 	func save() {
 		self.showActivityView { (Bool) -> Void in
 			XGUtility.compileForRandomiser()
@@ -320,3 +330,22 @@ class XDRHomeViewController: GoDViewController {
 	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

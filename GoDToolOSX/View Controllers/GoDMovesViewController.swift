@@ -13,6 +13,8 @@ class GoDMovesViewController: GoDTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
+		
+		self.title = "Move Editor"
     }
     
 }
