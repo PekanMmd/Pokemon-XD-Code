@@ -7,7 +7,9 @@
 //
 
 
-//var known = [("tutors", 0xA7918),]
+//getStringSafelyWithID(id: 0x1389).println()
+
+//var known = [("people ids", 9368),]
 //
 //for i in 0 ..< kNumberRelPointers {
 //	let offset = common.getPointer(index: i)

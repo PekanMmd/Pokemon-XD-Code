@@ -16,9 +16,39 @@ class GoDPatchViewController: GoDTableViewController {
 		self.title = "Patches"
     }
 	
-	var patches = ["Gen 4 Physical/Special Split","Assign default phys/spec categories to moves"]
-	var funcs = [#selector(gen4Categories),#selector(defaultCategories),]
+	var patches = ["Apply Physical/Special move split","Remove Physical/Special move split","Assign default phys/spec categories to moves", "Remove foreign languages from common_rel (very useful if it gets too big to import)"]
+	var funcs = [#selector(gen4Categories),#selector(removeGen4Categories),#selector(defaultCategories),#selector(removeLanguages)]
 	
+//	switch patch {
+//	case .betaStartersApply				: XGDolPatcher.enableBetaStarters()
+//	case .betaStartersRemove			: XGDolPatcher.disableBetaStarters()
+//	case .physicalSpecialSplitApply		: XGDolPatcher.applyPhysicalSpecialSplitPatch()
+//	case .physicalSpecialSplitRemove	: XGDolPatcher.removePhysicalSpecialSplitPatch()
+//	case .renameAllPokemonApply			: XGDolPatcher.allowRenamingAnyPokemon()
+//	case .shinyChanceEditingApply		: XGDolPatcher.removeShinyLock()
+//	case .shinyChanceEditingRemove		: XGDolPatcher.placeShinyLock()
+//	case .type9IndependentApply			: XGDolPatcher.removeType9Dependencies()
+//	case .unlimitedTutorMovesApply		: XGDolPatcher.implementUnlimitedTutors()
+//	case .zeroForeignStringTables		: XGDolPatcher.zeroForeignStringTables()
+//	case .decapitaliseNames				: XGDolPatcher.decapitalise()
+//	case .tradeEvolutions				: XGDolPatcher.removeTradeEvolutions()
+//	}
+	
+	func removeLanguages() {
+		XGDolPatcher.applyPatch(.zeroForeignStringTables)
+	}
+	
+	func oneStarter() {
+		XGDolPatcher.applyPatch(.betaStartersRemove)
+	}
+	
+	func twoStarters() {
+		XGDolPatcher.applyPatch(.betaStartersApply)
+	}
+	
+	func removeGen4Categories() {
+		XGDolPatcher.applyPatch(.physicalSpecialSplitRemove)
+	}
 	
 	func gen4Categories() {
 		XGDolPatcher.applyPatch(.physicalSpecialSplitApply)

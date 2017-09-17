@@ -96,7 +96,7 @@ class XGUtility {
 	}
 	
 	class func updateValidItems() {
-		let itemListStart = 0x1fa40
+		let itemListStart = Common_relIndices.ValidItems.startOffset()
 		let rel = XGFiles.common_rel.data
 		
 		print("Updating items list...")
@@ -396,6 +396,7 @@ class XGUtility {
 			move.category = XGMoveCategories(rawValue: categories[i]) ?? XGMoveCategories.none
 			move.save()
 		}
+		printg("all moves have now had their default categories applied.")
 		
 	}
 	

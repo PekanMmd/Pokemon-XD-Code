@@ -9,8 +9,8 @@
 import Foundation
 
 let kRELDataStartOffsetLocation = 0x6c
-let kRELPointersStartOffsetLocation = 0x70
-let kRELPointersFirstPointerOffset = 0x18
+let kRELPointersStartOffsetLocation = 0x24
+let kRELPointersFirstPointerOffset = 0x8
 let kRELSizeOfPointer = 0x10
 let kRELPointerDataPointer1Offset = 0x4
 let kRELPointerDataPointer2Offset = 0xc
@@ -19,15 +19,25 @@ let kNumberRelPointers = 0x84
 
 enum Common_relIndices : Int {
 	case BattleBingo  = 0
+	case PeopleIDs = 2 // 2 bytes at offset 0 person id 4 bytes at offset 4 string id for character name
 	case PokespotRock = 12
+	case PokestopRockEntries = 13
 	case PokespotOasis = 15
+	case PokespotOasisEntries = 16
 	case PokespotCave = 18
+	case PokespotCaveEntries = 19
 	case PokespotAll = 21
+	case PokespotAllEntries = 22
+	case Maps = 50 // includes name id for room and room id used in scripts
+	case ValidItems = 68 // list of items which are actually available
 	case Items = 70
+	case NumberOfItems = 71
 	case PokemonStats = 88
+	case NumberOfPokemon = 89
 	case Natures = 94
 	case USStringTable = 116
 	case Moves = 124
+	case NumberOfMoves = 125
 	case TutorMoves = 126
 	case Types = 130
 	
@@ -50,7 +60,7 @@ class XGCommon: NSObject {
 		super.init()
 		
 		self.dataStart = Int(data.get4BytesAtOffset(kRELDataStartOffsetLocation))
-		self.pointersStart = dataStart + Int(data.get4BytesAtOffset(kRELPointersStartOffsetLocation))
+		self.pointersStart = Int(data.get4BytesAtOffset(kRELPointersStartOffsetLocation))
 		self.firstPointer = pointersStart + kRELPointersFirstPointerOffset
 		
 	}

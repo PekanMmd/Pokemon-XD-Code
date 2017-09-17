@@ -284,7 +284,7 @@ class XDRHomeViewController: GoDViewController {
 	
 	func removeTradeEvolutions() {
 		self.showActivityView { (b) in
-			self.removeTradeEvs(40)
+			self.removeTradeEvs(35)
 		}
 		
 	}
@@ -314,7 +314,7 @@ class XDRHomeViewController: GoDViewController {
 	
 	func gen4PhysicalSpecialSplit() {
 		self.showActivityView { 
-			XGDolPatcher.applyPhysicalSpecialSplitPatch()
+			XGDolPatcher.applyPatch(.physicalSpecialSplitApply)
 			XGUtility.defaultMoveCategories()
 			
 			self.hideActivityView()

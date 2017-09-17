@@ -130,6 +130,7 @@ class XGDolPatcher: NSObject {
 			dol.replace4BytesAtOffset(offset, withBytes: kNopInstruction)
 			
 		}
+		
 		dol.replace4BytesAtOffset(kMirrorCoatOffset1, withBytes: kNopInstruction)
 		dol.replace4BytesAtOffset(kMirrorCoatOffset2, withBytes: kMirrorCoatBranch)
 		dol.replace4BytesAtOffset(kCounterOffset1, withBytes: kNopInstruction)
@@ -314,9 +315,6 @@ class XGDolPatcher: NSObject {
 	
 	class func zeroForeignStringTables() {
 		
-//		var data = XGFiles.Common_rel.data
-		
-		//		let tableOffsetsAndSizes = [(0x9534E,0xD317)]
 		let tableOffsetsAndSizes = [ (0x7AAFC,0xD484), (0x87F80,0xD3BC), (0x9533C,0xD334), (0x6D874,0xD288) ]
 		
 		for i in 0 ..< tableOffsetsAndSizes.count {
@@ -376,6 +374,11 @@ class XGDolPatcher: NSObject {
 	
 	
 	class func applyPatch(_ patch: XGDolPatches) {
+		
+		if region == .EU {
+			printg("EU support not ready for patch:",patch.name)
+			return
+		}
 		
 		switch patch {
 			case .betaStartersApply				: XGDolPatcher.enableBetaStarters()
