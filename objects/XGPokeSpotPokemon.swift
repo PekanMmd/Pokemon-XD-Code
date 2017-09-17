@@ -37,7 +37,7 @@ class XGPokeSpotPokemon: NSObject, XGDictionaryRepresentable {
 	
 	var startOffset : Int {
 		get {
-			return spot.dataTableStartOffset() + (index * kSizeOfPokeSpotData)
+			return spot.commonRelIndex.startOffset() + (index * kSizeOfPokeSpotData)
 		}
 	}
 	

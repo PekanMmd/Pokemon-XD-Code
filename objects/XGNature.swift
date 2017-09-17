@@ -9,7 +9,7 @@
 import Foundation
 // Data is found in common_rel
 
-let kFirstNatureStartOffset			= 0x47728
+//let kFirstNatureStartOffset			= 0x47728
 let kSizeOfNatureData				= 0x28
 let kNumberOfNatures				= 0x19
 

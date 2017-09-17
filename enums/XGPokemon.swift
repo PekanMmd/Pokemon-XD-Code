@@ -44,7 +44,7 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var startOffset : Int {
 		get{
-			return kFirstPokemonOffset + (index * kSizeOfPokemonStats)
+			return Common_relIndices.PokemonStats.startOffset() + (index * kSizeOfPokemonStats)
 		}
 	}
 	
@@ -190,7 +190,7 @@ enum XGOriginalPokemon {
 	
 	var startOffset : Int {
 		get{
-			return kFirstPokemonOffset + (index * kSizeOfPokemonStats)
+			return Common_relIndices.PokemonStats.startOffset() + (index * kSizeOfPokemonStats)
 		}
 	}
 	

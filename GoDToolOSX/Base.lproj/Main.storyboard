@@ -274,6 +274,19 @@ Twitter: @StarsMmd</mutableString>
             </objects>
             <point key="canvasLocation" x="-417" y="664"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="IOm-6r-vVc">
+            <objects>
+                <viewController id="Pft-Je-tH8" sceneMemberID="viewController">
+                    <view key="view" id="Tkq-Jy-f51">
+                        <rect key="frame" x="0.0" y="0.0" width="860" height="480"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="dpR-rH-HXr" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="602" y="1139"/>
+        </scene>
         <!--Pokemon Stats-->
         <scene sceneID="wTf-7Y-ZPw">
             <objects>

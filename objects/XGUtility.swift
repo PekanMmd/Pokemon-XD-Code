@@ -389,6 +389,16 @@ class XGUtility {
 		dol.save()
 	}
 	
+	class func defaultMoveCategories() {
+		let categories = XGResources.JSON("MoveCategories").json as! [Int]
+		for i in 0 ..< kNumberOfMoves {
+			let move = XGMove(index: i)
+			move.category = XGMoveCategories(rawValue: categories[i]) ?? XGMoveCategories.none
+			move.save()
+		}
+		
+	}
+	
 	//MARK: - Obtainable pokemon
 	class func obtainablePokemon() -> [XGPokemon] {
 		var pokes = [XGPokemon]()

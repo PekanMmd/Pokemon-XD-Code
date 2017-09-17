@@ -50,22 +50,35 @@ enum XGPokeSpots : Int, XGDictionaryRepresentable {
 		rel.save()
 	}
 	
-	func dataTableStartOffset() -> Int {
-		let rel = XGFiles.common_rel.data
-		return Int(rel.get4BytesAtOffset( 0xa8194 + (self.rawValue * 0x30) )) + kRELDataStartOffset
+	var commonRelIndex : Common_relIndices {
+	get {
+	switch self {
+	case .rock:
+	return .PokespotRock
+	case .oasis:
+	return .PokespotOasis
+	case .cave:
+	return .PokespotCave
+	case .all:
+	return .PokespotAll
 	}
+	}
+	}
+	
 	
 	func relocatePokespotData(toOffset offset: UInt32) {
 		
-		let rel = XGFiles.common_rel.data
-		let locationOffset  = 0xa8194 + (self.rawValue * 0x30)
-		let locationOffset2 = 0xa89cc + (self.rawValue * 0x10)
-		let newOffset = offset - UInt32(kRELDataStartOffset)
+		common.replacePointer(index: self.commonRelIndex, newAbsoluteOffset: Int(offset))
 		
-		rel.replace4BytesAtOffset(locationOffset, withBytes: newOffset)
-		rel.replace4BytesAtOffset(locationOffset + 8, withBytes: newOffset)
-		rel.replace4BytesAtOffset(locationOffset2, withBytes: newOffset)
-		rel.save()
+//		let rel = XGFiles.common_rel.data
+//		let locationOffset  = 0xa8194 + (self.rawValue * 0x30)
+//		let locationOffset2 = 0xa89cc + (self.rawValue * 0x10)
+//		let newOffset = offset - UInt32(kRELDataStartOffset)
+//		
+//		rel.replace4BytesAtOffset(locationOffset, withBytes: newOffset)
+//		rel.replace4BytesAtOffset(locationOffset + 8, withBytes: newOffset)
+//		rel.replace4BytesAtOffset(locationOffset2, withBytes: newOffset)
+//		rel.save()
 		
 	}
 }

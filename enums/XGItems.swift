@@ -28,7 +28,7 @@ enum XGItems : XGDictionaryRepresentable {
 	
 	var startOffset : Int {
 		get{
-			return kFirstItemOffset + (index * kSizeOfItemData)
+			return Common_relIndices.Items.startOffset() + (index * kSizeOfItemData)
 		}
 	}
 	
@@ -102,7 +102,7 @@ enum XGOriginalItems {
 	
 	var startOffset : Int {
 		get{
-			return kFirstItemOffset + (index * kSizeOfItemData)
+			return Common_relIndices.Items.startOffset() + (index * kSizeOfItemData)
 		}
 	}
 	

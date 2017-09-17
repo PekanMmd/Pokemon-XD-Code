@@ -8,7 +8,7 @@
 
 import Foundation
 
-let kFirstBattleBingoCardOffset			= 0x1CB0
+//let kFirstBattleBingoCardOffset			= 0x1CB0
 
 let kNumberOfBingoCouponRewards			= 0x0A
 let kNumberOfBingoCards					= 0x0B
@@ -55,7 +55,7 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 	
 	var startOffset : Int {
 		get {
-			return kFirstBattleBingoCardOffset + (index * kSizeOfBingoCardData)
+			return Common_relIndices.BattleBingo.startOffset() + (index * kSizeOfBingoCardData)
 		}
 	}
 	

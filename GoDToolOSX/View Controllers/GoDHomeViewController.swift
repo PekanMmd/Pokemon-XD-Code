@@ -20,6 +20,7 @@ class GoDHomeViewController: GoDTableViewController {
         super.viewDidLoad()
 		self.table.reloadData()
 		
+		
     }
 	
 	override func viewDidAppear() {

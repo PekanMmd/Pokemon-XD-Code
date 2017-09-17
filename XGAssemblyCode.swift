@@ -16,7 +16,7 @@ let kRELtoRAMOffsetDifference = 0xb18dc0 // add this value to a common_rel offse
 let kDOLtoRAMOffsetDifference = 0x30a0   // add this value to a start.dol offset to get it's offset in RAM
 
 let kRELDataStartOffset = 0x1CB0
-let kRelFreeSpaceStart = 0x80590
+let kRelFreeSpaceStart = 0x80590 + kRELtoRAMOffsetDifference
 
 let kPickupTableInDolStartOffset = 0x2F0758
 
@@ -36,10 +36,10 @@ class XGAssembly {
 	class func ASMfreeSpacePointer() -> Int {
 		var offset = kRelFreeSpaceStart
 		let rel = XGFiles.common_rel.data
-		var value = rel.get4BytesAtOffset(offset)
+		var value = rel.get4BytesAtOffset(offset - kRELtoRAMOffsetDifference)
 		while value != 0 {
 			offset = offset + 4
-			value = rel.get4BytesAtOffset(offset)
+			value = rel.get4BytesAtOffset(offset - kRELtoRAMOffsetDifference)
 		}
 		return offset
 	}
@@ -80,6 +80,16 @@ class XGAssembly {
 			dol.replace4BytesAtOffset(offset, withBytes: instruction)
 		}
 		dol.save()
+	}
+	
+	class func replaceRELASM(startOffset: Int, newASM asm: ASM) {
+		let rel = XGFiles.common_rel.data
+		for i in 0 ..< asm.count {
+			let offset = startOffset + (i * 4)
+			let instruction = asm[i]
+			rel.replace4BytesAtOffset(offset, withBytes: instruction)
+		}
+		rel.save()
 	}
 	
 	class func revertASM(startOffset: Int, newASM asm: ASM) {
@@ -319,6 +329,10 @@ class XGAssembly {
 		
 		let dol = XGFiles.dol.data
 		
+		if dol.get4BytesAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference) == 0xA0DB001C {
+			return
+		}
+		
 		// make 1d load 2 bytes from 1c using values from r27 instead of r3 (given that r27 now points to deck data)
 		dol.replace4BytesAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference, withBytes: 0xA0DB001C)
 		dol.replace4BytesAtOffset(0x28bb20 - kDOLtoRAMOffsetDifference, withBytes: 0x281B0000)
@@ -379,12 +393,12 @@ class XGAssembly {
 	class func switchNextPokemonAtEndOfTurn() {
 		// you no longer send in a new pokemon as soon as one faints. Now waits until end of turn. Still experimental!
 		
-		let switchlessStart = 0x229680 - kDOLtoRAMOffsetDifference
-		let switchlessBranch = 0x20e36c - kDOLtoRAMOffsetDifference
-		let executeCodeRoutine = 0x1f3bec - kDOLtoRAMOffsetDifference
-		let intimidateRoutine = 0x225c04 - kDOLtoRAMOffsetDifference
-		let unkownRoutine = 0x225ac8 - kDOLtoRAMOffsetDifference
-		let battleEntryEffects = 0x226474 - kDOLtoRAMOffsetDifference
+		let switchlessStart = ASMfreeSpacePointer()
+		let switchlessBranch = 0x20e36c
+		let executeCodeRoutine = 0x1f3bec
+		let intimidateRoutine = 0x225c04
+		let unkownRoutine = 0x225ac8
+		let battleEntryEffects = 0x226474
 		let switchlessCode : ASM = [
 			0x9421fff0,
 			0x7c0802a6,
@@ -413,8 +427,8 @@ class XGAssembly {
 			0x4e800020
 		]
 		
-		XGAssembly.replaceASM(startOffset: switchlessStart, newASM: switchlessCode)
-		XGAssembly.replaceASM(startOffset: switchlessBranch, newASM: [createBranchAndLinkFrom(offset: switchlessBranch, toOffset: switchlessStart)])
+		XGAssembly.replaceASM(startOffset: switchlessStart - kRELtoRAMOffsetDifference, newASM: switchlessCode)
+		XGAssembly.replaceASM(startOffset: switchlessBranch - kDOLtoRAMOffsetDifference, newASM: [createBranchAndLinkFrom(offset: switchlessBranch, toOffset: switchlessStart)])
 		
 	}
 }

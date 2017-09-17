@@ -10,7 +10,7 @@ import Foundation
 
 let kNumberOfPokemon		= 0x19F
 let kSizeOfPokemonStats		= 0x124
-let kFirstPokemonOffset		= 0x29DA8
+//let kFirstPokemonOffset		= 0x29DA8
 
 let kEXPRateOffset			= 0x00
 let kCatchRateOffset		= 0x01
@@ -168,7 +168,7 @@ class XGPokemonStats: NSObject {
 		
 		let rel = XGFiles.common_rel.data
 		
-		self.startOffset	= kFirstPokemonOffset + ( kSizeOfPokemonStats * index )
+		self.startOffset	= Common_relIndices.PokemonStats.startOffset() + ( kSizeOfPokemonStats * index )
 		self.index			= index
 		
 		self.nameID			= rel.get2BytesAtOffset(startOffset + kNameIDOffset)
@@ -179,15 +179,15 @@ class XGPokemonStats: NSObject {
 		self.bodyID		= rel.get4BytesAtOffset(startOffset + kPokemonBodyOffset)
 		self.bodyShinyID	= rel.get4BytesAtOffset(startOffset + kPokemonBodyShinyOffset)
 		
-		self.levelUpRate	= XGExpRate(rawValue: rel.getByteAtOffset(startOffset + kEXPRateOffset))!
-		self.genderRatio	= XGGenderRatios(rawValue: rel.getByteAtOffset(startOffset + kGenderRatioOffset))!
+		self.levelUpRate	= XGExpRate(rawValue: rel.getByteAtOffset(startOffset + kEXPRateOffset)) ?? .standard
+		self.genderRatio	= XGGenderRatios(rawValue: rel.getByteAtOffset(startOffset + kGenderRatioOffset)) ?? .maleOnly
 		
 		self.catchRate		= rel.getByteAtOffset(startOffset + kCatchRateOffset)
 		self.baseExp		= rel.getByteAtOffset(startOffset + kBaseEXPOffset)
 		self.baseHappiness	= rel.getByteAtOffset(startOffset + kBaseHappinessOffset)
 		
-		self.type1			= XGMoveTypes(rawValue: rel.getByteAtOffset(startOffset + kType1Offset))!
-		self.type2			= XGMoveTypes(rawValue: rel.getByteAtOffset(startOffset + kType2Offset))!
+		self.type1			= XGMoveTypes(rawValue: rel.getByteAtOffset(startOffset + kType1Offset)) ?? .normal
+		self.type2			= XGMoveTypes(rawValue: rel.getByteAtOffset(startOffset + kType2Offset)) ?? .normal
 		
 		let a1				= rel.getByteAtOffset(startOffset + kAbility1Offset)
 		let a2				= rel.getByteAtOffset(startOffset + kAbility2Offset)

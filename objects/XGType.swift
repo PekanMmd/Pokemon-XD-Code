@@ -8,7 +8,7 @@
 
 import Foundation
 
-let kFirstTypeOffset = 0xA7C30
+//let kFirstTypeOffset = 0xA7C30
 let kCategoryOffset = 0x0
 let kTypeIconBigIDOffset = 0x02
 let kTypeIconSmallIDOffset = 0x04
@@ -71,7 +71,7 @@ class XGType: NSObject {
 		
 		let rel			= XGFiles.common_rel.data
 		self.index		= index
-		startOffset		= kFirstTypeOffset + (index * kSizeOfTypeData)
+		startOffset		= Common_relIndices.Types.startOffset() + (index * kSizeOfTypeData)
 		
 		self.nameID		= rel.get2BytesAtOffset(startOffset + kTypeNameIDOffset)
 		self.category	= XGMoveCategories(rawValue: rel.getByteAtOffset(startOffset + kCategoryOffset))!

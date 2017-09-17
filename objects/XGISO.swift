@@ -20,8 +20,23 @@ import Foundation
 //	"M2_guild_1F_2.fsys"	: 0x1FE3A8DC,
 //]
 
-let kTOCFirstStringOffset = 0x783C
+let kTOCStartOffsetLocation = 0x424
+let kTOCFileSizeLocation    = 0x428
+let kTOCNumberEntriesOffset = 0x8
+let kTOCEntrySize			= 0xc
 
+// US
+//let kTOCFirstStringOffset = 0x783C
+
+enum XGRegions : UInt32 {
+	
+	case US = 0x47585845
+	case EU = 0x47585850
+	case JP = 0x4758584A
+	
+}
+
+let region = XGRegions(rawValue: XGFiles.iso.data.get4BytesAtOffset(0)) ?? .US
 class XGISO: NSObject {
 	
 	fileprivate let toc = XGFiles.toc.data
@@ -29,17 +44,19 @@ class XGISO: NSObject {
 	fileprivate var fileLocations = ["Start.dol" : 131840]
 //	fileprivate var fileLocations = ["Start.dol" : 0x1EC00] colosseum
 	
-	fileprivate var fileSizes = ["Start.dol" : 0x421E00]
+	fileprivate var fileSizes = [String : Int]()
 //	fileprivate var fileSizes = ["Start.dol" : 0x39AD00] colosseum
 	
 	var allFileNames = ["Start.dol"]
+	
+	let TOCFirstStringOffset = Int(XGFiles.toc.data.get4BytesAtOffset(kTOCNumberEntriesOffset)) * kTOCEntrySize
 	
 	override init() {
 		super.init()
 		
 		var i = 0x0
 		
-		while (i < kTOCFirstStringOffset) {
+		while (i < TOCFirstStringOffset) {
 			
 			let folder = toc.getByteAtOffset(i) == 1
 			
@@ -59,6 +76,20 @@ class XGISO: NSObject {
 			
 			i += 0xC
 		}
+		
+		let iso = XGFiles.iso.data
+		let dolStart = fileLocations["Start.dol"]!
+		let kDolSectionSizesStart = 0x90
+		let kDolSectionSizesCount = 18
+		let kDolHeaderSize = 0x100
+		
+		var size = kDolHeaderSize
+		for i in 0 ..< kDolSectionSizesCount {
+			let offset = dolStart + (i * 4) + kDolSectionSizesStart
+			size += Int(iso.get4BytesAtOffset(offset))
+		}
+		fileSizes["Start.dol"] = size
+		
 	}
 	
 	func updateISO() {
@@ -125,7 +156,7 @@ class XGISO: NSObject {
 	
 	fileprivate func getStringAtOffset(_ offset: Int) -> XGString {
 		
-		var currentOffset = offset + kTOCFirstStringOffset
+		var currentOffset = offset + TOCFirstStringOffset
 		
 		var currChar = 0x0
 		var nextChar = 0x1
@@ -200,9 +231,13 @@ class XGISO: NSObject {
 	
 	class func extractTOC() {
 		let iso = XGFiles.iso.data
+
+		// US
+//		let TOCStart = 0x442100
+//		let TOCLength = 0x15958
 		
-		let TOCStart = 0x442100
-		let TOCLength = 0x15958
+		let TOCStart = Int(iso.get4BytesAtOffset(kTOCStartOffsetLocation))
+		let TOCLength = Int(iso.get4BytesAtOffset(kTOCFileSizeLocation))
 		
 		let bytes = iso.getCharStreamFromOffset(TOCStart, length: TOCLength)
 		
@@ -433,12 +468,15 @@ class XGISO: NSObject {
 	}
 	
 	func extractAutoFSYS() {
-		for file in self.autoFsysList {
-			let xgf = XGFiles.nameAndFolder(file, .AutoFSYS)
-			if !xgf.exists {
-				let data = dataForFile(filename: file)!
-				data.file = xgf
-				data.save()
+		
+		if region != .EU {
+			for file in self.autoFsysList {
+				let xgf = XGFiles.nameAndFolder(file, .AutoFSYS)
+				if !xgf.exists {
+					let data = dataForFile(filename: file)!
+					data.file = xgf
+					data.save()
+				}
 			}
 		}
 	}
@@ -527,13 +565,17 @@ class XGISO: NSObject {
 	}
 	
 	func extractAutoStringTables() {
-		for file in XGFolders.AutoFSYS.filenames {
-			let msg = file.replacingOccurrences(of: ".fsys", with: ".msg")
-			if !XGFiles.stringTable(msg).exists {
-				let fsys = XGFiles.nameAndFolder(file, .AutoFSYS).fsysData
-				let data = fsys.decompressedDataForFileWithIndex(index: 2)!
-				data.file = .stringTable(msg)
-				data.save()
+		
+		if region != .EU {
+			
+			for file in XGFolders.AutoFSYS.filenames {
+				let msg = file.replacingOccurrences(of: ".fsys", with: ".msg")
+				if !XGFiles.stringTable(msg).exists {
+					let fsys = XGFiles.nameAndFolder(file, .AutoFSYS).fsysData
+					let data = fsys.decompressedDataForFileWithIndex(index: 2)!
+					data.file = .stringTable(msg)
+					data.save()
+				}
 			}
 		}
 	}
@@ -644,8 +686,10 @@ class XGISO: NSObject {
 		if !XGFiles.common_rel.exists {
 			iso.extractCommon()
 			
-			// purges a foreign string table for compression size, 3 more are available but shouldn't be necessary
-			XGStringTable(file: .common_rel, startOffset: 0x9533C, fileSize: 0xD334).purge()
+			if region == .US {
+				// purges a foreign string table for compression size, 3 more are available but shouldn't be necessary
+				XGStringTable(file: .common_rel, startOffset: 0x9533C, fileSize: 0xD334).purge()
+			}
 			
 		}
 		

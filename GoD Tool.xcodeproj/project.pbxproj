@@ -2309,6 +2309,12 @@
 		B2FEC07E1F6D25BF00AC263D /* GoDToolExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC07C1F6D25BF00AC263D /* GoDToolExtensions.swift */; };
 		B2FEC0821F6D261700AC263D /* GoDToolCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0801F6D260100AC263D /* GoDToolCLExtensions.swift */; };
 		B2FEC0841F6D620F00AC263D /* MoveCategories.json in Resources */ = {isa = PBXBuildFile; fileRef = B2FEC0831F6D620F00AC263D /* MoveCategories.json */; };
+		B2FEC0861F6DAD9B00AC263D /* GoDMovesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0851F6DAD9B00AC263D /* GoDMovesViewController.swift */; };
+		B2FEC0891F6DADAE00AC263D /* GoDSpotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0871F6DADAE00AC263D /* GoDSpotViewController.swift */; };
+		B2FEC08C1F6E9BB800AC263D /* XGCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC08B1F6E9BB800AC263D /* XGCommon.swift */; };
+		B2FEC08D1F6EA2EC00AC263D /* XGCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC08B1F6E9BB800AC263D /* XGCommon.swift */; };
+		B2FEC08E1F6EA2F400AC263D /* XGCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC08B1F6E9BB800AC263D /* XGCommon.swift */; };
+		B2FEC08F1F6EA2F400AC263D /* XGCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC08B1F6E9BB800AC263D /* XGCommon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -3458,6 +3464,9 @@
 		B2FEC07C1F6D25BF00AC263D /* GoDToolExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDToolExtensions.swift; sourceTree = "<group>"; };
 		B2FEC0801F6D260100AC263D /* GoDToolCLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDToolCLExtensions.swift; sourceTree = "<group>"; };
 		B2FEC0831F6D620F00AC263D /* MoveCategories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MoveCategories.json; sourceTree = "<group>"; };
+		B2FEC0851F6DAD9B00AC263D /* GoDMovesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDMovesViewController.swift; sourceTree = "<group>"; };
+		B2FEC0871F6DADAE00AC263D /* GoDSpotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDSpotViewController.swift; sourceTree = "<group>"; };
+		B2FEC08B1F6E9BB800AC263D /* XGCommon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGCommon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4494,6 +4503,7 @@
 			children = (
 				B2F5EB851F49A11A0075C6D2 /* GoDToolCL */,
 				B2F5ED061F49AD700075C6D2 /* Bridge.h */,
+				B2FEC08B1F6E9BB800AC263D /* XGCommon.swift */,
 				B2F5F8721F49B3BC0075C6D2 /* XGStringManager.swift */,
 				B2F5EC031F49A1FE0075C6D2 /* XGAssemblyCode.swift */,
 				B2F5EC021F49A1FE0075C6D2 /* XGUtility.swift */,
@@ -4846,6 +4856,8 @@
 				B2F5F8911F49CD050075C6D2 /* GoDViewController.swift */,
 				B2F5F8921F49CD050075C6D2 /* ViewController.swift */,
 				B2FEC0791F6C602A00AC263D /* GoDAlertViewController.swift */,
+				B2FEC0851F6DAD9B00AC263D /* GoDMovesViewController.swift */,
+				B2FEC0871F6DADAE00AC263D /* GoDSpotViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -6988,6 +7000,7 @@
 				B2ACE83D1F5E368900D87B22 /* GoDViewLayoutManager.swift in Sources */,
 				B2ACE8401F5E369C00D87B22 /* XGAssemblyCode.swift in Sources */,
 				B2FEC07B1F6C608C00AC263D /* GoDAlertViewController.swift in Sources */,
+				B2FEC08F1F6EA2F400AC263D /* XGCommon.swift in Sources */,
 				B2ACE8491F5E36C200D87B22 /* XGEffectivenessValues.swift in Sources */,
 				B2ACE8521F5E36C200D87B22 /* XGMaps.swift in Sources */,
 				B2ACE86C1F5E36CA00D87B22 /* XGGiftPokemon.swift in Sources */,
@@ -7079,6 +7092,7 @@
 				B2D1DF541F6872740023A876 /* GoDTexture.swift in Sources */,
 				B2F5EC541F49A1FE0075C6D2 /* XGShinyValues.swift in Sources */,
 				B2F5EC631F49A1FF0075C6D2 /* XGTrainerModels.swift in Sources */,
+				B2FEC08D1F6EA2EC00AC263D /* XGCommon.swift in Sources */,
 				B2F5EC121F49A1FE0075C6D2 /* XGDeckPokemon.swift in Sources */,
 				B2F5ECA51F49A1FF0075C6D2 /* XGNature.swift in Sources */,
 				B2F5EC1E1F49A1FE0075C6D2 /* XGExpRate.swift in Sources */,
@@ -7140,6 +7154,7 @@
 				B2F5ED691F49AEBC0075C6D2 /* XGTutorMovesPopover.swift in Sources */,
 				B2F5ECC71F49A1FF0075C6D2 /* XGStringTable.swift in Sources */,
 				B2F5EC491F49A1FE0075C6D2 /* XGPokeSpots.swift in Sources */,
+				B2FEC08E1F6EA2F400AC263D /* XGCommon.swift in Sources */,
 				B2F5EC641F49A1FF0075C6D2 /* XGTrainerModels.swift in Sources */,
 				B2F5ED5E1F49AEBC0075C6D2 /* XGMoveEffectPopover.swift in Sources */,
 				B2F5ED811F49AEBC0075C6D2 /* XGButtonField.swift in Sources */,
@@ -7319,6 +7334,7 @@
 				B2F5EC711F49A1FF0075C6D2 /* PBRStringTable.swift in Sources */,
 				B2F5ECF21F49A3E10075C6D2 /* XGAssemblyCode.swift in Sources */,
 				B2F5EC501F49A1FE0075C6D2 /* XGScriptInstruction.swift in Sources */,
+				B2FEC0861F6DAD9B00AC263D /* GoDMovesViewController.swift in Sources */,
 				B2F5F8C21F4C58CF0075C6D2 /* GoDImageExtensions.swift in Sources */,
 				B2F5EC381F49A1FE0075C6D2 /* XGMoveCategory.swift in Sources */,
 				B2F5ECC21F49A1FF0075C6D2 /* XGStarterPokemon.swift in Sources */,
@@ -7338,6 +7354,7 @@
 				B2D1DF521F68717E0023A876 /* XGTexturePalette.swift in Sources */,
 				B2D1DF551F6872740023A876 /* GoDTexture.swift in Sources */,
 				B2D1DF4F1F6871560023A876 /* XGPNGBlock.swift in Sources */,
+				B2FEC0891F6DADAE00AC263D /* GoDSpotViewController.swift in Sources */,
 				B205E0C51F60AA0D00A5F075 /* GoDPokemonPopUpButton.swift in Sources */,
 				B2F5ECDD1F49A1FF0075C6D2 /* XGTrainerClass.swift in Sources */,
 				B2F5ECBC1F49A1FF0075C6D2 /* XGScriptClassFunctionsData.swift in Sources */,
@@ -7350,6 +7367,7 @@
 				B2F5EC321F49A1FE0075C6D2 /* XGItems.swift in Sources */,
 				B2F5EC6B1F49A1FF0075C6D2 /* XGUnicodeCharacters.swift in Sources */,
 				B2F5EC831F49A1FF0075C6D2 /* XGDolPatcher.swift in Sources */,
+				B2FEC08C1F6E9BB800AC263D /* XGCommon.swift in Sources */,
 				B2F5EC291F49A1FE0075C6D2 /* XGFsys.swift in Sources */,
 				B2F5ECB31F49A1FF0075C6D2 /* XGPokeSpotPokemon.swift in Sources */,
 			);

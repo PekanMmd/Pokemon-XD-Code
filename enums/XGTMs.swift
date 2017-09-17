@@ -8,13 +8,15 @@
 
 import Foundation
 
-let kFirstTMListOffset = 0x4023A0
+let kFirstTMListOffset = region == .EU ? 0x43CC80 : 0x4023A0
+
 let kSizeOfTMEntry	   = 0x08
 let kFirstTMItemIndex  = 0x121
 let kNumberOfTMsAndHMs = 0x3A
 let kNumberOfTMs	   = 0x32
 
-let kFirstTutorMoveDataOffset	= 0xA7918
+//let kFirstTutorMoveDataOffset	= 0xA7918
+
 let kSizeOfTutorMoveEntry		= 0x0C
 let kNumberOfTutorMoves			= 0x0C
 
@@ -39,8 +41,8 @@ enum XGTMs : XGDictionaryRepresentable {
 		get {
 			switch self {
 			// Add 6 to the start offset because the actual Move index is 6 bytes in.
-				case .tm : return kFirstTMListOffset + 6 + ((index - 1) * kSizeOfTMEntry)
-				case .tutor : return kFirstTutorMoveDataOffset + ((index - 1) * kSizeOfTutorMoveEntry)
+				case .tm    : return kFirstTMListOffset + 6 + ((index - 1) * kSizeOfTMEntry)
+				case .tutor : return Common_relIndices.TutorMoves.startOffset() + ((index - 1) * kSizeOfTutorMoveEntry)
 			}
 		}
 	}

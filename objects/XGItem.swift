@@ -9,7 +9,7 @@
 import Foundation
 
 let kNumberOfItems				= 0x1BC
-let kFirstItemOffset			= 0x1FEE4
+//let kFirstItemOffset			= 0x1FEE4
 let kSizeOfItemData				= 0x28
 let kNumberOfFriendshipEffects	= 0x03
 
@@ -30,7 +30,7 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 
 	var startOffset : Int {
 		get{
-			return kFirstItemOffset + (index * kSizeOfItemData)
+			return Common_relIndices.Items.startOffset() + (index * kSizeOfItemData)
 		}
 	}
 	

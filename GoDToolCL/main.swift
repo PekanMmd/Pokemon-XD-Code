@@ -7,8 +7,18 @@
 //
 
 
-
-
+//var known = [("tutors", 0xA7918),]
+//
+//for i in 0 ..< kNumberRelPointers {
+//	let offset = common.getPointer(index: i)
+//	print(i,":",offset.hexString())
+//	
+//	for values in known {
+//		if offset == values.1 {
+//			print(values.0)
+//		}
+//	}
+//}
 
 //XGUtility.compileAllFiles()
 

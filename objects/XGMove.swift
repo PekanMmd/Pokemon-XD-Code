@@ -10,7 +10,7 @@ import Foundation
 
 let kNumberOfMoves				= 0x0177
 let kSizeOfMoveData				= 0x0038
-let kFirstMoveOffset			= 0xA2710
+//let kFirstMoveOffset			= 0xA2710
 
 let kPriorityOffset				= 0x00
 let kPPOffset					= 0x01
@@ -95,7 +95,7 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 //		var table = XGFiles.common_rel.stringTable
 		
 		self.moveIndex       = index
-		self.startOffset     = kFirstMoveOffset + (index * kSizeOfMoveData)
+		self.startOffset     = Common_relIndices.Moves.startOffset() + (index * kSizeOfMoveData)
 		
 		self.contactFlag	 = rel.getByteAtOffset(startOffset + kContactFlagOffset)    == 1
 		self.protectFlag	 = rel.getByteAtOffset(startOffset + kProtectFlagOffset)    == 1

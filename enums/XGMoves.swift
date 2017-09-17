@@ -33,7 +33,7 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var startOffset : Int {
 		get {
-			return kFirstMoveOffset + (index * kSizeOfMoveData)
+			return Common_relIndices.Moves.startOffset() + (index * kSizeOfMoveData)
 		}
 	}
 	
