@@ -28,7 +28,7 @@ class XGOriginalMovePopover: XGPopover, UISearchResultsUpdating, UISearchBarDele
 		let data  = XGFiles.original(.common_rel).data
 		let table = XGFiles.original(.common_rel).stringTable
 		
-		var offset = kFirstMoveOffset
+		var offset = Common_relIndices.Moves.startOffset()
 		
 		for i in 0 ..< kNumberOfMoves {
 			

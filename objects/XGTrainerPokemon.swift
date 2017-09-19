@@ -22,6 +22,7 @@ let kFirstPokemonEVOffset	= 0x0E
 let kFirstPokemonMoveOffset	= 0x14
 let kPokemonPriority1Offset = 0x1D // priority in vanilla but moved by stars in xg
 let kPokemonPIDOffset		= 0x1E
+let kPokemonGenRandomOffset = 0x1F // If value is set to 1 then the pokemon is generated with a random nature and gender. Always 0 in vanilla and unused in XG
 
 // added by stars by modifying dol behaviour
 let kPokemonshinynessOffset = 0x1C

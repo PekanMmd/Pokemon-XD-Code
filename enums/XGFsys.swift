@@ -244,7 +244,7 @@ class XGFsys : NSObject {
 	func replaceFileWithName(name: String, withFile newFile: XGFiles) {
 		let index = self.indexForFile(filename: name)
 		if !newFile.exists {
-			print("file doesn't exist:", newFile.path)
+			printg("file doesn't exist:", newFile.path)
 			return
 		}
 		
@@ -254,6 +254,8 @@ class XGFsys : NSObject {
 			} else {
 				self.shiftAndReplaceFileWithIndex(index!, withFile: newFile)
 			}
+		} else {
+			printg("file with name '",name,"' doesn't exist in ",self.fileName)
 		}
 	}
 	

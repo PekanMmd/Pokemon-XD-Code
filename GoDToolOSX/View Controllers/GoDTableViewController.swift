@@ -19,8 +19,7 @@ class GoDTableViewController: GoDViewController, GoDTableViewDelegate, NSTableVi
 
 		self.table = GoDTableView(width: self.widthForTable(), rows: 0, rowHeight: 0, delegate: self, dataSource: self)
 		self.table.translatesAutoresizingMaskIntoConstraints = false
-		self.view.addSubview(table)
-		self.views["table"] = table
+		self.addSubview(table, name: "table")
 		self.metrics["tableWidth"] = self.widthForTable()
 		
 		self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[table(tableWidth)]", options: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views))

@@ -8,6 +8,12 @@
 
 import Foundation
 
+extension NSObject {
+	func println() {
+		printg(self)
+	}
+}
+
 extension String {
 	func println() {
 		printg(self)

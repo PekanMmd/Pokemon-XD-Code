@@ -54,7 +54,7 @@ class GoDDesign: NSObject {
 	}
 	
 	class func colourRed() -> NSColor {
-		return colourFromHex(0xFC8868FF)
+		return colourFromHex(0xFC6848FF)
 	}
 	
 	class func colourOrange() -> NSColor {
@@ -62,11 +62,11 @@ class GoDDesign: NSObject {
 	}
 	
 	class func colourYellow() -> NSColor {
-		return colourFromHex( 0xF8F8A8FF)
+		return colourFromHex( 0xF8F888FF)
 	}
 	
 	class func colourGreen() -> NSColor {
-		return colourFromHex( 0xC8E89CFF)
+		return colourFromHex( 0xA8E79CFF)
 	}
 	
 	class func colourBlue() -> NSColor {
@@ -74,7 +74,7 @@ class GoDDesign: NSObject {
 	}
 	
 	class func colourPurple() -> NSColor {
-		return colourFromHex( 0xC207EDFF)
+		return colourFromHex( 0xA030FFFF)
 	}
 	
 	class func colourPink() -> NSColor {

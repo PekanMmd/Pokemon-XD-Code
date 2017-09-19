@@ -10,6 +10,10 @@ import Foundation
 
 class XGMutableData: NSObject {
 	
+	var fsysData : XGFsys {
+		return XGFsys(data: self)
+	}
+	
 	var file = XGFiles.nameAndFolder("", .Documents)
 	var data = NSMutableData()
 	

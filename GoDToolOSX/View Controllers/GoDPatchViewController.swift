@@ -34,6 +34,7 @@ class GoDPatchViewController: GoDTableViewController {
 //	case .tradeEvolutions				: XGDolPatcher.removeTradeEvolutions()
 //	}
 	
+	
 	func removeLanguages() {
 		XGDolPatcher.applyPatch(.zeroForeignStringTables)
 	}
@@ -75,7 +76,7 @@ class GoDPatchViewController: GoDTableViewController {
 	}
 	
 	override func widthForTable() -> NSNumber {
-		return 300
+		return 400
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {

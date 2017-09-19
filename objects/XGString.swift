@@ -86,7 +86,7 @@ class XGString: NSObject {
 		self.chars.append(char)
 	}
 	
-	func println() {
+	override func println() {
 		printg(self.string)
 	}
 	

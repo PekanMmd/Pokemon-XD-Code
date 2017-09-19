@@ -19,9 +19,11 @@ let kNumberRelPointers = 0x84
 
 enum Common_relIndices : Int {
 	case BattleBingo  = 0
+	case NumberOfBingoCards = 1
 	case PeopleIDs = 2 // 2 bytes at offset 0 person id 4 bytes at offset 4 string id for character name
+	case NumberOfPeopleIDs = 3
 	case PokespotRock = 12
-	case PokestopRockEntries = 13
+	case PokespotRockEntries = 13
 	case PokespotOasis = 15
 	case PokespotOasisEntries = 16
 	case PokespotCave = 18
@@ -30,16 +32,20 @@ enum Common_relIndices : Int {
 	case PokespotAllEntries = 22
 	case Maps = 50 // includes name id for room and room id used in scripts
 	case ValidItems = 68 // list of items which are actually available
+	case TotalNumberOfItems = 69
 	case Items = 70
 	case NumberOfItems = 71
 	case PokemonStats = 88
 	case NumberOfPokemon = 89
 	case Natures = 94
+	case NumberOfNatures = 95
 	case USStringTable = 116
 	case Moves = 124
 	case NumberOfMoves = 125
 	case TutorMoves = 126
+	case NumberOfTutorMoves = 127
 	case Types = 130
+	case NumberOfTypes = 131
 	
 	func startOffset() -> Int {
 		return common.getPointer(index: self)

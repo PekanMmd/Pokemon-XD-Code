@@ -60,7 +60,7 @@ class GoDTableCellView: NSImageView {
 			self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[t]|", options: [], metrics: nil, views: views))
 			self.imageView.isHidden = true
 		}
-		self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[t]|", options: [], metrics: nil, views: views))
+		self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[i]|", options: [], metrics: nil, views: views))
 		
 		self.addConstraint(NSLayoutConstraint(item: self.imageView, attribute: .width, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 1, constant: 0))
 		

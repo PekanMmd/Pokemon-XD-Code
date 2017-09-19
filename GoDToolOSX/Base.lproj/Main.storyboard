@@ -212,7 +212,7 @@ Twitter: @StarsMmd</mutableString>
             <objects>
                 <viewController id="OJE-ty-xWI" customClass="GoDPatchViewController" customModule="GoDToolOSX" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="qKs-78-5L8">
-                        <rect key="frame" x="0.0" y="0.0" width="300" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </view>
                 </viewController>
@@ -282,24 +282,25 @@ Twitter: @StarsMmd</mutableString>
                         <segue destination="JRm-IJ-Y9d" kind="modal" identifier="toHelpVC" id="PCr-YY-Lid"/>
                         <segue destination="NNe-8y-O4O" kind="modal" id="KtO-3W-Do8"/>
                         <segue destination="OJE-ty-xWI" kind="modal" identifier="toPatchVC" id="ON3-p7-AdR"/>
+                        <segue destination="Pft-Je-tH8" kind="show" identifier="toTrainerVC" id="ZV9-kU-Koc"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-417" y="664"/>
         </scene>
-        <!--View Controller-->
+        <!--Trainer Editor-->
         <scene sceneID="IOm-6r-vVc">
             <objects>
-                <viewController id="Pft-Je-tH8" sceneMemberID="viewController">
+                <viewController title="Trainer Editor" id="Pft-Je-tH8" customClass="GoDTrainerViewController" customModule="GoDToolOSX" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Tkq-Jy-f51">
-                        <rect key="frame" x="0.0" y="0.0" width="860" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="960" height="700"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </view>
                 </viewController>
                 <customObject id="dpR-rH-HXr" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="602" y="1139"/>
+            <point key="canvasLocation" x="1723" y="737"/>
         </scene>
         <!--Pokemon Stats-->
         <scene sceneID="wTf-7Y-ZPw">

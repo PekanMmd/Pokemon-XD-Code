@@ -1552,7 +1552,7 @@ class XGUtility {
 		
 		var decksString = ""
 		
-		for deck in TrainerDecksArray {
+		for deck in TrainerDecksArray where deck.file.exists {
 			
 			decksString += deck.trainersString()
 			

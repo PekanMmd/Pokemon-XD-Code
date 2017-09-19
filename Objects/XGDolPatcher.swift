@@ -257,9 +257,10 @@ class XGDolPatcher: NSObject {
 		script.save()
 	}
 	
-	// Used to change the probability of finding shinies and allows them to be generated decently.
 	
-	class func removeShinyLock() {
+	class func removeShinyGlitch() {
+		// upon further inspection it seems this isn't necessary. I believe the player's tid is always used when generating shadow pokemon
+		
 		let dol = XGFiles.dol.data
 		
 		dol.replace4BytesAtOffset(kShinyCalcPIDOffset1, withBytes: kShinyCalcNewPIDInstruction)
@@ -268,7 +269,7 @@ class XGDolPatcher: NSObject {
 		dol.save()
 	}
 	
-	class func placeShinyLock() {
+	class func replaceShinyGlitch() {
 		let dol = XGFiles.dol.data
 		
 		dol.replace4BytesAtOffset(kShinyCalcPIDOffset1, withBytes: kShinyCalcOriginalPIDInstruction)
@@ -386,8 +387,8 @@ class XGDolPatcher: NSObject {
 			case .physicalSpecialSplitApply		: XGDolPatcher.applyPhysicalSpecialSplitPatch()
 			case .physicalSpecialSplitRemove	: XGDolPatcher.removePhysicalSpecialSplitPatch()
 			case .renameAllPokemonApply			: XGDolPatcher.allowRenamingAnyPokemon()
-			case .shinyChanceEditingApply		: XGDolPatcher.removeShinyLock()
-			case .shinyChanceEditingRemove		: XGDolPatcher.placeShinyLock()
+			case .shinyChanceEditingApply		: XGDolPatcher.removeShinyGlitch()
+			case .shinyChanceEditingRemove		: XGDolPatcher.replaceShinyGlitch()
 			case .type9IndependentApply			: XGDolPatcher.removeType9Dependencies()
 			case .unlimitedTutorMovesApply		: XGDolPatcher.implementUnlimitedTutors()
 			case .zeroForeignStringTables		: XGDolPatcher.zeroForeignStringTables()

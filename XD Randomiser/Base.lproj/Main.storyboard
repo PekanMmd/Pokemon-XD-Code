@@ -51,7 +51,7 @@
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="XD_Randomiser" customModuleProvider="target"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="89" y="-65"/>
+            <point key="canvasLocation" x="75" y="-80"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
@@ -60,12 +60,12 @@
                     <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="250" y="360" width="250" height="510"/>
+                        <rect key="contentRect" x="250" y="360" width="250" height="560"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
-                        <value key="minSize" type="size" width="250" height="510"/>
-                        <value key="maxSize" type="size" width="250" height="510"/>
-                        <value key="minFullScreenContentSize" type="size" width="250" height="510"/>
-                        <value key="maxFullScreenContentSize" type="size" width="250" height="510"/>
+                        <value key="minSize" type="size" width="250" height="560"/>
+                        <value key="maxSize" type="size" width="250" height="560"/>
+                        <value key="minFullScreenContentSize" type="size" width="250" height="560"/>
+                        <value key="maxFullScreenContentSize" type="size" width="250" height="560"/>
                     </window>
                     <connections>
                         <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="cq2-FE-JQM"/>
@@ -80,27 +80,27 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="XDRHomeViewController" customModule="XD_Randomiser" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="250" height="510"/>
+                        <rect key="frame" x="0.0" y="0.0" width="250" height="560"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="B5x-sc-IJc">
-                                <rect key="frame" x="3" y="455" width="244" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="5OQ-fV-rSM"/>
-                                </constraints>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Put your ISO in:  &quot;~/Documents/XD-Randomiser/ISO&quot; and name it &quot;XD.iso&quot;" id="Ehf-L3-3la">
-                                    <font key="font" metaFont="system" size="10"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QI2-cW-Ivg">
-                                <rect key="frame" x="3" y="389" width="245" height="50"/>
+                                <rect key="frame" x="3" y="439" width="245" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="240" id="UWA-3q-Lfn"/>
                                 </constraints>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="randomiser" id="UZM-oD-F3k"/>
                             </imageView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="B5x-sc-IJc">
+                                <rect key="frame" x="3" y="505" width="244" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="5OQ-fV-rSM"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Put your ISO in:  &quot;~/Documents/XD-Randomiser/ISO&quot; and name it &quot;XD.iso&quot;" id="Ehf-L3-3la">
+                                    <font key="font" metaFont="system" size="10"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="QI2-cW-Ivg" firstAttribute="leading" secondItem="B5x-sc-IJc" secondAttribute="leading" id="FmW-B1-eAY"/>
@@ -110,7 +110,6 @@
                             <constraint firstItem="B5x-sc-IJc" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="5" id="kLM-u3-trU"/>
                             <constraint firstItem="QI2-cW-Ivg" firstAttribute="bottom" secondItem="B5x-sc-IJc" secondAttribute="bottom" id="lDG-6W-sBb"/>
                             <constraint firstItem="QI2-cW-Ivg" firstAttribute="top" secondItem="B5x-sc-IJc" secondAttribute="top" id="sh8-zI-Cww"/>
-                            <constraint firstItem="QI2-cW-Ivg" firstAttribute="width" secondItem="B5x-sc-IJc" secondAttribute="width" id="zxQ-Q3-ToW"/>
                         </constraints>
                     </view>
                     <connections>
@@ -120,7 +119,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="74" y="856"/>
+            <point key="canvasLocation" x="366" y="237"/>
         </scene>
     </scenes>
     <resources>

@@ -27,8 +27,8 @@ class XDRHomeViewController: GoDViewController {
 			
 		}
 		
-		let names = ["Randomise Pokemon", "Randomise Moves", "Randomise Abilities", "Randomise Types", "Randomise Evolutions", "Remove Trade Evolutions", "Randomise Battle Bingo", "Gen 4 Class Split","Save"]
-		let actions : [Selector] = [ #selector(randomisePokemon), #selector(randomiseMoves), #selector(randomiseAbilities), #selector(randomiseTypes), #selector(randomiseEvolutions), #selector(removeTradeEvolutions), #selector(randomiseBattleBingo), #selector(gen4PhysicalSpecialSplit), #selector(save)]
+		let names = ["Randomise Pokemon", "Randomise Moves", "Randomise Abilities", "Randomise Types", "Randomise Evolutions", "Remove Trade Evolutions", "Randomise Battle Bingo", "Gen 4 Class Split","Document Changes (Reference)","Save"]
+		let actions : [Selector] = [ #selector(randomisePokemon), #selector(randomiseMoves), #selector(randomiseAbilities), #selector(randomiseTypes), #selector(randomiseEvolutions), #selector(removeTradeEvolutions), #selector(randomiseBattleBingo), #selector(gen4PhysicalSpecialSplit),#selector(document), #selector(save)]
 		
 		for i in 0 ..< names.count {
 			let b = button(names[i], action: actions[i])
@@ -61,6 +61,17 @@ class XDRHomeViewController: GoDViewController {
 		b.isEnabled = XGFiles.iso.exists
 		self.view.addSubview(b)
 		return b
+	}
+	
+	func document() {
+		XGUtility.documentTrainers(title: "Randomised Trainers.txt", forXG: false)
+		XGUtility.documentStarterPokemon()
+		XGUtility.documentPokespots()
+		XGUtility.documentTrades()
+		XGUtility.documentBattleBingo()
+		XGUtility.documentPokemonStats(title: "Randomised Pokemon.txt", forXG: false)
+		XGUtility.saveObtainablePokemonByLocation()
+		XGUtility.documentShadowPokemon(title: "Randomised Shadow Pokemon.txt", forXG: false)
 	}
 	
 	func randomiseBattleBingo() {

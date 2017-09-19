@@ -40,29 +40,43 @@ enum XGPokeSpots : Int, XGDictionaryRepresentable {
 	
 	func numberOfEntries() -> Int {
 		let rel = XGFiles.common_rel.data
-		return Int(rel.get4BytesAtOffset(0xa7fa8 + (self.rawValue * 0xC)))
+		return Int(rel.get4BytesAtOffset(self.commonRelEntriesIndex.startOffset()))
 	}
 	
 	func setEntries(entries: UInt32) {
 		let rel = XGFiles.common_rel.data
-		let locationOffset = 0xa7fa8 + (self.rawValue * 0xC)
-		rel.replace4BytesAtOffset(locationOffset, withBytes: entries)
+		rel.replace4BytesAtOffset(self.commonRelEntriesIndex.startOffset(), withBytes: entries)
 		rel.save()
 	}
 	
 	var commonRelIndex : Common_relIndices {
-	get {
-	switch self {
-	case .rock:
-	return .PokespotRock
-	case .oasis:
-	return .PokespotOasis
-	case .cave:
-	return .PokespotCave
-	case .all:
-	return .PokespotAll
+		get {
+			switch self {
+			case .rock:
+				return .PokespotRock
+			case .oasis:
+				return .PokespotOasis
+			case .cave:
+				return .PokespotCave
+			case .all:
+				return .PokespotAll
+			}
+		}
 	}
-	}
+	
+	var commonRelEntriesIndex : Common_relIndices {
+		get {
+			switch self {
+			case .rock:
+				return .PokespotRockEntries
+			case .oasis:
+				return .PokespotOasisEntries
+			case .cave:
+				return .PokespotCaveEntries
+			case .all:
+				return .PokespotAllEntries
+			}
+		}
 	}
 	
 	

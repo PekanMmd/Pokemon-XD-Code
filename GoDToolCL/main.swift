@@ -6,8 +6,16 @@
 //  Copyright © 2015 StarsMmd. All rights reserved.
 //
 
+//XGAssembly.setShadowPokemonShininess(value: .random)
+//XGAssembly.fixShinyGlitch()
+//XGISO().importDol()
 
-//getStringSafelyWithID(id: 0x1389).println()
+
+
+
+
+
+
 
 //var known = [("people ids", 9368),]
 //
@@ -21,8 +29,6 @@
 //		}
 //	}
 //}
-
-//XGUtility.compileAllFiles()
 
 //loadAllStrings()
 //for string in allStrings {

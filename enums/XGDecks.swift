@@ -9,7 +9,7 @@
 import Foundation
 
 let kNumberOfDecks = 8
-let TrainerDecksArray : [XGDecks] = [.DeckStory, .DeckBingo, .DeckColosseum, .DeckHundred, .DeckImasugu, .DeckSample, .DeckVirtual]
+let TrainerDecksArray : [XGDecks] = [.DeckStory, .DeckColosseum, .DeckHundred, .DeckVirtual, .DeckImasugu, .DeckBingo, .DeckSample,]
 let MainDecksArray  : [XGDecks] = [.DeckStory, .DeckColosseum, .DeckHundred, .DeckVirtual]
 
 let kOffensiveDTAI = [0x0F, 0x3A, 0x00, 0x00, 0x73, 0x73, 0x74, 0x73, 0x73, 0x74, 0x82, 0x00, 0x2C, 0x27, 0x50, 0x00, 0x50, 0x32, 0x14, 0x0A, 0x09, 0x09, 0x32, 0x32, 0x00, 0x09, 0x00, 0x09, 0x32, 0x32, 0x08, 00]

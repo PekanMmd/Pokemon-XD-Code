@@ -478,6 +478,7 @@ enum XGFolders : String {
 			.AutoFSYS,
 			.Scripts,
 			.Logs,
+			.Reference,
 			]
 		
 		for folder in folders {
