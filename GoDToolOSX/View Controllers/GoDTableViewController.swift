@@ -11,7 +11,6 @@ import AppKit
 class GoDTableViewController: GoDViewController, GoDTableViewDelegate, NSTableViewDataSource {
 
 	var table : GoDTableView!
-	var currentIndexPath = IndexPath(item: 0, section: 0)
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -64,4 +63,14 @@ class GoDTableViewController: GoDViewController, GoDTableViewDelegate, NSTableVi
 		print(row)
 	}
 	
+	
 }
+
+
+
+
+
+
+
+
+

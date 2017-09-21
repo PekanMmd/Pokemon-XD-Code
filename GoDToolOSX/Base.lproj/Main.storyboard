@@ -231,14 +231,14 @@ Twitter: @StarsMmd</mutableString>
                             <scrollView wantsLayer="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bfj-SI-Yap">
                                 <rect key="frame" x="200" y="0.0" width="440" height="460"/>
                                 <clipView key="contentView" id="mQC-q8-Jd2">
-                                    <rect key="frame" x="1" y="1" width="438" height="458"/>
+                                    <rect key="frame" x="1" y="1" width="423" height="458"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView importsGraphics="NO" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" smartInsertDelete="YES" id="PzZ-Jv-CN9">
-                                            <rect key="frame" x="0.0" y="0.0" width="438" height="458"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="423" height="458"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <size key="minSize" width="438" height="458"/>
+                                            <size key="minSize" width="423" height="458"/>
                                             <size key="maxSize" width="6198" height="10000000"/>
                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         </textView>
@@ -250,7 +250,7 @@ Twitter: @StarsMmd</mutableString>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="C7E-oC-wyH">
-                                    <rect key="frame" x="423" y="1" width="16" height="458"/>
+                                    <rect key="frame" x="424" y="1" width="15" height="458"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>

@@ -15,11 +15,7 @@ class GoDTableView: NSScrollView {
 	
 	var width : NSNumber = 0
 	
-	var selectedRow : Int {
-		get {
-			return self.tableView.selectedRow
-		}
-	}
+	var selectedRow = -1
 	
 	init(width: NSNumber, rows: Int, rowHeight: CGFloat, delegate: GoDTableViewDelegate, dataSource: NSTableViewDataSource) {
 		super.init(frame: .zero)
@@ -66,7 +62,8 @@ class GoDTableView: NSScrollView {
 	}
 	
 	func didClickCell() {
-		if self.selectedRow >= 0 {
+		if self.tableView.selectedRow >= 0 {
+			self.selectedRow = self.tableView.selectedRow
 			self.delegate.tableView(self, didSelectRow: self.tableView.selectedRow)
 		}
 		

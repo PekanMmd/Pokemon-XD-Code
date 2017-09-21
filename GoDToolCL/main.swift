@@ -6,16 +6,11 @@
 //  Copyright © 2015 StarsMmd. All rights reserved.
 //
 
-//XGAssembly.setShadowPokemonShininess(value: .random)
-//XGAssembly.fixShinyGlitch()
-//XGISO().importDol()
 
-
-
-
-
-
-
+//getStringSafelyWithID(id: 40021).duplicateWithString("Your job isn't done yet!").replace()
+//getStringWithID(id: 53044)!.duplicateWithString("Shadow Pokemon!").replace()
+//getStringWithID(id: 53043)!.duplicateWithString("Eldes").replace()
+//getStringWithID(id: 53045)!.duplicateWithString("[07]{00}I regret to inform you that Ardos fled the[New Line]isle with our last 14 Shadow Pokemon. I[New Line]wanted to hand them over to you but he[New Line]refuses to accept defeat. He's been[New Line]spotted handing out pokemon to trainers[New Line]in Agate, Phenac, Pyrite and Gateon.").replace()
 
 //var known = [("people ids", 9368),]
 //

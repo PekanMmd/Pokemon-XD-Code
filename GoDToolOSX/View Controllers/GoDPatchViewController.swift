@@ -16,24 +16,28 @@ class GoDPatchViewController: GoDTableViewController {
 		self.title = "Patches"
     }
 	
-	var patches = ["Apply Physical/Special move split","Remove Physical/Special move split","Assign default phys/spec categories to moves", "Remove foreign languages from common_rel (very useful if it gets too big to import)"]
-	var funcs = [#selector(gen4Categories),#selector(removeGen4Categories),#selector(defaultCategories),#selector(removeLanguages)]
+	var patches = ["Apply Physical/Special move split","Remove Physical/Special move split","Assign default phys/spec categories to moves", "Remove foreign languages from common_rel (very useful if it gets too big to import)","Fix shiny glitch for shadow pokemon","Shadow pokemon can be shiny","Shadow pokemon are never shiny","Shadow pokemon are always shiny","Infinite use TMs",]
+	var funcs = [#selector(gen4Categories),#selector(removeGen4Categories),#selector(defaultCategories),#selector(removeLanguages),#selector(fixShinyGlitch),#selector(randomShinyShadows),#selector(neverShinyShadows),#selector(alwaysShinyShadows),#selector(infiniteTMs)]
 	
-//	switch patch {
-//	case .betaStartersApply				: XGDolPatcher.enableBetaStarters()
-//	case .betaStartersRemove			: XGDolPatcher.disableBetaStarters()
-//	case .physicalSpecialSplitApply		: XGDolPatcher.applyPhysicalSpecialSplitPatch()
-//	case .physicalSpecialSplitRemove	: XGDolPatcher.removePhysicalSpecialSplitPatch()
-//	case .renameAllPokemonApply			: XGDolPatcher.allowRenamingAnyPokemon()
-//	case .shinyChanceEditingApply		: XGDolPatcher.removeShinyLock()
-//	case .shinyChanceEditingRemove		: XGDolPatcher.placeShinyLock()
-//	case .type9IndependentApply			: XGDolPatcher.removeType9Dependencies()
-//	case .unlimitedTutorMovesApply		: XGDolPatcher.implementUnlimitedTutors()
-//	case .zeroForeignStringTables		: XGDolPatcher.zeroForeignStringTables()
-//	case .decapitaliseNames				: XGDolPatcher.decapitalise()
-//	case .tradeEvolutions				: XGDolPatcher.removeTradeEvolutions()
-//	}
+	func infiniteTMs() {
+		XGAssembly.infiniteUseTMs()
+	}
+
+	func fixShinyGlitch() {
+		XGAssembly.fixShinyGlitch()
+	}
 	
+	func alwaysShinyShadows() {
+		XGAssembly.setShadowPokemonShininess(value: .always)
+	}
+	
+	func neverShinyShadows() {
+		XGAssembly.setShadowPokemonShininess(value: .never)
+	}
+	
+	func randomShinyShadows() {
+		XGAssembly.setShadowPokemonShininess(value: .random)
+	}
 	
 	func removeLanguages() {
 		XGDolPatcher.applyPatch(.zeroForeignStringTables)
@@ -65,7 +69,7 @@ class GoDPatchViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let colour = row % 2 == 0 ? GoDDesign.colourWhite() : GoDDesign.colourGrey()
+		let colour = row % 2 == 0 ? GoDDesign.colourWhite() : GoDDesign.colourLightGrey()
 		
 		let view = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: patches[row], colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: nil, fontSize: 10, width: self.table.width)) as! GoDTableCellView
 		

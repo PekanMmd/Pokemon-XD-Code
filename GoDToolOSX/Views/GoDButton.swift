@@ -18,7 +18,7 @@ class GoDButton: NSButton {
 	    super.init(coder: aDecoder)
 	}
 	
-	init(title: String, colour: NSColor, textColour: NSColor, buttonType: NSButtonType, target: GoDViewController, action: Selector) {
+	init(title: String, colour: NSColor, textColour: NSColor, buttonType: NSButtonType, target: NSObject, action: Selector) {
 		super.init(frame: CGRect.zero)
 		
 		self.translatesAutoresizingMaskIntoConstraints = false

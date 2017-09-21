@@ -46,7 +46,7 @@ class GoDHomeViewController: GoDTableViewController {
 		
 		let image = (row % 2 == 0 ? NSImage(named: "cell") : NSImage(named: "cell gold"))!
 		
-		let view = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: tools[row], colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: image, fontSize: 14, width: self.table.width)) as! GoDTableCellView
+		let view = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: tools[row], colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: image, fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
 		
 		view.setTitle(tools[row])

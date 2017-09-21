@@ -2321,6 +2321,8 @@
 		B2FEC0971F6FDA5A00AC263D /* GoDTrainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0961F6FDA5A00AC263D /* GoDTrainerViewController.swift */; };
 		B2FEC0991F70311E00AC263D /* GoDPokemonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0981F70311E00AC263D /* GoDPokemonView.swift */; };
 		B2FEC09B1F7032F300AC263D /* GoDTrainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC09A1F7032F300AC263D /* GoDTrainerView.swift */; };
+		B2FEC09D1F727D8200AC263D /* GoDDPKMPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC09C1F727D8200AC263D /* GoDDPKMPopUpButton.swift */; };
+		B2FEC09F1F72955200AC263D /* GoDDDPKPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC09E1F72955200AC263D /* GoDDDPKPopUpButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -3477,6 +3479,8 @@
 		B2FEC0961F6FDA5A00AC263D /* GoDTrainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDTrainerViewController.swift; sourceTree = "<group>"; };
 		B2FEC0981F70311E00AC263D /* GoDPokemonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDPokemonView.swift; sourceTree = "<group>"; };
 		B2FEC09A1F7032F300AC263D /* GoDTrainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDTrainerView.swift; sourceTree = "<group>"; };
+		B2FEC09C1F727D8200AC263D /* GoDDPKMPopUpButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDDPKMPopUpButton.swift; sourceTree = "<group>"; };
+		B2FEC09E1F72955200AC263D /* GoDDDPKPopUpButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDDDPKPopUpButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3527,6 +3531,8 @@
 				B205E0CE1F60B32400A5F075 /* GoDNaturePopUpButton.swift */,
 				B205E0DA1F6387FA00A5F075 /* GoDEvolutionMethodPopUpButton.swift */,
 				B205E0DD1F63891E00A5F075 /* GoDEvolutionConditionPopUpButton.swift */,
+				B2FEC09C1F727D8200AC263D /* GoDDPKMPopUpButton.swift */,
+				B2FEC09E1F72955200AC263D /* GoDDDPKPopUpButton.swift */,
 			);
 			path = "PopUp Buttons";
 			sourceTree = "<group>";
@@ -7280,6 +7286,7 @@
 				B2F5EC3B1F49A1FE0075C6D2 /* XGMoves.swift in Sources */,
 				B2F5ECE31F49A1FF0075C6D2 /* XGType.swift in Sources */,
 				B2F5EC471F49A1FE0075C6D2 /* XGPokemon.swift in Sources */,
+				B2FEC09D1F727D8200AC263D /* GoDDPKMPopUpButton.swift in Sources */,
 				B2D1DF5E1F68DBF60023A876 /* GoDTextureFormats.swift in Sources */,
 				B2FEC07A1F6C602A00AC263D /* GoDAlertViewController.swift in Sources */,
 				B2F5F8861F49C3440075C6D2 /* XGOSXExtensions.swift in Sources */,
@@ -7288,6 +7295,7 @@
 				B2F5EC951F49A1FF0075C6D2 /* XGLevelUpMove.swift in Sources */,
 				B2FEC0971F6FDA5A00AC263D /* GoDTrainerViewController.swift in Sources */,
 				B2F5EC8C1F49A1FF0075C6D2 /* XGGiftPokemon.swift in Sources */,
+				B2FEC09F1F72955200AC263D /* GoDDDPKPopUpButton.swift in Sources */,
 				B205E0C91F60AE2400A5F075 /* GoDLevelPopUpButton.swift in Sources */,
 				B2F5EC351F49A1FE0075C6D2 /* XGMaps.swift in Sources */,
 				B2F5EC2F1F49A1FE0075C6D2 /* XGGenders.swift in Sources */,

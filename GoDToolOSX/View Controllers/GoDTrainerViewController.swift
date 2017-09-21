@@ -34,6 +34,10 @@ class GoDTrainerViewController: GoDTableViewController {
 		
 		self.title = "Trainer Editor"
 		
+		self.pokemon = currentTrainer.pokemon.map({ (mon) -> XGTrainerPokemon in
+			return mon.data
+		})
+		
 		for deck in TrainerDecksArray {
 			trainers += deck.allTrainers.map { (trainer) -> TrainerInfo in
 				return trainer.trainerInfo
@@ -132,7 +136,7 @@ class GoDTrainerViewController: GoDTableViewController {
 		case .DeckVirtual:
 			colour = GoDDesign.colourGreen()
 		case .DeckImasugu:
-			colour = GoDDesign.colourOrange()
+			colour = GoDDesign.colourPink()
 		default:
 			break
 		}
@@ -140,20 +144,24 @@ class GoDTrainerViewController: GoDTableViewController {
 		cell.setBackgroundColour(trainer.hasShadow ? GoDDesign.colourPurple() : colour)
 		
 		if self.table.selectedRow == row {
-			cell.setBackgroundColour(GoDDesign.colourPink())
+			cell.setBackgroundColour(GoDDesign.colourOrange())
 		}
 		
 		return cell
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
-		let info = trainers[row]
-		self.currentTrainer = XGTrainer(index: info.index, deck: info.deck)
-		self.trainerView.setUp()
-		for view in self.pokemonViews {
-			view.setUp()
+		self.showActivityView { 
+			let info = self.trainers[row]
+			self.currentTrainer = XGTrainer(index: info.index, deck: info.deck)
+			self.trainerView.setUp()
+			for view in self.pokemonViews {
+				view.setUp()
+			}
+			self.table.reloadData()
+			self.hideActivityView()
 		}
-		self.table.reloadData()
+		
 	}
     
 }

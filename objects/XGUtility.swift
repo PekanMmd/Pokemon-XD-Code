@@ -396,7 +396,7 @@ class XGUtility {
 			move.category = XGMoveCategories(rawValue: categories[i]) ?? XGMoveCategories.none
 			move.save()
 		}
-		printg("all moves have now had their default categories applied.")
+		printg("all moves have now had their default phys/spec categories applied.")
 		
 	}
 	

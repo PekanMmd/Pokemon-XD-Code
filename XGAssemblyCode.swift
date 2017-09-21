@@ -445,7 +445,7 @@ class XGAssembly {
 		
 		replaceASM(startOffset: startOffset - kDOLtoRAMOffsetDifference, newASM: [0x38c00000 + UInt32(value.rawValue)])
 		
-		printg("shadow pokemon shininess set to ", value.string)
+		printg("shadow pokemon shininess set to", value.string)
 	}
 	
 	class func switchNextPokemonAtEndOfTurn() {
