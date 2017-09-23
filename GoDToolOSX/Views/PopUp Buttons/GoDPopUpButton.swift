@@ -24,6 +24,7 @@ class GoDPopUpButton: NSPopUpButton {
 	
 	func initialise() {
 		self.removeAllItems()
+		self.alignment = .center
 		self.setUpItems()
 	}
 	

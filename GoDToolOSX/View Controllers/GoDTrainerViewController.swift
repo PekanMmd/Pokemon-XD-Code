@@ -77,7 +77,8 @@ class GoDTrainerViewController: GoDTableViewController {
 			self.views["pv\(view.index)"] = view
 		}
 		
-		self.addConstraintSize(view: pokemonViews[0], height: 280, width: 230)
+//		self.addConstraintSize(view: pokemonViews[0], height: 280, width: 230)
+		self.addConstraintWidth(view: pokemonViews[0], width: 330)
 		for i in 1 ... 5 {
 			self.addConstraintEqualSizes(view1: pokemonViews[0], view2: pokemonViews[i])
 		}
@@ -86,9 +87,9 @@ class GoDTrainerViewController: GoDTableViewController {
 		self.addConstraintHeight(view: trainerView, height: 80)
 		self.addConstraints(visualFormat: "V:|[tv][cv]|", layoutFormat: [.alignAllLeft, .alignAllRight])
 		self.addMetric(value: 10, name: "g")
-		self.pokemonContainer.addConstraints(visualFormat: "H:|-(g)-[pv0]-(g)-[pv1]-(g)-[pv2]", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
-		self.pokemonContainer.addConstraints(visualFormat: "H:|-(g)-[pv3]-(g)-[pv4]-(g)-[pv5]", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
-		self.pokemonContainer.addConstraints(visualFormat: "V:|-(g)-[pv0]-(g)-[pv3]", layoutFormat: [.alignAllLeft], metrics: metrics, views: views)
+		self.pokemonContainer.addConstraints(visualFormat: "H:|-(g)-[pv0]-(g)-[pv1]-(g)-[pv2]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
+		self.pokemonContainer.addConstraints(visualFormat: "H:|-(g)-[pv3]-(g)-[pv4]-(g)-[pv5]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
+		self.pokemonContainer.addConstraints(visualFormat: "V:|-(g)-[pv0]-(g)-[pv3]-(40)-|", layoutFormat: [.alignAllLeft], metrics: metrics, views: views)
 		self.addConstraints(visualFormat: "V:[pv4]-(g)-[sb(20)]", layoutFormat: [.alignAllCenterX])
 		self.addConstraintWidth(view: saveButton, width: 100)
 		
@@ -102,7 +103,7 @@ class GoDTrainerViewController: GoDTableViewController {
 	}
 	
 	override func widthForTable() -> NSNumber {
-		return 230
+		return 250
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {

@@ -28,7 +28,6 @@ class GoDTrainerView: NSView {
 		}
 	}
 	
-	
 	func setUp() {
 		
 		let trainer = self.delegate.currentTrainer

@@ -21,7 +21,7 @@ class GoDPokemonView: NSImageView {
 	var level = GoDLevelPopUpButton()
 	var moves = [GoDMovePopUpButton]()
 	
-	var ability : GoDButton!
+	var ability = GoDPopUpButton()
 	var nature = GoDNaturePopUpButton()
 	var gender = GoDGenderPopUpButton()
 	var happiness = NSTextField(frame: .zero)
@@ -82,7 +82,7 @@ class GoDPokemonView: NSImageView {
 			move.selectMove(move: pokemon.moves[move.tag])
 		}
 		for move in self.shadowMoves {
-			move.selectMove(move: pokemon.moves[move.tag])
+			move.selectMove(move: pokemon.shadowMoves[move.tag])
 		}
 		
 		self.ivs.integerValue = pokemon.IVs
@@ -91,7 +91,8 @@ class GoDPokemonView: NSImageView {
 		}
 		
 		
-		self.ability.title = pokemon.ability == 0 ? pokemon.species.stats.ability1.name.string : pokemon.species.stats.ability2.name.string
+		self.ability.setTitles(values: [pokemon.species.stats.ability1.name.string , pokemon.species.stats.ability2.name.string])
+		self.ability.selectItem(at: pokemon.ability)
 		self.nature.selectNature(nature: pokemon.nature)
 		self.gender.selectGender(gender: pokemon.gender)
 		self.happiness.integerValue = pokemon.happiness
@@ -119,6 +120,7 @@ class GoDPokemonView: NSImageView {
 			self.moves.append(move)
 			self.addSubview(move)
 			self.views["move\(i)"] = move
+			move.font = GoDDesign.fontOfSize(8)
 			
 			if i != 0 {
 				self.addConstraintEqualSizes(view1: moves[0], view2: move)
@@ -129,6 +131,7 @@ class GoDPokemonView: NSImageView {
 			self.shadowMoves.append(shadow)
 			self.addSubview(shadow)
 			self.views["shadow\(i)"] = shadow
+			shadow.font = GoDDesign.fontOfSize(8)
 			
 			self.addConstraintEqualSizes(view1: moves[0], view2: shadow)
 		}
@@ -141,12 +144,8 @@ class GoDPokemonView: NSImageView {
 			self.views["ev\(i)"] = ev
 		}
 		
-		self.ability = GoDButton(title: "-", colour: GoDDesign.colourGrey(), textColour: GoDDesign.colourBlack(), buttonType: NSButtonType.momentaryPushIn, target: self, action: #selector(swapAbility))
-		self.ability.font = GoDDesign.fontOfSize(10)
-		self.ability.wantsLayer = true
-		self.ability.layer?.cornerRadius = 8
-		
-		self.nature.font = GoDDesign.fontOfSize(10)
+		self.dpkm.font = GoDDesign.fontOfSize(8)
+		self.ddpk.font = GoDDesign.fontOfSize(8)
 		
 		let byteFormat = NumberFormatter()
 		let ivFormat = NumberFormatter()
@@ -190,39 +189,57 @@ class GoDPokemonView: NSImageView {
 		self.views["iv"] = ivs
 		
 		self.addSubview(shadowCatchrate)
-		self.views["catch"] = shadowCatchrate
+		self.views["shadowcr"] = shadowCatchrate
 		self.addSubview(shadowCounter)
-		self.views["counter"] = shadowCounter
+		self.views["shadowct"] = shadowCounter
 		self.addSubview(shadowAggression)
-		self.views["agg"] = shadowAggression
+		self.views["shadowag"] = shadowAggression
 		self.addSubview(shadowFlee)
-		self.views["flee"] = shadowFlee
+		self.views["shadowfl"] = shadowFlee
 		
 		
-		let titles = ["IVs","hpEV","atkEV","defEV","spaEV","spdEV","speEV","happiness","shadow counter","shadow flee","shadow aggression","shadow catch rate"]
-		for title in titles {
+		let titles = ["IVs","HP","Atk","Def","Sp.A","Sp.D","Speed","Happiness","Counter","Flee","Aggression","Catch rate"]
+		let visuals = ["IVs","hpEV","atkEV","defEV","spaEV","spdEV","speEV","happiness","shadowctT","shadowflT","shadowagT","shadowcrT"]
+		for i in 0 ..< titles.count {
+			let title = titles[i]
+			let name = visuals[i]
+			
 			let view = NSTextField(frame: .zero)
 			view.stringValue = title
 			view.setBackgroundColour(.clear)
-			views[title] = view
+			views[name] = view
 			self.addSubview(view)
+			view.alignment = .center
+			self.addConstraintHeight(view: view, height: 15)
+			view.font = GoDDesign.fontOfSize(10)
+			view.drawsBackground = false
+			view.isBezeled = false
+			view.isEditable = false
 		}
 		
 		for i in 0 ... 5 {
 			let view1 = views[["hpEV","atkEV","defEV","spaEV","spdEV","speEV",][i]]!
 			let view2 = evs[i]
 			self.addConstraintAlignLeftAndRightEdges(view1: view1, view2: view2)
+			view2.alignment = .right
+			view2.font = GoDDesign.fontOfSize(8)
 		}
 		
 		for i in 0 ... 5 {
-			let view1 = views[["IVs","happiness","shadow counter","shadow flee","shadow aggression","shadow catch rate"][i]]!
+			let view1 = views[["IVs","happiness","shadowctT","shadowflT","shadowagT","shadowcrT"][i]]!
 			let view2 = [ivs,happiness,shadowCounter,shadowFlee,shadowAggression,shadowCatchrate][i]
 			self.addConstraintAlignLeftAndRightEdges(view1: view1, view2: view2)
+			view2.alignment = .right
+			view2.font = GoDDesign.fontOfSize(8)
 		}
 		
+		for i in 1 ... 3 {
+			self.addConstraintEqualWidths(view1: moves[0], view2: moves[i])
+			self.addConstraintEqualWidths(view1: shadowMoves[0], view2: shadowMoves[i])
+		}
 		
 		for view in ["hpEV","atkEV","defEV","spaEV","spdEV","speEV",] {
-			self.addConstraintEqualSizes(view1: evs[0], view2: views[view]!)
+			self.addConstraintEqualWidths(view1: evs[0], view2: views[view]!)
 		}
 		for i in 1 ... 5 {
 			self.addConstraintEqualSizes(view1: evs[i], view2: evs[0])
@@ -237,24 +254,41 @@ class GoDPokemonView: NSImageView {
 		
 		self.metrics["g"] = 5
 		
+		for view in [shadowCatchrate,shadowFlee,shadowAggression] {
+			self.addConstraintEqualWidths(view1: view, view2: shadowCounter)
+		}
+		
+		self.addConstraintWidth(view: self.body, width: 80)
 		self.addConstraintEqualSizes(view1: ivs, view2: happiness)
-		self.addConstraintSize(view: ivs, height: 30, width: 60)
-		self.addConstraintHeight(view: moves[0], height: 30)
-		self.addConstraintHeight(view: evs[0], height: 20)
+		self.addConstraintHeight(view: ivs, height: 15)
+		self.addConstraintHeight(view: moves[0], height: 20)
+		self.addConstraintHeight(view: evs[0], height: 15)
 		self.addConstraintEqualWidths(view1: self.dpkm, view2: self.ddpk)
+		
+		for (view1, view2) : (NSView, NSView) in [(level,name),(ability,item),(nature,gender)] as! [(NSView, NSView)] {
+			self.addConstraintEqualSizes(view1: view1, view2: view2)
+		}
+		
 		self.addConstraints(visualFormat: "H:|-(g)-[dpkm]-(g)-[ddpk]-(g)-|", layoutFormat: [.alignAllTop,.alignAllBottom], metrics: metrics, views: views)
 		self.addConstraints(visualFormat: "V:|-(g)-[dpkm(20)]-(g)-[body(80)]", layoutFormat: [.alignAllLeft], metrics: metrics, views: views)
-		self.addConstraints(visualFormat: "H:|-(g)-[body]-(g)-[name]-(g)-|", layoutFormat: [.alignAllTop], metrics: metrics, views: views)
-		self.addConstraints(visualFormat: "V:[name(20)]-(g)-[level(20)]-(g)-[item(20)]", layoutFormat: [.alignAllLeft,.alignAllRight], metrics: metrics, views: views)
+		self.addConstraints(visualFormat: "H:|-(g)-[body]-(g)-[level]-(g)-[name]-(g)-|", layoutFormat: [.alignAllTop], metrics: metrics, views: views)
+		self.addConstraints(visualFormat: "H:[body]-(g)-[ability]-(g)-[item]-(g)-|", layoutFormat: [.alignAllCenterY], metrics: metrics, views: views)
+		self.addConstraints(visualFormat: "H:[body]-(g)-[nature]-(g)-[gender]-(g)-|", layoutFormat: [.alignAllBottom], metrics: metrics, views: views)
+		self.addConstraints(visualFormat: "V:[name(20)]-(10)-[ability(20)]-(10)-[nature(20)]", layoutFormat: [], metrics: metrics, views: views)
 		self.addConstraintEqualSizes(view1: name, view2: level)
 		self.addConstraintEqualSizes(view1: name, view2: item)
 		self.addConstraintEqualSizes(view1: ability, view2: nature)
 		self.addConstraintEqualSizes(view1: ability, view2: gender)
-		self.addConstraintHeight(view: ability, height: 30)
-		self.addConstraints(visualFormat: "H:|-(g)-[ability]-(g)-[nature]-(g)-[gender]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
-		self.addConstraints(visualFormat: "V:[body]-(g)-[ability]-(g)-[IVs][iv]", layoutFormat: [], metrics: metrics, views: views)
-		self.addConstraints(visualFormat: "H:|-(g)-[iv]-(g)-[happ]", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
-		self.addConstraints(visualFormat: "H:|-(g)-[IVs]-(g)-[happiness]", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
+		self.addConstraintHeight(view: ability, height: 20)
+		self.addConstraints(visualFormat: "V:[iv]-(g)-[hpEV][ev0]-(g)-[move0]-(g)-[shadow0]-(g)-[shadowctT][shadowct]", layoutFormat: [], metrics: metrics, views: views)
+		self.addConstraints(visualFormat: "V:[nature]-(g)-[IVs][iv]", layoutFormat: [.alignAllLeft, .alignAllRight], metrics: metrics, views: views)
+		self.addConstraints(visualFormat: "V:[gender]-(g)-[happiness][happ]", layoutFormat: [.alignAllLeft, .alignAllRight], metrics: metrics, views: views)
+		self.addConstraints(visualFormat: "H:|-(g)-[hpEV]-(g)-[atkEV]-(g)-[defEV]-(g)-[spaEV]-(g)-[spdEV]-(g)-[speEV]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
+		self.addConstraints(visualFormat: "H:|-(g)-[ev0]-(g)-[ev1]-(g)-[ev2]-(g)-[ev3]-(g)-[ev4]-(g)-[ev5]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
+		self.addConstraints(visualFormat: "H:|-(g)-[move0]-(g)-[move1]-(g)-[move2]-(g)-[move3]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
+		self.addConstraints(visualFormat: "H:|-(g)-[shadow0]-(g)-[shadow1]-(g)-[shadow2]-(g)-[shadow3]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
+		self.addConstraints(visualFormat: "H:|-(g)-[shadowctT]-(g)-[shadowflT]-(g)-[shadowagT]-(g)-[shadowcrT]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
+		self.addConstraints(visualFormat: "H:|-(g)-[shadowct]-(g)-[shadowfl]-(g)-[shadowag]-(g)-[shadowcr]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
 		
 		
 		

@@ -9,6 +9,7 @@
 import Cocoa
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/XD-Randomiser"
+let region = XGRegions(rawValue: XGFiles.iso.data.get4BytesAtOffset(0)) ?? .US
 
 func printg(_ args: Any...) {
 	for arg in args {

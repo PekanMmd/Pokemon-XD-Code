@@ -9,6 +9,8 @@
 import Cocoa
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/GoD-Tool"
+let region = XGRegions(rawValue: XGFiles.iso.data.get4BytesAtOffset(0)) ?? .US
+
 
 typealias TrainerInfo = (name:String,location:String,hasShadow: Bool,trainerModel:XGTrainerModels,index:Int,deck:XGDecks)
 extension XGTrainer {

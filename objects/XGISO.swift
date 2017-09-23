@@ -36,7 +36,6 @@ enum XGRegions : UInt32 {
 	
 }
 
-let region = XGRegions(rawValue: XGFiles.iso.data.get4BytesAtOffset(0)) ?? .US
 class XGISO: NSObject {
 	
 	fileprivate let toc = XGFiles.toc.data

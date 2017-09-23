@@ -9,6 +9,7 @@
 import Foundation
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+let region = XGRegions.US
 
 func printg(_ args: Any...) {
 	for arg in args {
