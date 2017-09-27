@@ -8,6 +8,8 @@
 
 
 
+//XGUtility.compileMainFiles()
+XGUtility.compileForRelease(XG: true)
 
 //var known = [("people ids", 9368),]
 //

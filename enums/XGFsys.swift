@@ -275,8 +275,10 @@ class XGFsys : NSObject {
 			return
 		}
 		
-		let shift = (newFile.fileSize != sizeForFile(index: index)) && (self.numberOfEntries > 1)
 		
+		let lzssCheck = self.data.get4BytesAtOffset(startOffsetForFile(index)) == kLZSSbytes
+		let oldSize = sizeForFile(index: index) - (lzssCheck ? kSizeOfLZSSHeader : 0)
+		let shift = (newFile.fileSize != oldSize) && (self.numberOfEntries > 1)
 		
 		if shift {
 			for i in 0 ..< self.numberOfEntries {

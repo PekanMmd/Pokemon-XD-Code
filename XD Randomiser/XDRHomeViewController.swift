@@ -167,6 +167,18 @@ class XDRHomeViewController: GoDViewController {
 		
 		self.showActivityView { (Bool) -> Void in
 			
+			for i in 1 ..< kNumberOfPokemon {
+				
+				let pokemon = XGPokemon.pokemon(i)
+				if pokemon.nameID > 0 {
+					let p = XGPokemonStats(index: pokemon.index)
+					for i in 0 ..< kNumberOfLevelUpMoves {
+						p.levelUpMoves[i].move = XGMoves.random()
+					}
+					p.save()
+				}
+			}
+			
 			for deck in MainDecksArray {
 				for pokemon in deck.allActivePokemon {
 					

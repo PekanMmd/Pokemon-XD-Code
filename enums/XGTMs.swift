@@ -150,7 +150,7 @@ enum XGTMs : XGDictionaryRepresentable {
 		
 		let desc = self.move.mdescription.string
 		
-		let maxLineLength = 19
+		let maxLineLength = 20
 		let newLine = "[New Line]"
 		
 		let words = desc.replacingOccurrences(of: newLine, with: " ").components(separatedBy: " ")
@@ -179,7 +179,6 @@ enum XGTMs : XGDictionaryRepresentable {
 			}
 			
 			lineLength += len + 1
-			
 			
 		}
 		
