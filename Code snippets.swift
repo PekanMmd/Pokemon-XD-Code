@@ -3369,28 +3369,6 @@ import Foundation
 //])
 //
 //
-//// shadow hunter/slayer
-//let hunterStart = 0x22a6a4 - kDOLtoRAMOffsetDifference
-//let checkShadowPokemon = 0x149014 - kDOLtoRAMOffsetDifference
-//replaceASM(startOffset: hunterStart, newASM: [
-//	0x7e038378, // mr r3, r16 (defending mon)
-//	0x80630000, // lw r3, 0 (r3)
-//	0x38630004, // addi r3, 4
-//	XGUtility.createBranchAndLinkFrom(offset: hunterStart + 0xc, toOffset: checkShadowPokemon),
-//	0x28030001, // cmpwi r3, 1
-//	XGUtility.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x28),
-//	0x7e238b78, // mr r3, r17
-//	0xa063001c, // lhz 0x001c(r3)     (get move effect)
-//	0x28030015, // cmpwi r3, shadow hunter/slayer
-//	XGUtility.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x18),
-//	// boost 50%
-//	0x56c3043e, // rlwinm r3, r22
-//	0x38000064, // li r0, 100
-//	0x1c630096, // mulli r3, 150
-//	0x7c0303d6, // div r0, r3, r0
-//	0x5416043e, // rlwinm r22, r0
-//])
-
 //// rage mode boost
 ////let checkStatus = 0x2025f0 - kDOLtoRAMOffsetDifference
 //let rageStart = 0x22a67c - kDOLtoRAMOffsetDifference
@@ -3407,25 +3385,7 @@ import Foundation
 //	0x5416043e, // rlwinm r22, r0
 //	])
 //
-//// hex
-//let hexStart = 0x22a6e0 - kDOLtoRAMOffsetDifference
-//let checkNoStatus = 0x203744 - kDOLtoRAMOffsetDifference
-//replaceASM(startOffset: hexStart, newASM: [
-//	0x7e038378, // mr r3, r16 (defending pokemon)
-//	XGUtility.createBranchAndLinkFrom(offset: hexStart + 0x4, toOffset: checkNoStatus),
-//	0x28030001, // if has no status effect
-//	XGUtility.powerPCBranchEqualFromOffset(from: 0x0, to: 0x28),
-//	0x7e238b78, // mr r3, r17
-//	// get move data pointer
-//	0x1c030038,
-//	0x806d89d4,
-//	0x7c630214,
-//	0xa063001c, // lhz 0x001c(r3)     (get move effect)
-//	0x2803000c, // cmpwi r3, move effect 12 (hex)
-//	XGUtility.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0xc),
-//	0x38600002, // li r3, 2
-//	0x7ED619D6, // mullw r22, r22, r3
-//])
+
 
 //for offset in stride(from: 770, through: 800, by: 2) {
 //	XGUtility.replaceMartItemAtOffset(offset, withItem: XGUtility.getMartItemAtOffset(offset + 2))
@@ -3751,6 +3711,80 @@ import Foundation
 //XGFiles.fsys("people_archive.fsys").fsysData.replaceFile(file: dive)
 
 
+//// sash/sturdy 2 (multihit moves work)
+//let sash2Branch   = 0x216038
+//let sash2Start    = 0xb99350
+//let getMoveEffect = 0x13e6e8
+//XGAssembly.replaceASM(startOffset: sash2Branch - kDOLtoRAMOffsetDifference, newASM: [
+//	XGAssembly.createBranchFrom(offset: sash2Branch, toOffset: sash2Start),
+//	// overwritten code
+//	0x7fa3eb78, // mr	r3, r29
+//	0x38800001, // li	r4, 1
+//])
+//XGAssembly.replaceRELASM(startOffset: sash2Start - kRELtoRAMOffsetDifference, newASM: [
+//	0x7f83e378, // mr r3, r28
+//	XGAssembly.createBranchAndLinkFrom(offset: sash2Start + 0x4, toOffset: getMoveEffect),
+//	0x2803001d, // cmpwi r3, 29 (2-5 hits)
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0x0, to: 0x28), // beq 0x28
+//	0x2803002c, // cmpwi r3, 44 (2 hits)
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0x0, to: 0x20), // beq 0x20
+//	0x2803004d, // cmpwi r3, 77 (2 hits + poison)
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0x0, to: 0x18), // beq 0x18
+//	0x28030068, // cmpwi r3, 104 (3 hits)
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0x0, to: 0x10), // beq 0x10
+//	0x2803009a, // cmpwi r3, 154 (beat up)
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0x0, to: 0x08), // beq 0x8
+//	XGAssembly.createBranchFrom(offset: sash2Start + 0x30, toOffset: sash2Branch + 0x4), // b branch + 0x4
+//	XGAssembly.createBranchFrom(offset: sash2Start + 0x34, toOffset: sash2Branch + 0x10), // b branch + 0x10
+//])
+//
+//
+//// shadow hunter/slayer
+//let hunterStart = 0x22a6a4 - kDOLtoRAMOffsetDifference
+//let checkShadowPokemon = 0x149014 - kDOLtoRAMOffsetDifference
+//XGAssembly.replaceASM(startOffset: hunterStart, newASM: [
+//	0x7e038378, // mr r3, r16 (defending mon)
+//	0x80630000, // lw r3, 0 (r3)
+//	0x38630004, // addi r3, 4
+//	XGAssembly.createBranchAndLinkFrom(offset: hunterStart + 0xc, toOffset: checkShadowPokemon),
+//	0x28030001, // cmpwi r3, 1
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x34),
+//	0x7e238b78, // mr r3, r17
+//	// get move data pointer
+//	0x1c030038,
+//	0x806d89d4,
+//	0x7c630214,
+//	0xa063001c, // lhz 0x001c(r3)     (get move effect)
+//	0x28030015, // cmpwi r3, shadow hunter/slayer
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x18),
+//	// boost 50%
+//	0x56c3043e, // rlwinm r3, r22
+//	0x38000064, // li r0, 100
+//	0x1c630096, // mulli r3, 150
+//	0x7c0303d6, // div r0, r3, r0
+//	0x5416043e, // rlwinm r22, r0
+//])
+//
+//
+//// hex
+//let hexStart = 0x22a6ec - kDOLtoRAMOffsetDifference
+//let checkNoStatus = 0x203744 - kDOLtoRAMOffsetDifference
+//XGAssembly.replaceASM(startOffset: hexStart, newASM: [
+//	0x7e038378, // mr r3, r16 (defending pokemon)
+//	XGAssembly.createBranchAndLinkFrom(offset: hexStart + 0x4, toOffset: checkNoStatus),
+//	0x28030001, // if has no status effect
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0x0, to: 0x28),
+//	0x7e238b78, // mr r3, r17
+//	// get move data pointer
+//	0x1c030038,
+//	0x806d89d4,
+//	0x7c630214,
+//	0xa063001c, // lhz 0x001c(r3)     (get move effect)
+//	0x2803000c, // cmpwi r3, move effect 12 (hex)
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0xc),
+//	0x38600002, // li r3, 2
+//	0x7ED619D6, // mullw r22, r22, r3
+//])
 
 
 

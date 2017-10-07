@@ -44,9 +44,10 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 	var startOffset		= 0x0
 	var moveIndex		= 0x0
 	
-	var moveName		= 0x0
-	var moveDescription = 0x0
-	var moveAnimation   = 0x0
+	var nameID			= 0x0
+	var descriptionID   = 0x0
+	var animationID     = 0x0
+	var animation2ID	= 0x0
 	
 	var priority		= 0x0
 	var pp				= 0x0
@@ -67,18 +68,18 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 	var soundBasedFlag	= false
 	var HMFlag			= false
 	
-	var moveAnimation2 = 0
 	var displayTypeMatchupFlag = 0
 	
-	var nameString : XGString {
+	
+	var name : XGString {
 		get {
-			return XGMoves.move(self.moveIndex).name
+			return XGFiles.common_rel.stringTable.stringSafelyWithID(nameID)
 		}
 	}
 	
-	var descriptionString : XGString {
+	var mdescription : XGString {
 		get {
-			return XGMoves.move(self.moveIndex).mdescription
+			return XGFiles.dol.stringTable.stringSafelyWithID(descriptionID)
 		}
 	}
 	
@@ -117,10 +118,10 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		self.priority		 = rel.getByteAtOffset(startOffset + kPriorityOffset)
 		self.pp				 = rel.getByteAtOffset(startOffset + kPPOffset)
 		
-		self.moveName		 = rel.get2BytesAtOffset(startOffset + kMoveNameIDOffset)
-		self.moveDescription = rel.get2BytesAtOffset(startOffset + kMoveDescriptionIDOffset)
-		self.moveAnimation   = rel.get2BytesAtOffset(startOffset + kAnimationIndexOffset)
-		self.moveAnimation2  = rel.get2BytesAtOffset(startOffset + kAnimation2IndexOffset)
+		self.nameID		   = rel.get2BytesAtOffset(startOffset + kMoveNameIDOffset)
+		self.descriptionID = rel.get2BytesAtOffset(startOffset + kMoveDescriptionIDOffset)
+		self.animationID   = rel.get2BytesAtOffset(startOffset + kAnimationIndexOffset)
+		self.animation2ID  = rel.get2BytesAtOffset(startOffset + kAnimation2IndexOffset)
 		
 		self.displayTypeMatchupFlag = rel.getByteAtOffset(startOffset + kMoveDisplaysTypeMatchupInSummaryScreenFlagOffset)
 		
@@ -163,14 +164,11 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		rel.replaceByteAtOffset(startOffset + kEffectAccuracyOffset, withByte: self.effectAccuracy)
 		rel.replaceByteAtOffset(startOffset + kPriorityOffset, withByte: self.priority)
 		
-		rel.replace2BytesAtOffset(startOffset + kMoveNameIDOffset, withBytes: self.moveName)
-		rel.replace2BytesAtOffset(startOffset + kMoveDescriptionIDOffset, withBytes: self.moveDescription)
-		rel.replace2BytesAtOffset(startOffset + kAnimationIndexOffset , withBytes: self.moveAnimation)
-		if self.moveAnimation < 0x164 {
-			rel.replace2BytesAtOffset(startOffset + kAnimation2IndexOffset, withBytes: self.moveAnimation)
-		} else {
-			rel.replace2BytesAtOffset(startOffset + kAnimation2IndexOffset, withBytes: self.moveAnimation - 1)
-		}
+		rel.replace2BytesAtOffset(startOffset + kMoveNameIDOffset, withBytes: self.nameID)
+		rel.replace2BytesAtOffset(startOffset + kMoveDescriptionIDOffset, withBytes: self.descriptionID)
+		rel.replace2BytesAtOffset(startOffset + kAnimationIndexOffset , withBytes: self.animationID)
+		rel.replace2BytesAtOffset(startOffset + kAnimation2IndexOffset, withBytes: self.animation2ID)
+		
 		
 		rel.replaceByteAtOffset(startOffset + kMoveDisplaysTypeMatchupInSummaryScreenFlagOffset, withByte: self.displayTypeMatchupFlag)
 		
@@ -181,9 +179,9 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 	var dictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
-			dictRep["name"] = self.nameString.string as AnyObject?
-			dictRep["description"] = self.descriptionString.string as AnyObject?
-			dictRep["moveAnimation"] = self.moveAnimation as AnyObject?
+			dictRep["name"] = self.name.string as AnyObject?
+			dictRep["description"] = self.mdescription.string as AnyObject?
+			dictRep["moveAnimation"] = self.animationID as AnyObject?
 			dictRep["priority"] = self.priority as AnyObject?
 			dictRep["pp"] = self.pp as AnyObject?
 			dictRep["effect"] = self.effect as AnyObject?
@@ -211,8 +209,8 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 	var readableDictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
-			dictRep["description"] = self.descriptionString.string as AnyObject?
-			dictRep["moveAnimation"] = XGOriginalMoves.move(self.moveAnimation).name.string as AnyObject?
+			dictRep["description"] = self.mdescription.string as AnyObject?
+			dictRep["moveAnimation"] = XGOriginalMoves.move(self.animationID).name.string as AnyObject?
 			dictRep["priority"] = self.priority as AnyObject?
 			dictRep["pp"] = self.pp as AnyObject?
 			dictRep["effect"] = self.effect as AnyObject?
@@ -233,7 +231,7 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 			dictRep["target"] = self.target.string as AnyObject?
 			dictRep["category"] = self.category.string as AnyObject?
 			
-			return ["\(self.moveIndex) " + self.nameString.string : dictRep as AnyObject]
+			return ["\(self.moveIndex) " + self.name.string : dictRep as AnyObject]
 		}
 	}
 	

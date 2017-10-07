@@ -13,13 +13,12 @@ class GoDHomeViewController: GoDTableViewController {
 	
 	@IBOutlet var logView: NSTextView!
 	
-	let tools = ["Trainer Editor","Pokemon Stats Editor","Patches"]
-	let segues = ["toTrainerVC","toStatsVC","toPatchVC"]
+	let tools = ["Trainer Editor (incomplete)","Pokemon Stats Editor","Move Editor","Item Editor","Patches"]
+	let segues = ["toTrainerVC","toStatsVC","toMoveVC","toItemVC","toPatchVC"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
 		self.table.reloadData()
-		
 		
     }
 	

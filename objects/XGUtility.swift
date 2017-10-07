@@ -49,8 +49,12 @@ class XGUtility {
 			}
 		}
 		
+		deckArchive.shiftAndReplaceFileWithIndex(0, withFile: .lzss("DeckData_Bingo.bin.lzss"))
 		deckArchive.shiftAndReplaceFileWithIndex(2, withFile: .lzss("DeckData_Colosseum.bin.lzss"))
 		deckArchive.shiftAndReplaceFileWithIndex(4, withFile: .lzss("DeckData_DarkPokemon.bin.lzss"))
+		deckArchive.shiftAndReplaceFileWithIndex(6, withFile: .lzss("DeckData_Hundred.bin.lzss"))
+		deckArchive.shiftAndReplaceFileWithIndex(8, withFile: .lzss("DeckData_Imasugu.bin.lzss"))
+		deckArchive.shiftAndReplaceFileWithIndex(10, withFile: .lzss("DeckData_Sample.bin.lzss"))
 		deckArchive.shiftAndReplaceFileWithIndex(12, withFile: .lzss("DeckData_Story.bin.lzss"))
 		deckArchive.shiftAndReplaceFileWithIndex(14, withFile: .lzss("DeckData_Virtual.bin.lzss"))
 		
@@ -190,11 +194,10 @@ class XGUtility {
 	
 	class func compileAllFiles() {
 		
-		importStringTables()
-		importScripts()
-		
 		prepareForCompilation()
 		
+		importStringTables()
+		importScripts()
 		
 		XGISO().importAllFiles()
 	}
@@ -223,6 +226,7 @@ class XGUtility {
 	}
 	
 	class func importStringTables() {
+		
 		for file in XGFolders.StringTables.files {
 			
 			print("importing string table: " + file.fileName)
@@ -390,7 +394,7 @@ class XGUtility {
 	}
 	
 	class func defaultMoveCategories() {
-		let categories = XGResources.JSON("MoveCategories").json as! [Int]
+		let categories = XGResources.JSON("Move Categories").json as! [Int]
 		for i in 0 ..< kNumberOfMoves {
 			let move = XGMove(index: i)
 			move.category = XGMoveCategories(rawValue: categories[i]) ?? XGMoveCategories.none
@@ -689,7 +693,7 @@ class XGUtility {
 	class func prepareMovesForRelease() {
 		for id in 1 ..< kNumberOfMoves {
 			let move = XGMove(index: id)
-			let name = move.nameString
+			let name = move.name
 			if name.string.characters.count > 1 {
 				
 				let index = name.string.characters.index(before: name.string.endIndex)
@@ -697,7 +701,7 @@ class XGUtility {
 				
 				if lastChar == "+" || lastChar == "-" {
 					let new = name.string.replacingCharacters(in: index ..< name.string.characters.endIndex, with: "")
-					move.nameString.duplicateWithString(new).replace()
+					move.name.duplicateWithString(new).replace()
 				}
 				
 			}
@@ -1443,8 +1447,8 @@ class XGUtility {
 			
 			indices.append(String(i))
 			hexIndices.append(i.hex())
-			names.append(move.nameString.string)
-			descriptions.append(move.descriptionString.string)
+			names.append(move.name.string)
+			descriptions.append(move.mdescription.string)
 			priorities.append(move.priority < 128 ? move.priority.string : (move.priority - 256).string)
 			basePowers.append(move.basePower > 0 ? move.basePower.string : "-")
 			effectAccuracies.append(move.effectAccuracy > 0 ? move.effectAccuracy.string + "%" : "-")

@@ -7,29 +7,20 @@
 //
 
 
+//let mantine = XGPokemon.pokemon(226).stats
+//let tms = [1,4,5,9,10,14,28,38,39,41,45,46,47,49]
+//let tut = [2,3,4,8,10,11]
+//for i in 1 ... 12 {
+//	mantine.tutorMoves[i - 1] = tut.contains(i)
+//}
+//for i in 1 ... 50 {
+//	mantine.tutorMoves[i - 1] = tms.contains(i)
+//}
+//mantine.save()
 
 //XGUtility.compileMainFiles()
-XGUtility.compileForRelease(XG: true)
+//XGUtility.compileForRelease(XG: true)
 
-//var known = [("people ids", 9368),]
-//
-//for i in 0 ..< kNumberRelPointers {
-//	let offset = common.getPointer(index: i)
-//	print(i,":",offset.hexString())
-//	
-//	for values in known {
-//		if offset == values.1 {
-//			print(values.0)
-//		}
-//	}
-//}
-
-//loadAllStrings()
-//for string in allStrings {
-//	if string.containsSubstring("Dr. C.") {
-//		string.stringPlusIDAndFile.println()
-//	}
-//}
 
 //XGUtility.compileMainFiles()
 
@@ -38,7 +29,6 @@ XGUtility.compileForRelease(XG: true)
 
 //let bingotex = XGFiles.texture("uv_str_bingo_00.fdat")
 //XGFiles.nameAndFolder("bingo_menu.fsys", .MenuFSYS).fsysData.replaceFile(file: bingotex.compress())
-
 
 
 //XGUtility.compileForRelease(XG: true)

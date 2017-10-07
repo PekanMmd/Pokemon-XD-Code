@@ -70,7 +70,7 @@ let kSpeciesNameIDOffset	= 0x1E
 let kPokemonModelIndexOffset = 0x2E // Same as pokemon's index
 let kPokemonBodyOffset		 = 0x118
 let kPokemonBodyShinyOffset	 = 0x120
-let kPokemonFaceIndexOffset	 = 0x116 // Same as Pokemon's national dex index
+let kPokemonFaceIndexOffset	 = 0x116
 
 class XGPokemonStats: NSObject {
 	
@@ -176,7 +176,7 @@ class XGPokemonStats: NSObject {
 		self.cryIndex		= rel.get2BytesAtOffset(startOffset + kPokemonCryIndexOffset)
 		self.modelIndex		= rel.get2BytesAtOffset(startOffset + kPokemonModelIndexOffset)
 		self.faceIndex		= rel.get2BytesAtOffset(startOffset + kPokemonFaceIndexOffset)
-		self.bodyID		= rel.get4BytesAtOffset(startOffset + kPokemonBodyOffset)
+		self.bodyID		    = rel.get4BytesAtOffset(startOffset + kPokemonBodyOffset)
 		self.bodyShinyID	= rel.get4BytesAtOffset(startOffset + kPokemonBodyShinyOffset)
 		
 		self.levelUpRate	= XGExpRate(rawValue: rel.getByteAtOffset(startOffset + kEXPRateOffset)) ?? .standard

@@ -271,9 +271,6 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 	
 	func save() {
 		
-		let data = self.deckData.deck.data
-		let start = startOffset
-		
 		if self.isShadowPokemon {
 			
 			self.shinyness = .random
@@ -291,7 +288,12 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 				data.replace2BytesAtOffset(shadowStartOffset + kFirstShadowMoveOFfset + (i * 2), withBytes: self.shadowMoves[i].index)
 			}
 			
+			data.save()
+			
 		}
+		
+		let data = self.deckData.deck.data
+		let start = startOffset
 		
 		data.replace2BytesAtOffset(start + kPokemonIndexOffset, withBytes: species.index)
 		data.replace2BytesAtOffset(start + kPokemonItemOffset, withBytes: item.index)

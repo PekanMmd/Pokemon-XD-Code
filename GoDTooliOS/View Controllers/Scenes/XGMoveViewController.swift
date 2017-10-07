@@ -152,10 +152,10 @@ class XGMoveViewController: XGTableViewController, UISearchResultsUpdating, UISe
 		indexField.isUserInteractionEnabled = false
 		self.addSubview(indexField, name: "index")
 		
-		nameField = XGTextField(title: "Name", height: 50, width: 200, action: { self.move.nameString.duplicateWithString(self.nameField.text).replace(); self.updateView() })
+		nameField = XGTextField(title: "Name", height: 50, width: 200, action: { self.move.name.duplicateWithString(self.nameField.text).replace(); self.updateView() })
 		self.addSubview(nameField, name: "name")
 		
-		descField = XGTextField(title: "Description", height: 50, width: 600, action: { self.move.descriptionString.duplicateWithString(self.descField.text).replace(); self.updateView() })
+		descField = XGTextField(title: "Description", height: 50, width: 600, action: { self.move.mdescription.duplicateWithString(self.descField.text).replace(); self.updateView() })
 		self.addSubview(descField, name: "desc")
 		
 		priorityField = XGValueTextField(title: "Priority", min: -126, max: 126, height: 50, width: 100, action: {self.move.priority = self.priorityField.value >= 0 ? self.priorityField.value : (256 - self.priorityField.value)})
@@ -253,8 +253,8 @@ class XGMoveViewController: XGTableViewController, UISearchResultsUpdating, UISe
 			
 			self.startField.text = String(format: "\(self.move.startOffset) : 0x%x", self.move.startOffset)
 			self.indexField.text = String(format: "\(self.move.moveIndex) : 0x%x", self.move.moveIndex)
-			self.nameField.text  = self.move.nameString.string
-			self.descField.text  = self.move.descriptionString.string
+			self.nameField.text  = self.move.name.string
+			self.descField.text  = self.move.mdescription.string
 			self.ppTextField.value = self.move.pp
 			self.powerField.value = self.move.basePower
 			self.accuracyField.value = self.move.accuracy
@@ -275,7 +275,7 @@ class XGMoveViewController: XGTableViewController, UISearchResultsUpdating, UISe
 			self.hmButton.backgroundColor = self.move.HMFlag ? UIColor.green : UIColor.red
 			
 			for i in 0 ..< self.animations.count {
-				if self.move.moveAnimation == self.animations[i] {
+				if self.move.animationID == self.animations[i] {
 					let omove = XGOriginalMoves.move(i)
 					self.animationButton.setBackgroundImage(omove.type.image, for: UIControlState())
 					self.animationButton.titleLabel?.text = omove.name.string
@@ -403,7 +403,8 @@ class XGMoveViewController: XGTableViewController, UISearchResultsUpdating, UISe
 			
 		} else if popoverPresenter == self.animationButton {
 			let index = (selectedItem as! XGOriginalMoves).index
-			self.move.moveAnimation = animations[index]
+			self.move.animationID = animations[index]
+			self.move.animation2ID = self.move.animationID - (self.move.animationID < 0x164 ? 0 : 1)
 		}
 		
 		self.updateView()
@@ -414,7 +415,7 @@ class XGMoveViewController: XGTableViewController, UISearchResultsUpdating, UISe
 			self.move.save()
 			
 			self.moveTypes[self.move.moveIndex] = self.move.type
-			self.moveNames[self.move.moveIndex] = self.move.nameString.string
+			self.moveNames[self.move.moveIndex] = self.move.name.string
 			
 			self.table.reloadRows(at: [self.currentIndexPath], with: .fade)
 			self.table.selectRow(at: self.currentIndexPath, animated: false, scrollPosition: .none)

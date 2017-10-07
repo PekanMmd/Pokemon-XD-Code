@@ -11,11 +11,21 @@ import Foundation
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
 let region = XGRegions.US
 
+let date = Date(timeIntervalSinceNow: 0)
+var logString = ""
+
 func printg(_ args: Any...) {
 	for arg in args {
 		print(arg, separator: " ", terminator: " ")
 	}
 	print("") // automatically adds new line
+	
+	for arg in args {
+		logString = logString + String(describing: arg) + " "
+	}
+	logString = logString + "\n"
+	
+	XGUtility.saveString(logString, toFile: .log(date))
 }
 
 extension GoDTexture {

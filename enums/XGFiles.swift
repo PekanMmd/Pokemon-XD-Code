@@ -455,6 +455,18 @@ enum XGFolders : String {
 			}
 		}
 		
+		let jsons = ["Move Effects", "Original Pokemon", "Original Moves", "Move Categories"]
+		
+		for j in jsons {
+			let file = XGFiles.nameAndFolder(j + ".json", .JSON)
+			if !file.exists {
+				let resource = XGResources.JSON(j)
+				let data = resource.data
+				data.file = file
+				data.save()
+			}
+		}
+		
 		if !DeckDataEmptyLZSS.file.exists {
 			DeckDataEmptyLZSS.save()
 		}

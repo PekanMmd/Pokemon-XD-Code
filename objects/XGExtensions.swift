@@ -50,6 +50,12 @@ extension String {
 		
 		return self.substring(to: extensionIndex)
 	}
+	
+	var fileExtensions : String {
+		let extensionIndex = self.characters.index(of: ".") ?? self.endIndex
+		
+		return self.substring(from: extensionIndex)
+	}
 }
 
 extension Bool {

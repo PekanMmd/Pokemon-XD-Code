@@ -25,6 +25,7 @@ let kSizeOfLZSSHeader				= 0x10
 let kLZSSbytes : UInt32				= 0x4C5A5353
 let kTCODbytes : UInt32				= 0x54434F44
 let kUSbytes						= 0x5553
+let kJPbytes						= 0x4A50
 
 class XGFsys : NSObject {
 	
@@ -214,6 +215,10 @@ class XGFsys : NSObject {
 		}
 		
 		if (decompressedData.get4BytesAtOffset(0) == 0x0) && (decompressedData.get2BytesAtOffset(0x6) == kUSbytes) {
+			ext = ".msg"
+		}
+		
+		if (decompressedData.get4BytesAtOffset(0) == 0x0) && (decompressedData.get2BytesAtOffset(0x6) == kJPbytes) {
 			ext = ".msg"
 		}
 		
@@ -455,7 +460,7 @@ class XGFsys : NSObject {
 				addendum = " " + addendum
 			}
 			
-			updatedNames.append(filenames[i] + addendum)
+			updatedNames.append(filenames[i].removeFileExtensions() + addendum + filenames[i].fileExtensions)
 		}
 		
 		for i in 0 ..< data.count {

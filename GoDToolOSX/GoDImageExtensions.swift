@@ -44,6 +44,10 @@ extension XGMoveTypes {
 			return XGFiles.typeImage(self.rawValue).image
 		}
 	}
+	
+	static var shadowImage : NSImage {
+		return XGFiles.nameAndFolder("type_shadow.png", .Types).image
+	}
 }
 
 extension XGResources {
