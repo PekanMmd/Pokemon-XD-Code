@@ -67,7 +67,7 @@ class XGMoveViewController: XGTableViewController, UISearchResultsUpdating, UISe
 		self.showActivityView{ (Bool) -> Void in
 			
 			for i in 0 ..< kNumberOfMoves {
-				self.animations.append(XGOriginalMoves.move(i).animation)
+				self.animations.append(i)
 			}
 			
 			self.loadTableData()

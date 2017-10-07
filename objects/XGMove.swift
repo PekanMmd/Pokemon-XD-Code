@@ -210,7 +210,7 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["description"] = self.mdescription.string as AnyObject?
-			dictRep["moveAnimation"] = XGOriginalMoves.move(self.animationID).name.string as AnyObject?
+			dictRep["moveAnimation"] = (XGFiles.nameAndFolder("Original Moves.json", .JSON).json as! [String])[self.animationID] as AnyObject?
 			dictRep["priority"] = self.priority as AnyObject?
 			dictRep["pp"] = self.pp as AnyObject?
 			dictRep["effect"] = self.effect as AnyObject?
