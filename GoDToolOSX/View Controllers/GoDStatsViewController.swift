@@ -453,7 +453,7 @@ class GoDStatsViewController: GoDTableViewController {
 		}
 		
 		func numberOfRows(in tableView: NSTableView) -> Int {
-			return kNumberOfTMs + kNumberOfTutorMoves
+			return kNumberOfTMsAndHMs + kNumberOfTutorMoves
 		}
 		
 		func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -462,12 +462,15 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 			
-			let isTM = row < 50
-			let tm = isTM ? XGTMs.tm(row + 1) : XGTMs.tutor(row - 49)
+			let isTM = row < 58
+			let tm = isTM ? XGTMs.tm(row + 1) : XGTMs.tutor(row - 57)
 			
 			let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: nil, fontSize: 12, width: self.width)) as! GoDTableCellView
 			
 			cell.setBackgroundImage(tm.move.type.image)
+			if tm.move.isShadowMove {
+				cell.setBackgroundImage(XGMoveTypes.shadowImage)
+			}
 			cell.setTitle(tm.move.name.string)
 			cell.addBorder(colour: GoDDesign.colourBlack(), width: 1)
 			
@@ -477,7 +480,7 @@ class GoDStatsViewController: GoDTableViewController {
 			if isTM {
 				cell.alphaValue = delegate.pokemon.learnableTMs[row] ? 1 : 0.5
 			} else {
-				cell.alphaValue = delegate.pokemon.tutorMoves[row - 50] ? 1 : 0.5
+				cell.alphaValue = delegate.pokemon.tutorMoves[row - 58] ? 1 : 0.5
 			}
 			
 			
@@ -486,10 +489,10 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
 			if row >= 0 {
-				if row < 50 {
+				if row < 58 {
 					delegate.pokemon.learnableTMs[row]  = !delegate.pokemon.learnableTMs[row]
 				} else {
-					delegate.pokemon.tutorMoves[row - 50] = !delegate.pokemon.tutorMoves[row - 50]
+					delegate.pokemon.tutorMoves[row - 58] = !delegate.pokemon.tutorMoves[row - 58]
 				}
 			}
 			tableView.reloadData()
@@ -497,10 +500,10 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		func tableView(tableView: NSTableView, didSelectRow row: Int) {
 			if row >= 0 {
-				if row < 50 {
+				if row < 58 {
 					delegate.pokemon.learnableTMs[row]  = !delegate.pokemon.learnableTMs[row]
 				} else {
-					delegate.pokemon.tutorMoves[row - 50] = !delegate.pokemon.tutorMoves[row - 50]
+					delegate.pokemon.tutorMoves[row - 58] = !delegate.pokemon.tutorMoves[row - 58]
 				}
 			}
 			tableView.reloadData()

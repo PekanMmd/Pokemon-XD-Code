@@ -394,7 +394,7 @@ class XGUtility {
 	}
 	
 	class func defaultMoveCategories() {
-		let categories = XGResources.JSON("Move Categories").json as! [Int]
+		let categories = XGFiles.nameAndFolder("Move Categories.json", .JSON).json as! [Int]
 		for i in 0 ..< kNumberOfMoves {
 			let move = XGMove(index: i)
 			move.category = XGMoveCategories(rawValue: categories[i]) ?? XGMoveCategories.none

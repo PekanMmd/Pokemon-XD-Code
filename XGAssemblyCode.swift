@@ -44,6 +44,8 @@ class XGAssembly {
 	}
 	
 	class func ASMfreeSpacePointer() -> Int {
+		// returns the next free instruction address (from common_rel) as a pointer to ram
+		
 		var offset = kRelFreeSpaceStart
 		let rel = XGFiles.common_rel.data
 		var value = rel.get4BytesAtOffset(offset - kRELtoRAMOffsetDifference)

@@ -138,7 +138,7 @@ enum XGTMs : XGDictionaryRepresentable {
 				dol.replace2BytesAtOffset(startOffset, withBytes: move.index)
 				dol.save()
 				
-				self.updateItemDescription()
+//				self.updateItemDescription()
 			
 			case .tutor : let rel = XGFiles.common_rel.data
 						rel.replace2BytesAtOffset(startOffset + kTutorMoveMoveIndexOffset, withBytes: move.index)

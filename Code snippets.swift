@@ -145,14 +145,7 @@ import Foundation
 //	pokemon.save()
 //}
 
-////Sand rush
-//let sandstart = 0x2009c0
-//let sinstructions : [UInt32] = [0x5464043e,0x28170021,0x41820020,0x28170022,0x41820024,0x28170032,0x40820028,0x281C0003,0x4182001C,0x4800001C,0x281C0002,0x41820010,0x48000010,0x281C0001,0x40820008]
-//for i in 0 ..< sinstructions.count {
-//	let offset = sandstart + (i * 4)
-//	dol.replace4BytesAtOffset(offset, withBytes: sinstructions[i])
-//}
-//dol.save()
+
 //loadAllStrings()
 //let bigd = XGDecks.DeckColosseum
 //var strs = [XGString]()
@@ -3786,6 +3779,33 @@ import Foundation
 //	0x7ED619D6, // mullw r22, r22, r3
 //])
 
+//// aoe moves (e.g. bulldoze discharge)
+// need to test how moves being absorbed affects aoe moves before investing time
+// into making this work.
+// it seems some abilities completely end the move after absorbing it.
+//let activateSecondary = 0x213d20
+//let getRoutinePos = 0x806dbb10 // lwz	r3, -0x44F0 (r13)
+//let setRoutinePos = 0x906dbb10 // stw	r3, -0x44F0 (r13)
+//
+//// change effect to eq in use move
+//let effectBranch = 0x20f068
+//let effectStart = 0x0
+//
+//let getTargets = 0x13e784
+//
+//let effectCode : ASM = [
+//
+//	0x7c791b78, // mr	r25, r3
+//	0x7f03c378, // mr	r3, r24
+//	XGAssembly.createBranchAndLinkFrom(offset: effectStart + 0x8, toOffset: getTargets),
+//	0x28030006, // cmpwi r3, both foes and ally
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0xc),
+//	0x38600093, // li r3, earthquake effect
+//	0x7c791b78, // mr	r25, r3
+//	// overwritten code
+//	0x38000000, // li	r0, 0
+//
+//]
 
 
 
