@@ -1,0 +1,84 @@
+01: sleep chance?
+02: poison chance
+03: burn chance
+04: freeze chance
+05: paralyse chance
+06: badly poison chance
+07: confusion chance
+08: flinch chance
+09: tri attack
+
+0b: double prize money
+
+16: chance to lower attack
+17: chance to lower defense
+18: chance to lower speed
+19: chance to lower sp.a
+1A: chance to lower sp.d
+1B: chance to lower accuracy
+1C: chance to lower evasion
+
+36: knock off
+
+4F: chance to raise user's attack
+50: chance to raise user's defense
+51: chance to raise user's speed
+52: chance to raise user's sp.def
+53: chance to raise user's sp.atk
+54: chance to raise user's accuracy
+55: chance to raise user's evasion
+
+62: omniboost chance
+
+88: always flinch
+
+A3: rapid spin
+
+C1: Puts yourself to sleep.
+C2: Poisons target
+C3: Burns target
+C4: Freezes target
+C5: Paralyzes target
+C6: Badly poisons target
+C7: Confuses target
+C9: Freezes opponent.
+CA: Uproar's effect.
+CB: Payday's effect.
+CD: Sand Tomb's effect.
+CE: 1/4 Recoil damage.
+CF: Raises users attack one level.
+D0: Raises users defense one level.
+D1: Raises users speed one level.
+D2: Raises users special attack one level.
+D3: Raises users special defense one level.
+D4: Raises users accuracy one level.
+D5: Raises users evasion one level.
+D6: Lowers users attack one level.
+D7: Lowers users defense one level.
+D8: Lowers users speed one level.
+D9: Lowers users special attack one level.
+DA: Lowers users special defense level.
+DB: Lowers users accuracy level.
+DC: Lowers users evasion one level.
+DD: Takes a turn to recover (Hyper Beam, etc...)
+DF: Thief's effect
+E2: Users stats all raise one level (Except Accuracy and Evasion).
+E5: Users attack and defense lower one level.
+E6: 1/3 Recoil.
+E7: Users attack raises two levels.
+E8: Users defense raises two levels.
+E9: Users speed raises two levels.
+EA: Users special attack raises two levels.
+EB: Users special defense raises two levels.
+EC: Users accuracy raises two levels.
+ED: Users evasion raises two levels.
+EE: Users attack lowers two levels.
+EF: Users defense lowers two levels.
+F0: Users speed lowers two levels.
+F1: Users special attack lowers two levels.
+F2: Users special defense lowers two levels.
+F3: Users accuracy lowers two levels.
+F4: Users evasion lowers two levels.
+F5: Outrage's effect.
+F6: Knock Off's effect.
+FB: Users special attack lowers two levels.

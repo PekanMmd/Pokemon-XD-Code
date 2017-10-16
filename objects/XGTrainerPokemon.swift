@@ -20,7 +20,7 @@ let kPokemonItemOffset		= 0x04
 let kFirstPokemonIVOffset	= 0x08
 let kFirstPokemonEVOffset	= 0x0E
 let kFirstPokemonMoveOffset	= 0x14
-let kPokemonPriority1Offset = 0x1D // priority in vanilla but moved by stars in xg
+let kPokemonPriority1Offset = 0x1D // priority? in vanilla but moved by stars in xg
 let kPokemonPIDOffset		= 0x1E
 let kPokemonGenRandomOffset = 0x1F // If value is set to 1 then the pokemon is generated with a random nature and gender. Always 0 in vanilla and unused in XG
 
@@ -38,7 +38,7 @@ let kShadowStoryIndexOffset	= 0x06
 let kShadowCounterOffset	= 0x08
 let kFirstShadowMoveOFfset	= 0x0C
 let kShadowAggressionOffset	= 0x14 // determines how often it enters reverse mode
-let kShadowUnknown2Offset	= 0x15
+let kShadowAlwaysFleeOffset	= 0x15 // the shadow pokemon is sent to miror b. even if you lose the battle
 
 let kPurificationExperienceOffset = 0xA // Should always be 0. The value gets increased as the pokemon gains exp and it is all gained at once upon purification.
 
@@ -66,7 +66,7 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 	var shadowFleeValue = 0x0
 	
 	var shadowAggression = 0x0
-	var shadowUnknown2 = 0x0
+	var shadowAlwaysFlee = 0x0
 	
 	var priority1 = 0x0
 	
@@ -88,6 +88,7 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 				dictRep["fleesToMirorB"] = self.shadowFleeValue as AnyObject?
 				dictRep["Aggressiveness"] = self.shadowAggression as AnyObject?
 				dictRep["ShadowDataInUse"] = self.ShadowDataInUse as AnyObject?
+				dictRep["ShadowAlwaysFlee"] = self.shadowAlwaysFlee as AnyObject?
 			}
 			
 			dictRep["species"] = self.species.dictionaryRepresentation as AnyObject?
@@ -144,6 +145,7 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 				shadowData["aggressiveness"] = self.shadowAggression as AnyObject?
 				shadowData["inUse"] = self.ShadowDataInUse as AnyObject?
 				shadowData["Aggression"] = self.shadowAggression as AnyObject?
+				shadowData["shadowAlwaysFlee"] = self.shadowAlwaysFlee as AnyObject?
 			}
 			
 			dictRep["item"] = self.item.name.string as AnyObject?
@@ -250,7 +252,7 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 			ShadowDataInUse	= data.getByteAtOffset(start + kShadowInUseFlagOffset) == 0x80
 			
 			shadowAggression = data.getByteAtOffset(start + kShadowAggressionOffset)
-			shadowUnknown2 = data.getByteAtOffset(start + kShadowUnknown2Offset)
+			shadowAlwaysFlee = data.getByteAtOffset(start + kShadowAlwaysFleeOffset)
 			
 			for i in 0 ..< kNumberOfPokemonMoves {
 				let index = data.get2BytesAtOffset(start + kFirstShadowMoveOFfset + (i * 2) )
@@ -283,6 +285,7 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 			data.replaceByteAtOffset(shadowStartOffset + kFleeAfterBattleOffset, withByte: shadowFleeValue)
 			data.replaceByteAtOffset(shadowStartOffset + kShadowAggressionOffset, withByte: shadowAggression)
 			data.replaceByteAtOffset(shadowStartOffset + kShadowInUseFlagOffset, withByte: ShadowDataInUse ? 0x80 : 0x00)
+			data.replaceByteAtOffset(shadowStartOffset + kShadowAlwaysFleeOffset, withByte: shadowAlwaysFlee)
 			
 			for i in 0 ..< kNumberOfPokemonMoves {
 				data.replace2BytesAtOffset(shadowStartOffset + kFirstShadowMoveOFfset + (i * 2), withBytes: self.shadowMoves[i].index)

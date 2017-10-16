@@ -115,7 +115,6 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		self.effectAccuracy	 = rel.getByteAtOffset(startOffset + kEffectAccuracyOffset)
 		self.basePower		 = rel.getByteAtOffset(startOffset + kBasePowerOffset)
 		self.accuracy		 = rel.getByteAtOffset(startOffset + kAccuracyOffset)
-		self.priority		 = rel.getByteAtOffset(startOffset + kPriorityOffset)
 		self.pp				 = rel.getByteAtOffset(startOffset + kPPOffset)
 		
 		self.nameID		   = rel.get2BytesAtOffset(startOffset + kMoveNameIDOffset)
@@ -124,6 +123,9 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		self.animation2ID  = rel.get2BytesAtOffset(startOffset + kAnimation2IndexOffset)
 		
 		self.displayTypeMatchupFlag = rel.getByteAtOffset(startOffset + kMoveDisplaysTypeMatchupInSummaryScreenFlagOffset)
+		
+		let p			   = rel.getByteAtOffset(startOffset + kPriorityOffset)
+		self.priority	   = p > 128 ? p - 256 : p
 		
 	}
 
@@ -162,13 +164,12 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		rel.replaceByteAtOffset(startOffset + kAccuracyOffset, withByte: self.accuracy)
 		rel.replaceByteAtOffset(startOffset + kPPOffset, withByte: self.pp)
 		rel.replaceByteAtOffset(startOffset + kEffectAccuracyOffset, withByte: self.effectAccuracy)
-		rel.replaceByteAtOffset(startOffset + kPriorityOffset, withByte: self.priority)
+		rel.replaceByteAtOffset(startOffset + kPriorityOffset, withByte: self.priority < 0 ? 256 + self.priority : self.priority)
 		
 		rel.replace2BytesAtOffset(startOffset + kMoveNameIDOffset, withBytes: self.nameID)
 		rel.replace2BytesAtOffset(startOffset + kMoveDescriptionIDOffset, withBytes: self.descriptionID)
 		rel.replace2BytesAtOffset(startOffset + kAnimationIndexOffset , withBytes: self.animationID)
 		rel.replace2BytesAtOffset(startOffset + kAnimation2IndexOffset, withBytes: self.animation2ID)
-		
 		
 		rel.replaceByteAtOffset(startOffset + kMoveDisplaysTypeMatchupInSummaryScreenFlagOffset, withByte: self.displayTypeMatchupFlag)
 		

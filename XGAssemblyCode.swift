@@ -491,114 +491,266 @@ class XGAssembly {
 		XGAssembly.replaceASM(startOffset: switchlessBranch - kDOLtoRAMOffsetDifference, newASM: [createBranchAndLinkFrom(offset: switchlessBranch, toOffset: switchlessStart)])
 		
 	}
-}
-
-func getRoutineStartForMoveEffect(index: Int) -> Int {
-	let effectOffset = index * 4
-	let pointerOffset = moveEffectTableStartDOL + effectOffset
-	let pointer = XGFiles.dol.data.get4BytesAtOffset(pointerOffset) - 0x80000000
-	return Int(pointer)
-}
-
-func getRoutinePointerForMove(move: XGMoves) -> Int {
-	return getRoutineStartForMoveEffect(index: move.data.effect)
-}
-
-func getRoutineEndPointerForMove(move: XGMoves) -> Int {
-	return getRoutineStartForMoveEffect(index: move.data.effect + 1)
-}
-
-
-func getFunctionPointerWithIndex(index: Int) -> Int {
-	let ram = XGFiles.nameAndFolder("xg ram.raw", .Reference).data
-	return Int(ram.get4BytesAtOffset(kRAMListOfFunctionPointers + (index * 4)))
-}
-
-func getFunctionPointerForStatusMove(move: XGMoves) -> Int {
-	// can be used for moves which just set up a status effect like safeguard, reflect and mist
-	// other moves don't seem to have a clear method of finding the function pointer
-	let ram = XGFiles.nameAndFolder("xg ram.raw", .Reference).data
 	
-	let routine = getRoutinePointerForMove(move: move)
-	// 3 seems to work for simple set up status moves
-	let functionIndex = ram.getByteAtOffset(routine + 3)
+	class func routineForSingleStatBoost(stat: XGStats, stages: XGStatStages) -> [Int] {
+		return [0x2f, 0xff, 0x01, 0x60, 0x1e, stat.rawValue + stages.rawValue, 0x29, 0x80, 0x41, 0x44, 0x39,]
+	}
 	
-	return getFunctionPointerWithIndex(index: functionIndex)
+	class func routineForTargetStatDrop(stat: XGStats, stages: XGStatStages) -> [Int] {
+		return [0x2f, 0xff, 0x01, 0x60, 0x1e, stat.rawValue + stages.rawValue, 0x29, 0x80, 0x41, 0x44, 0xcd,]
+	}
 	
-}
-
-func printRoutineForMove(move: XGMoves) {
-	let routineStart = getRoutinePointerForMove(move: move)
-//	let routineEnd = getRoutineEndPointerForMove(move: move)
-//	let length = routineEnd - routineStart > 0 ? routineEnd - routineStart : 50
-	let ram = XGFiles.nameAndFolder("xg ram.raw", .Reference).data
-//	var routine = ram.getByteStreamFromOffset(routineStart, length: length)
-	var routine = ram.getByteStreamFromOffset(routineStart, length: 4)
-	
-	var i = 4
-	var endFound = false
-	while !endFound {
+	class func routineForMultipleStatBoosts(RAMOffset: Int, boosts: [(stat: XGStats, stages: XGStatStages)], animate: Bool) -> [Int] {
+		// MULTI STAT BOOST
+		// intro
+		// --> stat checks
+		// check stat + #end of stat checks (0 ... n)
+		// check stat + 0x804167d9 (no stats can be boosted so fail)
+		// --> end of stat checks
+		// mask
+		// --> loop start of current boost
+		// start boost + #end of current boost
+		// mid boost + #end of current boost
+		// end boost
+		// -->
+		// outro
 		
-		let next = ram.getByteAtOffset(routineStart + i)
-		routine.append(next)
-		
-		if routine[i] == 15 && routine[i - 1] == 65 && routine[i - 2] == 65 && routine[i - 3] == 128 {
-			endFound = true
+		if boosts.isEmpty {
+			return [Int]()
 		}
 		
-		i += 1
+		let posBoosts = boosts.filter { (boost : (stat: XGStats, stages: XGStatStages)) -> Bool in
+			return boost.stages.trueValue > 0
+		}
+		
+		let stats = boosts.map { (boost: (stat: XGStats, stages: XGStatStages)) -> XGStats in
+			return boost.stat
+		}
+		
+		let intro = [0x00] + (animate ? [0x2, 0x4] : [Int]())
+		let animation = animate ? [0x0a, 0x0b, 0x4] : [Int]()
+		let mask = [0x2f, 0x80, 0x4e, 0xb9, 0x6c, 0x00, 0x49, 0x11, XGStats.maskForStats(stats: stats), 0x00]
+		let midBoost = [0x2a, 0x00, 0x80, 0x4e, 0x85, 0xc5, 0x02,]
+		let endBoost = [0x14, 0x80, 0x2f, 0x8f, 0xc8, 0x3a, 0x00, 0x40,]
+		let outro = [0x13, 0x00, 0x00, 0x0b, 0x04, 0x29, 0x80, 0x41, 0x41, 0x0f,]
+		
+		let sizeOfCheckStat = 9
+		let sizeOfStatBoost = 31
+		let statCheckEnd = RAMOffset + (posBoosts.count * sizeOfCheckStat)
+		
+		func checkStat(stat: XGStats, stages: XGStatStages, final: Bool) -> [Int] {
+			let comp = stages.trueValue > 0 ? 0x3 : 0x2
+			return [0x21, 0x11, final ? 0x00 : comp, stat.rawValue, stages.trueValue > 0 ? 0x0c : 0x00]
+		}
+		
+		func boostStart(stat: XGStats, stages: XGStatStages) -> [Int] {
+			return [0x2f, 0xff, 0x01, 0x60, 0x1e, stages.rawValue + stat.rawValue, 0x8a, 0x41,]
+		}
+		
+		
+		var routine = intro
+		
+		for i in 0 ..< posBoosts.count - 1 {
+			routine += checkStat(stat: posBoosts[i].stat, stages: posBoosts[i].stages, final: false) + intAsByteArray(statCheckEnd)
+		}
+		if posBoosts.count > 0 {
+			routine += checkStat(stat: posBoosts.last!.stat, stages: posBoosts.last!.stages, final: true) + intAsByteArray(0x804167d9)
+		}
+		
+		routine += animation
+		routine += mask
+		
+		var currentEndOffset = statCheckEnd + mask.count + sizeOfStatBoost
+		for boost in boosts {
+			routine += boostStart(stat: boost.stat, stages: boost.stages) + intAsByteArray(currentEndOffset)
+			routine += midBoost + intAsByteArray(currentEndOffset)
+			routine += endBoost
+			
+			currentEndOffset += sizeOfStatBoost
+		}
+		
+		routine += outro
+		
+		return routine
+	}
+	
+	class func hitWithSecondaryEffectOpenEnded(effect: Int) -> [Int] {
+		var end = [Int]()
+		
+		if effect >= 0x16 && effect <= 0x1c {
+			end = [0x2f, 0xff, 0x01, 0x60, 0x1e, 0x10 + effect - 0x15]
+		}
+		
+		if effect >= 0x4f && effect <= 0x55 {
+			end = [0x2f, 0xff, 0x01, 0x60, 0x1e, 0x10 + effect - 0x4e]
+		}
+		
+		return [0x2f, 0x80, 0x4e, 0x85, 0xc3, effect,] + end
+		
+	}
+	
+	class func routineHitAllWithSecondaryEffect(effect: Int) -> [Int] {
+		
+		return hitWithSecondaryEffectOpenEnded(effect: effect) + [0x29, 0x80, 0x41, 0x58, 0xfb]
+	}
+	
+	class func routineHitWithSecondaryEffect(effect: Int) -> [Int] {
+		
+		return hitWithSecondaryEffectOpenEnded(effect: effect) + [0x29, 0x80, 0x41, 0x40, 0x90]
+	}
+	
+	class func routineHitAndBranchToRoutine(routineOffsetRAM offset: Int) -> [Int] {
+		return routineRegularHitOpenEnded() + [0x29] + intAsByteArray(offset)
+	}
+	
+	class func routineHitAndStatChange(routineOffsetRAM offset: Int, boosts: [((stat: XGStats, stages: XGStatStages))]) -> [Int] {
+		let regularHit = routineRegularHitOpenEnded()
+		let statStart = offset + regularHit.count
+		
+		return regularHit + routineForMultipleStatBoosts(RAMOffset: statStart, boosts: boosts, animate: false)
+	}
+	
+	class func routineRegularHitOpenEnded() -> [Int] {
+		return [0x00, 0x02, 0x04, 0x05, 0x06, 0x07, 0x08, 0x2f, 0x80, 0x4e, 0xb9, 0x78, 0x00, 0x0a, 0x0b, 0x00, 0x0f, 0x5d, 0x12, 0x3b, 0x0c, 0x12, 0x0e, 0x13, 0x00, 0x40, 0x10, 0x13, 0x00, 0x50, 0x0d, 0x12, 0x0b, 0x04, 0x16, 0x1a, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x2f, 0x80, 0x4e, 0xb9, 0x47, 0x00, 0x4a, 0x00, 0x00,]
 	}
 	
 	
+	class func getRoutineStartForMoveEffect(index: Int) -> Int {
+		let effectOffset = index * 4
+		let pointerOffset = moveEffectTableStartDOL + effectOffset
+		let pointer = XGFiles.dol.data.get4BytesAtOffset(pointerOffset) - 0x80000000
+		return Int(pointer)
+	}
 	
-	print("routine: ", routine)
-	
-//	print("function guess for variable power move [0]: ", getFunctionPointerWithIndex(index: routine[0]).hexString())
-//	print("function guess for status effect move [2]: ", getFunctionPointerWithIndex(index: routine[2]).hexString())
-//	print("function guess for status effect move [3]: ", getFunctionPointerWithIndex(index: routine[3]).hexString())
-	
-	for i in 0 ..< routine.count {
+	class func routineDataForMoveEffect(effect: Int) -> [Int] {
+		var start = getRoutineStartForMoveEffect(index: effect)
+		var routine =  [Int]()
+		var file : XGFiles!
 		
-		if i < (routine.count - 6) {
-			if routine[i] == 29 && routine[i + 1] == 18 {
-				let effect = routine[i + 5]
-				print("check false for status effect on foe: ", effect)
-			}
+		if start - kRELtoRAMOffsetDifference > 0 {
+			// in common_rel
+			file = XGFiles.common_rel
+			start = start - kRELtoRAMOffsetDifference
 			
-			if routine[i] == 29 && routine[i + 1] == 17 {
-				let effect = routine[i + 5]
-				print("check false for status effect on user: ", effect)
-			}
+		} else {
+			// in dol
+			file = XGFiles.dol
+			start = start - kDOLtoRAMOffsetDifference + 0xa0
 			
-			if routine[i] == 30 && routine[i + 1] == 18 {
-				let effect = routine[i + 5]
-				print("check true for status effect on foe: ", effect)
-			}
-			
-			if routine[i] == 30 && routine[i + 1] == 17 {
-				let effect = routine[i + 5]
-				print("check true for status effect on user: ", effect)
-			}
 		}
 		
-		if i < (routine.count - 3) {
-			if routine[i] == 2 && routine[i + 1] == 4 {
-				let index = routine[i + 2]
-				print("initial function: ", getFunctionPointerWithIndex(index: index).hexString())
+		let data = file.data
+		
+		routine = data.getByteStreamFromOffset(start, length: 4)
+		
+		var i = 4
+		var endFound = false
+		while !endFound {
+			
+			routine.append(data.getByteAtOffset(start + i))
+			
+			if routine[i] == 15 && routine[i - 1] == 65 && routine[i - 2] == 65 && routine[i - 3] == 128 {
+				endFound = true
 			}
+			
+			if routine[i] == 57 && routine[i - 1] == 68 && routine[i - 2] == 65 && routine[i - 3] == 128 {
+				endFound = true
+			}
+			
+//			if routine[i] == 0x90 && routine[i - 1] == 64 && routine[i - 2] == 65 && routine[i - 3] == 128 {
+//				endFound = true
+//			}
+			
+			if routine[i] == 0xcd && routine[i - 1] == 68 && routine[i - 2] == 65 && routine[i - 3] == 128 {
+				endFound = true
+			}
+			
+			if routine[i] == 0xc8 && routine[i - 1] == 87 && routine[i - 2] == 65 && routine[i - 3] == 128 {
+				endFound = true
+			}
+			
+			if routine[i] == 0xe8 && routine[i - 1] == 64 && routine[i - 2] == 65 && routine[i - 3] == 128 {
+				endFound = true
+			}
+			
+			if routine[i] == 0xcd && routine[i - 1] == 0x45 && routine[i - 2] == 65 && routine[i - 3] == 128 {
+				endFound = true
+			}
+			
+//			if data.getByteAtOffset(start + i + 1) == 0x0 && data.getByteAtOffset(start + i + 2) == 0x2 && data.getByteAtOffset(start + i + 3) == 0x4 {
+//				endFound = true
+//			}
+//			
+//			if data.getByteAtOffset(start + i + 1) == 0x0 && data.getByteAtOffset(start + i + 2) == 0x1 && data.getByteAtOffset(start + i + 3) == 0x80 {
+//				endFound = true
+//			}
+			
+			i += 1
 		}
 		
-		if i < (routine.count - 3) {
-			if routine[i] == 128 && routine[i + 1] == 65 && routine[i + 2] == 92 && routine[i + 3] == 147 {
-				print("move fail routine")
-			}
-			if routine[i] == 128 && routine[i + 1] == 65 && routine[i + 2] == 65 && routine[i + 3] == 15 {
-				print("end of routine")
-			}
+		
+		return routine
+		
+	}
+	
+	class func routineDataForMove(move: XGMoves) -> [Int] {
+		return routineDataForMoveEffect(effect: move.data.effect)
+	}
+	
+	class func setMoveEffectRoutine(effect: Int, fileOffset: Int, moveToREL rel: Bool, newRoutine routine: [Int]?) {
+		let effectOffset = effect * 4
+		let pointerOffset = moveEffectTableStartDOL + effectOffset
+		let RAMOffset = UInt32(fileOffset + (rel ? kRELtoRAMOffsetDifference : kDOLtoRAMOffsetDifference)) + 0x80000000
+		
+		let dol = XGFiles.dol.data
+		dol.replace4BytesAtOffset(pointerOffset, withBytes: RAMOffset)
+		dol.save()
+		
+		if routine != nil {
+			let file = rel ? XGFiles.common_rel.data : XGFiles.dol.data
+			file.replaceBytesFromOffset(fileOffset, withByteStream: routine!)
+			file.save()
 		}
 	}
 	
+	class func newStatBoostRoutine(effect: Int, boosts: [(stat: XGStats, stages: XGStatStages)], animate: Bool, RAMOffset: Int?) -> [Int] {
+		
+		var routine = [Int]()
+		let offset = RAMOffset ?? ASMfreeSpacePointer()
+		
+		if boosts.count == 1 {
+			routine = routineForSingleStatBoost(stat: boosts[0].stat, stages: boosts[0].stages)
+		} else {
+			routine = routineForMultipleStatBoosts(RAMOffset: 0x80000000 + offset, boosts: boosts, animate: animate)
+		}
+		
+		return routine
+		
+	}
+	
+	class func intAsByteArray(_ i: Int) -> [Int] {
+		var val = i
+		var array = [0,0,0,0]
+		for j in [3,2,1,0] {
+			array[j] = val % 0x100
+			val = val >> 8
+		}
+		return array
+	}
+	
+	class func intAsByteArray(_ i: UInt32) -> [Int] {
+		var val = i
+		var array = [0,0,0,0]
+		for j in [3,2,1,0] {
+			array[j] = Int(val % 0x100)
+			val = val >> 8
+		}
+		return array
+	}
 }
+
+
+
 
 
 
