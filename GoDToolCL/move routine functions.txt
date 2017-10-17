@@ -22,7 +22,7 @@ move routine pointers in ram = 0x802f8af8
 13: display message and wait delay							HALF: delay
 14: display message at offset								WORD: offset containing message id
 15: display message from array								WORD: address of id array BYTE: index
-16: set effect with chance target
+16: check if secondary effect should activate
 17: set effect target
 18: set effect user
 19: end status												BYTE: status id
@@ -38,7 +38,7 @@ move routine pointers in ram = 0x802f8af8
 23: jump if type
 24: calculate exp gain										BYTE: target BYTE: type BYTE: destination
 25: switch in pokemon
-26: attacking pokemon reset crit and damage multipliers
+26: reset crit and damage multipliers and seconday effect
 27: attacking pokemon set number of hits
 28: decremement number of hits
 29: goto
@@ -168,7 +168,7 @@ be: break free (of pokeball ?)
 bf: set curled (defense curl)
 c0: recover based on weather
 c1: calculate hidden power damage
-
+c2: earthquake select next target
 c3: set future attack
 
 c9: follow me

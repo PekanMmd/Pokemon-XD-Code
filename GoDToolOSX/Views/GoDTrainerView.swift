@@ -35,4 +35,6 @@ class GoDTrainerView: NSView {
 		
 	}
 	
+	
+	
 }

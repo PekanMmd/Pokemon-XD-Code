@@ -45,7 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func rebuildISO(_ sender: AnyObject) {
-		XGUtility.compileAllFiles()
+		XGUtility.compileAllFiles(XG: false)
 		GoDAlertViewController.alert(title: "ISO Rebuild Complete", text: "Done.").show(sender: self.homeViewController)
 	}
 	

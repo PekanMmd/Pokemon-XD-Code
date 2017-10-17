@@ -23,8 +23,8 @@
 4F: chance to raise user's attack
 50: chance to raise user's defense
 51: chance to raise user's speed
-52: chance to raise user's sp.def
-53: chance to raise user's sp.atk
+52: chance to raise user's sp.atk
+53: chance to raise user's sp.def
 54: chance to raise user's accuracy
 55: chance to raise user's evasion
 

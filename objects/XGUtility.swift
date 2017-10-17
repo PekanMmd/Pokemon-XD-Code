@@ -143,8 +143,17 @@ class XGUtility {
 		print("updating shadow madness animation")
 		
 		let rel = XGFiles.common_rel.data
+		
 		let offset = move("shadow madness").data.startOffset + kAnimation2IndexOffset
 		rel.replace2BytesAtOffset(offset, withBytes: 0x173)
+		
+		let offset2 = move("coil").data.startOffset + kAnimationIndexOffset
+		rel.replace2BytesAtOffset(offset2, withBytes: 0x15d)
+		
+		let offset3 = move("cotton guard").data.startOffset + kAnimationIndexOffset
+		rel.replace2BytesAtOffset(offset3, withBytes: 0x15d)
+		
+		
 		rel.save()
 	}
 	
@@ -161,19 +170,19 @@ class XGUtility {
 		shadowMadnessAnimation()
 	}
 	
-	class func prepareForCompilation() {
+	class func prepareForCompilation(XG: Bool) {
 		updateShadowMoves()
 		updateValidItems()
 		updateHealingItems()
 		updateTutorMoves()
 		updatePokeSpots()
-		updateShadowMonitor()
+		updateShadowMonitor(XG: XG)
 		compressFiles()
 		importFsys()
 	}
 	
 	class func compileMainFiles() {
-		prepareForCompilation()
+		prepareForCompilation(XG: false)
 		XGISO().updateISO()
 	}
 	
@@ -187,14 +196,14 @@ class XGUtility {
 	}
 	
 	class func compileForRandomiser() {
-		prepareForCompilation()
+		prepareForCompilation(XG: false)
 		
 		XGISO().importRandomiserFiles()
 	}
 	
-	class func compileAllFiles() {
+	class func compileAllFiles(XG: Bool) {
 		
-		prepareForCompilation()
+		prepareForCompilation(XG: XG)
 		
 		importStringTables()
 		importScripts()
@@ -205,7 +214,7 @@ class XGUtility {
 	class func compileForRelease(XG: Bool) {
 		prepareForRelease()
 		if XG { prepareXG() }
-		compileAllFiles()
+		compileAllFiles(XG: true)
 	}
 	
 	class func importScripts() {
@@ -724,7 +733,7 @@ class XGUtility {
 		}
 	}
 	
-	class func updateShadowMonitor() {
+	class func updateShadowMonitor(XG: Bool) {
 		
 		print("updating shadow monitor")
 		
@@ -739,10 +748,13 @@ class XGUtility {
 		}
 		
 		for poke in pokes {
-			if poke.pokemon.index == 0 {
-				indices.append(0x118)
-			} else {
+			
+			if XG && poke.pokemon.index == 150 {
+				indices.append(0x10b)
+			} else if poke.pokemon.index != 0 {
 				indices.append(poke.pokemon.index)
+			} else {
+				indices.append(0x118)
 			}
 		}
 		

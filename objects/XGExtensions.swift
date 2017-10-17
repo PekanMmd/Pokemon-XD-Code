@@ -87,7 +87,8 @@ extension Int {
 extension String {
 	var simplified : String {
 		get {
-			let s = self.replacingOccurrences(of: " ", with: "")
+			var s = self.replacingOccurrences(of: " ", with: "")
+			s = s.replacingOccurrences(of: "-", with: "")
 			return s.lowercased()
 		}
 	}

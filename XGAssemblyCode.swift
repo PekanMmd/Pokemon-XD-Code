@@ -536,10 +536,18 @@ class XGAssembly {
 		
 		let sizeOfCheckStat = 9
 		let sizeOfStatBoost = 31
-		let statCheckEnd = RAMOffset + (posBoosts.count * sizeOfCheckStat)
+		let statCheckEnd = RAMOffset + (posBoosts.count * sizeOfCheckStat) + intro.count
 		
 		func checkStat(stat: XGStats, stages: XGStatStages, final: Bool) -> [Int] {
 			let comp = stages.trueValue > 0 ? 0x3 : 0x2
+			
+			// comparisons
+			// 0 beq
+			// 1 bne
+			// 2 ble
+			// 3 bge
+			// 5 branch if equals negation?
+			
 			return [0x21, 0x11, final ? 0x00 : comp, stat.rawValue, stages.trueValue > 0 ? 0x0c : 0x00]
 		}
 		
@@ -550,8 +558,10 @@ class XGAssembly {
 		
 		var routine = intro
 		
-		for i in 0 ..< posBoosts.count - 1 {
-			routine += checkStat(stat: posBoosts[i].stat, stages: posBoosts[i].stages, final: false) + intAsByteArray(statCheckEnd)
+		if posBoosts.count > 1 {
+			for i in 0 ..< posBoosts.count - 1 {
+				routine += checkStat(stat: posBoosts[i].stat, stages: posBoosts[i].stages, final: false) + intAsByteArray(statCheckEnd)
+			}
 		}
 		if posBoosts.count > 0 {
 			routine += checkStat(stat: posBoosts.last!.stat, stages: posBoosts.last!.stages, final: true) + intAsByteArray(0x804167d9)
@@ -560,7 +570,7 @@ class XGAssembly {
 		routine += animation
 		routine += mask
 		
-		var currentEndOffset = statCheckEnd + mask.count + sizeOfStatBoost
+		var currentEndOffset = statCheckEnd + animation.count + mask.count + sizeOfStatBoost
 		for boost in boosts {
 			routine += boostStart(stat: boost.stat, stages: boost.stages) + intAsByteArray(currentEndOffset)
 			routine += midBoost + intAsByteArray(currentEndOffset)

@@ -193,214 +193,6 @@ import Foundation
 //	strs[i].duplicateWithString(replacementStrs[i]).replace()
 //}
 
-
-//let bingoLevels = [5,15,25,30,45,50,60,75,80,100,10]
-//var bingoMons = [XGBattleBingoPokemon]()
-//for i in 0 ..< kNumberOfBingoCards {
-//	let card = XGBattleBingoCard(index: i)
-//
-//	card.pokemonLevel = bingoLevels[i]
-//
-//	for r in 0 ..< card.rewards.count {
-//		card.rewards[r] *= 2
-//	}
-//	card.save()
-//
-//	bingoMons.append(card.startingPokemon)
-//	for p in card.panels {
-//		switch p {
-//		case .pokemon(let poke):
-//			bingoMons.append(poke)
-//		default:
-//			break
-//		}
-//	}
-//}
-//
-//
-//
-//let bingo : [ (XGPokemon,XGMoves,XGNatures,XGMoveTypes,Int) ] = [
-//	//card 1
-//		(pokemon("bagon"),move("dragonbreath"),.modest,.dragon,0),
-//		(pokemon("bulbasaur"),move("absorb"),.hardy,.grass,0),
-//		(pokemon("mudkip"),move("water gun"),.hardy,.water,0),
-//		(pokemon("chikorita"),move("absorb"),.hardy,.grass,0),
-//		(pokemon("cyndaquil"),move("ember"),.hardy,.fire,0),
-//		(pokemon("sunkern"),move("leech seed"),.hardy,.grass,0),
-//		(pokemon("totodile"),move("water gun"),.hardy,.water,0),
-//		(pokemon("charmander"),move("ember"),.adamant,.fire,0),
-//		(pokemon("marill"),move("play fair"),.hardy,.water,0),
-//		(pokemon("magby"),move("will-o-wisp"),.hardy,.fire,0),
-//		(pokemon("squirtle"),move("water gun"),.hardy,.water,0),
-//		(pokemon("treecko"),move("absorb"),.hardy,.grass,0),
-//		(pokemon("goldeen"),move("baby doll eyes"),.hardy,.water,0),
-//		(pokemon("torchic"),move("ember"),.hardy,.fire,0),
-//	//card 2
-//		(pokemon("magnemite"),move("shockwave"),.modest,.electric,0),
-//		(pokemon("machop"),move("bullet punch"),.hardy,.fighting,0),
-//		(pokemon("pidgey"),move("air slash"),.hardy,.flying,0),
-//		(pokemon("gligar"),move("bulldoze"),.hardy,.flying,0),
-//		(pokemon("nosepass"),move("rock tomb"),.hardy,.rock,0),
-//		(pokemon("makuhita"),move("ice punch"),.hardy,.fighting,0),
-//		(pokemon("swablu"),move("dragonbreath"),.hardy,.flying,0),
-//		(pokemon("anorith"),move("aerial ace"),.hardy,.rock,0),
-//		(pokemon("meditite"),move("zen headbutt"),.hardy,.fighting,0),
-//		(pokemon("lunatone"),move("psybeam"),.hardy,.rock,0),
-//		(pokemon("larvitar"),move("rock slide"),.hardy,.rock,0),
-//		(pokemon("zubat"),move("aerial ace"),.hardy,.flying,0),
-//		(pokemon("mankey"),move("power up punch"),.hardy,.fighting,0),
-//		(pokemon("rhyhorn"),move("bulldoze"),.hardy,.rock,0),
-//	//card 3
-//		(pokemon("nuzleaf"),move("mega drain"),.modest,.grass,0),
-//		(pokemon("lanturn"),move("scald"),.hardy,.water,0), // ability 0 for volt absorb
-//		(pokemon("steelix"),move("iron head"),.hardy,.ground,0),
-//		(pokemon("magneton"),move("flash cannon"),.hardy,.electric,0),
-//		(pokemon("graveler"),move("bulldoze"),.hardy,.ground,0),
-//		(pokemon("spheal"),move("ice beam"),.hardy,.water,0),
-//		(pokemon("flaaffy"),move("thunderbolt"),.hardy,.electric,0),
-//		(pokemon("marshtomp"),move("earth power"),.hardy,.water,0),
-//		(pokemon("pupitar"),move("rock slide"),.hardy,.ground,0),
-//		(pokemon("pikachu"),move("volt tackle"),.hardy,.electric,0),
-//		(pokemon("manectric"),move("overheat"),.hardy,.electric,0),
-//		(pokemon("gyarados"),move("bounce"),.hardy,.water,0),
-//		(pokemon("piloswine"),move("icicle crash"),.hardy,.ground,0),
-//		(pokemon("lombre"),move("giga drain"),.hardy,.water,0),
-//	//card 4
-//		(pokemon("alakazam"),move("psychic"),.modest,.psychic,0),
-//		(pokemon("claydol"),move("psychic"),.hardy,.psychic,0),
-//		(pokemon("grumpig"),move("psychic"),.modest,.psychic,0),
-//		(pokemon("muk"),move("gunk shot"),.hardy,.poison,0),
-//		(pokemon("shiftry"),move("sucker punch"),.hardy,.dark,0),
-//		(pokemon("sharpedo"),move("crunch"),.hardy,.dark,0),
-//		(pokemon("medicham"),move("drain punch"),.hardy,.psychic,0),
-//		(pokemon("victreebel"),move("leaf storm"),.hardy,.poison,0),
-//		(pokemon("metang"),move("meteor mash"),.hardy,.psychic,0),
-//		(pokemon("seviper"),move("sucker punch"),.adamant,.poison,0),
-//		(pokemon("gardevoir"),move("moonblast"),.hardy,.psychic,0),
-//		(pokemon("crobat"),move("brave bird"),.adamant,.poison,0),
-//		(pokemon("absol"),move("dark pulse"),.hardy,.dark,0),
-//		(pokemon("sneasel"),move("ice punch"),.hardy,.dark,0),
-//	//card 5
-//		(pokemon("sableye"),move("will-o-wisp"),.brave,.ghost,0),
-//		(pokemon("wigglytuff"),move("play rough"),.adamant,.normal,0),
-//		(pokemon("gengar"),move("sludge bomb"),.adamant,.ghost,0),
-//		(pokemon("misdreavus"),move("shadow ball"),.modest,.ghost,0),
-//		(pokemon("blaziken"),move("blaze kick"),.hardy,.fighting,0),
-//		(pokemon("pidgeot"),move("hurricane"),.hardy,.normal,0),
-//		(pokemon("machamp"),move("cross chop"),.hardy,.fighting,0),
-//		(pokemon("banette"),move("sucker punch"),.adamant,.ghost,0),
-//		(pokemon("slaking"),move("giga impact"),.brave,.normal,0),
-//		(pokemon("exploud"),move("boomburst"),.hardy,.normal,0),
-//		(pokemon("breloom"),move("sky uppercut"),.jolly,.fighting,0),
-//		(pokemon("dusclops"),move("destiny bond"),.hardy,.ghost,0),
-//		(pokemon("hariyama"),move("knock off"),.adamant,.fighting,0),
-//		(pokemon("zangoose"),move("night slash"),.jolly,.normal,0),
-//	//card 6
-//		(pokemon("butterfree"),move("bug buzz"),.modest,.bug,0),
-//		(pokemon("armaldo"),move("stone edge"),.hardy,.bug,0),
-//		(pokemon("beedrill"),move("poison jab"),.hardy,.bug,0),
-//		(pokemon("scizor"),move("bullet punch"),.timid,.bug,0),
-//		(pokemon("scyther"),move("air slash"),.hardy,.bug,0),
-//		(pokemon("heracross"),move("rock blast"),.jolly,.bug,0),
-//		(pokemon("parasect"),move("seed bomb"),.hardy,.bug,0),
-//		(pokemon("ninjask"),move("aerial ace"),.hardy,.bug,0),
-//		(pokemon("shedinja"),move("shadow claw"),.hardy,.bug,0),
-//		(pokemon("ariados"),move("sucker punch"),.adamant,.bug,0),
-//		(pokemon("beautifly"),move("hurricane"),.hardy,.bug,0),
-//		(pokemon("masquerain"),move("scald"),.hardy,.bug,0),
-//		(pokemon("pinsir"),move("seismic toss"),.bold,.bug,0),
-//		(pokemon("shuckle"),move("toxic"),.hardy,.bug,0),
-//	//card 7
-//		(pokemon("pidgeot"),move("hurricane"),.modest,.flying,0),
-//		(pokemon("aggron"),move("iron tail"),.hardy,.steel,0),
-//		(pokemon("tyranitar"),move("stone edge"),.hardy,.rock,0),
-//		(pokemon("steelix"),move("earthquake"),.adamant,.steel,0),
-//		(pokemon("sneasel"),move("brick break"),.adamant,.ice,0),
-//		(pokemon("regirock"),move("stone edge"),.hardy,.rock,0),
-//		(pokemon("golem"),move("earthquake"),.relaxed,.rock,0),
-//		(pokemon("skarmory"),move("iron head"),.hardy,.steel,0),
-//		(pokemon("glalie"),move("ice beam"),.hardy,.ice,0),
-//		(pokemon("rhydon"),move("drill run"),.hardy,.rock,0),
-//		(pokemon("regice"),move("blizzard"),.hardy,.ice,0),
-//		(pokemon("registeel"),move("super power"),.hardy,.steel,0),
-//		(pokemon("omastar"),move("scald"),.hardy,.rock,0),
-//		(pokemon("lapras"),move("hydro pump"),.hardy,.ice,0),
-//	//card 8
-//		(pokemon("dragonite"),move("dragon claw"),.jolly,.dragon,0),
-//		(pokemon("ampharos"),move("thunderbolt"),.modest,.dragon,0),
-//		(pokemon("dragonite"),move("iron tail"),.adamant,.flying,0),
-//		(pokemon("tyranitar"),move("stone edge"),.adamant,.rock,0),
-//		(pokemon("altaria"),move("play fair"),.hardy,.dragon,0),
-//		(pokemon("flygon"),move("iron tail"),.jolly,.dragon,0),
-//		(pokemon("sceptile"),move("dragon pulse"),.adamant,.dragon,0),
-//		(pokemon("latias"),move("ice beam"),.adamant,.dragon,0),
-//		(pokemon("feraligatr"),move("ice punch"),.adamant,.water,0),
-//		(pokemon("salamence"),move("aerial ace"),.adamant,.flying,0),
-//		(pokemon("kingdra"),move("hydro pump"),.timid,.water,0),
-//		(pokemon("aerodactyl"),move("stone edge"),.timid,.rock,0),
-//		(pokemon("latios"),move("thunderbolt"),.brave,.dragon,0),
-//		(pokemon("charizard"),move("dragon claw"),.adamant,.flying,0),
-//	//card 9
-//		(pokemon("slaking"),move("body slam"),.brave,.normal,0),
-//		(pokemon("suicune"),move("hydro pump"),.bold,.water,0),
-//		(pokemon("regice"),move("blizzard"),.modest,.ice,0),
-//		(pokemon("zapdos"),move("thunder"),.relaxed,.electric,0),
-//		(pokemon("entei"),move("flare blitz"),.adamant,.fire,0),
-//		(pokemon("metagross"),move("meteor mash"),.adamant,.steel,0),
-//		(pokemon("regirock"),move("stone edge"),.adamant,.rock,0),
-//		(pokemon("registeel"),move("iron head"),.adamant,.steel,0),
-//		(pokemon("moltres"),move("fire blast"),.timid,.fire,0),
-//		(pokemon("raikou"),move("thunder"),.jolly,.normal,0),
-//		(pokemon("salamence"),move("outrage"),.brave,.dragon,0),
-//		(pokemon("tyranitar"),move("stone edge"),.impish,.rock,0),
-//		(pokemon("dragonite"),move("dragon claw"),.jolly,.dragon,0),
-//		(pokemon("articuno"),move("blizzard"),.timid,.ice,0),
-//	//card 10
-//		(pokemon("mew"),move("psychic"),.modest,.psychic,0),
-//		(pokemon("kyogre"),move("surf"),.modest,.water,0),
-//		(pokemon("mew"),move("sucker punch"),.adamant,.psychic,0),
-//		(pokemon("latias"),move("draco meteor"),.modest,.dragon,0),
-//		(pokemon("lugia"),move("aeroblast"),.hasty,.flying,0),
-//		(pokemon("groudon"),move("stone edge"),.adamant,.ground,0),
-//		(pokemon("mew"),move("ice beam"),.modest,.psychic,0),
-//		(pokemon("celebi"),move("leaf storm"),.modest,.psychic,0),
-//		(pokemon("latios"),move("dracometeor"),.modest,.dragon,0),
-//		(pokemon("jirachi"),move("iron head"),.adamant,.psychic,0),
-//		(pokemon("ho-oh"),move("sacred fire"),.hasty,.flying,0),
-//		(pokemon("rayquaza"),move("outrage"),.adamant,.dragon,0),
-//		(pokemon("mewtwo"),move("psystrike"),.modest,.psychic,0),
-//		(pokemon("deoxys"),move("psychoboost"),.modest,.psychic,0),
-//	//card 11
-//		(pokemon("bonsly"),move("stone edge"),.adamant,.rock,0),
-//		(pokemon("vulpix"),move("fire blast"),.modest,.fire,0),
-//		(pokemon("shroomish"),move("wood hammer"),.adamant,.grass,0),
-//		(pokemon("poliwag"),move("hydro pump"),.modest,.water,0),
-//		(pokemon("dratini"),move("draco meteor"),.modest,.dragon,0),
-//		(pokemon("mareep"),move("thunder"),.modest,.electric,0),
-//		(pokemon("snorunt"),move("blizzard"),.modest,.ice,0),
-//		(pokemon("phanpy"),move("earthquake"),.adamant,.ground,0),
-//		(pokemon("poochyena"),move("sucker punch"),.adamant,.dark,0),
-//		(pokemon("taillow"),move("brave bird"),.adamant,.flying,0),
-//		(pokemon("whismur"),move("boomburst"),.modest,.normal,0),
-//		(pokemon("tyrogue"),move("superpower"),.adamant,.fighting,0),
-//		(pokemon("grimer"),move("gunk shot"),.adamant,.poison,0),
-//		(pokemon("abra"),move("psychic"),.modest,.psychic,0)
-//
-//]
-//
-//for j in 0 ..< bingo.count {
-//	let mon = bingoMons[j]
-//	let nw = bingo[j]
-//
-//	mon.species = nw.0
-//	mon.move = nw.1
-//	mon.nature = nw.2
-//	mon.typeOnCard = nw.3 == mon.species.type1 ? 0 : 1
-//	mon.ability = nw.4
-//
-//	mon.save()
-//}
-
 // convert ability list to add more abilities
 
 //increaseNumberOfAbilities()
@@ -4053,10 +3845,9 @@ import Foundation
 //XGAssembly.replaceASM(startOffset: hpCheckBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: hpCheckBranch, toOffset: hpCheckStart)])
 //XGAssembly.replaceASM(startOffset: hpCheckStart - kDOLtoRAMOffsetDifference, newASM: hpCode)
 
-
 //// foul play 2, include stat boosts on foe
 //let fpBranch = 0x22a120 - kDOLtoRAMOffsetDifference
-//let fpStart = 0x2209c8 - kDOLtoRAMOffsetDifference
+//let fpStart = 0x2209cc - kDOLtoRAMOffsetDifference
 //
 //XGAssembly.replaceASM(startOffset: fpBranch, newASM: [
 //	0x9001000c, // overwritten code
@@ -4077,7 +3868,6 @@ import Foundation
 //		XGAssembly.createBranchFrom(offset: fpStart + 0x28, toOffset: fpBranch + 0x8)
 //])
 
-
 //// roar move effect doesn't require higher level
 //let roarStart = 0x221c54 - kDOLtoRAMOffsetDifference
 //XGAssembly.replaceASM(startOffset: roarStart, newASM: [0x7c7f1b78,kNopInstruction,kNopInstruction])
@@ -4088,39 +3878,6 @@ import Foundation
 //dol.replaceBytesFromOffset(roarRoutineStart, withByteStream: [0x3b,0x3b,0x3b])
 //dol.save()
 
-
-//let rel = XGFiles.common_rel.data
-//
-//let spreadAbsorbedStart = 0xb994e8  - kRELtoRAMOffsetDifference
-//let spreadA : UInt32 = 0x80b9
-//let spreadB : UInt32 = 0x94e8
-//let spreadMoveAbsorbedRoutine = [0x02, 0x04, 0x3A, 0x00, 0x20, 0x46, 0x12, 0x17, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x11, 0x00, 0x00, 0x4E, 0xFC, 0x78, 0x12, 0x13, 0x00, 0x50, 0x0B, 0x04, 0x29, 0x80, 0x41, 0x59, 0xa8]
-//
-//rel.replaceBytesFromOffset(spreadAbsorbedStart, withByteStream: spreadMoveAbsorbedRoutine)
-//
-//
-//let spreadCheckStart = 0x2209a4 - kDOLtoRAMOffsetDifference
-//let spreadCheckBranch = 0x22586c - kDOLtoRAMOffsetDifference
-//let getTargets = 0x13e784
-//
-//let spreadCode : ASM = [
-//	0x7fe3fb78, // mr r3, r31 (move)
-//	XGAssembly.createBranchAndLinkFrom(offset: spreadCheckStart + 0x4, toOffset: getTargets),
-//	0x28030006, // cmpwi r3, both foes and ally
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x10),
-//	0x3c600000 + spreadA, // lis	r3, spread a
-//	0x38630000 + spreadB, // addi	r3, r3, spread b
-//	0x906dbb10, // move routine set position
-//	0x3bc00001, // li	r30, 1 (over written code)
-//	XGAssembly.createBranchFrom(offset: spreadCheckStart + 0x20, toOffset: spreadCheckBranch)
-//]
-//XGAssembly.replaceASM(startOffset: spreadCheckBranch, newASM: [XGAssembly.createBranchFrom(offset: spreadCheckBranch, toOffset: spreadCheckStart)])
-//XGAssembly.replaceASM(startOffset: spreadCheckStart, newASM: spreadCode)
-
-//let dol = XGFiles.dol.data
-//let earthquakeStart = 0x4158fb - kDOLtoRAMOffsetDifference + 0xa0
-//let earthquakeRoutine = [0x00, 0x02, 0x04, 0xc2, 0x26, 0x29, 0x80, 0x41, 0x59, 0x33, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x36, 0x80, 0x4e, 0xb9, 0x38, 0x00, 0x02, 0x00, 0x00, 0x2f, 0x80, 0x4e, 0xb9, 0x5e, 0x02, 0xfc, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x39, 0x00, 0x00, 0x00, 0x00, 0x80, 0x4e, 0xb9, 0x5e, 0x29, 0x80, 0x41, 0x59, 0x56, 0x39, 0x80, 0x4e, 0xb9, 0x38, 0x00, 0x02, 0x00, 0x00, 0x2f, 0x80, 0x4e, 0xb9, 0x5e, 0x01, 0xfc, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x39, 0x00, 0x00, 0x00, 0x00, 0x80, 0x4e, 0xb9, 0x5e, 0x01, 0x80, 0x41, 0x59, 0x8d, 0x00, 0x00, 0x05, 0x06, 0x07, 0x08, 0x0a, 0x0b, 0x00, 0x0f, 0x5d, 0x12, 0x3b, 0x0c, 0x12, 0x0e, 0x13, 0x00, 0x40, 0x10, 0x13, 0x00, 0x50, 0x0d, 0x12, 0x0b, 0x04, 0x1a, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x2f, 0x80, 0x4e, 0xb9, 0x47, 0x00, 0x4a, 0x02, 0x10, 0x7c, 0x80, 0x41, 0x58, 0xff, 0x01, 0x3e, 0x3a, 0x00, 0x20, 0x07, 0x46, 0x12, 0x17, 0x00, 0x00, 0x00, 0x00, 0x0f, 0x10, 0x13, 0x00, 0x50, 0x0b, 0x04, 0x2f, 0x80, 0x4e, 0xb9, 0x47, 0x00, 0x4a, 0x02, 0x10, 0x7c, 0x80, 0x41, 0x58, 0xff, 0x01, 0x3e,]
-//dol.replaceBytesFromOffset(earthquakeStart, withByteStream: earthquakeRoutine)
 
 //// learnable SMs
 //let lsms = [
@@ -4187,7 +3944,7 @@ import Foundation
 //	0x9421ffe0, // stwu	sp, -0x0020 (sp)
 //	0x7c0802a6, // mflr	r0
 //	0x90010024, // stw	r0, 0x0024 (sp)
-//	XGAssembly.createBranchAndLinkFrom(offset: statBranch, toOffset: statStart),
+//	XGAssembly.createBranchAndLinkFrom(offset: statBranch + 0xc, toOffset: statStart),
 //	0x80010024, // lwz	r0, 0x0024 (sp)
 //	0x7c0803a6, // mtlr	r0
 //	0x38210020, // addi	sp, sp, 32
@@ -4260,6 +4017,387 @@ import Foundation
 //	XGAssembly.powerPCBranchLinkReturn(),
 //
 //])
+
+////let bingoLevels = [5,15,25,30,45,50,60,75,80,100,10]
+//var bingoMons = [XGBattleBingoPokemon]()
+//for i in 0 ..< kNumberOfBingoCards {
+//	let card = XGBattleBingoCard(index: i)
+//
+//	card.pokemonLevel = bingoLevels[i]
+//
+//	for r in 0 ..< card.rewards.count {
+//		card.rewards[r] *= 2
+//	}
+//	card.save()
+//
+//	bingoMons.append(card.startingPokemon)
+//	for p in card.panels {
+//		switch p {
+//		case .pokemon(let poke):
+//			bingoMons.append(poke)
+//		default:
+//			break
+//		}
+//	}
+//}
+//
+//
+//
+//let bingo : [ (XGPokemon,XGMoves,XGNatures,XGMoveTypes,Int) ] = [
+//	//card 1
+//		(pokemon("bagon"),move("dragonbreath"),.modest,.dragon,0),
+//		(pokemon("bulbasaur"),move("absorb"),.hardy,.grass,0),
+//		(pokemon("mudkip"),move("water gun"),.hardy,.water,0),
+//		(pokemon("chikorita"),move("absorb"),.hardy,.grass,0),
+//		(pokemon("cyndaquil"),move("ember"),.hardy,.fire,0),
+//		(pokemon("sunkern"),move("leech seed"),.hardy,.grass,0),
+//		(pokemon("totodile"),move("water gun"),.hardy,.water,0),
+//		(pokemon("charmander"),move("ember"),.adamant,.fire,0),
+//		(pokemon("marill"),move("play rough"),.hardy,.water,0),
+//		(pokemon("magby"),move("will-o-wisp"),.hardy,.fire,0),
+//		(pokemon("squirtle"),move("water gun"),.hardy,.water,0),
+//		(pokemon("treecko"),move("absorb"),.hardy,.grass,0),
+//		(pokemon("goldeen"),move("splash"),.hardy,.water,0),
+//		(pokemon("torchic"),move("ember"),.hardy,.fire,0),
+//	//card 2
+//		(pokemon("magnemite"),move("charge beam"),.modest,.electric,0),
+//		(pokemon("machop"),move("bullet punch"),.hardy,.fighting,0),
+//		(pokemon("pidgey"),move("air slash"),.hardy,.flying,0),
+//		(pokemon("gligar"),move("bulldoze"),.hardy,.flying,0),
+//		(pokemon("nosepass"),move("rock tomb"),.hardy,.rock,0),
+//		(pokemon("makuhita"),move("ice punch"),.hardy,.fighting,0),
+//		(pokemon("swablu"),move("dragonbreath"),.hardy,.flying,0),
+//		(pokemon("anorith"),move("aerial ace"),.hardy,.rock,0),
+//		(pokemon("meditite"),move("zen headbutt"),.hardy,.fighting,0),
+//		(pokemon("lunatone"),move("psybeam"),.hardy,.rock,0),
+//		(pokemon("larvitar"),move("rock slide"),.hardy,.rock,0),
+//		(pokemon("zubat"),move("aerial ace"),.hardy,.flying,0),
+//		(pokemon("mankey"),move("power up punch"),.hardy,.fighting,0),
+//		(pokemon("rhyhorn"),move("bulldoze"),.hardy,.rock,0),
+//	//card 3
+//		(pokemon("nuzleaf"),move("mega drain"),.modest,.grass,0),
+//		(pokemon("lanturn"),move("scald"),.hardy,.water,0), // ability 0 for volt absorb
+//		(pokemon("steelix"),move("iron head"),.hardy,.ground,0),
+//		(pokemon("magneton"),move("flash cannon"),.hardy,.electric,0),
+//		(pokemon("graveler"),move("bulldoze"),.hardy,.ground,0),
+//		(pokemon("spheal"),move("ice beam"),.hardy,.water,0),
+//		(pokemon("flaaffy"),move("thunderbolt"),.hardy,.electric,0),
+//		(pokemon("marshtomp"),move("earth power"),.hardy,.water,0),
+//		(pokemon("pupitar"),move("rock slide"),.hardy,.ground,0),
+//		(pokemon("pikachu"),move("volt tackle"),.hardy,.electric,0),
+//		(pokemon("manectric"),move("overheat"),.hardy,.electric,0),
+//		(pokemon("gyarados"),move("bounce"),.hardy,.water,0),
+//		(pokemon("piloswine"),move("icicle crash"),.hardy,.ground,0),
+//		(pokemon("lombre"),move("giga drain"),.hardy,.water,0),
+//	//card 4
+//		(pokemon("alakazam"),move("psychic"),.mild,.psychic,0),
+//		(pokemon("claydol"),move("psychic"),.hardy,.psychic,0),
+//		(pokemon("grumpig"),move("psychic"),.modest,.psychic,0),
+//		(pokemon("muk"),move("gunk shot"),.hardy,.poison,0),
+//		(pokemon("shiftry"),move("sucker punch"),.hardy,.dark,0),
+//		(pokemon("sharpedo"),move("crunch"),.hardy,.dark,0),
+//		(pokemon("medicham"),move("drain punch"),.hardy,.psychic,0),
+//		(pokemon("victreebel"),move("leaf storm"),.hardy,.poison,0),
+//		(pokemon("metang"),move("meteor mash"),.hardy,.psychic,0),
+//		(pokemon("seviper"),move("sucker punch"),.adamant,.poison,0),
+//		(pokemon("gardevoir"),move("moonblast"),.hardy,.psychic,0),
+//		(pokemon("crobat"),move("brave bird"),.adamant,.poison,0),
+//		(pokemon("absol"),move("dark pulse"),.hardy,.dark,0),
+//		(pokemon("sneasel"),move("ice punch"),.hardy,.dark,0),
+//	//card 5
+//		(pokemon("sableye"),move("will-o-wisp"),.brave,.ghost,0),
+//		(pokemon("wigglytuff"),move("play rough"),.adamant,.normal,0),
+//		(pokemon("gengar"),move("sludge bomb"),.adamant,.ghost,0),
+//		(pokemon("misdreavus"),move("shadow ball"),.modest,.ghost,0),
+//		(pokemon("blaziken"),move("blaze kick"),.hardy,.fighting,0),
+//		(pokemon("pidgeot"),move("hurricane"),.hardy,.normal,0),
+//		(pokemon("machamp"),move("cross chop"),.hardy,.fighting,0),
+//		(pokemon("banette"),move("sucker punch"),.adamant,.ghost,0),
+//		(pokemon("slaking"),move("giga impact"),.brave,.normal,0),
+//		(pokemon("exploud"),move("boomburst"),.hardy,.normal,0),
+//		(pokemon("breloom"),move("sky uppercut"),.jolly,.fighting,0),
+//		(pokemon("dusclops"),move("destiny bond"),.hardy,.ghost,0),
+//		(pokemon("hariyama"),move("knock off"),.adamant,.fighting,0),
+//		(pokemon("zangoose"),move("night slash"),.jolly,.normal,0),
+//	//card 6
+//		(pokemon("butterfree"),move("bug buzz"),.modest,.bug,0),
+//		(pokemon("armaldo"),move("stone edge"),.hardy,.bug,0),
+//		(pokemon("beedrill"),move("poison jab"),.hardy,.bug,0),
+//		(pokemon("scizor"),move("bullet punch"),.timid,.bug,0),
+//		(pokemon("scyther"),move("air slash"),.hardy,.bug,0),
+//		(pokemon("heracross"),move("rock blast"),.jolly,.bug,0),
+//		(pokemon("parasect"),move("seed bomb"),.hardy,.bug,0),
+//		(pokemon("ninjask"),move("aerial ace"),.hardy,.bug,0),
+//		(pokemon("shedinja"),move("shadow claw"),.hardy,.bug,0),
+//		(pokemon("ariados"),move("sucker punch"),.adamant,.bug,0),
+//		(pokemon("beautifly"),move("hurricane"),.hardy,.bug,0),
+//		(pokemon("masquerain"),move("scald"),.hardy,.bug,0),
+//		(pokemon("pinsir"),move("seismic toss"),.bold,.bug,0),
+//		(pokemon("shuckle"),move("toxic"),.hardy,.bug,0),
+//	//card 7
+//		(pokemon("pidgeot"),move("hurricane"),.modest,.flying,0),
+//		(pokemon("aggron"),move("iron tail"),.hardy,.steel,0),
+//		(pokemon("tyranitar"),move("stone edge"),.hardy,.rock,0),
+//		(pokemon("steelix"),move("earthquake"),.adamant,.steel,0),
+//		(pokemon("sneasel"),move("brick break"),.adamant,.ice,0),
+//		(pokemon("regirock"),move("stone edge"),.hardy,.rock,0),
+//		(pokemon("golem"),move("earthquake"),.relaxed,.rock,0),
+//		(pokemon("skarmory"),move("iron head"),.hardy,.steel,0),
+//		(pokemon("glalie"),move("ice beam"),.hardy,.ice,0),
+//		(pokemon("rhydon"),move("drill run"),.hardy,.rock,0),
+//		(pokemon("regice"),move("blizzard"),.hardy,.ice,0),
+//		(pokemon("registeel"),move("super power"),.hardy,.steel,0),
+//		(pokemon("omastar"),move("scald"),.hardy,.rock,0),
+//		(pokemon("lapras"),move("hydro pump"),.hardy,.ice,0),
+//	//card 8
+//		(pokemon("dragonite"),move("dragon claw"),.jolly,.dragon,0),
+//		(pokemon("ampharos"),move("thunderbolt"),.modest,.dragon,0),
+//		(pokemon("dragonite"),move("iron tail"),.adamant,.flying,0),
+//		(pokemon("tyranitar"),move("stone edge"),.adamant,.rock,0),
+//		(pokemon("altaria"),move("tackle"),.hardy,.dragon,0),
+//		(pokemon("flygon"),move("iron tail"),.jolly,.dragon,0),
+//		(pokemon("sceptile"),move("dragon pulse"),.adamant,.dragon,0),
+//		(pokemon("latias"),move("ice beam"),.adamant,.dragon,0),
+//		(pokemon("feraligatr"),move("ice punch"),.adamant,.water,0),
+//		(pokemon("salamence"),move("aerial ace"),.adamant,.flying,0),
+//		(pokemon("kingdra"),move("hydro pump"),.timid,.water,0),
+//		(pokemon("aerodactyl"),move("stone edge"),.timid,.rock,0),
+//		(pokemon("latios"),move("thunderbolt"),.brave,.dragon,0),
+//		(pokemon("charizard"),move("dragon claw"),.adamant,.flying,0),
+//	//card 9
+//		(pokemon("slaking"),move("body slam"),.brave,.normal,0),
+//		(pokemon("suicune"),move("hydro pump"),.bold,.water,0),
+//		(pokemon("regice"),move("blizzard"),.modest,.ice,0),
+//		(pokemon("zapdos"),move("thunder"),.relaxed,.electric,0),
+//		(pokemon("entei"),move("flare blitz"),.adamant,.fire,0),
+//		(pokemon("metagross"),move("meteor mash"),.adamant,.steel,0),
+//		(pokemon("regirock"),move("stone edge"),.adamant,.rock,0),
+//		(pokemon("registeel"),move("iron head"),.adamant,.steel,0),
+//		(pokemon("moltres"),move("fire blast"),.timid,.fire,0),
+//		(pokemon("raikou"),move("thunder"),.jolly,.normal,0),
+//		(pokemon("salamence"),move("outrage"),.brave,.dragon,0),
+//		(pokemon("tyranitar"),move("stone edge"),.impish,.rock,0),
+//		(pokemon("dragonite"),move("dragon claw"),.jolly,.dragon,0),
+//		(pokemon("articuno"),move("blizzard"),.timid,.ice,0),
+//	//card 10
+//		(pokemon("mew"),move("psychic"),.modest,.psychic,0),
+//		(pokemon("kyogre"),move("surf"),.modest,.water,0),
+//		(pokemon("mew"),move("sucker punch"),.adamant,.psychic,0),
+//		(pokemon("latias"),move("draco meteor"),.modest,.dragon,0),
+//		(pokemon("lugia"),move("aeroblast"),.hasty,.flying,0),
+//		(pokemon("groudon"),move("stone edge"),.adamant,.ground,0),
+//		(pokemon("mew"),move("ice beam"),.modest,.psychic,0),
+//		(pokemon("celebi"),move("leaf storm"),.modest,.psychic,0),
+//		(pokemon("latios"),move("dracometeor"),.modest,.dragon,0),
+//		(pokemon("jirachi"),move("iron head"),.adamant,.psychic,0),
+//		(pokemon("ho-oh"),move("sacred fire"),.hasty,.flying,0),
+//		(pokemon("rayquaza"),move("outrage"),.adamant,.dragon,0),
+//		(pokemon("mewtwo"),move("psystrike"),.modest,.psychic,0),
+//		(pokemon("deoxys"),move("psychoboost"),.modest,.psychic,0),
+//	//card 11
+//		(pokemon("bonsly"),move("stone edge"),.adamant,.rock,0),
+//		(pokemon("vulpix"),move("fire blast"),.modest,.fire,0),
+//		(pokemon("shroomish"),move("wood hammer"),.adamant,.grass,0),
+//		(pokemon("poliwag"),move("hydro pump"),.modest,.water,0),
+//		(pokemon("dratini"),move("draco meteor"),.modest,.dragon,0),
+//		(pokemon("mareep"),move("thunder"),.modest,.electric,0),
+//		(pokemon("snorunt"),move("blizzard"),.modest,.ice,0),
+//		(pokemon("phanpy"),move("earthquake"),.adamant,.ground,0),
+//		(pokemon("poochyena"),move("sucker punch"),.adamant,.dark,0),
+//		(pokemon("taillow"),move("brave bird"),.adamant,.flying,0),
+//		(pokemon("whismur"),move("boomburst"),.modest,.normal,0),
+//		(pokemon("tyrogue"),move("superpower"),.adamant,.fighting,0),
+//		(pokemon("grimer"),move("gunk shot"),.adamant,.poison,0),
+//		(pokemon("abra"),move("psychic"),.modest,.psychic,0)
+//
+//]
+//
+//for j in 0 ..< bingo.count {
+//	let mon = bingoMons[j]
+//	let nw = bingo[j]
+//
+//	mon.species = nw.0
+//	mon.move = nw.1
+//	mon.nature = nw.2
+//	mon.typeOnCard = nw.3 == mon.species.type1 ? 0 : 1
+//	mon.ability = nw.4
+//
+//	mon.save()
+//}
+
+
+
+//let dol = XGFiles.dol.data
+
+//let spreadAbsorbedStart = 0x2209f8  - kDOLtoRAMOffsetDifference
+//let spreadA : UInt32 = 0x8022
+//let spreadB : UInt32 = 0x09f8
+//let spreadC : UInt32 = 0x0000
+//let spreadMoveAbsorbedRoutine = [0x3A, 0x00, 0x20, 0x46, 0x12, 0x17, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x11, 0x00, 0x00, 0x4E, 0xFC, 0x78, 0x12, 0x13, 0x00, 0x50, 0x0B, 0x04, 0x29, 0x80, 0x41, 0x59, 0xa8, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00]
+//
+//dol.replaceBytesFromOffset(spreadAbsorbedStart, withByteStream: spreadMoveAbsorbedRoutine)
+//dol.save()
+
+//let spreadCheckStart = 0x2209a4 - kDOLtoRAMOffsetDifference
+//let spreadCheckBranch = 0x22586c - kDOLtoRAMOffsetDifference
+//let getTargets = 0x13e784 - kDOLtoRAMOffsetDifference
+//
+//let spreadCode : ASM = [
+//	0x7fe3fb78, // mr r3, r31 (move)
+//	XGAssembly.createBranchAndLinkFrom(offset: spreadCheckStart + 0x4, toOffset: getTargets),
+//	0x28030006, // cmpwi r3, both foes and ally
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x14),
+//	0x3c600000 + spreadA, // lis	r3, spread a
+//	0x38630000 + spreadB, // addi	r3, r3, spread b
+//	0x38630000 + spreadC, // addi	r3, r3, spread c
+//	0x906dbb10, // move routine set position
+//	0x3bc00001, // li	r30, 1 (over written code)
+//	XGAssembly.createBranchFrom(offset: spreadCheckStart + 0x24, toOffset: spreadCheckBranch + 0x4)
+//]
+//XGAssembly.replaceASM(startOffset: spreadCheckBranch, newASM: [XGAssembly.createBranchFrom(offset: spreadCheckBranch, toOffset: spreadCheckStart)])
+//XGAssembly.replaceASM(startOffset: spreadCheckStart, newASM: spreadCode)
+
+
+//let dol = XGFiles.dol.data
+//let earthquakeStart = 0x4158fb - kDOLtoRAMOffsetDifference + 0xa0
+//let earthquakeRoutine = [
+//
+//	// intro 0x4158fb
+//	0x32, 0x80, 0x22, 0x0a, 0x17, 0x80, 0x4e, 0x85, 0xc3, 0x1, 0x02, 0x04,
+//
+//	// next target 0x415907
+//	0xc2,
+//
+//	// reset 0x415908
+//	0x26,
+//	0x32, 0x80, 0x4e, 0x85, 0xc3, 0x80, 0x22, 0x0a, 0x17, 0x1,
+//
+//	// check if should work and check accuracy 0x415913
+//	0x00, 0x01, 0x80, 0x41, 0x59, 0x8d, 0x00, 0x00,
+//	0x29, 0x80, 0x41, 0x59, 0x33,
+//
+//	// filler 0x415921
+//	0x00, 0x00, 0x00, 0x00, 0x00,
+//	0x00, 0x00, 0x00, 0x00, 0x00,
+//	0x00, 0x00, 0x00, 0x00, 0x00,
+//	0x00, 0x00, 0x00, 0x00,
+//
+//	// set damage multiplier to 1 0x415933
+//	0x39, 0x80, 0x4e, 0xb9, 0x38, 0x00, 0x02, 0x00, 0x00,
+//	0x2f, 0x80, 0x4e, 0xb9, 0x5e, 0x01,
+//
+//	// start move 0x415942
+//	0xfc, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x39, 0x00, 0x00, 0x00, 0x00, 0x80, 0x4e, 0xb9, 0x5e,
+//
+//	// start damage routine 0x415956
+//	0x3b, 0x3b, 0x3b, 0x3b, 0x3b, 0x3b, // check accuracy
+//	0x05, 0x06, 0x07, 0x08, // calcs
+//	0x0a, 0x0b, 0x00, // animations
+//	0x0f, 0x5d, 0x12, 0x3b, 0x0c, 0x12, 0x0e, 0x13, 0x00, 0x40, 0x10, 0x13, 0x00, 0x50, // messages
+//	0x0d, 0x12, 0x0b, 0x04, 0x1a, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, // animations 2
+//	0x2f, 0x80, 0x4e, 0xb9, 0x47, 0x00, 0x16, 0x4a, 0x02, 0x10, // after move
+//	0x7c, 0x80, 0x41, 0x59, 0x08, 0x01, // jump while valid target
+//	0x3e, // end move
+//
+//	// attack missed 0x41598d
+//	0x3a, 0x00, 0x20, 0x07, 0x46, 0x12, 0x17, 0x00, 0x00, 0x00, 0x00, 0x0f, 0x10, 0x13, 0x00, 0x50, 0x0b, 0x04, 0x2f, 0x80, 0x4e, 0xb9, 0x47, 0x00, 0x4a, 0x02, 0x10, 0x7c, 0x80, 0x41, 0x59, 0x08, 0x01, 0x3e,]
+//
+//dol.replaceBytesFromOffset(earthquakeStart, withByteStream: earthquakeRoutine)
+//dol.save()
+//
+//
+//let dragonTailRoutine = XGAssembly.routineRegularHitOpenEnded() + [
+//	// roar
+//	0x00, 0x1f, 0x12, 0x15, 0x80, 0x41, 0x7a, 0x7f, 0x90, 0x80, 0x41, 0x5c, 0xb4,
+//]
+//
+//let uturnRoutine = XGAssembly.routineRegularHitOpenEnded() + [
+//	// baton pass
+//	0x77, 0x11, 0x07, 0x51, 0x11, 0x80, 0x41, 0x5c, 0xb4, 0xe1, 0x11, 0x3b, 0x52, 0x11, 0x02, 0x59, 0x11, 0x4d, 0x11, 0x4e, 0x11, 0x02, 0x74, 0x11, 0x14, 0x80, 0x2f, 0x90, 0xe0, 0x4f, 0x11, 0x01, 0x13, 0x00, 0x00, 0x3b, 0x53, 0x11, 0x29, 0x80, 0x41, 0x41, 0x0f,
+//]
+//
+//let shadowGiftRoutine = [0x00, 0x02, 0x04, 0x50, 0x11, 0x80, 0x41, 0x5c, 0x93, 0x00, 0x0a, 0x0b, 0x04, 0x77, 0x11, 0x07, 0x51, 0x11, 0x80, 0x41, 0x5c, 0x93, 0xe1, 0x11, 0x3b, 0x52, 0x11, 0x02, 0x59, 0x11, 0x4d, 0x11, 0x4e, 0x11, 0x01, 0x74, 0x11, 0x14, 0x80, 0x2f, 0x90, 0xe0, 0x4f, 0x11, 0x01, 0x13, 0x00, 0x00, 0x3b, 0x53, 0x11,
+//// branch cosmic power boosts
+//0x29, 0x80, 0x41, 0x66, 0x8d,]
+//
+//let skillSwap = [0x00, 0x02, 0x04, 0x01, 0x80, 0x41, 0x5c, 0x93, 0xff, 0xff, 0xd9, 0x80, 0x41, 0x5c, 0x93, 0x0a, 0x0b, 0x04, 0x0a, 0x0b, 0x00, 0x11, 0x00, 0x00, 0x4e, 0xd2, 0x13, 0x00, 0x60, 0x0b, 0x04, 0x53, 0x11, 0x53, 0x12, 0x29, 0x80, 0x41, 0x41, 0x0f,]
+//
+//let shadowAnalysisRoutine = XGAssembly.routineRegularHitOpenEnded() + [0x00, 0xa4, 0x80, 0x41, 0x5c, 0xb4, 0x11, 0x00, 0x00, 0x4e, 0xa0, 0x13, 0x00, 0x60, 0x0b, 0x04, 0x29, 0x80, 0x41, 0x41, 0x0f,]
+//
+//
+//let shadowFreezeRoutine =  [0x00, 0x02, 0x04, 0x1e, 0x12, 0x00, 0x00, 0x00, 0x14, 0x80, 0x41, 0x5c, 0x93, 0x1d, 0x12, 0x00, 0x00, 0x00, 0x07, 0x80, 0x41, 0x5e, 0xb9, 0x23, 0x12, 0x0f, 0x80, 0x41, 0x5c, 0xc6, 0x1f, 0x12, 0x28, 0x80, 0x41, 0x5e, 0x81, 0x1f, 0x12, 0x2f, 0x80, 0x41, 0x5e, 0x81, 0x1f, 0x12, 0x31, 0x80, 0x41, 0x5e, 0x81, 0x1d, 0x12, 0x00, 0x00, 0x00, 0x01, 0x80, 0x41, 0x5c, 0x93, 0x01, 0x80, 0x41, 0x5c, 0x93, 0x00, 0x00, 0x20, 0x12, 0x00, 0x4b, 0x80, 0x41, 0x6d, 0xb2, 0x0a, 0x0b, 0x04, 0x2f, 0x80, 0x4e, 0x85, 0xc3, 0x04, 0x17, 0x0b, 0x04, 0x29, 0x80, 0x41, 0x41, 0x0f,]
+//
+//let routines : [(effect: Int, routine: [Int], offset: Int)] = [
+//
+//	(28,dragonTailRoutine, 0xb99524),
+//	(57, uturnRoutine, 0xb99564),
+//	(213, shadowGiftRoutine, 0xb995c2),
+//	(191, skillSwap, 0xb995fa),
+//	(122, shadowAnalysisRoutine, 0xb99622),
+//
+//	(55, XGAssembly.routineForMultipleStatBoosts(RAMOffset: 0x80b9966a, boosts: [(stat: XGStats.accuracy, stages: XGStatStages.plus_1), (stat: XGStats.attack, stages: XGStatStages.plus_1)], animate: true), 0xb9966a), // hone claws
+//
+//	(56, XGAssembly.routineForMultipleStatBoosts(RAMOffset: 0x80b996d4, boosts: [(stat: XGStats.special_attack, stages: XGStatStages.plus_1), (stat: XGStats.special_defense, stages: XGStatStages.plus_1), (stat: XGStats.speed, stages: XGStatStages.plus_1)], animate: true), 0xb996d4), // quiver dance
+//
+//	(61, XGAssembly.routineForMultipleStatBoosts(RAMOffset: 0x80b99766, boosts: [(stat: XGStats.attack, stages: XGStatStages.plus_1), (stat: XGStats.defense, stages: XGStatStages.plus_1), (stat: XGStats.accuracy, stages: XGStatStages.plus_1)], animate: true), 0xb99766), // coil
+//
+//	(135, XGAssembly.routineForMultipleStatBoosts(RAMOffset: 0x80b997f8, boosts: [(stat: XGStats.speed, stages: XGStatStages.plus_1), (stat: XGStats.evasion, stages: XGStatStages.plus_1),], animate: true), 0xb997f8), // shadow haste
+//
+//	(203, XGAssembly.routineForMultipleStatBoosts(RAMOffset: 0x80b99862, boosts: [(stat: XGStats.attack, stages: XGStatStages.plus_1), (stat: XGStats.speed, stages: XGStatStages.plus_2),], animate: true), 0xb99862), // shift gear
+//
+//	(154, XGAssembly.routineForMultipleStatBoosts(RAMOffset: 0x80b998cc, boosts: [(stat: XGStats.attack, stages: XGStatStages.plus_1), (stat: XGStats.accuracy, stages: XGStatStages.plus_2),], animate: true), 0xb998cc), // shadow focus
+//
+//	(74, XGAssembly.routineForMultipleStatBoosts(RAMOffset: 0x80b99936, boosts: [(stat: XGStats.attack, stages: XGStatStages.plus_2), (stat: XGStats.special_attack, stages: XGStatStages.plus_2), (stat: XGStats.speed, stages: XGStatStages.plus_2), (stat: XGStats.defense, stages: XGStatStages.minus_1), (stat: XGStats.special_defense, stages: XGStatStages.minus_1)], animate: true), 0xb99936), // shell smash
+//
+//	(163, XGAssembly.routineForMultipleStatBoosts(RAMOffset: 0x80b99a06, boosts: [(stat: XGStats.attack, stages: XGStatStages.plus_1), (stat: XGStats.defense, stages: XGStatStages.plus_1), (stat: XGStats.speed, stages: XGStatStages.plus_1), (stat: XGStats.special_attack, stages: XGStatStages.plus_1), (stat: XGStats.special_defense, stages: XGStatStages.plus_1)], animate: true), 0xb99a06), // latent power
+//
+//	(145, XGAssembly.routineForMultipleStatBoosts(RAMOffset: 0x80b99ae8, boosts: [(stat: XGStats.evasion, stages: XGStatStages.minus_1), (stat: XGStats.special_defense, stages: XGStatStages.plus_3)], animate: true), 0xb99ae8), // shadow barrier
+//
+//	(63, XGAssembly.routineForSingleStatBoost(stat: .defense, stages: .plus_3), 0xb99b49), // cotton guard
+//
+//	(64, XGAssembly.routineForSingleStatBoost(stat: .special_attack, stages: .plus_3), 0xb99b54), // tail glow
+//
+//	(96, XGAssembly.routineHitWithSecondaryEffect(effect: 0x51), 0xb99b5f), // flame charge
+//
+//	(110, XGAssembly.routineHitWithSecondaryEffect(effect: 0xd8), 0xb99b70), // hammer arm
+//
+//	(131, XGAssembly.routineHitAndStatChange(routineOffsetRAM: 0x80b99b7b, boosts: [(stat: XGStats.defense, stages: XGStatStages.minus_1), (stat: XGStats.special_defense, stages: XGStatStages.minus_1)]), 0xb99b7b), // close combat
+//
+//	(184, XGAssembly.routineHitAndStatChange(routineOffsetRAM: 0x80b99c01, boosts: [(stat: XGStats.defense, stages: XGStatStages.minus_1), (stat: XGStats.special_defense, stages: XGStatStages.minus_1), (stat: XGStats.speed, stages: XGStatStages.minus_1)]), 0xb99c01), // v-create
+//
+//	(141, XGAssembly.routineHitWithSecondaryEffect(effect: 0x52), 0xb99ca6), // charge beam
+//
+//	(93, XGAssembly.routineHitAllWithSecondaryEffect(effect: 0x18), 0xb99cb7), // bulldoze
+//
+//	(34, XGAssembly.routineHitAllWithSecondaryEffect(effect: 0x03), 0xb99cc8), // lava plume
+//
+//	(81, XGAssembly.routineHitAllWithSecondaryEffect(effect: 0x05), 0xb99cd3), // discharge
+//
+//	(88, XGAssembly.routineHitAllWithSecondaryEffect(effect: 0x02), 0xb99cde), // sludge wave
+//
+//	(162, shadowFreezeRoutine, 0xb99ce9), // shadow freeze
+//
+//]
+//
+//
+//
+//var currentOffset = XGAssembly.ASMfreeSpacePointer()
+//for routine in routines {
+//
+////	// run first to generate offsets
+////	print("effect \(routine.effect) - \(currentOffset.hexString())")
+////	currentOffset += routine.routine.count
+//
+//	// fill in offsets then run this to actually add them
+//	XGAssembly.setMoveEffectRoutine(effect: routine.effect, fileOffset: routine.offset - kRELtoRAMOffsetDifference, moveToREL: true, newRoutine: routine.routine)
+//
+//
+//}
+
+
+
+
+
 
 
 
