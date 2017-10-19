@@ -66,7 +66,7 @@ class GoDPokemonView: NSImageView {
 			if key.contains("shadow") {
 				view.isHidden = !pokemon.isShadowPokemon
 			} else if (key != "dpkm") && (key != "ddpk") {
-				view.isHidden = !pokemon.isSet
+				view.isHidden = !(pokemon.deckData.index > 0)
 			} else {
 				view.isHidden = false
 			}
@@ -101,7 +101,6 @@ class GoDPokemonView: NSImageView {
 		self.shadowAggression.integerValue = pokemon.shadowAggression
 		self.shadowFlee.integerValue = pokemon.shadowFleeValue
 		self.shadowCatchrate.integerValue = pokemon.shadowCatchRate
-		
 		
 	}
 	
@@ -366,6 +365,7 @@ class GoDPokemonView: NSImageView {
 	
 	func setSpecies(sender: GoDPokemonPopUpButton) {
 		self.delegate.pokemon[self.index].species = sender.selectedValue
+		self.delegate.pokemon[self.index].moves = sender.selectedValue.movesForLevel(self.delegate.pokemon[self.index].level)
 		self.setUp()
 	}
 	

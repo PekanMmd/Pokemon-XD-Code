@@ -20,7 +20,9 @@ func loadAllStrings() {
 		allStrings += XGFiles.tableres2.stringTable.allStrings()
 		
 		XGFolders.StringTables.map{ (file: XGFiles) -> Void in
-			allStrings += file.stringTable.allStrings()
+			if file.fileName.contains(".msg") {
+				allStrings += file.stringTable.allStrings()
+			}
 		}
 		
 		stringsLoaded = true

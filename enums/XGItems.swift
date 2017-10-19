@@ -28,7 +28,7 @@ enum XGItems : XGDictionaryRepresentable {
 	
 	var startOffset : Int {
 		get{
-			return Common_relIndices.Items.startOffset() + (index * kSizeOfItemData)
+			return CommonIndexes.Items.startOffset + (index * kSizeOfItemData)
 		}
 	}
 	
@@ -80,7 +80,7 @@ enum XGItems : XGDictionaryRepresentable {
 	
 	static func allItems() -> [XGItems] {
 		var items = [XGItems]()
-		for i in 0 ..< kNumberOfItems {
+		for i in 0 ..< CommonIndexes.NumberOfItems.value {
 			items.append(.item(i))
 		}
 		return items
@@ -102,7 +102,7 @@ enum XGOriginalItems {
 	
 	var startOffset : Int {
 		get{
-			return Common_relIndices.Items.startOffset() + (index * kSizeOfItemData)
+			return CommonIndexes.Items.startOffset + (index * kSizeOfItemData)
 		}
 	}
 	
@@ -122,7 +122,7 @@ enum XGOriginalItems {
 	
 	static func allItems() -> [XGOriginalItems] {
 		var items = [XGOriginalItems]()
-		for i in 0 ..< kNumberOfItems {
+		for i in 0 ..< CommonIndexes.NumberOfItems.value {
 			items.append(.item(i))
 		}
 		return items
@@ -135,7 +135,7 @@ func allItems() -> [String : XGItems] {
 	
 	var dic = [String : XGItems]()
 	
-	for i in 0 ..< kNumberOfItems {
+	for i in 0 ..< CommonIndexes.NumberOfItems.value {
 		
 		let a = XGItems.item(i)
 		
@@ -154,16 +154,16 @@ func item(_ name: String) -> XGItems {
 }
 
 func allItemsArray() -> [XGItems] {
-	var items: [XGItems] = []
-	for i in 0 ..< kNumberOfItems {
+	var items : [XGItems] = []
+	for i in 0 ..< CommonIndexes.NumberOfItems.startOffset {
 		items.append(XGItems.item(i))
 	}
 	return items
 }
 
 func allOriginalItemsArray() -> [XGOriginalItems] {
-	var items: [XGOriginalItems] = []
-	for i in 0 ..< kNumberOfItems {
+	var items : [XGOriginalItems] = []
+	for i in 0 ..< CommonIndexes.NumberOfItems.value {
 		items.append(XGOriginalItems.item(i))
 	}
 	return items

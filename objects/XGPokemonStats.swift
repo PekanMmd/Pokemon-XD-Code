@@ -168,7 +168,7 @@ class XGPokemonStats: NSObject {
 		
 		let rel = XGFiles.common_rel.data
 		
-		self.startOffset	= Common_relIndices.PokemonStats.startOffset() + ( kSizeOfPokemonStats * index )
+		self.startOffset	= CommonIndexes.PokemonStats.startOffset + ( kSizeOfPokemonStats * index )
 		self.index			= index
 		
 		self.nameID			= rel.get2BytesAtOffset(startOffset + kNameIDOffset)

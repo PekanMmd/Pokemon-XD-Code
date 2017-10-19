@@ -96,7 +96,7 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 //		var table = XGFiles.common_rel.stringTable
 		
 		self.moveIndex       = index
-		self.startOffset     = Common_relIndices.Moves.startOffset() + (index * kSizeOfMoveData)
+		self.startOffset     = CommonIndexes.Moves.startOffset + (index * kSizeOfMoveData)
 		
 		self.contactFlag	 = rel.getByteAtOffset(startOffset + kContactFlagOffset)    == 1
 		self.protectFlag	 = rel.getByteAtOffset(startOffset + kProtectFlagOffset)    == 1

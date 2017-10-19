@@ -55,7 +55,7 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 	
 	var startOffset : Int {
 		get {
-			return Common_relIndices.BattleBingo.startOffset() + (index * kSizeOfBingoCardData)
+			return CommonIndexes.BattleBingo.startOffset + (index * kSizeOfBingoCardData)
 		}
 	}
 	

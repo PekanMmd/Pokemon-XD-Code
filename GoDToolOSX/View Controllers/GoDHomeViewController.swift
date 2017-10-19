@@ -27,6 +27,7 @@ class GoDHomeViewController: GoDTableViewController {
 		
 		(NSApp.delegate as! AppDelegate).homeViewController = self
 		
+//		let iso = XGFiles.iso
 		if !XGFiles.iso.exists {
 			self.performSegue(withIdentifier: "toHelpVC", sender: self)
 		}

@@ -29,7 +29,7 @@ class XGMovePopover: XGPopover, UISearchResultsUpdating, UISearchBarDelegate {
 		let data = XGFiles.common_rel.data
 		let table = XGFiles.common_rel.stringTable
 		
-		var offset = Common_relIndices.Moves.startOffset()
+		var offset = CommonIndexes.Moves.startOffset()
 		
 		for i in 0 ..< kNumberOfMoves {
 			

@@ -100,12 +100,12 @@ class XGUtility {
 	}
 	
 	class func updateValidItems() {
-		let itemListStart = Common_relIndices.ValidItems.startOffset()
+		let itemListStart = CommonIndexes.ValidItems.startOffset
 		let rel = XGFiles.common_rel.data
 		
 		print("Updating items list...")
 		
-		for i in 1 ..< kNumberOfItems {
+		for i in 1 ..< CommonIndexes.NumberOfItems.value {
 			let currentOffset = itemListStart + (i * 2)
 			
 			if XGItems.item(i).nameID != 0 {
@@ -945,12 +945,12 @@ class XGUtility {
 			print("Ability: ",XGAbilities.ability(value).name.string,"\n")
 		}
 		
-		if value <= kNumberOfItems {
+		if value <= CommonIndexes.NumberOfItems.value {
 			print("Item: ",XGItems.item(value).name.string,"\n")
 		}
 		
 		// Key items
-		if value > kNumberOfItems && value < 0x250 {
+		if value > CommonIndexes.NumberOfItems.value && value < 0x250 {
 			print("Item: ",XGItems.item(value - (517 - 367)).name.string,"\n")
 		}
 		
@@ -958,7 +958,7 @@ class XGUtility {
 			print("Type: ",XGMoveTypes(rawValue: value)!,"\n")
 		}
 		
-		for i in 1 ..< kNumberOfItems {
+		for i in 1 ..< CommonIndexes.NumberOfItems.value {
 			let item = XGItems.item(i).data
 			if item.holdItemID == value {
 				print("Hold item id: ",item.name.string,"\n")
@@ -1542,7 +1542,7 @@ class XGUtility {
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
 		
-		for i in 0 ..< kNumberOfItems {
+		for i in 0 ..< CommonIndexes.NumberOfItems.value {
 			
 			let entry = XGItem(index: i)
 			

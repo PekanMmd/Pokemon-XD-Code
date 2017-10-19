@@ -55,7 +55,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 	class func common_rel() -> XGStringTable {
 		
-		return XGStringTable(file: .common_rel, startOffset: Common_relIndices.USStringTable.startOffset() + 0x68, fileSize: 0x0DC70)
+		return XGStringTable(file: .common_rel, startOffset: CommonIndexes.USStringTable.startOffset + 0x68, fileSize: 0x0DC70)
 		
 	}
 	

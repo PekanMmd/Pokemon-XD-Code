@@ -37,6 +37,7 @@ indirect enum XGFiles {
 	case lzss(String)
 	case script(String)
 	case texture(String)
+	case rel(String)
 	case iso
 	case toc
 	case log(Date)
@@ -45,8 +46,10 @@ indirect enum XGFiles {
 	var path : String {
 		get{
 			switch self {
+				
 			case .original:
 				return folder.resourcePath + ("/" + self.fileName)
+				
 			default:
 				return folder.path + ("/" + self.fileName)
 			}
@@ -58,7 +61,7 @@ indirect enum XGFiles {
 			switch self {
 				
 				case .dol					: return "Start.dol"
-				case .common_rel			: return "common_rel.fdat"
+				case .common_rel			: return "common.rel"
 				case .tableres2				: return "tableres2.fdat"
 				case .pocket_menu			: return "pocket_menu.fdat"
 				case .deck(let deck)		: return deck.fileName
@@ -75,6 +78,7 @@ indirect enum XGFiles {
 				case .iso					: return "XD.iso"
 				case .toc					: return "Game.toc"
 				case .log(let d)			: return d.description
+				case .rel(let s)			: return s
 				case .nameAndFolder(let name, _) : return name
 				
 			}
@@ -104,6 +108,7 @@ indirect enum XGFiles {
 				case .iso				: folder = .ISO
 				case .toc				: folder = .TOC
 				case .log				: folder = .Logs
+				case .rel				: folder = .Rels
 				case .original(let f)	: folder = f.folder
 				case .nameAndFolder( _, let aFolder) : folder = aFolder
 				
@@ -270,6 +275,7 @@ enum XGFolders : String {
 	case AutoFSYS			= "AutoFSYS"
 	case MenuFSYS			= "MenuFSYS"
 	case Logs				= "Logs"
+	case Rels				= "Relocation Tables"
 	
 	var name : String {
 		get {
@@ -426,6 +432,7 @@ enum XGFolders : String {
 			.AutoFSYS,
 			.MenuFSYS,
 			.Logs,
+			.Rels,
 			]
 		
 		for folder in folders {

@@ -42,7 +42,7 @@ enum XGTMs : XGDictionaryRepresentable {
 			switch self {
 			// Add 6 to the start offset because the actual Move index is 6 bytes in.
 				case .tm    : return kFirstTMListOffset + 6 + ((index - 1) * kSizeOfTMEntry)
-				case .tutor : return Common_relIndices.TutorMoves.startOffset() + ((index - 1) * kSizeOfTutorMoveEntry)
+				case .tutor : return CommonIndexes.TutorMoves.startOffset + ((index - 1) * kSizeOfTutorMoveEntry)
 			}
 		}
 	}

@@ -4422,7 +4422,7 @@ import Foundation
 
 
 //for m in XGMoves.allMoves().filter({ (m) -> Bool in
-//	return (m.index < kNumberOfMoves - 1) && (m.data.effect != move("THIEF").data.effect) && (m.data.effect != move("FACADE").data.effect)
+//	return (m.index < kNumberOfMoves - 1)
 //}).sorted(by: { (m1, m2) -> Bool in
 //	return XGAssembly.getRoutineStartForMoveEffect(index: m1.data.effect) < XGAssembly.getRoutineStartForMoveEffect(index: m2.data.effect)
 //}) {

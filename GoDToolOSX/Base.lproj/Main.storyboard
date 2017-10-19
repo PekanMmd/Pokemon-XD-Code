@@ -468,6 +468,13 @@ Twitter: @StarsMmd</string>
                             <constraint firstAttribute="bottom" secondItem="iKX-gV-se8" secondAttribute="bottom" id="xd7-G8-pMz"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="hexLabel" destination="APo-SP-kG6" id="VJH-Ad-qDy"/>
+                        <outlet property="indexLabel" destination="fsb-2M-Wk4" id="fmO-ve-pgS"/>
+                        <outlet property="nameIDView" destination="V5N-ew-4Ij" id="bwc-Df-UtU"/>
+                        <outlet property="nameView" destination="jmB-Xy-LEu" id="Qxx-hB-pip"/>
+                        <outlet property="startLabel" destination="h17-i9-Mbq" id="jVf-KQ-3vR"/>
+                    </connections>
                 </viewController>
                 <customObject id="KZk-u5-TLw" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -688,7 +695,7 @@ Twitter: @StarsMmd</string>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fgb-aQ-4PQ">
                                         <rect key="frame" x="8" y="15" width="84" height="33"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Effect Accuracy" id="Igj-5J-Qjt">
-                                            <font key="font" metaFont="system" size="11"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -842,7 +849,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="109" y="76" width="95" height="18"/>
                                         <buttonCell key="cell" type="check" title="Magic Coat" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="lz2-1g-AUo">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="system" size="12"/>
+                                            <font key="font" metaFont="cellTitle"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="toggleMagic:" target="vSz-Wi-uwy" id="ZFm-xv-42b"/>
@@ -852,7 +859,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="8" y="22" width="95" height="18"/>
                                         <buttonCell key="cell" type="check" title="King's Rock" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Gtc-RB-9ny">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="system" size="12"/>
+                                            <font key="font" metaFont="cellTitle"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="toggleKings:" target="vSz-Wi-uwy" id="ih8-wh-Lw7"/>
@@ -862,7 +869,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="109" y="22" width="95" height="18"/>
                                         <buttonCell key="cell" type="check" title="Mirror Move" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="0rj-L8-bGx">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="system" size="12"/>
+                                            <font key="font" metaFont="cellTitle"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="toggleMirror:" target="vSz-Wi-uwy" id="un7-Po-qFU"/>
@@ -1124,7 +1131,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KtA-Zs-4qY" customClass="GoDOriginalMovesPopUpButton" customModule="GoDToolOSX" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="2" width="195" height="26"/>
+                                        <rect key="frame" x="8" y="2" width="195" height="30"/>
                                         <popUpButtonCell key="cell" type="push" title="Animation" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="kcR-xy-ESW" id="EIu-8s-oeC">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" size="11" name=".AppleSystemUIFont"/>

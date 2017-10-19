@@ -9,6 +9,13 @@
 import Cocoa
 
 class GoDItemViewController: GoDTableViewController {
+	
+	@IBOutlet var nameView: NSTextField!
+	@IBOutlet var nameIDView: NSTextField!
+	@IBOutlet var indexLabel: NSTextField!
+	@IBOutlet var hexLabel: NSTextField!
+	@IBOutlet var startLabel: NSTextField!
+	
 
 	var items = allItemsArray().map { (item) -> String in
 		return item.name.string
@@ -36,12 +43,16 @@ class GoDItemViewController: GoDTableViewController {
 	
 	func reloadView() {
 		
-		
+		nameView.stringValue = currentItem.name.string
+		nameIDView.integerValue = currentItem.nameID
+		indexLabel.integerValue = currentItem.index
+		hexLabel.stringValue = currentItem.index.hexString()
+		startLabel.stringValue = currentItem.startOffset.hexString()
 		
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
-		return kNumberOfItems
+		return CommonIndexes.NumberOfItems.value
 	}
 	
 	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {

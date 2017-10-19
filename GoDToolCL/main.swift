@@ -7,6 +7,18 @@
 //
 
 
+
+//let pkx = XGISO().dataForFile(filename: "pkx_mewtwo.fsys")!
+//pkx.file = .nameAndFolder("pkx_mewtwo.fsys", .FSYS)
+//pkx.save()
+//let model = pkx.fsysData.decompressedDataForFileWithIndex(index: 0)!
+//model.file = .nameAndFolder("mewtwo.pkx", .TextureImporter)
+//model.save()
+//
+//let ow = XGUtility.convertFromPKXToOverWorldModel(pkx: model)
+//ow.file = .nameAndFolder("mewtwo_ow.pkx", .Documents)
+//ow.save()
+
 //XGUtility.compileMainFiles()
 //XGUtility.compileForRelease(XG: true)
 

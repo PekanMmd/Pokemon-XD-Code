@@ -247,10 +247,6 @@ class XGISO: NSObject {
 	
 	var autoFsysList : [String] {
 		return [
-			"D1_garage_1F.fsys",
-			"D1_garage_B1.fsys",
-			"D1_garage_B2_1.fsys",
-			"D1_garage_B2_2.fsys",
 			"D1_labo_1F.fsys",
 			"D1_labo_B1.fsys",
 			"D1_labo_B2.fsys",
@@ -288,9 +284,6 @@ class XGISO: NSObject {
 			"D3_ship_bridge.fsys",
 			"D3_ship_cabine.fsys",
 			"D3_ship_deck.fsys",
-			"D4_casino_colo.fsys",
-			"D4_dome_1.fsys",
-			"D4_dome_2.fsys",
 			"D4_dome_3.fsys",
 			"D4_dome_4.fsys",
 			"D4_out.fsys",
@@ -339,8 +332,6 @@ class XGISO: NSObject {
 			"M1_pc_B1.fsys",
 			"M1_shop_1F.fsys",
 			"M1_shop_2F.fsys",
-			"M1_stadium_1F.fsys",
-			"M1_water_colo.fsys",
 			"M1_water_colo_field.fsys",
 			"M2_building_1F.fsys",
 			"M2_building_2F.fsys",
@@ -665,6 +656,18 @@ class XGISO: NSObject {
 		}
 	}
 	
+	func extractRels() {
+		for file in XGFolders.AutoFSYS.files where autoFsysList.contains(file.fileName) {
+			let rel = XGFiles.rel(file.fileName.replacingOccurrences(of: ".fsys", with: ".rel"))
+			if !rel.exists {
+				let fsys = file.fsysData
+				let data = fsys.decompressedDataForFileWithIndex(index: 0)!
+				data.file = rel
+				data.save()
+			}
+		}
+	}
+	
 	func extractDOL() {
 		if !XGFiles.dol.exists {
 			let dol = dataForFile(filename: "Start.dol")!
@@ -693,10 +696,13 @@ class XGISO: NSObject {
 		}
 		
 		// for pokespots
-		for file in ["M2_guild_1F_2.fsys"] {
-			let data = iso.dataForFile(filename: file)!
-			data.file = XGFiles.nameAndFolder(file, .AutoFSYS)
-			data.save()
+		for name in ["M2_guild_1F_2.fsys"] {
+			let file = XGFiles.nameAndFolder(name, .AutoFSYS)
+			if !file.exists {
+				let data = iso.dataForFile(filename: name)!
+				data.file = file
+				data.save()
+			}
 		}
 		
 		iso.extractScripts()
@@ -711,6 +717,7 @@ class XGISO: NSObject {
 		iso.extractDecks()
 		iso.extractStringTables()
 		iso.extractScripts()
+		iso.extractRels()
 	}
 	
 }

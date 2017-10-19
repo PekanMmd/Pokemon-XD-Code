@@ -332,7 +332,7 @@ class XGDolPatcher: NSObject {
 			name.duplicateWithString(name.string.capitalized).replace()
 		}
 		
-		for i in 0 ..< kNumberOfItems {
+		for i in 0 ..< CommonIndexes.NumberOfItems.value {
 			let name = XGItems.item(i).name
 			name.duplicateWithString(name.string.capitalized).replace()
 		}
