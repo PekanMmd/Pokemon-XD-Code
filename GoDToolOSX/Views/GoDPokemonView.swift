@@ -143,8 +143,16 @@ class GoDPokemonView: NSImageView {
 			self.addConstraintEqualSizes(view1: moves[0], view2: shadow)
 		}
 		
-		let popups = [ability,gender,nature,name,item,level]
-		let popselectors = [#selector(setAbility(sender:)),#selector(setGender(sender:)),#selector(setNature(sender:)),#selector(setSpecies(sender:)),#selector(setItem(sender:)),#selector(setLevel(sender:)),]
+		let texts = [shadowCounter, shadowFlee, shadowAggression, shadowCatchrate, ivs, happiness]
+		let textSelectors = [#selector(setCounter(sender:)),#selector(setFlee(sender:)),#selector(setAggression(sender:)),#selector(setCatch(sender:)),#selector(setIVs(sender:)),#selector(setHappiness(sender:)),]
+		for i in 0 ..< texts.count {
+			texts[i].target = self
+			texts[i].action = textSelectors[i]
+		}
+		
+		
+		let popups = [ability,gender,nature,name,item,level,dpkm,ddpk]
+		let popselectors = [#selector(setAbility(sender:)),#selector(setGender(sender:)),#selector(setNature(sender:)),#selector(setSpecies(sender:)),#selector(setItem(sender:)),#selector(setLevel(sender:)),#selector(setDPKM(sender:)),#selector(setDDPK(sender:))]
 		
 		for i in 0 ..< popups.count {
 			popups[i].target = self
@@ -157,21 +165,19 @@ class GoDPokemonView: NSImageView {
 			self.evs.append(ev)
 			self.addSubview(ev)
 			self.views["ev\(i)"] = ev
+			ev.target = self
+			ev.action = #selector(setEV(sender:))
 		}
 		
 		self.dpkm.font = GoDDesign.fontOfSize(8)
 		self.ddpk.font = GoDDesign.fontOfSize(8)
 		
-		let byteFormat = NumberFormatter()
-		let ivFormat = NumberFormatter()
-		let shortFormat = NumberFormatter()
+		let byteFormat = NumberFormatter.byteFormatter()
+		let shortFormat = NumberFormatter.shortFormatter()
 		
-		byteFormat.minimum = 0x00
-		byteFormat.maximum = 0xFF
+		let ivFormat = NumberFormatter()
 		ivFormat.minimum = 0
 		ivFormat.maximum = 31
-		shortFormat.minimum = 0x00
-		shortFormat.maximum = 0xFFFF
 		
 		for view in evs + [shadowCatchrate,shadowAggression,shadowFlee,happiness] {
 			view.formatter = byteFormat
@@ -313,6 +319,18 @@ class GoDPokemonView: NSImageView {
 		super.init(coder: coder)
 	}
 	
+	func setDPKM(sender: GoDDPKMPopUpButton) {
+		self.delegate.currentTrainer.pokemon[self.index] = sender.selectedValue
+		self.delegate.pokemon[self.index] = sender.selectedValue.data
+		self.setUp()
+	}
+	
+	func setDDPK(sender: GoDDDPKPopUpButton) {
+		self.delegate.currentTrainer.pokemon[self.index] = sender.selectedValue
+		self.delegate.pokemon[self.index] = sender.selectedValue.data
+		self.setUp()
+	}
+	
 	func setAbility(sender: GoDPopUpButton) {
 		self.delegate.pokemon[self.index].ability = sender.indexOfSelectedItem
 		self.setUp()
@@ -366,6 +384,11 @@ class GoDPokemonView: NSImageView {
 	func setSpecies(sender: GoDPokemonPopUpButton) {
 		self.delegate.pokemon[self.index].species = sender.selectedValue
 		self.delegate.pokemon[self.index].moves = sender.selectedValue.movesForLevel(self.delegate.pokemon[self.index].level)
+		
+		if self.delegate.pokemon[self.index].isShadowPokemon {
+			self.delegate.pokemon[self.index].shadowCatchRate = sender.selectedValue.catchRate
+		}
+		
 		self.setUp()
 	}
 	
@@ -381,6 +404,41 @@ class GoDPokemonView: NSImageView {
 	
 	func setNature(sender: GoDNaturePopUpButton) {
 		self.delegate.pokemon[self.index].nature = sender.selectedValue
+		self.setUp()
+	}
+	
+	func setCounter(sender: NSTextField) {
+		self.delegate.pokemon[self.index].shadowCounter = sender.integerValue
+		self.setUp()
+	}
+	
+	func setFlee(sender: NSTextField) {
+		self.delegate.pokemon[self.index].shadowFleeValue = sender.integerValue
+		self.setUp()
+	}
+	
+	func setAggression(sender: NSTextField) {
+		self.delegate.pokemon[self.index].shadowAggression = sender.integerValue
+		self.setUp()
+	}
+	
+	func setCatch(sender: NSTextField) {
+		self.delegate.pokemon[self.index].shadowCatchRate = sender.integerValue
+		self.setUp()
+	}
+	
+	func setIVs(sender: NSTextField) {
+		self.delegate.pokemon[self.index].IVs = sender.integerValue
+		self.setUp()
+	}
+	
+	func setHappiness(sender: NSTextField) {
+		self.delegate.pokemon[self.index].happiness = sender.integerValue
+		self.setUp()
+	}
+	
+	func setEV(sender: NSTextField) {
+		self.delegate.pokemon[self.index].EVs[sender.tag] = sender.integerValue
 		self.setUp()
 	}
 	

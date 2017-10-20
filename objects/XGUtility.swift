@@ -170,19 +170,19 @@ class XGUtility {
 		shadowMadnessAnimation()
 	}
 	
-	class func prepareForCompilation(XG: Bool) {
+	class func prepareForCompilation() {
 		updateShadowMoves()
 		updateValidItems()
 		updateHealingItems()
 		updateTutorMoves()
 		updatePokeSpots()
-		updateShadowMonitor(XG: XG)
+		updateShadowMonitor()
 		compressFiles()
 		importFsys()
 	}
 	
 	class func compileMainFiles() {
-		prepareForCompilation(XG: false)
+		prepareForCompilation()
 		XGISO().updateISO()
 	}
 	
@@ -196,14 +196,14 @@ class XGUtility {
 	}
 	
 	class func compileForRandomiser() {
-		prepareForCompilation(XG: false)
+		prepareForCompilation()
 		
 		XGISO().importRandomiserFiles()
 	}
 	
-	class func compileAllFiles(XG: Bool) {
+	class func compileAllFiles() {
 		
-		prepareForCompilation(XG: XG)
+		prepareForCompilation()
 		
 		importStringTables()
 		importScripts()
@@ -214,7 +214,7 @@ class XGUtility {
 	class func compileForRelease(XG: Bool) {
 		prepareForRelease()
 		if XG { prepareXG() }
-		compileAllFiles(XG: true)
+		compileAllFiles()
 	}
 	
 	class func importScripts() {
@@ -733,7 +733,7 @@ class XGUtility {
 		}
 	}
 	
-	class func updateShadowMonitor(XG: Bool) {
+	class func updateShadowMonitor() {
 		
 		print("updating shadow monitor")
 		
@@ -749,9 +749,7 @@ class XGUtility {
 		
 		for poke in pokes {
 			
-			if XG && poke.pokemon.index == 150 {
-				indices.append(0x10b)
-			} else if poke.pokemon.index != 0 {
+			if poke.pokemon.index != 0 {
 				indices.append(poke.pokemon.index)
 			} else {
 				indices.append(0x118)

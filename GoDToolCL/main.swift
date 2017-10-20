@@ -6,7 +6,7 @@
 //  Copyright © 2015 StarsMmd. All rights reserved.
 //
 
-
+XGUtility.compileForRelease(XG: true)
 
 //let pkx = XGISO().dataForFile(filename: "pkx_mewtwo.fsys")!
 //pkx.file = .nameAndFolder("pkx_mewtwo.fsys", .FSYS)
