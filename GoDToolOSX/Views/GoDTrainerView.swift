@@ -10,6 +10,8 @@ import Cocoa
 
 class GoDTrainerView: NSView {
 	
+	var imageview = NSImageView()
+	
 	init() {
 		super.init(frame: .zero)
 		self.translatesAutoresizingMaskIntoConstraints = false
@@ -32,6 +34,8 @@ class GoDTrainerView: NSView {
 		
 		let trainer = self.delegate.currentTrainer
 		self.setBackgroundColour(GoDDesign.colourRed())
+		
+		
 		
 	}
 	

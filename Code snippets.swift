@@ -4491,6 +4491,14 @@ import Foundation
 
 
 
+//for file in XGFolders.Rels.files where file.fileName.contains(".rel") {
+//	let rel = file.mapData
+//	print(file.fileName)
+//	for chara in rel.characters {
+//		print("id:", chara.characterID.hexString(), "model", chara.model.hexString(), (XGCharacterModels(rawValue: chara.model) ?? .none).name, "script:", chara.scriptIndex.hexString(), chara.scriptName)
+//	}
+//	print("")
+//}
 
 
 

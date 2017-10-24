@@ -13,9 +13,10 @@ let kFirstFileNamePointerOffset		= 0x44
 let kFirstFileDetailsPointerOffset	= 0x60
 let kSizeOfArchiveEntry				= 0x70
 
+let kFileIdentifierOffset			= 0x00
 let kFileStartPointerOffset			= 0x04
-let kCompressedSizeOffset			= 0x14
 let kUncompressedSizeOffset			= 0x08
+let kCompressedSizeOffset			= 0x14
 
 let kLZSSUncompressedSizeOffset		= 0x04
 let kLZSSCompressedSizeOffset		= 0x08
@@ -116,6 +117,29 @@ class XGFsys : NSObject {
 		}
 	}
 	
+	var identifiers : [Int] {
+		var ids = [Int]()
+		for i in 0 ..< self.numberOfEntries {
+			ids.append(identifierForFile(index: i))
+		}
+		return ids
+	}
+	
+	func indexForIdentifier(identifier: Int) -> Int {
+		var index = -1
+		
+		let idents = identifiers
+		
+		for id in 0 ..< idents.count {
+			if idents[id] == identifier {
+				index = id
+				break
+			}
+		}
+		
+		return index
+	}
+	
 	var firstEntryDetailOffset : Int {
 		get {
 			return Int(data.get4BytesAtOffset(kFirstFileDetailsPointerOffset))
@@ -143,6 +167,26 @@ class XGFsys : NSObject {
 	
 	func sizeForFile(index: Int) -> Int {
 		let start = startOffsetForFileDetails(index) + kCompressedSizeOffset
+		return Int(data.get4BytesAtOffset(start))
+	}
+	
+	func setSizeForFile(index: Int, newSize: Int) {
+		let start = startOffsetForFileDetails(index) + kCompressedSizeOffset
+		data.replace4BytesAtOffset(start, withBytes: UInt32(newSize))
+	}
+	
+	func uncompressedSizeForFile(index: Int) -> Int {
+		let start = startOffsetForFileDetails(index) + kUncompressedSizeOffset
+		return Int(data.get4BytesAtOffset(start))
+	}
+	
+	func setUncompressedSizeForFile(index: Int, newSize: Int) {
+		let start = startOffsetForFileDetails(index) + kUncompressedSizeOffset
+		data.replace4BytesAtOffset(start, withBytes: UInt32(newSize))
+	}
+	
+	func identifierForFile(index: Int) -> Int {
+		let start = startOffsetForFileDetails(index) + kFileIdentifierOffset
 		return Int(data.get4BytesAtOffset(start))
 	}
 	
@@ -281,8 +325,7 @@ class XGFsys : NSObject {
 		}
 		
 		
-		let lzssCheck = self.data.get4BytesAtOffset(startOffsetForFile(index)) == kLZSSbytes
-		let oldSize = sizeForFile(index: index) - (lzssCheck ? kSizeOfLZSSHeader : 0)
+		let oldSize = sizeForFile(index: index)
 		let shift = (newFile.fileSize != oldSize) && (self.numberOfEntries > 1)
 		
 		if shift {
@@ -340,18 +383,23 @@ class XGFsys : NSObject {
 			return
 		}
 		
-		
-		let lzssCheck = self.data.get4BytesAtOffset(fileStart) == kLZSSbytes
-		
 		eraseDataForFile(index: index)
 		
-		let fileSize = UInt32(newFile.data.length + kSizeOfLZSSHeader)
+		
+		let fileSize = UInt32(newFile.data.length)
+		let newData = newFile.data
 		
 		let detailsStart = startOffsetForFileDetails(index)
 		data.replace4BytesAtOffset(detailsStart + kCompressedSizeOffset, withBytes: fileSize)
 		
-		if lzssCheck { data.replace4BytesAtOffset(fileStart  + kLZSSCompressedSizeOffset, withBytes: fileSize) }
-		data.replaceBytesFromOffset(fileStart + (lzssCheck ? kSizeOfLZSSHeader : 0), withByteStream: newFile.data.byteStream)
+		let lzssCheck = newData.get4BytesAtOffset(0) == kLZSSbytes
+		if lzssCheck {
+			data.replace4BytesAtOffset(detailsStart + kUncompressedSizeOffset, withBytes: newData.get4BytesAtOffset(kLZSSUncompressedSizeOffset))
+		} else {
+			data.replace4BytesAtOffset(detailsStart + kUncompressedSizeOffset, withBytes: fileSize)
+		}
+		
+		data.replaceBytesFromOffset(fileStart, withByteStream: newData.byteStream)
 		
 		if saveWhenDone {
 			save()
@@ -360,17 +408,19 @@ class XGFsys : NSObject {
 	
 	func eraseDataForFile(index: Int) {
 		
-		let fileStart = startOffsetForFile(index)
-		let lzssCheck = self.data.get4BytesAtOffset(fileStart) == kLZSSbytes
+		let start = startOffsetForFile(index)
+		let size = sizeForFile(index: index)
 		
-		let start = startOffsetForFile(index) + (lzssCheck ? kSizeOfLZSSHeader : 0)
-		let size = sizeForFile(index: index) - (lzssCheck ? kSizeOfLZSSHeader : 0)
-		
-		data.nullBytes(start: start, length: size)
+		eraseData(start: start, length: size)
 	}
 	
 	func eraseData(start: Int, length: Int) {
 		data.nullBytes(start: start, length: length)
+	}
+	
+	func deleteFile(index: Int) {
+		eraseDataForFile(index: index)
+		setSizeForFile(index: index, newSize: 0)
 	}
 	
 	func shiftUpFileWithIndex(index: Int) {

@@ -44,6 +44,8 @@ enum XGLZSS {
 			for i : Int32 in 0 ..< length {
 				compressedStream.append((bytes?[Int(i)])!)
 			}
+			let header = kLZSSbytes.charArray + originalData.length.charArray + (compressedStream.count + 0x10).charArray + 0.charArray
+			compressedStream = header + compressedStream
 			let compressedData = XGMutableData(byteStream: compressedStream, file: output)
 			return compressedData
 		}

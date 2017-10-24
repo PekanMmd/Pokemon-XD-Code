@@ -167,7 +167,19 @@ class XGMutableData: NSObject {
 		return byteStream
 	}
 	
-	
+	func getWordStreamFromOffset(_ offset: Int, length: Int) -> [UInt32] {
+		// length in bytes, not number of words
+		
+		var byteStream = [UInt32]()
+		
+		for i in stride(from: 0, to: length, by: 4) {
+			
+			byteStream.append(self.get4BytesAtOffset(offset + i))
+			
+		}
+		
+		return byteStream
+	}
 	
 	//MARK: - Replace Bytes
 	

@@ -14,7 +14,7 @@ class XGUtility {
 	
 	class func compressFiles() {
 		
-		let compressFolders = [XGFolders.Common, XGFolders.Decks, XGFolders.Textures, XGFolders.StringTables, XGFolders.Scripts]
+		let compressFolders = [XGFolders.Common, XGFolders.Decks, XGFolders.Textures, XGFolders.StringTables, XGFolders.Scripts, XGFolders.Rels]
 		
 		for folder in compressFolders where folder.exists {
 			for file in folder.files {
@@ -36,7 +36,7 @@ class XGUtility {
 		let common = XGFiles.fsys("common.fsys").fsysData
 		common.shiftAndReplaceFileWithIndex(2, withFile: .lzss("DeckData_Empty.bin.lzss")) //EU file
 		common.shiftAndReplaceFileWithIndex(4, withFile: .lzss("DeckData_DarkPokemon.bin.lzss"))
-		common.shiftAndReplaceFileWithIndex(0, withFile: .lzss("common_rel.fdat.lzss"))
+		common.shiftAndReplaceFileWithIndex(0, withFile: .lzss("common.rel.lzss"))
 		
 		XGFiles.fsys("common_dvdeth.fsys").fsysData.shiftAndReplaceFileWithIndex(0, withFile: .lzss("tableres2.fdat.lzss"))
 		
@@ -207,6 +207,7 @@ class XGUtility {
 		
 		importStringTables()
 		importScripts()
+		importRels()
 		
 		XGISO().importAllFiles()
 	}
@@ -215,6 +216,24 @@ class XGUtility {
 		prepareForRelease()
 		if XG { prepareXG() }
 		compileAllFiles()
+	}
+	
+	class func importRels() {
+		for file in XGFolders.Rels.files where file.fileName.contains(".rel") {
+			
+			print("importing relocation table: " + file.fileName)
+			
+			let fsysName = file.fileName.replacingOccurrences(of: ".rel", with: ".fsys")
+			let lzssName = file.fileName + ".lzss"
+			
+			let fsysFile = XGFiles.nameAndFolder(fsysName, XGFolders.AutoFSYS)
+			let lzssFile = XGFiles.nameAndFolder(lzssName, XGFolders.LZSS)
+			
+			if fsysFile.exists && lzssFile.exists {
+				let fsys = fsysFile.fsysData
+				fsys.shiftAndReplaceFileWithIndex(0, withFile: lzssFile)
+			}
+		}
 	}
 	
 	class func importScripts() {
@@ -228,7 +247,7 @@ class XGUtility {
 			let fsysFile = XGFiles.nameAndFolder(fsysName, XGFolders.AutoFSYS)
 			let lzssFile = XGFiles.nameAndFolder(lzssName, XGFolders.LZSS)
 			
-			if fsysFile.exists {
+			if fsysFile.exists && lzssFile.exists {
 				fsysFile.fsysData.shiftAndReplaceFileWithIndex(1, withFile: lzssFile)
 			}
 		}
@@ -246,7 +265,7 @@ class XGUtility {
 			let fsysFile = XGFiles.nameAndFolder(fsysName, XGFolders.AutoFSYS)
 			let lzssFile = XGFiles.nameAndFolder(lzssName, XGFolders.LZSS)
 			
-			if fsysFile.exists {
+			if fsysFile.exists && lzssFile.exists {
 				fsysFile.fsysData.shiftAndReplaceFileWithIndex(2, withFile: lzssFile)
 			}
 		}

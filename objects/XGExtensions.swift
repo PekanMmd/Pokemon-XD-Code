@@ -15,6 +15,7 @@ extension NSObject {
 }
 
 extension String {
+	
 	func println() {
 		printg(self)
 	}
@@ -80,6 +81,49 @@ extension Int {
 	
 	func hexString() -> String {
 		return String(format: "0x%x", self)
+	}
+	
+	var byteArray : [Int] {
+		var val = self
+		var array = [0,0,0,0]
+		for j in [3,2,1,0] {
+			array[j] = Int(val % 0x100)
+			val = val >> 8
+		}
+		return array
+	}
+	
+	var charArray : [UInt8] {
+		return byteArray.map({ (i) -> UInt8 in
+			return UInt8(i)
+		})
+	}
+	
+}
+
+extension UInt32 {
+	
+	func hexToSignedFloat() -> Float {
+		var toInt = Int32(bitPattern: self)
+		var float : Float32 = 0
+		memcpy(&float, &toInt, MemoryLayout.size(ofValue: float))
+		return float
+	}
+	
+	var byteArray : [Int] {
+		var val = self
+		var array = [0,0,0,0]
+		for j in [3,2,1,0] {
+			array[j] = Int(val % 0x100)
+			val = val >> 8
+		}
+		return array
+	}
+	
+	var charArray : [UInt8] {
+		return byteArray.map({ (i) -> UInt8 in
+			return UInt8(i)
+		})
 	}
 	
 }

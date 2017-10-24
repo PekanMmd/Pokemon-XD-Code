@@ -16,11 +16,24 @@ enum MapRelIndexes : Int {
 let kSizeOfCharacter = 0x24
 class XGCharacter : NSObject {
 	
-	let kHasScriptOffset = 0x18
-	let kScriptIndexOffset = 0x20
+	let kModelOffset = 0x6
+	let kCharacterIDOffset = 0x8
+	let kHasScriptOffset = 0x14
+	let kScriptIndexOffset = 0x16
+	let kXOffset = 0x18
+	let kYOffset = 0x1C
+	let kZOffset = 0x20
+	
+	var model = 0
+	var characterID = 0
+	
+	var xCoordinate : Float = 0
+	var yCoordinate : Float = 0
+	var zCoordinate : Float = 0
 	
 	var hasScript = false
 	var scriptIndex = 0
+	var scriptName = "-"
 	var characterIndex = 0
 	var startOffset = 0
 	
@@ -37,26 +50,47 @@ class XGCharacter : NSObject {
 		self.file = file
 		
 		let data = file.data
+		self.model = data.get2BytesAtOffset(startOffset + kModelOffset)
+		self.characterID = data.get2BytesAtOffset(startOffset + kCharacterIDOffset)
 		self.hasScript = data.getByteAtOffset(startOffset + kHasScriptOffset) == 1
 		self.scriptIndex = data.get2BytesAtOffset(startOffset + kScriptIndexOffset)
+		
+		self.xCoordinate = data.get4BytesAtOffset(startOffset + kXOffset).hexToSignedFloat()
+		self.yCoordinate = data.get4BytesAtOffset(startOffset + kYOffset).hexToSignedFloat()
+		self.zCoordinate = data.get4BytesAtOffset(startOffset + kZOffset).hexToSignedFloat()
 	}
 }
 
 class XGMapRel : XGRelocationTable {
 	
 	var characters = [XGCharacter]()
+	var script : XGScript!
 	
 	override init(file: XGFiles) {
 		super.init(file: file)
+		
+		let scriptFile = XGFiles.script(file.fileName.replacingOccurrences(of: ".rel", with: ".scd"))
+		if scriptFile.exists {
+			self.script = scriptFile.scriptData
+		}
 		
 		let firstCharacter = self.getPointer(index: MapRelIndexes.FirstCharacter.rawValue)
 		let numberOfCharacters = self.getValueAtPointer(index: MapRelIndexes.NumberOfCharacters.rawValue)
 		
 		for i in 0 ..< numberOfCharacters {
-			characters.append(XGCharacter(file: file, index: i, startOffset: firstCharacter + (i * kSizeOfCharacter)))
+			let character = XGCharacter(file: file, index: i, startOffset: firstCharacter + (i * kSizeOfCharacter))
+			
+			if character.hasScript {
+				if self.script != nil {
+					if character.scriptIndex < script.ftbl.count {
+						character.scriptName = script.ftbl[character.scriptIndex].name
+					}
+				}
+			}
+			
+			characters.append(character)
 		}
 	}
-	
 	
 }
 
@@ -76,10 +110,13 @@ enum CommonIndexes : Int {
 	case PokespotAll = 21
 	case PokespotAllEntries = 22
 	case Maps = 50 // includes name id for room and room id used in scripts
+	case Rooms = 58
 	case ValidItems = 68 // list of items which are actually available
 	case TotalNumberOfItems = 69
 	case Items = 70
 	case NumberOfItems = 71
+	case CharacterModels = 84
+	case NumberOfCharacterModels = 85
 	case PokemonStats = 88
 	case NumberOfPokemon = 89
 	case Natures = 94

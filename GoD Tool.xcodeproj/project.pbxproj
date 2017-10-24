@@ -48,6 +48,7 @@
 		B27AA63B1F8F141B001D06CF /* move routine functions.txt in Resources */ = {isa = PBXBuildFile; fileRef = B27AA63A1F8F141B001D06CF /* move routine functions.txt */; };
 		B27AA63C1F8F141B001D06CF /* move routine functions.txt in Resources */ = {isa = PBXBuildFile; fileRef = B27AA63A1F8F141B001D06CF /* move routine functions.txt */; };
 		B27AA63D1F8F141B001D06CF /* move routine functions.txt in Resources */ = {isa = PBXBuildFile; fileRef = B27AA63A1F8F141B001D06CF /* move routine functions.txt */; };
+		B27C5FD91F9CD4B900E0596F /* XGCharacterModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27C5FD81F9CD4B900E0596F /* XGCharacterModels.swift */; };
 		B2A677D61F7FECF700214526 /* GoDItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A677D51F7FECF700214526 /* GoDItemViewController.swift */; };
 		B2ACE8301F5E34FB00D87B22 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ACE82F1F5E34FB00D87B22 /* AppDelegate.swift */; };
 		B2ACE8341F5E34FB00D87B22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2ACE8331F5E34FB00D87B22 /* Assets.xcassets */; };
@@ -2380,6 +2381,7 @@
 		B27AA6311F8E85C4001D06CF /* XGStatBoosts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGStatBoosts.swift; sourceTree = "<group>"; };
 		B27AA6361F8EDE0F001D06CF /* move routine seconday effects.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "move routine seconday effects.txt"; sourceTree = "<group>"; };
 		B27AA63A1F8F141B001D06CF /* move routine functions.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "move routine functions.txt"; sourceTree = "<group>"; };
+		B27C5FD81F9CD4B900E0596F /* XGCharacterModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGCharacterModels.swift; sourceTree = "<group>"; };
 		B2A677D51F7FECF700214526 /* GoDItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDItemViewController.swift; sourceTree = "<group>"; };
 		B2ACE82D1F5E34FA00D87B22 /* XD Randomiser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "XD Randomiser.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2ACE82F1F5E34FB00D87B22 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -4637,6 +4639,7 @@
 				B2F5EBB61F49A1FE0075C6D2 /* XGAbilities.swift */,
 				B2F5EBB71F49A1FE0075C6D2 /* XGBagSlots.swift */,
 				B2F5EBB81F49A1FE0075C6D2 /* XGBattleBingoPanel.swift */,
+				B27C5FD81F9CD4B900E0596F /* XGCharacterModels.swift */,
 				B2F5EBB91F49A1FE0075C6D2 /* XGDeckPokemon.swift */,
 				B2F5EBBA1F49A1FE0075C6D2 /* XGDecks.swift */,
 				B2F5EBBB1F49A1FE0075C6D2 /* XGEffectivenessValues.swift */,
@@ -7128,6 +7131,7 @@
 				B2F5ECE71F49A1FF0075C6D2 /* XGAssemblyCode.swift in Sources */,
 				B2F5ECDE1F49A1FF0075C6D2 /* XGTrainerPokemon.swift in Sources */,
 				B2F5ECAE1F49A1FF0075C6D2 /* XGPokemonStats.swift in Sources */,
+				B27C5FD91F9CD4B900E0596F /* XGCharacterModels.swift in Sources */,
 				B2F5EC811F49A1FF0075C6D2 /* XGDolPatcher.swift in Sources */,
 				B2ACE8901F5EC8FA00D87B22 /* XGResources.swift in Sources */,
 				B2F5ECC91F49A1FF0075C6D2 /* XGTextureBlock.swift in Sources */,

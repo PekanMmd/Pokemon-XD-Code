@@ -70,7 +70,13 @@ enum XGMaps : String, XGDictionaryRepresentable {
 }
 
 
-
+enum XGRooms {
+	case room(Int)
+	
+	var dataStart : Int {
+		return CommonIndexes.Rooms.startOffset
+	}
+}
 
 
 

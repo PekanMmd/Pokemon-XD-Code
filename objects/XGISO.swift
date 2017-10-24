@@ -36,6 +36,11 @@ enum XGRegions : UInt32 {
 	
 }
 
+enum XGGame {
+	case Colosseum
+	case XD
+}
+
 class XGISO: NSObject {
 	
 	fileprivate let toc = XGFiles.toc.data
@@ -414,7 +419,8 @@ class XGISO: NSObject {
 			"common_dvdeth.fsys",
 			"deck_archive.fsys",
 			"field_common.fsys",
-			"fight_common.fsys"
+			"fight_common.fsys",
+			"people_archive.fsys"
 		]
 	}
 	
