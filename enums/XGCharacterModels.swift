@@ -19,11 +19,17 @@ class XGCharacterModels : NSObject {
 	var identifier = 0
 	var name = ""
 	var fsysIndex = -1
+	var fileSize = -1
 	
 	var startOffset = 0
 	
 	var rawData : [Int] {
 		return XGFiles.common_rel.data.getByteStreamFromOffset(self.startOffset, length: kSizeOfCharacterModel)
+	}
+	
+	var modelData : XGMutableData {
+		let file = XGFiles.fsys("people_archive.fsys").fsysData
+		return file.decompressedDataForFileWithIndex(index: fsysIndex)!
 	}
 	
 	init(index: Int) {
@@ -40,6 +46,7 @@ class XGCharacterModels : NSObject {
 			if fsysIndex >= 0 {
 				self.name = fsys.fileNames[fsysIndex]
 				self.fsysIndex = fsysIndex
+				self.fileSize = fsys.sizeForFile(index: fsysIndex)
 			}
 		}
 	}

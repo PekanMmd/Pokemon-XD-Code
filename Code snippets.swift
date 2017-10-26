@@ -3684,7 +3684,7 @@ import Foundation
 //// spiky shield 1 (replaces endure effect)
 //XGAssembly.replaceASM(startOffset: 0x223514 - kDOLtoRAMOffsetDifference, newASM: [0x28000113])
 //XGAssembly.replaceASM(startOffset: 0x223570 - kDOLtoRAMOffsetDifference, newASM: [kNopInstruction])
-//XGAssembly.replaceASM(startOffset: 0x2235dc - kDOLtoRAMOffsetDifference, newASM: [kNopInstruction,kNopInstruction])
+//XGAssembly.replaceASM(startOffset: 0x2235dc - kDOLtoRAMOffsetDifference, newASM: [kNopInstruction,kNopInstruction, kNopInstruction])
 //let endureRemove = 0x21607c - kDOLtoRAMOffsetDifference
 //XGAssembly.replaceASM(startOffset: endureRemove, newASM: [kNopInstruction,kNopInstruction,kNopInstruction,kNopInstruction,kNopInstruction])
 //XGAssembly.replaceASM(startOffset: 0x2160d8 - kDOLtoRAMOffsetDifference, newASM: [0x48000030])
@@ -4393,6 +4393,40 @@ import Foundation
 //
 //
 //}
+
+//// sitrus berry
+//let sitrusBranch = 0x223efc
+//let sitrusStart = 0xb99648
+//
+//let getHPFraction = 0x203688
+//let sitrusCode : ASM = [
+//
+//	0x281b00fd, // cmpwi r27, 0xfd
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x1c),
+//	0x7fe3fb78, // mr	r3, r31
+//	0x38800004, // li	r4, 4
+//	XGAssembly.createBranchAndLinkFrom(offset: sitrusStart + 0x10, toOffset: getHPFraction),
+//	0x7c601b78, // mr	r0, r3
+//	0x7c1b0378, // mr	r27, r0
+//	XGAssembly.createBranchFrom(offset: 0x0, toOffset: 0x20),
+//	0x281b00fe, // cmpwi r27, 0xfe
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x18),
+//	0x7fe3fb78, // mr	r3, r31
+//	0x38800002, // li	r4, 2
+//	XGAssembly.createBranchAndLinkFrom(offset: sitrusStart + 0x30, toOffset: getHPFraction),
+//	0x7c601b78, // mr	r0, r3
+//	0x7c1b0378, // mr	r27, r0
+//
+//	0x57a3043e, // rlwinm	r3, r29, 0, 16, 31 (0000ffff) overwritten code
+//	XGAssembly.createBranchFrom(offset: sitrusStart + 0x40, toOffset: sitrusBranch + 0x4)
+//]
+//
+//XGAssembly.replaceASM(startOffset: sitrusBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: sitrusBranch, toOffset: sitrusStart)])
+//XGAssembly.replaceRELASM(startOffset: sitrusStart - kRELtoRAMOffsetDifference, newASM: sitrusCode)
+//
+//let sb = item("sitrus berry").data
+//sb.parameter = 0xfd
+//sb.save()
 
 
 

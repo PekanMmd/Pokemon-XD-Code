@@ -24,7 +24,7 @@ class XGCharacter : NSObject {
 	let kYOffset = 0x1C
 	let kZOffset = 0x20
 	
-	var model = 0
+	var model : XGCharacterModels!
 	var characterID = 0
 	
 	var xCoordinate : Float = 0
@@ -50,7 +50,8 @@ class XGCharacter : NSObject {
 		self.file = file
 		
 		let data = file.data
-		self.model = data.get2BytesAtOffset(startOffset + kModelOffset)
+		let m = data.get2BytesAtOffset(startOffset + kModelOffset)
+		self.model = XGCharacterModels(index: m)
 		self.characterID = data.get2BytesAtOffset(startOffset + kCharacterIDOffset)
 		self.hasScript = data.getByteAtOffset(startOffset + kHasScriptOffset) == 1
 		self.scriptIndex = data.get2BytesAtOffset(startOffset + kScriptIndexOffset)
@@ -95,7 +96,6 @@ class XGMapRel : XGRelocationTable {
 }
 
 let kNumberRelPointers = 0x84
-
 enum CommonIndexes : Int {
 	case BattleBingo  = 0
 	case NumberOfBingoCards = 1
@@ -139,13 +139,37 @@ enum CommonIndexes : Int {
 }
 
 let common = XGCommon()
-class XGCommon: XGRelocationTable {
+class XGCommon : XGRelocationTable {
 	
 	init() {
 		super.init(file: XGFiles.common_rel)
 		self.dataStart = Int(self.data.get4BytesAtOffset(kCommonRELDataStartOffsetLocation))
 	}
 	
+}
+
+enum PocketIndexes : Int {
+	case MartStartIndexes  = 0
+	case numberOfMarts = 1
+	case MartGreetings = 2
+	case numberOfMartGreetingSections = 3
+	case MartItems = 4
+	case numberOfMartItems = 5
+	
+	var startOffset : Int {
+		return pocket.getPointer(index: self.rawValue)
+	}
+	
+	var value : Int {
+		return pocket.getValueAtPointer(index: self.rawValue)
+	}
+}
+
+let pocket = XGPocket()
+class XGPocket : XGRelocationTable {
+	init() {
+		super.init(file: XGFiles.pocket_menu)
+	}
 }
 
 let kCommonRELDataStartOffsetLocation = 0x6c

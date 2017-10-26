@@ -59,7 +59,7 @@ class XGUtility {
 		deckArchive.shiftAndReplaceFileWithIndex(14, withFile: .lzss("DeckData_Virtual.bin.lzss"))
 		
 		XGFiles.fsys("fight_common.fsys").fsysData.shiftAndReplaceFileWithIndex(0, withFile: .lzss("fight.msg.lzss"))
-		XGFiles.nameAndFolder("pocket_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: .lzss("pocket_menu.fdat.lzss"))
+		XGFiles.nameAndFolder("pocket_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: .lzss("pocket_menu.rel.lzss"))
 		
 	}
 	

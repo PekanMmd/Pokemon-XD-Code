@@ -78,7 +78,7 @@ enum XGTrainerModels : Int, XGDictionaryRepresentable {
 	
 	case chaserFemale1				= 0x37
 	case chaserFemale2				= 0x38
-	case chaseMale					= 0x39
+	case chaserMale					= 0x39
 	case cail						= 0x3A
 	case coolTrainerFemale			= 0x3B
 	case coolTrainerMale			= 0x3C
@@ -208,7 +208,7 @@ enum XGTrainerModels : Int, XGDictionaryRepresentable {
 				return "Female Chaser A"
 			case .chaserFemale2:
 				return "Female Chaser B"
-			case .chaseMale:
+			case .chaserMale:
 				return "Male Chaser"
 			case .cail:
 				return "Rogue Cail"

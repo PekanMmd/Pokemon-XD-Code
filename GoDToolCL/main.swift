@@ -6,43 +6,48 @@
 //  Copyright © 2015 StarsMmd. All rights reserved.
 //
 
-//// sitrus berry
-//let sitrusBranch = 0x223efc
-//let sitrusStart = 0xb99648
+
+
+//getStringSafelyWithID(id: 0xc5da).println()
 //
-//let getHPFraction = 0x203688
-//let sitrusCode : ASM = [
+//for i in 0 ..< 9 {
+//	if i % 2 == 0 {
+//		print(i, pocket.getPointer(index: i).hexString())
+//	} else {
+//		print(i, pocket.getPointer(index: i).hexString(), pocket.getValueAtPointer(index: i).hexString())
+//	}
+//}
+
+
+//var chars = [Int]()
+//let setModel : UInt32 = 0x09230046
+//var identifiers = [Int]()
+//for file in XGFolders.Rels.files where file.fileName.contains(".rel") {
+//	let map = file.mapData
+//	for char in map.characters {
+//		chars.append(char.model.index)
+//	}
+//	let script = map.script.code
+//	for i in 0 ..< script.count {
+//		if script[i] == setModel {
+//			identifiers.append(Int(script[i - 2]))
+//		}
+//	}
 //	
-//	0x281b00fd, // cmpwi r27, 0xfd
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x1c),
-//	0x7fe3fb78, // mr	r3, r31
-//	0x38800004, // li	r4, 4
-//	XGAssembly.createBranchAndLinkFrom(offset: sitrusStart + 0x10, toOffset: getHPFraction),
-//	0x7c601b78, // mr	r0, r3
-//	0x7c1b0378, // mr	r27, r0
-//	XGAssembly.createBranchFrom(offset: 0x0, toOffset: 0x20),
-//	0x281b00fe, // cmpwi r27, 0xfe
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x18),
-//	0x7fe3fb78, // mr	r3, r31
-//	0x38800002, // li	r4, 2
-//	XGAssembly.createBranchAndLinkFrom(offset: sitrusStart + 0x30, toOffset: getHPFraction),
-//	0x7c601b78, // mr	r0, r3
-//	0x7c1b0378, // mr	r27, r0
-//	
-//	0x57a3043e, // rlwinm	r3, r29, 0, 16, 31 (0000ffff) overwritten code
-//	XGAssembly.createBranchFrom(offset: sitrusStart + 0x40, toOffset: sitrusBranch + 0x4)
-//]
+//}
 //
-//XGAssembly.replaceASM(startOffset: sitrusBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: sitrusBranch, toOffset: sitrusStart)])
-//XGAssembly.replaceRELASM(startOffset: sitrusStart - kRELtoRAMOffsetDifference, newASM: sitrusCode)
+//
+//for i in 0 ..< CommonIndexes.NumberOfCharacterModels.value {
+//	if !chars.contains(i) {
+//		let model = XGCharacterModels(index: i)
+//		if !identifiers.contains(model.identifier) {
+//			print(model.name.spaceToLength(20),model.fileSize.hexString().spaceLeftToLength(8))
+//		}
+//	}
+//}
 
 
-
-//let sb = item("sitrus berry").data
-//sb.parameter = 0xfd
-//sb.save()
-
-//XGUtility.compileAllFiles()
+//XGUtility.compileForRelease(XG: true)
 
 //for i in 0 ..< CommonIndexes.NumberOfCharacterModels.value {
 //	let model = XGCharacterModels(index: i)

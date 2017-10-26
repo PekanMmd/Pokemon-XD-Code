@@ -31,18 +31,18 @@ let instructionNames = [
 	
 ]
 
-let vectorCoordNames = ["vx","vy","vz","4"]
+let vectorCoordNames = ["x","y","z","4"]
 
 enum XGScriptOps : Int {
 	case nop		= 0
-	case `operator`
+	case xd_operator
 	case loadImmediate
 	case loadVariable
 	case setVariable
 	case setVector
 	case pop
 	case call
-	case `return`
+	case return_op
 	case callStandard
 	case jumpIfTrue
 	case jumpIfFalse

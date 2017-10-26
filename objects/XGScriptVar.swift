@@ -21,7 +21,7 @@ enum XGScriptVarTypes {
 	case pokemon		
 	case unknowntype44	
 	case codeptr_t
-	case unknown(UInt16)
+	case unknown(Int)
 	
 	var string : String {
 		get {
@@ -42,7 +42,7 @@ enum XGScriptVarTypes {
 		}
 	}
 	
-	static func typeWithIndex(_ id: UInt16) -> XGScriptVarTypes {
+	static func typeWithIndex(_ id: Int) -> XGScriptVarTypes {
 		switch id {
 			case  0 : return .none_t
 			case  1 : return .integer
@@ -63,15 +63,36 @@ enum XGScriptVarTypes {
 
 class XGScriptVar : NSObject {
 	
-	var type   = XGScriptVarTypes.none_t
-	var value  = Data()
+	var type   : XGScriptVarTypes = .none_t
+	var value  : UInt32 = 0
 	
-	init(rawBytes: Data) {
+	override var description: String {
+		
+		var val = ""
+		
+		switch self.type {
+		case .float:
+			val = "\(self.value.hexToSignedFloat())"
+		default:
+			val = "\(self.value.int)"
+		}
+		
+		return self.type.string + "(" + val + ")"
+	}
+	
+	var asFloat : Float {
+		return value.hexToSignedFloat()
+	}
+	
+	var asInt : Int {
+		return Int(value)
+	}
+	
+	init(type: Int, rawValue: UInt32) {
 		super.init()
 		
-		var varType : UInt16 = 0x50
-		(rawBytes as NSData).getBytes(&varType, length: 2)
-		self.type = XGScriptVarTypes.typeWithIndex(varType)
+		self.type = XGScriptVarTypes.typeWithIndex(type)
+		self.value = rawValue
 		
 		
 	}

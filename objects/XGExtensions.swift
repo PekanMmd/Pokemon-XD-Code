@@ -126,6 +126,10 @@ extension UInt32 {
 		})
 	}
 	
+	var int : Int {
+		return Int(self)
+	}
+	
 }
 
 extension String {

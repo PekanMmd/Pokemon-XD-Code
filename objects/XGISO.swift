@@ -392,7 +392,6 @@ class XGISO: NSObject {
 			"M6_shop_2F.fsys",
 			"M6_tower_1F.fsys",
 			"M6_tower_2F.fsys",
-			"M6_tower_3F.fsys",
 			"M6_tower_4F.fsys",
 			"M6_tower_top.fsys",
 			"S1_out.fsys",
