@@ -26,6 +26,36 @@ enum XGDecks : String, XGDictionaryRepresentable {
 	case DeckSample			= "DeckData_Sample.bin"
 	case DeckVirtual		= "DeckData_Virtual.bin"
 	
+	var id : Int {
+		switch self {
+		case .DeckStory:
+			return 1
+		case .DeckHundred:
+			return 2
+		case .DeckImasugu:
+			return 3
+		case .DeckVirtual:
+			return 4
+		case .DeckBingo:
+			return 5
+		case .DeckColosseum:
+			return 6
+		case .DeckSample:
+			return 7
+		case .DeckDarkPokemon:
+			return 0
+		}
+	}
+	
+	static func deckWithID(_ id: Int) -> XGDecks? {
+		for deck in TrainerDecksArray {
+			if deck.id == id {
+				return deck
+			}
+		}
+		return nil
+	}
+	
 	var file : XGFiles {
 		get {
 			return .deck(self)

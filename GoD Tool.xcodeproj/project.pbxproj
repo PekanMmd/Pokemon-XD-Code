@@ -56,6 +56,7 @@
 		B27C5FDF1FA1A37800E0596F /* XGScriptInstruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27C5FDC1FA19FB000E0596F /* XGScriptInstruction.swift */; };
 		B27C5FE01FA1A4F400E0596F /* XGScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF21F49A1FE0075C6D2 /* XGScript.swift */; };
 		B27C5FE11FA1A4FE00E0596F /* XGScriptInstruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27C5FDC1FA19FB000E0596F /* XGScriptInstruction.swift */; };
+		B29E55FC1FA4DA40006BE597 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
 		B2A677D61F7FECF700214526 /* GoDItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A677D51F7FECF700214526 /* GoDItemViewController.swift */; };
 		B2ACE8301F5E34FB00D87B22 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ACE82F1F5E34FB00D87B22 /* AppDelegate.swift */; };
 		B2ACE8341F5E34FB00D87B22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2ACE8331F5E34FB00D87B22 /* Assets.xcassets */; };
@@ -2324,6 +2325,12 @@
 		B2F911681F6606E900129DC2 /* DeckData_Empty.bin in Resources */ = {isa = PBXBuildFile; fileRef = B2F911671F6606E900129DC2 /* DeckData_Empty.bin */; };
 		B2F911691F6606E900129DC2 /* DeckData_Empty.bin in Resources */ = {isa = PBXBuildFile; fileRef = B2F911671F6606E900129DC2 /* DeckData_Empty.bin */; };
 		B2F9116A1F6606E900129DC2 /* DeckData_Empty.bin in Resources */ = {isa = PBXBuildFile; fileRef = B2F911671F6606E900129DC2 /* DeckData_Empty.bin */; };
+		B2F9B2951FA4A04200E1489E /* XGRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2941FA4A04200E1489E /* XGRoom.swift */; };
+		B2F9B2961FA4B6C400E1489E /* XGRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2941FA4A04200E1489E /* XGRoom.swift */; };
+		B2F9B2971FA4B6C400E1489E /* XGRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2941FA4A04200E1489E /* XGRoom.swift */; };
+		B2F9B2991FA4CDAD00E1489E /* XGBattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2981FA4CDAD00E1489E /* XGBattle.swift */; };
+		B2F9B29A1FA4CDAD00E1489E /* XGBattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2981FA4CDAD00E1489E /* XGBattle.swift */; };
+		B2F9B29B1FA4CDAD00E1489E /* XGBattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2981FA4CDAD00E1489E /* XGBattle.swift */; };
 		B2FEC0761F6C376C00AC263D /* randomiser.png in Resources */ = {isa = PBXBuildFile; fileRef = B2FEC0751F6C376C00AC263D /* randomiser.png */; };
 		B2FEC0771F6C37AC00AC263D /* GoDTextureFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */; };
 		B2FEC0781F6C4A0300AC263D /* GoDTextureFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */; };
@@ -2385,6 +2392,7 @@
 		B27AA63A1F8F141B001D06CF /* move routine functions.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "move routine functions.txt"; sourceTree = "<group>"; };
 		B27C5FD81F9CD4B900E0596F /* XGCharacterModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGCharacterModels.swift; sourceTree = "<group>"; };
 		B27C5FDC1FA19FB000E0596F /* XGScriptInstruction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGScriptInstruction.swift; sourceTree = "<group>"; };
+		B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGBattleField.swift; sourceTree = "<group>"; };
 		B2A677D51F7FECF700214526 /* GoDItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDItemViewController.swift; sourceTree = "<group>"; };
 		B2ACE82D1F5E34FA00D87B22 /* XD Randomiser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "XD Randomiser.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2ACE82F1F5E34FB00D87B22 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -3499,6 +3507,8 @@
 		B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GoDImageExtensions.swift; path = GoDToolOSX/GoDImageExtensions.swift; sourceTree = "<group>"; };
 		B2F7C8E61F8FB4F300BB664D /* default move routines.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "default move routines.txt"; sourceTree = "<group>"; };
 		B2F911671F6606E900129DC2 /* DeckData_Empty.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = DeckData_Empty.bin; sourceTree = "<group>"; };
+		B2F9B2941FA4A04200E1489E /* XGRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGRoom.swift; sourceTree = "<group>"; };
+		B2F9B2981FA4CDAD00E1489E /* XGBattle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGBattle.swift; sourceTree = "<group>"; };
 		B2FEC0751F6C376C00AC263D /* randomiser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = randomiser.png; sourceTree = "<group>"; };
 		B2FEC0791F6C602A00AC263D /* GoDAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDAlertViewController.swift; sourceTree = "<group>"; };
 		B2FEC07C1F6D25BF00AC263D /* GoDToolExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDToolExtensions.swift; sourceTree = "<group>"; };
@@ -4681,9 +4691,11 @@
 			isa = PBXGroup;
 			children = (
 				B2F5EBD91F49A1FE0075C6D2 /* PBRStringTable.swift */,
+				B2F9B2981FA4CDAD00E1489E /* XGBattle.swift */,
 				B2F5EBDA1F49A1FE0075C6D2 /* XGBattleBingoCard.swift */,
 				B2F5EBDB1F49A1FE0075C6D2 /* XGBattleBingoPokemon.swift */,
 				B2F5EBDC1F49A1FE0075C6D2 /* XGByteCopier.swift */,
+				B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */,
 				B2F5EBDF1F49A1FE0075C6D2 /* XGDemoStarterPokemon.swift */,
 				B2F5EBE01F49A1FE0075C6D2 /* XGDolPatcher.swift */,
 				B2F5EBE11F49A1FE0075C6D2 /* XGEvolution.swift */,
@@ -4697,6 +4709,7 @@
 				B2F5EBED1F49A1FE0075C6D2 /* XGNature.swift */,
 				B2F5EBF01F49A1FE0075C6D2 /* XGPokemonStats.swift */,
 				B2F5EBF11F49A1FE0075C6D2 /* XGPokeSpotPokemon.swift */,
+				B2F9B2941FA4A04200E1489E /* XGRoom.swift */,
 				B2F5EBF21F49A1FE0075C6D2 /* XGScript.swift */,
 				B2F5EBF31F49A1FE0075C6D2 /* XGScriptClass.swift */,
 				B2F5EBF41F49A1FE0075C6D2 /* XGScriptClassFunctionsData.swift */,
@@ -7123,6 +7136,7 @@
 				B2F5EC6C1F49A1FF0075C6D2 /* XGWeather.swift in Sources */,
 				B2F5ECD21F49A1FF0075C6D2 /* XGTradePokemon.swift in Sources */,
 				B2F5F8731F49B3BC0075C6D2 /* XGStringManager.swift in Sources */,
+				B2F9B2991FA4CDAD00E1489E /* XGBattle.swift in Sources */,
 				B2F5EC961F49A1FF0075C6D2 /* XGLZSS.swift in Sources */,
 				B2F5EC511F49A1FE0075C6D2 /* XGScriptOps.swift in Sources */,
 				B2D1DF511F68717D0023A876 /* XGTexturePalette.swift in Sources */,
@@ -7132,6 +7146,7 @@
 				B2F5ECE71F49A1FF0075C6D2 /* XGAssemblyCode.swift in Sources */,
 				B2F5ECDE1F49A1FF0075C6D2 /* XGTrainerPokemon.swift in Sources */,
 				B2F5ECAE1F49A1FF0075C6D2 /* XGPokemonStats.swift in Sources */,
+				B29E55FC1FA4DA40006BE597 /* XGBattleField.swift in Sources */,
 				B27C5FD91F9CD4B900E0596F /* XGCharacterModels.swift in Sources */,
 				B2F5EC811F49A1FF0075C6D2 /* XGDolPatcher.swift in Sources */,
 				B2ACE8901F5EC8FA00D87B22 /* XGResources.swift in Sources */,
@@ -7172,6 +7187,7 @@
 				B2F5EC871F49A1FF0075C6D2 /* XGExtensions.swift in Sources */,
 				B2F5EC5A1F49A1FE0075C6D2 /* XGStatusEffects.swift in Sources */,
 				B27C5FDD1FA19FB000E0596F /* XGScriptInstruction.swift in Sources */,
+				B2F9B2951FA4A04200E1489E /* XGRoom.swift in Sources */,
 				B2F5EC7E1F49A1FF0075C6D2 /* XGDemoStarterPokemon.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7199,6 +7215,7 @@
 				B2F5ED561F49AEBC0075C6D2 /* XGByteCopyPopover.swift in Sources */,
 				B2F5ED7E1F49AEBC0075C6D2 /* XGLearnableMoveCell.swift in Sources */,
 				B2F5EC5B1F49A1FE0075C6D2 /* XGStatusEffects.swift in Sources */,
+				B2F9B2961FA4B6C400E1489E /* XGRoom.swift in Sources */,
 				B2F5F8871F49C4450075C6D2 /* XGStringManager.swift in Sources */,
 				B2F5EC941F49A1FF0075C6D2 /* XGLevelUpMove.swift in Sources */,
 				B27AA6331F8E85C5001D06CF /* XGStatBoosts.swift in Sources */,
@@ -7244,6 +7261,7 @@
 				B2D1DF561F6876380023A876 /* GoDTexture.swift in Sources */,
 				B2F5ED5F1F49AEBC0075C6D2 /* XGMovePopover.swift in Sources */,
 				B2F5EC881F49A1FF0075C6D2 /* XGExtensions.swift in Sources */,
+				B2F9B29A1FA4CDAD00E1489E /* XGBattle.swift in Sources */,
 				B2F5ED771F49AEBC0075C6D2 /* XGShinyChanceViewController.swift in Sources */,
 				B2F5ED661F49AEBC0075C6D2 /* XGTMsPopover.swift in Sources */,
 				B2F5ECEB1F49A1FF0075C6D2 /* XGDictionaryRepresentable.swift in Sources */,
@@ -7357,6 +7375,7 @@
 				B2F5ECE01F49A1FF0075C6D2 /* XGTrainerPokemon.swift in Sources */,
 				B2F5ECA41F49A1FF0075C6D2 /* XGMutableData.swift in Sources */,
 				B2F5F8A91F49CD050075C6D2 /* ViewController.swift in Sources */,
+				B2F9B2971FA4B6C400E1489E /* XGRoom.swift in Sources */,
 				B2F5F8A71F49CD050075C6D2 /* GoDTableViewController.swift in Sources */,
 				B2F5EC621F49A1FF0075C6D2 /* XGTrainerClasses.swift in Sources */,
 				B27AA6341F8E85C5001D06CF /* XGStatBoosts.swift in Sources */,
@@ -7409,6 +7428,7 @@
 				B2F5EC9E1F49A1FF0075C6D2 /* XGMove.swift in Sources */,
 				B2F5ECEF1F49A1FF0075C6D2 /* XGDictionaryRepresentableExtension.swift in Sources */,
 				B2F5EC861F49A1FF0075C6D2 /* XGEvolution.swift in Sources */,
+				B2F9B29B1FA4CDAD00E1489E /* XGBattle.swift in Sources */,
 				B2F5EC1A1F49A1FE0075C6D2 /* XGEffectivenessValues.swift in Sources */,
 				B205E0CD1F60B24F00A5F075 /* GoDGenderPopUpButton.swift in Sources */,
 				B2F5F8AB1F49CD050075C6D2 /* GoDTableCellView.swift in Sources */,

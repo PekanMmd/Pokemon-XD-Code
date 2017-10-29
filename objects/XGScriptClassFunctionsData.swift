@@ -83,15 +83,18 @@ Function #9 (0x59600009): when the map finishes to change
 */
 
 //MARK: - Class Names
-let classNames : [Int : String] = [
+let ScriptClassNames : [Int : String] = [
 	 0 : "Standard",
 	 4 : "Vector",
 	 7 : "Array",
+	33 : "Camera",
 	35 : "Character",
 	37 : "Pokemon",
+	38 : "Movement",
 	39 : "Tasks",
-	40 : "Dialogs",
+	40 : "Dialogue",
 	41 : "Transition",
+	42 : "Battle",
 	43 : "Player",
 	47 : "Sound",
 	52 : "DayCare",
@@ -101,7 +104,7 @@ let classNames : [Int : String] = [
 ]
 
 //MARK: - Operators
-let operators : [(String,Int,Int)] = [
+let ScriptOperators : [(String,Int,Int)] = [
 	//#------------------------------------------------------------------
 	//Category(name = "Unary operators", start = 16, nb = 10),
 	
@@ -119,26 +122,26 @@ let operators : [(String,Int,Int)] = [
 	//Category(name = "Binary non-comparison operators", start = 32, nb = 8),
 	
 	("xor", 32, 2),
-	("||", 33, 2),
-	("&&", 34, 2),
-	("+", 35, 2), //# str + str is defined => con//Catenation
-	("-", 36, 2),
-	("x", 37, 2), //# int * str or str * int is defined. For vectors = <a,b,c>*<c,d,e> = <a*c, b*d, c*e>
-	("/", 38, 2), //# you cannot /0 for ints and floats but for vectors you can ...
-	("%", 39, 2), //# operands are implicitly converted to int, if possible.
+	("or", 33, 2),
+	("and", 34, 2),
+	("add", 35, 2), //# str + str is defined => con//Catenation
+	("subtract", 36, 2),
+	("multiply", 37, 2), //# int * str or str * int is defined. For vectors = <a,b,c>*<c,d,e> = <a*c, b*d, c*e>
+	("divide", 38, 2), //# you cannot /0 for ints and floats but for vectors you can ...
+	("mod", 39, 2), //# operands are implicitly converted to int, if possible.
 	//#------------------------------------------------------------------
 	//Category(name = "Comparison operators", start = 48, nb = 6),
 	
-	("==", 48, 2), //# For string equality comparison: '?' every character goes, '*' everything goes after here
-	(">", 49, 2), //# ordering of strings is done comparing their respective lengths
-	(">=", 50, 2),
-	("<", 51, 2),
-	("<=", 52, 2),
-	("!=", 53, 2)
+	("eq", 48, 2), //# For string equality comparison: '?' every character goes, '*' everything goes after here
+	("gt", 49, 2), //# ordering of strings is done comparing their respective lengths
+	("gteq", 50, 2),
+	("lt", 51, 2),
+	("lteq", 52, 2),
+	("neq", 53, 2)
 	//#------------------------------------------------------------------
 ]
 
-let functions : [Int : [(String,Int,Int,Bool)]] = [
+let ScriptClassFunctions : [Int : [(String,Int,Int,Bool)]] = [
 //MARK: - Standard
 	0 : [
 		//#------------------------------------------------------------------------------------
@@ -261,6 +264,12 @@ let functions : [Int : [(String,Int,Int,Bool)]] = [
 		("append", 25, 2, true) //#REMOVED
 	],
 	
+//MARK: - Camera
+	33 : [
+		("followCharacter", 18, 1, false), // # (Character target)
+	
+	],
+	
 //MARK: - Character
 	35 : [
 		//# The biggest class out there, there are 99 functions
@@ -272,11 +281,16 @@ let functions : [Int : [(String,Int,Int,Bool)]] = [
 		("displayMsgWithSpeciesSound", 21, 2, false), //# (int msgID, int unk ?)
 		//# Uses the species cry from Dialogs::setMsgVar($dialogs, 50, species)
 		
-		("canSeePlayer", 27, 4, false), //# (unk parameters)
+		("checkIfCrossingLine", 25, 4, false), // # (Float x1, Float z1, Float x2, Float z2)?
+		("checkIsInRange", 27, 4, false), //# (int x, int y, int z, float angle?)
 		("setPosition", 29, 3, false), //# (int x, int y, int z)
 		
 		("setCharacterFlags", 40, 2, false), //# (int flags ?)
 		("clearCharacterFlags", 41, 2, false), //# (int flags ?)
+		
+		("faceCharacter", 49, 3, false), // # (Character target, float unknown)
+		
+		("faceDirection", 62, 1, false), // # (int direction) (0 = straight down)
 		
 		("setModel", 70, 1, false), //# (int id)
 		
@@ -322,6 +336,11 @@ let functions : [Int : [(String,Int,Int,Bool)]] = [
 		("hasLearnedMove", 35, 1, false), // (int move id)
 	],
 	
+//MARK: - Movement
+	38: [
+		("warpToRoom", 22, 2, false), // # (int roomID, int unknown)
+	],
+	
 //MARK: - Tasks
 	39 : [
 		//#------------------------------------------------------------------------------------
@@ -339,20 +358,20 @@ let functions : [Int : [(String,Int,Int,Bool)]] = [
 		("sleep", 21, 2, false) //# (float) (miliseconds)
 	],
 	
-//MARK: - Dialog
+//MARK: - Dialogue
 	40 : [
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Known methods", start = 16, nb=-1),
 		
-		("displatSilentMsgBox", 16, 4, false), //# (int msgID, int isInForeground, int dontDisplayCharByChar)
+		("displaySilentMsgBox", 16, 4, false), //# (int msgID, int isInForeground, int dontDisplayCharByChar)
 		("displayMsgBox", 17, 5, false), //# (int msgID, int isInForeground, int dontDisplayCharByChar,
 		//# int textSoundPitchLevel)
-		("displayYesNoQuestion", 21, 2, false), //# (int msgID)
+		("displayYesNoQuestion", 21, 2, false),
 		
 		("setMsgVar", 28, 3, false), //# (int type, var val)
 		
-		("promptPartyPokemon2", 32, 1, false), //# these functions are **exactly** the same
-		("promptPartyPokemon", 33, 1, false),
+		("promptPartyPokemon", 32, 1, false), //# these functions are **exactly** the same
+		("promptPartyPokemon2", 33, 1, false),
 		("openPokemonSummary", 34, 1, false), //# no arg ...
 		
 		("promptName", 36, 2, false), //# (int forWho, var target, int mode)
@@ -385,10 +404,11 @@ let functions : [Int : [(String,Int,Int,Bool)]] = [
 		("checkStatus", 17, 2, false) //#$transition, int waitForCompletion
 	],
 	
-//MARK: - Unknown42
+//MARK: - Battle
 	42 : [
 		
-		("startBattle", 16, 4, false),
+		("startBattle", 16, 4, false), // # (int isTrainer, int unknown, int battleID) (battleID list in reference folder)
+		("checkBattleResult", 18, 0, false), // # sets last result to 2 if victory
 	],
 	
 //MARK: - Player
@@ -399,7 +419,7 @@ let functions : [Int : [(String,Int,Int,Bool)]] = [
 		("processEvents", 17, 1, false), //# MUST BE CALLED IN THE IDLE LOOP (usually 'hero_main')
 		
 		("lockMovement", 18, 0, false),
-		("unlockMovement", 18, 0, false),
+		("freeMovement", 19, 0, false),
 		
 		("receiveItem", 26, 2, false), //# (int amount, int ID)
 		("receiveItemWithoutMessage", 27, 2, false), //# (int amount, int ID)
@@ -429,6 +449,8 @@ let functions : [Int : [(String,Int,Int,Bool)]] = [
 		("countValidPartyPkm", 43, 1, false),
 		("getPartyPkm", 44, 2, false), //# (int index)
 		("checkPkmOwnership", 45, 2, false), //# (int index)
+		
+		("getFollowingCharacter", 47, 0, false), // # sets last result to character index of character following the player
 		
 		("countCaughtShadowPokemon", 49, 0, false),
 		

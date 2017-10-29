@@ -18,26 +18,24 @@ enum XGScriptVarTypes {
 	case list			
 	case msg			
 	case character		
-	case pokemon		
-	case unknowntype44	
+	case pokemon
 	case codeptr_t
 	case unknown(Int)
 	
 	var string : String {
 		get {
 			switch self {
-				case .none_t			: return "none_t"
-				case .integer			: return "integer"
-				case .float				: return "float"
-				case .string			: return "string"
-				case .vector			: return "vector"
-				case .list				: return "list"
-				case .msg				: return "msg"
-				case .character			: return "character"
-				case .pokemon			: return "pokemon"
-				case .unknowntype44		: return "unknowntype44"
-				case .codeptr_t			: return "codeptr_t"
-				case .unknown(let val)	: return "unknowntype\(val)"
+				case .none_t			: return "None"
+				case .integer			: return "Int"
+				case .float				: return "Float"
+				case .string			: return "String"
+				case .vector			: return "Vector"
+				case .list				: return "List"
+				case .msg				: return "Msg"
+				case .character			: return "Character"
+				case .pokemon			: return "Pokemon"
+				case .codeptr_t			: return "Pointer"
+				case .unknown(let val)	: return "UnknownType\(val)"
 			}
 		}
 	}
@@ -53,7 +51,6 @@ enum XGScriptVarTypes {
 			case  8 : return .msg
 			case 35 : return .character
 			case 37 : return .pokemon
-			case 44 : return .unknowntype44
 			case 53 : return .codeptr_t
 			default : return .unknown(id)
 		}
@@ -72,9 +69,9 @@ class XGScriptVar : NSObject {
 		
 		switch self.type {
 		case .float:
-			val = "\(self.value.hexToSignedFloat())"
+			val = "\(self.asFloat)"
 		default:
-			val = "\(self.value.int)"
+			val = "\(self.asInt)"
 		}
 		
 		return self.type.string + "(" + val + ")"
@@ -85,7 +82,7 @@ class XGScriptVar : NSObject {
 	}
 	
 	var asInt : Int {
-		return Int(value)
+		return value.int32
 	}
 	
 	init(type: Int, rawValue: UInt32) {

@@ -968,7 +968,7 @@ class XGUtility {
 		
 		// Key items
 		if value > CommonIndexes.NumberOfItems.value && value < 0x250 {
-			print("Item: ",XGItems.item(value - (517 - 367)).name.string,"\n")
+			print("Item: ",XGItems.item(value - 150).name.string,"\n")
 		}
 		
 		if value < kNumberOfTypes {

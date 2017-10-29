@@ -8,6 +8,19 @@
 
 import Foundation
 
+// extension [Int]
+//func byteString
+
+extension Sequence where Iterator.Element == Int {
+	var byteString : String {
+		var s = ""
+		for i in self {
+			s += String(format: "%02x ", i)
+		}
+		return s
+	}
+}
+
 extension NSObject {
 	func println() {
 		printg(self)
@@ -130,6 +143,24 @@ extension UInt32 {
 		return Int(self)
 	}
 	
+	var int16 : Int {
+		var value = (self & 0xFFFF).int
+		value = value > 0x8000 ? value - 0x10000 : value
+		return value
+	}
+	
+	var int32 : Int {
+		var value = (self & 0xFFFFFFFF).int
+		value = value > 0x80000000 ? value - 0x100000000 : value
+		return value
+	}
+	
+}
+
+extension Float {
+	var string : String {
+		return String(describing: self)
+	}
 }
 
 extension String {

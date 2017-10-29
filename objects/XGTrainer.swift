@@ -161,18 +161,60 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 	
 	var fullDescription : String {
 		get {
-			var s = ""
 			
-			s += "--------------------------\n"
-			s += "\(self.index): \(self.trainerClass.name) \(self.name)\n"
-			s += "--------------------------\n"
-			for p in self.pokemon {
-				s += p.description
-				s += "\n"
+			let trainerLength = 30
+			let pokemonLength = 20
+			let trainerTab = "".spaceToLength(trainerLength)
+			
+			var string = ""
+			let name = self.trainerClass.name
+			if name.stringLength > 1 {
+				switch name.chars[0] {
+				case .special( _, _) : name.chars[0...1] = [name.chars[1]]
+				default: break
+				}
 			}
-			s += "--------------------------\n"
 			
-			return s
+			string += (name.string + " " + self.name.string).spaceToLength(trainerLength)
+			for p in self.pokemon {
+				if p.isSet {
+					string += ((p.isShadow ? "Shadow " : "") + p.pokemon.name.string).spaceToLength(pokemonLength)
+				}
+			}
+			string += "\n" + self.locationString.spaceToLength(trainerLength)
+			
+			for p in self.pokemon {
+				if p.isSet {
+					string += ("Level " + p.level.string + (p.isShadow ? "+" : "")).spaceToLength(pokemonLength)
+				}
+			}
+			string += "\n" + trainerTab
+			
+			let mons = self.pokemon.map({ (dpoke) -> XGTrainerPokemon in
+				return dpoke.data
+			})
+			
+			for p in mons {
+				if p.isSet {
+					string += p.item.name.string.spaceToLength(pokemonLength)
+				}
+			}
+			string += "\n" + trainerTab
+			
+			for i in 0 ..< 4 {
+				
+				for p in mons {
+					if p.isSet {
+						string += (p.shadowMoves[i].index == 0 ? p.moves[i] : p.shadowMoves[i]).name.string.spaceToLength(pokemonLength)
+					}
+				}
+				
+				string += "\n" + trainerTab
+			}
+			
+			
+			string += "\n"
+			return string
 		}
 	}
 	
@@ -206,6 +248,10 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		get {
 			return self.shadowMask > 0
 		}
+	}
+	
+	var battleData : XGBattle? {
+		return XGBattle.battleForTrainer(index: self.index, deck: self.deck)
 	}
 	
 	init(index: Int, deck: XGDecks) {

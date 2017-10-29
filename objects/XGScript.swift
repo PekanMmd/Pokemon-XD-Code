@@ -163,6 +163,173 @@ class XGScript: NSObject {
 		
 	}
 	
+	override var description: String {
+		
+		let linebreak = "-----------------------------------\n"
+		
+		// file name
+		var desc = linebreak + self.file.fileName + "\n"
+		desc += linebreak
+		
+		
+		// list function names
+		desc += "\nFunctions: \(ftbl.count)\n"
+		desc += linebreak
+		
+		for (_, name) in self.ftbl {
+			desc += name + "\n"
+		}
+		
+		// list script code instructions
+		desc += "\nCode\n"
+		desc += linebreak
+		
+		var index = 0
+		for i in 0 ..< self.code.count {
+			
+			// if this instruction is the start of a function, add the function's name
+			for (offset, name) in self.ftbl {
+				if offset == index {
+					desc += "\n" + name + ":\n" + linebreak
+				}
+			}
+			
+			// convert instruction to string
+			let instruction = self.code[i]
+			desc += "\(index) \((index * 4 + CODEStart + kScriptSectionHeaderSize).hexString()): \(instruction)" + "\n"
+			
+			index += instruction.length
+			
+			// spacing
+			let spaceOps : [XGScriptOps] = [.pop,.return_op,.jump,.jumpIfTrue,.jumpIfFalse]
+			if spaceOps.contains(instruction.opCode) {
+				desc += "\n"
+			}
+			
+			// add context to values
+			if instruction.opCode == .call {
+				for (index, name) in self.ftbl {
+					if index == instruction.parameter {
+						desc += ">> " + name + "\n"
+					}
+				}
+			}
+			
+			if instruction.opCode == .loadImmediate {
+				switch instruction.scriptVar.type {
+				case .string:
+					desc += ">> \"" + getStringAtOffset(STRGStart + kScriptSectionHeaderSize + instruction.parameter) + "\"\n"
+				default:
+					break
+				}
+			}
+			
+			if instruction.opCode == .callStandard {
+				
+				if instruction.subOpCode == 35 { // Character
+					if instruction.parameter == 70 { // set model
+						
+						let instr = self.code[i - 2]
+						if instr .opCode == .loadImmediate {
+							let mid = instr.parameter
+							let archive = XGFiles.fsys("people_archive.fsys").fsysData
+							let mindex = archive.indexForIdentifier(identifier: mid)
+							desc += ">> " + archive.fileNames[mindex] + "\n"
+						}
+					}
+					
+					if instruction.parameter == 73 { // talk
+						let instr = self.code[i - 3]
+						if instr .opCode == .loadImmediate {
+							let sid = instr.parameter
+							desc += ">> \"" + getStringSafelyWithID(id: sid).string + "\"\n"
+						}
+						let typeInstr = self.code[i - 2]
+						if typeInstr .opCode == .loadImmediate {
+							let type = typeInstr.parameter
+							if type == 9 {
+								let instr = self.code[i - 4]
+								if instr .opCode == .loadImmediate {
+									let bid = instr.parameter
+									desc += ">>\n" + XGBattle(index: bid).trainer.fullDescription + "\n"
+								}
+							}
+						}
+					}
+					
+				}
+				
+				if instruction.subOpCode == 40 { // Dialogue
+					if instruction.parameter == 16 || instruction.parameter == 17 { // display msg box
+						let instr = self.code[i - 2]
+						if instr .opCode == .loadImmediate {
+							let sid = instr.parameter
+							desc += ">> \"" + getStringSafelyWithID(id: sid).string + "\"\n"
+						}
+					}
+				}
+				
+				if instruction.subOpCode == 43 { // Player
+					if instruction.parameter == 26 || instruction.parameter == 27 || instruction.parameter == 28 { // receive item, check item in bag
+						let instr = self.code[i - 2]
+						if instr .opCode == .loadImmediate {
+							let iid = instr.parameter - (instr.parameter < CommonIndexes.NumberOfItems.value ? 0 : 150)
+							desc += ">> " + XGItems.item(iid).name.string + "\n"
+						}
+					}
+				}
+				
+				if instruction.subOpCode == 42 { // Battle
+					if instruction.parameter == 16 { // startBattle
+						let instr = self.code[i - 2]
+						if instr .opCode == .loadImmediate {
+							let bid = instr.parameter
+							desc += ">>\n" + XGBattle(index: bid).trainer.fullDescription + "\n"
+						}
+					}
+				}
+				
+				if instruction.subOpCode == 38 { // Movement
+					if instruction.parameter == 22 { // warp to room
+						let instr = self.code[i - 2]
+						if instr .opCode == .loadImmediate {
+							let sid = instr.parameter
+							let room = XGRoom.roomWithID(sid)
+							var roomName = room == nil ? "invalid room" : room!.name
+							if sid == 0x38e { roomName = "World Map" }
+							if sid == 0x391 { roomName = "PC Box" }
+							if sid == 0x39f { roomName = "Staff Roll" }
+							desc += ">> \"" + roomName + "\"\n"
+						}
+					}
+				}
+				
+			}
+		}
+		
+		// list global variables
+		desc += "\nGVAR: \(self.gvar.count)\n" + linebreak
+		for g in  0 ..< self.gvar.count {
+			desc += "\(g): " + self.gvar[g].description + "\n"
+		}
+		
+		desc += "\nARRY: \(self.arry.count)\n" + linebreak
+		for a in 0 ..< self.arry.count {
+			desc += "\(a): " + String(describing: self.arry[a]) + "\n"
+		}
+		
+		desc += "\nVECT: \(self.vect.count)\n" + linebreak
+		for v in 0 ..< self.vect.count {
+			desc += "\(v): < + \(vect[v].x), \(vect[v].y), \(vect[v].z) + >\n"
+		}
+		
+		desc += "\nGIRI: \(self.giri.count)\n" + linebreak
+		for g in  0 ..< self.giri.count {
+			desc += "\(g): GroupID<\(self.giri[g].groupID)>, ResourceID<\(self.giri[g].resourceID)> \n"
+		}
+		
+		return desc
+	}
 	
 }
 

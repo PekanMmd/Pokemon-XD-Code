@@ -54,7 +54,7 @@ enum XGScriptClassesInfo {
 	var name : String {
 		switch self {
 			case .operators			: return "Operator"
-			case .classes(let val)	: return classNames[val] ?? "UnknownClass\(val)"
+			case .classes(let val)	: return ScriptClassNames[val] ?? "UnknownClass\(val)"
 		}
 	}
 	
@@ -68,56 +68,34 @@ enum XGScriptClassesInfo {
 	subscript(id: Int) -> XGScriptFunctionInfo {
 		
 		switch self {
-			case .operators			: return operatorWithIndex(id)
-			case .classes				: return functionForClass(self, withId: id)
+			case .operators			: return operatorWithID(id)
+			case .classes			: return functionWithID(id)
 		}
 		
 	}
 	
-	var functionsList : [XGScriptFunctionInfo] {
+	func operatorWithID(_ id: Int) -> XGScriptFunctionInfo {
 		
-		var ops = true
-		var funcs = [XGScriptFunctionInfo]()
-		
-		switch self {
-			case .operators	: ops = true
-			case .classes		: ops = false
-		}
-		
-		
-		if ops {
-			/*for (name,index,parameters) in XGScriptClassesInfo.operators {
-				funcs.append(.operators(name, index, parameters))
-			}*/
-		} else {
-			for (name,index,parameters,variadic) in functions[self.index] ?? [] {
-				funcs.append(.known(name, index, parameters, variadic))
-			}
-		}
-		return funcs
-	}
-	
-	func operatorWithIndex(_ id: Int) -> XGScriptFunctionInfo {
-		
-		/*for (name,index,parameters) in XGScriptClassesInfo.operators {
+		for (name,index,parameters) in ScriptOperators {
 			if index == id {
 				return .operators(name, index, parameters)
 			}
-		}*/
+			
+		}
 		
 		return .unknown(id)
 	}
 	
-	func functionForClass(_ scriptClass: XGScriptClassesInfo, withId id: Int) -> XGScriptFunctionInfo {
-		let finfo = functions[id]
+	func functionWithID(_ id: Int) -> XGScriptFunctionInfo {
+		let info = ScriptClassFunctions[self.index]
 		
-		guard let info = finfo else {
+		if info == nil {
 			return .unknown(id)
 		}
 		
-		for (name,findex,parameters,variadic) in info {
-			if findex == id {
-				return .known(name, findex, parameters, variadic)
+		for (name,index,parameters,variadic) in info! {
+			if index == id {
+				return .known(name, index, parameters, variadic)
 			}
 		}
 		

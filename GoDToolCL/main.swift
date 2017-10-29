@@ -8,6 +8,28 @@
 
 
 
+//for file in XGFolders.Rels.files where file.fileName.contains(".rel") {
+//	file.fileName.println()
+//	let map = file.mapData
+//	for warp in map.warps {
+//		print(warp.index, warp.warpType.name.spaceToLength(15), warp.xCoordinate.string.spaceToLength(10), warp.yCoordinate.string.spaceToLength(10), warp.zCoordinate.string.spaceToLength(10))
+//	}
+//	print("")
+//}
+
+//let pyrite = XGFiles.rel("M2_out.rel")
+//let map = pyrite.mapData
+//for c in map.characters {
+//	c.model.name.println()
+//	c.name.println()
+//	if c.hasScript { c.scriptName.println()}
+//	for r in c.rawData {
+//		print(r.hex().spaceLeftToLength(2), terminator: " ")
+//	}
+//	print("\n")
+//}
+
+
 //getStringSafelyWithID(id: 0xc5da).println()
 //
 //for i in 0 ..< 9 {

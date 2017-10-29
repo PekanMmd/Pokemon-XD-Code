@@ -12,22 +12,22 @@ let instructionNames = [
 	
 	"nop",
 	"operator",
-	"load immediate",
-	"load variable",
-	"set variable",
-	"set vector",
+	"ldimm",
+	"ldvar",
+	"setvar",
+	"setvector",
 	"pop",
 	"call",
 	"return",
-	"call standard",
-	"jump if true",
-	"jump if false",
-	"jump",
+	"callstd",
+	"jmptrue",
+	"jmpfalse",
+	"jmp",
 	"reserve",
 	"release",
 	"exit",
-	"set line",
-	"load and copy variable"
+	"setline",
+	"ldncpvar"
 	
 ]
 

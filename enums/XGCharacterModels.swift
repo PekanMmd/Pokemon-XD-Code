@@ -54,6 +54,74 @@ class XGCharacterModels : NSObject {
 }
 
 
+enum XGCharacterMovements : CustomStringConvertible {
+	
+	case index(Int)
+	
+	var index : Int {
+		switch self {
+		case .index(let i):
+			return i
+		}
+	}
+	
+	var description : String {
+		return self.name
+	}
+	
+	var name : String {
+		let m = XGCharacterMovements.movementsList[self.index]
+		if m != nil {
+			return m!
+		}
+		return "Unknown_\(self.index)"
+	}
+	
+	static var movementsList : [Int : String] {
+		return [
+			0x0A : "Sit",
+			0x10 : "Stand Still",
+			0x12 : "Jog Down, Walk Up",
+			0x50 : "Walk Around",
+		]
+	}
+	
+}
+
+enum XGWarpTypes : CustomStringConvertible {
+	
+	case index(Int)
+	
+	var index : Int {
+		switch self {
+		case .index(let i):
+			return i
+		}
+	}
+	
+	var description : String {
+		return self.name
+	}
+	
+	var name : String {
+		let m = XGWarpTypes.warpsList[self.index]
+		if m != nil {
+			return m!
+		}
+		return "Unknown_\(self.index)"
+	}
+	
+	static var warpsList : [Int : String] {
+		return [
+			0x00 : "Open Boundary",
+			0x01 : "Stair Case",
+			0xB4 : "Door",
+		]
+	}
+	
+}
+
+
 //enum XGCharacterModels : Int {
 //	
 //	case none = 0x0
