@@ -7,15 +7,91 @@
 //
 
 
-
-//for file in XGFolders.Rels.files where file.fileName.contains(".rel") {
-//	file.fileName.println()
-//	let map = file.mapData
-//	for warp in map.warps {
-//		print(warp.index, warp.warpType.name.spaceToLength(15), warp.xCoordinate.string.spaceToLength(10), warp.yCoordinate.string.spaceToLength(10), warp.zCoordinate.string.spaceToLength(10))
-//	}
-//	print("")
+//// wide guard
+//let wideGuardBranchLinks = [0x218204, 0x218184]
+//let wideGuardStart = 0xb99ba0
+//
+//for offset in wideGuardBranchLinks {
+//	XGAssembly.replaceASM(startOffset: offset - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchAndLinkFrom(offset: offset, toOffset: wideGuardStart), 0x28030001])
 //}
+//
+//let getPokemonPointer = 0x1efcac
+//let getFieldEffect = 0x1f84e0
+//let getCurrentMove = 0x148d64
+//let getMoveTargets = 0x13e784
+//
+//let wideEndOffset = 0x78
+//
+//XGAssembly.replaceRELASM(startOffset: wideGuardStart - kRELtoRAMOffsetDifference, newASM: [
+//	// allow blr
+//	0x9421ffe0, // stwu	sp, -0x0020 (sp)
+//	0x7c0802a6, // mflr	r0
+//	0x90010024, // stw	r0, 0x0024 (sp)
+//	0xbfa10014, // stmw	r29, 0x0014 (sp) (just in case I wanted to use r29 for something)
+//
+//	// check regular protect
+//	0x28030001, // cmpwi r3, 1
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0xc),
+//
+//	// regular protect so go to end
+//	0x38600001, // li r3, 1
+//	XGAssembly.createBranchFrom(offset: 0x1c, toOffset: wideEndOffset),
+//
+//	// no regular protect so check wide guard
+//
+//	// get field pointer
+//	0x7fc3f378, // mr	r3, r30
+//	0x7c641b78, // mr	r4, r3
+//	0x38600002, // li r3, 2
+//	XGAssembly.createBranchAndLinkFrom(offset: wideGuardStart + 0x2c, toOffset: getPokemonPointer),
+//
+//	// check wide guard
+//	0x3880004d, // li r4, 77
+//	XGAssembly.createBranchAndLinkFrom(offset: wideGuardStart + 0x34, toOffset: getFieldEffect),
+//	0x28030001, // cmpwi r3, 1
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0x0, to: 0xc),
+//	0x38600000, // li r3, 0
+//	XGAssembly.createBranchFrom(offset: 0x44, toOffset: wideEndOffset),
+//
+//	// check current move target
+//	0x38600011, // li r3, 17
+//	0x38800000, // li r4, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: wideGuardStart + 0x50, toOffset: getPokemonPointer),
+//	XGAssembly.createBranchAndLinkFrom(offset: wideGuardStart + 0x54, toOffset: getCurrentMove),
+//	XGAssembly.createBranchAndLinkFrom(offset: wideGuardStart + 0x58, toOffset: getMoveTargets),
+//	0x28030006, // cmpwi r3, both foes and ally
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0x0, to: 0xc),
+//	0x28030004, // cmpwi r3, both foes
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0xc),
+//	0x38600001, // li r3, 1
+//	XGAssembly.createBranchFrom(offset: 0x0, toOffset: 0x8),
+//	0x38600000, // li r3, 0
+//
+//	// wide end 0x78
+//	0xbba10014, // lmw	r29, 0x0014 (sp)
+//	0x80010024, // lwz	r0, 0x0024 (sp)
+//	0x7c0803a6, // mtlr	r0
+//	0x38210020, // addi	sp, sp, 32
+//	XGAssembly.powerPCBranchLinkReturn()
+//
+//])
+
+
+
+
+//XGFiles.nameAndFolder("M1_out.fsys", .AutoFSYS).fsysData.extractFilesToFolder(folder: .Documents)
+
+
+for file in XGFolders.Rels.files where file.fileName.contains("M1_out.rel") {
+	file.fileName.println()
+	let map = file.mapData
+	for warp in map.warps {
+		let w = warp.warp
+		print(warp.sortedIndex, warp.warpType.name.spaceToLength(20), warp.xCoordinate.string.spaceToLength(10), warp.yCoordinate.string.spaceToLength(10), warp.zCoordinate.string.spaceToLength(10), w ?? "-")
+		
+	}
+	print("")
+}
 
 //let pyrite = XGFiles.rel("M2_out.rel")
 //let map = pyrite.mapData

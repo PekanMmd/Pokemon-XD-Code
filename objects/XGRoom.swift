@@ -16,8 +16,13 @@ let kRoomNameIDOffset = 0x18
 class XGRoom: NSObject {
 	
 	var nameID = 0
-	var name : String {
+	var location : String {
 		return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID).string
+	}
+	
+	var name : String {
+		let ids = XGFiles.nameAndFolder("Room IDs.json", .JSON).json
+		return (ids as! [String : String])[roomID.hexString()] ?? "-"
 	}
 	
 	var roomID = 0
@@ -27,6 +32,12 @@ class XGRoom: NSObject {
 	
 	var rawData : [Int] {
 		return XGFiles.common_rel.data.getByteStreamFromOffset(startOffset, length: kSizeOfRoom)
+	}
+	
+	var warps : [XGWarp] {
+		return allWarps.filter({ (w) -> Bool in
+			return w.warpFromRoom.roomID == self.roomID && w.warpIsValid
+		})
 	}
 
 	init(index: Int) {
@@ -46,6 +57,16 @@ class XGRoom: NSObject {
 		for i in 0 ..< CommonIndexes.NumberOfRooms.value {
 			let room = XGRoom(index: i)
 			if room.roomID == id {
+				return room
+			}
+		}
+		return nil
+	}
+	
+	class func roomWithName(_ name: String) -> XGRoom? {
+		for i in 0 ..< CommonIndexes.NumberOfRooms.value {
+			let room = XGRoom(index: i)
+			if room.name == name {
 				return room
 			}
 		}

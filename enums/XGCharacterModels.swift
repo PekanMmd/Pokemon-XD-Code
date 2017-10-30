@@ -113,9 +113,10 @@ enum XGWarpTypes : CustomStringConvertible {
 	
 	static var warpsList : [Int : String] {
 		return [
-			0x00 : "Open Boundary",
+			0x00 : "Door",
 			0x01 : "Stair Case",
-			0xB4 : "Door",
+			0x5A : "Open Boundary 5A",
+			0xB4 : "Open Boundary B4",
 		]
 	}
 	

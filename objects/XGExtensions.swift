@@ -89,11 +89,11 @@ extension Int {
 	}
 	
 	func hex() -> String {
-		return String(format: "%x", self)
+		return String(format: "%x", self).uppercased()
 	}
 	
 	func hexString() -> String {
-		return String(format: "0x%x", self)
+		return "0x" + hex()
 	}
 	
 	var byteArray : [Int] {

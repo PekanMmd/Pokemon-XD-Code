@@ -473,7 +473,7 @@ enum XGFolders : String {
 			}
 		}
 		
-		let jsons = ["Move Effects", "Original Pokemon", "Original Moves", "Move Categories"]
+		let jsons = ["Move Effects", "Original Pokemon", "Original Moves", "Move Categories", "Room IDs"]
 		
 		for j in jsons {
 			let file = XGFiles.nameAndFolder(j + ".json", .JSON)
