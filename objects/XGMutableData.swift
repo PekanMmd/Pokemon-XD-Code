@@ -238,6 +238,10 @@ class XGMutableData: NSObject {
 		}
 	}
 	
+	func increaseLength(by length: Int) {
+		data.increaseLength(by: length)
+	}
+	
 	
 	// delete bytes
 	

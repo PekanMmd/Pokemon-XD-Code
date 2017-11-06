@@ -20,6 +20,10 @@ enum XGItems : XGDictionaryRepresentable {
 		}
 	}
 	
+	var description : String {
+		return self.name.string
+	}
+	
 	var hex : String {
 		get {
 			return String(format: "0x%x",self.index)

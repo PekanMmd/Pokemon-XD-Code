@@ -67,6 +67,7 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 	
 	var shadowAggression = 0x0
 	var shadowAlwaysFlee = 0x0
+	var shadowBoostLevel = 0x0 // level before snagged
 	
 	var priority1 = 0x0
 	
@@ -95,7 +96,7 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 			dictRep["item"] = self.item.dictionaryRepresentation as AnyObject?
 			dictRep["nature"] = self.nature.dictionaryRepresentation as AnyObject?
 			dictRep["gender"] = self.gender.dictionaryRepresentation as AnyObject?
-			dictRep["shinyness"] = self.shinyness.dictionaryRepresentation as AnyObject?
+//			dictRep["shinyness"] = self.shinyness.dictionaryRepresentation as AnyObject?
 			
 			var EVsArray = [AnyObject]()
 			for a in EVs {
@@ -151,7 +152,7 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 			dictRep["item"] = self.item.name.string as AnyObject?
 			dictRep["nature"] = self.nature.string as AnyObject?
 			dictRep["gender"] = self.gender.string as AnyObject?
-			dictRep["shinyness"] = self.shinyness.string as AnyObject?
+//			dictRep["shinyness"] = self.shinyness.string as AnyObject?
 			
 			var EVsDict = [String : AnyObject]()
 			EVsDict["HP"] = EVs[0] as AnyObject?
@@ -242,17 +243,20 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 		
 		if isShadowPokemon {
 			
+			shadowBoostLevel = data.getByteAtOffset(start + kPokemonLevelOffset)
+			
 			let data = XGDecks.DeckDarkPokemon.data
 			let start = self.shadowStartOffset
 			
 			shadowCatchRate = data.getByteAtOffset(start + kShadowCatchRateOFfset)
 			shadowCounter	= data.get2BytesAtOffset(start + kShadowCounterOffset)
 			shadowFleeValue = data.getByteAtOffset(start + kFleeAfterBattleOffset)
-			level			= data.getByteAtOffset(start + kShadowLevelOffset)
+//			level			= data.getByteAtOffset(start + kShadowLevelOffset)
 			ShadowDataInUse	= data.getByteAtOffset(start + kShadowInUseFlagOffset) == 0x80
 			
 			shadowAggression = data.getByteAtOffset(start + kShadowAggressionOffset)
 			shadowAlwaysFlee = data.getByteAtOffset(start + kShadowAlwaysFleeOffset)
+			
 			
 			for i in 0 ..< kNumberOfPokemonMoves {
 				let index = data.get2BytesAtOffset(start + kFirstShadowMoveOFfset + (i * 2) )
@@ -301,8 +305,8 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 		data.replace2BytesAtOffset(start + kPokemonIndexOffset, withBytes: species.index)
 		data.replace2BytesAtOffset(start + kPokemonItemOffset, withBytes: item.index)
 		data.replaceByteAtOffset(start + kPokemonHappinessOffset, withByte: happiness)
-		data.replaceByteAtOffset(start + kPokemonLevelOffset, withByte: isShadowPokemon ? (level + 5) : level)
-		// The shadow pokemon's level is often increased here to increase the prize money from shadow trainers
+		data.replaceByteAtOffset(start + kPokemonLevelOffset, withByte: isShadowPokemon ? shadowBoostLevel : level)
+		// The shadow pokemon's level is often increased here to make shadow pokemon more powerful (hence the + by their level)
 		
 		var pid = self.nature.rawValue << 3
 		pid += self.gender.rawValue << 1

@@ -67,7 +67,7 @@ class XGUtility {
 		let kBattleItemDataStartOffset = 0x402570
 		let kSizeOfBattleItemEntry = 0x10
 		let kBattleItemHPToRestoreOffset = 0xA
-		// N.B. A lot of these values are bit mask and so a single item can have many of these effects at once
+		// N.B. A lot of these values are bit masks and so a single item can have many of these effects at once
 		// byte 0x3 status to heal mask (0x20 sleep, 0x10 poison, 0x8 burn, 0x4 freeze, 0x2 paralysis, 0x1 confusion, 0x3F all)
 		// 0x40 level up, 0x80 guard spec
 		// byte 0x4 0x80 increase max pp, 0x40 revive, 0x20 restore pp, 0x10 evolution stone, 0x8 max out pp
@@ -157,16 +157,7 @@ class XGUtility {
 		rel.save()
 	}
 	
-	class func shadowLugiaDPKMLevel() {
-		let lugia = XGDeckPokemon.ddpk(73)
-		let data = lugia.deck.data
-		let start = lugia.data.startOffset
-		data.replaceByteAtOffset(start + kPokemonLevelOffset, withByte: 80)
-		data.save()
-	}
-	
 	class func prepareXG() {
-		shadowLugiaDPKMLevel()
 		shadowMadnessAnimation()
 	}
 	
@@ -316,9 +307,9 @@ class XGUtility {
 		XGFiles.nameAndFolder("topmenu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: system_tool)
 		XGFiles.nameAndFolder("waza_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: pocket_menu)
 		XGFiles.nameAndFolder("worldmap.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: world_map)
-		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.replaceFileWithIndex(0, withFile: pocket_menu, saveWhenDone: true)
-		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.replaceFileWithIndex(2, withFile: nameentrymenu, saveWhenDone: true)
-		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.replaceFileWithIndex(3, withFile: system_tool, saveWhenDone: true)
+		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: pocket_menu)
+		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(2, withFile: nameentrymenu)
+		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(3, withFile: system_tool)
 		
 		
 	}

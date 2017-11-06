@@ -56,6 +56,9 @@
 		B27C5FDF1FA1A37800E0596F /* XGScriptInstruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27C5FDC1FA19FB000E0596F /* XGScriptInstruction.swift */; };
 		B27C5FE01FA1A4F400E0596F /* XGScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF21F49A1FE0075C6D2 /* XGScript.swift */; };
 		B27C5FE11FA1A4FE00E0596F /* XGScriptInstruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27C5FDC1FA19FB000E0596F /* XGScriptInstruction.swift */; };
+		B28C4DB01FA9E49200EED1C9 /* XGPokemart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */; };
+		B28C4DB11FA9E49200EED1C9 /* XGPokemart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */; };
+		B28C4DB21FA9E49200EED1C9 /* XGPokemart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */; };
 		B29E55FC1FA4DA40006BE597 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
 		B29E55FE1FA5C423006BE597 /* XGWarp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FD1FA5C423006BE597 /* XGWarp.swift */; };
 		B29E55FF1FA63819006BE597 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
@@ -2402,6 +2405,7 @@
 		B27AA63A1F8F141B001D06CF /* move routine functions.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "move routine functions.txt"; sourceTree = "<group>"; };
 		B27C5FD81F9CD4B900E0596F /* XGCharacterModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGCharacterModels.swift; sourceTree = "<group>"; };
 		B27C5FDC1FA19FB000E0596F /* XGScriptInstruction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGScriptInstruction.swift; sourceTree = "<group>"; };
+		B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGPokemart.swift; sourceTree = "<group>"; };
 		B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGBattleField.swift; sourceTree = "<group>"; };
 		B29E55FD1FA5C423006BE597 /* XGWarp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGWarp.swift; sourceTree = "<group>"; };
 		B29E56031FA6DEE5006BE597 /* Room IDs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Room IDs.json"; sourceTree = "<group>"; };
@@ -4739,6 +4743,7 @@
 				B2F5EC001F49A1FE0075C6D2 /* XGTrainerPokemon.swift */,
 				B2F5EC011F49A1FE0075C6D2 /* XGType.swift */,
 				B29E55FD1FA5C423006BE597 /* XGWarp.swift */,
+				B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */,
 			);
 			path = objects;
 			sourceTree = "<group>";
@@ -7139,6 +7144,7 @@
 				B2F5EC691F49A1FF0075C6D2 /* XGUnicodeCharacters.swift in Sources */,
 				B2F5ECE11F49A1FF0075C6D2 /* XGType.swift in Sources */,
 				B2F5EC931F49A1FF0075C6D2 /* XGLevelUpMove.swift in Sources */,
+				B28C4DB01FA9E49200EED1C9 /* XGPokemart.swift in Sources */,
 				B2F5EC9C1F49A1FF0075C6D2 /* XGMove.swift in Sources */,
 				B2F5EC8A1F49A1FF0075C6D2 /* XGGiftPokemon.swift in Sources */,
 				B2F5EC751F49A1FF0075C6D2 /* XGBattleBingoPokemon.swift in Sources */,
@@ -7267,6 +7273,7 @@
 				B2F5ED691F49AEBC0075C6D2 /* XGTutorMovesPopover.swift in Sources */,
 				B2F5ECC71F49A1FF0075C6D2 /* XGStringTable.swift in Sources */,
 				B2F5EC491F49A1FE0075C6D2 /* XGPokeSpots.swift in Sources */,
+				B28C4DB11FA9E49200EED1C9 /* XGPokemart.swift in Sources */,
 				B2F5EC641F49A1FF0075C6D2 /* XGTrainerModels.swift in Sources */,
 				B2F5ED5E1F49AEBC0075C6D2 /* XGMoveEffectPopover.swift in Sources */,
 				B2F5ED811F49AEBC0075C6D2 /* XGButtonField.swift in Sources */,
@@ -7480,6 +7487,7 @@
 				B2F5EC231F49A1FE0075C6D2 /* XGFiles.swift in Sources */,
 				B2F5ECC51F49A1FF0075C6D2 /* XGString.swift in Sources */,
 				B2F5EBA81F49A1980075C6D2 /* AppDelegate.swift in Sources */,
+				B28C4DB21FA9E49200EED1C9 /* XGPokemart.swift in Sources */,
 				B2FEC0931F6EE81900AC263D /* GoDPatchViewController.swift in Sources */,
 				B2D1DF521F68717E0023A876 /* XGTexturePalette.swift in Sources */,
 				B2D1DF551F6872740023A876 /* GoDTexture.swift in Sources */,

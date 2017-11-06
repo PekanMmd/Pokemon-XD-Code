@@ -86,6 +86,12 @@ class XGPokemonStats: NSObject {
 	var bodyID		: UInt32 = 0x0
 	var bodyShinyID  : UInt32 = 0x0
 	
+	var bodyName : String {
+		let dance =  XGFiles.fsys("poke_dance.fsys").fsysData
+		let index = dance.indexForIdentifier(identifier: bodyID.int)
+		return dance.fileNames[index]
+	}
+	
 	var levelUpRate		= XGExpRate.standard
 	var genderRatio     = XGGenderRatios.maleOnly
 	

@@ -131,7 +131,7 @@ enum PocketIndexes : Int {
 	case MartStartIndexes  = 0
 	case numberOfMarts = 1
 	case MartGreetings = 2
-	case numberOfMartGreetingSections = 3
+	case numberOfMartGreetingSections = 3 // 0x4c bytes each
 	case MartItems = 4
 	case numberOfMartItems = 5
 	

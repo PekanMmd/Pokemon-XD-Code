@@ -526,8 +526,10 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,Bool)]] = [
 		("setShadowPkmStorageUnit", 22, 4, false), //# (int index, int subIndex)
 	],
 	
-	
-	
+//MARK: - Pokespot
+	60 : [
+		("getCurrentWildPokemon", 17, 2, false), //# (int unk, int pokespotId)
+	]
 	
 ]
 

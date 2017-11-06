@@ -232,8 +232,23 @@ class XGScript: NSObject {
 						let instr = self.code[i - 2]
 						if instr .opCode == .loadImmediate {
 							let mid = instr.parameter
-							let archive = XGFiles.fsys("people_archive.fsys").fsysData
-							let mindex = archive.indexForIdentifier(identifier: mid)
+							var mindex = -1
+							var archive : XGFsys!
+							
+							let fsys = self.file.fileName.removeFileExtensions() + ".fsys"
+							for folder in [XGFolders.AutoFSYS, XGFolders.FSYS, XGFolders.MenuFSYS] {
+								let fsysFile = XGFiles.nameAndFolder(fsys, folder)
+								if fsysFile.exists && mindex < 0 {
+									archive = fsysFile.fsysData
+									mindex = archive.indexForIdentifier(identifier: mid)
+								}
+							}
+							
+							if mindex < 0 {
+								archive = XGFiles.fsys("people_archive.fsys").fsysData
+								mindex = archive.indexForIdentifier(identifier: mid)
+							}
+							
 							desc += ">> " + archive.fileNames[mindex] + "\n"
 						}
 					}
@@ -260,6 +275,22 @@ class XGScript: NSObject {
 				}
 				
 				if instruction.subOpCode == 40 { // Dialogue
+					
+					if instruction.parameter == 39 {
+						
+						let instr = self.code[i - 2]
+						if instr .opCode == .loadImmediate {
+							let mid = instr.parameter - 1
+							let mart = XGPokemart(index: mid).items
+							desc += ">>\n"
+							for item in mart {
+								desc += item.name.string + "\n"
+							}
+							desc += "\n"
+						}
+						
+					}
+					
 					if instruction.parameter == 16 || instruction.parameter == 17 { // display msg box
 						let instr = self.code[i - 2]
 						if instr .opCode == .loadImmediate {
@@ -320,7 +351,7 @@ class XGScript: NSObject {
 		
 		desc += "\nVECT: \(self.vect.count)\n" + linebreak
 		for v in 0 ..< self.vect.count {
-			desc += "\(v): < + \(vect[v].x), \(vect[v].y), \(vect[v].z) + >\n"
+			desc += "\(v): < \(vect[v].x), \(vect[v].y), \(vect[v].z) >\n"
 		}
 		
 		desc += "\nGIRI: \(self.giri.count)\n" + linebreak
@@ -330,6 +361,8 @@ class XGScript: NSObject {
 		
 		return desc
 	}
+	
+	
 	
 }
 

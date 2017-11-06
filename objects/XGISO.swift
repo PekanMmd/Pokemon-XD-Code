@@ -20,10 +20,12 @@ import Foundation
 //	"M2_guild_1F_2.fsys"	: 0x1FE3A8DC,
 //]
 
+let kDOLStartOffsetLocation = 0x420
 let kTOCStartOffsetLocation = 0x424
 let kTOCFileSizeLocation    = 0x428
 let kTOCNumberEntriesOffset = 0x8
 let kTOCEntrySize			= 0xc
+let kISOFirstFileOffsetLocation = 0x434
 
 // US
 //let kTOCFirstStringOffset = 0x783C
@@ -45,18 +47,43 @@ class XGISO: NSObject {
 	
 	fileprivate let toc = XGFiles.toc.data
 	
-	fileprivate var fileLocations = ["Start.dol" : 131840]
+	fileprivate var fileLocations = [String : Int]()
+//	fileprivate var fileLocations = ["Start.dol" : 131840]
 //	fileprivate var fileLocations = ["Start.dol" : 0x1EC00] colosseum
 	
 	fileprivate var fileSizes = [String : Int]()
 //	fileprivate var fileSizes = ["Start.dol" : 0x39AD00] colosseum
 	
-	var allFileNames = ["Start.dol"]
+	fileprivate var fileDataOffsets = [String : Int]() // in toc
+	
+	var allFileNames = [String]()
+	var filesOrdered = [String]()
+	
+	var data = XGFiles.iso.data
 	
 	let TOCFirstStringOffset = Int(XGFiles.toc.data.get4BytesAtOffset(kTOCNumberEntriesOffset)) * kTOCEntrySize
 	
 	override init() {
 		super.init()
+		
+		let DOLStart = Int(self.data.get4BytesAtOffset(kDOLStartOffsetLocation))
+		let TOCStart = Int(self.data.get4BytesAtOffset(kTOCStartOffsetLocation))
+		let TOCLength = Int(self.data.get4BytesAtOffset(kTOCFileSizeLocation))
+		
+		fileLocations["Start.dol"] = DOLStart
+		fileLocations["Game.toc"] = TOCStart
+		fileSizes["Game.toc"] = TOCLength
+		
+		let kDolSectionSizesStart = 0x90
+		let kDolSectionSizesCount = 18
+		let kDolHeaderSize = 0x100
+		
+		var size = kDolHeaderSize
+		for i in 0 ..< kDolSectionSizesCount {
+			let offset = DOLStart + (i * 4) + kDolSectionSizesStart
+			size += Int(self.data.get4BytesAtOffset(offset))
+		}
+		fileSizes["Start.dol"] = size
 		
 		var i = 0x0
 		
@@ -75,25 +102,16 @@ class XGISO: NSObject {
 				allFileNames.append(fileName)
 				fileLocations[fileName] = fileOffset
 				fileSizes[fileName]     = fileSize
+				fileDataOffsets[fileName] = i
 				
 			}
 			
 			i += 0xC
 		}
 		
-		let iso = XGFiles.iso.data
-		let dolStart = fileLocations["Start.dol"]!
-		let kDolSectionSizesStart = 0x90
-		let kDolSectionSizesCount = 18
-		let kDolHeaderSize = 0x100
-		
-		var size = kDolHeaderSize
-		for i in 0 ..< kDolSectionSizesCount {
-			let offset = dolStart + (i * 4) + kDolSectionSizesStart
-			size += Int(iso.get4BytesAtOffset(offset))
+		self.filesOrdered = allFileNames.sorted { (s1, s2) -> Bool in
+			return locationForFile(s1)! < locationForFile(s2)!
 		}
-		fileSizes["Start.dol"] = size
-		
 	}
 	
 	func updateISO() {
@@ -116,15 +134,26 @@ class XGISO: NSObject {
 		files += XGFolders.MenuFSYS.files ?? [XGFiles]()
 		files.append(.dol)
 		importFiles(files)
+		importToc()
 	}
 	
 	func importDol() {
 		importFiles([.dol])
 	}
+	
+	func importToc() {
+		
+		let iso = self.data
+		let TOCStart = Int(iso.get4BytesAtOffset(kTOCStartOffsetLocation))
+		let toc = XGFiles.toc.data.byteStream
+		iso.replaceBytesFromOffset(TOCStart, withByteStream: toc)
+		iso.save()
+		
+	}
 
 	func importFiles(_ fileList: [XGFiles]) {
 		
-		let isodata = XGFiles.iso.data
+		let isodata = self.data
 		
 		for file in fileList {
 			
@@ -174,7 +203,6 @@ class XGISO: NSObject {
 			
 			string.append(.unicode(currChar))
 			
-			
 			nextChar = toc.getByteAtOffset(currentOffset)
 			
 		}
@@ -206,7 +234,7 @@ class XGISO: NSObject {
 			return nil
 		}
 		
-		let data = XGFiles.iso.data
+		let data = self.data
 		let bytes = data.getCharStreamFromOffset(start!, length: size!)
 		
 		return XGMutableData(byteStream: bytes, file: XGFiles.nameAndFolder(filename, .Documents))
@@ -219,18 +247,193 @@ class XGISO: NSObject {
 		let oldsize  = self.sizeForFile(filename)
 		let newsize = data.length
 		
-		if (start == nil) || (oldsize == nil) {
+		if (start == nil) {
+			printg("file not found:", filename)
 			return
 		}
 		
-		if oldsize != newsize {
-			return
+		let index = orderedIndexForFile(name: filename)
+		if index >= 0 {
+			let nextStart = index == allFileNames.count - 1 ? data.length : locationForFile(filesOrdered[index + 1])!
+			if start! + newsize > nextStart {
+				printg("file too large:", filename)
+				return
+			}
+		} else {
+			if oldsize != newsize {
+				printg("file too large:", filename)
+				return
+			}
 		}
 		
-		let isodata = XGFiles.iso.data
+		let isodata = self.data
 		isodata.replaceBytesFromOffset(start!, withByteStream: data.byteStream)
 		isodata.save()
 		
+	}
+	
+	func shiftAndReplaceFile(name: String, withData newData: XGMutableData) {
+		
+		let oldSize = sizeForFile(name)!
+		let shift = newData.length != oldSize
+		let index = orderedIndexForFile(name: name)
+		
+		if shift {
+			for i in 0 ..< allFileNames.count {
+				let file = filesOrdered[i]
+				self.shiftUpFile(name: file)
+			}
+			
+			var rev = [Int]()
+			for i in (index + 1) ..< allFileNames.count {
+				rev.append(i)
+			}
+			for i in rev.reversed() {
+				let file = filesOrdered[i]
+				self.shiftDownFile(name: file)
+			}
+		}
+		
+		self.replaceDataForFile(filename: name, withData: newData)
+		
+		if shift {
+			for i in 0 ..< self.allFileNames.count {
+				let file = filesOrdered[i]
+				self.shiftUpFile(name: file)
+			}
+		}
+		
+		self.data.save()
+	}
+	
+	
+	func eraseDataForFile(name: String) {
+		
+		let start = self.locationForFile(name)
+		let size = self.sizeForFile(name)
+		
+		if start == nil || size == nil {
+			printg("file not found:", name)
+			return
+		}
+		
+		eraseData(start: start!, length: size!)
+	}
+	
+	func eraseData(start: Int, length: Int) {
+		self.data.nullBytes(start: start, length: length)
+	}
+	
+	func deleteFile(name: String, save: Bool) {
+		eraseDataForFile(name: name)
+		setSize(size: 0, forFile: name)
+		if save {
+			self.data.save()
+		}
+		printg("deleted iso file:", name)
+	}
+	
+	func deleteFileAndPreserve(name: String, save: Bool) {
+		eraseDataForFile(name: name)
+		setSize(size: 0x30, forFile: name) // allows enough size for FSYS header
+		if locationForFile(name) != nil {
+			self.data.replaceBytesFromOffset(locationForFile(name)!, withByteStream: [0xDE, 0x1E, 0x7E, 0xD0])
+		}
+		if save {
+			self.data.save()
+		}
+		printg("deleted iso file:", name)
+	}
+	
+	func setSize(size: Int, forFile name: String) {
+		let start = fileDataOffsets[name]
+		if start != nil {
+			let toc = XGFiles.toc.data
+			toc.replace4BytesAtOffset(start! + 8, withBytes: UInt32(size))
+			toc.save()
+		}
+		fileSizes[name] = size
+	}
+	
+	func setStartOffset(offset: Int, forFile name: String) {
+		let start = fileDataOffsets[name]
+		if start != nil {
+			let toc = XGFiles.toc.data
+			toc.replace4BytesAtOffset(start! + 4, withBytes: UInt32(offset))
+			toc.save()
+		}
+		fileLocations[name] = offset
+	}
+	
+	func orderedIndexForFile(name: String) -> Int {
+		for i in 0 ..< allFileNames.count {
+			if filesOrdered[i] == name {
+				return i
+			}
+		}
+		return -1
+	}
+	
+	func shiftUpFile(name: String) {
+		// used to push a file closer to the file above it and create more space for other files
+		var previousEnd = 0x0
+		let index = orderedIndexForFile(name: name)
+		
+		if orderedIndexForFile(name: "bg2thumbcode.bin") >= index || orderedIndexForFile(name: "stm_bgm_00seaside32.fsys") <= index {
+			return
+		}
+		
+		if index == 0 {
+			previousEnd = self.data.get4BytesAtOffset(kISOFirstFileOffsetLocation).int
+		} else {
+			let previous = filesOrdered[index - 1]
+			previousEnd = self.locationForFile(previous)! + sizeForFile(previous)!
+		}
+		
+		if locationForFile(name)! - previousEnd > 0x20 {
+			self.moveFile(name: name, toOffset: previousEnd)
+		}
+		
+	}
+	
+	func shiftDownFile(name: String) {
+		// used to push a file closer to the file below it and create more space for other files
+		let size = sizeForFile(name)!
+		let index = orderedIndexForFile(name: name)
+		
+		if orderedIndexForFile(name: "bg2thumbcode.bin") >= index || orderedIndexForFile(name: "stm_bgm_00seaside32.fsys") <= index {
+			return
+		}
+		
+		let nextStart = index == allFileNames.count - 1 ? self.data.length : locationForFile(filesOrdered[index + 1])!
+		
+		let start = nextStart - size
+		
+		if start - locationForFile(name)! > 0x20 {
+			self.moveFile(name: name, toOffset: start)
+		}
+		
+	}
+	
+	func moveFile(name: String, toOffset startOffset: Int) {
+		
+		if startOffset == locationForFile(name)! {
+			return
+		}
+		
+		printg("Moving iso file:", name, "to:", startOffset.hexString())
+		
+		let bytes = self.dataForFile(filename: name)!.byteStream
+		
+		self.eraseData(start: locationForFile(name)!, length: sizeForFile(name)!)
+		self.setStartOffset(offset: startOffset, forFile: name)
+		
+		self.data.replaceBytesFromOffset(startOffset, withByteStream: bytes)
+	}
+	
+	func save() {
+		printg("saving iso...")
+		self.data.save()
 	}
 	
 	class func extractTOC() {

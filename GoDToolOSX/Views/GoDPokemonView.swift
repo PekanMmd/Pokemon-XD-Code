@@ -34,6 +34,7 @@ class GoDPokemonView: NSImageView {
 	var shadowCounter = NSTextField(frame: .zero)
 	var shadowAggression = NSTextField(frame: .zero)
 	var shadowFlee = NSTextField(frame: .zero)
+	var shadowBoost = GoDLevelPopUpButton()
 	
 	var views = [String : NSView]()
 	var metrics = [String : NSNumber]()
@@ -101,6 +102,7 @@ class GoDPokemonView: NSImageView {
 		self.shadowAggression.integerValue = pokemon.shadowAggression
 		self.shadowFlee.integerValue = pokemon.shadowFleeValue
 		self.shadowCatchrate.integerValue = pokemon.shadowCatchRate
+		self.shadowBoost.selectLevel(level: pokemon.shadowBoostLevel)
 		
 	}
 	
@@ -151,8 +153,8 @@ class GoDPokemonView: NSImageView {
 		}
 		
 		
-		let popups = [ability,gender,nature,name,item,level,dpkm,ddpk]
-		let popselectors = [#selector(setAbility(sender:)),#selector(setGender(sender:)),#selector(setNature(sender:)),#selector(setSpecies(sender:)),#selector(setItem(sender:)),#selector(setLevel(sender:)),#selector(setDPKM(sender:)),#selector(setDDPK(sender:))]
+		let popups = [ability,gender,nature,name,item,level,dpkm,ddpk,shadowBoost]
+		let popselectors = [#selector(setAbility(sender:)),#selector(setGender(sender:)),#selector(setNature(sender:)),#selector(setSpecies(sender:)),#selector(setItem(sender:)),#selector(setLevel(sender:)),#selector(setDPKM(sender:)),#selector(setDDPK(sender:)), #selector(setShadowBoostLevel(sender:)),]
 		
 		for i in 0 ..< popups.count {
 			popups[i].target = self
@@ -217,6 +219,8 @@ class GoDPokemonView: NSImageView {
 		self.views["shadowag"] = shadowAggression
 		self.addSubview(shadowFlee)
 		self.views["shadowfl"] = shadowFlee
+		self.addSubview(shadowBoost)
+		self.views["shadowbo"] = shadowBoost
 		
 		
 		let titles = ["IVs","HP","Atk","Def","Sp.A","Sp.D","Speed","Happiness","Counter","Flee","Aggression","Catch rate"]
@@ -285,8 +289,10 @@ class GoDPokemonView: NSImageView {
 		self.addConstraintHeight(view: moves[0], height: 20)
 		self.addConstraintHeight(view: evs[0], height: 15)
 		self.addConstraintEqualWidths(view1: self.dpkm, view2: self.ddpk)
+		self.addConstraintAlignLeftAndRightEdges(view1: self.body, view2: self.shadowBoost)
+		self.addConstraintAlignBottomEdges(view1: self.shadowBoost, view2: self.ivs)
 		
-		for (view1, view2) : (NSView, NSView) in [(level,name),(ability,item),(nature,gender)] as! [(NSView, NSView)] {
+		for (view1, view2) in [(level,name),(ability,item),(nature,gender)] as! [(NSView, NSView)] {
 			self.addConstraintEqualSizes(view1: view1, view2: view2)
 		}
 		
@@ -374,6 +380,10 @@ class GoDPokemonView: NSImageView {
 	func setShadowMove4(sender: GoDMovePopUpButton) {
 		self.delegate.pokemon[self.index].shadowMoves[3] = sender.selectedValue
 		self.setUp()
+	}
+	
+	func setShadowBoostLevel(sender: GoDLevelPopUpButton) {
+		self.delegate.pokemon[self.index].shadowBoostLevel = sender.selectedValue
 	}
 	
 	func setItem(sender: GoDItemPopUpButton) {

@@ -13,7 +13,7 @@ let kFirstFileNamePointerOffset		= 0x44
 let kFirstFileDetailsPointerOffset	= 0x60
 let kSizeOfArchiveEntry				= 0x70
 
-let kFileIdentifierOffset			= 0x00
+let kFileIdentifierOffset			= 0x00 // 3rd byte is the file format, 1st half is an arbitrary identifier
 let kFileStartPointerOffset			= 0x04
 let kUncompressedSizeOffset			= 0x08
 let kCompressedSizeOffset			= 0x14
@@ -25,6 +25,7 @@ let kSizeOfLZSSHeader				= 0x10
 
 let kLZSSbytes : UInt32				= 0x4C5A5353
 let kTCODbytes : UInt32				= 0x54434F44
+let kFSYSbytes : UInt32				= 0x46535953
 let kUSbytes						= 0x5553
 let kJPbytes						= 0x4A50
 
@@ -190,6 +191,10 @@ class XGFsys : NSObject {
 		return Int(data.get4BytesAtOffset(start))
 	}
 	
+	func fileTypeForFile(index: Int) -> Int {
+		return (identifierForFile(index: index) & 0xFF00) >> 8
+	}
+	
 	func dataForFileWithName(name: String) -> XGMutableData? {
 		let index = self.indexForFile(filename: name)
 		if index == nil {
@@ -254,16 +259,35 @@ class XGFsys : NSObject {
 		let filename = self.fileNames[index]
 		var ext = filename.removeFileExtensions() == filename ? ".fdat" : ""
 		
-		if decompressedData.get4BytesAtOffset(0) == kTCODbytes {
-			ext = ".scd"
-		}
+//		if decompressedData.get4BytesAtOffset(0) == kTCODbytes {
+//			ext = ".scd"
+//		}
+//		
+//		if (decompressedData.get4BytesAtOffset(0) == 0x0) && (decompressedData.get2BytesAtOffset(0x6) == kUSbytes) {
+//			ext = ".msg"
+//		}
+//		
+//		if (decompressedData.get4BytesAtOffset(0) == 0x0) && (decompressedData.get2BytesAtOffset(0x6) == kJPbytes) {
+//			ext = ".msg"
+//		}
 		
-		if (decompressedData.get4BytesAtOffset(0) == 0x0) && (decompressedData.get2BytesAtOffset(0x6) == kUSbytes) {
-			ext = ".msg"
-		}
-		
-		if (decompressedData.get4BytesAtOffset(0) == 0x0) && (decompressedData.get2BytesAtOffset(0x6) == kJPbytes) {
-			ext = ".msg"
+		let fileTypes = [(".dat", 0x04), // character model in hal dat format
+						 (".msg", 0x0a), // string table
+						 (".fnt", 0x0c), // font
+						 (".scd", 0x0e), // script data
+						 (".gtx", 0x12), // texture
+						 (".cam", 0x18), // camera data
+						 (".rel", 0x1c), // relocation table
+		                 (".pkx", 0x1e), // character battle model
+		                 (".wzx", 0x20), // move animation
+		                 (".atx", 0x32), // animated texture
+		                 (".bin", 0x34), // binary
+			
+		                 ]
+		for t in fileTypes {
+			if fileTypeForFile(index: index) == t.1 {
+				ext = t.0
+			}
 		}
 		
 		
@@ -340,6 +364,31 @@ class XGFsys : NSObject {
 			for i in rev.reversed() {
 				self.shiftDownFileWithIndex(index: i)
 			}
+			
+			let fileEnd = startOffsetForFile(index) + newFile.fileSize
+			var exapansionRequired = 0
+			
+			if index < self.numberOfEntries - 1 {
+				if fileEnd > startOffsetForFile(index + 1) {
+					print("file too large to replace: ", newFile.fileName, self.file.fileName, "adding space")
+					exapansionRequired = fileEnd - startOffsetForFile(index + 1)
+				}
+			}
+			
+			if fileEnd > self.dataEnd {
+				print("file too large to replace: ", newFile.fileName, self.file.fileName, "adding space")
+				exapansionRequired = fileEnd - dataEnd
+			}
+			
+			if exapansionRequired > 0 {
+				self.data.increaseLength(by: exapansionRequired + 0x14)
+				self.data.replace4BytesAtOffset(dataEnd, withBytes: kFSYSbytes)
+				for i in rev.reversed() {
+					self.shiftDownFileWithIndex(index: i)
+				}
+			}
+			
+			
 		}
 		
 		self.replaceFileWithIndex(index, withFile: newFile, saveWhenDone: false)
@@ -421,6 +470,12 @@ class XGFsys : NSObject {
 	func deleteFile(index: Int) {
 		eraseDataForFile(index: index)
 		setSizeForFile(index: index, newSize: 0)
+	}
+	
+	func deleteFileAndPreserve(index: Int) {
+		eraseDataForFile(index: index)
+		setSizeForFile(index: index, newSize: 4)
+		data.replaceBytesFromOffset(startOffsetForFile(index), withByteStream: [0xDE, 0x1E, 0x7E, 0xD0])
 	}
 	
 	func shiftUpFileWithIndex(index: Int) {
@@ -516,6 +571,20 @@ class XGFsys : NSObject {
 		for i in 0 ..< data.count {
 			data[i].file = .nameAndFolder(updatedNames[i], folder)
 			data[i].save()
+			
+			if data[i].file.fileName.fileExtensions.contains(".gtx") || data[i].file.fileName.fileExtensions.contains(".atx") {
+				data[i].file.texture.saveImage(file: .nameAndFolder(updatedNames[i] + ".png", folder))
+			}
+			
+			if data[i].file.fileName.fileExtensions.contains(".msg") {
+				XGUtility.saveJSON(data[i].file.stringTable.readableDictionaryRepresentation as AnyObject, toFile: .nameAndFolder(updatedNames[i] + ".json", folder))
+				
+			}
+			
+			if data[i].file.fileName.fileExtensions.contains(".scd") {
+				XGUtility.saveString(data[i].file.scriptData.description, toFile: .nameAndFolder(updatedNames[i] + ".txt", folder))
+			}
+			
 		}
 		
 	}
