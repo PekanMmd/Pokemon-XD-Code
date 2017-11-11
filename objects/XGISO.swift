@@ -143,11 +143,10 @@ class XGISO: NSObject {
 	
 	func importToc() {
 		
-		let iso = self.data
-		let TOCStart = Int(iso.get4BytesAtOffset(kTOCStartOffsetLocation))
+		let TOCStart = Int(self.data.get4BytesAtOffset(kTOCStartOffsetLocation))
 		let toc = XGFiles.toc.data.byteStream
-		iso.replaceBytesFromOffset(TOCStart, withByteStream: toc)
-		iso.save()
+		self.data.replaceBytesFromOffset(TOCStart, withByteStream: toc)
+		self.data.save()
 		
 	}
 
@@ -272,6 +271,15 @@ class XGISO: NSObject {
 		
 	}
 	
+	func shiftAndReplaceFile(_ file: XGFiles) {
+		print("replacing file:", file.fileName)
+		if self.allFileNames.contains(file.fileName) {
+			self.shiftAndReplaceFile(name: file.fileName, withData: file.data)
+		} else {
+			print("file not found:", file.fileName)
+		}
+	}
+	
 	func shiftAndReplaceFile(name: String, withData newData: XGMutableData) {
 		
 		let oldSize = sizeForFile(name)!
@@ -279,15 +287,11 @@ class XGISO: NSObject {
 		let index = orderedIndexForFile(name: name)
 		
 		if shift {
-			for i in 0 ..< allFileNames.count {
-				let file = filesOrdered[i]
+			for file in filesOrdered {
 				self.shiftUpFile(name: file)
 			}
 			
-			var rev = [Int]()
-			for i in (index + 1) ..< allFileNames.count {
-				rev.append(i)
-			}
+			let rev = (index + 1) ..< allFileNames.count
 			for i in rev.reversed() {
 				let file = filesOrdered[i]
 				self.shiftDownFile(name: file)
@@ -297,10 +301,12 @@ class XGISO: NSObject {
 		self.replaceDataForFile(filename: name, withData: newData)
 		
 		if shift {
+			self.setSize(size: newData.length, forFile: name)
 			for i in 0 ..< self.allFileNames.count {
 				let file = filesOrdered[i]
 				self.shiftUpFile(name: file)
 			}
+			self.importToc()
 		}
 		
 		self.data.save()
@@ -334,10 +340,11 @@ class XGISO: NSObject {
 	}
 	
 	func deleteFileAndPreserve(name: String, save: Bool) {
+		// replaces file with a dummy fsys container
 		eraseDataForFile(name: name)
-		setSize(size: 0x30, forFile: name) // allows enough size for FSYS header
+		setSize(size: NullFSYS.length, forFile: name)
 		if locationForFile(name) != nil {
-			self.data.replaceBytesFromOffset(locationForFile(name)!, withByteStream: [0xDE, 0x1E, 0x7E, 0xD0])
+			self.data.replaceBytesFromOffset(locationForFile(name)!, withByteStream: NullFSYS.byteStream)
 		}
 		if save {
 			self.data.save()
@@ -398,7 +405,7 @@ class XGISO: NSObject {
 	
 	func shiftDownFile(name: String) {
 		// used to push a file closer to the file below it and create more space for other files
-		let size = sizeForFile(name)!
+		let size  = sizeForFile(name)!
 		let index = orderedIndexForFile(name: name)
 		
 		if orderedIndexForFile(name: "bg2thumbcode.bin") >= index || orderedIndexForFile(name: "stm_bgm_00seaside32.fsys") <= index {

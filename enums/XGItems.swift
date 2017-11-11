@@ -159,7 +159,7 @@ func item(_ name: String) -> XGItems {
 
 func allItemsArray() -> [XGItems] {
 	var items : [XGItems] = []
-	for i in 0 ..< CommonIndexes.NumberOfItems.startOffset {
+	for i in 0 ..< CommonIndexes.NumberOfItems.value {
 		items.append(XGItems.item(i))
 	}
 	return items

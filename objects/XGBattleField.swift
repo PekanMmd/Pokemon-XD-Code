@@ -9,12 +9,14 @@
 import Cocoa
 
 let kSizeOfBattleFieldData = 0x18
-
 let kBattleFieldRoomIDOffset = 0x02
 
 class XGBattleField: NSObject {
 	
 	var roomID = 0
+	var room : XGRoom? {
+		return XGRoom.roomWithID(roomID)
+	}
 	
 	var index = 0
 	var startOffset = 0

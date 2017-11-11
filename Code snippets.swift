@@ -4428,6 +4428,16 @@ import Foundation
 //sb.parameter = 0xfd
 //sb.save()
 
+//// make orre colosseum 6 vs. 6
+//for offset in [0x0a1d48, 0x0a1d94] {
+//	XGAssembly.replaceASM(startOffset: offset - kDOLtoRAMOffsetDifference, newASM: [0x28000000])
+//}
+//XGAssembly.replaceASM(startOffset: 0x0a183c - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: 0x0a183c, toOffset: 0x0a1d24)])
+//for b in 87 ... 114 {
+//	let battle = XGBattle(index: b)
+//	battle.pokemonPerPlayer = 6
+//	battle.save()
+//}
 
 
 

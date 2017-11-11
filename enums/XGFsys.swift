@@ -9,6 +9,7 @@
 import Foundation
 
 let kNumberOfEntriesOffset			= 0x0C
+let kFSYSFileSizeOffset				= 0x20
 let kFirstFileNamePointerOffset		= 0x44
 let kFirstFileDetailsPointerOffset	= 0x60
 let kSizeOfArchiveEntry				= 0x70
@@ -76,6 +77,10 @@ class XGFsys : NSObject {
 		get {
 			return Int(data.get4BytesAtOffset(kNumberOfEntriesOffset))
 		}
+	}
+	
+	func setFilesize(_ newSize: Int) {
+		self.data.replace4BytesAtOffset(kFSYSFileSizeOffset, withBytes: UInt32(newSize))
 	}
 	
 	var firstFileNameOffset : Int {
@@ -381,7 +386,9 @@ class XGFsys : NSObject {
 			}
 			
 			if exapansionRequired > 0 {
+				
 				self.data.increaseLength(by: exapansionRequired + 0x14)
+				self.setFilesize(self.data.length)
 				self.data.replace4BytesAtOffset(dataEnd, withBytes: kFSYSbytes)
 				for i in rev.reversed() {
 					self.shiftDownFileWithIndex(index: i)

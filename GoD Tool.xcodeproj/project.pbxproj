@@ -2344,6 +2344,8 @@
 		B2F9B2991FA4CDAD00E1489E /* XGBattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2981FA4CDAD00E1489E /* XGBattle.swift */; };
 		B2F9B29A1FA4CDAD00E1489E /* XGBattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2981FA4CDAD00E1489E /* XGBattle.swift */; };
 		B2F9B29B1FA4CDAD00E1489E /* XGBattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2981FA4CDAD00E1489E /* XGBattle.swift */; };
+		B2FB65F41FB4B1CE00E056AB /* Null.fsys in Resources */ = {isa = PBXBuildFile; fileRef = B2FB65F31FB4B1CE00E056AB /* Null.fsys */; };
+		B2FB65F51FB4B1CE00E056AB /* Null.fsys in Resources */ = {isa = PBXBuildFile; fileRef = B2FB65F31FB4B1CE00E056AB /* Null.fsys */; };
 		B2FEC0761F6C376C00AC263D /* randomiser.png in Resources */ = {isa = PBXBuildFile; fileRef = B2FEC0751F6C376C00AC263D /* randomiser.png */; };
 		B2FEC0771F6C37AC00AC263D /* GoDTextureFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */; };
 		B2FEC0781F6C4A0300AC263D /* GoDTextureFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */; };
@@ -3526,6 +3528,7 @@
 		B2F911671F6606E900129DC2 /* DeckData_Empty.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = DeckData_Empty.bin; sourceTree = "<group>"; };
 		B2F9B2941FA4A04200E1489E /* XGRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGRoom.swift; sourceTree = "<group>"; };
 		B2F9B2981FA4CDAD00E1489E /* XGBattle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGBattle.swift; sourceTree = "<group>"; };
+		B2FB65F31FB4B1CE00E056AB /* Null.fsys */ = {isa = PBXFileReference; lastKnownFileType = file; path = Null.fsys; sourceTree = "<group>"; };
 		B2FEC0751F6C376C00AC263D /* randomiser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = randomiser.png; sourceTree = "<group>"; };
 		B2FEC0791F6C602A00AC263D /* GoDAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDAlertViewController.swift; sourceTree = "<group>"; };
 		B2FEC07C1F6D25BF00AC263D /* GoDToolExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDToolExtensions.swift; sourceTree = "<group>"; };
@@ -4725,6 +4728,7 @@
 				B2F5EBEB1F49A1FE0075C6D2 /* XGMtBattlePokemon.swift */,
 				B2F5EBEC1F49A1FE0075C6D2 /* XGMutableData.swift */,
 				B2F5EBED1F49A1FE0075C6D2 /* XGNature.swift */,
+				B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */,
 				B2F5EBF01F49A1FE0075C6D2 /* XGPokemonStats.swift */,
 				B2F5EBF11F49A1FE0075C6D2 /* XGPokeSpotPokemon.swift */,
 				B2F9B2941FA4A04200E1489E /* XGRoom.swift */,
@@ -4743,7 +4747,6 @@
 				B2F5EC001F49A1FE0075C6D2 /* XGTrainerPokemon.swift */,
 				B2F5EC011F49A1FE0075C6D2 /* XGType.swift */,
 				B29E55FD1FA5C423006BE597 /* XGWarp.swift */,
-				B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */,
 			);
 			path = objects;
 			sourceTree = "<group>";
@@ -4976,6 +4979,7 @@
 		B2F911661F6606C600129DC2 /* game files */ = {
 			isa = PBXGroup;
 			children = (
+				B2FB65F31FB4B1CE00E056AB /* Null.fsys */,
 				B2F911671F6606E900129DC2 /* DeckData_Empty.bin */,
 			);
 			name = "game files";
@@ -5304,6 +5308,7 @@
 				B2F50BB41F4C5FAC0075C6D2 /* face_170.png in Resources */,
 				B2F508861F4C5FAB0075C6D2 /* body_178.png in Resources */,
 				B2F50D561F4C5FAC0075C6D2 /* face_379.png in Resources */,
+				B2FB65F41FB4B1CE00E056AB /* Null.fsys in Resources */,
 				B2F509501F4C5FAB0075C6D2 /* body_279.png in Resources */,
 				B2F50E141F4C5FAD0075C6D2 /* trainer_62.png in Resources */,
 				B2F50B5E1F4C5FAC0075C6D2 /* face_127.png in Resources */,
@@ -6182,6 +6187,7 @@
 				B2F50AB31F4C5FAC0075C6D2 /* face_041.png in Resources */,
 				B2F509691F4C5FAB0075C6D2 /* body_291.png in Resources */,
 				B2F50C031F4C5FAC0075C6D2 /* face_209.png in Resources */,
+				B2FB65F51FB4B1CE00E056AB /* Null.fsys in Resources */,
 				B2F50DA51F4C5FAC0075C6D2 /* trainer_11.png in Resources */,
 				B2F508F31F4C5FAB0075C6D2 /* body_232.png in Resources */,
 				B2F50ACF1F4C5FAC0075C6D2 /* face_055.png in Resources */,

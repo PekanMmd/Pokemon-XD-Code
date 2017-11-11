@@ -266,15 +266,31 @@ class XGScript: NSObject {
 								let instr = self.code[i - 4]
 								if instr .opCode == .loadImmediate {
 									let bid = instr.parameter
-									desc += ">>\n" + XGBattle(index: bid).trainer.fullDescription + "\n"
+									desc += ">>\n" + XGBattle(index: bid).trainer!.fullDescription + "\n"
 								}
 							}
 						}
+					}
+					if instruction.parameter == 21 { // display message with sound
+						let instr = self.code[i - 2]
+						if instr .opCode == .loadImmediate {
+							let sid = instr.parameter
+							desc += ">> \"" + getStringSafelyWithID(id: sid).string + "\"\n"
+						}
+						
 					}
 					
 				}
 				
 				if instruction.subOpCode == 40 { // Dialogue
+					
+					if instruction.parameter == 72 { // startBattle
+						let instr = self.code[i - 2]
+						if instr .opCode == .loadImmediate {
+							let bid = instr.parameter
+							desc += ">>\n" + XGBattle(index: bid).trainer!.fullDescription + "\n"
+						}
+					}
 					
 					if instruction.parameter == 39 {
 						
@@ -315,7 +331,7 @@ class XGScript: NSObject {
 						let instr = self.code[i - 2]
 						if instr .opCode == .loadImmediate {
 							let bid = instr.parameter
-							desc += ">>\n" + XGBattle(index: bid).trainer.fullDescription + "\n"
+							desc += ">>\n" + XGBattle(index: bid).trainer!.fullDescription + "\n"
 						}
 					}
 				}

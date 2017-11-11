@@ -8,79 +8,6 @@
 
 import Foundation
 
-/*
-
-"""
-FunctionInfo
-
-List of operators (complete) and class methods
-
-**Priority of types when implicitely converting**:
-string < int < float < (not always convertible, like for ex. in the vector methods) vector
-
-**Calling convention for operators**:
-
-(top of stack)
-param 2 (if it exists)
-param 1
-
-=>
-
-(top of stack)
-result
-
-**Calling convention for script functions and methods**:
-(top of stack)
-etc ...
-param 1
-param 2
-
-=>
-result in $lastResult (for standard functions/methods, this is int(0) by default (i.e unless otherwise mentionned))
-
-^This applies for both standard (callstd) and script-coded (call) function calls
-
-Only the first class (clsID = 0, which is not really a class) does not need a first parameter, but uses 'reserve 0' nevertheless.
-
-All other classes need a instance, be it fake or not. Fake instances are either uninitialized local variables (created along with other local variables,
-with 'reserve n'), or most of the time, (still unitialized) singletons (refer to Instruction).
-
-For a script function, the stack has the following layout:
-
-local variable no. n
-...
-local variable no. 0
-return address			($stack[0])
-parameter no. 1
-...
-parameter no. n
-(etc ...)
-
-
-Special callbacks:
-(signature : 4 ints)
-
-Map scripts:
-pushpop_postprocess,
-modify_floor,
-preprocess,
-hero_main,
-postprocesss,
-pushpop_preprocess,
-talk_follower,
-sound,
-anywaysave_callback, (when trying to save)
-anywaysave_restart, (when saving map data)
-etc...
-
-Common script:
-(need to be verified)
-Function #8 (0x59600008): when the map starts to change
-Function #9 (0x59600009): when the map finishes to change
-"""
-
-
-*/
 
 //MARK: - Class Names
 let ScriptClassNames : [Int : String] = [
@@ -277,7 +204,7 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,Bool)]] = [
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Known methods", start = 16, nb=-1),
 		
-		("setVisibility", 16, 2, false), //# (int visible)
+		("setVisibility", 16, 1, false), //# (int visible)
 		("displayMsgWithSpeciesSound", 21, 2, false), //# (int msgID, int unk ?)
 		//# Uses the species cry from Dialogs::setMsgVar($dialogs, 50, species)
 		
@@ -332,7 +259,7 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,Bool)]] = [
 		("getHeldItem", 32, 1, false),
 		("getSIDTID", 33, 1, false),
 		
-		("teachMove", 34, 1, false), // (int move ide)
+		("teachMove", 34, 1, false), // (int move id)
 		("hasLearnedMove", 35, 1, false), // (int move id)
 	],
 	
@@ -392,6 +319,9 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,Bool)]] = [
 		
 		("openPkCouponsWindow", 70, 3, false), //# (int x, int y)
 		("closePkCouponsWindow", 71, 1, false),
+		
+		("startBattle", 72, 2, false), //# (int battleid)
+		("getBattleResult", 74, 1, false), 
 		
 	],
 	

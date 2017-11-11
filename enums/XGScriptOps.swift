@@ -34,24 +34,24 @@ let instructionNames = [
 let vectorCoordNames = ["x","y","z","4"]
 
 enum XGScriptOps : Int {
-	case nop		= 0
-	case xd_operator
-	case loadImmediate
-	case loadVariable
-	case setVariable
-	case setVector
-	case pop
-	case call
-	case return_op
-	case callStandard
-	case jumpIfTrue
-	case jumpIfFalse
-	case jump
-	case reserve
-	case release
-	case exit
-	case setLine
-	case loadAndCopyVariable
+	case nop			= 0
+	case xd_operator	= 1
+	case loadImmediate = 2
+	case loadVariable = 3
+	case setVariable = 4
+	case setVector = 5
+	case pop = 6
+	case call = 7
+	case return_op = 8
+	case callStandard = 9
+	case jumpIfTrue = 10
+	case jumpIfFalse = 11
+	case jump = 12
+	case reserve = 13
+	case release = 14
+	case exit = 15
+	case setLine = 16
+	case loadAndCopyVariable = 17
 	
 	
 	var name : String {
