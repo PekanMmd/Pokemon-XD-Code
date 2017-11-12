@@ -355,7 +355,7 @@ class XGFsys : NSObject {
 		
 		
 		let oldSize = sizeForFile(index: index)
-		let shift = (newFile.fileSize != oldSize) && (self.numberOfEntries > 1)
+		let shift = (newFile.fileSize > oldSize) && (self.numberOfEntries > 1)
 		
 		if shift {
 			for i in 0 ..< self.numberOfEntries {
@@ -387,7 +387,12 @@ class XGFsys : NSObject {
 			
 			if exapansionRequired > 0 {
 				
-				self.data.increaseLength(by: exapansionRequired + 0x14)
+				exapansionRequired += 0x14
+				while (exapansionRequired % 16) != 0 { // byte alignment is required by the iso
+					exapansionRequired += 1
+				}
+				
+				self.data.increaseLength(by: exapansionRequired)
 				self.setFilesize(self.data.length)
 				self.data.replace4BytesAtOffset(dataEnd, withBytes: kFSYSbytes)
 				for i in rev.reversed() {

@@ -4441,7 +4441,18 @@ import Foundation
 
 
 
-
+//let models = ["mewtwo", "suicune", "entei", "raikou", "rayquaza", "kyogre", "groudon"]
+//let indices = [52,53,54,55,56,57,132]
+//let anims = [0,0,0,0,0,0,2]
+//let archive = XGFiles.fsys("people_archive.fsys").fsysData
+//
+//for i in 0 ..< models.count {
+//	let model = XGFiles.nameAndFolder(models[i] + "_ow.dat", .TextureImporter)
+//	copyOWPokemonIdleAnimationFromIndex(index: anims[i], forModel: model)
+//	archive.shiftAndReplaceFileWithIndex(indices[i], withFile: model.compress())
+//}
+//archive.save()
+//XGISO().shiftAndReplaceFile(archive.file)
 
 
 

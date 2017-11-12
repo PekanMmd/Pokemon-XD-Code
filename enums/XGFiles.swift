@@ -128,6 +128,10 @@ indirect enum XGFiles {
 
 	var data : XGMutableData {
 		get {
+			if self == .toc {
+				return tocData
+			}
+			
 			if !self.exists {
 				printg("file doesn't exist:",self.path)
 			}

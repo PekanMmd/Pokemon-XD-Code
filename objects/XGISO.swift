@@ -43,9 +43,8 @@ enum XGGame {
 	case XD
 }
 
+var tocData = XGISO.extractTOC()
 class XGISO: NSObject {
-	
-	fileprivate let toc = XGFiles.toc.data
 	
 	fileprivate var fileLocations = [String : Int]()
 //	fileprivate var fileLocations = ["Start.dol" : 131840]
@@ -65,6 +64,7 @@ class XGISO: NSObject {
 	
 	override init() {
 		super.init()
+		
 		
 		let DOLStart = Int(self.data.get4BytesAtOffset(kDOLStartOffsetLocation))
 		let TOCStart = Int(self.data.get4BytesAtOffset(kTOCStartOffsetLocation))
@@ -89,13 +89,13 @@ class XGISO: NSObject {
 		
 		while (i < TOCFirstStringOffset) {
 			
-			let folder = toc.getByteAtOffset(i) == 1
+			let folder = tocData.getByteAtOffset(i) == 1
 			
 			if !folder {
 				
-				let nameOffset = Int(toc.get4BytesAtOffset(i))
-				let fileOffset = Int(toc.get4BytesAtOffset(i + 4))
-				let fileSize   = Int(toc.get4BytesAtOffset(i + 8))
+				let nameOffset = Int(tocData.get4BytesAtOffset(i))
+				let fileOffset = Int(tocData.get4BytesAtOffset(i + 4))
+				let fileSize   = Int(tocData.get4BytesAtOffset(i + 8))
 				
 				let fileName = getStringAtOffset(nameOffset).string
 				
@@ -134,19 +134,21 @@ class XGISO: NSObject {
 		files += XGFolders.MenuFSYS.files ?? [XGFiles]()
 		files.append(.dol)
 		importFiles(files)
-		importToc()
+		importToc(saveWhenDone: true)
 	}
 	
 	func importDol() {
 		importFiles([.dol])
 	}
 	
-	func importToc() {
+	func importToc(saveWhenDone save: Bool) {
 		
 		let TOCStart = Int(self.data.get4BytesAtOffset(kTOCStartOffsetLocation))
 		let toc = XGFiles.toc.data.byteStream
 		self.data.replaceBytesFromOffset(TOCStart, withByteStream: toc)
-		self.data.save()
+		if save {
+			self.data.save()
+		}
 		
 	}
 
@@ -197,12 +199,12 @@ class XGISO: NSObject {
 		
 		while (nextChar != 0x00) {
 			
-			currChar = toc.getByteAtOffset(currentOffset)
+			currChar = tocData.getByteAtOffset(currentOffset)
 			currentOffset += 1
 			
 			string.append(.unicode(currChar))
 			
-			nextChar = toc.getByteAtOffset(currentOffset)
+			nextChar = tocData.getByteAtOffset(currentOffset)
 			
 		}
 		
@@ -246,24 +248,23 @@ class XGISO: NSObject {
 		let oldsize  = self.sizeForFile(filename)
 		let newsize = data.length
 		
-		if (start == nil) {
+		if (start == nil) || (oldsize == nil) {
 			printg("file not found:", filename)
 			return
 		}
 		
 		let index = orderedIndexForFile(name: filename)
-		if index >= 0 {
-			let nextStart = index == allFileNames.count - 1 ? data.length : locationForFile(filesOrdered[index + 1])!
-			if start! + newsize > nextStart {
-				printg("file too large:", filename)
-				return
-			}
-		} else {
-			if oldsize != newsize {
-				printg("file too large:", filename)
-				return
-			}
+		if index < 0 {
+			return
 		}
+		
+		let nextStart = index == allFileNames.count - 1 ? data.length : locationForFile(filesOrdered[index + 1])!
+		if start! + newsize > nextStart {
+			printg("file too large:", filename)
+			return
+		}
+		
+		self.setSize(size: newsize, forFile: filename)
 		
 		let isodata = self.data
 		isodata.replaceBytesFromOffset(start!, withByteStream: data.byteStream)
@@ -272,7 +273,7 @@ class XGISO: NSObject {
 	}
 	
 	func shiftAndReplaceFile(_ file: XGFiles) {
-		print("replacing file:", file.fileName)
+		print("shift and replacing file:", file.fileName)
 		if self.allFileNames.contains(file.fileName) {
 			self.shiftAndReplaceFile(name: file.fileName, withData: file.data)
 		} else {
@@ -283,7 +284,7 @@ class XGISO: NSObject {
 	func shiftAndReplaceFile(name: String, withData newData: XGMutableData) {
 		
 		let oldSize = sizeForFile(name)!
-		let shift = newData.length != oldSize
+		let shift = newData.length > oldSize
 		let index = orderedIndexForFile(name: name)
 		
 		if shift {
@@ -301,12 +302,11 @@ class XGISO: NSObject {
 		self.replaceDataForFile(filename: name, withData: newData)
 		
 		if shift {
-			self.setSize(size: newData.length, forFile: name)
 			for i in 0 ..< self.allFileNames.count {
 				let file = filesOrdered[i]
 				self.shiftUpFile(name: file)
 			}
-			self.importToc()
+			self.importToc(saveWhenDone: false)
 		}
 		
 		self.data.save()
@@ -357,7 +357,7 @@ class XGISO: NSObject {
 		if start != nil {
 			let toc = XGFiles.toc.data
 			toc.replace4BytesAtOffset(start! + 8, withBytes: UInt32(size))
-			toc.save()
+			self.importToc(saveWhenDone: false)
 		}
 		fileSizes[name] = size
 	}
@@ -367,9 +367,12 @@ class XGISO: NSObject {
 		if start != nil {
 			let toc = XGFiles.toc.data
 			toc.replace4BytesAtOffset(start! + 4, withBytes: UInt32(offset))
-			toc.save()
+			self.importToc(saveWhenDone: false)
+			fileLocations[name] = offset
+		} else {
+			print("couldn't find toc data for file:", name)
 		}
-		fileLocations[name] = offset
+		
 	}
 	
 	func orderedIndexForFile(name: String) -> Int {
@@ -398,6 +401,9 @@ class XGISO: NSObject {
 		}
 		
 		if locationForFile(name)! - previousEnd > 0x20 {
+			while previousEnd % 16 != 0 {
+				previousEnd += 1 // byte alignment is required or game doesn't load
+			}
 			self.moveFile(name: name, toOffset: previousEnd)
 		}
 		
@@ -414,9 +420,14 @@ class XGISO: NSObject {
 		
 		let nextStart = index == allFileNames.count - 1 ? self.data.length : locationForFile(filesOrdered[index + 1])!
 		
-		let start = nextStart - size
+		var start = nextStart - size
 		
 		if start - locationForFile(name)! > 0x20 {
+			
+			while start % 16 != 0 {
+				start -= 1 // byte alignment is required or game doesn't load
+			}
+			
 			self.moveFile(name: name, toOffset: start)
 		}
 		
@@ -443,7 +454,7 @@ class XGISO: NSObject {
 		self.data.save()
 	}
 	
-	class func extractTOC() {
+	class func extractTOC() -> XGMutableData {
 		let iso = XGFiles.iso.data
 
 		// US
@@ -455,8 +466,7 @@ class XGISO: NSObject {
 		
 		let bytes = iso.getCharStreamFromOffset(TOCStart, length: TOCLength)
 		
-		let toc = XGMutableData(byteStream: bytes, file: .toc)
-		toc.save()
+		return XGMutableData(byteStream: bytes, file: .toc)
 		
 	}
 	
@@ -924,7 +934,6 @@ class XGISO: NSObject {
 	}
 	
 	 class func extractAllFiles() {
-		extractTOC()
 		let iso = XGISO()
 		iso.extractDOL()
 		iso.extractAllFSYS()

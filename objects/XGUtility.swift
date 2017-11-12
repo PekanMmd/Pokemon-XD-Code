@@ -2104,6 +2104,46 @@ class XGUtility {
 		return XGMutableData(byteStream: rawBytes, file: .nameAndFolder("", .Documents))
 	}
 	
+	class func copyOWPokemonIdleAnimationFromIndex(index: Int, forModel file: XGFiles) {
+		let data = file.data
+		let backup = file.data
+		backup.file = .nameAndFolder(file.fileName + ".bak", file.folder)
+		backup.save()
+		
+		let headerSize = 0x20
+		let pointerListPointer = data.get4BytesAtOffset(4).int + headerSize
+		let numberOfPointers = data.get4BytesAtOffset(8).int
+		let sceneDataPointerOffset = pointerListPointer + (numberOfPointers * 4)
+		let sceneDataPointer = data.get4BytesAtOffset(sceneDataPointerOffset).int + headerSize
+		let struct1Pointer = data.get4BytesAtOffset(sceneDataPointer).int + headerSize
+		let objectPointer = data.get4BytesAtOffset(struct1Pointer).int + headerSize
+		let animation0Pointer = data.get4BytesAtOffset(objectPointer + 4).int + headerSize
+		var animationOffsets = [UInt32]()
+		var currentAnimationOffset = animation0Pointer
+		var currentAnimation : UInt32 = 0
+		repeat {
+			currentAnimation = data.get4BytesAtOffset(currentAnimationOffset)
+			if currentAnimation != 0 {
+				animationOffsets.append(currentAnimation)
+			}
+			currentAnimationOffset += 4
+		} while currentAnimation != 0
+		
+		if index >= animationOffsets.count {
+			printg("animation index too large")
+			return
+		}
+		
+		if animationOffsets.count < 4 {
+			printg("model has fewer than 4 animations")
+			return
+		}
+		
+		data.replace4BytesAtOffset(animation0Pointer + 0xc, withBytes: animationOffsets[index])
+		data.save()
+		
+	}
+	
 	
 	//MARK: - pokespot
 	class func relocatePokespots(startOffset: UInt32, numberOfEntries n: UInt32) {
