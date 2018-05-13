@@ -31,9 +31,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			printg("file \"XD.iso\" not in ISO folder")
 			return
 		}
-		
 		XGFolders.setUpFolderFormat()
 		XGISO.extractAllFiles()
+		printg("extraction complete")
 		GoDAlertViewController.alert(title: "ISO Extraction Complete", text: "Done.").show(sender: self.homeViewController)
 		
 	}
@@ -55,11 +55,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		Gale of Darkness Tool
 		by @StarsMmd
 
-		
-			
+		source code: https://github.com/PekanMmd/Pokemon-XD-Code.git
 		"""
 		GoDAlertViewController.alert(title: "About GoD Tool", text: text).show(sender: self.homeViewController)
 	}
+	
+	@IBAction func showHelp(_ sender: Any) {
+		self.homeViewController.performSegue(withIdentifier: "toHelpVC", sender: self.homeViewController)
+	}
+	
 	
 	
 	func createDirectories() {

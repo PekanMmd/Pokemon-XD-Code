@@ -103,6 +103,7 @@
                                     <items>
                                         <menuItem title="GoD Tool Help" keyEquivalent="?" id="FKE-Sm-Kum">
                                             <connections>
+                                                <action selector="showHelp:" target="Voe-Tx-rLC" id="y6Y-xE-XjC"/>
                                                 <segue destination="JRm-IJ-Y9d" kind="modal" identifier="toHelpVC" id="NaH-4i-fmB"/>
                                             </connections>
                                         </menuItem>
@@ -2868,6 +2869,6 @@ Twitter: @StarsMmd</string>
         <image name="ball grey" width="500" height="500"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="PCr-YY-Lid"/>
+        <segue reference="NaH-4i-fmB"/>
     </inferredMetricsTieBreakers>
 </document>

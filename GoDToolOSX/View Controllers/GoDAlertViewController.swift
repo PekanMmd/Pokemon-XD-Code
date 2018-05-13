@@ -22,8 +22,13 @@ class GoDAlertViewController: GoDViewController {
         super.viewDidLoad()
 		
 		self.textLabel.alignment = .center
+		self.textLabel.sizeToFit()
+		let width = Float(self.textLabel.frame.width)
 		self.addSubview(textLabel, name: "l")
 		self.addConstraintAlignAllEdges(view1: self.view, view2: textLabel)
+		self.addConstraintWidth(view: self.textLabel, width: NSNumber(value: width))
+		self.textLabel.isEditable = false
+		
     }
 	
 	func show(sender: GoDViewController) {

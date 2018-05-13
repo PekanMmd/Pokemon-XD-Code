@@ -4717,7 +4717,11 @@ import Foundation
 //iso.importToc()
 
 
+//XGUtility.importTextures()
+//XGUtility.exportTextures()
 
+//let bingotex = XGFiles.texture("uv_str_bingo_00.fdat")
+//XGFiles.nameAndFolder("bingo_menu.fsys", .MenuFSYS).fsysData.replaceFile(file: bingotex.compress())
 
 
 

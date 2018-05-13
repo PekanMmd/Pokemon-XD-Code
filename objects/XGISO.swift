@@ -968,12 +968,19 @@ class XGISO: NSObject {
 	
 	 class func extractAllFiles() {
 		let iso = XGISO()
+		printg("extracting: Start.dol")
 		iso.extractDOL()
+		printg("extracting: FSYS archives")
 		iso.extractAllFSYS()
+		printg("extracting: common")
 		iso.extractCommon()
+		printg("extracting: decks")
 		iso.extractDecks()
+		printg("extracting: string tables")
 		iso.extractStringTables()
+		printg("extracting: scripts")
 		iso.extractScripts()
+		printg("extracting: relocatable files")
 		iso.extractRels()
 	}
 	
