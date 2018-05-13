@@ -33,9 +33,13 @@ class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon {
 	var giftType		= "Mt. Battle Prize"
 	
 	// unused
-	var level			= 5
-	var exp				= -1
 	var shinyValue		= XGShinyValues.random
+	var exp				= -1
+	var level			= 5 {
+		didSet {
+			level = 5
+		}
+	}
 	
 	var startOffset : Int {
 		get {

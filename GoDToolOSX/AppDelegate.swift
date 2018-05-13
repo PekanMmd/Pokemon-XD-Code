@@ -51,7 +51,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	
 	@IBAction func showAbout(_ sender: AnyObject) {
-		printg("show about")
+		let text = """
+		Gale of Darkness Tool
+		by @StarsMmd
+
+		
+			
+		"""
+		GoDAlertViewController.alert(title: "About GoD Tool", text: text).show(sender: self.homeViewController)
 	}
 	
 	

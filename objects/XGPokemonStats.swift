@@ -33,6 +33,9 @@ let kFirstEvolutionOffset	= 0xA6
 let kFirstLevelUpMoveOffset	= 0xC4
 let kFirstEggMoveOffset		= 0x7E
 
+let kFirstPokemonPKXIdentifierOffset = 0x40A0A8 // in start.dol
+let kModelDictionaryModelOffset = 0x4
+
 // weight 0xa, height 0x8
 
 /* Tutor moves order:
@@ -129,6 +132,24 @@ class XGPokemonStats: NSObject {
 	var specialAttackYield	= 0x0
 	var specialDefenseYield	= 0x0
 	
+	var pkxModelIdentifier : UInt32 {
+		let dol = XGFiles.dol.data
+		return dol.get4BytesAtOffset(kFirstPokemonPKXIdentifierOffset + (self.modelIndex * 8) + kModelDictionaryModelOffset)
+	}
+	
+	var pkxFSYS : XGFsys? {
+		return XGISO().getPKXModelWithIdentifier(id: self.pkxModelIdentifier)
+	}
+	
+	var pkxData : XGMutableData? {
+		let fsys = self.pkxFSYS
+		
+		if fsys != nil {
+			return fsys!.decompressedDataForFileWithIndex(index: 0)
+		}
+		
+		return nil
+	}
 	
 	var name : XGString {
 		get {

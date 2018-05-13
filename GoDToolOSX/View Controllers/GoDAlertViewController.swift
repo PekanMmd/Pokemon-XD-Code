@@ -21,6 +21,7 @@ class GoDAlertViewController: GoDViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+		self.textLabel.alignment = .center
 		self.addSubview(textLabel, name: "l")
 		self.addConstraintAlignAllEdges(view1: self.view, view2: textLabel)
     }

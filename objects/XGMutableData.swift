@@ -17,6 +17,10 @@ class XGMutableData: NSObject {
 	var file = XGFiles.nameAndFolder("", .Documents)
 	var data = NSMutableData()
 	
+	var rawBytes : UnsafeRawPointer {
+		return self.data.bytes
+	}
+	
 	var byteStream : [Int] {
 		get {
 			return getByteStreamFromOffset(0, length: length)
@@ -243,6 +247,29 @@ class XGMutableData: NSObject {
 		data.increaseLength(by: length)
 	}
 	
+	// insert bytes
+	
+	func insertByte(byte: Int, atOffset offset: Int) {
+		let range = NSMakeRange(offset, 0)
+		var b = UInt8(byte)
+		self.data.replaceBytes(in: range, withBytes: &b, length: 1)
+	}
+	
+	func insertBytes(bytes: [Int], atOffset offset: Int) {
+		for i in 0 ..< bytes.count {
+			insertByte(byte: bytes[i], atOffset: offset + i)
+		}
+	}
+	
+	func insertData(data: XGMutableData, atOffset offset: Int) {
+		self.data.replaceBytes(in: NSMakeRange(offset, 0), withBytes: data.rawBytes, length: data.length)
+	}
+	
+	func insertRepeatedByte(byte: Int, count: Int, atOffset offset: Int) {
+		for _ in 0 ..< count {
+			insertByte(byte: byte, atOffset: offset)
+		}
+	}
 	
 	// delete bytes
 	

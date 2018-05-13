@@ -12,25 +12,34 @@ import Foundation
 enum XGLZSS {
 	
 	case Input(XGFiles)
+	case InputData(XGMutableData)
 	
-	var input : XGFiles {
+	var inputFile : XGFiles {
 		get {
 			switch self {
-				case .Input(let file): return file
+			case .Input(let file):
+				return file
+			case .InputData(let d):
+				return d.file
 			}
 		}
 	}
 	
 	var output : XGFiles {
 		get {
-			let name = input.fileName + ".lzss"
+			let name = inputFile.fileName + ".lzss"
 			return .lzss(name)
 		}
 	}
 	
 	var originalData : XGMutableData {
 		get {
-			return self.input.data
+			switch self {
+			case .Input(let f):
+				return f.data
+			case .InputData(let d):
+				return d
+			}
 		}
 	}
 	
@@ -67,18 +76,10 @@ enum XGLZSS {
 	}
 	
 	func compress() {
-		if !self.input.exists {
-			printg("file doesn't exist: ", self.input.path)
-			return
-		}
 		compressedData.save()
 	}
 	
 	func decompress(file: XGFiles) {
-		if !self.input.exists {
-			printg("file doesn't exist: ", self.input.path)
-			return
-		}
 		let d = decompressedData
 		d.file = file
 		d.save()

@@ -122,6 +122,7 @@ class GoDSpotViewController: GoDTableViewController {
 	@IBAction func saveAction(_ sender: GoDButton) {
 		currentMon.save()
 		self.reloadView()
+		self.table.reloadData()
 	}
 	
 }

@@ -10,10 +10,10 @@ import Cocoa
 
 let kSizeOfWarp = 0x1C
 let kWarpIsValidOffset = 0x0
-let kWarpFromOffset = 0x2
-let kWarpFromIndexOffset = 0x7
-let kWarpToOffset = 0xE
-let kWarpToIndexOffset = 0x13
+let kWarpToOffset = 0x2
+let kWarpToIndexOffset = 0x7
+let kWarpFromOffset = 0xE
+let kWarpFromIndexOffset = 0x13
 
 var warps = [XGWarp]()
 var allWarps : [XGWarp] {
@@ -75,12 +75,11 @@ class XGWarp: NSObject {
 let kSizeOfWarpLocation = 0x10
 class XGWarpLocation : NSObject {
 	
-	let kWarpTypeOffset = 0x0
+	let kWarpAngleOffset = 0x0
 	let kXOffset = 0x4
 	let kYOffset = 0x8
 	let kZOffset = 0xC
 	
-	var warpType : XGWarpTypes!
 	var index = 0
 	var startOffset = 0
 	
@@ -89,6 +88,11 @@ class XGWarpLocation : NSObject {
 	var xCoordinate : Float = 0
 	var yCoordinate : Float = 0
 	var zCoordinate : Float = 0
+	var angle = 0
+	
+	var room : XGRoom? {
+		return XGRoom.roomWithName(self.file.fileName.removeFileExtensions())
+	}
 	
 	var file : XGFiles!
 	var rawData : [Int] {
@@ -100,12 +104,8 @@ class XGWarpLocation : NSObject {
 	}
 	
 	var warp : XGWarp? {
-		let room = XGRoom.roomWithName(self.file.fileName.removeFileExtensions())
-		if room != nil {
-			let warps = room!.warps
-			
-			if self.index < warps.count {
-				let w = warps[self.sortedIndex]
+		for w in allWarps {
+			if (w.warpFromRoom == self.room) && (w.warpFromIndex == self.index) {
 				return w
 			}
 		}
@@ -121,18 +121,17 @@ class XGWarpLocation : NSObject {
 		
 		let data = file.data
 		
-		let w = data.get2BytesAtOffset(startOffset + kWarpTypeOffset)
-		self.warpType = XGWarpTypes.index(w)
-		
 		self.xCoordinate = data.get4BytesAtOffset(startOffset + kXOffset).hexToSignedFloat()
 		self.yCoordinate = data.get4BytesAtOffset(startOffset + kYOffset).hexToSignedFloat()
 		self.zCoordinate = data.get4BytesAtOffset(startOffset + kZOffset).hexToSignedFloat()
+		self.angle = data.get2BytesAtOffset(startOffset + kWarpAngleOffset)
+		
 	}
 	
 	func save() {
 		let data = file.data
 		
-		data.replace2BytesAtOffset(startOffset + kWarpTypeOffset, withBytes: self.warpType.index)
+		data.replace2BytesAtOffset(startOffset + kWarpAngleOffset, withBytes: self.angle)
 		data.replace4BytesAtOffset(startOffset + kXOffset, withBytes: self.xCoordinate.bitPattern)
 		data.replace4BytesAtOffset(startOffset + kYOffset, withBytes: self.yCoordinate.bitPattern)
 		data.replace4BytesAtOffset(startOffset + kZOffset, withBytes: self.zCoordinate.bitPattern)

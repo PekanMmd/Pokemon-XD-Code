@@ -27,6 +27,7 @@ typealias VECT = (x: Float, y: Float, z: Float)
 class XGScript: NSObject {
 	
 	var file : XGFiles!
+	var mapRel : XGMapRel!
 	
 	var FTBLStart = 0
 	var HEADStart = 0
@@ -54,6 +55,11 @@ class XGScript: NSObject {
 		self.file = file
 		
 		let data = file.data
+		
+		let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions() + ".rel")
+		if relFile.exists {
+			mapRel = XGMapRel(file: relFile, checkScript: false)
+		}
 		
 		self.FTBLStart = kScriptSizeOfTCOD
 		self.HEADStart = FTBLStart + Int(data.get4BytesAtOffset(FTBLStart + kScriptSectionSizeOffset))
@@ -176,8 +182,9 @@ class XGScript: NSObject {
 		desc += "\nFunctions: \(ftbl.count)\n"
 		desc += linebreak
 		
-		for (_, name) in self.ftbl {
-			desc += name + "\n"
+		for i in 0 ..< self.ftbl.count {
+			let (_, name) = self.ftbl[i]
+			desc += "\(i): " + name + "\n"
 		}
 		
 		// list script code instructions
@@ -191,12 +198,13 @@ class XGScript: NSObject {
 			for (offset, name) in self.ftbl {
 				if offset == index {
 					desc += "\n" + name + ":\n" + linebreak
+					desc += "index |  offset  |   code   | text\n"
 				}
 			}
 			
 			// convert instruction to string
 			let instruction = self.code[i]
-			desc += "\(index) \((index * 4 + CODEStart + kScriptSectionHeaderSize).hexString()): \(instruction)" + "\n"
+			desc += "\(index.hexString())    (\((index * 4 + CODEStart + kScriptSectionHeaderSize).hexString())):  [\(instruction.raw1.hex())]  \(instruction)" + "\n"
 			
 			index += instruction.length
 			
@@ -212,6 +220,20 @@ class XGScript: NSObject {
 					if index == instruction.parameter {
 						desc += ">> " + name + "\n"
 					}
+				}
+			}
+			
+			if instruction.opCode == .loadAndCopyVariable || instruction.opCode == .loadVariable {
+				if instruction.parameter > 0x80 && instruction.parameter <= 0x120 {
+					let index = instruction.parameter - 0x80
+					if index < giri.count {
+						if giri[index].groupID != 0 {
+							let charIndex = giri[index].resourceID
+							let char = mapRel.characters[charIndex]
+							desc += " " + char.model.name + " " + char.name + "\n"
+						}
+					}
+					
 				}
 			}
 			
@@ -292,7 +314,7 @@ class XGScript: NSObject {
 						}
 					}
 					
-					if instruction.parameter == 39 {
+					if instruction.parameter == 39 { // open poke mart menu
 						
 						let instr = self.code[i - 2]
 						if instr .opCode == .loadImmediate {
@@ -342,10 +364,7 @@ class XGScript: NSObject {
 						if instr .opCode == .loadImmediate {
 							let sid = instr.parameter
 							let room = XGRoom.roomWithID(sid)
-							var roomName = room == nil ? "invalid room" : room!.name
-							if sid == 0x38e { roomName = "World Map" }
-							if sid == 0x391 { roomName = "PC Box" }
-							if sid == 0x39f { roomName = "Staff Roll" }
+							let roomName = room == nil ? "invalid room" : room!.name
 							desc += ">> \"" + roomName + "\"\n"
 						}
 					}
@@ -372,7 +391,17 @@ class XGScript: NSObject {
 		
 		desc += "\nGIRI: \(self.giri.count)\n" + linebreak
 		for g in  0 ..< self.giri.count {
-			desc += "\(g): GroupID<\(self.giri[g].groupID)>, ResourceID<\(self.giri[g].resourceID)> \n"
+			let currentGiri = self.giri[g]
+			
+			desc += "\(g): GroupID(\(currentGiri.groupID)), ResourceID(\(currentGiri.resourceID))"
+			if currentGiri.groupID != 0 && currentGiri.resourceID < mapRel.characters.count {
+				let char = mapRel.characters[currentGiri.resourceID]
+				desc += " " + char.model.name + " " + char.name + " <\(char.xCoordinate), \(char.yCoordinate), \(char.zCoordinate)>" + "\n"
+			} else if currentGiri.groupID == 0 && currentGiri.resourceID == 100 {
+				desc += " Player\n"
+			} else {
+				desc += "\n"
+			}
 		}
 		
 		return desc

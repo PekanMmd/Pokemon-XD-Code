@@ -48,10 +48,10 @@ class XGAssembly {
 		
 		var offset = kRelFreeSpaceStart
 		let rel = XGFiles.common_rel.data
-		var value = rel.get4BytesAtOffset(offset - kRELtoRAMOffsetDifference)
-		while value != 0 {
+		var value = (rel.get4BytesAtOffset(offset - kRELtoRAMOffsetDifference), rel.get4BytesAtOffset(offset + 4 - kRELtoRAMOffsetDifference), rel.get4BytesAtOffset(offset + 8 - kRELtoRAMOffsetDifference), rel.get4BytesAtOffset(offset + 12 - kRELtoRAMOffsetDifference))
+		while value != (0,0,0,0) {
 			offset = offset + 4
-			value = rel.get4BytesAtOffset(offset - kRELtoRAMOffsetDifference)
+			value = (rel.get4BytesAtOffset(offset - kRELtoRAMOffsetDifference), rel.get4BytesAtOffset(offset + 4 - kRELtoRAMOffsetDifference), rel.get4BytesAtOffset(offset + 8 - kRELtoRAMOffsetDifference), rel.get4BytesAtOffset(offset + 12 - kRELtoRAMOffsetDifference))
 		}
 		return offset
 	}
@@ -191,7 +191,7 @@ class XGAssembly {
 		return 0x40810000 + UInt32( (to - from) & 0xFFFF)
 	}
 	
-	class func paralysisHalvesSpped() {
+	class func paralysisHalvesSpeed() {
 		let dol = XGFiles.dol.data
 		dol.replace4BytesAtOffset(0x203af8 - kDOLtoRAMOffsetDifference, withBytes: 0x56f7f87e)
 		dol.save()
@@ -297,7 +297,7 @@ class XGAssembly {
 		
 	}
 	
-	class func setDeoxysFormeToAttack() {
+	class func setDeoxysForme(to forme: XGDeoxysFormes) {
 		
 		let dol = XGFiles.dol.data
 		
@@ -313,7 +313,7 @@ class XGAssembly {
 			
 			let off = offset - kDOLtoRAMOffsetDifference
 			
-			dol.replace4BytesAtOffset(off, withBytes: 0x38000001)
+			dol.replace4BytesAtOffset(off, withBytes: UInt32(0x38000000 + forme.rawValue))
 			
 		}
 		
@@ -500,7 +500,11 @@ class XGAssembly {
 		return [0x2f, 0xff, 0x01, 0x60, 0x1e, stat.rawValue + stages.rawValue, 0x29, 0x80, 0x41, 0x44, 0xcd,]
 	}
 	
-	class func routineForMultipleStatBoosts(RAMOffset: Int, boosts: [(stat: XGStats, stages: XGStatStages)], animate: Bool) -> [Int] {
+	class func routineForMultipleStatBoosts(RAMOffset: Int, boosts: [(stat: XGStats, stages: XGStatStages)]) -> [Int] {
+		return routineForMultipleStatBoosts(RAMOffset: RAMOffset, boosts: boosts, isSecondaryEffect: false)
+	}
+	
+	class func routineForMultipleStatBoosts(RAMOffset: Int, boosts: [(stat: XGStats, stages: XGStatStages)], isSecondaryEffect: Bool) -> [Int] {
 		// MULTI STAT BOOST
 		// intro
 		// --> stat checks
@@ -527,8 +531,8 @@ class XGAssembly {
 			return boost.stat
 		}
 		
-		let intro = [0x00] + (animate ? [0x2, 0x4] : [Int]())
-		let animation = animate ? [0x0a, 0x0b, 0x4] : [Int]()
+		let intro = !isSecondaryEffect ? [0x00, 0x2, 0x4] : [Int]() // move animation
+		let animation = !isSecondaryEffect ? [0x0a, 0x0b, 0x4] : [Int]() // move animation 2
 		let mask = [0x2f, 0x80, 0x4e, 0xb9, 0x6c, 0x00, 0x49, 0x11, XGStats.maskForStats(stats: stats), 0x00]
 		let midBoost = [0x2a, 0x00, 0x80, 0x4e, 0x85, 0xc5, 0x02,]
 		let endBoost = [0x14, 0x80, 0x2f, 0x8f, 0xc8, 0x3a, 0x00, 0x40,]
@@ -554,7 +558,6 @@ class XGAssembly {
 		func boostStart(stat: XGStats, stages: XGStatStages) -> [Int] {
 			return [0x2f, 0xff, 0x01, 0x60, 0x1e, stages.rawValue + stat.rawValue, 0x8a, 0x41,]
 		}
-		
 		
 		var routine = intro
 		
@@ -617,7 +620,7 @@ class XGAssembly {
 		let regularHit = routineRegularHitOpenEnded()
 		let statStart = offset + regularHit.count
 		
-		return regularHit + routineForMultipleStatBoosts(RAMOffset: statStart, boosts: boosts, animate: false)
+		return regularHit + routineForMultipleStatBoosts(RAMOffset: statStart, boosts: boosts, isSecondaryEffect: true)
 	}
 	
 	class func routineRegularHitOpenEnded() -> [Int] {
@@ -723,7 +726,7 @@ class XGAssembly {
 		}
 	}
 	
-	class func newStatBoostRoutine(effect: Int, boosts: [(stat: XGStats, stages: XGStatStages)], animate: Bool, RAMOffset: Int?) -> [Int] {
+	class func newStatBoostRoutine(effect: Int, boosts: [(stat: XGStats, stages: XGStatStages)], RAMOffset: Int?) -> [Int] {
 		
 		var routine = [Int]()
 		let offset = RAMOffset ?? ASMfreeSpacePointer()
@@ -731,7 +734,7 @@ class XGAssembly {
 		if boosts.count == 1 {
 			routine = routineForSingleStatBoost(stat: boosts[0].stat, stages: boosts[0].stages)
 		} else {
-			routine = routineForMultipleStatBoosts(RAMOffset: 0x80000000 + offset, boosts: boosts, animate: animate)
+			routine = routineForMultipleStatBoosts(RAMOffset: 0x80000000 + offset, boosts: boosts, isSecondaryEffect: false)
 		}
 		
 		return routine

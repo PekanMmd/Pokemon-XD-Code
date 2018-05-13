@@ -285,7 +285,6 @@ enum XGDecks : String, XGDictionaryRepresentable {
 			
 			var pokes = [XGTrainerPokemon]()
 			
-			
 			if self == .DeckDarkPokemon {
 				for i in 0 ..< self.DDPKEntries {
 					pokes.append(XGTrainerPokemon(DeckData: .ddpk(i)))

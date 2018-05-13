@@ -108,8 +108,14 @@ class XGScriptInstruction: NSObject {
 			break
 		}
 		
-		var paramString = param.string
+		var paramString = param.string + " (" + param.hexString() + ")"
 		switch self.opCode {
+		case .jump:
+			fallthrough
+		case .jumpIfTrue:
+			fallthrough
+		case.jumpIfFalse:
+			paramString = param.hexString()
 		case .loadVariable:
 			fallthrough
 		case .setVariable:

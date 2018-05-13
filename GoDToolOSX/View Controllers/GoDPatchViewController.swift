@@ -16,8 +16,12 @@ class GoDPatchViewController: GoDTableViewController {
 		self.title = "Patches"
     }
 	
-	var patches = ["Apply Physical/Special move split","Remove Physical/Special move split","Assign default phys/spec categories to moves", "Remove foreign languages from common_rel (very useful if it gets too big to import)","Fix shiny glitch for shadow pokemon","Shadow pokemon can be shiny","Shadow pokemon are never shiny","Shadow pokemon are always shiny","Infinite use TMs",]
-	var funcs = [#selector(gen4Categories),#selector(removeGen4Categories),#selector(defaultCategories),#selector(removeLanguages),#selector(fixShinyGlitch),#selector(randomShinyShadows),#selector(neverShinyShadows),#selector(alwaysShinyShadows),#selector(infiniteTMs)]
+	var patches = ["Apply Physical/Special move split","Remove Physical/Special move split","Assign default phys/spec categories to moves", "When a pokémon is KO'd it isn't replaced until the end of the turn","Remove foreign languages from common_rel (very useful if it gets too big to import)","Fix shiny glitch for shadow pokemon","Shadow pokemon can be shiny","Shadow pokemon are never shiny","Shadow pokemon are always shiny","Infinite use TMs", "Set Deoxys model to: Normal", "Set Deoxys model to: Attack", "Set Deoxys model to: Defense", "Set Deoxys model to: Speed",]
+	var funcs = [#selector(gen4Categories),#selector(removeGen4Categories),#selector(defaultCategories),#selector(endOfTurnSwitchIns),#selector(removeLanguages),#selector(fixShinyGlitch),#selector(randomShinyShadows),#selector(neverShinyShadows),#selector(alwaysShinyShadows),#selector(infiniteTMs), #selector(deoxysN), #selector(deoxysA), #selector(deoxysD), #selector(deoxysS),]
+	
+	func endOfTurnSwitchIns() {
+		XGAssembly.switchNextPokemonAtEndOfTurn()
+	}
 	
 	func infiniteTMs() {
 		XGAssembly.infiniteUseTMs()
@@ -61,6 +65,22 @@ class GoDPatchViewController: GoDTableViewController {
 	
 	func defaultCategories() {
 		XGUtility.defaultMoveCategories()
+	}
+	
+	func deoxysN() {
+		XGAssembly.setDeoxysForme(to: .normal)
+	}
+	
+	func deoxysA() {
+		XGAssembly.setDeoxysForme(to: .attack)
+	}
+	
+	func deoxysD() {
+		XGAssembly.setDeoxysForme(to: .defense)
+	}
+	
+	func deoxysS() {
+		XGAssembly.setDeoxysForme(to: .speed)
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {

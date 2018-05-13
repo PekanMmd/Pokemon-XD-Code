@@ -14,7 +14,7 @@ let kBattleStyleOffset = 0x2
 let kBattlePokemonPerPlayerOffset = 0x3
 let kBattleUnknown1Offset = 0x4 // 1 in story, 0 otherwise. could be whether or not to receive prize money or black out etc.
 let kBattleFieldOffset = 0x6
-
+let kBattleBGMOffset = 0x12
 let kBattlePlayer1DeckIDOffset = 0x1C
 let kBattlePlayer1TrainerIDOffset = 0x1E
 let kBattleDeckIDOffset = 0x24
@@ -46,6 +46,7 @@ class XGBattle: NSObject {
 	var battleField : XGBattleField!
 	var trainerID = 0
 	var pokemonPerPlayer = 6
+	var BGMusicID = 0
 	
 	var p1Deck : XGDecks!
 	var p1TID = 0
@@ -130,6 +131,7 @@ class XGBattle: NSObject {
 		
 		self.p1TID = data.get2BytesAtOffset(startOffset + kBattlePlayer1TrainerIDOffset)
 		
+		self.BGMusicID = data.get2BytesAtOffset(startOffset + kBattleBGMOffset)
 		
 	}
 	
@@ -144,6 +146,22 @@ class XGBattle: NSObject {
 		data.replaceByteAtOffset(startOffset + kBattlePokemonPerPlayerOffset, withByte: self.pokemonPerPlayer)
 		data.replace2BytesAtOffset(startOffset + kBattlePlayer1DeckIDOffset, withBytes: (self.p1Deck ?? .DeckDarkPokemon).id)
 		data.replace2BytesAtOffset(startOffset + kBattlePlayer1TrainerIDOffset, withBytes: self.p1TID)
+		data.replace2BytesAtOffset(startOffset + kBattleBGMOffset, withBytes: self.BGMusicID)
+		
+		data.save()
+	}
+	
+	func setToWildPokemon() {
+		
+		self.deck = XGDecks.deckWithID(7)
+		self.trainerID = 7
+		self.save()
+		
+		let data = XGFiles.common_rel.data
+		
+		data.replaceBytesFromOffset(self.startOffset, withByteStream: [0xc,0x0, 0x1, 0x6, 0x1])
+		data.replace2BytesAtOffset(self.startOffset + 0xE, withBytes: 0xf6ec)
+		data.replaceByteAtOffset(self.startOffset + 0x17, withByte: 0x6)
 		
 		data.save()
 	}

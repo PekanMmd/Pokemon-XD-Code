@@ -1,19 +1,16 @@
 //
-//  GoDPokemonView.swift
-//  GoD Tool
+//  GoDShadowPokemonView.swift
+//  GoDToolOSX
 //
-//  Created by The Steez on 18/09/2017.
-//
+//  Created by The Steez on 09/05/2018.
 //
 
 import Cocoa
 
-class GoDPokemonView: NSImageView {
+class GoDShadowPokemonView: NSImageView {
 	
-	var index = 0
-
 	var dpkm = GoDDPKMPopUpButton()
-	var ddpk = GoDDDPKPopUpButton()
+	var ddpk = GoDDDPKPopUpButton() // vestige of pokemon view kept for alignment constraints
 	var body = NSImageView()
 	var name = GoDPokemonPopUpButton()
 	var item = GoDItemPopUpButton()
@@ -38,75 +35,23 @@ class GoDPokemonView: NSImageView {
 	var views = [String : NSView]()
 	var metrics = [String : NSNumber]()
 	
-	var delegate : GoDTrainerViewController! {
+	var delegate : GoDShadowPokemonViewController! {
 		didSet {
 			setUp()
 		}
 	}
 	
-	func setUp() {
-		let trainer = self.delegate.currentTrainer
-		
-		if self.dpkm.deck != self.delegate.currentTrainer.deck {
-			self.dpkm.deck = self.delegate.currentTrainer.deck
-		}
-		
-		let pokemon = self.delegate.pokemon[self.index]
-		
-		if !pokemon.isSet {
-			self.setBackgroundColour(GoDDesign.colourGrey())
-		} else if pokemon.isShadowPokemon {
-			self.setBackgroundColour(GoDDesign.colourPurple())
-		} else {
-			self.setBackgroundColour(GoDDesign.colourLightGrey())
-		}
-		
-		for key in views.keys {
-			let view = views[key]!
-			if key.contains("shadow") {
-				view.isHidden = !pokemon.isShadowPokemon
-			} else if (key != "dpkm") && (key != "ddpk") {
-				view.isHidden = !(pokemon.deckData.index > 0)
-			} else {
-				view.isHidden = false
-			}
-		}
-		
-		self.name.selectPokemon(pokemon: pokemon.species)
-		self.dpkm.selectItem(at: pokemon.deckData.DPKMIndex)
-		self.ddpk.selectItem(at: pokemon.isShadowPokemon ? pokemon.deckData.index : 0)
-		self.body.image = pokemon.species.body
-		self.level.selectLevel(level: pokemon.level)
-		self.item.selectItem(item: pokemon.item)
-		for move in self.moves {
-			move.selectMove(move: pokemon.moves[move.tag])
-		}
-		for move in self.shadowMoves {
-			move.selectMove(move: pokemon.shadowMoves[move.tag])
-		}
-		
-		self.ivs.integerValue = pokemon.IVs
-		for i in 0 ..< 6 {
-			self.evs[i].integerValue = pokemon.EVs[i]
-		}
-		
-		
-		self.ability.setTitles(values: [pokemon.species.stats.ability1.name.string , pokemon.species.stats.ability2.name.string])
-		self.ability.selectItem(at: pokemon.ability)
-		self.nature.selectNature(nature: pokemon.nature)
-		self.gender.selectGender(gender: pokemon.gender)
-		self.happiness.integerValue = pokemon.happiness
-		
-		self.shadowCounter.integerValue = pokemon.shadowCounter
-		self.shadowAggression.integerValue = pokemon.shadowAggression
-		self.shadowFlee.integerValue = pokemon.shadowFleeValue
-		self.shadowCatchrate.integerValue = pokemon.shadowCatchRate
-		self.shadowBoost.selectLevel(level: pokemon.shadowBoostLevel)
-		
-	}
-	
 	init() {
 		super.init(frame: .zero)
+		self.layoutViews()
+	}
+	
+	required init?(coder: NSCoder) {
+		super.init(coder: coder)
+		self.layoutViews()
+	}
+	
+	func layoutViews() {
 		
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.wantsLayer = true
@@ -151,9 +96,8 @@ class GoDPokemonView: NSImageView {
 			texts[i].action = textSelectors[i]
 		}
 		
-		
-		let popups = [ability,gender,nature,name,item,level,dpkm,ddpk,shadowBoost]
-		let popselectors = [#selector(setAbility(sender:)),#selector(setGender(sender:)),#selector(setNature(sender:)),#selector(setSpecies(sender:)),#selector(setItem(sender:)),#selector(setLevel(sender:)),#selector(setDPKM(sender:)),#selector(setDDPK(sender:)), #selector(setShadowBoostLevel(sender:)),]
+		let popups = [ability,gender,nature,name,item,level,dpkm,shadowBoost]
+		let popselectors = [#selector(setAbility(sender:)),#selector(setGender(sender:)),#selector(setNature(sender:)),#selector(setSpecies(sender:)),#selector(setItem(sender:)),#selector(setLevel(sender:)),#selector(setDPKM(sender:)), #selector(setShadowBoostLevel(sender:)),]
 		
 		for i in 0 ..< popups.count {
 			popups[i].target = self
@@ -171,7 +115,6 @@ class GoDPokemonView: NSImageView {
 		}
 		
 		self.dpkm.font = GoDDesign.fontOfSize(8)
-		self.ddpk.font = GoDDesign.fontOfSize(8)
 		
 		let byteFormat = NumberFormatter.byteFormatter()
 		let shortFormat = NumberFormatter.shortFormatter()
@@ -272,8 +215,6 @@ class GoDPokemonView: NSImageView {
 		for key in views.keys {
 			let view = views[key]!
 			view.translatesAutoresizingMaskIntoConstraints = false
-			
-			view.isHidden = true
 		}
 		
 		self.metrics["g"] = 5
@@ -315,156 +256,177 @@ class GoDPokemonView: NSImageView {
 		self.addConstraints(visualFormat: "H:|-(g)-[shadow0]-(g)-[shadow1]-(g)-[shadow2]-(g)-[shadow3]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
 		self.addConstraints(visualFormat: "H:|-(g)-[shadowctT]-(g)-[shadowflT]-(g)-[shadowagT]-(g)-[shadowcrT]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
 		self.addConstraints(visualFormat: "H:|-(g)-[shadowct]-(g)-[shadowfl]-(g)-[shadowag]-(g)-[shadowcr]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
-		
-		
-		
 	}
 	
-	required init?(coder: NSCoder) {
-		super.init(coder: coder)
+	
+	func setUp() {
+		
+		let pokemon = self.delegate.currentPokemon
+		
+		if !pokemon.isSet {
+			self.setBackgroundColour(GoDDesign.colourGrey())
+		} else {
+			self.setBackgroundColour(GoDDesign.colourWhite())
+		}
+		
+		self.ddpk.isHidden = true
+		self.dpkm.deck = .DeckStory
+		
+		self.name.selectPokemon(pokemon: pokemon.species)
+		self.dpkm.selectItem(at: pokemon.deckData.DPKMIndex)
+		self.body.image = pokemon.species.body
+		self.level.selectLevel(level: pokemon.level)
+		self.item.selectItem(item: pokemon.item)
+		for move in self.moves {
+			move.selectMove(move: pokemon.moves[move.tag])
+		}
+		for move in self.shadowMoves {
+			move.selectMove(move: pokemon.shadowMoves[move.tag])
+		}
+		
+		self.ivs.integerValue = pokemon.IVs
+		for i in 0 ..< 6 {
+			self.evs[i].integerValue = pokemon.EVs[i]
+		}
+		
+		self.ability.setTitles(values: [pokemon.species.stats.ability1.name.string , pokemon.species.stats.ability2.name.string])
+		self.ability.selectItem(at: pokemon.ability)
+		self.nature.selectNature(nature: pokemon.nature)
+		self.gender.selectGender(gender: pokemon.gender)
+		self.happiness.integerValue = pokemon.happiness
+		
+		self.shadowCounter.integerValue = pokemon.shadowCounter
+		self.shadowAggression.integerValue = pokemon.shadowAggression
+		self.shadowFlee.integerValue = pokemon.shadowFleeValue
+		self.shadowCatchrate.integerValue = pokemon.shadowCatchRate
+		self.shadowBoost.selectLevel(level: pokemon.shadowBoostLevel)
+		
 	}
 	
 	func setDPKM(sender: GoDDPKMPopUpButton) {
-		self.delegate.currentTrainer.pokemon[self.index] = sender.selectedValue
-		self.delegate.pokemon[self.index] = sender.selectedValue.data
-		self.setUp()
-	}
-	
-	func setDDPK(sender: GoDDDPKPopUpButton) {
-		self.delegate.currentTrainer.pokemon[self.index] = sender.selectedValue
-		self.delegate.pokemon[self.index] = sender.selectedValue.data
-		self.setUp()
+		if sender.selectedValue.index == 0 {
+			delegate.currentPokemon.ShadowDataInUse = false
+		} else {
+			delegate.currentPokemon.ShadowDataInUse = true
+		}
+		delegate.currentPokemon.save()
+		
+		delegate.currentPokemon.deckData.setDPKMIndexForDDPK(newIndex: sender.selectedValue.index)
+		delegate.allShadows = XGDecks.DeckDarkPokemon.allPokemon
+		delegate.reloadAllData()
 	}
 	
 	func setAbility(sender: GoDPopUpButton) {
-		self.delegate.pokemon[self.index].ability = sender.indexOfSelectedItem
+		self.delegate.currentPokemon.ability = sender.indexOfSelectedItem
 		self.setUp()
 	}
 	
 	func setMove1(sender: GoDMovePopUpButton) {
-		self.delegate.pokemon[self.index].moves[0] = sender.selectedValue
+		self.delegate.currentPokemon.moves[0] = sender.selectedValue
 		self.setUp()
 	}
 	
 	func setMove2(sender: GoDMovePopUpButton) {
-		self.delegate.pokemon[self.index].moves[1] = sender.selectedValue
+		self.delegate.currentPokemon.moves[1] = sender.selectedValue
 		self.setUp()
 	}
 	
 	func setMove3(sender: GoDMovePopUpButton) {
-		self.delegate.pokemon[self.index].moves[2] = sender.selectedValue
+		self.delegate.currentPokemon.moves[2] = sender.selectedValue
 		self.setUp()
 	}
 	
 	func setMove4(sender: GoDMovePopUpButton) {
-		self.delegate.pokemon[self.index].moves[3] = sender.selectedValue
+		self.delegate.currentPokemon.moves[3] = sender.selectedValue
 		self.setUp()
 	}
 	
 	func setShadowMove1(sender: GoDMovePopUpButton) {
-		self.delegate.pokemon[self.index].shadowMoves[0] = sender.selectedValue
+		self.delegate.currentPokemon.shadowMoves[0] = sender.selectedValue
 		self.setUp()
 	}
 	
 	func setShadowMove2(sender: GoDMovePopUpButton) {
-		self.delegate.pokemon[self.index].shadowMoves[1] = sender.selectedValue
+		self.delegate.currentPokemon.shadowMoves[1] = sender.selectedValue
 		self.setUp()
 	}
 	
 	func setShadowMove3(sender: GoDMovePopUpButton) {
-		self.delegate.pokemon[self.index].shadowMoves[2] = sender.selectedValue
+		self.delegate.currentPokemon.shadowMoves[2] = sender.selectedValue
 		self.setUp()
 	}
 	
 	func setShadowMove4(sender: GoDMovePopUpButton) {
-		self.delegate.pokemon[self.index].shadowMoves[3] = sender.selectedValue
+		self.delegate.currentPokemon.shadowMoves[3] = sender.selectedValue
 		self.setUp()
 	}
 	
 	func setShadowBoostLevel(sender: GoDLevelPopUpButton) {
-		self.delegate.pokemon[self.index].shadowBoostLevel = sender.selectedValue
+		self.delegate.currentPokemon.shadowBoostLevel = sender.selectedValue
 	}
 	
 	func setItem(sender: GoDItemPopUpButton) {
-		self.delegate.pokemon[self.index].item = sender.selectedValue
+		self.delegate.currentPokemon.item = sender.selectedValue
 		self.setUp()
 	}
 	
 	func setSpecies(sender: GoDPokemonPopUpButton) {
-		self.delegate.pokemon[self.index].species = sender.selectedValue
-		self.delegate.pokemon[self.index].moves = sender.selectedValue.movesForLevel(self.delegate.pokemon[self.index].level)
-		
-		if self.delegate.pokemon[self.index].isShadowPokemon {
-			self.delegate.pokemon[self.index].shadowCatchRate = sender.selectedValue.catchRate
-		}
+		self.delegate.currentPokemon.species = sender.selectedValue
+		self.delegate.currentPokemon.moves = sender.selectedValue.movesForLevel(self.delegate.currentPokemon.level)
+		self.delegate.currentPokemon.shadowCatchRate = sender.selectedValue.catchRate
 		
 		self.setUp()
 	}
 	
 	func setLevel(sender: GoDLevelPopUpButton) {
-		self.delegate.pokemon[self.index].level = sender.selectedValue
+		self.delegate.currentPokemon.level = sender.selectedValue
 		self.setUp()
 	}
 	
 	func setGender(sender: GoDGenderPopUpButton) {
-		self.delegate.pokemon[self.index].gender = sender.selectedValue
+		self.delegate.currentPokemon.gender = sender.selectedValue
 		self.setUp()
 	}
 	
 	func setNature(sender: GoDNaturePopUpButton) {
-		self.delegate.pokemon[self.index].nature = sender.selectedValue
+		self.delegate.currentPokemon.nature = sender.selectedValue
 		self.setUp()
 	}
 	
 	func setCounter(sender: NSTextField) {
-		self.delegate.pokemon[self.index].shadowCounter = sender.integerValue
+		self.delegate.currentPokemon.shadowCounter = sender.integerValue
 		self.setUp()
 	}
 	
 	func setFlee(sender: NSTextField) {
-		self.delegate.pokemon[self.index].shadowFleeValue = sender.integerValue
+		self.delegate.currentPokemon.shadowFleeValue = sender.integerValue
 		self.setUp()
 	}
 	
 	func setAggression(sender: NSTextField) {
-		self.delegate.pokemon[self.index].shadowAggression = sender.integerValue
+		self.delegate.currentPokemon.shadowAggression = sender.integerValue
 		self.setUp()
 	}
 	
 	func setCatch(sender: NSTextField) {
-		self.delegate.pokemon[self.index].shadowCatchRate = sender.integerValue
+		self.delegate.currentPokemon.shadowCatchRate = sender.integerValue
 		self.setUp()
 	}
 	
 	func setIVs(sender: NSTextField) {
-		self.delegate.pokemon[self.index].IVs = sender.integerValue
+		self.delegate.currentPokemon.IVs = sender.integerValue
 		self.setUp()
 	}
 	
 	func setHappiness(sender: NSTextField) {
-		self.delegate.pokemon[self.index].happiness = sender.integerValue
+		self.delegate.currentPokemon.happiness = sender.integerValue
 		self.setUp()
 	}
 	
 	func setEV(sender: NSTextField) {
-		self.delegate.pokemon[self.index].EVs[sender.tag] = sender.integerValue
+		self.delegate.currentPokemon.EVs[sender.tag] = sender.integerValue
 		self.setUp()
 	}
 	
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

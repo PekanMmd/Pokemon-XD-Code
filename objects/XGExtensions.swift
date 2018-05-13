@@ -8,8 +8,6 @@
 
 import Foundation
 
-// extension [Int]
-//func byteString
 
 extension Sequence where Iterator.Element == Int {
 	var byteString : String {
@@ -19,7 +17,16 @@ extension Sequence where Iterator.Element == Int {
 		}
 		return s
 	}
+	
+	var hexStream : String {
+		var s = ""
+		for i in self {
+			s += String(format: "%02x ", i)
+		}
+		return s
+	}
 }
+
 
 extension NSObject {
 	func println() {
@@ -69,6 +76,12 @@ extension String {
 		let extensionIndex = self.characters.index(of: ".") ?? self.endIndex
 		
 		return self.substring(from: extensionIndex)
+	}
+	
+	var cppEnum : String {
+		// convention used in PkmGCTools by Tux
+		return self.replacingOccurrences(of: "-", with: " ").capitalized.replacingOccurrences(of: " ", with: "")
+		
 	}
 }
 
@@ -153,6 +166,14 @@ extension UInt32 {
 		var value = (self & 0xFFFFFFFF).int
 		value = value > 0x80000000 ? value - 0x100000000 : value
 		return value
+	}
+	
+	func hex() -> String {
+		return String(format: "%08x", self).uppercased()
+	}
+	
+	func hexString() -> String {
+		return "0x" + hex()
 	}
 	
 }

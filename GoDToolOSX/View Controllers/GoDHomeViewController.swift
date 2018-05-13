@@ -10,11 +10,10 @@ import Cocoa
 
 class GoDHomeViewController: GoDTableViewController {
 	
-	
 	@IBOutlet var logView: NSTextView!
 	
-	let tools = ["Trainer Editor","Pokemon Stats Editor","Move Editor","Item Editor (Incomplete)","Pokespot Editor","Patches"]
-	let segues = ["toTrainerVC","toStatsVC","toMoveVC","toItemVC","toSpotVC","toPatchVC"]
+	let tools = ["Trainer Editor","Shadow Pokemon Editor","Pokemon Stats Editor","Move Editor","Item Editor (Incomplete)","Pokespot Editor","Gift Pokemon Editor","Patches", "Script Viewer", "Save Reference Data"]
+	let segues = ["toTrainerVC","toShadowVC","toStatsVC","toMoveVC","toItemVC","toSpotVC","toGiftVC","toPatchVC","toScriptVC"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,11 +26,9 @@ class GoDHomeViewController: GoDTableViewController {
 		
 		(NSApp.delegate as! AppDelegate).homeViewController = self
 		
-//		let iso = XGFiles.iso
 		if !XGFiles.iso.exists {
 			self.performSegue(withIdentifier: "toHelpVC", sender: self)
 		}
-		
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
@@ -46,8 +43,7 @@ class GoDHomeViewController: GoDTableViewController {
 		
 		let image = (row % 2 == 0 ? NSImage(named: "cell") : NSImage(named: "cell gold"))!
 		
-		let view = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: tools[row], colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: image, fontSize: 16, width: self.table.width)) as! GoDTableCellView
-		
+		let view = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: tools[row], colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: image, fontSize: 14, width: self.table.width)) as! GoDTableCellView
 		
 		view.setTitle(tools[row])
 		
@@ -59,6 +55,8 @@ class GoDHomeViewController: GoDTableViewController {
 			self.performSegue(withIdentifier: "toHelpVC", sender: self)
 		} else if row < segues.count && row >= 0 {
 			performSegue(withIdentifier: segues[row], sender: self)
+		} else {
+			XGUtility.documentISO(forXG: false)
 		}
 	}
     

@@ -129,7 +129,7 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 		
 		var moveSlot = 0
 		for move in levelUpMoves {
-			if (move.level < pokeLevel) && (move.move.index > 0) {
+			if (move.level <= pokeLevel) && (move.move.index > 0) {
 				
 				if hasMove(move.move) {
 					continue

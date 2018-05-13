@@ -18,7 +18,7 @@ class XGUtility {
 		
 		for folder in compressFolders where folder.exists {
 			for file in folder.files {
-				print("compressing file: " + file.fileName)
+				printg("compressing file: " + file.fileName)
 				file.compress()
 			}
 		}
@@ -27,7 +27,7 @@ class XGUtility {
 	
 	class func importFsys() {
 		
-		print("importing files to .fsys archives")
+		printg("importing files to .fsys archives")
 		
 		if !DeckDataEmptyLZSS.file.exists {
 			DeckDataEmptyLZSS.save()
@@ -103,7 +103,7 @@ class XGUtility {
 		let itemListStart = CommonIndexes.ValidItems.startOffset
 		let rel = XGFiles.common_rel.data
 		
-		print("Updating items list...")
+		printg("Updating items list...")
 		
 		for i in 1 ..< CommonIndexes.NumberOfItems.value {
 			let currentOffset = itemListStart + (i * 2)
@@ -140,7 +140,7 @@ class XGUtility {
 	}
 	
 	class func shadowMadnessAnimation() {
-		print("updating shadow madness animation")
+		printg("updating shadow madness animation")
 		
 		let rel = XGFiles.common_rel.data
 		
@@ -159,6 +159,16 @@ class XGUtility {
 	
 	class func prepareXG() {
 		shadowMadnessAnimation()
+		
+		
+		for mon in XGDecks.DeckStory.allActivePokemon {
+			if mon.isShadowPokemon {
+				mon.shinyness = .random
+			} else {
+				mon.shinyness = mon.shinyness == .always ? .always : .never
+			}
+			mon.save()
+		}
 	}
 	
 	class func prepareForCompilation() {
@@ -212,7 +222,7 @@ class XGUtility {
 	class func importRels() {
 		for file in XGFolders.Rels.files where file.fileName.contains(".rel") {
 			
-			print("importing relocation table: " + file.fileName)
+			printg("importing relocation table: " + file.fileName)
 			
 			let fsysName = file.fileName.replacingOccurrences(of: ".rel", with: ".fsys")
 			let lzssName = file.fileName + ".lzss"
@@ -230,7 +240,7 @@ class XGUtility {
 	class func importScripts() {
 		for file in XGFolders.Scripts.files {
 			
-			print("importing script: " + file.fileName)
+			printg("importing script: " + file.fileName)
 			
 			let fsysName = file.fileName.replacingOccurrences(of: ".scd", with: ".fsys")
 			let lzssName = file.fileName + ".lzss"
@@ -248,7 +258,7 @@ class XGUtility {
 		
 		for file in XGFolders.StringTables.files {
 			
-			print("importing string table: " + file.fileName)
+			printg("importing string table: " + file.fileName)
 			
 			let fsysName = file.fileName.replacingOccurrences(of: ".msg", with: ".fsys")
 			let lzssName = file.fileName + ".lzss"
@@ -261,7 +271,7 @@ class XGUtility {
 			}
 		}
 		
-		print("importing menu string tables")
+		printg("importing menu string tables")
 		
 		let pocket_menu = XGFiles.lzss("pocket_menu.msg.lzss")
 		let d4tower1f3 = XGFiles.lzss("D4_tower_1F_3.msg.lzss")
@@ -342,7 +352,7 @@ class XGUtility {
 			let fsys = XGFsys(data: iso.dataForFile(filename: name)!)
 			for index in 0 ..< fsys.numberOfEntries {
 				if fsys.fileNames[index].contains(file.fileName.removeFileExtensions()) {
-					print("fsys: ",name,", index: ", index, ",name: ", fsys.fileNames[index])
+					printg("fsys: ",name,", index: ", index, ",name: ", fsys.fileNames[index])
 				}
 			}
 			
@@ -366,7 +376,7 @@ class XGUtility {
 		do {
 			try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted).write(to: URL(fileURLWithPath: file.path), options: [.atomic])
 		} catch {
-			print("couldn't save json to file: \(file.path)")
+			printg("couldn't save json to file: \(file.path)")
 		}
 	}
 	
@@ -375,7 +385,7 @@ class XGUtility {
 			let json = try JSONSerialization.jsonObject(with: file.data.data as Data, options: [])
 			return json as AnyObject?
 		} catch {
-			print("couldn't load json from file: \(file.path)")
+			printg("couldn't load json from file: \(file.path)")
 			return nil
 		}
 	}
@@ -661,6 +671,14 @@ class XGUtility {
 			string += "Wild " + poke.pokemon.name.string + "  \t\(tabsForName(poke.pokemon.name.string))Lv. " + "\(poke.minLevel) - \(poke.maxLevel)" + "\n"
 		}
 		
+		if XGPokeSpots.all.numberOfEntries() > 2 {
+			string += "\n************************************************************************************\nBoss Encounters\n\n"
+			for i in 2 ..< XGPokeSpots.all.numberOfEntries() {
+				let poke = XGPokeSpotPokemon(index: i, pokespot: .all)
+				string += "Wild " + poke.pokemon.name.string + "  \t\(tabsForName(poke.pokemon.name.string))Lv. " + "\(poke.minLevel) - \(poke.maxLevel)" + "\n"
+			}
+		}
+		
 		string += "\n************************************************************************************\nHordel Trade\n\n"
 		
 		let pokemon = XGTradePokemon(index: 0)
@@ -686,45 +704,7 @@ class XGUtility {
 	
 	//MARK: - Release configuration
 	class func prepareForRelease() {
-		//	prepareMonsForRelease()
-		//	prepareMovesForRelease()
 		fixUpTrainerPokemon()
-	}
-	
-	class func prepareMonsForRelease() {
-		for id in 1 ..< kNumberOfPokemon {
-			let mon = XGPokemonStats(index: id)
-			let name = mon.name
-			if name.string.characters.count > 2 {
-				let index = name.string.characters.index(name.string.endIndex, offsetBy: -2)
-				let lastChars = name.string.substring(from: index)
-				
-				if lastChars == "-A" {
-					name.println()
-					let new = name.string.replacingOccurrences(of: "-A", with: "")
-					mon.name.duplicateWithString(new).replace()
-				}
-				
-			}
-		}
-	}
-	
-	class func prepareMovesForRelease() {
-		for id in 1 ..< kNumberOfMoves {
-			let move = XGMove(index: id)
-			let name = move.name
-			if name.string.characters.count > 1 {
-				
-				let index = name.string.characters.index(before: name.string.endIndex)
-				let lastChar = name.string.substring(from: index)
-				
-				if lastChar == "+" || lastChar == "-" {
-					let new = name.string.replacingCharacters(in: index ..< name.string.characters.endIndex, with: "")
-					move.name.duplicateWithString(new).replace()
-				}
-				
-			}
-		}
 	}
 	
 	class func fixUpTrainerPokemon() {
@@ -745,7 +725,7 @@ class XGUtility {
 	
 	class func updateShadowMonitor() {
 		
-		print("updating shadow monitor")
+		printg("updating shadow monitor")
 		
 		let start = 0x4014EA
 		
@@ -779,7 +759,7 @@ class XGUtility {
 		// Corresponds to each tutor move. This class function will set it so that it is in the same
 		// Order as the tutor moves indexes.
 		
-		print("updating tutor moves")
+		printg("updating tutor moves")
 		
 		let dol = XGFiles.dol.data
 		
@@ -820,7 +800,7 @@ class XGUtility {
 		// This code only does it for gen I-II since national id is same as index.
 		// Also need to get national ids for the pokemon you get from trade.
 		
-		print("updating pokespots")
+		printg("updating pokespots")
 		
 		let script = XGFiles.script("M2_guild_1F_2.scd").data
 		
@@ -883,7 +863,11 @@ class XGUtility {
 					if mon.moves.contains(where: { (m) -> Bool in
 						return m.index == search.index
 					}) {
-						print(trainer.name, trainer.locationString)
+						printg(trainer.name, trainer.locationString)
+					} else if mon.shadowMoves.contains(where: { (m) -> Bool in
+						return m.index == search.index
+					}) {
+						printg(trainer.name, trainer.locationString)
 					}
 				}
 			}
@@ -894,7 +878,7 @@ class XGUtility {
 			if mon.levelUpMoves.contains(where: { (m) -> Bool in
 				return m.move.index == search.index
 			}) {
-				print(mon.name)
+				printg(mon.name)
 			}
 		}
 		
@@ -904,7 +888,7 @@ class XGUtility {
 				switch panel {
 				case .pokemon(let mon):
 					if mon.move.index == search.index {
-						print("Battle Bingo Card ", i)
+						printg("Battle Bingo Card ", i)
 					}
 				default:
 					break
@@ -920,7 +904,7 @@ class XGUtility {
 					return p.data
 				}) {
 					if mon.species.index == search.index {
-						print(trainer.name, trainer.locationString)
+						printg(trainer.name, trainer.locationString)
 					}
 				}
 			}
@@ -937,48 +921,48 @@ class XGUtility {
 				st.duplicateWithString(st.string.replacingOccurrences(of: a, with: b, options: .literal)).replace()
 			}
 		}
-		print("replaced \"\(a)\" with \"\(b)\"\n")
+		printg("replaced \"\(a)\" with \"\(b)\"\n")
 	}
 	
 	class func valueContext(_ value: Int) {
-		print("Value:", value, "can have the following meanings:\n")
+		printg("Value:", value, "can have the following meanings:\n")
 		if value <= kNumberOfMoves {
-			print("Move: ",XGMoves.move(value).name.string,"\n")
+			printg("Move: ",XGMoves.move(value).name.string,"\n")
 		}
 		if value <= kNumberOfPokemon {
-			print("Pokemon: ",XGPokemon.pokemon(value).name.string,"\n")
+			printg("Pokemon: ",XGPokemon.pokemon(value).name.string,"\n")
 		}
 		
 		if value <= kNumberOfAbilities {
-			print("Ability: ",XGAbilities.ability(value).name.string,"\n")
+			printg("Ability: ",XGAbilities.ability(value).name.string,"\n")
 		}
 		
 		if value <= CommonIndexes.NumberOfItems.value {
-			print("Item: ",XGItems.item(value).name.string,"\n")
+			printg("Item: ",XGItems.item(value).name.string,"\n")
 		}
 		
 		// Key items
 		if value > CommonIndexes.NumberOfItems.value && value < 0x250 {
-			print("Item: ",XGItems.item(value - 150).name.string,"\n")
+			printg("Item: ",XGItems.item(value - 150).name.string,"\n")
 		}
 		
 		if value < kNumberOfTypes {
-			print("Type: ",XGMoveTypes(rawValue: value)!,"\n")
+			printg("Type: ",XGMoveTypes(rawValue: value)!,"\n")
 		}
 		
 		for i in 1 ..< CommonIndexes.NumberOfItems.value {
 			let item = XGItems.item(i).data
 			if item.holdItemID == value {
-				print("Hold item id: ",item.name.string,"\n")
+				printg("Hold item id: ",item.name.string,"\n")
 			}
 			if item.inBattleUseID == value {
-				print("In battle item id: ",item.name.string,"\n")
+				printg("In battle item id: ",item.name.string,"\n")
 			}
 		}
 		
 		if value > 0x1000 {
 			loadAllStrings()
-			print("String: ",getStringSafelyWithID(id: value),"\n")
+			printg("String: ",getStringSafelyWithID(id: value),"\n")
 		}
 		
 		
@@ -995,7 +979,7 @@ class XGUtility {
 			let i = itemHexList[j]
 			
 			if i == 0x1FF {
-				print("---------")
+				printg("---------")
 				continue
 			}
 			let item = XGItems.item(i)
@@ -1007,7 +991,7 @@ class XGUtility {
 				}
 			}
 			
-			print("\(0x300 + (j*2)):\t",item.index,item.name.string,tmName,"\n")
+			printg("\(0x300 + (j*2)):\t",item.index,item.name.string,tmName,"\n")
 		}
 		
 	}
@@ -1094,7 +1078,7 @@ class XGUtility {
 		
 		string += "return [self.name.string : dictRep]\n}\n}\n\n"
 		
-		print(string)
+		printg(string)
 		
 	}
 	
@@ -1102,7 +1086,7 @@ class XGUtility {
 	class func documentPokemonStats(title: String, forXG: Bool) {
 		
 		let fileName = "Pokemon Stats"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1214,12 +1198,12 @@ class XGUtility {
 			raw_array.append(mon.dictionaryRepresentation as AnyObject)
 			hum_array.append(mon.readableDictionaryRepresentation as AnyObject)
 		}
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 		var dataRepresentation = [
 			
@@ -1420,7 +1404,7 @@ class XGUtility {
 	class func documentMoves(title: String, forXG: Bool) {
 		
 		let fileName = "Moves"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1432,12 +1416,12 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 		var indices = [String]()
 		var hexIndices = [String]()
@@ -1521,7 +1505,7 @@ class XGUtility {
 	class func documentBattleBingo() {
 		
 		let fileName = "Battle Bingo"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1533,19 +1517,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentItems() {
 		
 		let fileName = "Items"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1557,19 +1541,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentTrainers(title: String, forXG: Bool) {
 		
 		let fileName = "Trainers"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1584,12 +1568,12 @@ class XGUtility {
 			hum_array.append(deck.readableDictionaryRepresentation as AnyObject)
 			
 		}
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 		saveString(decksString, toFile: .nameAndFolder(title + ".txt", .Reference))
 	}
@@ -1597,17 +1581,17 @@ class XGUtility {
 	class func documentShadowPokemon(title: String, forXG: Bool) {
 		
 		let fileName = "Shadow Pokemon"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
 		
 		let raw_array = XGDecks.DeckDarkPokemon.dictionaryRepresentation
 		let hum_array = XGDecks.DeckDarkPokemon.readableDictionaryRepresentation
 		
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 		var indices = [String]()
 		var hexIndices = [String]()
@@ -1663,7 +1647,9 @@ class XGUtility {
 	class func documentTMs() {
 		
 		let fileName = "TMs"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
+		
+		var locations = [Int : String]()
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1675,19 +1661,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentTutorMoves() {
 		
 		let fileName = "Tutor Moves"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1699,19 +1685,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentTrainerClasses() {
 		
 		let fileName = "Trainer classes"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1723,19 +1709,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentStarterPokemon() {
 		
 		let fileName = "Starter Pokemon"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1750,19 +1736,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentMtBattlePokemon() {
 		
 		let fileName = "Mt. Battle Prize Pokemon"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1774,19 +1760,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentTrades() {
 		
 		let fileName = "In-Game Trades"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1798,19 +1784,19 @@ class XGUtility {
 			raw_array.append(entry.dictionaryRepresentation as AnyObject)
 			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentGiftShadowPokemon() {
 		
 		let fileName = "Shadow Pokemon Gift"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1820,12 +1806,12 @@ class XGUtility {
 		raw_array.append(entry.dictionaryRepresentation as AnyObject)
 		hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 	}
 	
@@ -1835,7 +1821,7 @@ class XGUtility {
 		let itemHexList = dat.getShortStreamFromOffset(0x300, length: 0x170)
 		
 		let fileName = "Pokemarts"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
 		
 		var raw_array = [AnyObject]()
 		var hum_array = [AnyObject]()
@@ -1855,19 +1841,19 @@ class XGUtility {
 			}
 			
 		}
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 	}
 	
 	class func documentPokespots() {
 		
 		let fileName = "Pokespots"
-		print("documenting " + fileName + "...")
+		printg("documenting " + fileName + "...")
 		
 		var raw_array1 = [AnyObject]()
 		var hum_array1 = [AnyObject]()
@@ -1889,12 +1875,12 @@ class XGUtility {
 			hum_array1.append([spot.string : hum_array] as AnyObject)
 		}
 		
-		print("saving " + fileName + "...")
+		printg("saving " + fileName + "...")
 		
 		saveJSON(raw_array1 as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
 		saveJSON(hum_array1 as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
 		
-		print("saved " + fileName + "!\n")
+		printg("saved " + fileName + "!\n")
 		
 	}
 	
@@ -1955,6 +1941,7 @@ class XGUtility {
 		documentData(title: title, data: dataRepresentation)
 		
 	}
+	
 	
 	class func documentISO(forXG: Bool) {
 		
@@ -2105,6 +2092,8 @@ class XGUtility {
 	}
 	
 	class func copyOWPokemonIdleAnimationFromIndex(index: Int, forModel file: XGFiles) {
+		// almost always index 0 holds the idle animation
+		// for overworld need to copy that to index 3
 		let data = file.data
 		let backup = file.data
 		backup.file = .nameAndFolder(file.fileName + ".bak", file.folder)

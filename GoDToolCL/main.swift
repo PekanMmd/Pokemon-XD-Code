@@ -6,11 +6,19 @@
 //  Copyright © 2015 StarsMmd. All rights reserved.
 //
 
+// use move effect focus energy for free space
 
-//for i in 0 ..< CommonIndexes.NumberOfCharacterModels.value {
-//	let model = XGCharacterModels(index: i)
-//	print(i, model.name, model.fsysIndex.string)
-//}
+//let iso = XGISO()
+
+
+//XGUtility.compileMainFiles()
+
+//XGISO().importDol()
+//XGUtility.compileAllFiles()
+
+//XGUtility.compileForRelease(XG: true)
+
+
 
 
 

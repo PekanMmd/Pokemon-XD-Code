@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1421" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
-        <plugIn identifier="com.apple.imagekit.ibplugin" version="11762"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.imagekit.ibplugin" version="13771"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -141,7 +141,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="360" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FhI-CA-wWf">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FhI-CA-wWf">
                                 <rect key="frame" x="20" y="20" width="320" height="440"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="320" id="437-rB-L8J"/>
@@ -200,6 +200,9 @@ Twitter: @StarsMmd</string>
                         <rect key="contentRect" x="50" y="59" width="111" height="41"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                         <value key="maxSize" type="size" width="1000" height="1000"/>
+                        <connections>
+                            <outlet property="delegate" destination="B8D-0N-5wS" id="rei-GN-5h1"/>
+                        </connections>
                     </window>
                     <connections>
                         <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="cq2-FE-JQM"/>
@@ -236,7 +239,7 @@ Twitter: @StarsMmd</string>
                                     <rect key="frame" x="1" y="1" width="438" height="458"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textView importsGraphics="NO" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" smartInsertDelete="YES" id="PzZ-Jv-CN9">
+                                        <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" allowsCharacterPickerTouchBarItem="NO" usesRuler="YES" allowsNonContiguousLayout="YES" textCompletion="NO" id="PzZ-Jv-CN9">
                                             <rect key="frame" x="0.0" y="0.0" width="438" height="458"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -256,7 +259,7 @@ Twitter: @StarsMmd</string>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bpl-pp-3vQ">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bpl-pp-3vQ">
                                 <rect key="frame" x="198" y="460" width="444" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="9Ho-sf-xk4"/>
@@ -288,6 +291,9 @@ Twitter: @StarsMmd</string>
                         <segue destination="vSz-Wi-uwy" kind="show" identifier="toMoveVC" id="Alv-ao-LX4"/>
                         <segue destination="9YN-7z-LmO" kind="show" identifier="toItemVC" id="dzP-JI-JRf"/>
                         <segue destination="Mrz-db-3XP" kind="show" identifier="toSpotVC" id="J5N-WD-1dc"/>
+                        <segue destination="GMZ-cQ-xq6" kind="show" identifier="toShadowVC" id="9oX-Ot-32Z"/>
+                        <segue destination="ggV-ux-Xw2" kind="show" identifier="toGiftVC" id="Nci-Fm-WU6"/>
+                        <segue destination="fdm-8h-awW" kind="show" identifier="toScriptVC" id="2ng-HQ-rBh"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -363,7 +369,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setMaxAction:" target="Mrz-db-3XP" id="ngt-Aj-JkG"/>
                                         </connections>
                                     </popUpButton>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="H86-7e-XBY">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H86-7e-XBY">
                                         <rect key="frame" x="5" y="55" width="100" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="tcv-UT-XfA"/>
@@ -377,7 +383,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setChanceAction:" target="Mrz-db-3XP" id="m0y-XJ-CNY"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lsv-e5-3r9">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lsv-e5-3r9">
                                         <rect key="frame" x="155" y="55" width="90" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="Ko4-kh-Rqr">
                                             <font key="font" metaFont="system"/>
@@ -388,26 +394,26 @@ Twitter: @StarsMmd</string>
                                             <action selector="setStepsAction:" target="Mrz-db-3XP" id="4Q3-hq-P8h"/>
                                         </connections>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ddk-J8-bZ7">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ddk-J8-bZ7">
                                         <rect key="frame" x="3" y="75" width="104" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="SOQ-W3-6VP"/>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Encounter Chance" id="PEg-Bf-Rma">
-                                            <font key="font" metaFont="system" size="11"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2vK-Wl-e4Y">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2vK-Wl-e4Y">
                                         <rect key="frame" x="153" y="75" width="94" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Steps Per Snack" id="vic-At-0kC">
-                                            <font key="font" metaFont="system" size="11"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="e0g-Oz-ebi">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e0g-Oz-ebi">
                                         <rect key="frame" x="153" y="141" width="94" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Max" id="562-Ih-x5I">
                                             <font key="font" metaFont="system"/>
@@ -436,7 +442,7 @@ Twitter: @StarsMmd</string>
                                             <constraint firstAttribute="width" constant="50" id="zay-XB-7SH"/>
                                         </constraints>
                                     </customView>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jo0-sw-4d5">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jo0-sw-4d5">
                                         <rect key="frame" x="3" y="141" width="104" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="Ps0-Up-lXG"/>
@@ -464,6 +470,8 @@ Twitter: @StarsMmd</string>
                                         <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hz7-P2-TyO">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
+                                            <string key="keyEquivalent">s</string>
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="saveAction:" target="Mrz-db-3XP" id="KGp-KG-Of1"/>
@@ -569,7 +577,7 @@ Twitter: @StarsMmd</string>
                             <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DCE-a2-sKu" userLabel="Info" customClass="GoDContainerView" customModule="GoDToolOSX" customModuleProvider="target">
                                 <rect key="frame" x="214" y="270" width="210" height="190"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AAw-g4-wNV">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AAw-g4-wNV">
                                         <rect key="frame" x="8" y="155" width="79" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="5yn-jm-buh"/>
@@ -581,7 +589,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bXl-c4-mse">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bXl-c4-mse">
                                         <rect key="frame" x="8" y="120" width="79" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="ryi-aM-DDp"/>
@@ -592,7 +600,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TGK-me-3BG">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TGK-me-3BG">
                                         <rect key="frame" x="8" y="5" width="79" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="sIN-v2-5hf"/>
@@ -603,7 +611,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gZ8-Cp-1zH">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gZ8-Cp-1zH">
                                         <rect key="frame" x="8" y="75" width="79" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="GsG-dh-g5o"/>
@@ -614,7 +622,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lfL-h8-ct9">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lfL-h8-ct9">
                                         <rect key="frame" x="8" y="40" width="79" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="gM6-CZ-PUr"/>
@@ -625,7 +633,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jmB-Xy-LEu">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jmB-Xy-LEu">
                                         <rect key="frame" x="95" y="155" width="105" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="eff-h3-7h0"/>
@@ -636,7 +644,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="V5N-ew-4Ij">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V5N-ew-4Ij">
                                         <rect key="frame" x="95" y="120" width="105" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="tPU-fq-jWE"/>
@@ -650,7 +658,7 @@ Twitter: @StarsMmd</string>
                                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="YHE-5I-asI">
                                         <rect key="frame" x="10" y="110" width="190" height="5"/>
                                     </box>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fsb-2M-Wk4">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fsb-2M-Wk4">
                                         <rect key="frame" x="93" y="75" width="109" height="30"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="jQ5-5F-SfX">
                                             <font key="font" metaFont="cellTitle"/>
@@ -658,7 +666,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="APo-SP-kG6">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="APo-SP-kG6">
                                         <rect key="frame" x="93" y="40" width="109" height="30"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0x0" id="nLR-2N-KlC">
                                             <font key="font" metaFont="cellTitle"/>
@@ -666,7 +674,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="h17-i9-Mbq">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h17-i9-Mbq">
                                         <rect key="frame" x="93" y="5" width="109" height="30"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0x0" id="4Kc-xR-RW3">
                                             <font key="font" metaFont="cellTitle"/>
@@ -766,10 +774,10 @@ Twitter: @StarsMmd</string>
                                 <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
                             </ikImageView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="wcZ-uf-Jp4" userLabel="Info" customClass="GoDContainerView" customModule="GoDToolOSX" customModuleProvider="target">
-                                <rect key="frame" x="210" y="280" width="210" height="190"/>
+                                <rect key="frame" x="210" y="325" width="210" height="145"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KyE-eJ-6P3">
-                                        <rect key="frame" x="8" y="155" width="79" height="30"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KyE-eJ-6P3">
+                                        <rect key="frame" x="8" y="110" width="79" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="75" id="eMQ-j0-ymc"/>
                                             <constraint firstAttribute="height" constant="30" id="jes-ck-B01"/>
@@ -780,8 +788,8 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="M3S-E0-mlf">
-                                        <rect key="frame" x="8" y="120" width="79" height="30"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M3S-E0-mlf">
+                                        <rect key="frame" x="8" y="75" width="79" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="vZm-GQ-dzh"/>
                                         </constraints>
@@ -791,10 +799,10 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="B2K-o7-lam">
-                                        <rect key="frame" x="8" y="5" width="79" height="30"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B2K-o7-lam">
+                                        <rect key="frame" x="8" y="5" width="79" height="15"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="57B-Sc-i4u"/>
+                                            <constraint firstAttribute="height" constant="15" id="57B-Sc-i4u"/>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Start Offset:" id="Ryv-NV-y8T">
                                             <font key="font" metaFont="system"/>
@@ -802,10 +810,10 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ywl-od-bWA">
-                                        <rect key="frame" x="8" y="75" width="79" height="30"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ywl-od-bWA">
+                                        <rect key="frame" x="8" y="45" width="79" height="15"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="44n-kt-Dnb"/>
+                                            <constraint firstAttribute="height" constant="15" id="44n-kt-Dnb"/>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Index:" id="eSN-4m-FfW">
                                             <font key="font" metaFont="system"/>
@@ -813,10 +821,10 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fkA-85-Vhm">
-                                        <rect key="frame" x="8" y="40" width="79" height="30"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fkA-85-Vhm">
+                                        <rect key="frame" x="8" y="25" width="79" height="15"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="C0N-Nq-6dK"/>
+                                            <constraint firstAttribute="height" constant="15" id="C0N-Nq-6dK"/>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Hex:" id="tZT-4v-KLj">
                                             <font key="font" metaFont="system"/>
@@ -824,8 +832,8 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="N8S-hs-pf7">
-                                        <rect key="frame" x="95" y="155" width="105" height="30"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N8S-hs-pf7">
+                                        <rect key="frame" x="95" y="110" width="105" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="4zk-aa-TLm"/>
                                         </constraints>
@@ -838,8 +846,8 @@ Twitter: @StarsMmd</string>
                                             <action selector="setMoveName:" target="vSz-Wi-uwy" id="d1h-9H-0W4"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6SL-0p-I30">
-                                        <rect key="frame" x="95" y="120" width="105" height="30"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6SL-0p-I30">
+                                        <rect key="frame" x="95" y="75" width="105" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="s9S-d7-uWs"/>
                                         </constraints>
@@ -853,26 +861,26 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </textField>
                                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Vti-RP-XYp">
-                                        <rect key="frame" x="10" y="110" width="190" height="5"/>
+                                        <rect key="frame" x="10" y="65" width="190" height="5"/>
                                     </box>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bZZ-BM-GmX">
-                                        <rect key="frame" x="93" y="75" width="109" height="30"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bZZ-BM-GmX">
+                                        <rect key="frame" x="93" y="45" width="109" height="15"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="kbC-PZ-DvR">
                                             <font key="font" metaFont="cellTitle"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="I5G-Z9-lqQ">
-                                        <rect key="frame" x="93" y="40" width="109" height="30"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I5G-Z9-lqQ">
+                                        <rect key="frame" x="93" y="25" width="109" height="15"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0x0" id="9af-eu-X44">
                                             <font key="font" metaFont="cellTitle"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BLH-HZ-6Nv">
-                                        <rect key="frame" x="93" y="5" width="109" height="30"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BLH-HZ-6Nv">
+                                        <rect key="frame" x="93" y="5" width="109" height="15"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0x0" id="eGO-s4-bLH">
                                             <font key="font" metaFont="cellTitle"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -924,10 +932,10 @@ Twitter: @StarsMmd</string>
                                 </constraints>
                             </customView>
                             <customView identifier="Numerical Values" translatesAutoresizingMaskIntoConstraints="NO" id="NWF-kq-oKk" customClass="GoDContainerView" customModule="GoDToolOSX" customModuleProvider="target">
-                                <rect key="frame" x="430" y="40" width="212" height="230"/>
+                                <rect key="frame" x="430" y="40" width="212" height="275"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SuM-s8-b2i">
-                                        <rect key="frame" x="8" y="187" width="84" height="33"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SuM-s8-b2i">
+                                        <rect key="frame" x="8" y="217" width="84" height="33"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="33" id="Wh1-Ge-kP3"/>
                                             <constraint firstAttribute="width" constant="80" id="iUg-Pq-RF5"/>
@@ -938,40 +946,40 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yGR-WP-CXC">
-                                        <rect key="frame" x="8" y="144" width="84" height="33"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yGR-WP-CXC">
+                                        <rect key="frame" x="8" y="169" width="84" height="33"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Accuracy" id="sUZ-WV-ef0">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lTJ-4k-QCU">
-                                        <rect key="frame" x="8" y="101" width="84" height="33"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lTJ-4k-QCU">
+                                        <rect key="frame" x="8" y="121" width="84" height="33"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="PP" id="bF8-HH-tQA">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="N5V-zX-jjI">
-                                        <rect key="frame" x="8" y="58" width="84" height="33"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N5V-zX-jjI">
+                                        <rect key="frame" x="8" y="73" width="84" height="33"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Priority" id="2Lj-eu-m12">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fgb-aQ-4PQ">
-                                        <rect key="frame" x="8" y="15" width="84" height="33"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fgb-aQ-4PQ">
+                                        <rect key="frame" x="8" y="25" width="84" height="33"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Effect Accuracy" id="Igj-5J-Qjt">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VO0-hP-9yE">
-                                        <rect key="frame" x="100" y="187" width="102" height="33"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VO0-hP-9yE">
+                                        <rect key="frame" x="100" y="217" width="102" height="33"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="Q6S-0O-CTG">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="P6a-Js-2T0"/>
                                             <font key="font" metaFont="system"/>
@@ -982,8 +990,8 @@ Twitter: @StarsMmd</string>
                                             <action selector="newPower:" target="vSz-Wi-uwy" id="VSD-bp-plW"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4qR-Xr-KlY">
-                                        <rect key="frame" x="100" y="101" width="102" height="33"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4qR-Xr-KlY">
+                                        <rect key="frame" x="100" y="121" width="102" height="33"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="8Gi-mL-Q5v">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="OaG-U7-CDl"/>
                                             <font key="font" metaFont="system"/>
@@ -994,8 +1002,8 @@ Twitter: @StarsMmd</string>
                                             <action selector="newPP:" target="vSz-Wi-uwy" id="Mks-fQ-Ts5"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yLM-pO-0Si">
-                                        <rect key="frame" x="100" y="58" width="102" height="33"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yLM-pO-0Si">
+                                        <rect key="frame" x="100" y="73" width="102" height="33"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="NeW-zB-9Vl">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="L2e-sy-sWk"/>
                                             <font key="font" metaFont="system"/>
@@ -1006,8 +1014,8 @@ Twitter: @StarsMmd</string>
                                             <action selector="newPriority:" target="vSz-Wi-uwy" id="TBx-Zj-wNi"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VEk-IP-BE4">
-                                        <rect key="frame" x="100" y="15" width="102" height="33"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VEk-IP-BE4">
+                                        <rect key="frame" x="100" y="25" width="102" height="33"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="RvG-o9-xZr">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="2YY-qa-e5p"/>
                                             <font key="font" metaFont="system"/>
@@ -1018,8 +1026,8 @@ Twitter: @StarsMmd</string>
                                             <action selector="newEffectAcc:" target="vSz-Wi-uwy" id="1Ko-FX-uWu"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Ej-Xu-ddU">
-                                        <rect key="frame" x="100" y="144" width="102" height="33"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Ej-Xu-ddU">
+                                        <rect key="frame" x="100" y="169" width="102" height="33"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="MGr-rd-iE9">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="9E0-pV-AuW"/>
                                             <font key="font" metaFont="system"/>
@@ -1039,9 +1047,9 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="VEk-IP-BE4" firstAttribute="trailing" secondItem="VO0-hP-9yE" secondAttribute="trailing" id="E7Q-Zu-Z9R"/>
                                     <constraint firstItem="N5V-zX-jjI" firstAttribute="leading" secondItem="SuM-s8-b2i" secondAttribute="leading" id="GoR-U9-o4q"/>
                                     <constraint firstItem="lTJ-4k-QCU" firstAttribute="leading" secondItem="SuM-s8-b2i" secondAttribute="leading" id="LpR-ot-Nt4"/>
-                                    <constraint firstItem="lTJ-4k-QCU" firstAttribute="top" secondItem="yGR-WP-CXC" secondAttribute="bottom" constant="10" id="MwI-1k-PtR"/>
+                                    <constraint firstItem="lTJ-4k-QCU" firstAttribute="top" secondItem="yGR-WP-CXC" secondAttribute="bottom" constant="15" id="MwI-1k-PtR"/>
                                     <constraint firstItem="7Ej-Xu-ddU" firstAttribute="trailing" secondItem="VO0-hP-9yE" secondAttribute="trailing" id="QXb-rR-DIY"/>
-                                    <constraint firstItem="fgb-aQ-4PQ" firstAttribute="top" secondItem="N5V-zX-jjI" secondAttribute="bottom" constant="10" id="ScH-on-HX3"/>
+                                    <constraint firstItem="fgb-aQ-4PQ" firstAttribute="top" secondItem="N5V-zX-jjI" secondAttribute="bottom" constant="15" id="ScH-on-HX3"/>
                                     <constraint firstItem="4qR-Xr-KlY" firstAttribute="trailing" secondItem="VO0-hP-9yE" secondAttribute="trailing" id="Sd2-Tb-KTv"/>
                                     <constraint firstItem="VEk-IP-BE4" firstAttribute="leading" secondItem="VO0-hP-9yE" secondAttribute="leading" id="THS-tB-QHo"/>
                                     <constraint firstItem="N5V-zX-jjI" firstAttribute="trailing" secondItem="SuM-s8-b2i" secondAttribute="trailing" id="VUi-0R-ebW"/>
@@ -1051,7 +1059,7 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="4qR-Xr-KlY" firstAttribute="leading" secondItem="VO0-hP-9yE" secondAttribute="leading" id="bcD-nz-7Zv"/>
                                     <constraint firstItem="VEk-IP-BE4" firstAttribute="top" secondItem="fgb-aQ-4PQ" secondAttribute="top" id="c8I-ie-pes"/>
                                     <constraint firstItem="7Ej-Xu-ddU" firstAttribute="top" secondItem="yGR-WP-CXC" secondAttribute="top" id="dZ8-Bq-czT"/>
-                                    <constraint firstItem="SuM-s8-b2i" firstAttribute="top" secondItem="NWF-kq-oKk" secondAttribute="top" constant="10" id="drT-jq-a14"/>
+                                    <constraint firstItem="SuM-s8-b2i" firstAttribute="top" secondItem="NWF-kq-oKk" secondAttribute="top" constant="25" id="drT-jq-a14"/>
                                     <constraint firstItem="fgb-aQ-4PQ" firstAttribute="height" secondItem="SuM-s8-b2i" secondAttribute="height" id="f1c-0W-0Ge"/>
                                     <constraint firstItem="7Ej-Xu-ddU" firstAttribute="bottom" secondItem="yGR-WP-CXC" secondAttribute="bottom" id="hBz-1y-mhy"/>
                                     <constraint firstItem="4qR-Xr-KlY" firstAttribute="top" secondItem="lTJ-4k-QCU" secondAttribute="top" id="ifc-hP-t5o"/>
@@ -1060,12 +1068,12 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="VEk-IP-BE4" firstAttribute="bottom" secondItem="fgb-aQ-4PQ" secondAttribute="bottom" id="n9p-5F-KMb"/>
                                     <constraint firstItem="fgb-aQ-4PQ" firstAttribute="leading" secondItem="SuM-s8-b2i" secondAttribute="leading" id="pbI-Kv-SkT"/>
                                     <constraint firstItem="yLM-pO-0Si" firstAttribute="top" secondItem="N5V-zX-jjI" secondAttribute="top" id="qW3-cM-bgP"/>
-                                    <constraint firstItem="N5V-zX-jjI" firstAttribute="top" secondItem="lTJ-4k-QCU" secondAttribute="bottom" constant="10" id="qpF-dp-Y9m"/>
+                                    <constraint firstItem="N5V-zX-jjI" firstAttribute="top" secondItem="lTJ-4k-QCU" secondAttribute="bottom" constant="15" id="qpF-dp-Y9m"/>
                                     <constraint firstItem="yGR-WP-CXC" firstAttribute="trailing" secondItem="SuM-s8-b2i" secondAttribute="trailing" id="tiy-jZ-pnl"/>
                                     <constraint firstItem="SuM-s8-b2i" firstAttribute="leading" secondItem="NWF-kq-oKk" secondAttribute="leading" constant="10" id="ueK-go-9gj"/>
                                     <constraint firstItem="yGR-WP-CXC" firstAttribute="leading" secondItem="SuM-s8-b2i" secondAttribute="leading" id="ueQ-Db-Lce"/>
                                     <constraint firstItem="VO0-hP-9yE" firstAttribute="bottom" secondItem="SuM-s8-b2i" secondAttribute="bottom" id="upy-Ps-LBp"/>
-                                    <constraint firstItem="yGR-WP-CXC" firstAttribute="top" secondItem="SuM-s8-b2i" secondAttribute="bottom" constant="10" id="vpn-tW-ohM"/>
+                                    <constraint firstItem="yGR-WP-CXC" firstAttribute="top" secondItem="SuM-s8-b2i" secondAttribute="bottom" constant="15" id="vpn-tW-ohM"/>
                                     <constraint firstItem="yLM-pO-0Si" firstAttribute="bottom" secondItem="N5V-zX-jjI" secondAttribute="bottom" id="wIE-Zn-XjR"/>
                                     <constraint firstItem="yLM-pO-0Si" firstAttribute="trailing" secondItem="VO0-hP-9yE" secondAttribute="trailing" id="wLL-7j-x9M"/>
                                     <constraint firstItem="yLM-pO-0Si" firstAttribute="leading" secondItem="VO0-hP-9yE" secondAttribute="leading" id="y5F-Dd-wCO"/>
@@ -1073,10 +1081,10 @@ Twitter: @StarsMmd</string>
                                 </constraints>
                             </customView>
                             <customView identifier="Flags" translatesAutoresizingMaskIntoConstraints="NO" id="Ft6-mg-LNz" customClass="GoDContainerView" customModule="GoDToolOSX" customModuleProvider="target">
-                                <rect key="frame" x="652" y="40" width="212" height="230"/>
+                                <rect key="frame" x="652" y="40" width="212" height="275"/>
                                 <subviews>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="bbU-nh-ajy">
-                                        <rect key="frame" x="109" y="184" width="95" height="18"/>
+                                        <rect key="frame" x="109" y="224" width="95" height="18"/>
                                         <buttonCell key="cell" type="check" title="Protect" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="6Bb-3C-tzN">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -1086,7 +1094,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </button>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="ivQ-Rl-kaU">
-                                        <rect key="frame" x="8" y="130" width="95" height="18"/>
+                                        <rect key="frame" x="8" y="160" width="95" height="18"/>
                                         <buttonCell key="cell" type="check" title="Sound" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="7TV-Pr-4Yg">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -1096,7 +1104,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </button>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="xYi-NR-UCI">
-                                        <rect key="frame" x="109" y="130" width="95" height="18"/>
+                                        <rect key="frame" x="109" y="160" width="95" height="18"/>
                                         <buttonCell key="cell" type="check" title="Snatch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="EO7-pf-DkA">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -1106,7 +1114,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </button>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="TZ8-fc-8dP">
-                                        <rect key="frame" x="8" y="76" width="95" height="18"/>
+                                        <rect key="frame" x="8" y="96" width="95" height="18"/>
                                         <buttonCell key="cell" type="check" title="Contact" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Eqw-1f-Nfw">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -1116,7 +1124,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </button>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="PdV-vh-qnR">
-                                        <rect key="frame" x="109" y="76" width="95" height="18"/>
+                                        <rect key="frame" x="109" y="96" width="95" height="18"/>
                                         <buttonCell key="cell" type="check" title="Magic Coat" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="lz2-1g-AUo">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="cellTitle"/>
@@ -1126,7 +1134,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </button>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="0pE-TB-Bl2">
-                                        <rect key="frame" x="8" y="22" width="95" height="18"/>
+                                        <rect key="frame" x="8" y="32" width="95" height="18"/>
                                         <buttonCell key="cell" type="check" title="King's Rock" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Gtc-RB-9ny">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="cellTitle"/>
@@ -1136,7 +1144,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </button>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="xo7-xR-lUT">
-                                        <rect key="frame" x="109" y="22" width="95" height="18"/>
+                                        <rect key="frame" x="109" y="32" width="95" height="18"/>
                                         <buttonCell key="cell" type="check" title="Mirror Move" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="0rj-L8-bGx">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="cellTitle"/>
@@ -1146,7 +1154,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </button>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="lYf-Mu-5Do">
-                                        <rect key="frame" x="8" y="184" width="95" height="18"/>
+                                        <rect key="frame" x="8" y="224" width="95" height="18"/>
                                         <buttonCell key="cell" type="check" title="HM" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="GaH-hQ-H6y">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -1160,7 +1168,7 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="0pE-TB-Bl2" firstAttribute="height" secondItem="lYf-Mu-5Do" secondAttribute="height" id="1z1-1V-aWI"/>
                                     <constraint firstAttribute="trailing" secondItem="bbU-nh-ajy" secondAttribute="trailing" constant="10" id="3J5-G5-fbz"/>
                                     <constraint firstItem="0pE-TB-Bl2" firstAttribute="leading" secondItem="lYf-Mu-5Do" secondAttribute="leading" id="3aY-5B-rS6"/>
-                                    <constraint firstItem="ivQ-Rl-kaU" firstAttribute="top" secondItem="lYf-Mu-5Do" secondAttribute="bottom" constant="40" id="6vj-hI-aok"/>
+                                    <constraint firstItem="ivQ-Rl-kaU" firstAttribute="top" secondItem="lYf-Mu-5Do" secondAttribute="bottom" constant="50" id="6vj-hI-aok"/>
                                     <constraint firstItem="PdV-vh-qnR" firstAttribute="trailing" secondItem="bbU-nh-ajy" secondAttribute="trailing" id="AZ3-q8-4Yf"/>
                                     <constraint firstItem="ivQ-Rl-kaU" firstAttribute="leading" secondItem="lYf-Mu-5Do" secondAttribute="leading" id="CXc-uQ-Fp3"/>
                                     <constraint firstItem="xYi-NR-UCI" firstAttribute="top" secondItem="ivQ-Rl-kaU" secondAttribute="top" id="Dvq-kS-GEB"/>
@@ -1175,29 +1183,29 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="bbU-nh-ajy" firstAttribute="leading" secondItem="lYf-Mu-5Do" secondAttribute="trailing" constant="10" id="abX-Bv-l8f"/>
                                     <constraint firstItem="bbU-nh-ajy" firstAttribute="width" secondItem="lYf-Mu-5Do" secondAttribute="width" id="bCH-zF-fJS"/>
                                     <constraint firstItem="xo7-xR-lUT" firstAttribute="bottom" secondItem="0pE-TB-Bl2" secondAttribute="bottom" id="bV5-le-2f4"/>
-                                    <constraint firstItem="0pE-TB-Bl2" firstAttribute="top" secondItem="TZ8-fc-8dP" secondAttribute="bottom" constant="40" id="cFe-fS-kPh"/>
+                                    <constraint firstItem="0pE-TB-Bl2" firstAttribute="top" secondItem="TZ8-fc-8dP" secondAttribute="bottom" constant="50" id="cFe-fS-kPh"/>
                                     <constraint firstItem="0pE-TB-Bl2" firstAttribute="trailing" secondItem="lYf-Mu-5Do" secondAttribute="trailing" id="gBT-q6-hF6"/>
                                     <constraint firstItem="ivQ-Rl-kaU" firstAttribute="trailing" secondItem="lYf-Mu-5Do" secondAttribute="trailing" id="gP3-uK-8Ii"/>
                                     <constraint firstItem="bbU-nh-ajy" firstAttribute="bottom" secondItem="lYf-Mu-5Do" secondAttribute="bottom" id="h5n-KT-xLF"/>
                                     <constraint firstItem="xYi-NR-UCI" firstAttribute="trailing" secondItem="bbU-nh-ajy" secondAttribute="trailing" id="kNI-vZ-WQj"/>
                                     <constraint firstItem="xYi-NR-UCI" firstAttribute="leading" secondItem="bbU-nh-ajy" secondAttribute="leading" id="kdm-9m-2D2"/>
-                                    <constraint firstItem="TZ8-fc-8dP" firstAttribute="top" secondItem="ivQ-Rl-kaU" secondAttribute="bottom" constant="40" id="lYp-eL-TDa"/>
+                                    <constraint firstItem="TZ8-fc-8dP" firstAttribute="top" secondItem="ivQ-Rl-kaU" secondAttribute="bottom" constant="50" id="lYp-eL-TDa"/>
                                     <constraint firstItem="PdV-vh-qnR" firstAttribute="top" secondItem="TZ8-fc-8dP" secondAttribute="top" id="oyE-oS-mrA"/>
                                     <constraint firstItem="TZ8-fc-8dP" firstAttribute="trailing" secondItem="lYf-Mu-5Do" secondAttribute="trailing" id="pUq-XQ-to9"/>
                                     <constraint firstItem="PdV-vh-qnR" firstAttribute="leading" secondItem="bbU-nh-ajy" secondAttribute="leading" id="rdL-oj-4u4"/>
                                     <constraint firstItem="PdV-vh-qnR" firstAttribute="bottom" secondItem="TZ8-fc-8dP" secondAttribute="bottom" id="t7P-zQ-XzP"/>
                                     <constraint firstItem="xo7-xR-lUT" firstAttribute="trailing" secondItem="bbU-nh-ajy" secondAttribute="trailing" id="xva-Pk-KgG"/>
-                                    <constraint firstItem="lYf-Mu-5Do" firstAttribute="top" secondItem="Ft6-mg-LNz" secondAttribute="top" constant="30" id="zQi-TS-FUM"/>
+                                    <constraint firstItem="lYf-Mu-5Do" firstAttribute="top" secondItem="Ft6-mg-LNz" secondAttribute="top" constant="35" id="zQi-TS-FUM"/>
                                 </constraints>
                             </customView>
                             <customView identifier="Description" translatesAutoresizingMaskIntoConstraints="NO" id="njQ-ZR-Ild" customClass="GoDContainerView" customModule="GoDToolOSX" customModuleProvider="target">
-                                <rect key="frame" x="430" y="380" width="434" height="90"/>
+                                <rect key="frame" x="430" y="400" width="434" height="70"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MRi-Zv-4WC">
-                                        <rect key="frame" x="3" y="55" width="94" height="25"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MRi-Zv-4WC">
+                                        <rect key="frame" x="3" y="40" width="94" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="90" id="3XV-A8-xQW"/>
-                                            <constraint firstAttribute="height" constant="25" id="LxT-jw-cGu"/>
+                                            <constraint firstAttribute="height" constant="20" id="LxT-jw-cGu"/>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Description ID" id="fYq-6g-ZKF">
                                             <font key="font" metaFont="system"/>
@@ -1205,16 +1213,16 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DUh-6A-ho1">
-                                        <rect key="frame" x="98" y="55" width="333" height="25"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DUh-6A-ho1">
+                                        <rect key="frame" x="98" y="40" width="333" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Description" id="38V-nI-5Gd">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uv6-21-10P">
-                                        <rect key="frame" x="100" y="20" width="329" height="25"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uv6-21-10P">
+                                        <rect key="frame" x="100" y="10" width="329" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" drawsBackground="YES" id="uUP-mq-hB7">
                                             <font key="font" metaFont="system" size="10"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1224,8 +1232,8 @@ Twitter: @StarsMmd</string>
                                             <action selector="setMoveDescription:" target="vSz-Wi-uwy" id="509-Ns-5kI"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J7N-xC-8Qk">
-                                        <rect key="frame" x="5" y="20" width="90" height="25"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J7N-xC-8Qk">
+                                        <rect key="frame" x="5" y="10" width="90" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="oof-n8-TRU"/>
                                         </constraints>
@@ -1253,17 +1261,17 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="uv6-21-10P" firstAttribute="bottom" secondItem="J7N-xC-8Qk" secondAttribute="bottom" id="a5s-rp-zYh"/>
                                     <constraint firstAttribute="trailing" secondItem="DUh-6A-ho1" secondAttribute="trailing" constant="5" id="b5H-ox-QoP"/>
                                     <constraint firstItem="uv6-21-10P" firstAttribute="top" secondItem="J7N-xC-8Qk" secondAttribute="top" id="jOW-iQ-dct"/>
-                                    <constraint firstAttribute="bottom" secondItem="J7N-xC-8Qk" secondAttribute="bottom" constant="20" id="mni-RF-OZF"/>
-                                    <constraint firstItem="J7N-xC-8Qk" firstAttribute="top" secondItem="MRi-Zv-4WC" secondAttribute="bottom" constant="10" id="qbp-g8-ICE"/>
+                                    <constraint firstAttribute="bottom" secondItem="J7N-xC-8Qk" secondAttribute="bottom" constant="10" id="mni-RF-OZF"/>
+                                    <constraint firstItem="J7N-xC-8Qk" firstAttribute="top" secondItem="MRi-Zv-4WC" secondAttribute="bottom" constant="5" id="qbp-g8-ICE"/>
                                 </constraints>
                             </customView>
                             <customView identifier="Effect" translatesAutoresizingMaskIntoConstraints="NO" id="FYg-R6-kff" customClass="GoDContainerView" customModule="GoDToolOSX" customModuleProvider="target">
-                                <rect key="frame" x="430" y="280" width="434" height="80"/>
+                                <rect key="frame" x="430" y="325" width="434" height="70"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZX6-Ay-7rC">
-                                        <rect key="frame" x="8" y="45" width="418" height="25"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZX6-Ay-7rC">
+                                        <rect key="frame" x="8" y="40" width="418" height="20"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="25" id="Qbc-Tb-vUa"/>
+                                            <constraint firstAttribute="height" constant="20" id="Qbc-Tb-vUa"/>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Effect" id="nfl-C4-Y7F">
                                             <font key="font" metaFont="system"/>
@@ -1299,7 +1307,7 @@ Twitter: @StarsMmd</string>
                                     <constraint firstAttribute="trailing" secondItem="ZX6-Ay-7rC" secondAttribute="trailing" constant="10" id="QGA-Qw-ZOz"/>
                                     <constraint firstItem="ZX6-Ay-7rC" firstAttribute="leading" secondItem="FYg-R6-kff" secondAttribute="leading" constant="10" id="dr2-kt-cqW"/>
                                     <constraint firstItem="IrO-CI-fVg" firstAttribute="trailing" secondItem="ZX6-Ay-7rC" secondAttribute="trailing" id="jyT-Za-cE4"/>
-                                    <constraint firstItem="IrO-CI-fVg" firstAttribute="top" secondItem="ZX6-Ay-7rC" secondAttribute="bottom" constant="10" id="unI-Bj-Zka"/>
+                                    <constraint firstItem="IrO-CI-fVg" firstAttribute="top" secondItem="ZX6-Ay-7rC" secondAttribute="bottom" constant="5" id="unI-Bj-Zka"/>
                                 </constraints>
                             </customView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rHt-aa-MRc" customClass="GoDButton" customModule="GoDToolOSX" customModuleProvider="target">
@@ -1311,16 +1319,18 @@ Twitter: @StarsMmd</string>
                                 <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HBA-lV-WpW">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent">s</string>
+                                    <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="save:" target="vSz-Wi-uwy" id="hBj-d7-EP1"/>
                                 </connections>
                             </button>
                             <customView identifier="drop downs" translatesAutoresizingMaskIntoConstraints="NO" id="sgZ-vI-CoQ" customClass="GoDContainerView" customModule="GoDToolOSX" customModuleProvider="target">
-                                <rect key="frame" x="210" y="40" width="210" height="230"/>
+                                <rect key="frame" x="210" y="40" width="210" height="275"/>
                                 <subviews>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DtU-wV-TRq" customClass="GoDCategoryPopUpButton" customModule="GoDToolOSX" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="113" width="195" height="30"/>
+                                        <rect key="frame" x="8" y="163" width="195" height="30"/>
                                         <popUpButtonCell key="cell" type="push" title="Category" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="n4M-6i-4cA" id="Xe7-7f-ujh">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu"/>
@@ -1337,7 +1347,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </popUpButton>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cbn-C5-gLz" customClass="GoDTargetsPopUpButton" customModule="GoDToolOSX" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="56" width="195" height="30"/>
+                                        <rect key="frame" x="8" y="111" width="195" height="30"/>
                                         <popUpButtonCell key="cell" type="push" title="Targets" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="DrE-rE-sSC" id="Nyb-q0-a24">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu"/>
@@ -1354,7 +1364,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </popUpButton>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fCb-rM-EEP" customClass="GoDTypePopUpButton" customModule="GoDToolOSX" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="170" width="195" height="30"/>
+                                        <rect key="frame" x="8" y="215" width="195" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="CA8-mu-nCX"/>
                                         </constraints>
@@ -1373,24 +1383,24 @@ Twitter: @StarsMmd</string>
                                             <action selector="newType:" target="vSz-Wi-uwy" id="RdJ-ui-PRc"/>
                                         </connections>
                                     </popUpButton>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LgZ-po-LOB">
-                                        <rect key="frame" x="8" y="143" width="194" height="20"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LgZ-po-LOB">
+                                        <rect key="frame" x="8" y="193" width="194" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Category" id="9It-UQ-bNh">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nj5-on-hEZ">
-                                        <rect key="frame" x="8" y="86" width="194" height="20"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nj5-on-hEZ">
+                                        <rect key="frame" x="8" y="141" width="194" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Targets" id="khh-Mj-RaF">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XtL-Kw-xrX">
-                                        <rect key="frame" x="8" y="200" width="194" height="20"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XtL-Kw-xrX">
+                                        <rect key="frame" x="8" y="245" width="194" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="Qna-4r-8x9"/>
                                         </constraints>
@@ -1400,8 +1410,8 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KtA-Zs-4qY" customClass="GoDOriginalMovesPopUpButton" customModule="GoDToolOSX" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="2" width="195" height="30"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KtA-Zs-4qY" customClass="GoDOriginalMovesPopUpButton" customModule="GoDToolOSX" customModuleProvider="target">
+                                        <rect key="frame" x="8" y="59" width="195" height="30"/>
                                         <popUpButtonCell key="cell" type="push" title="Animation" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="kcR-xy-ESW" id="EIu-8s-oeC">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" size="11" name=".AppleSystemUIFont"/>
@@ -1417,9 +1427,34 @@ Twitter: @StarsMmd</string>
                                             <action selector="newAnimation:" target="vSz-Wi-uwy" id="AHh-oi-Old"/>
                                         </connections>
                                     </popUpButton>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4zS-Qa-qA0">
-                                        <rect key="frame" x="8" y="30" width="194" height="20"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4zS-Qa-qA0">
+                                        <rect key="frame" x="8" y="89" width="194" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Animation" id="D5P-Xq-b0h">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dST-Sl-Rbz" customClass="GoDMoveEffectTypesPopUpButton" customModule="GoDToolOSX" customModuleProvider="target">
+                                        <rect key="frame" x="8" y="14" width="195" height="26"/>
+                                        <popUpButtonCell key="cell" type="push" title="Effect Type" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="XPn-P1-q1P" id="HAo-9o-BIb">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="11" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" id="JSM-lh-Ijl">
+                                                <items>
+                                                    <menuItem title="Effect Type" state="on" id="XPn-P1-q1P"/>
+                                                    <menuItem title="Item 2" id="6QR-Vc-6fX"/>
+                                                    <menuItem title="Item 3" id="8QA-gV-xSO"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <action selector="newEffectType:" target="vSz-Wi-uwy" id="SWO-eu-XFt"/>
+                                        </connections>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YeK-sb-JCt">
+                                        <rect key="frame" x="8" y="40" width="194" height="17"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Effect Type" id="RPc-Fo-D0s">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1433,9 +1468,11 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="KtA-Zs-4qY" firstAttribute="leading" secondItem="Cbn-C5-gLz" secondAttribute="leading" id="1zr-OU-Qda"/>
                                     <constraint firstItem="KtA-Zs-4qY" firstAttribute="trailing" secondItem="4zS-Qa-qA0" secondAttribute="trailing" id="49v-pM-iYV"/>
                                     <constraint firstItem="DtU-wV-TRq" firstAttribute="trailing" secondItem="LgZ-po-LOB" secondAttribute="trailing" id="4eW-zT-BRe"/>
+                                    <constraint firstItem="YeK-sb-JCt" firstAttribute="trailing" secondItem="XtL-Kw-xrX" secondAttribute="trailing" id="8hw-Cx-Rez"/>
                                     <constraint firstItem="DtU-wV-TRq" firstAttribute="leading" secondItem="LgZ-po-LOB" secondAttribute="leading" id="975-MB-9H4"/>
                                     <constraint firstItem="KtA-Zs-4qY" firstAttribute="height" secondItem="fCb-rM-EEP" secondAttribute="height" id="A2g-ri-54I"/>
                                     <constraint firstAttribute="trailing" secondItem="XtL-Kw-xrX" secondAttribute="trailing" constant="10" id="BHR-ne-UVO"/>
+                                    <constraint firstItem="YeK-sb-JCt" firstAttribute="leading" secondItem="XtL-Kw-xrX" secondAttribute="leading" id="EAn-g7-5pZ"/>
                                     <constraint firstItem="LgZ-po-LOB" firstAttribute="leading" secondItem="XtL-Kw-xrX" secondAttribute="leading" id="MAI-fD-7wa"/>
                                     <constraint firstItem="LgZ-po-LOB" firstAttribute="height" secondItem="XtL-Kw-xrX" secondAttribute="height" id="Mar-q9-GWY"/>
                                     <constraint firstItem="DtU-wV-TRq" firstAttribute="height" secondItem="fCb-rM-EEP" secondAttribute="height" id="MzY-26-hoc"/>
@@ -1448,12 +1485,16 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="nj5-on-hEZ" firstAttribute="trailing" secondItem="XtL-Kw-xrX" secondAttribute="trailing" id="SPo-V4-Fkv"/>
                                     <constraint firstItem="nj5-on-hEZ" firstAttribute="height" secondItem="XtL-Kw-xrX" secondAttribute="height" id="Sfe-Vu-bby"/>
                                     <constraint firstItem="4zS-Qa-qA0" firstAttribute="height" secondItem="nj5-on-hEZ" secondAttribute="height" id="T0a-fn-l1R"/>
+                                    <constraint firstItem="dST-Sl-Rbz" firstAttribute="top" secondItem="YeK-sb-JCt" secondAttribute="bottom" constant="2" id="TFe-QZ-HlD"/>
                                     <constraint firstItem="fCb-rM-EEP" firstAttribute="top" secondItem="XtL-Kw-xrX" secondAttribute="bottom" constant="2" id="Tn2-Sh-47a"/>
                                     <constraint firstItem="KtA-Zs-4qY" firstAttribute="trailing" secondItem="Cbn-C5-gLz" secondAttribute="trailing" id="X5S-oq-PAl"/>
-                                    <constraint firstItem="4zS-Qa-qA0" firstAttribute="top" secondItem="Cbn-C5-gLz" secondAttribute="bottom" constant="10" id="ftU-v2-InD"/>
-                                    <constraint firstItem="nj5-on-hEZ" firstAttribute="top" secondItem="DtU-wV-TRq" secondAttribute="bottom" constant="10" id="kcb-WA-r4a"/>
+                                    <constraint firstItem="dST-Sl-Rbz" firstAttribute="leading" secondItem="YeK-sb-JCt" secondAttribute="leading" id="a6H-dw-cbd"/>
+                                    <constraint firstItem="YeK-sb-JCt" firstAttribute="top" secondItem="KtA-Zs-4qY" secondAttribute="bottom" constant="5" id="ed5-sg-Ofw"/>
+                                    <constraint firstItem="4zS-Qa-qA0" firstAttribute="top" secondItem="Cbn-C5-gLz" secondAttribute="bottom" constant="5" id="ftU-v2-InD"/>
+                                    <constraint firstItem="nj5-on-hEZ" firstAttribute="top" secondItem="DtU-wV-TRq" secondAttribute="bottom" constant="5" id="kcb-WA-r4a"/>
                                     <constraint firstItem="fCb-rM-EEP" firstAttribute="trailing" secondItem="XtL-Kw-xrX" secondAttribute="trailing" id="ktL-Pj-ObV"/>
-                                    <constraint firstItem="LgZ-po-LOB" firstAttribute="top" secondItem="fCb-rM-EEP" secondAttribute="bottom" constant="10" id="l7R-KH-h0k"/>
+                                    <constraint firstItem="LgZ-po-LOB" firstAttribute="top" secondItem="fCb-rM-EEP" secondAttribute="bottom" constant="5" id="l7R-KH-h0k"/>
+                                    <constraint firstItem="dST-Sl-Rbz" firstAttribute="trailing" secondItem="YeK-sb-JCt" secondAttribute="trailing" id="lnZ-5Q-2kL"/>
                                     <constraint firstItem="Cbn-C5-gLz" firstAttribute="top" secondItem="nj5-on-hEZ" secondAttribute="bottom" constant="2" id="qs0-W7-GsS"/>
                                     <constraint firstItem="fCb-rM-EEP" firstAttribute="leading" secondItem="XtL-Kw-xrX" secondAttribute="leading" id="sVe-gQ-jxk"/>
                                     <constraint firstItem="LgZ-po-LOB" firstAttribute="trailing" secondItem="XtL-Kw-xrX" secondAttribute="trailing" id="yrz-iX-cTQ"/>
@@ -1497,6 +1538,7 @@ Twitter: @StarsMmd</string>
                         <outlet property="descID" destination="J7N-xC-8Qk" id="vbI-xa-uob"/>
                         <outlet property="effect" destination="IrO-CI-fVg" id="tvw-iD-qjc"/>
                         <outlet property="effectAcc" destination="VEk-IP-BE4" id="y6O-id-JkO"/>
+                        <outlet property="effectType" destination="dST-Sl-Rbz" id="lzT-p6-VdH"/>
                         <outlet property="hex" destination="I5G-Z9-lqQ" id="fUf-EI-shJ"/>
                         <outlet property="hm" destination="lYf-Mu-5Do" id="kjr-9R-xqi"/>
                         <outlet property="index" destination="bZZ-BM-GmX" id="E5A-61-Qrj"/>
@@ -1551,7 +1593,7 @@ Twitter: @StarsMmd</string>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="Vqa-V0-vc1" userLabel="Info" customClass="GoDContainerView" customModule="GoDToolOSX" customModuleProvider="target">
                                 <rect key="frame" x="210" y="280" width="210" height="190"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wRw-Cz-5x4">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wRw-Cz-5x4">
                                         <rect key="frame" x="8" y="155" width="79" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="75" id="FTc-fL-sWu"/>
@@ -1563,7 +1605,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="k3C-rS-AVL">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k3C-rS-AVL">
                                         <rect key="frame" x="8" y="120" width="79" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="Vio-B0-frR"/>
@@ -1574,7 +1616,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fZe-qZ-8J3">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fZe-qZ-8J3">
                                         <rect key="frame" x="8" y="5" width="79" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="iRI-sk-adc"/>
@@ -1585,7 +1627,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LuX-cD-Wfq">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LuX-cD-Wfq">
                                         <rect key="frame" x="8" y="75" width="79" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="9Nr-Jo-2gB"/>
@@ -1596,7 +1638,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KxO-am-hq8">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KxO-am-hq8">
                                         <rect key="frame" x="8" y="40" width="79" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="ej3-aK-qmW"/>
@@ -1607,7 +1649,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dsH-fI-MGV">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dsH-fI-MGV">
                                         <rect key="frame" x="95" y="155" width="105" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="fyX-FR-AhS"/>
@@ -1621,7 +1663,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setName:" target="7OK-Av-0ny" id="5zl-So-q61"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ChJ-Zy-S9q">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ChJ-Zy-S9q">
                                         <rect key="frame" x="95" y="120" width="105" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="av1-b0-WPu"/>
@@ -1638,7 +1680,7 @@ Twitter: @StarsMmd</string>
                                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="TXC-ao-krn">
                                         <rect key="frame" x="10" y="110" width="190" height="5"/>
                                     </box>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FIy-wR-XlY">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FIy-wR-XlY">
                                         <rect key="frame" x="93" y="75" width="109" height="30"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0" id="ris-md-wbI">
                                             <font key="font" metaFont="cellTitle"/>
@@ -1646,7 +1688,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SRS-pe-gks">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SRS-pe-gks">
                                         <rect key="frame" x="93" y="40" width="109" height="30"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0x0" id="jLs-fj-9dQ">
                                             <font key="font" metaFont="cellTitle"/>
@@ -1654,7 +1696,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Jbu-DP-gNY">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jbu-DP-gNY">
                                         <rect key="frame" x="93" y="5" width="109" height="30"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0x0" id="eqT-wI-QGH">
                                             <font key="font" metaFont="cellTitle"/>
@@ -1709,7 +1751,7 @@ Twitter: @StarsMmd</string>
                             <customView appearanceType="aqua" translatesAutoresizingMaskIntoConstraints="NO" id="kLX-6o-YNi" userLabel="Stats" customClass="GoDContainerView" customModule="GoDToolOSX" customModuleProvider="target">
                                 <rect key="frame" x="425" y="280" width="105" height="190"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2Rz-r8-VMI">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Rz-r8-VMI">
                                         <rect key="frame" x="3" y="155" width="54" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="AGy-bo-i3z"/>
@@ -1721,7 +1763,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="evq-Og-Nvz">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="evq-Og-Nvz">
                                         <rect key="frame" x="3" y="125" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Atk" id="ZJw-q0-jSl">
                                             <font key="font" metaFont="system"/>
@@ -1729,7 +1771,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="D1l-7x-yL8">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D1l-7x-yL8">
                                         <rect key="frame" x="3" y="95" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Def" id="PGN-GS-FHv">
                                             <font key="font" metaFont="system"/>
@@ -1737,7 +1779,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3eG-BG-2Sm">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3eG-BG-2Sm">
                                         <rect key="frame" x="3" y="65" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sp.Atk" id="s62-93-ORn">
                                             <font key="font" metaFont="system"/>
@@ -1745,7 +1787,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0dl-zB-hpQ">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0dl-zB-hpQ">
                                         <rect key="frame" x="3" y="35" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sp. Def" id="Jqm-n5-6cg">
                                             <font key="font" metaFont="system"/>
@@ -1753,7 +1795,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="83H-1K-eVZ">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="83H-1K-eVZ">
                                         <rect key="frame" x="3" y="5" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Speed" id="yxD-BN-gfG">
                                             <font key="font" metaFont="system"/>
@@ -1761,7 +1803,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YAf-UY-vFd">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YAf-UY-vFd">
                                         <rect key="frame" x="55" y="155" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="1y9-Hy-4UG">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="xBx-SB-J1Y"/>
@@ -1773,7 +1815,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setHP:" target="7OK-Av-0ny" id="UDq-Hn-McM"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lAe-ZO-c9N">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lAe-ZO-c9N">
                                         <rect key="frame" x="55" y="125" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="x52-lg-u3E">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="lxQ-vS-Pbm"/>
@@ -1785,7 +1827,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setAtk:" target="7OK-Av-0ny" id="eh4-1g-dhK"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DzO-Sb-rph">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DzO-Sb-rph">
                                         <rect key="frame" x="55" y="95" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="LYt-5u-jIg">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="maA-9T-7x3"/>
@@ -1797,7 +1839,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setDef:" target="7OK-Av-0ny" id="Po3-Rv-WaX"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5qu-fC-dX7">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5qu-fC-dX7">
                                         <rect key="frame" x="55" y="65" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="nMa-et-hpD">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="eJO-Jb-anm"/>
@@ -1809,7 +1851,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setSpAtk:" target="7OK-Av-0ny" id="b5N-iS-PdD"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hM3-cc-dZN">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hM3-cc-dZN">
                                         <rect key="frame" x="55" y="5" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="8qj-72-8iD">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="jmN-d8-Z0E"/>
@@ -1821,7 +1863,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setSpeed:" target="7OK-Av-0ny" id="5pL-bR-QNg"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vFc-Or-M2d">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vFc-Or-M2d">
                                         <rect key="frame" x="55" y="35" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="UeZ-Qj-hR5">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="RBS-Bx-nek"/>
@@ -1908,7 +1950,7 @@ Twitter: @StarsMmd</string>
                             <customView identifier="types" translatesAutoresizingMaskIntoConstraints="NO" id="FQq-v2-QjS" customClass="GoDContainerView" customModule="GoDToolOSX" customModuleProvider="target">
                                 <rect key="frame" x="210" y="205" width="210" height="70"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ceU-6t-9fq">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ceU-6t-9fq">
                                         <rect key="frame" x="53" y="40" width="104" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="8TG-pX-We3"/>
@@ -1983,7 +2025,7 @@ Twitter: @StarsMmd</string>
                             <customView identifier="types" translatesAutoresizingMaskIntoConstraints="NO" id="SWi-SW-twQ" customClass="GoDContainerView" customModule="GoDToolOSX" customModuleProvider="target">
                                 <rect key="frame" x="210" y="130" width="210" height="70"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LV1-6l-Pyu">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LV1-6l-Pyu">
                                         <rect key="frame" x="53" y="40" width="104" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="3an-10-acN"/>
@@ -2057,7 +2099,7 @@ Twitter: @StarsMmd</string>
                             <customView identifier="types" translatesAutoresizingMaskIntoConstraints="NO" id="g4P-a5-ceI" customClass="GoDContainerView" customModule="GoDToolOSX" customModuleProvider="target">
                                 <rect key="frame" x="210" y="55" width="210" height="70"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FVG-RE-CQZ">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FVG-RE-CQZ">
                                         <rect key="frame" x="53" y="40" width="104" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="KGu-hY-J9h"/>
@@ -2137,7 +2179,7 @@ Twitter: @StarsMmd</string>
                             <customView identifier="EVs" translatesAutoresizingMaskIntoConstraints="NO" id="x9Z-QG-m0x" customClass="GoDContainerView" customModule="GoDToolOSX" customModuleProvider="target">
                                 <rect key="frame" x="425" y="55" width="105" height="220"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lcs-gp-HkD">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lcs-gp-HkD">
                                         <rect key="frame" x="3" y="185" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="HP EV" id="YfX-lG-Fo3">
                                             <font key="font" metaFont="miniSystem"/>
@@ -2145,7 +2187,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gKF-i7-uYz">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gKF-i7-uYz">
                                         <rect key="frame" x="3" y="155" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Atk EV" id="Gxb-ZN-1li">
                                             <font key="font" metaFont="miniSystem"/>
@@ -2153,7 +2195,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rbz-kR-kb0">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rbz-kR-kb0">
                                         <rect key="frame" x="3" y="125" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Def EV" id="dsc-fe-2s0">
                                             <font key="font" metaFont="miniSystem"/>
@@ -2161,7 +2203,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OVv-Pn-nHU">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OVv-Pn-nHU">
                                         <rect key="frame" x="3" y="95" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sp.Atk EV" id="uPl-km-WA0">
                                             <font key="font" metaFont="miniSystem"/>
@@ -2169,7 +2211,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="55d-1o-JEl">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="55d-1o-JEl">
                                         <rect key="frame" x="3" y="65" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sp. Def EV" id="tA7-KU-EEV">
                                             <font key="font" metaFont="miniSystem"/>
@@ -2177,7 +2219,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fwv-5p-sTX">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fwv-5p-sTX">
                                         <rect key="frame" x="3" y="35" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Speed EV" id="uQC-eP-38L">
                                             <font key="font" metaFont="miniSystem"/>
@@ -2185,7 +2227,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hxM-It-MI3">
+                                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hxM-It-MI3">
                                         <rect key="frame" x="55" y="185" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="w8g-vR-dH9">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="7IB-sV-yZq"/>
@@ -2197,7 +2239,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setHPEV:" target="7OK-Av-0ny" id="MBY-8b-HNA"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LEc-cT-Sbh">
+                                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LEc-cT-Sbh">
                                         <rect key="frame" x="55" y="155" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="jB8-ls-988">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="BQy-1s-j3I"/>
@@ -2209,7 +2251,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setAtkEV:" target="7OK-Av-0ny" id="gtE-jT-QAU"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MFY-0b-ut0">
+                                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MFY-0b-ut0">
                                         <rect key="frame" x="55" y="125" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iLh-zU-fr2">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="SAA-oB-yyr"/>
@@ -2221,7 +2263,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setDefEV:" target="7OK-Av-0ny" id="XJk-Ho-Cua"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bk7-jA-cY3">
+                                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bk7-jA-cY3">
                                         <rect key="frame" x="55" y="95" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iLk-zF-jVh">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="U6O-Ti-cz0"/>
@@ -2233,7 +2275,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setSpAtkEV:" target="7OK-Av-0ny" id="0jg-7x-bjg"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JR9-3J-ED9">
+                                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JR9-3J-ED9">
                                         <rect key="frame" x="55" y="35" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iOb-If-5dt">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="K27-E3-zDw"/>
@@ -2245,7 +2287,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setSpeedEV:" target="7OK-Av-0ny" id="jTn-cA-HwJ"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="my5-CB-ilz">
+                                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="my5-CB-ilz">
                                         <rect key="frame" x="55" y="65" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="EQ3-6Z-g5g">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="TLl-dp-5KO"/>
@@ -2349,7 +2391,7 @@ Twitter: @StarsMmd</string>
                                             <constraint firstAttribute="height" constant="30" id="SN3-xc-NF7"/>
                                         </constraints>
                                     </customView>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NAs-58-DK2">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NAs-58-DK2">
                                         <rect key="frame" x="51" y="190" width="104" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="9q8-xL-TWY"/>
@@ -2385,7 +2427,7 @@ Twitter: @StarsMmd</string>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="jco-O6-TUi" customClass="GoDContainerView" customModule="GoDToolOSX" customModuleProvider="target">
                                 <rect key="frame" x="535" y="55" width="110" height="220"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UdZ-3o-7SO">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UdZ-3o-7SO">
                                         <rect key="frame" x="8" y="180" width="54" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="50" id="9Vg-jw-Xll"/>
@@ -2397,7 +2439,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bJA-NG-y8c">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bJA-NG-y8c">
                                         <rect key="frame" x="8" y="140" width="54" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="D9P-6Z-g5N"/>
@@ -2409,7 +2451,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XEH-7q-YKN">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XEH-7q-YKN">
                                         <rect key="frame" x="8" y="100" width="54" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="50" id="0FV-71-mSZ"/>
@@ -2421,7 +2463,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v4M-vf-qf2">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v4M-vf-qf2">
                                         <rect key="frame" x="8" y="60" width="54" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="50" id="awd-GI-geR"/>
@@ -2433,7 +2475,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qNl-FQ-3JI">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qNl-FQ-3JI">
                                         <rect key="frame" x="8" y="20" width="54" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="0Bs-BJ-GKQ"/>
@@ -2445,7 +2487,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5bv-7S-Wb1">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5bv-7S-Wb1">
                                         <rect key="frame" x="65" y="180" width="40" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" drawsBackground="YES" id="BWM-3D-Nqu">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="MTM-ug-LRt"/>
@@ -2457,7 +2499,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setCatchRate:" target="7OK-Av-0ny" id="r3Z-pt-XAB"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RR3-qO-WC1">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RR3-qO-WC1">
                                         <rect key="frame" x="65" y="140" width="40" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" drawsBackground="YES" id="zyS-JK-CQg">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="PlN-M0-eI3"/>
@@ -2469,7 +2511,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setHappiness:" target="7OK-Av-0ny" id="Y6Z-d9-mzN"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DWr-Mj-Kg1">
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DWr-Mj-Kg1">
                                         <rect key="frame" x="65" y="100" width="40" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" drawsBackground="YES" id="EbL-pQ-srS">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="yj1-a3-p1J"/>
@@ -2646,23 +2688,186 @@ Twitter: @StarsMmd</string>
             </objects>
             <point key="canvasLocation" x="701" y="603"/>
         </scene>
-        <!--View Controller-->
+        <!--Shadow Pokemon Editor-->
         <scene sceneID="Leb-XN-t4x">
             <objects>
-                <viewController id="GMZ-cQ-xq6" sceneMemberID="viewController">
+                <viewController title="Shadow Pokemon Editor" id="GMZ-cQ-xq6" customClass="GoDShadowPokemonViewController" customModule="GoDToolOSX" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="h4r-kK-EGH">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <rect key="frame" x="0.0" y="0.0" width="560" height="330"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H6t-Yz-prK">
+                                <rect key="frame" x="0.0" y="0.0" width="200" height="330"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="PHe-YJ-4ha"/>
+                                </constraints>
+                            </customView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="fL5-8D-Jgv" customClass="GoDShadowPokemonView" customModule="GoDToolOSX" customModuleProvider="target">
+                                <rect key="frame" x="215" y="40" width="330" height="280"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="330" id="10J-8e-Cyv"/>
+                                    <constraint firstAttribute="height" constant="280" id="mpd-lB-ncx"/>
+                                </constraints>
+                            </customView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qNh-bq-YKz">
+                                <rect key="frame" x="334" y="2" width="92" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="Ig9-kc-a36"/>
+                                    <constraint firstAttribute="width" constant="80" id="ak7-bb-yPL"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zbJ-fz-nx9">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent">s</string>
+                                    <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="save:" target="GMZ-cQ-xq6" id="n7N-oa-crx"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="qNh-bq-YKz" firstAttribute="top" secondItem="fL5-8D-Jgv" secondAttribute="bottom" constant="10" id="COu-fU-UWk"/>
+                            <constraint firstAttribute="bottom" secondItem="H6t-Yz-prK" secondAttribute="bottom" id="Dtr-Q6-aHv"/>
+                            <constraint firstItem="H6t-Yz-prK" firstAttribute="top" secondItem="h4r-kK-EGH" secondAttribute="top" id="Kef-AQ-abF"/>
+                            <constraint firstItem="fL5-8D-Jgv" firstAttribute="leading" secondItem="H6t-Yz-prK" secondAttribute="trailing" constant="15" id="P1F-4q-9IK"/>
+                            <constraint firstItem="H6t-Yz-prK" firstAttribute="leading" secondItem="h4r-kK-EGH" secondAttribute="leading" id="dA5-IU-nav"/>
+                            <constraint firstItem="fL5-8D-Jgv" firstAttribute="top" secondItem="h4r-kK-EGH" secondAttribute="top" constant="10" id="ges-DY-ejl"/>
+                            <constraint firstItem="qNh-bq-YKz" firstAttribute="centerX" secondItem="fL5-8D-Jgv" secondAttribute="centerX" id="zdl-hh-HsH"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="pokemonView" destination="fL5-8D-Jgv" id="p3o-iI-S5D"/>
+                    </connections>
                 </viewController>
                 <customObject id="UUE-Hm-i0Y" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-1026" y="1294"/>
+        </scene>
+        <!--Gift Pokemon Editor-->
+        <scene sceneID="m8T-yW-RfH">
+            <objects>
+                <viewController title="Gift Pokemon Editor" id="ggV-ux-Xw2" customClass="GoDGiftViewController" customModule="GoDToolOSX" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="Tw2-ma-Ii5">
+                        <rect key="frame" x="0.0" y="0.0" width="560" height="330"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cf7-hR-wGd">
+                                <rect key="frame" x="0.0" y="0.0" width="200" height="330"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="1YU-Db-YkH"/>
+                                </constraints>
+                            </customView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="MAt-xW-M9s" customClass="GoDGiftPokemonView" customModule="GoDToolOSX" customModuleProvider="target">
+                                <rect key="frame" x="215" y="40" width="330" height="280"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="280" id="W36-we-Svg"/>
+                                    <constraint firstAttribute="width" constant="330" id="Yew-Fu-I0z"/>
+                                </constraints>
+                            </customView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zc5-8x-ZJf">
+                                <rect key="frame" x="334" y="2" width="92" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="NdA-wy-2sV"/>
+                                    <constraint firstAttribute="width" constant="80" id="hX8-2G-CuP"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="i7Z-Cr-tKO">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent">s</string>
+                                    <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="save:" target="ggV-ux-Xw2" id="4GX-bE-Oa5"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="MAt-xW-M9s" firstAttribute="leading" secondItem="Cf7-hR-wGd" secondAttribute="trailing" constant="15" id="3C4-Uj-Ugp"/>
+                            <constraint firstItem="zc5-8x-ZJf" firstAttribute="centerX" secondItem="MAt-xW-M9s" secondAttribute="centerX" id="Dj6-DK-TRl"/>
+                            <constraint firstItem="Cf7-hR-wGd" firstAttribute="top" secondItem="Tw2-ma-Ii5" secondAttribute="top" id="R7a-ZN-Jj2"/>
+                            <constraint firstAttribute="bottom" secondItem="Cf7-hR-wGd" secondAttribute="bottom" id="XNT-JX-W5K"/>
+                            <constraint firstItem="zc5-8x-ZJf" firstAttribute="top" secondItem="MAt-xW-M9s" secondAttribute="bottom" constant="10" id="tKl-Jd-ETa"/>
+                            <constraint firstItem="MAt-xW-M9s" firstAttribute="top" secondItem="Tw2-ma-Ii5" secondAttribute="top" constant="10" id="tZP-Bz-K6D"/>
+                            <constraint firstItem="Cf7-hR-wGd" firstAttribute="leading" secondItem="Tw2-ma-Ii5" secondAttribute="leading" id="ubo-MQ-bL7"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="pokemonView" destination="MAt-xW-M9s" id="wIh-1R-fmi"/>
+                    </connections>
+                </viewController>
+                <customObject id="q9h-ur-ImT" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1897" y="1205"/>
+        </scene>
+        <!--Script Viewer-->
+        <scene sceneID="ywa-Zi-hCR">
+            <objects>
+                <viewController title="Script Viewer" showSeguePresentationStyle="single" id="fdm-8h-awW" customClass="GoDScriptViewController" customModule="GoDToolOSX" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" autoresizesSubviews="NO" id="q3B-ue-dTD">
+                        <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <scrollView wantsLayer="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xd2-NL-rzr">
+                                <rect key="frame" x="200" y="0.0" width="440" height="460"/>
+                                <clipView key="contentView" id="G44-Rg-vbY">
+                                    <rect key="frame" x="1" y="1" width="438" height="458"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" incrementalSearchingEnabled="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" textReplacement="YES" id="H5U-ch-V3F">
+                                            <rect key="frame" x="0.0" y="0.0" width="438" height="458"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <size key="minSize" width="438" height="458"/>
+                                            <size key="maxSize" width="6198" height="10000000"/>
+                                            <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        </textView>
+                                    </subviews>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="qPN-Rz-oYa">
+                                    <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="7mU-Zd-M5i">
+                                    <rect key="frame" x="423" y="1" width="16" height="458"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Je8-rV-1tu">
+                                <rect key="frame" x="198" y="460" width="444" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="F4O-aq-XZI"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Script Text" id="JIS-gk-GbL">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="xd2-NL-rzr" firstAttribute="leading" secondItem="q3B-ue-dTD" secondAttribute="leading" constant="200" id="9qM-Xl-lMX"/>
+                            <constraint firstItem="Je8-rV-1tu" firstAttribute="trailing" secondItem="xd2-NL-rzr" secondAttribute="trailing" id="FUl-vg-oU1"/>
+                            <constraint firstItem="Je8-rV-1tu" firstAttribute="leading" secondItem="xd2-NL-rzr" secondAttribute="leading" id="Lje-DF-P6J"/>
+                            <constraint firstAttribute="bottom" secondItem="xd2-NL-rzr" secondAttribute="bottom" id="YOV-QB-okH"/>
+                            <constraint firstItem="xd2-NL-rzr" firstAttribute="top" secondItem="Je8-rV-1tu" secondAttribute="bottom" id="hDd-O0-jbM"/>
+                            <constraint firstAttribute="trailing" secondItem="xd2-NL-rzr" secondAttribute="trailing" id="kRf-4C-MIt"/>
+                            <constraint firstItem="Je8-rV-1tu" firstAttribute="top" secondItem="q3B-ue-dTD" secondAttribute="top" id="qXt-5I-B14"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="scriptView" destination="H5U-ch-V3F" id="QrX-ZK-qiO"/>
+                    </connections>
+                </viewController>
+                <customObject id="V00-VV-w2l" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2067" y="654"/>
         </scene>
     </scenes>
     <resources>
         <image name="ball grey" width="500" height="500"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NaH-4i-fmB"/>
+        <segue reference="PCr-YY-Lid"/>
     </inferredMetricsTieBreakers>
 </document>

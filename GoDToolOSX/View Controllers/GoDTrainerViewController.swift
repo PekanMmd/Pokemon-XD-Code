@@ -64,6 +64,8 @@ class GoDTrainerViewController: GoDTableViewController {
 		
 		self.saveButton = GoDButton(title: "Save", colour: GoDDesign.colourGrey(), textColour: GoDDesign.colourLightBlack(), buttonType: NSButtonType.momentaryPushIn, target: self, action: #selector(save))
 		
+		self.saveButton.keyEquivalent = "⌘S"
+		
 		self.layoutViews()
 	}
 	
@@ -128,6 +130,11 @@ class GoDTrainerViewController: GoDTableViewController {
 		let trainer = trainers[row]
 		cell.setTitle("\(trainer.index): " + trainer.name.replacingOccurrences(of: "[07]{00}", with: "") + "\n" + trainer.location)
 		cell.setImage(image: trainer.trainerModel.image)
+		
+		if trainer.trainerModel == XGTrainerModels.noTrainer {
+			let face = XGTrainer(index: trainer.index, deck: trainer.deck).pokemon[0].data.species.face
+			cell.setImage(image: face)
+		}
 		
 		var colour = GoDDesign.colourWhite()
 		switch trainer.deck {

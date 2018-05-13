@@ -55,3 +55,16 @@ func getStringSafelyWithID(id: Int) -> XGString {
 	}
 	return XGString(string: "-", file: nil, sid: nil)
 }
+
+func getStringsContaining(substring: String) -> [XGString] {
+	loadAllStrings()
+	
+	var found = [XGString]()
+	for str in allStrings where str.containsSubstring(substring) {
+		found.append(str)
+	}
+	return found
+}
+
+
+

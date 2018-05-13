@@ -10,6 +10,8 @@ import Foundation
 
 let kNumberOfTrainerModels = 0x44
 
+let kFirstTrainerPKXIdentifierOffset = 0x409e88 // in start.dol
+
 enum XGTrainerModels : Int, XGDictionaryRepresentable {
 	
 	case none						= 0x00
@@ -90,6 +92,25 @@ enum XGTrainerModels : Int, XGDictionaryRepresentable {
 	case greevil2					= 0x41
 	case michael3WithSnagMachine	= 0x42
 	case michael3WithoutSnagMachine	= 0x43
+	
+	var pkxModelIdentifier : UInt32 {
+		let dol = XGFiles.dol.data
+		return dol.get4BytesAtOffset(kFirstTrainerPKXIdentifierOffset + (self.rawValue * 8) + kModelDictionaryModelOffset)
+	}
+	
+	var pkxFSYS : XGFsys? {
+		return XGISO().getPKXModelWithIdentifier(id: self.pkxModelIdentifier)
+	}
+	
+	var pkxData : XGMutableData? {
+		let fsys = self.pkxFSYS
+		
+		if fsys != nil {
+			return fsys!.decompressedDataForFileWithIndex(index: 0)
+		}
+		
+		return nil
+	}
 	
 	var name : String {
 		get {

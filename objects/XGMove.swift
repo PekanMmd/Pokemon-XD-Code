@@ -37,6 +37,8 @@ let kMoveDescriptionIDOffset	= 0x2E
 let kAnimationIndexOffset		= 0x1E
 let kAnimation2IndexOffset		= 0x32
 
+let kMoveEffectTypeOffset		= 0x34 // used by AI
+
 let kMoveDisplaysTypeMatchupInSummaryScreenFlagOffset = 0x15
 
 class XGMove: NSObject, XGDictionaryRepresentable {
@@ -58,6 +60,8 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 	var type			= XGMoveTypes.normal
 	var target			= XGMoveTargets.selectedTarget
 	var category		= XGMoveCategories.none
+	
+	var effectType		= XGMoveEffectTypes.none
 	
 	var contactFlag		= false
 	var protectFlag		= false
@@ -127,6 +131,8 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		let p			   = rel.getByteAtOffset(startOffset + kPriorityOffset)
 		self.priority	   = p > 128 ? p - 256 : p
 		
+		self.effectType	   = XGMoveEffectTypes(rawValue: rel.getByteAtOffset(startOffset + kMoveEffectTypeOffset)) ?? .unknown
+		
 	}
 
 	func save() {
@@ -172,6 +178,8 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		rel.replace2BytesAtOffset(startOffset + kAnimation2IndexOffset, withBytes: self.animation2ID)
 		
 		rel.replaceByteAtOffset(startOffset + kMoveDisplaysTypeMatchupInSummaryScreenFlagOffset, withByte: self.displayTypeMatchupFlag)
+		
+		rel.replaceByteAtOffset(startOffset + kMoveEffectTypeOffset, withByte: self.effectType.rawValue)
 		
 		rel.save()
 		

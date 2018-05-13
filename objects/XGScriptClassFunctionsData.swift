@@ -400,6 +400,12 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,Bool)]] = [
 		
 	],
 	
+//MARK: - Sound
+	47 : [
+		("setBGM",25, 5, false), //# (int bgm id, int unk1, int unk2, int unk3) one of the params is probably volume
+	
+	],
+	
 //MARK: - Day Care
 	52 : [
 		//#------------------------------------------------------------------------------------

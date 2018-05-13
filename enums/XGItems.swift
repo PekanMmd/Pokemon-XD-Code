@@ -15,9 +15,13 @@ enum XGItems : XGDictionaryRepresentable {
 	var index : Int {
 		get {
 			switch self {
-				case .item(let i): return i
+				case .item(let i): return (i > CommonIndexes.NumberOfItems.value && i < 0x250) ? i - 150 : i
 			}
 		}
+	}
+	
+	var TMIndex : Int {
+		return self.index >= XGTMs.tm(1).item.index && self.index <= XGTMs.tm(kNumberOfTMs).item.index ? self.index - XGTMs.tm(1).item.index + 1 : -1
 	}
 	
 	var description : String {

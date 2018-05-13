@@ -20,15 +20,22 @@ class XGMapRel : XGRelocationTable {
 	
 	var characters = [XGCharacter]()
 	var warps = [XGWarpLocation]()
-	var script : XGScript!
+	var treasure = [XGTreasure]()
 	
-	override init(file: XGFiles) {
+	var roomID = 0
+	
+	var script : XGScript? {
+		let scriptFile = XGFiles.script(file.fileName.replacingOccurrences(of: ".rel", with: ".scd"))
+		return scriptFile.exists ? scriptFile.scriptData : nil
+	}
+	
+	override convenience init(file: XGFiles) {
+		self.init(file: file, checkScript: true)
+	}
+	
+	init(file: XGFiles, checkScript: Bool) {
 		super.init(file: file)
 		
-		let scriptFile = XGFiles.script(file.fileName.replacingOccurrences(of: ".rel", with: ".scd"))
-		if scriptFile.exists {
-			self.script = scriptFile.scriptData
-		}
 		
 		let firstWarp = self.getPointer(index: MapRelIndexes.FirstWarp.rawValue)
 		let numberOfWarps = self.getValueAtPointer(index: MapRelIndexes.NumberOfWarps.rawValue)
@@ -39,23 +46,38 @@ class XGMapRel : XGRelocationTable {
 		}
 		
 		warps.sort { (w1, w2) -> Bool in
-			return w1.warpType.index == w2.warpType.index ? w1.zCoordinate > w2.zCoordinate : w1.warpType.index < w2.warpType.index
+			return w1.zCoordinate > w2.zCoordinate
 		}
 		
 		for i in 0 ..< numberOfWarps {
 			warps[i].sortedIndex = i
 		}
 		
+		for i in 0 ..< CommonIndexes.NumberOfRooms.value {
+			let room = XGRoom(index: i)
+			if room.name == file.fileName.removeFileExtensions() {
+				self.roomID = room.roomID
+			}
+		}
+		
+		for i in 0 ..< CommonIndexes.NumberTreasureBoxes.value {
+			let treasure = XGTreasure(index: i)
+			if treasure.roomID == self.roomID {
+				self.treasure.append(treasure)
+			}
+		}
+		
 		let firstCharacter = self.getPointer(index: MapRelIndexes.FirstCharacter.rawValue)
 		let numberOfCharacters = self.getValueAtPointer(index: MapRelIndexes.NumberOfCharacters.rawValue)
 		
+		let script = checkScript ? self.script : nil
 		for i in 0 ..< numberOfCharacters {
 			let character = XGCharacter(file: file, index: i, startOffset: firstCharacter + (i * kSizeOfCharacter))
 			
 			if character.hasScript {
-				if self.script != nil {
-					if character.scriptIndex < script.ftbl.count {
-						character.scriptName = script.ftbl[character.scriptIndex].name
+				if script != nil {
+					if character.scriptIndex < script!.ftbl.count {
+						character.scriptName = script!.ftbl[character.scriptIndex].name
 					}
 				}
 			}
@@ -72,6 +94,7 @@ enum CommonIndexes : Int {
 	case NumberOfBingoCards = 1
 	case PeopleIDs = 2 // 2 bytes at offset 0 person id 4 bytes at offset 4 string id for character name
 	case NumberOfPeopleIDs = 3
+	case numberOfPokespots = 11
 	case PokespotRock = 12
 	case PokespotRockEntries = 13
 	case PokespotOasis = 15
@@ -88,8 +111,8 @@ enum CommonIndexes : Int {
 	case NumberOfRooms = 59
 	case Warps = 62
 	case NumberOfWarps = 63
-	case UnknownWarpData = 66 // 0x1c bytes each
-	case NumberOfUnknownWarpData = 67
+	case TreasureBoxData = 66 // 0x1c bytes each
+	case NumberTreasureBoxes = 67
 	case ValidItems = 68 // list of items which are actually available in XD
 	case TotalNumberOfItems = 69
 	case Items = 70
@@ -112,8 +135,16 @@ enum CommonIndexes : Int {
 		return common.getPointer(index: self.rawValue)
 	}
 	
+	func setStartOffset(_ offset: Int) {
+		common.replacePointer(index: self.rawValue, newAbsoluteOffset: offset)
+	}
+	
 	var value : Int {
 		return common.getValueAtPointer(index: self.rawValue)
+	}
+	
+	func setValue(_ value: Int) {
+		common.setValueAtPointer(index: self.rawValue, newValue: value)
 	}
 }
 
@@ -150,6 +181,7 @@ class XGPocket : XGRelocationTable {
 		super.init(file: XGFiles.pocket_menu)
 	}
 }
+
 
 let kCommonRELDataStartOffsetLocation = 0x6c
 let kRELDataStartOffsetLocation = 0x64
@@ -195,6 +227,12 @@ class XGRelocationTable: NSObject {
 	func getValueAtPointer(index: Int) -> Int {
 		let startOffset = getPointer(index: index)
 		return Int(data.get4BytesAtOffset(startOffset))
+	}
+	
+	func setValueAtPointer(index: Int, newValue value: Int) {
+		let startOffset = getPointer(index: index)
+		data.replace4BytesAtOffset(startOffset, withBytes: UInt32(value))
+		data.save()
 	}
 	
 	func replacePointer(index: Int, newAbsoluteOffset newOffset: Int) {

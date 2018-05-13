@@ -470,6 +470,21 @@ class XGISO: NSObject {
 		
 	}
 	
+	func getPKXModelWithIdentifier(id: UInt32) -> XGFsys? {
+		for file in self.allFileNames where file.contains("pkx") {
+			let start = self.locationForFile(file)!
+			
+			let details = self.data.get4BytesAtOffset(start + 0x60) // first fsys file details pointer
+			let identifier = self.data.get4BytesAtOffset(start + Int(details))
+			
+			if identifier == id {
+				return self.dataForFile(filename: file)!.fsysData
+			}
+			
+		}
+		return nil
+	}
+	
 	var autoFsysList : [String] {
 		return [
 			"D1_labo_1F.fsys",
@@ -745,7 +760,7 @@ class XGISO: NSObject {
 	
 	func extractDecks() {
 		let deck = XGFiles.fsys("deck_archive.fsys").fsysData
-		let deckFiles : [XGFiles] = [.deck(.DeckColosseum), .deck(.DeckDarkPokemon), .deck(.DeckHundred), .deck(.DeckStory), .deck(.DeckVirtual)]
+		let deckFiles : [XGFiles] = [.deck(.DeckColosseum), .deck(.DeckDarkPokemon), .deck(.DeckHundred), .deck(.DeckStory), .deck(.DeckVirtual), .deck(.DeckImasugu), .deck(.DeckSample), .deck(.DeckBingo)]
 		
 		if !deckFiles[0].exists {
 			let deckFile = deck.decompressedDataForFileWithIndex(index: 2)!
@@ -774,6 +789,24 @@ class XGISO: NSObject {
 		if !deckFiles[4].exists {
 			let deckFile = deck.decompressedDataForFileWithIndex(index: 14)!
 			deckFile.file = deckFiles[4]
+			deckFile.save()
+		}
+		
+		if !deckFiles[5].exists {
+			let deckFile = deck.decompressedDataForFileWithIndex(index: 8)!
+			deckFile.file = deckFiles[5]
+			deckFile.save()
+		}
+		
+		if !deckFiles[6].exists {
+			let deckFile = deck.decompressedDataForFileWithIndex(index: 10)!
+			deckFile.file = deckFiles[6]
+			deckFile.save()
+		}
+		
+		if !deckFiles[7].exists {
+			let deckFile = deck.decompressedDataForFileWithIndex(index: 0)!
+			deckFile.file = deckFiles[7]
 			deckFile.save()
 		}
 		

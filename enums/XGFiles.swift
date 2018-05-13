@@ -268,6 +268,25 @@ indirect enum XGFiles {
 		return .nameAndFolder(self.fileName + ".lzss", .LZSS)
 	}
 	
+	func compileMapFsys(allowShift shift: Bool) {
+		let baseName = self.fileName.removeFileExtensions()
+		let fsys = XGFiles.nameAndFolder(baseName + ".fsys", .AutoFSYS).fsysData
+		let rel = XGFiles.rel(baseName + ".rel").compress()
+		let scd = XGFiles.script(baseName + ".scd").compress()
+		let msg = XGFiles.stringTable(baseName + ".msg").compress()
+		
+		if shift {
+			fsys.shiftAndReplaceFileWithIndex(0, withFile: rel)
+			fsys.shiftAndReplaceFileWithIndex(1, withFile: scd)
+			fsys.shiftAndReplaceFileWithIndex(2, withFile: msg)
+		} else {
+			fsys.replaceFileWithIndex(0, withFile: rel, saveWhenDone: false)
+			fsys.replaceFileWithIndex(1, withFile: scd, saveWhenDone: false)
+			fsys.replaceFileWithIndex(2, withFile: msg, saveWhenDone: false)
+			fsys.save()
+		}
+	}
+	
 }
 
 

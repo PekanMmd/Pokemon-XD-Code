@@ -110,6 +110,7 @@ class XDRHomeViewController: GoDViewController {
 					}
 					
 					pokemon.species = XGPokemon.random()
+					pokemon.shadowCatchRate = pokemon.species.catchRate
 					pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
 					pokemon.happiness = 128
 					pokemon.save()
@@ -157,6 +158,14 @@ class XDRHomeViewController: GoDViewController {
 					pokemon.save()
 				}
 				
+			}
+			
+			if XGPokeSpots.all.numberOfEntries() > 2 {
+				for i in 2 ..< XGPokeSpots.all.numberOfEntries() {
+					let pokemon = XGPokeSpotPokemon(index: i, pokespot: .all)
+					pokemon.pokemon = XGPokemon.random()
+					pokemon.save()
+				}
 			}
 			
 			self.hideActivityView()

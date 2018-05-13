@@ -20,6 +20,7 @@ class GoDMovesViewController: GoDTableViewController {
 	@IBOutlet var category: GoDCategoryPopUpButton!
 	@IBOutlet var targets: GoDTargetsPopUpButton!
 	@IBOutlet var animation: GoDOriginalMovesPopUpButton!
+	@IBOutlet var effectType: GoDMoveEffectTypesPopUpButton!
 	
 	@IBOutlet var descID: NSTextField!
 	@IBOutlet var desc: NSTextField!
@@ -97,6 +98,7 @@ class GoDMovesViewController: GoDTableViewController {
 		self.type.selectType(type: currentMove.type)
 		self.targets.selectTarget(target: currentMove.target)
 		self.category.selectCategory(category: currentMove.category)
+		self.effectType.selectType(type: currentMove.effectType)
 		
 		self.contact.state = currentMove.contactFlag ? NSOnState : NSOffState
 		self.mirror.state = currentMove.mirrorMoveFlag ? NSOnState : NSOffState
@@ -208,6 +210,13 @@ class GoDMovesViewController: GoDTableViewController {
 		
 		self.currentMove.target = value
 	}
+	
+	@IBAction func newEffectType(_ sender: GoDMoveEffectTypesPopUpButton) {
+		let value = sender.selectedValue
+		
+		self.currentMove.effectType = value
+	}
+	
 	
 	@IBAction func newAnimation(_ sender: GoDOriginalMovesPopUpButton) {
 		let value = sender.indexOfSelectedItem

@@ -40,7 +40,7 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 	var trainerClass		= XGTrainerClasses.michael1
 	var trainerModel		= XGTrainerModels.michael1WithoutSnagMachine
 	var AI					= 0
-	var cameraEffects		= 0 // some models have unique animations at the start of battle which require special cameras
+	var cameraEffects		= 0 // some models have unique animations at the start of battle which require special camera movements
 	
 	var locationString : String {
 		get {

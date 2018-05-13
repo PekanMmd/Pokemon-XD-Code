@@ -28,21 +28,21 @@ let kPokemonGenRandomOffset = 0x1F // If value is set to 1 then the pokemon is g
 let kPokemonshinynessOffset = 0x1C
 let kPokemonPriority2Offset	= 0x1F
 
+let isShinyAvailable = XGFiles.dol.data.get4BytesAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference) == 0xa0db001c
+
 let kSizeOfShadowData		= 0x18
 
 let kFleeAfterBattleOffset	= 0x00 // 0 = no flee. Other values probably chances of finding with mirorb. Higher value = more common encounter.
-let kShadowCatchRateOFfset	= 0x01
-let kShadowLevelOffset		= 0x02
-let kShadowInUseFlagOffset	= 0x03
-let kShadowStoryIndexOffset	= 0x06
-let kShadowCounterOffset	= 0x08
+let kShadowCatchRateOFfset	= 0x01 // this catch rate overrides the species' catch rate
+let kShadowLevelOffset		= 0x02 // the pokemon's level after it's caught. Regular level can be increased so AI shadows are stronger
+let kShadowInUseFlagOffset	= 0x03 // mask checked to see whether this entry is included in shadow pokemon count (default 0x80)
+let kShadowStoryIndexOffset	= 0x06 // dpkm index of pokemon data in deck story
+let kShadowCounterOffset	= 0x08 // the starting value of the heart gauge
 let kFirstShadowMoveOFfset	= 0x0C
 let kShadowAggressionOffset	= 0x14 // determines how often it enters reverse mode
 let kShadowAlwaysFleeOffset	= 0x15 // the shadow pokemon is sent to miror b. even if you lose the battle
 
 let kPurificationExperienceOffset = 0xA // Should always be 0. The value gets increased as the pokemon gains exp and it is all gained at once upon purification.
-
-let isShinyAvailable = XGFiles.dol.data.get4BytesAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference) == 0xa0db001c
 
 class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 	
@@ -56,7 +56,7 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 	var nature		= XGNatures.hardy
 	var gender		= XGGenders.male
 	var IVs			= 0x0 // All IVs will be the same. Not much point in varying them.
-	var EVs			= [Int]()
+	var EVs			= [0,0,0,0,0,0]
 	var moves		= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
 	
 	var shadowCatchRate = 0x0
