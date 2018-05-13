@@ -23,7 +23,7 @@ class GoDAlertViewController: GoDViewController {
 		
 		self.textLabel.alignment = .center
 		self.textLabel.sizeToFit()
-		let width = Float(self.textLabel.frame.width)
+		let width = min(Float(self.textLabel.frame.width), 100)
 		self.addSubview(textLabel, name: "l")
 		self.addConstraintAlignAllEdges(view1: self.view, view2: textLabel)
 		self.addConstraintWidth(view: self.textLabel, width: NSNumber(value: width))
