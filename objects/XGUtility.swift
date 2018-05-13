@@ -863,11 +863,11 @@ class XGUtility {
 					if mon.moves.contains(where: { (m) -> Bool in
 						return m.index == search.index
 					}) {
-						printg(trainer.name, trainer.locationString)
+						printg(trainer.index,trainer.name, trainer.locationString)
 					} else if mon.shadowMoves.contains(where: { (m) -> Bool in
 						return m.index == search.index
 					}) {
-						printg(trainer.name, trainer.locationString)
+						printg(trainer.index,trainer.name, trainer.locationString)
 					}
 				}
 			}

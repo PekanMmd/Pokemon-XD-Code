@@ -744,9 +744,9 @@ class XGISO: NSObject {
 			tableres2.file = .tableres2
 			tableres2.save()
 		}
-		if !XGFiles.nameAndFolder("pocket_menu.fdat", .Common).exists {
+		if !XGFiles.nameAndFolder("pocket_menu.rel", .Common).exists {
 			let pocket = XGFiles.nameAndFolder("pocket_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
-			pocket.file = .nameAndFolder("pocket_menu.fdat", .Common)
+			pocket.file = .nameAndFolder("pocket_menu.rel", .Common)
 			pocket.save()
 		}
 		
