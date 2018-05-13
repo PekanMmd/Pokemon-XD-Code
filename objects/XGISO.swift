@@ -577,12 +577,6 @@ class XGISO: NSObject {
 			"M2_building_2F.fsys",
 			"M2_building_3F.fsys",
 			"M2_building_4F.fsys",
-			"M2_cave_1F_1.fsys",
-			"M2_cave_1F_2.fsys",
-			"M2_cave_2F_1.fsys",
-			"M2_cave_2F_2.fsys",
-			"M2_cave_3F_1.fsys",
-			"M2_cave_3F_2.fsys",
 			"M2_enter_1F.fsys",
 			"M2_enter_1F_2.fsys",
 			"M2_guild_1F_1.fsys",
@@ -816,7 +810,7 @@ class XGISO: NSObject {
 		
 		if region != .EU {
 			
-			for file in XGFolders.AutoFSYS.filenames {
+			for file in XGFolders.AutoFSYS.filenames where file.fileExtensions == ".fsys" {
 				let msg = file.replacingOccurrences(of: ".fsys", with: ".msg")
 				if !XGFiles.stringTable(msg).exists {
 					let fsys = XGFiles.nameAndFolder(file, .AutoFSYS).fsysData
