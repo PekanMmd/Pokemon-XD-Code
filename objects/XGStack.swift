@@ -18,6 +18,12 @@ class XGStack<T>: NSObject {
 	func pop() -> T {
 		return data.removeLast()
 	}
+	
+	var asArray : [T] {
+		let array = self.data
+		return array
+	}
+	
 }
 
 

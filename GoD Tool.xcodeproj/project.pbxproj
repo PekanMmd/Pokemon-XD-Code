@@ -4758,6 +4758,7 @@
 				B24507FF208A348E00FEC54E /* XGDeoxysFormes.swift */,
 				B2F5EBBB1F49A1FE0075C6D2 /* XGEffectivenessValues.swift */,
 				B2F5EBBC1F49A1FE0075C6D2 /* XGEvolutionMethods.swift */,
+				B2EAFF0020BDA676009FC947 /* XDSExpr.swift */,
 				B2F5EBBD1F49A1FE0075C6D2 /* XGExpRate.swift */,
 				B2F5EBBE1F49A1FE0075C6D2 /* XGFiles.swift */,
 				B2FB748E1FC0522900B6B2AE /* XGFileTypes.swift */,
@@ -4787,7 +4788,6 @@
 				B2F5EBD61F49A1FE0075C6D2 /* XGUnicodeCharacters.swift */,
 				B2F5EBD71F49A1FE0075C6D2 /* XGWeather.swift */,
 				B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */,
-				B2EAFF0020BDA676009FC947 /* XDSExpr.swift */,
 			);
 			path = enums;
 			sourceTree = "<group>";

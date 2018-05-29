@@ -7,31 +7,83 @@
 
 import Foundation
 
-typealias Variable   = String
-typealias Location   = String
-typealias ClassID    = Int
-typealias FunctionID = Int
+typealias XDSVariable   = String
+typealias XDSLocation   = String
+typealias XDSClassID    = Int
+typealias XDSFunctionID = Int
+typealias XDSOperator	= Int
+
 indirect enum XDSExpr {
 	
 	case bracket(XDSExpr)
-	case unaryOperator(XDSExpr)
-	case binaryOperator(XDSExpr, XDSExpr)
+	case unaryOperator(XDSOperator, XDSExpr)
+	case binaryOperator(XDSOperator, XDSExpr, XDSExpr)
 	case loadImmediate(XGScriptVar)
-	case loadVariable(Variable)
-	case setVariable(Variable, XDSExpr)
-	case setVector(Variable, XGScriptVar)
-	case call(Location, [XDSExpr])
-	case scriptReturn(XDSExpr)
-	case callStandard(ClassID, FunctionID, [XDSExpr])
-	case jumpTrue(XDSExpr, Location)
-	case jumpFalse(XDSExpr, Location)
-	case jump(Location)
+	case loadVariable(XDSVariable)
+	case setVariable(XDSVariable, XDSExpr)
+	case setVector(XDSVariable, XGScriptVar)
+	case call(XDSLocation, [XDSExpr])
+	case XDSReturn(XDSExpr)
+	case callStandard(XDSClassID, XDSFunctionID, [XDSExpr])
+	case jumpTrue(XDSExpr, XDSLocation)
+	case jumpFalse(XDSExpr, XDSLocation)
+	case jump(XDSLocation)
+	case loadNonCopyableVariable(XDSVariable)
 	case reserve(Int)
 	case exit
 	case setLine(Int)
-	case loadNonCopyableVariable(Variable)
 	
+	
+	
+	var text : String {
+		switch self {
+			
+		case .bracket(let e):
+			return "(" + e.text + ")"
+		case .unaryOperator(let e):
+			return ""
+		case .binaryOperator(_, _):
+			<#code#>
+		case .loadImmediate(_):
+			<#code#>
+		case .loadVariable(_):
+			<#code#>
+		case .setVariable(_, _):
+			<#code#>
+		case .setVector(_, _):
+			<#code#>
+		case .call(_, _):
+			<#code#>
+		case .scriptReturn(_):
+			<#code#>
+		case .callStandard(_, _, _):
+			<#code#>
+		case .jumpTrue(_, _):
+			<#code#>
+		case .jumpFalse(_, _):
+			<#code#>
+		case .jump(_):
+			<#code#>
+		case .reserve(_):
+			<#code#>
+		case .exit:
+			<#code#>
+		case .setLine(_):
+			<#code#>
+		case .loadNonCopyableVariable(_):
+			<#code#>
+		}
+	}
 	
 	
 }
+
+
+
+
+
+
+
+
+
 

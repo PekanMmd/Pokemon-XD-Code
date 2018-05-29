@@ -449,6 +449,17 @@ class XGScript: NSObject {
 		return stack
 	}
 	
+	func getXDSScript() -> String {
+		let stack = getInstructionStack()
+		let script = ""
+		
+		for instruction in stack.asArray {
+			
+		}
+		
+		return script
+	}
+	
 }
 
 
