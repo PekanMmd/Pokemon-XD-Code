@@ -327,6 +327,7 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		
 		deck.replaceByteAtOffset(start + kTrainerClassNameOffset , withByte: self.trainerClass.rawValue)
 		deck.replaceByteAtOffset(start + kTrainerClassModelOffset, withByte: self.trainerModel.rawValue)
+		deck.replace2BytesAtOffset(start + kStringOffset, withBytes: self.trainerStringID)
 		
 		var current = start + kFirstTrainerPokemonOffset
 		
@@ -353,6 +354,9 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		deck.save()
 	}
 	
+	func setAI(to ai: XGAI) {
+		self.AI = ai.rawValue
+	}
    
 }
 

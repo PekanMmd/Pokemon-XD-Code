@@ -51,9 +51,21 @@ class GoDSpotViewController: GoDTableViewController {
 		
 		let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
-		cell.setBackgroundImage(pokemon.type1.image)
-		cell.setTitle(pokemon.name.string)
+		let spot = rowToSpot(row: row)
+//		cell.setBackgroundImage(pokemon.type1.image)
+		cell.setTitle(pokemon.name.string + "\n" + spot.string + " Pokespot : " + pokemon.index.string)
 		cell.setImage(image: pokemon.face)
+		
+		switch spot {
+		case .rock:
+			cell.setBackgroundImage(XGMoveTypes.rock.image)
+		case .oasis:
+			cell.setBackgroundImage(XGMoveTypes.grass.image)
+		case .cave:
+			cell.setBackgroundImage(XGMoveTypes.water.image)
+		case .all:
+			cell.setBackgroundImage(XGMoveTypes.steel.image)
+		}
 		
 		cell.identifier = "cell"
 		cell.translatesAutoresizingMaskIntoConstraints = false
@@ -66,6 +78,26 @@ class GoDSpotViewController: GoDTableViewController {
 		}
 		
 		return cell
+	}
+	
+	func rowToSpot(row: Int) -> XGPokeSpots {
+		let rock = XGPokeSpots.rock.numberOfEntries()
+		let oasis = XGPokeSpots.oasis.numberOfEntries()
+		let cave = XGPokeSpots.cave.numberOfEntries()
+		
+		var index = 0
+		var spot = XGPokeSpots.all
+		
+		if row < rock {
+			spot = .rock
+		} else if row < rock + oasis {
+			spot = .oasis
+		} else if row < rock + oasis + cave {
+			spot = .cave
+		}
+		
+		return spot
+		
 	}
 	
 	func rowToMon(row: Int) -> XGPokeSpotPokemon {

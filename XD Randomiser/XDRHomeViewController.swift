@@ -118,6 +118,35 @@ class XDRHomeViewController: GoDViewController {
 				}
 			}
 			
+			// change duplicate shadow pokemon
+			for i in 1 ..< XGDecks.DeckDarkPokemon.DDPKEntries {
+				let poke = XGDeckPokemon.ddpk(i)
+				if poke.DPKMIndex > 0 {
+					
+					var duplicate = false
+					
+					repeat {
+						duplicate = false
+						
+						for j in 1 ..< i {
+							let check = XGDeckPokemon.ddpk(j)
+							if check.data.species.index == poke.data.species.index {
+								duplicate = true
+								
+								let pokemon = poke.data
+								pokemon.species = XGPokemon.random()
+								pokemon.shadowCatchRate = pokemon.species.catchRate
+								pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
+								pokemon.happiness = 128
+								pokemon.save()
+							}
+						}
+						
+					} while duplicate
+					
+				}
+			}
+			
 			var gifts : [XGGiftPokemon] = []
 			
 			gifts.append(XGStarterPokemon())
@@ -316,7 +345,7 @@ class XDRHomeViewController: GoDViewController {
 	
 	func removeTradeEvolutions() {
 		self.showActivityView { (b) in
-			self.removeTradeEvs(35)
+			self.removeTradeEvs(30)
 		}
 		
 	}

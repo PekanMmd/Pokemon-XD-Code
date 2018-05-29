@@ -200,6 +200,17 @@ class XGFsys : NSObject {
 		return index
 	}
 	
+	func indexForFileType(type: XGFileTypes) -> Int {
+		
+		for i in 0 ..< numberOfEntries {
+			if fileTypeForFile(index: i).rawValue == type.rawValue {
+				return i
+			}
+		}
+		
+		return -1
+	}
+	
 	var firstEntryDetailOffset : Int {
 		get {
 			return Int(data.get4BytesAtOffset(kFirstFileDetailsPointerOffset))
@@ -274,6 +285,15 @@ class XGFsys : NSObject {
 			return nil
 		}
 		return decompressedDataForFileWithIndex(index: index!)
+	}
+	
+	func decompressedDataForFileWithFiletype(type: XGFileTypes) -> XGMutableData? {
+		let index = indexForFileType(type: type)
+		if index < 0 || index > self.numberOfEntries {
+			printg(self.fileName + " - file type: " + type.fileExtension + " doesn't exists.")
+			return nil
+		}
+		return decompressedDataForFileWithIndex(index: index)
 	}
 	
 	func dataForFileWithIndex(index: Int) -> XGMutableData? {

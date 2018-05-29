@@ -70,6 +70,8 @@ class XGScriptVar : NSObject {
 		switch self.type {
 		case .float:
 			val = "\(self.asFloat)"
+		case .pokemon:
+			val = "\(XGPokemon.pokemon(self.asInt).name.string)"
 		default:
 			val = "\(self.asInt)"
 		}

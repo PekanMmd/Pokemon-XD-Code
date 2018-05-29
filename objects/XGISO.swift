@@ -811,12 +811,14 @@ class XGISO: NSObject {
 		if region != .EU {
 			
 			for file in XGFolders.AutoFSYS.filenames where file.fileExtensions == ".fsys" {
-				let msg = file.replacingOccurrences(of: ".fsys", with: ".msg")
-				if !XGFiles.stringTable(msg).exists {
+				let msg = XGFiles.stringTable(file.replacingOccurrences(of: ".fsys", with: ".msg"))
+				if !msg.exists {
 					let fsys = XGFiles.nameAndFolder(file, .AutoFSYS).fsysData
-					let data = fsys.decompressedDataForFileWithIndex(index: 2)!
-					data.file = .stringTable(msg)
-					data.save()
+					let data = fsys.decompressedDataForFileWithFiletype(type: .msg)
+					if let d = data {
+						d.file = msg
+						d.save()
+					}
 				}
 			}
 		}
@@ -901,9 +903,11 @@ class XGISO: NSObject {
 			let scd = XGFiles.script(file.fileName.replacingOccurrences(of: ".fsys", with: ".scd"))
 			if !scd.exists {
 				let fsys = file.fsysData
-				let data = fsys.decompressedDataForFileWithIndex(index: 1)!
-				data.file = scd
-				data.save()
+				let data = fsys.decompressedDataForFileWithFiletype(type: .scd)
+				if let d = data {
+					d.file = scd
+					d.save()
+				}
 			}
 		}
 	}
@@ -913,9 +917,25 @@ class XGISO: NSObject {
 			let rel = XGFiles.rel(file.fileName.replacingOccurrences(of: ".fsys", with: ".rel"))
 			if !rel.exists {
 				let fsys = file.fsysData
-				let data = fsys.decompressedDataForFileWithIndex(index: 0)!
-				data.file = rel
-				data.save()
+				let data = fsys.decompressedDataForFileWithFiletype(type: .rel)
+				if let d = data {
+					d.file = rel
+					d.save()
+				}
+			}
+		}
+	}
+	
+	func extractCols() {
+		for file in XGFolders.AutoFSYS.files where autoFsysList.contains(file.fileName) {
+			let col = XGFiles.col(file.fileName.replacingOccurrences(of: ".fsys", with: ".col"))
+			if !col.exists {
+				let fsys = file.fsysData
+				let data = fsys.decompressedDataForFileWithFiletype(type: .col)
+				if let d = data {
+					d.file = col
+					d.save()
+				}
 			}
 		}
 	}
@@ -976,6 +996,8 @@ class XGISO: NSObject {
 		iso.extractScripts()
 		printg("extracting: relocatable files")
 		iso.extractRels()
+		printg("extracting: collision data")
+		iso.extractCols()
 	}
 	
 }

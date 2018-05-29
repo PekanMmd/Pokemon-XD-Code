@@ -12,6 +12,18 @@ let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .use
 let region = XGRegions(rawValue: XGFiles.iso.data.get4BytesAtOffset(0)) ?? .US
 
 
+extension NSColor {
+	var vec3 : [GLfloat] {
+		return [Float(self.redComponent).gl, Float(self.greenComponent).gl, Float(self.blueComponent).gl]
+	}
+}
+
+extension Float {
+	var gl : GLfloat {
+		return GLfloat(self)
+	}
+}
+
 typealias TrainerInfo = (name:String,location:String,hasShadow: Bool,trainerModel:XGTrainerModels,index:Int,deck:XGDecks)
 extension XGTrainer {
 	var trainerInfo : TrainerInfo {

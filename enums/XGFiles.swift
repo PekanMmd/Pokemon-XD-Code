@@ -46,6 +46,7 @@ indirect enum XGFiles {
 	case script(String)
 	case texture(String)
 	case rel(String)
+	case col(String)
 	case iso
 	case toc
 	case log(Date)
@@ -70,7 +71,7 @@ indirect enum XGFiles {
 				
 				case .dol					: return "Start.dol"
 				case .common_rel			: return "common.rel"
-				case .tableres2				: return "tableres2.fdat"
+				case .tableres2				: return "tableres2.rel"
 				case .pocket_menu			: return "pocket_menu.rel"
 				case .deck(let deck)		: return deck.fileName
 				case .pokeFace(let id)		: return "face_" + String(format: "%03d", id) + ".png"
@@ -87,6 +88,7 @@ indirect enum XGFiles {
 				case .toc					: return "Game.toc"
 				case .log(let d)			: return d.description
 				case .rel(let s)			: return s
+				case .col(let s)			: return s
 				case .nameAndFolder(let name, _) : return name
 				
 			}
@@ -117,6 +119,7 @@ indirect enum XGFiles {
 				case .toc				: folder = .TOC
 				case .log				: folder = .Logs
 				case .rel				: folder = .Rels
+				case .col				: folder = .Col
 				case .original(let f)	: folder = f.folder
 				case .nameAndFolder( _, let aFolder) : folder = aFolder
 				
@@ -318,6 +321,7 @@ enum XGFolders : String {
 	case MenuFSYS			= "MenuFSYS"
 	case Logs				= "Logs"
 	case Rels				= "Relocation Tables"
+	case Col				= "Collision Data"
 	
 	var name : String {
 		get {
@@ -475,6 +479,7 @@ enum XGFolders : String {
 			.MenuFSYS,
 			.Logs,
 			.Rels,
+			.Col,
 			]
 		
 		for folder in folders {

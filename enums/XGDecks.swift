@@ -14,6 +14,27 @@ let MainDecksArray  : [XGDecks] = [.DeckStory, .DeckColosseum, .DeckHundred, .De
 
 let kOffensiveDTAI = [0x0F, 0x3A, 0x00, 0x00, 0x73, 0x73, 0x74, 0x73, 0x73, 0x74, 0x82, 0x00, 0x2C, 0x27, 0x50, 0x00, 0x50, 0x32, 0x14, 0x0A, 0x09, 0x09, 0x32, 0x32, 0x00, 0x09, 0x00, 0x09, 0x32, 0x32, 0x08, 00]
 let kDefensiveDTAI = [0x0F, 0x3A, 0x00, 0x00, 0x73, 0x73, 0x74, 0x73, 0x73, 0x74, 0x82, 0x00, 0x2C, 0x27, 0x50, 0x00, 0x50, 0x1E, 0x00, 0x0A, 0x07, 0x09, 0x4B, 0x32, 0x00, 0x03, 0x00, 0x01, 0x4B, 0x19, 0x04, 0x00]
+let kSimpleDTAI = [0x4F, 0x3E, 0x00, 0x00, 0x75, 0x75, 0x75, 0x75, 0x75, 0x75, 0x75, 0x00, 0x2B, 0x29, 0x32, 0x64, 0x32, 0x32, 0x32, 0x32, 0x09, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+let kCycleDTAI = [0x27, 0x2A, 0x00, 0x00, 0x73, 0x73, 0x74, 0x73, 0x73, 0x74, 0x82, 0x00, 0x2C, 0x27, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x09, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+
+/* Enum for different types of AI trainers can use.
+* These values aren't inherent in XD
+* they are AI data copy and pasted from different files.
+* I'm not even entirely sure how they work or what the data means.
+*
+* run addOrreColoAIOptions() on the deck to enable these options
+* otherwise they'll just be setting whichever AI happens
+* to be in that index.
+*
+*/
+
+enum XGAI : Int {
+	case none 		= 0
+	case offensive  = 1 // Copied from orre colosseum. Makes fairly smart and slightly randomised decisions.
+	case defensive  = 2 // Copied from orre colosseum. Makes fairly smart and slightly randomised decisions.
+	case simple 	= 3 // Copied from wild pokespot pokemon. Always makes the same best decision based on target in front.
+	case cycle 		= 4 // Copied from battle CDs. Uses each of the pokemon's moves in order.
+}
 
 enum XGDecks : String, XGDictionaryRepresentable {
 	
@@ -217,6 +238,32 @@ enum XGDecks : String, XGDictionaryRepresentable {
 		}
 	}
 	
+	func addPokemonEntries(count: Int) {
+		let data = self.data
+		
+		let bytesToAdd = count * kSizeOfPokemonData
+		let insertionPoint = DTAIHeaderOffset
+		data.replace4BytesAtOffset(DPKMHeaderOffset + 0x4, withBytes: UInt32(DPKMSize + bytesToAdd))
+		data.replace4BytesAtOffset(DPKMHeaderOffset + 0x8, withBytes: UInt32(DPKMEntries + count))
+		data.insertRepeatedByte(byte: 0, count: bytesToAdd, atOffset: insertionPoint)
+		data.replace4BytesAtOffset(0x4, withBytes: UInt32(data.length))
+		
+		data.save()
+	}
+	
+	func addTrainerEntries(count: Int) {
+		let data = self.data
+		
+		let bytesToAdd = count * kSizeOfTrainerData
+		let insertionPoint = DPKMHeaderOffset
+		data.replace4BytesAtOffset(DTNRHeaderOffset + 0x4, withBytes: UInt32(DTNRSize + bytesToAdd))
+		data.replace4BytesAtOffset(DTNRHeaderOffset + 0x8, withBytes: UInt32(DTNREntries + count))
+		data.insertRepeatedByte(byte: 0, count: bytesToAdd, atOffset: insertionPoint)
+		data.replace4BytesAtOffset(0x4, withBytes: UInt32(data.length))
+		
+		data.save()
+	}
+	
 	func unusedPokemon() -> XGDeckPokemon {
 		let next = nextUnusedIndexFromIndex(0)
 		return XGDeckPokemon.dpkm(next, self)
@@ -265,7 +312,7 @@ enum XGDecks : String, XGDictionaryRepresentable {
 		
 		let data = self.data
 		
-		data.replaceBytesFromOffset(DTAIDataOffset + kSizeOfAIData, withByteStream: kOffensiveDTAI + kDefensiveDTAI)
+		data.replaceBytesFromOffset(DTAIDataOffset + kSizeOfAIData, withByteStream: kOffensiveDTAI + kDefensiveDTAI + kSimpleDTAI + kCycleDTAI)
 		
 		data.save()
 	}

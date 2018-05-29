@@ -1,15 +1,16 @@
 //
-//  GoDScriptViewer.swift
-//  GoDToolOSX
+//  GoDCollisionViewController.swift
+//  GoDToolCL
 //
-//  Created by The Steez on 09/05/2018.
+//  Created by The Steez on 28/05/2018.
 //
 
 import Cocoa
 
-class GoDScriptViewController: GoDTableViewController {
+class GoDCollisionViewController: GoDTableViewController {
 	
-	@IBOutlet var scriptView: NSTextView!
+	
+	@IBOutlet var openglView: GoDOpenGLView!
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -17,16 +18,16 @@ class GoDScriptViewController: GoDTableViewController {
 		self.table.reloadData()
 	}
 	
-	var scripts : [XGFiles] {
-		return XGFolders.Scripts.files.filter({ (file) -> Bool in
-			return file.fileName.contains(".scd")
+	var cols : [XGFiles] {
+		return XGFolders.Col.files.filter({ (file) -> Bool in
+			return file.fileName.contains(".col")
 		}).sorted(by: { (f1, f2) -> Bool in
 			return f1.fileName < f2.fileName
 		})
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
-		return scripts.count == 0 ? 1 : scripts.count
+		return cols.count == 0 ? 1 : cols.count
 	}
 	
 	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -34,10 +35,10 @@ class GoDScriptViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
-		if scripts.count > 0 {
-			if self.scripts[row].exists {
-				self.scriptView.string = scripts[row].scriptData.description
-				self.scriptView.scrollToBeginningOfDocument(nil)
+		if cols.count > 0 {
+			if self.cols[row].exists {
+				self.openglView.file = self.cols[row]
+				self.openglView.render()
 			}
 			self.table.reloadData()
 		} else {
@@ -52,15 +53,15 @@ class GoDScriptViewController: GoDTableViewController {
 		cell.identifier = "cell"
 		cell.titleField.maximumNumberOfLines = 2
 		
-		if scripts.count == 0 {
+		if cols.count == 0 {
 			
 			cell.setBackgroundColour(GoDDesign.colourWhite())
-			cell.setTitle("No scripts found in Scripts folder.\nExtract ISO and try again.")
+			cell.setTitle("No .col files found in collision data folder.\nExtract ISO and try again.")
 			
 			return cell
 		}
 		
-		let str = scripts[row].fileName
+		let str = cols[row].fileName
 		let index2 = str.index(str.startIndex, offsetBy: 2)
 		let prefix = str.substring(to: index2)
 		
@@ -68,7 +69,7 @@ class GoDScriptViewController: GoDTableViewController {
 		
 		if map == nil {
 			cell.setBackgroundColour(GoDDesign.colourWhite())
-			cell.setTitle(scripts[row].fileName)
+			cell.setTitle(cols[row].fileName)
 		} else {
 			var colour = GoDDesign.colourWhite()
 			
@@ -111,7 +112,7 @@ class GoDScriptViewController: GoDTableViewController {
 			
 			cell.setBackgroundColour(colour)
 			
-			cell.setTitle(scripts[row].fileName + "\n" + map!.name)
+			cell.setTitle(cols[row].fileName + "\n" + map!.name)
 			
 			if self.table.selectedRow == row {
 				cell.setBackgroundColour(GoDDesign.colourOrange())
@@ -121,4 +122,47 @@ class GoDScriptViewController: GoDTableViewController {
 		
 		return cell
 	}
+	
+	override func keyDown(with event: NSEvent) {
+		if let view = self.openglView {
+			printg("pressed key:", event.keyCode)
+			if let keyName = KeyCodeName(rawValue: event.keyCode) {
+				if view.dictionaryOfKeys[keyName] != true {
+					view.dictionaryOfKeys[keyName] = true
+				}
+			}
+		} else { super.keyDown(with: event) }
+	}
+	
+	override func keyUp(with event: NSEvent) {
+		if let view = self.openglView {
+			if let keyName = KeyCodeName(rawValue: event.keyCode) {
+				view.dictionaryOfKeys[keyName] = false
+			}
+		} else { super.keyUp(with: event) }
+	}
+	
+	override func mouseDragged(with event: NSEvent) {
+		if let view = self.openglView {
+			view.mouseEvent(deltaX: Float(event.deltaX), deltaY: Float(event.deltaY))
+		}
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

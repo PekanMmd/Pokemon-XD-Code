@@ -13,6 +13,7 @@ enum XGResources {
 	case JSON(String)
 	case png(String)
 	case bin(String)
+	case shader(String)
 	case nameAndFileType(String, String)
 	
 	var path : String {
@@ -27,6 +28,7 @@ enum XGResources {
 				case .JSON(let name)							: return name
 				case .png(let name)								: return name
 				case .bin(let name)								: return name
+				case .shader(let name)							: return name
 				case .nameAndFileType(let name, _)	: return name
 			}
 		}
@@ -38,6 +40,7 @@ enum XGResources {
 				case .JSON									: return ".json"
 				case .png									: return ".png"
 				case .bin									: return ".bin"
+				case .shader								: return ".glsl"
 				case .nameAndFileType( _, let filetype)		: return filetype
 			}
 		}

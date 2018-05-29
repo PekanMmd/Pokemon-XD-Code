@@ -25,6 +25,11 @@ class XGRoom: NSObject {
 		return (ids as! [String : String])[roomID.hexString()] ?? "-"
 	}
 	
+	var map : XGMaps {
+		let id = self.name.substring(from: 0, to: 2)
+		return XGMaps(rawValue: id) ?? .Unknown
+	}
+	
 	var roomID = 0
 	
 	var index = 0

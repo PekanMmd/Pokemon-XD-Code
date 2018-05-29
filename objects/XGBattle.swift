@@ -25,6 +25,7 @@ enum XGBattleStyles : Int {
 	case none = 0
 	case single = 1
 	case double = 2
+	case other = 3
 	
 	var name: String {
 		switch self {
@@ -34,6 +35,8 @@ enum XGBattleStyles : Int {
 			return "single"
 		case .double:
 			return "double"
+		case .other:
+			return "other"
 		}
 	}
 	
@@ -115,7 +118,7 @@ class XGBattle: NSObject {
 		let data = XGFiles.common_rel.data
 		
 		let style = data.getByteAtOffset(startOffset + kBattleStyleOffset)
-		self.battleStyle = XGBattleStyles(rawValue: style) ?? .none
+		self.battleStyle = XGBattleStyles(rawValue: style) ?? .other
 		
 		let d = data.get2BytesAtOffset(startOffset + kBattleDeckIDOffset)
 		self.deck = XGDecks.deckWithID(d)

@@ -12,8 +12,8 @@ class GoDHomeViewController: GoDTableViewController {
 	
 	@IBOutlet var logView: NSTextView!
 	
-	let tools = ["Trainer Editor","Shadow Pokemon Editor","Pokemon Stats Editor","Move Editor","Item Editor (Incomplete)","Pokespot Editor","Gift Pokemon Editor","Patches", "Script Viewer", "Save Reference Data"]
-	let segues = ["toTrainerVC","toShadowVC","toStatsVC","toMoveVC","toItemVC","toSpotVC","toGiftVC","toPatchVC","toScriptVC"]
+	let tools = ["Trainer Editor","Shadow Pokemon Editor","Pokemon Stats Editor","Move Editor","Item Editor (Incomplete)","Pokespot Editor","Gift Pokemon Editor","Patches", "Script Viewer", "Collision Viewer","Save Reference Data"]
+	let segues = ["toTrainerVC","toShadowVC","toStatsVC","toMoveVC","toItemVC","toSpotVC","toGiftVC","toPatchVC","toScriptVC", "toCollisionVC"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +59,12 @@ class GoDHomeViewController: GoDTableViewController {
 			XGUtility.documentISO(forXG: false)
 		}
 	}
-    
+	
+	override func viewDidDisappear() {
+		super.viewDidDisappear()
+		NSApplication.shared().terminate(self)
+	}
+	
 }
 
 

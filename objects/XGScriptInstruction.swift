@@ -86,7 +86,7 @@ class XGScriptInstruction: NSObject {
 			fallthrough
 		case .setVariable:
 			fallthrough
-		case .loadAndCopyVariable:
+		case .loadNonCopyableVariable:
 			fallthrough
 		case .setLine:
 			fallthrough
@@ -120,7 +120,7 @@ class XGScriptInstruction: NSObject {
 			fallthrough
 		case .setVariable:
 			fallthrough
-		case .loadAndCopyVariable:
+		case .loadNonCopyableVariable:
 			switch self.subOpCode {
 			case 0:
 				paramString = "#GVAR[\(self.parameter)]"

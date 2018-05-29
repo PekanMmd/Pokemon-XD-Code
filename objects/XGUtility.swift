@@ -38,7 +38,7 @@ class XGUtility {
 		common.shiftAndReplaceFileWithIndex(4, withFile: .lzss("DeckData_DarkPokemon.bin.lzss"))
 		common.shiftAndReplaceFileWithIndex(0, withFile: .lzss("common.rel.lzss"))
 		
-		XGFiles.fsys("common_dvdeth.fsys").fsysData.shiftAndReplaceFileWithIndex(0, withFile: .lzss("tableres2.fdat.lzss"))
+		XGFiles.fsys("common_dvdeth.fsys").fsysData.shiftAndReplaceFileWithIndex(0, withFile: .lzss("tableres2.rel.lzss"))
 		
 		let deckArchive = XGFiles.fsys("deck_archive.fsys").fsysData
 		
@@ -86,7 +86,7 @@ class XGUtility {
 		
 		let dol = XGFiles.dol.data
 		
-		let healingItems = [13,19,20,21,22,26,27,28,29,30,31,44,139,142]
+		let healingItems = [13,19,20,21,22,26,27,28,29,30,31,32,33,44,45,139,142]
 		
 		for i in healingItems {
 			let item = XGItem(index: i)
@@ -198,7 +198,9 @@ class XGUtility {
 	
 	class func compileForRandomiser() {
 		prepareForCompilation()
-		
+		if XGFiles.common_rel.data.get4BytesAtOffset(0x7e764) != 0x002d0000 {
+			XGDolPatcher.zeroForeignStringTables()
+		}
 		XGISO().importRandomiserFiles()
 	}
 	
@@ -675,7 +677,9 @@ class XGUtility {
 			string += "\n************************************************************************************\nBoss Encounters\n\n"
 			for i in 2 ..< XGPokeSpots.all.numberOfEntries() {
 				let poke = XGPokeSpotPokemon(index: i, pokespot: .all)
-				string += "Wild " + poke.pokemon.name.string + "  \t\(tabsForName(poke.pokemon.name.string))Lv. " + "\(poke.minLevel) - \(poke.maxLevel)" + "\n"
+				if poke.pokemon.index > 0 {
+					string += "Wild " + poke.pokemon.name.string + "  \t\(tabsForName(poke.pokemon.name.string))Lv. " + "\(poke.minLevel) - \(poke.maxLevel)" + "\n"
+				}
 			}
 		}
 		
@@ -1119,6 +1123,8 @@ class XGUtility {
 		var TMs = [ [String] ]()
 		var tutorHeaders = [String]()
 		var tutors = [ [String] ]()
+		var evolutionHeaders = [String]()
+		var evolutions = [ [String] ]()
 		
 		for _ in 0 ..< kNumberOfLevelUpMoves {
 			levelUpMoves.append([String]())
@@ -1130,6 +1136,10 @@ class XGUtility {
 		
 		for _ in 0 ..< kNumberOfTutorMoves {
 			tutors.append([String]())
+		}
+		
+		for _ in 0 ..< kNumberOfEvolutions {
+			evolutions.append([String]())
 		}
 		
 		for i in 0 ..< kNumberOfPokemon {
@@ -1168,7 +1178,7 @@ class XGUtility {
 				
 				let lums = mon.levelUpMoves.map({ (lum) -> String in
 					var level = lum.level.string
-					if lum.level < 10  { level = " " + level}
+					if lum.level < 10  { level = "  " + level}
 					if lum.level < 100 { level = " " + level}
 					return "\(level) - \(lum.move.name.string)"
 				})
@@ -1191,6 +1201,32 @@ class XGUtility {
 				
 				for j in 0 ..< kNumberOfTutorMoves {
 					tutors[j].append(mon.tutorMoves[j].string)
+				}
+				
+				evolutionHeaders.append(mon.evolutions.filter({ (evo) -> Bool in
+					return evo.evolvesInto > 0
+				}).count.string)
+				
+				for j in 0 ..< kNumberOfEvolutions {
+					let evo = mon.evolutions[j]
+					var condition = ""
+					var method = evo.evolutionMethod.string
+					switch evo.evolutionMethod {
+					case .evolutionStone:
+						condition = "(" + XGItems.item(evo.condition).name.string + ")"
+					case .levelUp:
+						condition = "(Lv. " + evo.condition.string + ")"
+					case .levelUpWithKeyItem:
+						condition = "(" + XGItems.item(evo.condition).name.string + ")"
+					case .tradeWithItem:
+						condition = "(" + XGItems.item(evo.condition).name.string + ")"
+					case .none:
+						method = ""
+					default:
+						condition = ""
+						
+					}
+					evolutions[j].append(XGPokemon.pokemon(evo.evolvesInto).name.string + " " + method + condition)
 				}
 				
 			}
@@ -1230,6 +1266,11 @@ class XGUtility {
 			]
 		
 		documentDataHorizontally(title: title, data: dataRepresentation)
+		
+		dataRepresentation.append(("Evolutions",evolutionHeaders,true))
+		for i in 0 ..< kNumberOfEvolutions {
+			dataRepresentation.append(("Evolution",evolutions[i],false))
+		}
 		
 		dataRepresentation.append(("Level Up Moves",lumHeaders,true))
 		for i in 0 ..< kNumberOfLevelUpMoves {
@@ -1644,27 +1685,122 @@ class XGUtility {
 		
 	}
 	
+	class func getItemLocations() -> [[String]] {
+		var locations = [[String]]()
+		for i in 0 ..< CommonIndexes.NumberOfItems.value {
+			locations.append([String]())
+		}
+		
+		for i in 0 ..< CommonIndexes.NumberTreasureBoxes.value {
+			let treasure = XGTreasure(index: i)
+			locations[treasure.item.index].addUnique(treasure.room.map.name)
+		}
+		
+		for s in XGFolders.Scripts.files where s.fileName.fileExtensions == ".scd" {
+			let script = s.scriptData
+			let map = (XGMaps(rawValue: s.fileName.substring(from: 0, to: 2)) ?? .Unknown).name
+			
+			var found = [Int]()
+			
+			for i in 0 ..< script.code.count {
+				
+				// convert instruction to string
+				let instruction = script.code[i]
+				
+				if instruction.opCode == .callStandard {
+					
+					if instruction.subOpCode == 35 { // Character
+						
+						if instruction.parameter == 73 { // talk
+							let instr = script.code[i - 3]
+							
+							let typeInstr = script.code[i - 2]
+							if typeInstr .opCode == .loadImmediate {
+								let type = typeInstr.parameter
+								if type == 14 {
+									let instr = script.code[i - 4]
+									if instr .opCode == .loadImmediate {
+										let itemid = instr.parameter
+										let item = XGItems.item(itemid)
+										found.addUnique(item.index)
+									}
+								}
+							}
+						}
+					}
+					
+					
+					if instruction.subOpCode == 40 { // Dialogue
+						
+						if instruction.parameter == 39 { // open poke mart menu
+							
+							let instr = script.code[i - 2]
+							if instr .opCode == .loadImmediate {
+								let mart = XGPokemart(index: instr.parameter).items
+								for i in mart {
+									found.addUnique(i.index)
+								}
+							}
+							
+						}
+					}
+					
+					if instruction.subOpCode == 43 { // Player
+						if instruction.parameter == 26 || instruction.parameter == 27 || instruction.parameter == 67 { // receive item
+							let instr = script.code[i - 2]
+							if instr .opCode == .loadImmediate {
+								let iid = instr.parameter - (instr.parameter < CommonIndexes.NumberOfItems.value ? 0 : 150)
+								let item = XGItems.item(iid)
+								found.addUnique(item.index)
+							}
+						}
+					}
+					
+				}
+			}
+			for index in found {
+				locations[index].addUnique(map)
+			}
+		}
+		
+		return locations
+	}
+	
+	class func getTMLocations() -> [(tm:XGTMs, locations:[String])] {
+		var locations = getItemLocations()
+		var tmLocations = [(XGTMs,[String])]()
+		
+		let firstIndex = XGTMs.tm(1).item.index
+		for i in firstIndex ..< firstIndex + kNumberOfTMsAndHMs {
+			let tm = XGTMs.tm(i - firstIndex + 1)
+			tmLocations.append((tm, locations[i]))
+		}
+		
+		return tmLocations
+	}
+	
 	class func documentTMs() {
 		
-		let fileName = "TMs"
+		let fileName = "TM Locations"
 		printg("documenting " + fileName + "...")
 		
-		var locations = [Int : String]()
+		let locations = getTMLocations()
 		
-		var raw_array = [AnyObject]()
-		var hum_array = [AnyObject]()
+		var str = "TM locations\n\n"
 		
-		for i in 1 ... kNumberOfTMs {
+		for (tm, locs) in locations {
+			var locationString = locs.count == 0 ? "N/A" : locs[0]
+			if locs.count > 1 {
+				for i in 1 ..< locs.count {
+					locationString += ", " + locs[i]
+				}
+			}
+			str += tm.item.name.string + " (\(tm.move.name.string))".spaceToLength(20) + ": " + locationString + "\n"
 			
-			let entry = XGTMs.tm(i)
-			
-			raw_array.append(entry.dictionaryRepresentation as AnyObject)
-			hum_array.append(entry.readableDictionaryRepresentation as AnyObject)
 		}
 		printg("saving " + fileName + "...")
 		
-		saveJSON(raw_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " raw.json", .Reference))
-		saveJSON(hum_array as AnyObject, toFile: XGFiles.nameAndFolder(fileName + " human readable.json", .Reference))
+		saveString(str, toFile: .nameAndFolder(fileName + ".txt", .Reference))
 		
 		printg("saved " + fileName + "!\n")
 		

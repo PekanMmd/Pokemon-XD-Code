@@ -28,6 +28,8 @@ enum XGMaps : String, XGDictionaryRepresentable {
 	case OutskirtStand	= "S1"
 	case SnagemHideout	= "S2"
 	case KaminkosHouse	= "S3"
+	case Pokespot		= "es"
+	case Unknown		= "Unknown"
 	
 	var code : String {
 		return self.rawValue
@@ -51,6 +53,8 @@ enum XGMaps : String, XGDictionaryRepresentable {
 		case .OutskirtStand	: return "Outskirt Stand"
 		case .SnagemHideout	: return "Team Snagem's Hideout"
 		case .KaminkosHouse	: return "Kaminko's House"
+		case .Pokespot		: return "Pokespot"
+		case .Unknown		: return "Unknown"
 			
 		}
 	}

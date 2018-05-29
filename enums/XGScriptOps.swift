@@ -51,7 +51,7 @@ enum XGScriptOps : Int {
 	case release = 14
 	case exit = 15
 	case setLine = 16
-	case loadAndCopyVariable = 17
+	case loadNonCopyableVariable = 17
 	
 	
 	var name : String {

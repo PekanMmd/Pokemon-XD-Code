@@ -103,6 +103,8 @@ enum CommonIndexes : Int {
 	case PokespotCaveEntries = 19
 	case PokespotAll = 21
 	case PokespotAllEntries = 22
+	case BattleCDs = 24
+	case NumberBattleCDs = 25
 	case Battles = 26
 	case NumberOfBattles = 27
 	case BattleFields = 28

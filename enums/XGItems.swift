@@ -21,7 +21,7 @@ enum XGItems : XGDictionaryRepresentable {
 	}
 	
 	var TMIndex : Int {
-		return self.index >= XGTMs.tm(1).item.index && self.index <= XGTMs.tm(kNumberOfTMs).item.index ? self.index - XGTMs.tm(1).item.index + 1 : -1
+		return self.index >= XGTMs.tm(1).item.index && self.index <= XGTMs.tm(kNumberOfTMsAndHMs).item.index ? self.index - XGTMs.tm(1).item.index + 1 : -1
 	}
 	
 	var description : String {
@@ -147,7 +147,7 @@ func allItems() -> [String : XGItems] {
 		
 		let a = XGItems.item(i)
 		
-		dic[a.name.string.lowercased()] = a
+		dic[a.name.string.simplified] = a
 		
 	}
 	
@@ -157,8 +157,8 @@ func allItems() -> [String : XGItems] {
 let items = allItems()
 
 func item(_ name: String) -> XGItems {
-	if items[name.lowercased()] == nil { print("couldn't find: " + name) }
-	return items[name.lowercased()] ?? .item(0)
+	if items[name.simplified] == nil { print("couldn't find: " + name) }
+	return items[name.simplified] ?? .item(0)
 }
 
 func allItemsArray() -> [XGItems] {

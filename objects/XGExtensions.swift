@@ -27,6 +27,26 @@ extension Sequence where Iterator.Element == Int {
 	}
 }
 
+extension Array where Element == Int {
+	
+	mutating func addUnique(_ new: Int) {
+		if !self.contains(new) {
+			self.append(new)
+		}
+	}
+	
+}
+
+extension Array where Element == String {
+	
+	mutating func addUnique(_ new: String) {
+		if !self.contains(new) {
+			self.append(new)
+		}
+	}
+	
+}
+
 
 extension NSObject {
 	func println() {
@@ -101,6 +121,10 @@ extension Int {
 		return String(self)
 	}
 	
+	func println() {
+		printg(self)
+	}
+	
 	func hex() -> String {
 		return String(format: "%x", self).uppercased()
 	}
@@ -128,6 +152,10 @@ extension Int {
 }
 
 extension UInt32 {
+	
+	func println() {
+		printg(self)
+	}
 	
 	func hexToSignedFloat() -> Float {
 		var toInt = Int32(bitPattern: self)
@@ -179,9 +207,23 @@ extension UInt32 {
 }
 
 extension Float {
+	
+	func println() {
+		printg(self)
+	}
+	
 	var string : String {
 		return String(describing: self)
 	}
+	
+	func raisedToPower(_ pow: Int) -> Float {
+		var result : Float = 1.0
+		for _ in 0 ..< pow {
+			result *= self
+		}
+		return result
+	}
+	
 }
 
 extension String {
@@ -189,6 +231,7 @@ extension String {
 		get {
 			var s = self.replacingOccurrences(of: " ", with: "")
 			s = s.replacingOccurrences(of: "-", with: "")
+			s = s.replacingOccurrences(of: "é", with: "e")
 			return s.lowercased()
 		}
 	}

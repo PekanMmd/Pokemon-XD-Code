@@ -17,6 +17,10 @@ class XGMutableData: NSObject {
 	var file = XGFiles.nameAndFolder("", .Documents)
 	var data = NSMutableData()
 	
+	var string : String {
+		return String(bytesNoCopy: self.data.mutableBytes, length: self.data.length, encoding: .ascii, freeWhenDone: false) ?? ""
+	}
+	
 	var rawBytes : UnsafeRawPointer {
 		return self.data.bytes
 	}

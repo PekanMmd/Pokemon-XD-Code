@@ -223,7 +223,7 @@ class XGScript: NSObject {
 				}
 			}
 			
-			if instruction.opCode == .loadAndCopyVariable || instruction.opCode == .loadVariable {
+			if instruction.opCode == .loadNonCopyableVariable || instruction.opCode == .loadVariable {
 				if instruction.parameter > 0x80 && instruction.parameter <= 0x120 {
 					let index = instruction.parameter - 0x80
 					if index < giri.count {
@@ -291,6 +291,13 @@ class XGScript: NSObject {
 									desc += ">>\n" + XGBattle(index: bid).trainer!.fullDescription + "\n"
 								}
 							}
+							if type == 14 {
+								let instr = self.code[i - 4]
+								if instr .opCode == .loadImmediate {
+									let itemid = instr.parameter
+									desc += ">> receive item: " + XGItems.item(itemid).name.string + "\n"
+								}
+							}
 						}
 					}
 					if instruction.parameter == 21 { // display message with sound
@@ -318,7 +325,7 @@ class XGScript: NSObject {
 						
 						let instr = self.code[i - 2]
 						if instr .opCode == .loadImmediate {
-							let mid = instr.parameter - 1
+							let mid = instr.parameter
 							let mart = XGPokemart(index: mid).items
 							desc += ">>\n"
 							for item in mart {
@@ -329,9 +336,24 @@ class XGScript: NSObject {
 						
 					}
 					
+					if instruction.parameter == 29 { // display custom menu
+						
+						let instr = self.code[i - 2]
+						if instr.opCode == .loadNonCopyableVariable {
+							let param = instr.parameter
+							if param < 0x300 && param >= 0x200 {
+								let arrayIndex = param - 0x200
+								for element in arry[arrayIndex] {
+									desc += ">>" + getStringSafelyWithID(id: element.asInt).string + "\n"
+								}
+							}
+						}
+						
+					}
+					
 					if instruction.parameter == 16 || instruction.parameter == 17 { // display msg box
 						let instr = self.code[i - 2]
-						if instr .opCode == .loadImmediate {
+						if instr.opCode == .loadImmediate {
 							let sid = instr.parameter
 							desc += ">> \"" + getStringSafelyWithID(id: sid).string + "\"\n"
 						}
@@ -339,7 +361,7 @@ class XGScript: NSObject {
 				}
 				
 				if instruction.subOpCode == 43 { // Player
-					if instruction.parameter == 26 || instruction.parameter == 27 || instruction.parameter == 28 { // receive item, check item in bag
+					if instruction.parameter == 26 || instruction.parameter == 27 || instruction.parameter == 28 || instruction.parameter == 67 { // receive item, check item in bag
 						let instr = self.code[i - 2]
 						if instr .opCode == .loadImmediate {
 							let iid = instr.parameter - (instr.parameter < CommonIndexes.NumberOfItems.value ? 0 : 150)

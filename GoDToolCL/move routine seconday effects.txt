@@ -30,6 +30,8 @@
 
 62: omniboost chance
 
+75: lock user into outrage
+
 88: always flinch
 
 A3: rapid spin

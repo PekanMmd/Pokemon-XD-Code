@@ -10,7 +10,9 @@ import Foundation
 
 enum XGFileTypes : Int {
 	case none = 0x00
+	case rdat = 0x02 // room model in hal dat format (unknown if it uses a different file extension)
 	case dat  = 0x04 // character model in hal dat format
+	case col  = 0x06 // collision file
 	case msg  = 0x0a // string table
 	case fnt  = 0x0c // font
 	case scd  = 0x0e // script data
@@ -33,8 +35,12 @@ enum XGFileTypes : Int {
 		switch self {
 		case .none:
 			return ""
+		case .rdat:
+			return ".rdat"
 		case .dat:
 			return ".dat"
+		case .col:
+			return ".col"
 		case .msg:
 			return ".msg"
 		case .fnt:

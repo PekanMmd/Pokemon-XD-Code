@@ -36,6 +36,12 @@ class XGCharacter : NSObject {
 		return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID).string
 	}
 	
+	override var description: String {
+		get {
+			return "\(self.characterID) - name: \(self.name) model: \(self.model.name)\n" + "coordinates: <\(self.xCoordinate),\(self.yCoordinate),\(self.zCoordinate)> angle: \(self.angle)\n" + "script: \(self.scriptName) (\(self.scriptIndex))\n"
+		}
+	}
+	
 	var xCoordinate : Float = 0
 	var yCoordinate : Float = 0
 	var zCoordinate : Float = 0

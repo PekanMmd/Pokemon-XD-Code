@@ -26,6 +26,7 @@ let ScriptClassNames : [Int : String] = [
 	47 : "Sound",
 	52 : "DayCare",
 	54 : "TaskManager",
+	58 : "VirtualBattle",
 	59 : "ShadowPokemon",
 	60 : "PokeSpot"
 ]
@@ -297,6 +298,8 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,Bool)]] = [
 		
 		("setMsgVar", 28, 3, false), //# (int type, var val)
 		
+		("displayCustomMenu", 29, 5, false), // (unk, x, unk, unk, array of string ids of options)
+		
 		("promptPartyPokemon", 32, 1, false), //# these functions are **exactly** the same
 		("promptPartyPokemon2", 33, 1, false),
 		("openPokemonSummary", 34, 1, false), //# no arg ...
@@ -394,6 +397,7 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,Bool)]] = [
 		("receivePkCoupons", 63, 2, false), //# (int amount) (can be < 0)
 		("countAllShadowPkm", 64, 1, false),
 		
+		("receiveItemSilently", 67, 5, false), //# (int unk, int unk, int itemid, int quantity)
 		("isSpeciesInPC", 68, 2, false), //# (int species)
 		("releasePartyPkm", 69, 2, false), //# (int index). Returns 1 iff there was a valid Pokémon, 0 otherwise.
 		
@@ -427,12 +431,12 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,Bool)]] = [
 		("getPkm", 22, 1, false)
 	],
 	
-//MARK: - Task Managet
+//MARK: - Task Manager
 	54 : [
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Methods", start = 16, nb = 8),
 		
-		("allo//CateTask", 16, 2, false), //# returns taskUID ... allo//Cates a task but seems to do nothing ... BROKEN ?
+		("allocateTask", 16, 2, false), //# returns taskUID ... allocates a task but seems to do nothing ... BROKEN ?
 		("zeroFunction17", 17, 1, false), //# arg : taskUID
 		("getTaskCounter", 18, 1, false),
 		("stopTask", 19, 2, false), //# unusable
@@ -441,6 +445,14 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,Bool)]] = [
 		("unknownFunction22", 22, 3, false),
 		("unknownFunction23", 23, 3, false)
 	],
+	
+//MARK: - Virtual Battle
+	58 : [
+		
+		("startBattle", 17, 4, false), // # (int unk, int unk, int unk, int unk) (battleID list in reference folder)
+		("checkBattleResult", 22, 0, false), // # sets last result to 2 if victory
+	],
+	
 	
 //MARK: - Shadow Pokemon
 	59 : [
