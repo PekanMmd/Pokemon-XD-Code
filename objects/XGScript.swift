@@ -429,7 +429,25 @@ class XGScript: NSObject {
 		return desc
 	}
 	
-	
+	func getInstructionStack() -> XGStack<XDSExpr> {
+		let stack = XGStack<XDSExpr>()
+		
+		for instruction in self.code {
+			
+			switch instruction.opCode {
+				
+			case .setLine:
+				stack.push(.setLine(instruction.parameter))
+			case .jumpIfFalse:
+				stack.push(.jumpFalse(stack.pop(), "Location\(instruction.parameter)"))
+				
+				
+				
+			}
+		}
+		
+		return stack
+	}
 	
 }
 
