@@ -440,10 +440,148 @@ class XGScript: NSObject {
 				stack.push(.setLine(instruction.parameter))
 			case .jumpIfFalse:
 				stack.push(.jumpFalse(stack.pop(), "Location\(instruction.parameter)"))
-				
-				
-				
-			}
+            case .jumpIfTrue:
+                stack.push(.jumpTrue(stack.pop(), "Location\(instruction.parameter)"))
+            case .jump:
+                stack.push(.jump("Location\(instruction.parameter)"))
+            case .call:
+                stack.push(.call("Location\(instruction.parameter)", []))
+            case .exit:
+                stack.push(.exit)
+            case .xd_operator:
+                if (instruction.subOpCode > 25 && instruction.subOpCode < 32) {
+                    let e = stack.pop()
+                    switch e {
+                    case loadVariable:
+                        fallthrough
+                    case nop:
+                        fallthrough
+                    case bracket:
+                        fallthrough
+                    case unaryOperator:
+                        fallthrough
+                    case loadImmediate:
+                        fallthrough
+                    case exit:
+                        fallthrough
+                    case XDSReturn:
+                        stack.push(.unaryOperator(instruction.subOpCode, e))
+                    default:
+                        stack.push(.unaryOperator(instruction.subOpCode, .bracket(e)))
+                    }
+                    
+                    stack.push(.unaryOperator(instruction.subOpCode, stack.pop()))
+                } else if (instruction.subOpCode > 32 && instruction.subOpCode < 39 || instruction.subOpCode < 53 && instruction.subOpCode > 48) {
+                    let e1 = stack.pop()
+                    let e2 = stack.pop()
+                    var r1 = XDSExpr.setLine(0)
+                    var r2 = XDSExpr.setLine(0)
+                    
+                    switch e1 {
+                    case loadVariable:
+                        fallthrough
+                    case nop:
+                        fallthrough
+                    case bracket:
+                        fallthrough
+                    case unaryOperator:
+                        fallthrough
+                    case loadImmediate:
+                        fallthrough
+                    case exit:
+                        fallthrough
+                    case XDSReturn:
+                        r1 = e1;
+                    default:
+                        r1 = .bracket(e1)
+                    }
+                    
+                    switch e2 {
+                    case loadVariable:
+                        fallthrough
+                    case nop:
+                        fallthrough
+                    case bracket:
+                        fallthrough
+                    case unaryOperator:
+                        fallthrough
+                    case loadImmediate:
+                        fallthrough
+                    case exit:
+                        fallthrough
+                    case XDSReturn:
+                        r2 = e2;
+                    default:
+                        r2 = .bracket(e2)
+                    }
+                    stack.push(instruction.subOpCode, .binaryOperator(r2, r1))
+                } else {
+                    printg("error! Unknown subOpCode!")
+                }
+            case .nop:
+                break
+            case .loadImmediate:
+                stack.push(.loadImmediate(instruction.scriptVar))
+            case .loadVariable:
+                switch self.subOpCode {
+                case 0:
+                    stack.push(.loadVariable("GVAR[\(self.parameter)]"))
+                case 1:
+                    stack.push(.loadVariable("Stack[\(self.parameter)]"))
+                case 2:
+                    stack.push(.loadVariable("LastResult"))
+                default:
+                    if param < 0x80 && param > 0 {
+                        stack.push(.loadVariable("" + XGScriptClassesInfo.classes(param).name.lowercased()))
+                    } else if param == 0x80 {
+                        stack.push(.loadVariable("#characters[player]"))
+                    } else if param <= 0x120 {
+                        stack.push(.loadVariable("characters[\(param - 0x80)]"))
+                    } else if param < 0x300 && param >= 0x200 {
+                        stack.push(.loadVariable("arrays[\(param - 0x200)]"))
+                    } else {
+                        stack.push(.loadVariable("invalid"))
+                    }
+                    
+                }
+            case .setVariable:
+                switch self.subOpCode {
+                case 0:
+                    stack.push(.setVariable("GVAR[\(self.parameter)]"))
+                case 1:
+                    stack.push(.setVariable("Stack[\(self.parameter)]"))
+                case 2:
+                    stack.push(.setVariable("LastResult"))
+                default:
+                    if param < 0x80 && param > 0 {
+                        stack.push(.setVariable("" + XGScriptClassesInfo.classes(param).name.lowercased()))
+                    } else if param == 0x80 {
+                        stack.push(.setVariable("#characters[player]"))
+                    } else if param <= 0x120 {
+                        stack.push(.setVariable("characters[\(param - 0x80)]"))
+                    } else if param < 0x300 && param >= 0x200 {
+                        stack.push(.setVariable("arrays[\(param - 0x200)]"))
+                    } else {
+                        stack.push(.setVariable("invalid"))
+                    }
+                    
+                }
+            case .setVector:
+                <#code#>
+            case .pop:
+                <#code#>
+            case .return_op:
+                <#code#>
+            case .callStandard:
+                <#code#>
+            case .reserve:
+                <#code#>
+            case .release:
+                <#code#>
+            case .loadNonCopyableVariable:
+                <#code#>
+            }
+            
 		}
 		
 		return stack
