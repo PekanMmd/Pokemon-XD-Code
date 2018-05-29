@@ -21,7 +21,7 @@ indirect enum XDSExpr {
 	case loadImmediate(XGScriptVar)
 	case loadVariable(XDSVariable)
 	case setVariable(XDSVariable, XDSExpr)
-	case setVector(XDSVariable, XGScriptVar)
+	case setVector(XDSVariable, XDSExpr)
 	case call(XDSLocation, [XDSExpr])
 	case XDSReturn(XDSExpr)
 	case callStandard(XDSClassID, XDSFunctionID, [XDSExpr])
@@ -34,24 +34,30 @@ indirect enum XDSExpr {
 	case setLine(Int)
 	
 	
-	
 	var text : String {
 		switch self {
 			
 		case .bracket(let e):
 			return "(" + e.text + ")"
-		case .unaryOperator(let e):
-			return ""
-		case .binaryOperator(_, _):
-			<#code#>
-		case .loadImmediate(_):
-			<#code#>
-		case .loadVariable(_):
-			<#code#>
-		case .setVariable(_, _):
-			<#code#>
-		case .setVector(_, _):
-			<#code#>
+		case .unaryOperator(let o,let e):
+			return XGScriptClassesInfo.operators.operatorWithID(o).name + e.text
+		case .binaryOperator(let o, let e1, let e2):
+			return e1.text + " \(XGScriptClassesInfo.operators.operatorWithID(o).name) " + e2.text
+		case .loadImmediate(let v):
+			switch v.type {
+			case .float:
+				return "\(v.asFloat)"
+			case .pokemon:
+				return "\(XGPokemon.pokemon(v.asInt).name.string)"
+			default:
+				return "\(v.asInt)"
+			}
+		case .loadVariable(let v):
+			return v
+		case .setVariable(let v, let e):
+			return v + " = " + e.text
+		case .setVector(let v, let e):
+			return v + " = " + e.text
 		case .call(_, _):
 			<#code#>
 		case .scriptReturn(_):
