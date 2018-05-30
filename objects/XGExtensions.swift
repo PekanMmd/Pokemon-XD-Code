@@ -236,6 +236,17 @@ extension String {
 		}
 	}
 	
+	func addRepeated(s: String, count: Int) -> String {
+		if count < 1 {
+			return self
+		}
+		var result = self
+		for _ in 0 ..< count {
+			result += s
+		}
+		return result
+	}
+	
 	var length : Int {
 		return self.characters.count
 	}

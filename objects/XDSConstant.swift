@@ -1,5 +1,5 @@
 //
-//  XGScriptVar.swift
+//  XDSConstant.swift
 //  XGCommandLineTools
 //
 //  Created by StarsMmd on 21/05/2016.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGScriptVarTypes {
+enum XDSConstantTypes {
 
 	case none_t
 	case integer		
@@ -40,7 +40,7 @@ enum XGScriptVarTypes {
 		}
 	}
 	
-	static func typeWithIndex(_ id: Int) -> XGScriptVarTypes {
+	static func typeWithIndex(_ id: Int) -> XDSConstantTypes {
 		switch id {
 			case  0 : return .none_t
 			case  1 : return .integer
@@ -58,9 +58,9 @@ enum XGScriptVarTypes {
 
 }
 
-class XGScriptVar : NSObject {
+class XDSConstant : NSObject {
 	
-	var type   : XGScriptVarTypes = .none_t
+	var type   : XDSConstantTypes = .none_t
 	var value  : UInt32 = 0
 	
 	override var description: String {
@@ -69,7 +69,7 @@ class XGScriptVar : NSObject {
 		
 		switch self.type {
 		case .float:
-			val = "\(self.asFloat)"
+			val = String(format: "%.2f",self.asFloat)
 		case .pokemon:
 			val = "\(XGPokemon.pokemon(self.asInt).name.string)"
 		default:
@@ -90,12 +90,15 @@ class XGScriptVar : NSObject {
 	init(type: Int, rawValue: UInt32) {
 		super.init()
 		
-		self.type = XGScriptVarTypes.typeWithIndex(type)
+		self.type = XDSConstantTypes.typeWithIndex(type)
 		self.value = rawValue
 		
 		
 	}
 	
+	class var null : XDSConstant {
+		return XDSConstant(type: 0, rawValue: 0)
+	}
 }
 
 

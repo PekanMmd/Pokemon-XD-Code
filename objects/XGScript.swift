@@ -42,11 +42,11 @@ class XGScript: NSObject {
 	var ftbl = [FTBL]()
 	var code = [XGScriptInstruction]()
 	
-	var gvar = [XGScriptVar]()
+	var gvar = [XDSConstant]()
 	var strg = [String]()
 	var vect = [VECT]()
 	var giri = [GIRI]()
-	var arry = [[XGScriptVar]]()
+	var arry = [[XDSConstant]]()
 	
 	
 	init(file: XGFiles) {
@@ -89,7 +89,7 @@ class XGScript: NSObject {
 		
 		for i in 0 ..< numberGVAREntries {
 			let start = GVARStart + kScriptSectionHeaderSize + (i * kScriptGVARSize)
-			self.gvar.append( XGScriptVar(type: data.get2BytesAtOffset(start), rawValue: data.get4BytesAtOffset(start + 4)) )
+			self.gvar.append( XDSConstant(type: data.get2BytesAtOffset(start), rawValue: data.get4BytesAtOffset(start + 4)) )
 		}
 		
 		var strgPos = STRGStart + kScriptSectionHeaderSize
@@ -121,10 +121,10 @@ class XGScript: NSObject {
 			let startPointer = data.get4BytesAtOffset(start + (i * kScriptARRYPointerSize)).int
 			let entries = data.get4BytesAtOffset(start + startPointer - 0x10).int
 			
-			var arr = [XGScriptVar]()
+			var arr = [XDSConstant]()
 			for j in 0 ..< entries {
 				let varStart = start + startPointer + (j * kScriptGVARSize)
-				arr.append( XGScriptVar(type: data.get2BytesAtOffset(varStart), rawValue: data.get4BytesAtOffset(varStart + 4)) )
+				arr.append( XDSConstant(type: data.get2BytesAtOffset(varStart), rawValue: data.get4BytesAtOffset(varStart + 4)) )
 			}
 			self.arry.append(arr)
 		}
@@ -238,7 +238,7 @@ class XGScript: NSObject {
 			}
 			
 			if instruction.opCode == .loadImmediate {
-				switch instruction.scriptVar.type {
+				switch instruction.constant.type {
 				case .string:
 					desc += ">> \"" + getStringAtOffset(STRGStart + kScriptSectionHeaderSize + instruction.parameter) + "\"\n"
 				default:
@@ -429,158 +429,209 @@ class XGScript: NSObject {
 		return desc
 	}
 	
+	func getParameterCountForFunction(named name: String) -> Int {
+		for i in 0 ..< ftbl.count {
+			let f = ftbl[i]
+			let g = i == ftbl.count - 1 ? nil : ftbl[i + 1]
+			if f.name == name {
+				var paramCount = 0
+				var currentIndex = f.codeOffset
+				let lastIndex = g == nil ? self.code.count : g!.codeOffset
+				
+				var counter = 0
+				var lastI = 0
+				func getCodeIndexForInstruction(index: Int) -> Int {
+					for i in lastI ..< self.code.count {
+						if counter == index {
+							lastI = i
+							return i
+						}
+						counter += code[i].length
+					}
+					return -1
+				}
+				
+				while currentIndex < lastIndex && currentIndex >= 0 {
+					let currentInstruction = self.code[getCodeIndexForInstruction(index: currentIndex)]
+					switch currentInstruction.opCode {
+					case .loadVariable:
+						fallthrough
+					case .loadNonCopyableVariable:
+						if currentInstruction.subOpCode == 1 && currentInstruction.parameter > 0 {
+							paramCount += 1
+						}
+						currentIndex += currentInstruction.length
+					default:
+						currentIndex += currentInstruction.length
+					}
+				}
+				return paramCount
+			}
+		}
+		printg("couldn't get function parameter count: function \"\(name)\" doesn't exist")
+		return 0
+	}
+	
+	func getFunctionAtLocation(location: Int) -> String {
+		for f in ftbl {
+			if f.codeOffset == location {
+				return f.name
+			}
+		}
+		return ""
+	}
+	
 	func getInstructionStack() -> XGStack<XDSExpr> {
 		let stack = XGStack<XDSExpr>()
 		
-		for instruction in self.code {
+		var functionParams = [String : Int]()
+		for f in ftbl {
+			functionParams[f.name] = getParameterCountForFunction(named: f.name)
+		}
+		
+		for i in 0 ..< self.code.count {
+			
+			let instruction = self.code[i]
 			
 			switch instruction.opCode {
 				
 			case .setLine:
 				stack.push(.setLine(instruction.parameter))
 			case .jumpIfFalse:
-				stack.push(.jumpFalse(stack.pop(), "Location\(instruction.parameter)"))
+				// for unary or binary predicates, invert operators so can use jumptrue
+				let predicate = stack.pop()
+				let location = XDSExpr.locationWithIndex(instruction.parameter)
+				switch predicate {
+				case .binaryOperator(let o, let e1, let e2):
+					switch o {
+						/*("=", 48, 2),
+						  (">", 49, 2),
+						  (">=", 50, 2),
+						  ("<", 51, 2),
+						  ("<=", 52, 2),
+						  ("!=", 53, 2)*/
+					case 49:
+						stack.push(.jumpTrue(XDSExpr.binaryOperator(52, e1, e2).bracketed, location))
+					case 52:
+						stack.push(.jumpTrue(XDSExpr.binaryOperator(49, e1, e2).bracketed, location))
+					case 50:
+						stack.push(.jumpTrue(XDSExpr.binaryOperator(51, e1, e2).bracketed, location))
+					case 51:
+						stack.push(.jumpTrue(XDSExpr.binaryOperator(50, e1, e2).bracketed, location))
+					case 48:
+						stack.push(.jumpTrue(XDSExpr.binaryOperator(53, e1, e2).bracketed, location))
+					case 53:
+						stack.push(.jumpTrue(XDSExpr.binaryOperator(48, e1, e2).bracketed, location))
+					default:
+						stack.push(.jumpFalse(predicate.bracketed, location))
+					}
+				case .unaryOperator(let o, let e):
+					switch o {
+					case 16: // ! not operator
+						stack.push(.jumpTrue(e, location))
+					default:
+						stack.push(.jumpFalse(predicate.bracketed, location))
+					}
+				default:
+					stack.push(.jumpFalse(predicate.bracketed, location))
+				}
             case .jumpIfTrue:
-                stack.push(.jumpTrue(stack.pop(), "Location\(instruction.parameter)"))
+                stack.push(.jumpTrue(stack.pop().bracketed, XDSExpr.locationWithIndex(instruction.parameter)))
             case .jump:
-                stack.push(.jump("Location\(instruction.parameter)"))
+                stack.push(.jump(XDSExpr.locationWithIndex(instruction.parameter)))
             case .call:
-                stack.push(.call("Location\(instruction.parameter)", []))
+				let fname = getFunctionAtLocation(location: instruction.parameter)
+				let param_count = functionParams[fname] ?? 0
+				var params = [XDSExpr]()
+				for _ in 0 ..< param_count {
+					params.append(stack.pop().bracketed)
+				}
+                stack.push(.call(fname, params))
             case .exit:
                 stack.push(.exit)
             case .xd_operator:
-                if (instruction.subOpCode > 25 && instruction.subOpCode < 32) {
-                    let e = stack.pop()
-                    switch e {
-                    case loadVariable:
-                        fallthrough
-                    case nop:
-                        fallthrough
-                    case bracket:
-                        fallthrough
-                    case unaryOperator:
-                        fallthrough
-                    case loadImmediate:
-                        fallthrough
-                    case exit:
-                        fallthrough
-                    case XDSReturn:
-                        stack.push(.unaryOperator(instruction.subOpCode, e))
-                    default:
-                        stack.push(.unaryOperator(instruction.subOpCode, .bracket(e)))
-                    }
-                    
-                    stack.push(.unaryOperator(instruction.subOpCode, stack.pop()))
-                } else if (instruction.subOpCode > 32 && instruction.subOpCode < 39 || instruction.subOpCode < 53 && instruction.subOpCode > 48) {
-                    let e1 = stack.pop()
-                    let e2 = stack.pop()
-                    var r1 = XDSExpr.setLine(0)
-                    var r2 = XDSExpr.setLine(0)
-                    
-                    switch e1 {
-                    case loadVariable:
-                        fallthrough
-                    case nop:
-                        fallthrough
-                    case bracket:
-                        fallthrough
-                    case unaryOperator:
-                        fallthrough
-                    case loadImmediate:
-                        fallthrough
-                    case exit:
-                        fallthrough
-                    case XDSReturn:
-                        r1 = e1;
-                    default:
-                        r1 = .bracket(e1)
-                    }
-                    
-                    switch e2 {
-                    case loadVariable:
-                        fallthrough
-                    case nop:
-                        fallthrough
-                    case bracket:
-                        fallthrough
-                    case unaryOperator:
-                        fallthrough
-                    case loadImmediate:
-                        fallthrough
-                    case exit:
-                        fallthrough
-                    case XDSReturn:
-                        r2 = e2;
-                    default:
-                        r2 = .bracket(e2)
-                    }
-                    stack.push(instruction.subOpCode, .binaryOperator(r2, r1))
+                if instruction.subOpCode >= 18 && instruction.subOpCode <= 25 {
+                     stack.push(.unaryOperator(instruction.subOpCode, stack.pop().forcedBracketed))
+				} else if instruction.subOpCode >= 16 && instruction.subOpCode <= 17 {
+					stack.push(.unaryOperator(instruction.subOpCode, stack.pop().bracketed))
+				} else if (instruction.subOpCode >= 32 && instruction.subOpCode <= 39) || (instruction.subOpCode <= 53 && instruction.subOpCode >= 48) {
+                    let e2 = stack.pop().bracketed
+                    let e1 = stack.pop().bracketed
+                    stack.push(.binaryOperator(instruction.subOpCode, e1, e2))
                 } else {
-                    printg("error! Unknown subOpCode!")
+					printg("error! Unknown operator: \(instruction.subOpCode)")
                 }
             case .nop:
-                break
+                continue
             case .loadImmediate:
-                stack.push(.loadImmediate(instruction.scriptVar))
+                stack.push(.loadImmediate(instruction.constant))
             case .loadVariable:
-                switch self.subOpCode {
-                case 0:
-                    stack.push(.loadVariable("GVAR[\(self.parameter)]"))
-                case 1:
-                    stack.push(.loadVariable("Stack[\(self.parameter)]"))
-                case 2:
-                    stack.push(.loadVariable("LastResult"))
-                default:
-                    if param < 0x80 && param > 0 {
-                        stack.push(.loadVariable("" + XGScriptClassesInfo.classes(param).name.lowercased()))
-                    } else if param == 0x80 {
-                        stack.push(.loadVariable("#characters[player]"))
-                    } else if param <= 0x120 {
-                        stack.push(.loadVariable("characters[\(param - 0x80)]"))
-                    } else if param < 0x300 && param >= 0x200 {
-                        stack.push(.loadVariable("arrays[\(param - 0x200)]"))
-                    } else {
-                        stack.push(.loadVariable("invalid"))
-                    }
-                    
-                }
+				if instruction.XDSVariable != kXDSLastResultVariable { // TODO: evalutate success
+					stack.push(.loadPointer(instruction.XDSVariable))
+				} else {
+					let previous = stack.pop()
+					switch previous {
+					case .callStandardVoid(let c, let f, let es):
+						stack.push(.callStandard(c, f, es))
+					default:
+						stack.push(previous)
+						stack.push(.loadPointer(instruction.XDSVariable))
+					}
+				}
             case .setVariable:
-                switch self.subOpCode {
-                case 0:
-                    stack.push(.setVariable("GVAR[\(self.parameter)]"))
-                case 1:
-                    stack.push(.setVariable("Stack[\(self.parameter)]"))
-                case 2:
-                    stack.push(.setVariable("LastResult"))
-                default:
-                    if param < 0x80 && param > 0 {
-                        stack.push(.setVariable("" + XGScriptClassesInfo.classes(param).name.lowercased()))
-                    } else if param == 0x80 {
-                        stack.push(.setVariable("#characters[player]"))
-                    } else if param <= 0x120 {
-                        stack.push(.setVariable("characters[\(param - 0x80)]"))
-                    } else if param < 0x300 && param >= 0x200 {
-                        stack.push(.setVariable("arrays[\(param - 0x200)]"))
-                    } else {
-                        stack.push(.setVariable("invalid"))
-                    }
-                    
-                }
+                stack.push(.setVariable(instruction.XDSVariable, stack.pop().bracketed))
             case .setVector:
-                <#code#>
+                stack.push(.setVector(instruction.XDSVariable, stack.pop().bracketed))
             case .pop:
-                <#code#>
+                continue
             case .return_op:
-                <#code#>
+                let previous = stack.pop()
+				switch previous {
+				case .setVariable(let v, let e):
+					if v == kXDSLastResultVariable {
+						stack.push(.XDSReturnResult(e.bracketed))
+					} else {
+						stack.push(previous)
+						stack.push(.XDSReturn)
+					}
+				default:
+					stack.push(previous)
+					stack.push(.XDSReturn)
+				}
             case .callStandard:
-                <#code#>
+				var paramCount = 0
+				if i == self.code.count - 1 {
+					printg("error: final function call without pop.")
+				}
+                let next = self.code[i + 1]
+				if next.opCode != .pop {
+					printg("error: function call without pop.")
+				} else {
+					paramCount = next.subOpCode
+				}
+				var params = [XDSExpr]()
+				for _ in 0 ..< paramCount {
+					params.append(stack.pop().bracketed)
+				}
+				stack.push(.callStandardVoid(instruction.subOpCode, instruction.parameter, params))
             case .reserve:
-                <#code#>
+                stack.push(.reserve(instruction.parameter))
             case .release:
-                <#code#>
-            case .loadNonCopyableVariable:
-                <#code#>
-            }
+                continue
+			case .loadNonCopyableVariable:
+				if instruction.XDSVariable != kXDSLastResultVariable { // TODO: evalutate success
+					stack.push(.loadPointer(instruction.XDSVariable))
+				} else {
+					let previous = stack.pop()
+					switch previous {
+					case .callStandardVoid(let c, let f, let es):
+						stack.push(.callStandard(c, f, es))
+					default:
+						stack.push(previous)
+						stack.push(.loadPointer(instruction.XDSVariable))
+					}
+				}
+			}
             
 		}
 		
@@ -589,11 +640,233 @@ class XGScript: NSObject {
 	
 	func getXDSScript() -> String {
 		let stack = getInstructionStack()
-		let script = ""
 		
-		for instruction in stack.asArray {
+		var jumpLocations = [Int]()
+		var functionLocations = [Int : String]()
+		for f in ftbl {
+			functionLocations[f.codeOffset] = f.name
+		}
+		
+		// first pass to find jump locations
+		// must separate first pass in order to catch negative jumps in loops etc.
+		for expr in stack.asArray {
+			
+			switch expr {
+			case .jump(let l):
+				jumpLocations.addUnique(XDSExpr.indexForLocation(l))
+			case .jumpTrue(_, let l):
+				jumpLocations.addUnique(XDSExpr.indexForLocation(l))
+			case .jumpFalse(_, let l):
+				jumpLocations.addUnique(XDSExpr.indexForLocation(l))
+			default:
+				break
+			}
 			
 		}
+		
+		// second pass to insert comments and locations
+		let updatedStack = XGStack<XDSExpr>()
+		var instructionIndex = 0
+		for expr in stack.asArray {
+			
+			if let fname = functionLocations[instructionIndex] {
+				let paramCount = getParameterCountForFunction(named: fname)
+				var params = [XDSVariable]()
+				for i in 0 ..< paramCount {
+					params.append("arg_" + i.string)
+				}
+				
+				let function = XDSExpr.function(fname, params)
+				let comment  = XDSExpr.comment("".addRepeated(s: "-", count: function.text.count - kXDSCommentIndicator.count))
+				updatedStack.push(comment)
+				updatedStack.push(function)
+				updatedStack.push(comment)
+				
+			}
+			
+			if jumpLocations.contains(instructionIndex) {
+				updatedStack.push(XDSExpr.locationIndex(instructionIndex))
+			}
+			
+			
+			updatedStack.push(expr)
+			if let comment = expr.comment {
+				updatedStack.push(comment)
+			}
+			
+			instructionIndex += expr.instructionCount
+		}
+		
+		// third pass to print
+		var script = ""
+		instructionIndex = 0
+		var indentation = 0
+		let indentationStack = XGStack<Int>()
+		let expressions = updatedStack.asArray
+		
+		for i in 0 ..< expressions.count {
+			
+			let expr = expressions[i]
+			
+			// before expression
+			var newLines = 0
+			switch expr {
+			case .location:
+				fallthrough
+			case .locationIndex:
+				newLines = 1
+			case .function:
+				newLines = 1
+			case .XDSReturn:
+				fallthrough
+			case .XDSReturnResult(_):
+				newLines = 1
+			default:
+				newLines = 0
+			}
+			for _ in 0 ..< newLines {
+				script += "\n"
+			}
+			
+			// decrement indentation
+			if indentation > 0 {
+				switch expr {
+				case .locationIndex(let i):
+					if i == indentationStack.peek() {
+						indentationStack.pop()
+						indentation -= 1
+					}
+				case .location(let l):
+					if XDSExpr.locationWithIndex(indentationStack.peek()) == l {
+						indentationStack.pop()
+						indentation -= 1
+					}
+				default:
+					break
+				}
+			}
+			
+			// print expression
+			
+			let text = expr.text
+			let indent = text.count > 0 ? "".addRepeated(s: "    ", count: indentation) : ""
+			
+			script += indent + text
+			
+			// after expression
+			newLines = 0
+			switch expr {
+			case .jumpFalse:
+				fallthrough
+			case .jumpTrue:
+				newLines = 1
+			case .jump:
+				newLines = 2
+			case .call:
+				newLines = 2
+			case .exit:
+				newLines = 4
+			case .function:
+				newLines = 2
+			case .XDSReturn:
+				fallthrough
+			case .XDSReturnResult(_):
+				newLines = 4
+			default:
+				newLines = expr.text.count == 0 ? 0 : 1
+			}
+			for _ in 0 ..< newLines {
+				script += "\n"
+			}
+			
+			// increment indentation
+			if i < expressions.count - 1 {
+				switch expr {
+				case .jumpTrue(_, let l):
+					let target = XDSExpr.indexForLocation(l)
+					if target <= instructionIndex { continue }
+					var reached = false
+					var shouldIndent = false
+					for j in i + 1 ..< expressions.count {
+						if reached { continue }
+						
+						let test = expressions[j]
+						switch test {
+						case .jumpTrue(_, let l):
+							if XDSExpr.indexForLocation(l) >= target {
+								shouldIndent = false
+								reached = true
+							}
+						case .jumpFalse(_, let l):
+							if XDSExpr.indexForLocation(l) >= target {
+								shouldIndent = false
+								reached = true
+							}
+						case .location(let l):
+							if l == XDSExpr.locationWithIndex(target) && reached == false {
+								reached = true
+								shouldIndent = true
+							}
+						case .locationIndex(let i):
+							if i == target && reached == false {
+								reached = true
+								shouldIndent = true
+							}
+						default:
+							continue
+						}
+					}
+					if shouldIndent {
+						indentationStack.push(target)
+						indentation += 1
+					}
+				case .jumpFalse(_, let l):
+					let target = XDSExpr.indexForLocation(l)
+					if target <= instructionIndex { continue }
+					var reached = false
+					var shouldIndent = false
+					for j in i + 1 ..< expressions.count {
+						if reached { continue }
+						
+						let test = expressions[j]
+						switch test {
+						case .jumpTrue(_, let l):
+							if XDSExpr.indexForLocation(l) >= target {
+								shouldIndent = false
+								reached = true
+							}
+						case .jumpFalse(_, let l):
+							if XDSExpr.indexForLocation(l) >= target {
+								shouldIndent = false
+								reached = true
+							}
+						case .location(let l):
+							if l == XDSExpr.locationWithIndex(target) {
+								reached = true
+								shouldIndent = true
+							}
+						case .locationIndex(let i):
+							if i == target {
+								reached = true
+								shouldIndent = true
+							}
+						default:
+							continue
+						}
+					}
+					if shouldIndent {
+						indentationStack.push(target)
+						indentation += 1
+					}
+				default:
+					break
+				}
+				
+			}
+			
+			instructionIndex += expr.instructionCount
+		}
+		
 		
 		return script
 	}

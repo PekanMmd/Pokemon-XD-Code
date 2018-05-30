@@ -8,6 +8,8 @@
 
 import Cocoa
 
+let kXDSLastResultVariable = "LastResult"
+
 class XGScriptInstruction: NSObject {
 	
 	var opCode = XGScriptOps.nop
@@ -22,8 +24,55 @@ class XGScriptInstruction: NSObject {
 	var raw1 : UInt32 = 0
 	var raw2 : UInt32 = 0
 	
-	var scriptVar : XGScriptVar!
+	var constant : XDSConstant!
 	
+	var SCDVariable : String {
+		let param = self.parameter
+		switch self.subOpCode {
+		case 0:
+			return "#GVAR[\(self.parameter)]"
+		case 1:
+			return "#Stack[\(self.parameter)]"
+		case 2:
+			return "#LastResult"
+		default:
+			if param < 0x80 && param > 0 {
+				return "#" + XGScriptClassesInfo.classes(param).name.lowercased() + "Object"
+			} else if param == 0x80 {
+				return "#characters[player]"
+			} else if param <= 0x120 {
+				return "#characters[\(param - 0x80)]"
+			} else if param < 0x300 && param >= 0x200 {
+				return "#arrays[\(param - 0x200)]"
+			} else {
+				return "#invalid"
+			}
+		}
+	}
+	
+	var XDSVariable : String {
+		let param = self.parameter
+		switch self.subOpCode {
+		case 0:
+			return "gvar_\(param)"
+		case 1:
+			return param < 0 ? "var_\(-param)" : "arg_\(param)"
+		case 2:
+			return kXDSLastResultVariable
+		default:
+			if param < 0x80 && param > 0 {
+				return XGScriptClassesInfo.classes(param).name.lowercased() + "_object"
+			} else if param == 0x80 {
+				return "player_character_object"
+			} else if param <= 0x120 {
+				return "character_object\(param - 0x80)"
+			} else if param < 0x300 && param >= 0x200 {
+				return "array_\(param - 0x200)"
+			} else {
+				return "_invalid_var_"
+			}
+		}
+	}
 	
 	init(bytes: UInt32, next: UInt32) {
 		super.init()
@@ -40,12 +89,12 @@ class XGScriptInstruction: NSObject {
 		self.raw2 = 0
 		
 		if self.opCode == .loadImmediate {
-			self.scriptVar = XGScriptVar(type: self.subOpCode, rawValue: next)
+			self.constant = XDSConstant(type: self.subOpCode, rawValue: next)
 			
 			var strType = false
-			switch scriptVar.type {
+			switch constant.type {
 			case .string:
-				self.scriptVar.value = UInt32(self.parameter)
+				self.constant.value = UInt32(self.parameter)
 				strType = true
 			default:
 				break
@@ -104,6 +153,10 @@ class XGScriptInstruction: NSObject {
 			sub = XGScriptClassesInfo.classes(self.subOpCode).name + "."
 		case .xd_operator:
 			sub = XGScriptClassesInfo.operators.operatorWithID(self.subOpCode).name
+		case .setVector:
+			let dimensions = ["v.x ","v.y ", "v.z "]
+			let index = self.subSubOpCodes.0
+			sub = index < 3 ? dimensions[index] : "error"
 		default:
 			break
 		}
@@ -120,32 +173,14 @@ class XGScriptInstruction: NSObject {
 			fallthrough
 		case .setVariable:
 			fallthrough
+		case .setVector:
+			fallthrough
 		case .loadNonCopyableVariable:
-			switch self.subOpCode {
-			case 0:
-				paramString = "#GVAR[\(self.parameter)]"
-			case 1:
-				paramString = "#Stack[\(self.parameter)]"
-			case 2:
-				paramString = "#LastResult"
-			default:
-				if param < 0x80 && param > 0 {
-					paramString = "#" + XGScriptClassesInfo.classes(param).name.lowercased()
-				} else if param == 0x80 {
-					paramString = "#characters[player]"
-				} else if param <= 0x120 {
-					paramString = "#characters[\(param - 0x80)]"
-				} else if param < 0x300 && param >= 0x200 {
-					paramString = "#arrays[\(param - 0x200)]"
-				} else {
-					paramString = "#invalid"
-				}
-				
-			}
+			paramString = self.SCDVariable
 		case .callStandard:
 			paramString = XGScriptClassesInfo.classes(self.subOpCode)[param].name + "()"
 		case .loadImmediate:
-			paramString = self.scriptVar.description + " (" + param.hexString() + ")"
+			paramString = self.constant.description + " (" + param.hexString() + ")"
 		case .pop:
 			fallthrough
 		case .release:

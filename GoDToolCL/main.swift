@@ -7,6 +7,9 @@
 //
 //
 
+let script = XGFiles.script("esaba_A.scd").scriptData.getXDSScript()
+XGUtility.saveString(script, toFile: .nameAndFolder("script.xds", .Documents))
+
 //XGFiles.nameAndFolder("esaba_A.fsys", .AutoFSYS).fsysData.extractFilesToFolder(folder: .Reference)
 
 //item("XG000 Photo").name.duplicateWithString("Photo").replace()

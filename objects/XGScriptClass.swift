@@ -18,23 +18,23 @@ enum XGScriptFunctionInfo {
 		switch self {
 			case .operators(let name,_,_)	: return name
 			case .known(let name,_,_,_)		: return name
-			case .unknown(let val)			: return "UnknownFunction\(val)"
+			case .unknown(let val)			: return "Function\(val)"
 		}
 	}
 	
 	var index : Int {
 		switch self {
 			case .operators(_,let val,_)	: return val
-			case .known(_,let val,_,_)	: return val
-			case .unknown(let val)		: return val
+			case .known(_,let val,_,_)		: return val
+			case .unknown(let val)			: return val
 		}
 	}
 	
 	var parameters : Int {
 		switch self {
 			case .operators(_,_,let val)	: return val
-			case .known(_,_,let val,_)	: return val
-			case .unknown				: return 0
+			case .known(_,_,let val,_)		: return val
+			case .unknown					: return 0
 		}
 	}
 	
@@ -54,7 +54,7 @@ enum XGScriptClassesInfo {
 	var name : String {
 		switch self {
 			case .operators			: return "Operator"
-			case .classes(let val)	: return ScriptClassNames[val] ?? "UnknownClass\(val)"
+			case .classes(let val)	: return ScriptClassNames[val] ?? "Class\(val)"
 		}
 	}
 	

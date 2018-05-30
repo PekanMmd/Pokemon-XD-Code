@@ -19,6 +19,10 @@ class XGStack<T>: NSObject {
 		return data.removeLast()
 	}
 	
+	func peek() -> T {
+		return data.last!
+	}
+	
 	var asArray : [T] {
 		let array = self.data
 		return array

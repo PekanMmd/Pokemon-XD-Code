@@ -11,6 +11,7 @@ import Foundation
 
 //MARK: - Class Names
 let ScriptClassNames : [Int : String] = [
+	// .xds script format requires classes to be named with first character capitalised and all subsequent characters in lowercase
 	 0 : "Standard",
 	 4 : "Vector",
 	 7 : "Array",
@@ -24,11 +25,11 @@ let ScriptClassNames : [Int : String] = [
 	42 : "Battle",
 	43 : "Player",
 	47 : "Sound",
-	52 : "DayCare",
-	54 : "TaskManager",
-	58 : "VirtualBattle",
-	59 : "ShadowPokemon",
-	60 : "PokeSpot"
+	52 : "Daycare",
+	54 : "Taskmanager",
+	58 : "Virtualbattle",
+	59 : "Shadowpokemon",
+	60 : "Pokespot"
 ]
 
 //MARK: - Operators
@@ -36,12 +37,16 @@ let ScriptOperators : [(String,Int,Int)] = [
 	//#------------------------------------------------------------------
 	//Category(name = "Unary operators", start = 16, nb = 10),
 	
-	("not", 16, 1),
-	("negative", 17, 1),
+	("!", 16, 1), // not
+	("-", 17, 1), // negative
+	
+	// type cast
 	("hex", 18, 1),
 	("string", 19, 1),
 	("integer", 20, 1),
 	("float", 21, 1),
+	
+	// parameters
 	("getvx", 22, 1),
 	("getvy", 23, 1),
 	("getvz", 24, 1),
@@ -49,23 +54,23 @@ let ScriptOperators : [(String,Int,Int)] = [
 	//#------------------------------------------------------------------
 	//Category(name = "Binary non-comparison operators", start = 32, nb = 8),
 	
-	("xor", 32, 2),
-	("or", 33, 2),
-	("and", 34, 2),
-	("add", 35, 2), //# str + str is defined => con//Catenation
-	("subtract", 36, 2),
-	("multiply", 37, 2), //# int * str or str * int is defined. For vectors = <a,b,c>*<c,d,e> = <a*c, b*d, c*e>
-	("divide", 38, 2), //# you cannot /0 for ints and floats but for vectors you can ...
-	("mod", 39, 2), //# operands are implicitly converted to int, if possible.
+	("^", 32, 2), // xor
+	("or", 33, 2), // or |
+	("and", 34, 2), // and &
+	("+", 35, 2), // add # str + str is defined as concatenation
+	("-", 36, 2), // subtract
+	("*", 37, 2), // multiply # int * str or str * int is defined. For vectors = <a,b,c>*<c,d,e> = <a*c, b*d, c*e>
+	("/", 38, 2), //# you cannot /0 for ints and floats but for vectors you can ...
+	("%", 39, 2), //# operands are implicitly converted to int, if possible.
 	//#------------------------------------------------------------------
 	//Category(name = "Comparison operators", start = 48, nb = 6),
 	
-	("eq", 48, 2), //# For string equality comparison: '?' every character goes, '*' everything goes after here
-	("gt", 49, 2), //# ordering of strings is done comparing their respective lengths
-	("gteq", 50, 2),
-	("lt", 51, 2),
-	("lteq", 52, 2),
-	("neq", 53, 2)
+	("=", 48, 2), //# For string equality comparison: '?' every character goes, '*' everything goes after here
+	(">", 49, 2), //# ordering of strings is done comparing their respective lengths
+	(">=", 50, 2),
+	("<", 51, 2),
+	("<=", 52, 2),
+	("!=", 53, 2)
 	//#------------------------------------------------------------------
 ]
 
