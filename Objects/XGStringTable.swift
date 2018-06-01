@@ -261,7 +261,13 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 		let offset = offsetForStringID(stringID)
 		
-		if offset != nil {
+		
+		
+		if offset != nil  {
+			
+			if offset! + 2 >= self.stringTable.length {
+				return nil
+			}
 			
 			let string = getStringAtOffset(offset!)
 			string.id = stringID

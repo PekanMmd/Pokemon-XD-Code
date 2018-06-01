@@ -817,7 +817,9 @@ class XGISO: NSObject {
 					let data = fsys.decompressedDataForFileWithFiletype(type: .msg)
 					if let d = data {
 						d.file = msg
-						d.save()
+						if d.get2BytesAtOffset(6) == 0x5553 { // US in unicode
+							d.save()
+						}
 					}
 				}
 			}
@@ -906,7 +908,9 @@ class XGISO: NSObject {
 				let data = fsys.decompressedDataForFileWithFiletype(type: .scd)
 				if let d = data {
 					d.file = scd
-					d.save()
+					if d.get4BytesAtOffset(0) == kTCODbytes {
+						d.save()
+					}
 				}
 			}
 		}

@@ -234,7 +234,7 @@ class XGUtility {
 			
 			if fsysFile.exists && lzssFile.exists {
 				let fsys = fsysFile.fsysData
-				fsys.shiftAndReplaceFileWithIndex(0, withFile: lzssFile)
+				fsys.shiftAndReplaceFileWithType(.rel, withFile: lzssFile)
 			}
 		}
 	}
@@ -251,7 +251,7 @@ class XGUtility {
 			let lzssFile = XGFiles.nameAndFolder(lzssName, XGFolders.LZSS)
 			
 			if fsysFile.exists && lzssFile.exists {
-				fsysFile.fsysData.shiftAndReplaceFileWithIndex(1, withFile: lzssFile)
+				fsysFile.fsysData.shiftAndReplaceFileWithType(.scd, withFile: lzssFile)
 			}
 		}
 	}
@@ -269,7 +269,7 @@ class XGUtility {
 			let lzssFile = XGFiles.nameAndFolder(lzssName, XGFolders.LZSS)
 			
 			if fsysFile.exists && lzssFile.exists {
-				fsysFile.fsysData.shiftAndReplaceFileWithIndex(2, withFile: lzssFile)
+				fsysFile.fsysData.shiftAndReplaceFileWithType(.msg, withFile: lzssFile)
 			}
 		}
 		

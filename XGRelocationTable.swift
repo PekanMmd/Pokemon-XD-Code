@@ -148,6 +148,15 @@ enum CommonIndexes : Int {
 	func setValue(_ value: Int) {
 		common.setValueAtPointer(index: self.rawValue, newValue: value)
 	}
+	
+	static func indexForStartOffset(offset: Int) -> Int? {
+		for i in 0 ... CommonIndexes.NumberOfTypes.rawValue{
+			if common.getPointer(index: i) == offset {
+				return i
+			}
+		}
+		return nil
+	}
 }
 
 let common = XGCommon()

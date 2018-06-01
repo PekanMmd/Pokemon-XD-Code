@@ -87,6 +87,21 @@ class XDSConstant : NSObject {
 		return value.int32
 	}
 	
+	var rawValueString : String {
+		var val = ""
+		
+		switch self.type {
+		case .float:
+			val = String(format: "%.2f",self.asFloat)
+		case .pokemon:
+			val = "\(XGPokemon.pokemon(self.asInt).name.string)"
+		default:
+			val = "\(self.asInt)"
+		}
+		
+		return val
+	}
+	
 	init(type: Int, rawValue: UInt32) {
 		super.init()
 		

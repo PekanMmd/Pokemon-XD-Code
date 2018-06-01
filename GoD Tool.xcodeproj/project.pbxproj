@@ -35,6 +35,7 @@
 		B23074661F98EC29002D31EC /* XGRelocationTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B252D95A1F98AF0400794FCE /* XGRelocationTable.swift */; };
 		B23074671F98EC2A002D31EC /* XGRelocationTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B252D95A1F98AF0400794FCE /* XGRelocationTable.swift */; };
 		B23074681F98EC2B002D31EC /* XGRelocationTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B252D95A1F98AF0400794FCE /* XGRelocationTable.swift */; };
+		B23DD76D20BEE5E100348D26 /* XDSExpr.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EAFF0020BDA676009FC947 /* XDSExpr.swift */; };
 		B2445AF7209F474E00B5404E /* XGMoveEffectTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2445AF6209F474E00B5404E /* XGMoveEffectTypes.swift */; };
 		B2445AF9209F52CC00B5404E /* GoDMoveEffectTypePopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2445AF8209F52CC00B5404E /* GoDMoveEffectTypePopUpButton.swift */; };
 		B2445AFA209F52D900B5404E /* XGMoveEffectTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2445AF6209F474E00B5404E /* XGMoveEffectTypes.swift */; };
@@ -210,7 +211,6 @@
 		B2EAFEFE20BDA43A009FC947 /* XGStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EAFEFD20BDA43A009FC947 /* XGStack.swift */; };
 		B2EAFEFF20BDA498009FC947 /* XGStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EAFEFD20BDA43A009FC947 /* XGStack.swift */; };
 		B2EAFF0120BDA676009FC947 /* XDSExpr.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EAFF0020BDA676009FC947 /* XDSExpr.swift */; };
-		B2EAFF0320BED901009FC947 /* XDScript.sublime-syntax in Resources */ = {isa = PBXBuildFile; fileRef = B2EAFF0220BED900009FC947 /* XDScript.sublime-syntax */; };
 		B2F1485D1F6C141A00FF9C94 /* GoDLevelUpMoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F1485C1F6C141A00FF9C94 /* GoDLevelUpMoveView.swift */; };
 		B2F507221F4C5FAA0075C6D2 /* body_000.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F5038A1F4C5FA80075C6D2 /* body_000.png */; };
 		B2F507231F4C5FAA0075C6D2 /* body_000.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F5038A1F4C5FA80075C6D2 /* body_000.png */; };
@@ -2447,6 +2447,7 @@
 		B21A7CFB20BC42CA00BDD04C /* fragment.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
 		B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGCollisionData.swift; sourceTree = "<group>"; };
 		B2240B571F83F0B300C94AB3 /* GoDTargetsPopUpButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDTargetsPopUpButton.swift; sourceTree = "<group>"; };
+		B23DD76E20C0B54500348D26 /* XDScript.sublime-color-scheme */ = {isa = PBXFileReference; lastKnownFileType = text; path = "XDScript.sublime-color-scheme"; sourceTree = "<group>"; };
 		B2445AF6209F474E00B5404E /* XGMoveEffectTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGMoveEffectTypes.swift; sourceTree = "<group>"; };
 		B2445AF8209F52CC00B5404E /* GoDMoveEffectTypePopUpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDMoveEffectTypePopUpButton.swift; sourceTree = "<group>"; };
 		B24507FF208A348E00FEC54E /* XGDeoxysFormes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGDeoxysFormes.swift; sourceTree = "<group>"; };
@@ -4667,6 +4668,7 @@
 				B2F5EB851F49A11A0075C6D2 /* GoDToolCL */,
 				B2F5ED061F49AD700075C6D2 /* Bridge.h */,
 				B2EAFF0220BED900009FC947 /* XDScript.sublime-syntax */,
+				B23DD76E20C0B54500348D26 /* XDScript.sublime-color-scheme */,
 				B252D95A1F98AF0400794FCE /* XGRelocationTable.swift */,
 				B2F5F8721F49B3BC0075C6D2 /* XGStringManager.swift */,
 				B2F5EC031F49A1FE0075C6D2 /* XGAssemblyCode.swift */,
@@ -6718,7 +6720,6 @@
 				B2F50E271F4C5FAD0075C6D2 /* type_0.png in Resources */,
 				B2F508AD1F4C5FAB0075C6D2 /* body_197.png in Resources */,
 				B2F50BF31F4C5FAC0075C6D2 /* face_201.png in Resources */,
-				B2EAFF0320BED901009FC947 /* XDScript.sublime-syntax in Resources */,
 				B2F507671F4C5FAB0075C6D2 /* body_034.png in Resources */,
 				B2F508F11F4C5FAB0075C6D2 /* body_231.png in Resources */,
 				B2F50B4F1F4C5FAC0075C6D2 /* face_119.png in Resources */,
@@ -7579,6 +7580,7 @@
 				B2F5EC6E1F49A1FF0075C6D2 /* XGWeather.swift in Sources */,
 				B2F5EC171F49A1FE0075C6D2 /* XGDecks.swift in Sources */,
 				B2F5F8A41F49CD050075C6D2 /* GoDTableViewDelegate.swift in Sources */,
+				B23DD76D20BEE5E100348D26 /* XDSExpr.swift in Sources */,
 				B27AA62A1F8646EA001D06CF /* GoDOriginalMovePopUpButton.swift in Sources */,
 				B2FEC09B1F7032F300AC263D /* GoDTrainerView.swift in Sources */,
 				B21A7CFF20BC68DA00BDD04C /* XGCollisionData.swift in Sources */,

@@ -12,6 +12,9 @@ let kXDSLastResultVariable = "LastResult"
 
 class XGScriptInstruction: NSObject {
 	
+	var isScriptFunctionLastResult = false // set during decompilation to prevent being attributed to the wrong function
+	var isUnusedPostpendedCall = false // set during decompilation to prevent parsing stray function calls at end of script
+	
 	var opCode = XGScriptOps.nop
 	var subOpCode = 0
 	var parameter = 0
@@ -56,7 +59,7 @@ class XGScriptInstruction: NSObject {
 		case 0:
 			return "gvar_\(param)"
 		case 1:
-			return param < 0 ? "var_\(-param)" : "arg_\(param)"
+			return param < 0 ? "var_\(-param)" : "arg_\(param - 1)"
 		case 2:
 			return kXDSLastResultVariable
 		default:
@@ -91,16 +94,18 @@ class XGScriptInstruction: NSObject {
 		if self.opCode == .loadImmediate {
 			self.constant = XDSConstant(type: self.subOpCode, rawValue: next)
 			
-			var strType = false
+			var shortType = false
 			switch constant.type {
+			case .vector:
+				fallthrough
 			case .string:
 				self.constant.value = UInt32(self.parameter)
-				strType = true
+				shortType = true
 			default:
 				break
 			}
 			
-			if !strType {
+			if !shortType {
 				self.length = 2
 				self.parameter = next.int32
 				self.raw2 = next

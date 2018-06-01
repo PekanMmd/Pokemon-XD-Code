@@ -51,6 +51,16 @@ class XGCharacterModels : NSObject {
 		}
 	}
 	
+	class func modelWithIdentifier(id: Int) -> XGCharacterModels {
+		for i in 0 ..< CommonIndexes.NumberOfCharacterModels.value {
+			let model = XGCharacterModels(index: i)
+			if model.identifier == id {
+				return model
+			}
+		}
+		return XGCharacterModels(index: 0)
+	}
+	
 }
 
 

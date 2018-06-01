@@ -13,7 +13,8 @@ typealias XDSClassID    = Int
 typealias XDSFunctionID = Int
 typealias XDSOperator	= Int
 
-let kXDSCommentIndicator = "\\\\"
+let kXDSCommentIndicator = "//"
+let kStoryProgressionFlag = 0x3c4
 
 indirect enum XDSExpr {
 	
@@ -22,10 +23,12 @@ indirect enum XDSExpr {
 	case unaryOperator(XDSOperator, XDSExpr)
 	case binaryOperator(XDSOperator, XDSExpr, XDSExpr)
 	case loadImmediate(XDSConstant)
+	case macroImmediate(XDSConstant, XDSMacroTypes) // a constant value that has been replaced by a macro
 	case loadVariable(XDSVariable)
 	case setVariable(XDSVariable, XDSExpr)
 	case setVector(XDSVariable, XDSExpr)
 	case call(XDSLocation, [XDSExpr])
+	case callVoid(XDSLocation, [XDSExpr])
 	case XDSReturn
 	case XDSReturnResult(XDSExpr)
 	case callStandard(XDSClassID, XDSFunctionID, [XDSExpr]) // returns a value in last result
@@ -43,8 +46,19 @@ indirect enum XDSExpr {
 	case msgMacro(XGString)
 	case exit
 	case setLine(Int)
-	//TODO: - add xdsdefault
+	//TODO: - add assign
 	
+	var isLoadImmediate : Bool {
+		return self.xdsID == XDSExpr.loadImmediate(XDSConstant.null).xdsID
+	}
+	
+	var isImmediate : Bool {
+		return self.isLoadImmediate || self.xdsID == XDSExpr.macroImmediate(XDSConstant.null, .none).xdsID
+	}
+	
+	var isCallstdWithReturnValue : Bool {
+		return self.xdsID == XDSExpr.callStandard(0, 0, []).xdsID
+	}
 	
 	// used for comparison in order tyo eschew switch statements
 	var xdsID : Int {
@@ -62,6 +76,9 @@ indirect enum XDSExpr {
 		case .loadImmediate(_):
 			id += 1
 			fallthrough
+		case .macroImmediate(_, _):
+			id += 1
+			fallthrough
 		case .loadVariable(_):
 			id += 1
 			fallthrough
@@ -72,6 +89,9 @@ indirect enum XDSExpr {
 			id += 1
 			fallthrough
 		case .call(_, _):
+			id += 1
+			fallthrough
+		case .callVoid(_, _):
 			id += 1
 			fallthrough
 		case .XDSReturn:
@@ -145,6 +165,8 @@ indirect enum XDSExpr {
 			fallthrough
 		case .loadImmediate:
 			fallthrough
+		case .macroImmediate:
+			fallthrough
 		case .exit:
 			fallthrough
 		case .msgMacro:
@@ -155,6 +177,16 @@ indirect enum XDSExpr {
 			fallthrough
 		case .XDSReturn:
 			return self
+		case .callVoid(_, let es):
+			return es.count > 0 ? .bracket(self) : self
+		case .call(_,let es):
+			return es.count > 0 ? .bracket(self) : self
+		case .callStandard(let c, _,let es):
+			let defaultParams = c == 0 ? 0 : 1
+			return es.count > defaultParams ? .bracket(self) : self
+		case .callStandardVoid(let c, _,let es):
+			let defaultParams = c == 0 ? 0 : 1
+			return es.count > defaultParams ? .bracket(self) : self
 		default:
 			return .bracket(self)
 		}
@@ -177,8 +209,14 @@ indirect enum XDSExpr {
 			for e in es {
 				constants += e.constants
 			}
-		case .loadImmediate(let v):
-			return [v]
+		case .callVoid(_, let es):
+			for e in es {
+				constants += e.constants
+			}
+		case .loadImmediate(let c):
+			return [c]
+		case .macroImmediate(let c, _):
+			return [c]
 		case .bracket(let e):
 			return e.constants
 		case .unaryOperator(_,let e):
@@ -220,8 +258,10 @@ indirect enum XDSExpr {
 			return 1 + e.instructionCount
 		case .binaryOperator(_, let e1, let e2):
 			return 1 + e1.instructionCount + e2.instructionCount
-		case .loadImmediate(let v):
-			return v.type.string == XDSConstantTypes.string.string ?  1 : 2
+		case .loadImmediate(let c):
+			return (c.type.string == XDSConstantTypes.string.string) || c.type.string == XDSConstantTypes.vector.string ?  1 : 2
+		case .macroImmediate(let c, _):
+			return (c.type.string == XDSConstantTypes.string.string) || c.type.string == XDSConstantTypes.vector.string ?  1 : 2
 		case .loadVariable(_):
 			return 1
 		case .setVariable(_, let e):
@@ -229,6 +269,12 @@ indirect enum XDSExpr {
 		case .setVector(_, let e):
 			return 1 + e.instructionCount
 		case .call(_, let es):
+			var count = 2 // includes load var last result
+			for e in es {
+				count += e.instructionCount
+			}
+			return count
+		case .callVoid(_, let es):
 			var count = 1
 			for e in es {
 				count += e.instructionCount
@@ -237,7 +283,7 @@ indirect enum XDSExpr {
 		case .XDSReturn:
 			return 2 // includes release
 		case .XDSReturnResult(let e):
-			return 2 + e.instructionCount
+			return 3 + e.instructionCount // includes release and setvar last result
 		case .callStandard(_, _, let es):
 			var count = 3 // includes pop and ldvar last rsult
 			for e in es {
@@ -279,12 +325,103 @@ indirect enum XDSExpr {
 		}
 	}
 	
+	var macroName : String {
+		switch self {
+		case .macro(let s, _):
+			return s
+		default:
+			return ""
+		}
+	}
+	
 	static func locationWithIndex(_ i: Int) -> XDSLocation {
 		return XDSExpr.locationWithName("location_" + i.string)
 	}
 	
 	static func locationWithName(_ n: String) -> XDSLocation {
 		return "@" + n
+	}
+	
+	static func macroWithName(_ n: String) -> String {
+		return "#" + n
+	}
+	
+	static func macroForString(xs: XGString) -> String {
+		let id = xs.id > 0 ? ":\(xs.id):" : ""
+		return "$" + id + "\"\(xs.string)\""
+	}
+	
+	static func stringFromMacroImmediate(c: XDSConstant, t: XDSMacroTypes) -> String {
+		switch t {
+		case .bool:
+			return c.asInt != 0 ? XDSExpr.macroWithName("TRUE") : XDSExpr.macroWithName("FALSE")
+		case .flag:
+			return c.asInt == kStoryProgressionFlag ? XDSExpr.macroWithName("STORY_FLAG") : c.asInt.string
+		case .none:
+			printg("error: empty macro value")
+			return "error: empty macro value"
+		case .pokemon:
+			if c.asInt == 0 {
+				return XDSExpr.macroWithName("pokemon_none".uppercased())
+			}
+			return XDSExpr.macroWithName("POKEMON_" + XGPokemon.pokemon(c.asInt).name.string.simplified.uppercased())
+		case .item:
+			if c.asInt == 0 {
+				return XDSExpr.macroWithName("item_none".uppercased())
+			}
+			return XDSExpr.macroWithName("ITEM_" + XGItems.item(c.asInt).name.string.simplified.uppercased())
+		case .model:
+			if c.asInt == 0 {
+				return XDSExpr.macroWithName("model_none".uppercased())
+			}
+			return XDSExpr.macroWithName("MODEL_" + XGCharacterModels.modelWithIdentifier(id: c.asInt).name.simplified.uppercased())
+		case .move:
+			if c.asInt == 0 {
+				return XDSExpr.macroWithName("move_none".uppercased())
+			}
+			return XDSExpr.macroWithName("MOVE_" + XGMoves.move(c.asInt).name.string.simplified.uppercased())
+		case .room:
+			if c.asInt == 0 {
+				return XDSExpr.macroWithName("room_none".uppercased())
+			}
+			return XDSExpr.macroWithName("ROOM_" + (XGRoom.roomWithID(c.asInt) ?? XGRoom(index: 0)).name.simplified.uppercased())
+		case .msg:
+			return macroForString(xs: getStringSafelyWithID(id: c.asInt))
+		case .talk:
+			if let type = XDSTalkTypes(rawValue: c.asInt) {
+			return XDSExpr.macroWithName("SPEECH_TYPE_" + type.string.uppercased())
+			} else {
+				printg("error: unknown speech type")
+				return "error: unknown speech type"
+			}
+		case .ability:
+			if c.asInt == 0 {
+				return XDSExpr.macroWithName("ability_none".uppercased())
+			}
+			return XDSExpr.macroWithName("ABILITY_" + XGAbilities.ability(c.asInt).name.string.simplified.uppercased())
+		case .msgVar:
+			return XDSExpr.macroWithName("MSG_VAR" + c.asInt.hexString())
+		case .battleResult:
+			switch c.asInt {
+				case 1: return XDSExpr.macroWithName("result_defeat".uppercased())
+				case 2: return XDSExpr.macroWithName("result_victory".uppercased())
+				default: return XDSExpr.macroWithName("result_unknown".uppercased() + c.asInt.string)
+			}
+		case .shadowStatus:
+			switch c.asInt {
+			case 0: return XDSExpr.macroWithName("status_not_seen".uppercased())
+			case 1: return XDSExpr.macroWithName("status_seen_in_world".uppercased())
+			case 2: return XDSExpr.macroWithName("status_seen_in_battle".uppercased())
+			case 3: return XDSExpr.macroWithName("status_caught".uppercased())
+			case 4: return XDSExpr.macroWithName("status_purified".uppercased())
+			default: printg("error unknown shadow pokemon status");return "error unknown shadow pokemon status"
+			}
+		case .pokespot:
+			guard let spot = XGPokeSpots(rawValue: c.asInt) else {
+				printg("error unknown pokespot");return "error unknown pokespot"
+			}
+			return XDSExpr.macroWithName("POKESPOT_" + spot.string.uppercased())
+		}
 	}
 	
 	static func indexForLocation(_ l: XDSLocation) -> Int {
@@ -310,9 +447,15 @@ indirect enum XDSExpr {
 				return "\(v.asFloat)"
 			case .pokemon:
 				return "\(XGPokemon.pokemon(v.asInt).name.string)"
+			case .string:
+				return "strg[" + v.asInt.string + "]"
+			case .vector:
+				return "vect[" + v.asInt.string + "]"
 			default:
 				return "\(v.asInt)"
 			}
+		case .macroImmediate(let c, let t):
+			return XDSExpr.stringFromMacroImmediate(c: c, t: t)
 		case .loadVariable(let v):
 			return v
 		case .loadPointer(let s):
@@ -324,23 +467,7 @@ indirect enum XDSExpr {
 		case .unaryOperator(let o,let e):
 			return XGScriptClassesInfo.operators.operatorWithID(o).name + e.text
 		case .binaryOperator(let o, let e1, let e2):
-			if (e1.xdsID == XDSExpr.loadImmediate(XDSConstant.null).xdsID) && (e2.xdsID != XDSExpr.loadImmediate(XDSConstant.null).xdsID) {
-				let reversed = e2.text + " \(XGScriptClassesInfo.operators.operatorWithID(o).name) " + e1.text
-				switch o {
-				case 48: // = equal
-					fallthrough
-				case 53: // != not equal
-					return reversed
-				case 33:
-					fallthrough
-				case 34:
-					return reversed
-				default:
-					return e1.text + " \(XGScriptClassesInfo.operators.operatorWithID(o).name) " + e2.text
-				}
-			} else {
-				return e1.text + " \(XGScriptClassesInfo.operators.operatorWithID(o).name) " + e2.text
-			}
+			return e1.text + " \(XGScriptClassesInfo.operators.operatorWithID(o).name) " + e2.text
 			
 		// assignments
 		case .setVariable(let v, let e):
@@ -357,7 +484,13 @@ indirect enum XDSExpr {
 			}
 			return s
 		case .call(let l, let es):
-			var s = "exec " + l
+			var s = "call " + XDSExpr.locationWithName(l)
+			for e in es {
+				s += " " + e.text
+			}
+			return s
+		case .callVoid(let l, let es):
+			var s = "call " + XDSExpr.locationWithName(l)
 			for e in es {
 				s += " " + e.text
 			}
@@ -369,7 +502,7 @@ indirect enum XDSExpr {
 			let xdsfunction = xdsclass.functionWithID(f)
 			var s = c > 0 ? es[0].text + "." : ""
 			s += xdsfunction.name
-			let firstIndex = c == 0 ? 0 : 1
+			let firstIndex = c > 0 ? 1 : 0
 			for i in firstIndex ..< es.count {
 				let e = es[i]
 				s += " " + e.text
@@ -398,10 +531,9 @@ indirect enum XDSExpr {
 		case .comment(let s):
 			return kXDSCommentIndicator + s
 		case .macro(let s, let t):
-			return "define #" + s + " " + t
+			return "define " + s + " " + t
 		case .msgMacro(let x):
-			let id = x.id > 0 ? ":\(x.id):" : ""
-			return "$" + id + "\"\(x.string)\""
+			return XDSExpr.macroForString(xs: x)
 		}
 	}
 	
@@ -410,32 +542,15 @@ indirect enum XDSExpr {
 		case .callStandardVoid(let c, let f, let params):
 			
 			if c == 35 { // Character
-				if f == 70 { // set model
-					if params[1].xdsID == XDSExpr.loadImmediate(XDSConstant.null).xdsID {
-						let modelId = params[1].constants[0].value
-						let archive = XGFiles.fsys("people_archive.fsys").fsysData
-						let mindex = archive.indexForIdentifier(identifier: modelId.int)
-						let name = archive.fileNameForFileWithIndex(index: mindex)
-						return .comment("model: " + name)
-					}
-				}
-				
 				if f == 73 { // talk
 					let type = params[1].constants[0].value
 					if type == 9 {
 						if params[3].xdsID == XDSExpr.loadImmediate(XDSConstant.null).xdsID {
 							let battleId = params[3].constants[0].value.int
 							if let battle = XGBattle(index: battleId).trainer {
-								let s = ("\n" + battle.fullDescription).replacingOccurrences(of: "\n", with: "\n" + kXDSCommentIndicator + " ")
+								let s = ("\n/*\n" + battle.fullDescription + "\n */\n").replacingOccurrences(of: "\n", with: "\n * ")
 								return .comment(s)
 							}
-						}
-					}
-					if type == 14 {
-						if params[3].xdsID == XDSExpr.loadImmediate(XDSConstant.null).xdsID {
-							let itemId = params[3].constants[0].value.int
-							let item = XGItems.item(itemId).name.string
-							return .comment(" receive item: " + item)
 						}
 					}
 				}
@@ -448,7 +563,7 @@ indirect enum XDSExpr {
 					if params[1].xdsID == XDSExpr.loadImmediate(XDSConstant.null).xdsID {
 						let battleId = params[1].constants[0].value.int
 						if let battle = XGBattle(index: battleId).trainer {
-							let s = ("\n" + battle.fullDescription).replacingOccurrences(of: "\n", with: "\n" + kXDSCommentIndicator + " ")
+							let s = ("\n/*\n" + battle.fullDescription + "\n */\n").replacingOccurrences(of: "\n", with: "\n * ")
 							return .comment(s)
 						}
 					}
@@ -460,10 +575,11 @@ indirect enum XDSExpr {
 					if params[1].xdsID == XDSExpr.loadImmediate(XDSConstant.null).xdsID {
 						let martId = params[1].constants[0].value.int
 						let mart = XGPokemart(index: martId).items
-						var s = ""
+						var s = "\n/*\n"
 						for item in mart {
-							s += "\n" + kXDSCommentIndicator + " " + item.name.string
+							s += "\n * " + item.name.string
 						}
+						s += "\n */\n"
 						return .comment(s)
 					}
 				}
@@ -475,7 +591,7 @@ indirect enum XDSExpr {
 					if params[1].xdsID == XDSExpr.loadImmediate(XDSConstant.null).xdsID {
 						let battleId = params[1].constants[0].value.int
 						if let battle = XGBattle(index: battleId).trainer {
-							let s = ("\n" + battle.fullDescription).replacingOccurrences(of: "\n", with: "\n" + kXDSCommentIndicator + " ")
+							let s = ("\n/*\n" + battle.fullDescription + "\n */\n").replacingOccurrences(of: "\n", with: "\n * ")
 							return .comment(s)
 						}
 					}
@@ -488,6 +604,35 @@ indirect enum XDSExpr {
 		return nil
 	}
 	
+	var macros : [XDSExpr] {
+		switch self {
+			
+		case .bracket(let e):
+			return e.macros
+		case .unaryOperator(_, let e):
+			return e.macros
+		case .binaryOperator(_, let e1, let e2):
+			return e1.macros + e2.macros
+		case .macroImmediate(let c, let t):
+			return [.macro(self.text,c.rawValueString)]
+		case .XDSReturnResult(let e):
+			return e.macros
+		case .callStandard(_, _, let es):
+			var macs = [XDSExpr]()
+			for e in es {
+				macs += e.macros
+			}
+			return macs
+		case .callStandardVoid(_, _, let es):
+			var macs = [XDSExpr]()
+			for e in es {
+				macs += e.macros
+			}
+			return macs
+		default:
+			return []
+		}
+	}
 	
 }
 

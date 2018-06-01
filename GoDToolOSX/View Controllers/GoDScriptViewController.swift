@@ -36,7 +36,7 @@ class GoDScriptViewController: GoDTableViewController {
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
 		if scripts.count > 0 {
 			if self.scripts[row].exists {
-				self.scriptView.string = scripts[row].scriptData.description
+				self.scriptView.string = scripts[row].scriptData.getXDSScript()
 				self.scriptView.scrollToBeginningOfDocument(nil)
 			}
 			self.table.reloadData()

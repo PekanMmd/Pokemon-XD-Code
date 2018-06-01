@@ -385,6 +385,13 @@ class XGFsys : NSObject {
 		self.replaceFile(file: file, removeFileExtension: true)
 	}
 	
+	func shiftAndReplaceFileWithType(_ type: XGFileTypes, withFile newFile: XGFiles) {
+		let index = indexForFileType(type: type)
+		if index >= 0 {
+			shiftAndReplaceFileWithIndex(index, withFile: newFile)
+		}
+	}
+	
 	func shiftAndReplaceFileWithIndex(_ index: Int, withFile newFile: XGFiles) {
 		if !(index < self.numberOfEntries) {
 			print("index doesn't exist:", index)
@@ -806,6 +813,7 @@ class XGFsys : NSObject {
 							let scriptData = data[i].file.scriptData
 							scriptData.mapRel = XGMapRel(file: .nameAndFolder(rel.fileName, folder), checkScript: false)
 							XGUtility.saveString(scriptData.description, toFile: .nameAndFolder(updatedNames[i] + ".txt", folder))
+							XGUtility.saveString(scriptData.description, toFile: .nameAndFolder(updatedNames[i].removeFileExtensions() + ".xds", folder))
 						}
 					}
 				}

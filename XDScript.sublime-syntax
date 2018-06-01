@@ -3,83 +3,105 @@
 
 name: XDScript
 file_extensions:
-  - xds
+- xds
 scope: xdscript
 
 variables:
-  unicode: '\\\h{1,6}[ \t\n\f]?'
-  escape: '(?:{{unicode}}|\\[^\n\f\h])'
-  nonascii: '[\p{L}\p{M}\p{S}\p{N}&&[^[:ascii:]]]'
-  nmstart: '(?:[[_a-zA-Z]{{nonascii}}]|{{escape}})'
-  nmchar: '(?:[[-\w]{{nonascii}}]|{{escape}})'
-  ident: '(?:--{{nmchar}}+|-?{{nmstart}}{{nmchar}}*)'
-  integer: '(?:[-+]?\d+)'
-  number: '[-+]?(?:(?:\d*\.\d+(?:[eE]{{integer}})*)|{{integer}})'
+ident: '[A-Za-z_]([A-Za-z_0-9]*)'
+number: '-?(\d+(\.\d+)?|\.\d+)'
 
 contexts:
 
-  prototype:
-    - include: macros
-    - include: comments
+prototype:
+- include: macros
+- include: comments
 
-  main:
-    - match: \b(define|exec|assign|return)\b
-      scope: keyword.control.c
-    - match: '!=|=|<|>|-|/'
-      scope: keyword.operator
-    - match: '\+'
-      scope: keyword.operator
-    - match: '\*'
-      scope: keyword.operator
-    - match: '"'
-      push: string
-    - match: \(
-      push: brackets
-    - match: \)
-      scope: invalid.illegal.stray-bracket-end
-    - match: \b(goto)\b
-      push: goto
-    - match: '\b{{number}}\b'
-      scope: constant.numeric
-    - match: '(.*_object)(.*)\.'
-      scope: keyword.control.c
+main:
+- match: '({{ident}}\s)(=)'
+captures:
+1: entity.assignment.xds
+3: keyword.xds
+- match: \b(define|call|assign|return|function|goto|if|ifFalse)\b
+scope: keyword.xds
+- match: '"'
+push: string
+- match: '\$:'
+push: string_macro
+- match: '({{ident}}_object)({{number}}?)\.'
+captures:
+1: constant.object.xds
+3: constant.object.xds
+- match: '({{ident}}_object)({{number}}?)'
+scope: constant.object.xds
+- match: '{{ident}}\.'
+captures:
+0: entity.callstd.xds
+- match: '\b{{number}}\b'
+scope: constant.numeric.xds
+- match: '\b<\b'
+push:  vector
 
-  goto:
-    - meta_include_prototype: false
-    - meta_scope: keyword.control.c
-    - match: \b(if|ifFalse)\b
-      pop: true
-    - match: '\n'
-      pop: true
-    - match: '@\b{{ident}}\b'
-      scope: constant.numeric
+vector:
+- meta_include_prototype: false
+- meta_scope: constant.vector.xds
+- match: '\b>\b'
+pop: true
 
-  string:
-    - meta_scope: string.quoted.double.c
-    - match: \\.
-      scope: constant.character.escape.c
-    - match: '"'
-      pop: true
+string_macro:
+- meta_scope: constant.macro.string.xds
+- match: ':'
+pop: true
 
-  brackets:
-    - match: \)
-      pop: true
-    - include: main
+string:
+- meta_include_prototype: false
+- meta_scope: string.quoted.double.xds
+- match: '\['
+push: string_escapes
+- match: '{'
+push: string_escape_params
+- match: '"'
+pop: true
 
-  macros:
-    - match: '#\b{{ident}}\b'
-      scope: string.quoted.single
-    - match: '@\b{{ident}}\b'
-      scope: entity.name.interface
+string_escapes:
+- meta_include_prototype: false
+- meta_scope: string.escape.xds
+- match: '\]'
+pop: true
 
-  comments:
-    - match: '\\'
-      push: comment
 
-  comment:
-    - meta_scope: comment.line
-    - match: '\n'
-      pop: true
+string_escape_params:
+- meta_include_prototype: false
+- meta_scope: string.escape.param.xds
+- match: '}'
+pop: true
+
+macros:
+- match: '(#{{ident}})\.'
+captures:
+1: constant.macro.callstd.xds
+3: constant.macro.callstd.xds
+- match: '#\b{{ident}}\b'
+scope: constant.macro.xds
+- match: '@\b{{ident}}\b'
+scope: constant.location.xds
+
+comments:
+- match: '//'
+push: comment
+- match: '/\*'
+push: commentMultiLine
+
+comment:
+- meta_include_prototype: false
+- meta_scope: comment.line.xds
+- match: '\n'
+pop: true
+
+commentMultiLine:
+- meta_include_prototype: false
+- meta_scope: comment.block.xds
+- match: '\*/'
+pop: true
 
 
 

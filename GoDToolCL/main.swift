@@ -7,8 +7,16 @@
 //
 //
 
-let script = XGFiles.script("esaba_A.scd").scriptData.getXDSScript()
-XGUtility.saveString(script, toFile: .nameAndFolder("script.xds", .Documents))
+printg("documenting script: common.scd")
+XGUtility.saveString(XGFiles.common_rel.scriptData.getXDSScript(), toFile: .nameAndFolder("common.xds", .Reference))
+XGFolders.Scripts.map({ (file) in
+	printg("documenting script: ", file.fileName)
+	let script = file.scriptData.getXDSScript()
+	XGUtility.saveString(script, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + ".xds", .Reference))
+})
+
+//let script = XGFiles.script("esaba_A.scd").scriptData.getXDSScript()
+
 
 //XGFiles.nameAndFolder("esaba_A.fsys", .AutoFSYS).fsysData.extractFilesToFolder(folder: .Reference)
 

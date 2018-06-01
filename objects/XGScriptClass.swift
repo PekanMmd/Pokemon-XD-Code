@@ -11,21 +11,21 @@ import Foundation
 enum XGScriptFunctionInfo {
 	
 	case operators(String,Int,Int)
-	case known(String,Int,Int,Bool)
+	case known(String,Int,Int,[XDSMacroTypes?]?, XDSMacroTypes?)
 	case unknown(Int)
 	
 	var name : String {
 		switch self {
 			case .operators(let name,_,_)	: return name
-			case .known(let name,_,_,_)		: return name
-			case .unknown(let val)			: return "Function\(val)"
+			case .known(let name,_,_,_,_)	: return name
+			case .unknown(let val)			: return "function\(val)"
 		}
 	}
 	
 	var index : Int {
 		switch self {
 			case .operators(_,let val,_)	: return val
-			case .known(_,let val,_,_)		: return val
+			case .known(_,let val,_,_,_)	: return val
 			case .unknown(let val)			: return val
 		}
 	}
@@ -33,16 +33,24 @@ enum XGScriptFunctionInfo {
 	var parameters : Int {
 		switch self {
 			case .operators(_,_,let val)	: return val
-			case .known(_,_,let val,_)		: return val
+			case .known(_,_,let val,_,_)	: return val
 			case .unknown					: return 0
 		}
 	}
 	
-	var variadic : Bool {
+	var macros : [XDSMacroTypes?]? {
 		switch self {
-			case .operators				:return false
-			case .known(_,_,_,let val)	: return val
-			case .unknown				: return false
+			case .operators				:return nil
+			case .known(_,_,_,let val,_): return val
+			case .unknown				: return nil
+		}
+	}
+	
+	var returnMacro : XDSMacroTypes? {
+		switch self {
+		case .operators				:return nil
+		case .known(_,_,_,_,let val): return val
+		case .unknown				: return nil
 		}
 	}
 }
@@ -93,9 +101,9 @@ enum XGScriptClassesInfo {
 			return .unknown(id)
 		}
 		
-		for (name,index,parameters,variadic) in info! {
+		for (name,index,parameters,macros, macro) in info! {
 			if index == id {
-				return .known(name, index, parameters, variadic)
+				return .known(name, index, parameters, macros, macro)
 			}
 		}
 		
