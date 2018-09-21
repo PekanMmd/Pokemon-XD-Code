@@ -7,30 +7,40 @@
 //
 //
 
-printg("documenting script: common.scd")
-XGUtility.saveString(XGFiles.common_rel.scriptData.getXDSScript(), toFile: .nameAndFolder("common.xds", .Reference))
-XGFolders.Scripts.map({ (file) in
-	printg("documenting script: ", file.fileName)
-	let script = file.scriptData.getXDSScript()
-	XGUtility.saveString(script, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + ".xds", .Reference))
-})
 
-//let script = XGFiles.script("esaba_A.scd").scriptData.getXDSScript()
+for i in 0 ..< CommonIndexes.NumberOfCharacterModels.value {
+	let model = XGCharacterModels(index: i)
+	print(model.name.spaceToLength(20), terminator: " ")
+	for v in model.boundBox {
+		print(String(format: "%.2f", v), terminator: " ")
+	}
+	"".println()
+	for j in 0 ..< 8 {
+		model.boundBox[j] = 0.0
+	}
+	if !model.name.contains("rinto") {
+	model.save()
+	}
+}
+
+//XGUtility.compileDol()
+XGUtility.compileCommonRel()
+//XGUtility.compileAllFiles()
 
 
-//XGFiles.nameAndFolder("esaba_A.fsys", .AutoFSYS).fsysData.extractFilesToFolder(folder: .Reference)
+//XGUtility.compileForRelease(XG: true)
+//XGUtility.documentISO(forXG: true)
 
-//item("XG000 Photo").name.duplicateWithString("Photo").replace()
 
-//// added battle cds to selection string
-//getStringSafelyWithID(id: 0x8105).duplicateWithString("Welcome back!").replace()
-//getStringSafelyWithID(id: 0x8106).duplicateWithString("Welcom back!").replace()
 
-//XGFolders.Scripts.map { (file) in
-//	printg("saving script:", file.fileName)
-//	XGUtility.saveString(file.scriptData.description, toFile: .nameAndFolder(file.fileName + ".txt", .Reference))
-//}
 
+
+
+
+
+
+//let script = XGFiles.nameAndFolder("M1_water_colo_field.xds", .XDS).data.string
+//XDSScriptCompiler.compile(text: script)
 
 //let cd = item("Battle CD 01")
 //let locations = XGUtility.getItemLocations()
@@ -40,26 +50,4 @@ XGFolders.Scripts.map({ (file) in
 //	printg(i, location.count > 0 ? location[0] : "-", "\n", cd.cdDescription, "\n", cd.conditions, "\n")
 //}
 
-
-
-
-
-//XGUtility.compileForRelease(XG: true)
-//XGUtility.documentISO(forXG: true)
-
-//// repeat ball catch rate to 3.5x
-//XGAssembly.replaceASM(startOffset: 0x21942c - kDOLtoRAMOffsetDifference, newASM: [0x3b800023])
-//
-////// timer ball update to gen V+ mechanics (maxes in 12 turns)
-////XGAssembly.replaceASM(startOffset: 0x219444 - kDOLtoRAMOffsetDifference, newASM: [
-////	0x0, // r28 = r3 * 3
-////	0x0, // r28 = r28 / 2
-////	0x0, // addi r28, r28, 10
-////	])
-//
-//// nest ball start = 0x802193a8
-//
-
-
-//XGUtility.compileAllFiles()
 

@@ -18,22 +18,23 @@ let kSizeOfTypeData = 0x30
 
 let kNumberOfTypes = 0x12
 
+
 class XGType: NSObject {
 	
-	var index				 = 0
-	var nameID				 = 0
+	@objc var index				 = 0
+	@objc var nameID				 = 0
 	var category			 = XGMoveCategories.none
 	var effectivenessTable	 = [XGEffectivenessValues]()
 	
-	var name : XGString {
+	@objc var name : XGString {
 		get {
 			return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
 		}
 	}
 	
-	var startOffset = 0
+	@objc var startOffset = 0
 	
-	var dictionaryRepresentation : [String : AnyObject] {
+	@objc var dictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["name"] = self.name
@@ -50,7 +51,7 @@ class XGType: NSObject {
 		}
 	}
 	
-	var readableDictionaryRepresentation : [String : AnyObject] {
+	@objc var readableDictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			
@@ -66,7 +67,7 @@ class XGType: NSObject {
 		}
 	}
 	
-	init(index: Int) {
+	@objc init(index: Int) {
 		super.init()
 		
 		let rel			= XGFiles.common_rel.data
@@ -90,7 +91,7 @@ class XGType: NSObject {
 		
 	}
 	
-	func save() {
+	@objc func save() {
 		
 		let rel = XGFiles.common_rel.data
 		

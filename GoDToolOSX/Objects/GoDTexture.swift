@@ -23,39 +23,39 @@ let kDancerStartOffset = 0xA0
 
 class GoDTexture: NSObject {
 
-	var data : XGMutableData!
+	@objc var data : XGMutableData!
 	
-	var width = 0
-	var height = 0
-	var BPP = 0
-	var textureStart = 0
-	var paletteStart = 0
+	@objc var width = 0
+	@objc var height = 0
+	@objc var BPP = 0
+	@objc var textureStart = 0
+	@objc var paletteStart = 0
 	var format = GoDTextureFormats.C8
-	var paletteFormat = 0
+	@objc var paletteFormat = 0
 	
-	var isIndexed : Bool {
+	@objc var isIndexed : Bool {
 		return format.isIndexed
 	}
 	
-	var blockWidth : Int {
+	@objc var blockWidth : Int {
 		return format.blockWidth
 	}
 	
-	var blockHeight : Int {
+	@objc var blockHeight : Int {
 		return format.blockHeight
 	}
 	
-	var textureLength : Int {
+	@objc var textureLength : Int {
 		get {
 			return self.isIndexed ? paletteStart - textureStart : data.length - textureStart
 		}
 	}
 	
-	var paletteLength : Int {
+	@objc var paletteLength : Int {
 		return self.isIndexed ? (self.data.length - self.paletteStart) : 0
 	}
 	
-	var paletteCount : Int {
+	@objc var paletteCount : Int {
 		return paletteLength / 2
 	}
 	
@@ -68,14 +68,14 @@ class GoDTexture: NSObject {
 		}
 	}
 	
-	var isPokeDance = false
-	var startOffset = 0x0
+	@objc var isPokeDance = false
+	@objc var startOffset = 0x0
 	
 	convenience init(file: XGFiles) {
 		self.init(data: file.data)
 	}
 	
-	init(data: XGMutableData) {
+	@objc init(data: XGMutableData) {
 		super.init()
 		
 		self.data = data
@@ -86,12 +86,12 @@ class GoDTexture: NSObject {
 		
 	}
 	
-	func setStartOffset(offset: Int) {
+	@objc func setStartOffset(offset: Int) {
 		self.startOffset = offset
 		self.setUp()
 	}
 	
-	func setUp() {
+	@objc func setUp() {
 		
 		self.width = data.get2BytesAtOffset(startOffset + kTextureWidthOffset)
 		self.height = data.get2BytesAtOffset(startOffset + kTextureHeightOffset)
@@ -101,9 +101,10 @@ class GoDTexture: NSObject {
 		let formatIndex = data.getByteAtOffset(startOffset + kTextureFormatOffset)
 		self.format = GoDTextureFormats(rawValue: formatIndex) ?? .C8
 		self.paletteFormat = data.getByteAtOffset(startOffset + kPaletteFormatOffset)
+		
 	}
 	
-	func save() {
+	@objc func save() {
 		
 		self.data.replace2BytesAtOffset(startOffset + kTextureWidthOffset, withBytes: self.width)
 		self.data.replace2BytesAtOffset(startOffset + kTextureHeightOffset, withBytes: self.height)
@@ -116,11 +117,11 @@ class GoDTexture: NSObject {
 		self.data.save()
 	}
 	
-	func replaceTextureData(newBytes: [Int]) {
+	@objc func replaceTextureData(newBytes: [Int]) {
 		self.data.replaceBytesFromOffset(self.textureStart, withByteStream: newBytes)
 	}
 	
-	func replacePaletteData(newBytes: [Int]) {
+	@objc func replacePaletteData(newBytes: [Int]) {
 		self.data.replaceBytesFromOffset(self.paletteStart, withByteStream: newBytes)
 	}
 	

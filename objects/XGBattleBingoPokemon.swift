@@ -19,14 +19,14 @@ let kBattleBingoPokemonMoveOffset		= 0x06
 
 class XGBattleBingoPokemon: NSObject, XGDictionaryRepresentable {
 	
-	var typeOnCard	= 0x0
+	@objc var typeOnCard	= 0x0
 	var species		= XGPokemon.pokemon(0)
-	var ability		= 0x0
+	@objc var ability		= 0x0
 	var nature		= XGNatures.hardy
 	var gender		= XGGenders.male
 	var move		= XGMoves.move(0)
 	
-	var startOffset : Int = 0
+	@objc var startOffset : Int = 0
 	
 	override var description : String {
 		get {
@@ -34,7 +34,11 @@ class XGBattleBingoPokemon: NSObject, XGDictionaryRepresentable {
 		}
 	}
 	
-	init(startOffset: Int) {
+	override init() {
+		super.init()
+	}
+	
+	@objc init(startOffset: Int) {
 		super.init()
 		
 		self.startOffset = startOffset
@@ -58,7 +62,11 @@ class XGBattleBingoPokemon: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	func save() {
+	@objc func save() {
+		
+		guard self.startOffset > 0 else {
+			return
+		}
 		
 		let rel = XGFiles.common_rel.data
 		
@@ -74,7 +82,7 @@ class XGBattleBingoPokemon: NSObject, XGDictionaryRepresentable {
 	}
 	
 	
-	var dictionaryRepresentation : [String : AnyObject] {
+	@objc var dictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["typeOnCard"] = self.typeOnCard as AnyObject?
@@ -89,7 +97,7 @@ class XGBattleBingoPokemon: NSObject, XGDictionaryRepresentable {
 		}
 	}
 	
-	var readableDictionaryRepresentation : [String : AnyObject] {
+	@objc var readableDictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["typeOnCard"] = (self.typeOnCard == 0 ? self.species.type1.name : self.species.type2.name) as AnyObject?

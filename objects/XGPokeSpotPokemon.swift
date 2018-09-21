@@ -20,22 +20,22 @@ let kStepsPerPokeSnackOffset	= 0x0A
 
 class XGPokeSpotPokemon: NSObject, XGDictionaryRepresentable {
 	
-	var index				= 0
+	@objc var index				= 0
 	var spot				= XGPokeSpots.rock
 	var pokemon				= XGPokemon.pokemon(0)
 	
-	var minLevel			= 0
-	var maxLevel			= 0
-	var encounterPercentage	= 0
-	var stepsPerSnack		= 0
+	@objc var minLevel			= 0
+	@objc var maxLevel			= 0
+	@objc var encounterPercentage	= 0
+	@objc var stepsPerSnack		= 0
 
-	var location : String {
+	@objc var location : String {
 		get {
 			return spot.string
 		}
 	}
 	
-	var startOffset : Int {
+	@objc var startOffset : Int {
 		get {
 			return spot.commonRelIndex.startOffset + (index * kSizeOfPokeSpotData)
 		}
@@ -60,7 +60,7 @@ class XGPokeSpotPokemon: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	func save() {
+	@objc func save() {
 		
 		let rel = XGFiles.common_rel.data
 		let start = startOffset
@@ -75,7 +75,7 @@ class XGPokeSpotPokemon: NSObject, XGDictionaryRepresentable {
 		rel.save()
 	}
 	
-	var dictionaryRepresentation : [String : AnyObject] {
+	@objc var dictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["minLevel"] = self.minLevel as AnyObject?
@@ -89,7 +89,7 @@ class XGPokeSpotPokemon: NSObject, XGDictionaryRepresentable {
 		}
 	}
 	
-	var readableDictionaryRepresentation : [String : AnyObject] {
+	@objc var readableDictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["minLevel"] = self.minLevel as AnyObject?

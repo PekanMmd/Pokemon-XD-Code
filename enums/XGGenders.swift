@@ -13,6 +13,7 @@ enum XGGenders : Int, XGDictionaryRepresentable {
 	case male		= 0x0
 	case female		= 0x1
 	case genderless = 0x2
+	case random 	= 0xFFFF
 	
 	var string : String {
 		get {
@@ -20,6 +21,7 @@ enum XGGenders : Int, XGDictionaryRepresentable {
 				case .male:			return "Male"
 				case .female:		return "Female"
 				case .genderless:	return "Genderless"
+				case .random:		return "Random"
 			}
 		}
 	}

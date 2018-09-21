@@ -8,16 +8,31 @@
 
 import Cocoa
 
+let xdtools = ["Trainer Editor","Shadow Pokemon Editor","Pokemon Stats Editor","Move Editor","Item Editor (Incomplete)","Pokespot Editor","Gift Pokemon Editor", "Patches", "Randomiser", "Script Viewer", "Collision Viewer","Save Reference Data"]
+let xdsegues = ["toTrainerVC","toShadowVC","toStatsVC","toMoveVC","toItemVC","toSpotVC","toGiftVC","toPatchVC","toRandomiserVC","toScriptVC", "toCollisionVC"]
+
+let colotools = ["Trainer Editor","Pokemon Stats Editor","Move Editor","Item Editor (Incomplete)","Gift Pokemon Editor", "Patches", "Randomiser", "Collision Viewer","Save Reference Data"]
+let colosegues = ["toTrainerVC","toStatsVC","toMoveVC","toItemVC","toGiftVC", "toPatchVC", "toRandomiserVC", "toCollisionVC"]
+
 class GoDHomeViewController: GoDTableViewController {
 	
 	@IBOutlet var logView: NSTextView!
 	
-	let tools = ["Trainer Editor","Shadow Pokemon Editor","Pokemon Stats Editor","Move Editor","Item Editor (Incomplete)","Pokespot Editor","Gift Pokemon Editor","Patches", "Script Viewer", "Collision Viewer","Save Reference Data"]
-	let segues = ["toTrainerVC","toShadowVC","toStatsVC","toMoveVC","toItemVC","toSpotVC","toGiftVC","toPatchVC","toScriptVC", "toCollisionVC"]
+	let tools  = game == .XD ? xdtools : colotools
+	let segues = game == .XD ? xdsegues : colosegues
 
     override func viewDidLoad() {
         super.viewDidLoad()
 		self.table.reloadData()
+		
+		if game == .Colosseum {
+			self.title = "Colosseum Tool"
+		}
+		
+//		let indexes : [CommonIndexes] = [.AIDebugScenarios, .DebugScenarios, .StoryDebugOptions, .BattleDebugScenarios]
+//		for i in indexes {
+//			printg(i.startOffset.hexString())
+//		}
 		
     }
 	
@@ -27,7 +42,7 @@ class GoDHomeViewController: GoDTableViewController {
 		(NSApp.delegate as! AppDelegate).homeViewController = self
 		
 		if !XGFiles.iso.exists {
-			self.performSegue(withIdentifier: "toHelpVC", sender: self)
+			self.performSegue(withIdentifier: NSStoryboardSegue.Identifier(rawValue: "toHelpVC"), sender: self)
 		}
 	}
 	
@@ -41,9 +56,9 @@ class GoDHomeViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let image = (row % 2 == 0 ? NSImage(named: "cell") : NSImage(named: "cell gold"))!
+		let image = (row % 2 == 0 ? NSImage(named: NSImage.Name(rawValue: "Item Cell")) : NSImage(named: NSImage.Name(rawValue: "Tool Cell")))!
 		
-		let view = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: tools[row], colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: image, fontSize: 14, width: self.table.width)) as! GoDTableCellView
+		let view = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: tools[row], colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: image, fontSize: 14, width: self.table.width)) as! GoDTableCellView
 		
 		view.setTitle(tools[row])
 		
@@ -51,10 +66,13 @@ class GoDHomeViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		if row == -1 {
+			return
+		}
 		if !XGFiles.iso.exists || !XGFiles.common_rel.exists || !XGFiles.dol.exists {
-			self.performSegue(withIdentifier: "toHelpVC", sender: self)
+			self.performSegue(withIdentifier: NSStoryboardSegue.Identifier(rawValue: "toHelpVC"), sender: self)
 		} else if row < segues.count && row >= 0 {
-			performSegue(withIdentifier: segues[row], sender: self)
+			performSegue(withIdentifier: NSStoryboardSegue.Identifier(rawValue: segues[row]), sender: self)
 		} else {
 			XGUtility.documentISO(forXG: false)
 		}
@@ -62,7 +80,7 @@ class GoDHomeViewController: GoDTableViewController {
 	
 	override func viewDidDisappear() {
 		super.viewDidDisappear()
-		NSApplication.shared().terminate(self)
+		NSApplication.shared.terminate(self)
 	}
 	
 }

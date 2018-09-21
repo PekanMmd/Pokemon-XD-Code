@@ -22,7 +22,7 @@ void main() {
 	float intensity = dot(normal, lightRay) / (length(normal) * length(lightRay));
 	intensity = clamp(intensity, 0, 1);
 	
-	vec3 viewer = normalize(vec3(0.0, 0.0, 0.2) - passPosition);
+	vec3 viewer = normalize(vec3(0.0, 0.0, -0.2) - passPosition);
 	vec3 reflection = reflect(lightRay, normal);
 	
 	float specular = pow(max(dot(viewer, reflection), 0.0), shininess);

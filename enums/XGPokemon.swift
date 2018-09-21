@@ -31,7 +31,11 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 	var index : Int {
 		get {
 			switch self {
-			case .pokemon(let i): return i
+			case .pokemon(let i):
+				if (i > CommonIndexes.NumberOfPokemon.value) || (i < 0) {
+					return 0
+				}
+				return i
 			}
 		}
 	}
@@ -148,7 +152,7 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 	
 	static func random() -> XGPokemon {
 		var rand = 0
-		while (rand == 0) || ((rand > 251) && (rand < 277)) || (rand > 411) {
+		while (rand == 0) || ((rand > 251) && (rand < 277)) || (rand > 411) || (XGPokemon.pokemon(rand).name.string.length < 2) {
 			rand = Int(arc4random_uniform(UInt32(kNumberOfPokemon - 1))) + 1
 		}
 		return XGPokemon.pokemon(rand)
@@ -253,7 +257,7 @@ func allPokemon() -> [String : XGPokemon] {
 let pokemons = allPokemon()
 
 func pokemon(_ name: String) -> XGPokemon {
-	if pokemons[name.lowercased()] == nil { print("couldn't find: " + name) }
+	if pokemons[name.lowercased()] == nil { printg("couldn't find: " + name) }
 	return pokemons[name.lowercased()] ?? .pokemon(0)
 }
 

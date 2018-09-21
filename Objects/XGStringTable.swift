@@ -14,23 +14,23 @@ let kEndOfHeader		   = 0x10
 class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 	var file = XGFiles.nameAndFolder("", .Documents)
-	var startOffset = 0x0
-	var stringTable = XGMutableData()
-	var stringOffsets = [Int : Int]()
+	@objc var startOffset = 0x0
+	@objc var stringTable = XGMutableData()
+	@objc var stringOffsets = [Int : Int]()
 	
-	var numberOfEntries : Int {
+	@objc var numberOfEntries : Int {
 		get {
 			return stringTable.get2BytesAtOffset(kNumberOfStringsOffset)
 		}
 	}
 	
-	var fileSize : Int {
+	@objc var fileSize : Int {
 		get {
 			return self.stringTable.length
 		}
 	}
 	
-	var extraCharacters : Int {
+	@objc var extraCharacters : Int {
 		
 		get {
 			var currentChar = 0x00
@@ -53,49 +53,83 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	class func common_rel() -> XGStringTable {
-		
-		return XGStringTable(file: .common_rel, startOffset: CommonIndexes.USStringTable.startOffset + 0x68, fileSize: 0x0DC70)
-		
-	}
-	
-	class func tableres2() -> XGStringTable {
-		
-		return XGStringTable(file: .tableres2, startOffset: 0x048F88, fileSize: 0x16E84)
-		
-	}
-	
-	class func dol() -> XGStringTable {
-		
-		return  XGStringTable(file: .dol, startOffset: 0x374FC0, fileSize: 0x178BE)
+	@objc class func common_rel() -> XGStringTable {
+		if game == .XD {
+			return XGStringTable(file: .common_rel, startOffset: CommonIndexes.USStringTable.startOffset + 0x68, fileSize: 0x0DC70)
+		} else {
+			if region == .JP {
+				return XGStringTable(file: .common_rel, startOffset: 0x4580, fileSize: 0x9cf8)
+			} else {
+				return XGStringTable(file: .common_rel, startOffset: 0x59890, fileSize: 0x1ec50)
+			}
+		}
 		
 	}
 	
-	class func dol2() -> XGStringTable {
+	@objc class func common_rel2() -> XGStringTable { // second string table in common_rel in colosseum
+		if game == .XD {
+			// same as common_rel1
+			return XGStringTable(file: .common_rel, startOffset: CommonIndexes.USStringTable.startOffset + 0x68, fileSize: 0x0DC70)
+		} else {
+			if region == .JP {
+				// same as common_rel1. couldn't find it in JP version
+				return XGStringTable(file: .common_rel, startOffset: 0x4580, fileSize: 0x9cf8)
+			} else {
+				return XGStringTable(file: .common_rel, startOffset: 0x784e0, fileSize: 0x13068)
+			}
+		}
+		
+	}
+	
+	@objc class func tableres2() -> XGStringTable? {
+		
+		if game == .XD {
+			return XGStringTable(file: .tableres2, startOffset: 0x048F88, fileSize: 0x16E84)
+		} else {
+			return nil
+		}
+		
+	}
+	
+	@objc class func dol() -> XGStringTable {
+		
+		if game == .XD {
+			return  XGStringTable(file: .dol, startOffset: 0x374FC0, fileSize: 0x178BE)
+		} else {
+			if region == .JP {
+				return XGStringTable(file: .dol, startOffset: 0x2bece0, fileSize: 0xd850)
+			} else {
+				return XGStringTable(file: .dol, startOffset: 0x2cc810, fileSize: 0x124e0)
+			}
+		}
+		
+	}
+	
+	@objc class func dol2() -> XGStringTable {
 		
 		return  XGStringTable(file: .dol, startOffset: 0x38c7c4, fileSize: 0x41c)
 		
 	}
 	
-	class func common_relOriginal() -> XGStringTable {
+	@objc class func common_relOriginal() -> XGStringTable {
 		
 		return XGStringTable(file: .original(.common_rel), startOffset: 0x04E274, fileSize: 0x0DC70)
 		
 	}
 	
-	class func tableres2Original() -> XGStringTable {
+	@objc class func tableres2Original() -> XGStringTable {
 		
 		return XGStringTable(file: .original(.tableres2), startOffset: 0x048F88, fileSize: 0x16E84)
 		
 	}
 	
-	class func dolOriginal() -> XGStringTable {
+	@objc class func dolOriginal() -> XGStringTable {
 		
 		return  XGStringTable(file: .original(.dol), startOffset: 0x374FC0, fileSize: 0x178BE)
 		
 	}
 	
-	class func dol2Original() -> XGStringTable {
+	@objc class func dol2Original() -> XGStringTable {
 		
 		return  XGStringTable(file: .original(.dol), startOffset: 0x38c7c4, fileSize: 0x41c)
 		
@@ -114,7 +148,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		getOffsets()
 	}
 	
-	func save() {
+	@objc func save() {
 		
 		let data = file.data
 		
@@ -124,7 +158,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	func getOffsets() {
+	@objc func getOffsets() {
 		
 		var currentOffset = kEndOfHeader
 		
@@ -144,7 +178,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	func updateOffsets() {
+	@objc func updateOffsets() {
 		
 		var currentOffset = kEndOfHeader
 		
@@ -172,7 +206,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 	
 	
-	func decreaseOffsetsAfter(_ offset: Int, byCharacters characters: Int) {
+	@objc func decreaseOffsetsAfter(_ offset: Int, byCharacters characters: Int) {
 		
 		for (sid, off) in self.stringOffsets {
 			
@@ -183,7 +217,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	func increaseOffsetsAfter(_ offset: Int, byCharacters characters: Int) {
+	@objc func increaseOffsetsAfter(_ offset: Int, byCharacters characters: Int) {
 		
 		for (sid, off) in self.stringOffsets {
 			
@@ -199,7 +233,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		return self.stringOffsets[stringID]
 	}
 	
-	func endOffsetForStringId(_ stringID : Int) -> Int {
+	@objc func endOffsetForStringId(_ stringID : Int) -> Int {
 		
 		let startOff = offsetForStringID(stringID)!
 		
@@ -209,7 +243,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	func getStringAtOffset(_ offset: Int) -> XGString {
+	@objc func getStringAtOffset(_ offset: Int) -> XGString {
 		
 		var currentOffset = offset
 		
@@ -257,7 +291,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	func stringWithID(_ stringID: Int) -> XGString? {
+	@objc func stringWithID(_ stringID: Int) -> XGString? {
 		
 		let offset = offsetForStringID(stringID)
 		
@@ -278,20 +312,20 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		return nil
 	}
 	
-	func stringSafelyWithID(_ stringID: Int) -> XGString {
+	@objc func stringSafelyWithID(_ stringID: Int) -> XGString {
 		
 		let string = stringWithID(stringID)
 		
 		return string ?? XGString(string: "-", file: .nameAndFolder("",.Documents), sid: 0)
 	}
 	
-	func containsStringWithId(_ stringID: Int) -> Bool {
+	@objc func containsStringWithId(_ stringID: Int) -> Bool {
 		
 			return stringOffsets.index(forKey: stringID) != nil
 		
 	}
 	
-	func allStrings() -> [XGString] {
+	@objc func allStrings() -> [XGString] {
 		
 		var strings = [XGString]()
 		
@@ -304,7 +338,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		return strings
 	}
 	
-	func purge() {
+	@objc func purge() {
 		
 		let strings = allStrings()
 		for str in strings {
@@ -374,79 +408,13 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	func printAllStrings() {
+	@objc func printAllStrings() {
 		for string in self.allStrings() {
 			print(string.string,"\n")
 		}
 	}
 	
-	class func jsonFromTrainerNames() {
-		var dict = [ String : String ]()
-		
-		let decks : [XGDecks] = [XGDecks.DeckStory, XGDecks.DeckHundred, XGDecks.DeckColosseum, XGDecks.DeckVirtual]
-		
-		for deck in decks {
-			
-			print("-------------------------------")
-			print("-------------------------------")
-			print("-------------------------------")
-			print("starting deck:" + deck.fileName)
-			print("-------------------------------")
-			
-			let numTr = deck.DTNREntries
-			print("Entries: \(numTr)")
-			print("-------------------------------")
-			
-			for i in 1 ..< numTr {
-				
-				let tr = XGTrainer(index: i, deck: .DeckStory)
-				
-				dict[tr.name.string] = "\(tr.nameID)"
-				
-			}
-			
-		}
-		
-		var arr = [ [String] ]()
-		
-		for k in dict.keys {
-			arr.append([ k, dict[k]! ])
-		}
-		
-		arr = arr.sorted { $0[0] < $1[0] }
-		
-		do {
-			let data = try JSONSerialization.data(withJSONObject: arr, options: .prettyPrinted)
-			
-			let saved = (try? data.write(to: URL(fileURLWithPath: XGFolders.JSON.path + "/Trainers.json"), options: [.atomic])) != nil
-			print("-------------------------------")
-			print("saved = \(saved)")
-			print("-------------------------------")
-			print("-------------------------------")
-			print("-------------------------------")
-			
-		} catch {
-			
-		}
-	}
-	
-	class func trainerNamesFromJSON() {
-		
-		do {
-			let data : [ [String] ] = try JSONSerialization.jsonObject( with: Data(contentsOf: URL(fileURLWithPath: XGFiles.nameAndFolder("Trainers.json", .JSON).path)), options: []) as! [[String]]
-			print("\(data)")
-			
-			for d in data {
-				XGFiles.common_rel.stringTable.replaceString(XGString(string: d[0], file: .common_rel, sid: Int(d[1]) ), alert: false)
-			}
-			
-		} catch {
-			
-		}
-		
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
+	@objc var dictionaryRepresentation: [String : AnyObject] {
 		get {
 			let strings = self.allStrings()
 			
@@ -468,7 +436,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		}
 	}
 	
-	var readableDictionaryRepresentation: [String : AnyObject] {
+	@objc var readableDictionaryRepresentation: [String : AnyObject] {
 		get {
 			let strings = self.allStrings()
 			

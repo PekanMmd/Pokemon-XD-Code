@@ -13,10 +13,13 @@ enum XGFileTypes : Int {
 	case rdat = 0x02 // room model in hal dat format (unknown if it uses a different file extension)
 	case dat  = 0x04 // character model in hal dat format
 	case col  = 0x06 // collision file
+	case samp = 0x08 // shorter music files for fanfares etc.
 	case msg  = 0x0a // string table
 	case fnt  = 0x0c // font
 	case scd  = 0x0e // script data
+	case dats = 0x10 // multiple .dat models in one archive
 	case gtx  = 0x12 // texture
+	case gpt1 = 0x14 // 
 	case cam  = 0x18 // camera data
 	case rel  = 0x1c // relocation table
 	case pkx  = 0x1e // character battle model (same as dat with additional header information)
@@ -33,40 +36,26 @@ enum XGFileTypes : Int {
 	
 	var fileExtension : String {
 		switch self {
-		case .none:
-			return ""
-		case .rdat:
-			return ".rdat"
-		case .dat:
-			return ".dat"
-		case .col:
-			return ".col"
-		case .msg:
-			return ".msg"
-		case .fnt:
-			return ".fnt"
-		case .scd:
-			return ".scd"
-		case .gtx:
-			return ".gtx"
-		case .cam:
-			return ".cam"
-		case .rel:
-			return ".rel"
-		case .pkx:
-			return ".pkx"
-		case .wzx:
-			return ".wzx"
-		case .isd:
-			return ".isd"
-		case .ish:
-			return ".ish"
-		case .gsw:
-			return ".gsw"
-		case .atx:
-			return ".atx"
-		case .bin:
-			return ".bin"
+		case .none: return ""
+		case .rdat: return ".rdat"
+		case .dat : return ".dat"
+		case .col : return ".col"
+		case .samp: return ".samp"
+		case .msg : return ".msg"
+		case .fnt : return ".fnt"
+		case .scd : return ".scd"
+		case .dats: return ".dats"
+		case .gtx : return ".gtx"
+		case .gpt1: return ".gpt1"
+		case .cam : return ".cam"
+		case .rel : return ".rel"
+		case .pkx : return ".pkx"
+		case .wzx : return ".wzx"
+		case .isd : return ".isd"
+		case .ish : return ".ish"
+		case .gsw : return ".gsw"
+		case .atx : return ".atx"
+		case .bin : return ".bin"
 		}
 	}
 }

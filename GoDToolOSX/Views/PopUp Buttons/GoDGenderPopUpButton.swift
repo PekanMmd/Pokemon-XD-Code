@@ -11,7 +11,7 @@ import Cocoa
 class GoDGenderPopUpButton: GoDPopUpButton {
 	
 	var selectedValue : XGGenders {
-		return XGGenders(rawValue: self.indexOfSelectedItem) ?? .genderless
+		return XGGenders(rawValue: self.indexOfSelectedItem) ?? .random
 	}
 	
 	func selectGender(gender: XGGenders) {
@@ -21,7 +21,7 @@ class GoDGenderPopUpButton: GoDPopUpButton {
 	override func setUpItems() {
 		var values = [String]()
 		
-		for g in [XGGenders.male,XGGenders.female,XGGenders.genderless] {
+		for g in [XGGenders.male,XGGenders.female,XGGenders.genderless, XGGenders.random] {
 			values.append(g.string)
 		}
 		

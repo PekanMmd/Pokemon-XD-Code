@@ -18,8 +18,8 @@ extension XGFiles {
 
 extension XGTrainerModels {
 	var image : NSImage {
-		
-		return XGFiles.trainerFace(self.rawValue).image
+		let val = self.rawValue >= XGFolders.Trainers.files.count ? 0 : self.rawValue
+		return XGFiles.trainerFace(val).image
 		
 	}
 }

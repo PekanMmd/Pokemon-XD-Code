@@ -8,107 +8,6 @@
 
 import Foundation
 
-enum XDSMacroTypes : Int {
-	case none = 0
-	case pokemon
-	case item
-	case model
-	case move
-	case room
-	case msg
-	case flag
-	case bool
-	case talk
-	case ability
-	case msgVar
-	case battleResult
-	case shadowStatus
-	case pokespot
-}
-
-enum XDSTalkTypes : Int {
-	case normal = 1
-	case approachThenSpeak = 2
-	case promptYesNo = 3
-	case battle = 9
-	case silentItem = 14
-	case speciesCry = 15
-	case silentText = 16
-	
-	var extraMacro : XDSMacroTypes? {
-		switch self {
-		case .silentItem:
-			return .item
-		case .speciesCry:
-			return .pokemon
-		default:
-			return nil
-		}
-	}
-	
-	var string : String {
-		switch self {
-		case .normal:
-			return "normal"
-		case .approachThenSpeak:
-			return "approach"
-		case .promptYesNo:
-			return "yes_no"
-		case .battle:
-			return "battle"
-		case .silentItem:
-			return "get_item"
-		case .speciesCry:
-			return "species_cry"
-		case .silentText:
-			return "silent"
-		}
-	}
-}
-
-enum XDSMSGVarTypes : Int {
-	case pokemon = 0x4e
-	case item = 0x2d
-	// incomplete but unnecessary. full list in xgspecialstringcharacter
-	
-	static func macroForVarType(_ type: Int) -> XDSMacroTypes? {
-		switch type {
-			
-		case 0x0f: fallthrough
-		case 0x10: fallthrough
-		case 0x11: fallthrough
-		case 0x12: return .pokemon
-		
-		case 0x16: fallthrough
-		case 0x17: fallthrough
-		case 0x18: fallthrough
-		case 0x19: return .pokemon
-			
-		case 0x1a: fallthrough
-		case 0x1b: fallthrough
-		case 0x1c: fallthrough
-		case 0x1d: return .ability
-			
-		case 0x1e: fallthrough
-			
-		case 0x20: fallthrough
-		case 0x21: return .pokemon
-			
-		case 0x28: return .move
-			
-		case 0x29: fallthrough
-		case 0x2d: fallthrough
-		case 0x2e: return .item
-			
-		case 0x2f: return nil // item quantity
-			
-		case 0x4e: return .pokemon
-			
-		default: return nil
-		}
-	}
-}
-
 //MARK: - Class Names
 let ScriptClassNames : [Int : String] = [
 	// .xds script format requires classes to be named with first character capitalised and all subsequent characters in lowercase
@@ -127,7 +26,6 @@ let ScriptClassNames : [Int : String] = [
 	47 : "Sound",
 	52 : "Daycare",
 	54 : "Taskmanager",
-	58 : "Virtualbattle",
 	59 : "Shadowpokemon",
 	60 : "Pokespot"
 ]
@@ -207,15 +105,15 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		("setFlagTotrue", 129, 1, [.flag], nil),
 		("setFlagTofalse", 130, 1, [.flag], nil),
 		("setFlag", 131, 2, [.flag, nil], nil),
-		("checkFlag", 132, 2, [.flag, nil], nil),
+		("checkFlag", 132, 2, [.flag, nil], .bool),
 		("getFlag", 133, 1, [.flag], nil),
 		
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Misc. 1", start = 136, nb = 5),
 		
 		("printf", 136, 1, nil, nil),
-		("rand", 137, 0, nil, nil),
-		("setShadowPkmStatus", 138, 2, nil, nil),
+		("genRandomNumberMod", 137, 1, nil, nil), // generates a random number between 0 and the parameter - 1
+		("setShadowPkmStatus", 138, 2, [.shadowID, .shadowStatus], nil),
 		("checkMultiFlagsInv", 139, 1, nil, nil),
 		("checkMultiFlags", 140, 1, nil, nil),
 		//#------------------------------------------------------------------------------------
@@ -230,9 +128,9 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		("getPreviousMapID", 146, 0, nil, .room),
 		("unknownFunction147", 147, 2, nil, nil), //# (int, float)
 		("getPkmSpeciesName", 148, 1, [.pokemon], .msg),
-		("unknownFunction147", 149, 1, nil, nil), //# some map related function; returns a reference to a character
-		("speciesRelatedFunction148", 150, 1, nil, nil), //# take the species index as arg
-		("getPkmRelatedArrayElement", 151, 1, nil, nil), //# (array, index)
+		("getTreasureBoxCharacter", 149, 1, [.treasureID], nil), //# (int treasureID) returns a character object for the treasure
+		("speciesRelatedFunction148", 150, 1, [.pokemon], nil), //# take the species index as arg
+		("getArrayElement", 151, 1, nil, nil), //# (array, index)
 		("unknownFunction152", 152, 1, nil, nil),
 		("distance", 153, 2, nil, nil),  //# between the two points whose coordinates are the vector args
 		("unknownFunction154", 154, 1, nil, nil), //# (character), returns 0 by default
@@ -318,6 +216,8 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		("checkIsInRange", 27, 4, nil, .bool), //# (int x, int y, int z, float angle?)
 		("setPosition", 29, 3, nil, nil), //# (int x, int y, int z)
 		
+		("moveToPosition", 36, 4, nil, nil), //# (int speed, int x, int y, int z)
+		
 		("setCharacterFlags", 40, 2, nil, nil), //# (int flags ?)
 		("clearCharacterFlags", 41, 2, nil, nil), //# (int flags ?)
 		
@@ -349,6 +249,7 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		("playCry", 16, 1, nil, nil),
 		("deleteMove", 17, 1, nil, nil), // (int move index)
 		
+		("countMoves", 20, 1, nil, nil),
 		("getPokeballCaughtWith", 1, 21, nil, .item),
 		("getNickname", 22, 1, nil, nil),
 		
@@ -403,11 +304,12 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		
 		("setMsgVar", 28, 3, [.msgVar, nil], nil), //# (int type, var val)
 		
-		("displayCustomMenu", 29, 5, nil, nil), // (unk, unk, unk, unk, array of string ids for menu options)
+		("displayCustomMenu", 29, 5, [.msg,nil,nil,nil,nil], nil), // (unk, unk, unk, unk, array of string ids for menu options)
 		
 		("promptPartyPokemon", 32, 1, nil, nil), //# these functions are **exactly** the same
 		("promptPartyPokemon2", 33, 1, nil, nil),
-		("openPokemonSummary", 34, 1, nil, nil), //# no arg ...
+		("openPokemonSummary", 34, 2, nil, nil), //# int partyIndex
+		("openMoveSelectionWindow", 35, 2, nil, nil), //# int partyIndex
 		
 		("promptName", 36, 2, nil, nil), //# (int forWhom, var target, int mode)
 		//# forWhom: 0 for Player, 1 for Sister, 2 for Poké. mode: 0 = enter pkm name, 1 = player name, 2 = sister name (not verified)
@@ -420,7 +322,9 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		
 		("openItemMenu", 50, 1, nil, nil),
 		
-		("moveRelearner", 64, 2, nil, nil), //# (int partyIndex)
+		("showWorldMapLocation", 60, 2, nil, nil),
+		
+		("openMoveRelearnerMenuForPartyMember", 64, 2, nil, .move), //# (int partyIndex)
 		
 		("openMoneyWindow", 67, 3, nil, nil), //# (int x, int y)
 		("closeMoneyWindow", 68, 1, nil, nil),
@@ -428,8 +332,10 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		("openPkCouponsWindow", 70, 3, nil, nil), //# (int x, int y)
 		("closePkCouponsWindow", 71, 1, nil, nil),
 		
-		("startBattle", 72, 2, nil, nil), //# (int battleid)
+		("startBattle", 72, 2, [.battleID], nil), //# (int battleid)
 		("getBattleResult", 74, 1, nil, .battleResult),
+		
+		("askMewMenuQuestionWithIndex", 78, 2, nil, nil),
 		
 	],
 	
@@ -445,8 +351,13 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 //MARK: - Battle
 	42 : [
 		
-		("startBattle", 16, 4, [.bool,nil,nil], nil), // # (int isTrainer, int unknown, int battleID) (battleID list in reference folder)
+		("startBattle", 16, 4, [.battleID, nil,.bool], nil),// # (int isTrainer, int unknown, int battleID) (battleID list in reference folder)
 		("checkBattleResult", 18, 0, nil, .battleResult), // # sets last result to 2 if victory
+		
+		("setBattlefield", 23, 2, [.battlefield], nil),
+		("setPostBattleText", 26, 3, [.battleResult, .msg], nil),
+		
+		("setBattleID", 42, 2, [.battleID], nil),
 	],
 	
 //MARK: - Player
@@ -465,6 +376,7 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		
 		("receiveMoney", 29, 2, nil, nil), //# (int amount) (can be < 0)
 		("getMoney", 30, 1, nil, nil),
+		("getSavedMoney", 31, 1, nil, nil),
 		
 		("countPartyPkm", 34, 1, nil, nil), //# (int amount)
 		("countShadowPartyPkm", 35, 1, nil, nil), //# (int amount)
@@ -511,7 +423,10 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 	
 //MARK: - Sound
 	47 : [
-		("setBGM",25, 5, nil, nil), //# (int bgm id, int unk1, int unk2, int unk3) one of the params is probably volume
+		
+		("playSoundEffect", 16, 4, nil, nil), // int songid, int unk, int volume
+		
+		("setBGM", 25, 5, nil, nil), //# (int bgm id, int unk1, int unk2, int volume)
 	
 	],
 	
@@ -563,13 +478,13 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		//# 2 : seen and battled against
 		//# 3 : caught
 		//# 4 : purified
-		("isShadowPkmPurified", 16, 2, nil, .bool),
-		("isShadowPkmCaught", 17, 2, nil, .bool),
-		("setShadowPkmStatus", 18, 3, [nil, .shadowStatus], nil),
-		("getShadowPkmSpecies", 19, 2, nil, .pokemon),
-		("getShadowPkmStatus", 20, 2, nil, .shadowStatus),
+		("isShadowPkmPurified", 16, 2, [.shadowID], .bool),
+		("isShadowPkmCaught", 17, 2, [.shadowID], .bool),
+		("setShadowPkmStatus", 18, 3, [.shadowID, .shadowStatus], nil),
+		("getShadowPkmSpecies", 19, 2, [.shadowID], .pokemon),
+		("getShadowPkmStatus", 20, 2, [.shadowID], .shadowStatus),
 		("unknownFunction21", 21, 2, nil, nil),
-		("setShadowPkmPCBoxIndex", 22, 4, nil, nil), //# (int index, int subIndex)
+		("setShadowPkmPCBoxIndex", 22, 4, [.shadowID, nil, nil], nil), //# (int index, int subIndex)
 	],
 	
 //MARK: - Pokespot

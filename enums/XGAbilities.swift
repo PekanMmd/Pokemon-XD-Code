@@ -11,14 +11,14 @@ import Foundation
 let kFirstAbilityNameID = 0xC1D
 let kFirstAbilityDescriptionID = 0xCE5
 
-let abilityListUpdated = XGFiles.dol.data.get4BytesAtOffset(kAbilitiesStartOffset + 8) != 0
+let abilityListUpdated = game == .Colosseum ? false : XGFiles.dol.data.get4BytesAtOffset(kAbilitiesStartOffset + 8) != 0
 
 let kNumberOfAbilities			= abilityListUpdated ? (0x3A8 / 8) : 0x4E
 let kAbilityNameIDOffset		= abilityListUpdated ? 0 : 4
 let kAbilityDescriptionIDOffset = abilityListUpdated ? 4 : 8
 let kSizeOfAbilityEntry			= abilityListUpdated ? 8 : 12
 
-let kAbilitiesStartOffset = 0x3FCC50
+let kAbilitiesStartOffset = game == .XD ? 0x3FCC50 : (region == .JP ? 0x348D20 : 0x35C5E0)
 
 enum XGAbilities : XGDictionaryRepresentable {
 	
@@ -27,7 +27,11 @@ enum XGAbilities : XGDictionaryRepresentable {
 	var index : Int {
 		get {
 			switch self {
-				case .ability(let i): return i
+				case .ability(let i):
+					if i > kNumberOfAbilities || i < 0 {
+						return 0
+					}
+					return i
 			}
 		}
 	}
@@ -106,7 +110,7 @@ enum XGAbilities : XGDictionaryRepresentable {
 	
 	static func random() -> XGAbilities {
 		var rand = 0
-		while (XGAbilities.ability(rand).nameID == 0) {
+		while (XGAbilities.ability(rand).nameID == 0) || (XGAbilities.ability(rand).name.string.length < 2) {
 			rand = Int(arc4random_uniform(UInt32(kNumberOfAbilities - 1))) + 1
 		}
 		return XGAbilities.ability(rand)
@@ -132,7 +136,7 @@ func allAbilities() -> [String : XGAbilities] {
 let abilities = allAbilities()
 
 func ability(_ name: String) -> XGAbilities {
-	if abilities[name.simplified] == nil { print("couldn't find: " + name) }
+	if abilities[name.simplified] == nil { printg("couldn't find: " + name) }
 	return abilities[name.simplified] ?? .ability(0)
 }
 

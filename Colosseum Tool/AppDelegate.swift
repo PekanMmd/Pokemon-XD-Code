@@ -7,6 +7,7 @@
 
 import Cocoa
 
+let appDelegate = (NSApp.delegate as! AppDelegate)
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 

@@ -8,13 +8,12 @@
 
 import Foundation
 
-typealias ASM = [UInt32]
-
 let kColosseumDolToRamOffsetDifference = 0x3000
 let kColosseumDolToISOOffsetDifference = 0x1EC00
 
 let kRELtoRAMOffsetDifference = 0xb18dc0 // add this value to a common_rel offset to get it's offset in RAM
-let kDOLtoRAMOffsetDifference = 0x30a0   // add this value to a start.dol offset to get it's offset in RAM
+let kDOLtoRAMOffsetDifference = 0x30a0   // add this value to a start.dol [UInt32] offset to get it's offset in RAM
+let kDOLTableToRAMOffsetDifference = 0x3000 // add this value to a start.dol data table offset to get it's offset in RAM
 let kDoltoISOOffsetDifference = 0x20300 // add this value to a start.dol offset to get it's offset in the ISO
 
 let kRELDataStartOffset = 0x1CB0
@@ -90,7 +89,7 @@ class XGAssembly {
 		let dol = XGFiles.dol.data
 		for i in 0 ..< asm.count {
 			let offset = startOffset + (i * 4)
-			let instruction = asm[i]
+			let instruction = asm[i].codeAtOffset(offset + kDOLtoRAMOffsetDifference)
 			dol.replace4BytesAtOffset(offset, withBytes: instruction)
 		}
 		dol.save()
@@ -101,13 +100,34 @@ class XGAssembly {
 		let rel = XGFiles.common_rel.data
 		for i in 0 ..< asm.count {
 			let offset = startOffset + (i * 4) - ramOffset
+			let instruction = asm[i].codeAtOffset(offset + kRELtoRAMOffsetDifference)
+			rel.replace4BytesAtOffset(offset, withBytes: instruction)
+		}
+		rel.save()
+	}
+	
+	class func replaceASM(startOffset: Int, newASM asm: [UInt32]) {
+		let dol = XGFiles.dol.data
+		for i in 0 ..< asm.count {
+			let offset = startOffset + (i * 4)
+			let instruction = asm[i]
+			dol.replace4BytesAtOffset(offset, withBytes: instruction)
+		}
+		dol.save()
+	}
+	
+	class func replaceRELASM(startOffset: Int, newASM asm: [UInt32]) {
+		let ramOffset = startOffset > kRELtoRAMOffsetDifference ? kRELtoRAMOffsetDifference : 0
+		let rel = XGFiles.common_rel.data
+		for i in 0 ..< asm.count {
+			let offset = startOffset + (i * 4) - ramOffset
 			let instruction = asm[i]
 			rel.replace4BytesAtOffset(offset, withBytes: instruction)
 		}
 		rel.save()
 	}
 	
-	class func revertASM(startOffset: Int, newASM asm: ASM) {
+	class func revertASM(startOffset: Int, newASM asm: [UInt32]) {
 		for i in 0 ..< asm.count {
 			let offset = startOffset + (i * 4)
 			revertDolInstructionFromOffset(offset: offset, length: 1)
@@ -115,7 +135,7 @@ class XGAssembly {
 	}
 	
 	class func removeASM(startOffset: Int, length: Int) {
-		let asm = ASM(repeating: kNopInstruction, count: length)
+		let asm = [UInt32](repeating: kNopInstruction, count: length)
 		replaceASM(startOffset: startOffset, newASM: asm)
 	}
 	
@@ -127,7 +147,7 @@ class XGAssembly {
 	class func getWordAtRamOffsetFromR13(offset: Int) -> Int {
 		// this should be a pointer into common_rel
 		let ram = XGFiles.nameAndFolder("xg ram.raw", .Reference).data
-		return Int(ram.get4BytesAtOffset(ramPointerOffsetFromR13(offset: offset))) - kRELtoRAMOffsetDifference
+		return Int(ram.get4BytesAtOffset(ramPointerOffsetFromR13(offset: offset)))
 	}
 	
 	class func createBranchAndLinkFrom(offset: Int, toOffset to: Int) -> UInt32 {
@@ -159,7 +179,8 @@ class XGAssembly {
 		if difference > 0x7FFF || difference < -0xFFFF {
 			print("conditional branch overflow")
 		}
-		return UInt32(16 << 26) + (BO << 21) + (BI << 16) + UInt32(difference & 0xFFFF)
+		let diff = UInt32(difference & 0xFFFF)
+		return UInt32(16 << 26) + (BO << 21) + (BI << 16) + diff
 	}
 	
 	class func powerPCBranchEqualFromOffset(from: Int, to: Int) -> UInt32 {
@@ -455,14 +476,17 @@ class XGAssembly {
 	
 	class func switchNextPokemonAtEndOfTurn() {
 		// you no longer send in a new pokemon as soon as one faints. Now waits until end of turn. Still experimental!
+		// pretty much a copy and paste of all the code that would be called at the end of the move routine with just a few lines of code where the switching happens being omitted. Not a very elegant solution but effective.
 		
 		let switchlessStart = ASMfreeSpacePointer()
+		let switchless2Start = switchlessStart + 0x74
 		let switchlessBranch = 0x20e36c
 		let executeCodeRoutine = 0x1f3bec
 		let intimidateRoutine = 0x225c04
 		let unkownRoutine = 0x225ac8
 		let battleEntryEffects = 0x226474
-		let switchlessCode : ASM = [
+		let animSoundCallback = 0x2236a8
+		let switchlessCode : [UInt32] = [
 			0x9421fff0,
 			0x7c0802a6,
 			0x3c808022,
@@ -472,16 +496,22 @@ class XGAssembly {
 			0x38a00000,
 			0x38c00000,
 			createBranchAndLinkFrom(offset: switchlessStart + 0x20, toOffset: executeCodeRoutine),
+			
+			createBranchAndLinkFrom(offset: switchlessStart + 0x24, toOffset: switchless2Start),
+			
+			0x3c608041,
+			0x386369f0,
+			createBranchAndLinkFrom(offset: switchlessStart + 0x30, toOffset: animSoundCallback),
 			0x38600001,
-			createBranchAndLinkFrom(offset: switchlessStart + 0x28, toOffset: intimidateRoutine),
-			createBranchAndLinkFrom(offset: switchlessStart + 0x2c, toOffset: unkownRoutine),
+			createBranchAndLinkFrom(offset: switchlessStart + 0x38, toOffset: intimidateRoutine),
+			createBranchAndLinkFrom(offset: switchlessStart + 0x3c, toOffset: unkownRoutine),
 			0x3c808022,
 			0x38600000,
 			0x38847588,
 			0x38a00000,
 			0x38c00000,
-			createBranchAndLinkFrom(offset: switchlessStart + 0x44, toOffset: executeCodeRoutine),
-			createBranchAndLinkFrom(offset: switchlessStart + 0x48, toOffset: battleEntryEffects),
+			createBranchAndLinkFrom(offset: switchlessStart + 0x54, toOffset: executeCodeRoutine),
+			createBranchAndLinkFrom(offset: switchlessStart + 0x58, toOffset: battleEntryEffects),
 			0x80010014,
 			0x7c0803a6,
 			0x38210010,
@@ -490,7 +520,70 @@ class XGAssembly {
 			0x4e800020
 		]
 		
-		XGAssembly.replaceASM(startOffset: switchlessStart - kRELtoRAMOffsetDifference, newASM: switchlessCode)
+		let moveRoutineGetPosition = 0x2236f8
+		let getPokemonPointer = 0x1efcac
+		let getCurrentMove = 0x148d64
+		let getAllyTrainerNumber = 0x1f7688
+		let getFoeTrainerNumber = 0x1f7640
+		let unknown = 0x1f87ac
+		let setAppropriateBattleResult = 0x1f3dac
+		let moveRoutineUpdatePosition = 0x2236dc
+		let switchless2Code : [UInt32] = [
+			0x9421ffe0,
+			0x7c0802a6,
+			0x90010024,
+			0xbf61000c,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x10, toOffset: moveRoutineGetPosition),
+			0x80a30001,
+			0x38600011,
+			0x38800000,
+			0x3005ffff,
+			0x7c002910,
+			0x541f063e,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x2c, toOffset: getPokemonPointer),
+			0x7c7e1b78,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x34, toOffset: getCurrentMove),
+			0x7c601b78,
+			0x38600000,
+			0x7c1b0378,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x44, toOffset: getAllyTrainerNumber),
+			0x547d063e,
+			0x38600000,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x50, toOffset: getFoeTrainerNumber),
+			0x547c063e,
+			0x38600005,
+			0x38800000,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x60, toOffset: getPokemonPointer),
+			0x7fa4eb78,
+			0x7f85e378,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x6c, toOffset: unknown),
+			0x28030000,
+			0x40820010,
+			0x38600000,
+			0x38800002,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x80, toOffset: setAppropriateBattleResult),
+			0x38600004,
+			0x38800000,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x8c, toOffset: getPokemonPointer),
+			0x7fa4eb78,
+			0x7f85e378,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x98, toOffset: unknown),
+			0x28030000,
+			0x40820010,
+			0x38600000,
+			0x38800003,
+			createBranchAndLinkFrom(offset: switchless2Start + 0xac, toOffset: setAppropriateBattleResult),
+			0x38600005,
+			createBranchAndLinkFrom(offset: switchless2Start + 0xb4, toOffset: moveRoutineUpdatePosition),
+			0xbb61000c,
+			0x80010024,
+			0x7c0803a6,
+			0x38210020,
+			powerPCBranchLinkReturn()
+		
+		]
+		
+		XGAssembly.replaceRELASM(startOffset: switchlessStart - kRELtoRAMOffsetDifference, newASM: switchlessCode + switchless2Code)
 		XGAssembly.replaceASM(startOffset: switchlessBranch - kDOLtoRAMOffsetDifference, newASM: [createBranchAndLinkFrom(offset: switchlessBranch, toOffset: switchlessStart)])
 		
 	}
@@ -503,11 +596,11 @@ class XGAssembly {
 		return [0x2f, 0xff, 0x01, 0x60, 0x1e, stat.rawValue + stages.rawValue, 0x29, 0x80, 0x41, 0x44, 0xcd,]
 	}
 	
-	class func routineForMultipleStatBoosts(RAMOffset: Int, boosts: [(stat: XGStats, stages: XGStatStages)]) -> [Int] {
-		return routineForMultipleStatBoosts(RAMOffset: RAMOffset, boosts: boosts, isSecondaryEffect: false)
+	class func routineForMultipleStatBoosts(RAMOffset: Int, boosts: [(stat: XGStats, stages: XGStatStages)], affectsUser: Bool) -> [Int] {
+		return routineForMultipleStatBoosts(RAMOffset: RAMOffset, boosts: boosts, isSecondaryEffect: false, affectsUser: affectsUser)
 	}
 	
-	class func routineForMultipleStatBoosts(RAMOffset: Int, boosts: [(stat: XGStats, stages: XGStatStages)], isSecondaryEffect: Bool) -> [Int] {
+	class func routineForMultipleStatBoosts(RAMOffset: Int, boosts: [(stat: XGStats, stages: XGStatStages)], isSecondaryEffect: Bool, affectsUser: Bool) -> [Int] {
 		// MULTI STAT BOOST
 		// intro
 		// --> stat checks
@@ -538,7 +631,8 @@ class XGAssembly {
 		let animation = !isSecondaryEffect ? [0x0a, 0x0b, 0x4] : [Int]() // move animation 2
 		let mask = [0x2f, 0x80, 0x4e, 0xb9, 0x6c, 0x00, 0x49, 0x11, XGStats.maskForStats(stats: stats), 0x00]
 		let midBoost = [0x2a, 0x00, 0x80, 0x4e, 0x85, 0xc5, 0x02,]
-		let endBoost = [0x14, 0x80, 0x2f, 0x8f, 0xc8, 0x3a, 0x00, 0x40,]
+		let endBoostPositive = [0x14, 0x80, 0x2f, 0x8f, 0xc8, 0x3a, 0x00, 0x40,]
+		let endBoostNegative = [0x14, 0x80, 0x2f, 0x8f, 0xe0, 0x3a, 0x00, 0x40,]
 		let outro = [0x13, 0x00, 0x00, 0x0b, 0x04, 0x29, 0x80, 0x41, 0x41, 0x0f,]
 		
 		let sizeOfCheckStat = 9
@@ -559,7 +653,30 @@ class XGAssembly {
 		}
 		
 		func boostStart(stat: XGStats, stages: XGStatStages) -> [Int] {
-			return [0x2f, 0xff, 0x01, 0x60, 0x1e, stages.rawValue + stat.rawValue, 0x8a, 0x41,]
+			
+			// if set then even if mist is active or the user has the ability clear body/white smoke,
+			// the stat buff/nerf will still occur. e.g. superpower
+			let notAffectedByClearBodyOrMistMask = 0x80
+			
+			// if set the stat buff/nerf will be applied to the pokemon that used the move,
+			// otherwise it will be applied to the pokemon that was targeted by the move
+			let affectsUserMask = 0x40
+			
+			// if set, the stat buff/nerf will still activate even if the move was protected against.
+			// Probably doesn't apply to any moves but used for abilities like intimidate
+			//let activatesThroughProtectMask = 0x20
+			
+			// if set, when the stat buff/nerf fails (e.g. blocked by mist or an ability),
+			// an appropriate message is displayed to explain that it failed.
+			let showsAnimationOnFailureMask = 0x1
+			
+			var flagsMask = 0x0
+			if !isSecondaryEffect { flagsMask += showsAnimationOnFailureMask }
+			if affectsUser || (stages.trueValue > 0) { flagsMask += notAffectedByClearBodyOrMistMask }
+			if affectsUser { flagsMask += affectsUserMask }
+			
+			
+			return [0x2f, 0xff, 0x01, 0x60, 0x1e, stages.rawValue + stat.rawValue, 0x8a, flagsMask,]
 		}
 		
 		var routine = intro
@@ -580,7 +697,7 @@ class XGAssembly {
 		for boost in boosts {
 			routine += boostStart(stat: boost.stat, stages: boost.stages) + intAsByteArray(currentEndOffset)
 			routine += midBoost + intAsByteArray(currentEndOffset)
-			routine += endBoost
+			routine += boost.stages.trueValue > 0 ? endBoostPositive : endBoostNegative
 			
 			currentEndOffset += sizeOfStatBoost
 		}
@@ -619,11 +736,11 @@ class XGAssembly {
 		return routineRegularHitOpenEnded() + [0x29] + intAsByteArray(offset)
 	}
 	
-	class func routineHitAndStatChange(routineOffsetRAM offset: Int, boosts: [((stat: XGStats, stages: XGStatStages))]) -> [Int] {
+	class func routineHitAndStatChange(routineOffsetRAM offset: Int, boosts: [((stat: XGStats, stages: XGStatStages))], affectsUser: Bool) -> [Int] {
 		let regularHit = routineRegularHitOpenEnded()
 		let statStart = offset + regularHit.count
 		
-		return regularHit + routineForMultipleStatBoosts(RAMOffset: statStart, boosts: boosts, isSecondaryEffect: true)
+		return regularHit + routineForMultipleStatBoosts(RAMOffset: statStart, boosts: boosts, isSecondaryEffect: true, affectsUser: affectsUser)
 	}
 	
 	class func routineRegularHitOpenEnded() -> [Int] {
@@ -729,19 +846,39 @@ class XGAssembly {
 		}
 	}
 	
-	class func newStatBoostRoutine(effect: Int, boosts: [(stat: XGStats, stages: XGStatStages)], RAMOffset: Int?) -> [Int] {
+	class func setMoveEffectRoutineRAMOffset(effect: Int, RAMOffset offset: UInt32) {
+		let effectOffset = effect * 4
+		let pointerOffset = moveEffectTableStartDOL + effectOffset
+		let RAMOffset = offset + (offset > 0x80000000 ? 0 : 0x80000000)
+		
+		let dol = XGFiles.dol.data
+		dol.replace4BytesAtOffset(pointerOffset, withBytes: RAMOffset)
+		dol.save()
+	}
+	
+	
+	class func newStatBoostRoutine(effect: Int, boosts: [(stat: XGStats, stages: XGStatStages)], RAMOffset: Int?, affectsUser: Bool) -> [Int] {
 		
 		var routine = [Int]()
 		let offset = RAMOffset ?? ASMfreeSpacePointer()
 		
 		if boosts.count == 1 {
-			routine = routineForSingleStatBoost(stat: boosts[0].stat, stages: boosts[0].stages)
+			if affectsUser {
+				routine = routineForSingleStatBoost(stat: boosts[0].stat, stages: boosts[0].stages)
+			} else {
+				routine = routineForTargetStatDrop(stat: boosts[0].stat, stages: boosts[0].stages)
+			}
 		} else {
-			routine = routineForMultipleStatBoosts(RAMOffset: 0x80000000 + offset, boosts: boosts, isSecondaryEffect: false)
+			routine = routineForMultipleStatBoosts(RAMOffset: 0x80000000 + offset, boosts: boosts, isSecondaryEffect: false, affectsUser: affectsUser)
 		}
 		
 		return routine
 		
+	}
+	
+	class func startOffsetForMoveRoutineFunction(index: Int) -> UInt32 {
+		let firstPointer = 0x2f8af8 - kDOLTableToRAMOffsetDifference
+		return XGFiles.dol.data.get4BytesAtOffset(firstPointer + (4 * index))
 	}
 	
 	class func intAsByteArray(_ i: Int) -> [Int] {

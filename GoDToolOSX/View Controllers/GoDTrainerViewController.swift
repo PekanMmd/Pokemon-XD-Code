@@ -62,7 +62,7 @@ class GoDTrainerViewController: GoDTableViewController {
 		self.pokemonContainer.layer?.borderColor = GoDDesign.colourBlack().cgColor
 		self.pokemonContainer.layer?.borderWidth = 1
 		
-		self.saveButton = GoDButton(title: "Save", colour: GoDDesign.colourGrey(), textColour: GoDDesign.colourLightBlack(), buttonType: NSButtonType.momentaryPushIn, target: self, action: #selector(save))
+		self.saveButton = GoDButton(title: "Save", colour: GoDDesign.colourGrey(), textColour: GoDDesign.colourLightBlack(), buttonType: NSButton.ButtonType.momentaryPushIn, target: self, action: #selector(save))
 		
 		self.saveButton.keyEquivalent = "⌘S"
 		
@@ -79,7 +79,6 @@ class GoDTrainerViewController: GoDTableViewController {
 			self.views["pv\(view.index)"] = view
 		}
 		
-//		self.addConstraintSize(view: pokemonViews[0], height: 280, width: 230)
 		self.addConstraintWidth(view: pokemonViews[0], width: 330)
 		for i in 1 ... 5 {
 			self.addConstraintEqualSizes(view1: pokemonViews[0], view2: pokemonViews[i])
@@ -97,7 +96,7 @@ class GoDTrainerViewController: GoDTableViewController {
 		
 	}
 	
-	func save() {
+	@objc func save() {
 		self.showActivityView { 
 			self.currentTrainer.save()
 			for mon in self.pokemon {
@@ -121,9 +120,9 @@ class GoDTrainerViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 12, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 12, width: self.table.width)) as! GoDTableCellView
 		
-		cell.identifier = "cell"
+		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		
 		cell.titleField.maximumNumberOfLines = 2
 		
@@ -131,7 +130,7 @@ class GoDTrainerViewController: GoDTableViewController {
 		cell.setTitle("\(trainer.index): " + trainer.name.replacingOccurrences(of: "[07]{00}", with: "") + "\n" + trainer.location)
 		cell.setImage(image: trainer.trainerModel.image)
 		
-		if trainer.trainerModel == XGTrainerModels.noTrainer {
+		if trainer.trainerModel == XGTrainerModels.none {
 			let face = XGTrainer(index: trainer.index, deck: trainer.deck).pokemon[0].data.species.face
 			cell.setImage(image: face)
 		}
@@ -162,6 +161,9 @@ class GoDTrainerViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		if row == -1 {
+			return
+		}
 		self.showActivityView { 
 			let info = self.trainers[row]
 			self.currentTrainer = XGTrainer(index: info.index, deck: info.deck)

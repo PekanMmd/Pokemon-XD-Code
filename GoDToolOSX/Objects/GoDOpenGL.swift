@@ -195,7 +195,7 @@ struct Matrix4 {
 		
 	}
 	
-	func translate(x x: Float, y: Float, z: Float) -> Matrix4 {
+	func translate(x: Float, y: Float, z: Float) -> Matrix4 {
 		
 		var m = Matrix4()
 		

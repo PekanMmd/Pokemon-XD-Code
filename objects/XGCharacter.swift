@@ -23,16 +23,16 @@ let kZOffset = 0x20
 let kSizeOfCharacter = 0x24
 class XGCharacter : NSObject {
 	
-	var model : XGCharacterModels!
+	@objc var model : XGCharacterModels!
 	var movementType : XGCharacterMovements!
-	var characterID = 0
+	@objc var characterID = 0
 	
-	var nameID : Int {
+	@objc var nameID : Int {
 		let start = CommonIndexes.PeopleIDs.startOffset + (self.characterID * 8)
 		return XGFiles.common_rel.data.get4BytesAtOffset(start + 4).int
 	}
 	
-	var name : String {
+	@objc var name : String {
 		return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID).string
 	}
 	
@@ -42,21 +42,21 @@ class XGCharacter : NSObject {
 		}
 	}
 	
-	var xCoordinate : Float = 0
-	var yCoordinate : Float = 0
-	var zCoordinate : Float = 0
-	var angle = 0
+	@objc var xCoordinate : Float = 0
+	@objc var yCoordinate : Float = 0
+	@objc var zCoordinate : Float = 0
+	@objc var angle = 0
 	
-	var hasScript = false
-	var scriptIndex = 0
-	var hasPassiveScript = false
-	var passiveScriptIndex = 0
-	var scriptName = "-"
-	var characterIndex = 0
-	var startOffset = 0
+	@objc var hasScript = false
+	@objc var scriptIndex = 0
+	@objc var hasPassiveScript = false
+	@objc var passiveScriptIndex = 0
+	@objc var scriptName = "-"
+	@objc var characterIndex = 0
+	@objc var startOffset = 0
 	
 	var file : XGFiles!
-	var rawData : [Int] {
+	@objc var rawData : [Int] {
 		return file.data.getByteStreamFromOffset(startOffset, length: kSizeOfCharacter)
 	}
 	
@@ -83,7 +83,7 @@ class XGCharacter : NSObject {
 		self.angle = data.get2BytesAtOffset(startOffset + kCharacterAngleOffset)
 	}
 	
-	func save() {
+	@objc func save() {
 		let data = file.data
 		
 		data.replace2BytesAtOffset(startOffset + kModelOffset, withBytes: self.model.index)

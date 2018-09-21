@@ -49,7 +49,7 @@ class GoDSpotViewController: GoDTableViewController {
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		let pokemon = rowToMon(row: row).pokemon
 		
-		let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
 		let spot = rowToSpot(row: row)
 //		cell.setBackgroundImage(pokemon.type1.image)
@@ -67,7 +67,7 @@ class GoDSpotViewController: GoDTableViewController {
 			cell.setBackgroundImage(XGMoveTypes.steel.image)
 		}
 		
-		cell.identifier = "cell"
+		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		cell.translatesAutoresizingMaskIntoConstraints = false
 		
 		cell.alphaValue = self.table.selectedRow == row ? 1 : 0.75
@@ -126,6 +126,9 @@ class GoDSpotViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		if row == -1 {
+			return
+		}
 		self.currentMon = rowToMon(row: row)
 		self.reloadView()
 	}

@@ -13,9 +13,9 @@ class XGString: NSObject {
 	var chars = [XGUnicodeCharacters]()
 	
 	var table = XGFiles.nameAndFolder("", .Documents)
-	var id	  = 0
+	@objc var id	  = 0
 	
-	var dataLength : Int {
+	@objc var dataLength : Int {
 		get {
 			var count = 0
 			for char in chars {
@@ -25,17 +25,15 @@ class XGString: NSObject {
 		}
 	}
 	
-	var stringLength : Int {
+	@objc var stringLength : Int {
 		return chars.count
 	}
 	
 	override var description : String {
-		get {
-			return string
-		}
+		return self.string
 	}
 	
-	var string : String {
+	@objc var string : String {
 		get {
 			var str = ""
 			for char in chars {
@@ -45,13 +43,13 @@ class XGString: NSObject {
 		}
 	}
 	
-	var stringPlusIDAndFile : String {
+	@objc var stringPlusIDAndFile : String {
 		get {
 			return "ID : 0x" + String(format: "%x", id) + " " + "\(id)" + " \nFile: \(table.fileName)\n\(string)\n"
 		}
 	}
 	
-	var byteStream : [UInt8] {
+	@objc var byteStream : [UInt8] {
 		get {
 			var stream = [UInt8]()
 			for char in chars {
@@ -77,17 +75,13 @@ class XGString: NSObject {
 		
 	}
 	
-	func copyString() {
+	@objc func copyString() {
 //		let pb = UIPasteboard.generalPasteboard()
 //		pb.string = self.string
 	}
 	
 	func append(_ char: XGUnicodeCharacters) {
 		self.chars.append(char)
-	}
-	
-	override func println() {
-		printg(self.string)
 	}
 	
 	init(string: String, file: XGFiles?, sid: Int?) {
@@ -160,23 +154,23 @@ class XGString: NSObject {
 		self.chars = chars
 	}
 	
-	func replace() -> Bool {
+	@objc func replace() -> Bool {
 		if self.id == 0 {
 			return false
 		}
 		return self.table.stringTable.replaceString(self, alert: false)
 	}
 	
-	func containsSubstring(_ sub: String) -> Bool {
+	@objc func containsSubstring(_ sub: String) -> Bool {
 		return self.string.contains(sub)
 	}
 	
-	func replaceSubstring(_ sub: String, withString new: String, verbose: Bool) {
+	@objc func replaceSubstring(_ sub: String, withString new: String, verbose: Bool) {
 		let str = self.string.replacingOccurrences(of: sub, with: new, options: [], range: nil)
 		self.duplicateWithString(str).replace()
 	}
 	
-	func duplicateWithString(_ str: String) -> XGString {
+	@objc func duplicateWithString(_ str: String) -> XGString {
 		return XGString(string: str, file: self.table, sid: self.id)
 	}
 	

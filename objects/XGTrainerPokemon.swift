@@ -49,33 +49,39 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 	var deckData	= XGDeckPokemon.dpkm(0, XGDecks.DeckStory)
 	
 	var species		= XGPokemon.pokemon(0)
-	var level		= 0x0
-	var happiness	= 0x0
-	var ability		= 0x0
+	@objc var level		= 0x0
+	@objc var happiness	= 0x0
 	var item		= XGItems.item(0)
 	var nature		= XGNatures.hardy
 	var gender		= XGGenders.male
-	var IVs			= 0x0 // All IVs will be the same. Not much point in varying them.
-	var EVs			= [0,0,0,0,0,0]
+	@objc var IVs			= 0x0 // All IVs will be the same. Not much point in varying them.
+	@objc var EVs			= [0,0,0,0,0,0]
 	var moves		= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
+	@objc var ability		= 0x0 {
+		didSet {
+			if ability != 0 && ability != 1 {
+				ability = 0xFF // set to random in colosseum
+			}
+		}
+	}
 	
-	var shadowCatchRate = 0x0
-	var shadowCounter	= 0x0
-	var ShadowDataInUse = false
+	@objc var shadowCatchRate = 0x0
+	@objc var shadowCounter	= 0x0
+	@objc var ShadowDataInUse = false
 	var shadowMoves		= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
-	var shadowFleeValue = 0x0
+	@objc var shadowFleeValue = 0x0
 	
-	var shadowAggression = 0x0
-	var shadowAlwaysFlee = 0x0
-	var shadowBoostLevel = 0x0 // level before snagged
+	@objc var shadowAggression = 0x0
+	@objc var shadowAlwaysFlee = 0x0
+	@objc var shadowBoostLevel = 0x0 // level before snagged
 	
-	var priority1 = 0x0
+	@objc var priority1 = 0x0
 	
 	// function of these bytes modified by editing dol code
 	var shinyness = XGShinyValues.never
-	var priority	  = 0
+	@objc var priority	  = 0
 	
-	var dictionaryRepresentation : [String : AnyObject] {
+	@objc var dictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["level"] = self.level as AnyObject?
@@ -122,7 +128,7 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 		}
 	}
 	
-	var readableDictionaryRepresentation : [String : AnyObject] {
+	@objc var readableDictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			
@@ -183,25 +189,25 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 	}
 	
 	
-	var startOffset : Int {
+	@objc var startOffset : Int {
 		get {
 			return deckData.deck.DPKMDataOffset + (deckData.DPKMIndex * kSizeOfPokemonData)
 		}
 	}
 	
-	var shadowStartOffset : Int {
+	@objc var shadowStartOffset : Int {
 		get {
 			return XGDecks.DeckDarkPokemon.DDPKDataOffset + (deckData.index * kSizeOfShadowData)
 		}
 	}
 	
-	var isShadowPokemon : Bool {
+	@objc var isShadowPokemon : Bool {
 		get {
 			return deckData.isShadow
 		}
 	}
 	
-	var isSet : Bool {
+	@objc var isSet : Bool {
 		get {
 			return deckData.isSet
 		}
@@ -275,7 +281,7 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 	}
 	
 	
-	func save() {
+	@objc func save() {
 		
 		if self.isShadowPokemon {
 			
@@ -333,7 +339,7 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	func purge() {
+	@objc func purge() {
 		species		= XGPokemon.pokemon(0)
 		level		= 0
 		happiness	= 0

@@ -50,9 +50,9 @@ enum XGUnicodeCharacters {
 			var string = ""
 			switch self {
 			case .unicode(let i)				: let u = UnicodeScalar(i); string = u == nil ? "" : u!.description
-				case .predefinedFontColour(let p)	: return p.specialUnicode.string
-				case .specifiedFontColour(let s)	: return s.specialUnicode.string
-				case .special(let s, let b)			: var str = s.string
+			case .predefinedFontColour(let p)	: return p.specialUnicode.string
+			case .specifiedFontColour(let s)	: return s.specialUnicode.string
+			case .special(let s, let b)			: var str = s.string
 													if b.count > 0 {
 														str = str + "{"
 														for hex in b {
@@ -73,7 +73,7 @@ enum XGUnicodeCharacters {
 				case .unicode( _)				: return self.string
 				case .predefinedFontColour(let p)	: return p.name
 				case .specifiedFontColour(let s)	: return s.name
-				case .special( _, let _)			: return self.string
+				case .special( _, _)			: return self.string
 			}
 		}
 	}

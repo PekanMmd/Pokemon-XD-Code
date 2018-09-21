@@ -13,15 +13,15 @@ let kBattleFieldRoomIDOffset = 0x02
 
 class XGBattleField: NSObject {
 	
-	var roomID = 0
-	var room : XGRoom? {
+	@objc var roomID = 0
+	@objc var room : XGRoom? {
 		return XGRoom.roomWithID(roomID)
 	}
 	
-	var index = 0
-	var startOffset = 0
+	@objc var index = 0
+	@objc var startOffset = 0
 	
-	init(index: Int) {
+	@objc init(index: Int) {
 		super.init()
 		
 		self.index = index

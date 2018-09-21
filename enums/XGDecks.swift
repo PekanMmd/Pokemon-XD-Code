@@ -30,9 +30,9 @@ let kCycleDTAI = [0x27, 0x2A, 0x00, 0x00, 0x73, 0x73, 0x74, 0x73, 0x73, 0x74, 0x
 
 enum XGAI : Int {
 	case none 		= 0
-	case offensive  = 1 // Copied from orre colosseum. Makes fairly smart and slightly randomised decisions.
-	case defensive  = 2 // Copied from orre colosseum. Makes fairly smart and slightly randomised decisions.
-	case simple 	= 3 // Copied from wild pokespot pokemon. Always makes the same best decision based on target in front.
+	case offensive  = 1 // Copied from orre colosseum. Makes fairly smart and slightly randomised decisions but often gets stuck spamming status moves.
+	case defensive  = 2 // Copied from orre colosseum. Makes fairly smart and slightly randomised decisions but often gets stuck spamming status moves.
+	case simple 	= 3 // Copied from wild pokespot pokemon. Always makes the same best decision based on target in front. Seems to be unreliable in double battles.
 	case cycle 		= 4 // Copied from battle CDs. Uses each of the pokemon's moves in order.
 }
 
@@ -289,7 +289,7 @@ enum XGDecks : String, XGDictionaryRepresentable {
 				return i
 			}
 		}
-		print("No more unused pokemon")
+		printg("No more unused pokemon")
 		return 0
 	}
 	

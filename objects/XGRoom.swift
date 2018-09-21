@@ -8,21 +8,31 @@
 
 import Cocoa
 
-let kSizeOfRoom = 0x40
+let kSizeOfRoom = game == .XD ? 0x40 : 0x4C
 
-let kRoomIDOffset = 0x2
-let kRoomNameIDOffset = 0x18
+let kRoomIDOffset = game == .XD ? 0x2 : 0x6
+let kRoomNameIDOffset = game == .XD ? 0x18 : 0x24
 
 class XGRoom: NSObject {
 	
-	var nameID = 0
-	var location : String {
+	@objc var nameID = 0
+	@objc var location : String {
 		return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID).string
 	}
 	
-	var name : String {
-		let ids = XGFiles.nameAndFolder("Room IDs.json", .JSON).json
-		return (ids as! [String : String])[roomID.hexString()] ?? "-"
+	@objc var name : String {
+		if game == .XD {
+			let ids = XGFiles.nameAndFolder("Room IDs.json", .JSON).json
+			return (ids as! [String : String])[roomID.hexString()] ?? "-"
+		} else {
+			let start = CommonIndexes.RoomData.startOffset + (0x18 * index)
+			let id =  XGFiles.common_rel.data.get4BytesAtOffset(start + 4).int
+			return XGFiles.common_rel.stringTable.stringSafelyWithID(id).string
+		}
+	}
+	
+	@objc var mapName : String {
+		return getStringSafelyWithID(id: nameID).string
 	}
 	
 	var map : XGMaps {
@@ -30,22 +40,16 @@ class XGRoom: NSObject {
 		return XGMaps(rawValue: id) ?? .Unknown
 	}
 	
-	var roomID = 0
+	@objc var roomID = 0
 	
-	var index = 0
-	var startOffset = 0
+	@objc var index = 0
+	@objc var startOffset = 0
 	
-	var rawData : [Int] {
+	@objc var rawData : [Int] {
 		return XGFiles.common_rel.data.getByteStreamFromOffset(startOffset, length: kSizeOfRoom)
 	}
-	
-	var warps : [XGWarp] {
-		return allWarps.filter({ (w) -> Bool in
-			return w.warpFromRoom.roomID == self.roomID && w.warpIsValid
-		})
-	}
 
-	init(index: Int) {
+	@objc init(index: Int) {
 		super.init()
 		
 		self.index = index
@@ -58,7 +62,7 @@ class XGRoom: NSObject {
 		
 	}
 	
-	class func roomWithID(_ id: Int) -> XGRoom? {
+	@objc class func roomWithID(_ id: Int) -> XGRoom? {
 		for i in 0 ..< CommonIndexes.NumberOfRooms.value {
 			let room = XGRoom(index: i)
 			if room.roomID == id {
@@ -68,11 +72,11 @@ class XGRoom: NSObject {
 		return nil
 	}
 	
-	class func roomWithName(_ name: String) -> XGRoom? {
-		for i in 0 ..< CommonIndexes.NumberOfRooms.value {
-			let room = XGRoom(index: i)
-			if room.name == name {
-				return room
+	@objc class func roomWithName(_ name: String) -> XGRoom? {
+		let ids = XGFiles.nameAndFolder("Room IDs.json", .JSON).json as! [String : String]
+		for (id, rname) in ids {
+			if rname == name {
+				return XGRoom.roomWithID(id.hexStringToInt())
 			}
 		}
 		return nil

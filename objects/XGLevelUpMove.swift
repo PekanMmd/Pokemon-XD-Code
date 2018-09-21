@@ -16,17 +16,17 @@ let kLevelUpMoveIndexOffset = 0x2 // 2 bytes
 
 class XGLevelUpMove: NSObject, XGDictionaryRepresentable {
 	
-	var level = 0x0
+	@objc var level = 0x0
 	var move  = XGMoves.move(0)
 	
-	init(level: Int, move: Int) {
+	@objc init(level: Int, move: Int) {
 		super.init()
 		
 		self.level = level
 		self.move  = .move(move)
 	}
 	
-	func isSet() -> Bool {
+	@objc func isSet() -> Bool {
 		return self.level > 0
 	}
 	
@@ -34,7 +34,7 @@ class XGLevelUpMove: NSObject, XGDictionaryRepresentable {
 		return (level, move.index)
 	}
 	
-	var dictionaryRepresentation : [String : AnyObject] {
+	@objc var dictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["level"] = self.level as AnyObject?
@@ -45,7 +45,7 @@ class XGLevelUpMove: NSObject, XGDictionaryRepresentable {
 		}
 	}
 	
-	var readableDictionaryRepresentation : [String : AnyObject] {
+	@objc var readableDictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["level"] = self.level as AnyObject?

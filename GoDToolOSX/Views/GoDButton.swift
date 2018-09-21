@@ -18,14 +18,14 @@ class GoDButton: NSButton {
 	    super.init(coder: aDecoder)
 	}
 	
-	init(title: String, colour: NSColor, textColour: NSColor, buttonType: NSButtonType, target: NSObject, action: Selector) {
+	init(title: String, colour: NSColor, textColour: NSColor, buttonType: NSButton.ButtonType, target: NSObject, action: Selector) {
 		super.init(frame: CGRect.zero)
 		
 		self.setUp(title: title, colour: colour, textColour: textColour, buttonType: buttonType, target: target, action: action)
 		
 	}
 	
-	func setUp(title: String, colour: NSColor, textColour: NSColor, buttonType: NSButtonType, target: NSObject, action: Selector) {
+	func setUp(title: String, colour: NSColor, textColour: NSColor, buttonType: NSButton.ButtonType, target: NSObject, action: Selector) {
 		
 		self.translatesAutoresizingMaskIntoConstraints = false
 		

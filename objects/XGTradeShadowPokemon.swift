@@ -20,7 +20,7 @@ let kTradeShadowPokemonMove4Offset		=  0x1A
 
 class XGTradeShadowPokemon: NSObject, XGGiftPokemon {
 	
-	var level			= 0x0
+	@objc var level			= 0x0
 //	var DDPKID			= 0x0
 	var species			= XGPokemon.pokemon(0)
 	var move1			= XGMoves.move(0)
@@ -28,14 +28,14 @@ class XGTradeShadowPokemon: NSObject, XGGiftPokemon {
 	var move3			= XGMoves.move(0)
 	var move4			= XGMoves.move(0)
 	
-	var giftType		= "Given Shadow Pokemon"
+	@objc var giftType		= "Given Shadow Pokemon"
 	
 	// unused
-	var index			= 0
-	var exp				= -1
+	@objc var index			= 0
+	@objc var exp				= -1
 	var shinyValue		= XGShinyValues.random
 	
-	var startOffset : Int {
+	@objc var startOffset : Int {
 		get {
 			return kTogepiOffset
 		}
@@ -66,7 +66,7 @@ class XGTradeShadowPokemon: NSObject, XGGiftPokemon {
 		
 	}
 	
-	func save() {
+	@objc func save() {
 		
 		let dol = XGFiles.dol.data
 		let start = startOffset

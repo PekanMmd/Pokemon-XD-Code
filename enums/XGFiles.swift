@@ -18,6 +18,8 @@ var loadedStringTables = [String : XGStringTable]()
 let loadableFiles = [XGFiles.common_rel.path,XGFiles.dol.path,XGDecks.DeckStory.file.path,XGDecks.DeckDarkPokemon.file.path, XGFiles.iso.path,XGFiles.original(.common_rel).path,XGFiles.original(.dol).path,XGFiles.original(.tableres2).path, XGFiles.fsys("people_archive.fsys").path, XGFiles.pocket_menu.path]
 let loadableStringTables = [XGFiles.tableres2.path,XGFiles.stringTable("pocket_menu.msg").path,XGFiles.common_rel.path,XGFiles.dol.path,XGFiles.original(.common_rel).path,XGFiles.original(.dol).path,XGFiles.original(.tableres2).path]
 
+let compressionFolders = [XGFolders.Common, XGFolders.Decks, XGFolders.Textures, XGFolders.StringTables, XGFolders.Scripts, XGFolders.Rels]
+
 let DeckDataEmptyLZSS = XGMutableData(byteStream: [0x4C, 0x5A, 0x53, 0x53, 0x00, 0x00, 0x01, 0xF4, 0x00, 0x00, 0x00, 0x54, 0x00, 0x00, 0x00, 0x00, 0xAF, 0x44, 0x45, 0x43, 0x4B, 0xEB, 0xF0, 0xD0, 0xEB, 0xF0, 0x02, 0xAE, 0xEA, 0xF2, 0x54, 0x4E, 0x52, 0xEB, 0xF0, 0x48, 0xEB, 0xF0, 0x01, 0x70, 0xDC, 0xFF, 0x1B, 0x0F, 0x2D, 0x0F, 0xE8, 0xF4, 0x50, 0x4B, 0x4D, 0xEB, 0xF0, 0x31, 0x30, 0x06, 0x0F, 0x5F, 0x0F, 0xFA, 0xF3, 0x41, 0x49, 0x4A, 0x0F, 0x8B, 0x0F, 0xD6, 0xE6, 0xF6, 0x53, 0x54, 0x01, 0x01, 0x18, 0xE6, 0xF5, 0x4E, 0x55, 0x03, 0x4C, 0x4C, 0x94, 0x01], file: .lzss("DeckData_Empty.bin.lzss"))
 
 let NullFSYS = XGMutableData(byteStream: [0x46, 0x53, 0x59, 0x53, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -84,13 +86,12 @@ indirect enum XGFiles {
 				case .lzss(let s)			: return s
 				case .script(let s)			: return s
 				case .texture(let s)		: return s
-				case .iso					: return "XD.iso"
 				case .toc					: return "Game.toc"
 				case .log(let d)			: return d.description
 				case .rel(let s)			: return s
 				case .col(let s)			: return s
 				case .nameAndFolder(let name, _) : return name
-				
+				case .iso					: return game == .Colosseum ? "Colosseum.iso" : "XD.iso"
 			}
 		}
 	}
@@ -128,6 +129,10 @@ indirect enum XGFiles {
 			return folder
 		}
 	}
+	
+	var text : String {
+		return data.string
+	}
 
 	var data : XGMutableData {
 		get {
@@ -150,7 +155,9 @@ indirect enum XGFiles {
 			data = XGMutableData(contentsOfXGFile: self)
 			
 			if loadableFiles.contains(self.path) {
-				loadedFiles[self.path] = data
+				if data.length > 0 {
+					loadedFiles[self.path] = data
+				}
 			}
 			
 			return data
@@ -200,6 +207,23 @@ indirect enum XGFiles {
 		}
 	}
 	
+	func writeScriptData() {
+		if XGFiles.rel(self.fileName.removeFileExtensions() + ".rel").exists {
+			let script = self.scriptData
+			XGUtility.saveString(script.description, toFile: .nameAndFolder(self.fileName + ".txt", self.folder))
+			XGUtility.saveString(script.getXDSScript(), toFile: .nameAndFolder(self.fileName.removeFileExtensions() + ".xds", self.folder))
+		} else {
+			for rel in self.folder.files {
+				if rel.fileName == self.fileName.removeFileExtensions() + ".rel" {
+					let scriptData = self.scriptData
+					scriptData.mapRel = XGMapRel(file: .nameAndFolder(rel.fileName, self.folder), checkScript: false)
+					XGUtility.saveString(scriptData.description, toFile: .nameAndFolder(self.fileName + ".txt", self.folder))
+					XGUtility.saveString(scriptData.getXDSScript(), toFile: .nameAndFolder(self.fileName.removeFileExtensions() + ".xds", folder))
+				}
+			}
+		}
+	}
+	
 	var stringTable : XGStringTable {
 		get {
 			
@@ -213,20 +237,8 @@ indirect enum XGFiles {
 			
 			switch self {
 			case .common_rel : table = XGStringTable.common_rel()
-			case .tableres2  : table = XGStringTable.tableres2()
+			case .tableres2  : table = XGStringTable.tableres2()!
 			case .dol		 : table = XGStringTable.dol()
-				
-			case .original(let f) :
-				switch f {
-					
-				case .common_rel :
-					table = XGStringTable.common_relOriginal()
-				case .dol :
-					table = XGStringTable.dolOriginal()
-				case .tableres2 :
-					table = XGStringTable.tableres2Original()
-				default: table = XGStringTable(file: self, startOffset: 0, fileSize: self.fileSize)
-				}
 				
 			default			 : table = XGStringTable(file: self, startOffset: 0, fileSize: self.fileSize)
 			}
@@ -237,6 +249,10 @@ indirect enum XGFiles {
 			
 			return table
 		}
+	}
+	
+	var collisionData : XGCollisionData {
+		return XGCollisionData(file: self)
 	}
 	
 	var fileSize : Int {
@@ -267,7 +283,7 @@ indirect enum XGFiles {
 				try fm.removeItem(atPath: self.path)
 			} catch let error1 as NSError {
 				error = error1
-				print(error)
+				printg(error)
 			}
 		}
 	}
@@ -277,23 +293,19 @@ indirect enum XGFiles {
 		return .nameAndFolder(self.fileName + ".lzss", .LZSS)
 	}
 	
-	func compileMapFsys(allowShift shift: Bool) {
+	func compileMapFsys() {
 		let baseName = self.fileName.removeFileExtensions()
 		let fsys = XGFiles.nameAndFolder(baseName + ".fsys", .AutoFSYS).fsysData
 		let rel = XGFiles.rel(baseName + ".rel").compress()
 		let scd = XGFiles.script(baseName + ".scd").compress()
 		let msg = XGFiles.stringTable(baseName + ".msg").compress()
 		
-		if shift {
-			fsys.shiftAndReplaceFileWithIndex(0, withFile: rel)
-			fsys.shiftAndReplaceFileWithIndex(1, withFile: scd)
-			fsys.shiftAndReplaceFileWithIndex(2, withFile: msg)
-		} else {
-			fsys.replaceFileWithIndex(0, withFile: rel, saveWhenDone: false)
-			fsys.replaceFileWithIndex(1, withFile: scd, saveWhenDone: false)
-			fsys.replaceFileWithIndex(2, withFile: msg, saveWhenDone: false)
-			fsys.save()
-		}
+		printg("compiling \(baseName).fsys...")
+		fsys.shiftAndReplaceFileWithType(.rel, withFile: rel)
+		fsys.shiftAndReplaceFileWithType(.scd, withFile: scd)
+		fsys.shiftAndReplaceFileWithType(.msg, withFile: msg)
+		
+		XGISO().importFiles([fsys.file])
 	}
 	
 }
@@ -328,6 +340,7 @@ enum XGFolders : String {
 	case Logs				= "Logs"
 	case Rels				= "Relocation Tables"
 	case Col				= "Collision Data"
+	case XDS				= "XDS"
 	
 	var name : String {
 		get {
@@ -486,6 +499,7 @@ enum XGFolders : String {
 			.Logs,
 			.Rels,
 			.Col,
+			.XDS,
 			]
 		
 		for folder in folders {
@@ -530,11 +544,6 @@ enum XGFolders : String {
 		if !DeckDataEmptyLZSS.file.exists {
 			DeckDataEmptyLZSS.save()
 		}
-		
-//		if !NullFSYS.file.exists {
-//			NullFSYS.save()
-//		}
-		
 		
 	}
 	

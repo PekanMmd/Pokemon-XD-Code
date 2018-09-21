@@ -13,14 +13,14 @@ protocol GoDViewLayoutManager {
 }
 
 extension NSView : GoDViewLayoutManager {
-	var contentview : NSView {
+	@objc var contentview : NSView {
 		return self
 	}
 }
 
 extension GoDViewLayoutManager {
 	
-	func addConstraints(visualFormat: String, layoutFormat: NSLayoutFormatOptions, metrics: [String: NSNumber]?, views: [String: NSView]) {
+	func addConstraints(visualFormat: String, layoutFormat: NSLayoutConstraint.FormatOptions, metrics: [String: NSNumber]?, views: [String: NSView]) {
 		self.contentview.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: visualFormat, options: layoutFormat, metrics: metrics, views: views))
 	}
 	

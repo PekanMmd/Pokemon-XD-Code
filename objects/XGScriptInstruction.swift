@@ -12,26 +12,29 @@ let kXDSLastResultVariable = "LastResult"
 
 class XGScriptInstruction: NSObject {
 	
-	var isScriptFunctionLastResult = false // set during decompilation to prevent being attributed to the wrong function
-	var isUnusedPostpendedCall = false // set during decompilation to prevent parsing stray function calls at end of script
+	@objc var isScriptFunctionLastResult = false // set during decompilation to prevent being attributed to the wrong function
+	@objc var isUnusedPostpendedCall = false // set during decompilation to prevent parsing stray function calls at end of script
 	
 	var opCode = XGScriptOps.nop
-	var subOpCode = 0
-	var parameter = 0
+	@objc var subOpCode = 0
+	@objc var parameter = 0
 	
-	var longParameter = 0 // used by 'call', 'jumptrue', 'jumpfalse', and 'jump'
+	@objc var longParameter = 0 // used by 'call', 'jumptrue', 'jumpfalse', and 'jump'
 	var subSubOpCodes = (0,0)
 	
-	var length = 1
+	@objc var level = 0
 	
-	var raw1 : UInt32 = 0
-	var raw2 : UInt32 = 0
+	@objc var length = 1
 	
-	var constant : XDSConstant!
+	@objc var raw1 : UInt32 = 0
+	@objc var raw2 : UInt32 = 0
 	
-	var SCDVariable : String {
+	@objc var constant : XDSConstant!
+	
+	@objc var SCDVariable : String {
 		let param = self.parameter
-		switch self.subOpCode {
+		let (_, level) = self.subSubOpCodes
+		switch level {
 		case 0:
 			return "#GVAR[\(self.parameter)]"
 		case 1:
@@ -53,11 +56,11 @@ class XGScriptInstruction: NSObject {
 		}
 	}
 	
-	var XDSVariable : String {
+	@objc var XDSVariable : String {
 		let param = self.parameter
-		switch self.subOpCode {
+		switch self.level {
 		case 0:
-			return "gvar_\(param)"
+			return "gvar_" + String(format: "%02d", param)
 		case 1:
 			return param < 0 ? "var_\(-param)" : "arg_\(param - 1)"
 		case 2:
@@ -68,16 +71,21 @@ class XGScriptInstruction: NSObject {
 			} else if param == 0x80 {
 				return "player_character_object"
 			} else if param <= 0x120 {
-				return "character_object\(param - 0x80)"
+				return "character_object" + String(format: "%02d", param - 0x80)
 			} else if param < 0x300 && param >= 0x200 {
-				return "array_\(param - 0x200)"
+				return "array_" + String(format: "%02d", param - 0x200)
 			} else {
 				return "_invalid_var_"
 			}
 		}
 	}
 	
-	init(bytes: UInt32, next: UInt32) {
+	var vectorDimension : XDSVectorDimension {
+		let (d, _) = self.subSubOpCodes
+		return XDSVectorDimension(rawValue: d) ?? .invalid
+	}
+	
+	@objc init(bytes: UInt32, next: UInt32) {
 		super.init()
 		
 		let op				= ((bytes >> 24) & 0xFF).int
@@ -87,6 +95,7 @@ class XGScriptInstruction: NSObject {
 		
 		self.longParameter  = (bytes & 0xFFFFFF).int
 		self.subSubOpCodes  = ((self.subOpCode >> 4), self.subOpCode & 0xf)
+		self.level		    = self.subSubOpCodes.1
 		
 		self.raw1 = bytes
 		self.raw2 = 0
@@ -159,7 +168,7 @@ class XGScriptInstruction: NSObject {
 		case .xd_operator:
 			sub = XGScriptClassesInfo.operators.operatorWithID(self.subOpCode).name
 		case .setVector:
-			let dimensions = ["v.x ","v.y ", "v.z "]
+			let dimensions = ["vx ","vy ", "vz "]
 			let index = self.subSubOpCodes.0
 			sub = index < 3 ? dimensions[index] : "error"
 		default:

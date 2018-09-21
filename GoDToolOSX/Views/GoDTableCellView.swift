@@ -22,7 +22,7 @@ class GoDTableCellView: NSImageView {
 		
 		self.addConstraintWidth(view: self, width: width)
 		
-		self.identifier = "cell"
+		self.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		
 		self.imageAlignment = .alignCenter
 		self.imageScaling   = .scaleAxesIndependently

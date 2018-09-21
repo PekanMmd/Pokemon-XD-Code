@@ -8,187 +8,27 @@
 
 import Cocoa
 
-enum MapRelIndexes : Int {
-	case FirstCharacter = 0
-	case NumberOfCharacters = 1
-	case FirstWarp = 6
-	case NumberOfWarps = 7
-}
-
-
-class XGMapRel : XGRelocationTable {
-	
-	var characters = [XGCharacter]()
-	var warps = [XGWarpLocation]()
-	var treasure = [XGTreasure]()
-	
-	var roomID = 0
-	
-	var script : XGScript? {
-		let scriptFile = XGFiles.script(file.fileName.replacingOccurrences(of: ".rel", with: ".scd"))
-		return scriptFile.exists ? scriptFile.scriptData : nil
-	}
-	
-	override convenience init(file: XGFiles) {
-		self.init(file: file, checkScript: true)
-	}
-	
-	init(file: XGFiles, checkScript: Bool) {
-		super.init(file: file)
-		
-		
-		let firstWarp = self.getPointer(index: MapRelIndexes.FirstWarp.rawValue)
-		let numberOfWarps = self.getValueAtPointer(index: MapRelIndexes.NumberOfWarps.rawValue)
-		
-		for i in 0 ..< numberOfWarps {
-			let warp = XGWarpLocation(file: file, index: i, startOffset: firstWarp + (i * kSizeOfWarpLocation))
-			warps.append(warp)
-		}
-		
-		warps.sort { (w1, w2) -> Bool in
-			return w1.zCoordinate > w2.zCoordinate
-		}
-		
-		for i in 0 ..< numberOfWarps {
-			warps[i].sortedIndex = i
-		}
-		
-		for i in 0 ..< CommonIndexes.NumberOfRooms.value {
-			let room = XGRoom(index: i)
-			if room.name == file.fileName.removeFileExtensions() {
-				self.roomID = room.roomID
-			}
-		}
-		
-		for i in 0 ..< CommonIndexes.NumberTreasureBoxes.value {
-			let treasure = XGTreasure(index: i)
-			if treasure.roomID == self.roomID {
-				self.treasure.append(treasure)
-			}
-		}
-		
-		let firstCharacter = self.getPointer(index: MapRelIndexes.FirstCharacter.rawValue)
-		let numberOfCharacters = self.getValueAtPointer(index: MapRelIndexes.NumberOfCharacters.rawValue)
-		
-		let script = checkScript ? self.script : nil
-		for i in 0 ..< numberOfCharacters {
-			let character = XGCharacter(file: file, index: i, startOffset: firstCharacter + (i * kSizeOfCharacter))
-			
-			if character.hasScript {
-				if script != nil {
-					if character.scriptIndex < script!.ftbl.count {
-						character.scriptName = script!.ftbl[character.scriptIndex].name
-					}
-				}
-			}
-			
-			characters.append(character)
-		}
-	}
-	
-}
-
-let kNumberRelPointers = 0x84
-enum CommonIndexes : Int {
-	case BattleBingo  = 0
-	case NumberOfBingoCards = 1
-	case PeopleIDs = 2 // 2 bytes at offset 0 person id 4 bytes at offset 4 string id for character name
-	case NumberOfPeopleIDs = 3
-	case numberOfPokespots = 11
-	case PokespotRock = 12
-	case PokespotRockEntries = 13
-	case PokespotOasis = 15
-	case PokespotOasisEntries = 16
-	case PokespotCave = 18
-	case PokespotCaveEntries = 19
-	case PokespotAll = 21
-	case PokespotAllEntries = 22
-	case BattleCDs = 24
-	case NumberBattleCDs = 25
-	case Battles = 26
-	case NumberOfBattles = 27
-	case BattleFields = 28
-	case NumberOfBattleFields = 29
-	case Rooms = 58 // same as maps
-	case NumberOfRooms = 59
-	case Warps = 62
-	case NumberOfWarps = 63
-	case TreasureBoxData = 66 // 0x1c bytes each
-	case NumberTreasureBoxes = 67
-	case ValidItems = 68 // list of items which are actually available in XD
-	case TotalNumberOfItems = 69
-	case Items = 70
-	case NumberOfItems = 71
-	case CharacterModels = 84
-	case NumberOfCharacterModels = 85
-	case PokemonStats = 88
-	case NumberOfPokemon = 89
-	case Natures = 94
-	case NumberOfNatures = 95
-	case USStringTable = 116
-	case Moves = 124
-	case NumberOfMoves = 125
-	case TutorMoves = 126
-	case NumberOfTutorMoves = 127
-	case Types = 130
-	case NumberOfTypes = 131
-	
-	var startOffset : Int {
-		return common.getPointer(index: self.rawValue)
-	}
-	
-	func setStartOffset(_ offset: Int) {
-		common.replacePointer(index: self.rawValue, newAbsoluteOffset: offset)
-	}
-	
-	var value : Int {
-		return common.getValueAtPointer(index: self.rawValue)
-	}
-	
-	func setValue(_ value: Int) {
-		common.setValueAtPointer(index: self.rawValue, newValue: value)
-	}
-	
-	static func indexForStartOffset(offset: Int) -> Int? {
-		for i in 0 ... CommonIndexes.NumberOfTypes.rawValue{
-			if common.getPointer(index: i) == offset {
-				return i
-			}
-		}
-		return nil
-	}
-}
-
 let common = XGCommon()
 class XGCommon : XGRelocationTable {
 	
-	init() {
+	@objc init() {
 		super.init(file: XGFiles.common_rel)
 		self.dataStart = Int(self.data.get4BytesAtOffset(kCommonRELDataStartOffsetLocation))
 	}
 	
-}
-
-enum PocketIndexes : Int {
-	case MartStartIndexes  = 0
-	case numberOfMarts = 1
-	case MartGreetings = 2
-	case numberOfMartGreetingSections = 3 // 0x4c bytes each
-	case MartItems = 4
-	case numberOfMartItems = 5
-	
-	var startOffset : Int {
-		return pocket.getPointer(index: self.rawValue)
+	var dictionary : [Int : (Int, Int)] {
+		var dict = [Int : (Int, Int)]()
+		for i in 0 ..< kNumberRelPointers {
+			dict[i] = (self.getPointer(index: i), self.getValueAtPointer(index: i))
+		}
+		return dict
 	}
 	
-	var value : Int {
-		return pocket.getValueAtPointer(index: self.rawValue)
-	}
 }
 
 let pocket = XGPocket()
 class XGPocket : XGRelocationTable {
-	init() {
+	@objc init() {
 		super.init(file: XGFiles.pocket_menu)
 	}
 }
@@ -205,11 +45,11 @@ let kRELPointerDataPointer2Offset = 0xc
 class XGRelocationTable: NSObject {
 	
 	var file : XGFiles!
-	var data : XGMutableData!
+	@objc var data : XGMutableData!
 	
-	var dataStart = 0
-	var pointersStart = 0
-	var firstPointer = 0
+	@objc var dataStart = 0
+	@objc var pointersStart = 0
+	@objc var firstPointer = 0
 	
 	init(file: XGFiles) {
 		super.init()
@@ -223,9 +63,13 @@ class XGRelocationTable: NSObject {
 		
 	}
 	
-	var pointers = [Int : Int]()
+	@objc var pointers = [Int : Int]()
 	
-	func getPointer(index: Int) -> Int {
+	@objc func getPointerOffset(index: Int) -> Int {
+		return firstPointer + (index * kRELSizeOfPointer) + kRELPointerDataPointer1Offset
+	}
+	
+	@objc func getPointer(index: Int) -> Int {
 		
 		if pointers[index] == nil {
 			let offset = firstPointer + (index * kRELSizeOfPointer) + kRELPointerDataPointer1Offset
@@ -235,18 +79,18 @@ class XGRelocationTable: NSObject {
 		return pointers[index] ?? 0
 	}
 	
-	func getValueAtPointer(index: Int) -> Int {
+	@objc func getValueAtPointer(index: Int) -> Int {
 		let startOffset = getPointer(index: index)
 		return Int(data.get4BytesAtOffset(startOffset))
 	}
 	
-	func setValueAtPointer(index: Int, newValue value: Int) {
+	@objc func setValueAtPointer(index: Int, newValue value: Int) {
 		let startOffset = getPointer(index: index)
 		data.replace4BytesAtOffset(startOffset, withBytes: UInt32(value))
 		data.save()
 	}
 	
-	func replacePointer(index: Int, newAbsoluteOffset newOffset: Int) {
+	@objc func replacePointer(index: Int, newAbsoluteOffset newOffset: Int) {
 		let offset1 = firstPointer + (index * kRELSizeOfPointer) + kRELPointerDataPointer1Offset
 		let offset2 = firstPointer + (index * kRELSizeOfPointer) + kRELPointerDataPointer2Offset
 		

@@ -24,6 +24,11 @@ enum XGItems : XGDictionaryRepresentable {
 		return self.index >= XGTMs.tm(1).item.index && self.index <= XGTMs.tm(kNumberOfTMsAndHMs).item.index ? self.index - XGTMs.tm(1).item.index + 1 : -1
 	}
 	
+	var scriptIndex : Int {
+		// index used in scripts and pokemarts is different for key items
+		return index >= 0x15e ? index + 150 : index
+	}
+	
 	var description : String {
 		return self.name.string
 	}
@@ -94,6 +99,14 @@ enum XGItems : XGDictionaryRepresentable {
 		return items
 	}
 	
+	static func pokeballs() -> [XGItems] {
+		var items = [XGItems]()
+		for i in 0 ... 12 {
+			items.append(.item(i))
+		}
+		return items
+	}
+	
 }
 
 enum XGOriginalItems {
@@ -157,7 +170,7 @@ func allItems() -> [String : XGItems] {
 let items = allItems()
 
 func item(_ name: String) -> XGItems {
-	if items[name.simplified] == nil { print("couldn't find: " + name) }
+	if items[name.simplified] == nil { printg("couldn't find: " + name) }
 	return items[name.simplified] ?? .item(0)
 }
 

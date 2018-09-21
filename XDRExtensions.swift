@@ -10,6 +10,8 @@ import Cocoa
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/XD-Randomiser"
 let region = XGRegions(rawValue: XGFiles.iso.data.get4BytesAtOffset(0)) ?? .US
+let game = XGGame.XD
+var verbose = true
 
 let date = Date(timeIntervalSinceNow: 0)
 var logString = ""
@@ -34,22 +36,22 @@ extension GoDTexture {
 		return
 	}
 	
-	func palette() -> [Int] {
+	@objc func palette() -> [Int] {
 		return []
 	}
 	
-	func pixels() -> [Int] {
+	@objc func pixels() -> [Int] {
 		
 		return []
 	}
 	
-	var pngData : Data {
+	@objc var pngData : Data {
 		get {
 			return Data()
 		}
 	}
 	
-	var image : NSImage {
+	@objc var image : NSImage {
 		get {
 			return NSImage(data: self.pngData)!
 		}
@@ -61,7 +63,7 @@ extension GoDTexture {
 }
 
 extension XGStringTable {
-	func replaceString(_ string: XGString, alert: Bool) -> Bool {
+	@objc func replaceString(_ string: XGString, alert: Bool) -> Bool {
 		
 		let copyStream = self.stringTable.getCharStreamFromOffset(0, length: self.stringOffsets[string.id]!)
 		

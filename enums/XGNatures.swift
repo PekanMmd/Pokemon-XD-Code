@@ -40,6 +40,8 @@ enum XGNatures : Int, XGDictionaryRepresentable {
 	case careful	= 0x17
 	case quirky		= 0x18
 	
+	case random     = 0xFFFF
+	
 	var string : String {
 		get {
 			switch self {
@@ -68,6 +70,7 @@ enum XGNatures : Int, XGDictionaryRepresentable {
 				case .sassy		: return "Sassy"
 				case .careful	: return "Careful"
 				case .quirky	: return "Quirky"
+				case .random	: return "Random"
 			}
 		}
 	}

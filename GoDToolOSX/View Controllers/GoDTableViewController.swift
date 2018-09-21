@@ -42,9 +42,9 @@ class GoDTableViewController: GoDViewController, GoDTableViewDelegate, NSTableVi
 	}
 	
 	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-		let cell = tableView.make(withIdentifier: "cell", owner: self) ?? NSImageView(frame: NSMakeRect(0,0,200,0))
+		let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? NSImageView(frame: NSMakeRect(0,0,200,0))
 		
-		cell.identifier = "cell"
+		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		cell.translatesAutoresizingMaskIntoConstraints = false
 		
 		if cell.isKind(of: NSImageView.self) {
@@ -53,7 +53,7 @@ class GoDTableViewController: GoDViewController, GoDTableViewDelegate, NSTableVi
 			
 			imageView.imageAlignment = .alignCenter
 			imageView.imageScaling = .scaleAxesIndependently
-			imageView.image = row % 2 == 0 ? NSImage(named: "cell") : NSImage(named: "cell gold")
+			imageView.image = row % 2 == 0 ? NSImage(named: NSImage.Name(rawValue: "cell")) : NSImage(named: NSImage.Name(rawValue: "Tool Cell"))
 		}
 		
 		return cell

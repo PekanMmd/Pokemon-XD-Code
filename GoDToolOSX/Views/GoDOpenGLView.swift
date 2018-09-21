@@ -40,102 +40,6 @@ enum XGShaders {
 	}
 }
 
-let kVBOBufferSize = 4096
-let kGLFloatSize   = 4
-let kXGVertexSize  = XGVertex().rawData.count * kGLFloatSize
-let kVertexesPerBuffer = kVBOBufferSize / kXGVertexSize
-
-class XGVertex : NSObject {
-	var x : GLfloat = 0.0
-	var y : GLfloat = 0.0
-	var z : GLfloat = 0.0
-	var type : GLfloat = 0.0
-	var index : GLfloat = 0.0
-	
-	// normal
-	var nx : GLfloat = 0.0
-	var ny : GLfloat = 0.0
-	var nz : GLfloat = 0.0
-	
-	var rawData : [GLfloat] {
-		var data = [GLfloat]()
-		data.append(x)
-		data.append(y)
-		data.append(z)
-		data.append(type)
-		data.append(index)
-		data.append(nx)
-		data.append(ny)
-		data.append(nz)
-		
-		// padding so vertexes forming triangle align to same vbo buffer
-		data.append(0.0)
-		data.append(0.0)
-		return data
-	}
-	
-	func scale(maxD : GLfloat, magnification: GLfloat) {
-		
-		self.x /= maxD
-		self.y /= maxD
-		self.z /= maxD
-		
-		self.x *= magnification
-		self.y *= magnification
-		self.z *= magnification
-	}
-}
-
-enum KeyCodeName: UInt16 {
-	case W		= 13
-	case A		= 0
-	case S		= 1
-	case D		= 2
-	case i		= 34
-	case enter	= 36
-	case space  = 49
-	case one	= 18
-	case two	= 19
-	case three	= 20
-	case four	= 21
-	case five	= 23
-	case six	= 22
-	case seven	= 26
-	case eight	= 28
-	case nine	= 25
-	case zero	= 29
-	case plus	= 24
-	case minus	= 27
-	case up		= 126
-	case down	= 125
-	case left	= 123
-	case right	= 124
-	case tab	= 48
-	case delete	= 51
-	case lessthan = 43
-	case morethan = 47
-	
-	static var allKeys : [KeyCodeName] {
-		var keys = [KeyCodeName]()
-		for i : UInt16 in 0 ... 255 {
-			if let key = KeyCodeName(rawValue: i) {
-				keys.append(key)
-			}
-		}
-		return keys
-	}
-	
-	static var dictionaryOfKeys : [KeyCodeName: Bool] {
-		var keys = [KeyCodeName: Bool]()
-		
-		for key in allKeys {
-			keys[key] = false
-		}
-		
-		return keys
-	}
-}
-
 class GoDOpenGLView: NSOpenGLView {
 	
 	var dictionaryOfKeys : [KeyCodeName : Bool] = KeyCodeName.dictionaryOfKeys
@@ -149,19 +53,19 @@ class GoDOpenGLView: NSOpenGLView {
 	private var vboIDs    : [GLuint] = [0]
 	
 	
-	var lightPosition : Vector3 = Vector3(v0: 0.0, v1: 0.0, v2: 2.0)
-	var ambientLight :  GLfloat  = 0.25
+	var lightPosition : Vector3 = Vector3(v0: 0.0, v1: 1.0, v2: -2.0)
+	var ambientLight :  GLfloat  = 0.35
 	var specular : GLfloat = 1.0
 	var shininess : GLfloat = 32
 	
-	var defaultCameraPosition = Vector3(v0: 0.0, v1: -0.15, v2: -2.0)
+	var defaultCameraPosition = Vector3(v0: 0.0, v1: 1.0, v2: -2.0)
 	var cameraPosition : Vector3!
 	var defaultCameraOrientation = Vector3(v0: 0.0, v1: 0.0, v2: 0.0)
 	var cameraOrientation : Vector3!
 	
 	var invertRotation = true
 	
-	var cameraSpeed : Float = 2.0 {
+	var cameraSpeed : Float = 1.5 {
 		didSet {
 			cameraSpeed = max(cameraSpeed, 0.1)
 		}
@@ -237,6 +141,9 @@ class GoDOpenGLView: NSOpenGLView {
 				
 				glVertexAttribPointer(3, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(kXGVertexSize), UnsafePointer<GLuint>(bitPattern: 20))
 				glEnableVertexAttribArray(3)
+				
+				glVertexAttribPointer(4, 1, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(kXGVertexSize), UnsafePointer<GLuint>(bitPattern: 32))
+				glEnableVertexAttribArray(4)
 				
 				glBindVertexArray(0)    //  Ensure no further changes are made to the VAO.
 				
@@ -329,7 +236,7 @@ class GoDOpenGLView: NSOpenGLView {
 		return newShader
 	}
 	
-	func redraw() {
+	@objc func redraw() {
 		projection = defaultProjection
 		
 		self.display()
@@ -466,14 +373,14 @@ class GoDOpenGLView: NSOpenGLView {
 				cameraPosition = Vector3(v0:0.0, v1:0.01, v2:0.0)
 				cameraOrientation = Vector3(v0:0.0, v1:0.0, v2:0.0)
 			case (KeyCodeName.one, true):
-				cameraPosition = Vector3(v0:0.0, v1:0.0, v2:-2.0)
+				cameraPosition = Vector3(v0:0.0, v1:0.0, v2:2.0)
 				cameraOrientation = Vector3(v0:0.0, v1:0.0, v2:0.0)
 			case (KeyCodeName.three, true):
-				cameraPosition = Vector3(v0:0.0, v1:2.0, v2:0.0)
+				cameraPosition = Vector3(v0:0.0, v1:-2.0, v2:0.0)
 				cameraOrientation = Vector3(v0:0.0, v1:0.0, v2:0.0)
 				rotateCamera(pitch: 270.0, yaw: 0.0)
 			case (KeyCodeName.two, true):
-				cameraPosition = Vector3(v0:0.0, v1:-2.0, v2:0.0)
+				cameraPosition = Vector3(v0:0.0, v1:2.0, v2:0.0)
 				cameraOrientation = Vector3(v0:0.0, v1:0.0, v2:0.0)
 				rotateCamera(pitch: 90.0, yaw: 0.0)
 			case (KeyCodeName.plus, true):

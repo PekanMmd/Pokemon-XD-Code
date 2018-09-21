@@ -31,21 +31,20 @@ let kBingoCardFirstPokemonOffset		= 0x24
 let kBingoCardFirstMysteryPanelOffset	= 0xB0
 
 
-
 class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 	
-	var difficulty			= 0
-	var subIndex			= 0
+	@objc var difficulty			= 0
+	@objc var subIndex			= 0
 	
-	var index				= 0
+	@objc var index				= 0
 	
-	var nameID				= 0
-	var detailsID			= 0
+	@objc var nameID				= 0
+	@objc var detailsID			= 0
 	
-	var pokemonLevel		= 0
-	var startingPokemon		: XGBattleBingoPokemon!
+	@objc var pokemonLevel		= 0
+	@objc var startingPokemon		: XGBattleBingoPokemon!
 	var panels				= [XGBattleBingoPanel]()
-	var rewards				= [Int]()
+	@objc var rewards				= [Int]()
 	
 //	var name : XGString {
 //		get {
@@ -53,7 +52,7 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 //		}
 //	}
 	
-	var startOffset : Int {
+	@objc var startOffset : Int {
 		get {
 			return CommonIndexes.BattleBingo.startOffset + (index * kSizeOfBingoCardData)
 		}
@@ -63,7 +62,6 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 		get {
 			var s = ""
 			s += "Battle Bingo Card - \(self.index)\n"
-//			s +=
 			s += "\(startingPokemon)\n\n"
 			for i in 0 ..< 4 {
 				for j in 0 ..< 4 {
@@ -84,7 +82,7 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 	}
 	
 	
-	init(index: Int) {
+	@objc init(index: Int) {
 		super.init()
 		
 		self.index = index
@@ -133,7 +131,7 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	func save() {
+	@objc func save() {
 		
 		let start = self.startOffset
 		let rel = XGFiles.common_rel.data
@@ -163,7 +161,7 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	var dictionaryRepresentation : [String : AnyObject] {
+	@objc var dictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["difficulty"] = self.difficulty as AnyObject?
@@ -185,7 +183,7 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 		}
 	}
 	
-	var readableDictionaryRepresentation : [String : AnyObject] {
+	@objc var readableDictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["Difficulty"] = self.difficulty as AnyObject?

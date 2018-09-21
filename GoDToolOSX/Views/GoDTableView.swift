@@ -39,7 +39,7 @@ class GoDTableView: NSScrollView {
 		
 		self.tableView.intercellSpacing = NSSize(width: 0, height: 0)
 		
-		let column = NSTableColumn(identifier: "col")
+		let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "col"))
 		column.minWidth = CGFloat(width)
 		column.title = "XD:GoD"
 		self.tableView.addTableColumn(column)
@@ -61,7 +61,7 @@ class GoDTableView: NSScrollView {
 		
 	}
 	
-	func didClickCell() {
+	@objc func didClickCell() {
 		if self.tableView.selectedRow >= 0 {
 			self.selectedRow = self.tableView.selectedRow
 			self.delegate.tableView(self, didSelectRow: self.tableView.selectedRow)
@@ -77,7 +77,7 @@ class GoDTableView: NSScrollView {
 		self.tableView.reloadData(forRowIndexes: [index], columnIndexes: [0])
 	}
 	
-	override func setBackgroundColour(_ colour: NSColor) {
+	func setBGColour(_ colour: NSColor) {
 		super.setBackgroundColour(colour)
 		self.tableView.backgroundColor = colour
 		self.tableView.enclosingScrollView?.drawsBackground = colour.alphaComponent > 0

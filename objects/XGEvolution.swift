@@ -18,11 +18,11 @@ let kEvolvedFormOffset			= 0x4 // 2 bytes
 class XGEvolution: NSObject, XGDictionaryRepresentable {
 	
 	var evolutionMethod	= XGEvolutionMethods.none
-	var condition		= 0
-	var evolvesInto		= 0
+	@objc var condition		= 0
+	@objc var evolvesInto		= 0
 	
 	
-	init(evolutionMethod: Int, condition: Int, evolvedForm: Int) {
+	@objc init(evolutionMethod: Int, condition: Int, evolvedForm: Int) {
 		super.init()
 		
 		self.evolutionMethod = XGEvolutionMethods(rawValue: evolutionMethod)!
@@ -30,7 +30,7 @@ class XGEvolution: NSObject, XGDictionaryRepresentable {
 		self.evolvesInto	 = evolvedForm
 	}
 	
-	func isSet() -> Bool {
+	@objc func isSet() -> Bool {
 		return self.evolutionMethod != .none
 	}
 	
@@ -38,7 +38,7 @@ class XGEvolution: NSObject, XGDictionaryRepresentable {
 		return (evolutionMethod.rawValue, condition, evolvesInto)
 	}
 	
-	var dictionaryRepresentation : [String : AnyObject] {
+	@objc var dictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["evolvesInto"] = self.evolvesInto as AnyObject?
@@ -50,7 +50,7 @@ class XGEvolution: NSObject, XGDictionaryRepresentable {
 		}
 	}
 	
-	var readableDictionaryRepresentation : [String : AnyObject] {
+	@objc var readableDictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["evolvesInto"] = self.evolvesInto as AnyObject?

@@ -11,7 +11,8 @@ import Cocoa
 class GoDNaturePopUpButton: GoDPopUpButton {
 
 	var selectedValue : XGNatures {
-		return XGNatures.allNatures()[self.indexOfSelectedItem]
+		let all = game == .XD ? XGNatures.allNatures() : XGNatures.allNatures() + [XGNatures.random]
+		return all[self.indexOfSelectedItem]
 	}
 	
 	func selectNature(nature: XGNatures) {
@@ -19,8 +20,11 @@ class GoDNaturePopUpButton: GoDPopUpButton {
 	}
 	
 	override func setUpItems() {
-		let values = XGNatures.allNatures().map { (nature) -> String in
+		var values = XGNatures.allNatures().map { (nature) -> String in
 			return nature.string
+		}
+		if game == .Colosseum {
+			values.append(XGNatures.random.string)
 		}
 		
 		self.setTitles(values: values)

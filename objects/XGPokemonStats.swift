@@ -4,7 +4,7 @@
 //
 //  Created by StarsMmd on 26/12/2014.
 //  Copyright (c) 2014 StarsMmd. All rights reserved.
-// 475c4 4e258 cc77-56d cc85-56e cd1d-14d8
+// 
 
 import Foundation
 
@@ -77,19 +77,19 @@ let kPokemonFaceIndexOffset	 = 0x116
 
 class XGPokemonStats: NSObject {
 	
-	var index			= 0x0
-	var startOffset		= 0x0
+	@objc var index			= 0x0
+	@objc var startOffset		= 0x0
 	
-	var nameID			= 0x0
-	var speciesNameID	= 0x0
-	var cryIndex		= 0x0
-	var modelIndex		= 0x0
-	var faceIndex		= 0x0
+	@objc var nameID			= 0x0
+	@objc var speciesNameID	= 0x0
+	@objc var cryIndex		= 0x0
+	@objc var modelIndex		= 0x0
+	@objc var faceIndex		= 0x0
 	
-	var bodyID		: UInt32 = 0x0
-	var bodyShinyID  : UInt32 = 0x0
+	@objc var bodyID		: UInt32 = 0x0
+	@objc var bodyShinyID  : UInt32 = 0x0
 	
-	var bodyName : String {
+	@objc var bodyName : String {
 		let dance =  XGFiles.fsys("poke_dance.fsys").fsysData
 		let index = dance.indexForIdentifier(identifier: bodyID.int)
 		return dance.fileNames[index]
@@ -98,9 +98,9 @@ class XGPokemonStats: NSObject {
 	var levelUpRate		= XGExpRate.standard
 	var genderRatio     = XGGenderRatios.maleOnly
 	
-	var catchRate		= 0x0
-	var baseExp			= 0x0
-	var baseHappiness	= 0x0
+	@objc var catchRate		= 0x0
+	@objc var baseExp			= 0x0
+	@objc var baseHappiness	= 0x0
 	
 	var type1			= XGMoveTypes.normal
 	var type2			= XGMoveTypes.normal
@@ -111,37 +111,37 @@ class XGPokemonStats: NSObject {
 	var heldItem1		= XGItems.item(0)
 	var heldItem2		= XGItems.item(0)
 	
-	var hp				= 0x0
-	var speed			= 0x0
-	var attack			= 0x0
-	var defense			= 0x0
-	var specialAttack	= 0x0
-	var specialDefense	= 0x0
+	@objc var hp				= 0x0
+	@objc var speed			= 0x0
+	@objc var attack			= 0x0
+	@objc var defense			= 0x0
+	@objc var specialAttack	= 0x0
+	@objc var specialDefense	= 0x0
 	
-	var levelUpMoves	= [XGLevelUpMove]()
-	var learnableTMs	= [Bool]()
-	var tutorMoves		= [Bool]()
-	var evolutions		= [XGEvolution]()
+	@objc var levelUpMoves	= [XGLevelUpMove]()
+	@objc var learnableTMs	= [Bool]()
+	@objc var tutorMoves		= [Bool]()
+	@objc var evolutions		= [XGEvolution]()
 	
-	var nationalIndex	= 0
+	@objc var nationalIndex	= 0
 	
-	var hpYield				= 0x0
-	var speedYield			= 0x0
-	var attackYield			= 0x0
-	var defenseYield		= 0x0
-	var specialAttackYield	= 0x0
-	var specialDefenseYield	= 0x0
+	@objc var hpYield				= 0x0
+	@objc var speedYield			= 0x0
+	@objc var attackYield			= 0x0
+	@objc var defenseYield		= 0x0
+	@objc var specialAttackYield	= 0x0
+	@objc var specialDefenseYield	= 0x0
 	
-	var pkxModelIdentifier : UInt32 {
+	@objc var pkxModelIdentifier : UInt32 {
 		let dol = XGFiles.dol.data
 		return dol.get4BytesAtOffset(kFirstPokemonPKXIdentifierOffset + (self.modelIndex * 8) + kModelDictionaryModelOffset)
 	}
 	
-	var pkxFSYS : XGFsys? {
+	@objc var pkxFSYS : XGFsys? {
 		return XGISO().getPKXModelWithIdentifier(id: self.pkxModelIdentifier)
 	}
 	
-	var pkxData : XGMutableData? {
+	@objc var pkxData : XGMutableData? {
 		let fsys = self.pkxFSYS
 		
 		if fsys != nil {
@@ -151,38 +151,38 @@ class XGPokemonStats: NSObject {
 		return nil
 	}
 	
-	var name : XGString {
+	@objc var name : XGString {
 		get {
 			return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
 		}
 	}
 	
-	var species : XGString {
+	@objc var species : XGString {
 		get {
 			let file = XGFiles.nameAndFolder("pda_menu.msg", .StringTables)
 			return XGStringTable(file: file, startOffset: 0, fileSize: file.fileSize).stringSafelyWithID(self.speciesNameID)
 		}
 	}
 	
-	var numberOfTMs : Int {
+	@objc var numberOfTMs : Int {
 		get {
 			return learnableTMs.filter{ $0 }.count
 		}
 	}
 	
-	var numberOfTutorMoves : Int {
+	@objc var numberOfTutorMoves : Int {
 		get {
 			return tutorMoves.filter{ $0 }.count
 		}
 	}
 	
-	var numberOfLevelUpMoves : Int {
+	@objc var numberOfLevelUpMoves : Int {
 		get {
 			return levelUpMoves.filter{ $0.isSet() }.count
 		}
 	}
 	
-	var numberOfEvolutions : Int {
+	@objc var numberOfEvolutions : Int {
 		get {
 			return evolutions.filter{ $0.isSet() }.count
 		}
@@ -202,7 +202,7 @@ class XGPokemonStats: NSObject {
 		self.speciesNameID  = rel.get2BytesAtOffset(startOffset + kSpeciesNameIDOffset)
 		self.cryIndex		= rel.get2BytesAtOffset(startOffset + kPokemonCryIndexOffset)
 		self.modelIndex		= rel.get2BytesAtOffset(startOffset + kPokemonModelIndexOffset)
-		self.faceIndex		= rel.get2BytesAtOffset(startOffset + kPokemonFaceIndexOffset)
+		self.faceIndex		= game == .XD ? rel.get2BytesAtOffset(startOffset + kPokemonFaceIndexOffset) : rel.get4BytesAtOffset(CommonIndexes.PokefaceTextures.startOffset + (index * 8) + 4).int
 		self.bodyID		    = rel.get4BytesAtOffset(startOffset + kPokemonBodyOffset)
 		self.bodyShinyID	= rel.get4BytesAtOffset(startOffset + kPokemonBodyShinyOffset)
 		
@@ -276,7 +276,7 @@ class XGPokemonStats: NSObject {
 		
 	}
 	
-	func save() {
+	@objc func save() {
 		
 		let rel	= XGFiles.common_rel.data
 
@@ -359,7 +359,7 @@ class XGPokemonStats: NSObject {
 	}
 	
 	
-	var dictionaryRepresentation : [String : AnyObject] {
+	@objc var dictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["name"] = self.name.string as AnyObject?
@@ -410,7 +410,7 @@ class XGPokemonStats: NSObject {
 		}
 	}
 	
-	var readableDictionaryRepresentation : [String : AnyObject] {
+	@objc var readableDictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			

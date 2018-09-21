@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
-        <plugIn identifier="com.apple.imagekit.ibplugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
+        <plugIn identifier="com.apple.imagekit.ibplugin" version="14113"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -62,6 +62,26 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Edit" id="W48-6f-4Dl">
                                     <items>
+                                        <menuItem title="Logs" id="6TM-j1-Ag0">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Logs" id="vqI-K9-XxD">
+                                                <items>
+                                                    <menuItem title="Verbose" id="4gy-Al-AUM">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="setVerboseLogs:" target="Voe-Tx-rLC" id="CXv-hg-dxa"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Fast" id="Hob-rn-WlJ">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="setFastLogs:" target="Voe-Tx-rLC" id="a1f-hU-KvW"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="gcK-uI-4ME"/>
                                         <menuItem title="Cut" keyEquivalent="x" id="uRl-iY-unG">
                                             <connections>
                                                 <action selector="cut:" target="Ady-hI-5gd" id="YJe-68-I9s"/>
@@ -116,7 +136,7 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="GoD_Tool" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Colosseum_Tool" customModuleProvider="target"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-176" y="92"/>
@@ -124,7 +144,7 @@
         <!--alert-->
         <scene sceneID="bWh-Mo-N9R">
             <objects>
-                <viewController title="alert" storyboardIdentifier="alert" id="NNe-8y-O4O" customClass="GoDAlertViewController" customModule="GoD_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="alert" storyboardIdentifier="alert" id="NNe-8y-O4O" customClass="GoDAlertViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="EHI-FW-Uko">
                         <rect key="frame" x="0.0" y="0.0" width="217" height="176"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -137,7 +157,7 @@
         <!--Help-->
         <scene sceneID="iRK-1C-rm3">
             <objects>
-                <viewController title="Help" id="JRm-IJ-Y9d" sceneMemberID="viewController">
+                <viewController title="Help" id="JRm-IJ-Y9d" customClass="GoDHelpViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="MeS-Pn-Un2">
                         <rect key="frame" x="0.0" y="0.0" width="360" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -187,6 +207,9 @@ Twitter: @StarsMmd</string>
                             <constraint firstAttribute="trailing" secondItem="FhI-CA-wWf" secondAttribute="trailing" constant="20" id="y0O-Zt-heC"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="text" destination="FhI-CA-wWf" id="mwn-Dc-s10"/>
+                    </connections>
                 </viewController>
                 <customObject id="1mP-RA-cWJ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -216,7 +239,7 @@ Twitter: @StarsMmd</string>
         <!--GoD Patch View Controller-->
         <scene sceneID="c9d-9X-HLi">
             <objects>
-                <viewController id="OJE-ty-xWI" customClass="GoDPatchViewController" customModule="GoD_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="OJE-ty-xWI" customClass="GoDPatchViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="qKs-78-5L8">
                         <rect key="frame" x="0.0" y="0.0" width="400" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -229,7 +252,7 @@ Twitter: @StarsMmd</string>
         <!--Collision Viewer-->
         <scene sceneID="qMG-ZI-rGv">
             <objects>
-                <viewController title="Collision Viewer" id="Ymc-o2-mcc" customClass="GoDCollisionViewController" customModule="GoD_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Collision Viewer" id="Ymc-o2-mcc" customClass="GoDCollisionViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="afM-LZ-PTR">
                         <rect key="frame" x="0.0" y="0.0" width="840" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -240,21 +263,29 @@ Twitter: @StarsMmd</string>
                                     <constraint firstAttribute="width" constant="200" id="DWX-2A-ks9"/>
                                 </constraints>
                             </customView>
-                            <openGLView colorSize="5bit_RGB_8bit_Alpha" depthSize="32bit" rendererType="accelerated" useAuxiliaryDepthBufferStencil="NO" useDoubleBufferingEnabled="YES" allowOffline="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LQC-Tu-ilY" customClass="GoDOpenGLView" customModule="GoD_Tool">
+                            <openGLView colorSize="5bit_RGB_8bit_Alpha" depthSize="32bit" rendererType="accelerated" useAuxiliaryDepthBufferStencil="NO" useDoubleBufferingEnabled="YES" allowOffline="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LQC-Tu-ilY" customClass="GoDOpenGLView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="200" y="0.0" width="640" height="480"/>
                             </openGLView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="WuW-EJ-zRl" customClass="GoDMetalView" customModule="Colosseum_Tool" customModuleProvider="target">
+                                <rect key="frame" x="200" y="0.0" width="640" height="480"/>
+                            </customView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="hdw-Eq-kuR" firstAttribute="leading" secondItem="afM-LZ-PTR" secondAttribute="leading" id="1Va-hx-WZp"/>
                             <constraint firstItem="LQC-Tu-ilY" firstAttribute="top" secondItem="afM-LZ-PTR" secondAttribute="top" id="A5K-FD-gC9"/>
                             <constraint firstAttribute="bottom" secondItem="hdw-Eq-kuR" secondAttribute="bottom" id="B2l-B7-4cq"/>
+                            <constraint firstAttribute="bottom" secondItem="WuW-EJ-zRl" secondAttribute="bottom" id="Gsh-zu-JkV"/>
                             <constraint firstItem="hdw-Eq-kuR" firstAttribute="top" secondItem="afM-LZ-PTR" secondAttribute="top" id="Qt7-dk-0rd"/>
                             <constraint firstItem="LQC-Tu-ilY" firstAttribute="leading" secondItem="hdw-Eq-kuR" secondAttribute="trailing" id="UAW-Sa-LzK"/>
+                            <constraint firstItem="WuW-EJ-zRl" firstAttribute="top" secondItem="afM-LZ-PTR" secondAttribute="top" id="fuX-ou-QwJ"/>
                             <constraint firstAttribute="bottom" secondItem="LQC-Tu-ilY" secondAttribute="bottom" id="ijA-ap-9dx"/>
                             <constraint firstAttribute="trailing" secondItem="LQC-Tu-ilY" secondAttribute="trailing" id="kSl-a8-VFB"/>
+                            <constraint firstAttribute="trailing" secondItem="WuW-EJ-zRl" secondAttribute="trailing" id="w4a-eY-ejp"/>
+                            <constraint firstItem="WuW-EJ-zRl" firstAttribute="leading" secondItem="hdw-Eq-kuR" secondAttribute="trailing" id="y2s-Lf-ldX"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="metalView" destination="WuW-EJ-zRl" id="rHk-el-kqP"/>
                         <outlet property="openglView" destination="LQC-Tu-ilY" id="4tB-Xw-RxJ"/>
                     </connections>
                 </viewController>
@@ -265,7 +296,7 @@ Twitter: @StarsMmd</string>
         <!--GoD Tool Home-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController title="GoD Tool Home" showSeguePresentationStyle="single" id="XfG-lQ-9wD" customClass="GoDHomeViewController" customModule="GoD_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="GoD Tool Home" showSeguePresentationStyle="single" id="XfG-lQ-9wD" customClass="GoDHomeViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" autoresizesSubviews="NO" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -323,7 +354,7 @@ Twitter: @StarsMmd</string>
                         <segue destination="7OK-Av-0ny" kind="show" identifier="toStatsVC" id="B9F-pI-6Cd"/>
                         <segue destination="JRm-IJ-Y9d" kind="modal" identifier="toHelpVC" id="PCr-YY-Lid"/>
                         <segue destination="NNe-8y-O4O" kind="modal" id="KtO-3W-Do8"/>
-                        <segue destination="OJE-ty-xWI" kind="modal" identifier="toPatchVC" id="ON3-p7-AdR"/>
+                        <segue destination="OJE-ty-xWI" kind="show" identifier="toPatchVC" id="ON3-p7-AdR"/>
                         <segue destination="Pft-Je-tH8" kind="show" identifier="toTrainerVC" id="ZV9-kU-Koc"/>
                         <segue destination="vSz-Wi-uwy" kind="show" identifier="toMoveVC" id="Alv-ao-LX4"/>
                         <segue destination="9YN-7z-LmO" kind="show" identifier="toItemVC" id="dzP-JI-JRf"/>
@@ -332,6 +363,7 @@ Twitter: @StarsMmd</string>
                         <segue destination="ggV-ux-Xw2" kind="show" identifier="toGiftVC" id="Nci-Fm-WU6"/>
                         <segue destination="fdm-8h-awW" kind="show" identifier="toScriptVC" id="2ng-HQ-rBh"/>
                         <segue destination="Ymc-o2-mcc" kind="show" identifier="toCollisionVC" id="Yva-yh-abS"/>
+                        <segue destination="bib-3E-KV4" kind="show" identifier="toRandomiserVC" id="GcT-Yy-p62"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -341,15 +373,15 @@ Twitter: @StarsMmd</string>
         <!--Spot Editor-->
         <scene sceneID="ahX-g4-E2m">
             <objects>
-                <viewController title="Spot Editor" id="Mrz-db-3XP" customClass="GoDSpotViewController" customModule="GoD_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Spot Editor" id="Mrz-db-3XP" customClass="GoDSpotViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="UUK-h0-IbU">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="sK9-HC-kNN" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="sK9-HC-kNN" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="210" y="10" width="260" height="340"/>
                                 <subviews>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WU3-Ql-W0k" customClass="GoDPokemonPopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WU3-Ql-W0k" customClass="GoDPokemonPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="78" y="182" width="105" height="26"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="Q2U-qd-oh7"/>
@@ -369,7 +401,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setSpeciesAction:" target="Mrz-db-3XP" id="Tgi-pL-m5n"/>
                                         </connections>
                                     </popUpButton>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="x3C-hG-Te6" customClass="GoDLevelPopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="x3C-hG-Te6" customClass="GoDLevelPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="3" y="117" width="105" height="26"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="SQu-7z-nyo"/>
@@ -390,7 +422,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setMinAction:" target="Mrz-db-3XP" id="taa-cB-HtI"/>
                                         </connections>
                                     </popUpButton>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cjY-5e-xMo" customClass="GoDLevelPopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cjY-5e-xMo" customClass="GoDLevelPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="153" y="117" width="95" height="26"/>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9mY-hw-vAi" id="OXZ-nD-6Um">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -412,7 +444,7 @@ Twitter: @StarsMmd</string>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="tcv-UT-XfA"/>
                                         </constraints>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="D6b-W7-GJq">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="D6b-W7-GJq">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -423,7 +455,7 @@ Twitter: @StarsMmd</string>
                                     </textField>
                                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lsv-e5-3r9">
                                         <rect key="frame" x="155" y="55" width="90" height="20"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="Ko4-kh-Rqr">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="Ko4-kh-Rqr">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -499,7 +531,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ball grey" id="wzU-YI-eda"/>
                                     </imageView>
-                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NaN-K0-Tp1" customClass="GoDButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NaN-K0-Tp1" customClass="GoDButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="85" y="3" width="92" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="cxa-zm-Ncq"/>
@@ -607,12 +639,12 @@ Twitter: @StarsMmd</string>
         <!--Item Editor-->
         <scene sceneID="sbW-o5-zVa">
             <objects>
-                <viewController title="Item Editor" id="9YN-7z-LmO" customClass="GoDItemViewController" customModule="GoD_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Item Editor" id="9YN-7z-LmO" customClass="GoDItemViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="daW-jT-L0n">
                         <rect key="frame" x="0.0" y="0.0" width="860" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DCE-a2-sKu" userLabel="Info" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DCE-a2-sKu" userLabel="Info" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="214" y="270" width="210" height="190"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AAw-g4-wNV">
@@ -799,7 +831,7 @@ Twitter: @StarsMmd</string>
         <!--Move Editor-->
         <scene sceneID="njB-zs-XSr">
             <objects>
-                <viewController title="Move Editor" id="vSz-Wi-uwy" customClass="GoDMovesViewController" customModule="GoD_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Move Editor" id="vSz-Wi-uwy" customClass="GoDMovesViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="dUk-LJ-KYc">
                         <rect key="frame" x="0.0" y="0.0" width="874" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -811,7 +843,7 @@ Twitter: @StarsMmd</string>
                                 </constraints>
                                 <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
                             </ikImageView>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="wcZ-uf-Jp4" userLabel="Info" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="wcZ-uf-Jp4" userLabel="Info" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="210" y="325" width="210" height="145"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KyE-eJ-6P3">
@@ -875,7 +907,7 @@ Twitter: @StarsMmd</string>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="4zk-aa-TLm"/>
                                         </constraints>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="-" bezelStyle="round" id="eEG-Z0-zhC">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="-" bezelStyle="round" id="eEG-Z0-zhC">
                                             <font key="font" metaFont="cellTitle"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -889,7 +921,7 @@ Twitter: @StarsMmd</string>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="s9S-d7-uWs"/>
                                         </constraints>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="-" bezelStyle="round" id="Ige-k7-dwF">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="-" bezelStyle="round" id="Ige-k7-dwF">
                                             <font key="font" metaFont="cellTitle"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -969,7 +1001,7 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="fkA-85-Vhm" firstAttribute="width" secondItem="KyE-eJ-6P3" secondAttribute="width" id="xn8-5t-yDC"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="Numerical Values" translatesAutoresizingMaskIntoConstraints="NO" id="NWF-kq-oKk" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView identifier="Numerical Values" translatesAutoresizingMaskIntoConstraints="NO" id="NWF-kq-oKk" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="430" y="40" width="212" height="275"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SuM-s8-b2i">
@@ -1118,7 +1150,7 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="N5V-zX-jjI" firstAttribute="height" secondItem="SuM-s8-b2i" secondAttribute="height" id="yg8-aJ-YBe"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="Flags" translatesAutoresizingMaskIntoConstraints="NO" id="Ft6-mg-LNz" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView identifier="Flags" translatesAutoresizingMaskIntoConstraints="NO" id="Ft6-mg-LNz" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="652" y="40" width="212" height="275"/>
                                 <subviews>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="bbU-nh-ajy">
@@ -1236,7 +1268,7 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="lYf-Mu-5Do" firstAttribute="top" secondItem="Ft6-mg-LNz" secondAttribute="top" constant="35" id="zQi-TS-FUM"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="Description" translatesAutoresizingMaskIntoConstraints="NO" id="njQ-ZR-Ild" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView identifier="Description" translatesAutoresizingMaskIntoConstraints="NO" id="njQ-ZR-Ild" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="430" y="400" width="434" height="70"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MRi-Zv-4WC">
@@ -1303,7 +1335,7 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="J7N-xC-8Qk" firstAttribute="top" secondItem="MRi-Zv-4WC" secondAttribute="bottom" constant="5" id="qbp-g8-ICE"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="Effect" translatesAutoresizingMaskIntoConstraints="NO" id="FYg-R6-kff" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView identifier="Effect" translatesAutoresizingMaskIntoConstraints="NO" id="FYg-R6-kff" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="430" y="325" width="434" height="70"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZX6-Ay-7rC">
@@ -1317,7 +1349,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IrO-CI-fVg" customClass="GoDEffectsPopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IrO-CI-fVg" customClass="GoDEffectsPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="8" y="7" width="419" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="nFa-rF-I4E"/>
@@ -1348,7 +1380,7 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="IrO-CI-fVg" firstAttribute="top" secondItem="ZX6-Ay-7rC" secondAttribute="bottom" constant="5" id="unI-Bj-Zka"/>
                                 </constraints>
                             </customView>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rHt-aa-MRc" customClass="GoDButton" customModule="GoD_Tool" customModuleProvider="target">
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rHt-aa-MRc" customClass="GoDButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="481" y="3" width="112" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="Ts8-2w-olz"/>
@@ -1364,10 +1396,10 @@ Twitter: @StarsMmd</string>
                                     <action selector="save:" target="vSz-Wi-uwy" id="hBj-d7-EP1"/>
                                 </connections>
                             </button>
-                            <customView identifier="drop downs" translatesAutoresizingMaskIntoConstraints="NO" id="sgZ-vI-CoQ" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView identifier="drop downs" translatesAutoresizingMaskIntoConstraints="NO" id="sgZ-vI-CoQ" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="210" y="40" width="210" height="275"/>
                                 <subviews>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DtU-wV-TRq" customClass="GoDCategoryPopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DtU-wV-TRq" customClass="GoDCategoryPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="8" y="163" width="195" height="30"/>
                                         <popUpButtonCell key="cell" type="push" title="Category" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="n4M-6i-4cA" id="Xe7-7f-ujh">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1384,7 +1416,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="newCategory:" target="vSz-Wi-uwy" id="nN6-UH-EQw"/>
                                         </connections>
                                     </popUpButton>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cbn-C5-gLz" customClass="GoDTargetsPopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cbn-C5-gLz" customClass="GoDTargetsPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="8" y="111" width="195" height="30"/>
                                         <popUpButtonCell key="cell" type="push" title="Targets" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="DrE-rE-sSC" id="Nyb-q0-a24">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1401,7 +1433,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="newTargets:" target="vSz-Wi-uwy" id="2Vl-UQ-pW4"/>
                                         </connections>
                                     </popUpButton>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fCb-rM-EEP" customClass="GoDTypePopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fCb-rM-EEP" customClass="GoDTypePopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="8" y="215" width="195" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="CA8-mu-nCX"/>
@@ -1448,7 +1480,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KtA-Zs-4qY" customClass="GoDOriginalMovesPopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KtA-Zs-4qY" customClass="GoDOriginalMovesPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="8" y="59" width="195" height="30"/>
                                         <popUpButtonCell key="cell" type="push" title="Animation" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="kcR-xy-ESW" id="EIu-8s-oeC">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1473,7 +1505,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dST-Sl-Rbz" customClass="GoDMoveEffectTypesPopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dST-Sl-Rbz" customClass="GoDMoveEffectTypesPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="8" y="14" width="195" height="26"/>
                                         <popUpButtonCell key="cell" type="push" title="Effect Type" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="XPn-P1-q1P" id="HAo-9o-BIb">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1603,7 +1635,7 @@ Twitter: @StarsMmd</string>
         <!--Trainer Editor-->
         <scene sceneID="IOm-6r-vVc">
             <objects>
-                <viewController title="Trainer Editor" id="Pft-Je-tH8" customClass="GoDTrainerViewController" customModule="GoD_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Trainer Editor" id="Pft-Je-tH8" customClass="GoDTrainerViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Tkq-Jy-f51">
                         <rect key="frame" x="0.0" y="0.0" width="1280" height="700"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1616,7 +1648,7 @@ Twitter: @StarsMmd</string>
         <!--Pokemon Stats-->
         <scene sceneID="wTf-7Y-ZPw">
             <objects>
-                <viewController title="Pokemon Stats" showSeguePresentationStyle="single" id="7OK-Av-0ny" customClass="GoDStatsViewController" customModule="GoD_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Pokemon Stats" showSeguePresentationStyle="single" id="7OK-Av-0ny" customClass="GoDStatsViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="J6P-jy-6iO">
                         <rect key="frame" x="0.0" y="0.0" width="860" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1628,7 +1660,7 @@ Twitter: @StarsMmd</string>
                                 </constraints>
                                 <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
                             </ikImageView>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="Vqa-V0-vc1" userLabel="Info" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="Vqa-V0-vc1" userLabel="Info" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="210" y="280" width="210" height="190"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wRw-Cz-5x4">
@@ -1692,7 +1724,7 @@ Twitter: @StarsMmd</string>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="fyX-FR-AhS"/>
                                         </constraints>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="-" bezelStyle="round" id="B5z-2e-mKi">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="-" bezelStyle="round" id="B5z-2e-mKi">
                                             <font key="font" metaFont="cellTitle"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1706,7 +1738,7 @@ Twitter: @StarsMmd</string>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="av1-b0-WPu"/>
                                         </constraints>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="-" bezelStyle="round" id="6ub-GZ-2dF">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="-" bezelStyle="round" id="6ub-GZ-2dF">
                                             <font key="font" metaFont="cellTitle"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1786,7 +1818,7 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="ChJ-Zy-S9q" firstAttribute="bottom" secondItem="k3C-rS-AVL" secondAttribute="bottom" id="zx0-uG-rzX"/>
                                 </constraints>
                             </customView>
-                            <customView appearanceType="aqua" translatesAutoresizingMaskIntoConstraints="NO" id="kLX-6o-YNi" userLabel="Stats" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView appearanceType="aqua" translatesAutoresizingMaskIntoConstraints="NO" id="kLX-6o-YNi" userLabel="Stats" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="425" y="280" width="105" height="190"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Rz-r8-VMI">
@@ -1843,7 +1875,7 @@ Twitter: @StarsMmd</string>
                                     </textField>
                                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YAf-UY-vFd">
                                         <rect key="frame" x="55" y="155" width="45" height="25"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="1y9-Hy-4UG">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="1y9-Hy-4UG">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="xBx-SB-J1Y"/>
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1855,7 +1887,7 @@ Twitter: @StarsMmd</string>
                                     </textField>
                                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lAe-ZO-c9N">
                                         <rect key="frame" x="55" y="125" width="45" height="25"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="x52-lg-u3E">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="x52-lg-u3E">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="lxQ-vS-Pbm"/>
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1867,7 +1899,7 @@ Twitter: @StarsMmd</string>
                                     </textField>
                                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DzO-Sb-rph">
                                         <rect key="frame" x="55" y="95" width="45" height="25"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="LYt-5u-jIg">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="LYt-5u-jIg">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="maA-9T-7x3"/>
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1879,7 +1911,7 @@ Twitter: @StarsMmd</string>
                                     </textField>
                                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5qu-fC-dX7">
                                         <rect key="frame" x="55" y="65" width="45" height="25"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="nMa-et-hpD">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="nMa-et-hpD">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="eJO-Jb-anm"/>
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1891,7 +1923,7 @@ Twitter: @StarsMmd</string>
                                     </textField>
                                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hM3-cc-dZN">
                                         <rect key="frame" x="55" y="5" width="45" height="25"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="8qj-72-8iD">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="8qj-72-8iD">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="jmN-d8-Z0E"/>
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1903,7 +1935,7 @@ Twitter: @StarsMmd</string>
                                     </textField>
                                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vFc-Or-M2d">
                                         <rect key="frame" x="55" y="35" width="45" height="25"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="UeZ-Qj-hR5">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="UeZ-Qj-hR5">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="RBS-Bx-nek"/>
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1985,7 +2017,7 @@ Twitter: @StarsMmd</string>
                                     <action selector="save:" target="7OK-Av-0ny" id="PiC-7D-izD"/>
                                 </connections>
                             </button>
-                            <customView identifier="types" translatesAutoresizingMaskIntoConstraints="NO" id="FQq-v2-QjS" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView identifier="types" translatesAutoresizingMaskIntoConstraints="NO" id="FQq-v2-QjS" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="210" y="205" width="210" height="70"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ceU-6t-9fq">
@@ -2000,7 +2032,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OFO-mC-9hE" customClass="GoDTypePopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OFO-mC-9hE" customClass="GoDTypePopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="6" y="7" width="100" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="3wt-WP-4pA"/>
@@ -2021,7 +2053,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setType1:" target="7OK-Av-0ny" id="66i-Cc-49W"/>
                                         </connections>
                                     </popUpButton>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="D2b-ak-pcy" customClass="GoDTypePopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="D2b-ak-pcy" customClass="GoDTypePopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="106" y="7" width="100" height="25"/>
                                         <popUpButtonCell key="cell" type="push" title="type 2" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="BZm-qu-agu" id="3Uu-Bk-gxv">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -2060,7 +2092,7 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="o8U-vg-TsN" firstAttribute="top" secondItem="ceU-6t-9fq" secondAttribute="bottom" constant="10" id="pfq-5f-FPR"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="types" translatesAutoresizingMaskIntoConstraints="NO" id="SWi-SW-twQ" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView identifier="types" translatesAutoresizingMaskIntoConstraints="NO" id="SWi-SW-twQ" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="210" y="130" width="210" height="70"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LV1-6l-Pyu">
@@ -2075,7 +2107,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wQr-pY-CfQ" customClass="GoDAbilityPopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wQr-pY-CfQ" customClass="GoDAbilityPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="6" y="7" width="100" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="Qcn-4J-YTk"/>
@@ -2095,7 +2127,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setAbility1:" target="7OK-Av-0ny" id="wIL-a0-qf0"/>
                                         </connections>
                                     </popUpButton>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9et-WE-ocv" customClass="GoDAbilityPopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9et-WE-ocv" customClass="GoDAbilityPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="106" y="7" width="100" height="25"/>
                                         <popUpButtonCell key="cell" type="push" title="ability 2" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="VZv-uw-y68" id="1RJ-wC-TP8">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -2134,7 +2166,7 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="Zza-HJ-RPx" firstAttribute="leading" secondItem="wQr-pY-CfQ" secondAttribute="trailing" id="y8Q-xK-iuE"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="types" translatesAutoresizingMaskIntoConstraints="NO" id="g4P-a5-ceI" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView identifier="types" translatesAutoresizingMaskIntoConstraints="NO" id="g4P-a5-ceI" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="210" y="55" width="210" height="70"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FVG-RE-CQZ">
@@ -2149,7 +2181,7 @@ Twitter: @StarsMmd</string>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iBK-PZ-GMd" customClass="GoDItemPopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iBK-PZ-GMd" customClass="GoDItemPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="6" y="7" width="100" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="8h5-BB-4dr"/>
@@ -2169,7 +2201,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setItem1:" target="7OK-Av-0ny" id="mR4-k6-z4p"/>
                                         </connections>
                                     </popUpButton>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ngy-rW-f8Z" customClass="GoDItemPopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ngy-rW-f8Z" customClass="GoDItemPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="106" y="7" width="100" height="25"/>
                                         <popUpButtonCell key="cell" type="push" title="Item 2" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="DhL-04-CSJ" id="CNG-IG-ogv">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -2208,13 +2240,13 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="eGB-41-Sr5" firstAttribute="centerY" secondItem="iBK-PZ-GMd" secondAttribute="centerY" id="zLe-sB-Xo2"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="TMs" translatesAutoresizingMaskIntoConstraints="NO" id="Q9p-XZ-yJa" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView identifier="TMs" translatesAutoresizingMaskIntoConstraints="NO" id="Q9p-XZ-yJa" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="535" y="280" width="110" height="190"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="110" id="rSH-Xs-ERF"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="EVs" translatesAutoresizingMaskIntoConstraints="NO" id="x9Z-QG-m0x" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView identifier="EVs" translatesAutoresizingMaskIntoConstraints="NO" id="x9Z-QG-m0x" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="425" y="55" width="105" height="220"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lcs-gp-HkD">
@@ -2267,7 +2299,7 @@ Twitter: @StarsMmd</string>
                                     </textField>
                                     <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hxM-It-MI3">
                                         <rect key="frame" x="55" y="185" width="45" height="25"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="w8g-vR-dH9">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="w8g-vR-dH9">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="7IB-sV-yZq"/>
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -2279,7 +2311,7 @@ Twitter: @StarsMmd</string>
                                     </textField>
                                     <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LEc-cT-Sbh">
                                         <rect key="frame" x="55" y="155" width="45" height="25"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="jB8-ls-988">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="jB8-ls-988">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="BQy-1s-j3I"/>
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -2291,7 +2323,7 @@ Twitter: @StarsMmd</string>
                                     </textField>
                                     <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MFY-0b-ut0">
                                         <rect key="frame" x="55" y="125" width="45" height="25"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iLh-zU-fr2">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iLh-zU-fr2">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="SAA-oB-yyr"/>
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -2303,7 +2335,7 @@ Twitter: @StarsMmd</string>
                                     </textField>
                                     <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bk7-jA-cY3">
                                         <rect key="frame" x="55" y="95" width="45" height="25"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iLk-zF-jVh">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iLk-zF-jVh">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="U6O-Ti-cz0"/>
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -2315,7 +2347,7 @@ Twitter: @StarsMmd</string>
                                     </textField>
                                     <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JR9-3J-ED9">
                                         <rect key="frame" x="55" y="35" width="45" height="25"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iOb-If-5dt">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iOb-If-5dt">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="K27-E3-zDw"/>
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -2327,7 +2359,7 @@ Twitter: @StarsMmd</string>
                                     </textField>
                                     <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="my5-CB-ilz">
                                         <rect key="frame" x="55" y="65" width="45" height="25"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="EQ3-6Z-g5g">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="EQ3-6Z-g5g">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="TLl-dp-5KO"/>
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -2390,40 +2422,40 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="Bk7-jA-cY3" firstAttribute="trailing" secondItem="LEc-cT-Sbh" secondAttribute="trailing" id="zjB-ZY-yfU"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="Moves" translatesAutoresizingMaskIntoConstraints="NO" id="RF7-CC-WJk" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView identifier="Moves" translatesAutoresizingMaskIntoConstraints="NO" id="RF7-CC-WJk" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="650" y="280" width="205" height="190"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="205" id="j8z-H8-sqZ"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="Evolutions" translatesAutoresizingMaskIntoConstraints="NO" id="LI2-Yx-jLE" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView identifier="Evolutions" translatesAutoresizingMaskIntoConstraints="NO" id="LI2-Yx-jLE" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="650" y="55" width="205" height="220"/>
                                 <subviews>
-                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="ktT-pC-MtZ" customClass="GoDEvolutionView" customModule="GoD_Tool" customModuleProvider="target">
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="ktT-pC-MtZ" customClass="GoDEvolutionView" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="5" y="150" width="195" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="EKf-S1-XrU"/>
                                         </constraints>
                                     </customView>
-                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="d5F-8I-qaV" customClass="GoDEvolutionView" customModule="GoD_Tool" customModuleProvider="target">
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="d5F-8I-qaV" customClass="GoDEvolutionView" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="5" y="115" width="195" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="1EF-ff-A36"/>
                                         </constraints>
                                     </customView>
-                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="rYr-f4-FZt" customClass="GoDEvolutionView" customModule="GoD_Tool" customModuleProvider="target">
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="rYr-f4-FZt" customClass="GoDEvolutionView" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="5" y="80" width="195" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="z4S-dY-3NL"/>
                                         </constraints>
                                     </customView>
-                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="2vZ-o3-CVM" customClass="GoDEvolutionView" customModule="GoD_Tool" customModuleProvider="target">
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="2vZ-o3-CVM" customClass="GoDEvolutionView" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="5" y="45" width="195" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="vlo-kV-hiQ"/>
                                         </constraints>
                                     </customView>
-                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="dmZ-QI-ZCh" customClass="GoDEvolutionView" customModule="GoD_Tool" customModuleProvider="target">
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="dmZ-QI-ZCh" customClass="GoDEvolutionView" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="5" y="10" width="195" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="SN3-xc-NF7"/>
@@ -2462,7 +2494,7 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="dmZ-QI-ZCh" firstAttribute="top" secondItem="2vZ-o3-CVM" secondAttribute="bottom" constant="5" id="qSS-43-1sq"/>
                                 </constraints>
                             </customView>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="jco-O6-TUi" customClass="GoDContainerView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="jco-O6-TUi" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="535" y="55" width="110" height="220"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UdZ-3o-7SO">
@@ -2561,7 +2593,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setBaseExp:" target="7OK-Av-0ny" id="SyH-Hy-IVh"/>
                                         </connections>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cgw-9Z-LGt" customClass="GoDExpRatePopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cgw-9Z-LGt" customClass="GoDExpRatePopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="58" y="57" width="50" height="25"/>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="gqK-hh-7RZ" id="cvK-6j-SZA">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -2578,7 +2610,7 @@ Twitter: @StarsMmd</string>
                                             <action selector="setExpRate:" target="7OK-Av-0ny" id="Taf-Yv-cbl"/>
                                         </connections>
                                     </popUpButton>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gWJ-Rv-90R" customClass="GoDGenderRatioPopUpButton" customModule="GoD_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gWJ-Rv-90R" customClass="GoDGenderRatioPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
                                         <rect key="frame" x="58" y="17" width="50" height="25"/>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Wpv-9P-3p9" id="GT0-tu-ZJb">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -2726,10 +2758,135 @@ Twitter: @StarsMmd</string>
             </objects>
             <point key="canvasLocation" x="701" y="603"/>
         </scene>
+        <!--Randomiser-->
+        <scene sceneID="RLC-BP-HlD">
+            <objects>
+                <viewController title="Randomiser" id="bib-3E-KV4" customClass="GoDRandomiserViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="XxS-rD-gwb">
+                        <rect key="frame" x="0.0" y="0.0" width="311" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="m8a-C3-nFY">
+                                <rect key="frame" x="8" y="254" width="130" height="18"/>
+                                <buttonCell key="cell" type="check" title="Pokemon Species" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="0bR-q3-Ucq">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DRo-Dc-sIh">
+                                <rect key="frame" x="158" y="210" width="130" height="18"/>
+                                <buttonCell key="cell" type="check" title="Pokemon Abilities" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Hdx-E2-Y2q">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dl1-qm-izc">
+                                <rect key="frame" x="8" y="166" width="113" height="18"/>
+                                <buttonCell key="cell" type="check" title="Pokemon Stats" bezelStyle="regularSquare" imagePosition="left" inset="2" id="MXW-O4-NOc">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w7a-JO-od0">
+                                <rect key="frame" x="8" y="78" width="96" height="18"/>
+                                <buttonCell key="cell" type="check" title="Battle Bingo" bezelStyle="regularSquare" imagePosition="left" inset="2" id="mwJ-Il-9I1">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5Jq-Yi-2jS">
+                                <rect key="frame" x="158" y="166" width="144" height="18"/>
+                                <buttonCell key="cell" type="check" title="Pokemon Evolutions" bezelStyle="regularSquare" imagePosition="left" inset="2" id="TKt-D1-FON">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ggv-x8-P7o">
+                                <rect key="frame" x="8" y="122" width="95" height="18"/>
+                                <buttonCell key="cell" type="check" title="Move Types" bezelStyle="regularSquare" imagePosition="left" inset="2" id="TNM-ZD-7bp">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IdL-GV-3WZ">
+                                <rect key="frame" x="158" y="122" width="85" height="18"/>
+                                <buttonCell key="cell" type="check" title="TM Moves" bezelStyle="regularSquare" imagePosition="left" inset="2" id="a9B-av-A4g">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bOX-gC-QF6">
+                                <rect key="frame" x="100" y="13" width="112" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="LDb-1M-kgV"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Randomise" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2qt-nb-MYB">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="randomise:" target="bib-3E-KV4" id="rvk-Wp-mUk"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Meo-I9-p3a">
+                                <rect key="frame" x="8" y="210" width="118" height="18"/>
+                                <buttonCell key="cell" type="check" title="Pokemon Types" bezelStyle="regularSquare" imagePosition="left" inset="2" id="ilM-ET-TiP">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="C41-co-vFw">
+                                <rect key="frame" x="158" y="254" width="121" height="18"/>
+                                <buttonCell key="cell" type="check" title="Pokemon Moves" bezelStyle="regularSquare" imagePosition="left" inset="2" id="imd-qM-0kN">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="IdL-GV-3WZ" firstAttribute="centerY" secondItem="Ggv-x8-P7o" secondAttribute="centerY" id="773-0v-POY"/>
+                            <constraint firstItem="w7a-JO-od0" firstAttribute="top" secondItem="Ggv-x8-P7o" secondAttribute="bottom" constant="30" id="BNE-IH-LEf"/>
+                            <constraint firstItem="DRo-Dc-sIh" firstAttribute="leading" secondItem="C41-co-vFw" secondAttribute="leading" id="Ekt-aJ-qd2"/>
+                            <constraint firstItem="Ggv-x8-P7o" firstAttribute="leading" secondItem="m8a-C3-nFY" secondAttribute="leading" id="GNu-TH-jyZ"/>
+                            <constraint firstItem="C41-co-vFw" firstAttribute="centerY" secondItem="m8a-C3-nFY" secondAttribute="centerY" id="Ghx-ex-rML"/>
+                            <constraint firstAttribute="bottom" secondItem="bOX-gC-QF6" secondAttribute="bottom" constant="20" id="I1Y-rp-aSo"/>
+                            <constraint firstItem="m8a-C3-nFY" firstAttribute="top" secondItem="XxS-rD-gwb" secondAttribute="top" constant="30" id="IJg-Xg-A4e"/>
+                            <constraint firstItem="IdL-GV-3WZ" firstAttribute="leading" secondItem="C41-co-vFw" secondAttribute="leading" id="Lrk-IZ-j4u"/>
+                            <constraint firstItem="dl1-qm-izc" firstAttribute="top" secondItem="Meo-I9-p3a" secondAttribute="bottom" constant="30" id="N9T-yC-5Vb"/>
+                            <constraint firstItem="dl1-qm-izc" firstAttribute="leading" secondItem="m8a-C3-nFY" secondAttribute="leading" id="O62-AQ-izk"/>
+                            <constraint firstItem="5Jq-Yi-2jS" firstAttribute="leading" secondItem="C41-co-vFw" secondAttribute="leading" id="Q7Q-js-sCM"/>
+                            <constraint firstItem="bOX-gC-QF6" firstAttribute="centerX" secondItem="XxS-rD-gwb" secondAttribute="centerX" id="QKa-yd-QX5"/>
+                            <constraint firstItem="Ggv-x8-P7o" firstAttribute="top" secondItem="dl1-qm-izc" secondAttribute="bottom" constant="30" id="RYe-wh-8aQ"/>
+                            <constraint firstItem="C41-co-vFw" firstAttribute="leading" secondItem="XxS-rD-gwb" secondAttribute="leading" constant="160" id="YzE-8j-8qj"/>
+                            <constraint firstItem="m8a-C3-nFY" firstAttribute="leading" secondItem="XxS-rD-gwb" secondAttribute="leading" constant="10" id="duS-ME-u1R"/>
+                            <constraint firstItem="5Jq-Yi-2jS" firstAttribute="centerY" secondItem="dl1-qm-izc" secondAttribute="centerY" id="dyS-Ee-nVq"/>
+                            <constraint firstItem="m8a-C3-nFY" firstAttribute="top" secondItem="XxS-rD-gwb" secondAttribute="top" constant="30" id="g1O-sa-95D"/>
+                            <constraint firstItem="DRo-Dc-sIh" firstAttribute="centerY" secondItem="Meo-I9-p3a" secondAttribute="centerY" id="mEU-Fb-0TP"/>
+                            <constraint firstItem="w7a-JO-od0" firstAttribute="leading" secondItem="m8a-C3-nFY" secondAttribute="leading" id="r9g-tD-4gR"/>
+                            <constraint firstItem="Meo-I9-p3a" firstAttribute="top" secondItem="m8a-C3-nFY" secondAttribute="bottom" constant="30" id="twO-8T-fug"/>
+                            <constraint firstItem="Meo-I9-p3a" firstAttribute="leading" secondItem="m8a-C3-nFY" secondAttribute="leading" id="uAD-8p-Lz4"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="bbingo" destination="w7a-JO-od0" id="Szk-Tb-LJs"/>
+                        <outlet property="mtypes" destination="Ggv-x8-P7o" id="4WA-UR-XUi"/>
+                        <outlet property="pabilities" destination="DRo-Dc-sIh" id="vAa-um-FXg"/>
+                        <outlet property="pevolutions" destination="5Jq-Yi-2jS" id="tPa-sB-8sI"/>
+                        <outlet property="pmoves" destination="C41-co-vFw" id="Br9-K0-LyH"/>
+                        <outlet property="pspecies" destination="m8a-C3-nFY" id="Fvz-Jr-hT0"/>
+                        <outlet property="pstats" destination="dl1-qm-izc" id="NZJ-gh-Jsf"/>
+                        <outlet property="ptypes" destination="Meo-I9-p3a" id="Drh-iv-hbx"/>
+                        <outlet property="tmmoves" destination="IdL-GV-3WZ" id="nKc-Zg-R0Y"/>
+                    </connections>
+                </viewController>
+                <customObject id="eFG-ij-Tpv" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2622.5" y="1175"/>
+        </scene>
         <!--Shadow Pokemon Editor-->
         <scene sceneID="Leb-XN-t4x">
             <objects>
-                <viewController title="Shadow Pokemon Editor" id="GMZ-cQ-xq6" customClass="GoDShadowPokemonViewController" customModule="GoD_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Shadow Pokemon Editor" id="GMZ-cQ-xq6" customClass="GoDShadowPokemonViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="h4r-kK-EGH">
                         <rect key="frame" x="0.0" y="0.0" width="560" height="330"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -2740,7 +2897,7 @@ Twitter: @StarsMmd</string>
                                     <constraint firstAttribute="width" constant="200" id="PHe-YJ-4ha"/>
                                 </constraints>
                             </customView>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="fL5-8D-Jgv" customClass="GoDShadowPokemonView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="fL5-8D-Jgv" customClass="GoDShadowPokemonView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="215" y="40" width="330" height="280"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="330" id="10J-8e-Cyv"/>
@@ -2785,7 +2942,7 @@ Twitter: @StarsMmd</string>
         <!--Gift Pokemon Editor-->
         <scene sceneID="m8T-yW-RfH">
             <objects>
-                <viewController title="Gift Pokemon Editor" id="ggV-ux-Xw2" customClass="GoDGiftViewController" customModule="GoD_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Gift Pokemon Editor" id="ggV-ux-Xw2" customClass="GoDGiftViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Tw2-ma-Ii5">
                         <rect key="frame" x="0.0" y="0.0" width="560" height="330"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -2796,7 +2953,7 @@ Twitter: @StarsMmd</string>
                                     <constraint firstAttribute="width" constant="200" id="1YU-Db-YkH"/>
                                 </constraints>
                             </customView>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="MAt-xW-M9s" customClass="GoDGiftPokemonView" customModule="GoD_Tool" customModuleProvider="target">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="MAt-xW-M9s" customClass="GoDGiftPokemonView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="215" y="40" width="330" height="280"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="280" id="W36-we-Svg"/>
@@ -2841,7 +2998,7 @@ Twitter: @StarsMmd</string>
         <!--Script Viewer-->
         <scene sceneID="ywa-Zi-hCR">
             <objects>
-                <viewController title="Script Viewer" showSeguePresentationStyle="single" id="fdm-8h-awW" customClass="GoDScriptViewController" customModule="GoD_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Script Viewer" showSeguePresentationStyle="single" id="fdm-8h-awW" customClass="GoDScriptViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" autoresizesSubviews="NO" id="q3B-ue-dTD">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>

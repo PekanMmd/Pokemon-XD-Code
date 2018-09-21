@@ -17,7 +17,9 @@ func loadAllStrings() {
 		
 		allStrings += XGFiles.common_rel.stringTable.allStrings()
 		allStrings += XGFiles.dol.stringTable.allStrings()
-		allStrings += XGFiles.tableres2.stringTable.allStrings()
+		if game == .XD {
+			allStrings += XGFiles.tableres2.stringTable.allStrings()
+		}
 		
 		XGFolders.StringTables.map{ (file: XGFiles) -> Void in
 			if file.fileName.contains(".msg") {

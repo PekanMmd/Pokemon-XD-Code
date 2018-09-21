@@ -8,108 +8,101 @@
 
 import Cocoa
 
-let kSizeOfWarp = 0x1C
-let kWarpIsValidOffset = 0x0
-let kWarpToOffset = 0x2
-let kWarpToIndexOffset = 0x7
-let kWarpFromOffset = 0xE
-let kWarpFromIndexOffset = 0x13
+let kSizeOfInteractionPoint = 0x1C
 
-var warps = [XGWarp]()
-var allWarps : [XGWarp] {
-get {
-	if warps.isEmpty {
-		for i in 0 ..< CommonIndexes.NumberOfWarps.value {
-			warps.append(XGWarp(index: i))
+let kIPMapIndexOffset = 0x13
+let kIPMapIDOffset = 0xe
+let kIPWarpTargetIndexOffset = 0x7
+let kIPWarpTargetMapOffset = 0x2
+let kIPTextIDOffset = 0xc
+let kIPTypeOffset = 0xa
+
+
+fileprivate var IPData = [XGInteractionPointData]()
+fileprivate func getIPData() {
+	if IPData.isEmpty {
+		for i in 0 ..< CommonIndexes.NumberOfInteractionPoints.value {
+			IPData.append(XGInteractionPointData(index: i))
 		}
 	}
-	return warps
 }
+var allInteractionPointData : [XGInteractionPointData] {
+	getIPData()
+	return IPData
 }
 
-class XGWarp: NSObject {
+class XGInteractionPointData: NSObject {
 	
-	var index = 0
-	var startOffset = 0
+	@objc var index = 0
+	@objc var startOffset = 0
 	
-	var warpFromIndex = 0
-	var warpFromRoom : XGRoom!
+	@objc var mapIndex = 0
+	@objc var mapRoom : XGRoom!
 	
-	var warpToIndex = 0
-	var warpToRoom : XGRoom!
+	@objc var targetWarpIndex = 0
+	@objc var targetWarpRoom : XGRoom!
 	
-	var warpIsValid = true
-	
-	override var description: String {
-		if warpFromRoom == nil || warpToRoom == nil {
-			return "-"
-		}
-		
-		return "Warp: \(warpFromRoom.name)[\(self.warpFromIndex)] -> \(warpToRoom.name)[\(warpToIndex)]"
+	@objc var textID = 0
+	@objc var text : XGString {
+		return getStringSafelyWithID(id: textID)
 	}
 	
-	init(index: Int) {
+	@objc var IPType = 0
+	
+	@objc init(index: Int) {
 		super.init()
 		
 		self.index = index
-		self.startOffset = CommonIndexes.Warps.startOffset + (index * kSizeOfWarp)
+		self.startOffset = CommonIndexes.InteractionPoints.startOffset + (index * kSizeOfInteractionPoint)
 		
 		let rel = XGFiles.common_rel.data
-		self.warpFromRoom = XGRoom.roomWithID(rel.get2BytesAtOffset(startOffset + kWarpFromOffset))
-		self.warpFromIndex = rel.getByteAtOffset(startOffset + kWarpFromIndexOffset)
-		self.warpToRoom = XGRoom.roomWithID(rel.get2BytesAtOffset(startOffset + kWarpToOffset))
-		self.warpToIndex = rel.getByteAtOffset(startOffset + kWarpToIndexOffset)
-		
-		self.warpIsValid = rel.getByteAtOffset(startOffset + kWarpIsValidOffset) == 1
+		self.mapRoom = XGRoom.roomWithID(rel.get2BytesAtOffset(startOffset + kIPMapIDOffset))
+		self.mapIndex = rel.getByteAtOffset(startOffset + kIPMapIndexOffset)
+		self.targetWarpRoom = XGRoom.roomWithID(rel.get2BytesAtOffset(startOffset + kIPWarpTargetMapOffset))
+		self.targetWarpIndex = rel.getByteAtOffset(startOffset + kIPWarpTargetIndexOffset)
+		self.textID = rel.get4BytesAtOffset(startOffset + kIPTextIDOffset).int
+		self.IPType = rel.get2BytesAtOffset(startOffset + kIPTypeOffset)
 		
 	}
 	
-	class func warpForRoom(roomID: Int, withIndex index: Int) -> XGWarp {
-		return allWarps.filter({ (w) -> Bool in
-			return w.warpFromRoom.roomID == roomID && w.warpFromIndex == index
+	@objc class func dataForRoom(roomID: Int, IPIndex index: Int) -> XGInteractionPointData {
+		return allInteractionPointData.filter({ (w) -> Bool in
+			if w.mapRoom != nil {
+				return w.mapRoom.roomID == roomID && w.mapIndex == index
+			}
+			return false
 		})[0]
 	}
 
 }
 
-let kSizeOfWarpLocation = 0x10
-class XGWarpLocation : NSObject {
+let kSizeOfInteractionLocation = 0x10
+let kIPAngleOffset = 0x0
+let kILXOffset = 0x4
+let kILYOffset = 0x8
+let kILZOffset = 0xC
+
+class XGInteractionLocation : NSObject {
 	
-	let kWarpAngleOffset = 0x0
-	let kXOffset = 0x4
-	let kYOffset = 0x8
-	let kZOffset = 0xC
+	@objc var index = 0
+	@objc var startOffset = 0
 	
-	var index = 0
-	var startOffset = 0
+	@objc var xCoordinate : Float = 0
+	@objc var yCoordinate : Float = 0
+	@objc var zCoordinate : Float = 0
+	@objc var angle = 0
 	
-	var sortedIndex = 0
-	
-	var xCoordinate : Float = 0
-	var yCoordinate : Float = 0
-	var zCoordinate : Float = 0
-	var angle = 0
-	
-	var room : XGRoom? {
-		return XGRoom.roomWithName(self.file.fileName.removeFileExtensions())
+	@objc var room : XGRoom {
+		return XGRoom.roomWithName(self.file.fileName.removeFileExtensions())!
 	}
 	
 	var file : XGFiles!
-	var rawData : [Int] {
-		return file.data.getByteStreamFromOffset(startOffset, length: kSizeOfWarpLocation)
+	@objc var rawData : [Int] {
+		return file.data.getByteStreamFromOffset(startOffset, length: kSizeOfInteractionLocation)
 	}
 	
-	var squareDistanceFromCenter : Float {
-		return pow(xCoordinate, 2) + pow(yCoordinate, 2) + pow(zCoordinate, 2)
-	}
-	
-	var warp : XGWarp? {
-		for w in allWarps {
-			if (w.warpFromRoom == self.room) && (w.warpFromIndex == self.index) {
-				return w
-			}
-		}
-		return nil
+	@objc var interactionData : XGInteractionPointData {
+		return XGInteractionPointData.dataForRoom(roomID: self.room.roomID, IPIndex: self.index)
 	}
 	
 	init(file: XGFiles, index: Int, startOffset: Int) {
@@ -121,20 +114,20 @@ class XGWarpLocation : NSObject {
 		
 		let data = file.data
 		
-		self.xCoordinate = data.get4BytesAtOffset(startOffset + kXOffset).hexToSignedFloat()
-		self.yCoordinate = data.get4BytesAtOffset(startOffset + kYOffset).hexToSignedFloat()
-		self.zCoordinate = data.get4BytesAtOffset(startOffset + kZOffset).hexToSignedFloat()
-		self.angle = data.get2BytesAtOffset(startOffset + kWarpAngleOffset)
+		self.xCoordinate = data.get4BytesAtOffset(startOffset + kILXOffset).hexToSignedFloat()
+		self.yCoordinate = data.get4BytesAtOffset(startOffset + kILYOffset).hexToSignedFloat()
+		self.zCoordinate = data.get4BytesAtOffset(startOffset + kILZOffset).hexToSignedFloat()
+		self.angle = data.get2BytesAtOffset(startOffset + kIPAngleOffset)
 		
 	}
 	
-	func save() {
+	@objc func save() {
 		let data = file.data
 		
-		data.replace2BytesAtOffset(startOffset + kWarpAngleOffset, withBytes: self.angle)
-		data.replace4BytesAtOffset(startOffset + kXOffset, withBytes: self.xCoordinate.bitPattern)
-		data.replace4BytesAtOffset(startOffset + kYOffset, withBytes: self.yCoordinate.bitPattern)
-		data.replace4BytesAtOffset(startOffset + kZOffset, withBytes: self.zCoordinate.bitPattern)
+		data.replace2BytesAtOffset(startOffset + kIPAngleOffset, withBytes: self.angle)
+		data.replace4BytesAtOffset(startOffset + kILXOffset, withBytes: self.xCoordinate.bitPattern)
+		data.replace4BytesAtOffset(startOffset + kILYOffset, withBytes: self.yCoordinate.bitPattern)
+		data.replace4BytesAtOffset(startOffset + kILZOffset, withBytes: self.zCoordinate.bitPattern)
 		
 		data.save()
 	}

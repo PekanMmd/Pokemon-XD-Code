@@ -22,22 +22,22 @@ let kTradePokemonMove4Offset		=  0x32
 
 class XGTradePokemon: NSObject, XGGiftPokemon {
 	
-	var index			= 0
+	@objc var index			= 0
 	
-	var level			= 0x0
+	@objc var level			= 0x0
 	var species			= XGPokemon.pokemon(0)
 	var move1			= XGMoves.move(0)
 	var move2			= XGMoves.move(0)
 	var move3			= XGMoves.move(0)
 	var move4			= XGMoves.move(0)
 	
-	var giftType		= "Duking Trade"
+	@objc var giftType		= "Duking Trade"
 	
 	// unused
-	var exp				= -1
+	@objc var exp				= -1
 	var shinyValue		= XGShinyValues.random
 	
-	var startOffset : Int {
+	@objc var startOffset : Int {
 		get {
 			switch index {
 				case 0 : return kElekidOffset
@@ -48,7 +48,7 @@ class XGTradePokemon: NSObject, XGGiftPokemon {
 		}
 	}
 	
-	init(index: Int) {
+	@objc init(index: Int) {
 		super.init()
 		
 		let dol			= XGFiles.dol.data
@@ -77,7 +77,7 @@ class XGTradePokemon: NSObject, XGGiftPokemon {
 		
 	}
 	
-	func save() {
+	@objc func save() {
 		
 		let dol = XGFiles.dol.data
 		let start = startOffset

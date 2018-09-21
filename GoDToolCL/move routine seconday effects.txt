@@ -1,4 +1,4 @@
-01: sleep chance?
+01: sleep chance
 02: poison chance
 03: burn chance
 04: freeze chance
@@ -19,6 +19,13 @@
 1C: chance to lower evasion
 
 36: knock off
+
+41: put attacker to sleep
+42: poison attacker
+43: burn attacker
+44: freeze attacker
+45: paralyse attacker
+46: badly poisoned attacker
 
 4F: chance to raise user's attack
 50: chance to raise user's defense

@@ -49,7 +49,7 @@ extension Array where Element == String {
 
 
 extension NSObject {
-	func println() {
+	@objc func println() {
 		printg(self)
 	}
 }
@@ -149,6 +149,10 @@ extension Int {
 		})
 	}
 	
+	func stringIDToString() -> XGString {
+		return getStringSafelyWithID(id: self)
+	}
+	
 }
 
 extension UInt32 {
@@ -204,6 +208,10 @@ extension UInt32 {
 		return "0x" + hex()
 	}
 	
+	func stringIDToString() -> XGString {
+		return getStringSafelyWithID(id: self.int)
+	}
+	
 }
 
 extension Float {
@@ -224,14 +232,36 @@ extension Float {
 		return result
 	}
 	
+	func floatToHex() -> UInt32 {
+		var toInt : Int32 = 0
+		var float : Float32 = self
+		memcpy(&toInt, &float, MemoryLayout.size(ofValue: toInt))
+		return UInt32(bitPattern: toInt)
+	}
+	
 }
 
 extension String {
+	
+	func save(toFile file: XGFiles) {
+		XGUtility.saveString(self, toFile: file)
+	}
+	
+	func hexStringToInt() -> Int {
+		return Int(strtoul(self, nil, 16)) // converts hex string to uint and then cast as Int
+		
+	}
+	
 	var simplified : String {
 		get {
 			var s = self.replacingOccurrences(of: " ", with: "")
 			s = s.replacingOccurrences(of: "-", with: "")
 			s = s.replacingOccurrences(of: "é", with: "e")
+			s = s.replacingOccurrences(of: ".", with: "")
+			s = s.replacingOccurrences(of: "'", with: "")
+			s = s.replacingOccurrences(of: "\"", with: "")
+			s = s.replacingOccurrences(of: "/", with: "")
+			s = s.replacingOccurrences(of: "\\", with: "")
 			return s.lowercased()
 		}
 	}
@@ -256,7 +286,7 @@ extension String {
 		if to <= from {
 			return ""
 		}
-		if from > self.characters.count {
+		if from > self.count {
 			return ""
 		}
 		if to <= 0 {
@@ -264,14 +294,29 @@ extension String {
 		}
 		
 		let f = from < 0 ? 0 : from
-		let t = to > self.characters.count ? self.characters.count : to
+		let t = to > self.count ? self.count : to
 		
-		let start = self.characters.index(self.startIndex, offsetBy: f)
-		let subStart = self.substring(from: start)
-		return subStart.substring(to: self.characters.index(self.startIndex, offsetBy: t - f))
+		let start = self.index(self.startIndex, offsetBy: f)
+		let end = self.index(self.startIndex, offsetBy: t)
+		return String(self[start..<end])
 		
 	}
+	
+	var stack : XGStack<String> {
+		let s = XGStack<String>()
+		var string = self
+		for _ in 0 ..< self.count {
+			let last = String(describing: string.removeLast())
+			s.push(last)
+		}
+		return s
+	}
+	
 }
+
+
+
+
 
 
 

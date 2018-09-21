@@ -26,7 +26,7 @@ let kAvailabilityFlagOffset		= 0x07
 enum XGTMs : XGDictionaryRepresentable {
 	
 	case tm(Int)
-	case tutor(Int)
+	case tutor(Int) // not available in colosseum
 	
 	var index : Int {
 		get {
@@ -138,7 +138,7 @@ enum XGTMs : XGDictionaryRepresentable {
 				dol.replace2BytesAtOffset(startOffset, withBytes: move.index)
 				dol.save()
 				
-//				self.updateItemDescription()
+				self.updateItemDescription()
 			
 			case .tutor : let rel = XGFiles.common_rel.data
 						rel.replace2BytesAtOffset(startOffset + kTutorMoveMoveIndexOffset, withBytes: move.index)

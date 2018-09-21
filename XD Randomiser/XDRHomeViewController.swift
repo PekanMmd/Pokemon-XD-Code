@@ -10,7 +10,7 @@ import Cocoa
 
 class XDRHomeViewController: GoDViewController {
 
-	var buttons = [NSButton]()
+	@objc var buttons = [NSButton]()
 	
 	@IBOutlet var isoLabel: NSTextField!
 	@IBOutlet var headerImage: NSImageView!
@@ -18,7 +18,6 @@ class XDRHomeViewController: GoDViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Do any additional setup after loading the view.
 		
 		if XGFiles.iso.exists {
 			isoLabel.stringValue = ""
@@ -53,7 +52,7 @@ class XDRHomeViewController: GoDViewController {
 		}
 	}
 	
-	func button(_ name: String, action: Selector) -> NSButton {
+	@objc func button(_ name: String, action: Selector) -> NSButton {
 		let b = NSButton(frame: NSRect(x: 0, y: 0, width: 200, height: 40))
 		b.title = name
 		b.action = action
@@ -63,19 +62,19 @@ class XDRHomeViewController: GoDViewController {
 		return b
 	}
 	
-	func document() {
-		XGUtility.documentTrainers(title: "Randomised Trainers.txt", forXG: false)
+	@objc func document() {
+		XGUtility.documentTrainers(title: "Randomised Trainers", forXG: false)
 		XGUtility.documentStarterPokemon()
 		XGUtility.documentPokespots()
 		XGUtility.documentTrades()
 		XGUtility.documentBattleBingo()
-		XGUtility.documentPokemonStats(title: "Randomised Pokemon.txt", forXG: false)
-		XGUtility.saveObtainablePokemonByLocation()
-		XGUtility.documentShadowPokemon(title: "Randomised Shadow Pokemon.txt", forXG: false)
+		XGUtility.documentPokemonStats(title: "Randomised Pokemon", forXG: false)
+		XGUtility.saveObtainablePokemonByLocation(prefix: "XD Randomised")
+		XGUtility.documentShadowPokemon(title: "Randomised Shadow Pokemon", forXG: false)
 	}
 	
-	func randomiseBattleBingo() {
-		self.showActivityView { (Bool) -> Void in
+	@objc func randomiseBattleBingo() {
+		self.showActivityView { () -> Void in
 			for i in 0 ..< kNumberOfBingoCards {
 				let card = XGBattleBingoCard(index: i)
 				let starter = card.startingPokemon!
@@ -99,8 +98,8 @@ class XDRHomeViewController: GoDViewController {
 		}
 	}
 	
-	func randomisePokemon() {
-		self.showActivityView { (Bool) -> Void in
+	@objc func randomisePokemon() {
+		self.showActivityView { () -> Void in
 			
 			for deck in MainDecksArray {
 				for pokemon in deck.allActivePokemon {
@@ -201,9 +200,9 @@ class XDRHomeViewController: GoDViewController {
 		}
 	}
 	
-	func randomiseMoves() {
+	@objc func randomiseMoves() {
 		
-		self.showActivityView { (Bool) -> Void in
+		self.showActivityView { () -> Void in
 			
 			for i in 1 ..< kNumberOfPokemon {
 				
@@ -270,13 +269,42 @@ class XDRHomeViewController: GoDViewController {
 				
 			}
 			
+			for i in 1 ..< kNumberOfPokemon {
+				
+				if XGPokemon.pokemon(i).nameID == 0 {
+					continue
+				}
+				
+				let pokemon = XGPokemon.pokemon(i)
+				if pokemon.nameID > 0 {
+					let p = XGPokemonStats(index: pokemon.index)
+					
+					for j in 0 ..< p.levelUpMoves.count {
+						p.levelUpMoves[j].move = XGMoves.random()
+						var dupe = true
+						while dupe {
+							dupe = false
+							for k in 0 ..< j {
+								if p.levelUpMoves[k].move == p.levelUpMoves[j].move {
+									p.levelUpMoves[j].move = XGMoves.random()
+									dupe = true
+								}
+							}
+						}
+					}
+					
+					p.save()
+				}
+			}
+			
 			self.hideActivityView()
 		}
 		
+		
 	}
 	
-	func randomiseAbilities() {
-		self.showActivityView { (Bool) -> Void in
+	@objc func randomiseAbilities() {
+		self.showActivityView { () -> Void in
 			for i in 1 ..< kNumberOfPokemon {
 				
 				if XGPokemon.pokemon(i).nameID == 0 {
@@ -299,8 +327,8 @@ class XDRHomeViewController: GoDViewController {
 		}
 	}
 	
-	func randomiseTypes() {
-		self.showActivityView { (Bool) -> Void in
+	@objc func randomiseTypes() {
+		self.showActivityView { () -> Void in
 			for i in 1 ..< kNumberOfPokemon {
 				
 				if XGPokemon.pokemon(i).nameID == 0 {
@@ -321,8 +349,8 @@ class XDRHomeViewController: GoDViewController {
 		}
 	}
 	
-	func randomiseEvolutions() {
-		self.showActivityView { (Bool) -> Void in
+	@objc func randomiseEvolutions() {
+		self.showActivityView { () -> Void in
 			for i in 1 ..< kNumberOfPokemon {
 				
 				let pokemon = XGPokemon.pokemon(i)
@@ -343,15 +371,15 @@ class XDRHomeViewController: GoDViewController {
 		}
 	}
 	
-	func removeTradeEvolutions() {
-		self.showActivityView { (b) in
+	@objc func removeTradeEvolutions() {
+		self.showActivityView { () -> Void in
 			self.removeTradeEvs(30)
 		}
 		
 	}
 	
-	func removeTradeEvs(_ level: Int) {
-		self.showActivityView { (Bool) -> Void in
+	@objc func removeTradeEvs(_ level: Int) {
+		self.showActivityView { () -> Void in
 			for i in 1 ..< kNumberOfPokemon {
 				
 				let pokemon = XGPokemon.pokemon(i)
@@ -373,7 +401,7 @@ class XDRHomeViewController: GoDViewController {
 		}
 	}
 	
-	func gen4PhysicalSpecialSplit() {
+	@objc func gen4PhysicalSpecialSplit() {
 		self.showActivityView { 
 			XGDolPatcher.applyPatch(.physicalSpecialSplitApply)
 			XGUtility.defaultMoveCategories()
@@ -383,11 +411,16 @@ class XDRHomeViewController: GoDViewController {
 		
 	}
 	
-	func save() {
-		self.showActivityView { (Bool) -> Void in
+	@objc func save() {
+		self.showActivityView { () -> Void in
 			XGUtility.compileForRandomiser()
 			self.hideActivityView()
 		}
+	}
+	
+	override func viewDidDisappear() {
+		super.viewDidDisappear()
+		NSApplication.shared.terminate(self)
 	}
 	
 }

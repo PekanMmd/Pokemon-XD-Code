@@ -8,6 +8,10 @@
 
 import Cocoa
 
+let xdpatches = ["Apply Physical/Special move split","Remove Physical/Special move split","Assign default phys/spec categories to moves", "When a pokémon is KO'd it isn't replaced until the end of the turn","Remove foreign languages from common_rel (very useful if it gets too big to import)","Fix shiny glitch for shadow pokemon","Shadow pokemon can be shiny","Shadow pokemon are never shiny","Shadow pokemon are always shiny","Infinite use TMs", "Always show shadow pokemon natures", "Set Deoxys model to: Normal", "Set Deoxys model to: Attack", "Set Deoxys model to: Defense", "Set Deoxys model to: Speed","Allow female demo starter pokemon","Gen VII critical hit ratios"]
+let colopatches = ["Apply Physical/Special move split","Assign default phys/spec categories to moves", "Delete Battle Mode Data. (highly recommended)", "Allow female starter pokemon","Gen VII critical hit ratios"]
+
+
 class GoDPatchViewController: GoDTableViewController {
 
     override func viewDidLoad() {
@@ -16,34 +20,47 @@ class GoDPatchViewController: GoDTableViewController {
 		self.title = "Patches"
     }
 	
-	var patches = ["Apply Physical/Special move split","Remove Physical/Special move split","Assign default phys/spec categories to moves", "When a pokémon is KO'd it isn't replaced until the end of the turn","Remove foreign languages from common_rel (very useful if it gets too big to import)","Fix shiny glitch for shadow pokemon","Shadow pokemon can be shiny","Shadow pokemon are never shiny","Shadow pokemon are always shiny","Infinite use TMs", "Set Deoxys model to: Normal", "Set Deoxys model to: Attack", "Set Deoxys model to: Defense", "Set Deoxys model to: Speed",]
-	var funcs = [#selector(gen4Categories),#selector(removeGen4Categories),#selector(defaultCategories),#selector(endOfTurnSwitchIns),#selector(removeLanguages),#selector(fixShinyGlitch),#selector(randomShinyShadows),#selector(neverShinyShadows),#selector(alwaysShinyShadows),#selector(infiniteTMs), #selector(deoxysN), #selector(deoxysA), #selector(deoxysD), #selector(deoxysS),]
+	let patches = game == .XD ? xdpatches : colopatches
+	var funcs = game == .Colosseum ? [#selector(gen4Categories), #selector(defaultCategories), #selector(deleteBattleMode),  #selector(allowFemaleStarters),#selector(gen7CriticalRatios)] :
+		[#selector(gen4Categories), #selector(removeGen4Categories), #selector(defaultCategories), #selector(endOfTurnSwitchIns), #selector(removeLanguages), #selector(fixShinyGlitch), #selector(randomShinyShadows), #selector(neverShinyShadows), #selector(alwaysShinyShadows), #selector(infiniteTMs), #selector(shadowNature), #selector(deoxysN), #selector(deoxysA), #selector(deoxysD), #selector(deoxysS), #selector(allowFemaleStarters),#selector(gen7CriticalRatios)]
 	
-	func endOfTurnSwitchIns() {
+	@objc func gen7CriticalRatios() {
+		XGDolPatcher.gen7CritRatios()
+	}
+	
+	@objc func allowFemaleStarters() {
+		XGDolPatcher.allowFemaleStarters()
+	}
+	
+	@objc func endOfTurnSwitchIns() {
 		XGAssembly.switchNextPokemonAtEndOfTurn()
 	}
 	
-	func infiniteTMs() {
+	@objc func infiniteTMs() {
 		XGAssembly.infiniteUseTMs()
 	}
+	
+	@objc func shadowNature() {
+		XGDolPatcher.alwaysShowShadowPokemonNature()
+	}
 
-	func fixShinyGlitch() {
+	@objc func fixShinyGlitch() {
 		XGAssembly.fixShinyGlitch()
 	}
 	
-	func alwaysShinyShadows() {
+	@objc func alwaysShinyShadows() {
 		XGAssembly.setShadowPokemonShininess(value: .always)
 	}
 	
-	func neverShinyShadows() {
+	@objc func neverShinyShadows() {
 		XGAssembly.setShadowPokemonShininess(value: .never)
 	}
 	
-	func randomShinyShadows() {
+	@objc func randomShinyShadows() {
 		XGAssembly.setShadowPokemonShininess(value: .random)
 	}
 	
-	func removeLanguages() {
+	@objc func removeLanguages() {
 		XGDolPatcher.applyPatch(.zeroForeignStringTables)
 	}
 	
@@ -55,32 +72,36 @@ class GoDPatchViewController: GoDTableViewController {
 		XGDolPatcher.applyPatch(.betaStartersApply)
 	}
 	
-	func removeGen4Categories() {
+	@objc func removeGen4Categories() {
 		XGDolPatcher.applyPatch(.physicalSpecialSplitRemove)
 	}
 	
-	func gen4Categories() {
+	@objc func gen4Categories() {
 		XGDolPatcher.applyPatch(.physicalSpecialSplitApply)
 	}
 	
-	func defaultCategories() {
+	@objc func defaultCategories() {
 		XGUtility.defaultMoveCategories()
 	}
 	
-	func deoxysN() {
+	@objc func deoxysN() {
 		XGAssembly.setDeoxysForme(to: .normal)
 	}
 	
-	func deoxysA() {
+	@objc func deoxysA() {
 		XGAssembly.setDeoxysForme(to: .attack)
 	}
 	
-	func deoxysD() {
+	@objc func deoxysD() {
 		XGAssembly.setDeoxysForme(to: .defense)
 	}
 	
-	func deoxysS() {
+	@objc func deoxysS() {
 		XGAssembly.setDeoxysForme(to: .speed)
+	}
+	
+	@objc func deleteBattleMode() {
+		XGDolPatcher.deleteBattleModeData()
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
@@ -91,7 +112,7 @@ class GoDPatchViewController: GoDTableViewController {
 		
 		let colour = row % 2 == 0 ? GoDDesign.colourWhite() : GoDDesign.colourLightGrey()
 		
-		let view = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: patches[row], colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: nil, fontSize: 10, width: self.table.width)) as! GoDTableCellView
+		let view = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: patches[row], colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: nil, fontSize: 10, width: self.table.width)) as! GoDTableCellView
 		
 		view.setBackgroundColour(colour)
 		view.setTitle(patches[row])
@@ -104,6 +125,9 @@ class GoDPatchViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		if row == -1 {
+			return
+		}
 		self.showActivityView { 
 			self.performSelector(onMainThread: self.funcs[row], with: nil, waitUntilDone: true)
 			self.hideActivityView()

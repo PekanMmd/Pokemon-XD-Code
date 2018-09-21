@@ -8,7 +8,7 @@
 
 import Foundation
 
-//let kNumberOfItems				= 0x1BC
+let kNumberOfItems				= CommonIndexes.NumberOfItems.value // 0x1bc
 //let kFirstItemOffset			= 0x1FEE4
 let kSizeOfItemData				= 0x28
 let kNumberOfFriendshipEffects	= 0x03
@@ -24,43 +24,55 @@ let kItemDescriptionIDOffset	 = 0x16
 let kItemParameterOffset		 = 0x1B
 let kFirstFriendshipEffectOffset = 0x24 // Signed Int
 
-let kItemFunctionInRAMPointerOffset = 0x20 // value is only filled in RAM at runtime and is empty in common_rel
+let kItemFunctionInRAMPointerOffset1 = 0x1C // value is only filled in RAM at runtime and is empty in common_rel
+let kItemFunctionInRAMPointerOffset2 = 0x20 // value is only filled in RAM at runtime and is empty in common_rel
 
 class XGItem: NSObject, XGDictionaryRepresentable {
 
-	var startOffset : Int {
+	@objc var startOffset : Int {
 		get{
 			return CommonIndexes.Items.startOffset + (index * kSizeOfItemData)
 		}
 	}
 	
-	var index				= 0x0
+	@objc var index				= 0x0
 	
-	var bagSlot				= XGBagSlots.items
-	var inBattleUseID		= 0x0
-	var price				= 0x0
-	var couponPrice			= 0x0
-	var holdItemID			= 0x0
-	var nameID				= 0x0
-	var descriptionID		= 0x0
-	var parameter			= 0x0
-	var friendshipEffects	= [Int](repeating: 0x0, count: kNumberOfFriendshipEffects)
-	var canBeHeld = false
+	var scriptIndex : Int {
+		// index used in scripts and pokemarts is different for key items
+		return index >= 0x15e ? index + 150 : index
+	}
 	
-	var name : XGString {
+	var bagSlot					= XGBagSlots.items
+	@objc var inBattleUseID		= 0x0
+	@objc var price				= 0x0
+	@objc var couponPrice		= 0x0
+	@objc var holdItemID		= 0x0
+	@objc var nameID			= 0x0
+	@objc var descriptionID		= 0x0
+	@objc var parameter			= 0x0
+	@objc var friendshipEffects	= [Int](repeating: 0x0, count: kNumberOfFriendshipEffects)
+	@objc var canBeHeld 		= false
+	
+	var function1 : UInt32 		= 0x0
+	var function2 : UInt32		= 0x0
+	
+	@objc var name : XGString {
 		get {
 			return XGItems.item(index).name
 		}
 	}
 	
-	var descriptionString : XGString {
+	@objc var descriptionString : XGString {
 		get {
 			return XGItems.item(index).descriptionString
 		}
 	}
 	
+	@objc convenience init(scriptIndex: Int) {
+		self.init(index: scriptIndex >= kNumberOfItems ? scriptIndex - 150 : scriptIndex)
+	}
 	
-	init(index: Int) {
+	@objc init(index: Int) {
 		super.init()
 		
 		self.index = index
@@ -80,10 +92,12 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 		canBeHeld			= data.getByteAtOffset(start + kItemCantBeHeldOffset) == 0
 		friendshipEffects	= data.getByteStreamFromOffset(start + kFirstFriendshipEffectOffset, length: kNumberOfFriendshipEffects)
 		
+		function1			= data.get4BytesAtOffset(start + kItemFunctionInRAMPointerOffset1)
+		function2			= data.get4BytesAtOffset(start + kItemFunctionInRAMPointerOffset2)
 		
 	}
 	
-	func save() {
+	@objc func save() {
 		
 		let data = XGFiles.common_rel.data
 		let start = self.startOffset
@@ -99,12 +113,15 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 		data.replaceByteAtOffset(start + kItemCantBeHeldOffset, withByte: canBeHeld ? 0 : 1)
 		data.replaceBytesFromOffset(start + kFirstFriendshipEffectOffset, withByteStream: friendshipEffects)
 		
+		data.replace4BytesAtOffset(start + kItemFunctionInRAMPointerOffset1, withBytes: function1)
+		data.replace4BytesAtOffset(start + kItemFunctionInRAMPointerOffset2, withBytes: function2)
+		
 		data.save()
 		
 	}
 	
 	
-	var dictionaryRepresentation : [String : AnyObject] {
+	@objc var dictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["name"] = self.name.string as AnyObject?
@@ -128,7 +145,7 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 		}
 	}
 	
-	var readableDictionaryRepresentation : [String : AnyObject] {
+	@objc var readableDictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["description"] = self.descriptionString.string as AnyObject?

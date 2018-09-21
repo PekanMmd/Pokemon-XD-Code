@@ -52,14 +52,14 @@ class GoDLevelUpMoveView: NSView {
 		self.addConstraint(NSLayoutConstraint(item: movePopUp, attribute: .width, relatedBy: .equal, toItem: levelPopUp, attribute: .width, multiplier: 2, constant: 0))
 	}
 	
-	func setMove() {
+	@objc func setMove() {
 		if delegate != nil {
 			delegate.pokemon.levelUpMoves[self.index].move = self.movePopUp.selectedValue
 			self.reloadData()
 		}
 	}
 	
-	func setLevel() {
+	@objc func setLevel() {
 		if delegate != nil {
 			delegate.pokemon.levelUpMoves[self.index].level = self.levelPopUp.selectedValue
 			self.reloadData()

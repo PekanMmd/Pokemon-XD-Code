@@ -8,8 +8,8 @@
 
 import Foundation
 
-let kFirstShadowMoveIndex	= 0x164
-let kLastShadowMoveIndex	= 0x176
+let kFirstShadowMoveIndex	= game == .XD ? 0x164 : 0x164
+let kLastShadowMoveIndex	= game == .XD ? 0x176 : 0x164
 
 let shadowMovesUseHMFlag	= XGMove(index: kFirstShadowMoveIndex).HMFlag
 
@@ -20,7 +20,11 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 	var index : Int {
 		get {
 			switch self {
-				case .move(let i): return i
+				case .move(let i):
+					if i > CommonIndexes.NumberOfMoves.value || i < 0 {
+						return 0
+					}
+					return i
 			}
 		}
 	}
@@ -115,7 +119,7 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 	
 	static func random() -> XGMoves {
 		var rand = 0
-		while (XGMoves.move(rand).name.stringLength < 2) || (XGMoves.move(rand).isShadowMove) {
+		while (XGMoves.move(rand).name.stringLength < 2) || (XGMoves.move(rand).isShadowMove) || (XGMoves.move(rand).data.pp == 1) {
 			rand = Int(arc4random_uniform(UInt32(kNumberOfMoves - 1))) + 1
 		}
 		return XGMoves.move(rand)
@@ -219,7 +223,7 @@ func allMoves() -> [String : XGMoves] {
 let moves = allMoves()
 
 func move(_ name: String) -> XGMoves {
-	if moves[name.simplified] == nil { print("couldn't find: " + name) }
+	if moves[name.simplified] == nil { printg("couldn't find: " + name) }
 	return moves[name.simplified] ?? .move(0)
 }
 

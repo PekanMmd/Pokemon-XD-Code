@@ -11,28 +11,28 @@ import AppKit
 class GoDDesign: NSObject {
 	
 	//MARK: - Fonts
-	class func fontOfSize(_ size: CGFloat) -> NSFont {
+	@objc class func fontOfSize(_ size: CGFloat) -> NSFont {
 		return NSFont(name: "Helvetica", size: size)!
 	}
 	
-	class func fontBoldOfSize(_ size: CGFloat) -> NSFont {
+	@objc class func fontBoldOfSize(_ size: CGFloat) -> NSFont {
 		return NSFont(name: "Helvetica Bold", size: size)!
 	}
 	
 	
 	//MARK: - Sizes
-	class func sizeCornerRadius() -> CGFloat {
+	@objc class func sizeCornerRadius() -> CGFloat {
 		return 12.0
 	}
 	
-	class func sizeBottomButton() -> CGFloat {
+	@objc class func sizeBottomButton() -> CGFloat {
 		return 60.0
 	}
 	
 	
 	//MARK: - Colours
 	
-	class func colourFromHex(_ hex: Double) -> NSColor {
+	@objc class func colourFromHex(_ hex: Double) -> NSColor {
 		let red   = CGFloat((hex  / 0x1000000) / 0xFF)
 		let green = CGFloat(((hex / 0x10000).truncatingRemainder(dividingBy: 0x100)) / 0xFF)
 		let blue  = CGFloat(((hex / 0x100).truncatingRemainder(dividingBy: 0x100)) / 0xFF)
@@ -41,108 +41,108 @@ class GoDDesign: NSObject {
 		return NSColor(red: red, green: green, blue: blue, alpha: alpha)
 	}
 	
-	class func colourClear() -> NSColor {
+	@objc class func colourClear() -> NSColor {
 		return colourFromHex(0x00000000)
 	}
 	
-	class func colourBlack() -> NSColor {
+	@objc class func colourBlack() -> NSColor {
 		return colourFromHex(0x000000FF)
 	}
 	
-	class func colourWhite() -> NSColor {
+	@objc class func colourWhite() -> NSColor {
 		return colourFromHex(0xFFFFFFFF)
 	}
 	
-	class func colourRed() -> NSColor {
+	@objc class func colourRed() -> NSColor {
 		return colourFromHex(0xFC6848FF)
 	}
 	
-	class func colourLightOrange() -> NSColor {
+	@objc class func colourLightOrange() -> NSColor {
 		return colourFromHex( 0xFFD080FF)
 	}
 	
-	class func colourOrange() -> NSColor {
+	@objc class func colourOrange() -> NSColor {
 		return colourFromHex( 0xF7B409FF)
 	}
 	
-	class func colourYellow() -> NSColor {
+	@objc class func colourYellow() -> NSColor {
 		return colourFromHex( 0xF8F888FF)
 	}
 	
-	class func colourLightGreen() -> NSColor {
+	@objc class func colourLightGreen() -> NSColor {
 		return colourFromHex( 0xD0FFD0FF)
 	}
 	
-	class func colourGreen() -> NSColor {
+	@objc class func colourGreen() -> NSColor {
 		return colourFromHex( 0xA8E79CFF)
 	}
 	
-	class func colourLightBlue() -> NSColor {
+	@objc class func colourLightBlue() -> NSColor {
 		return colourFromHex( 0xB8F0FFFF)
 	}
 	
-	class func colourBlue() -> NSColor {
+	@objc class func colourBlue() -> NSColor {
 		return colourFromHex( 0x80ACFFFF)
 	}
 	
-	class func colourLightPurple() -> NSColor {
+	@objc class func colourLightPurple() -> NSColor {
 		return colourFromHex( 0xE0C0FFFF)
 	}
 	
-	class func colourPurple() -> NSColor {
+	@objc class func colourPurple() -> NSColor {
 		return colourFromHex( 0xA070FFFF)
 	}
 	
-	class func colourPeach() -> NSColor {
+	@objc class func colourPeach() -> NSColor {
 		return colourFromHex( 0xFFE8D0FF)
 	}
 	
-	class func colourBabyPink() -> NSColor {
+	@objc class func colourBabyPink() -> NSColor {
 		return colourFromHex( 0xFFE0E8FF)
 	}
 	
-	class func colourPink() -> NSColor {
+	@objc class func colourPink() -> NSColor {
 		return colourFromHex( 0xFC80F6FF)
 	}
 	
-	class func colourNavy() -> NSColor {
+	@objc class func colourNavy() -> NSColor {
 		return colourFromHex( 0x28276BFF)
 	}
 	
-	class func colourBrown() -> NSColor {
+	@objc class func colourBrown() -> NSColor {
 		return colourFromHex( 0xC0A078FF)
 	}
 	
-	class func colourLightBlack() -> NSColor {
+	@objc class func colourLightBlack() -> NSColor {
 		return colourFromHex( 0x282828FF)
 	}
 	
-	class func colourGrey() -> NSColor {
+	@objc class func colourGrey() -> NSColor {
 		return colourFromHex( 0xC0C0C8FF)
 	}
 	
-	class func colourDarkGrey() -> NSColor {
+	@objc class func colourDarkGrey() -> NSColor {
 		return colourFromHex( 0xA0A0A8FF)
 	}
 	
-	class func colourLightGrey() -> NSColor {
+	@objc class func colourLightGrey() -> NSColor {
 		return colourFromHex( 0xF0F0FCFF)
 	}
 	
-	class func colourMainTheme() -> NSColor {
+	@objc class func colourMainTheme() -> NSColor {
 		return colourWhite()
 	}
 	
-	class func colourBackground() -> NSColor {
+	@objc class func colourBackground() -> NSColor {
 		return colourLightGrey()
 	}
 	
-	class func colourBlur() -> NSColor {
+	@objc class func colourBlur() -> NSColor {
 		return colourFromHex( 0x70ACFF80)
 	}
 	
 	//MARK: - Dates
-	class func dateFormatter() -> DateFormatter {
+	@objc class func dateFormatter() -> DateFormatter {
 		let formatter = DateFormatter()
 		formatter.dateStyle = .medium
 		formatter.timeStyle = .short
@@ -150,8 +150,8 @@ class GoDDesign: NSObject {
 	}
 	
 	//MARK: - Photos
-	class func photoDefault() -> NSImage {
-		let image = NSImage(named: "PhotoDefault")!
+	@objc class func photoDefault() -> NSImage {
+		let image = NSImage(named: NSImage.Name(rawValue: "PhotoDefault"))!
 		return image
 	}
 	

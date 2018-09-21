@@ -35,10 +35,10 @@ move routine pointers in ram = 0x802f8af8
 20: jump if field effect									BYTE: target WORD: status id WORD: destination
 21: jump if stat											BYTE: target BYTE: comparison (3:<,2:>,1:<,0:= these are untested assumptions) BYTE: stat id BYTE: value WORD: destination
 22: jump if status compare									BYTE: target WORD: status id BYTE: compare to boolean WORD: destination
-23: jump if type
-24: calculate exp gain										BYTE: target BYTE: type BYTE: destination
+23: jump if type											BYTE: target BYTE: type BYTE: destination
+24: calculate exp gain
 25: switch in pokemon
-26: reset crit and damage multipliers and seconday effect
+26: reset crit and damage multipliers and secondary effect
 27: attacking pokemon set number of hits
 28: decremement number of hits
 29: goto
@@ -59,7 +59,7 @@ move routine pointers in ram = 0x802f8af8
 38: and value at offset with half
 39: and value at offset with word
 3a: pause											HALF: duration
-3b: increase routine position by 1
+3b: increase routine position by 1 (nop)
 3c: increase routine position by 2
 3d: set end of knock out checks
 3e: set end of move
@@ -72,7 +72,7 @@ move routine pointers in ram = 0x802f8af8
 45: set end of knockout checks 3
 46: play animation
 47: unknown
-48: unknown but related to stat boost stages
+48: stat boost calculate animation index
 49: stat change animation
 4a: after attack
 4b: damage calc
@@ -112,7 +112,7 @@ move routine pointers in ram = 0x802f8af8
 87: set damage by stocks
 88: set hp healing by stocks
 89: negative damage
-8a: go to stat boost offset
+8a: stat buff/nerf								BYTE: flags WORD: unknown offset
 8b: normalise stat boosts
 8c: set bide
 8d: confusion if end of outrage, etc.

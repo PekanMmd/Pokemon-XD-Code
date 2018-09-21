@@ -11,18 +11,18 @@ import AppKit
 
 extension NSView {
 	
-	func setBackgroundColour(_ colour: NSColor) {
+	@objc func setBackgroundColour(_ colour: NSColor) {
 		self.wantsLayer = true
 		self.layer?.backgroundColor = colour.cgColor
 	}
 	
-	func addBorder(colour: NSColor, width: CGFloat) {
+	@objc func addBorder(colour: NSColor, width: CGFloat) {
 		self.wantsLayer = true
 		self.layer?.borderWidth = width
 		self.layer?.borderColor = colour.cgColor
 	}
 	
-	func removeBorder() {
+	@objc func removeBorder() {
 		self.wantsLayer = true
 		self.layer?.borderWidth = 0
 	}

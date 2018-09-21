@@ -120,13 +120,13 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		let pokemon = mons[row]
 		
-		let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
 		cell.setBackgroundImage(pokemon.type1.image)
 		cell.setTitle(pokemon.name)
 		cell.setImage(image: XGFiles.pokeFace(pokemon.index).image)
 		
-		cell.identifier = "cell"
+		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		cell.translatesAutoresizingMaskIntoConstraints = false
 		
 		cell.alphaValue = self.table.selectedRow == row ? 1 : 0.75
@@ -465,7 +465,7 @@ class GoDStatsViewController: GoDTableViewController {
 			let isTM = row < 58
 			let tm = isTM ? XGTMs.tm(row + 1) : XGTMs.tutor(row - 57)
 			
-			let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: nil, fontSize: 12, width: self.width)) as! GoDTableCellView
+			let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: nil, fontSize: 12, width: self.width)) as! GoDTableCellView
 			
 			cell.setBackgroundImage(tm.move.type.image)
 			if tm.move.isShadowMove {
@@ -474,7 +474,7 @@ class GoDStatsViewController: GoDTableViewController {
 			cell.setTitle(tm.move.name.string)
 			cell.addBorder(colour: GoDDesign.colourBlack(), width: 1)
 			
-			cell.identifier = "cell"
+			cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 			cell.translatesAutoresizingMaskIntoConstraints = false
 			
 			if isTM {
@@ -540,9 +540,9 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 			
-			let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDLevelUpMoveView() ) as! GoDLevelUpMoveView
+			let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDLevelUpMoveView() ) as! GoDLevelUpMoveView
 			
-			cell.identifier = "cell"
+			cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 			cell.translatesAutoresizingMaskIntoConstraints = false
 			
 			cell.index = row

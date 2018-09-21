@@ -66,6 +66,9 @@ class GoDMovesViewController: GoDTableViewController {
 		self.power.formatter = NumberFormatter.byteFormatter()
 		self.accuracy.formatter = NumberFormatter.byteFormatter()
 		self.effectAcc.formatter = NumberFormatter.byteFormatter()
+		if game == .Colosseum {
+			self.category.isEnabled = XGFiles.dol.data.get4BytesAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F
+		}
     }
 	
 	func reloadViewWithActivity() {
@@ -81,7 +84,7 @@ class GoDMovesViewController: GoDTableViewController {
 		self.nameID.integerValue = currentMove.nameID
 		self.index.integerValue = currentMove.moveIndex
 		self.hex.stringValue = currentMove.moveIndex.hexString()
-		self.offset.integerValue = currentMove.startOffset
+		self.offset.stringValue = currentMove.startOffset.hexString()
 		
 		self.descID.integerValue = currentMove.descriptionID
 		self.desc.stringValue = currentMove.mdescription.string
@@ -97,17 +100,26 @@ class GoDMovesViewController: GoDTableViewController {
 		
 		self.type.selectType(type: currentMove.type)
 		self.targets.selectTarget(target: currentMove.target)
-		self.category.selectCategory(category: currentMove.category)
 		self.effectType.selectType(type: currentMove.effectType)
+		if game == .XD {
+			self.category.selectCategory(category: currentMove.category)
+		} else {
+			let enabled = XGFiles.dol.data.get4BytesAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F
+			if enabled {
+				self.category.selectCategory(category: currentMove.category)
+			} else {
+				self.category.selectCategory(category: currentMove.type.category)
+			}
+		}
 		
-		self.contact.state = currentMove.contactFlag ? NSOnState : NSOffState
-		self.mirror.state = currentMove.mirrorMoveFlag ? NSOnState : NSOffState
-		self.protect.state = currentMove.protectFlag ? NSOnState : NSOffState
-		self.kings.state = currentMove.kingsRockFlag ? NSOnState : NSOffState
-		self.magic.state = currentMove.magicCoatFlag ? NSOnState : NSOffState
-		self.sound.state = currentMove.soundBasedFlag ? NSOnState : NSOffState
-		self.snatch.state = currentMove.snatchFlag ? NSOnState : NSOffState
-		self.hm.state = currentMove.HMFlag ? NSOnState : NSOffState
+		self.contact.state = currentMove.contactFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		self.mirror.state = currentMove.mirrorMoveFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		self.protect.state = currentMove.protectFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		self.kings.state = currentMove.kingsRockFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		self.magic.state = currentMove.magicCoatFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		self.sound.state = currentMove.soundBasedFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		self.snatch.state = currentMove.snatchFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		self.hm.state = currentMove.HMFlag ? NSControl.StateValue.on : NSControl.StateValue.off
 		
 		
 	}
@@ -124,12 +136,12 @@ class GoDMovesViewController: GoDTableViewController {
 		
 		let move = moves[row]
 		
-		let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
 		cell.setBackgroundImage(move.isShadow ? XGMoveTypes.shadowImage : move.type.image)
 		cell.setTitle(move.name)
 		
-		cell.identifier = "cell"
+		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		cell.translatesAutoresizingMaskIntoConstraints = false
 		
 		cell.alphaValue = self.table.selectedRow == row ? 1 : 0.75
@@ -262,49 +274,49 @@ class GoDMovesViewController: GoDTableViewController {
 	}
 	
 	@IBAction func toggleHMFlag(_ sender: NSButton) {
-		let value = sender.state == NSOnState
+		let value = sender.state == NSControl.StateValue.on
 		
 		self.currentMove.HMFlag = value
 	}
 	
 	@IBAction func toggleSound(_ sender: NSButton) {
-		let value = sender.state == NSOnState
+		let value = sender.state == NSControl.StateValue.on
 		
 		self.currentMove.soundBasedFlag = value
 	}
 	
 	@IBAction func toggleContact(_ sender: NSButton) {
-		let value = sender.state == NSOnState
+		let value = sender.state == NSControl.StateValue.on
 		
 		self.currentMove.contactFlag = value
 	}
 	
 	@IBAction func toggleKings(_ sender: NSButton) {
-		let value = sender.state == NSOnState
+		let value = sender.state == NSControl.StateValue.on
 		
 		self.currentMove.kingsRockFlag = value
 	}
 	
 	@IBAction func toggleProtect(_ sender: NSButton) {
-		let value = sender.state == NSOnState
+		let value = sender.state == NSControl.StateValue.on
 		
 		self.currentMove.protectFlag = value
 	}
 	
 	@IBAction func toggleSnatch(_ sender: NSButton) {
-		let value = sender.state == NSOnState
+		let value = sender.state == NSControl.StateValue.on
 		
 		self.currentMove.snatchFlag = value
 	}
 	
 	@IBAction func toggleMagic(_ sender: NSButton) {
-		let value = sender.state == NSOnState
+		let value = sender.state == NSControl.StateValue.on
 		
 		self.currentMove.magicCoatFlag = value
 	}
 	
 	@IBAction func toggleMirror(_ sender: NSButton) {
-		let value = sender.state == NSOnState
+		let value = sender.state == NSControl.StateValue.on
 		
 		self.currentMove.mirrorMoveFlag = value
 	}

@@ -8,7 +8,7 @@
 
 import Foundation
 
-let kNumberOfBagSlots = 8
+let kNumberOfBagSlots = game == .Colosseum ? 7 : 8
 
 enum XGBagSlots : Int, CustomStringConvertible, XGDictionaryRepresentable {
 	

@@ -23,6 +23,7 @@ enum XGMaps : String, XGDictionaryRepresentable {
 	case PhenacCity		= "M1"
 	case PyriteTown		= "M2"
 	case AgateVillage	= "M3"
+	case TheUnder		= "M4"
 	case PokemonHQ		= "M5"
 	case GateonPort		= "M6"
 	case OutskirtStand	= "S1"
@@ -48,6 +49,7 @@ enum XGMaps : String, XGDictionaryRepresentable {
 		case .PhenacCity	: return "Phenac City"
 		case .PyriteTown	: return "Pyrite Town"
 		case .AgateVillage	: return "Agate Village"
+		case .TheUnder		: return "The Under"
 		case .PokemonHQ		: return "Pokemon HQ Lab"
 		case .GateonPort	: return "Gateon Port"
 		case .OutskirtStand	: return "Outskirt Stand"
@@ -71,15 +73,6 @@ enum XGMaps : String, XGDictionaryRepresentable {
 		}
 	}
 	
-}
-
-
-enum XGRooms {
-	case room(Int)
-	
-	var dataStart : Int {
-		return CommonIndexes.Rooms.startOffset
-	}
 }
 
 

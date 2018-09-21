@@ -198,7 +198,31 @@ class GoDTextureImporter: NSObject {
 			pixelBytes = byteStreamFromTexturePixels(pixels: texPixels)
 			self.updatePalette()
 		} else {
-			pixelBytes = self.byteStreamFromPNGPixels(pixels: pngPixels)
+			if texture.format == .RGBA32 {
+				let bytes = self.byteStreamFromPNGPixels(pixels: pngPixels)
+				var splitBytes = [Int]()
+				// rg and ba values of rgba32 are separated within blocks so must restructure first
+				let blockCount = splitBytes.count / 64 // 64 bytes per block, 4 pixelsperrow x 4 pixelspercolumn x 4 bytesperpixel
+				
+				for i in 0 ..< blockCount {
+					let blockStart = i * 64
+					var blockARs = [Int]()
+					var blockGBs = [Int]()
+					for j in 0 ..< 16 {
+						let currentPixel = blockStart + (j * 4)
+						blockARs.append(bytes[currentPixel])
+						blockARs.append(bytes[currentPixel + 1])
+						blockGBs.append(bytes[currentPixel + 2])
+						blockGBs.append(bytes[currentPixel + 3])
+					}
+					splitBytes += blockARs + blockGBs
+				}
+				
+				pixelBytes = splitBytes
+				
+			} else {
+				pixelBytes = self.byteStreamFromPNGPixels(pixels: pngPixels)
+			}
 		}
 		
 		texture.replaceTextureData(newBytes: pixelBytes)

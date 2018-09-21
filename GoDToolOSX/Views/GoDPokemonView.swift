@@ -91,8 +91,13 @@ class GoDPokemonView: NSImageView {
 		}
 		
 		
-		self.ability.setTitles(values: [pokemon.species.stats.ability1.name.string , pokemon.species.stats.ability2.name.string])
-		self.ability.selectItem(at: pokemon.ability)
+		let abtitles = [pokemon.species.stats.ability1.name.string , pokemon.species.stats.ability2.name.string] + (game == .XD ? [] : ["Random"])
+		self.ability.setTitles(values: abtitles)
+		if pokemon.ability == 0 || pokemon.ability == 1 {
+			self.ability.selectItem(at: pokemon.ability)
+		} else {
+			self.ability.selectItem(at: 2)
+		}
 		self.nature.selectNature(nature: pokemon.nature)
 		self.gender.selectGender(gender: pokemon.gender)
 		self.happiness.integerValue = pokemon.happiness
@@ -149,6 +154,7 @@ class GoDPokemonView: NSImageView {
 		for i in 0 ..< texts.count {
 			texts[i].target = self
 			texts[i].action = textSelectors[i]
+			texts[i].cell?.sendsActionOnEndEditing = true
 		}
 		
 		
@@ -168,6 +174,7 @@ class GoDPokemonView: NSImageView {
 			self.views["ev\(i)"] = ev
 			ev.target = self
 			ev.action = #selector(setEV(sender:))
+			ev.cell?.sendsActionOnEndEditing = true
 		}
 		
 		self.dpkm.font = GoDDesign.fontOfSize(8)
@@ -324,73 +331,73 @@ class GoDPokemonView: NSImageView {
 		super.init(coder: coder)
 	}
 	
-	func setDPKM(sender: GoDDPKMPopUpButton) {
+	@objc func setDPKM(sender: GoDDPKMPopUpButton) {
 		self.delegate.currentTrainer.pokemon[self.index] = sender.selectedValue
 		self.delegate.pokemon[self.index] = sender.selectedValue.data
 		self.setUp()
 	}
 	
-	func setDDPK(sender: GoDDDPKPopUpButton) {
+	@objc func setDDPK(sender: GoDDDPKPopUpButton) {
 		self.delegate.currentTrainer.pokemon[self.index] = sender.selectedValue
 		self.delegate.pokemon[self.index] = sender.selectedValue.data
 		self.setUp()
 	}
 	
-	func setAbility(sender: GoDPopUpButton) {
+	@objc func setAbility(sender: GoDPopUpButton) {
 		self.delegate.pokemon[self.index].ability = sender.indexOfSelectedItem
 		self.setUp()
 	}
 	
-	func setMove1(sender: GoDMovePopUpButton) {
+	@objc func setMove1(sender: GoDMovePopUpButton) {
 		self.delegate.pokemon[self.index].moves[0] = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setMove2(sender: GoDMovePopUpButton) {
+	@objc func setMove2(sender: GoDMovePopUpButton) {
 		self.delegate.pokemon[self.index].moves[1] = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setMove3(sender: GoDMovePopUpButton) {
+	@objc func setMove3(sender: GoDMovePopUpButton) {
 		self.delegate.pokemon[self.index].moves[2] = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setMove4(sender: GoDMovePopUpButton) {
+	@objc func setMove4(sender: GoDMovePopUpButton) {
 		self.delegate.pokemon[self.index].moves[3] = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setShadowMove1(sender: GoDMovePopUpButton) {
+	@objc func setShadowMove1(sender: GoDMovePopUpButton) {
 		self.delegate.pokemon[self.index].shadowMoves[0] = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setShadowMove2(sender: GoDMovePopUpButton) {
+	@objc func setShadowMove2(sender: GoDMovePopUpButton) {
 		self.delegate.pokemon[self.index].shadowMoves[1] = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setShadowMove3(sender: GoDMovePopUpButton) {
+	@objc func setShadowMove3(sender: GoDMovePopUpButton) {
 		self.delegate.pokemon[self.index].shadowMoves[2] = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setShadowMove4(sender: GoDMovePopUpButton) {
+	@objc func setShadowMove4(sender: GoDMovePopUpButton) {
 		self.delegate.pokemon[self.index].shadowMoves[3] = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setShadowBoostLevel(sender: GoDLevelPopUpButton) {
+	@objc func setShadowBoostLevel(sender: GoDLevelPopUpButton) {
 		self.delegate.pokemon[self.index].shadowBoostLevel = sender.selectedValue
 	}
 	
-	func setItem(sender: GoDItemPopUpButton) {
+	@objc func setItem(sender: GoDItemPopUpButton) {
 		self.delegate.pokemon[self.index].item = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setSpecies(sender: GoDPokemonPopUpButton) {
+	@objc func setSpecies(sender: GoDPokemonPopUpButton) {
 		self.delegate.pokemon[self.index].species = sender.selectedValue
 		self.delegate.pokemon[self.index].moves = sender.selectedValue.movesForLevel(self.delegate.pokemon[self.index].level)
 		
@@ -398,55 +405,61 @@ class GoDPokemonView: NSImageView {
 			self.delegate.pokemon[self.index].shadowCatchRate = sender.selectedValue.catchRate
 		}
 		
+		let gr = sender.selectedValue.stats.genderRatio
+		
+			 if gr == .maleOnly   { self.delegate.pokemon[self.index].gender = .male }
+		else if gr == .femaleOnly { self.delegate.pokemon[self.index].gender = .female }
+		else if gr == .genderless { self.delegate.pokemon[self.index].gender = .genderless }
+		
 		self.setUp()
 	}
 	
-	func setLevel(sender: GoDLevelPopUpButton) {
+	@objc func setLevel(sender: GoDLevelPopUpButton) {
 		self.delegate.pokemon[self.index].level = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setGender(sender: GoDGenderPopUpButton) {
+	@objc func setGender(sender: GoDGenderPopUpButton) {
 		self.delegate.pokemon[self.index].gender = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setNature(sender: GoDNaturePopUpButton) {
+	@objc func setNature(sender: GoDNaturePopUpButton) {
 		self.delegate.pokemon[self.index].nature = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setCounter(sender: NSTextField) {
+	@objc func setCounter(sender: NSTextField) {
 		self.delegate.pokemon[self.index].shadowCounter = sender.integerValue
 		self.setUp()
 	}
 	
-	func setFlee(sender: NSTextField) {
+	@objc func setFlee(sender: NSTextField) {
 		self.delegate.pokemon[self.index].shadowFleeValue = sender.integerValue
 		self.setUp()
 	}
 	
-	func setAggression(sender: NSTextField) {
+	@objc func setAggression(sender: NSTextField) {
 		self.delegate.pokemon[self.index].shadowAggression = sender.integerValue
 		self.setUp()
 	}
 	
-	func setCatch(sender: NSTextField) {
+	@objc func setCatch(sender: NSTextField) {
 		self.delegate.pokemon[self.index].shadowCatchRate = sender.integerValue
 		self.setUp()
 	}
 	
-	func setIVs(sender: NSTextField) {
+	@objc func setIVs(sender: NSTextField) {
 		self.delegate.pokemon[self.index].IVs = sender.integerValue
 		self.setUp()
 	}
 	
-	func setHappiness(sender: NSTextField) {
+	@objc func setHappiness(sender: NSTextField) {
 		self.delegate.pokemon[self.index].happiness = sender.integerValue
 		self.setUp()
 	}
 	
-	func setEV(sender: NSTextField) {
+	@objc func setEV(sender: NSTextField) {
 		self.delegate.pokemon[self.index].EVs[sender.tag] = sender.integerValue
 		self.setUp()
 	}

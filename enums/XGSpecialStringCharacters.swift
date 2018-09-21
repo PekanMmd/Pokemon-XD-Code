@@ -11,6 +11,7 @@ import Foundation
 let k2ByteChars = [0x07, 0x09, 0x38, 0x52, 0x53, 0x5B, 0x5C]
 let k5ByteChars = [0x08]
 
+let kBold 			= "Font Bold"
 let kNewLine		= "New Line"
 let kDialogueEnd	= "Dialogue End"
 let kClearWindow	= "Clear Window"
@@ -38,7 +39,7 @@ enum XGSpecialCharacters : Int {
 	case kanjiStart				= 0x04
 	case furiganaStart			= 0x05
 	case furiganaEnd			= 0x06
-	case changeFont				= 0x07 // 2bytes (according to made_s this changes font. Do experiment
+	case changeFont				= 0x07 // 2bytes // 1=bold
 	case changeColourSpecified	= 0x08 // 5bytes (rgba)
 	case pause					= 0x09 // 2 bytes (second byte determines duration, likely in tenths of a second)
 	case unused0A				= 0x0A
@@ -108,7 +109,7 @@ enum XGSpecialCharacters : Int {
 	case unused4A				= 0x4A
 	case special4B				= 0x4B
 	case special4C				= 0x4C
-	case special4D				= 0x4D
+	case specialMSG				= 0x4D // loads another .msg string as the variable
 	case varPokemon4E			= 0x4E
 	case unused4F				= 0x4F
 	case special50				= 0x50

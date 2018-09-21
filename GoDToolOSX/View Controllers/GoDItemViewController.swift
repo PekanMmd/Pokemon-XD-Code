@@ -52,7 +52,7 @@ class GoDItemViewController: GoDTableViewController {
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
-		return CommonIndexes.NumberOfItems.value
+		return kNumberOfItems
 	}
 	
 	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -63,11 +63,11 @@ class GoDItemViewController: GoDTableViewController {
 		
 		let item = items[row]
 		
-		let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: NSImage(named: "cell"), fontSize: 16, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: NSImage(named: NSImage.Name(rawValue: "File Cell")), fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
 		cell.setTitle(item)
 		
-		cell.identifier = "cell"
+		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		cell.translatesAutoresizingMaskIntoConstraints = false
 		
 		cell.alphaValue = self.table.selectedRow == row ? 1 : 0.75

@@ -8,8 +8,10 @@
 
 import Foundation
 
+var verbose = false
 let date = Date(timeIntervalSinceNow: 0)
 var logString = ""
+
 
 func printg(_ args: Any...) {
 	for arg in args {

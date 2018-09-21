@@ -8,50 +8,80 @@
 
 import Foundation
 
-let kSizeOfCharacterModel = 0x34
+let kSizeOfCharacterModel = game == .XD ? 0x34 : 0x2c
 
-let kCharacterModelFSYSIdentifier = 0x4 // corresponds to the id of the model's file in people_archive.fsys. This is the word at offset 0 of each of the file entry details in the fsys (also used to refer to the model in scripts)
+// corresponds to the id of the model's file in people_archive.fsys. This is the word at offset 0 of each of the file entry details in the fsys (also used to refer to the model in scripts)
+let kCharacterModelFSYSIdentifier = game == .XD ? 0x4 : 0xc
+// 8 total, assuming they make up vertices of bound box
+let kFirstBoundBoxVertexOffset = game == .XD ? 0x8 : 0x10
 
 
 class XGCharacterModels : NSObject {
 
-	var index = 0
-	var identifier = 0
-	var name = ""
-	var fsysIndex = -1
-	var fileSize = -1
+	@objc var index = 0
+	@objc var identifier : UInt32 = 0
+	@objc var name = ""
+	@objc var fsysIndex = -1
+	@objc var fileSize = -1
 	
-	var startOffset = 0
+	var boundBox = [Float]()
 	
-	var rawData : [Int] {
+	@objc var startOffset = 0
+	
+	@objc var archive : XGFsys? {
+		return game == .XD ? XGFiles.fsys("people_archive.fsys").fsysData : XGUtility.searchForFsysForIdentifier(id: identifier)
+	}
+	
+	@objc var rawData : [Int] {
 		return XGFiles.common_rel.data.getByteStreamFromOffset(self.startOffset, length: kSizeOfCharacterModel)
 	}
 	
-	var modelData : XGMutableData {
-		let file = XGFiles.fsys("people_archive.fsys").fsysData
-		return file.decompressedDataForFileWithIndex(index: fsysIndex)!
+	@objc var modelData : XGMutableData {
+		return archive!.decompressedDataForFileWithIndex(index: fsysIndex)!
 	}
 	
-	init(index: Int) {
+	@objc init(index: Int) {
 		super.init()
+		
+		let rel = XGFiles.common_rel.data
 		
 		self.index = index
 		self.startOffset = CommonIndexes.CharacterModels.startOffset + (self.index * kSizeOfCharacterModel)
-		self.identifier = Int(XGFiles.common_rel.data.get4BytesAtOffset(self.startOffset + kCharacterModelFSYSIdentifier))
+		self.identifier = rel.get4BytesAtOffset(self.startOffset + kCharacterModelFSYSIdentifier)
 		
-		let file = XGFiles.fsys("people_archive.fsys")
-		if file.exists {
-			let fsys = file.fsysData
-			let fsysIndex = fsys.indexForIdentifier(identifier: self.identifier)
-			if fsysIndex >= 0 {
-				self.name = fsys.fileNames[fsysIndex]
-				self.fsysIndex = fsysIndex
-				self.fileSize = fsys.sizeForFile(index: fsysIndex)
+		if let arch = archive {
+			let file = arch.file!
+			if file.exists {
+				let fsysIndex = arch.indexForIdentifier(identifier: self.identifier.int)
+				if fsysIndex >= 0 {
+					self.name = arch.fileNames[fsysIndex]
+					self.fsysIndex = fsysIndex
+					self.fileSize = arch.sizeForFile(index: fsysIndex)
+				}
 			}
+		}
+		
+		for i in 0 ..< 8 {
+			let offset = self.startOffset + (i * 4) + kFirstBoundBoxVertexOffset
+			let f = rel.get4BytesAtOffset(offset).hexToSignedFloat()
+			self.boundBox.append(f)
 		}
 	}
 	
-	class func modelWithIdentifier(id: Int) -> XGCharacterModels {
+	func save() {
+		let rel = XGFiles.common_rel.data
+		
+		rel.replace4BytesAtOffset(self.startOffset + kCharacterModelFSYSIdentifier, withBytes: self.identifier)
+		for i in 0 ..< 8 {
+			let offset = self.startOffset + (i * 4) + kFirstBoundBoxVertexOffset
+			let f = self.boundBox[i]
+			rel.replace4BytesAtOffset(offset, withBytes: f.floatToHex())
+		}
+		
+		rel.save()
+	}
+	
+	@objc class func modelWithIdentifier(id: Int) -> XGCharacterModels {
 		for i in 0 ..< CommonIndexes.NumberOfCharacterModels.value {
 			let model = XGCharacterModels(index: i)
 			if model.identifier == id {

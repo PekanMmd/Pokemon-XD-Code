@@ -13,6 +13,14 @@ enum XGBattleBingoPanel : CustomStringConvertible, XGDictionaryRepresentable {
 	case mysteryPanel(XGBattleBingoItem)
 	case pokemon(XGBattleBingoPokemon)
 	
+	var pokemon : XGBattleBingoPokemon? {
+		get {
+			switch self {
+			case .pokemon(let p): return p
+			default: return nil
+			}
+		}
+	}
 	
 	var description : String {
 		get {

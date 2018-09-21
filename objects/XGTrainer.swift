@@ -26,23 +26,23 @@ let kTrainerAIOffset				= 0x28 // 2bytes
 
 class XGTrainer: NSObject, XGDictionaryRepresentable {
 
-	var index				= 0x0
+	@objc var index				= 0x0
 	var deck				= XGDecks.DeckStory
 	
-	var nameID				= 0x0
-	var trainerStringID		= 0x0
-	var trainerString		= ""
-	var preBattleTextID		= 0x0
-	var victoryTextID		= 0x0
-	var defeatTextID		= 0x0
-	var shadowMask			= 0x0
+	@objc var nameID				= 0x0
+	@objc var trainerStringID		= 0x0
+	@objc var trainerString		= ""
+	@objc var preBattleTextID		= 0x0
+	@objc var victoryTextID		= 0x0
+	@objc var defeatTextID		= 0x0
+	@objc var shadowMask			= 0x0
 	var pokemon				= [XGDeckPokemon]()
 	var trainerClass		= XGTrainerClasses.michael1
 	var trainerModel		= XGTrainerModels.michael1WithoutSnagMachine
-	var AI					= 0
-	var cameraEffects		= 0 // some models have unique animations at the start of battle which require special camera movements
+	@objc var AI					= 0
+	@objc var cameraEffects		= 0 // some models have unique animations at the start of battle which require special camera movements
 	
-	var locationString : String {
+	@objc var locationString : String {
 		get {
 			var str = self.trainerString
 			let index1 = str.index(str.startIndex, offsetBy: 1)
@@ -62,6 +62,12 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 				str = str.replacingOccurrences(of: "_p", with: " Player Team")
 				str = str.replacingOccurrences(of: "_e", with: " Enemy Team")
 				str = str.replacingOccurrences(of: "Vdisk", with: "Battle CD ")
+				
+			} else if str.range(of: "Tutor") != nil {
+				
+				str = str.replacingOccurrences(of: "p", with: " Player Team")
+				str = str.replacingOccurrences(of: "e", with: " Enemy Team")
+				str = str.replacingOccurrences(of: "Tutor", with: "Tutor Sim ")
 				
 			} else if sub1 == "N" {
 				str = str.replacingCharacters(in: str.startIndex..<index1, with: "Mt.Battle Zone ")
@@ -89,7 +95,7 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		}
 	}
 	
-	var dictionaryRepresentation : [String : AnyObject] {
+	@objc var dictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["index"] = self.index as AnyObject?
@@ -114,7 +120,7 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		}
 	}
 	
-	var readableDictionaryRepresentation : [String : AnyObject] {
+	@objc var readableDictionaryRepresentation : [String : AnyObject] {
 		get {
 			
 			var dictRep = [String : AnyObject]()
@@ -159,7 +165,7 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		}
 	}
 	
-	var fullDescription : String {
+	@objc var fullDescription : String {
 		get {
 			
 			let trainerLength = 30
@@ -196,6 +202,13 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 			
 			for p in mons {
 				if p.isSet {
+					string += (p.ability == 0 ? p.species.ability1 : p.species.ability2).spaceToLength(pokemonLength)
+				}
+			}
+			string += "\n" + trainerTab
+			
+			for p in mons {
+				if p.isSet {
 					string += p.item.name.string.spaceToLength(pokemonLength)
 				}
 			}
@@ -218,19 +231,19 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		}
 	}
 	
-	var startOffset : Int {
+	@objc var startOffset : Int {
 		get {
 			return deck.DTNRDataOffset + (index * kSizeOfTrainerData)
 		}
 	}
 	
-	var name : XGString {
+	@objc var name : XGString {
 		get {
 			return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
 		}
 	}
 	
-	var prizeMoney : Int {
+	@objc var prizeMoney : Int {
 		get {
 			var maxLevel = 0
 			
@@ -244,13 +257,13 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		}
 	}
 	
-	var hasShadow : Bool {
+	@objc var hasShadow : Bool {
 		get {
 			return self.shadowMask > 0
 		}
 	}
 	
-	var battleData : XGBattle? {
+	@objc var battleData : XGBattle? {
 		return XGBattle.battleForTrainer(index: self.index, deck: self.deck)
 	}
 	
@@ -313,7 +326,7 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		
 	}
 	
-	func save() {
+	@objc func save() {
 		
 		let start = startOffset
 		let deck = self.deck.data
@@ -358,6 +371,16 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		self.AI = ai.rawValue
 	}
    
+}
+
+func allTrainers() -> [XGTrainer] {
+	var trainers = [XGTrainer]()
+	
+	for deck in TrainerDecksArray {
+		trainers += deck.allTrainers
+	}
+	
+	return trainers
 }
 
 

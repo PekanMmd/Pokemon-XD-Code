@@ -10,17 +10,17 @@ import Cocoa
 
 class XGPokemart: NSObject {
 	
-	var index = 0
+	@objc var index = 0
 	
 	var items = [XGItems]()
-	var firstItemIndex = 0
-	var itemsStartOffset : Int {
+	@objc var firstItemIndex = 0
+	@objc var itemsStartOffset : Int {
 		get {
 			return PocketIndexes.MartItems.startOffset + (firstItemIndex * 2)
 		}
 	}
 	
-	init(index: Int) {
+	@objc init(index: Int) {
 		super.init()
 		
 		let data = pocket.data!
@@ -37,13 +37,13 @@ class XGPokemart: NSObject {
 		}
 	}
 	
-	func save() {
+	@objc func save() {
 		let data = pocket.data!
 		data.replace2BytesAtOffset(PocketIndexes.MartStartIndexes.startOffset + (index * 4) + 2, withBytes: self.firstItemIndex)
 		
 		var nextItemOffset = itemsStartOffset
 		for item in self.items {
-			data.replace2BytesAtOffset(nextItemOffset, withBytes: item.index)
+			data.replace2BytesAtOffset(nextItemOffset, withBytes: item.scriptIndex)
 			nextItemOffset += 2
 		}
 		data.replace2BytesAtOffset(nextItemOffset, withBytes: 0)

@@ -24,52 +24,52 @@ let kBattleCDConditionDescriptionIDOffset = 0x18
 class XGBattleCD: NSObject {
 	
 	var battleStyle : XGBattleStyles!
-	var battleField : XGBattleField!
+	@objc var battleField : XGBattleField!
 	
 	var deck : XGDecks!
-	var trainerID = 0
+	@objc var trainerID = 0
 	var p1Deck : XGDecks!
-	var p1TID = 0
+	@objc var p1TID = 0
 	
-	var turnLimit = 0
+	@objc var turnLimit = 0
 	
-	var index = 0
-	var startOffset = 0
+	@objc var index = 0
+	@objc var startOffset = 0
 	
-	var descriptionID = 0
-	var cdDescription : XGString {
+	@objc var descriptionID = 0
+	@objc var cdDescription : XGString {
 		return getStringSafelyWithID(id: descriptionID)
 	}
 	
-	var conditionsID = 0
-	var conditions : XGString {
+	@objc var conditionsID = 0
+	@objc var conditions : XGString {
 		return getStringSafelyWithID(id: conditionsID)
 	}
 	
-	var conditionsBoldID = 0
-	var conditionsBold : XGString {
+	@objc var conditionsBoldID = 0
+	@objc var conditionsBold : XGString {
 		return getStringSafelyWithID(id: conditionsBoldID)
 	}
 	
-	var trainer : XGTrainer? {
+	@objc var trainer : XGTrainer? {
 		if deck == nil {
 			return nil
 		}
 		return XGTrainer(index: trainerID, deck: deck)
 	}
 	
-	var p1Trainer : XGTrainer? {
+	@objc var p1Trainer : XGTrainer? {
 		if p1Deck == nil {
 			return nil
 		}
 		return XGTrainer(index: p1TID, deck: p1Deck)
 	}
 	
-	var rawData : [Int] {
+	@objc var rawData : [Int] {
 		return XGFiles.common_rel.data.getByteStreamFromOffset(self.startOffset, length: kSizeOfBattleCDData)
 	}
 	
-	var title : String {
+	@objc var title : String {
 		let p1t = p1Trainer
 		let p1 = p1t == nil ? (p1TID == 0x1388 ? "Player" : "Invalid") : p1t!.name.string
 		
@@ -117,7 +117,7 @@ class XGBattleCD: NSObject {
 		return desc
 	}
 	
-	init(index: Int) {
+	@objc init(index: Int) {
 		super.init()
 		
 		self.index = index
@@ -150,15 +150,15 @@ class XGBattleCD: NSObject {
 		
 	}
 	
-	func save() {
+	@objc func save() {
 		
 		let data = XGFiles.common_rel.data
 		
 		data.replaceByteAtOffset(startOffset + kBattleCDTurnLimitOffset, withByte: self.turnLimit)
 		data.replaceByteAtOffset(startOffset + kBattleStyleOffset, withByte: self.battleStyle.rawValue)
-		data.replace2BytesAtOffset(startOffset + kBattleDeckIDOffset, withBytes: self.deck.id)
 		data.replace2BytesAtOffset(startOffset + kBattleFieldOffset, withBytes: self.battleField.index)
-		data.replace2BytesAtOffset(startOffset + kBattleTrainerIDOffset, withBytes: self.trainerID)
+		data.replace2BytesAtOffset(startOffset + kBattlePlayer2DeckIDOffset, withBytes: self.deck.id)
+		data.replace2BytesAtOffset(startOffset + kBattlePlayer2TrainerIDOffset, withBytes: self.trainerID)
 		data.replace2BytesAtOffset(startOffset + kBattlePlayer1DeckIDOffset, withBytes: (self.p1Deck ?? .DeckDarkPokemon).id)
 		data.replace2BytesAtOffset(startOffset + kBattlePlayer1TrainerIDOffset, withBytes: self.p1TID)
 		data.replace4BytesAtOffset(startOffset + kBattleCDDescriptionIDOffset, withBytes: UInt32(self.descriptionID))

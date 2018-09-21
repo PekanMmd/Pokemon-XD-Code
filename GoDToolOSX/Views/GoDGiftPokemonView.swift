@@ -10,8 +10,8 @@ import Cocoa
 class GoDGiftPokemonView: NSImageView {
 
 	// copied from pokemon view so irrelevant views are just hidden
-	var dpkm = GoDDPKMPopUpButton()
-	var ddpk = GoDDDPKPopUpButton()
+	var dpkm = GoDPopUpButton()
+	var ddpk = GoDPopUpButton()
 	var body = NSImageView()
 	var name = GoDPokemonPopUpButton()
 	var item = GoDItemPopUpButton()
@@ -289,27 +289,27 @@ class GoDGiftPokemonView: NSImageView {
 		
 	}
 	
-	func setMove1(sender: GoDMovePopUpButton) {
+	@objc func setMove1(sender: GoDMovePopUpButton) {
 		self.delegate.currentGift.move1 = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setMove2(sender: GoDMovePopUpButton) {
+	@objc func setMove2(sender: GoDMovePopUpButton) {
 		self.delegate.currentGift.move2 = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setMove3(sender: GoDMovePopUpButton) {
+	@objc func setMove3(sender: GoDMovePopUpButton) {
 		self.delegate.currentGift.move3 = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setMove4(sender: GoDMovePopUpButton) {
+	@objc func setMove4(sender: GoDMovePopUpButton) {
 		self.delegate.currentGift.move4 = sender.selectedValue
 		self.setUp()
 	}
 	
-	func setSpecies(sender: GoDPokemonPopUpButton) {
+	@objc func setSpecies(sender: GoDPokemonPopUpButton) {
 		
 		var mon = self.delegate.currentGift
 		mon.species = sender.selectedValue
@@ -323,7 +323,7 @@ class GoDGiftPokemonView: NSImageView {
 		self.setUp()
 	}
 	
-	func setLevel(sender: GoDLevelPopUpButton) {
+	@objc func setLevel(sender: GoDLevelPopUpButton) {
 		self.delegate.currentGift.level = sender.selectedValue
 		self.setUp()
 	}

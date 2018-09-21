@@ -20,9 +20,18 @@ main:
 - match: '({{ident}}\s)(=)'
 captures:
 1: entity.assignment.xds
-3: keyword.xds
-- match: \b(define|call|assign|return|function|goto|if|ifFalse)\b
+3: keyword.operator.assignment.xds
+- match: \b(define|call|assign|return|function|goto|if|ifFalse|Null)\b
 scope: keyword.xds
+- match: '(<) ({{number}}) ({{number}}) ({{number}}) (>)'
+captures:
+1: constant.vector.xds
+2: constant.numeric.xds
+5: constant.numeric.xds
+8: constant.numeric.xds
+11: constant.vector.xds
+- match: '\b{{number}}\b'
+scope: constant.numeric.xds
 - match: '"'
 push: string
 - match: '\$:'
@@ -36,16 +45,17 @@ scope: constant.object.xds
 - match: '{{ident}}\.'
 captures:
 0: entity.callstd.xds
-- match: '\b{{number}}\b'
-scope: constant.numeric.xds
-- match: '\b<\b'
-push:  vector
+- match: '(Pokemon\()({{number}})(\))'
+captures:
+1: keyword.type.xds
+2: constant.numeric.xds
+5: keyword.type.xds
+- match: '(Class{{number}}\()({{number}})(\))'
+captures:
+1: keyword.type.xds
+5: constant.numeric.xds
+7: keyword.type.xds
 
-vector:
-- meta_include_prototype: false
-- meta_scope: constant.vector.xds
-- match: '\b>\b'
-pop: true
 
 string_macro:
 - meta_scope: constant.macro.string.xds

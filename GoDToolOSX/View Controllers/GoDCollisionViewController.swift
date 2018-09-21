@@ -11,11 +11,27 @@ class GoDCollisionViewController: GoDTableViewController {
 	
 	
 	@IBOutlet var openglView: GoDOpenGLView!
+	@IBOutlet var metalView: GoDMetalView!
+	
+	var useMetal = true
+	var renderView : NSView {
+		return useMetal ? self.metalView : self.openglView
+	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.table.tableView.intercellSpacing = NSSize(width: 0, height: 1)
 		self.table.reloadData()
+		
+		if useMetal {
+			self.openglView.isHidden = true
+			self.openglView.removeFromSuperview()
+			self.openglView = nil
+			self.metalView.setup()
+		} else {
+			self.metalView.isHidden = true
+		}
+		
 	}
 	
 	var cols : [XGFiles] {
@@ -35,10 +51,18 @@ class GoDCollisionViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		if row == -1 {
+			return
+		}
 		if cols.count > 0 {
 			if self.cols[row].exists {
-				self.openglView.file = self.cols[row]
-				self.openglView.render()
+				if useMetal {
+					self.metalView.file = self.cols[row]
+					metalManager.render()
+				} else {
+					self.openglView.file = self.cols[row]
+					self.openglView.render()
+				}
 			}
 			self.table.reloadData()
 		} else {
@@ -48,9 +72,9 @@ class GoDCollisionViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 12, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 12, width: self.table.width)) as! GoDTableCellView
 		
-		cell.identifier = "cell"
+		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		cell.titleField.maximumNumberOfLines = 2
 		
 		if cols.count == 0 {
@@ -106,6 +130,8 @@ class GoDCollisionViewController: GoDTableViewController {
 				colour = GoDDesign.colourLightOrange()
 			case .Pokespot:
 				colour = GoDDesign.colourYellow()
+			case .TheUnder:
+				colour = GoDDesign.colourGrey()
 			case .Unknown:
 				colour = GoDDesign.colourWhite()
 			}
@@ -124,8 +150,8 @@ class GoDCollisionViewController: GoDTableViewController {
 	}
 	
 	override func keyDown(with event: NSEvent) {
-		if let view = self.openglView {
-			printg("pressed key:", event.keyCode)
+		if let view = self.metalView {
+//			printg("pressed key:", event.keyCode)
 			if let keyName = KeyCodeName(rawValue: event.keyCode) {
 				if view.dictionaryOfKeys[keyName] != true {
 					view.dictionaryOfKeys[keyName] = true
@@ -135,7 +161,7 @@ class GoDCollisionViewController: GoDTableViewController {
 	}
 	
 	override func keyUp(with event: NSEvent) {
-		if let view = self.openglView {
+		if let view = self.metalView {
 			if let keyName = KeyCodeName(rawValue: event.keyCode) {
 				view.dictionaryOfKeys[keyName] = false
 			}
@@ -143,7 +169,7 @@ class GoDCollisionViewController: GoDTableViewController {
 	}
 	
 	override func mouseDragged(with event: NSEvent) {
-		if let view = self.openglView {
+		if let view = self.metalView {
 			view.mouseEvent(deltaX: Float(event.deltaX), deltaY: Float(event.deltaY))
 		}
 	}

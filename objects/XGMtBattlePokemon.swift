@@ -22,7 +22,7 @@ let kMtBattlePokemonMove4Offset		=  0x12
 
 class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon {
 	
-	var index			= 0
+	@objc var index			= 0
 	
 	var species			= XGPokemon.pokemon(0)
 	var move1			= XGMoves.move(0)
@@ -30,18 +30,18 @@ class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon {
 	var move3			= XGMoves.move(0)
 	var move4			= XGMoves.move(0)
 	
-	var giftType		= "Mt. Battle Prize"
+	@objc var giftType		= "Mt. Battle Prize"
 	
 	// unused
 	var shinyValue		= XGShinyValues.random
-	var exp				= -1
-	var level			= 5 {
+	@objc var exp				= -1
+	@objc var level			= 5 {
 		didSet {
 			level = 5
 		}
 	}
 	
-	var startOffset : Int {
+	@objc var startOffset : Int {
 		get {
 			switch index {
 				case 0 : return kChikoritaOffset
@@ -51,7 +51,7 @@ class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon {
 		}
 	}
 	
-	init(index: Int) {
+	@objc init(index: Int) {
 		super.init()
 		
 		let dol			= XGFiles.dol.data
@@ -74,7 +74,7 @@ class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon {
 		
 	}
 	
-	func save() {
+	@objc func save() {
 		
 		let dol = XGFiles.dol.data
 		let start = startOffset

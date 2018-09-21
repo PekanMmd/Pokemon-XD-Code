@@ -706,7 +706,7 @@ import Foundation
 //	}
 //	
 //	if percentageTotal != 100 && spot != .all {
-//		print("wrong percentage total for spot: " + spot.string, percentageTotal)
+//		printg("wrong percentage total for spot: " + spot.string, percentageTotal)
 //	}
 //}
 
@@ -1373,7 +1373,7 @@ import Foundation
 //let foulBranch = 0x8022a188 - kDOLtoRAMOffsetDifference
 //let foulStart = 0x8022278c - kDOLtoRAMOffsetDifference
 //let foulEnd = foulBranch + 0x8
-//replaceASM(startOffset: foulBranch, newASM: [createBranchFrom(offset: foulBranch, toOffset: foulStart)])
+//replaceASM(startOffset: foulBranch, newASM: [createBranchFrom(offset: foulBranch, toOffset: foulStart), kNopInstruction])
 //replaceASM(startOffset: foulStart, newASM: [
 //	0x7c140378, // mr r20, r0
 //	0x7e238b78, // mr r3, r17
@@ -1516,7 +1516,7 @@ import Foundation
 //	createBranchFrom(offset: sandStart + 0x38, toOffset: sandEnd)
 //	])
 //
-// sheer force sand force amplifier tough claws adaptability
+// sheer force sand force amplifier tough claws adaptability technician solar power mega launcher
 //let abilityBranch = 0x8022a66c - kDOLtoRAMOffsetDifference
 //let abilityStart = 0x80220cec - kDOLtoRAMOffsetDifference
 //let abilityEnd = abilityBranch + 0x4
@@ -1618,7 +1618,7 @@ import Foundation
 //	createBranchFrom(offset: sandCheck + 0xc, toOffset: abilityStart + boost33)
 //	])
 //
-//// technician mega launcher solar power
+//// aerilate, pixilate, refrigerate, reckless
 //let ability2Branch = 0x8022a670 - kDOLtoRAMOffsetDifference
 //let ability2Start = 0x8022190c - kDOLtoRAMOffsetDifference
 //let ability2End = ability2Branch + 0x4
@@ -2290,7 +2290,7 @@ import Foundation
 //	0x2803006a,	// cmpwi r3, tinted lens
 //	powerPCBranchNotEqualFromOffset(from: 0x28, to: 0x38), // bne lens end
 //
-//	0x1C7D0014,	// mullw r3, r29, 20
+//	0x1C7D0014,	// mulli r3, r29, 20
 //	0x3800000a,	// li r0, 10
 //	0x7FA303D7,	// divw r29, r3, r0
 //
@@ -2324,9 +2324,9 @@ import Foundation
 //	createBranchAndLinkFrom(offset: filter2Start + 0x1c, toOffset: 0x801efcac - kDOLtoRAMOffsetDifference), // get pokemon pointer
 //	0xa063080c,	// lhz r3, 0x80c(r3) (get ability)
 //	0x28030065,	// cmpwi r3, filter
-//	powerPCBranchNotEqualFromOffset(from: 0x28, to: 0x5c),
+//	powerPCBranchNotEqualFromOffset(from: 0x28, to: 0x38),
 //
-//	0x1C7D004B,	// mullw r3, r29, 75
+//	0x1C7D004B,	// mulli r3, r29, 75
 //	0x38000064,	// li r0, 100
 //	0x7FA303D7,	// divw r29, r3, r0
 //
@@ -2337,7 +2337,7 @@ import Foundation
 //	0x28030047, // cmpwi r3, 71 (compare with expert belt)
 //	powerPCBranchNotEqualFromOffset(from: 0x4c, to: 0x5c),
 //
-//	0x1C7D0078,	// mullw r3, r29, 120
+//	0x1C7D0078,	// mulli r3, r29, 120
 //	0x38000064,	// li r0, 100
 //	0x7FA303D7,	// divw r29, r3, r0
 //
@@ -2348,8 +2348,6 @@ import Foundation
 //	0x38210020, // addi	sp, sp, 32
 //	0x4e800020, // blr
 //])
-//
-//
 //let getEffectiveness = 0x8022271c - kDOLtoRAMOffsetDifference
 //
 //let effectiveEnd = 0x78
@@ -2405,6 +2403,98 @@ import Foundation
 //])
 //
 //
+//// expert belt tinted lens filter on shadow moves
+//let shadowTintedBranch = 0x216dd0
+//let shadowFilterBranch = 0x216e00
+//let shadowTintedStart = 0xB99FA8
+//let shadowFilterStart = 0xB99FC4
+//XGAssembly.replaceASM(startOffset: shadowTintedBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: shadowTintedBranch, toOffset: shadowTintedStart)])
+//XGAssembly.replaceASM(startOffset: shadowFilterBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: shadowFilterBranch, toOffset: shadowFilterStart)])
+//XGAssembly.replaceRELASM(startOffset: shadowTintedStart - kRELtoRAMOffsetDifference, newASM: [
+//	0x7f83e378, // mr	r3, r28 (attacking pokemon)
+//	0xa063080c,	// lhz r3, 0x80c(r3) (get ability)
+//	0x2803006a,	// cmpwi r3, tinted lens
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8), // bne lens end
+//	0x5739083c,	// rlwinm	r25, r25, 1, 0, 30 (7fffffff) (25 << 1)
+//	0x7fe3fb78, // mr	r3, r31 (overwritten code)
+//	XGAssembly.createBranchFrom(offset: shadowTintedStart + 0x18, toOffset: shadowTintedBranch + 0x4)
+//])
+//let getItem2 = 0x20384c
+//XGAssembly.replaceRELASM(startOffset: shadowFilterStart - kRELtoRAMOffsetDifference, newASM: [
+//
+//	0x7f63db78, // mr r3, r27 (defending pokemon)
+//	0xa063080c,	// lhz r3, 0x80c(r3) (get ability)
+//	0x28030065,	// cmpwi r3, filter
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x10), // bne filter end
+//	0x1cb9004B, // mulli	r5, r25, 75
+//	0x38000064, // li	r0, 100
+//	0x7f2503d6, // divw	r25, r5, r0
+//
+//	0x7f83e378, // mr	r3, r28 (attacking pokemon)
+//	XGAssembly.createBranchAndLinkFrom(offset: shadowFilterStart + 0x20, toOffset: getItem2), // get item's hold item id
+//	0x28030047, // cmpwi r3, 71 (compare with expert belt)
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x10), // bne expert belt end
+//	0x1cb90078, // mulli	r5, r25, 120
+//	0x38000064, // li	r0, 100
+//	0x7f2503d6, // divw	r25, r5, r0
+//
+//	0x7fe3fb78, // mr	r3, r31 (overwritten code)
+//	XGAssembly.createBranchFrom(offset: shadowFilterStart + 0x3c, toOffset: shadowFilterBranch + 0x4),
+//	// filler
+//	kNopInstruction,
+//	kNopInstruction,
+//	kNopInstruction,
+//	kNopInstruction,
+//	kNopInstruction,
+//])
+//
+//// expert belt fix
+//let filter2Start = 0x2295F8 - kDOLtoRAMOffsetDifference
+//let getItem = 0x20384c - kDOLtoRAMOffsetDifference
+//XGAssembly.replaceASM(startOffset: filter2Start, newASM: [
+//
+//	0x9421ffe0, // stwu	sp, -0x0020 (sp)
+//	0x7c0802a6, // mflr	r0
+//	0x90010024, // stw	r0, 0x0024 (sp)
+//	0xbfa10014, // stmw	r29, 0x0014 (sp)
+//	0x83B2009C, // lwz	r29, 0x009C (r18)
+//
+//	0x38600012, // li r3, 18 (defending pokemon)
+//	0x38800000, // li r4, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: filter2Start + 0x1c, toOffset: 0x1efcac - kDOLtoRAMOffsetDifference), // get pokemon pointer
+//	0xa063080c,	// lhz r3, 0x80c(r3) (get ability)
+//	0x28030065,	// cmpwi r3, filter
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x28, to: 0x38),
+//
+//	0x1C7D004B,	// mulli r3, r29, 75
+//	0x38000064,	// li r0, 100
+//	0x7FA303D7,	// divw r29, r3, r0
+//
+//	0x38600011, //li r3, 17 (attacking pokemon)
+//	0x38800000, // li r4, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: filter2Start + 0x40, toOffset: 0x1efcac - kDOLtoRAMOffsetDifference), // get pokemon pointer
+//	XGAssembly.createBranchAndLinkFrom(offset: filter2Start + 0x44, toOffset: getItem), // get item's hold item id
+//	0x28030047, // cmpwi r3, 71 (compare with expert belt)
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x4c, to: 0x5c),
+//
+//	0x1C7D0078,	// mulli r3, r29, 120
+//	0x38000064,	// li r0, 100
+//	0x7FA303D7,	// divw r29, r3, r0
+//
+//	0x93B2009C, // stw	r29, 0x009C (r18)
+//	0xbba10014, // lmw	r29, 0x0014 (sp)
+//	0x80010024, // lwz	r0, 0x0024 (sp)
+//	0x7c0803a6, // mtlr	r0
+//	0x38210020, // addi	sp, sp, 32
+//	0x4e800020, // blr
+//])
+//
+//
+//// timer ball update to closer to gen V+ mechanics (maxes in 15 turns)
+//XGAssembly.replaceASM(startOffset: 0x219444 - kDOLtoRAMOffsetDifference, newASM: [
+//	0x54630C3C, // r3  = r3 * 2
+//	0x3B83000A, // r28  = r3 + 10
+//])
 //
 //renameZaprong(newName: "BonBon")
 //
@@ -3714,6 +3804,12 @@ import Foundation
 //	XGAssembly.powerPCBranchLinkReturn(),
 //
 //])
+//// might help with some issues with animating custom stat boost stages which are > +2 or < -2
+//let nerfBranch = 0x210ce4 - kDOLtoRAMOffsetDifference
+//let buffBranch = 0x210cd4 - kDOLtoRAMOffsetDifference
+//XGAssembly.replaceASM(startOffset: nerfBranch, newASM: [0x48000024])
+//XGAssembly.replaceASM(startOffset: buffBranch, newASM: [0x40800024])
+
 
 //var bingoMons = [XGBattleBingoPokemon]()
 //for i in 0 ..< kNumberOfBingoCards {
@@ -3794,7 +3890,7 @@ import Foundation
 //		(pokemon("absol"),move("dark pulse"),.hardy,.dark,0),
 //		(pokemon("sneasel"),move("ice punch"),.hardy,.dark,0),
 //	//card 5
-//		(pokemon("sableye"),move("will-o-wisp"),.brave,.ghost,0),
+//		(pokemon("sableye"),move("toxic"),.brave,.ghost,0),
 //		(pokemon("wigglytuff"),move("play rough"),.adamant,.normal,0),
 //		(pokemon("gengar"),move("sludge bomb"),.adamant,.ghost,0),
 //		(pokemon("misdreavus"),move("shadow ball"),.modest,.ghost,0),
@@ -3840,7 +3936,7 @@ import Foundation
 //		(pokemon("lapras"),move("hydro pump"),.hardy,.ice,0),
 //	//card 8
 //		(pokemon("dragonite"),move("dragon claw"),.jolly,.dragon,0),
-//		(pokemon("ampharos"),move("thunderbolt"),.modest,.dragon,0),
+//		(pokemon("aggron"),move("metal claw"),.adamant,.rock,0),
 //		(pokemon("dragonite"),move("iron tail"),.adamant,.flying,0),
 //		(pokemon("tyranitar"),move("stone edge"),.adamant,.rock,0),
 //		(pokemon("altaria"),move("disarming voice"),.hardy,.dragon,0),
@@ -3914,12 +4010,32 @@ import Foundation
 //	mon.save()
 //}
 
-//let dol = XGFiles.dol.data
-//let earthquakeStart = 0x4158fb - kDOLtoRAMOffsetDifference + 0xa0
+//let names = ["Starter Card", "Match-Up Card", "Mix-Up Card", "Edgy Card", "Immunity Card", "Bug Card", "Solid Card", "Dragon Card", "Legend Card", "Myth Card", "Bonsly Card"]
+//let descs = ["A simple Card for learning the rules.",
+//			 "Watch out for unexpected match-ups!",
+//			 "This one will try to trick you.",
+//			 "Type advantage isn't a guarantee.",
+//			 "Good luck landing any hits...",
+//			 "No strategy here. Are you adaptable?",
+//			 "Your starter is no good. Get Catching!",
+//			 "All strong but which have the best moves?",
+//			 "Legendary pokemon come out to play!",
+//			 "Can you handle the strongest pokemon?",
+//			 "Little pokemon with big moves."]
+//
+//for i in 0 ..< CommonIndexes.NumberOfBingoCards.value {
+//	let card = XGBattleBingoCard(index: i)
+//	print("Bingo Card \(i)")
+//	getStringSafelyWithID(id: card.detailsID).duplicateWithString("[07]{01}" + descs[i]).replace()
+//	getStringSafelyWithID(id: card.nameID).duplicateWithString(names[i]).replace()
+//}
+
+
+//let earthquakeStart = 0x4158fb - kDOLTableToRAMOffsetDifference
 //let earthquakeRoutine = [
 //
 //	// intro 0x4158fb
-//	0x00, 0x32, 0x80, 0x22, 0x0a, 0x17, 0x80, 0x4e, 0x85, 0xc3, 0x1, 0x02, 0x04,
+//	0x00, 0x32, 0x80, 0x22, 0x0a, 0x17, 0x80, 0x4e, 0x85, 0xc3, 0x1, 0x02, 0x3b,
 //
 //	// next target 0x415908
 //	0xc2,
@@ -3946,26 +4062,30 @@ import Foundation
 //	0xfc, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x39, 0x00, 0x00, 0x00, 0x00, 0x80, 0x4e, 0xb9, 0x5e,
 //
 //	// start damage routine 0x415957
-//	0x3b, 0x3b, 0x3b, 0x3b, 0x3b, 0x3b, // check accuracy
+//	0x3b, 0x3b, 0x3b, 0x3b, 0x3b, // filler
 //	0x05, 0x06, 0x07, 0x08, // calcs
 //	0x0a, 0x0b, 0x00, // animations
 //	0x0f, 0x5d, 0x12, 0x3b, 0x0c, 0x12, 0x0e, 0x13, 0x00, 0x40, 0x10, 0x13, 0x00, 0x50, // messages
 //	0x0d, 0x12, 0x0b, 0x04, 0x1a, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, // animations 2
 //	0x2f, 0x80, 0x4e, 0xb9, 0x47, 0x00, 0x16, 0x4a, 0x02, 0x10, // after move
 //	0x7c, 0x80, 0x41, 0x59, 0x09, 0x01, // jump while valid target
-//	0x3e, // end move
+//	0x04, 0x3e, // end move
 //
 //	// attack missed 0x41598e
 //	0x3a, 0x00, 0x20, 0x07, 0x46, 0x12, 0x17, 0x00, 0x00, 0x00, 0x00, 0x0f, 0x10, 0x13, 0x00, 0x50, 0x0b, 0x04, 0x2f, 0x80, 0x4e, 0xb9, 0x47, 0x00, 0x4a, 0x02, 0x10, 0x7c, 0x80, 0x41, 0x59, 0x09, 0x01, 0x3e,]
 //
+//let dol = XGFiles.dol.data
 //dol.replaceBytesFromOffset(earthquakeStart, withByteStream: earthquakeRoutine)
 //dol.save()
+
 //let dragonTailRoutine = XGAssembly.routineRegularHitOpenEnded() + [
 //	// roar
 //	0x00, 0x1f, 0x12, 0x15, 0x80, 0x41, 0x7a, 0x7f, 0x90, 0x80, 0x41, 0x5c, 0xb4,
 //]
 //
 //let uturnRoutine = XGAssembly.routineRegularHitOpenEnded() + [
+//	0x1e, 0x12, 0x00, 0x00, 0x00, 0x2b, 0x80, 0x41, 0x41, 0x0f, // protect
+//	// still need to check if move failed
 //	// baton pass
 //	0x77, 0x11, 0x07, 0x51, 0x11, 0x80, 0x41, 0x5c, 0xb4, 0xe1, 0x11, 0x3b, 0x52, 0x11, 0x02, 0x59, 0x11, 0x4d, 0x11, 0x4e, 0x11, 0x02, 0x74, 0x11, 0x14, 0x80, 0x2f, 0x90, 0xe0, 0x4f, 0x11, 0x01, 0x13, 0x00, 0x00, 0x3b, 0x53, 0x11, 0x29, 0x80, 0x41, 0x41, 0x0f,
 //]
@@ -3984,7 +4104,7 @@ import Foundation
 //let routines : [(effect: Int, routine: [Int], offset: Int)] = [
 //
 //	(28,dragonTailRoutine, 0xb99524),
-//	(57, uturnRoutine, 0xb99564),
+//	(57, uturnRoutine, 0x0xb9a670),
 //	(213, shadowGiftRoutine, 0xb995c2),
 //	(191, skillSwap, 0xb995fa),
 //	(122, shadowAnalysisRoutine, 0xb99622),
@@ -4105,57 +4225,6 @@ import Foundation
 //	XGAssembly.createBranchFrom(offset: shadowBattleStart2 + 0x44, toOffset: shadowBattleBranch2 + 0x4)// branch back
 //	])
 
-
-
-//// hard code ow wild pokemon for each map
-//let owMonStart = 0x1fae4c
-//let owCodeStart = 0xB99D48
-//let owReturn = 0x1fae88
-//XGAssembly.replaceRELASM(startOffset: owCodeStart - kRELtoRAMOffsetDifference, newASM: [
-//	0x2c17002d, // cmpwi r23, D5 out
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
-//	0x380000f3, // li r0, raikou
-//	0x2c17002a, // cmpwi r23, D3_ship_deck
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
-//	0x380000f4, // li r0, entei
-//	0x2c170036, // cmpwi r23, M1_out
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
-//	0x380000f5, // li r0, suicune
-//	0x2c17001e, // cmpwi r23, M1_water_colo_field
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
-//	0x38000194, // li r0, kyogre
-//	0x2c17002f, // cmpwi r23, D6_fort_3F_1
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
-//	0x38000195, // li r0, groudon
-//	0x2c17002c, // cmpwi r23, D5_factory_top
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
-//	0x38000196, // li r0, rayquaza
-//	0x2c170000, // cmpwi r23, -
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
-//	0x38000096, // li r0, mewtwo
-//
-//	// for future expansion
-//	0x2c170000, // cmpwi r23, -
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
-//	0x38000000, // li r0, --
-//	0x2c170000, // cmpwi r23, -
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
-//	0x38000000, // li r0, -
-//	0x2c170000, // cmpwi r23, -
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
-//	0x38000000, // li r0, --
-//	0x2c170000, // cmpwi r23, -
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
-//	0x38000000, // li r0, --
-//	0x2c170000, // cmpwi r23, -
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
-//	0x38000000, // li r0, --
-//	kNopInstruction,
-//	kNopInstruction,
-//
-//	XGAssembly.createBranchFrom(offset: owCodeStart + 0x98, toOffset: owReturn),
-//
-//	])
 
 
 //// wild battles for groudon, kyogre and rayquaza
@@ -4353,7 +4422,7 @@ import Foundation
 //	0x2c17002a, // cmpwi r23, D3_ship_deck
 //	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
 //	0x380000f4, // li r0, entei
-//	0x2c170036, // cmpwi r23, M1_out
+//	0x2c170007, // cmpwi r23, M1_out
 //	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
 //	0x380000f5, // li r0, suicune
 //	0x2c170000, // cmpwi r23, -
@@ -4401,7 +4470,7 @@ import Foundation
 //let getHPFraction = 0x203688
 //let sitrusCode : ASM = [
 //
-//	0x281b00fd, // cmpwi r27, 0xfd
+//	0x281b00fc, // cmpwi r27, 0xfd
 //	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x1c),
 //	0x7fe3fb78, // mr	r3, r31
 //	0x38800004, // li	r4, 4
@@ -5060,72 +5129,1037 @@ import Foundation
 //	printg("")
 //}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//getStringSafelyWithID(id: 24177).duplicateWithString("[Speaker]: Aarrghh![Wait Input]").replace()
+//getStringSafelyWithID(id: 24180).duplicateWithString("[Speaker]: Thanks for playing XG![New Line]Don't forget to check out Mt.Battle.[New Line]There's a surprise at the top.[Wait Input]").replace()
+//
+//
+//
+//
+//
+//// repeat ball catch rate to 3.5x
+//XGAssembly.replaceASM(startOffset: 0x21942c - kDOLtoRAMOffsetDifference, newASM: [0x3b800023])
+//
+
+// multi battle with gonzap to enter key lair
+//let oldGonzap = XGTrainer(index: 145, deck: .DeckStory)
+//let oldBodyBuilder = XGTrainer(index: 22, deck: .DeckStory)
+//let oldBodyBuilder2 = XGTrainer(index: 111, deck: .DeckStory)
+//let gonzap = XGTrainer(index: 225, deck: .DeckStory)
+//let b1 = XGTrainer(index: 209, deck: .DeckStory)
+//let b2 = XGTrainer(index: 210, deck: .DeckStory)
+//
+//for trainer in [gonzap, b1, b2] {
+//	trainer.AI = XGAI.offensive.rawValue
+//	trainer.defeatTextID = 0
+//	trainer.preBattleTextID = 0
+//	trainer.victoryTextID = 0
+//}
+//b1.nameID = oldBodyBuilder.nameID
+//b2.nameID = oldBodyBuilder2.nameID
+
+//gonzap.trainerModel = oldGonzap.trainerModel
+//gonzap.cameraEffects = oldGonzap.cameraEffects
+//gonzap.nameID = oldGonzap.nameID
+//gonzap.trainerClass = oldGonzap.trainerClass
+//gonzap.save()
+//for trainer in [b1, b2] {
+//	trainer.trainerModel = oldBodyBuilder.trainerModel
+//	trainer.cameraEffects = oldBodyBuilder.cameraEffects
+//	trainer.trainerClass = oldBodyBuilder.trainerClass
+//	trainer.save()
+//}
+//
+//let gonzapMultiBattle = gonzap.battleData!
+//let oldBattle = oldGonzap.battleData!
+//let zookBattle = XGTrainer(index: 147, deck: .DeckStory).battleData!
+//gonzapMultiBattle.p3TID = 209
+//gonzapMultiBattle.p3Deck = .DeckStory
+//gonzapMultiBattle.p3Controller = .AI
+//gonzapMultiBattle.p4TID = 210
+//gonzapMultiBattle.p4Deck = .DeckStory
+//gonzapMultiBattle.p4Controller = .AI
+//gonzapMultiBattle.pokemonPerPlayer = 6
+//gonzapMultiBattle.trainersPerSide = 2
+//gonzapMultiBattle.battleStyle = .single
+//gonzapMultiBattle.BGMusicID = oldBattle.BGMusicID
+//gonzapMultiBattle.battleField = zookBattle.battleField
+//gonzapMultiBattle.battleType = .story
+//gonzapMultiBattle.unknown = oldBattle.unknown
+//gonzapMultiBattle.unknown2 = oldBattle.unknown2
+//gonzapMultiBattle.save()
+
+//// one trick room expiry message
+//XGAssembly.replaceASM(startOffset: 0x228dd8 - kDOLtoRAMOffsetDifference, newASM: [0x28000001])
+//getStringSafelyWithID(id: 20099).duplicateWithString("The [0d] wore off!").replace()
+//
+//// herbal medicine fix
+//let hp = item("heal powder").data
+//hp.parameter = item("full heal").data.parameter
+//hp.save()
+//let rh = item("revival herb").data
+//rh.parameter = item("max revive").data.parameter
+//rh.save()
+//let ep = item("energy powder").data
+//ep.parameter = item("super potion").data.parameter
+//ep.save()
+//let er = item("energy root").data
+//er.parameter = item("hyper potion").data.parameter
+//er.save()
+//
+//// sitrus berry fix
+//XGAssembly.replaceRELASM(startOffset: 0xb9a018 - kRELtoRAMOffsetDifference, newASM: [0x281b00fc])
+//
+//let sitrus2Branch = 0x15f2fc
+//let sitrus2Start = 0xB9A358
+//XGAssembly.replaceASM(startOffset: sitrus2Branch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: sitrus2Branch, toOffset: sitrus2Start)])
+//XGAssembly.replaceRELASM(startOffset: sitrus2Start, newASM: [
+//	0x2c0000fd, // cmpwi r0, 252
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0, to: 8), // beq 8
+//	XGAssembly.createBranchFrom(offset: sitrus2Start + 0x8, toOffset: 0x15f32c), // b 0x15f32c
+//	0x5463FC7F, // rlwinm.	r3, r3, 31, 17, 31 (0000fffe) divide by 2, divided by 2 again after branch
+//	XGAssembly.createBranchFrom(offset: sitrus2Start + 0x10, toOffset: 0x15f310), // b 15f310
+//])
+//
+//let sb = item("sitrus berry").data
+//sb.parameter = 0xfc
+//sb.save()
+
+//// paralysis moves don't affect electric types
+//let thunderwaveRoutine =  [0x00, 0x02, 0x04, 0x1f, 0x12, 0x07, 0x80, 0x41, 0x4d, 0x01, 0x23, 0x12, 0x0d, 0x80, 0x41, 0x5c, 0xc6, 0x1e, 0x12, 0x00, 0x00, 0x00, 0x14, 0x80, 0x41, 0x5c, 0x93, 0x07, 0xf9, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3d, 0x00, 0x00, 0x00, 0x00, 0x80, 0x4e, 0xb9, 0x5e, 0x2a, 0x00, 0x80, 0x4e, 0xb9, 0x5e, 0x00, 0x80, 0x41, 0x5c, 0x93, 0x1d, 0x12, 0x00, 0x00, 0x00, 0x05, 0x80, 0x41, 0x4c, 0xe8, 0x1d, 0x12, 0x00, 0x00, 0x00, 0x01, 0x80, 0x41, 0x5c, 0x93, 0x01, 0x80, 0x41, 0x5c, 0x93, 0x00, 0x00, 0x20, 0x12, 0x00, 0x4b, 0x80, 0x41, 0x6d, 0xb2, 0x0a, 0x0b, 0x04, 0x2f, 0x80, 0x4e, 0x85, 0xc3, 0x05, 0x17, 0x10, 0x13, 0x00, 0x50, 0x0b, 0x04, 0x29, 0x80, 0x41, 0x41, 0x0f,]
+//
+//let routines : [(effect: Int, routine: [Int], offset: Int)] = [
+//	(67, thunderwaveRoutine, 0xB9A4AC),
+//]
+//
+////var currentOffset = XGAssembly.ASMfreeSpacePointer()
+//for routine in routines {
+////	// run first to generate offsets
+////	print("effect \(routine.effect) - \(currentOffset.hexString())")
+////	currentOffset += routine.routine.count
+//
+//	// fill in offsets then run this to actually add them
+//	XGAssembly.setMoveEffectRoutine(effect: routine.effect, fileOffset: routine.offset - kRELtoRAMOffsetDifference, moveToREL: true, newRoutine: routine.routine)
+//}
+//// secondary move effects can't paralyse electric types
+//let paraStart = 0xB9A520
+//let paraBranch = 0x213dbc
+//let checkHasType = 0x2054fc
+//let getPointer = 0x1efcac
+//XGAssembly.replaceASM(startOffset: paraBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: paraBranch, toOffset: paraStart)])
+//XGAssembly.replaceRELASM(startOffset: paraStart - kRELtoRAMOffsetDifference, newASM: [
+//	0x3bed87a0, // overwritten code
+//	0x881f0003, // lbz	r0, 0x0003 (r31) get move secondary effect index
+//	0x28000005, // cmpwi r0, paralysis chance
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0x0, to: 0x8),
+//	XGAssembly.createBranchFrom(offset: paraStart + 0x10, toOffset: paraBranch + 0x4),
+//	0x38600012, // li r3, 18
+//	0x38800000, // li r4, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: paraStart + 0x1c, toOffset: getPointer),
+//	0x3880000d, // li r4, electric
+//	XGAssembly.createBranchAndLinkFrom(offset: paraStart + 0x24, toOffset: checkHasType),
+//	0x28030001, // cmpwi r3, 1
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x8),
+//	0x3ba00000, // li	r29, 0
+//	XGAssembly.createBranchFrom(offset: paraStart + 0x34, toOffset: paraBranch + 0x4)
+//
+//])
+
+//// spore/powder moves don't affect grass types prankster doesn't affect dark types
+//let sporeBranch = 0x225870
+//let sporeStart = 0xB9A558
+//let moveGetTargets = 0x13e784
+//let checkHasType = 0x2054fc
+//let getPointer = 0x1efcac
+//let getCurrentMove = 0x148d64
+//let getAbility = 0x2055c8
+//let moveGetCategory = 0x13e7f0
+//let moveGetPriority = 0x13e7b8
+//let moveRoutineSetPosition = 0x2236d4
+//
+//let sporeEnd = 0x58
+//let sporeBlocked = 0x44
+//let pranksterEnd = 0xf0
+//let pranksterBlocked = 0xe0
+//
+//XGAssembly.replaceASM(startOffset: sporeBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: sporeBranch, toOffset: sporeStart)])
+//XGAssembly.replaceRELASM(startOffset: sporeStart - kRELtoRAMOffsetDifference, newASM: [
+//
+//	0x38600012, // li r3, 18 (defending pokemon)
+//	0x38800000, // li r4, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0x8, toOffset: getPointer), // get pokemon pointer
+//	0x3880000c, // li r4, grass
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0x10, toOffset: checkHasType),
+//	0x28030001, // cmpwi r3, 1
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x18, to: sporeEnd),
+//
+//	0x38600011, // li r3, 17 (attacking pokemon)
+//	0x38800000, // li r4, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0x24, toOffset: getPointer), // get pokemon pointer
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0x28, toOffset: getCurrentMove),
+//	0x28030093, // cmpwi r3, spore
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0x30, to: sporeBlocked),
+//	0x2803004e, // cmpwi r3, stun spore
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0x38, to: sporeBlocked),
+//	0x2803004f, // cmpwi r3, sleep powder
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x40, to: sporeEnd),
+//
+//	// spore blocked 0x44
+//	0x3c6080ba, // lis	r3, 0x80ba
+//	0x3863a650, // subi	r3, r3, 0x59b0
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0x4c, toOffset: moveRoutineSetPosition),
+//	0x3bc00001, // li	r30, 1
+//	XGAssembly.createBranchFrom(offset: 0x54, toOffset: pranksterEnd),
+//
+//	// spore end 0x58
+//	0x38600012, // li r3, 18 (defending pokemon)
+//	0x38800000, // li r4, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0x60, toOffset: getPointer), // get pokemon pointer
+//	0x38800011, // li r4, dark
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0x68, toOffset: checkHasType),
+//	0x28030001, // cmpwi r3, 1
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x70, to: pranksterEnd),
+//
+//	0x38600011, // li r3, 17 (attacking pokemon)
+//	0x38800000, // li r4, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0x7c, toOffset: getPointer), // get pokemon pointer
+//	0xa063080c, // lhz	r3, 0x080C (r3) get ability
+//	0x28030059, // cmpwi r3, prankster
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x88, to: pranksterEnd),
+//
+//	0x38600011, // li r3, 17 (attacking pokemon)
+//	0x38800000, // li r4, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0x94, toOffset: getPointer), // get pokemon pointer
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0x98, toOffset: getCurrentMove),
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0x9c, toOffset: moveGetCategory),
+//	0x28030000, // cmpwi r3, status
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0xa4, to: pranksterEnd),
+//
+//	0x38600011, // li r3, 17 (attacking pokemon)
+//	0x38800000, // li r4, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0xb0, toOffset: getPointer), // get pokemon pointer
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0xb4, toOffset: getCurrentMove),
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0xb8, toOffset: moveGetPriority),
+//	0x28030000, // cmpwi r3, 0
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0xc0, to: pranksterEnd),
+//
+//	0x38600011, // li r3, 17 (attacking pokemon)
+//	0x38800000, // li r4, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0xcc, toOffset: getPointer), // get pokemon pointer
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0xd0, toOffset: getCurrentMove),
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0xd4, toOffset: moveGetTargets),
+//	0x28030005, // cmpwi r3, user
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0xdc, to: pranksterEnd),
+//
+//	// prankster blocked 0xe0
+//	0x3c6080ba, // lis	r3, 0x80ba
+//	0x3863a650, // subi	r3, r3, 0x59b0
+//	0x3bc00001, // li	r30, 1
+//	XGAssembly.createBranchAndLinkFrom(offset: sporeStart + 0xec, toOffset: moveRoutineSetPosition),
+//
+//	// prankster end 0xf0
+//	0x7fc3f378, // mr r3, r30 overwritten code
+//	XGAssembly.createBranchFrom(offset: sporeStart + 0xf4, toOffset: sporeBranch + 0x4)
+//])
+//XGAssembly.replaceRELASM(startOffset: 0xb9a650 - kRELtoRAMOffsetDifference, newASM: [ 0x02298041, 0x5cc60000, ])
+
+//// spread moves damage reduced by 25% when hitting multiple targets
+//let spreadBranches = [0x22aa4c, 0x22a8f4]
+//let spreadStart = 0xB9A658
+//let spreadMaths = [0x22aa60, 0x22a908]
+//for offset in spreadBranches {
+//	XGAssembly.replaceASM(startOffset: offset - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchAndLinkFrom(offset: offset, toOffset: spreadStart)])
+//}
+//for offset in spreadMaths {
+//	XGAssembly.replaceASM(startOffset: offset - kDOLtoRAMOffsetDifference, newASM: [
+//		0x1dce0003, // mulli r14, r14, 3  (r14 * 3)
+//		0x7dce1670, // srawi r14, r14, 2  ( r14 >> 2 == r14 / 4)
+//	])
+//}
+//XGAssembly.replaceRELASM(startOffset: spreadStart - kRELtoRAMOffsetDifference, newASM: [
+//	0x28000004, // cmpwi r0, both foes spread move
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0xc),
+//
+//	// if it passes first test then we can return without checking the second condition
+//	// we simply do the comparison again so the next line will do the right jump after returning
+//	0x28000004, // cmpwi r0, both foes spread move
+//	XGAssembly.powerPCBranchLinkReturn(),
+//
+//	// otherwise we check the second condition and once we return the jump will be based on that
+//	// as the first comparison no longer affects the results
+//	0x28000006, // cmpwi r0, both foes and ally spread move
+//	XGAssembly.powerPCBranchLinkReturn(),
+//])
+
+//// stat booster +2 (r3 index of stat to boost, r4 battle pokemon)
+//let statBoosterPlus2Start = 0xB9A6F8
+//let getStatIndex = 0x222484
+//let getValueWithIndex = 0x142e7c
+//let unknownFunc = 0x148a98
+//let setParams = 0x1f6780
+//let setValueWithIndex = 0x141d14
+//let animSoundCallback = 0x2236a8
+//let statBoosterPlus2Code : ASM = [
+//
+//0x9421ffe0, // stwu	sp, -0x0020 (sp)
+//0x7c0802a6, // mflr	r0
+//0x90010024, // stw	r0, 0x0024 (sp)
+//0x93e1001c, // stw	r31, 0x001C (sp)
+//0x93c10018, // stw	r30, 0x0018 (sp)
+//0x93a10014, // stw	r29, 0x0014 (sp)
+//0x93810010, // stw	r28, 0x0010 (sp)
+//0x7C9F2378, // mr	r31, r4
+//XGAssembly.createBranchAndLinkFrom(offset: statBoosterPlus2Start + 0x20, toOffset: getStatIndex),
+//
+//0x7c601b78, // mr	r0, r3
+//0x7fe3fb78, // mr	r3, r31
+//0x7c1d0378, // mr	r29, r0
+//0x38800000, // li	r4, 0
+//0x7fa5eb78, // mr	r5, r29
+//0x38c00000, // li	r6, 0
+//XGAssembly.createBranchAndLinkFrom(offset: statBoosterPlus2Start + 0x3c, toOffset: getValueWithIndex),
+//
+//0x7c7c0774, // extsb	r28, r3
+//0x2c1c000c, // cmpwi	r28, 12
+//0x40800078, // bge 0x78
+//
+//0x7fe3fb78, // mr	r3, r31
+//XGAssembly.createBranchAndLinkFrom(offset: statBoosterPlus2Start + 0x50, toOffset: unknownFunc),
+//
+//0x5460043e, // rlwinm	r0, r3, 0, 16, 31 (0000ffff)
+//0x28000002, // cmplwi	r0, 2
+//0x41820064, // beq 0x64
+//
+//0x7fe4fb78, // mr	r4, r31
+//0x38600000, // li	r3, 0
+//XGAssembly.createBranchAndLinkFrom(offset: statBoosterPlus2Start + 0x68, toOffset: setParams),
+//
+//0x381c0002, // addi	r0, r28, 2
+//0x2800000c, // cmpwi r0, 12
+//XGAssembly.powerPCBranchLessThanOrEqualFromOffset(from: 0x0, to: 0x8),
+//0x3800000c, // li r0, 12
+//
+//0x7fe3fb78, // mr r3, r31
+//0x7c070774, // extsb r7, r0
+//0x7fa5eb78, // mr	r5, r29
+//0x38800000, // li	r4, 0
+//0x38c00000, // li	r6, 0
+//XGAssembly.createBranchAndLinkFrom(offset: statBoosterPlus2Start + 0x90, toOffset: setValueWithIndex),
+//
+//0x808dbb04, // lwz	r4, -0x44FC (r13)
+//0x3c608041, // lis	r3, 0x8041
+//0x38a00011, // li	r5, 17
+//0x38000000, // li	r0, 0
+//0x3c840001, // addis	r4, r4, 1
+//0x38637957, // addi	r3, r3, 31063
+//0x98a460a4, // stb	r5, 0x60A4 (r4)
+//0x808dbb04, // lwz	r4, -0x44FC (r13)
+//0x3c840001, // addis	r4, r4, 1
+//0x980460a5, // stb	r0, 0x60A5 (r4)
+//XGAssembly.createBranchAndLinkFrom(offset: statBoosterPlus2Start + 0xbc, toOffset: animSoundCallback),
+//
+//0x80010024, // lwz	r0, 0x0024 (sp)
+//0x83e1001c, // lwz	r31, 0x001C (sp)
+//0x83c10018, // lwz	r30, 0x0018 (sp)
+//0x83a10014, // lwz	r29, 0x0014 (sp)
+//0x83810010, // lwz	r28, 0x0010 (sp)
+//0x7c0803a6, // mtlr	r0
+//0x38210020, // addi	sp, sp, 32
+//
+//XGAssembly.powerPCBranchLinkReturn()
+//]
+//XGAssembly.replaceRELASM(startOffset: statBoosterPlus2Start - kRELtoRAMOffsetDifference, newASM: statBoosterPlus2Code)
+//
+//
+//// defiant competitive
+//let defiantBranch = 0x2223d0
+//let defiantStart = 0xB9A7D8
+//XGAssembly.replaceASM(startOffset: defiantBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: defiantBranch, toOffset: defiantStart)])
+//XGAssembly.replaceRELASM(startOffset: defiantStart - kRELtoRAMOffsetDifference, newASM: [
+//	0x7f800774, // extsb	r0, r28 (stat change stages)
+//	0x28000080, // cmpwi r0, 0x80 // treats negative as big number
+//	XGAssembly.powerPCBranchGreaterThanOrEqualFromOffset(from: 0x0, to: 0xc),
+//	0x3a6d87a0, // overwritten code
+//	XGAssembly.createBranchFrom(offset: defiantStart + 0x10, toOffset: defiantBranch + 4),
+//
+//	0x57200673, // rlwinm.	r0, r25, 0, 25, 25 (00000040) affects user mask
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0x0, to: 0xc),
+//	0x3a6d87a0, // overwritten code
+//	XGAssembly.createBranchFrom(offset: defiantStart + 0x20, toOffset: defiantBranch + 4),
+//
+//	0x281a0067, // cmpwi r26, defiant
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x18),
+//
+//	0x38600001, // li r3, attack
+//	0x7f04c378, // mr r4, r24
+//	XGAssembly.createBranchAndLinkFrom(offset: defiantStart + 0x34, toOffset: statBoosterPlus2Start),
+//	0x3a6d87a0, // overwritten code
+//	XGAssembly.createBranchFrom(offset: defiantStart + 0x3c, toOffset: defiantBranch + 4),
+//
+//	0x281a0068, // cmpwi r26, competitive
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x10),
+//
+//	0x38600004, // li r3, sp. attack
+//	0x7f04c378, // mr r4, r24
+//	XGAssembly.createBranchAndLinkFrom(offset: defiantStart + 0x50, toOffset: statBoosterPlus2Start),
+//	0x3a6d87a0, // overwritten code
+//	XGAssembly.createBranchFrom(offset: defiantStart + 0x58, toOffset: defiantBranch + 4),
+//
+//])
+
+//// moves thaw from frozen
+//let thawBranch = 0x226d6c
+//let thawStart = 0xB9A834
+//let thawTrue = thawStart + 0x38
+//let thawFalse = thawStart + 0x3c
+//// r30 current move
+//// r26 move effect
+//XGAssembly.replaceASM(startOffset: thawBranch - kDOLtoRAMOffsetDifference, newASM: [.b(thawStart), .nop, .nop])
+//XGAssembly.replaceRELASM(startOffset: thawStart - kRELtoRAMOffsetDifference, newASM: [
+//	.cmpwi(.r30, move("flame wheel").index),
+//	.beq(thawTrue),
+//	.cmpwi(.r30, move("flare blitz").index),
+//	.beq(thawTrue),
+//	.cmpwi(.r30, move("scald").index),
+//	.beq(thawTrue),
+//	.cmpwi(.r30, move("sacred fire").index),
+//	.beq(thawTrue),
+//	.cmpwi(.r30, move("shadow blaze").index),
+//	.beq(thawTrue),
+//	.cmpwi(.r30, move("shadow tribute").index),
+//	.beq(thawTrue),
+//	.cmpwi(.r26, 125), // move effect burn chance and thaw from frozen
+//	.bne(thawFalse),
+//	// thaw true 0x38
+//	.b(0x226d94),
+//	// thaw false 0x3c
+//	.b(0x226d78)
+//])
+
+//// move effect 203 always neutral damage addition to freeze dry and scrappy code
+//let neutralStart = 0xB9A834
+//let neutralBranch = 0x216d80
+//let getMoveEffect = 0x13e6e8
+//let neutralSkip = 0x216e10
+//let setEffectiveness = 0x1f057c
+//let checkSetEffectiveness = 0x1f05d0
+//XGAssembly.setMoveEffectRoutineRAMOffset(effect: 203, RAMOffset: 0x80414b23)
+//XGAssembly.replaceASM(startOffset: neutralBranch - kDOLtoRAMOffsetDifference, newASM: [
+//	.b(neutralStart),
+//	// overwritten code
+//	.mr(.r3, .r26),
+//	.bl(0x13d03c),
+//	.cmpwi(.r3, 1),
+//])
+//XGAssembly.replaceRELASM(startOffset: neutralStart - kRELtoRAMOffsetDifference, newASM: [
+//	.mr(.r3, .r26), // move id
+//	.bl(getMoveEffect),
+//	.cmpwi(.r3, 203), // new effect always neutral damage
+//	.beq_f(0, 8),
+//	.b(neutralBranch + 0x4),
+//
+//	// neutral damage
+//	.mr(.r3, .r31),
+//	.li(.r4, XGEffectivenessValues.neutral.rawValue),
+//	.bl(checkSetEffectiveness),
+//	.cmpwi(.r3, 2),
+//	.beq_f(0, 8),
+//	.b(neutralSkip),
+//	.mr(.r3, .r31),
+//	.li(.r4, XGEffectivenessValues.neutral.rawValue),
+//	.li(.r5, 0),
+//	.bl(setEffectiveness),
+//	.b(neutralSkip),
+//
+//])
+
+//// ghost types can't be trapped
+//let ghostBranch = 0x20f7b0
+//let ghostStart = 0xB9A874
+//let checkHasType = 0x2054fc
+//let ghostSkip = 0x20f980
+//
+//XGAssembly.replaceASM(startOffset: ghostBranch - kDOLtoRAMOffsetDifference, newASM: [
+//	.b(ghostStart),
+//	.cmpwi(.r31, 50), // compare ability with runaway (overwritten code)
+//])
+//XGAssembly.replaceRELASM(startOffset: ghostStart - kRELtoRAMOffsetDifference, newASM: [
+//	.mr(.r3, .r28),
+//	.li(.r4, XGMoveTypes.ghost.rawValue),
+//	.bl(checkHasType),
+//	.cmpwi(.r3, 1),
+//	.beq_f(0, 8),
+//	.b(ghostBranch + 0x4),
+//	.li(.r3, 0),
+//	.b(ghostSkip),
+//])
+
+
+//let toxicBranch = 0x2178d4
+//let toxicStart = 0xB9A894
+//let checkHasType = 0x2054fc
+//let toxicSkip = 0x2179b8
+//XGAssembly.replaceASM(startOffset: toxicBranch - kDOLtoRAMOffsetDifference, newASM: [
+//	.b(toxicStart)
+//])
+//XGAssembly.replaceRELASM(startOffset: toxicStart - kRELtoRAMOffsetDifference, newASM: [
+//	.mr(.r3, .r23),
+//	.li(.r4, XGMoveTypes.poison.rawValue),
+//	.bl(checkHasType),
+//	.cmpwi(.r3, 1),
+//	.beq_f(0, 8),
+//	.b(toxicBranch + 0x4),
+//	.li(.r22, 100), // set accuracy
+//	.b(toxicSkip)
+//])
+
+
+//// ghosts can't be trapped 2
+//let ghost2Branch = 0x1f279c
+//let ghost2Start = 0xB9AA58
+//let checkType = 0x2054fc
+//XGAssembly.replaceASM(startOffset: ghost2Branch - kDOLtoRAMOffsetDifference, newASM: [.b(ghost2Start)])
+//XGAssembly.replaceRELASM(startOffset: ghost2Start - kRELtoRAMOffsetDifference, newASM: [
+//
+//	.stwu(.sp, .sp, -0x20),
+//	.stmw(.r31, .sp, 0x10),
+//	.mr(.r31, .r3),
+//
+//	.mr(.r3, .r25),
+//	.li(.r4, XGMoveTypes.ghost.rawValue),
+//	.bl(checkType),
+//	.cmpwi(.r3, 1),
+//	.bne_f(0, 8),
+//	.li(.r31, 0),
+//
+//	.mr(.r3, .r31),
+//	.lmw(.r31, .sp, 0x10),
+//	.addi(.sp, .sp, 0x20),
+//
+//	.lmw(.r25, .sp, 0x14), // overwritten
+//	.b(ghost2Branch + 4)
+//])
+//
+//// flame orb / toxic orb poison heal
+//
+//XGAbilities.ability(50).name.duplicateWithString("Poison Heal").replace()
+//XGAbilities.ability(50).adescription.duplicateWithString("Heals when poisoned.").replace()
+//
+//// remove runaway effect
+//XGAssembly.replaceASM(startOffset: 0x20f7b0 - kDOLtoRAMOffsetDifference, newASM: [
+//	.b(0x20f7c4),
+//	.nop,
+//	.nop
+//])
+//
+//let flameOrb = XGItem(index: 190)
+//let toxicOrb = XGItem(index: 185)
+//flameOrb.name.duplicateWithString("Flame Orb").replace()
+//toxicOrb.name.duplicateWithString("Toxic Orb").replace()
+//flameOrb.descriptionID = toxicOrb.descriptionID
+//toxicOrb.descriptionString.duplicateWithString("Inflicts the holder with[New Line]a status at the[New Line]of the turn.").replace()
+//
+//flameOrb.holdItemID = 78
+//toxicOrb.holdItemID = 79
+//for orb in [flameOrb, toxicOrb] {
+//	orb.bagSlot = .items
+//	orb.canBeHeld = true
+//	orb.couponPrice = 200
+//	orb.price = 500
+//	orb.friendshipEffects = [0,0,0]
+//	orb.inBattleUseID = 0
+//	orb.parameter = 0
+//	orb.save()
+//}
+//
+//let badPoisonResidualBranch = 0x227d88
+//let poisonResidualBranch = 0x227d0c
+//let badPoisonSkip = 0x227e08
+//let poisonSkip = 0x227d58
+//let poisonHealStart1 = 0xB9AA30
+//let poisonHealStart2 = 0xB9AA44
+//
+//XGAssembly.replaceASM(startOffset: poisonResidualBranch - kDOLtoRAMOffsetDifference, newASM: [.b(poisonHealStart1)])
+//XGAssembly.replaceRELASM(startOffset: poisonHealStart1, newASM: [
+//	.cmpwi(.r28, ability("poison heal").index),
+//	.bne_f(0, 8),
+//	.b(poisonSkip),
+//	.lwz(.r0, .r13, -0x44e8), // overwritten
+//	.b(poisonResidualBranch + 4)
+//])
+//XGAssembly.replaceASM(startOffset: badPoisonResidualBranch - kDOLtoRAMOffsetDifference, newASM: [.b(poisonHealStart2)])
+//XGAssembly.replaceRELASM(startOffset: poisonHealStart2, newASM: [
+//	.cmpwi(.r28, ability("poison heal").index),
+//	.bne_f(0, 8),
+//	.b(badPoisonSkip),
+//	.lwz(.r0, .r13, -0x44e8), // overwritten
+//	.b(badPoisonResidualBranch + 4)
+//])
+//
+//
+//let orbBranch = 0x225ab4
+//let orbStart = 0xB9A8B4
+//let checkFullHP = 0x201d20
+//let checkStatus = 0x2025f0
+//let checkSetStatus = 0x20254c
+//let checkHasType = 0x2054fc
+//let setStatus = 0x2024a4
+//let checkNoStatus = 0x203744
+//let getHPFraction = 0x203688
+//let storeHPLoss = 0x13e094
+//let animSoundCallback = 0x2236a8
+//let getItem = 0x20384c // get item's hold item id
+//
+//let healOffset = orbStart + 0x34
+//let flameOrbOffset = orbStart + 0x6c
+//let toxicOrbOffset = orbStart + 0xec
+//let returnOffset = orbStart + 0x174
+//XGAssembly.replaceASM(startOffset: orbBranch - kDOLtoRAMOffsetDifference, newASM: [ .b(orbStart) ])
+//XGAssembly.replaceRELASM(startOffset: orbStart - kRELtoRAMOffsetDifference, newASM: [
+//
+//	.lhz(.r3, .r31, 0x80c), // get ability
+//	.cmpwi(.r3, ability("poison heal").index),
+//	.bne(flameOrbOffset),
+//	.mr(.r3, .r31),
+//	.li(.r4, 3), // poison
+//	.bl(checkStatus),
+//	.cmpwi(.r3, 1),
+//	.beq(healOffset),
+//	.mr(.r3, .r31),
+//	.li(.r4, 4), // bad poison
+//	.bl(checkStatus),
+//	.cmpwi(.r3, 1),
+//	.bne(flameOrbOffset),
+//
+//	//heal offset 0x34
+//	.mr(.r3, .r31),
+//	.bl(checkFullHP),
+//	.cmpwi(.r3, 1),
+//	.beq(flameOrbOffset),
+//	.mr(.r3, .r31),
+//	.li(.r4, 8), // 1/8 max hp
+//	.bl(getHPFraction),
+//	.rlwinm(.r0, .r3, 0, 16, 31),
+//	.neg(.r4, .r0),
+//	.mr(.r3, .r30),
+//	.bl(storeHPLoss),
+//	.lis(.r3, 0x8041),
+//	.addi(.r3, .r3, 31004),
+//	.bl(animSoundCallback),
+//
+//	// flame orb offset 0x6c
+//	.mr(.r3, .r31),
+//	.bl(getItem),
+//	.cmpwi(.r3, item("flame orb").data.holdItemID),
+//	.bne(toxicOrbOffset),
+//
+//	.mr(.r3, .r31),
+//	.li(.r4, XGMoveTypes.fire.rawValue),
+//	.bl(checkHasType),
+//	.cmpwi(.r3, 1),
+//	.beq(returnOffset),
+//
+//	.mr(.r3, .r31),
+//	.bl(checkNoStatus),
+//	.cmpwi(.r3, 1),
+//	.bne(returnOffset),
+//
+//	.lhz(.r3, .r31, 0x80c), // get ability
+//	.cmpwi(.r3, ability("water veil").index),
+//	.beq(returnOffset),
+//
+//	// activate burn
+//	.mr(.r3, .r31),
+//	.li(.r4, 6), // burn
+//	.bl(checkSetStatus),
+//	.cmpwi(.r3, 2),
+//	.bne(returnOffset),
+//	.mr(.r3, .r31),
+//	.li(.r4, 6), // burn
+//	.li(.r5, 0),
+//	.bl(setStatus),
+//
+//	.nop, // .li(.r4, 3), // burn chance secondary effect
+//	.nop, // .lis(.r3, 0x8042),
+//	.nop, // .rlwinm(.r0, .r4, 2, 0, 29),
+//	.nop, // .subi(.r3, .r3, 31568),
+//	.nop, // .lwzx(.r3, .r3, .r0),
+//	.nop, // .bl(animSoundCallback),
+//
+//	.b(returnOffset),
+//
+//
+//	// toxic orb offset 0xec
+//	.cmpwi(.r3, item("toxic orb").data.holdItemID),
+//	.bne(returnOffset),
+//
+//	.mr(.r3, .r31),
+//	.li(.r4, XGMoveTypes.poison.rawValue),
+//	.bl(checkHasType),
+//	.cmpwi(.r3, 1),
+//	.beq(returnOffset),
+//
+//	.mr(.r3, .r31),
+//	.li(.r4, XGMoveTypes.steel.rawValue),
+//	.bl(checkHasType),
+//	.cmpwi(.r3, 1),
+//	.beq(returnOffset),
+//
+//	.mr(.r3, .r31),
+//	.bl(checkNoStatus),
+//	.cmpwi(.r3, 1),
+//	.bne(returnOffset),
+//
+//	.lhz(.r3, .r31, 0x80c), // get ability
+//	.cmpwi(.r3, ability("immunity").index),
+//	.beq(returnOffset),
+//
+//	// activate poison
+//
+//	.mr(.r3, .r31),
+//	.li(.r4, 4), // badly poisoned
+//	.bl(checkSetStatus),
+//	.cmpwi(.r3, 2),
+//	.bne(returnOffset),
+//	.mr(.r3, .r31),
+//	.li(.r4, 4), // badly poisoned
+//	.li(.r5, 0),
+//	.bl(setStatus),
+//
+//	.nop, // .li(.r4, 6), // badly poison chance secondary effect
+//	.nop, // .lis(.r3, 0x8042),
+//	.nop, // .rlwinm(.r0, .r4, 2, 0, 29),
+//	.nop, // .subi(.r3, .r3, 31568),
+//	.nop, // .lwzx(.r3, .r3, .r0),
+//	.nop, // .bl(animSoundCallback),
+//
+//	// return offset 0x174
+//	.lmw(.r28, .sp, 0x10), // overwritten code
+//	.b(orbBranch + 0x4)
+//])
+
+//// poison touch ability
+//
+//// remove magma armour
+//XGAbilities.ability(40).name.duplicateWithString("Poison Touch").replace()
+//XGAbilities.ability(40).adescription.duplicateWithString("Contact may poison.").replace()
+//
+//let shadowFreezeRoutine =  [0x00, 0x02, 0x04, 0x1e, 0x12, 0x00, 0x00, 0x00, 0x14, 0x80, 0x41, 0x5c, 0x93, 0x1d, 0x12, 0x00, 0x00, 0x00, 0x07, 0x80, 0x41, 0x5e, 0xb9, 0x23, 0x12, 0x0f, 0x80, 0x41, 0x5c, 0xc6, 0x1f, 0x12, 0x19, 0x80, 0x41, 0x5e, 0x81, 0x1f, 0x12, 0x2f, 0x80, 0x41, 0x5e, 0x81, 0x1f, 0x12, 0x31, 0x80, 0x41, 0x5e, 0x81, 0x1d, 0x12, 0x00, 0x00, 0x00, 0x01, 0x80, 0x41, 0x5c, 0x93, 0x01, 0x80, 0x41, 0x5c, 0x93, 0x00, 0x00, 0x20, 0x12, 0x00, 0x4b, 0x80, 0x41, 0x6d, 0xb2, 0x0a, 0x0b, 0x04, 0x2f, 0x80, 0x4e, 0x85, 0xc3, 0x04, 0x17, 0x0b, 0x04, 0x29, 0x80, 0x41, 0x41, 0x0f,]
+//
+//let routine : (effect: Int, routine: [Int], offset: Int) = (162, shadowFreezeRoutine, 0xb99ce9)
+//XGAssembly.setMoveEffectRoutine(effect: routine.effect, fileOffset: routine.offset - kRELtoRAMOffsetDifference, moveToREL: true, newRoutine: routine.routine)
+//let magmaArmourOffset = 0x21443c - kDOLtoRAMOffsetDifference
+//XGAssembly.replaceASM(startOffset: magmaArmourOffset, newASM: [.nop,.nop,.nop])
+//
+//let poisonTouchBranch = 0x225580
+//let poisonTouchStart = 0xB9AA90
+//let poisonTouchReturn = poisonTouchStart + 0x70
+//let RNG16Bit = 0x25ca08
+//let animSoundCallback = 0x2236a8
+//let checkHasHP = 0x204a70
+//XGAssembly.replaceASM(startOffset: poisonTouchBranch - kDOLtoRAMOffsetDifference, newASM: [.b(poisonTouchStart)])
+//XGAssembly.replaceRELASM(startOffset: poisonTouchStart - kRELtoRAMOffsetDifference, newASM: [
+//
+//	.cmpwi(.r26, 1), // check move succeeded
+//	.bne(poisonTouchReturn),
+//
+//	.mr(.r3, .r30),
+//	.bl(checkHasHP),
+//	.cmpwi(.r3, 1),
+//	.bne(poisonTouchReturn),
+//
+//	.cmpwi(.r25, 1), // contact check
+//	.bne(poisonTouchReturn),
+//
+//	.cmpwi(.r16, ability("poison touch").index),
+//	.bne(poisonTouchReturn),
+//
+//	// get random number
+//	.bl(RNG16Bit),
+//
+//	// calculate random number % 10 (remainder)
+//	// result is random number between 0 and 9
+//	.mr(.r4, .r3),
+//	.li(.r3, 10),
+//	.divw(.r0, .r4, .r3),
+//	.mullw(.r0, .r0, .r3),
+//	.sub(.r0, .r4, .r0),
+//
+//	// activate if random number less than 3 (30% chance)
+//	.cmpwi(.r0, 2),
+//	.bgt(poisonTouchReturn),
+//
+//	// activate poison
+//	.lwz(.r0, .r13, -0x44e8),
+//	.ori(.r0, .r0, 0x2000),
+//	.stw(.r0, .r13, -0x44e8),
+//	.subi(.r5, .r13, 30816),
+//	.li(.r4, 2), // poison secondary effect
+//	.stb(.r4, .r5, 3),
+//	.lis(.r3, 0x8041),
+//	.addi(.r3, .r3, 31755),
+//	.bl(animSoundCallback),
+//	.li(.r17, 1),
+//
+//	// poison touch return 0x70
+//	.mr(.r3, .r17),
+//	.b(poisonTouchBranch + 4)
+//])
+
+//// ability capsule
+//
+//let capsuleFuncStart = 0xB9AB08
+//let selectPokemon = 0x2420c
+//let storePokemonPointer = 0x24148
+//let displayMessage = 0x117468 // r3 : 2  |  r4 : message string id | r5 & r6: 0
+//let waitMessage = 0x1173a8 // r3 = 1
+//let getName = 0x149584 // param index 0x16
+//let setMessageParam = 0x2370ec // r3 = param index, r4 = value
+//let getAbility = 0x1416a4 // param indexes 0x1a & 0x1b
+//let abilityGetPointer = 0x144298
+//let abilityPointerGetNameID = 0x144280
+//let stringIDGetPointer = 0x107300
+//let getAbilityIndex = 0x1491d0
+//let itemMessage = 0xa481c
+//let closeWindow = 0x241e0
+//let getSpecies = 0x1470c4
+//let speciesGetStats = 0x146078
+//let statsGetAbilityWithIndex = 0x145c80
+//
+//XGAssembly.replaceRELASM(startOffset: capsuleFuncStart - kRELtoRAMOffsetDifference, newASM: [
+//
+//	.stwu(.sp, .sp, -0x40),
+//	.mflr(.r0),
+//	.stw(.r0, .sp, 0x44),
+//	.stmw(.r23, .sp, 0x1c),
+//	.mr(.r23, .r4),
+//
+//	// select party pokemon
+//	.li(.r3, 0),
+//	.li(.r4, 1),
+//	.bl(selectPokemon),
+//	.cmpwi(.r3, 0),
+//	.bge_f(0, 0x20),
+//
+//	// return
+//	.bl(closeWindow),
+//	.li(.r3, 1),
+//	.lmw(.r23, .sp, 0x1c),
+//	.lwz(.r0, .sp, 0x44),
+//	.mtlr(.r0),
+//	.addi(.sp, .sp, 0x40),
+//	.blr,
+//
+//	// store pokemon pointer
+//	.mr(.r27, .r3),
+//	.addi(.r4, .sp, 12),
+//	.addi(.r5, .sp,  8),
+//	.bl(storePokemonPointer),
+//	.lwz(.r3, .sp, 12),
+//	.mr(.r31, .r3),
+//
+//	// check if has second ability
+//	.bl(getSpecies),
+//	.bl(speciesGetStats),
+//	.li(.r4, 1),
+//	.bl(statsGetAbilityWithIndex),
+//	.cmpwi(.r3, 0),
+//	.bne_f(0, 0x30),
+//
+//	// ability capsule useless
+//
+//	.lis(.r3, 0x1),
+//	.subi(.r3, .r3, (0x10000 - 0xe2c4)),
+//	.bl(itemMessage),
+//	.mr(.r3, .r27),
+//	.bl(closeWindow),
+//
+//	// return
+//	.li(.r3, 1),
+//	.lmw(.r23, .sp, 0x1c),
+//	.lwz(.r0, .sp, 0x44),
+//	.mtlr(.r0),
+//	.addi(.sp, .sp, 0x40),
+//	.blr,
+//
+//	// get pokemon name
+//	.mr(.r3, .r31),
+//	.bl(getName),
+//	.mr(.r30, .r3),
+//
+//	// get ability before
+//	.mr(.r3, .r31),
+//	.bl(getAbility),
+//	.bl(abilityGetPointer),
+//	.bl(abilityPointerGetNameID),
+//	.bl(stringIDGetPointer),
+//	.mr(.r29, .r3),
+//
+//	// switch abilities
+//	.mr(.r3, .r31),
+//	.bl(getAbilityIndex),
+//	.cmpwi(.r3, 1),
+//
+//	.lbz(.r3, .r31, 0x1d),
+//	.beq_f(0, 0xc),
+//
+//	.addi(.r3, .r3, 0x40),
+//	.b_f(0, 8),
+//	.subi(.r3, .r3, 0x40),
+//	.stb(.r3, .r31, 0x1d),
+//
+//	// get ability after
+//	.mr(.r3, .r31),
+//	.bl(getAbility),
+//	.bl(abilityGetPointer),
+//	.bl(abilityPointerGetNameID),
+//	.bl(stringIDGetPointer),
+//	.mr(.r28, .r3),
+//
+//	// set message params
+//	.li(.r3, 0x16),
+//	.mr(.r4, .r30),
+//	.bl(setMessageParam),
+//	.li(.r3, 0x1a),
+//	.mr(.r4, .r29),
+//	.bl(setMessageParam),
+//	.li(.r3, 0x1b),
+//	.mr(.r4, .r28),
+//	.bl(setMessageParam),
+//
+//	// display message
+//	.lis(.r3, 0x1),
+//	.subi(.r3, .r3, (0x10000 - 0xe2c3)),
+//	.bl(itemMessage),
+//	.mr(.r3, .r27),
+//	.bl(closeWindow),
+//
+//	// return
+//	.li(.r0, 1),
+//	.stw(.r0, .r23, 0),
+//	.li(.r3, 0),
+//	.lmw(.r23, .sp, 0x1c),
+//	.lwz(.r0, .sp, 0x44),
+//	.mtlr(.r0),
+//	.addi(.sp, .sp, 0x40),
+//	.blr,
+//
+//])
+//// set used capsule strings in start.dol string table by replacing unused string
+//getStringSafelyWithID(id: 0xe2c3).duplicateWithString("[16]'s ability changed from [1a][New Line]to [1b]![Dialogue End]").replace()
+//getStringSafelyWithID(id: 0xe2c4).duplicateWithString("The ability could not be changed.[Dialogue End]").replace()
+//
+//let ac = XGItem(index: 55)
+//ac.name.duplicateWithString("Ability Capsule").replace()
+//ac.descriptionString.duplicateWithString("Switches a[New Line]Pokémon's ability.").replace()
+//ac.holdItemID = 0
+//ac.bagSlot = .items
+//ac.canBeHeld = true
+//ac.couponPrice = 500
+//ac.price = 2000
+//ac.friendshipEffects = [0,0,0]
+//ac.inBattleUseID = 0
+//ac.parameter = 0
+//ac.function1 = UInt32(capsuleFuncStart) + 0x80000000
+//ac.function2 = ac.function1
+//ac.save()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//// import nintendon't gci save to dolphin gci to import into mem card
+//let to = XGFiles.nameAndFolder("GXXE.raw", .Resources).data
+//let from = XGFiles.nameAndFolder("GXXE.gci", .Resources).data
+//let toStart = 0xB2000
+//let fromStart = 0x40
+//let save = from.getByteStreamFromOffset(fromStart, length: 0x56000)
+//to.replaceBytesFromOffset(toStart, withByteStream: save)
+//to.save()
+
+//// import dolphin gci save to nintendon't gci file
+//let from = XGFiles.nameAndFolder("GXXE.raw", .Resources).data
+//let to = XGFiles.nameAndFolder("GXXE.gci", .Resources).data
+//let fromStart = 0xB2000
+//let toStart = 0x40
+//let save = from.getByteStreamFromOffset(fromStart, length: 0x56000)
+//to.replaceBytesFromOffset(toStart, withByteStream: save)
+//to.save()
 
 
 

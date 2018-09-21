@@ -8,9 +8,9 @@
 
 import Foundation
 
-let kFirstTrainerClassDataOffset	= 0xEA40
+let kFirstTrainerClassDataOffset	= CommonIndexes.TrainerClasses.startOffset
 let kSizeOfTrainerClassEntry		= 0x0C
-let kNumberOfTrainerClasses			= 0x33
+let kNumberOfTrainerClasses			= CommonIndexes.NumberOfTrainerClasses.value
 
 // Prize money is payout * max pokemon level * 2
 let kTrainerClassPayoutOffset		= 0x00
@@ -18,24 +18,24 @@ let kTrainerClassNameIDOffset		= 0x06
 
 class XGTrainerClass: NSObject {
 	
-	var payout = 0
-	var nameID = 0
+	@objc var payout = 0
+	@objc var nameID = 0
 	
 	var tClass = XGTrainerClasses.none
 	
-	var name : XGString {
+	@objc var name : XGString {
 		get {
 			return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
 		}
 	}
 	
-	var startOffset : Int {
+	@objc var startOffset : Int {
 		get {
 			return kFirstTrainerClassDataOffset + (self.tClass.rawValue * kSizeOfTrainerClassEntry)
 		}
 	}
 	
-	var dictionaryRepresentation : [String : AnyObject] {
+	@objc var dictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["name"] = self.name.string as AnyObject?
@@ -46,7 +46,7 @@ class XGTrainerClass: NSObject {
 		}
 	}
 	
-	var readableDictionaryRepresentation : [String : AnyObject] {
+	@objc var readableDictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["payout"] = self.payout as AnyObject?
@@ -69,7 +69,7 @@ class XGTrainerClass: NSObject {
 		
 	}
 	
-	func save() {
+	@objc func save() {
 		
 		let rel = XGFiles.common_rel.data
 		let start = self.startOffset

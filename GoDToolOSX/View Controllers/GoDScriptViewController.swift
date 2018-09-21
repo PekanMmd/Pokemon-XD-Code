@@ -34,6 +34,9 @@ class GoDScriptViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		if row == -1 {
+			return
+		}
 		if scripts.count > 0 {
 			if self.scripts[row].exists {
 				self.scriptView.string = scripts[row].scriptData.getXDSScript()
@@ -47,9 +50,9 @@ class GoDScriptViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let cell = (tableView.make(withIdentifier: "cell", owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 12, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 12, width: self.table.width)) as! GoDTableCellView
 		
-		cell.identifier = "cell"
+		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		cell.titleField.maximumNumberOfLines = 2
 		
 		if scripts.count == 0 {
@@ -105,6 +108,8 @@ class GoDScriptViewController: GoDTableViewController {
 				colour = GoDDesign.colourLightOrange()
 			case .Pokespot:
 				colour = GoDDesign.colourYellow()
+			case .TheUnder:
+				colour = GoDDesign.colourGrey()
 			case .Unknown:
 				colour = GoDDesign.colourWhite()
 			}

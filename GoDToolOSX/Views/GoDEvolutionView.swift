@@ -47,14 +47,14 @@ class GoDEvolutionView: NSView {
 		
 	}
 	
-	func setPokemon() {
+	@objc func setPokemon() {
 		if delegate != nil {
 			delegate.pokemon.evolutions[self.index].evolvesInto = self.pokemonPopUp.selectedValue.index
 			self.reloadData()
 		}
 	}
 	
-	func setMethod() {
+	@objc func setMethod() {
 		if delegate != nil {
 			delegate.pokemon.evolutions[self.index].evolutionMethod = self.methodPopUp.selectedValue
 			self.coniditionPopUp.method = delegate.pokemon.evolutions[self.index].evolutionMethod
@@ -63,7 +63,7 @@ class GoDEvolutionView: NSView {
 		}
 	}
 	
-	func setCondition() {
+	@objc func setCondition() {
 		if delegate != nil {
 			delegate.pokemon.evolutions[self.index].condition = self.coniditionPopUp.selectedValue
 			self.reloadData()

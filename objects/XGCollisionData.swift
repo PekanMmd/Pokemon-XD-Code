@@ -6,12 +6,17 @@
 //
 
 import Cocoa
+import Metal
 
-var types = [GLfloat]()
+var types = [Int]()
 class XGCollisionData: NSObject {
 	
 	var file : XGFiles!
 	var mapRel : XGMapRel!
+	var warpIndexes = [Int]()
+	var numberOfWarps : Int {
+		return warpIndexes.count
+	}
 	
 	var vertexes = [XGVertex]()
 	var rawVertexBuffer : [GLfloat] {
@@ -38,27 +43,39 @@ class XGCollisionData: NSObject {
 		
 		let list_start  = data.get4BytesAtOffset(0x0).int
 		let entry_count = data.get4BytesAtOffset(0x4).int
-		let entry_size = 0x40;
 		
 		var maxD : GLfloat = 0
 		
-		for i in 0 ..< entry_count {
+		for i in 0 ... entry_count {
+			// add an extra  loop for data not pointed to but comes straight after pointer table
 			
+			let entry_size = 0x40;
+			var o = i == entry_count ? 0x0 : 0x24
 			let offset = list_start + (entry_size * i)
-			var o = 0x24
-			while o < entry_size {
+			
+			while o < ( i == entry_count ? 0x4 : entry_size ) {
 				
 				let a_o = data.get4BytesAtOffset(offset + o).int
 				if  a_o > 0 {
-					let data_start = data.get4BytesAtOffset(a_o).int
-					let num = data.get4BytesAtOffset(a_o + 0x4).int
+					var isWarp = false
+					if o == 0x2c {
+						// this is a warp point
+						isWarp = true
+					}
+					
+					let data_start = i == entry_count ? a_o : data.get4BytesAtOffset(a_o).int
+					let num = i == entry_count ? data.get4BytesAtOffset(offset + o + 4).int : data.get4BytesAtOffset(a_o + 0x4).int
 					let face_size = 0x34
 					
 					for s in 0 ..< num {
 						let s_o = data_start + (s * face_size)
 						var triangle = [XGVertex]()
 						
-						var type = GLfloat(data.get2BytesAtOffset(s_o + 0x30))
+						let type = data.get2BytesAtOffset(s_o + 0x30)
+						let interactionIndex = data.get2BytesAtOffset(s_o + 0x32)
+						if isWarp {
+							warpIndexes.addUnique(interactionIndex)
+						}
 						
 						for c in 0 ..< 3 { // 4th element is normal vector
 							
@@ -66,6 +83,7 @@ class XGCollisionData: NSObject {
 							let vy = data.get4BytesAtOffset( s_o + (c * 0xc) + 0x4).hexToSignedFloat()
 							let vz = data.get4BytesAtOffset( s_o + (c * 0xc) + 0x8).hexToSignedFloat()
 							let v = XGVertex()
+							// may need to some axes depending on rendering engine
 							v.x = vx.gl
 							v.y = vy.gl
 							v.z = vz.gl
@@ -81,15 +99,13 @@ class XGCollisionData: NSObject {
 						let ny = data.get4BytesAtOffset( s_o + (3 * 0xc) + 0x4).hexToSignedFloat()
 						let nz = data.get4BytesAtOffset( s_o + (3 * 0xc) + 0x8).hexToSignedFloat()
 						
-						if triangle[0].y == triangle[1].y && triangle[1].y == triangle[2].y {
-							type = 100
-						}
-						
 						for v in triangle {
 							v.nx = nx.gl
 							v.ny = ny.gl
 							v.nz = nz.gl
-							v.type = type
+							v.type = GLfloat(type)
+							v.isWarp = isWarp
+							v.interactionIndex = GLfloat(interactionIndex)
 						}
 						if !types.contains(type) {
 							types.append(type)
@@ -101,7 +117,7 @@ class XGCollisionData: NSObject {
 				o += 4
 			}
 		}
-		printg("types found so far:", types)
+		
 		let mag : GLfloat = 1
 		for v in self.vertexes {
 			v.scale(maxD: maxD, magnification: mag)

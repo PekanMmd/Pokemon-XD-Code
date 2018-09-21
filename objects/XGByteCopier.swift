@@ -11,9 +11,9 @@ import Foundation
 class XGByteCopier: NSObject {
 	
 	var targetFile = XGFiles.nameAndFolder("", .Documents)
-	var targetStartOffset = 0
+	@objc var targetStartOffset = 0
 	
-	var bytes = [Int]()
+	@objc var bytes = [Int]()
 	
 	fileprivate var data = XGMutableData()
 	
@@ -30,15 +30,15 @@ class XGByteCopier: NSObject {
 		
 	}
 	
-	func copyByte(_ index: Int) {
+	@objc func copyByte(_ index: Int) {
 		self.data.replaceByteAtOffset(targetStartOffset + index, withByte: bytes[index])
 	}
 	
-	func copyAll() {
+	@objc func copyAll() {
 		self.data.replaceBytesFromOffset(targetStartOffset, withByteStream: self.bytes)
 	}
 	
-	func save() {
+	@objc func save() {
 		self.data.save()
 	}
 	
