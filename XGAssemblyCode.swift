@@ -323,6 +323,12 @@ class XGAssembly {
 	
 	class func setDeoxysForme(to forme: XGDeoxysFormes) {
 		
+		// outdated. could simply return the required form id from the
+		// function that calculates deoxys form based on game.
+		// this function is found in ram at offset 0x80140128
+		
+		// cosmetic only
+		
 		let dol = XGFiles.dol.data
 		
 		for offset in [0x1D8F8C, 0x1D900C] {

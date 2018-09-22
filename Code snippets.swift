@@ -348,8 +348,7 @@ import Foundation
 //
 //adol.save()
 
-
-//snow warning
+////snow warning
 //let snowWarningIndex = kNumberOfAbilities + 8
 //let bdol = XGFiles.dol.data
 //let nops = [0x80225d24 - kDOLtoRAMOffsetDifference, 0x80225d54 - kDOLtoRAMOffsetDifference]
@@ -368,7 +367,20 @@ import Foundation
 //
 //loadAllStrings()
 //getStringWithID(id: 0x4eea)!.duplicateWithString("[1e]'s [1c][New Line]activated!").replace()
+
+//// snow warning uses hail animation
+//let snowRoutineStart = 0xB9AC60
+//let snowWarningRoutine = [0x46, 0x19, 0x1e, 0x00, 0x00, 0x00, 0x00, 0x29, 0x80, 0x41, 0x78, 0x43]
+//let rel = XGFiles.common_rel.data
+//rel.replaceBytesFromOffset(snowRoutineStart - kRELtoRAMOffsetDifference, withByteStream: snowWarningRoutine)
+//rel.save()
 //
+//let snowRoutineBranch = 0x225ec4
+//XGAssembly.replaceASM(startOffset: snowRoutineBranch - kDOLtoRAMOffsetDifference, newASM: [
+//	.lis(.r3, 0x80ba),
+//	.subi(.r3, .r3, 0x10000 - 0xac60),
+//])
+
 
 
 //let dugtrio = pokemon("dugtrio").stats
@@ -4082,6 +4094,11 @@ import Foundation
 //	// roar
 //	0x00, 0x1f, 0x12, 0x15, 0x80, 0x41, 0x7a, 0x7f, 0x90, 0x80, 0x41, 0x5c, 0xb4,
 //]
+// use this one to remove suction cups as an ability
+//let dragonTailRoutine2 = XGAssembly.routineRegularHitOpenEnded() + [
+//	// roar
+//	0x00, 0x3b, 0x3b, 0x3b, 0x3b, 0x3b, 0x3b, 0x3b, 0x90, 0x80, 0x41, 0x5c, 0xb4,
+//]
 //
 //let uturnRoutine = XGAssembly.routineRegularHitOpenEnded() + [
 //	0x1e, 0x12, 0x00, 0x00, 0x00, 0x2b, 0x80, 0x41, 0x41, 0x0f, // protect
@@ -4262,9 +4279,9 @@ import Foundation
 //let groudon = relg.characters[3]
 //groudon.characterID = 0
 //groudon.model = XGCharacterModels(index: 103)
-//groudon.xCoordinate = -102.0
+//groudon.xCoordinate = 75.0
 //groudon.yCoordinate = 0
-//groudon.zCoordinate = 38.0
+//groudon.zCoordinate = 11.9
 //groudon.angle = 0
 //groudon.movementType = XGCharacterMovements.index(0x10)
 //groudon.scriptIndex = 11
@@ -4277,7 +4294,7 @@ import Foundation
 //rayquaza.model = XGCharacterModels(index: 41)
 //rayquaza.xCoordinate = -79.0
 //rayquaza.yCoordinate = 29.99
-//rayquaza.zCoordinate = 103.0
+//rayquaza.zCoordinate = 118.0
 //rayquaza.angle = 0
 //rayquaza.movementType = XGCharacterMovements.index(0x10)
 //rayquaza.save()
@@ -4293,6 +4310,9 @@ import Foundation
 //	let model = XGFiles.nameAndFolder(models[i] + "_ow.dat", .TextureImporter)
 //	copyOWPokemonIdleAnimationFromIndex(index: anims[i], forModel: model)
 //	archive.shiftAndReplaceFileWithIndex(indices[i], withFile: model.compress())
+//	let modelData = XGCharacterModels(index: i)
+//	modelData.boundBox = [22.00, 52.00, 8.00, -300.00, 300.00, -120.00, 120.00, 6.00]
+//	modelData.save()
 //}
 //archive.save()
 //XGISO().shiftAndReplaceFile(archive.file)
@@ -6062,6 +6082,180 @@ import Foundation
 //ac.function1 = UInt32(capsuleFuncStart) + 0x80000000
 //ac.function2 = ac.function1
 //ac.save()
+
+//// remove white smoke ability
+//XGAssembly.replaceASM(startOffset: 0x222170 - kDOLtoRAMOffsetDifference, newASM: [
+//	.b(0x2221f8),
+//	.nop
+//])
+//// remove shield dust ability
+//XGAssembly.replaceASM(startOffset: 0x214004 - kDOLtoRAMOffsetDifference, newASM: [
+//	.b(0x214038),
+//	.nop
+//])
+//
+//// remove water veil ability
+//let wispRoutine = [0x00, 0x02, 0x04, 0x1e, 0x12, 0x00, 0x00, 0x00, 0x14, 0x80, 0x41, 0x5c, 0x93, 0x1d, 0x12, 0x00, 0x00, 0x00, 0x06, 0x80, 0x41, 0x5e, 0xb9, 0x23, 0x12, 0x0a, 0x80, 0x41, 0x5c, 0xc6, 0x3b, 0x3b, 0x3b, 0x3b, 0x3b, 0x3b, 0x3b, 0x1d, 0x12, 0x00, 0x00, 0x00, 0x01, 0x80, 0x41, 0x5c, 0x93, 0x01, 0x80, 0x41, 0x5c, 0x93, 0x00, 0x00, 0x20, 0x12, 0x00, 0x4b, 0x80, 0x41, 0x6d, 0xb2, 0x0a, 0x0b, 0x04, 0x2f, 0x80, 0x4e, 0x85, 0xc3, 0x03, 0x17, 0x0b, 0x04, 0x29, 0x80, 0x41, 0x41, 0x0f,]
+//XGAssembly.setMoveEffectRoutine(effect: move("will-o-wisp").data.effect, fileOffset: 0x415e32 - kDOLTableToRAMOffsetDifference, moveToREL: false, newRoutine: wispRoutine)
+//XGAssembly.replaceASM(startOffset: 0x214304 - kDOLtoRAMOffsetDifference, newASM: [
+//	.b(0x21436c),
+//	.nop
+//])
+//
+//// remove oblivious ability
+//XGAssembly.replaceASM(startOffset: 0x225518 - kDOLtoRAMOffsetDifference, newASM: [
+//	.nop,
+//	.nop
+//])
+//XGAssembly.replaceASM(startOffset: 0x2210e8 - kDOLtoRAMOffsetDifference, newASM: [
+//	.b(0x221100),
+//	.nop
+//])
+//
+//// remove own tempo ability
+//let dol = XGFiles.dol.data
+//dol.replaceBytesFromOffset(0x411B31 , withByteStream: [0x3b,0x3b,0x3b,0x3b,0x3b,0x3b,0x3b,])
+//dol.save()
+//XGAssembly.replaceASM(startOffset: 0x21479c - kDOLtoRAMOffsetDifference, newASM: [
+//	.nop,
+//	.nop
+//])
+//
+//// remove magnet pull ability
+//XGAssembly.replaceASM(startOffset: 0x20f8a4 - kDOLtoRAMOffsetDifference, newASM: [
+//	.b(0x20f910),
+//	.nop
+//])
+//
+//// remove magnet pull ability
+//XGAssembly.replaceASM(startOffset: 0x1f2678 - kDOLtoRAMOffsetDifference, newASM: [
+//	.li(.r31, 0),
+//	.b(0x1f2694),
+//	.nop
+//])
+//
+//let unaware = XGAbilities.ability(21)
+//let sniper = XGAbilities.ability(42)
+//unaware.name.duplicateWithString("Unaware").replace()
+//unaware.adescription.duplicateWithString("Ignores stat changes.")
+//sniper.name.duplicateWithString("Sniper").replace()
+//sniper.adescription.duplicateWithString("Stronger critical hits.")
+//
+//// unaware, sniper
+//XGAssembly.replaceASM(startOffset: 0x22a720 - kDOLtoRAMOffsetDifference, newASM: [
+//	.li(.r4, 0),
+//	.lwz(.r3, .sp, 0x30), // defending ability
+//	.cmpwi(.r3, ability("unaware").index),
+//	.bne_f(0, 0xc),
+//	.stw(.r4, .sp, 0x24),
+//	.stw(.r4, .sp, 0x28),
+//	.cmpwi(.r27, ability("unaware").index), // attacking ability
+//	.bne_f(0, 0xc),
+//	.stw(.r4, .sp, 0x34),
+//	.stw(.r4, .sp, 0x38),
+//	.cmpwi(.r27, ability("sniper").index),
+//	.bne_f(0, 0x14),
+//	.cmpwi(.r26, 3), // critical hit
+//	.bne_f(0, 0xc),
+//	.mulli(.r14, .r14, 3),
+//	.srawi(.r14, .r14, 1),
+//
+//])
+//
+//
+//// faster weather animations
+//let fasterWeatherAnimationsBranch = 0x211a3c
+//let fastWeatherStart = 0xB9AC6C
+//let weatherAnimation = 0x210d4c
+//// compare r4 with weather indexes and only if not weather, branch link to animation
+//XGAssembly.replaceASM(startOffset: fasterWeatherAnimationsBranch - kDOLtoRAMOffsetDifference, newASM: [.b(fastWeatherStart)])
+//XGAssembly.replaceRELASM(startOffset: fastWeatherStart - kRELtoRAMOffsetDifference, newASM: [
+//	.cmpwi(.r4, 0xc), // sand storm
+//	.beq_f(0, 0x18),
+//	.cmpwi(.r4, 0xd), // hail
+//	.beq_f(0, 0x10),
+//	.cmpwi(.r4, 0x25), // shadow sky
+//	.beq_f(0, 0x8),
+//	.bl(weatherAnimation),
+//	.b(fasterWeatherAnimationsBranch + 4)
+//])
+
+
+
+
+//// 50% berries figy, wiki, mago, aguav, iapapa
+//XGAssembly.replaceASM(startOffset: 0x22498c - kDOLtoRAMOffsetDifference, newASM: [.li(.r4, 4)])
+//for i in 143 ... 147 {
+//	let berry = XGItem(index: i)
+//	berry.parameter = 2
+//	berry.save()
+//}
+//
+//// berries after move
+//let berryStart = 0x223734
+//let berryBranch = 0x2275d0
+//XGAssembly.replaceASM(startOffset: berryBranch - kDOLtoRAMOffsetDifference, newASM: [.bl(berryStart)])
+//
+//// copied from end turn item activation but ammended to only factor in berries
+//XGAssembly.replaceASM(startOffset: berryStart - kDOLtoRAMOffsetDifference, newASM: [
+//	.li(.r4, 0),
+//	.stwu(.sp, .sp, -0x60),
+//	.mflr(.r0),
+//	.stw(.r0, .sp, 0x64),
+//	.stmw(.r20, .sp, 0x30),
+//	.mr(.r21, .r4),
+//	.mr(.r31, .r3),
+//	.li(.r30, 0),
+//	.li(.r26, 0),
+//	.mr(.r3, .r31),
+//	.bl(0x204a70), // check has hp
+//	.rlwinm_(.r0, .r3, 0, 24, 31),
+//	.bne_f(0, 0xc),
+//	.li(.r3, 0),
+//	.b(0x2247e0),
+//	.mr(.r3, .r31),
+//	.bl(0x203870), // get item
+//	.mr(.r25, .r3),
+//	.mr(.r3, .r31),
+//	.bl(0x20384c), // get held item id
+//	.mr(.r20, .r3),
+//	.mr(.r3, .r31),
+//	.bl(0x203828), // get parameter
+//	.mr(.r27, .r3),
+//	.mr(.r3, .r31),
+//	.bl(0x148da8), // get move routine pointer
+//	.mr(.r22, .r3),
+//	.mr(.r3, .r31),
+//	.bl(0x20489c), // get stats
+//	.mr(.r23, .r3),
+//	.bl(0x149410), // get hp
+//	.mr(.r29, .r3),
+//	.mr(.r3, .r23),
+//	.bl(0x1493f0), // get max hp
+//	.mr(.r4, .r25),
+//	.mr(.r25, .r3),
+//	.li(.r3, 0),
+//	.bl(0x1f65bc), // unknown func
+//	.rlwinm(.r0, .r20, 0, 16, 31),
+//	.cmplwi(.r0, 23), // adjusted to max held item id for berries and white herb)
+//	.ble_f(0, 8),
+//	.b(0x224774),
+//	.lis(.r3, 0x8042),
+//	.rlwinm(.r0, .r0, 2, 0, 29),
+//	.subi(.r3, .r3, 31296),
+//	.lwzx(.r0, .r3, .r0),
+//	.mtctr(.r0),
+//	.bctr
+//
+//
+//])
+
+
+
+
+
+
+
 
 
 

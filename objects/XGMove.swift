@@ -39,12 +39,26 @@ let kAnimation2IndexOffset		= 0x32
 
 let kMoveEffectTypeOffset		= 0x34 // used by AI
 
-let kMoveDisplaysTypeMatchupInSummaryScreenFlagOffset = 0x15
+let kMoveDisplaysTypeMatchupInSummaryScreenFlagOffset = 0x15 // XD only
+
+let kMoveContestAppealJamIndexOffset = game == .XD ? 0x16 : 0x14 // probably an index into some other table
+let kMoveContestAppealTypeOffset = game == .XD ? 0x17: 0x15 // beauty: 2, tough:5 etc.
+
+//XD only string ids loaded during message "[Pokemon name] used move!"
+// ID : 0x4f6d 20333
+// File: fight.msg
+// [0f] used[New Line][28][0e]
+// first string is unused in message, second is exclamation point (parameter 0xe)
+let kMoveUnusedStringIDOffset = 0x26
+let kMoveExclamationPointStringIDOffset = 0x2a
 
 class XGMove: NSObject, XGDictionaryRepresentable {
 	
 	@objc var startOffset		= 0x0
 	@objc var moveIndex		= 0x0
+	
+	var unusedString = 0
+	var exclamationString = 0
 	
 	@objc var nameID			= 0x0
 	@objc var descriptionID   = 0x0
@@ -133,6 +147,9 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		
 		self.effectType	   = XGMoveEffectTypes(rawValue: rel.getByteAtOffset(startOffset + kMoveEffectTypeOffset)) ?? .unknown
 		
+		self.unusedString = rel.get2BytesAtOffset(startOffset + kMoveUnusedStringIDOffset)
+		self.exclamationString = rel.get2BytesAtOffset(startOffset + kMoveExclamationPointStringIDOffset)
+		
 	}
 
 	@objc func save() {
@@ -180,6 +197,9 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		rel.replaceByteAtOffset(startOffset + kMoveDisplaysTypeMatchupInSummaryScreenFlagOffset, withByte: self.displayTypeMatchupFlag)
 		
 		rel.replaceByteAtOffset(startOffset + kMoveEffectTypeOffset, withByte: self.effectType.rawValue)
+		
+		rel.replace2BytesAtOffset(startOffset + kMoveUnusedStringIDOffset, withBytes: self.unusedString)
+		rel.replace2BytesAtOffset(startOffset + kMoveExclamationPointStringIDOffset, withBytes: self.exclamationString)
 		
 		rel.save()
 		

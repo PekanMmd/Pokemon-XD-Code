@@ -73,7 +73,9 @@ enum XGASM {
 	case mfctr(XGRegisters)
 	case mtspr(XGRegisters, XGRegisters)
 	case mtlr(XGRegisters)
+	
 	case mtctr(XGRegisters)
+	case bctr
 	
 	case cmpw(XGRegisters, XGRegisters)
 	case cmplw(XGRegisters, XGRegisters)
@@ -409,8 +411,11 @@ enum XGASM {
 			return (UInt32(31) << 26) | (rs.value << 21) | (spr.value << 16) | (467 << 1)
 		case .mtlr(let rs):
 			return XGASM.mtspr(.lr, rs).code
+			
 		case .mtctr(let rs):
 			return XGASM.mtspr(.ctr, rs).code
+		case .bctr:
+			return 0x4e800420
 			
 		// compare
 		case .cmpw(let ra, let rb):

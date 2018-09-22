@@ -8,29 +8,15 @@
 //
 
 
-for i in 0 ..< CommonIndexes.NumberOfCharacterModels.value {
-	let model = XGCharacterModels(index: i)
-	print(model.name.spaceToLength(20), terminator: " ")
-	for v in model.boundBox {
-		print(String(format: "%.2f", v), terminator: " ")
-	}
-	"".println()
-	for j in 0 ..< 8 {
-		model.boundBox[j] = 0.0
-	}
-	if !model.name.contains("rinto") {
-	model.save()
-	}
-}
 
-//XGUtility.compileDol()
-XGUtility.compileCommonRel()
+////XGUtility.compileDol()
+////XGUtility.compileCommonRel()
 //XGUtility.compileAllFiles()
-
-
+//
+//
+//
 //XGUtility.compileForRelease(XG: true)
 //XGUtility.documentISO(forXG: true)
-
 
 
 

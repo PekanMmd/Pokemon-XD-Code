@@ -41,6 +41,7 @@
 
 88: always flinch
 
+
 A3: rapid spin
 
 C1: Puts yourself to sleep.
