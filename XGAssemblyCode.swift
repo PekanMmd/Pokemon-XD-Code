@@ -146,7 +146,7 @@ class XGAssembly {
 	
 	class func getWordAtRamOffsetFromR13(offset: Int) -> Int {
 		// this should be a pointer into common_rel
-		let ram = XGFiles.nameAndFolder("xg ram.raw", .Reference).data
+		let ram = XGFiles.nameAndFolder("xg ram.raw", .Resources).data
 		return Int(ram.get4BytesAtOffset(ramPointerOffsetFromR13(offset: offset)))
 	}
 	
@@ -839,7 +839,7 @@ class XGAssembly {
 	class func setMoveEffectRoutine(effect: Int, fileOffset: Int, moveToREL rel: Bool, newRoutine routine: [Int]?) {
 		let effectOffset = effect * 4
 		let pointerOffset = moveEffectTableStartDOL + effectOffset
-		let RAMOffset = UInt32(fileOffset + (rel ? kRELtoRAMOffsetDifference : kDOLtoRAMOffsetDifference)) + 0x80000000
+		let RAMOffset = UInt32(fileOffset + (rel ? kRELtoRAMOffsetDifference : kDOLTableToRAMOffsetDifference)) + 0x80000000
 		
 		let dol = XGFiles.dol.data
 		dol.replace4BytesAtOffset(pointerOffset, withBytes: RAMOffset)

@@ -31,11 +31,11 @@ move routine pointers in ram = 0x802f8af8
 1c: unknown													BYTE: param
 1d: jump if main status										BYTE: target WORD: status id WORD: destination
 1e: jump if secondary status								BYTE: target WORD: status id WORD: destination
-1f: jump if ability											BYTE: target WORD: status id WORD: destination
+1f: jump if ability											BYTE: target WORD: ability id WORD: destination
 20: jump if field effect									BYTE: target WORD: status id WORD: destination
 21: jump if stat											BYTE: target BYTE: comparison (3:<,2:>,1:<,0:= these are untested assumptions) BYTE: stat id BYTE: value WORD: destination
 22: jump if status compare									BYTE: target WORD: status id BYTE: compare to boolean WORD: destination
-23: jump if type											BYTE: target BYTE: type BYTE: destination
+23: jump if type											BYTE: target BYTE: type WORD: destination
 24: calculate exp gain
 25: switch in pokemon
 26: reset crit and damage multipliers and secondary effect
@@ -70,7 +70,7 @@ move routine pointers in ram = 0x802f8af8
 43: jump if type 2
 44: jump if ability present
 45: set end of knockout checks 3
-46: play animation
+46: prepare animation (usually followed by function 0xb)
 47: unknown
 48: stat boost calculate animation index
 49: stat change animation
@@ -173,10 +173,13 @@ c3: set future attack
 
 c9: follow me
 
+ce: 25% recoil
+
 e1: switch out abilities (natural cure)			BYTE: target
 
 e3: nature power
 
+e6: 33% recoil
 
 
 

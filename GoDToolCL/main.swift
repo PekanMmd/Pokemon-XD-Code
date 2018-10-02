@@ -9,12 +9,14 @@
 
 
 
-////XGUtility.compileDol()
-////XGUtility.compileCommonRel()
+
+XGAssembly.ASMfreeSpacePointer().hexString().println()
+
+
+//XGUtility.compileDol()
+//XGUtility.compileCommonRel()
+//XGUtility.compileMainFiles()
 //XGUtility.compileAllFiles()
-//
-//
-//
 //XGUtility.compileForRelease(XG: true)
 //XGUtility.documentISO(forXG: true)
 
@@ -23,7 +25,7 @@
 
 
 
-
+//XGAssembly.getWordAtRamOffsetFromR13(offset: -0x74b0).hexString().println() //number battle types
 
 //let script = XGFiles.nameAndFolder("M1_water_colo_field.xds", .XDS).data.string
 //XDSScriptCompiler.compile(text: script)

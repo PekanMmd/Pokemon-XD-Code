@@ -765,7 +765,7 @@ import Foundation
 
 //let ldol = XGFiles.dol.data
 //
-//// stat booster (r3 index of stat to boost, r4 battle pokemon)
+//// old stat booster (r3 index of stat to boost, r4 battle pokemon)
 //let statBoosterStart = 0x8015258c - kDOLtoRAMOffsetDifference
 //let statBoosterCode : [UInt32] = [0x9421ffe0,0x7c0802a6,0x90010024,0x93e1001c,0x93c10018,0x93a10014,0x93810010,
 //0x7C9F2378,0x480cfed9,0x7c601b78,0x7fe3fb78,0x7c1d0378,0x38800000,0x7fa5eb78,0x38c00000,0x4bff08b5,
@@ -1169,7 +1169,7 @@ import Foundation
 //]
 //replaceASM(startOffset: magicCheckStart, newASM: magicCode)
 //
-//// ability activate function
+//// old ability activate function
 //let abilityActivateStart = 0x80220708 - kDOLtoRAMOffsetDifference
 //let messageParams = 0x801f6780 - kDOLtoRAMOffsetDifference
 //let animSoundCallBack = 0x802236a8 - kDOLtoRAMOffsetDifference
@@ -1198,80 +1198,6 @@ import Foundation
 //	0x4e800020																	// blr
 //	])
 //
-//// trace, download, trickster
-//let entryBranch = 0x80225d18 - kDOLtoRAMOffsetDifference
-//let entryStart = 0x80222554 - kDOLtoRAMOffsetDifference
-//let entryEnd = 0x80225d1c - kDOLtoRAMOffsetDifference
-//let traceStart = entryStart + 0x20
-//let downloadStart = traceStart + 0x44
-//let tricksterStart = downloadStart + 0x14
-//let traceIndex : UInt32 = 36
-//let downloadIndex : UInt32 = 100
-//let tricksterIndex : UInt32 = 57
-//let checkSetStatus = 0x8020254c - kDOLtoRAMOffsetDifference
-//let setStatus = 0x802024a4 - kDOLtoRAMOffsetDifference
-//let activate = 0x8015258c - kDOLtoRAMOffsetDifference
-//replaceASM(startOffset: entryBranch, newASM: [createBranchFrom(offset: entryBranch, toOffset: entryStart)])
-//replaceASM(startOffset: entryStart, newASM: [
-//	0x5460043e,																	// rlwinm r0, r3
-//	0x28000000 + traceIndex,													// cmpwi r0, trace
-//	powerPCBranchEqualFromOffset(from: entryStart + 0x8, to: traceStart),		// beq traceStart:
-//	0x28000000 + downloadIndex,													// cmpwi r0, download
-//	powerPCBranchEqualFromOffset(from: entryStart + 0x10, to: downloadStart),	// beq downloadStart:
-//	0x28000000 + tricksterIndex,												// cmpwi r0, trickster
-//	powerPCBranchEqualFromOffset(from: entryStart + 0x18, to: tricksterStart),	// beq tricksterStart:
-//	createBranchFrom(offset: entryStart + 0x1c, toOffset: entryEnd),			// b entryEnd
-//	//traceStart: 0x20 -------->
-//	0x7fe3fb78,																	// mr r3, r31
-//	0x8863084d,																	// lbz r3, 0x084d(r3)
-//	0x5460063f,																	// rlwinm r0, r3
-//	powerPCBranchNotEqualFromOffset(from: traceStart + 0xc, to: entryEnd),		// bne entryEnd
-//	0x7fe3fb78,																	// mr r3, r31
-//	0x3880003c,																	// li r4, 60
-//	createBranchAndLinkFrom(offset:traceStart + 0x18, toOffset: checkSetStatus),// bl checkIfCanSetStatus
-//	0x28030002,																	// cmpwi r3, 2
-//	powerPCBranchNotEqualFromOffset(from: 0, to: 0x14),							// bne don't set
-//	0x7fe3fb78,																	// mr r3, r31
-//	0x3880003c,																	// li r4, 60
-//	0x38a00000,																	// li r5, 0
-//	createBranchAndLinkFrom(offset: traceStart + 0x30, toOffset: setStatus),	// bl set status
-//	0x7fe3fb78,																	// mr r3, r31
-//	0x38800001,																	// li r4, 1
-//	0x9883084d,																	// stb r4, 0x084d(r3)
-//	createBranchFrom(offset: traceStart + 0x40, toOffset: entryEnd),			// b entryEnd
-//	//downloadStart: 0x64 -------->
-//	0x7fe3fb78,																	// mr r3, r31
-//	0x7C641B78,																	// mr r4, r3
-//	0x38600004,																	// li r3, 4
-//	createBranchAndLinkFrom(offset: downloadStart + 0xc, toOffset: activate),	// bl activate ability (stat boost)
-//	createBranchFrom(offset: downloadStart + 0x10, toOffset: entryEnd),			// b entry end
-//	//tricksterStart: 0x78 -------->
-//	0x7fe3fb78,																	// mr r3, r31
-//	createBranchAndLinkFrom(offset: tricksterStart + 0x4, toOffset: abilityActivateStart),
-//	0x38600000,	// li r3, 0
-//	createBranchAndLinkFrom(offset: tricksterStart + 0x0c, toOffset: get_pointer_index_func),	// bl get_pointer_index
-//	0x7C641B78,	// mr r4, r3
-//	0x38600002,	// li r3, 2
-//	createBranchAndLinkFrom(offset: tricksterStart + 0x18, toOffset: get_pointer_general_func), // bl get_pointer_general
-//	0x7C7F1B78,	// mr r31, r3
-//	0x3880004C,	// li r4, 76
-//	createBranchAndLinkFrom(offset: tricksterStart + 0x24, toOffset: check_status_func), // bl check_status
-//	0x28030002,	// cmpwi r3, 2
-//	powerPCBranchNotEqualFromOffset(from: tricksterStart + 0x2c, to: entryEnd),
-//	0x7fe3fb78,	//0x28 mr r3, r31
-//	0x3880004C,	//0x2c li r4, 76
-//	0x38a00000,	//0x30 li r5, 0
-//	createBranchAndLinkFrom(offset: tricksterStart + 0x3c, toOffset: set_status_function), //0x34 bl set_status
-//	0x38600001,	//0x38 li r3, 1
-//	createBranchAndLinkFrom(offset: tricksterStart + 0x44, toOffset: get_pointer_index_func), //0x3c bl get_pointer_index
-//	0x7C641B78,	//0x40 mr r4, r3
-//	0x38600002,	//0x44 li r3, 2
-//	createBranchAndLinkFrom(offset: tricksterStart + 0x50, toOffset: get_pointer_general_func), //0x48 bl get_pointer_general
-//	0x3880004C,	//0x4c li r4, 76
-//	0x38a00000,	//0x50 li r5, 0
-//	createBranchAndLinkFrom(offset: tricksterStart + 0x5c, toOffset: set_status_function), //0x54 bl set_status
-//	createBranchFrom(offset: tricksterStart + 0x60, toOffset: entryEnd), //0x58 b entry end:
-//	])
 //
 //
 //
@@ -1279,18 +1205,6 @@ import Foundation
 //replaceASM(startOffset: 0x80225234 - kDOLtoRAMOffsetDifference, newASM: [0x38800008])
 //
 //
-//
-//// natural cure activation message
-//let naturalBranch = 0x8021c5fc - kDOLtoRAMOffsetDifference
-//let naturalStart = 0x802226e4 - kDOLtoRAMOffsetDifference
-//let naturalEnd = naturalBranch + 0x4
-//replaceASM(startOffset: naturalBranch, newASM: [createBranchFrom(offset: naturalBranch, toOffset: naturalStart)])
-//replaceASM(startOffset: naturalStart, newASM: [
-//	0x7fe3fb78, // mr r3, r31
-//	createBranchAndLinkFrom(offset: naturalStart + 0x4, toOffset: abilityActivateStart),
-//	0x7fe3fb78, // mr r3, r31
-//	createBranchFrom(offset: naturalStart + 0xc, toOffset: naturalEnd)
-//	])
 //
 //// shadow max belly drum effect
 //let bellyBranch = 0x8021e724 - kDOLtoRAMOffsetDifference
@@ -4701,149 +4615,6 @@ import Foundation
 //
 //
 //
-//// immune to moves abilities r31 current move r3 defending ability
-//let originOffset = 0x225804
-//let originNopOffset = 0x225838
-//let immunitiesStart = 0xB9A05C
-//let statBoost = 0x15258c
-//
-//let moveGetSnatchFlag = 0x13e5e4
-//let moveGetSoundFlag = 0x13e548
-//let moveGetType = 0x13e870
-//let moveCheckShadow = 0x13e514
-//
-//let powerupImmune = 0x14c
-//let immune = 0x154
-//let powerupNotImmune = 0x15c
-//let notImmune = 0x164
-//
-//XGAssembly.replaceASM(startOffset: originOffset - kDOLtoRAMOffsetDifference, newASM: [0x3bc00000,XGAssembly.createBranchAndLinkFrom(offset: originOffset + 0x4, toOffset: immunitiesStart),0x28030001])
-//XGAssembly.replaceASM(startOffset: originNopOffset - kDOLtoRAMOffsetDifference, newASM: [kNopInstruction])
-//XGAssembly.replaceRELASM(startOffset: immunitiesStart - kRELtoRAMOffsetDifference, newASM: [
-//0x9421ffdc, 0x7c0802a6, 0x90010028, 0x93e1001c, 0x93c10018, 0x93a10014, 0x93810010, 0x93610020,
-//
-//// 0x20
-//0x7c7c1b78, // mr r28,r3
-//0x7fe3fb78, // mr r3, r31
-//XGAssembly.createBranchAndLinkFrom(offset: immunitiesStart + 0x28, toOffset: moveGetSnatchFlag),
-//0x7c7e1b78, // mr r30, r3
-//0x7fe3fb78, // mr r3, r31
-//XGAssembly.createBranchAndLinkFrom(offset: immunitiesStart + 0x34, toOffset: moveGetSoundFlag),
-//0x7C7D1B78, // mr r29, r3
-//0x7fe3fb78, // mr r3, r31
-//XGAssembly.createBranchAndLinkFrom(offset: immunitiesStart + 0x40, toOffset: moveCheckShadow),
-//0x7c7b1b78, // mr r27, r3
-//0x7fe3fb78, // mr r3, r31
-//XGAssembly.createBranchAndLinkFrom(offset: immunitiesStart + 0x4c, toOffset: moveGetType),
-//0x7C7F1B78, // mr r31, r3
-//0x7f83e378, //mr r3,r28
-//
-//// 0x58 bulletproof
-//0x2803004e,0x4082000c,0x281e0001,XGAssembly.powerPCBranchEqualFromOffset(from: 0x64, to: immune),
-//
-//// 0x68 soundproof
-//0x2803002b,0x40820010,0x281d0001,0x40820008,XGAssembly.createBranchFrom(offset: 0x78, toOffset: immune),
-//
-//// 0x7c lightning rod
-//0x2803001f,0x40820014,0x281f000d,0x4082000c,0x38600004,XGAssembly.createBranchFrom(offset: 0x90, toOffset: powerupImmune),
-//
-//// 0x94 motor drive
-//0x2803005f,0x40820014,0x281f000d,0x4082000c,0x38600003,XGAssembly.createBranchFrom(offset: 0xa8, toOffset: powerupImmune),
-//
-//// 0xac storm drain
-//0x28030060,0x40820014,0x281f000b,0x4082000c,0x38600004,XGAssembly.createBranchFrom(offset: 0xc0, toOffset: powerupImmune),
-//
-//// 0xc4 sap sipper
-//0x28030061,0x40820014,0x281f000c,0x4082000c,0x38600001,XGAssembly.createBranchFrom(offset: 0xd8, toOffset: powerupImmune),
-//
-//// 0xdc justified on dark moves
-//0x28030062,0x40820024,0x281f0011,0x4082000c,0x38600001,XGAssembly.createBranchFrom(offset: 0xf0, toOffset: powerupNotImmune),
-//
-//// 0xf4 justified on shadow moves
-//0x281b0001,0x4082000c,0x38600001,XGAssembly.createBranchFrom(offset: 0x100, toOffset: powerupNotImmune),
-//
-//// 0x104 rattled on bug moves
-//0x2803003c,0x4082005c,0x281f0006,0x4082000c,0x38600003,XGAssembly.createBranchFrom(offset: 0x118, toOffset: powerupNotImmune),
-//// 0x11c rattled on ghost moves
-//0x281f0007,0x4082000c,0x38600003,XGAssembly.createBranchFrom(offset: 0x128, toOffset: powerupNotImmune),
-//// 0x12c rattled on dark moves
-//0x281f0011,0x4082000c,0x38600003,XGAssembly.createBranchFrom(offset: 0x138, toOffset: powerupNotImmune),
-//// 0x13c justified on shadow moves
-//0x281b0001,0x40820024,0x38600003,XGAssembly.createBranchFrom(offset: 0x148, toOffset: powerupNotImmune),
-//
-//
-//
-//// 0x14c power up immune
-//0x80810014,
-//XGAssembly.createBranchAndLinkFrom(offset: immunitiesStart + 0x150, toOffset: statBoost),
-//
-//// 0x154 immune
-//0x38600001,
-//0x48000010,
-//
-//// 0x15c power up not immune
-//0x80810014,
-//XGAssembly.createBranchAndLinkFrom(offset: immunitiesStart + 0x160, toOffset: statBoost),
-//
-//// 0x164 not immune
-//0x38600000,
-//
-//// 0x168
-//0x80010028, 0x83e1001c, 0x83c10018, 0x83a10014, 0x83810010, 0x83610020, 0x7c0803a6, 0x38210024, 0x4e800020
-//])
-//
-//// check if move immune ability is being activated on user
-//let immuneSelfBranch = 0x2257f4
-//let immuneSelfStart = 0xB99F8C
-//let getMoveTargets = 0x13e784
-//let selfReturn = 0x22580c
-//let notSelfReturn = 0x225800
-//XGAssembly.replaceASM(startOffset: immuneSelfBranch - kDOLtoRAMOffsetDifference, newASM: [
-//	0x7C7F1B78,	// mr r31, r3
-//	XGAssembly.createBranchAndLinkFrom(offset: immuneSelfBranch + 0x4, toOffset: getMoveTargets),
-//	XGAssembly.createBranchFrom(offset: immuneSelfBranch + 0x8, toOffset: immuneSelfStart),
-//])
-//XGAssembly.replaceRELASM(startOffset: immuneSelfStart - kRELtoRAMOffsetDifference, newASM: [
-//
-//	0x28030005, // cmpwi r3, move user
-//	0x40820010, // bne 0x10
-//	0x38600000, // li r3, 0
-//	0x3bc00000, // li r30, 0
-//	XGAssembly.createBranchFrom(offset: immuneSelfStart + 0x10, toOffset: selfReturn),
-//	0x7fa3eb78, // mr r3, r29
-//	XGAssembly.createBranchFrom(offset: immuneSelfStart + 0x18, toOffset: notSelfReturn),
-//
-//])
-//
-//
-//
-//// moxie
-//let moxieBranch = 0x225108
-//let moxieStart  = 0xb9a294
-//let checkHP = 0x204a70
-////let statBoost = 0x15258c
-//
-//XGAssembly.replaceASM(startOffset: moxieBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: moxieBranch, toOffset: moxieStart)])
-//XGAssembly.replaceRELASM(startOffset: moxieStart - kRELtoRAMOffsetDifference, newASM: [
-//0x7fe3fb78, // mr r3, r31 (defending pokemon pointer)
-//XGAssembly.createBranchAndLinkFrom(offset: moxieStart + 0x4, toOffset: checkHP),
-//0x28030001, // cmpwi r3, 1
-//XGAssembly.powerPCBranchEqualFromOffset(from: 0xc, to: 0x2c),
-//
-//0x7fc3f378, // mr r3, r30 (attacking pokemon pointer)
-//0xa063080c,	// lhz r3, 0x80c(r3) (get ability)
-//0x2803003a, // cmpwi r3, moxie
-//XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x1c, to: 0x2c),
-//
-//0x38600001, // li r3, attack stat
-//0x7fc4f378, // mr r4, r30 battle pokemon
-//XGAssembly.createBranchAndLinkFrom(offset: moxieStart + 0x28, toOffset: statBoost),
-//
-//0x5704043e, // rlwinm	r4, r24, 0, 16, 31 (0000ffff) overwritten code
-//XGAssembly.createBranchFrom(offset: moxieStart + 0x30, toOffset: moxieBranch + 0x4),
-//
-//])
-//
 //// life orb
 //let lifeBranch = 0x2250f4
 //let lifeStart = 0xB9A1E8
@@ -4925,6 +4696,31 @@ import Foundation
 //0xb083000c, // sth	r4, 0x000c (r3)
 //XGAssembly.powerPCBranchLinkReturn()
 //])
+//// flinch status remains set for whole move routine
+//// may need to end flinch status at end of turn but seems to happen automatically in testing
+//// just look out for edge cases
+//XGAssembly.replaceASM(startOffset: 0x226ed0 - kDOLtoRAMOffsetDifference, newASM: [.nop])
+//
+//
+//// life orb on flinch
+//let lifeOrbFlinchBranch = 0xb9a208
+//let lifeFlinchTrue = 0xb9a28c
+//let lifeOrbFlinchStart = 0xB9AE9C
+//let checkStatus = 0x2025f0
+//XGAssembly.replaceRELASM(startOffset: lifeOrbFlinchBranch - kRELtoRAMOffsetDifference, newASM: [.b(lifeOrbFlinchStart), .nop])
+//XGAssembly.replaceRELASM(startOffset: lifeOrbFlinchStart - kRELtoRAMOffsetDifference, newASM: [
+//	.cmpwi(.r26, 0), // overwritten - check move didn't miss or fail
+//	.bne_f(0, 8),
+//	.b(lifeFlinchTrue),
+//	.mr(.r3, .r30),
+//	.li(.r4, 17), // flinched status
+//	.bl(checkStatus),
+//	.cmpwi(.r3, 1),
+//	.bne_f(0, 8),
+//	.b(lifeFlinchTrue),
+//	.b(lifeOrbFlinchBranch + 4)
+//])
+
 //
 //// snow cloak
 //let snowBranch = 0x21793c - kDOLtoRAMOffsetDifference
@@ -5208,10 +5004,7 @@ import Foundation
 //gonzapMultiBattle.unknown2 = oldBattle.unknown2
 //gonzapMultiBattle.save()
 
-//// one trick room expiry message
-//XGAssembly.replaceASM(startOffset: 0x228dd8 - kDOLtoRAMOffsetDifference, newASM: [0x28000001])
-//getStringSafelyWithID(id: 20099).duplicateWithString("The [0d] wore off!").replace()
-//
+
 //// herbal medicine fix
 //let hp = item("heal powder").data
 //hp.parameter = item("full heal").data.parameter
@@ -5408,151 +5201,6 @@ import Foundation
 //	// as the first comparison no longer affects the results
 //	0x28000006, // cmpwi r0, both foes and ally spread move
 //	XGAssembly.powerPCBranchLinkReturn(),
-//])
-
-//// stat booster +2 (r3 index of stat to boost, r4 battle pokemon)
-//let statBoosterPlus2Start = 0xB9A6F8
-//let getStatIndex = 0x222484
-//let getValueWithIndex = 0x142e7c
-//let unknownFunc = 0x148a98
-//let setParams = 0x1f6780
-//let setValueWithIndex = 0x141d14
-//let animSoundCallback = 0x2236a8
-//let statBoosterPlus2Code : ASM = [
-//
-//0x9421ffe0, // stwu	sp, -0x0020 (sp)
-//0x7c0802a6, // mflr	r0
-//0x90010024, // stw	r0, 0x0024 (sp)
-//0x93e1001c, // stw	r31, 0x001C (sp)
-//0x93c10018, // stw	r30, 0x0018 (sp)
-//0x93a10014, // stw	r29, 0x0014 (sp)
-//0x93810010, // stw	r28, 0x0010 (sp)
-//0x7C9F2378, // mr	r31, r4
-//XGAssembly.createBranchAndLinkFrom(offset: statBoosterPlus2Start + 0x20, toOffset: getStatIndex),
-//
-//0x7c601b78, // mr	r0, r3
-//0x7fe3fb78, // mr	r3, r31
-//0x7c1d0378, // mr	r29, r0
-//0x38800000, // li	r4, 0
-//0x7fa5eb78, // mr	r5, r29
-//0x38c00000, // li	r6, 0
-//XGAssembly.createBranchAndLinkFrom(offset: statBoosterPlus2Start + 0x3c, toOffset: getValueWithIndex),
-//
-//0x7c7c0774, // extsb	r28, r3
-//0x2c1c000c, // cmpwi	r28, 12
-//0x40800078, // bge 0x78
-//
-//0x7fe3fb78, // mr	r3, r31
-//XGAssembly.createBranchAndLinkFrom(offset: statBoosterPlus2Start + 0x50, toOffset: unknownFunc),
-//
-//0x5460043e, // rlwinm	r0, r3, 0, 16, 31 (0000ffff)
-//0x28000002, // cmplwi	r0, 2
-//0x41820064, // beq 0x64
-//
-//0x7fe4fb78, // mr	r4, r31
-//0x38600000, // li	r3, 0
-//XGAssembly.createBranchAndLinkFrom(offset: statBoosterPlus2Start + 0x68, toOffset: setParams),
-//
-//0x381c0002, // addi	r0, r28, 2
-//0x2800000c, // cmpwi r0, 12
-//XGAssembly.powerPCBranchLessThanOrEqualFromOffset(from: 0x0, to: 0x8),
-//0x3800000c, // li r0, 12
-//
-//0x7fe3fb78, // mr r3, r31
-//0x7c070774, // extsb r7, r0
-//0x7fa5eb78, // mr	r5, r29
-//0x38800000, // li	r4, 0
-//0x38c00000, // li	r6, 0
-//XGAssembly.createBranchAndLinkFrom(offset: statBoosterPlus2Start + 0x90, toOffset: setValueWithIndex),
-//
-//0x808dbb04, // lwz	r4, -0x44FC (r13)
-//0x3c608041, // lis	r3, 0x8041
-//0x38a00011, // li	r5, 17
-//0x38000000, // li	r0, 0
-//0x3c840001, // addis	r4, r4, 1
-//0x38637957, // addi	r3, r3, 31063
-//0x98a460a4, // stb	r5, 0x60A4 (r4)
-//0x808dbb04, // lwz	r4, -0x44FC (r13)
-//0x3c840001, // addis	r4, r4, 1
-//0x980460a5, // stb	r0, 0x60A5 (r4)
-//XGAssembly.createBranchAndLinkFrom(offset: statBoosterPlus2Start + 0xbc, toOffset: animSoundCallback),
-//
-//0x80010024, // lwz	r0, 0x0024 (sp)
-//0x83e1001c, // lwz	r31, 0x001C (sp)
-//0x83c10018, // lwz	r30, 0x0018 (sp)
-//0x83a10014, // lwz	r29, 0x0014 (sp)
-//0x83810010, // lwz	r28, 0x0010 (sp)
-//0x7c0803a6, // mtlr	r0
-//0x38210020, // addi	sp, sp, 32
-//
-//XGAssembly.powerPCBranchLinkReturn()
-//]
-//XGAssembly.replaceRELASM(startOffset: statBoosterPlus2Start - kRELtoRAMOffsetDifference, newASM: statBoosterPlus2Code)
-//
-//
-//// defiant competitive
-//let defiantBranch = 0x2223d0
-//let defiantStart = 0xB9A7D8
-//XGAssembly.replaceASM(startOffset: defiantBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: defiantBranch, toOffset: defiantStart)])
-//XGAssembly.replaceRELASM(startOffset: defiantStart - kRELtoRAMOffsetDifference, newASM: [
-//	0x7f800774, // extsb	r0, r28 (stat change stages)
-//	0x28000080, // cmpwi r0, 0x80 // treats negative as big number
-//	XGAssembly.powerPCBranchGreaterThanOrEqualFromOffset(from: 0x0, to: 0xc),
-//	0x3a6d87a0, // overwritten code
-//	XGAssembly.createBranchFrom(offset: defiantStart + 0x10, toOffset: defiantBranch + 4),
-//
-//	0x57200673, // rlwinm.	r0, r25, 0, 25, 25 (00000040) affects user mask
-//	XGAssembly.powerPCBranchEqualFromOffset(from: 0x0, to: 0xc),
-//	0x3a6d87a0, // overwritten code
-//	XGAssembly.createBranchFrom(offset: defiantStart + 0x20, toOffset: defiantBranch + 4),
-//
-//	0x281a0067, // cmpwi r26, defiant
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x18),
-//
-//	0x38600001, // li r3, attack
-//	0x7f04c378, // mr r4, r24
-//	XGAssembly.createBranchAndLinkFrom(offset: defiantStart + 0x34, toOffset: statBoosterPlus2Start),
-//	0x3a6d87a0, // overwritten code
-//	XGAssembly.createBranchFrom(offset: defiantStart + 0x3c, toOffset: defiantBranch + 4),
-//
-//	0x281a0068, // cmpwi r26, competitive
-//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x10),
-//
-//	0x38600004, // li r3, sp. attack
-//	0x7f04c378, // mr r4, r24
-//	XGAssembly.createBranchAndLinkFrom(offset: defiantStart + 0x50, toOffset: statBoosterPlus2Start),
-//	0x3a6d87a0, // overwritten code
-//	XGAssembly.createBranchFrom(offset: defiantStart + 0x58, toOffset: defiantBranch + 4),
-//
-//])
-
-//// moves thaw from frozen
-//let thawBranch = 0x226d6c
-//let thawStart = 0xB9A834
-//let thawTrue = thawStart + 0x38
-//let thawFalse = thawStart + 0x3c
-//// r30 current move
-//// r26 move effect
-//XGAssembly.replaceASM(startOffset: thawBranch - kDOLtoRAMOffsetDifference, newASM: [.b(thawStart), .nop, .nop])
-//XGAssembly.replaceRELASM(startOffset: thawStart - kRELtoRAMOffsetDifference, newASM: [
-//	.cmpwi(.r30, move("flame wheel").index),
-//	.beq(thawTrue),
-//	.cmpwi(.r30, move("flare blitz").index),
-//	.beq(thawTrue),
-//	.cmpwi(.r30, move("scald").index),
-//	.beq(thawTrue),
-//	.cmpwi(.r30, move("sacred fire").index),
-//	.beq(thawTrue),
-//	.cmpwi(.r30, move("shadow blaze").index),
-//	.beq(thawTrue),
-//	.cmpwi(.r30, move("shadow tribute").index),
-//	.beq(thawTrue),
-//	.cmpwi(.r26, 125), // move effect burn chance and thaw from frozen
-//	.bne(thawFalse),
-//	// thaw true 0x38
-//	.b(0x226d94),
-//	// thaw false 0x3c
-//	.b(0x226d78)
 //])
 
 //// move effect 203 always neutral damage addition to freeze dry and scrappy code
@@ -6143,7 +5791,7 @@ import Foundation
 //
 //// unaware, sniper
 //XGAssembly.replaceASM(startOffset: 0x22a720 - kDOLtoRAMOffsetDifference, newASM: [
-//	.li(.r4, 0),
+//	.li(.r4, 6),
 //	.lwz(.r3, .sp, 0x30), // defending ability
 //	.cmpwi(.r3, ability("unaware").index),
 //	.bne_f(0, 0xc),
@@ -6249,6 +5897,601 @@ import Foundation
 //
 //
 //])
+
+//// electric types can't be paralysed 2
+//let paraBranch = 0x2144e0
+//let paraStart = 0xB9AC8C
+//let paraSkip = 0x214660
+//let paraTrue = paraBranch + 0x8
+//let checkHasType = 0x2054fc
+//// compare ability in r22 to limber and compare type to electric battle pokemon in r19
+//XGAssembly.replaceASM(startOffset: paraBranch - kDOLtoRAMOffsetDifference, newASM: [.b(paraStart)])
+//XGAssembly.replaceRELASM(startOffset: paraStart - kRELtoRAMOffsetDifference, newASM: [
+//	.cmpwi(.r0, ability("limber").index),
+//	.bne_f(0, 8),
+//	.b(paraSkip),
+//
+//	.mr(.r3, .r19), // battle pokemon
+//	.li(.r4, XGMoveTypes.electric.rawValue),
+//	.bl(checkHasType),
+//	.cmpwi(.r3, 1),
+//	.bne_f(0, 8),
+//	.b(paraSkip),
+//
+//	.b(paraTrue)
+//
+//])
+//
+//
+//// foul play
+//let foulBranch = 0x22a188
+//let foulStart = 0x22278c
+//let foulEnd = foulBranch + 0x8
+//let getAttackStat = 0x1493d0
+//XGAssembly.replaceASM(startOffset: foulBranch - kDOLtoRAMOffsetDifference, newASM: [.b(foulStart), .nop])
+//XGAssembly.replaceASM(startOffset: foulStart - kDOLtoRAMOffsetDifference, newASM: [
+//	.mr(.r20, .r0), // overwritten code
+//	.mr(.r3, .r17),
+//
+//	// get move data pointer
+//	.mulli(.r0, .r3, 56),
+//	.lwz(.r3, .r13, -0x762c),
+//	.add(.r3, .r3, .r0),
+//	.lhz(.r3, .r3, 0x1c),
+//	.cmplwi(.r3, 15),
+//	.bne_f(0x0, 0x14),
+//
+//	.mr_(.r3, .r18),
+//	.beq_f(0, 0xc),
+//
+//	.bl(getAttackStat),
+//	.mr(.r21, .r3),
+//
+//	// return
+//	.mr(.r3, .r18), // overwritten code
+//	.b(foulEnd)
+//])
+
+//// fix animation inconsistencies 2 for +3 and higher stat boosts
+//XGAssembly.replaceASM(startOffset: 0x2117e4 - kDOLtoRAMOffsetDifference, newASM: [0x40800028])
+//
+//// unaware, sniper
+//XGAssembly.replaceASM(startOffset: 0x22a720 - kDOLtoRAMOffsetDifference, newASM: [
+//
+//	.li(.r4, 6),
+//	.lwz(.r3, .sp, 0x30), // defending ability
+//	.cmpwi(.r3, ability("unaware").index),
+//	.bne_f(0, 0xc),
+//	.stw(.r4, .sp, 0x24),
+//	.stw(.r4, .sp, 0x28),
+//	.cmpwi(.r27, ability("unaware").index), // attacking ability
+//	.bne_f(0, 0xc),
+//	.stw(.r4, .sp, 0x34),
+//	.stw(.r4, .sp, 0x38),
+//	.cmpwi(.r27, ability("sniper").index),
+//	.bne_f(0, 0x14),
+//	.cmpwi(.r26, 3), // critical hit
+//	.bne_f(0, 0xc),
+//	.mulli(.r14, .r14, 3),
+//	.srawi(.r14, .r14, 1),
+//
+//])
+//
+//
+//let statBoostAnimationRoutineStart = 0xB9ADE4
+//let statBoostAnimationRoutine = [0x2f, 0xff, 0x01, 0x60, 0x1e, 0x00, 0x2f, 0x80, 0x4e, 0x85, 0xc3, 0x00, 0x29, 0x80, 0x41, 0x79, 0x63, 0x3b, 0x3b, 0x3b]
+//let rel = XGFiles.common_rel.data
+//rel.replaceBytesFromOffset(statBoostAnimationRoutineStart - kRELtoRAMOffsetDifference, withByteStream: statBoostAnimationRoutine)
+//rel.save()
+//
+//// store value at address
+//
+//// ability stat booster (r3 index of stat to boost + stages, r4 battle pokemon)
+//let statBoosterStart = 0xB9ACC0 //old at 0xB9A6F8
+//let getStatIndex = 0x222484
+//let getValueWithIndex = 0x142e7c
+//let unknownFunc = 0x148a98
+//let setParams = 0x1f6780
+//let setValueWithIndex = 0x141d14
+//let animSoundCallback = 0x2236a8
+//
+//XGAssembly.replaceRELASM(startOffset: statBoosterStart - kRELtoRAMOffsetDifference, newASM: [
+//	.stwu(.sp, .sp, -0x50),
+//	.mflr(.r0),
+//	.stw(.r0, .sp, 0x54),
+//	.stmw(.r20, .sp, 0x10),
+//
+//	.mr(.r24, .r3),
+//	.rlwinm(.r3, .r3, 0, 28, 31), // 0x0000000f stat index to boost
+//	.mr(.r20, .r3),
+//	.mr(.r31, .r4),
+//	.bl(getStatIndex),
+//
+//	.mr(.r29, .r3),
+//	.mr(.r3, .r31),
+//	.li(.r4, 0),
+//	.mr(.r5, .r29),
+//	.li(.r6, 0),
+//	.bl(getValueWithIndex),
+//
+//	.cmpwi(.r3, 12),
+//	.bge_f(0, 0xcc),
+//
+//	.extsb(.r28, .r3),
+//	.mr(.r3, .r31),
+//	.bl(unknownFunc),
+//	.cmplwi(.r3, 2),
+//	.beq_f(0, 0xb8),
+//
+//	.mr(.r4, .r31),
+//	.li(.r3, 0),
+//	.bl(setParams),
+//
+//	.rlwinm(.r3, .r24, 0, 24, 27), // 0x000000f0 stat boost stages
+//	.srawi(.r21, .r3, 4),
+//	.add(.r7, .r28, .r21),
+//	.cmpwi(.r7, 12),
+//	.ble_f(0, 8),
+//	.li(.r7, 12),
+//	.mr(.r3, .r31),
+//	.mr(.r5, .r29),
+//	.li(.r4, 0),
+//	.li(.r6, 0),
+//	.bl(setValueWithIndex),
+//
+//	.lwz(.r23, .r13, -0x44fc),
+//	.addis(.r23, .r23, 1),
+//	.lbz(.r25, .r23, 0x60a4),
+//	.lbz(.r26, .r23, 0x60a5),
+//	.lbz(.r27, .r23, 0x601e),
+//	.lis(.r3, 0x804f),
+//	.subi(.r3, .r3, 0x10_000 - 0x85C3),
+//	.lbz(.r22, .r3, 0),
+//
+//	.lis(.r6, 0x80BA),
+//	.subi(.r6, .r6, 0x10_000 - 0xADE9),
+//	.stb(.r24, .r6, 0),
+//
+//	.li(.r5, 14),
+//	.cmpwi(.r21, 1),
+//	.ble_f(0, 8),
+//	.nop,
+//	.add(.r5, .r5, .r20),
+//
+//	.lis(.r3, 0x80BA),
+//	.subi(.r3, .r3, 0x10_000 - 0xADEF),
+//	.stb(.r5, .r3, 0),
+//
+//	.li(.r0, 0),
+//	.stb(.r5, .r23, 0x60a4),
+//	.stb(.r0, .r23, 0x60a5),
+//	.lis(.r3, 0x80BA),
+//	.subi(.r3, .r3, 0x10_000 - 0xADE4),
+//	.bl(animSoundCallback),
+//
+//	.stb(.r25, .r23, 0x60a4),
+//	.stb(.r26, .r23, 0x60a5),
+//	.stb(.r27, .r23, 0x601e),
+//	.lis(.r3, 0x804f),
+//	.subi(.r3, .r3, 0x10_000 - 0x85C3),
+//	.stb(.r22, .r3, 0),
+//
+//	.lmw(.r20, .sp, 0x10),
+//	.lwz(.r0, .sp, 0x54),
+//	.mtlr(.r0),
+//	.addi(.sp, .sp, 0x50),
+//	.blr,
+//	.nop
+//
+//])
+//
+//// defiant competitive
+//let defiantBranch = 0x2223d0
+//let defiantStart = 0xB9A7D8
+//XGAssembly.replaceASM(startOffset: defiantBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: defiantBranch, toOffset: defiantStart)])
+//XGAssembly.replaceRELASM(startOffset: defiantStart - kRELtoRAMOffsetDifference, newASM: [
+//	0x7f800774, // extsb	r0, r28 (stat change stages)
+//	0x28000080, // cmplwi r0, 0x80 // treats negative as big number
+//	XGAssembly.powerPCBranchGreaterThanOrEqualFromOffset(from: 0x0, to: 0xc),
+//	0x3a6d87a0, // overwritten code
+//	XGAssembly.createBranchFrom(offset: defiantStart + 0x10, toOffset: defiantBranch + 4),
+//
+//	0x57200673, // rlwinm.	r0, r25, 0, 25, 25 (00000040) affects user mask
+//	XGAssembly.powerPCBranchEqualFromOffset(from: 0x0, to: 0xc),
+//	0x3a6d87a0, // overwritten code
+//	XGAssembly.createBranchFrom(offset: defiantStart + 0x20, toOffset: defiantBranch + 4),
+//
+//	0x281a0067, // cmpwi r26, defiant
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x18),
+//
+//	0x38600021, // li r3, attack, 2 stages
+//	0x7f04c378, // mr r4, r24
+//	XGAssembly.createBranchAndLinkFrom(offset: defiantStart + 0x34, toOffset: statBoosterStart),
+//	0x3a6d87a0, // overwritten code
+//	XGAssembly.createBranchFrom(offset: defiantStart + 0x3c, toOffset: defiantBranch + 4),
+//
+//	0x281a0068, // cmpwi r26, competitive
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x0, to: 0x10),
+//
+//	0x38600024, // li r3, sp. attack, 2 stages
+//	0x7f04c378, // mr r4, r24
+//	XGAssembly.createBranchAndLinkFrom(offset: defiantStart + 0x50, toOffset: statBoosterStart),
+//	0x3a6d87a0, // overwritten code
+//	XGAssembly.createBranchFrom(offset: defiantStart + 0x58, toOffset: defiantBranch + 4),
+//
+//])
+//
+//
+//// immune to moves abilities r31 current move r3 defending ability
+//let originOffset = 0x225804
+//let originNopOffset = 0x225838
+//let immunitiesStart = 0xB9A05C
+//let statBoost = 0xB9ACC0
+//
+//let moveGetSnatchFlag = 0x13e5e4
+//let moveGetSoundFlag = 0x13e548
+//let moveGetType = 0x13e870
+//let moveCheckShadow = 0x13e514
+//
+//let powerupImmune = 0x14c
+//let immune = 0x154
+//let powerupNotImmune = 0x15c
+//let notImmune = 0x164
+//
+//XGAssembly.replaceASM(startOffset: originOffset - kDOLtoRAMOffsetDifference, newASM: [0x3bc00000,XGAssembly.createBranchAndLinkFrom(offset: originOffset + 0x4, toOffset: immunitiesStart),0x28030001])
+//XGAssembly.replaceASM(startOffset: originNopOffset - kDOLtoRAMOffsetDifference, newASM: [kNopInstruction])
+//XGAssembly.replaceRELASM(startOffset: immunitiesStart - kRELtoRAMOffsetDifference, newASM: [
+//0x9421ffdc, 0x7c0802a6, 0x90010028, 0x93e1001c, 0x93c10018, 0x93a10014, 0x93810010, 0x93610020,
+//
+//// 0x20
+//0x7c7c1b78, // mr r28,r3
+//0x7fe3fb78, // mr r3, r31
+//XGAssembly.createBranchAndLinkFrom(offset: immunitiesStart + 0x28, toOffset: moveGetSnatchFlag),
+//0x7c7e1b78, // mr r30, r3
+//0x7fe3fb78, // mr r3, r31
+//XGAssembly.createBranchAndLinkFrom(offset: immunitiesStart + 0x34, toOffset: moveGetSoundFlag),
+//0x7C7D1B78, // mr r29, r3
+//0x7fe3fb78, // mr r3, r31
+//XGAssembly.createBranchAndLinkFrom(offset: immunitiesStart + 0x40, toOffset: moveCheckShadow),
+//0x7c7b1b78, // mr r27, r3
+//0x7fe3fb78, // mr r3, r31
+//XGAssembly.createBranchAndLinkFrom(offset: immunitiesStart + 0x4c, toOffset: moveGetType),
+//0x7C7F1B78, // mr r31, r3
+//0x7f83e378, //mr r3,r28
+//
+//// 0x58 bulletproof
+//0x2803004e,0x4082000c,0x281e0001,XGAssembly.powerPCBranchEqualFromOffset(from: 0x64, to: immune),
+//
+//// 0x68 soundproof
+//0x2803002b,0x40820010,0x281d0001,0x40820008,XGAssembly.createBranchFrom(offset: 0x78, toOffset: immune),
+//
+//// 0x7c lightning rod
+//0x2803001f,0x40820014,0x281f000d,0x4082000c,0x38600014,XGAssembly.createBranchFrom(offset: 0x90, toOffset: powerupImmune),
+//
+//// 0x94 motor drive
+//0x2803005f,0x40820014,0x281f000d,0x4082000c,0x38600013,XGAssembly.createBranchFrom(offset: 0xa8, toOffset: powerupImmune),
+//
+//// 0xac storm drain
+//0x28030060,0x40820014,0x281f000b,0x4082000c,0x38600014,XGAssembly.createBranchFrom(offset: 0xc0, toOffset: powerupImmune),
+//
+//// 0xc4 sap sipper
+//0x28030061,0x40820014,0x281f000c,0x4082000c,0x38600011,XGAssembly.createBranchFrom(offset: 0xd8, toOffset: powerupImmune),
+//
+//// 0xdc justified on dark moves
+//0x28030062,0x40820024,0x281f0011,0x4082000c,0x38600011,XGAssembly.createBranchFrom(offset: 0xf0, toOffset: powerupNotImmune),
+//
+//// 0xf4 justified on shadow moves
+//0x281b0001,0x4082000c,0x38600021,XGAssembly.createBranchFrom(offset: 0x100, toOffset: powerupNotImmune),
+//
+//// 0x104 rattled on bug moves
+//0x2803003c,0x4082005c,0x281f0006,0x4082000c,0x38600013,XGAssembly.createBranchFrom(offset: 0x118, toOffset: powerupNotImmune),
+//// 0x11c rattled on ghost moves
+//0x281f0007,0x4082000c,0x38600013,XGAssembly.createBranchFrom(offset: 0x128, toOffset: powerupNotImmune),
+//// 0x12c rattled on dark moves
+//0x281f0011,0x4082000c,0x38600013,XGAssembly.createBranchFrom(offset: 0x138, toOffset: powerupNotImmune),
+//// 0x13c rattled on shadow moves
+//0x281b0001,0x40820024,0x38600013,XGAssembly.createBranchFrom(offset: 0x148, toOffset: powerupNotImmune),
+//
+//
+//
+//// 0x14c power up immune
+//0x80810014,
+//XGAssembly.createBranchAndLinkFrom(offset: immunitiesStart + 0x150, toOffset: statBoost),
+//
+//// 0x154 immune
+//0x38600001,
+//0x48000010,
+//
+//// 0x15c power up not immune
+//0x80810014,
+//XGAssembly.createBranchAndLinkFrom(offset: immunitiesStart + 0x160, toOffset: statBoost),
+//
+//// 0x164 not immune
+//0x38600000,
+//
+//// 0x168
+//0x80010028, 0x83e1001c, 0x83c10018, 0x83a10014, 0x83810010, 0x83610020, 0x7c0803a6, 0x38210024, 0x4e800020
+//])
+//
+//// check if move immune ability is being activated on user
+//let immuneSelfBranch = 0x2257f4
+//let immuneSelfStart = 0xB99F8C
+//let getMoveTargets = 0x13e784
+//let selfReturn = 0x22580c
+//let notSelfReturn = 0x225800
+//XGAssembly.replaceASM(startOffset: immuneSelfBranch - kDOLtoRAMOffsetDifference, newASM: [
+//	0x7C7F1B78,	// mr r31, r3
+//	XGAssembly.createBranchAndLinkFrom(offset: immuneSelfBranch + 0x4, toOffset: getMoveTargets),
+//	XGAssembly.createBranchFrom(offset: immuneSelfBranch + 0x8, toOffset: immuneSelfStart),
+//])
+//XGAssembly.replaceRELASM(startOffset: immuneSelfStart - kRELtoRAMOffsetDifference, newASM: [
+//
+//	0x28030005, // cmpwi r3, move user
+//	0x40820010, // bne 0x10
+//	0x38600000, // li r3, 0
+//	0x3bc00000, // li r30, 0
+//	XGAssembly.createBranchFrom(offset: immuneSelfStart + 0x10, toOffset: selfReturn),
+//	0x7fa3eb78, // mr r3, r29
+//	XGAssembly.createBranchFrom(offset: immuneSelfStart + 0x18, toOffset: notSelfReturn),
+//
+//])
+//
+//
+//
+//// moxie
+//let moxieBranch = 0x225108
+//let moxieStart  = 0xb9a294
+//let checkHP = 0x204a70
+////let statBoost = 0xB9ACC0
+//
+//XGAssembly.replaceASM(startOffset: moxieBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: moxieBranch, toOffset: moxieStart)])
+//XGAssembly.replaceRELASM(startOffset: moxieStart - kRELtoRAMOffsetDifference, newASM: [
+//0x7fe3fb78, // mr r3, r31 (defending pokemon pointer)
+//XGAssembly.createBranchAndLinkFrom(offset: moxieStart + 0x4, toOffset: checkHP),
+//0x28030001, // cmpwi r3, 1
+//XGAssembly.powerPCBranchEqualFromOffset(from: 0xc, to: 0x2c),
+//
+//0x7fc3f378, // mr r3, r30 (attacking pokemon pointer)
+//0xa063080c,	// lhz r3, 0x80c(r3) (get ability)
+//0x2803003a, // cmpwi r3, moxie
+//XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x1c, to: 0x2c),
+//
+//0x38600011, // li r3, attack stat, 1 stage
+//0x7fc4f378, // mr r4, r30 battle pokemon
+//XGAssembly.createBranchAndLinkFrom(offset: moxieStart + 0x28, toOffset: statBoost),
+//
+//0x5704043e, // rlwinm	r4, r24, 0, 16, 31 (0000ffff) overwritten code
+//XGAssembly.createBranchFrom(offset: moxieStart + 0x30, toOffset: moxieBranch + 0x4),
+//
+//])
+//
+//
+//
+//// ability activation animation
+//let abilityActivateStart = 0xB9ADF8
+////let getStatIndex = 0x222484
+////let getValueWithIndex = 0x142e7c
+////let unknownFunc = 0x148a98
+////let setParams = 0x1f6780
+////let setValueWithIndex = 0x141d14
+////let animSoundCallback = 0x2236a8
+//
+//XGAssembly.replaceRELASM(startOffset: abilityActivateStart - kRELtoRAMOffsetDifference, newASM: [
+//	.stwu(.sp, .sp, -0x50),
+//	.mflr(.r0),
+//	.stw(.r0, .sp, 0x54),
+//	.stmw(.r20, .sp, 0x10),
+//
+//	.mr(.r4, .r3),
+//	.li(.r3, 0),
+//	.bl(setParams),
+//
+//	.lwz(.r23, .r13, -0x44fc),
+//	.addis(.r23, .r23, 1),
+//	.lbz(.r25, .r23, 0x60a4),
+//	.lbz(.r26, .r23, 0x60a5),
+//	.lbz(.r27, .r23, 0x601e),
+//	.lis(.r3, 0x804f),
+//	.subi(.r3, .r3, 0x10_000 - 0x85C3),
+//	.lbz(.r22, .r3, 0),
+//
+//	.lis(.r6, 0x80BA),
+//	.subi(.r6, .r6, 0x10_000 - 0xADE9),
+//
+//	.li(.r24, 0x16),
+//	.stb(.r24, .r6, 0),
+//
+//	.lis(.r3, 0x80BA),
+//	.subi(.r3, .r3, 0x10_000 - 0xADEF),
+//	.li(.r5, 20),
+//	.stb(.r5, .r3, 0),
+//
+//	.li(.r0, 0),
+//	.stb(.r5, .r23, 0x60a4),
+//	.stb(.r0, .r23, 0x60a5),
+//	.lis(.r3, 0x80BA),
+//	.subi(.r3, .r3, 0x10_000 - 0xADE4),
+//	.bl(animSoundCallback),
+//
+//	.stb(.r25, .r23, 0x60a4),
+//	.stb(.r26, .r23, 0x60a5),
+//	.stb(.r27, .r23, 0x601e),
+//	.lis(.r3, 0x804f),
+//	.subi(.r3, .r3, 0x10_000 - 0x85C3),
+//	.stb(.r22, .r3, 0),
+//
+//	.lmw(.r20, .sp, 0x10),
+//	.lwz(.r0, .sp, 0x54),
+//	.mtlr(.r0),
+//	.addi(.sp, .sp, 0x50),
+//	.blr,
+//	.nop
+//
+//	])
+//
+//
+//// natural cure activation message
+//let naturalBranch = 0x21c5fc
+//let naturalStart = 0x2226e4
+//let naturalEnd = naturalBranch + 0x4
+//XGAssembly.replaceASM(startOffset: naturalBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: naturalBranch, toOffset: naturalStart)])
+//XGAssembly.replaceASM(startOffset: naturalStart - kDOLtoRAMOffsetDifference, newASM: [
+//	0x7fe3fb78, // mr r3, r31
+//	XGAssembly.createBranchAndLinkFrom(offset: naturalStart + 0x4, toOffset: abilityActivateStart),
+//	0x7fe3fb78, // mr r3, r31
+//	XGAssembly.createBranchFrom(offset: naturalStart + 0xc, toOffset: naturalEnd)
+//])
+//
+//// trace, download, trickster
+//let get_pointer_index_func = 0x1f3f3c
+//let get_pointer_general_func = 0x1efcac
+//let check_status_func = 0x1f848c
+//let set_status_function = 0x1f8438
+//let end_status_function = 0x1f8534
+//
+//let entryBranch = 0x225d18
+//let entryStart = 0x222554
+//let entryEnd = 0x225d1c
+//let traceStart = entryStart + 0x20
+//let downloadStart = traceStart + 0x44
+//let tricksterStart = downloadStart + 0x14
+//let traceIndex : UInt32 = 36
+//let downloadIndex : UInt32 = 100
+//let tricksterIndex : UInt32 = 57
+//let checkSetStatus = 0x20254c
+//let setStatus = 0x2024a4
+//let activate = abilityActivateStart
+//XGAssembly.replaceASM(startOffset: entryBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: entryBranch, toOffset: entryStart)])
+//XGAssembly.replaceASM(startOffset: entryStart - kDOLtoRAMOffsetDifference, newASM: [
+//	0x5460043e,																	// rlwinm r0, r3
+//	0x28000000 + traceIndex,													// cmpwi r0, trace
+//	XGAssembly.powerPCBranchEqualFromOffset(from: entryStart + 0x8, to: traceStart),		// beq traceStart:
+//	0x28000000 + downloadIndex,													// cmpwi r0, download
+//	XGAssembly.powerPCBranchEqualFromOffset(from: entryStart + 0x10, to: downloadStart),	// beq downloadStart:
+//	0x28000000 + tricksterIndex,												// cmpwi r0, trickster
+//	XGAssembly.powerPCBranchEqualFromOffset(from: entryStart + 0x18, to: tricksterStart),	// beq tricksterStart:
+//	XGAssembly.createBranchFrom(offset: entryStart + 0x1c, toOffset: entryEnd),			// b entryEnd
+//	//traceStart: 0x20 -------->
+//	0x7fe3fb78,																	// mr r3, r31
+//	0x8863084d,																	// lbz r3, 0x084d(r3)
+//	0x5460063f,																	// rlwinm r0, r3
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: traceStart + 0xc, to: entryEnd),		// bne entryEnd
+//	0x7fe3fb78,																	// mr r3, r31
+//	0x3880003c,																	// li r4, 60
+//	XGAssembly.createBranchAndLinkFrom(offset:traceStart + 0x18, toOffset: checkSetStatus),// bl checkIfCanSetStatus
+//	0x28030002,																	// cmpwi r3, 2
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0, to: 0x14),							// bne don't set
+//	0x7fe3fb78,																	// mr r3, r31
+//	0x3880003c,																	// li r4, 60
+//	0x38a00000,																	// li r5, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: traceStart + 0x30, toOffset: setStatus),	// bl set status
+//	0x7fe3fb78,																	// mr r3, r31
+//	0x38800001,																	// li r4, 1
+//	0x9883084d,																	// stb r4, 0x084d(r3)
+//	XGAssembly.createBranchFrom(offset: traceStart + 0x40, toOffset: entryEnd),			// b entryEnd
+//	//downloadStart: 0x64 -------->
+//	0x7fe3fb78,																	// mr r3, r31
+//	0x7C641B78,																	// mr r4, r3
+//	0x38600004,																	// li r3, 4
+//	XGAssembly.createBranchAndLinkFrom(offset: downloadStart + 0xc, toOffset: activate),	// bl activate ability (stat boost)
+//	XGAssembly.createBranchFrom(offset: downloadStart + 0x10, toOffset: entryEnd),			// b entry end
+//	//tricksterStart: 0x78 -------->
+//	0x7fe3fb78,																	// mr r3, r31
+//	XGAssembly.createBranchAndLinkFrom(offset: tricksterStart + 0x4, toOffset: abilityActivateStart),
+//	0x38600000,	// li r3, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: tricksterStart + 0x0c, toOffset: get_pointer_index_func),	// bl get_pointer_index
+//	0x7C641B78,	// mr r4, r3
+//	0x38600002,	// li r3, 2
+//	XGAssembly.createBranchAndLinkFrom(offset: tricksterStart + 0x18, toOffset: get_pointer_general_func), // bl get_pointer_general
+//	0x7C7F1B78,	// mr r31, r3
+//	0x3880004C,	// li r4, 76
+//	XGAssembly.createBranchAndLinkFrom(offset: tricksterStart + 0x24, toOffset: check_status_func), // bl check_status
+//	0x28030002,	// cmpwi r3, 2
+//	XGAssembly.powerPCBranchNotEqualFromOffset(from: tricksterStart + 0x2c, to: entryEnd),
+//	0x7fe3fb78,	//0x28 mr r3, r31
+//	0x3880004C,	//0x2c li r4, 76
+//	0x38a00000,	//0x30 li r5, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: tricksterStart + 0x3c, toOffset: set_status_function), //0x34 bl set_status
+//	0x38600001,	//0x38 li r3, 1
+//	XGAssembly.createBranchAndLinkFrom(offset: tricksterStart + 0x44, toOffset: get_pointer_index_func), //0x3c bl get_pointer_index
+//	0x7C641B78,	//0x40 mr r4, r3
+//	0x38600002,	//0x44 li r3, 2
+//	XGAssembly.createBranchAndLinkFrom(offset: tricksterStart + 0x50, toOffset: get_pointer_general_func), //0x48 bl get_pointer_general
+//	0x3880004C,	//0x4c li r4, 76
+//	0x38a00000,	//0x50 li r5, 0
+//	XGAssembly.createBranchAndLinkFrom(offset: tricksterStart + 0x5c, toOffset: set_status_function), //0x54 bl set_status
+//	XGAssembly.createBranchFrom(offset: tricksterStart + 0x60, toOffset: entryEnd), //0x58 b entry end:
+//])
+
+//// one trick room expiry message
+//getStringSafelyWithID(id: 20099).duplicateWithString("The [0d] wore off!").replace()
+//let trickExpireBranch = 0x228dc4
+//let trickExpireStart = 0xB9AEC4
+//let trickExpireSkip = 0x228dd0
+//XGAssembly.replaceASM(startOffset: trickExpireBranch - kDOLtoRAMOffsetDifference, newASM: [.b(trickExpireStart)])
+//XGAssembly.replaceRELASM(startOffset: trickExpireStart - kRELtoRAMOffsetDifference, newASM: [
+//	.cmplwi(.r28, 1),
+//	.bne_f(0, 8),
+//	.b(trickExpireSkip),
+//	.lis(.r3, 0x8041), // overwritten code
+//	.b(trickExpireBranch + 4)
+//])
+
+//// moves thaw from frozen
+//let thawBranch = 0x226d6c
+//let thawStart = 0xB9AED8
+//let thawTrue = thawStart + 0x38
+//let thawFalse = thawStart + 0x3c
+//XGAssembly.replaceASM(startOffset: thawBranch - kDOLtoRAMOffsetDifference, newASM: [.b(thawStart), .nop, .nop])
+//XGAssembly.replaceRELASM(startOffset: thawStart - kRELtoRAMOffsetDifference, newASM: [
+//	.cmpwi(.r30, move("flame wheel").index),
+//	.beq(thawTrue),
+//	.cmpwi(.r30, move("flare blitz").index),
+//	.beq(thawTrue),
+//	.cmpwi(.r30, move("scald").index),
+//	.beq(thawTrue),
+//	.cmpwi(.r30, move("sacred fire").index),
+//	.beq(thawTrue),
+//	.cmpwi(.r30, move("shadow blaze").index),
+//	.beq(thawTrue),
+//	.cmpwi(.r30, move("shadow tribute").index),
+//	.beq(thawTrue),
+//	.cmpwi(.r26, 125), // move effect burn chance and thaw from frozen
+//	.bne(thawFalse),
+//	// thaw true 0x38
+//	.b(0x226da4),
+//	// thaw false 0x3c
+//	.b(0x226d78)
+//])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
