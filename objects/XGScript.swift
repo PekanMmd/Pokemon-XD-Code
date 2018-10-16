@@ -16,11 +16,13 @@ let kScriptVECTSize = 0xc
 let kScriptGIRISize = 0x8
 let kScriptARRYPointerSize = 0x4
 
+let kScriptUnknownIDOffset = 0x28
+
 let kScriptSectionSizeOffset = 0x4
 let kScriptSectionEntriesOffset = 0x10
 
 
-typealias FTBL = (codeOffset: Int, end: Int,name: String, index: Int)
+typealias FTBL = (codeOffset: Int, end: Int, name: String, index: Int)
 typealias GIRI = (groupID: Int, resourceID: Int)
 typealias VECT = (x: Float, y: Float, z: Float)
 
@@ -51,6 +53,8 @@ class XGScript: NSObject {
 	
 	var globalMacroTypes = [XDSVariable : XDSMacroTypes]()
 	
+	var scriptID : UInt32 = 0x0
+	
 	@objc var codeLength : Int {
 		var count = 0
 		
@@ -75,6 +79,8 @@ class XGScript: NSObject {
 		if relFile.exists {
 			mapRel = XGMapRel(file: relFile, checkScript: false)
 		}
+		
+		self.scriptID = data.get4BytesAtOffset(kScriptUnknownIDOffset)
 		
 		self.FTBLStart = kScriptSizeOfTCOD
 		self.HEADStart = FTBLStart + Int(data.get4BytesAtOffset(FTBLStart + kScriptSectionSizeOffset))
@@ -692,7 +698,7 @@ class XGScript: NSObject {
 					if stack.peek().isReturn {
 						stack.push(.nop)
 					} else {
-						stack.push(.unaryOperator(instruction.subOpCode, stack.pop().forcedBracketed))
+						stack.push(.unaryOperator(instruction.subOpCode, stack.pop()))
 					}
 				} else if instruction.subOpCode >= 16 && instruction.subOpCode <= 17 {
 					if stack.peek().isReturn {
@@ -772,6 +778,8 @@ class XGScript: NSObject {
             case .loadImmediate:
                 stack.push(.loadImmediate(instruction.constant))
 				
+			case .loadNonCopyableVariable:
+				stack.push(.loadPointer(instruction.XDSVariable))
 				
             case .loadVariable:
 				if instruction.XDSVariable != kXDSLastResultVariable { // TODO: evaluate success
@@ -987,10 +995,7 @@ class XGScript: NSObject {
 				
             case .release:
                 continue // automatically included in return
-				
-				
-			case .loadNonCopyableVariable:
-				stack.push(.loadPointer(instruction.XDSVariable))
+			
 				
 			}
 			
@@ -1027,11 +1032,12 @@ class XGScript: NSObject {
 	}
 	
 	func getGlobalVars() -> (text: String, macros: [XDSExpr]) {
-		var str = ""
+		var str = "define ++ScriptIdentifier \(self.scriptID.hexString())\n"
 		var mac = [XDSExpr]()
 		
-		if giri.count > 1 {
-			for i in 1 ..< giri.count {
+		
+		if giri.count > 0 {
+			for i in 0 ..< giri.count {
 				let variable = XGScriptInstruction(bytes: 0x03030080 + UInt32(i), next: 0).XDSVariable
 				let gid = giri[i].groupID
 				let rid = giri[i].resourceID
@@ -1057,6 +1063,12 @@ class XGScript: NSObject {
 							str += "model: " + macroString + " "
 							mac.append(.macro(macroString, modelID.string))
 						}
+						
+						if !character.isVisible {
+							str += "visible: #FALSE "
+						}
+						
+						str += "flags: " + character.flags.hexString() + " "
 						
 						str += "x: " + character.xCoordinate.string + " "
 						str += "y: " + character.yCoordinate.string + " "
@@ -1086,37 +1098,13 @@ class XGScript: NSObject {
 		}
 		str += "\n"
 		
-		for i in 0 ..< gvar.count {
-			let variable = "gvar_" + String(format: "%02d", i)
-			var value = gvar[i].rawValueString
-			str += variable + " = "
-			if let type = globalMacroTypes[variable] {
-				let macroString = XDSExpr.stringFromMacroImmediate(c: gvar[i], t: type)
-				str += macroString
-				if type != .msg {
-					mac.append(.macro(macroString, value))
-				}
-			} else {
-				var strgCount = 0
-				for i in 0 ..< strg.count {
-					strgCount += strg[i].count + 1
-				}
-				for i in 0 ..< strgCount {
-					value = value.replacingOccurrences(of: "String(" + i.string + ")", with: "\"" + getStringAtOffset(i + STRGStart  + kScriptSectionHeaderSize) + "\"")
-				}
-				str += value
-			}
-			str += "\n"
-		}
-		str += "\n"
-		
 		for i in 0 ..< arry.count {
 			let array = arry[i]
 			
 			let variable = "array_" + String(format: "%02d", i)
 			let type = globalMacroTypes[variable]
 			
-			str += variable + " = ["
+			str += "global " + variable + " = ["
 			for val in array {
 				let value = val.rawValueString
 				
@@ -1140,9 +1128,34 @@ class XGScript: NSObject {
 			let x = String(format: "%.2f", vector.x)
 			let y = String(format: "%.2f", vector.y)
 			let z = String(format: "%.2f", vector.z)
-			str += variable + " = < \(x) \(y) \(z) >\n"
+			str += "global " + variable + " = <\(x) \(y) \(z)>\n"
 			
 		}
+		str += "\n"
+		
+		for i in 0 ..< gvar.count {
+			let variable = "gvar_" + String(format: "%02d", i)
+			var value = gvar[i].rawValueString
+			str += "global " + variable + " = "
+			if let type = globalMacroTypes[variable] {
+				let macroString = XDSExpr.stringFromMacroImmediate(c: gvar[i], t: type)
+				str += macroString
+				if type != .msg {
+					mac.append(.macro(macroString, value))
+				}
+			} else {
+				var strgCount = 0
+				for i in 0 ..< strg.count {
+					strgCount += strg[i].count + 1
+				}
+				for i in 0 ..< strgCount {
+					value = value.replacingOccurrences(of: "String(" + i.string + ")", with: "\"" + getStringAtOffset(i + STRGStart  + kScriptSectionHeaderSize) + "\"")
+				}
+				str += value
+			}
+			str += "\n"
+		}
+		str += "\n"
 		
 		return (str, mac)
 	}
@@ -1365,9 +1378,17 @@ class XGScript: NSObject {
 			
 			// override character object variable
 			for (macname, varname) in characterMacros {
-				text = text.replacingOccurrences(of: varname + " ", with: macname + " ")
-				text = text.replacingOccurrences(of: varname + ".", with: macname + ".")
-				text = text.replacingOccurrences(of: varname + ")", with: macname + ")")
+				for add in [" ", ".", ")", ">", "]", "\"", "\n"] {
+					text = text.replacingOccurrences(of: varname + add, with: macname + add)
+				}
+			}
+			
+			for f in ftbl {
+				let locname = XDSExpr.locationWithIndex(f.codeOffset)
+				let funname = XDSExpr.locationWithName(f.name)
+				for add in [" ", ".", ")", ">", "]", "\"", "\n"] {
+					text = text.replacingOccurrences(of: locname + add, with: funname + add)
+				}
 			}
 			
 			script += indent + text

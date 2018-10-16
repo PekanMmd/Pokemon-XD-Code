@@ -7,10 +7,11 @@
 
 import Foundation
 
-
+let kNumberMapPointers = game == .XD ? 11 : 8
 enum MapRelIndexes : Int {
 	case FirstCharacter = 0
 	case NumberOfCharacters = 1
+	
 	case FirstInteractionLocation = 6
 	case NumberOfInteractionLocations = 7
 }

@@ -119,6 +119,7 @@ enum XGCharacterMovements : CustomStringConvertible {
 	
 	static var movementsList : [Int : String] {
 		return [
+			0x00 : "none",
 			0x0A : "Sit",
 			0x10 : "Stand Still",
 			0x12 : "Jog Down, Walk Up",

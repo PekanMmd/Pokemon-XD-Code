@@ -41,6 +41,7 @@ indirect enum XDSExpr {
 	case loadImmediate(XDSConstant)
 	case macroImmediate(XDSConstant, XDSMacroTypes) // a constant value that has been replaced by a macro
 	case loadVariable(XDSVariable)
+	case loadPointer(XDSVariable)
 	case setVariable(XDSVariable, XDSExpr)
 	case setVector(XDSVariable, XDSVectorDimension, XDSExpr)
 	case call(XDSLocation, [XDSExpr])
@@ -52,17 +53,15 @@ indirect enum XDSExpr {
 	case jumpTrue(XDSExpr, XDSLocation)
 	case jumpFalse(XDSExpr, XDSLocation)
 	case jump(XDSLocation)
-	case loadPointer(XDSVariable)
 	case reserve(Int)
 	case location(XDSLocation)
 	case locationIndex(Int)
-	case function(XDSVariable, [XDSVariable])
+	case function(XDSLocation, [XDSVariable])
 	case comment(String)
 	case macro(XDSMacro, String)
 	case msgMacro(XGString)
 	case exit
 	case setLine(Int)
-	//TODO: - add assign
 	
 	var isLoadImmediate : Bool {
 		return self.xdsID == XDSExpr.loadImmediate(XDSConstant.null).xdsID
@@ -201,19 +200,10 @@ indirect enum XDSExpr {
 			fallthrough
 		case .XDSReturn:
 			return self
-		case .callVoid(_, let es):
-			return es.count > 0 ? .bracket(self) : self
-		case .call(_,let es):
-			return es.count > 0 ? .bracket(self) : self
-		case .callStandard(let c, let f, let es):
-			if c == 7 && f == 16 {
-				return self
-			}
-			let defaultParams = c == 0 ? 0 : 1
-			return es.count > defaultParams ? .bracket(self) : self
-		case .callStandardVoid(let c, _,let es):
-			let defaultParams = c == 0 ? 0 : 1
-			return es.count > defaultParams ? .bracket(self) : self
+		case .callStandard:
+			return self
+		case .callStandardVoid:
+			return self
 		default:
 			return .bracket(self)
 		}
@@ -485,6 +475,20 @@ indirect enum XDSExpr {
 				printg("error unknown pokespot");return "error unknown pokespot"
 			}
 			return XDSExpr.macroWithName("POKESPOT_" + spot.string.simplified.uppercased())
+		case .partyMember:
+			switch c.asInt {
+			case 0:
+				return "PARTY_MEMBER_NONE"
+			case 1:
+				return "PARTY_MEMBER_JOVI"
+			case 2:
+				return "PARTY_MEMBER_KANDEE"
+			case 3:
+				return "PARTY_MEMBER_KRANE"
+			default:
+				printg("error unknown party member");return "error unknown party member"
+			}
+			
 		}
 	}
 	
@@ -518,7 +522,7 @@ indirect enum XDSExpr {
 		case .bracket(let e):
 			return "(" + e.text + ")"
 		case .unaryOperator(let o,let e):
-			return XGScriptClassesInfo.operators.operatorWithID(o).name + e.text
+			return XGScriptClassesInfo.operators.operatorWithID(o).name + "(" + e.text + ")"
 		case .binaryOperator(let o, let e1, let e2):
 			return e1.text + " \(XGScriptClassesInfo.operators.operatorWithID(o).name) " + e2.text
 			
@@ -565,12 +569,19 @@ indirect enum XDSExpr {
 				let xdsclass = XGScriptClassesInfo.classes(c)
 				let xdsfunction = xdsclass.functionWithID(f)
 				var s = c > 0 ? es[0].text + "." : ""
-				s += xdsfunction.name
+				// local variables and function parameters need additional class info
+				if c > 0 {
+					if es[0].text.contains("arg") || (es[0].text.contains("var") && !es[0].text.contains("gvar")) {
+						s += xdsclass.name.capitalized + "."
+					}
+				}
+				s += xdsfunction.name + "("
 				let firstIndex = c > 0 ? 1 : 0
 				for i in firstIndex ..< es.count {
 					let e = es[i]
-					s += " " + e.text
+					s += (i == firstIndex ? "" : " ") + e.text
 				}
+				s += ")"
 				return s
 			}
 			
@@ -609,7 +620,7 @@ indirect enum XDSExpr {
 			if c == 35 { // Character
 				if f == 73 { // talk
 					let type = params[1].constants[0].value
-					if type == 9 {
+					if type == 9 || type == 6 {
 						if (params[3].isImmediate) {
 							let battleId = params[3].constants[0].value.int
 							let battle = XGBattle(index: battleId)
@@ -695,6 +706,11 @@ indirect enum XDSExpr {
 		default:
 			return []
 		}
+	}
+	
+	func instructions(gvar: [String], arry: [String], vect: [String], strg: [String], giri: [String]) -> (instructions: [XGScriptInstruction]?, error: String?) {
+		//TODO: - complete implementation
+		return (nil,"incomplete implementation")
 	}
 	
 }

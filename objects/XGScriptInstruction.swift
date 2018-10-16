@@ -62,16 +62,30 @@ class XGScriptInstruction: NSObject {
 		case 0:
 			return "gvar_" + String(format: "%02d", param)
 		case 1:
-			return param < 0 ? "var_\(-param)" : "arg_\(param - 1)"
+			var pointerAdd = ""
+			switch self.opCode {
+			case.loadNonCopyableVariable:
+				pointerAdd = "*"
+			default:
+				pointerAdd = ""
+			}
+			return (param < 0 ? "var_\(-param)" : "arg_\(param - 1)") + pointerAdd
 		case 2:
-			return kXDSLastResultVariable
+			var pointerAdd = ""
+			switch self.opCode {
+			case.loadNonCopyableVariable:
+				pointerAdd = "*"
+			default:
+				pointerAdd = ""
+			}
+			return kXDSLastResultVariable + pointerAdd
 		default:
 			if param < 0x80 && param > 0 {
-				return XGScriptClassesInfo.classes(param).name.lowercased() + "_object"
+				return XGScriptClassesInfo.classes(param).name.capitalized
 			} else if param == 0x80 {
-				return "player_character_object"
+				return "player_character"
 			} else if param <= 0x120 {
-				return "character_object" + String(format: "%02d", param - 0x80)
+				return "character_" + String(format: "%02d", param - 0x80)
 			} else if param < 0x300 && param >= 0x200 {
 				return "array_" + String(format: "%02d", param - 0x200)
 			} else {

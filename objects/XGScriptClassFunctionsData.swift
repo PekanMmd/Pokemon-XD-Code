@@ -72,6 +72,7 @@ let ScriptOperators : [(String,Int,Int)] = [
 	//#------------------------------------------------------------------
 ]
 
+// function name, function id, number parameters, parameter types, return types
 let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTypes?)]] = [
 //MARK: - Standard
 	0 : [
@@ -181,8 +182,8 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Methods (1)", start = 16, nb = 5),
 		
-		("get", 16, 2, nil, nil),
-		("set", 17, 3, nil, nil),
+		("get", 16, 2, nil, nil), // array get
+		("set", 17, 3, nil, nil), // array set
 		("size", 18, 1, nil, nil),
 		("resize", 19, 2, nil, nil), //#REMOVED
 		("extend", 20, 2, nil, nil), //#REMOVED
@@ -222,6 +223,8 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		("clearCharacterFlags", 41, 2, nil, nil), //# (int flags ?)
 		
 		("faceCharacter", 49, 3, nil, nil), // # (Character target, float unknown)
+		
+		("runToPosition", 55, 4, nil, nil), // (float x, float y, float z)
 		
 		("faceAngleInDegrees", 62, 1, nil, nil), // # (int direction) (0 = straight down)
 		
@@ -400,12 +403,13 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		("getPartyPkm", 44, 2, nil, nil), //# (int index)
 		("checkPkmOwnership", 45, 2, nil, nil), //# (int index)
 		
-		("getFollowingCharacter", 47, 0, nil, nil), // # sets last result to character index of character following the player
+		("getFollowingCharacter", 47, 0, nil, .partyMember), // # sets last result to character index of character following the player
 		
 		("countCaughtShadowPokemon", 49, 0, nil, nil),
 		
 		("isPCFull", 52, 1, nil, .bool),
 		("countLegendaryPartyPkm", 53, 1, nil, nil),
+		("setPartyMember", 54, 2, [.partyMember, nil], nil), // int party member character index (0 for none), int unknown. also used to unset.
 		
 		("countPurfiedPkm", 59, 1, nil, nil),
 		("awardMtBattleRibbons", 60, 1, nil, nil),

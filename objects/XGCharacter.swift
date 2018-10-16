@@ -8,6 +8,7 @@
 
 import Cocoa
 
+let kCharacterFlagsOffset = 0x0
 let kMovementOffset = 0x1
 let kCharacterAngleOffset = 0x4
 let kModelOffset = 0x6
@@ -41,6 +42,9 @@ class XGCharacter : NSObject {
 			return "\(self.characterID) - name: \(self.name) model: \(self.model.name)\n" + "coordinates: <\(self.xCoordinate),\(self.yCoordinate),\(self.zCoordinate)> angle: \(self.angle)\n" + "script: \(self.scriptName) (\(self.scriptIndex))\n"
 		}
 	}
+	
+	@objc var flags = 0
+	var isVisible = false
 	
 	@objc var xCoordinate : Float = 0
 	@objc var yCoordinate : Float = 0
@@ -81,6 +85,9 @@ class XGCharacter : NSObject {
 		self.yCoordinate = data.get4BytesAtOffset(startOffset + kYOffset).hexToSignedFloat()
 		self.zCoordinate = data.get4BytesAtOffset(startOffset + kZOffset).hexToSignedFloat()
 		self.angle = data.get2BytesAtOffset(startOffset + kCharacterAngleOffset)
+		
+		self.flags = data.getByteAtOffset(startOffset + kCharacterFlagsOffset)
+		self.isVisible = self.flags >> 7 == 1
 	}
 	
 	@objc func save() {
@@ -98,6 +105,9 @@ class XGCharacter : NSObject {
 		data.replace4BytesAtOffset(startOffset + kYOffset, withBytes: self.yCoordinate.bitPattern)
 		data.replace4BytesAtOffset(startOffset + kZOffset, withBytes: self.zCoordinate.bitPattern)
 		data.replace2BytesAtOffset(startOffset + kCharacterAngleOffset, withBytes: self.angle)
+		
+		let flagsUpdated = (self.flags & 0x7F) | (self.isVisible ? 0x80 : 0x00)
+		data.replaceByteAtOffset(startOffset + kCharacterFlagsOffset, withByte: flagsUpdated)
 		
 		data.save()
 	}

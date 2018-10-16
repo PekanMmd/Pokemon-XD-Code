@@ -233,15 +233,51 @@ extension Float {
 	}
 	
 	func floatToHex() -> UInt32 {
-		var toInt : Int32 = 0
-		var float : Float32 = self
-		memcpy(&toInt, &float, MemoryLayout.size(ofValue: toInt))
-		return UInt32(bitPattern: toInt)
+		return self.bitPattern
 	}
 	
 }
 
 extension String {
+	
+	var functionName : String? {
+		if !self.contains("(") || self.contains("(") {
+			return nil
+		}
+		var string = ""
+		let ss = self.stack
+		while ss.peek() != "(" {
+			string += ss.pop()
+		}
+		return string
+	}
+	
+	var parameterString : String? {
+		if !self.contains("(") || self.contains("(") {
+			return nil
+		}
+		var string = ""
+		let ss = self.replacingOccurrences(of: self.functionName! + "(", with: "").stack
+		while ss.peek() != ")" {
+			string += ss.pop()
+		}
+		return string
+	}
+	
+	func isValidXDSVariable() -> Bool {
+		if self.length == 0 { return false }
+		if self == self.capitalized { return false}
+		if "0123456789".contains(self.first!) { return false }
+		let s = self.stack
+		while !s.isEmpty {
+			let c = s.pop()
+			if !"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_".contains(c) {
+				return false
+			}
+		}
+		
+		return true
+	}
 	
 	func save(toFile file: XGFiles) {
 		XGUtility.saveString(self, toFile: file)
@@ -249,7 +285,33 @@ extension String {
 	
 	func hexStringToInt() -> Int {
 		return Int(strtoul(self, nil, 16)) // converts hex string to uint and then cast as Int
+	}
+	
+	var isHexInteger : Bool {
 		
+		if self.length < 3 {
+			return false
+		}
+		
+		if self.substring(from: 0, to: 2) != "0x" {
+			return false
+		}
+		let remaining = self.substring(from: 2, to: self.length).stack
+		while !remaining.isEmpty {
+			let next = remaining.pop()
+			if !"0123456789abcdefABCDEF".contains(next) {
+				return false
+			}
+		}
+		return true
+	}
+	
+	var integerValue : Int? {
+		if self.isHexInteger {
+			return self.hexStringToInt()
+		} else {
+			return Int(self)
+		}
 	}
 	
 	var simplified : String {
@@ -282,6 +344,7 @@ extension String {
 	}
 	
 	func substring(from: Int, to: Int) -> String {
+		// includes from, excludes to
 		
 		if to <= from {
 			return ""

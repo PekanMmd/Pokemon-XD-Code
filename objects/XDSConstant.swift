@@ -26,7 +26,7 @@ enum XDSConstantTypes {
 	var string : String {
 		get {
 			switch self {
-				case .none_t			: return "None"
+				case .none_t			: return "Type_null"
 				case .integer			: return "Int"
 				case .float				: return "Float"
 				case .string			: return "String"
@@ -36,8 +36,24 @@ enum XDSConstantTypes {
 				case .character			: return "Character"
 				case .pokemon			: return "Pokemon"
 				case .codeptr_t			: return "Pointer"
-				case .unknown(let val)	: return "UnknownType\(val)"
+				case .unknown(let val)	: return "Type_\(val)"
 			}
+		}
+	}
+	
+	var index : Int {
+		switch self {
+		case .none_t			: return 0
+		case .integer			: return 1
+		case .float				: return 2
+		case .string			: return 3
+		case .vector			: return 4
+		case .array				: return 7
+		case .msg				: return 8
+		case .character			: return 35
+		case .pokemon			: return 37
+		case .codeptr_t			: return 53
+		case .unknown(let val)	: return val
 		}
 	}
 	
@@ -56,6 +72,18 @@ enum XDSConstantTypes {
 			default : return .unknown(id)
 		}
 	}
+	
+	static func typeWithName(_ name: String) -> XDSConstantTypes? {
+		
+		// not sure of actual number of types but should be fewer than 100
+		for i in 0 ..< 100 {
+			let type = XDSConstantTypes.typeWithIndex(i)
+			if type.string == name {
+				return type
+			}
+		}
+		return nil
+	}
 
 }
 
@@ -70,9 +98,7 @@ class XDSConstant : NSObject {
 		
 		switch self.type {
 		case .float:
-			val = String(format: "%.2f",self.asFloat)
-		case .pokemon:
-			val = "\(XGPokemon.pokemon(self.asInt).name.string)"
+			val = String(format: "%.2f", self.asFloat)
 		default:
 			val = "\(self.asInt)"
 		}
@@ -91,7 +117,7 @@ class XDSConstant : NSObject {
 	@objc var rawValueString : String {
 		switch self.type {
 		case .float:
-			return String(format: "%.2f", self.asFloat)
+			return String(format: "%.3f", self.asFloat)
 		case .pokemon:
 			return "Pokemon(\(self.asInt))"
 		case .string:
@@ -111,7 +137,7 @@ class XDSConstant : NSObject {
 		case .codeptr_t:
 			return XDSExpr.locationIndex(self.asInt).text
 		case .unknown(let i):
-			return XGScriptClassesInfo.classes(i).name + "(\(self.asInt))"
+			return XGScriptClassesInfo.classes(i).name.capitalized + "(\(self.asInt))"
 		}
 	}
 	

@@ -6,9 +6,11 @@
 //
 
 
-for file in XGFolders.Documents.files where file.fileName.contains("pkx") {
-	file.fsysData.extractFilesToFolder(folder: .Documents)
-}
+
+
+//for file in XGFolders.Documents.files where file.fileName.contains("pkx") {
+//	file.fsysData.extractFilesToFolder(folder: .Documents)
+//}
 
 
 

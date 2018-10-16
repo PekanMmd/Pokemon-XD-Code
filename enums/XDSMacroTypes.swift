@@ -27,6 +27,7 @@ enum XDSMacroTypes : Int {
 	case shadowID
 	case treasureID
 	case battlefield
+	case partyMember
 }
 
 enum XDSTalkTypes : Int {

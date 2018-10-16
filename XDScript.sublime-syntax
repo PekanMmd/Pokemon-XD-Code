@@ -7,8 +7,10 @@ file_extensions:
 scope: xdscript
 
 variables:
-ident: '[A-Za-z_]([A-Za-z_0-9]*)'
-number: '-?(\d+(\.\d+)?|\.\d+)'
+ident: '[a-z_]([A-Za-z_0-9]*)'
+type: '[A-Z]([A-Za-z_0-9]*)'
+number: '-?((\d+(\.\d+)|\.\d+)|(0x([0-9A-Fa-f]+))|(\d+))'
+float: '-?(\d+(\.\d+)|\.\d+)'
 
 contexts:
 
@@ -21,9 +23,9 @@ main:
 captures:
 1: entity.assignment.xds
 3: keyword.operator.assignment.xds
-- match: \b(define|call|assign|return|function|goto|if|ifFalse|Null)\b
+- match: \b(define|call|assign|return|function|goto|if|ifFalse|Null|global|groupID|resourceID|LastResult)\b
 scope: keyword.xds
-- match: '(<) ({{number}}) ({{number}}) ({{number}}) (>)'
+- match: '(<)({{float}}) ({{float}}) ({{float}})(>)'
 captures:
 1: constant.vector.xds
 2: constant.numeric.xds
@@ -36,25 +38,17 @@ scope: constant.numeric.xds
 push: string
 - match: '\$:'
 push: string_macro
-- match: '({{ident}}_object)({{number}}?)\.'
-captures:
-1: constant.object.xds
-3: constant.object.xds
-- match: '({{ident}}_object)({{number}}?)'
+- match: '\b({{type}})\.'
 scope: constant.object.xds
-- match: '{{ident}}\.'
+- match: '\b({{ident}}\.)({{type}}\.)'
 captures:
 0: entity.callstd.xds
-- match: '(Pokemon\()({{number}})(\))'
+3: constant.object.xds
+- match: '\b{{ident}}\.'
 captures:
-1: keyword.type.xds
-2: constant.numeric.xds
-5: keyword.type.xds
-- match: '(Class{{number}}\()({{number}})(\))'
-captures:
-1: keyword.type.xds
-5: constant.numeric.xds
-7: keyword.type.xds
+0: entity.callstd.xds
+- match: '\b({{type}})\(({{number}})\)'
+scope: constant.numeric.xds
 
 
 string_macro:
@@ -86,13 +80,15 @@ string_escape_params:
 pop: true
 
 macros:
-- match: '(#{{ident}})\.'
+- match: '(#([A-Za-z_0-9]+))\.'
 captures:
 1: constant.macro.callstd.xds
 3: constant.macro.callstd.xds
-- match: '#\b{{ident}}\b'
+- match: '#\b([A-Za-z_0-9]+)\b'
 scope: constant.macro.xds
-- match: '@\b{{ident}}\b'
+- match: '\+\+\b({{type}})\b'
+scope: constant.object.xds
+- match: '@\b({{ident}})\b'
 scope: constant.location.xds
 
 comments:

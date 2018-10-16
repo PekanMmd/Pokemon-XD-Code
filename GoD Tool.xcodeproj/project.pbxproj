@@ -1033,7 +1033,6 @@
 		B2560A91214C7E7C00137C37 /* XGStarterPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF61F49A1FE0075C6D2 /* XGStarterPokemon.swift */; };
 		B2560A92214C7E7D00137C37 /* XGStarterPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF61F49A1FE0075C6D2 /* XGStarterPokemon.swift */; };
 		B2560A95214CA1FF00137C37 /* GoDRandomiserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A93214CA1FF00137C37 /* GoDRandomiserViewController.swift */; };
-		B2560A97214CA1FF00137C37 /* GoDRandomiserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A93214CA1FF00137C37 /* GoDRandomiserViewController.swift */; };
 		B2560A99214CA25200137C37 /* XGRandomiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A98214CA25200137C37 /* XGRandomiser.swift */; };
 		B2560A9A214CA25200137C37 /* XGRandomiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A98214CA25200137C37 /* XGRandomiser.swift */; };
 		B2562F4821349567004180F1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2562F4721349567004180F1 /* main.swift */; };
@@ -10124,7 +10123,6 @@
 				B2562F6D2134979A004180F1 /* XGMoveTargets.swift in Sources */,
 				B2562F5F2134976C004180F1 /* XGEffectivenessValues.swift in Sources */,
 				B2562F74213497BB004180F1 /* CMTMs.swift in Sources */,
-				B2560A97214CA1FF00137C37 /* GoDRandomiserViewController.swift in Sources */,
 				B2562F992134992C004180F1 /* XGDictionaryRepresentableExtension.swift in Sources */,
 				B2562F6221349781004180F1 /* CMFiles.swift in Sources */,
 				B2562F822134983C004180F1 /* XGEvolution.swift in Sources */,
