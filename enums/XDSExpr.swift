@@ -742,7 +742,7 @@ indirect enum XDSExpr {
 			} else if giri.contains(variable) {
 				return (3, giri.index(of: variable)! + 0x80)
 			} else if locals.contains(variable) {
-				return (1, (0x10000 - locals.index(of: variable)!) & 0xFFFF)
+				return (1, (0x10000 - (locals.index(of: variable)! + 1)) & 0xFFFF)
 			} else if args.contains(variable) {
 				return (1, args.index(of: variable)! + 1)
 			} else if let classInfo = XGScriptClassesInfo.getClassNamed(variable) {
