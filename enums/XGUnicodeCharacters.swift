@@ -28,6 +28,15 @@ enum XGUnicodeCharacters {
 		}
 	}
 	
+	var unicode : UInt8 {
+		get {
+			switch self {
+			case .unicode(let val): return UInt8(val % 0x100)
+			default: 				return 0xff
+			}
+		}
+	}
+	
 	var length : Int {
 		get {
 			return self.byteStream.count

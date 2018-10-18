@@ -730,69 +730,245 @@ indirect enum XDSExpr {
 		}
 	}
 	
-	func instructions(gvar: [String], arry: [String], strg: [String], giri: [String], locals: [String], args: [String]) -> (instructions: [XGScriptInstruction]?, error: String?) {
-		//TODO: - complete implementation
+	func instructions(gvar: [String], arry: [String], giri: [String], locals: [String], args: [String], locations: [String : Int]) -> (instructions: [XGScriptInstruction]?, error: String?) {
 		
-//		switch self {
-//			
-//		case .nop:
-//			return ([XGScriptInstruction(bytes: 0, next: 0)], nil)
-//		case .bracket(_):
-//			<#code#>
-//		case .unaryOperator(_, _):
-//			<#code#>
-//		case .binaryOperator(_, _, _):
-//			<#code#>
-//		case .loadImmediate(_):
-//			<#code#>
-//		case .macroImmediate(_, _):
-//			<#code#>
-//		case .loadVariable(_):
-//			<#code#>
-//		case .loadPointer(_):
-//			<#code#>
-//		case .setVariable(_, _):
-//			<#code#>
-//		case .setVector(_, _, _):
-//			<#code#>
-//		case .call(_, _):
-//			<#code#>
-//		case .callVoid(_, _):
-//			<#code#>
-//		case .XDSReturn:
-//			<#code#>
-//		case .XDSReturnResult(_):
-//			<#code#>
-//		case .callStandard(_, _, _):
-//			<#code#>
-//		case .callStandardVoid(_, _, _):
-//			<#code#>
-//		case .jumpTrue(_, _):
-//			<#code#>
-//		case .jumpFalse(_, _):
-//			<#code#>
-//		case .jump(_):
-//			<#code#>
-//		case .reserve(_):
-//			<#code#>
-//		case .location(_):
-//			<#code#>
-//		case .locationIndex(_):
-//			<#code#>
-//		case .function(_, _):
-//			<#code#>
-//		case .comment(_):
-//			<#code#>
-//		case .macro(_, _):
-//			<#code#>
-//		case .msgMacro(_):
-//			<#code#>
-//		case .exit:
-//			<#code#>
-//		case .setLine(_):
-//			<#code#>
-//		}
-		return (nil,"incomplete implementation")
+		func getLevelIndexForVariable(variable: String) -> (level: Int, index: Int)? {
+			if variable == kXDSLastResultVariable {
+				return (2,0)
+			} else if gvar.contains(variable) {
+				return (0, gvar.index(of: variable)!)
+			} else if arry.contains(variable) {
+				return (3, arry.index(of: variable)! + 0x200)
+			} else if giri.contains(variable) {
+				return (3, giri.index(of: variable)! + 0x80)
+			} else if locals.contains(variable) {
+				return (1, (0x10000 - locals.index(of: variable)!) & 0xFFFF)
+			} else if args.contains(variable) {
+				return (1, args.index(of: variable)! + 1)
+			} else if let classInfo = XGScriptClassesInfo.getClassNamed(variable) {
+				return (3, classInfo.index)
+			} else {
+				return nil
+			}
+		}
+		
+		switch self {
+			
+		case .nop:
+			return ([XGScriptInstruction.nopInstruction()], nil)
+		case .bracket(let e):
+			return e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+		case .unaryOperator(let id, let es):
+			let (subs, err) = es.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			if err == nil {
+				return (subs! + [XGScriptInstruction.xdsoperator(op: id)], nil)
+			} else {
+				return (nil, err)
+			}
+			
+			
+		case .binaryOperator(let id, let e1, let e2):
+			let (subs1, err1) = e1.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			let (subs2, err2) = e2.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			if subs1 != nil && subs2 != nil {
+				return (subs1! + subs2! + [XGScriptInstruction.xdsoperator(op: id)], nil)
+			} else {
+				if let err = err1 {
+					return (nil, err)
+				}
+				return (nil, err2)
+			}
+			
+			
+		case .loadImmediate(let c):
+			return ([XGScriptInstruction.loadImmediate(c: c)], nil)
+		case .macroImmediate(let c, _):
+			return XDSExpr.loadImmediate(c).instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			
+			
+		case .loadVariable(let variable):
+			if let (level, index) = getLevelIndexForVariable(variable: variable) {
+				return ([XGScriptInstruction.variableInstruction(op: .loadVariable, level: level, index: index)], nil)
+			} else {
+				return (nil, "Invalid variable name '\(variable)'.")
+			}
+			
+			
+		case .loadPointer(let variable):
+			if let (level, index) = getLevelIndexForVariable(variable: variable) {
+				return ([XGScriptInstruction.variableInstruction(op: .loadNonCopyableVariable, level: level, index: index)], nil)
+			} else {
+				return (nil, "Invalid variable name '\(variable)'.")
+			}
+			
+		case .setVariable(let variable, let e):
+			let (subs, error) = e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			if subs == nil {
+				return (nil, error)
+			}
+			
+			if let (level, index) = getLevelIndexForVariable(variable: variable) {
+				return (subs! + [XGScriptInstruction.variableInstruction(op: .setVariable, level: level, index: index)], nil)
+			} else {
+				return (nil, "Invalid variable name '\(variable)'.")
+			}
+			
+			
+		case .setVector(let variable, let dimension, let e):
+			let (subs, error) = e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			if subs == nil {
+				return (nil, error)
+			}
+			
+			if let (level, index) = getLevelIndexForVariable(variable: variable) {
+				// vectors use level and dimension
+				let levDim = level + (dimension.rawValue << 4)
+				return (subs! + [XGScriptInstruction.variableInstruction(op: .setVector, level: levDim, index: index)], nil)
+			} else {
+				return (nil, "Invalid variable name '\(variable)'.")
+			}
+			
+			
+		case .call(let name, let params):
+			var paramInstructions = [XGScriptInstruction]()
+			for param in params {
+				let (subs, error) = param.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+				if subs == nil {
+					return (nil, error)
+				}
+				paramInstructions = subs! + paramInstructions
+			}
+			
+			if locations[name] == nil {
+				return (nil, "Function '\(name)' doesn't exist.")
+			}
+			
+			let currentInstruction = XGScriptInstruction.call(location: locations[name]!)
+			let lastResult = XGScriptInstruction.loadVarLastResult()
+			return (paramInstructions + [currentInstruction, lastResult], nil)
+			
+		case .callVoid(let name, let params):
+			var paramInstructions = [XGScriptInstruction]()
+			for param in params {
+				let (subs, error) = param.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+				if subs == nil {
+					return (nil, error)
+				}
+				paramInstructions = subs! + paramInstructions
+			}
+			
+			if locations[name] == nil {
+				return (nil, "Function '\(name)' doesn't exist.")
+			}
+			
+			let currentInstruction = XGScriptInstruction.call(location: locations[name]!)
+			return (paramInstructions + [currentInstruction], nil)
+			
+		case .XDSReturn:
+			let releaseInstruction = XGScriptInstruction.release(count: locals.count)
+			let returnInstruction = XGScriptInstruction.xdsreturn()
+			return ([releaseInstruction, returnInstruction], nil)
+			
+		case .XDSReturnResult(let e):
+			let (subs, error) = XDSExpr.setVariable(kXDSLastResultVariable, e).instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			if subs == nil {
+				return (nil, error)
+			}
+			
+			let releaseInstruction = XGScriptInstruction.release(count: locals.count)
+			let returnInstruction = XGScriptInstruction.xdsreturn()
+			return (subs! + [releaseInstruction, returnInstruction], nil)
+			
+		case .callStandard(let c, let f, let params):
+			var paramInstructions = [XGScriptInstruction]()
+			for param in params {
+				let (subs, error) = param.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+				if subs == nil {
+					return (nil, error)
+				}
+				paramInstructions = subs! + paramInstructions
+			}
+			
+			let currentInstruction = XGScriptInstruction.functionCall(classID: c, funcID: f)
+			let lastResult = XGScriptInstruction.loadVarLastResult()
+			let pop = XGScriptInstruction.pop(count: params.count)
+			return (paramInstructions + [currentInstruction, pop, lastResult], nil)
+			
+		case .callStandardVoid(let c, let f, let params):
+			var paramInstructions = [XGScriptInstruction]()
+			for param in params {
+				let (subs, error) = param.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+				if subs == nil {
+					return (nil, error)
+				}
+				paramInstructions = subs! + paramInstructions
+			}
+			
+			let currentInstruction = XGScriptInstruction.functionCall(classID: c, funcID: f)
+			let pop = XGScriptInstruction.pop(count: params.count)
+			return (paramInstructions + [currentInstruction, pop], nil)
+			
+		case .jumpTrue(let e, let location):
+			let (subs, err) = e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			if subs != nil {
+				if locations[location] == nil {
+					return (nil, "Location '\(location)' doesn't exist.")
+				}
+				
+				return (subs! + [XGScriptInstruction.jump(op: .jumpIfTrue, location: locations[location]!)], nil)
+			} else {
+				return (nil, err)
+			}
+			
+			
+		case .jumpFalse(let e, let location):
+			let (subs, err) = e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			if subs != nil {
+				if locations[location] == nil {
+					return (nil, "Location '\(location)' doesn't exist.")
+				}
+				
+				return (subs! + [XGScriptInstruction.jump(op: .jumpIfFalse, location: locations[location]!)], nil)
+			} else {
+				return (nil, err)
+			}
+			
+			
+		case .jump(let location):
+			if locations[location] == nil {
+				return (nil, "Location '\(location)' doesn't exist.")
+			}
+			
+			return ([XGScriptInstruction.jump(op: .jump, location: locations[location]!)], nil)
+			
+			
+		case .reserve(let count):
+			return ([XGScriptInstruction.reserve(count: count)], nil)
+			
+			
+		// don't output any code for locations. they're just used for reference by the compiler
+		case .location(_):
+			return ([], nil)
+		case .locationIndex(_):
+			return ([], nil)
+			
+			
+		case .function(let name, _):
+			return ([XGScriptInstruction.reserve(count: locals.count)], nil)
+			
+		// shouldn't be able to access these through the script compiler but for completion sake:
+		case .comment(_):
+			return ([], nil)
+		case .macro(_, _):
+			return ([], nil)
+		case .msgMacro(let string):
+			let constant = XDSConstant(type: 1, rawValue: UInt32(string.id))
+			return ([XGScriptInstruction.loadImmediate(c: constant)],nil)
+		case .exit:
+			return ([XGScriptInstruction(opCode: .exit, subOpCode: 0, parameter: 0)],nil)
+		case .setLine(let index):
+			return ([XGScriptInstruction(opCode: .setLine, subOpCode: 0, parameter: index)],nil)
+		}
 	}
 	
 }

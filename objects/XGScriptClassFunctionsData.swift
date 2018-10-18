@@ -215,7 +215,7 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		
 		("checkIfCrossingLine", 25, 4, nil, .bool), // # (Float x1, Float z1, Float x2, Float z2)?
 		("checkIsInRange", 27, 4, nil, .bool), //# (int x, int y, int z, float angle?)
-		("setPosition", 29, 3, nil, nil), //# (int x, int y, int z)
+		("setPosition", 29, 3, nil, nil), //# (int/float x, int/float y, int/float z) accepts either int or float for any of the values and can mix and match as desired
 		
 		("moveToPosition", 36, 4, nil, nil), //# (int speed, int x, int y, int z)
 		

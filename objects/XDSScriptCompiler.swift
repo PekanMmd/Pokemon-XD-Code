@@ -64,13 +64,13 @@ class XDSScriptCompiler: NSObject {
 		let macro = macroprocessor(text: stripped)
 		
 		// for testing white space and comment stripping
-		//stripped.save(toFile: .nameAndFolder("white space stripped.xds", .Documents))
+//		stripped.save(toFile: .nameAndFolder("white space stripped.xds", .Documents))
 		
 		if macro == nil {
 			return nil
 		}
 		// for testing macroprocessor result
-		//macro!.save(toFile: .nameAndFolder("macros.xds", .Documents))
+//		macro!.save(toFile: .nameAndFolder("macros.xds", .Documents))
 		
 		let lines = getLines(text: macro!)
 		
@@ -101,11 +101,11 @@ class XDSScriptCompiler: NSObject {
 		}
 		
 		// test that expressions are correct
-		var recreated = ""
-		for expr in expressions {
-			recreated += expr.text + "\n"
-		}
-		recreated.save(toFile: .nameAndFolder("recreated.xds", .Documents))
+//		var recreated = ""
+//		for expr in expressions {
+//			recreated += expr.text + "\n"
+//		}
+//		recreated.save(toFile: .nameAndFolder("recreated.xds", .Documents))
 		
 		
 		let stack = createExprStack(expressions)
@@ -113,7 +113,7 @@ class XDSScriptCompiler: NSObject {
 		locations = getLocations(expressions)
 		
 		let ftbl = getFTBL(expressions)
-		if let code = getCODE(stack, gvar: gvars.names, arry: arrys.names, strg: strgs, giri: giris.names) {
+		if let code = getCODE(stack, gvar: gvars.names, arry: arrys.names, giri: giris.names) {
 			
 			var data = XDSCode()
 			data += compileFTBL(ftbl)
@@ -336,6 +336,20 @@ class XDSScriptCompiler: NSObject {
 			}
 			return false
 		}
+		if tokens[1] == kXDSLastResultVariable {
+			error = "'\(kXDSLastResultVariable)' is a special reserved variable name."
+			for i in 0 ..< tokens.count {
+				error += " " + tokens[i]
+			}
+			return false
+		}
+		if ["define", "call", "return", "function", "goto", "if", "ifFalse", "Null", "global"].contains(tokens[1]) {
+			error = "'\(tokens[1])' is a reserved keyword."
+			for i in 0 ..< tokens.count {
+				error += " " + tokens[i]
+			}
+			return false
+		}
 		if parseLiteral(tokens[3]) == nil {
 			error = "Invalid global variable value '\(tokens[3])':"
 			for i in 0 ..< tokens.count {
@@ -363,9 +377,10 @@ class XDSScriptCompiler: NSObject {
 	
 	private class func handleMSGString(id: Int?, text: String) -> Int? {
 		//TODO: msg replacements
+		// pass string without surrounding quotation marks
 		// if id is nil then generate a new string with the next free id
 		// replace occurrences of [Quote] with \"
-		// check that id isn't 0
+		// check that id isn't 0 otherwise simply return 0 without parsing string
 		
 		// return the strings finalised id or nil if failed
 		return id
@@ -424,22 +439,57 @@ class XDSScriptCompiler: NSObject {
 			}
 		}
 		
-		if text.substring(from: 0, to: 1) == "[" {
-			let parts = text.replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").split(separator: " ")
-			var params = [XDSConstant]()
-			for token in parts {
-				let string = String(token)
-				if let (type, val) = parseLiteral(string) {
-					params.append(val[0])
+		if text.length > 2 {
+			if text.first! == "[" && text.last! == "]" {
+				var inner = text
+				inner.removeFirst()
+				inner.removeLast()
+				if let parts = tokenise(line: inner) {
+					
+					var params = [XDSConstant]()
+					for token in parts {
+						if let (type, val) = parseLiteral(token) {
+							if type.index == XDSConstantTypes.array.index {
+								error = "Invalid array element, array cannot contain an array: \(token)"
+								return nil
+							}
+							params.append(val[0])
+						} else {
+							error = "Invalid array element: \(token)"
+							return nil
+						}
+						
+					}
+					return (XDSConstantTypes.array, params)
 				} else {
-					error = "Invalid array element: \(string)"
 					return nil
 				}
-				
 			}
-			return (XDSConstantTypes.array, params)
 		}
 		
+		if text.substring(from: 0, to: 1) == "$" {
+			let id = text.msgID
+			let str = text.msgText
+			
+			if id != nil {
+				if id! < 0 {
+					error = "Invalid message id: \(text)"
+					return nil
+				}
+			}
+			
+			if str != nil {
+				if str == "" {
+					error = "Invalid message id: \(text)"
+					return nil
+				}
+			}
+			
+			let newID = str == nil ? id : handleMSGString(id: id, text: str!)
+			if newID != nil {
+				return (XDSConstantTypes.integer, [XDSConstant(type: XDSConstantTypes.integer.index, rawValue: UInt32(newID!))])
+			}
+		}
 		
 		return (XDSConstantTypes.none_t, [XDSConstant(type: 0, rawValue: 0)])
 	}
@@ -682,8 +732,10 @@ class XDSScriptCompiler: NSObject {
 			if (current == " " && scopeStack.peek() == .normal) || current == "\n" {
 				tokens.append(currentToken)
 				currentToken = ""
-			} else if current == "\"" && scopeStack.peek() == .string {
-				scopeStack.pop()
+			}else if scopeStack.peek() == .string {
+				if current == "\"" {
+					scopeStack.pop()
+				}
 				currentToken += current
 			} else if let bracket = BracketScopes(rawValue: current) {
 				
@@ -1180,258 +1232,7 @@ class XDSScriptCompiler: NSObject {
 			}
 		}
 		
-		// bracketed expression
-		if token.first! == "(" && token.last! == ")" {
-			if let inner = tokenise(line: token.substring(from: 1, to: token.length - 1)) {
-				return evalTokens(tokens: inner, subExpr: true)
-			} else {
-				error = "Invalid bracket contents: \(token)"
-				return nil
-			}
-		}
-		
-		if token.contains("[") && token.contains("]") {
-			// array element access
-			// syntactic sugar but is actually implemented as a function call
-			
-			var index = ""
-			var variable = ""
-			let ss = token.stack
-			while ss.peek() != "[" {
-				variable += ss.pop()
-			}
-			ss.pop()
-			while ss.peek() != "]" {
-				index += ss.pop()
-			}
-			
-			if let subTokens = tokenise(line: index) {
-				if let indexpr = evalTokens(tokens: subTokens, subExpr: true) {
-					return XDSExpr.callStandard(7, 16, [XDSExpr.loadPointer(variable), indexpr])
-				}
-			}
-			
-		}
-		
-		if token.contains("(") && token.contains(")") {
-			// unary operator, special type literal or function call
-			
-			var parameters = ""
-			var functionName = ""
-			var variableName = "" // either variable or class name
-			var localClassName = "" // follows local variable
-			let ss = token.stack
-			while ss.peek() != "(" {
-				functionName += ss.pop()
-			}
-			ss.pop()
-			while ss.peek() != ")" {
-				parameters += ss.pop()
-			}
-			
-			var functionParameters = [XDSExpr]()
-			var functionIndex = 0
-			var classIndex = 0
-			
-			func getParameters() -> [XDSExpr]? {
-				var paramList = [XDSExpr]()
-				if let tokens = tokenise(line: parameters) {
-					for t in tokens {
-						if let expr = evalToken(t) {
-							paramList.append(expr)
-						} else {
-							error += "\nInvalid function parameters: \(token)"
-							return nil
-						}
-					}
-				}
-				return paramList
-			}
-			
-			let functionParts = functionName.split(separator: ".")
-			switch functionParts.count {
-			case 1:
-				// operator or standard classless function
-				functionName = String(functionParts[0]) // remains unchanged
-				
-				// check if unary operator
-				for (name,id,params) in ScriptOperators where params == 1 {
-					if name == functionName {
-						if let tokens = tokenise(line: parameters) {
-							if let expr =  evalTokens(tokens: tokens, subExpr: true) {
-								return .unaryOperator(id, expr)
-							} else {
-								error += "\nInvalid operator parameters: \(token)"
-								return nil
-							}
-						} else {
-							error = "Invalid operator paramters: \(token)"
-							return nil
-						}
-					}
-				}
-				
-				// check if type literal
-				// only types start with capitals
-				if "ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(functionName.substring(from: 0, to: 1)) {
-					if let type = XDSConstantTypes.typeWithName(functionName) {
-						if let val = parameters.integerValue {
-							return .loadImmediate(XDSConstant(type: type.index, rawValue: UInt32(bitPattern: Int32(val))))
-						} else {
-							error = "Invalid raw integer: \(token)"
-							return nil
-						}
-					} else {
-						error = "Invalid type name: \(token)"
-						return nil
-					}
-				}
-				
-				// check if standard function
-				if let info = XGScriptClassesInfo.classes(0).functionWithName(functionName) {
-					classIndex = 0
-					functionIndex = info.index
-					if let params = getParameters() {
-						functionParameters = params
-					} else {
-						return nil
-					}
-					
-				} else {
-					error = "Unrecognised function: \(functionName)"
-					return nil
-				}
-				
-			case 2:
-				// global variable or class function call
-				variableName = String(functionParts[0])
-				functionName = String(functionParts[1])
-				
-				if let params = getParameters() {
-					functionParameters = [XDSExpr.loadPointer(variableName)] + params
-				} else {
-					return nil
-				}
-				
-				if let gvarIndex = gvars.names.index(of: variableName) {
-					classIndex = gvars.values[gvarIndex].type.index
-					
-					if let params = getParameters() {
-						if classIndex <= 4 {
-							functionParameters = [XDSExpr.loadVariable(variableName)] + params
-						} else {
-							functionParameters = [XDSExpr.loadPointer(variableName)] + params
-						}
-					}
-					
-				} else if arrys.names.contains(variableName) {
-					classIndex = 7
-				} else if vects.names.contains(variableName) {
-					classIndex = 4
-					
-					if let params = getParameters() {
-						let immediate = XDSConstant(type: XDSConstantTypes.vector.index, rawValue: UInt32(vects.names.index(of: variableName)!))
-						functionParameters = [XDSExpr.loadImmediate(immediate)] + params
-					}
-				} else if giris.names.contains(variableName) {
-					classIndex = 35
-					
-					if let params = getParameters() {
-						// character is loadvar instead of loadpointer(ldncpyvar) when using a character object directly
-						functionParameters = [XDSExpr.loadVariable(variableName)] + params
-					}
-					
-				} else if let cinfo = XGScriptClassesInfo.getClassNamed(variableName) {
-					classIndex = cinfo.index
-					if classIndex == 35 {
-						error = "Character functions must be applied to a character variable: \(token)"
-						return nil
-					}
-				} else {
-					error = "Invalid class or global variable name: '\(variableName)'"
-					return nil
-				}
-				
-				if let finfo = XGScriptClassesInfo.classes(classIndex).functionWithName(functionName) {
-					functionIndex = finfo.index
-				} else {
-					error = "Unrecognised function: '\(functionName)', for class: '\(XGScriptClassesInfo.classes(classIndex).name)'"
-					return nil
-				}
-				
-				
-			case 3:
-				// local variable class function call
-				variableName   = String(functionParts[0])
-				localClassName = String(functionParts[1])
-				functionName   = String(functionParts[2])
-				
-				if let cinfo = XGScriptClassesInfo.getClassNamed(localClassName) {
-					classIndex = cinfo.index
-				} else {
-					error = "Invalid class name: '\(localClassName)' on token: '\(token)'"
-					return nil
-				}
-				
-				if let finfo = XGScriptClassesInfo.classes(classIndex).functionWithName(functionName) {
-					functionIndex = finfo.index
-				} else {
-					error = "Unrecognised function: '\(functionName)', for class: '\(XGScriptClassesInfo.classes(classIndex).name)'"
-					return nil
-				}
-				
-				if let params = getParameters() {
-					if locals[currentFunction]!.contains(variableName) || args[currentFunction]!.contains(variableName) || variableName == kXDSLastResultVariable {
-						if classIndex <= 4 {
-							functionParameters = [XDSExpr.loadVariable(variableName)] + params
-						} else {
-							functionParameters = [XDSExpr.loadPointer(variableName)] + params
-						}
-					} else {
-						// apparently function calls on unassigned local variables are a thing such as in hero main
-						// previously returned an error here but now will just assume everything that
-						// hits this case is an intended local variable.
-						// will be up to the script writer to be careful here.
-						// if player.processEvents() in hero main is the only exception then
-						// it may be worth simply accounting for it as an edge case.
-						// will see if it shows up anywhere else.
-						
-						var locs = locals[currentFunction]!
-						locs.addUnique(variableName)
-						locals[currentFunction] = locs
-						
-						if classIndex <= 4 {
-							functionParameters = [XDSExpr.loadVariable(variableName)] + params
-						} else {
-							functionParameters = [XDSExpr.loadPointer(variableName)] + params
-						}
-					}
-				} else {
-					return nil
-				}
-				
-			default:
-				error = "Function call with too many parts: \(token)"
-				return nil
-			}
-			
-			return .callStandard(classIndex, functionIndex, functionParameters)
-			
-		}
-		
-		if let val = Int(token) {
-			return .loadImmediate(XDSConstant(type: XDSConstantTypes.integer.index, rawValue: UInt32(bitPattern: Int32(val))))
-		}
-		
-		if token.isHexInteger {
-			return .loadImmediate(XDSConstant(type: XDSConstantTypes.integer.index, rawValue: UInt32(bitPattern: Int32(token.hexStringToInt()))))
-		}
-		
-		if let val = Float(token) {
-			return .loadImmediate(XDSConstant(type: XDSConstantTypes.float.index, rawValue: val.floatToHex()))
-		}
-		
-		// string literal
+		// string or msg literal
 		if token.substring(from: 0, to: 1) == "\"" {
 			let string = token.replacingOccurrences(of: "\"", with: "")
 			strgs.addUnique(string)
@@ -1454,49 +1255,21 @@ class XDSScriptCompiler: NSObject {
 		}
 		
 		if token.substring(from: 0, to: 1) == "$" {
-			var id : Int? = nil
-			var text : String? = ""
-			let ss = token.stack
-			ss.pop() // remove leading $
-			// check if has an id
-			if ss.peek() == ":" {
-				ss.pop() // remove opening ':'
-				var idText = ""
-				while ss.peek() != ":" {
-					idText += ss.pop()
-					if ss.isEmpty {
-						error = "Incomplete message ID: \(token) - missing closing ':'"
-						return nil
-					}
-				}
-				ss.pop() // remove closing ':'
-				if idText.length > 0 {
-					if let val = Int(idText) {
-						id = val
-					} else {
-						error = "Invalid message ID: \(token)"
-						return nil
-					}
-				}
-			}
-			// check for text
-			if !ss.isEmpty {
-				if ss.peek() == "\"" {
-					ss.pop() // remove opening quote
-					while ss.peek() != "\"" {
-						text! += ss.pop()
-						if ss.isEmpty {
-							error = "Invalid message text: \(token) - missing closing '\"'"
-							return nil
-						}
-					}
-					ss.pop() // remove closing quote
-				} else {
-					error = "Invalid message text: missing opening '\"'"
+			var id : Int? = token.msgID
+			var text : String? = token.msgText
+			
+			if id != nil {
+				if id! < 0 {
+					error = "Invalid message id: \(token)"
 					return nil
 				}
-			} else {
-				text = nil
+			}
+			
+			if text != nil {
+				if text == "" {
+					error = "Invalid message id: \(token)"
+					return nil
+				}
 			}
 			
 			if text != nil {
@@ -1510,6 +1283,262 @@ class XDSScriptCompiler: NSObject {
 			// error in handlemsgstring
 			return nil
 			
+		}
+		
+		// bracketed expression
+		if token.first! == "(" && token.last! == ")" {
+			if let inner = tokenise(line: token.substring(from: 1, to: token.length - 1)) {
+				return evalTokens(tokens: inner, subExpr: true)
+			} else {
+				error = "Invalid bracket contents: \(token)"
+				return nil
+			}
+		}
+		
+		if let firstBracket = token.firstBracket {
+			if firstBracket == "[" {
+				if token.contains("[") && token.last! == "]" {
+					// array element access
+					// syntactic sugar but is actually implemented as a function call
+					
+					var index = ""
+					var variable = ""
+					let ss = token.stack
+					while ss.peek() != "[" {
+						variable += ss.pop()
+					}
+					ss.pop()
+					while ss.count > 1 {
+						index += ss.pop()
+					}
+					
+					if let subTokens = tokenise(line: index) {
+						if let indexpr = evalTokens(tokens: subTokens, subExpr: true) {
+							return XDSExpr.callStandard(7, 16, [XDSExpr.loadPointer(variable), indexpr])
+						}
+					}
+					
+				}
+			} else {
+				
+				if token.contains("(") && token.last! == ")" {
+					// unary operator, special type literal or function call
+					
+					var parameters = ""
+					var functionName = ""
+					var variableName = "" // either variable or class name
+					var localClassName = "" // follows local variable
+					let ss = token.stack
+					while ss.peek() != "(" {
+						functionName += ss.pop()
+					}
+					ss.pop()
+					while ss.count > 1 {
+						parameters += ss.pop()
+					}
+					
+					var functionParameters = [XDSExpr]()
+					var functionIndex = 0
+					var classIndex = 0
+					
+					func getParameters() -> [XDSExpr]? {
+						var paramList = [XDSExpr]()
+						if let tokens = tokenise(line: parameters) {
+							for t in tokens {
+								if let expr = evalToken(t) {
+									paramList.append(expr)
+								} else {
+									error += "\nInvalid function parameters: \(token)"
+									return nil
+								}
+							}
+						}
+						return paramList
+					}
+					
+					let functionParts = functionName.split(separator: ".")
+					switch functionParts.count {
+					case 1:
+						// operator or standard classless function
+						functionName = String(functionParts[0]) // remains unchanged
+						
+						// check if unary operator
+						for (name,id,params) in ScriptOperators where params == 1 {
+							if name == functionName {
+								if let tokens = tokenise(line: parameters) {
+									if let expr =  evalTokens(tokens: tokens, subExpr: true) {
+										return .unaryOperator(id, expr)
+									} else {
+										error += "\nInvalid operator parameters: \(token)"
+										return nil
+									}
+								} else {
+									error = "Invalid operator paramters: \(token)"
+									return nil
+								}
+							}
+						}
+						
+						// check if type literal
+						// only types start with capitals
+						if "ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(functionName.substring(from: 0, to: 1)) {
+							if let type = XDSConstantTypes.typeWithName(functionName) {
+								if let val = parameters.integerValue {
+									return .loadImmediate(XDSConstant(type: type.index, rawValue: UInt32(bitPattern: Int32(val))))
+								} else {
+									error = "Invalid raw integer: \(token)"
+									return nil
+								}
+							} else {
+								error = "Invalid type name: \(token)"
+								return nil
+							}
+						}
+						
+						// check if standard function
+						if let info = XGScriptClassesInfo.classes(0).functionWithName(functionName) {
+							classIndex = 0
+							functionIndex = info.index
+							if let params = getParameters() {
+								functionParameters = params
+							} else {
+								return nil
+							}
+							
+						} else {
+							error = "Unrecognised function: \(functionName)"
+							return nil
+						}
+						
+					case 2:
+						// global variable or class function call
+						variableName = String(functionParts[0])
+						functionName = String(functionParts[1])
+						
+						if let params = getParameters() {
+							functionParameters = [XDSExpr.loadPointer(variableName)] + params
+						} else {
+							return nil
+						}
+						
+						if let gvarIndex = gvars.names.index(of: variableName) {
+							classIndex = gvars.values[gvarIndex].type.index
+							
+							if let params = getParameters() {
+								if classIndex <= 4 {
+									functionParameters = [XDSExpr.loadVariable(variableName)] + params
+								} else {
+									functionParameters = [XDSExpr.loadPointer(variableName)] + params
+								}
+							}
+							
+						} else if arrys.names.contains(variableName) {
+							classIndex = 7
+						} else if vects.names.contains(variableName) {
+							classIndex = 4
+							
+							if let params = getParameters() {
+								let immediate = XDSConstant(type: XDSConstantTypes.vector.index, rawValue: UInt32(vects.names.index(of: variableName)!))
+								functionParameters = [XDSExpr.loadImmediate(immediate)] + params
+							}
+						} else if giris.names.contains(variableName) {
+							classIndex = 35
+							
+							if let params = getParameters() {
+								// character is loadvar instead of loadpointer(ldncpyvar) when using a character object directly
+								functionParameters = [XDSExpr.loadVariable(variableName)] + params
+							}
+							
+						} else if let cinfo = XGScriptClassesInfo.getClassNamed(variableName) {
+							classIndex = cinfo.index
+							if classIndex == 35 {
+								error = "Character functions must be applied to a character variable: \(token)"
+								return nil
+							}
+						} else {
+							error = "Invalid class or global variable name: '\(variableName)'"
+							return nil
+						}
+						
+						if let finfo = XGScriptClassesInfo.classes(classIndex).functionWithName(functionName) {
+							functionIndex = finfo.index
+						} else {
+							error = "Unrecognised function: '\(functionName)', for class: '\(XGScriptClassesInfo.classes(classIndex).name)'"
+							return nil
+						}
+						
+						
+					case 3:
+						// local variable class function call
+						variableName   = String(functionParts[0])
+						localClassName = String(functionParts[1])
+						functionName   = String(functionParts[2])
+						
+						if let cinfo = XGScriptClassesInfo.getClassNamed(localClassName) {
+							classIndex = cinfo.index
+						} else {
+							error = "Invalid class name: '\(localClassName)' on token: '\(token)'"
+							return nil
+						}
+						
+						if let finfo = XGScriptClassesInfo.classes(classIndex).functionWithName(functionName) {
+							functionIndex = finfo.index
+						} else {
+							error = "Unrecognised function: '\(functionName)', for class: '\(XGScriptClassesInfo.classes(classIndex).name)'"
+							return nil
+						}
+						
+						if let params = getParameters() {
+							if locals[currentFunction]!.contains(variableName) || args[currentFunction]!.contains(variableName) || variableName == kXDSLastResultVariable {
+								if classIndex <= 4 {
+									functionParameters = [XDSExpr.loadVariable(variableName)] + params
+								} else {
+									functionParameters = [XDSExpr.loadPointer(variableName)] + params
+								}
+							} else {
+								// apparently function calls on unassigned local variables are a thing such as in hero main
+								// previously returned an error here but now will just assume everything that
+								// hits this case is an intended local variable.
+								// will be up to the script writer to be careful here.
+								// if player.processEvents() in hero main is the only exception then
+								// it may be worth simply accounting for it as an edge case.
+								// will see if it shows up anywhere else.
+								
+								var locs = locals[currentFunction]!
+								locs.addUnique(variableName)
+								locals[currentFunction] = locs
+								
+								if classIndex <= 4 {
+									functionParameters = [XDSExpr.loadVariable(variableName)] + params
+								} else {
+									functionParameters = [XDSExpr.loadPointer(variableName)] + params
+								}
+							}
+						} else {
+							return nil
+						}
+						
+					default:
+						error = "Function call with too many parts: \(token)"
+						return nil
+					}
+					
+					return .callStandard(classIndex, functionIndex, functionParameters)
+					
+				}
+			}
+		}
+		
+		if let val = Int(token) {
+			return .loadImmediate(XDSConstant(type: XDSConstantTypes.integer.index, rawValue: UInt32(bitPattern: Int32(val))))
+		}
+		
+		if token.isHexInteger {
+			return .loadImmediate(XDSConstant(type: XDSConstantTypes.integer.index, rawValue: UInt32(bitPattern: Int32(token.hexStringToInt()))))
+		}
+		
+		if let val = Float(token) {
+			return .loadImmediate(XDSConstant(type: XDSConstantTypes.float.index, rawValue: val.floatToHex()))
 		}
 		
 		error = "Invalid token: \(token)"
@@ -1564,7 +1593,7 @@ class XDSScriptCompiler: NSObject {
 		return functions
 	}
 	
-	private class func getCODE(_ exprs: XGStack<XDSExpr>, gvar: [String], arry: [String], strg: [String], giri: [String]) -> [XGScriptInstruction]? {
+	private class func getCODE(_ exprs: XGStack<XDSExpr>, gvar: [String], arry: [String], giri: [String]) -> [XGScriptInstruction]? {
 		
 		var instructions = [XGScriptInstruction]()
 		
@@ -1578,7 +1607,38 @@ class XDSScriptCompiler: NSObject {
 			default: break
 			}
 			
-			let (instructs, errorString) = nextExpression.instructions(gvar: gvar, arry: arry, strg: strg, giri: giri, locals: locals[currentFunction]!, args: args[currentFunction]!)
+			switch nextExpression {
+			case .call(let name, _):
+				if args[name] == nil {
+					error = "Error in script function call: '\(name)' is not a function location."
+					return nil
+				}
+			case .callVoid(let name, _):
+				if args[name] == nil {
+					error = "Error in script function call: '\(name)' is not a function location."
+					return nil
+				}
+			case .jump(let location):
+				if locations[location] == nil {
+					error = "Invalid goto location: location '\(location)' doesn't exist."
+					return nil
+				}
+			case .jumpTrue(_, let location):
+				if locations[location] == nil {
+					error = "Invalid goto location: location '\(location)' doesn't exist."
+					return nil
+				}
+			case .jumpFalse(_, let location):
+				if locations[location] == nil {
+					error = "Invalid goto location: location '\(location)' doesn't exist."
+					return nil
+				}
+			default:
+				break
+				
+			}
+			
+			let (instructs, errorString) = nextExpression.instructions(gvar: gvar, arry: arry, giri: giri, locals: locals[currentFunction]!, args: args[currentFunction]!, locations: locations)
 			if let e = errorString {
 				error = e
 				return nil
@@ -1605,16 +1665,20 @@ class XDSScriptCompiler: NSObject {
 		var stringSize : UInt32 = 0x0
 		
 		var functionNames = [String]()
-		for (_, _, name, _) in data {
+		for (_, _, n, _) in data {
+			let name = n.substring(from: 1, to: n.length)
 			functionNames.addUnique(name)
-			stringSize += UInt32(name.length) + 1
+			stringSize += UInt32(name.length) + 1 // + 1 for space
 		}
 		
 		let firstStringOffset = headSize + 0x20
 		
 		var sectionSize = headSize + stringSize + 0x20
 		// make sure section is padded for alignment
-		sectionSize += sectionSize % 16
+		let remainder = 16 - (sectionSize % 16)
+		if remainder < 16 {
+			sectionSize += remainder
+		}
 		
 		code += [sectionSize] // section size
 		code += [0,0] // padding
@@ -1635,7 +1699,8 @@ class XDSScriptCompiler: NSObject {
 		}
 		
 		// fill pointer table
-		for (codeOffset, _, name, _) in data {
+		for (codeOffset, _, n, _) in data {
+			let name = n.substring(from: 1, to: n.length)
 			code += [UInt32(codeOffset)]
 			code += [getFuncNameStartIndex(str: name) + firstStringOffset]
 		}
@@ -1646,7 +1711,7 @@ class XDSScriptCompiler: NSObject {
 		
 		// adds one byte at a time, buffering into a uint32 and adding the whole word once full
 		func addByte(_ byte: UInt8) {
-			let value = UInt32(byte) << (currentByteIndex * 4)
+			let value = UInt32(byte) << (currentByteIndex * 8)
 			currentWord = currentWord | value
 			if currentByteIndex == 0 {
 				code += [currentWord]
@@ -1660,9 +1725,7 @@ class XDSScriptCompiler: NSObject {
 		for s in functionNames {
 			let string = XGString(string: s, file: nil, sid: nil)
 			for char in string.chars {
-				for byte in char.byteStream {
-					addByte(byte)
-				}
+				addByte(char.unicode)
 			}
 			addByte(0)
 		}
@@ -1682,7 +1745,10 @@ class XDSScriptCompiler: NSObject {
 		
 		var sectionSize = UInt32(data.count) * 4 + 0x20
 		// make sure section is padded for alignment
-		sectionSize += sectionSize % 16
+		let remainder = 16 - (sectionSize % 16)
+		if remainder < 16 {
+			sectionSize += remainder
+		}
 		
 		code += [sectionSize] // section size
 		code += [0,0] // padding
@@ -1712,7 +1778,10 @@ class XDSScriptCompiler: NSObject {
 			instructionCount += UInt32(instruction.length)
 		}
 		// make sure section is padded for alignment
-		sectionSize += sectionSize % 16
+		let remainder = 16 - (sectionSize % 16)
+		if remainder < 16 {
+			sectionSize += remainder
+		}
 		
 		code += [sectionSize] // section size
 		code += [0,0] // padding
@@ -1741,7 +1810,10 @@ class XDSScriptCompiler: NSObject {
 		
 		var sectionSize = UInt32(gvars.names.count) * 8 + 0x20
 		// make sure section is padded for alignment
-		sectionSize += sectionSize % 16
+		let remainder = 16 - (sectionSize % 16)
+		if remainder < 16 {
+			sectionSize += remainder
+		}
 		
 		code += [sectionSize] // section size
 		code += [0,0] // padding
@@ -1771,7 +1843,10 @@ class XDSScriptCompiler: NSObject {
 			sectionSize += 8 * UInt32(a.count)
 		}
 		// make sure section is padded for alignment
-		sectionSize += sectionSize % 16
+		let remainder = 16 - (sectionSize % 16)
+		if remainder < 16 {
+			sectionSize += remainder
+		}
 		
 		code += [sectionSize] // section size
 		code += [0,0] // padding
@@ -1785,7 +1860,16 @@ class XDSScriptCompiler: NSObject {
 		for a in data {
 			code += [currentStart]
 			currentStart += 8 * UInt32(a.count) + 0x10
-			arrayCode += [UInt32(a.count), 0, currentIndex, 0] // array header
+			
+			var initialised : UInt32 = 0 // set to 1 if array already has usable values. 0 all set to 0
+			for element in a {
+				if element.asInt > 0 {
+					initialised = 1
+				}
+			}
+			
+			let indexInit = (initialised << 24) + currentIndex
+			arrayCode += [UInt32(a.count), 0, indexInit, 0] // array header
 			currentIndex += 1
 			for val in a {
 				arrayCode += [UInt32(val.type.index) << 16, val.value]
@@ -1812,7 +1896,10 @@ class XDSScriptCompiler: NSObject {
 			sectionSize += s.length + 1
 		}
 		// make sure section is padded for alignment
-		sectionSize += sectionSize % 16
+		let remainder = 16 - (sectionSize % 16)
+		if remainder < 16 {
+			sectionSize += remainder
+		}
 		
 		code += [UInt32(sectionSize)] // section size
 		code += [0,0] // padding
@@ -1824,7 +1911,7 @@ class XDSScriptCompiler: NSObject {
 		
 		// adds one byte at a time, buffering into a uint32 and adding the whole word once full
 		func addByte(_ byte: UInt8) {
-			let value = UInt32(byte) << (currentByteIndex * 4)
+			let value = UInt32(byte) << (currentByteIndex * 8)
 			currentWord = currentWord | value
 			if currentByteIndex == 0 {
 				code += [currentWord]
@@ -1838,9 +1925,7 @@ class XDSScriptCompiler: NSObject {
 		for s in data {
 			let string = XGString(string: s, file: nil, sid: nil)
 			for char in string.chars {
-				for byte in char.byteStream {
-					addByte(byte)
-				}
+				addByte(char.unicode)
 			}
 			addByte(0)
 		}
@@ -1860,7 +1945,10 @@ class XDSScriptCompiler: NSObject {
 		
 		var sectionSize = UInt32(data.count) * 12 + 0x20
 		// make sure section is padded for alignment
-		sectionSize += sectionSize % 16
+		let remainder = 16 - (sectionSize % 16)
+		if remainder < 16 {
+			sectionSize += remainder
+		}
 		
 		code += [sectionSize] // section size
 		code += [0,0] // padding
@@ -1885,7 +1973,10 @@ class XDSScriptCompiler: NSObject {
 		
 		var sectionSize = UInt32(data.count) * 8 + 0x20
 		// make sure section is padded for alignment
-		sectionSize += sectionSize % 16
+		let remainder = 16 - (sectionSize % 16)
+		if remainder < 16 {
+			sectionSize += remainder
+		}
 		
 		code += [sectionSize] // section size
 		code += [0,0] // padding

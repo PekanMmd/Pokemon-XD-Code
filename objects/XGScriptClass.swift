@@ -11,12 +11,14 @@ import Foundation
 enum XGScriptFunctionInfo {
 	
 	case operators(String,Int,Int)
+	case unknownOperator(Int)
 	case known(String,Int,Int,[XDSMacroTypes?]?, XDSMacroTypes?)
 	case unknown(Int)
 	
 	var name : String {
 		switch self {
 			case .operators(let name,_,_)	: return name
+			case .unknownOperator(let val)  : return "operator\(val)"
 			case .known(let name,_,_,_,_)	: return name
 			case .unknown(let val)			: return "function\(val)"
 		}
@@ -25,6 +27,7 @@ enum XGScriptFunctionInfo {
 	var index : Int {
 		switch self {
 			case .operators(_,let val,_)	: return val
+			case .unknownOperator(let val)	: return val
 			case .known(_,let val,_,_,_)	: return val
 			case .unknown(let val)			: return val
 		}
@@ -33,6 +36,7 @@ enum XGScriptFunctionInfo {
 	var parameters : Int {
 		switch self {
 			case .operators(_,_,let val)	: return val
+			case .unknownOperator(let val)  : return 0
 			case .known(_,_,let val,_,_)	: return val
 			case .unknown					: return 0
 		}
@@ -40,7 +44,8 @@ enum XGScriptFunctionInfo {
 	
 	var macros : [XDSMacroTypes?]? {
 		switch self {
-			case .operators				:return nil
+			case .operators				: return nil
+			case .unknownOperator		: return nil
 			case .known(_,_,_,let val,_): return val
 			case .unknown				: return nil
 		}
@@ -48,9 +53,10 @@ enum XGScriptFunctionInfo {
 	
 	var returnMacro : XDSMacroTypes? {
 		switch self {
-		case .operators				:return nil
-		case .known(_,_,_,_,let val): return val
-		case .unknown				: return nil
+			case .operators				: return nil
+			case .unknownOperator		: return nil
+			case .known(_,_,_,_,let val): return val
+			case .unknown				: return nil
 		}
 	}
 }
@@ -91,7 +97,10 @@ enum XGScriptClassesInfo {
 			
 		}
 		
-		return .unknown(id)
+		// Hopefully shouldn't hit this case
+		// All operators should be documented
+		printg("Error: encountered unknown operator \(id)")
+		return .unknownOperator(id)
 	}
 	
 	func functionWithID(_ id: Int) -> XGScriptFunctionInfo {
@@ -122,7 +131,7 @@ enum XGScriptClassesInfo {
 	}
 	
 	static func getClassNamed(_ name: String) -> XGScriptClassesInfo? {
-		let kNumberOfXDSClasses = 100 // don't know the number but pretty sure it's fewer than 100 =p
+		let kNumberOfXDSClasses = 127 // don't know the number but script variables allow up to 127
 		for i in 0 ..< kNumberOfXDSClasses {
 			let info = XGScriptClassesInfo.classes(i)
 			if info.name.lowercased() == name.lowercased() {

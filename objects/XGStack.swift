@@ -28,6 +28,10 @@ class XGStack<T>: NSObject {
 		return array
 	}
 	
+	var count : Int {
+		return data.count
+	}
+	
 	@objc var isEmpty : Bool {
 		return data.count == 0
 	}

@@ -11,11 +11,15 @@
 //XGUtility.documentXDS()
 
 //XGFiles.script("M1_out.scd").scriptData.getXDSScript().save(toFile: .nameAndFolder("M1_out.xds", .Documents))
+XGFiles.script("M1_out.scd").scriptData.description.save(toFile: .nameAndFolder("m1_out_old.scd.txt", .Documents))
 
 let script = XGFiles.nameAndFolder("M1_out.xds", .Documents).data.string
 if !XDSScriptCompiler.compile(text: script, toFile: .nameAndFolder("M1_out.scd", .Documents)) {
 	XDSScriptCompiler.error.println()
 }
+let newscript = XGFiles.nameAndFolder("M1_out.scd", .Documents).scriptData
+newscript.description.save(toFile: .nameAndFolder("m1_out_new.scd.txt", .Documents))
+newscript.getXDSScript().save(toFile: .nameAndFolder("m1_out_new.xds", .Documents))
 
 //XGFiles.nameAndFolder("pkx_usohachi.fsys", .Documents).fsysData.extractFilesToFolder(folder: .Documents)
 

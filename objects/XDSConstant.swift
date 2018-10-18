@@ -117,7 +117,17 @@ class XDSConstant : NSObject {
 	@objc var rawValueString : String {
 		switch self.type {
 		case .float:
-			return String(format: "%.3f", self.asFloat)
+			var text = String(format: "%.4f", self.asFloat)
+			if !text.contains(".") {
+				text += ".0"
+			}
+			while text.last == "0" {
+				text.removeLast()
+			}
+			if text.last == "." {
+				text += "0"
+			}
+			return text
 		case .pokemon:
 			return "Pokemon(\(self.asInt))"
 		case .string:

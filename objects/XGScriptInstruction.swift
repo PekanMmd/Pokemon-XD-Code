@@ -67,7 +67,7 @@ class XGScriptInstruction: NSObject {
 		case 1:
 			var pointerAdd = ""
 			switch self.opCode {
-			case.loadNonCopyableVariable:
+			case .loadNonCopyableVariable:
 				pointerAdd = "*"
 			default:
 				pointerAdd = ""
@@ -76,7 +76,7 @@ class XGScriptInstruction: NSObject {
 		case 2:
 			var pointerAdd = ""
 			switch self.opCode {
-			case.loadNonCopyableVariable:
+			case .loadNonCopyableVariable:
 				pointerAdd = "*"
 			default:
 				pointerAdd = ""
@@ -139,6 +139,71 @@ class XGScriptInstruction: NSObject {
 			
 		}
 		
+	}
+	
+	convenience init(opCode: XGScriptOps, subOpCode: Int, parameter: Int) {
+		let op = (opCode.rawValue << 24)
+		let sub = (subOpCode << 16)
+		let param = (parameter & 0xFFFF)
+		self.init(bytes: UInt32( op + sub + param ), next: 0)
+	}
+	
+	class func variableInstruction(op: XGScriptOps, level: Int, index: Int) -> XGScriptInstruction {
+		return XGScriptInstruction(opCode: op, subOpCode: level, parameter: index)
+	}
+	
+	class func functionCall(classID: Int, funcID: Int) -> XGScriptInstruction {
+		return XGScriptInstruction(opCode: .callStandard, subOpCode: classID, parameter: funcID)
+	}
+	
+	class func loadImmediate(c: XDSConstant) -> XGScriptInstruction {
+		
+		switch c.type {
+		case .string:
+			fallthrough
+		case .vector:
+			return XGScriptInstruction(opCode: .loadImmediate, subOpCode: c.type.index, parameter: c.value.int)
+		default:
+			let code : UInt32 = UInt32(XGScriptOps.loadImmediate.rawValue << 24) + (UInt32(c.type.index) << 16)
+			return XGScriptInstruction(bytes: code, next: c.value)
+		}
+		
+	}
+	
+	class func xdsoperator(op: Int) -> XGScriptInstruction {
+		return XGScriptInstruction(opCode: .xd_operator, subOpCode: op, parameter: 0)
+	}
+	
+	class func nopInstruction() -> XGScriptInstruction {
+		return XGScriptInstruction(opCode: .nop, subOpCode: 0, parameter: 0)
+	}
+	
+	class func call(location: Int) -> XGScriptInstruction {
+		return XGScriptInstruction(opCode: .call, subOpCode: 0, parameter: location)
+	}
+	
+	class func loadVarLastResult() -> XGScriptInstruction {
+		return XGScriptInstruction.variableInstruction(op: .loadVariable, level: 2, index: 0)
+	}
+	
+	class func jump(op: XGScriptOps, location: Int) -> XGScriptInstruction {
+		return XGScriptInstruction(opCode: op, subOpCode: 0, parameter: location)
+	}
+	
+	class func reserve(count: Int) -> XGScriptInstruction {
+		return XGScriptInstruction(opCode: .reserve, subOpCode: count, parameter: 0)
+	}
+	
+	class func release(count: Int) -> XGScriptInstruction {
+		return XGScriptInstruction(opCode: .release, subOpCode: count, parameter: 0)
+	}
+	
+	class func xdsreturn() -> XGScriptInstruction {
+		return XGScriptInstruction(opCode: .return_op, subOpCode: 0, parameter: 0)
+	}
+	
+	class  func pop(count: Int) -> XGScriptInstruction {
+		return XGScriptInstruction(opCode: .pop, subOpCode: count, parameter: 0)
 	}
 	
 	override var description: String {

@@ -54,57 +54,6 @@ extension NSObject {
 	}
 }
 
-extension String {
-	
-	func println() {
-		printg(self)
-	}
-	
-	func spaceToLength(_ length: Int) -> String {
-		
-		var spaces = ""
-		let wordLength = self.characters.count
-		for i in 1 ... length {
-			if i > wordLength {
-				spaces += " "
-			}
-		}
-		
-		return self + spaces
-	}
-	
-	func spaceLeftToLength(_ length: Int) -> String {
-		
-		var spaces = ""
-		let wordLength = self.characters.count
-		for i in 1 ... length {
-			if i > wordLength {
-				spaces += " "
-			}
-		}
-		
-		return spaces + self
-	}
-	
-	func removeFileExtensions() -> String {
-		let extensionIndex = self.characters.index(of: ".") ?? self.endIndex
-		
-		return self.substring(to: extensionIndex)
-	}
-	
-	var fileExtensions : String {
-		let extensionIndex = self.characters.index(of: ".") ?? self.endIndex
-		
-		return self.substring(from: extensionIndex)
-	}
-	
-	var cppEnum : String {
-		// convention used in PkmGCTools by Tux
-		return self.replacingOccurrences(of: "-", with: " ").capitalized.replacingOccurrences(of: " ", with: "")
-		
-	}
-}
-
 extension Bool {
 	var string : String {
 		return self ? "Yes" : "No"
@@ -240,8 +189,56 @@ extension Float {
 
 extension String {
 	
+	func println() {
+		printg(self)
+	}
+	
+	func spaceToLength(_ length: Int) -> String {
+		
+		var spaces = ""
+		let wordLength = self.characters.count
+		for i in 1 ... length {
+			if i > wordLength {
+				spaces += " "
+			}
+		}
+		
+		return self + spaces
+	}
+	
+	func spaceLeftToLength(_ length: Int) -> String {
+		
+		var spaces = ""
+		let wordLength = self.characters.count
+		for i in 1 ... length {
+			if i > wordLength {
+				spaces += " "
+			}
+		}
+		
+		return spaces + self
+	}
+	
+	func removeFileExtensions() -> String {
+		let extensionIndex = self.characters.index(of: ".") ?? self.endIndex
+		
+		return self.substring(to: extensionIndex)
+	}
+	
+	var fileExtensions : String {
+		let extensionIndex = self.characters.index(of: ".") ?? self.endIndex
+		
+		return self.substring(from: extensionIndex)
+	}
+	
+	var cppEnum : String {
+		// convention used in PkmGCTools by Tux
+		return self.replacingOccurrences(of: "-", with: " ").capitalized.replacingOccurrences(of: " ", with: "")
+		
+	}
+	
 	var functionName : String? {
-		if !self.contains("(") || self.contains("(") {
+		if !self.contains("(") || !self.contains(")") {
 			return nil
 		}
 		var string = ""
@@ -253,15 +250,29 @@ extension String {
 	}
 	
 	var parameterString : String? {
-		if !self.contains("(") || self.contains("(") {
+		if !self.contains("(") || !self.contains(")") {
 			return nil
 		}
 		var string = ""
 		let ss = self.replacingOccurrences(of: self.functionName! + "(", with: "").stack
-		while ss.peek() != ")" {
+		while ss.count > 1 {
 			string += ss.pop()
 		}
 		return string
+	}
+	
+	var firstBracket : String? {
+		if !self.contains("(") && !self.contains("[") {
+			return nil
+		}
+		let ss = self.stack
+		while !ss.isEmpty {
+			let b = ss.pop()
+			if "([".contains(b) {
+				return b
+			}
+		}
+		return nil
 	}
 	
 	func isValidXDSVariable() -> Bool {
@@ -373,6 +384,88 @@ extension String {
 			s.push(last)
 		}
 		return s
+	}
+	
+	var msgID : Int? {
+		// returns negative value if invalid msgmacro, nil if doesn't exist
+		if self.length < 3 {
+			return -1
+		}
+		let ss = self.stack
+		if ss.peek() != "$" {
+			return -1
+		}
+		ss.pop() // remove leading $
+		
+		// check if has an id
+		if ss.peek() == ":" {
+			ss.pop() // remove opening ':'
+			var idText = ""
+			while ss.peek() != ":" {
+				idText += ss.pop()
+				if ss.isEmpty {
+					return -1
+				}
+				if ss.peek() == "\"" {
+					return -1
+				}
+			}
+			
+			if idText.length == 0 {
+				return nil
+			}
+			
+			return idText.integerValue == nil ? -1 : idText.integerValue!
+		} else if ss.peek() == "\"" {
+			return nil
+		} else {
+			return -1
+		}
+	}
+	
+	var msgText : String? {
+		// return empty string if error, nil if doesn't exist
+		
+		if self.length < 3 {
+			return ""
+		}
+		let ss = self.stack
+		if ss.peek() != "$" {
+			return ""
+		}
+		ss.pop() // remove leading $
+		
+		// check if has an id
+		if ss.peek() == ":" {
+			ss.pop() // remove opening ':'
+			while ss.peek() != ":" {
+				ss.pop()
+				if ss.isEmpty {
+					return ""
+				}
+			}
+			if ss.peek() == ":" {
+				ss.pop() // remove closing ':'
+			}
+		}
+		
+		var text = ""
+		while !ss.isEmpty {
+			text += ss.pop()
+		}
+		if text.length > 2 {
+			if text.first! == "\"" && text.last! == "\"" {
+				text.removeFirst()
+				text.removeLast()
+				return text
+			}
+			return ""
+		} else if text.length == 0 {
+			return nil
+		} else {
+			return ""
+		}
+		
 	}
 	
 }
