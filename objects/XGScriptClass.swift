@@ -111,10 +111,10 @@ enum XGScriptClassesInfo {
 	}
 	
 	func functionWithName(_ name: String) -> XGScriptFunctionInfo? {
-		let kMaxNumberOfXDSClassFunctions = 99 // according to Tux's notes largest is 99
+		let kMaxNumberOfXDSClassFunctions = 200 // don't know the number but pretty sure it's fewer than 200 =p
 		for i in 0 ..< kMaxNumberOfXDSClassFunctions {
 			let info = self.functionWithID(i)
-			if info.name == name {
+			if info.name.lowercased() == name.lowercased() {
 				return info
 			}
 		}
@@ -125,7 +125,7 @@ enum XGScriptClassesInfo {
 		let kNumberOfXDSClasses = 100 // don't know the number but pretty sure it's fewer than 100 =p
 		for i in 0 ..< kNumberOfXDSClasses {
 			let info = XGScriptClassesInfo.classes(i)
-			if info.name == name {
+			if info.name.lowercased() == name.lowercased() {
 				return info
 			}
 		}

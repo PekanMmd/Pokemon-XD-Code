@@ -57,6 +57,9 @@ class XGScriptInstruction: NSObject {
 	}
 	
 	@objc var XDSVariable : String {
+		// add an asterisk to last result, local variables and script function parameters if the type of the varible isn't copyable.
+		// it is incredibly difficult to infer the underlying type for these variables.
+		
 		let param = self.parameter
 		switch self.level {
 		case 0:

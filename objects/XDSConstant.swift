@@ -125,7 +125,7 @@ class XDSConstant : NSObject {
 		case .vector:
 			return "vector_" + String(format: "%02d", self.asInt)
 		case .integer:
-			return "\(self.asInt)"
+			return self.asInt >= 0x200 ? self.asInt.hexString() : "\(self.asInt)"
 		case .none_t:
 			return "Null"
 		case .array:

@@ -336,7 +336,7 @@ indirect enum XDSExpr {
 		case .location(_):
 			return 0
 		case .function(_, _):
-			return 0
+			return 1 // includes reserve
 		case .exit:
 			return 1
 		case .setLine(_):
@@ -375,7 +375,8 @@ indirect enum XDSExpr {
 		if xs.id == 0 {
 			return "$:0:"
 		}
-		return "$:\(xs.id):" + "\"\(xs.string)\""
+		// must replace double quotes with special character since xds doesn't use escaped characters
+		return "$:\(xs.id):" + "\"\(xs.string.replacingOccurrences(of: "\"", with: "[Quote]"))\""
 	}
 	
 	static func stringFromMacroImmediate(c: XDSConstant, t: XDSMacroTypes) -> String {
@@ -534,20 +535,20 @@ indirect enum XDSExpr {
 			
 		// function calls
 		case .function(let name, let params):
-			var s = "function " + XDSExpr.locationWithName(name)
+			var s = "function " + name
 			
 			for param in params {
 				s += " " + param
 			}
 			return s
 		case .call(let l, let es):
-			var s = "call " + XDSExpr.locationWithName(l)
+			var s = "call " + l
 			for e in es {
 				s += " " + e.text
 			}
 			return s
 		case .callVoid(let l, let es):
-			var s = "call " + XDSExpr.locationWithName(l)
+			var s = "call " + l
 			for e in es {
 				s += " " + e.text
 			}
@@ -568,10 +569,11 @@ indirect enum XDSExpr {
 			} else {
 				let xdsclass = XGScriptClassesInfo.classes(c)
 				let xdsfunction = xdsclass.functionWithID(f)
-				var s = c > 0 ? es[0].text + "." : ""
+				// don't need * in function calls as the type is explicitly included
+				var s = c > 0 ? es[0].text.replacingOccurrences(of: "*", with: "") + "." : ""
 				// local variables and function parameters need additional class info
 				if c > 0 {
-					if es[0].text.contains("arg") || (es[0].text.contains("var") && !es[0].text.contains("gvar")) {
+					if es[0].text.contains("arg") || (es[0].text.contains("var") && !es[0].text.contains("gvar")) || es[0].text.contains(kXDSLastResultVariable) {
 						s += xdsclass.name.capitalized + "."
 					}
 				}
@@ -703,13 +705,93 @@ indirect enum XDSExpr {
 				macs += e.macros
 			}
 			return macs
+		case .setVariable(_, let e):
+			return e.macros
+		case .setVector(_, _, let e):
+			return e.macros
+		case .call(_, let es):
+			var macs = [XDSExpr]()
+			for e in es {
+				macs += e.macros
+			}
+			return macs
+		case .callVoid(_, let es):
+			var macs = [XDSExpr]()
+			for e in es {
+				macs += e.macros
+			}
+			return macs
+		case .jumpTrue(let e, _):
+			return e.macros
+		case .jumpFalse(let e, _):
+			return e.macros
 		default:
 			return []
 		}
 	}
 	
-	func instructions(gvar: [String], arry: [String], vect: [String], strg: [String], giri: [String]) -> (instructions: [XGScriptInstruction]?, error: String?) {
+	func instructions(gvar: [String], arry: [String], strg: [String], giri: [String], locals: [String], args: [String]) -> (instructions: [XGScriptInstruction]?, error: String?) {
 		//TODO: - complete implementation
+		
+//		switch self {
+//			
+//		case .nop:
+//			return ([XGScriptInstruction(bytes: 0, next: 0)], nil)
+//		case .bracket(_):
+//			<#code#>
+//		case .unaryOperator(_, _):
+//			<#code#>
+//		case .binaryOperator(_, _, _):
+//			<#code#>
+//		case .loadImmediate(_):
+//			<#code#>
+//		case .macroImmediate(_, _):
+//			<#code#>
+//		case .loadVariable(_):
+//			<#code#>
+//		case .loadPointer(_):
+//			<#code#>
+//		case .setVariable(_, _):
+//			<#code#>
+//		case .setVector(_, _, _):
+//			<#code#>
+//		case .call(_, _):
+//			<#code#>
+//		case .callVoid(_, _):
+//			<#code#>
+//		case .XDSReturn:
+//			<#code#>
+//		case .XDSReturnResult(_):
+//			<#code#>
+//		case .callStandard(_, _, _):
+//			<#code#>
+//		case .callStandardVoid(_, _, _):
+//			<#code#>
+//		case .jumpTrue(_, _):
+//			<#code#>
+//		case .jumpFalse(_, _):
+//			<#code#>
+//		case .jump(_):
+//			<#code#>
+//		case .reserve(_):
+//			<#code#>
+//		case .location(_):
+//			<#code#>
+//		case .locationIndex(_):
+//			<#code#>
+//		case .function(_, _):
+//			<#code#>
+//		case .comment(_):
+//			<#code#>
+//		case .macro(_, _):
+//			<#code#>
+//		case .msgMacro(_):
+//			<#code#>
+//		case .exit:
+//			<#code#>
+//		case .setLine(_):
+//			<#code#>
+//		}
 		return (nil,"incomplete implementation")
 	}
 	

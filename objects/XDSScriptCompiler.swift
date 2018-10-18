@@ -22,13 +22,23 @@ class XDSScriptCompiler: NSObject {
 	static var currentFunction = ""
 	static var scriptID = 0 // currently unknown what this value represents
 	
+	static var characters = [XGCharacter]()
+	
 	static var error = ""
 	
 	class func compile(text: String, toFile file: XGFiles) -> Bool {
 		if let data = compile(text: text) {
 			data.file = file
 			data.save()
-			return true
+			if file.exists {
+				printg("Successfully compiled script: \(file.fileName)")
+				return true
+			} else {
+				let errorString = "XDS compilation error, File: \(file.fileName) \nError- failed to save file."
+				
+				printg(errorString)
+				return false
+			}
 		}
 		
 		let errorString = "XDS compilation error, File: \(file.fileName) \nError-" + error
@@ -47,26 +57,34 @@ class XDSScriptCompiler: NSObject {
 		locals = [String : [XDSVariable]]()
 		strgs  = [String]()
 		locations = [String : Int]()
+		characters = [XGCharacter]()
 		
 		var stripped = stripComments(text: text)
 		stripped = stripWhiteSpace(text: stripped)
 		let macro = macroprocessor(text: stripped)
 		
+		// for testing white space and comment stripping
+		//stripped.save(toFile: .nameAndFolder("white space stripped.xds", .Documents))
+		
 		if macro == nil {
 			return nil
 		}
+		// for testing macroprocessor result
+		//macro!.save(toFile: .nameAndFolder("macros.xds", .Documents))
+		
 		let lines = getLines(text: macro!)
 		
 		var expressions = [XDSExpr]()
 		for line in lines {
 			if let tokens = tokenise(line: line) {
+				
 				if currentFunction == "" {
 					if tokens.count > 0 {
 						if tokens[0] != "function" {
 							error = "Only 'define', 'assign' and 'global' statements are allowed before the first function header."
 							error = "\nInvalid line: "
 							for t in tokens {
-								error += t
+								error += " " + t
 							}
 							return nil
 						}
@@ -82,12 +100,20 @@ class XDSScriptCompiler: NSObject {
 			}
 		}
 		
+		// test that expressions are correct
+		var recreated = ""
+		for expr in expressions {
+			recreated += expr.text + "\n"
+		}
+		recreated.save(toFile: .nameAndFolder("recreated.xds", .Documents))
+		
+		
 		let stack = createExprStack(expressions)
 		
 		locations = getLocations(expressions)
 		
 		let ftbl = getFTBL(expressions)
-		if let code = getCODE(stack, gvar: gvars.names, arry: arrys.names, vect: vects.names, strg: strgs, giri: giris.names) {
+		if let code = getCODE(stack, gvar: gvars.names, arry: arrys.names, strg: strgs, giri: giris.names) {
 			
 			var data = XDSCode()
 			data += compileFTBL(ftbl)
@@ -176,7 +202,7 @@ class XDSScriptCompiler: NSObject {
 					} else {
 						var updatedLine = line
 						for (macro, repl) in macros {
-							for add in [" ", ".", ")", ">", "]", "\"", "\n"] {
+							for add in [" ", ".", ")", ">", "]", "(", "<", "[", "\"", "\n"] {
 								updatedLine = updatedLine.replacingOccurrences(of: macro + add, with: repl + add)
 							}
 						}
@@ -198,6 +224,8 @@ class XDSScriptCompiler: NSObject {
 		var gid = -1
 		var rid = -1
 		var name = ""
+		
+		let character = XGCharacter()
 		
 		
 		var assignIndex = 0
@@ -230,9 +258,13 @@ class XDSScriptCompiler: NSObject {
 					return false
 				}
 				
+				// TODO: Complete handling assignments updating characters in rel
+				
 			default:
-				error = "Invalid assignment variable: \(token)"
-				return false
+				break
+				// uncomment once fully implemented
+//				error = "Invalid assignment variable: \(token)"
+//				return false
 				
 			}
 			assignIndex += 2
@@ -264,6 +296,10 @@ class XDSScriptCompiler: NSObject {
 		
 		giris.names.append(name)
 		giris.values.append((groupID: gid, resourceID: rid))
+		
+		if gid > 0 {
+			characters.append(character)
+		}
 		
 		return true
 	}
@@ -328,6 +364,8 @@ class XDSScriptCompiler: NSObject {
 	private class func handleMSGString(id: Int?, text: String) -> Int? {
 		//TODO: msg replacements
 		// if id is nil then generate a new string with the next free id
+		// replace occurrences of [Quote] with \"
+		// check that id isn't 0
 		
 		// return the strings finalised id or nil if failed
 		return id
@@ -431,6 +469,7 @@ class XDSScriptCompiler: NSObject {
 		
 		var scope = WhiteSpaceScopes.normal
 		
+		// remove leading new lines
 		if !stack.isEmpty {
 			var done = false
 			while !done {
@@ -445,7 +484,32 @@ class XDSScriptCompiler: NSObject {
 			}
 		}
 		
+		// strips consecutive white space characters
+		// also combine multiline statements into one line if contained within brackets by treating newlines as
+		// regular spaces.
+		// doesn't include vector brackets ('<' or '>') as they also serve as greater/less than operators
+		var bracketLevel = 0
+		let leftBrackets = "(["
+		let rightBrackets = ")]"
+		
 		while !stack.isEmpty {
+			
+			if leftBrackets.contains(stack.peek()) {
+				bracketLevel += 1
+			}
+			if bracketLevel > 0 {
+				if rightBrackets.contains(stack.peek()) {
+					bracketLevel -= 1
+				}
+			}
+			
+			// replace newlines with regular spaces if within brackets
+			if bracketLevel > 0 {
+				if stack.peek() == "\n" {
+					stack.pop()
+					stack.push(" ")
+				}
+			}
 			
 			var ignore = false
 			if scope == .space {
@@ -485,6 +549,20 @@ class XDSScriptCompiler: NSObject {
 				stripped += current
 			}
 			
+		}
+		
+		// remove all spaces at end of line
+		// also remove spaces immediately following or preceding brackets
+		for (replace, with) in [(" \n","\n"),("[ ","["),("( ","("),(" ]","]"),(" )",")")] {
+			while stripped.range(of: replace) != nil {
+				stripped = stripped.replacingOccurrences(of: replace, with: with)
+			}
+		}
+		
+		if stripped.length > 0 {
+			while "\n ".contains(stripped.last!)  {
+				stripped.removeLast()
+			}
 		}
 		
 		return stripped
@@ -563,6 +641,9 @@ class XDSScriptCompiler: NSObject {
 				currentLine = ""
 			}
 		}
+		if currentLine.length > 0 {
+			lines.append(currentLine + "\n")
+		}
 		
 		return lines
 	}
@@ -605,17 +686,43 @@ class XDSScriptCompiler: NSObject {
 				scopeStack.pop()
 				currentToken += current
 			} else if let bracket = BracketScopes(rawValue: current) {
-				scopeStack.push(bracket)
+				
+				var isOperator = false
+				if bracket == .angled {
+					if !stack.isEmpty {
+						if stack.peek() == " " || stack.peek() == "=" {
+							isOperator = true
+						}
+					}
+				}
+				
+				if !isOperator {
+					scopeStack.push(bracket)
+				}
+				
 				currentToken += current
+				
 			} else {
 				for bracket : BracketScopes in [.round, .square, .angled] {
 					if current == bracket.closing {
-						if scopeStack.peek() == bracket {
-							scopeStack.pop()
-						} else {
-							if scopeStack.peek() != .string {
-								error = "Extraneous bracket: " + current + ". " + currentToken
-								return nil
+						
+						var isOperator = false
+						if bracket == .angled {
+							if !stack.isEmpty {
+								if stack.peek() == " " || stack.peek() == "=" {
+									isOperator = true
+								}
+							}
+						}
+						
+						if !isOperator {
+							if scopeStack.peek() == bracket {
+								scopeStack.pop()
+							} else {
+								if scopeStack.peek() != .string {
+									error = "Extraneous bracket: " + current + ". " + currentToken
+									return nil
+								}
 							}
 						}
 					}
@@ -624,7 +731,7 @@ class XDSScriptCompiler: NSObject {
 			}
 			
 		}
-		if currentToken.count > 0 {
+		if currentToken.length > 0 {
 			tokens.append(currentToken)
 		}
 		if scopeStack.peek() != .normal {
@@ -683,7 +790,7 @@ class XDSScriptCompiler: NSObject {
 							} else {
 								error = "Invalid line: "
 								for t in tokens {
-									error += t
+									error += " " + t
 								}
 								return nil
 							}
@@ -694,7 +801,7 @@ class XDSScriptCompiler: NSObject {
 				} else {
 					error = "Call must be followed by a function location.\nInvalid line: "
 					for t in tokens {
-						error += t
+						error += " " + t
 					}
 					return nil
 				}
@@ -706,9 +813,12 @@ class XDSScriptCompiler: NSObject {
 					if name == tokens[1] {
 						if let e1 = evalToken(tokens[0]){
 							if let e2 = evalToken(tokens[2]){
-								// TODO: confirm ordering of expressions
 								return .binaryOperator(id , e1, e2)
+							} else {
+								return nil
 							}
+						} else {
+							return nil
 						}
 					}
 				}
@@ -736,7 +846,7 @@ class XDSScriptCompiler: NSObject {
 					if locals[tokens[1]] != nil {
 						error = "Function must have a unique name.\nInvalid line: "
 						for t in tokens {
-							error += t
+							error += " " + t
 						}
 						return nil
 					}
@@ -750,7 +860,7 @@ class XDSScriptCompiler: NSObject {
 				} else {
 					error = "Function header must be followed by a function location name.\nInvalid line: "
 					for t in tokens {
-						error += t
+						error += " " + t
 					}
 					return nil
 				}
@@ -765,7 +875,7 @@ class XDSScriptCompiler: NSObject {
 					} else {
 						error = "Goto must be followed by a location.\nInvalid line: "
 						for t in tokens {
-							error += t
+							error += " " + t
 						}
 						return nil
 					}
@@ -782,25 +892,43 @@ class XDSScriptCompiler: NSObject {
 						if tokens[2] == "if" {
 							if let expr = evalTokens(tokens: subTokens, subExpr: true) {
 								return .jumpTrue(expr, tokens[1])
+							} else {
+								error += "\nInvalid goto condition.\nInvalid line: "
+								for t in tokens {
+									error += " " + t
+								}
+								return nil
 							}
 						} else if tokens[2] == "ifFalse" {
 							if let expr = evalTokens(tokens: subTokens, subExpr: true) {
 								return .jumpFalse(expr, tokens[1])
+							} else {
+								error += "\nInvalid goto condition.\nInvalid line: "
+								for t in tokens {
+									error += " " + t
+								}
+								return nil
 							}
 						}  else {
 							error = "Expected 'if' or 'ifFalse' after location.\nInvalid line: "
 							for t in tokens {
-								error += t
+								error += " " + t
 							}
 							return nil
 						}
 					} else {
 						error = "Goto must be followed by a location.\nInvalid line: "
 						for t in tokens {
-							error += t
+							error += " " + t
 						}
 						return nil
 					}
+				} else {
+					error = "Incomplete goto statement.\nInvalid line: "
+					for t in tokens {
+						error += " " + t
+					}
+					return nil
 				}
 				
 				
@@ -817,7 +945,7 @@ class XDSScriptCompiler: NSObject {
 							} else {
 								error += "\nInvalid line: "
 								for t in tokens {
-									error += t
+									error += " " + t
 								}
 								return nil
 							}
@@ -828,7 +956,7 @@ class XDSScriptCompiler: NSObject {
 				} else {
 					error = "Call must be followed by a function location\nInvalid line: "
 					for t in tokens {
-						error += t
+						error += " " + t
 					}
 					return nil
 				}
@@ -848,7 +976,7 @@ class XDSScriptCompiler: NSObject {
 				} else {
 					error += "\nInvalid line: "
 					for t in tokens {
-						error += t
+						error += " " + t
 					}
 					return nil
 				}
@@ -885,7 +1013,7 @@ class XDSScriptCompiler: NSObject {
 							if !vects.names.contains(variable) && !locals[currentFunction]!.contains(variable) && !args[currentFunction]!.contains(variable) && !gvars.names.contains(variable)  {
 								error = "Vector \(variable) doesn't exist.\nInvalid line: "
 								for t in tokens {
-									error += t
+									error += " " + t
 								}
 								return nil
 							}
@@ -900,7 +1028,7 @@ class XDSScriptCompiler: NSObject {
 							default:
 								error = "Invalid vector dimension '\(index!)'.\nInvalid line: "
 								for t in tokens {
-									error += t
+									error += " " + t
 								}
 								return nil
 								
@@ -924,7 +1052,7 @@ class XDSScriptCompiler: NSObject {
 							if !arrys.names.contains(variable) && !locals[currentFunction]!.contains(variable) && !args[currentFunction]!.contains(variable) && !gvars.names.contains(variable)  {
 								error = "Array \(variable) doesn't exist.\nInvalid line: "
 								for t in tokens {
-									error += t
+									error += " " + t
 								}
 								return nil
 							}
@@ -944,28 +1072,28 @@ class XDSScriptCompiler: NSObject {
 							if args[currentFunction]!.contains(variable) {
 								error = "Cannot modify a function parameter.\nInvalid line: "
 								for t in tokens {
-									error += t
+									error += " " + t
 								}
 								return nil
 							}
 							if vects.names.contains(variable) {
 								error = "No vector dimension specified.\nInvalid line: "
 								for t in tokens {
-									error += t
+									error += " " + t
 								}
 								return nil
 							}
 							if arrys.names.contains(variable) {
 								error = "No array index specified.\nInvalid line: "
 								for t in tokens {
-									error += t
+									error += " " + t
 								}
 								return nil
 							}
 							if giris.names.contains(variable) {
 								error = "Cannot modify a character variable.\nInvalid line: "
 								for t in tokens {
-									error += t
+									error += " " + t
 								}
 								return nil
 							}
@@ -986,7 +1114,7 @@ class XDSScriptCompiler: NSObject {
 		
 		error = "Invalid line: "
 		for t in tokens {
-			error += t
+			error += " " + t
 		}
 		return nil
 	}
@@ -1026,7 +1154,7 @@ class XDSScriptCompiler: NSObject {
 				let index = gvars.names.index(of: name)!
 				let val = gvars.values[index]
 				let type = val.type.index
-				if type == 35 || type < 3 {
+				if type <= 4 {
 					return .loadVariable(token)
 				} else {
 					return .loadPointer(token)
@@ -1034,7 +1162,7 @@ class XDSScriptCompiler: NSObject {
 			}
 		}
 		
-		for name in arrys.names + vects.names {
+		for name in arrys.names {
 			if token == name {
 				return .loadPointer(token)
 			}
@@ -1043,6 +1171,12 @@ class XDSScriptCompiler: NSObject {
 		for name in giris.names {
 			if token == name {
 				return .loadVariable(token)
+			}
+		}
+		
+		for name in vects.names {
+			if token == name {
+				return .loadImmediate(XDSConstant(type: XDSConstantTypes.vector.index, rawValue: UInt32(vects.names.index(of: token)!)))
 			}
 		}
 		
@@ -1183,7 +1317,7 @@ class XDSScriptCompiler: NSObject {
 					classIndex = gvars.values[gvarIndex].type.index
 					
 					if let params = getParameters() {
-						if classIndex == 35 || classIndex < 3 {
+						if classIndex <= 4 {
 							functionParameters = [XDSExpr.loadVariable(variableName)] + params
 						} else {
 							functionParameters = [XDSExpr.loadPointer(variableName)] + params
@@ -1194,10 +1328,16 @@ class XDSScriptCompiler: NSObject {
 					classIndex = 7
 				} else if vects.names.contains(variableName) {
 					classIndex = 4
+					
+					if let params = getParameters() {
+						let immediate = XDSConstant(type: XDSConstantTypes.vector.index, rawValue: UInt32(vects.names.index(of: variableName)!))
+						functionParameters = [XDSExpr.loadImmediate(immediate)] + params
+					}
 				} else if giris.names.contains(variableName) {
 					classIndex = 35
 					
 					if let params = getParameters() {
+						// character is loadvar instead of loadpointer(ldncpyvar) when using a character object directly
 						functionParameters = [XDSExpr.loadVariable(variableName)] + params
 					}
 					
@@ -1241,15 +1381,30 @@ class XDSScriptCompiler: NSObject {
 				}
 				
 				if let params = getParameters() {
-					if locals[currentFunction]!.contains(variableName) || args[currentFunction]!.contains(variableName) {
-						if classIndex == 35 || classIndex < 3 {
+					if locals[currentFunction]!.contains(variableName) || args[currentFunction]!.contains(variableName) || variableName == kXDSLastResultVariable {
+						if classIndex <= 4 {
 							functionParameters = [XDSExpr.loadVariable(variableName)] + params
 						} else {
 							functionParameters = [XDSExpr.loadPointer(variableName)] + params
 						}
 					} else {
-						error = "Unrecognised local variable or function parameter: '\(variableName)'"
-						return nil
+						// apparently function calls on unassigned local variables are a thing such as in hero main
+						// previously returned an error here but now will just assume everything that
+						// hits this case is an intended local variable.
+						// will be up to the script writer to be careful here.
+						// if player.processEvents() in hero main is the only exception then
+						// it may be worth simply accounting for it as an edge case.
+						// will see if it shows up anywhere else.
+						
+						var locs = locals[currentFunction]!
+						locs.addUnique(variableName)
+						locals[currentFunction] = locs
+						
+						if classIndex <= 4 {
+							functionParameters = [XDSExpr.loadVariable(variableName)] + params
+						} else {
+							functionParameters = [XDSExpr.loadPointer(variableName)] + params
+						}
 					}
 				} else {
 					return nil
@@ -1318,10 +1473,6 @@ class XDSScriptCompiler: NSObject {
 				if idText.length > 0 {
 					if let val = Int(idText) {
 						id = val
-						if id == 0 {
-							error = "Message ID cannot be 0: \(token)"
-							return nil
-						}
 					} else {
 						error = "Invalid message ID: \(token)"
 						return nil
@@ -1413,14 +1564,21 @@ class XDSScriptCompiler: NSObject {
 		return functions
 	}
 	
-	private class func getCODE(_ exprs: XGStack<XDSExpr>, gvar: [String], arry: [String], vect: [String], strg: [String], giri: [String]) -> [XGScriptInstruction]? {
+	private class func getCODE(_ exprs: XGStack<XDSExpr>, gvar: [String], arry: [String], strg: [String], giri: [String]) -> [XGScriptInstruction]? {
 		
 		var instructions = [XGScriptInstruction]()
 		
 		let expressions = exprs
 		while !expressions.isEmpty {
 			let nextExpression = expressions.pop()
-			let (instructs, errorString) = nextExpression.instructions(gvar: gvar, arry: arry, vect: vect, strg: strg, giri: giri)
+			
+			switch nextExpression {
+			case .function(let name, _):
+				currentFunction = name
+			default: break
+			}
+			
+			let (instructs, errorString) = nextExpression.instructions(gvar: gvar, arry: arry, strg: strg, giri: giri, locals: locals[currentFunction]!, args: args[currentFunction]!)
 			if let e = errorString {
 				error = e
 				return nil

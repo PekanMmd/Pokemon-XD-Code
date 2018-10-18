@@ -8,8 +8,14 @@
 //
 
 
-XGUtility.documentXDS()
+//XGUtility.documentXDS()
 
+//XGFiles.script("M1_out.scd").scriptData.getXDSScript().save(toFile: .nameAndFolder("M1_out.xds", .Documents))
+
+let script = XGFiles.nameAndFolder("M1_out.xds", .Documents).data.string
+if !XDSScriptCompiler.compile(text: script, toFile: .nameAndFolder("M1_out.scd", .Documents)) {
+	XDSScriptCompiler.error.println()
+}
 
 //XGFiles.nameAndFolder("pkx_usohachi.fsys", .Documents).fsysData.extractFilesToFolder(folder: .Documents)
 

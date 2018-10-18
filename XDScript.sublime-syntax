@@ -23,8 +23,13 @@ main:
 captures:
 1: entity.assignment.xds
 3: keyword.operator.assignment.xds
-- match: \b(define|call|assign|return|function|goto|if|ifFalse|Null|global|groupID|resourceID|LastResult)\b
+- match: \b(define|call|return|function|goto|if|ifFalse|Null|global|groupID|resourceID|LastResult)\b
 scope: keyword.xds
+- match: '\b(assign) ({{ident}})\b'
+captures:
+1: keyword.xds
+2: entity.assignment.xds
+3: entity.assignment.xds
 - match: '(<)({{float}}) ({{float}}) ({{float}})(>)'
 captures:
 1: constant.vector.xds

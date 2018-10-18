@@ -593,38 +593,9 @@ class XGScript: NSObject {
 				
 				
 			case .jumpIfFalse:
-				// for unary or binary predicates, invert operators so can use jumptrue
 				let predicate = stack.pop()
 				let location = XDSExpr.locationWithIndex(instruction.parameter)
-				switch predicate {
-				case .binaryOperator(let o, let e1, let e2):
-					// reverse test directions if possible to make true test instead of false
-					switch o {
-					case 49:
-						stack.push(.jumpTrue(XDSExpr.binaryOperator(52, e1, e2), location))
-					case 52:
-						stack.push(.jumpTrue(XDSExpr.binaryOperator(49, e1, e2), location))
-					case 50:
-						stack.push(.jumpTrue(XDSExpr.binaryOperator(51, e1, e2), location))
-					case 51:
-						stack.push(.jumpTrue(XDSExpr.binaryOperator(50, e1, e2), location))
-					case 48:
-						stack.push(.jumpTrue(XDSExpr.binaryOperator(53, e1, e2), location))
-					case 53:
-						stack.push(.jumpTrue(XDSExpr.binaryOperator(48, e1, e2), location))
-					default:
-						stack.push(.jumpFalse(predicate, location))
-					}
-				case .unaryOperator(let o, let e):
-					switch o {
-					case 16: // ! not operator
-						stack.push(.jumpTrue(e, location))
-					default:
-						stack.push(.jumpFalse(predicate, location))
-					}
-				default:
-					stack.push(.jumpFalse(predicate, location))
-				}
+				stack.push(.jumpFalse(predicate, location))
 				
 				
             case .jumpIfTrue:
@@ -665,7 +636,7 @@ class XGScript: NSObject {
 							}
 						}
 					} else {
-						stack.push(.callVoid(fname, params))
+						stack.push(.callVoid(XDSExpr.locationWithName(fname), params))
 						
 						if scriptFunctionSetsLastResult(name: fname) {
 							var found = false
@@ -772,8 +743,8 @@ class XGScript: NSObject {
 				
 				
             case .nop:
+				// must add nops to preserve instruction count
                 stack.push(.nop)
-				
 				
             case .loadImmediate:
                 stack.push(.loadImmediate(instruction.constant))
@@ -1032,9 +1003,8 @@ class XGScript: NSObject {
 	}
 	
 	func getGlobalVars() -> (text: String, macros: [XDSExpr]) {
-		var str = "define ++ScriptIdentifier \(self.scriptID.hexString())\n"
+		var str = ""
 		var mac = [XDSExpr]()
-		
 		
 		if giri.count > 0 {
 			for i in 0 ..< giri.count {
@@ -1187,6 +1157,8 @@ class XGScript: NSObject {
 		
 		// second pass to get macros and insert comments and locations
 		// also set global variable macros
+		// function headers should replace reserve statements
+		// so assume can take out reserves
 		let updatedStack = XGStack<XDSExpr>()
 		var macros = [XDSExpr]()
 		var instructionIndex = 0
@@ -1201,13 +1173,19 @@ class XGScript: NSObject {
 					params.append("arg_" + i.string)
 				}
 				
-				let function = XDSExpr.function(fname, params)
+				let function = XDSExpr.function(XDSExpr.locationWithName(fname), params)
 				updatedStack.push(function)
 				
 			}
 			
 			if jumpLocations.contains(instructionIndex) {
 				updatedStack.push(XDSExpr.locationIndex(instructionIndex))
+			}
+			
+			// skips reserves as they should now be replaced by function headers
+			switch expr {
+			case .reserve(_): instructionIndex += 1; continue
+			default: break
 			}
 			
 			switch expr {
@@ -1288,6 +1266,9 @@ class XGScript: NSObject {
 				characterMacros[macname] = varname
 			}
 		}
+		
+		// Special macros for GoD tool
+		script += "define ++ScriptIdentifier \(self.scriptID.hexString())\n"
 		
 		for macro in uniqueMacros.sorted(by: { (m1, m2) -> Bool in
 			if m1.macroName == "#TRUE" {

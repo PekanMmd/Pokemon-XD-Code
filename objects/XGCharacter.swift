@@ -64,6 +64,10 @@ class XGCharacter : NSObject {
 		return file.data.getByteStreamFromOffset(startOffset, length: kSizeOfCharacter)
 	}
 	
+	override init() {
+		super.init()
+	}
+	
 	init(file: XGFiles, index: Int, startOffset: Int) {
 		super.init()
 		
