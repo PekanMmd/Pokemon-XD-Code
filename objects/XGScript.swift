@@ -1216,11 +1216,16 @@ class XGScript: NSObject {
 							let immediate = es[2]
 							let constant = immediate.constants[0]
 							let mac = XDSExpr.macroImmediate(constant, type)
-							macros += [mac]
+							if type != .msg {
+								macros += [.macro(mac.text, constant.rawValueString)]
+							}
 							updatedStack.push(.callStandardVoid(7, 17, [es[0], es[1], mac]))
+						} else {
+							updatedStack.push(expr)
 						}
+					} else {
+						updatedStack.push(expr)
 					}
-					updatedStack.push(expr)
 					
 				default:
 					updatedStack.push(expr)
@@ -1230,31 +1235,43 @@ class XGScript: NSObject {
 					if e.isLoadImmediate {
 						let constant = e.constants[0]
 						let mac = XDSExpr.macroImmediate(constant, type)
-						macros += [mac]
+						if type != .msg {
+							macros += [.macro(mac.text, constant.rawValueString)]
+						}
 						updatedStack.push(.setVariable(v, mac))
+					} else {
+						updatedStack.push(expr)
 					}
+				} else {
+					updatedStack.push(expr)
 				}
-				updatedStack.push(expr)
 				
 			case .binaryOperator(let op, let e1, let e2):
 				if e1.isVariable && e2.isLoadImmediate {
 					if let type = globalMacroTypes[e1.variable!] {
 						let constant = e2.constants[0]
 						let mac = XDSExpr.macroImmediate(constant, type)
-						macros += [mac]
+						if type != .msg {
+							macros += [.macro(mac.text, constant.rawValueString)]
+						}
 						updatedStack.push(.binaryOperator(op, e1, mac))
+					} else {
+						updatedStack.push(expr)
 					}
-				}
-				if e2.isVariable && e1.isLoadImmediate {
+				} else if e2.isVariable && e1.isLoadImmediate {
 					if let type = globalMacroTypes[e2.variable!] {
 						let constant = e1.constants[0]
 						let mac = XDSExpr.macroImmediate(constant, type)
-						macros += [mac]
+						if type != .msg {
+							macros += [.macro(mac.text, constant.rawValueString)]
+						}
 						updatedStack.push(.binaryOperator(op, mac, e2))
+					} else {
+						updatedStack.push(expr)
 					}
+				} else {
+					updatedStack.push(expr)
 				}
-				
-				updatedStack.push(expr)
 			default:
 				updatedStack.push(expr)
 			}
