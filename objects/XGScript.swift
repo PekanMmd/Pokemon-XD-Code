@@ -114,11 +114,6 @@ class XGScript: NSObject {
 			return f1.codeOffset < f2.codeOffset
 		}
 		
-		for i in 0 ..< (numberFTBLEntries - 1) {
-			self.ftbl[i] = (self.ftbl[i].codeOffset, self.ftbl[i + 1].codeOffset, self.ftbl[i].name,self.ftbl[i].index)
-		}
-		self.ftbl[numberFTBLEntries - 1] = (self.ftbl[numberFTBLEntries - 1].codeOffset, self.codeLength, self.ftbl[numberFTBLEntries - 1].name,self.ftbl[numberFTBLEntries - 1].index)
-		
 		for i in 0 ..< numberGVAREntries {
 			let start = GVARStart + kScriptSectionHeaderSize + (i * kScriptGVARSize)
 			self.gvar.append( XDSConstant(type: data.get2BytesAtOffset(start + 2), rawValue: data.get4BytesAtOffset(start + 4)) )
@@ -184,6 +179,11 @@ class XGScript: NSObject {
 		}
 		
 		
+		// end offsets for ftbl
+		for i in 0 ..< (numberFTBLEntries - 1) {
+			self.ftbl[i] = (self.ftbl[i].codeOffset, self.ftbl[i + 1].codeOffset, self.ftbl[i].name,self.ftbl[i].index)
+		}
+		self.ftbl[numberFTBLEntries - 1] = (self.ftbl[numberFTBLEntries - 1].codeOffset, self.codeLength, self.ftbl[numberFTBLEntries - 1].name,self.ftbl[numberFTBLEntries - 1].index)
 		
 	}
 	
@@ -546,6 +546,7 @@ class XGScript: NSObject {
 				
 				while currentIndex < lastIndex && currentIndex >= 0 {
 					let currentInstruction = self.code[getCodeIndexForInstruction(index: currentIndex)]
+					
 					switch currentInstruction.opCode {
 					case .loadVariable:
 						fallthrough
@@ -1204,26 +1205,56 @@ class XGScript: NSObject {
 			default: break
 			}
 			
+			// add macros for global vars if macro type is known
 			switch expr {
 			case .callStandardVoid(7, 17, let es):
 				let array = es[0]
 				switch array {
 				case .loadPointer(let v):
 					if let type = globalMacroTypes[v] {
-						if es[2].xdsID == XDSExpr.loadImmediate(XDSConstant.null).xdsID {
+						if es[2].isLoadImmediate {
 							let immediate = es[2]
 							let constant = immediate.constants[0]
 							let mac = XDSExpr.macroImmediate(constant, type)
+							macros += [mac]
 							updatedStack.push(.callStandardVoid(7, 17, [es[0], es[1], mac]))
-						} else {
-							updatedStack.push(expr)
 						}
-					} else {
-						updatedStack.push(expr)
 					}
+					updatedStack.push(expr)
+					
 				default:
 					updatedStack.push(expr)
 				}
+			case .setVariable(let v, let e):
+				if let type = globalMacroTypes[v] {
+					if e.isLoadImmediate {
+						let constant = e.constants[0]
+						let mac = XDSExpr.macroImmediate(constant, type)
+						macros += [mac]
+						updatedStack.push(.setVariable(v, mac))
+					}
+				}
+				updatedStack.push(expr)
+				
+			case .binaryOperator(let op, let e1, let e2):
+				if e1.isVariable && e2.isLoadImmediate {
+					if let type = globalMacroTypes[e1.variable!] {
+						let constant = e2.constants[0]
+						let mac = XDSExpr.macroImmediate(constant, type)
+						macros += [mac]
+						updatedStack.push(.binaryOperator(op, e1, mac))
+					}
+				}
+				if e2.isVariable && e1.isLoadImmediate {
+					if let type = globalMacroTypes[e2.variable!] {
+						let constant = e1.constants[0]
+						let mac = XDSExpr.macroImmediate(constant, type)
+						macros += [mac]
+						updatedStack.push(.binaryOperator(op, mac, e2))
+					}
+				}
+				
+				updatedStack.push(expr)
 			default:
 				updatedStack.push(expr)
 			}

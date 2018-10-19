@@ -86,13 +86,13 @@ class XDSScriptCompiler: NSObject {
 		let macro = macroprocessor(text: stripped)
 		
 		// for testing white space and comment stripping
-		stripped.save(toFile: .nameAndFolder("white space stripped.xds", .Resources))
+//		stripped.save(toFile: .nameAndFolder("white space stripped.xds", .Resources))
 		
 		if macro == nil {
 			return nil
 		}
 		// for testing macroprocessor result
-		macro!.save(toFile: .nameAndFolder("macros.xds", .Resources))
+//		macro!.save(toFile: .nameAndFolder("macros.xds", .Resources))
 		
 		let lines = getLines(text: macro!)
 		

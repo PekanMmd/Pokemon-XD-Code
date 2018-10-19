@@ -71,6 +71,10 @@ indirect enum XDSExpr {
 		return self.isLoadImmediate || self.xdsID == XDSExpr.macroImmediate(XDSConstant.null, .none).xdsID
 	}
 	
+	var isVariable : Bool {
+		return self.xdsID == XDSExpr.loadVariable("").xdsID || self.xdsID == XDSExpr.loadPointer("").xdsID
+	}
+	
 	var isReturn : Bool {
 		return self.xdsID == XDSExpr.XDSReturn.xdsID || self.xdsID == XDSExpr.XDSReturnResult(.nop).xdsID
 	}
@@ -215,6 +219,17 @@ indirect enum XDSExpr {
 			return self
 		default:
 			return .bracket(self)
+		}
+	}
+	
+	var variable : XDSVariable? {
+		switch self{
+		case .loadVariable(let v):
+			return v
+		case .loadPointer(let v):
+			return v
+		default:
+			return nil
 		}
 	}
 	
@@ -697,7 +712,7 @@ indirect enum XDSExpr {
 			return e.macros
 		case .binaryOperator(_, let e1, let e2):
 			return e1.macros + e2.macros
-		case .macroImmediate(let c, let t):
+		case .macroImmediate(let c, _):
 			return [.macro(self.text,c.rawValueString)]
 		case .XDSReturnResult(let e):
 			return e.macros

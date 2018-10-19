@@ -36,7 +36,7 @@ enum XDSConstantTypes {
 				case .character			: return "Character"
 				case .pokemon			: return "Pokemon"
 				case .codeptr_t			: return "Pointer"
-				case .unknown(let val)	: return "Class\(val)"
+				case .unknown(let val)	: return XGScriptClassesInfo.classes(val).name
 			}
 		}
 	}

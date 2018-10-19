@@ -10,7 +10,7 @@
 
 //XGUtility.documentXDS()
 
-for name in ["M1_out", "S3_out", "D3_ship_deck", "esaba_C", "D7_out"] {
+for name in ["esaba_C", "D7_out"] {
 	printg("script test: \(name)")
 	XGFiles.script(name + ".scd").scriptData.getXDSScript().save(toFile: .nameAndFolder(name + ".xds", .Resources))
 	XGFiles.script(name + ".scd").scriptData.description.save(toFile: .nameAndFolder(name + "_old.scd.txt", .Resources))
