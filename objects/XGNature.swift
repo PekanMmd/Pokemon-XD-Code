@@ -25,7 +25,7 @@ let kSpAtkModificationOffset		= 0x07
 let kSpDefModificationOffset		= 0x08
 let kSpeedModificationOffset		= 0x09
 
-let kNatureNameIDOffset				= 0x16
+let kNatureNameIDOffset				= 0x14
 
 class XGNature: NSObject {
 	

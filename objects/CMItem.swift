@@ -19,8 +19,8 @@ let kInBattleUseItemIDOffset	 = 0x04 // Items that can be used on your pokemon i
 let kItemPriceOffset			 = 0x06
 let kItemCouponCostOffset		 = 0x08
 let kItemBattleHoldItemIDOffset  = 0x0B
-let kItemNameIDOffset			 = 0x12
-let kItemDescriptionIDOffset	 = 0x16
+let kItemNameIDOffset			 = 0x10
+let kItemDescriptionIDOffset	 = 0x14
 let kItemParameterOffset		 = 0x1B
 let kFirstFriendshipEffectOffset = 0x24 // Signed Int
 
@@ -74,8 +74,8 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 		price				= data.get2BytesAtOffset(start + kItemPriceOffset)
 		couponPrice			= data.get2BytesAtOffset(start + kItemCouponCostOffset)
 		holdItemID			= data.getByteAtOffset(start + kItemBattleHoldItemIDOffset)
-		nameID				= data.get2BytesAtOffset(start + kItemNameIDOffset)
-		descriptionID		= data.get2BytesAtOffset(start + kItemDescriptionIDOffset)
+		nameID				= data.get4BytesAtOffset(start + kItemNameIDOffset).int
+		descriptionID		= data.get4BytesAtOffset(start + kItemDescriptionIDOffset).int
 		parameter			= data.getByteAtOffset(start + kItemParameterOffset)
 		canBeHeld			= data.getByteAtOffset(start + kItemCantBeHeldOffset) == 0
 		friendshipEffects	= data.getByteStreamFromOffset(start + kFirstFriendshipEffectOffset, length: kNumberOfFriendshipEffects)
@@ -93,8 +93,8 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 		data.replace2BytesAtOffset(start + kItemPriceOffset, withBytes: price)
 		data.replace2BytesAtOffset(start + kItemCouponCostOffset, withBytes: couponPrice)
 		data.replaceByteAtOffset(start + kItemBattleHoldItemIDOffset, withByte: holdItemID)
-		data.replace2BytesAtOffset(start + kItemNameIDOffset, withBytes: nameID)
-		data.replace2BytesAtOffset(start + kItemDescriptionIDOffset, withBytes: descriptionID)
+		data.replace4BytesAtOffset(start + kItemNameIDOffset, withBytes: UInt32(nameID))
+		data.replace4BytesAtOffset(start + kItemDescriptionIDOffset, withBytes: UInt32(descriptionID))
 		data.replaceByteAtOffset(start + kItemParameterOffset, withByte: parameter)
 		data.replaceByteAtOffset(start + kItemCantBeHeldOffset, withByte: canBeHeld ? 0 : 1)
 		data.replaceBytesFromOffset(start + kFirstFriendshipEffectOffset, withByteStream: friendshipEffects)

@@ -18,7 +18,7 @@ class XGMutableData: NSObject {
 	@objc var data = NSMutableData()
 	
 	@objc var string : String {
-		return String(bytesNoCopy: self.data.mutableBytes, length: self.data.length, encoding: .ascii, freeWhenDone: false) ?? ""
+		return String(bytesNoCopy: self.data.mutableBytes, length: self.data.length, encoding: .utf8, freeWhenDone: false) ?? ""
 	}
 	
 	@objc var rawBytes : UnsafeRawPointer {

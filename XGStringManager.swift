@@ -8,22 +8,26 @@
 
 import Foundation
 
-var allStrings = [XGString]()
+var allStringTables = [XGStringTable]()
 var stringsLoaded = false
 
 func loadAllStrings() {
 	
 	if !stringsLoaded {
 		
-		allStrings += XGFiles.common_rel.stringTable.allStrings()
-		allStrings += XGFiles.dol.stringTable.allStrings()
+		allStringTables = [XGFiles.common_rel.stringTable]
+		allStringTables += [XGStringTable.dol()]
+		allStringTables += [XGStringTable.dol2()]
 		if game == .XD {
-			allStrings += XGFiles.tableres2.stringTable.allStrings()
+			allStringTables += [XGFiles.tableres2.stringTable]
 		}
 		
 		XGFolders.StringTables.map{ (file: XGFiles) -> Void in
-			if file.fileName.contains(".msg") {
-				allStrings += file.stringTable.allStrings()
+			if file.fileName.fileExtensions.contains(".msg") {
+				let table = file.stringTable
+				if table.numberOfEntries > 0 {
+					allStringTables += [table]
+				}
 			}
 		}
 		
@@ -35,9 +39,13 @@ func loadAllStrings() {
 func getStringWithID(id: Int) -> XGString? {
 	loadAllStrings()
 	
-	for str in allStrings {
-		if str.id == id {
-			return str
+	if id == 0 {
+		return nil
+	}
+	
+	for table in allStringTables where table.containsStringWithId(id) {
+		if let s = table.stringWithID(id) {
+			return s
 		}
 	}
 	return nil
@@ -50,11 +58,12 @@ func getStringSafelyWithID(id: Int) -> XGString {
 		return XGString(string: "-", file: nil, sid: nil)
 	}
 	
-	for str in allStrings {
-		if str.id == id {
-			return str
+	for table in allStringTables where table.containsStringWithId(id) {
+		if let s = table.stringWithID(id) {
+			return s
 		}
 	}
+	
 	return XGString(string: "-", file: nil, sid: nil)
 }
 
@@ -62,9 +71,12 @@ func getStringsContaining(substring: String) -> [XGString] {
 	loadAllStrings()
 	
 	var found = [XGString]()
-	for str in allStrings where str.containsSubstring(substring) {
-		found.append(str)
+	for table in allStringTables {
+		for str in table.allStrings() where str.containsSubstring(substring) {
+			found.append(str)
+		}
 	}
+	
 	return found
 }
 

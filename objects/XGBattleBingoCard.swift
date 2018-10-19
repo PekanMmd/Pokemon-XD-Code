@@ -24,8 +24,8 @@ let kBingoCardSubIndexOffset			= 0x02
 let kBingoCardPokemonLevelOffset		= 0x03
 let kBingoCardPokemonCountOffset		= 0x06
 let kBingoCardMysteryPanelCountOffset	= 0x07
-let kBingoCardNameIDOffset				= 0x0A
-let kBingoCardDetailsIDOffset			= 0x0E
+let kBingoCardNameIDOffset				= 0x08
+let kBingoCardDetailsIDOffset			= 0x0C
 let kBingoCardFirstCouponsRewardOffset	= 0x10
 let kBingoCardFirstPokemonOffset		= 0x24
 let kBingoCardFirstMysteryPanelOffset	= 0xB0
@@ -93,8 +93,8 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 		difficulty = rel.getByteAtOffset(start + kBingoCardDifficultyLevelOffset)
 		subIndex = rel.getByteAtOffset(start + kBingoCardSubIndexOffset)
 		
-		nameID = rel.get2BytesAtOffset(start + kBingoCardNameIDOffset)
-		detailsID = rel.get2BytesAtOffset(start + kBingoCardDetailsIDOffset)
+		nameID = Int(rel.get4BytesAtOffset(start + kBingoCardNameIDOffset))
+		detailsID = Int(rel.get4BytesAtOffset(start + kBingoCardDetailsIDOffset))
 		
 		pokemonLevel = rel.getByteAtOffset(start + kBingoCardPokemonLevelOffset)
 		
@@ -139,10 +139,11 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 		rel.replaceByteAtOffset(start + kBingoCardPokemonLevelOffset, withByte: self.pokemonLevel)
 		
 		for i in 0 ..< kNumberOfBingoCouponRewards {
-			
 			rel.replace2BytesAtOffset(start + kBingoCardFirstCouponsRewardOffset + (i*2), withBytes: self.rewards[i])
-			
 		}
+		
+		rel.replace4BytesAtOffset(start + kBingoCardNameIDOffset, withBytes: UInt32(self.nameID))
+		rel.replace4BytesAtOffset(start + kBingoCardDetailsIDOffset, withBytes: UInt32(self.detailsID))
 		
 		rel.save()
 		

@@ -220,16 +220,6 @@ class XGUtility {
 	}
 	
 	//MARK: - Utilities 2
-	class func replaceString(_ a: String, withString b: String) {
-		loadAllStrings()
-		
-		for st in allStrings {
-			if st.string.contains(a) {
-				st.duplicateWithString(st.string.replacingOccurrences(of: a, with: b, options: .literal)).replace()
-			}
-		}
-		printg("replaced \"\(a)\" with \"\(b)\"\n")
-	}
 	
 	class func valueContext(_ value: Int) {
 		printg("Value:", value, "can have the following meanings:\n")

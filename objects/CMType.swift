@@ -11,7 +11,7 @@ let kFirstTypeOffset = region == .JP ? 0x344C40 : 0x358500
 let kCategoryOffset = 0x0
 let kTypeIconBigIDOffset = 0x02
 let kTypeIconSmallIDOffset = 0x04 // not available in colosseum
-let kTypeNameIDOffset = 0x6
+let kTypeNameIDOffset = 0x4
 let kFirstEffectivenessOffset = 0x9
 let kSizeOfTypeData = 0x2C
 
@@ -74,7 +74,7 @@ class XGType: NSObject {
 		self.index		= index
 		startOffset		= kFirstTypeOffset + (index * kSizeOfTypeData)
 		
-		self.nameID		= dol.get2BytesAtOffset(startOffset + kTypeNameIDOffset)
+		self.nameID		= dol.get4BytesAtOffset(startOffset + kTypeNameIDOffset).int
 		self.category	= XGMoveCategories(rawValue: dol.getByteAtOffset(startOffset + kCategoryOffset))!
 		
 		var offset = startOffset + kFirstEffectivenessOffset

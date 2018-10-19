@@ -155,8 +155,12 @@ extension GoDTexture {
 extension XGStringTable {
 	func replaceString(_ string: XGString, alert: Bool) -> Bool {
 		
-		let copyStream = self.stringTable.getCharStreamFromOffset(0, length: self.stringOffsets[string.id]!)
+		if self.stringWithID(string.id) == nil {
+			printg("String table '\(self.file.fileName)' doesn't contain string with id: \(string.id)")
+			return false
+		}
 		
+		let copyStream = self.stringTable.getCharStreamFromOffset(0, length: self.stringOffsets[string.id]!)
 		let dataCopy = XGMutableData(byteStream: copyStream, file: self.file)
 		
 		let oldText = self.stringWithID(string.id)!
@@ -210,11 +214,7 @@ extension XGStringTable {
 			self.updateOffsets()
 			self.save()
 			
-			stringsLoaded = false
-			
 			return true
-			
-		} else {
 			
 		}
 		

@@ -14,7 +14,7 @@ let kNumberOfTrainerClasses			= CommonIndexes.NumberOfTrainerClasses.value
 
 // Prize money is payout * max pokemon level * 2
 let kTrainerClassPayoutOffset		= 0x00
-let kTrainerClassNameIDOffset		= 0x06
+let kTrainerClassNameIDOffset		= 0x04
 
 class XGTrainerClass: NSObject {
 	
@@ -65,7 +65,7 @@ class XGTrainerClass: NSObject {
 		let start = self.startOffset
 		
 		self.payout = rel.get2BytesAtOffset(start + kTrainerClassPayoutOffset)
-		self.nameID = rel.get2BytesAtOffset(start + kTrainerClassNameIDOffset)
+		self.nameID = rel.get4BytesAtOffset(start + kTrainerClassNameIDOffset).int
 		
 	}
 	
@@ -74,7 +74,7 @@ class XGTrainerClass: NSObject {
 		let rel = XGFiles.common_rel.data
 		let start = self.startOffset
 		
-		rel.replace2BytesAtOffset(start + kTrainerClassNameIDOffset, withBytes: self.nameID)
+		rel.replace4BytesAtOffset(start + kTrainerClassNameIDOffset, withBytes: UInt32(self.nameID))
 		rel.replace2BytesAtOffset(start + kTrainerClassPayoutOffset, withBytes: self.payout)
 		rel.save()
 	}

@@ -10,16 +10,22 @@
 
 //XGUtility.documentXDS()
 
-//XGFiles.script("M1_out.scd").scriptData.getXDSScript().save(toFile: .nameAndFolder("M1_out.xds", .Documents))
-XGFiles.script("M1_out.scd").scriptData.description.save(toFile: .nameAndFolder("m1_out_old.scd.txt", .Documents))
-
-let script = XGFiles.nameAndFolder("M1_out.xds", .Documents).data.string
-if !XDSScriptCompiler.compile(text: script, toFile: .nameAndFolder("M1_out.scd", .Documents)) {
-	XDSScriptCompiler.error.println()
+for name in ["M1_out", "S3_out", "D3_ship_deck", "esaba_C", "D7_out"] {
+	printg("script test: \(name)")
+	XGFiles.script(name + ".scd").scriptData.getXDSScript().save(toFile: .nameAndFolder(name + ".xds", .Resources))
+	XGFiles.script(name + ".scd").scriptData.description.save(toFile: .nameAndFolder(name + "_old.scd.txt", .Resources))
+	
+	let script = XGFiles.nameAndFolder(name + ".xds", .Resources).data.string
+	if !XDSScriptCompiler.compile(text: script, toFile: .nameAndFolder(name + ".scd", .Resources)) {
+		XDSScriptCompiler.error.println()
+	}
+	let newscript = XGFiles.nameAndFolder(name + ".scd", .Resources).scriptData
+	newscript.description.save(toFile: .nameAndFolder(name + "_new.scd.txt", .Resources))
+	newscript.getXDSScript().save(toFile: .nameAndFolder(name + "_new.xds", .Resources))
+	printg("script test complete.")
 }
-let newscript = XGFiles.nameAndFolder("M1_out.scd", .Documents).scriptData
-newscript.description.save(toFile: .nameAndFolder("m1_out_new.scd.txt", .Documents))
-newscript.getXDSScript().save(toFile: .nameAndFolder("m1_out_new.xds", .Documents))
+XGUtility.documentXDS()
+
 
 //XGFiles.nameAndFolder("pkx_usohachi.fsys", .Documents).fsysData.extractFilesToFolder(folder: .Documents)
 
@@ -85,9 +91,6 @@ XGAssembly.ASMfreeSpacePointer().hexString().println()
 
 
 //XGAssembly.getWordAtRamOffsetFromR13(offset: -0x74b0).hexString().println() //number battle types
-
-//let script = XGFiles.nameAndFolder("M1_water_colo_field.xds", .XDS).data.string
-//XDSScriptCompiler.compile(text: script)
 
 //let cd = item("Battle CD 01")
 //let locations = XGUtility.getItemLocations()

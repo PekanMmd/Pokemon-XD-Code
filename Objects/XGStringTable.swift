@@ -17,6 +17,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	@objc var startOffset = 0x0
 	@objc var stringTable = XGMutableData()
 	@objc var stringOffsets = [Int : Int]()
+	var stringIDs = [Int]()
 	
 	@objc var numberOfEntries : Int {
 		get {
@@ -151,9 +152,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	@objc func save() {
 		
 		let data = file.data
-		
 		data.replaceBytesFromOffset(self.startOffset, withByteStream: stringTable.byteStream)
-		
 		data.save()
 		
 	}
@@ -161,19 +160,24 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	@objc func getOffsets() {
 		
 		var currentOffset = kEndOfHeader
+		var needsUpdate = false
 		
 		for _ in 0 ..< numberOfEntries {
 			
-			let id = stringTable.get4BytesAtOffset(currentOffset)
+			var id = stringTable.get4BytesAtOffset(currentOffset).int
+			let offset = stringTable.get4BytesAtOffset(currentOffset + 4).int
+			if self.stringTable.get2BytesAtOffset(offset) == 0x0 {
+				id = -1
+				needsUpdate = true
+			}
+			self.stringOffsets[id] = offset
+			self.stringIDs.append(id)
+			currentOffset += 8
 			
-			currentOffset += 4
-			
-			let offset = stringTable.get4BytesAtOffset(currentOffset)
-			
-			self.stringOffsets[Int(id)] = Int(offset)
-			
-			currentOffset += 4
-			
+		}
+		
+		if needsUpdate {
+			self.updateOffsets()
 		}
 		
 	}
@@ -182,23 +186,15 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 		var currentOffset = kEndOfHeader
 		
-		var sids = [Int]()
-		
-		for (sid, _) in self.stringOffsets {
-			sids.append(sid)
-		}
-		
+		var sids = self.stringIDs
 		sids.sort{$0 < $1}
 		
 		for sid in sids {
 			
-			stringTable.replace4BytesAtOffset(currentOffset, withBytes: UInt32(sid))
-			
-			currentOffset += 4
-			
-			stringTable.replace4BytesAtOffset(currentOffset, withBytes: UInt32(stringOffsets[sid]!))
-			
-			currentOffset += 4
+			let id : UInt32 = sid < 0 ? 0xFFFFFFFF : UInt32(sid)
+			stringTable.replace4BytesAtOffset(currentOffset, withBytes: id)
+			stringTable.replace4BytesAtOffset(currentOffset + 4, withBytes: UInt32(stringOffsets[sid]!))
+			currentOffset += 8
 			
 		}
 		
@@ -208,10 +204,12 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 	@objc func decreaseOffsetsAfter(_ offset: Int, byCharacters characters: Int) {
 		
-		for (sid, off) in self.stringOffsets {
+		for sid in self.stringIDs {
 			
-			if off > offset {
-				stringOffsets[sid] = off - characters
+			if let off = stringOffsets[sid] {
+				if off > offset {
+					stringOffsets[sid] = off - characters
+				}
 			}
 		}
 		
@@ -219,24 +217,24 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 	@objc func increaseOffsetsAfter(_ offset: Int, byCharacters characters: Int) {
 		
-		for (sid, off) in self.stringOffsets {
+		for sid in self.stringIDs {
 			
-			if off > offset {
-				stringOffsets[sid] = off + characters
+			if let off = stringOffsets[sid] {
+				if off > offset {
+					stringOffsets[sid] = off + characters
+				}
 			}
 		}
 		
 	}
 	
 	func offsetForStringID(_ stringID : Int) -> Int? {
-		
 		return self.stringOffsets[stringID]
 	}
 	
 	@objc func endOffsetForStringId(_ stringID : Int) -> Int {
 		
 		let startOff = offsetForStringID(stringID)!
-		
 		let text = stringWithID(stringID)!
 		
 		return startOff + text.dataLength
@@ -295,8 +293,6 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 		let offset = offsetForStringID(stringID)
 		
-		
-		
 		if offset != nil  {
 			
 			if offset! + 2 >= self.stringTable.length {
@@ -316,20 +312,18 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 		let string = stringWithID(stringID)
 		
-		return string ?? XGString(string: "-", file: .nameAndFolder("",.Documents), sid: 0)
+		return string ?? XGString(string: "-", file: nil, sid: 0)
 	}
 	
 	@objc func containsStringWithId(_ stringID: Int) -> Bool {
-		
-			return stringOffsets.index(forKey: stringID) != nil
-		
+			return stringIDs.contains(stringID)
 	}
 	
 	@objc func allStrings() -> [XGString] {
 		
 		var strings = [XGString]()
 		
-		for (sid, _) in self.stringOffsets {
+		for sid in self.stringIDs {
 			
 			let string = self.stringSafelyWithID(sid)
 			strings.append(string)
@@ -340,7 +334,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 	@objc func purge() {
 		
-		let strings = allStrings()
+		let strings = self.allStrings()
 		for str in strings {
 			
 			let string = XGString(string: "-", file: self.file, sid: str.id)

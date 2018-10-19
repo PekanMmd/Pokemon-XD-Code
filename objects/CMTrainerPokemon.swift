@@ -26,7 +26,7 @@ let kPokemonHappinessOffset	= 0x08
 let kPokemonSpeciesOffset	= 0x0A
 let kPokemonPokeballOffset	= 0x0D
 let kPokemonItemOffset		= 0x12
-let kPokemonNameIDOffset	= 0x16
+let kPokemonNameIDOffset	= 0x14
 let kFirstPokemonIVOffset	= 0x1C
 let kFirstPokemonEVOffset	= 0x23
 
@@ -108,7 +108,7 @@ class XGTrainerPokemon : NSObject {
 		let spec		= data.get2BytesAtOffset(start + kPokemonSpeciesOffset)
 		species			= XGPokemon.pokemon(spec)
 		level			= data.getByteAtOffset(start + kPokemonLevelOffset)
-		nameID			= data.get2BytesAtOffset(start + kPokemonNameIDOffset)
+		nameID			= data.get4BytesAtOffset(start + kPokemonNameIDOffset).int
 		
 		shadowID		= data.getByteAtOffset(start + kPokemonShadowIDOffset)
 		
@@ -180,7 +180,7 @@ class XGTrainerPokemon : NSObject {
 		}
 		
 		data.replace2BytesAtOffset(start + kPokemonSpeciesOffset, withBytes: species.index)
-		data.replace2BytesAtOffset(start + kPokemonNameIDOffset, withBytes: species.nameID)
+		data.replace4BytesAtOffset(start + kPokemonNameIDOffset, withBytes: UInt32(species.nameID))
 		data.replace2BytesAtOffset(start + kPokemonItemOffset, withBytes: item.index)
 		data.replaceByteAtOffset(start + kPokemonHappinessOffset, withByte: happiness)
 		data.replaceByteAtOffset(start + kPokemonLevelOffset, withByte: level)

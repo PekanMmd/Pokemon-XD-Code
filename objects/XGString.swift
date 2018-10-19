@@ -158,6 +158,19 @@ class XGString: NSObject {
 		if self.id == 0 {
 			return false
 		}
+		
+		loadAllStrings()
+		var success = true
+		for table in allStringTables {
+			if table.containsStringWithId(self.id) {
+				success = success && table.replaceString(self, alert: false)
+			}
+		}
+		return success
+	}
+	
+	func replaceDirectly() -> Bool {
+		stringsLoaded = false
 		return self.table.stringTable.replaceString(self, alert: false)
 	}
 	

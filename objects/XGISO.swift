@@ -610,9 +610,7 @@ class XGISO: NSObject {
 					let data = fsys.decompressedDataForFileWithFiletype(type: .msg)
 					if let d = data {
 						d.file = msg
-						if d.get2BytesAtOffset(6) == 0x5553 { // US in unicode
-							d.save()
-						}
+						d.save()
 					}
 				}
 			}

@@ -54,7 +54,7 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var nameID : Int {
 		get {
-			return XGFiles.common_rel.data.get2BytesAtOffset(startOffset + kNameIDOffset)
+			return Int(XGFiles.common_rel.data.get4BytesAtOffset(startOffset + kNameIDOffset))
 		}
 	}
 	
@@ -200,7 +200,7 @@ enum XGOriginalPokemon {
 	
 	var nameID : Int {
 		get {
-			return XGFiles.original(.common_rel).data.get2BytesAtOffset(startOffset + kNameIDOffset)
+			return Int(XGFiles.original(.common_rel).data.get4BytesAtOffset(startOffset + kNameIDOffset))
 		}
 	}
 	

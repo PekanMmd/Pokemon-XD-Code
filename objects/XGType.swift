@@ -12,7 +12,7 @@ import Foundation
 let kCategoryOffset = 0x0
 let kTypeIconBigIDOffset = 0x02
 let kTypeIconSmallIDOffset = 0x04
-let kTypeNameIDOffset = 0xA
+let kTypeNameIDOffset = 0x8
 let kFirstEffectivenessOffset = 0xD
 let kSizeOfTypeData = 0x30
 
@@ -74,7 +74,7 @@ class XGType: NSObject {
 		self.index		= index
 		startOffset		= CommonIndexes.Types.startOffset + (index * kSizeOfTypeData)
 		
-		self.nameID		= rel.get2BytesAtOffset(startOffset + kTypeNameIDOffset)
+		self.nameID		= rel.get4BytesAtOffset(startOffset + kTypeNameIDOffset).int
 		self.category	= XGMoveCategories(rawValue: rel.getByteAtOffset(startOffset + kCategoryOffset))!
 		
 		var offset = startOffset + kFirstEffectivenessOffset
@@ -96,6 +96,7 @@ class XGType: NSObject {
 		let rel = XGFiles.common_rel.data
 		
 		rel.replaceByteAtOffset(startOffset + kCategoryOffset, withByte: self.category.rawValue)
+		rel.replace4BytesAtOffset(startOffset + kTypeNameIDOffset, withBytes: UInt32(self.nameID))
 		
 		for i in 0 ..< self.effectivenessTable.count {
 			

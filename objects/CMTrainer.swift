@@ -17,12 +17,12 @@ let kTrainerGenderOffset			= 0x00
 let kTrainerClassOffset				= 0x03
 let kTrainerFirstPokemonOffset		= 0x04
 let kTrainerAIOffset				= 0x06
-let kTrainerNameIDOffset			= 0x0A
+let kTrainerNameIDOffset			= 0x08
 let kTrainerBattleTransitionOffset	= 0x0C
 let kTrainerClassModelOffset		= 0x13
-let kTrainerPreBattleTextIDOffset	= 0x26
-let kTrainerVictoryTextIDOffset		= 0x2A
-let kTrainerDefeatTextIDOffset		= 0x2E
+let kTrainerPreBattleTextIDOffset	= 0x24
+let kTrainerVictoryTextIDOffset		= 0x28
+let kTrainerDefeatTextIDOffset		= 0x2C
 let kFirstTrainerLoseText2Offset	= 0x32
 let kTrainerFirstItemOffset			= 0x14
 
@@ -88,10 +88,10 @@ class XGTrainer: NSObject {
 		
 		let deck = XGFiles.common_rel.data
 		
-		self.nameID =  deck.get2BytesAtOffset(start + kTrainerNameIDOffset)
-		self.preBattleTextID = deck.get2BytesAtOffset(start + kTrainerPreBattleTextIDOffset)
-		self.victoryTextID = deck.get2BytesAtOffset(start + kTrainerVictoryTextIDOffset)
-		self.defeatTextID = deck.get2BytesAtOffset(start + kTrainerDefeatTextIDOffset)
+		self.nameID =  deck.get4BytesAtOffset(start + kTrainerNameIDOffset).int
+		self.preBattleTextID = deck.get4BytesAtOffset(start + kTrainerPreBattleTextIDOffset).int
+		self.victoryTextID = deck.get4BytesAtOffset(start + kTrainerVictoryTextIDOffset).int
+		self.defeatTextID = deck.get4BytesAtOffset(start + kTrainerDefeatTextIDOffset).int
 		self.ai = deck.get2BytesAtOffset(start + kTrainerAIOffset)
 		
 		let tClass = deck.getByteAtOffset(start + kTrainerClassOffset)
@@ -114,10 +114,10 @@ class XGTrainer: NSObject {
 		let start = startOffset
 		let deck = XGFiles.common_rel.data
 		
-		deck.replace2BytesAtOffset(start + kTrainerNameIDOffset, withBytes: self.nameID)
-		deck.replace2BytesAtOffset(start + kTrainerPreBattleTextIDOffset, withBytes: self.preBattleTextID)
-		deck.replace2BytesAtOffset(start + kTrainerVictoryTextIDOffset, withBytes: self.victoryTextID)
-		deck.replace2BytesAtOffset(start + kTrainerDefeatTextIDOffset, withBytes: self.defeatTextID)
+		deck.replace4BytesAtOffset(start + kTrainerNameIDOffset, withBytes: UInt32(self.nameID))
+		deck.replace4BytesAtOffset(start + kTrainerPreBattleTextIDOffset, withBytes: UInt32(self.preBattleTextID))
+		deck.replace4BytesAtOffset(start + kTrainerVictoryTextIDOffset, withBytes: UInt32(self.victoryTextID))
+		deck.replace4BytesAtOffset(start + kTrainerDefeatTextIDOffset, withBytes: UInt32(self.defeatTextID))
 		
 		deck.replace2BytesAtOffset(start + kTrainerAIOffset, withBytes: self.ai)
 		deck.replaceByteAtOffset(start + kTrainerClassOffset , withByte: self.trainerClass.rawValue)

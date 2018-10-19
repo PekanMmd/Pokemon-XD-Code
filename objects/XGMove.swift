@@ -32,8 +32,8 @@ let kMoveCategoryOffset			= game == .XD ? 0x13 : 0x1F // added through hacking i
 let kBasePowerOffset			= game == .XD ? 0x19 : 0x17
 let kEffectOffset				= game == .XD ? 0x1D : 0x1B
 
-let kMoveNameIDOffset			= 0x22
-let kMoveDescriptionIDOffset	= 0x2E
+let kMoveNameIDOffset			= 0x20
+let kMoveDescriptionIDOffset	= 0x2C
 let kAnimationIndexOffset		= game == .XD ? 0x1E : 0x1C
 let kAnimation2IndexOffset		= 0x32
 
@@ -135,8 +135,8 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		self.accuracy		 = rel.getByteAtOffset(startOffset + kAccuracyOffset)
 		self.pp				 = rel.getByteAtOffset(startOffset + kPPOffset)
 		
-		self.nameID		   = rel.get2BytesAtOffset(startOffset + kMoveNameIDOffset)
-		self.descriptionID = rel.get2BytesAtOffset(startOffset + kMoveDescriptionIDOffset)
+		self.nameID		   = rel.get4BytesAtOffset(startOffset + kMoveNameIDOffset).int
+		self.descriptionID = rel.get4BytesAtOffset(startOffset + kMoveDescriptionIDOffset).int
 		self.animationID   = rel.get2BytesAtOffset(startOffset + kAnimationIndexOffset)
 		self.animation2ID  = rel.get2BytesAtOffset(startOffset + kAnimation2IndexOffset)
 		
@@ -189,8 +189,8 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		rel.replaceByteAtOffset(startOffset + kEffectAccuracyOffset, withByte: self.effectAccuracy)
 		rel.replaceByteAtOffset(startOffset + kPriorityOffset, withByte: self.priority < 0 ? 256 + self.priority : self.priority)
 		
-		rel.replace2BytesAtOffset(startOffset + kMoveNameIDOffset, withBytes: self.nameID)
-		rel.replace2BytesAtOffset(startOffset + kMoveDescriptionIDOffset, withBytes: self.descriptionID)
+		rel.replace4BytesAtOffset(startOffset + kMoveNameIDOffset, withBytes: UInt32(self.nameID))
+		rel.replace4BytesAtOffset(startOffset + kMoveDescriptionIDOffset, withBytes:UInt32( self.descriptionID))
 		rel.replace2BytesAtOffset(startOffset + kAnimationIndexOffset , withBytes: self.animationID)
 		rel.replace2BytesAtOffset(startOffset + kAnimation2IndexOffset, withBytes: self.animation2ID)
 		

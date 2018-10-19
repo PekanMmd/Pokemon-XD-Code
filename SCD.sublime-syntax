@@ -1,0 +1,78 @@
+%YAML 1.2
+---
+
+name: Pokemon_XD_SCD
+file_extensions:
+  - scd.txt
+scope: scd
+
+variables:
+  ident: '([A-Za-z_0-9\[\]\-]+)'
+  type: '[A-Z]([A-Za-z_0-9]*)'
+  number: '-?((\d+(\.\d+)|\.\d+)|(0x([0-9A-Fa-f]+))|(\d+))'
+  float: '-?(\d+(\.\d+)|\.\d+)'
+
+contexts:
+
+  main:
+    - match: '\(0x([A-Fa-f0-9]+)\):'
+      scope: comment.xds
+    - match: '0x([A-Fa-f0-9]+)  '
+      scope: comment.multiline.xds
+    - match: '\[([A-Fa-f0-9]+)\]'
+      scope: comment.xds
+    - match: \b(return|exit|reserve|release)\b
+      scope: keyword.xds
+    - match: \b(jmp|jmptrue|jmpfalse) {{number}}\b
+      scope: keyword.xds
+    - match: \b(ldvar|ldncpvar)\b
+      scope: string.quoted.double.xds
+    - match: \b(call|callstd|operator)\b
+      scope: constant.macro.xds
+    - match: \b(pop {{number}})\b
+      scope: constant.macro.xds
+    - match: \b(setvar|setvector|)\b
+      scope: string.escape.xds
+    - match: \b((setline {{number}} \({{number}}\))|nop)
+      scope: comment.xds
+    - match: \b(ldimm)\b
+      scope: constant.numeric.xds
+    - match: ({{type}}\({{number}}\))
+      scope: constant.object.xds
+    - match: '\(0x([A-Fa-f0-9]+)\)'
+      scope: constant.object.xds
+    - match: '#({{ident}})'
+      scope: constant.location.xds
+    - match: '({{ident}}.{{ident}}\(\))'
+      scope: constant.vector.xds
+    - match: '"'
+      push: string
+
+  string:
+    - meta_include_prototype: false
+    - meta_scope: string.quoted.double.xds
+    - match: '\['
+      push: string_escapes
+    - match: '{'
+      push: string_escape_params
+    - match: '"'
+      pop: true
+
+  string_escapes:
+    - meta_include_prototype: false
+    - meta_scope: string.escape.xds
+    - match: '\]'
+      pop: true
+
+
+  string_escape_params:
+    - meta_include_prototype: false
+    - meta_scope: string.escape.param.xds
+    - match: '}'
+      pop: true
+
+
+
+
+
+

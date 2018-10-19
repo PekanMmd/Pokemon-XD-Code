@@ -66,9 +66,9 @@ let kSpecialAttackOffset	= 0x95
 let kSpecialDefenseOffset	= 0x97
 let kSpeedOffset			= 0x99
 
-let kNameIDOffset			= 0x1A
+let kNameIDOffset			= 0x18
 let kPokemonCryIndexOffset	= 0x0C
-let kSpeciesNameIDOffset	= 0x1E
+let kSpeciesNameIDOffset	= 0x1C
 
 let kPokemonModelIndexOffset = 0x2E // Same as pokemon's index
 let kPokemonBodyOffset		 = 0x118
@@ -198,8 +198,8 @@ class XGPokemonStats: NSObject {
 		self.startOffset	= CommonIndexes.PokemonStats.startOffset + ( kSizeOfPokemonStats * index )
 		self.index			= index
 		
-		self.nameID			= rel.get2BytesAtOffset(startOffset + kNameIDOffset)
-		self.speciesNameID  = rel.get2BytesAtOffset(startOffset + kSpeciesNameIDOffset)
+		self.nameID			= rel.get4BytesAtOffset(startOffset + kNameIDOffset).int
+		self.speciesNameID  = rel.get4BytesAtOffset(startOffset + kSpeciesNameIDOffset).int
 		self.cryIndex		= rel.get2BytesAtOffset(startOffset + kPokemonCryIndexOffset)
 		self.modelIndex		= rel.get2BytesAtOffset(startOffset + kPokemonModelIndexOffset)
 		self.faceIndex		= game == .XD ? rel.get2BytesAtOffset(startOffset + kPokemonFaceIndexOffset) : rel.get4BytesAtOffset(CommonIndexes.PokefaceTextures.startOffset + (index * 8) + 4).int
@@ -280,8 +280,8 @@ class XGPokemonStats: NSObject {
 		
 		let rel	= XGFiles.common_rel.data
 
-		rel.replace2BytesAtOffset(startOffset + kNameIDOffset, withBytes: nameID)
-		rel.replace2BytesAtOffset(startOffset + kSpeciesNameIDOffset, withBytes: speciesNameID)
+		rel.replace4BytesAtOffset(startOffset + kNameIDOffset, withBytes: UInt32(nameID))
+		rel.replace4BytesAtOffset(startOffset + kSpeciesNameIDOffset, withBytes: UInt32(speciesNameID))
 		rel.replace2BytesAtOffset(startOffset + kPokemonCryIndexOffset, withBytes: cryIndex)
 		rel.replace2BytesAtOffset(startOffset + kPokemonModelIndexOffset, withBytes: modelIndex)
 		rel.replace2BytesAtOffset(startOffset + kPokemonFaceIndexOffset, withBytes: faceIndex)

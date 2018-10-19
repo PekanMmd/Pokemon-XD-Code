@@ -3851,6 +3851,8 @@
 		B2445AF6209F474E00B5404E /* XGMoveEffectTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGMoveEffectTypes.swift; sourceTree = "<group>"; };
 		B2445AF8209F52CC00B5404E /* GoDMoveEffectTypePopUpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDMoveEffectTypePopUpButton.swift; sourceTree = "<group>"; };
 		B24507FF208A348E00FEC54E /* XGDeoxysFormes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGDeoxysFormes.swift; sourceTree = "<group>"; };
+		B247ED3B21794A1C0034CAF5 /* SCD.sublime-color-scheme */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SCD.sublime-color-scheme"; sourceTree = "<group>"; };
+		B247ED3C21794A1C0034CAF5 /* SCD.sublime-syntax */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SCD.sublime-syntax"; sourceTree = "<group>"; };
 		B249085221516D520044947B /* XGASM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGASM.swift; sourceTree = "<group>"; };
 		B24A9CB320A31C1900F0BBD0 /* GoDShadowPokemonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDShadowPokemonViewController.swift; sourceTree = "<group>"; };
 		B24A9CB520A321D100F0BBD0 /* GoDShadowPokemonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDShadowPokemonView.swift; sourceTree = "<group>"; };
@@ -6314,6 +6316,8 @@
 				B2F5EB851F49A11A0075C6D2 /* GoDToolCL */,
 				B2562F4621349567004180F1 /* ColosseumToolCL */,
 				B2F5ED061F49AD700075C6D2 /* Bridge.h */,
+				B247ED3B21794A1C0034CAF5 /* SCD.sublime-color-scheme */,
+				B247ED3C21794A1C0034CAF5 /* SCD.sublime-syntax */,
 				B2EAFF0220BED900009FC947 /* XDScript.sublime-syntax */,
 				B23DD76E20C0B54500348D26 /* XDScript.sublime-color-scheme */,
 				B252D95A1F98AF0400794FCE /* XGRelocationTable.swift */,

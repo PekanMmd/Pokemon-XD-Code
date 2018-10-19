@@ -32,7 +32,7 @@ class XGOriginalMovePopover: XGPopover, UISearchResultsUpdating, UISearchBarDele
 		
 		for i in 0 ..< kNumberOfMoves {
 			
-			let nameID = data.get2BytesAtOffset(offset + kMoveNameIDOffset)
+			let nameID = data.get4BytesAtOffset(offset + kMoveNameIDOffset).int
 			let name = table.stringSafelyWithID(nameID).string
 			
 			let type = data.getByteAtOffset(offset + kMoveTypeOffset)

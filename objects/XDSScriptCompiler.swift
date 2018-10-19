@@ -20,18 +20,33 @@ class XDSScriptCompiler: NSObject {
 	static var strgs  = [String]()
 	static var locations = [String : Int]()
 	static var currentFunction = ""
-	static var scriptID = 0 // currently unknown what this value represents
-	
 	static var characters = [XGCharacter]()
+	
+	// special variables
+	static var scriptID = 0 // currently unknown what this value represents
+	static var baseStringID = 0
+	static var xdsversion : Float = 0.0
+	static var writeDisassembly = false
+	static var decompileXDS = false
 	
 	static var error = ""
 	
 	class func compile(text: String, toFile file: XGFiles) -> Bool {
-		if let data = compile(text: text) {
+		if let data = compile(text) {
 			data.file = file
 			data.save()
 			if file.exists {
-				printg("Successfully compiled script: \(file.fileName)")
+				printg("Successfully compiled script: \(file.fileName)!")
+				if writeDisassembly {
+					printg("Disassembling newly compiled file...")
+					file.scriptData.description.save(toFile: .nameAndFolder(file.fileName + ".txt", file.folder))
+					printg("Disassembly complete!")
+				}
+				if decompileXDS {
+					printg("redecompiling newly compiled file...")
+					file.scriptData.getXDSScript().save(toFile: .nameAndFolder(file.fileName.removeFileExtensions() + "_decompiled.xds", file.folder))
+					printg("Decompilation complete!")
+				}
 				return true
 			} else {
 				let errorString = "XDS compilation error, File: \(file.fileName) \nError- failed to save file."
@@ -47,7 +62,7 @@ class XDSScriptCompiler: NSObject {
 		return false
 	}
 	
-	class func compile(text: String) -> XGMutableData? {
+	class func compile(_ script: String) -> XGMutableData? {
 		
 		giris  = (names: [XDSVariable](), values: [GIRI]())
 		gvars  = (names: [XDSVariable](), values: [XDSConstant]())
@@ -58,19 +73,26 @@ class XDSScriptCompiler: NSObject {
 		strgs  = [String]()
 		locations = [String : Int]()
 		characters = [XGCharacter]()
+		currentFunction = ""
 		
-		var stripped = stripComments(text: text)
+		scriptID = 0
+		baseStringID = 0
+		xdsversion = 0
+		writeDisassembly = false
+		decompileXDS = false
+		
+		var stripped = stripComments(text: script)
 		stripped = stripWhiteSpace(text: stripped)
 		let macro = macroprocessor(text: stripped)
 		
 		// for testing white space and comment stripping
-//		stripped.save(toFile: .nameAndFolder("white space stripped.xds", .Documents))
+		stripped.save(toFile: .nameAndFolder("white space stripped.xds", .Resources))
 		
 		if macro == nil {
 			return nil
 		}
 		// for testing macroprocessor result
-//		macro!.save(toFile: .nameAndFolder("macros.xds", .Documents))
+		macro!.save(toFile: .nameAndFolder("macros.xds", .Resources))
 		
 		let lines = getLines(text: macro!)
 		
@@ -105,7 +127,7 @@ class XDSScriptCompiler: NSObject {
 //		for expr in expressions {
 //			recreated += expr.text + "\n"
 //		}
-//		recreated.save(toFile: .nameAndFolder("recreated.xds", .Documents))
+//		recreated.save(toFile: .nameAndFolder("recreated.xds", .Resources))
 		
 		
 		let stack = createExprStack(expressions)
@@ -151,14 +173,9 @@ class XDSScriptCompiler: NSObject {
 						// special define statement for unknown identifier
 						// unsure how necessary it is but for now must be explicitly stated
 						if tokens.count == 3 {
-							if tokens[1] == "++ScriptIdentifier" {
-								if let val = Int(tokens[2]) {
-									scriptID = val
-								} else {
-									if tokens[2].isHexInteger {
-										let val = tokens[2].hexStringToInt()
-										scriptID = val
-									}
+							if tokens[1].contains("++") {
+								if !handleSpecialMacro(tokens: tokens) {
+									return nil
 								}
 							}
 						}
@@ -215,6 +232,72 @@ class XDSScriptCompiler: NSObject {
 		}
 		
 		return updated
+	}
+	
+	private class func handleSpecialMacro(tokens: [String]) -> Bool {
+		
+		if tokens[1] == "++ScriptIdentifier" {
+			if let val = tokens[2].integerValue {
+				scriptID = val
+				return true
+			} else {
+				error = "Invalid script identifier: \(tokens[0]) \(tokens[1]) \(tokens[2])"
+				return false
+			}
+		}
+		
+		if tokens[1] == "++BaseStringID" {
+			if let val = tokens[2].integerValue {
+				baseStringID = val
+				return true
+			} else {
+				error = "Invalid string id: \(tokens[0]) \(tokens[1]) \(tokens[2])"
+				return false
+			}
+		}
+		
+		if tokens[1] == "++XDSVersion" {
+			if let val = Float(tokens[2]) {
+				xdsversion = val
+				if xdsversion > currentXDSVersion {
+					error = "This compiler is too old. It was built for xds versions \(String(format: "%1.1f", currentXDSVersion)) and below.\n"
+					error += "\(tokens[0]) \(tokens[1]) \(tokens[2])"
+				}
+				return true
+			} else {
+				error = "Invalid xds version: \(tokens[0]) \(tokens[1]) \(tokens[2])"
+				return false
+			}
+		}
+		
+		if tokens[1] == "++WriteDisassembly" {
+			if tokens[2] == "YES" {
+				writeDisassembly = true
+				return true
+			} else if tokens[2] == "NO" {
+				writeDisassembly = false
+				return true
+			} else  {
+				error = "Invalid token, expected 'YES' or 'NO': \(tokens[0]) \(tokens[1]) \(tokens[2])"
+				return false
+			}
+		}
+		
+		if tokens[1] == "++WriteDecompilation" {
+			if tokens[2] == "YES" {
+				decompileXDS = true
+				return true
+			} else if tokens[2] == "NO" {
+				decompileXDS = false
+				return true
+			} else  {
+				error = "Invalid token, expected 'YES' or 'NO': \(tokens[0]) \(tokens[1]) \(tokens[2])"
+				return false
+			}
+		}
+		
+		error = "Unrecognised special macro: \(tokens[1])"
+		return false
 	}
 	
 	private class func handleAssignment(tokens: [String]) -> Bool {
@@ -381,9 +464,29 @@ class XDSScriptCompiler: NSObject {
 		// if id is nil then generate a new string with the next free id
 		// replace occurrences of [Quote] with \"
 		// check that id isn't 0 otherwise simply return 0 without parsing string
+		// use baseStringID as starting value to search for unused string ids
+		// return -1 if failed to replace string and set error
 		
-		// return the strings finalised id or nil if failed
-		return id
+		// return the strings finalised id or -1 if failed
+		
+		if id != nil {
+			if let msg = getStringWithID(id: id!) {
+				if !msg.duplicateWithString(text.replacingOccurrences(of: "[Quote]", with: "\"")).replace() {
+					error = "Failed to replace msg: $:\(id!):\"\(text)\""
+					return -1
+				}
+			}
+		}
+		
+		let newID = id
+		
+		if id == nil {
+			if newID != nil {
+				printg("String: \"\(text)\" was added with msgID: $:\(newID):")
+			}
+		}
+		
+		return newID
 	}
 	
 	private class func parseLiteral(_ text: String) -> (XDSConstantTypes, [XDSConstant])? {
@@ -485,8 +588,17 @@ class XDSScriptCompiler: NSObject {
 				}
 			}
 			
+			if id == nil && str == nil {
+				error = "Invalid msg macro: \(text)"
+				return nil
+			}
+			
 			let newID = str == nil ? id : handleMSGString(id: id, text: str!)
 			if newID != nil {
+				if newID! < 0 {
+					// error in handlemsg
+					return nil
+				}
 				return (XDSConstantTypes.integer, [XDSConstant(type: XDSConstantTypes.integer.index, rawValue: UInt32(newID!))])
 			}
 		}
@@ -1232,7 +1344,7 @@ class XDSScriptCompiler: NSObject {
 			}
 		}
 		
-		// string or msg literal
+		// string literal
 		if token.substring(from: 0, to: 1) == "\"" {
 			let string = token.replacingOccurrences(of: "\"", with: "")
 			strgs.addUnique(string)
@@ -1277,6 +1389,10 @@ class XDSScriptCompiler: NSObject {
 			}
 			
 			if id != nil {
+				if id! < 0 {
+					// error in handlemsg
+					return nil
+				}
 				return .loadImmediate(XDSConstant(type: XDSConstantTypes.integer.index, rawValue: UInt32(id!)))
 			}
 			

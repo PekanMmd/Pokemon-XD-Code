@@ -333,6 +333,11 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		
 		deck.replace2BytesAtOffset(start + kTrainerCameraEffectOffset, withBytes: self.cameraEffects)
 		
+		for id in [nameID, preBattleTextID, victoryTextID, defeatTextID] {
+			if id > 0xFFFF {
+				printg("warning: trainer msg ids must not exceed 0xFFFF (~32,000)")
+			}
+		}
 		deck.replace2BytesAtOffset(start + kTrainerNameIDOffset, withBytes: self.nameID)
 		deck.replace2BytesAtOffset(start + kTrainerPreBattleTextIDOffset, withBytes: self.preBattleTextID)
 		deck.replace2BytesAtOffset(start + kTrainerVictoryTextIDOffset, withBytes: self.victoryTextID)

@@ -296,6 +296,18 @@ class XGFsys : NSObject {
 		return decompressedDataForFileWithIndex(index: index)
 	}
 	
+	func decompressedDataForFilesWithFiletype(type: XGFileTypes) -> [XGMutableData] {
+		var filesData = [XGMutableData]()
+		for index in 0 ..< self.numberOfEntries {
+			if fileTypeForFile(index: index) == type {
+				if let file = decompressedDataForFileWithIndex(index: index) {
+					filesData.append(file)
+				}
+			}
+		}
+		return filesData
+	}
+	
 	@objc func dataForFileWithIndex(index: Int) -> XGMutableData? {
 		
 		let start = self.startOffsetForFile(index)

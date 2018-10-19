@@ -46,14 +46,14 @@ enum XGItems : XGDictionaryRepresentable {
 	var nameID : Int {
 		get {
 			let data  = XGFiles.dol.data
-			return data.get2BytesAtOffset(startOffset + kItemNameIDOffset)
+			return Int(data.get4BytesAtOffset(startOffset + kItemNameIDOffset))
 		}
 	}
 	
 	var descriptionID : Int {
 		get {
 			let data  = XGFiles.dol.data
-			return data.get2BytesAtOffset(startOffset + kItemDescriptionIDOffset)
+			return Int(data.get4BytesAtOffset(startOffset + kItemDescriptionIDOffset))
 		}
 	}
 	

@@ -120,7 +120,7 @@ enum XGScriptClassesInfo {
 	}
 	
 	func functionWithName(_ name: String) -> XGScriptFunctionInfo? {
-		let kMaxNumberOfXDSClassFunctions = 200 // don't know the number but pretty sure it's fewer than 200 =p
+		let kMaxNumberOfXDSClassFunctions = 200 // theoretical limit is 0xffff but 200 is probably safe
 		for i in 0 ..< kMaxNumberOfXDSClassFunctions {
 			let info = self.functionWithID(i)
 			if info.name.lowercased() == name.lowercased() {

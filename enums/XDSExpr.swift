@@ -310,15 +310,23 @@ indirect enum XDSExpr {
 		case .XDSReturnResult(let e):
 			return 3 + e.instructionCount // includes release and setvar last result
 		case .callStandard(_, _, let es):
-			var count = 3 // includes pop and ldvar last result
+			var count = 2 // includes ldvar last result
 			for e in es {
 				count += e.instructionCount
 			}
+			// if it has params then also need an instruction for pop
+			if es.count > 0 {
+				count += 1
+			}
 			return count
 		case .callStandardVoid(_, _, let es):
-			var count = 2 // includes pop
+			var count = 1
 			for e in es {
 				count += e.instructionCount
+			}
+			// if it has params then also need an instruction for pop
+			if es.count > 0 {
+				count += 1
 			}
 			return count
 		case .jumpTrue(let e, _):
@@ -843,9 +851,12 @@ indirect enum XDSExpr {
 				return (nil, "Function '\(name)' doesn't exist.")
 			}
 			
-			let currentInstruction = XGScriptInstruction.call(location: locations[name]!)
-			let lastResult = XGScriptInstruction.loadVarLastResult()
-			return (paramInstructions + [currentInstruction, lastResult], nil)
+			var currentInstructions = [XGScriptInstruction.call(location: locations[name]!)]
+			if params.count > 0 {
+				currentInstructions += [XGScriptInstruction.pop(count: params.count)]
+			}
+			currentInstructions += [XGScriptInstruction.loadVarLastResult()]
+			return (paramInstructions + currentInstructions, nil)
 			
 		case .callVoid(let name, let params):
 			var paramInstructions = [XGScriptInstruction]()
@@ -861,8 +872,11 @@ indirect enum XDSExpr {
 				return (nil, "Function '\(name)' doesn't exist.")
 			}
 			
-			let currentInstruction = XGScriptInstruction.call(location: locations[name]!)
-			return (paramInstructions + [currentInstruction], nil)
+			var currentInstructions = [XGScriptInstruction.call(location: locations[name]!)]
+			if params.count > 0 {
+				currentInstructions += [XGScriptInstruction.pop(count: params.count)]
+			}
+			return (paramInstructions + currentInstructions, nil)
 			
 		case .XDSReturn:
 			let releaseInstruction = XGScriptInstruction.release(count: locals.count)
@@ -889,10 +903,12 @@ indirect enum XDSExpr {
 				paramInstructions = subs! + paramInstructions
 			}
 			
-			let currentInstruction = XGScriptInstruction.functionCall(classID: c, funcID: f)
-			let lastResult = XGScriptInstruction.loadVarLastResult()
-			let pop = XGScriptInstruction.pop(count: params.count)
-			return (paramInstructions + [currentInstruction, pop, lastResult], nil)
+			var currentInstructions = [XGScriptInstruction.functionCall(classID: c, funcID: f)]
+			if params.count > 0 {
+				currentInstructions += [XGScriptInstruction.pop(count: params.count)]
+			}
+			currentInstructions += [XGScriptInstruction.loadVarLastResult()]
+			return (paramInstructions + currentInstructions, nil)
 			
 		case .callStandardVoid(let c, let f, let params):
 			var paramInstructions = [XGScriptInstruction]()
@@ -904,9 +920,11 @@ indirect enum XDSExpr {
 				paramInstructions = subs! + paramInstructions
 			}
 			
-			let currentInstruction = XGScriptInstruction.functionCall(classID: c, funcID: f)
-			let pop = XGScriptInstruction.pop(count: params.count)
-			return (paramInstructions + [currentInstruction, pop], nil)
+			var currentInstructions = [XGScriptInstruction.functionCall(classID: c, funcID: f)]
+			if params.count > 0 {
+				currentInstructions += [XGScriptInstruction.pop(count: params.count)]
+			}
+			return (paramInstructions + currentInstructions, nil)
 			
 		case .jumpTrue(let e, let location):
 			let (subs, err) = e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)

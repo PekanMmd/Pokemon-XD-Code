@@ -11,7 +11,7 @@ let kSizeOfBattleData = 0x38
 
 let kBattleBattleTypeOffset = 0x0
 let kBattleFieldOffset  = 0x5
-let kBattleNameIDOffset = 0xa
+let kBattleNameIDOffset = 0x8
 let kBattleColosseumRoundOffset = 0x16
 
 let kBattleTrainer1IndexOffset = 0x18

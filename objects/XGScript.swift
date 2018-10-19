@@ -26,6 +26,8 @@ typealias FTBL = (codeOffset: Int, end: Int, name: String, index: Int)
 typealias GIRI = (groupID: Int, resourceID: Int)
 typealias VECT = (x: Float, y: Float, z: Float)
 
+let currentXDSVersion : Float = 1.0
+
 class XGScript: NSObject {
 	
 	var file : XGFiles!
@@ -614,10 +616,17 @@ class XGScript: NSObject {
 				if !instruction.isUnusedPostpendedCall {
 					let fname = getFunctionAtLocation(location: instruction.parameter)
 					
-					let param_count = functionParams[fname] ?? 0
+					var paramCount = 0
+					if i <= self.code.count - 1 {
+						let next = self.code[i + 1]
+						if next.opCode == .pop {
+							paramCount = next.subOpCode
+						}
+					}
+					
 					var params = [XDSExpr]()
 					var broken = false // ignore malformed instructions caused by returning mid function.
-					for _ in 0 ..< param_count {
+					for _ in 0 ..< paramCount {
 						if !broken {
 							if stack.peek().isReturn {
 								stack.push(.nop)
@@ -804,7 +813,7 @@ class XGScript: NSObject {
 				}
 				
             case .pop:
-				// automatically included in callstd
+				// automatically included in callstd and call
                 continue
 				
 				
@@ -826,14 +835,11 @@ class XGScript: NSObject {
 				
             case .callStandard:
 				var paramCount = 0
-				if i == self.code.count - 1 {
-					printg("error: final function call without pop.\n", file.fileName)
-				}
-                let next = self.code[i + 1]
-				if next.opCode != .pop {
-					printg("error: function call without pop at index \(i.hexString())\n", file.fileName)
-				} else {
-					paramCount = next.subOpCode
+				if i <= self.code.count - 1 {
+					let next = self.code[i + 1]
+					if next.opCode == .pop {
+						paramCount = next.subOpCode
+					}
 				}
 				
 				var params = [XDSExpr]()
@@ -992,6 +998,16 @@ class XGScript: NSObject {
 		/////////////////////////////////////////////////////////////
 		/////////////////////////////////////////////////////////////
 		"""
+	}
+	
+	private func getSpecialMacros() -> [String] {
+		var macs = [String]()
+		macs.append("define ++ScriptIdentifier \(self.scriptID.hexString()) // best not to chcange this")
+		macs.append("define ++BaseStringID 0x10000 // starts looking for free msg ids from this value")
+		macs.append("define ++XDSVersion " + String(format: "%1.1f", currentXDSVersion) + " // lets future versions of the compiler know which rules to follow")
+		macs.append("define ++WriteDisassembly NO // a disassembly of the compiled code can be saved in the same folder for double checking")
+		macs.append("define ++WriteDecompilation NO // after compiling, the compiled code is decompiled into a new .xds file for double checkking")
+		return macs
 	}
 	
 	@objc private func generateFTBLHeader() -> String {
@@ -1268,7 +1284,9 @@ class XGScript: NSObject {
 		}
 		
 		// Special macros for GoD tool
-		script += "define ++ScriptIdentifier \(self.scriptID.hexString())\n"
+		for macro in self.getSpecialMacros() {
+			script += macro + "\n"
+		}
 		
 		for macro in uniqueMacros.sorted(by: { (m1, m2) -> Bool in
 			if m1.macroName == "#TRUE" {
