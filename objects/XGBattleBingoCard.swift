@@ -142,8 +142,8 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 			rel.replace2BytesAtOffset(start + kBingoCardFirstCouponsRewardOffset + (i*2), withBytes: self.rewards[i])
 		}
 		
-		rel.replace4BytesAtOffset(start + kBingoCardNameIDOffset, withBytes: UInt32(self.nameID))
-		rel.replace4BytesAtOffset(start + kBingoCardDetailsIDOffset, withBytes: UInt32(self.detailsID))
+		rel.replaceWordAtOffset(start + kBingoCardNameIDOffset, withBytes: UInt32(self.nameID))
+		rel.replaceWordAtOffset(start + kBingoCardDetailsIDOffset, withBytes: UInt32(self.detailsID))
 		
 		rel.save()
 		

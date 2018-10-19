@@ -77,9 +77,9 @@ class XGTreasure: NSObject {
 		data.replace2BytesAtOffset(self.startOffset + kTreasureItemIDOffset, withBytes: self.itemID)
 		data.replace2BytesAtOffset(self.startOffset + kTreasureFlagOffset, withBytes: self.flag)
 		data.replace2BytesAtOffset(self.startOffset + kTreasureRoomIDOffset, withBytes: self.roomID)
-		data.replace4BytesAtOffset(self.startOffset + kTreasureXCoordOffset, withBytes: self.xCoordinate.bitPattern)
-		data.replace4BytesAtOffset(self.startOffset + kTreasureYCoordOffset, withBytes: self.yCoordinate.bitPattern)
-		data.replace4BytesAtOffset(self.startOffset + kTreasureZCoordOffset, withBytes: self.zCoordinate.bitPattern)
+		data.replaceWordAtOffset(self.startOffset + kTreasureXCoordOffset, withBytes: self.xCoordinate.bitPattern)
+		data.replaceWordAtOffset(self.startOffset + kTreasureYCoordOffset, withBytes: self.yCoordinate.bitPattern)
+		data.replaceWordAtOffset(self.startOffset + kTreasureZCoordOffset, withBytes: self.zCoordinate.bitPattern)
 		data.replace2BytesAtOffset(self.startOffset + kTreasureAngleOffset, withBytes: self.angle)
 		
 		data.save()

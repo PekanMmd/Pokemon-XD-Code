@@ -27,44 +27,40 @@
 {
 "name": "Location",
 "scope": "constant.location",
-"foreground": ["#ffd0a0", "#b08040"],
+"foreground": ["#ffd8a8", "#c89868"],
 "font_style": "italic",
 },{
 "name": "Keyword",
 "scope": "keyword",
-"foreground": "#ff5000",
+"foreground": "#f07040",
 },{
 "name": "Macro",
 "scope": "constant.macro",
-"foreground": "springgreen",
-},{
-"name": "MacroCallstd",
-"scope": "constant.macro.callstd",
-"foreground": "#d0ffd0",
+"foreground": "#b0f0b0",
 },{
 "name": "Object",
 "scope": "constant.object",
-"foreground": "#d0d0ff",
+"foreground": "#d0d0f0",
 },{
 "name": "Number",
 "scope": "constant.numeric",
-"foreground": "#c0f0ff",
+"foreground": "#c0e0e8",
 },{
 "name": "StringMacro",
 "scope": "constant.macro.string",
-"foreground": "turquoise",
+"foreground": "#90d0c8",
 },{
 "name": "VariableCallstd",
 "scope": "entity.callstd",
-"foreground": "#ffffd0",
+"foreground": "#e8e8c8",
 },{
 "name": "VariableAssignment",
 "scope": "entity.assignment",
-"foreground": "#a0d0ff",
+"foreground": "#90d0f0",
 },{
 "name": "StringEscape",
 "scope": "string.escape",
-"foreground": "#c0a060",
+"foreground": "#c0b080",
 },{
 "name": "StringEscapeParam",
 "scope": "string.escape.param",
@@ -72,11 +68,7 @@
 },{
 "name": "VectorLiteral",
 "scope": "constant.vector",
-"foreground": "#60b0b0",
-},{
-"name": "TypeName",
-"scope": "keyword.type",
-"foreground": "#9090f0",
+"foreground": "#90b0b0",
 },{
 "name": "AssignmentOperator",
 "scope": "keyword.operator.assignment",
@@ -85,31 +77,22 @@
 "name": "Operator",
 "scope": "keyword.operator",
 "foreground": "#ffb0c0",
+},{
+"name": "BooleanTrue",
+"scope": "constant.boolean.true",
+"foreground": "#c0ffd0",
+},{
+"name": "BooleanFalse",
+"scope": "constant.boolean.false",
+"foreground": "#ffa0b0",
+},{
+"name": "AssignmentParameter",
+"scope": "keyword.parameter",
+"foreground": "#e8c0e8",
 },
 
 ]
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

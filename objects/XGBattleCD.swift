@@ -161,9 +161,9 @@ class XGBattleCD: NSObject {
 		data.replace2BytesAtOffset(startOffset + kBattlePlayer2TrainerIDOffset, withBytes: self.trainerID)
 		data.replace2BytesAtOffset(startOffset + kBattlePlayer1DeckIDOffset, withBytes: (self.p1Deck ?? .DeckDarkPokemon).id)
 		data.replace2BytesAtOffset(startOffset + kBattlePlayer1TrainerIDOffset, withBytes: self.p1TID)
-		data.replace4BytesAtOffset(startOffset + kBattleCDDescriptionIDOffset, withBytes: UInt32(self.descriptionID))
-		data.replace4BytesAtOffset(startOffset + kBattleCDConditionDescriptionIDOffset, withBytes: UInt32(self.conditionsID))
-		data.replace4BytesAtOffset(startOffset + kBattleCDBoldConditionDescriptionIDOffset, withBytes: UInt32(self.conditionsBoldID))
+		data.replaceWordAtOffset(startOffset + kBattleCDDescriptionIDOffset, withBytes: UInt32(self.descriptionID))
+		data.replaceWordAtOffset(startOffset + kBattleCDConditionDescriptionIDOffset, withBytes: UInt32(self.conditionsID))
+		data.replaceWordAtOffset(startOffset + kBattleCDBoldConditionDescriptionIDOffset, withBytes: UInt32(self.conditionsBoldID))
 		
 		data.save()
 	}

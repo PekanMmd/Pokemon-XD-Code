@@ -243,10 +243,10 @@ enum XGDecks : String, XGDictionaryRepresentable {
 		
 		let bytesToAdd = count * kSizeOfPokemonData
 		let insertionPoint = DTAIHeaderOffset
-		data.replace4BytesAtOffset(DPKMHeaderOffset + 0x4, withBytes: UInt32(DPKMSize + bytesToAdd))
-		data.replace4BytesAtOffset(DPKMHeaderOffset + 0x8, withBytes: UInt32(DPKMEntries + count))
+		data.replaceWordAtOffset(DPKMHeaderOffset + 0x4, withBytes: UInt32(DPKMSize + bytesToAdd))
+		data.replaceWordAtOffset(DPKMHeaderOffset + 0x8, withBytes: UInt32(DPKMEntries + count))
 		data.insertRepeatedByte(byte: 0, count: bytesToAdd, atOffset: insertionPoint)
-		data.replace4BytesAtOffset(0x4, withBytes: UInt32(data.length))
+		data.replaceWordAtOffset(0x4, withBytes: UInt32(data.length))
 		
 		data.save()
 	}
@@ -256,10 +256,10 @@ enum XGDecks : String, XGDictionaryRepresentable {
 		
 		let bytesToAdd = count * kSizeOfTrainerData
 		let insertionPoint = DPKMHeaderOffset
-		data.replace4BytesAtOffset(DTNRHeaderOffset + 0x4, withBytes: UInt32(DTNRSize + bytesToAdd))
-		data.replace4BytesAtOffset(DTNRHeaderOffset + 0x8, withBytes: UInt32(DTNREntries + count))
+		data.replaceWordAtOffset(DTNRHeaderOffset + 0x4, withBytes: UInt32(DTNRSize + bytesToAdd))
+		data.replaceWordAtOffset(DTNRHeaderOffset + 0x8, withBytes: UInt32(DTNREntries + count))
 		data.insertRepeatedByte(byte: 0, count: bytesToAdd, atOffset: insertionPoint)
-		data.replace4BytesAtOffset(0x4, withBytes: UInt32(data.length))
+		data.replaceWordAtOffset(0x4, withBytes: UInt32(data.length))
 		
 		data.save()
 	}

@@ -43,7 +43,7 @@ enum XGPokeSpots : Int, XGDictionaryRepresentable {
 		return Int(rel.get4BytesAtOffset(self.commonRelEntriesIndex.startOffset))
 	}
 	
-	func setEntries(entries: UInt32) {
+	func setEntries(entries: Int) {
 		let rel = XGFiles.common_rel.data
 		rel.replace4BytesAtOffset(self.commonRelEntriesIndex.startOffset, withBytes: entries)
 		rel.save()
@@ -80,19 +80,9 @@ enum XGPokeSpots : Int, XGDictionaryRepresentable {
 	}
 	
 	
-	func relocatePokespotData(toOffset offset: UInt32) {
+	func relocatePokespotData(toOffset offset: Int) {
 		
-		common.replacePointer(index: self.commonRelIndex.rawValue, newAbsoluteOffset: Int(offset))
-		
-//		let rel = XGFiles.common_rel.data
-//		let locationOffset  = 0xa8194 + (self.rawValue * 0x30)
-//		let locationOffset2 = 0xa89cc + (self.rawValue * 0x10)
-//		let newOffset = offset - UInt32(kRELDataStartOffset)
-//		
-//		rel.replace4BytesAtOffset(locationOffset, withBytes: newOffset)
-//		rel.replace4BytesAtOffset(locationOffset + 8, withBytes: newOffset)
-//		rel.replace4BytesAtOffset(locationOffset2, withBytes: newOffset)
-//		rel.save()
+		common.replacePointer(index: self.commonRelIndex.rawValue, newAbsoluteOffset: offset)
 		
 	}
 }

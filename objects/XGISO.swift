@@ -375,7 +375,7 @@ class XGISO: NSObject {
 		let start = fileDataOffsets[name]
 		if start != nil {
 			let toc = XGFiles.toc.data
-			toc.replace4BytesAtOffset(start! + 8, withBytes: UInt32(size))
+			toc.replaceWordAtOffset(start! + 8, withBytes: UInt32(size))
 			self.importToc(saveWhenDone: false)
 		}
 		fileSizes[name] = size
@@ -385,7 +385,7 @@ class XGISO: NSObject {
 		let start = fileDataOffsets[name]
 		if start != nil {
 			let toc = XGFiles.toc.data
-			toc.replace4BytesAtOffset(start! + 4, withBytes: UInt32(offset))
+			toc.replaceWordAtOffset(start! + 4, withBytes: UInt32(offset))
 			self.importToc(saveWhenDone: false)
 			fileLocations[name] = offset
 		} else {

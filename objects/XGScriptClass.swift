@@ -120,17 +120,37 @@ enum XGScriptClassesInfo {
 	}
 	
 	func functionWithName(_ name: String) -> XGScriptFunctionInfo? {
+		
 		let kMaxNumberOfXDSClassFunctions = 200 // theoretical limit is 0xffff but 200 is probably safe
 		for i in 0 ..< kMaxNumberOfXDSClassFunctions {
-			let info = self.functionWithID(i)
+			let info = self[i]
 			if info.name.lowercased() == name.lowercased() {
 				return info
 			}
+			
+			// so old scripts can still refer to renamed functions by "function" + number
+			if XGScriptFunctionInfo.unknown(i).name.lowercased() == name.lowercased() {
+				return self[i]
+			}
+			
 		}
+		
 		return nil
 	}
 	
 	static func getClassNamed(_ name: String) -> XGScriptClassesInfo? {
+		
+		// so old scripts can still refer to renamed classes by "Class" + number
+		if name.length > 5 {
+			if name.substring(from: 0, to: 5) == "Class" {
+				if let val = name.substring(from: 5, to: name.length).integerValue {
+					if val < 127 {
+						return XGScriptClassesInfo.classes(val)
+					}
+				}
+			}
+		}
+		
 		let kNumberOfXDSClasses = 127 // don't know the number but script variables allow up to 127
 		for i in 0 ..< kNumberOfXDSClasses {
 			let info = XGScriptClassesInfo.classes(i)

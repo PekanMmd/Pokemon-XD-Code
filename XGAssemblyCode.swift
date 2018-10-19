@@ -66,7 +66,7 @@ class XGAssembly {
 			let off = offset + (i * 4)
 			
 			let original = XGFiles.original(.dol).data.get4BytesAtOffset(off)
-			dol.replace4BytesAtOffset(off, withBytes: original)
+			dol.replaceWordAtOffset(off, withBytes: original)
 			
 		}
 		dol.save()
@@ -79,7 +79,7 @@ class XGAssembly {
 		for offset in offsets {
 			
 			let original = XGFiles.original(.dol).data.get4BytesAtOffset(offset)
-			dol.replace4BytesAtOffset(offset, withBytes: original)
+			dol.replaceWordAtOffset(offset, withBytes: original)
 			
 		}
 		dol.save()
@@ -90,7 +90,7 @@ class XGAssembly {
 		for i in 0 ..< asm.count {
 			let offset = startOffset + (i * 4)
 			let instruction = asm[i].codeAtOffset(offset + kDOLtoRAMOffsetDifference)
-			dol.replace4BytesAtOffset(offset, withBytes: instruction)
+			dol.replaceWordAtOffset(offset, withBytes: instruction)
 		}
 		dol.save()
 	}
@@ -101,7 +101,7 @@ class XGAssembly {
 		for i in 0 ..< asm.count {
 			let offset = startOffset + (i * 4) - ramOffset
 			let instruction = asm[i].codeAtOffset(offset + kRELtoRAMOffsetDifference)
-			rel.replace4BytesAtOffset(offset, withBytes: instruction)
+			rel.replaceWordAtOffset(offset, withBytes: instruction)
 		}
 		rel.save()
 	}
@@ -111,7 +111,7 @@ class XGAssembly {
 		for i in 0 ..< asm.count {
 			let offset = startOffset + (i * 4)
 			let instruction = asm[i]
-			dol.replace4BytesAtOffset(offset, withBytes: instruction)
+			dol.replaceWordAtOffset(offset, withBytes: instruction)
 		}
 		dol.save()
 	}
@@ -122,7 +122,7 @@ class XGAssembly {
 		for i in 0 ..< asm.count {
 			let offset = startOffset + (i * 4) - ramOffset
 			let instruction = asm[i]
-			rel.replace4BytesAtOffset(offset, withBytes: instruction)
+			rel.replaceWordAtOffset(offset, withBytes: instruction)
 		}
 		rel.save()
 	}
@@ -217,13 +217,13 @@ class XGAssembly {
 	
 	class func paralysisHalvesSpeed() {
 		let dol = XGFiles.dol.data
-		dol.replace4BytesAtOffset(0x203af8 - kDOLtoRAMOffsetDifference, withBytes: 0x56f7f87e)
+		dol.replaceWordAtOffset(0x203af8 - kDOLtoRAMOffsetDifference, withBytes: 0x56f7f87e)
 		dol.save()
 	}
 	
 	class func infiniteUseTMs() {
 		let dol = XGFiles.dol.data
-		dol.replace4BytesAtOffset(0x0a5158 - kDOLtoRAMOffsetDifference, withBytes: 0x38000000)
+		dol.replaceWordAtOffset(0x0a5158 - kDOLtoRAMOffsetDifference, withBytes: 0x38000000)
 		dol.save()
 	}
 	
@@ -245,9 +245,9 @@ class XGAssembly {
 		let sizeOfAbilityTable = 0x3A8
 		let newNumberOfEntries = sizeOfAbilityTable / 8
 		
-		dol.replace4BytesAtOffset(abilityMultiplierAddress, withBytes: newAbilityEntryMultiplier)
-		dol.replace4BytesAtOffset(abilityGetNameAddress, withBytes: abilityGetName)
-		dol.replace4BytesAtOffset(abilityGetDescriptionAddress, withBytes: abilityGetDescription)
+		dol.replaceWordAtOffset(abilityMultiplierAddress, withBytes: newAbilityEntryMultiplier)
+		dol.replaceWordAtOffset(abilityGetNameAddress, withBytes: abilityGetName)
+		dol.replaceWordAtOffset(abilityGetDescriptionAddress, withBytes: abilityGetDescription)
 		
 		
 		var allabilities = [(UInt32,UInt32)]()
@@ -265,18 +265,18 @@ class XGAssembly {
 			
 			if i < allabilities.count {
 				
-				dol.replace4BytesAtOffset(offset    , withBytes: allabilities[i].0)
-				dol.replace4BytesAtOffset(offset + 4, withBytes: allabilities[i].1)
+				dol.replaceWordAtOffset(offset    , withBytes: allabilities[i].0)
+				dol.replaceWordAtOffset(offset + 4, withBytes: allabilities[i].1)
 				
 			} else {
 				
-				dol.replace4BytesAtOffset(offset    , withBytes: 0)
-				dol.replace4BytesAtOffset(offset + 4, withBytes: 0)
+				dol.replaceWordAtOffset(offset    , withBytes: 0)
+				dol.replaceWordAtOffset(offset + 4, withBytes: 0)
 				
 			}
 		}
 		
-		dol.replace4BytesAtOffset(0x41db38, withBytes: 0x74)
+		dol.replaceWordAtOffset(0x41db38, withBytes: 0x74)
 		
 		dol.save()
 		
@@ -311,10 +311,10 @@ class XGAssembly {
 		for i in 0 ... 2 {
 			
 			let offset1 = off1 + (i * 4)
-			dol.replace4BytesAtOffset(offset1, withBytes: UInt32(instructions1[i]))
+			dol.replaceWordAtOffset(offset1, withBytes: instructions1[i].unsigned)
 			
 			let offset2 = off2 + (i * 4)
-			dol.replace4BytesAtOffset(offset2, withBytes: UInt32(instructions2[i]))
+			dol.replaceWordAtOffset(offset2, withBytes: instructions2[i].unsigned)
 		}
 		
 		dol.save()
@@ -335,7 +335,7 @@ class XGAssembly {
 			
 			let off = offset - kDOLtoRAMOffsetDifference
 			
-			dol.replace4BytesAtOffset(off, withBytes: 0x54001838)
+			dol.replaceWordAtOffset(off, withBytes: 0x54001838)
 			
 		}
 		
@@ -343,7 +343,7 @@ class XGAssembly {
 			
 			let off = offset - kDOLtoRAMOffsetDifference
 			
-			dol.replace4BytesAtOffset(off, withBytes: UInt32(0x38000000 + forme.rawValue))
+			dol.replaceWordAtOffset(off, withBytes: UInt32(0x38000000 + forme.rawValue))
 			
 		}
 		
@@ -359,7 +359,7 @@ class XGAssembly {
 			
 			let off = offset - kDOLtoRAMOffsetDifference
 			
-			dol.replace4BytesAtOffset(off, withBytes: kNopInstruction)
+			dol.replaceWordAtOffset(off, withBytes: kNopInstruction)
 			
 		}
 		
@@ -376,28 +376,28 @@ class XGAssembly {
 		}
 		
 		// make 1d load 2 bytes from 1c using values from r27 instead of r3 (given that r27 now points to deck data)
-		dol.replace4BytesAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference, withBytes: 0xA0DB001C)
-		dol.replace4BytesAtOffset(0x28bb20 - kDOLtoRAMOffsetDifference, withBytes: 0x281B0000)
-		dol.replace4BytesAtOffset(0x28bb28 - kDOLtoRAMOffsetDifference, withBytes: 0x38C00000)
+		dol.replaceWordAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference, withBytes: 0xA0DB001C)
+		dol.replaceWordAtOffset(0x28bb20 - kDOLtoRAMOffsetDifference, withBytes: 0x281B0000)
+		dol.replaceWordAtOffset(0x28bb28 - kDOLtoRAMOffsetDifference, withBytes: 0x38C00000)
 		
 		// remove use of r27 so we can steal it >=D
-		dol.replace4BytesAtOffset(0x1fbee0 - kDOLtoRAMOffsetDifference, withBytes: kNopInstruction)
+		dol.replaceWordAtOffset(0x1fbee0 - kDOLtoRAMOffsetDifference, withBytes: kNopInstruction)
 		
 		// store the deck data pointer in r27 so we can use it again later
-		dol.replace4BytesAtOffset(0x1fbd00 - kDOLtoRAMOffsetDifference, withBytes: 0x7F5BD378)
+		dol.replaceWordAtOffset(0x1fbd00 - kDOLtoRAMOffsetDifference, withBytes: 0x7F5BD378)
 		
 		// load 1d into r6 before pid gen
 		let offsets = [0x1fbef4,0x1fbfb8]
 		
 		for offset in offsets {
-			dol.replace4BytesAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: instructionToBranchToSameFunction(0x4808fdcd, originalOffset: 0x1fbd54, newOffset: UInt32(offset)))
+			dol.replaceWordAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: instructionToBranchToSameFunction(0x4808fdcd, originalOffset: 0x1fbd54, newOffset: UInt32(offset)))
 		}
 		
 		// where the game read from 1d, now read from 1f
-		dol.replace4BytesAtOffset(0x1fbd54 - kDOLtoRAMOffsetDifference, withBytes: instructionToBranchToSameFunction(0x4808fdc5, originalOffset: 0x1fbcec, newOffset: 0x1fbd54))
+		dol.replaceWordAtOffset(0x1fbd54 - kDOLtoRAMOffsetDifference, withBytes: instructionToBranchToSameFunction(0x4808fdc5, originalOffset: 0x1fbcec, newOffset: 0x1fbd54))
 		
 		// where the game read from 1f just load 0 instead
-		dol.replace4BytesAtOffset(0x1fbcec - kDOLtoRAMOffsetDifference, withBytes: 0x38600000)
+		dol.replaceWordAtOffset(0x1fbcec - kDOLtoRAMOffsetDifference, withBytes: 0x38600000)
 		
 		
 		dol.save()
@@ -842,7 +842,7 @@ class XGAssembly {
 		let RAMOffset = UInt32(fileOffset + (rel ? kRELtoRAMOffsetDifference : kDOLTableToRAMOffsetDifference)) + 0x80000000
 		
 		let dol = XGFiles.dol.data
-		dol.replace4BytesAtOffset(pointerOffset, withBytes: RAMOffset)
+		dol.replaceWordAtOffset(pointerOffset, withBytes: RAMOffset)
 		dol.save()
 		
 		if routine != nil {
@@ -858,7 +858,7 @@ class XGAssembly {
 		let RAMOffset = offset + (offset > 0x80000000 ? 0 : 0x80000000)
 		
 		let dol = XGFiles.dol.data
-		dol.replace4BytesAtOffset(pointerOffset, withBytes: RAMOffset)
+		dol.replaceWordAtOffset(pointerOffset, withBytes: RAMOffset)
 		dol.save()
 	}
 	
@@ -917,16 +917,16 @@ class XGAssembly {
 //let dol = XGFiles.dol.data
 //
 ////shiny
-//dol.replace4BytesAtOffset(0x8012442c - kColosseumDolToRamOffsetDifference, withBytes: 0x3B60FFFF)
+//dol.replaceWordAtOffset(0x8012442c - kColosseumDolToRamOffsetDifference, withBytes: 0x3B60FFFF)
 //
 //// female starter espeon
-//dol.replace4BytesAtOffset(0x80130b1c - kColosseumDolToRamOffsetDifference, withBytes: 0x38800001)
+//dol.replaceWordAtOffset(0x80130b1c - kColosseumDolToRamOffsetDifference, withBytes: 0x38800001)
 //
 //// shiny glitch
-//dol.replace4BytesAtOffset(0x801248a8 - kColosseumDolToRamOffsetDifference, withBytes: 0x3B800000)
+//dol.replaceWordAtOffset(0x801248a8 - kColosseumDolToRamOffsetDifference, withBytes: 0x3B800000)
 //
 // shiny chance
-////dol.replace4BytesAtOffset(0x80124844 - kColosseumDolToRamOffsetDifference, withBytes: 0x38600008)
+////dol.replaceWordAtOffset(0x80124844 - kColosseumDolToRamOffsetDifference, withBytes: 0x38600008)
 //
 //dol.save()
 

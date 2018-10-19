@@ -78,13 +78,13 @@ enum XGAbilities : XGDictionaryRepresentable {
 	
 	func replaceNameID(newID: Int) {
 		let dol = XGFiles.dol.data
-		dol.replace4BytesAtOffset(nameIDOffset, withBytes: UInt32(newID))
+		dol.replace4BytesAtOffset(nameIDOffset, withBytes: newID)
 		dol.save()
 	}
 	
 	func replaceDescriptionID(newID: Int) {
 		let dol = XGFiles.dol.data
-		dol.replace4BytesAtOffset(descriptionIDOffset, withBytes: UInt32(newID))
+		dol.replace4BytesAtOffset(descriptionIDOffset, withBytes: newID)
 		dol.save()
 	}
 	

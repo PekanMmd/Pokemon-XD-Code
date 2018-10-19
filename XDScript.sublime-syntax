@@ -7,10 +7,11 @@ file_extensions:
 scope: xdscript
 
 variables:
-ident: '[a-z_]([A-Za-z_0-9]*)'
-type: '[A-Z]([A-Za-z_0-9]*)'
+ident: '[a-z_][A-Za-z_0-9]*'
+type: '[A-Z][A-Za-z_0-9]*'
 number: '-?((\d+(\.\d+)|\.\d+)|(0x([0-9A-Fa-f]+))|(\d+))'
 float: '-?(\d+(\.\d+)|\.\d+)'
+space: \s+
 
 contexts:
 
@@ -19,24 +20,23 @@ prototype:
 - include: comments
 
 main:
-- match: '({{ident}}\s)(=)'
+- match: '({{ident}})({{space}})(=)'
 captures:
 1: entity.assignment.xds
-3: keyword.operator.assignment.xds
-- match: \b(define|call|return|function|goto|if|ifFalse|Null|global|groupID|resourceID|LastResult|YES|NO)\b
+- match: \b(define|call|return|function|goto|if|ifFalse|Null|global|LastResult)\b
 scope: keyword.xds
-- match: '\b(assign) ({{ident}})\b'
+- match: '\b({{type}})\:'
+scope: keyword.parameter.xds
+- match: \b(YES|True)\b
+scope: constant.boolean.true.xds
+- match: \b(NO|False)\b
+scope: constant.boolean.false.xds
+- match: '\b(assign)({{space}})({{ident}})\b'
 captures:
 1: keyword.xds
-2: entity.assignment.xds
 3: entity.assignment.xds
-- match: '(<)({{float}}) ({{float}}) ({{float}})(>)'
-captures:
-1: constant.vector.xds
-2: constant.numeric.xds
-5: constant.numeric.xds
-8: constant.numeric.xds
-11: constant.vector.xds
+- match: (<)({{space}})?({{float}})({{space}})({{float}})({{space}})({{float}})({{space}})?(>)
+scope: constant.numeric.xds
 - match: '\b{{number}}\b'
 scope: constant.numeric.xds
 - match: '"'
@@ -45,10 +45,10 @@ push: string
 push: string_macro
 - match: '\b({{type}})\.'
 scope: constant.object.xds
-- match: '\b({{ident}}\.)({{type}}\.)'
+- match: \b({{ident}}\.)({{type}}\.)
 captures:
-0: entity.callstd.xds
-3: constant.object.xds
+1: entity.callstd.xds
+2: constant.object.xds
 - match: '\b{{ident}}\.'
 captures:
 0: entity.callstd.xds
@@ -85,10 +85,8 @@ string_escape_params:
 pop: true
 
 macros:
-- match: '(#([A-Za-z_0-9]+))\.'
-captures:
-1: constant.macro.callstd.xds
-3: constant.macro.callstd.xds
+- match: '#[A-Za-z_0-9]+\.'
+scope: constant.macro.xds
 - match: '#\b([A-Za-z_0-9]+)\b'
 scope: constant.macro.xds
 - match: '\+\+\b({{type}})\b'

@@ -86,7 +86,7 @@ class XGRelocationTable: NSObject {
 	
 	@objc func setValueAtPointer(index: Int, newValue value: Int) {
 		let startOffset = getPointer(index: index)
-		data.replace4BytesAtOffset(startOffset, withBytes: UInt32(value))
+		data.replaceWordAtOffset(startOffset, withBytes: value.unsigned)
 		data.save()
 	}
 	
@@ -95,7 +95,7 @@ class XGRelocationTable: NSObject {
 		let offset2 = firstPointer + (index * kRELSizeOfPointer) + kRELPointerDataPointer2Offset
 		
 		for offset in [offset1, offset2] {
-			data.replace4BytesAtOffset(offset, withBytes: UInt32(newOffset - dataStart))
+			data.replaceWordAtOffset(offset, withBytes: UInt32(newOffset - dataStart))
 		}
 		data.save()
 		

@@ -189,8 +189,8 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		rel.replaceByteAtOffset(startOffset + kEffectAccuracyOffset, withByte: self.effectAccuracy)
 		rel.replaceByteAtOffset(startOffset + kPriorityOffset, withByte: self.priority < 0 ? 256 + self.priority : self.priority)
 		
-		rel.replace4BytesAtOffset(startOffset + kMoveNameIDOffset, withBytes: UInt32(self.nameID))
-		rel.replace4BytesAtOffset(startOffset + kMoveDescriptionIDOffset, withBytes:UInt32( self.descriptionID))
+		rel.replaceWordAtOffset(startOffset + kMoveNameIDOffset, withBytes: UInt32(self.nameID))
+		rel.replaceWordAtOffset(startOffset + kMoveDescriptionIDOffset, withBytes:UInt32( self.descriptionID))
 		rel.replace2BytesAtOffset(startOffset + kAnimationIndexOffset , withBytes: self.animationID)
 		rel.replace2BytesAtOffset(startOffset + kAnimation2IndexOffset, withBytes: self.animation2ID)
 		

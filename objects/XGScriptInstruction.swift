@@ -248,7 +248,7 @@ class XGScriptInstruction: NSObject {
 		case .callStandard:
 			sub = XGScriptClassesInfo.classes(self.subOpCode).name + "."
 		case .xd_operator:
-			sub = XGScriptClassesInfo.operators.operatorWithID(self.subOpCode).name
+			sub = XGScriptClassesInfo.operators[self.subOpCode].name
 		case .setVector:
 			let dimensions = ["vx ","vy ", "vz "]
 			let index = self.subSubOpCodes.0

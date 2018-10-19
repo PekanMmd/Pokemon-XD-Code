@@ -129,7 +129,8 @@ class XDSConstant : NSObject {
 			}
 			return text
 		case .pokemon:
-			return "Pokemon(\(self.asInt))"
+			let mid = self.asInt == 0 ? "" : "\(self.asInt)"
+			return "Pokemon(\(mid))"
 		case .string:
 			return "String(\(self.asInt))"
 		case .vector:
@@ -147,7 +148,8 @@ class XDSConstant : NSObject {
 		case .codeptr_t:
 			return XDSExpr.locationIndex(self.asInt).text
 		case .unknown(let i):
-			return XGScriptClassesInfo.classes(i).name.capitalized + "(\(self.asInt))"
+			let mid = self.asInt == 0 ? "" : "\(self.asInt)"
+			return XGScriptClassesInfo.classes(i).name.capitalized + "(\(mid))"
 		}
 	}
 	
@@ -160,8 +162,24 @@ class XDSConstant : NSObject {
 		
 	}
 	
+	var expression : XDSExpr {
+		return .loadImmediate(self)
+	}
+	
 	@objc class var null : XDSConstant {
 		return XDSConstant(type: 0, rawValue: 0)
+	}
+	
+	class func integer(_ val: Int) -> XDSConstant {
+		return XDSConstant(type: XDSConstantTypes.integer.index, rawValue: val.unsigned)
+	}
+	
+	class func integer(_ val: UInt32) -> XDSConstant {
+		return XDSConstant(type: XDSConstantTypes.integer.index, rawValue: val)
+	}
+	
+	class func float(_ val: Float) -> XDSConstant {
+		return XDSConstant(type: XDSConstantTypes.float.index, rawValue: val.floatToHex())
 	}
 }
 

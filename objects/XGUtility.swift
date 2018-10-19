@@ -468,13 +468,13 @@ class XGUtility {
 
 // generate PID to match criteria to load random value
 let dol = XGFiles.dol.data
-dol.replace4BytesAtOffset(0x14155C - kDOLtoRAMOffsetDifference, withBytes: 0x3B40FFFF)
+dol.replaceWordAtOffset(0x14155C - kDOLtoRAMOffsetDifference, withBytes: 0x3B40FFFF)
 // shiny calc to use fixed TID
-dol.replace4BytesAtOffset(0x14416c - kDOLtoRAMOffsetDifference, withBytes: 0x38600000)
-dol.replace4BytesAtOffset(0x14af84 - kDOLtoRAMOffsetDifference, withBytes: 0x38600000)
+dol.replaceWordAtOffset(0x14416c - kDOLtoRAMOffsetDifference, withBytes: 0x38600000)
+dol.replaceWordAtOffset(0x14af84 - kDOLtoRAMOffsetDifference, withBytes: 0x38600000)
 
 // shadow lugia HUD
-dol.replace4BytesAtOffset(0x1118b0 - kDOLtoRAMOffsetDifference, withBytes: kNopInstruction)
+dol.replaceWordAtOffset(0x1118b0 - kDOLtoRAMOffsetDifference, withBytes: kNopInstruction)
 
 dol.save()
 

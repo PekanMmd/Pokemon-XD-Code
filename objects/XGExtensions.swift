@@ -70,6 +70,13 @@ extension Int {
 		return String(self)
 	}
 	
+	var unsigned : UInt32 {
+		if self >= 0 {
+			return UInt32(self)
+		}
+		return UInt32(0xFFFFFFFF) - UInt32(-(self + 1))
+	}
+	
 	func println() {
 		printg(self)
 	}
@@ -253,10 +260,16 @@ extension String {
 		if !self.contains("(") || !self.contains(")") {
 			return nil
 		}
+		if self.functionName == nil {
+			return nil
+		}
 		var string = ""
 		let ss = self.replacingOccurrences(of: self.functionName! + "(", with: "").stack
 		while ss.count > 1 {
 			string += ss.pop()
+		}
+		if ss.peek() != ")" {
+			return nil
 		}
 		return string
 	}

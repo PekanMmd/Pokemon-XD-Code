@@ -96,7 +96,7 @@ class XGType: NSObject {
 		let rel = XGFiles.common_rel.data
 		
 		rel.replaceByteAtOffset(startOffset + kCategoryOffset, withByte: self.category.rawValue)
-		rel.replace4BytesAtOffset(startOffset + kTypeNameIDOffset, withBytes: UInt32(self.nameID))
+		rel.replaceWordAtOffset(startOffset + kTypeNameIDOffset, withBytes: UInt32(self.nameID))
 		
 		for i in 0 ..< self.effectivenessTable.count {
 			

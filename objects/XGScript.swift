@@ -675,35 +675,36 @@ class XGScript: NSObject {
 				
 				
             case .xd_operator:
-                if instruction.subOpCode >= 18 && instruction.subOpCode <= 25 {
+                if instruction.subOpCode >= 16 && instruction.subOpCode <= 25 {
 					if stack.peek().isReturn {
 						stack.push(.nop)
 					} else {
 						stack.push(.unaryOperator(instruction.subOpCode, stack.pop()))
 					}
-				} else if instruction.subOpCode >= 16 && instruction.subOpCode <= 17 {
-					if stack.peek().isReturn {
-						stack.push(.nop)
-					} else {
-						stack.push(.unaryOperator(instruction.subOpCode, stack.pop().bracketed))
-					}
 				} else if (instruction.subOpCode >= 32 && instruction.subOpCode <= 39) || (instruction.subOpCode <= 53 && instruction.subOpCode >= 48) {
-					var e2 = XDSExpr.nop
+					// Must confirm ordering of variables otherwise / and % will be broken
+					// Tux documenting his binary operators the other way around
+					// (e.g. < as >=)
+					// but I think this way is more consistent with function parameters
+					// where the first parameter is at the top of the stack
+					// ultimately just depends on what the developers chose so could be either one
 					var e1 = XDSExpr.nop
-					if !stack.peek().isReturn {
-						e2 = stack.pop()
-					}
+					var e2 = XDSExpr.nop
 					if !stack.peek().isReturn {
 						e1 = stack.pop()
 					}
+					if !stack.peek().isReturn {
+						e2 = stack.pop()
+					}
 					
-					if e2.isNop {
+					if e1.isNop {
 						stack.push(.nop)
-					} else if e1.isNop {
+					} else if e2.isNop {
 						stack.push(.nop)
-						for _ in 0 ..< e2.instructionCount {
+						for _ in 0 ..< e1.instructionCount {
 							stack.push(.nop)
 						}
+						stack.push(.nop)
 					} else {
 						
 						var op = instruction.subOpCode
@@ -736,7 +737,7 @@ class XGScript: NSObject {
 							
 							switch e1 {
 							case .callStandard(let c, let f, _):
-								if let returnType = XGScriptClassesInfo.classes(c).functionWithID(f).returnMacro {
+								if let returnType = XGScriptClassesInfo.classes(c)[f].returnMacro {
 									e2 = .macroImmediate(e2.constants[0], returnType)
 								}
 							default:
@@ -855,7 +856,7 @@ class XGScript: NSObject {
 					macros.append(nil)
 				}
 				// get macros if they have been documented
-				if let m = XGScriptClassesInfo.classes(c).functionWithID(f).macros {
+				if let m = XGScriptClassesInfo.classes(c)[f].macros {
 					for j in firstIndex ..< paramCount {
 						macros[j] = m[j - firstIndex]
 					}
@@ -1003,7 +1004,7 @@ class XGScript: NSObject {
 	
 	private func getSpecialMacros() -> [String] {
 		var macs = [String]()
-		macs.append("define ++ScriptIdentifier \(self.scriptID.hexString()) // best not to chcange this")
+		macs.append("define ++ScriptIdentifier \(self.scriptID.hexString()) // best not to change this")
 		macs.append("define ++BaseStringID 0x10000 // starts looking for free msg ids from this value")
 		macs.append("define ++XDSVersion " + String(format: "%1.1f", currentXDSVersion) + " // lets future versions of the compiler know which rules to follow")
 		macs.append("define ++WriteDisassembly NO // a disassembly of the compiled code can be saved in the same folder for double checking")
@@ -1028,45 +1029,45 @@ class XGScript: NSObject {
 				let variable = XGScriptInstruction(bytes: 0x03030080 + UInt32(i), next: 0).XDSVariable
 				let gid = giri[i].groupID
 				let rid = giri[i].resourceID
-				str += "assign " + variable + " groupID: " + gid.string + " resourceID: " + rid.string + " "
+				str += "assign " + variable + " GroupID: " + gid.string + " ResourceID: " + rid.string + " "
 				if let rel = mapRel {
 					let g = giri[i]
 					if g.groupID != 0 {
 						let character = rel.characters[g.resourceID]
 						let charID = character.characterID
 						if charID == 0 {
-							str += "characterID: " + charID.string + " "
+							str += "CharacterID: " + charID.string + " "
 						} else {
 							let macroString = XDSExpr.macroWithName("CHARACTERID_" + character.name.simplified.uppercased())
-							str += "characterID: " + macroString + " "
+							str += "CharacterID: " + macroString + " "
 							mac.append(.macro(macroString, charID.string))
 						}
 						
 						let modelID = character.model.index
 						if modelID == 0 {
-							str += "model: " + modelID.string + " "
+							str += "ModelID: " + modelID.string + " "
 						} else {
 							let macroString = XDSExpr.macroWithName("MODELID_" + character.model.name.simplified.uppercased())
-							str += "model: " + macroString + " "
+							str += "ModelID: " + macroString + " "
 							mac.append(.macro(macroString, modelID.string))
 						}
 						
 						if !character.isVisible {
-							str += "visible: #FALSE "
+							str += "Visible: False "
 						}
 						
-						str += "flags: " + character.flags.hexString() + " "
+						str += "Flags: " + character.flags.hexString() + " "
 						
-						str += "x: " + character.xCoordinate.string + " "
-						str += "y: " + character.yCoordinate.string + " "
-						str += "z: " + character.zCoordinate.string + " "
-						str += "angle: " + character.angle.string   + " "
+						str += "X: " + character.xCoordinate.string + " "
+						str += "Y: " + character.yCoordinate.string + " "
+						str += "Z: " + character.zCoordinate.string + " "
+						str += "Angle: " + character.angle.string   + " "
 						
 						if character.hasScript {
-							str += "script: " + XDSExpr.locationWithName(ftbl[character.scriptIndex].name) + " "
+							str += "Script: " + XDSExpr.locationWithName(ftbl[character.scriptIndex].name) + " "
 						}
 						if character.hasPassiveScript {
-							str += "background: " + XDSExpr.locationWithName(ftbl[character.passiveScriptIndex].name) + " "
+							str += "Background: " + XDSExpr.locationWithName(ftbl[character.passiveScriptIndex].name) + " "
 						}
 						
 					}
@@ -1178,6 +1179,108 @@ class XGScript: NSObject {
 		// so assume can take out reserves
 		let updatedStack = XGStack<XDSExpr>()
 		var macros = [XDSExpr]()
+		
+		func updateGlobalsM(_ exprs: [XDSExpr]) -> [XDSExpr] {
+			return exprs.map({ (e) -> XDSExpr in
+				return updateGlobals(e)
+			})
+		}
+		
+		func updateGlobals(_ expr: XDSExpr) -> XDSExpr {
+			// add macros for global vars if macro type can be inferred
+			switch expr {
+			case .callStandardVoid(7, 17, let es):
+				let array = es[0]
+				switch array {
+				case .loadPointer(let v):
+					if let type = globalMacroTypes[v] {
+						if es[2].isLoadImmediate {
+							let constant = es[2].constants[0]
+							let mac = XDSExpr.macroImmediate(constant, type)
+							if type != .msg {
+								macros += [.macro(mac.text, constant.rawValueString)]
+							}
+							return .callStandardVoid(7, 17, [es[0], updateGlobals(es[1]), mac])
+						}
+					}
+					return .callStandardVoid(7, 17, updateGlobalsM(es))
+					
+				default:
+					return .callStandardVoid(7, 17, updateGlobalsM(es))
+				}
+				
+			case .setVariable(let v, let e):
+				if let type = globalMacroTypes[v] {
+					if e.isLoadImmediate {
+						let constant = e.constants[0]
+						let mac = XDSExpr.macroImmediate(constant, type)
+						if type != .msg {
+							macros += [.macro(mac.text, constant.rawValueString)]
+						}
+						return .setVariable(v, mac)
+					}
+				}
+				return .setVariable(v, updateGlobals(e))
+				
+			case .binaryOperator(let op, let e1, let e2):
+				if e1.isVariable && e2.isLoadImmediate {
+					if let type = globalMacroTypes[e1.variable!] {
+						let constant = e2.constants[0]
+						let mac = XDSExpr.macroImmediate(constant, type)
+						if type != .msg {
+							macros += [.macro(mac.text, constant.rawValueString)]
+						}
+						return .binaryOperator(op, updateGlobals(e1), mac)
+					}
+				}
+				if e2.isVariable && e1.isLoadImmediate {
+					if let type = globalMacroTypes[e2.variable!] {
+						let constant = e1.constants[0]
+						let mac = XDSExpr.macroImmediate(constant, type)
+						if type != .msg {
+							macros += [.macro(mac.text, constant.rawValueString)]
+						}
+						return .binaryOperator(op, mac, updateGlobals(e2))
+					}
+				}
+				return .binaryOperator(op, updateGlobals(e1), updateGlobals(e2))
+				
+			case .unaryOperator(let op, let e):
+				return .unaryOperator(op, updateGlobals(e))
+				
+			case .bracket(let e):
+				return .bracket(updateGlobals(e))
+				
+			case .call(let l, let es):
+				return .call(l, updateGlobalsM(es))
+			case .callVoid(let l, let es):
+				return .callVoid(l, updateGlobalsM(es))
+				
+			case .callStandard(let c, let f, let es):
+				return .callStandard(c, f, updateGlobalsM(es))
+			case .callStandardVoid(let c, let f, let es):
+				return .callStandardVoid(c, f, updateGlobalsM(es))
+				
+			case .jumpFalse(let e, let l):
+				return .jumpFalse(updateGlobals(e), l)
+			case .jumpTrue(let e, let l):
+				return .jumpTrue(updateGlobals(e), l)
+				
+			case .setVariable(let v, let e):
+				return .setVariable(v, updateGlobals(e))
+			case .setVector(let v, let d, let e):
+				return .setVector(v, d, updateGlobals(e))
+				
+			case .XDSReturnResult(let e):
+				return .XDSReturnResult(updateGlobals(e))
+				
+				
+			default:
+				return expr
+			}
+		}
+		
+		
 		var instructionIndex = 0
 		for expr in stack.asArray {
 			
@@ -1205,76 +1308,8 @@ class XGScript: NSObject {
 			default: break
 			}
 			
-			// add macros for global vars if macro type is known
-			switch expr {
-			case .callStandardVoid(7, 17, let es):
-				let array = es[0]
-				switch array {
-				case .loadPointer(let v):
-					if let type = globalMacroTypes[v] {
-						if es[2].isLoadImmediate {
-							let immediate = es[2]
-							let constant = immediate.constants[0]
-							let mac = XDSExpr.macroImmediate(constant, type)
-							if type != .msg {
-								macros += [.macro(mac.text, constant.rawValueString)]
-							}
-							updatedStack.push(.callStandardVoid(7, 17, [es[0], es[1], mac]))
-						} else {
-							updatedStack.push(expr)
-						}
-					} else {
-						updatedStack.push(expr)
-					}
-					
-				default:
-					updatedStack.push(expr)
-				}
-			case .setVariable(let v, let e):
-				if let type = globalMacroTypes[v] {
-					if e.isLoadImmediate {
-						let constant = e.constants[0]
-						let mac = XDSExpr.macroImmediate(constant, type)
-						if type != .msg {
-							macros += [.macro(mac.text, constant.rawValueString)]
-						}
-						updatedStack.push(.setVariable(v, mac))
-					} else {
-						updatedStack.push(expr)
-					}
-				} else {
-					updatedStack.push(expr)
-				}
-				
-			case .binaryOperator(let op, let e1, let e2):
-				if e1.isVariable && e2.isLoadImmediate {
-					if let type = globalMacroTypes[e1.variable!] {
-						let constant = e2.constants[0]
-						let mac = XDSExpr.macroImmediate(constant, type)
-						if type != .msg {
-							macros += [.macro(mac.text, constant.rawValueString)]
-						}
-						updatedStack.push(.binaryOperator(op, e1, mac))
-					} else {
-						updatedStack.push(expr)
-					}
-				} else if e2.isVariable && e1.isLoadImmediate {
-					if let type = globalMacroTypes[e2.variable!] {
-						let constant = e1.constants[0]
-						let mac = XDSExpr.macroImmediate(constant, type)
-						if type != .msg {
-							macros += [.macro(mac.text, constant.rawValueString)]
-						}
-						updatedStack.push(.binaryOperator(op, mac, e2))
-					} else {
-						updatedStack.push(expr)
-					}
-				} else {
-					updatedStack.push(expr)
-				}
-			default:
-				updatedStack.push(expr)
-			}
+			updatedStack.push(updateGlobals(expr))
+			
 			if let comment = expr.comment {
 				updatedStack.push(comment)
 			}
@@ -1293,6 +1328,9 @@ class XGScript: NSObject {
 		
 		var uniqueMacros = [XDSExpr]()
 		for macro in macros {
+			if macro.macroName == "True" || macro.macroName == "False" {
+				continue
+			}
 			if !uniqueMacros.contains(where: { (expr) -> Bool in
 				return expr.macroName == macro.macroName
 			}) {
@@ -1337,15 +1375,6 @@ class XGScript: NSObject {
 		}
 		
 		for macro in uniqueMacros.sorted(by: { (m1, m2) -> Bool in
-			if m1.macroName == "#TRUE" {
-				return true
-			} else if m2.macroName == "#TRUE" {
-				return false
-			} else if m1.macroName == "#FALSE" {
-				return true
-			} else if m2.macroName == "#FALSE" {
-				return false
-			}
 			return m1.macroName < m2.macroName
 		}) {
 			script += macro.text + "\n"

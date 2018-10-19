@@ -109,8 +109,8 @@ class GoDTexture: NSObject {
 		self.data.replace2BytesAtOffset(startOffset + kTextureWidthOffset, withBytes: self.width)
 		self.data.replace2BytesAtOffset(startOffset + kTextureHeightOffset, withBytes: self.height)
 		self.data.replaceByteAtOffset(startOffset + kTextureBPPOffset, withByte: self.BPP)
-		self.data.replace4BytesAtOffset(startOffset + kTexturePointerOffset, withBytes: UInt32(self.textureStart - startOffset))
-		self.data.replace4BytesAtOffset(startOffset + kPalettePointerOffset, withBytes: UInt32(self.paletteStart - startOffset))
+		self.data.replaceWordAtOffset(startOffset + kTexturePointerOffset, withBytes: UInt32(self.textureStart - startOffset))
+		self.data.replaceWordAtOffset(startOffset + kPalettePointerOffset, withBytes: UInt32(self.paletteStart - startOffset))
 		self.data.replaceByteAtOffset(startOffset + kTextureFormatOffset, withByte: self.format.rawValue)
 		self.data.replaceByteAtOffset(startOffset + kPaletteFormatOffset, withByte: self.paletteFormat)
 		

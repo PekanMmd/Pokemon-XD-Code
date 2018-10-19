@@ -405,7 +405,7 @@ indirect enum XDSExpr {
 	static func stringFromMacroImmediate(c: XDSConstant, t: XDSMacroTypes) -> String {
 		switch t {
 		case .bool:
-			return c.asInt != 0 ? XDSExpr.macroWithName("TRUE") : XDSExpr.macroWithName("FALSE")
+			return c.asInt != 0 ? "True" : "False"
 		case .flag:
 			if let flag = XDSFlags(rawValue: c.asInt) {
 				return XDSExpr.macroWithName("FLAG_" + flag.name.simplified.uppercased())
@@ -546,9 +546,9 @@ indirect enum XDSExpr {
 		case .bracket(let e):
 			return "(" + e.text + ")"
 		case .unaryOperator(let o,let e):
-			return XGScriptClassesInfo.operators.operatorWithID(o).name + "(" + e.text + ")"
+			return XGScriptClassesInfo.operators[o].name + "(" + e.text + ")"
 		case .binaryOperator(let o, let e1, let e2):
-			return e1.text + " \(XGScriptClassesInfo.operators.operatorWithID(o).name) " + e2.text
+			return e1.text + " \(XGScriptClassesInfo.operators[o].name) " + e2.text
 			
 		// assignments
 		case .setVariable(let v, let e):
@@ -591,7 +591,7 @@ indirect enum XDSExpr {
 				
 			} else {
 				let xdsclass = XGScriptClassesInfo.classes(c)
-				let xdsfunction = xdsclass.functionWithID(f)
+				let xdsfunction = xdsclass[f]
 				// don't need * in function calls as the type is explicitly included
 				var s = c > 0 ? es[0].text.replacingOccurrences(of: "*", with: "") + "." : ""
 				// local variables and function parameters need additional class info
@@ -794,7 +794,7 @@ indirect enum XDSExpr {
 			let (subs1, err1) = e1.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
 			let (subs2, err2) = e2.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
 			if subs1 != nil && subs2 != nil {
-				return (subs1! + subs2! + [XGScriptInstruction.xdsoperator(op: id)], nil)
+				return (subs2! + subs1! + [XGScriptInstruction.xdsoperator(op: id)], nil)
 			} else {
 				if let err = err1 {
 					return (nil, err)
@@ -995,7 +995,7 @@ indirect enum XDSExpr {
 		case .macro(_, _):
 			return ([], nil)
 		case .msgMacro(let string):
-			let constant = XDSConstant(type: 1, rawValue: UInt32(string.id))
+			let constant = XDSConstant.integer(string.id)
 			return ([XGScriptInstruction.loadImmediate(c: constant)],nil)
 		case .exit:
 			return ([XGScriptInstruction(opCode: .exit, subOpCode: 0, parameter: 0)],nil)

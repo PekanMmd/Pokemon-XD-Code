@@ -107,14 +107,14 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 		data.replace2BytesAtOffset(start + kItemPriceOffset, withBytes: price)
 		data.replace2BytesAtOffset(start + kItemCouponCostOffset, withBytes: couponPrice)
 		data.replaceByteAtOffset(start + kItemBattleHoldItemIDOffset, withByte: holdItemID)
-		data.replace4BytesAtOffset(start + kItemNameIDOffset, withBytes: UInt32(nameID))
-		data.replace4BytesAtOffset(start + kItemDescriptionIDOffset, withBytes: UInt32(descriptionID))
+		data.replaceWordAtOffset(start + kItemNameIDOffset, withBytes: UInt32(nameID))
+		data.replaceWordAtOffset(start + kItemDescriptionIDOffset, withBytes: UInt32(descriptionID))
 		data.replaceByteAtOffset(start + kItemParameterOffset, withByte: parameter)
 		data.replaceByteAtOffset(start + kItemCantBeHeldOffset, withByte: canBeHeld ? 0 : 1)
 		data.replaceBytesFromOffset(start + kFirstFriendshipEffectOffset, withByteStream: friendshipEffects)
 		
-		data.replace4BytesAtOffset(start + kItemFunctionInRAMPointerOffset1, withBytes: function1)
-		data.replace4BytesAtOffset(start + kItemFunctionInRAMPointerOffset2, withBytes: function2)
+		data.replaceWordAtOffset(start + kItemFunctionInRAMPointerOffset1, withBytes: function1)
+		data.replaceWordAtOffset(start + kItemFunctionInRAMPointerOffset2, withBytes: function2)
 		
 		data.save()
 		

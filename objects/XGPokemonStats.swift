@@ -280,13 +280,13 @@ class XGPokemonStats: NSObject {
 		
 		let rel	= XGFiles.common_rel.data
 
-		rel.replace4BytesAtOffset(startOffset + kNameIDOffset, withBytes: UInt32(nameID))
-		rel.replace4BytesAtOffset(startOffset + kSpeciesNameIDOffset, withBytes: UInt32(speciesNameID))
+		rel.replaceWordAtOffset(startOffset + kNameIDOffset, withBytes: UInt32(nameID))
+		rel.replaceWordAtOffset(startOffset + kSpeciesNameIDOffset, withBytes: UInt32(speciesNameID))
 		rel.replace2BytesAtOffset(startOffset + kPokemonCryIndexOffset, withBytes: cryIndex)
 		rel.replace2BytesAtOffset(startOffset + kPokemonModelIndexOffset, withBytes: modelIndex)
 		rel.replace2BytesAtOffset(startOffset + kPokemonFaceIndexOffset, withBytes: faceIndex)
-		rel.replace4BytesAtOffset(startOffset + kPokemonBodyOffset, withBytes: bodyID)
-		rel.replace4BytesAtOffset(startOffset + kPokemonBodyShinyOffset, withBytes: bodyShinyID)
+		rel.replaceWordAtOffset(startOffset + kPokemonBodyOffset, withBytes: bodyID)
+		rel.replaceWordAtOffset(startOffset + kPokemonBodyShinyOffset, withBytes: bodyShinyID)
 		
 		rel.replaceByteAtOffset(startOffset + kEXPRateOffset, withByte: levelUpRate.rawValue)
 		rel.replaceByteAtOffset(startOffset + kGenderRatioOffset, withByte: genderRatio.rawValue)

@@ -227,14 +227,14 @@ import Foundation
 //	let start = 0x3FCC50 + (i * 8)
 //	
 //	if dol.get4BytesAtOffset(start) == 0 {
-//		dol.replace4BytesAtOffset(start, withBytes: UInt32(unused[nextUnused]))
+//		dol.replaceWordAtOffset(start, withBytes: UInt32(unused[nextUnused]))
 //		XGFiles.common_rel.stringTable.stringWithID(unused[nextUnused])!.duplicateWithString(abNames[nextAb]).replace()
 //		nextAb += 1
 //		nextUnused += 1
 //	}
 //	
 //	if dol.get4BytesAtOffset(start + 4) == 0 {
-//		dol.replace4BytesAtOffset(start + 4, withBytes: UInt32(unused[nextUnused]))
+//		dol.replaceWordAtOffset(start + 4, withBytes: UInt32(unused[nextUnused]))
 //		XGFiles.common_rel.stringTable.stringWithID(unused[nextUnused])!.duplicateWithString(abDes[nextDe]).replace()
 //		nextDe += 1
 //		nextUnused += 1
@@ -335,7 +335,7 @@ import Foundation
 //let adol = XGFiles.dol.data
 //for i in 0 ..< shadowCheckInstructions.count {
 //	
-//	adol.replace4BytesAtOffset(shadowMovesCheckStartAddress + (i * 4), withBytes: shadowCheckInstructions[i])
+//	adol.replaceWordAtOffset(shadowMovesCheckStartAddress + (i * 4), withBytes: shadowCheckInstructions[i])
 //	
 //}
 //
@@ -343,7 +343,7 @@ import Foundation
 //let li_r3_0 : UInt32 = 0x38600000
 //let dependentOffsets = [0x8021aafc,0x801bd9e0,0x80210628,0x802187b0]
 //for offset in dependentOffsets {
-//	adol.replace4BytesAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: li_r3_0)
+//	adol.replaceWordAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: li_r3_0)
 //}
 //
 //adol.save()
@@ -353,16 +353,16 @@ import Foundation
 //let bdol = XGFiles.dol.data
 //let nops = [0x80225d24 - kDOLtoRAMOffsetDifference, 0x80225d54 - kDOLtoRAMOffsetDifference]
 //for offset in nops {
-//	bdol.replace4BytesAtOffset(offset, withBytes: kNopInstruction)
+//	bdol.replaceWordAtOffset(offset, withBytes: kNopInstruction)
 //}
-//bdol.replace4BytesAtOffset(0x80225d4c - kDOLtoRAMOffsetDifference, withBytes: UInt32(0x2c000000 + snowWarningIndex))
+//bdol.replaceWordAtOffset(0x80225d4c - kDOLtoRAMOffsetDifference, withBytes: UInt32(0x2c000000 + snowWarningIndex))
 //
 //let rainToSnow : UInt32 = 0x80225e90 - 0x80225d7c
 //let weatherStarter : [UInt32] = [0x38600000, 0x38800053, 0x4BFCD1F9 - rainToSnow, 0x5460063E, 0x28000002, 0x40820188 - rainToSnow, 0x38600000, 0x38800053, 0x38A00000, 0x4BFCD189 - rainToSnow, 0x7FE4FB78, 0x38600000, 0x4BFD09D5 - rainToSnow, 0x3C608041, 0x3863783C, 0x4BFFD8F1 - rainToSnow, kNopInstruction]
 //
 //let snowstart = 0x80225e90 - kDOLtoRAMOffsetDifference
 //for i in 0 ..< weatherStarter.count {
-//	bdol.replace4BytesAtOffset(snowstart + (i * 4), withBytes: weatherStarter[i])
+//	bdol.replaceWordAtOffset(snowstart + (i * 4), withBytes: weatherStarter[i])
 //}
 //
 //loadAllStrings()
@@ -433,21 +433,21 @@ import Foundation
 //let critValues : [UInt32] = [0x38800003,0x38800002,0x38800002,0x38800002]
 //
 //for i in 0 ..< critOffsets.count {
-//	cdol.replace4BytesAtOffset(critOffsets[i] - kDOLtoRAMOffsetDifference, withBytes: critValues[i])
+//	cdol.replaceWordAtOffset(critOffsets[i] - kDOLtoRAMOffsetDifference, withBytes: critValues[i])
 //}
 //
 //// reverse mode residual
-//cdol.replace4BytesAtOffset(0x8022811c - kDOLtoRAMOffsetDifference, withBytes: 0x38800008)
+//cdol.replaceWordAtOffset(0x8022811c - kDOLtoRAMOffsetDifference, withBytes: 0x38800008)
 //
 //// paralysis to halve speed
-//cdol.replace4BytesAtOffset(0x80203adc - kDOLtoRAMOffsetDifference, withBytes: 0x56f7f87e)
+//cdol.replaceWordAtOffset(0x80203adc - kDOLtoRAMOffsetDifference, withBytes: 0x56f7f87e)
 //
 //// choice scarf
 //let choicescarfindex : UInt32 = 52
 //let choiceStart = 0x80203ab4 - kDOLtoRAMOffsetDifference
 //let choiceInstructions : [UInt32] = [kNopInstruction,0x7f43d378,0x4bfffdb5,0x28030000 + choicescarfindex,0x4082000C,0x1EF70003,0x56f7f87e]
 //for i in 0 ..< choiceInstructions.count {
-//	cdol.replace4BytesAtOffset(choiceStart + (i * 4), withBytes: choiceInstructions[i])
+//	cdol.replaceWordAtOffset(choiceStart + (i * 4), withBytes: choiceInstructions[i])
 //}
 //
 //// move maintenance
@@ -458,7 +458,7 @@ import Foundation
 //	mov.HMFlag = true
 //	mov.save()
 //	let rel = XGFiles.common_rel.data
-//	rel.replace4BytesAtOffset(mov.startOffset + 0x14, withBytes: 0x00023101)
+//	rel.replaceWordAtOffset(mov.startOffset + 0x14, withBytes: 0x00023101)
 //	rel.save()
 //	
 //}
@@ -523,8 +523,8 @@ import Foundation
 //let magicBounceBranchInstruction : UInt32 = 0x4bf3033d
 //let magicBounceCompareInstruction : UInt32 = 0x28000000 + magicBounceIndex
 //
-//cdol.replace4BytesAtOffset(magicBounceBranchAddress - kDOLtoRAMOffsetDifference, withBytes: magicBounceBranchInstruction)
-//cdol.replace4BytesAtOffset(magicBounceCompareAddress - kDOLtoRAMOffsetDifference, withBytes: magicBounceCompareInstruction)
+//cdol.replaceWordAtOffset(magicBounceBranchAddress - kDOLtoRAMOffsetDifference, withBytes: magicBounceBranchInstruction)
+//cdol.replaceWordAtOffset(magicBounceCompareAddress - kDOLtoRAMOffsetDifference, withBytes: magicBounceCompareInstruction)
 //
 //cdol.save()
 
@@ -537,7 +537,7 @@ import Foundation
 //
 //for i in 0 ..< sheerForceInstructions.count {
 //	let offset = sheerForceStart + (i * 4) - kDOLtoRAMOffsetDifference
-//	ddol.replace4BytesAtOffset(offset, withBytes: sheerForceInstructions[i])
+//	ddol.replaceWordAtOffset(offset, withBytes: sheerForceInstructions[i])
 //}
 //
 //// -ate abilities types
@@ -546,7 +546,7 @@ import Foundation
 //
 //for i in 0 ..< ateInstructions.count {
 //	let offset = ateStart + (i * 4)
-//	ddol.replace4BytesAtOffset(offset, withBytes: UInt32(ateInstructions[i]))
+//	ddol.replaceWordAtOffset(offset, withBytes: UInt32(ateInstructions[i]))
 //}
 //
 //let priorityAbilitiesStart = 0x8015224c - kDOLtoRAMOffsetDifference
@@ -554,14 +554,14 @@ import Foundation
 //
 //for i in 0 ..< priorityAbilitiesInstructions.count {
 //	let offset = priorityAbilitiesStart + (i * 4)
-//	ddol.replace4BytesAtOffset(offset, withBytes: priorityAbilitiesInstructions[i])
+//	ddol.replaceWordAtOffset(offset, withBytes: priorityAbilitiesInstructions[i])
 //}
 //
 //let determineOrderOffsets = [0x801f43e8,0x801f43ec,0x801f43f4,0x801f43f8]
 //let determineOrderInstructions : [UInt32] = [0x7f23cb78,0x4bf5de61,0x7f43d378,0x4bf5de55]
 //
 //for i in 0 ..< determineOrderOffsets.count {
-//	ddol.replace4BytesAtOffset(determineOrderOffsets[i] - kDOLtoRAMOffsetDifference, withBytes: determineOrderInstructions[i])
+//	ddol.replaceWordAtOffset(determineOrderOffsets[i] - kDOLtoRAMOffsetDifference, withBytes: determineOrderInstructions[i])
 //}
 //
 //ddol.save()
@@ -573,20 +573,20 @@ import Foundation
 //let hardoffset2 = 0x8022582c - kDOLtoRAMOffsetDifference
 //let hardbranch : UInt32 = 0x4bf18db9
 //
-//dol2.replace4BytesAtOffset(hardoffset1, withBytes: hardcomparison)
-//dol2.replace4BytesAtOffset(hardoffset2, withBytes: hardbranch)
+//dol2.replaceWordAtOffset(hardoffset1, withBytes: hardcomparison)
+//dol2.replaceWordAtOffset(hardoffset2, withBytes: hardbranch)
 //
 //// regenerator
 //let naturalcurechangestart = 0x8021c5cc - kDOLtoRAMOffsetDifference
 //let naturalcurechanges : [UInt32] = [0x7C7E1B78,0x48002559,0x7fe3fb78]
 //for i in 0 ... 2 {
-//	dol2.replace4BytesAtOffset(naturalcurechangestart + (i * 4), withBytes: naturalcurechanges[i])
+//	dol2.replaceWordAtOffset(naturalcurechangestart + (i * 4), withBytes: naturalcurechanges[i])
 //}
 //
 //let regenStart = 0x8021eb28 - kDOLtoRAMOffsetDifference
 //let regenCode : [UInt32] = [0x7fe3fb78,0xa063080c,0x28030054,0x41820008,0x4e800020,0x7fe3fb78,0x80630000,0x38630004,0xA0830090,0xa0630004,0x38000003, 0x7C0403D6,0x7C630214,0x7C032040,0x40810014,0x7fe3fb78,0x80630000,0x38630004,0xA0630090,0x7C641B78,0x7fe3fb78,0x80630000,0x38630004,0xb0830004,0x4e800020]
 //for i in 0 ..< regenCode.count {
-//	dol2.replace4BytesAtOffset(regenStart + (i * 4), withBytes: regenCode[i])
+//	dol2.replaceWordAtOffset(regenStart + (i * 4), withBytes: regenCode[i])
 //}
 //dol2.save()
 //
@@ -778,19 +778,19 @@ import Foundation
 //]
 //
 //for i in 0 ..< statBoosterCode.count {
-//	ldol.replace4BytesAtOffset(statBoosterStart + (i * 4), withBytes: statBoosterCode[i])
+//	ldol.replaceWordAtOffset(statBoosterStart + (i * 4), withBytes: statBoosterCode[i])
 //}
 //
 //// tailwind and trick room
 //let safeguards = [0x80214040,0x8021bd6c,0x8022cd90,0x8022d538,0x8022d94c,0x8022e0fc,0x8022e244,0x8022ee48,0x80230154,0x802302f4,0x802306b8,0x80230bd0,0x802314e8,0x802ccf60,0x802de1b4]
 //let mists = [0x8022c910,0x802cc790,0x802ccab4,0x802cccf8,0x802ccf40,0x802220a4,0x80210990]
 //for offset in safeguards + mists {
-//	ldol.replace4BytesAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: 0x38600000)
+//	ldol.replaceWordAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: 0x38600000)
 //}
 //
 //let tailBranchOffset = 0x801f4430 - kDOLtoRAMOffsetDifference
 //let tailBranchInstruction = 0x4bf5e04d
-//ldol.replace4BytesAtOffset(tailBranchOffset, withBytes: UInt32(tailBranchInstruction))
+//ldol.replaceWordAtOffset(tailBranchOffset, withBytes: UInt32(tailBranchInstruction))
 //
 //let tailStart = 0x8015247c - kDOLtoRAMOffsetDifference
 //let tailCode : [UInt32] = [0x9421ffe0,0x7c0802a6,0x90010024,0x93e1001c,0x93c10018,0x93a10014,0x93810010,
@@ -802,7 +802,7 @@ import Foundation
 //]
 //
 //for i in 0 ..< tailCode.count {
-//	ldol.replace4BytesAtOffset(tailStart + (i * 4), withBytes: tailCode[i])
+//	ldol.replaceWordAtOffset(tailStart + (i * 4), withBytes: tailCode[i])
 //}
 //
 //
@@ -812,23 +812,23 @@ import Foundation
 //let avBranchOffset = 0x802014ac - kDOLtoRAMOffsetDifference
 //let avBranchInstruction : UInt32 = 0x4bf16619
 //
-//ldol.replace4BytesAtOffset(avBranchOffset, withBytes: avBranchInstruction)
+//ldol.replaceWordAtOffset(avBranchOffset, withBytes: avBranchInstruction)
 //
 //let assaultVestStart = 0x80117ac4 - kDOLtoRAMOffsetDifference
 //let assaultVestCode : [UInt32] = [0x28030001,0x40820008,0x4e800020,0x281f004c,0x4082000c,0x38600001,0x4e800020,0x38600000,0x4e800020]
 //
 //for i in 0 ..< assaultVestCode.count {
-//	ldol.replace4BytesAtOffset(assaultVestStart + (i * 4), withBytes: assaultVestCode[i])
+//	ldol.replaceWordAtOffset(assaultVestStart + (i * 4), withBytes: assaultVestCode[i])
 //}
 
-//ldol.replace4BytesAtOffset(0x802014b0 - kDOLtoRAMOffsetDifference, withBytes: 0x28030001)
+//ldol.replaceWordAtOffset(0x802014b0 - kDOLtoRAMOffsetDifference, withBytes: 0x28030001)
 
 //
 //
 //// allow shadow moves to use hm flag
 //let shadowBranchOffsetsR0 = [0x8001c60c,0x8001c7ec,0x8001e314,0x80036c60]
 //for offset in shadowBranchOffsetsR0 {
-//	ldol.replace4BytesAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: createBranchAndLinkFrom(offset: offset - 0x80000000, toOffset: 0x21eb8c))
+//	ldol.replaceWordAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: createBranchAndLinkFrom(offset: offset - 0x80000000, toOffset: 0x21eb8c))
 //}
 //
 //let shadowStart = 0x8021eb8c - kDOLtoRAMOffsetDifference
@@ -842,12 +842,12 @@ import Foundation
 //]
 //
 //for i in 0 ..< shadowCode.count {
-//	ldol.replace4BytesAtOffset(shadowStart + (i * 4), withBytes: shadowCode[i])
+//	ldol.replaceWordAtOffset(shadowStart + (i * 4), withBytes: shadowCode[i])
 //}
 //
 //let shadowR3Offsets = [0x8007e6dc,0x80034e98]
 //for offset in shadowR3Offsets {
-//	ldol.replace4BytesAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: createBranchFrom(offset: offset - 0x80000000, toOffset: 0x21ebb8))
+//	ldol.replaceWordAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: createBranchFrom(offset: offset - 0x80000000, toOffset: 0x21ebb8))
 //}
 //
 //ldol.save()
@@ -887,7 +887,7 @@ import Foundation
 //
 //let tr2BranchOffset = 0x80152498 - kDOLtoRAMOffsetDifference
 //let tr2BranchInstr  = createBranchFrom(offset: 0x152498, toOffset: 0x152520)
-//kdol.replace4BytesAtOffset(tr2BranchOffset, withBytes: tr2BranchInstr)
+//kdol.replaceWordAtOffset(tr2BranchOffset, withBytes: tr2BranchInstr)
 //
 //let tr2Start = 0x80152520 - kDOLtoRAMOffsetDifference
 //let tr2Instructions : [UInt32] = [
@@ -898,12 +898,12 @@ import Foundation
 //
 //
 //for i in 0 ..< tr2Instructions.count {
-//	kdol.replace4BytesAtOffset(tr2Start + (i * 4), withBytes: tr2Instructions[i])
+//	kdol.replaceWordAtOffset(tr2Start + (i * 4), withBytes: tr2Instructions[i])
 //}
 //
-//kdol.replace4BytesAtOffset(0x801524c8 - kDOLtoRAMOffsetDifference, withBytes: 0x7F83E378)
+//kdol.replaceWordAtOffset(0x801524c8 - kDOLtoRAMOffsetDifference, withBytes: 0x7F83E378)
 //for offset in [0x801524b0,0x801524e0] {
-//	kdol.replace4BytesAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: 0x7FE3FB78)
+//	kdol.replaceWordAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: 0x7FE3FB78)
 //}
 
 //// No guard
@@ -918,7 +918,7 @@ import Foundation
 //]
 //
 //for i in 0 ..< noguardinstructions.count {
-//	kdol.replace4BytesAtOffset(noguardstart + (i * 4), withBytes: noguardinstructions[i])
+//	kdol.replaceWordAtOffset(noguardstart + (i * 4), withBytes: noguardinstructions[i])
 //}
 //
 //kdol.save()
@@ -962,7 +962,7 @@ import Foundation
 // skill link part 2
 //let dol = XGFiles.dol.data
 //
-//dol.replace4BytesAtOffset(0x80221d70 - kDOLtoRAMOffsetDifference, withBytes: createBranchAndLinkFrom(offset: 0x221d70, toOffset: 0x152548))
+//dol.replaceWordAtOffset(0x80221d70 - kDOLtoRAMOffsetDifference, withBytes: createBranchAndLinkFrom(offset: 0x221d70, toOffset: 0x152548))
 //
 //dol.save()
 
@@ -981,14 +981,14 @@ import Foundation
 //]
 //
 //let bdol = XGFiles.dol.data
-//bdol.replace4BytesAtOffset(skillLinkBranchOffset, withBytes: skillLinkBranchInstruction)
+//bdol.replaceWordAtOffset(skillLinkBranchOffset, withBytes: skillLinkBranchInstruction)
 //for i in 0 ..< skillLinkCode.count {
-//	bdol.replace4BytesAtOffset(skillLinkStart + (i * 4), withBytes: skillLinkCode[i])
+//	bdol.replaceWordAtOffset(skillLinkStart + (i * 4), withBytes: skillLinkCode[i])
 //}
 //
 //// foes can enter reverse mode
 //let reverseOffset = 0x80226754 - kDOLtoRAMOffsetDifference
-//bdol.replace4BytesAtOffset(reverseOffset, withBytes: kNopInstruction)
+//bdol.replaceWordAtOffset(reverseOffset, withBytes: kNopInstruction)
 //
 //
 ////// no infinite weather
@@ -996,8 +996,8 @@ import Foundation
 //let infiniteReplacements : [UInt32] = [0x38800056,0x38800055,0x38800054]
 //for i in 0 ..< infiniteReplacements.count {
 //	let index = i * 2
-//	bdol.replace4BytesAtOffset(infiniteOffsets[index] - kDOLtoRAMOffsetDifference, withBytes: infiniteReplacements[i])
-//	bdol.replace4BytesAtOffset(infiniteOffsets[index + 1] - kDOLtoRAMOffsetDifference, withBytes: infiniteReplacements[i])
+//	bdol.replaceWordAtOffset(infiniteOffsets[index] - kDOLtoRAMOffsetDifference, withBytes: infiniteReplacements[i])
+//	bdol.replaceWordAtOffset(infiniteOffsets[index + 1] - kDOLtoRAMOffsetDifference, withBytes: infiniteReplacements[i])
 //}
 //bdol.save()
 //
@@ -1063,7 +1063,7 @@ import Foundation
 //let label_end_status = tr_start + 0x5c
 //let label_end		 = tr_start + 0x84
 //
-//kdol.replace4BytesAtOffset(mist_start, withBytes: createBranchFrom(offset: mist_start, toOffset: tr_start))
+//kdol.replaceWordAtOffset(mist_start, withBytes: createBranchFrom(offset: mist_start, toOffset: tr_start))
 //
 //let mistCode : [UInt32] = [
 //	
@@ -1122,7 +1122,7 @@ import Foundation
 //for i in 0 ..< mistCode.count {
 //	let offset = i * 4
 //	let instruction = mistCode[i]
-//	kdol.replace4BytesAtOffset(tr_start + offset, withBytes: instruction)
+//	kdol.replaceWordAtOffset(tr_start + offset, withBytes: instruction)
 //}
 //
 //
@@ -1143,7 +1143,7 @@ import Foundation
 //for i in 0 ..< tw_code.count {
 //	let offset = i * 4
 //	let inst = tw_code[i]
-//	kdol.replace4BytesAtOffset(tw_start + offset, withBytes: inst)
+//	kdol.replaceWordAtOffset(tw_start + offset, withBytes: inst)
 //}
 //
 // kdol.save()
@@ -4600,8 +4600,8 @@ import Foundation
 //
 //// increase number of tms by replacing hms
 //let dol = XGFiles.dol.data
-//dol.replace4BytesAtOffset(0x15e92c - kDOLtoRAMOffsetDifference, withBytes: 0x28030038)
-//dol.replace4BytesAtOffset(0x15e948 - kDOLtoRAMOffsetDifference, withBytes: 0x3803ffc8)
+//dol.replaceWordAtOffset(0x15e92c - kDOLtoRAMOffsetDifference, withBytes: 0x28030038)
+//dol.replaceWordAtOffset(0x15e948 - kDOLtoRAMOffsetDifference, withBytes: 0x3803ffc8)
 //dol.save()
 //
 //// remove amplifier ability code

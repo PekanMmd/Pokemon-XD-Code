@@ -105,9 +105,9 @@ class XGCharacter : NSObject {
 		data.replace2BytesAtOffset(startOffset + kScriptIndexOffset, withBytes: self.scriptIndex)
 		data.replaceByteAtOffset(startOffset + kMovementOffset, withByte: self.movementType.index)
 		
-		data.replace4BytesAtOffset(startOffset + kXOffset, withBytes: self.xCoordinate.bitPattern)
-		data.replace4BytesAtOffset(startOffset + kYOffset, withBytes: self.yCoordinate.bitPattern)
-		data.replace4BytesAtOffset(startOffset + kZOffset, withBytes: self.zCoordinate.bitPattern)
+		data.replaceWordAtOffset(startOffset + kXOffset, withBytes: self.xCoordinate.bitPattern)
+		data.replaceWordAtOffset(startOffset + kYOffset, withBytes: self.yCoordinate.bitPattern)
+		data.replaceWordAtOffset(startOffset + kZOffset, withBytes: self.zCoordinate.bitPattern)
 		data.replace2BytesAtOffset(startOffset + kCharacterAngleOffset, withBytes: self.angle)
 		
 		let flagsUpdated = (self.flags & 0x7F) | (self.isVisible ? 0x80 : 0x00)

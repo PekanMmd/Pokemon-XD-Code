@@ -125,9 +125,9 @@ class XGInteractionLocation : NSObject {
 		let data = file.data
 		
 		data.replace2BytesAtOffset(startOffset + kIPAngleOffset, withBytes: self.angle)
-		data.replace4BytesAtOffset(startOffset + kILXOffset, withBytes: self.xCoordinate.bitPattern)
-		data.replace4BytesAtOffset(startOffset + kILYOffset, withBytes: self.yCoordinate.bitPattern)
-		data.replace4BytesAtOffset(startOffset + kILZOffset, withBytes: self.zCoordinate.bitPattern)
+		data.replaceWordAtOffset(startOffset + kILXOffset, withBytes: self.xCoordinate.bitPattern)
+		data.replaceWordAtOffset(startOffset + kILYOffset, withBytes: self.yCoordinate.bitPattern)
+		data.replaceWordAtOffset(startOffset + kILZOffset, withBytes: self.zCoordinate.bitPattern)
 		
 		data.save()
 	}

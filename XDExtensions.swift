@@ -513,14 +513,14 @@ extension XGUtility {
 		let rel = XGFiles.common_rel.data
 		for i in 0 ..< kNumberOfMoves {
 			let offset = tableStart + (i * 4)
-			rel.replace4BytesAtOffset(offset, withBytes: UInt32(i << 16) + 0x0500)
+			rel.replaceWordAtOffset(offset, withBytes: UInt32(i << 16) + 0x0500)
 		}
 		
 		for i in 0 ..< kNumberOfMoves {
 			
 			let m = XGMoves.move(i).data
 			if m.isShadowMove {
-				rel.replace4BytesAtOffset(m.startOffset + 0x14, withBytes: 0x00023101)
+				rel.replaceWordAtOffset(m.startOffset + 0x14, withBytes: 0x00023101)
 			}
 			
 		}
@@ -1001,7 +1001,7 @@ extension XGUtility {
 			let tmove = XGTMs.tutor(i).move
 			let offset = offsets[i-1]
 			
-			dol.replace4BytesAtOffset(offset + 6, withBytes: kNopInstruction)
+			dol.replaceWordAtOffset(offset + 6, withBytes: kNopInstruction)
 			
 			dol.replace2BytesAtOffset(offset, withBytes: tmove.index)
 		}
@@ -1515,17 +1515,17 @@ extension XGUtility {
 			return
 		}
 		
-		data.replace4BytesAtOffset(animation0Pointer + 0xc, withBytes: animationOffsets[index])
+		data.replaceWordAtOffset(animation0Pointer + 0xc, withBytes: animationOffsets[index])
 		data.save()
 		
 	}
 	
 	
 	//MARK: - pokespot
-	class func relocatePokespots(startOffset: UInt32, numberOfEntries n: UInt32) {
+	class func relocatePokespots(startOffset: Int, numberOfEntries n: Int) {
 		
 		var spotStart = startOffset
-		let entrySize = UInt32(kSizeOfPokeSpotData)
+		let entrySize = kSizeOfPokeSpotData
 		
 		//rock
 		XGPokeSpots.rock.relocatePokespotData(toOffset: spotStart)
@@ -1544,7 +1544,6 @@ extension XGUtility {
 		
 		//bonsly munchlax
 		XGPokeSpots.all.relocatePokespotData(toOffset: spotStart)
-		
 		
 		let dol = XGFiles.dol.data
 		let offset = 0x1faf50 - kDOLtoRAMOffsetDifference

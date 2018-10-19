@@ -64,10 +64,10 @@ let ScriptOperators : [(String,Int,Int)] = [
 	//Category(name = "Comparison operators", start = 48, nb = 6),
 	
 	("=", 48, 2), //# For string equality comparison: '?' every character goes, '*' everything goes after here
-	(">", 49, 2), //# ordering of strings is done comparing their respective lengths
-	(">=", 50, 2),
-	("<", 51, 2),
-	("<=", 52, 2),
+	("<=", 49, 2), //# ordering of strings is done comparing their respective lengths
+	("<", 50, 2),
+	(">=", 51, 2),
+	(">", 52, 2),
 	("!=", 53, 2)
 	//#------------------------------------------------------------------
 ]

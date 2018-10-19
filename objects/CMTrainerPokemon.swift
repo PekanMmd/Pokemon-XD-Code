@@ -180,7 +180,7 @@ class XGTrainerPokemon : NSObject {
 		}
 		
 		data.replace2BytesAtOffset(start + kPokemonSpeciesOffset, withBytes: species.index)
-		data.replace4BytesAtOffset(start + kPokemonNameIDOffset, withBytes: UInt32(species.nameID))
+		data.replaceWordAtOffset(start + kPokemonNameIDOffset, withBytes: UInt32(species.nameID))
 		data.replace2BytesAtOffset(start + kPokemonItemOffset, withBytes: item.index)
 		data.replaceByteAtOffset(start + kPokemonHappinessOffset, withByte: happiness)
 		data.replaceByteAtOffset(start + kPokemonLevelOffset, withByte: level)

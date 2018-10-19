@@ -326,14 +326,14 @@ class XDSScriptCompiler: NSObject {
 			switch token {
 			case "assign":
 				name = nextToken
-			case "groupID:":
+			case "GroupID:":
 				if let val = nextToken.integerValue {
 					gid = val
 				} else {
 					error = "Invalid \(token) value: '\(nextToken)'"
 					return false
 				}
-			case "resourceID:":
+			case "ResourceID:":
 				if let val = nextToken.integerValue {
 					rid = val
 				} else {
@@ -495,19 +495,31 @@ class XDSScriptCompiler: NSObject {
 		// first element has type array if second element is an array representing an array literal
 		// otherwise second element contains a single value representing a literal. The constant contains its type.
 		
+		if text.length == 0 {
+			return nil
+		}
+		
+		if text.first! == "@" {
+			error = "Uh oh, location as a literal! Technically allowed but hoped this day would never come. If you wrote this line yourself then it's probably wrong otherwise tell @StarsMmd he has to implement location literals. \(text)"
+			return nil
+		}
+		
 		if let val = text.integerValue {
-			return (XDSConstantTypes.integer, [XDSConstant(type: XDSConstantTypes.integer.index, rawValue: UInt32(val))])
+			return (XDSConstantTypes.integer, [XDSConstant.integer(val)])
 		}
 		
 		if let val = Float(text) {
-			return (XDSConstantTypes.float, [XDSConstant(type: XDSConstantTypes.float.index, rawValue: val.floatToHex())])
+			return (XDSConstantTypes.float, [XDSConstant.float(val)])
 		}
 		
 		if "ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(text.substring(from: 0, to: 1)) {
 			if text.contains("(") && text.contains(")") {
 				if let type = XDSConstantTypes.typeWithName(text.functionName!) {
-					if let val = text.parameterString!.integerValue {
-						return (type, [XDSConstant(type: type.index, rawValue:UInt32(val))])
+					if let param = text.parameterString {
+						let paramString = param == "" ? "0" : param
+						if let val = paramString.integerValue {
+							return (type, [XDSConstant(type: type.index, rawValue:UInt32(val))])
+						}
 					}
 				}
 			}
@@ -515,6 +527,14 @@ class XDSScriptCompiler: NSObject {
 		
 		if text == "Null" {
 			return (XDSConstantTypes.none_t, [XDSConstant.null])
+		}
+		
+		if text == "True" {
+			return (XDSConstantTypes.integer, [XDSConstant.integer(1)])
+		}
+		
+		if text == "False" {
+			return (XDSConstantTypes.integer, [XDSConstant.integer(0)])
 		}
 		
 		if let index = arrys.names.index(of: text) {
@@ -535,7 +555,7 @@ class XDSScriptCompiler: NSObject {
 				if let x = Float(String(parts[0])) {
 					if let y = Float(String(parts[1])) {
 						if let z = Float(String(parts[2])) {
-							return (XDSConstantTypes.vector, [XDSConstant(type: XDSConstantTypes.float.index, rawValue: x.floatToHex()), XDSConstant(type: XDSConstantTypes.float.index, rawValue: y.floatToHex()), XDSConstant(type: XDSConstantTypes.float.index, rawValue: z.floatToHex())])
+							return (XDSConstantTypes.vector, [XDSConstant.float(x), XDSConstant.float(y), XDSConstant.float(z)])
 						}
 					}
 				}
@@ -599,11 +619,11 @@ class XDSScriptCompiler: NSObject {
 					// error in handlemsg
 					return nil
 				}
-				return (XDSConstantTypes.integer, [XDSConstant(type: XDSConstantTypes.integer.index, rawValue: UInt32(newID!))])
+				return (XDSConstantTypes.integer, [XDSConstant.integer(newID!)])
 			}
 		}
 		
-		return (XDSConstantTypes.none_t, [XDSConstant(type: 0, rawValue: 0)])
+		return (XDSConstantTypes.none_t, [XDSConstant.null])
 	}
 	
 	private class func getStringStartIndex(str: String) -> UInt32 {
@@ -1295,6 +1315,14 @@ class XDSScriptCompiler: NSObject {
 			return XDSExpr.XDSReturn
 		}
 		
+		if token == "True" {
+			return XDSConstant.integer(1).expression
+		}
+		
+		if token == "False" {
+			return XDSConstant.integer(0).expression
+		}
+		
 		// load variables
 		if token == kXDSLastResultVariable {
 			return XDSExpr.loadVariable(token)
@@ -1393,7 +1421,7 @@ class XDSScriptCompiler: NSObject {
 					// error in handlemsg
 					return nil
 				}
-				return .loadImmediate(XDSConstant(type: XDSConstantTypes.integer.index, rawValue: UInt32(id!)))
+				return XDSConstant.integer(id!).expression
 			}
 			
 			// error in handlemsgstring
@@ -1500,7 +1528,9 @@ class XDSScriptCompiler: NSObject {
 						if "ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(functionName.substring(from: 0, to: 1)) {
 							if let type = XDSConstantTypes.typeWithName(functionName) {
 								if let val = parameters.integerValue {
-									return .loadImmediate(XDSConstant(type: type.index, rawValue: UInt32(bitPattern: Int32(val))))
+									return .loadImmediate(XDSConstant(type: type.index, rawValue: val.unsigned))
+								} else if parameters == "" {
+									return .loadImmediate(XDSConstant(type: type.index, rawValue: 0))
 								} else {
 									error = "Invalid raw integer: \(token)"
 									return nil
@@ -1645,16 +1675,12 @@ class XDSScriptCompiler: NSObject {
 			}
 		}
 		
-		if let val = Int(token) {
-			return .loadImmediate(XDSConstant(type: XDSConstantTypes.integer.index, rawValue: UInt32(bitPattern: Int32(val))))
-		}
-		
-		if token.isHexInteger {
-			return .loadImmediate(XDSConstant(type: XDSConstantTypes.integer.index, rawValue: UInt32(bitPattern: Int32(token.hexStringToInt()))))
+		if let val = token.integerValue {
+			return XDSConstant.integer(val).expression
 		}
 		
 		if let val = Float(token) {
-			return .loadImmediate(XDSConstant(type: XDSConstantTypes.float.index, rawValue: val.floatToHex()))
+			return XDSConstant.float(val).expression
 		}
 		
 		error = "Invalid token: \(token)"

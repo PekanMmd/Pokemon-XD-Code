@@ -71,11 +71,11 @@ class XGCharacterModels : NSObject {
 	func save() {
 		let rel = XGFiles.common_rel.data
 		
-		rel.replace4BytesAtOffset(self.startOffset + kCharacterModelFSYSIdentifier, withBytes: self.identifier)
+		rel.replaceWordAtOffset(self.startOffset + kCharacterModelFSYSIdentifier, withBytes: self.identifier)
 		for i in 0 ..< 8 {
 			let offset = self.startOffset + (i * 4) + kFirstBoundBoxVertexOffset
 			let f = self.boundBox[i]
-			rel.replace4BytesAtOffset(offset, withBytes: f.floatToHex())
+			rel.replaceWordAtOffset(offset, withBytes: f.floatToHex())
 		}
 		
 		rel.save()

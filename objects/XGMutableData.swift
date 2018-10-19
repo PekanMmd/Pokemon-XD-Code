@@ -209,9 +209,17 @@ class XGMutableData: NSObject {
 		
 	}
 	
-	@objc func replace4BytesAtOffset(_ start : Int, withBytes bytes: UInt32) {
+	@objc func replaceWordAtOffset(_ start : Int, withBytes newbytes: UInt32) {
 		
-		var bytes = UInt32(bytes)
+		var bytes = UInt32(newbytes)
+		bytes = UInt32(bigEndian: bytes)
+		self.data.replaceBytes(in: NSMakeRange(start, 4), withBytes: &bytes)
+		
+	}
+	
+	@objc func replace4BytesAtOffset(_ start : Int, withBytes newbytes: Int) {
+		
+		var bytes = newbytes.unsigned
 		bytes = UInt32(bigEndian: bytes)
 		self.data.replaceBytes(in: NSMakeRange(start, 4), withBytes: &bytes)
 		

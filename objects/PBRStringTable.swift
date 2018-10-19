@@ -109,11 +109,11 @@ class PBRStringTable: NSObject {
 		
 		for sid in sids {
 			
-			stringTable.replace4BytesAtOffset(currentOffset, withBytes: UInt32(sid))
+			stringTable.replaceWordAtOffset(currentOffset, withBytes: UInt32(sid))
 			
 			currentOffset += 4
 			
-			stringTable.replace4BytesAtOffset(currentOffset, withBytes: UInt32(stringOffsets[sid]!))
+			stringTable.replaceWordAtOffset(currentOffset, withBytes: UInt32(stringOffsets[sid]!))
 			
 			currentOffset += 4
 			

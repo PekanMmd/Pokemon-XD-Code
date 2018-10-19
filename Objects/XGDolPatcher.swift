@@ -127,13 +127,13 @@ class XGDolPatcher: NSObject {
 			
 			let dol = XGFiles.dol.data
 			for offset in kClassPatchOffsets {
-				dol.replace4BytesAtOffset(offset, withBytes: kNopInstruction)
+				dol.replaceWordAtOffset(offset, withBytes: kNopInstruction)
 			}
 			
-			dol.replace4BytesAtOffset(kMirrorCoatOffset1, withBytes: kNopInstruction)
-			dol.replace4BytesAtOffset(kMirrorCoatOffset2, withBytes: kMirrorCoatBranch)
-			dol.replace4BytesAtOffset(kCounterOffset1, withBytes: kNopInstruction)
-			dol.replace4BytesAtOffset(kCounterOffset2, withBytes: kCounterBranch)
+			dol.replaceWordAtOffset(kMirrorCoatOffset1, withBytes: kNopInstruction)
+			dol.replaceWordAtOffset(kMirrorCoatOffset2, withBytes: kMirrorCoatBranch)
+			dol.replaceWordAtOffset(kCounterOffset1, withBytes: kNopInstruction)
+			dol.replaceWordAtOffset(kCounterOffset2, withBytes: kCounterBranch)
 			dol.save()
 			
 		} else if game == .Colosseum && region == .US {
@@ -180,17 +180,17 @@ class XGDolPatcher: NSObject {
 		for offset in kClassPatchOffsets {
 			
 			if offset == kClassPatchOffsets[0] {
-				dol.replace4BytesAtOffset(offset, withBytes: kBranchInstruction1)
+				dol.replaceWordAtOffset(offset, withBytes: kBranchInstruction1)
 			} else {
-				dol.replace4BytesAtOffset(offset, withBytes: kBranchInstruction2)
+				dol.replaceWordAtOffset(offset, withBytes: kBranchInstruction2)
 			}
 			
 		}
 		
-		dol.replace4BytesAtOffset(kMirrorCoatOffset1, withBytes: kMirrorBranchOrigin1)
-		dol.replace4BytesAtOffset(kMirrorCoatOffset2, withBytes: kMirrorBranchOrigin2)
-		dol.replace4BytesAtOffset(kCounterOffset1, withBytes: kCounterBranchOrigin1)
-		dol.replace4BytesAtOffset(kCounterOffset2, withBytes: kCounterBranchOrigin2)
+		dol.replaceWordAtOffset(kMirrorCoatOffset1, withBytes: kMirrorBranchOrigin1)
+		dol.replaceWordAtOffset(kMirrorCoatOffset2, withBytes: kMirrorBranchOrigin2)
+		dol.replaceWordAtOffset(kCounterOffset1, withBytes: kCounterBranchOrigin1)
+		dol.replaceWordAtOffset(kCounterOffset2, withBytes: kCounterBranchOrigin2)
 		
 		dol.save()
 		
@@ -207,14 +207,14 @@ class XGDolPatcher: NSObject {
 		
 		let dol = XGFiles.dol.data
 		
-		dol.replace4BytesAtOffset(0x2C55B0, withBytes: kBranchInstruction9)
-		dol.replace4BytesAtOffset(0x031230, withBytes: 0x3B400000)
+		dol.replaceWordAtOffset(0x2C55B0, withBytes: kBranchInstruction9)
+		dol.replaceWordAtOffset(0x031230, withBytes: 0x3B400000)
 		
 		
 		let nopOffsets = [0x2C59FC, 0x2C5D8C, 0x2C8870, 0x2C895C]
 		
 		for offset in nopOffsets {
-			dol.replace4BytesAtOffset(offset, withBytes: kNopInstruction)
+			dol.replaceWordAtOffset(offset, withBytes: kNopInstruction)
 		}
 		
 		dol.save()
@@ -236,7 +236,7 @@ class XGDolPatcher: NSObject {
 		
 		for i in 0 ..< 3 {
 			let offset = i * 4
-			dol.replace4BytesAtOffset(kBetaStartersFirstOffset + offset, withBytes: instructions[i])
+			dol.replaceWordAtOffset(kBetaStartersFirstOffset + offset, withBytes: instructions[i])
 		}
 		
 		dol.save()
@@ -250,7 +250,7 @@ class XGDolPatcher: NSObject {
 		
 		for i in 0 ..< 3 {
 			let offset = i * 4
-			dol.replace4BytesAtOffset(kBetaStartersFirstOffset + offset, withBytes: instructions[i])
+			dol.replaceWordAtOffset(kBetaStartersFirstOffset + offset, withBytes: instructions[i])
 		}
 		
 		dol.save()
@@ -267,9 +267,9 @@ class XGDolPatcher: NSObject {
 	@objc class func allowRenamingAnyPokemon() {
 //		let dol = XGFiles.Dol.data
 //		
-//		dol.replace4BytesAtOffset(kNameRaterOffset1, withBytes: kNopInstruction)
-//		dol.replace4BytesAtOffset(kNameRaterOffset2, withBytes: kNameRaterInstruction2)
-//		dol.replace4BytesAtOffset(kNameRaterOffset3, withBytes: kNameRaterInstruction3)
+//		dol.replaceWordAtOffset(kNameRaterOffset1, withBytes: kNopInstruction)
+//		dol.replaceWordAtOffset(kNameRaterOffset2, withBytes: kNameRaterInstruction2)
+//		dol.replaceWordAtOffset(kNameRaterOffset3, withBytes: kNameRaterInstruction3)
 //		
 //		dol.save()
 	}
@@ -296,8 +296,8 @@ class XGDolPatcher: NSObject {
 		
 		let dol = XGFiles.dol.data
 		
-		dol.replace4BytesAtOffset(kShinyCalcPIDOffset1, withBytes: kShinyCalcNewPIDInstruction)
-		dol.replace4BytesAtOffset(kShinyCalcPIDOffset2, withBytes: kShinyCalcNewPIDInstruction)
+		dol.replaceWordAtOffset(kShinyCalcPIDOffset1, withBytes: kShinyCalcNewPIDInstruction)
+		dol.replaceWordAtOffset(kShinyCalcPIDOffset2, withBytes: kShinyCalcNewPIDInstruction)
 		
 		dol.save()
 	}
@@ -305,8 +305,8 @@ class XGDolPatcher: NSObject {
 	@objc class func replaceShinyGlitch() {
 		let dol = XGFiles.dol.data
 		
-		dol.replace4BytesAtOffset(kShinyCalcPIDOffset1, withBytes: kShinyCalcOriginalPIDInstruction)
-		dol.replace4BytesAtOffset(kShinyCalcPIDOffset2, withBytes: kShinyCalcOriginalPIDInstruction)
+		dol.replaceWordAtOffset(kShinyCalcPIDOffset1, withBytes: kShinyCalcOriginalPIDInstruction)
+		dol.replaceWordAtOffset(kShinyCalcPIDOffset2, withBytes: kShinyCalcOriginalPIDInstruction)
 		
 		dol.save()
 	}

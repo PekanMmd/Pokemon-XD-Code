@@ -192,8 +192,8 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		for sid in sids {
 			
 			let id : UInt32 = sid < 0 ? 0xFFFFFFFF : UInt32(sid)
-			stringTable.replace4BytesAtOffset(currentOffset, withBytes: id)
-			stringTable.replace4BytesAtOffset(currentOffset + 4, withBytes: UInt32(stringOffsets[sid]!))
+			stringTable.replaceWordAtOffset(currentOffset, withBytes: id)
+			stringTable.replaceWordAtOffset(currentOffset + 4, withBytes: UInt32(stringOffsets[sid]!))
 			currentOffset += 8
 			
 		}
