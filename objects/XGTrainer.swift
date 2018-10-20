@@ -335,7 +335,7 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		
 		for id in [nameID, preBattleTextID, victoryTextID, defeatTextID] {
 			if id > 0xFFFF {
-				printg("warning: trainer msg ids must not exceed 0xFFFF (~32,000)")
+				printg("warning: trainer msg ids must not exceed 0xFFFF (~32,000)\n\(self.deck.fileName + " " + self.index.hexString())")
 			}
 		}
 		deck.replace2BytesAtOffset(start + kTrainerNameIDOffset, withBytes: self.nameID)

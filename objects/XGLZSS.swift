@@ -27,7 +27,7 @@ enum XGLZSS {
 	
 	var output : XGFiles {
 		get {
-			let name = inputFile.fileName + ".lzss"
+			let name = inputFile.fileName
 			return .lzss(name)
 		}
 	}

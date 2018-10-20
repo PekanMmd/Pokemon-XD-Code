@@ -18,7 +18,12 @@ class XGMutableData: NSObject {
 	@objc var data = NSMutableData()
 	
 	@objc var string : String {
-		return String(bytesNoCopy: self.data.mutableBytes, length: self.data.length, encoding: .utf8, freeWhenDone: false) ?? ""
+		for encoding : String.Encoding in [.utf8, .utf16, .utf32, .ascii, .unicode] {
+			if let text = String(bytesNoCopy: self.data.mutableBytes, length: self.data.length, encoding: encoding, freeWhenDone: false) {
+				return text
+			}
+		}
+		return ""
 	}
 	
 	@objc var rawBytes : UnsafeRawPointer {
@@ -113,12 +118,16 @@ class XGMutableData: NSObject {
 		
 	}
 	
-	@objc func get4BytesAtOffset(_ start : Int) -> UInt32 {
+	@objc func get4BytesAtOffset(_ start : Int) -> Int {
+		return getWordAtOffset(start).int
+	}
+	
+	@objc func getWordAtOffset(_ start : Int) -> UInt32 {
 		
 		var bytes : UInt32 = 0x0
 		self.data.getBytes(&bytes, range: NSMakeRange(start, 4))
 		bytes = UInt32(bigEndian: bytes)
-		return UInt32(bytes )
+		return UInt32(bytes)
 		
 	}
 	
@@ -185,7 +194,7 @@ class XGMutableData: NSObject {
 		
 		for i in stride(from: 0, to: length, by: 4) {
 			
-			byteStream.append(self.get4BytesAtOffset(offset + i))
+			byteStream.append(self.getWordAtOffset(offset + i))
 			
 		}
 		
@@ -308,6 +317,26 @@ class XGMutableData: NSObject {
 	
 	@objc func setFilename(_ filename: String) {
 		self.file = .nameAndFolder(filename, self.file.folder)
+	}
+	
+	func getStringAtOffset(_ offset: Int) -> String {
+		
+		var currentOffset = offset
+		
+		var currChar = 0x0
+		var nextChar = 0x1
+		
+		let string = XGString(string: "", file: nil, sid: nil)
+		
+		while (nextChar != 0x00) {
+			currChar = self.getByteAtOffset(currentOffset)
+			currentOffset += 1
+			
+			string.append(.unicode(currChar))
+			nextChar = self.getByteAtOffset(currentOffset)
+		}
+		
+		return string.string
 	}
 	
 	

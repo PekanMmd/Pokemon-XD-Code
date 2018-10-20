@@ -67,7 +67,7 @@ class GoDMovesViewController: GoDTableViewController {
 		self.accuracy.formatter = NumberFormatter.byteFormatter()
 		self.effectAcc.formatter = NumberFormatter.byteFormatter()
 		if game == .Colosseum {
-			self.category.isEnabled = XGFiles.dol.data.get4BytesAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F
+			self.category.isEnabled = XGFiles.dol.data.getWordAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F
 		}
     }
 	
@@ -104,7 +104,7 @@ class GoDMovesViewController: GoDTableViewController {
 		if game == .XD {
 			self.category.selectCategory(category: currentMove.category)
 		} else {
-			let enabled = XGFiles.dol.data.get4BytesAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F
+			let enabled = XGFiles.dol.data.getWordAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F
 			if enabled {
 				self.category.selectCategory(category: currentMove.category)
 			} else {

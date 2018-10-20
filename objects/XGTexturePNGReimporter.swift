@@ -37,8 +37,8 @@ class XGTexturePNGReimporter: NSObject {
 		self.texture  = oldTextureData
 		self.newImage = newImage
 		
-		self.textureDataStartOffset = Int(texture.get4BytesAtOffset(kTexturePointerOffset))
-		self.PaletteDataStartOffset = Int(texture.get4BytesAtOffset(kPalettePointerOffset))
+		self.textureDataStartOffset = Int(texture.getWordAtOffset(kTexturePointerOffset))
+		self.PaletteDataStartOffset = Int(texture.getWordAtOffset(kPalettePointerOffset))
 		
 		if PaletteDataStartOffset != 0 {
 			self.blockWidth  = 8

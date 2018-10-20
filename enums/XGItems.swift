@@ -48,14 +48,14 @@ enum XGItems : XGDictionaryRepresentable {
 	var nameID : Int {
 		get {
 			let data  = XGFiles.common_rel.data
-			return Int(data.get4BytesAtOffset(startOffset + kItemNameIDOffset))
+			return Int(data.getWordAtOffset(startOffset + kItemNameIDOffset))
 		}
 	}
 	
 	var descriptionID : Int {
 		get {
 			let data  = XGFiles.common_rel.data
-			return Int(data.get4BytesAtOffset(startOffset + kItemDescriptionIDOffset))
+			return Int(data.getWordAtOffset(startOffset + kItemDescriptionIDOffset))
 		}
 	}
 	
@@ -68,7 +68,7 @@ enum XGItems : XGDictionaryRepresentable {
 	
 	var descriptionString : XGString {
 		get {
-			let table = XGFiles.stringTable("pocket_menu.msg").stringTable
+			let table = XGFiles.msg("pocket_menu").stringTable
 			return table.stringSafelyWithID(descriptionID)
 		}
 	}
@@ -130,7 +130,7 @@ enum XGOriginalItems {
 	var nameID : Int {
 		get {
 			let data  = XGFiles.original(.common_rel).data
-			return Int(data.get4BytesAtOffset(startOffset + kItemNameIDOffset))
+			return Int(data.getWordAtOffset(startOffset + kItemNameIDOffset))
 		}
 	}
 	

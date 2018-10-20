@@ -77,35 +77,35 @@ class XGScript: NSObject {
 		self.file = data.file
 		self.data = data
 		
-		let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions() + ".rel")
+		let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
 		if relFile.exists {
 			mapRel = XGMapRel(file: relFile, checkScript: false)
 		}
 		
-		self.scriptID = data.get4BytesAtOffset(kScriptUnknownIDOffset)
+		self.scriptID = data.getWordAtOffset(kScriptUnknownIDOffset)
 		
 		self.FTBLStart = kScriptSizeOfTCOD
-		self.HEADStart = FTBLStart + Int(data.get4BytesAtOffset(FTBLStart + kScriptSectionSizeOffset))
-		self.CODEStart = HEADStart + Int(data.get4BytesAtOffset(HEADStart + kScriptSectionSizeOffset))
-		self.GVARStart = CODEStart + Int(data.get4BytesAtOffset(CODEStart + kScriptSectionSizeOffset))
-		self.STRGStart = GVARStart + Int(data.get4BytesAtOffset(GVARStart + kScriptSectionSizeOffset))
-		self.VECTStart = STRGStart + Int(data.get4BytesAtOffset(STRGStart + kScriptSectionSizeOffset))
-		self.GIRIStart = VECTStart + Int(data.get4BytesAtOffset(VECTStart + kScriptSectionSizeOffset))
-		self.ARRYStart = GIRIStart + Int(data.get4BytesAtOffset(GIRIStart + kScriptSectionSizeOffset))
+		self.HEADStart = FTBLStart + Int(data.getWordAtOffset(FTBLStart + kScriptSectionSizeOffset))
+		self.CODEStart = HEADStart + Int(data.getWordAtOffset(HEADStart + kScriptSectionSizeOffset))
+		self.GVARStart = CODEStart + Int(data.getWordAtOffset(CODEStart + kScriptSectionSizeOffset))
+		self.STRGStart = GVARStart + Int(data.getWordAtOffset(GVARStart + kScriptSectionSizeOffset))
+		self.VECTStart = STRGStart + Int(data.getWordAtOffset(STRGStart + kScriptSectionSizeOffset))
+		self.GIRIStart = VECTStart + Int(data.getWordAtOffset(VECTStart + kScriptSectionSizeOffset))
+		self.ARRYStart = GIRIStart + Int(data.getWordAtOffset(GIRIStart + kScriptSectionSizeOffset))
 		
-		let numberFTBLEntries = Int(data.get4BytesAtOffset(FTBLStart + kScriptSectionEntriesOffset))
-//		let numberHEADEntries = Int(data.get4BytesAtOffset(HEADStart + kScriptSectionEntriesOffset))
-//		let numberCODEEntries = Int(data.get4BytesAtOffset(CODEStart + kScriptSectionEntriesOffset))
-		let numberGVAREntries = Int(data.get4BytesAtOffset(GVARStart + kScriptSectionEntriesOffset))
-		let numberSTRGEntries = Int(data.get4BytesAtOffset(STRGStart + kScriptSectionEntriesOffset))
-		let numberVECTEntries = Int(data.get4BytesAtOffset(VECTStart + kScriptSectionEntriesOffset))
-		let numberGIRIEntries = Int(data.get4BytesAtOffset(GIRIStart + kScriptSectionEntriesOffset))
-		let numberARRYEntries = Int(data.get4BytesAtOffset(ARRYStart + kScriptSectionEntriesOffset))
+		let numberFTBLEntries = Int(data.getWordAtOffset(FTBLStart + kScriptSectionEntriesOffset))
+//		let numberHEADEntries = Int(data.getWordAtOffset(HEADStart + kScriptSectionEntriesOffset))
+//		let numberCODEEntries = Int(data.getWordAtOffset(CODEStart + kScriptSectionEntriesOffset))
+		let numberGVAREntries = Int(data.getWordAtOffset(GVARStart + kScriptSectionEntriesOffset))
+		let numberSTRGEntries = Int(data.getWordAtOffset(STRGStart + kScriptSectionEntriesOffset))
+		let numberVECTEntries = Int(data.getWordAtOffset(VECTStart + kScriptSectionEntriesOffset))
+		let numberGIRIEntries = Int(data.getWordAtOffset(GIRIStart + kScriptSectionEntriesOffset))
+		let numberARRYEntries = Int(data.getWordAtOffset(ARRYStart + kScriptSectionEntriesOffset))
 		
 		for i in 0 ..< numberFTBLEntries {
 			let start = FTBLStart + kScriptSectionHeaderSize + (i * kScriptFTBLSize)
-			let codeOffset = Int(data.get4BytesAtOffset(start))
-			let nameOffset = Int(data.get4BytesAtOffset(start + 0x4))
+			let codeOffset = Int(data.getWordAtOffset(start))
+			let nameOffset = Int(data.getWordAtOffset(start + 0x4))
 			let name = getStringAtOffset(nameOffset + kScriptSizeOfTCOD)
 			self.ftbl.append((codeOffset,0,name,i))
 		}
@@ -116,28 +116,28 @@ class XGScript: NSObject {
 		
 		for i in 0 ..< numberGVAREntries {
 			let start = GVARStart + kScriptSectionHeaderSize + (i * kScriptGVARSize)
-			self.gvar.append( XDSConstant(type: data.get2BytesAtOffset(start + 2), rawValue: data.get4BytesAtOffset(start + 4)) )
+			self.gvar.append( XDSConstant(type: data.get2BytesAtOffset(start + 2), rawValue: data.getWordAtOffset(start + 4)) )
 		}
 		
 		var strgPos = STRGStart + kScriptSectionHeaderSize
 		for _ in 0 ..< numberSTRGEntries {
 			let str = getStringAtOffset(strgPos)
 			self.strg.append(str)
-			strgPos += str.characters.count + 1
+			strgPos += str.length + 1
 		}
 		
 		for i in 0 ..< numberVECTEntries {
 			let start = VECTStart + kScriptSectionHeaderSize + (i * kScriptVECTSize)
-			let x = data.get4BytesAtOffset(start).hexToSignedFloat()
-			let y = data.get4BytesAtOffset(start + 4).hexToSignedFloat()
-			let z = data.get4BytesAtOffset(start + 8).hexToSignedFloat()
+			let x = data.getWordAtOffset(start).hexToSignedFloat()
+			let y = data.getWordAtOffset(start + 4).hexToSignedFloat()
+			let z = data.getWordAtOffset(start + 8).hexToSignedFloat()
 			self.vect.append((x,y,z))
 		}
 		
 		for i in 0 ..< numberGIRIEntries {
 			let start = GIRIStart + kScriptSectionHeaderSize + (i * kScriptGIRISize)
-			let groupID = Int(data.get4BytesAtOffset(start))
-			let resourceID = Int(data.get4BytesAtOffset(start + 0x4))
+			let groupID = Int(data.getWordAtOffset(start))
+			let resourceID = Int(data.getWordAtOffset(start + 0x4))
 			self.giri.append((groupID, resourceID))
 		}
 		
@@ -145,13 +145,13 @@ class XGScript: NSObject {
 			
 			let start = ARRYStart + kScriptSectionHeaderSize
 			
-			let startPointer = data.get4BytesAtOffset(start + (i * kScriptARRYPointerSize)).int
-			let entries = data.get4BytesAtOffset(start + startPointer - 0x10).int
+			let startPointer = data.getWordAtOffset(start + (i * kScriptARRYPointerSize)).int
+			let entries = data.getWordAtOffset(start + startPointer - 0x10).int
 			
 			var arr = [XDSConstant]()
 			for j in 0 ..< entries {
 				let varStart = start + startPointer + (j * kScriptGVARSize)
-				arr.append( XDSConstant(type: data.get2BytesAtOffset(varStart), rawValue: data.get4BytesAtOffset(varStart + 4)) )
+				arr.append( XDSConstant(type: data.get2BytesAtOffset(varStart), rawValue: data.getWordAtOffset(varStart + 4)) )
 			}
 			self.arry.append(arr)
 		}
@@ -301,17 +301,14 @@ class XGScript: NSObject {
 							var mindex = -1
 							var archive : XGFsys!
 							
-							let fsys = self.file.fileName.removeFileExtensions() + ".fsys"
-							for folder in [XGFolders.AutoFSYS, XGFolders.FSYS, XGFolders.MenuFSYS] {
-								let fsysFile = XGFiles.nameAndFolder(fsys, folder)
-								if fsysFile.exists && mindex < 0 {
-									archive = fsysFile.fsysData
-									mindex = archive.indexForIdentifier(identifier: mid)
-								}
+							let fsys = XGFiles.fsys(self.file.fileName.removeFileExtensions())
+							if fsys.exists {
+								archive = fsys.fsysData
+								mindex = archive.indexForIdentifier(identifier: mid)
 							}
 							
 							if mindex < 0 {
-								archive = XGFiles.fsys("people_archive.fsys").fsysData
+								archive = XGFiles.fsys("people_archive").fsysData
 								mindex = archive.indexForIdentifier(identifier: mid)
 							}
 							
@@ -881,7 +878,7 @@ class XGScript: NSObject {
 							switch type {
 							case .flag:
 								let value = param.constants[0]
-								if let flag = XDSFlags(rawValue: value.asInt) {
+								if let _ = XDSFlags(rawValue: value.asInt) {
 									param = .macroImmediate(value, type)
 								}
 							case .talk:
@@ -988,7 +985,7 @@ class XGScript: NSObject {
 		let longline = "Decompiled using Gale of Darkness Tool by @StarsMmd"
 		let date = Date(timeIntervalSinceNow: 0)
 		let shortline = "on \(date).".spaceToLength(longline.count)
-		let filename = (self.file.fileName.removeFileExtensions() + ".xds").spaceToLength(longline.count)
+		let filename = (self.file.fileName.removeFileExtensions() + XGFileTypes.xds.fileExtension).spaceToLength(longline.count)
 		return """
 		/////////////////////////////////////////////////////////////
 		/////////////////////////////////////////////////////////////
@@ -1004,11 +1001,14 @@ class XGScript: NSObject {
 	
 	private func getSpecialMacros() -> [String] {
 		var macs = [String]()
+		macs.append("define ++XDSVersion " + String(format: "%1.1f", currentXDSVersion) + " // lets future versions of the compiler know which rules to follow")
 		macs.append("define ++ScriptIdentifier \(self.scriptID.hexString()) // best not to change this")
 		macs.append("define ++BaseStringID 0x10000 // starts looking for free msg ids from this value")
-		macs.append("define ++XDSVersion " + String(format: "%1.1f", currentXDSVersion) + " // lets future versions of the compiler know which rules to follow")
+		macs.append("define ++UpdateStrings YES // when a new msg id is allocated this xds script can be automagically updated with the id")
+		macs.append("define ++IncreaseMSGSize NO // when replacing a string, the file can be made larger if the string is too long")
 		macs.append("define ++WriteDisassembly NO // a disassembly of the compiled code can be saved in the same folder for double checking")
-		macs.append("define ++WriteDecompilation NO // after compiling, the compiled code is decompiled into a new .xds file for double checkking")
+		macs.append("define ++WriteDecompilation NO // after compiling, the compiled code is decompiled into a new .xds file for double checking")
+		
 		return macs
 	}
 	
@@ -1370,10 +1370,13 @@ class XGScript: NSObject {
 		}
 		
 		// Special macros for GoD tool
+		script += "// Compiler options\n"
 		for macro in self.getSpecialMacros() {
 			script += macro + "\n"
 		}
 		
+		// macros
+		script += "// Macro defintions"
 		for macro in uniqueMacros.sorted(by: { (m1, m2) -> Bool in
 			return m1.macroName < m2.macroName
 		}) {

@@ -29,7 +29,14 @@ class XGCharacterModels : NSObject {
 	@objc var startOffset = 0
 	
 	@objc var archive : XGFsys? {
-		return game == .XD ? XGFiles.fsys("people_archive.fsys").fsysData : XGUtility.searchForFsysForIdentifier(id: identifier)
+		if game == .XD {
+			return XGFiles.fsys("people_archive").fsysData
+		}
+		let files = XGUtility.searchForFsysForIdentifier(id: identifier)
+		if files.count > 0 {
+			return files[0]
+		}
+		return nil
 	}
 	
 	@objc var rawData : [Int] {
@@ -47,7 +54,7 @@ class XGCharacterModels : NSObject {
 		
 		self.index = index
 		self.startOffset = CommonIndexes.CharacterModels.startOffset + (self.index * kSizeOfCharacterModel)
-		self.identifier = rel.get4BytesAtOffset(self.startOffset + kCharacterModelFSYSIdentifier)
+		self.identifier = rel.getWordAtOffset(self.startOffset + kCharacterModelFSYSIdentifier)
 		
 		if let arch = archive {
 			let file = arch.file!
@@ -63,7 +70,7 @@ class XGCharacterModels : NSObject {
 		
 		for i in 0 ..< 8 {
 			let offset = self.startOffset + (i * 4) + kFirstBoundBoxVertexOffset
-			let f = rel.get4BytesAtOffset(offset).hexToSignedFloat()
+			let f = rel.getWordAtOffset(offset).hexToSignedFloat()
 			self.boundBox.append(f)
 		}
 	}

@@ -11,6 +11,9 @@ import Cocoa
 extension XGFiles {
 	var image : NSImage {
 		get {
+			if !self.exists {
+				printg("Image file doesn't exist:", self.path)
+			}
 			return NSImage(contentsOfFile: self.path)!
 		}
 	}
@@ -20,7 +23,6 @@ extension XGTrainerModels {
 	var image : NSImage {
 		let val = self.rawValue >= XGFolders.Trainers.files.count ? 0 : self.rawValue
 		return XGFiles.trainerFace(val).image
-		
 	}
 }
 

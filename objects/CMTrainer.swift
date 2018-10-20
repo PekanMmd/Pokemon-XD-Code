@@ -88,10 +88,10 @@ class XGTrainer: NSObject {
 		
 		let deck = XGFiles.common_rel.data
 		
-		self.nameID =  deck.get4BytesAtOffset(start + kTrainerNameIDOffset).int
-		self.preBattleTextID = deck.get4BytesAtOffset(start + kTrainerPreBattleTextIDOffset).int
-		self.victoryTextID = deck.get4BytesAtOffset(start + kTrainerVictoryTextIDOffset).int
-		self.defeatTextID = deck.get4BytesAtOffset(start + kTrainerDefeatTextIDOffset).int
+		self.nameID =  deck.getWordAtOffset(start + kTrainerNameIDOffset).int
+		self.preBattleTextID = deck.getWordAtOffset(start + kTrainerPreBattleTextIDOffset).int
+		self.victoryTextID = deck.getWordAtOffset(start + kTrainerVictoryTextIDOffset).int
+		self.defeatTextID = deck.getWordAtOffset(start + kTrainerDefeatTextIDOffset).int
 		self.ai = deck.get2BytesAtOffset(start + kTrainerAIOffset)
 		
 		let tClass = deck.getByteAtOffset(start + kTrainerClassOffset)

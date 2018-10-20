@@ -55,6 +55,13 @@
                                                 <action selector="rebuildISO:" target="Voe-Tx-rLC" id="mZ1-F3-OBU"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="mLq-Zu-sy3"/>
+                                        <menuItem title="Enable File Size Increases" id="Saz-QX-HFK">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="toggleAllowIncreasedFileSizes:" target="Voe-Tx-rLC" id="ntl-4O-o3O"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
@@ -136,7 +143,11 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Colosseum_Tool" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Colosseum_Tool" customModuleProvider="target">
+                    <connections>
+                        <outlet property="fileSizeMenuItem" destination="Saz-QX-HFK" id="LYe-f3-cGG"/>
+                    </connections>
+                </customObject>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-176" y="92"/>
@@ -2249,56 +2260,56 @@ Twitter: @StarsMmd</string>
                             <customView identifier="EVs" translatesAutoresizingMaskIntoConstraints="NO" id="x9Z-QG-m0x" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="425" y="55" width="105" height="220"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lcs-gp-HkD">
-                                        <rect key="frame" x="3" y="185" width="54" height="25"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lcs-gp-HkD">
+                                        <rect key="frame" x="3" y="175" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="HP EV" id="YfX-lG-Fo3">
                                             <font key="font" metaFont="miniSystem"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gKF-i7-uYz">
-                                        <rect key="frame" x="3" y="155" width="54" height="25"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gKF-i7-uYz">
+                                        <rect key="frame" x="3" y="145" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Atk EV" id="Gxb-ZN-1li">
                                             <font key="font" metaFont="miniSystem"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rbz-kR-kb0">
-                                        <rect key="frame" x="3" y="125" width="54" height="25"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rbz-kR-kb0">
+                                        <rect key="frame" x="3" y="115" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Def EV" id="dsc-fe-2s0">
                                             <font key="font" metaFont="miniSystem"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OVv-Pn-nHU">
-                                        <rect key="frame" x="3" y="95" width="54" height="25"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OVv-Pn-nHU">
+                                        <rect key="frame" x="3" y="85" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sp.Atk EV" id="uPl-km-WA0">
                                             <font key="font" metaFont="miniSystem"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="55d-1o-JEl">
-                                        <rect key="frame" x="3" y="65" width="54" height="25"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="55d-1o-JEl">
+                                        <rect key="frame" x="3" y="55" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sp. Def EV" id="tA7-KU-EEV">
                                             <font key="font" metaFont="miniSystem"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fwv-5p-sTX">
-                                        <rect key="frame" x="3" y="35" width="54" height="25"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fwv-5p-sTX">
+                                        <rect key="frame" x="3" y="25" width="54" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Speed EV" id="uQC-eP-38L">
                                             <font key="font" metaFont="miniSystem"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hxM-It-MI3">
-                                        <rect key="frame" x="55" y="185" width="45" height="25"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hxM-It-MI3">
+                                        <rect key="frame" x="55" y="175" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="w8g-vR-dH9">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="7IB-sV-yZq"/>
                                             <font key="font" metaFont="system"/>
@@ -2309,8 +2320,8 @@ Twitter: @StarsMmd</string>
                                             <action selector="setHPEV:" target="7OK-Av-0ny" id="MBY-8b-HNA"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LEc-cT-Sbh">
-                                        <rect key="frame" x="55" y="155" width="45" height="25"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LEc-cT-Sbh">
+                                        <rect key="frame" x="55" y="145" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="jB8-ls-988">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="BQy-1s-j3I"/>
                                             <font key="font" metaFont="system"/>
@@ -2321,8 +2332,8 @@ Twitter: @StarsMmd</string>
                                             <action selector="setAtkEV:" target="7OK-Av-0ny" id="gtE-jT-QAU"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MFY-0b-ut0">
-                                        <rect key="frame" x="55" y="125" width="45" height="25"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MFY-0b-ut0">
+                                        <rect key="frame" x="55" y="115" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iLh-zU-fr2">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="SAA-oB-yyr"/>
                                             <font key="font" metaFont="system"/>
@@ -2333,8 +2344,8 @@ Twitter: @StarsMmd</string>
                                             <action selector="setDefEV:" target="7OK-Av-0ny" id="XJk-Ho-Cua"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bk7-jA-cY3">
-                                        <rect key="frame" x="55" y="95" width="45" height="25"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bk7-jA-cY3">
+                                        <rect key="frame" x="55" y="85" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iLk-zF-jVh">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="U6O-Ti-cz0"/>
                                             <font key="font" metaFont="system"/>
@@ -2345,8 +2356,8 @@ Twitter: @StarsMmd</string>
                                             <action selector="setSpAtkEV:" target="7OK-Av-0ny" id="0jg-7x-bjg"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JR9-3J-ED9">
-                                        <rect key="frame" x="55" y="35" width="45" height="25"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JR9-3J-ED9">
+                                        <rect key="frame" x="55" y="25" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iOb-If-5dt">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="K27-E3-zDw"/>
                                             <font key="font" metaFont="system"/>
@@ -2357,8 +2368,8 @@ Twitter: @StarsMmd</string>
                                             <action selector="setSpeedEV:" target="7OK-Av-0ny" id="jTn-cA-HwJ"/>
                                         </connections>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="my5-CB-ilz">
-                                        <rect key="frame" x="55" y="65" width="45" height="25"/>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="my5-CB-ilz">
+                                        <rect key="frame" x="55" y="55" width="45" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="EQ3-6Z-g5g">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="TLl-dp-5KO"/>
                                             <font key="font" metaFont="system"/>
@@ -3063,6 +3074,6 @@ Twitter: @StarsMmd</string>
         <image name="ball grey" width="500" height="500"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="PCr-YY-Lid"/>
+        <segue reference="NaH-4i-fmB"/>
     </inferredMetricsTieBreakers>
 </document>

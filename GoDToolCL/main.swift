@@ -8,22 +8,6 @@
 //
 
 
-//XGUtility.documentXDS()
-
-for name in ["M1_out", "S3_out", "D3_ship_deck", "esaba_C", "D7_out"] {
-	printg("script test: \(name)")
-	XGFiles.script(name + ".scd").scriptData.getXDSScript().save(toFile: .nameAndFolder(name + ".xds", .Resources))
-	XGFiles.script(name + ".scd").scriptData.description.save(toFile: .nameAndFolder(name + "_old.scd.txt", .Resources))
-	
-	let script = XGFiles.nameAndFolder(name + ".xds", .Resources).data.string
-	if !XDSScriptCompiler.compile(text: script, toFile: .nameAndFolder(name + ".scd", .Resources)) {
-		XDSScriptCompiler.error.println()
-	}
-	let newscript = XGFiles.nameAndFolder(name + ".scd", .Resources).scriptData
-	newscript.description.save(toFile: .nameAndFolder(name + "_new.scd.txt", .Resources))
-	newscript.getXDSScript().save(toFile: .nameAndFolder(name + "_new.xds", .Resources))
-	printg("script test complete.")
-}
 XGUtility.documentXDS()
 
 
@@ -38,17 +22,17 @@ XGUtility.documentXDS()
 //
 //	// get number of padding 0s at end
 //	var index = pkx.length - 4
-//	var current = pkx.get4BytesAtOffset(index)
+//	var current = pkx.getWordAtOffset(index)
 //
 //	while current == 0 {
 //		modelEndPaddingCounter += 4
 //		index -= 4
-//		current = pkx.get4BytesAtOffset(index)
+//		current = pkx.getWordAtOffset(index)
 //	}
 //	modelEndPaddingCounter = pkx.length - (index + 4)
 //
-//	let skipStart = Int(pkx.get4BytesAtOffset(pkx.length - modelEndPaddingCounter - 0x1C)) + modelStart
-//	let skipEnd = Int(pkx.get4BytesAtOffset(modelHeader + 4)) + modelStart
+//	let skipStart = Int(pkx.getWordAtOffset(pkx.length - modelEndPaddingCounter - 0x1C)) + modelStart
+//	let skipEnd = Int(pkx.getWordAtOffset(modelHeader + 4)) + modelStart
 //
 //	let part2 = pkx.getCharStreamFromOffset(modelStart, length: skipStart - modelStart)
 //	let part3 = pkx.getCharStreamFromOffset(skipEnd, length: pkx.length - modelEndPaddingCounter - 0x1C - skipEnd)
@@ -56,7 +40,7 @@ XGUtility.documentXDS()
 //	var rawBytes = part2 + part3 + part4
 //
 //	let newLength = rawBytes.count + 0x20
-//	let header4 = [newLength, skipStart - modelStart, Int(pkx.get4BytesAtOffset(modelHeader + 8)), 0x01]
+//	let header4 = [newLength, skipStart - modelStart, Int(pkx.getWordAtOffset(modelHeader + 8)), 0x01]
 //	var header = [UInt8]()
 //	for h in header4 {
 //		header.append(UInt8(h >> 24))

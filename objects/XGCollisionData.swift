@@ -36,13 +36,13 @@ class XGCollisionData: NSObject {
 		
 		let data = file.data
 		
-		let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions() + ".rel")
+		let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
 		if relFile.exists {
 			mapRel = XGMapRel(file: relFile, checkScript: false)
 		}
 		
-		let list_start  = data.get4BytesAtOffset(0x0).int
-		let entry_count = data.get4BytesAtOffset(0x4).int
+		let list_start  = data.getWordAtOffset(0x0).int
+		let entry_count = data.getWordAtOffset(0x4).int
 		
 		var maxD : GLfloat = 0
 		
@@ -55,7 +55,7 @@ class XGCollisionData: NSObject {
 			
 			while o < ( i == entry_count ? 0x4 : entry_size ) {
 				
-				let a_o = data.get4BytesAtOffset(offset + o).int
+				let a_o = data.getWordAtOffset(offset + o).int
 				if  a_o > 0 {
 					var isWarp = false
 					if o == 0x2c {
@@ -63,8 +63,8 @@ class XGCollisionData: NSObject {
 						isWarp = true
 					}
 					
-					let data_start = i == entry_count ? a_o : data.get4BytesAtOffset(a_o).int
-					let num = i == entry_count ? data.get4BytesAtOffset(offset + o + 4).int : data.get4BytesAtOffset(a_o + 0x4).int
+					let data_start = i == entry_count ? a_o : data.getWordAtOffset(a_o).int
+					let num = i == entry_count ? data.getWordAtOffset(offset + o + 4).int : data.getWordAtOffset(a_o + 0x4).int
 					let face_size = 0x34
 					
 					for s in 0 ..< num {
@@ -79,9 +79,9 @@ class XGCollisionData: NSObject {
 						
 						for c in 0 ..< 3 { // 4th element is normal vector
 							
-							let vx = data.get4BytesAtOffset( s_o + (c * 0xc) + 0x0 ).hexToSignedFloat()
-							let vy = data.get4BytesAtOffset( s_o + (c * 0xc) + 0x4).hexToSignedFloat()
-							let vz = data.get4BytesAtOffset( s_o + (c * 0xc) + 0x8).hexToSignedFloat()
+							let vx = data.getWordAtOffset( s_o + (c * 0xc) + 0x0 ).hexToSignedFloat()
+							let vy = data.getWordAtOffset( s_o + (c * 0xc) + 0x4).hexToSignedFloat()
+							let vz = data.getWordAtOffset( s_o + (c * 0xc) + 0x8).hexToSignedFloat()
 							let v = XGVertex()
 							// may need to some axes depending on rendering engine
 							v.x = vx.gl
@@ -95,9 +95,9 @@ class XGCollisionData: NSObject {
 							maxD = max(maxD, abs(vz))
 						}
 						// get normal
-						let nx = data.get4BytesAtOffset( s_o + (3 * 0xc) + 0x0 ).hexToSignedFloat()
-						let ny = data.get4BytesAtOffset( s_o + (3 * 0xc) + 0x4).hexToSignedFloat()
-						let nz = data.get4BytesAtOffset( s_o + (3 * 0xc) + 0x8).hexToSignedFloat()
+						let nx = data.getWordAtOffset( s_o + (3 * 0xc) + 0x0 ).hexToSignedFloat()
+						let ny = data.getWordAtOffset( s_o + (3 * 0xc) + 0x4).hexToSignedFloat()
+						let nz = data.getWordAtOffset( s_o + (3 * 0xc) + 0x8).hexToSignedFloat()
 						
 						for v in triangle {
 							v.nx = nx.gl

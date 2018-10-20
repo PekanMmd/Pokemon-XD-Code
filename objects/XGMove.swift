@@ -111,7 +111,6 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		super.init()
 		
 		let rel   = XGFiles.common_rel.data
-//		var table = XGFiles.common_rel.stringTable
 		
 		self.moveIndex       = index
 		self.startOffset     = CommonIndexes.Moves.startOffset + (index * kSizeOfMoveData)
@@ -135,8 +134,8 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		self.accuracy		 = rel.getByteAtOffset(startOffset + kAccuracyOffset)
 		self.pp				 = rel.getByteAtOffset(startOffset + kPPOffset)
 		
-		self.nameID		   = rel.get4BytesAtOffset(startOffset + kMoveNameIDOffset).int
-		self.descriptionID = rel.get4BytesAtOffset(startOffset + kMoveDescriptionIDOffset).int
+		self.nameID		   = rel.getWordAtOffset(startOffset + kMoveNameIDOffset).int
+		self.descriptionID = rel.getWordAtOffset(startOffset + kMoveDescriptionIDOffset).int
 		self.animationID   = rel.get2BytesAtOffset(startOffset + kAnimationIndexOffset)
 		self.animation2ID  = rel.get2BytesAtOffset(startOffset + kAnimation2IndexOffset)
 		

@@ -45,6 +45,12 @@ extension Array where Element == String {
 		}
 	}
 	
+	func println() {
+		for s in self {
+			s.println()
+		}
+	}
+	
 }
 
 
@@ -203,7 +209,7 @@ extension String {
 	func spaceToLength(_ length: Int) -> String {
 		
 		var spaces = ""
-		let wordLength = self.characters.count
+		let wordLength = self.length
 		for i in 1 ... length {
 			if i > wordLength {
 				spaces += " "
@@ -364,7 +370,7 @@ extension String {
 	}
 	
 	var length : Int {
-		return self.characters.count
+		return self.count
 	}
 	
 	func substring(from: Int, to: Int) -> String {
@@ -381,7 +387,7 @@ extension String {
 		}
 		
 		let f = from < 0 ? 0 : from
-		let t = to > self.count ? self.count : to
+		let t = to > self.length ? self.length : to
 		
 		let start = self.index(self.startIndex, offsetBy: f)
 		let end = self.index(self.startIndex, offsetBy: t)

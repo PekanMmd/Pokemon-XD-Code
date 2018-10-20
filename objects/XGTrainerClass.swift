@@ -65,7 +65,7 @@ class XGTrainerClass: NSObject {
 		let start = self.startOffset
 		
 		self.payout = rel.get2BytesAtOffset(start + kTrainerClassPayoutOffset)
-		self.nameID = rel.get4BytesAtOffset(start + kTrainerClassNameIDOffset).int
+		self.nameID = rel.getWordAtOffset(start + kTrainerClassNameIDOffset).int
 		
 	}
 	

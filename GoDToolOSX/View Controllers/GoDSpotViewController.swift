@@ -52,7 +52,6 @@ class GoDSpotViewController: GoDTableViewController {
 		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
 		let spot = rowToSpot(row: row)
-//		cell.setBackgroundImage(pokemon.type1.image)
 		cell.setTitle(pokemon.name.string + "\n" + spot.string + " Pokespot : " + pokemon.index.string)
 		cell.setImage(image: pokemon.face)
 		
@@ -85,7 +84,6 @@ class GoDSpotViewController: GoDTableViewController {
 		let oasis = XGPokeSpots.oasis.numberOfEntries()
 		let cave = XGPokeSpots.cave.numberOfEntries()
 		
-		var index = 0
 		var spot = XGPokeSpots.all
 		
 		if row < rock {

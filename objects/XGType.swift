@@ -74,7 +74,7 @@ class XGType: NSObject {
 		self.index		= index
 		startOffset		= CommonIndexes.Types.startOffset + (index * kSizeOfTypeData)
 		
-		self.nameID		= rel.get4BytesAtOffset(startOffset + kTypeNameIDOffset).int
+		self.nameID		= rel.getWordAtOffset(startOffset + kTypeNameIDOffset).int
 		self.category	= XGMoveCategories(rawValue: rel.getByteAtOffset(startOffset + kCategoryOffset))!
 		
 		var offset = startOffset + kFirstEffectivenessOffset

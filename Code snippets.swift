@@ -226,14 +226,14 @@ import Foundation
 //	
 //	let start = 0x3FCC50 + (i * 8)
 //	
-//	if dol.get4BytesAtOffset(start) == 0 {
+//	if dol.getWordAtOffset(start) == 0 {
 //		dol.replaceWordAtOffset(start, withBytes: UInt32(unused[nextUnused]))
 //		XGFiles.common_rel.stringTable.stringWithID(unused[nextUnused])!.duplicateWithString(abNames[nextAb]).replace()
 //		nextAb += 1
 //		nextUnused += 1
 //	}
 //	
-//	if dol.get4BytesAtOffset(start + 4) == 0 {
+//	if dol.getWordAtOffset(start + 4) == 0 {
 //		dol.replaceWordAtOffset(start + 4, withBytes: UInt32(unused[nextUnused]))
 //		XGFiles.common_rel.stringTable.stringWithID(unused[nextUnused])!.duplicateWithString(abDes[nextDe]).replace()
 //		nextDe += 1
@@ -6671,7 +6671,7 @@ import Foundation
 
 
 
-//for file in XGFolders.Rels.files where file.fileName.contains(".rel") {
+//for file in XGFolders.Rels.files where file.fileType == .rel {
 //	let rel = file.mapData
 //	print(file.fileName)
 //	for chara in rel.characters {
@@ -6681,24 +6681,13 @@ import Foundation
 //}
 
 
-//let iso = XGISO()
-//
-//for file in iso.allFileNames where file.contains("ex_") || file.contains("M2_cave") || file.contains("Script_t") || file.contains("waza_view") || file.contains("tv_test") || file.contains("_fr.") || file.contains("_ge.") || file.contains("_it.") {
-//	iso.deleteFileAndPreserve(name: file, save: false)
-//}
-//
-//for i in 0 ..< iso.allFileNames.count {
-//	let file = iso.filesOrdered[i]
-//	iso.shiftUpFile(name: file)
-//}
-//iso.importToc()
 
 
 //XGUtility.importTextures()
 //XGUtility.exportTextures()
 
 //let bingotex = XGFiles.texture("uv_str_bingo_00.fdat")
-//XGFiles.nameAndFolder("bingo_menu.fsys", .MenuFSYS).fsysData.replaceFile(file: bingotex.compress())
+//XGFiles.fsys("bingo_menu").fsysData.replaceFile(file: bingotex.compress())
 
 
 // manually change shinyness using hex editor

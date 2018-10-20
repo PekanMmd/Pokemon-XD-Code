@@ -8,6 +8,7 @@
 import Foundation
 
 var verbose = false
+var increaseFileSizes = false
 let date = Date(timeIntervalSinceNow: 0)
 var logString = ""
 

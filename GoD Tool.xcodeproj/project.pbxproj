@@ -5221,6 +5221,17 @@
 			path = Shaders;
 			sourceTree = "<group>";
 		};
+		B247ED3E217B9FF30034CAF5 /* Sublime */ = {
+			isa = PBXGroup;
+			children = (
+				B247ED3B21794A1C0034CAF5 /* SCD.sublime-color-scheme */,
+				B247ED3C21794A1C0034CAF5 /* SCD.sublime-syntax */,
+				B2EAFF0220BED900009FC947 /* XDScript.sublime-syntax */,
+				B23DD76E20C0B54500348D26 /* XDScript.sublime-color-scheme */,
+			);
+			path = Sublime;
+			sourceTree = "<group>";
+		};
 		B2562F4621349567004180F1 /* ColosseumToolCL */ = {
 			isa = PBXGroup;
 			children = (
@@ -6313,13 +6324,10 @@
 		B2F5EB781F49A0CD0075C6D2 = {
 			isa = PBXGroup;
 			children = (
+				B247ED3E217B9FF30034CAF5 /* Sublime */,
 				B2F5EB851F49A11A0075C6D2 /* GoDToolCL */,
 				B2562F4621349567004180F1 /* ColosseumToolCL */,
 				B2F5ED061F49AD700075C6D2 /* Bridge.h */,
-				B247ED3B21794A1C0034CAF5 /* SCD.sublime-color-scheme */,
-				B247ED3C21794A1C0034CAF5 /* SCD.sublime-syntax */,
-				B2EAFF0220BED900009FC947 /* XDScript.sublime-syntax */,
-				B23DD76E20C0B54500348D26 /* XDScript.sublime-color-scheme */,
 				B252D95A1F98AF0400794FCE /* XGRelocationTable.swift */,
 				B208E75A20C4DD2D00D298BF /* XDRelIndexes.swift */,
 				B208E75F20C4DD3E00D298BF /* CMRelIndexes.swift */,

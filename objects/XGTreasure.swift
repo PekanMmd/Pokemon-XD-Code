@@ -63,9 +63,9 @@ class XGTreasure: NSObject {
 		self.itemID = data.get2BytesAtOffset(self.startOffset + kTreasureItemIDOffset)
 		self.flag = data.get2BytesAtOffset(self.startOffset + kTreasureFlagOffset)
 		self.roomID = data.get2BytesAtOffset(self.startOffset + kTreasureRoomIDOffset)
-		self.xCoordinate = data.get4BytesAtOffset(self.startOffset + kTreasureXCoordOffset).hexToSignedFloat()
-		self.yCoordinate = data.get4BytesAtOffset(self.startOffset + kTreasureYCoordOffset).hexToSignedFloat()
-		self.zCoordinate = data.get4BytesAtOffset(self.startOffset + kTreasureZCoordOffset).hexToSignedFloat()
+		self.xCoordinate = data.getWordAtOffset(self.startOffset + kTreasureXCoordOffset).hexToSignedFloat()
+		self.yCoordinate = data.getWordAtOffset(self.startOffset + kTreasureYCoordOffset).hexToSignedFloat()
+		self.zCoordinate = data.getWordAtOffset(self.startOffset + kTreasureZCoordOffset).hexToSignedFloat()
 		self.angle = data.get2BytesAtOffset(self.startOffset + kTreasureAngleOffset)
 	}
 	

@@ -85,6 +85,9 @@ class XGString: NSObject {
 	}
 	
 	init(string: String, file: XGFiles?, sid: Int?) {
+		// Forgive me! I wrote this years ago when I was still learning swift and the default
+		// swift library has some really bad string manipulation functions
+		// The function works. It used to be a lot worse... trust me :-)
 		super.init()
 		
 		self.table = file ?? XGFiles.nameAndFolder("", .Documents)
@@ -92,48 +95,48 @@ class XGString: NSObject {
 		
 		var chars = [XGUnicodeCharacters]()
 		
-		var current   = string.startIndex
-		let end		  = string.endIndex
+		var current   = 0
+		let end		  = string.length
 		
 		while current != end {
 			
-			var char = string.substring(with: (current ..< string.characters.index(current, offsetBy: 1)))
-			current = string.characters.index(current, offsetBy: 1)
+			var char = string.substring(from: current, to: current + 1)
+			current += 1
 			
 			if char == "[" {
 				var midString = ""
 				
-				char = string.substring(with: (current ..< string.characters.index(current, offsetBy: 1)))
-				current = string.characters.index(current, offsetBy: 1)
+				char = string.substring(from: current, to: current + 1)
+				current += 1
 				
 				while char != "]" {
 					midString = midString + char
 					
-					char = string.substring(with: (current ..< string.characters.index(current, offsetBy: 1)))
-					current = string.characters.index(current, offsetBy: 1)
+					char = string.substring(from: current, to: current + 1)
+					current += 1
 				}
 				
 				let sp = XGSpecialCharacters.fromString(midString)
 				var extraBytes = [Int]()
 				
 				if sp.extraBytes > 0 {
-					current = string.characters.index(current, offsetBy: 1)
+					current += 1
 					
 					for _ in 0 ..< sp.extraBytes {
 						
 						var byte = ""
-						char = string.substring(with: (current ..< string.characters.index(current, offsetBy: 1)))
-						current = string.characters.index(current, offsetBy: 1)
+						char = string.substring(from: current, to: current + 1)
+						current += 1
 						byte = byte + char
 						
-						char = string.substring(with: (current ..< string.characters.index(current, offsetBy: 1)))
-						current = string.characters.index(current, offsetBy: 1)
+						char = string.substring(from: current, to: current + 1)
+						current += 1
 						byte = byte + char
 						
 						extraBytes.append(XGUnicodeCharacters.hexStringToInt(byte))
 						
 					}
-					current = string.characters.index(current, offsetBy: 1)
+					current += 1
 				}
 				
 				let ch = XGUnicodeCharacters.special(sp, extraBytes)
@@ -155,6 +158,10 @@ class XGString: NSObject {
 	}
 	
 	@objc func replace() -> Bool {
+		return replace(increaseSize: false)
+	}
+	
+	@objc func replace(increaseSize: Bool) -> Bool {
 		if self.id == 0 {
 			return false
 		}
@@ -163,7 +170,7 @@ class XGString: NSObject {
 		var success = true
 		for table in allStringTables {
 			if table.containsStringWithId(self.id) {
-				success = success && table.replaceString(self, alert: false)
+				success = success && table.replaceString(self, alert: false, save: true, increaseLength: increaseSize)
 			}
 		}
 		return success
@@ -171,7 +178,7 @@ class XGString: NSObject {
 	
 	func replaceDirectly() -> Bool {
 		stringsLoaded = false
-		return self.table.stringTable.replaceString(self, alert: false)
+		return self.table.stringTable.replaceString(self, alert: false, save: true)
 	}
 	
 	@objc func containsSubstring(_ sub: String) -> Bool {

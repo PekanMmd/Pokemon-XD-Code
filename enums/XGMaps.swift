@@ -13,6 +13,7 @@ let kSizeOfMapEntry = 0x18
 
 enum XGMaps : String, XGDictionaryRepresentable {
 	
+	case Demo			= "B1"
 	case ShadowLab		= "D1"
 	case MtBattle		= "D2"
 	case SSLibra		= "D3"
@@ -29,6 +30,7 @@ enum XGMaps : String, XGDictionaryRepresentable {
 	case OutskirtStand	= "S1"
 	case SnagemHideout	= "S2"
 	case KaminkosHouse	= "S3"
+	case AncientColo	= "T1"
 	case Pokespot		= "es"
 	case Unknown		= "Unknown"
 	
@@ -39,6 +41,7 @@ enum XGMaps : String, XGDictionaryRepresentable {
 	var name : String {
 		switch self {
 			
+		case .Demo			: return "Demo Area"
 		case .ShadowLab		: return "Shadow Pokemon Lab"
 		case .MtBattle		: return "Mt. Battle"
 		case .SSLibra		: return "S.S. Libra"
@@ -56,6 +59,7 @@ enum XGMaps : String, XGDictionaryRepresentable {
 		case .SnagemHideout	: return "Team Snagem's Hideout"
 		case .KaminkosHouse	: return "Kaminko's House"
 		case .Pokespot		: return "Pokespot"
+		case .AncientColo	: return "Ancient Colosseum"
 		case .Unknown		: return "Unknown"
 			
 		}

@@ -90,7 +90,7 @@ class XGPokemonStats: NSObject {
 	@objc var bodyShinyID  : UInt32 = 0x0
 	
 	@objc var bodyName : String {
-		let dance =  XGFiles.fsys("poke_dance.fsys").fsysData
+		let dance =  XGFiles.fsys("poke_dance").fsysData
 		let index = dance.indexForIdentifier(identifier: bodyID.int)
 		return dance.fileNames[index]
 	}
@@ -134,11 +134,11 @@ class XGPokemonStats: NSObject {
 	
 	@objc var pkxModelIdentifier : UInt32 {
 		let dol = XGFiles.dol.data
-		return dol.get4BytesAtOffset(kFirstPokemonPKXIdentifierOffset + (self.modelIndex * 8) + kModelDictionaryModelOffset)
+		return dol.getWordAtOffset(kFirstPokemonPKXIdentifierOffset + (self.modelIndex * 8) + kModelDictionaryModelOffset)
 	}
 	
 	@objc var pkxFSYS : XGFsys? {
-		return XGISO().getPKXModelWithIdentifier(id: self.pkxModelIdentifier)
+		return ISO.getPKXModelWithIdentifier(id: self.pkxModelIdentifier)
 	}
 	
 	@objc var pkxData : XGMutableData? {
@@ -159,7 +159,7 @@ class XGPokemonStats: NSObject {
 	
 	@objc var species : XGString {
 		get {
-			let file = XGFiles.nameAndFolder("pda_menu.msg", .StringTables)
+			let file = XGFiles.msg("pda_menu")
 			return XGStringTable(file: file, startOffset: 0, fileSize: file.fileSize).stringSafelyWithID(self.speciesNameID)
 		}
 	}
@@ -198,13 +198,13 @@ class XGPokemonStats: NSObject {
 		self.startOffset	= CommonIndexes.PokemonStats.startOffset + ( kSizeOfPokemonStats * index )
 		self.index			= index
 		
-		self.nameID			= rel.get4BytesAtOffset(startOffset + kNameIDOffset).int
-		self.speciesNameID  = rel.get4BytesAtOffset(startOffset + kSpeciesNameIDOffset).int
+		self.nameID			= rel.getWordAtOffset(startOffset + kNameIDOffset).int
+		self.speciesNameID  = rel.getWordAtOffset(startOffset + kSpeciesNameIDOffset).int
 		self.cryIndex		= rel.get2BytesAtOffset(startOffset + kPokemonCryIndexOffset)
 		self.modelIndex		= rel.get2BytesAtOffset(startOffset + kPokemonModelIndexOffset)
-		self.faceIndex		= game == .XD ? rel.get2BytesAtOffset(startOffset + kPokemonFaceIndexOffset) : rel.get4BytesAtOffset(CommonIndexes.PokefaceTextures.startOffset + (index * 8) + 4).int
-		self.bodyID		    = rel.get4BytesAtOffset(startOffset + kPokemonBodyOffset)
-		self.bodyShinyID	= rel.get4BytesAtOffset(startOffset + kPokemonBodyShinyOffset)
+		self.faceIndex		= game == .XD ? rel.get2BytesAtOffset(startOffset + kPokemonFaceIndexOffset) : rel.getWordAtOffset(CommonIndexes.PokefaceTextures.startOffset + (index * 8) + 4).int
+		self.bodyID		    = rel.getWordAtOffset(startOffset + kPokemonBodyOffset)
+		self.bodyShinyID	= rel.getWordAtOffset(startOffset + kPokemonBodyShinyOffset)
 		
 		self.levelUpRate	= XGExpRate(rawValue: rel.getByteAtOffset(startOffset + kEXPRateOffset)) ?? .standard
 		self.genderRatio	= XGGenderRatios(rawValue: rel.getByteAtOffset(startOffset + kGenderRatioOffset)) ?? .maleOnly

@@ -14,8 +14,8 @@ func ==(lhs: XGFiles, rhs: XGFiles) -> Bool {
 var loadedFiles = [String : XGMutableData]()
 var loadedStringTables = [String : XGStringTable]()
 
-let loadableFiles = [XGFiles.common_rel.path,XGFiles.dol.path, XGFiles.iso.path,XGFiles.original(.common_rel).path,XGFiles.original(.dol).path,XGFiles.original(.tableres2).path, XGFiles.fsys("people_archive.fsys").path, XGFiles.pocket_menu.path]
-let loadableStringTables = [XGFiles.tableres2.path,XGFiles.stringTable("pocket_menu.msg").path,XGFiles.common_rel.path,XGFiles.dol.path,XGFiles.original(.common_rel).path,XGFiles.original(.dol).path,XGFiles.original(.tableres2).path]
+let loadableFiles = [XGFiles.common_rel.path,XGFiles.dol.path, XGFiles.iso.path,XGFiles.original(.common_rel).path,XGFiles.original(.dol).path,XGFiles.original(.tableres2).path, XGFiles.fsys("people_archive").path, XGFiles.pocket_menu.path]
+let loadableStringTables = [XGFiles.tableres2.path,XGFiles.msg("pocket_menu").path,XGFiles.common_rel.path,XGFiles.dol.path,XGFiles.original(.common_rel).path,XGFiles.original(.dol).path,XGFiles.original(.tableres2).path]
 
 let compressionFolders = [XGFolders.Common, XGFolders.Textures, XGFolders.StringTables, XGFolders.Scripts, XGFolders.Rels]
 
@@ -25,7 +25,7 @@ let NullFSYS = XGMutableData(byteStream: [0x46, 0x53, 0x59, 0x53, 0x00, 0x00, 0x
 										  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 										  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 										  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0xE1, 0xE7, 0xED, 0x46, 0x53, 0x59, 0x53],
-							 file: .fsys("Null.fsys"))
+							 file: .fsys("Null"))
 
 indirect enum XGFiles {
 	
@@ -33,18 +33,21 @@ indirect enum XGFiles {
 	case common_rel
 	case tableres2
 	case pocket_menu
+	case deck(XGDecks)
 	case pokeFace(Int)
 	case pokeBody(Int)
 	case typeImage(Int)
 	case trainerFace(Int)
-	case stringTable(String)
+	case msg(String)
 	case original(XGFiles)
 	case fsys(String)
 	case lzss(String)
-	case script(String)
+	case scd(String)
+	case xds(String)
 	case texture(String)
 	case rel(String)
 	case col(String)
+	case json(String)
 	case iso
 	case toc
 	case log(Date)
@@ -67,26 +70,29 @@ indirect enum XGFiles {
 		get {
 			switch self {
 				
-			case .dol					: return "Start.dol"
-			case .common_rel			: return "common.rel"
-			case .tableres2				: return "tableres2.rel"
-			case .pocket_menu			: return "pocket_menu.rel"
-			case .pokeFace(let id)		: return "face_" + String(format: "%03d", id) + ".png"
-			case .pokeBody(let id)		: return "body_" + String(format: "%03d", id) + ".png"
-			case .typeImage(let id)		: return "type_" + String(id) + ".png"
-			case .trainerFace(let id)	: return "trainer_" + String(id) + ".png"
-			case .stringTable(let s)	: return s
+			case .dol					: return "Start" + XGFileTypes.dol.fileExtension
+			case .common_rel			: return "common" + XGFileTypes.rel.fileExtension
+			case .tableres2				: return "tableres2" + XGFileTypes.rel.fileExtension
+			case .pocket_menu			: return "pocket_menu" + XGFileTypes.rel.fileExtension
+			case .deck(let deck)		: return deck.fileName
+			case .pokeFace(let id)		: return "face_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
+			case .pokeBody(let id)		: return "body_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
+			case .typeImage(let id)		: return "type_" + String(id) + XGFileTypes.png.fileExtension
+			case .trainerFace(let id)	: return "trainer_" + String(id) + XGFileTypes.png.fileExtension
+			case .msg(let s)			: return s + XGFileTypes.msg.fileExtension
 			case .original(let o)		: return o.fileName
-			case .fsys(let s)			: return s
-			case .lzss(let s)			: return s
-			case .script(let s)			: return s
+			case .fsys(let s)			: return s + XGFileTypes.fsys.fileExtension
+			case .lzss(let s)			: return s + XGFileTypes.lzss.fileExtension
+			case .scd(let s)			: return s + XGFileTypes.scd.fileExtension
+			case .xds(let s)			: return s + XGFileTypes.xds.fileExtension
 			case .texture(let s)		: return s
-			case .toc					: return "Game.toc"
-			case .log(let d)			: return d.description
-			case .rel(let s)			: return s
-			case .col(let s)			: return s
+			case .toc					: return "Game" + XGFileTypes.toc.fileExtension
+			case .log(let d)			: return d.description + XGFileTypes.txt.fileExtension
+			case .rel(let s)			: return s + XGFileTypes.rel.fileExtension
+			case .col(let s)			: return s + XGFileTypes.col.fileExtension
+			case .json(let s)			: return s + XGFileTypes.json.fileExtension
 			case .nameAndFolder(let name, _) : return name
-			case .iso					: return game == .Colosseum ? "Colosseum.iso" : "XD.iso"
+			case .iso					: return (game == .Colosseum ? "Colosseum" : "XD") + XGFileTypes.iso.fileExtension
 			}
 		}
 	}
@@ -101,20 +107,23 @@ indirect enum XGFiles {
 			case .common_rel		: folder = .Common
 			case .tableres2			: folder = .Common
 			case .pocket_menu		: folder = .Common
+			case .deck				: folder = .Documents
 			case .pokeFace			: folder = .PokeFace
 			case .pokeBody			: folder = .PokeBody
 			case .typeImage			: folder = .Types
 			case .trainerFace		: folder = .Trainers
-			case .stringTable		: folder = .StringTables
+			case .msg		: folder = .StringTables
 			case .fsys				: folder = .FSYS
 			case .lzss				: folder = .LZSS
-			case .script			: folder = .Scripts
+			case .scd				: folder = .Scripts
+			case .xds				: folder = .Documents
 			case .texture			: folder = .Textures
 			case .iso				: folder = .ISO
-			case .toc				: folder = .TOC
+			case .toc				: folder = .Documents
 			case .log				: folder = .Logs
 			case .rel				: folder = .Rels
 			case .col				: folder = .Col
+			case .json				: folder = .JSON
 			case .original(let f)	: folder = f.folder
 			case .nameAndFolder( _, let aFolder) : folder = aFolder
 				
@@ -124,6 +133,10 @@ indirect enum XGFiles {
 		}
 	}
 	
+	var text : String {
+		return data.string
+	}
+	
 	var data : XGMutableData {
 		get {
 			if self == .toc {
@@ -131,7 +144,7 @@ indirect enum XGFiles {
 			}
 			
 			if !self.exists {
-				printg("file doesn't exist:",self.path)
+				printg("file doesn't exist:", self.path)
 			}
 			
 			var data : XGMutableData!
@@ -176,6 +189,12 @@ indirect enum XGFiles {
 	var fsysData : XGFsys {
 		get {
 			return XGFsys(file: self)
+		}
+	}
+	
+	var mapData : XGMapRel {
+		get {
+			return XGMapRel(file: self)
 		}
 	}
 	
@@ -246,23 +265,93 @@ indirect enum XGFiles {
 	}
 	
 	func compress() -> XGFiles {
-		XGLZSS.Input(self).compress()
-		return .nameAndFolder(self.fileName + ".lzss", .LZSS)
+		if self.exists {
+			XGLZSS.Input(self).compress()
+		}
+		return .lzss(self.fileName)
 	}
 	
 	func compileMapFsys() {
+		
 		let baseName = self.fileName.removeFileExtensions()
-		let fsys = XGFiles.nameAndFolder(baseName + ".fsys", .AutoFSYS).fsysData
-		let rel = XGFiles.rel(baseName + ".rel").compress()
-		let scd = XGFiles.script(baseName + ".scd").compress()
-		let msg = XGFiles.stringTable(baseName + ".msg").compress()
+		let fsysFile = XGFiles.nameAndFolder(baseName + XGFileTypes.fsys.fileExtension, .AutoFSYS)
+		let rel = XGFiles.rel(baseName)
+		let col = XGFiles.col(baseName)
+		let scd = XGFiles.scd(baseName)
+		let msg = XGFiles.msg(baseName)
 		
-		printg("compiling \(baseName).fsys...")
-		fsys.shiftAndReplaceFileWithType(.rel, withFile: rel)
-		fsys.shiftAndReplaceFileWithType(.scd, withFile: scd)
-		fsys.shiftAndReplaceFileWithType(.msg, withFile: msg)
+		if fsysFile.exists {
+			let fsys = fsysFile.fsysData
+			printg("compiling \(baseName).fsys...")
+			if rel.exists {
+				fsys.shiftAndReplaceFileWithType(.rel, withFile: rel.compress(), save: false)
+			}
+			if scd.exists {
+				fsys.shiftAndReplaceFileWithType(.scd, withFile: scd.compress(), save: false)
+			}
+			if msg.exists {
+				fsys.shiftAndReplaceFileWithType(.msg, withFile: msg.compress(), save: false)
+			}
+			if rel.exists {
+				fsys.shiftAndReplaceFileWithType(.col, withFile: col.compress(), save: true)
+			}
+			ISO.importFiles([fsysFile])
+		}
 		
-		XGISO().importFiles([fsys.file])
+	}
+	
+	func compileMenuFsys() {
+		
+		let baseName = self.fileName.removeFileExtensions()
+		let fsysFile = XGFiles.nameAndFolder(baseName + XGFileTypes.fsys.fileExtension, .MenuFSYS)
+		let rel = XGFiles.rel(baseName)
+		let col = XGFiles.col(baseName)
+		let scd = XGFiles.scd(baseName)
+		
+		if fsysFile.exists {
+			let fsys = fsysFile.fsysData
+			printg("compiling \(baseName).fsys...")
+			if rel.exists {
+				fsys.shiftAndReplaceFileWithType(.rel, withFile: rel.compress(), save: false)
+			}
+			if scd.exists {
+				fsys.shiftAndReplaceFileWithType(.scd, withFile: scd.compress(), save: false)
+			}
+			if rel.exists {
+				fsys.shiftAndReplaceFileWithType(.col, withFile: col.compress(), save: true)
+			}
+			ISO.importFiles([fsysFile])
+		}
+		
+	}
+	
+	var fileExtension : String {
+		var ext = self.fileName.fileExtensions
+		if ext.length > 0 {
+			ext = ext.substring(from: 1, to: ext.length)
+		}
+		while ext.range(of: ".") != nil {
+			if ext.length > 0 {
+				ext = ext.fileExtensions
+				if ext.length > 0 {
+					ext = ext.substring(from: 1, to: ext.length)
+				}
+			} else {
+				return ext
+			}
+		}
+		return ext
+	}
+	
+	var fileType : XGFileTypes {
+		for i in 2 ..< 255 {
+			if let type = XGFileTypes(rawValue: i) {
+				if type.fileExtension == "." + self.fileExtension {
+					return type
+				}
+			}
+		}
+		return .unknown
 	}
 	
 }
@@ -290,7 +379,6 @@ enum XGFolders : String {
 	case Reference			= "Reference"
 	case Resources			= "Resources"
 	case ISO				= "ISO"
-	case TOC				= "TOC"
 	case AutoFSYS			= "AutoFSYS"
 	case MenuFSYS			= "MenuFSYS"
 	case Logs				= "Logs"
@@ -448,7 +536,6 @@ enum XGFolders : String {
 			.Reference,
 			.Resources,
 			.ISO,
-			.TOC,
 			.AutoFSYS,
 			.MenuFSYS,
 			.Logs,
@@ -515,7 +602,6 @@ enum XGFolders : String {
 			.FSYS,
 			.LZSS,
 			.ISO,
-			.TOC,
 			.MenuFSYS,
 			.AutoFSYS,
 			.Scripts,
@@ -530,7 +616,7 @@ enum XGFolders : String {
 		let jsons = ["Move Effects", "Original Pokemon", "Original Moves", "Move Categories"]
 		
 		for j in jsons {
-			let file = XGFiles.nameAndFolder(j + ".json", .JSON)
+			let file = XGFiles.json(j)
 			if !file.exists {
 				let resource = XGResources.JSON(j)
 				let data = resource.data

@@ -13,7 +13,7 @@ class XGCommon : XGRelocationTable {
 	
 	@objc init() {
 		super.init(file: XGFiles.common_rel)
-		self.dataStart = Int(self.data.get4BytesAtOffset(kCommonRELDataStartOffsetLocation))
+		self.dataStart = Int(self.data.getWordAtOffset(kCommonRELDataStartOffsetLocation))
 	}
 	
 	var dictionary : [Int : (Int, Int)] {
@@ -57,8 +57,8 @@ class XGRelocationTable: NSObject {
 		self.file = file
 		self.data = file.data
 		
-		self.dataStart = Int(data.get4BytesAtOffset(kRELDataStartOffsetLocation))
-		self.pointersStart = Int(data.get4BytesAtOffset(kRELPointersStartOffsetLocation))
+		self.dataStart = Int(data.getWordAtOffset(kRELDataStartOffsetLocation))
+		self.pointersStart = Int(data.getWordAtOffset(kRELPointersStartOffsetLocation))
 		self.firstPointer = pointersStart + kRELPointersFirstPointerOffset
 		
 	}
@@ -73,7 +73,7 @@ class XGRelocationTable: NSObject {
 		
 		if pointers[index] == nil {
 			let offset = firstPointer + (index * kRELSizeOfPointer) + kRELPointerDataPointer1Offset
-			pointers[index] = Int(data.get4BytesAtOffset(offset)) + dataStart
+			pointers[index] = Int(data.getWordAtOffset(offset)) + dataStart
 		}
 		
 		return pointers[index] ?? 0
@@ -81,7 +81,7 @@ class XGRelocationTable: NSObject {
 	
 	@objc func getValueAtPointer(index: Int) -> Int {
 		let startOffset = getPointer(index: index)
-		return Int(data.get4BytesAtOffset(startOffset))
+		return Int(data.getWordAtOffset(startOffset))
 	}
 	
 	@objc func setValueAtPointer(index: Int, newValue value: Int) {

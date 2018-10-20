@@ -30,7 +30,7 @@ class XGCharacter : NSObject {
 	
 	@objc var nameID : Int {
 		let start = CommonIndexes.PeopleIDs.startOffset + (self.characterID * 8)
-		return XGFiles.common_rel.data.get4BytesAtOffset(start + 4).int
+		return XGFiles.common_rel.data.getWordAtOffset(start + 4).int
 	}
 	
 	@objc var name : String {
@@ -85,9 +85,9 @@ class XGCharacter : NSObject {
 		self.passiveScriptIndex = data.get2BytesAtOffset(startOffset + kPassiveScriptIndexOffset)
 		self.movementType = .index(data.getByteAtOffset(startOffset + kMovementOffset))
 		
-		self.xCoordinate = data.get4BytesAtOffset(startOffset + kXOffset).hexToSignedFloat()
-		self.yCoordinate = data.get4BytesAtOffset(startOffset + kYOffset).hexToSignedFloat()
-		self.zCoordinate = data.get4BytesAtOffset(startOffset + kZOffset).hexToSignedFloat()
+		self.xCoordinate = data.getWordAtOffset(startOffset + kXOffset).hexToSignedFloat()
+		self.yCoordinate = data.getWordAtOffset(startOffset + kYOffset).hexToSignedFloat()
+		self.zCoordinate = data.getWordAtOffset(startOffset + kZOffset).hexToSignedFloat()
 		self.angle = data.get2BytesAtOffset(startOffset + kCharacterAngleOffset)
 		
 		self.flags = data.getByteAtOffset(startOffset + kCharacterFlagsOffset)

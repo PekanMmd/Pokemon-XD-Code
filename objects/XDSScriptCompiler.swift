@@ -28,8 +28,24 @@ class XDSScriptCompiler: NSObject {
 	static var xdsversion : Float = 0.0
 	static var writeDisassembly = false
 	static var decompileXDS = false
+	static var updateStringIDs = false
+	static var increaseMSGSize = false
 	
+	static var scriptFile : XGFiles?
 	static var error = ""
+	
+	class func compile(textFile file: XGFiles) -> Bool {
+		let scdFile = XGFiles.scd(file.fileName.removeFileExtensions())
+		return compile(textFile: file, toFile: scdFile)
+	}
+	
+	class func compile(textFile file: XGFiles, toFile target: XGFiles) -> Bool {
+		if file.exists {
+			scriptFile = file
+			return compile(text: file.text, toFile: target)
+		}
+		return false
+	}
 	
 	class func compile(text: String, toFile file: XGFiles) -> Bool {
 		if let data = compile(text) {
@@ -47,11 +63,15 @@ class XDSScriptCompiler: NSObject {
 					file.scriptData.getXDSScript().save(toFile: .nameAndFolder(file.fileName.removeFileExtensions() + "_decompiled.xds", file.folder))
 					printg("Decompilation complete!")
 				}
+				
+				scriptFile = nil
 				return true
 			} else {
-				let errorString = "XDS compilation error, File: \(file.fileName) \nError- failed to save file."
 				
+				let errorString = "XDS compilation error, File: \(file.fileName) \nError- failed to save file."
 				printg(errorString)
+				
+				scriptFile = nil
 				return false
 			}
 		}
@@ -62,7 +82,7 @@ class XDSScriptCompiler: NSObject {
 		return false
 	}
 	
-	class func compile(_ script: String) -> XGMutableData? {
+	private class func compile(_ script: String) -> XGMutableData? {
 		
 		giris  = (names: [XDSVariable](), values: [GIRI]())
 		gvars  = (names: [XDSVariable](), values: [XDSConstant]())
@@ -80,6 +100,8 @@ class XDSScriptCompiler: NSObject {
 		xdsversion = 0
 		writeDisassembly = false
 		decompileXDS = false
+		updateStringIDs = false
+		increaseMSGSize = false
 		
 		var stripped = stripComments(text: script)
 		stripped = stripWhiteSpace(text: stripped)
@@ -296,6 +318,32 @@ class XDSScriptCompiler: NSObject {
 			}
 		}
 		
+		if tokens[1] == "++UpdateStrings" {
+			if tokens[2] == "YES" {
+				updateStringIDs = true
+				return true
+			} else if tokens[2] == "NO" {
+				updateStringIDs = false
+				return true
+			} else  {
+				error = "Invalid token, expected 'YES' or 'NO': \(tokens[0]) \(tokens[1]) \(tokens[2])"
+				return false
+			}
+		}
+		
+		if tokens[1] == "++IncreaseMSGSize" {
+			if tokens[2] == "YES" {
+				increaseMSGSize = true
+				return true
+			} else if tokens[2] == "NO" {
+				increaseMSGSize = false
+				return true
+			} else  {
+				error = "Invalid token, expected 'YES' or 'NO': \(tokens[0]) \(tokens[1]) \(tokens[2])"
+				return false
+			}
+		}
+		
 		error = "Unrecognised special macro: \(tokens[1])"
 		return false
 	}
@@ -459,7 +507,6 @@ class XDSScriptCompiler: NSObject {
 	}
 	
 	private class func handleMSGString(id: Int?, text: String) -> Int? {
-		//TODO: msg replacements
 		// pass string without surrounding quotation marks
 		// if id is nil then generate a new string with the next free id
 		// replace occurrences of [Quote] with \"
@@ -469,13 +516,21 @@ class XDSScriptCompiler: NSObject {
 		
 		// return the strings finalised id or -1 if failed
 		
+		if verbose {
+			if text.length > 0 {
+				printg("Replacing msg\(id == nil ? " by creating new id:" +  text : "with id: \(id!.hexString()) " + text)")
+			}
+		}
+		
 		if id != nil {
 			if let msg = getStringWithID(id: id!) {
-				if !msg.duplicateWithString(text.replacingOccurrences(of: "[Quote]", with: "\"")).replace() {
-					error = "Failed to replace msg: $:\(id!):\"\(text)\""
+				if !msg.duplicateWithString(text.replacingOccurrences(of: "[Quote]", with: "\"")).replace(increaseSize: increaseMSGSize) {
+					error = "Failed to replace msg: $:\(id!):\"\(text)\"\n either the msg doesn't exist in any file or the string was too large.\n In the event of the latter try setting '++IncreaseMSGSize' to 'YES'."
 					return -1
 				}
 			}
+		} else {
+			// TODO: handle adding new string to msg
 		}
 		
 		let newID = id
@@ -483,6 +538,15 @@ class XDSScriptCompiler: NSObject {
 		if id == nil {
 			if newID != nil {
 				printg("String: \"\(text)\" was added with msgID: $:\(newID):")
+				if updateStringIDs {
+					if let file = scriptFile {
+						var scripttext = file.text
+						scripttext = scripttext.replacingOccurrences(of: "$" + "\"" + text + "\"", with: "$:\(newID):" + "\"" + text + "\"")
+						scripttext = scripttext.replacingOccurrences(of: "$::" + "\"" + text + "\"", with: "$:\(newID):" + "\"" + text + "\"")
+						scripttext.save(toFile: file)
+					}
+				}
+				
 			}
 		}
 		

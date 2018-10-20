@@ -9,9 +9,9 @@ import Foundation
 
 enum XGRegions : UInt32 {
 	
-	case US = 0x47433645
-	case EU = 0x47433650
-	case JP = 0x4743364A
+	case US = 0x47433645 // GC6E
+	case EU = 0x47433650 // GC6P
+	case JP = 0x4743364A // GC6J
 	
 }
 
@@ -59,124 +59,6 @@ class XGMapRel : XGRelocationTable {
 }
 
 extension XGISO {
-	var autoFsysList : [String] {
-		return [
-			"D1_labo_1F.fsys",
-			"D1_labo_B1.fsys",
-			"D1_labo_B2.fsys",
-			"D1_labo_B3.fsys",
-			"D1_out.fsys",
-			"D2_cloud_1.fsys",
-			"D2_cloud_2.fsys",
-			"D2_cloud_3.fsys",
-			"D2_cloud_4.fsys",
-			"D2_crater_colo.fsys",
-			"D2_magma_1.fsys",
-			"D2_magma_2.fsys",
-			"D2_magma_3.fsys",
-			"D2_out.fsys",
-			"D2_pc_1F.fsys",
-			"D2_rest_1.fsys",
-			"D2_rest_2.fsys",
-			"D2_rest_3.fsys",
-			"D2_rest_4.fsys",
-			"D2_rest_5.fsys",
-			"D2_rest_6.fsys",
-			"D2_rest_7.fsys",
-			"D2_rest_8.fsys",
-			"D2_rest_9.fsys",
-			"D2_valley_1.fsys",
-			"D2_valley_2.fsys",
-			"D2_valley_3.fsys",
-			"D4_dome_3.fsys",
-			"D4_dome_4.fsys",
-			"D4_out.fsys",
-			"D4_out_2.fsys",
-			"D4_tower_1F_1.fsys",
-			"D4_tower_1F_2.fsys",
-			"D4_tower_1F_3.fsys",
-			"M1_carde_1.fsys",
-			"M1_gym_1F.fsys",
-			"M1_gym_B1.fsys",
-			"M1_houseA_1F.fsys",
-			"M1_houseA_2F.fsys",
-			"M1_houseB_1F.fsys",
-			"M1_houseC_1F.fsys",
-			"M1_out.fsys",
-			"M1_pc_1F.fsys",
-			"M1_pc_B1.fsys",
-			"M1_shop_1F.fsys",
-			"M1_shop_2F.fsys",
-			"M1_stadium_1F.fsys",
-			"M1_water_colo.fsys",
-			"M2_building_1F.fsys",
-			"M2_building_2F.fsys",
-			"M2_building_3F.fsys",
-			"M2_building_4F.fsys",
-			"M2_cave_1F_1.fsys",
-			"M2_cave_1F_2.fsys",
-			"M2_cave_2F_1.fsys",
-			"M2_cave_2F_2.fsys",
-			"M2_cave_3F_1.fsys",
-			"M2_cave_3F_2.fsys",
-			"M2_enter_1F.fsys",
-			"M2_enter_1F_2.fsys",
-			"M2_guild_1F_1.fsys",
-			"M2_guild_1F_2.fsys",
-			"M2_hotel_1F.fsys",
-			"M2_houseA_1F.fsys",
-			"M2_out.fsys",
-			"M2_police_1F.fsys",
-			"M2_shop_1F.fsys",
-			"M2_uranai_1F.fsys",
-			"M2_windmill_1F.fsys",
-			"M2_windmill_2F.fsys",
-			"M3_cave_1F_1.fsys",
-			"M3_cave_1F_2.fsys",
-			"M3_houseA_1F.fsys",
-			"M3_houseB_1F.fsys",
-			"M3_houseC_1F.fsys",
-			"M3_houseC_2F.fsys",
-			"M3_houseD_1F.fsys",
-			"M3_out.fsys",
-			"M3_pc_1F.fsys",
-			"M3_shop_1F.fsys",
-			"M3_shrine_1F.fsys",
-			"M4_bottom_1F.fsys",
-			"M4_bottom_colo.fsys",
-			"M4_cylinder_colo.fsys",
-			"M4_enter_1F.fsys",
-			"M4_enter_B1.fsys",
-			"M4_hotel_1F.fsys",
-			"M4_hotel_B1.fsys",
-			"M4_houseA_1F.fsys",
-			"M4_junk_1F.fsys",
-			"M4_junk_B1.fsys",
-			"M4_kanpo_1F.fsys",
-			"M4_labo_1F.fsys",
-			"M4_labo_B1.fsys",
-			"M4_out.fsys",
-			"M4_out_2.fsys",
-			"M4_shop_1F.fsys",
-			"M4_subway_1F.fsys",
-			"M4_subway_B1.fsys",
-			"M4_subway_B2_1.fsys",
-			"M4_subway_B2_2.fsys",
-			"M4_subway_B3.fsys",
-			"M4_train_1F.fsys",
-			"S1_out.fsys",
-			"S1_shop_1F.fsys",
-			"S2_bossroom_1.fsys",
-			"S2_building_1F_2.fsys",
-			"S2_building_2F_2.fsys",
-			"S2_building_3F_2.fsys",
-			"S2_hallway_1.fsys",
-			"S2_out_1.fsys",
-			"S2_out_2.fsys",
-			"S2_out_3.fsys",
-			"S2_snatchroom_1.fsys"
-		]
-	}
 	
 	var fsysList : [String] {
 		return [
@@ -189,21 +71,10 @@ extension XGISO {
 	
 	var menuFsysList : [String] {
 		return [
-			"carde_menu.fsys",
-			"colosseumbattle_menu.fsys",
 			"D2_present_room.fsys",
 			"keydisc.fsys",
 			"DNA_key.fsys",
-			"name_entry_menu.fsys",
-			"pcbox_menu.fsys",
-			"pcbox_name_entry_menu.fsys",
-			"pcbox_pocket_menu.fsys",
-			"pda_menu.fsys",
-			"pocket_menu.fsys",
-			"pokemonchange_menu.fsys",
 			"title.fsys",
-			"topmenu.fsys",
-			"waza_menu.fsys",
 			"world_map.fsys"
 		]
 	}
@@ -216,52 +87,55 @@ extension XGISO {
 	
 	func extractSpecificStringTables() {
 		
-		let fightFile = XGFiles.stringTable("fight.msg")
+		extractMenuFSYS()
+		extractFSYS()
+		
+		let fightFile = XGFiles.msg("fight")
 		if !fightFile.exists {
-			let fight = XGFiles.fsys("fight_common.fsys").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let fight = XGFiles.fsys("fight_common").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			fight.file = fightFile
 			fight.save()
 		}
 		
-		let pocket_menu = XGFiles.stringTable("pocket_menu.msg")
-		let nameentrymenu = XGFiles.stringTable("name_entry_menu.msg")
-		let system_tool = XGFiles.stringTable("system_tool.msg")
-		let pda_menu = XGFiles.stringTable("pda_menu.msg")
-		let p_exchange = XGFiles.stringTable("p_exchange.msg")
-		let world_map = XGFiles.stringTable("world_map.msg")
+		let pocket_menu = XGFiles.msg("pocket_menu")
+		let nameentrymenu = XGFiles.msg("name_entry_menu")
+		let system_tool = XGFiles.msg("system_tool")
+		let pda_menu = XGFiles.msg("pda_menu")
+		let p_exchange = XGFiles.msg("p_exchange")
+		let world_map = XGFiles.msg("world_map")
 		
 		if !pocket_menu.exists {
-			let pm = XGFiles.nameAndFolder("pcbox_pocket_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let pm = XGFiles.nameAndFolder("pcbox_pocket_menu",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			pm.file = pocket_menu
 			pm.save()
 		}
 		
 		if !nameentrymenu.exists {
-			let nem = XGFiles.nameAndFolder("pcbox_name_entry_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let nem = XGFiles.nameAndFolder("pcbox_name_entry_menu",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			nem.file = nameentrymenu
 			nem.save()
 		}
 		
 		if !system_tool.exists {
-			let st = XGFiles.nameAndFolder("pcbox_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let st = XGFiles.nameAndFolder("pcbox_menu",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			st.file = system_tool
 			st.save()
 		}
 		
 		if !pda_menu.exists {
-			let pda = XGFiles.nameAndFolder("pda_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let pda = XGFiles.nameAndFolder("pda_menu",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			pda.file = pda_menu
 			pda.save()
 		}
 		
 		if !p_exchange.exists {
-			let pex = XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let pex = XGFiles.nameAndFolder("pokemonchange_menu",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			pex.file = p_exchange
 			pex.save()
 		}
 		
 		if !world_map.exists {
-			let wm = XGFiles.nameAndFolder("world_map.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let wm = XGFiles.nameAndFolder("world_map",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			wm.file = world_map
 			wm.save()
 		}
@@ -274,66 +148,75 @@ extension XGUtility {
 		
 		printg("importing files to .fsys archives")
 		
-		let common = XGFiles.fsys("common.fsys").fsysData
+		ISO.extractFSYS()
+		ISO.extractMenuFSYS()
+		
+		let common = XGFiles.fsys("common").fsysData
 		if game == .XD {
-			common.shiftAndReplaceFileWithIndex(0, withFile: .lzss("common.rel.lzss"))
+			common.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.common_rel.compress(), save: true)
 		} else {
-			common.replaceFileWithIndex(0, withFile: .lzss("common.rel.lzss"), saveWhenDone: true)
+			common.replaceFileWithIndex(0, withFile: XGFiles.common_rel.compress(), saveWhenDone: true)
 			if game == .Colosseum && compressionTooLarge {
 				commonTooLarge = true
 			}
 		}
 		
-		XGFiles.fsys("fight_common.fsys").fsysData.shiftAndReplaceFileWithType(.msg, withFile: .lzss("fight.msg.lzss"))
-		XGFiles.nameAndFolder("pocket_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.rel, withFile: .lzss("pocket_menu.rel.lzss"))
+		XGFiles.fsys("fight_common").fsysData.shiftAndReplaceFileWithType(.msg, withFile: XGFiles.msg("fight").compress(), save: true)
+		XGFiles.fsys("pocket_menu").fsysData.shiftAndReplaceFileWithType(.rel, withFile: XGFiles.pocket_menu.compress(), save: true)
 
 	}
 	
 	class func prepareForQuickCompilation() {
-		XGFiles.common_rel.compress()
 		importFsys()
 	}
 	
 	class func prepareForCompilation() {
-		compressFiles()
+		fixUpTrainerPokemon()
 		importFsys()
 	}
 	
 	class func importSpecificStringTables() {
 		printg("importing menu string tables")
 		
-		let pocket_menu = XGFiles.lzss("pocket_menu.msg.lzss")
-		let nameentrymenu = XGFiles.lzss("name_entry_menu.msg.lzss")
-		let system_tool = XGFiles.lzss("system_tool.msg.lzss")
-		let pda_menu = XGFiles.lzss("pda_menu.msg.lzss")
-		let p_exchange = XGFiles.lzss("p_exchange.msg.lzss")
-		let fight = XGFiles.lzss("fight.msg.lzss")
+		ISO.extractMenuFSYS()
 		
-		XGFiles.nameAndFolder("carde_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool)
-		XGFiles.fsys("fight_common.fsys").fsysData.shiftAndReplaceFileWithType(.msg, withFile: fight)
-		XGFiles.nameAndFolder("name_entry_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: nameentrymenu)
-		XGFiles.nameAndFolder("pcbox_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool)
-		XGFiles.nameAndFolder("pcbox_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: pocket_menu)
-		XGFiles.nameAndFolder("pcbox_name_entry_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: nameentrymenu)
-		XGFiles.nameAndFolder("pcbox_pocket_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: pocket_menu)
-		XGFiles.nameAndFolder("pda_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: pda_menu)
-		XGFiles.nameAndFolder("pocket_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: pocket_menu)
-		XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool)
-		XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: pocket_menu)
-		XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: p_exchange)
-		XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool)
-		XGFiles.nameAndFolder("title.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool)
-		XGFiles.nameAndFolder("topmenu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool)
-		XGFiles.nameAndFolder("waza_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: pocket_menu)
-		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: pocket_menu)
-		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: nameentrymenu)
-		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool)
+		let pocket_menu = XGFiles.msg("pocket_menu").compress()
+		let nameentrymenu = XGFiles.msg("name_entry_menu").compress()
+		let system_tool = XGFiles.msg("system_tool").compress()
+		let pda_menu = XGFiles.msg("pda_menu").compress()
+		let p_exchange = XGFiles.msg("p_exchange").compress()
+		let fight = XGFiles.msg("fight").compress()
+		
+		for file in [pocket_menu, nameentrymenu, system_tool, pda_menu, p_exchange, fight] {
+			if !file.exists {
+				ISO.extractSpecificStringTables()
+				file.compress()
+			}
+		}
+		
+		
+		XGFiles.fsys("carde_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool, save: true)
+		XGFiles.fsys("fight_common").fsysData.shiftAndReplaceFileWithType(.msg, withFile: fight, save: true)
+		XGFiles.fsys("name_entry_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: nameentrymenu, save: true)
+		XGFiles.fsys("pcbox_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool, save: true)
+		XGFiles.fsys("pcbox_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: pocket_menu, save: true)
+		XGFiles.fsys("pcbox_name_entry_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: nameentrymenu, save: true)
+		XGFiles.fsys("pcbox_pocket_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: pocket_menu, save: true)
+		XGFiles.fsys("pda_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: pda_menu, save: true)
+		XGFiles.fsys("pocket_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: pocket_menu, save: true)
+		XGFiles.fsys("pokemonchange_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool, save: true)
+		XGFiles.fsys("pokemonchange_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: pocket_menu, save: true)
+		XGFiles.fsys("pokemonchange_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: p_exchange, save: true)
+		XGFiles.fsys("pokemonchange_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool, save: true)
+		XGFiles.fsys("title").fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool, save: true)
+		XGFiles.fsys("topmenu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool, save: true)
+		XGFiles.fsys("waza_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: pocket_menu, save: true)
+		XGFiles.fsys("colosseumbattle_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: pocket_menu, save: true)
+		XGFiles.fsys("colosseumbattle_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: nameentrymenu, save: true)
+		XGFiles.fsys("colosseumbattle_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool, save: true)
 	}
 	
 	//MARK: - Release configuration
-	class func prepareForRelease() {
-		fixUpTrainerPokemon()
-	}
 	
 	class func fixUpTrainerPokemon() {
 		for deck in TrainerDecksArray {
@@ -1152,6 +1035,8 @@ extension XGDolPatcher {
 			XGTrainer(index: i).purge(autoSave: true)
 		}
 	}
+	
+	class func tutorMovesAvailableImmediately() { }
 }
 
 

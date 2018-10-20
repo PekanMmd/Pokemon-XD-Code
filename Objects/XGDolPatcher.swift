@@ -110,7 +110,7 @@ class XGDolPatcher: NSObject {
 		let dol = XGFiles.dol.data
 		
 		for offset in kClassPatchOffsets {
-			let machineInstruction = dol.get4BytesAtOffset(offset)
+			let machineInstruction = dol.getWordAtOffset(offset)
 			
 			if machineInstruction == kNopInstruction {
 				return true
@@ -200,7 +200,7 @@ class XGDolPatcher: NSObject {
 	
 	@objc class func isType9Independent() -> Bool {
 		let dol = XGFiles.dol.data
-		return dol.get4BytesAtOffset(0x2C55B0) == kBranchInstruction9
+		return dol.getWordAtOffset(0x2C55B0) == kBranchInstruction9
 	}
 	
 	@objc class func removeType9Dependencies() {
@@ -225,7 +225,7 @@ class XGDolPatcher: NSObject {
 	
 	@objc class func areBetaStartersEnabled() -> Bool {
 		let dol = XGFiles.dol.data
-		return dol.get4BytesAtOffset(kBetaStartersFirstOffset) == kBetaStartersInstruction1
+		return dol.getWordAtOffset(kBetaStartersFirstOffset) == kBetaStartersInstruction1
 	}
 	
 	@objc class func enableBetaStarters() {
@@ -261,7 +261,7 @@ class XGDolPatcher: NSObject {
 	
 //	class func canRenameAnyPokemon() -> Bool {
 //		let dol = XGFiles.Dol.data
-//		return dol.get4BytesAtOffset(kNameRaterOffset1) == kNopInstruction
+//		return dol.getWordAtOffset(kNameRaterOffset1) == kNopInstruction
 //	}
 //	
 	@objc class func allowRenamingAnyPokemon() {
@@ -277,7 +277,7 @@ class XGDolPatcher: NSObject {
 	
 	@objc class func implementUnlimitedTutors() {
 		
-		let script = XGFiles.script("M3_cave_1F_2.scd").data
+		let script = XGFiles.scd("M3_cave_1F_2.scd").data
 //		for i in [0,1] {
 //			script.replaceByteAtOffset(kUnlimitedTutorMovesJumpOffsets[i], withByte: kUnlimitedTutorMovesJumpInstruction)
 //			

@@ -33,6 +33,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		verbose = false
 	}
 	
+	@IBOutlet weak var fileSizeMenuItem: NSMenuItem!
+	
+	
+	@IBAction func toggleAllowIncreasedFileSizes(_ sender: Any) {
+		increaseFileSizes = !increaseFileSizes
+		if increaseFileSizes {
+			printg("Enabled file size increases. This will stop the file importer from ignoring files that are larger than the original but importing might take a lot longer if the files are larger. Make sure your ISO has enough free space if using larger files.")
+		}
+		fileSizeMenuItem.title = increaseFileSizes ? "Disable File Size Increases" : "Enable File Size Increases"
+	}
 	
 	
 	@IBAction func extractISO(_ sender: Any) {
@@ -50,10 +60,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			let rel = XGFiles.common_rel.data
 			var zero = false
 			if region == .JP {
-				zero = rel.get4BytesAtOffset(0x4580 + 0x9cf8 - 4) != 0
+				zero = rel.getWordAtOffset(0x4580 + 0x9cf8 - 4) != 0
 			}
 			if region == .US {
-				zero = rel.get4BytesAtOffset(0x784e0 + 0x13068 - 4) != 0
+				zero = rel.getWordAtOffset(0x784e0 + 0x13068 - 4) != 0
 			}
 			
 			if zero {

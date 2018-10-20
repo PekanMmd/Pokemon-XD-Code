@@ -43,7 +43,7 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var nameID : Int {
 		get {
-			return Int(XGFiles.common_rel.data.get4BytesAtOffset(startOffset + kMoveNameIDOffset))
+			return Int(XGFiles.common_rel.data.getWordAtOffset(startOffset + kMoveNameIDOffset))
 		}
 	}
 	
@@ -55,7 +55,7 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var descriptionID : Int {
 		get {
-			return Int(XGFiles.common_rel.data.get4BytesAtOffset(startOffset + kMoveDescriptionIDOffset))
+			return Int(XGFiles.common_rel.data.getWordAtOffset(startOffset + kMoveDescriptionIDOffset))
 		}
 	}
 	

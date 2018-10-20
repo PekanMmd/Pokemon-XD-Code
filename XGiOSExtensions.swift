@@ -43,7 +43,6 @@ extension XGStringTable {
 	func replaceString(_ string: XGString, alert: Bool) -> Bool {
 		
 		let copyStream = self.stringTable.getCharStreamFromOffset(0, length: self.stringOffsets[string.id]!)
-		
 		let dataCopy = XGMutableData(byteStream: copyStream, file: self.file)
 		
 		let oldText = self.stringWithID(string.id)!
@@ -52,14 +51,11 @@ extension XGStringTable {
 		if difference <= self.extraCharacters {
 			
 			let stream = string.byteStream
-			
 			dataCopy.appendBytes(stream)
 			
 			
 			let oldEnd = self.endOffsetForStringId(string.id)
-			
 			let newEnd = stringTable.getCharStreamFromOffset(oldEnd, length: fileSize - oldEnd)
-			
 			let endData = XGMutableData(byteStream: newEnd, file: self.file)
 			
 			dataCopy.appendBytes(endData.charStream)
@@ -84,9 +80,7 @@ extension XGStringTable {
 				var emptyByte : UInt8 = 0x0
 				
 				for _ in 0 ..< difference {
-					
 					dataCopy.data.append(&emptyByte, length: 1)
-					
 				}
 				
 				self.decreaseOffsetsAfter(stringOffsets[string.id]!, byCharacters: difference)

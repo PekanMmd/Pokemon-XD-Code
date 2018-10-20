@@ -22,11 +22,11 @@ class XGRoom: NSObject {
 	
 	@objc var name : String {
 		if game == .XD {
-			let ids = XGFiles.nameAndFolder("Room IDs.json", .JSON).json
+			let ids = XGFiles.json("Room IDs").json
 			return (ids as! [String : String])[roomID.hexString()] ?? "-"
 		} else {
 			let start = CommonIndexes.RoomData.startOffset + (0x18 * index)
-			let id =  XGFiles.common_rel.data.get4BytesAtOffset(start + 4).int
+			let id =  XGFiles.common_rel.data.getWordAtOffset(start + 4).int
 			return XGFiles.common_rel.stringTable.stringSafelyWithID(id).string
 		}
 	}
@@ -58,7 +58,7 @@ class XGRoom: NSObject {
 		let data = XGFiles.common_rel.data
 		
 		self.roomID = data.get2BytesAtOffset(startOffset + kRoomIDOffset)
-		self.nameID = data.get4BytesAtOffset(startOffset + kRoomNameIDOffset).int
+		self.nameID = data.getWordAtOffset(startOffset + kRoomNameIDOffset).int
 		
 	}
 	
@@ -73,7 +73,7 @@ class XGRoom: NSObject {
 	}
 	
 	@objc class func roomWithName(_ name: String) -> XGRoom? {
-		let ids = XGFiles.nameAndFolder("Room IDs.json", .JSON).json as! [String : String]
+		let ids = XGFiles.json("Room IDs").json as! [String : String]
 		for (id, rname) in ids {
 			if rname == name {
 				return XGRoom.roomWithID(id.hexStringToInt())

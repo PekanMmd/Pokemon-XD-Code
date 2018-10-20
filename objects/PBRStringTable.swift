@@ -17,7 +17,7 @@ class PBRStringTable: NSObject {
 	
 	var numberOfEntries : Int {
 		get {
-			return Int(stringTable.get4BytesAtOffset(kNumberOfStringsOffset))
+			return Int(stringTable.getWordAtOffset(kNumberOfStringsOffset))
 		}
 	}
 	
@@ -51,7 +51,7 @@ class PBRStringTable: NSObject {
 	}
 	
 	class func common() -> PBRStringTable {
-		return PBRStringTable(file: XGFiles.stringTable("common.msg"), startOffset: 0, fileSize: 0xb605e)
+		return PBRStringTable(file: XGFiles.msg("common"), startOffset: 0, fileSize: 0xb605e)
 	}
 	
 	init(file: XGFiles, startOffset: Int, fileSize: Int) {
@@ -85,7 +85,7 @@ class PBRStringTable: NSObject {
 			
 			let id = i + 1
 			
-			let offset = stringTable.get4BytesAtOffset(currentOffset)
+			let offset = stringTable.getWordAtOffset(currentOffset)
 			
 			self.stringOffsets[Int(id)] = Int(offset)
 			
@@ -455,22 +455,20 @@ class PBRStringTable: NSObject {
 		}
 	}
 	
-	class func trainerNamesFromJSON() {
-		
-		do {
-			let data : [ [String] ] = try JSONSerialization.jsonObject( with: Data(contentsOf: URL(fileURLWithPath: XGFiles.nameAndFolder("Trainers.json", .JSON).path)), options: []) as! [[String]]
-			print("\(data)")
-			
-			for d in data {
-				XGStringTable.common_rel().replaceString(XGString(string: d[0], file: .common_rel, sid: Int(d[1]) ), alert: false)
-			}
-			
-		} catch {
-			
-		}
-		
-		
-		
-	}
+//	class func trainerNamesFromJSON() {
+//		
+//		do {
+//			let data : [ [String] ] = try JSONSerialization.jsonObject( with: Data(contentsOf: URL(fileURLWithPath: XGFiles.nameAndFolder("Trainers.json", .JSON).path)), options: []) as! [[String]]
+//			print("\(data)")
+//			
+//			for d in data {
+//				XGStringTable.common_rel().replaceString(XGString(string: d[0], file: .common_rel, sid: Int(d[1]) ), alert: false, save: true)
+//			}
+//			
+//		} catch {
+//			
+//		}
+//		
+//	}
 	
 }

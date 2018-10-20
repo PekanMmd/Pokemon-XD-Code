@@ -38,14 +38,14 @@ enum XGAI : Int {
 
 enum XGDecks : String, XGDictionaryRepresentable {
 	
-	case DeckDarkPokemon	= "DeckData_DarkPokemon.bin"
-	case DeckStory			= "DeckData_Story.bin"
-	case DeckBingo			= "DeckData_Bingo.bin"
-	case DeckColosseum		= "DeckData_Colosseum.bin"
-	case DeckHundred		= "DeckData_Hundred.bin"
-	case DeckImasugu		= "DeckData_Imasugu.bin"
-	case DeckSample			= "DeckData_Sample.bin"
-	case DeckVirtual		= "DeckData_Virtual.bin"
+	case DeckDarkPokemon	= "DeckData_DarkPokemon"
+	case DeckStory			= "DeckData_Story"
+	case DeckBingo			= "DeckData_Bingo"
+	case DeckColosseum		= "DeckData_Colosseum"
+	case DeckHundred		= "DeckData_Hundred"
+	case DeckImasugu		= "DeckData_Imasugu"
+	case DeckSample			= "DeckData_Sample"
+	case DeckVirtual		= "DeckData_Virtual"
 	
 	var id : Int {
 		switch self {
@@ -85,7 +85,7 @@ enum XGDecks : String, XGDictionaryRepresentable {
 	
 	var fileName : String {
 		get {
-			return self.rawValue
+			return self.rawValue + XGFileTypes.bin.fileExtension
 		}
 	}
 	
@@ -97,7 +97,7 @@ enum XGDecks : String, XGDictionaryRepresentable {
 	
 	var fileSize : Int {
 		get {
-			return Int(data.get4BytesAtOffset(0x4))
+			return Int(data.getWordAtOffset(0x4))
 		}
 	}
 	
@@ -111,14 +111,14 @@ enum XGDecks : String, XGDictionaryRepresentable {
 	var DDPKSize : Int {
 		get {
 			let offset = DDPKHeaderOffset + 0x4
-			return Int(data.get4BytesAtOffset(offset))
+			return Int(data.getWordAtOffset(offset))
 		}
 	}
 	
 	var DDPKEntries : Int {
 		get {
 			let offset = DDPKHeaderOffset + 0x08
-			return Int(data.get4BytesAtOffset(offset))
+			return Int(data.getWordAtOffset(offset))
 		}
 	}
 	
@@ -140,14 +140,14 @@ enum XGDecks : String, XGDictionaryRepresentable {
 	var DTNRSize : Int {
 		get {
 			let offset = DTNRHeaderOffset + 0x4
-			return Int(data.get4BytesAtOffset(offset))
+			return Int(data.getWordAtOffset(offset))
 		}
 	}
 	
 	var DTNREntries : Int {
 		get {
 			let offset = DTNRHeaderOffset + 0x8
-			return Int(data.get4BytesAtOffset(offset))
+			return Int(data.getWordAtOffset(offset))
 		}
 	}
 	
@@ -167,14 +167,14 @@ enum XGDecks : String, XGDictionaryRepresentable {
 	var DPKMSize : Int {
 		get {
 			let offset = DPKMHeaderOffset + 0x4
-			return Int(data.get4BytesAtOffset(offset))
+			return Int(data.getWordAtOffset(offset))
 		}
 	}
 	
 	var DPKMEntries : Int {
 		get {
 			let offset = DPKMHeaderOffset + 0x8
-			return Int(data.get4BytesAtOffset(offset))
+			return Int(data.getWordAtOffset(offset))
 		}
 	}
 	
@@ -194,14 +194,14 @@ enum XGDecks : String, XGDictionaryRepresentable {
 	var DTAISize : Int {
 		get {
 			let offset = DTAIHeaderOffset + 0x4
-			return Int(data.get4BytesAtOffset(offset))
+			return Int(data.getWordAtOffset(offset))
 		}
 	}
 	
 	var DTAIEntries : Int {
 		get {
 			let offset = DTAIHeaderOffset + 0x8
-			return Int(data.get4BytesAtOffset(offset))
+			return Int(data.getWordAtOffset(offset))
 		}
 	}
 	
@@ -221,14 +221,14 @@ enum XGDecks : String, XGDictionaryRepresentable {
 	var DSTRSize : Int {
 		get {
 			let offset = DSTRHeaderOffset + 0x4
-			return Int(data.get4BytesAtOffset(offset))
+			return Int(data.getWordAtOffset(offset))
 		}
 	}
 	
 	var DSTREntries : Int {
 		get {
 			let offset = DSTRHeaderOffset + 0x8
-			return Int(data.get4BytesAtOffset(offset))
+			return Int(data.getWordAtOffset(offset))
 		}
 	}
 	

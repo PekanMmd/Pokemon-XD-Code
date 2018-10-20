@@ -490,6 +490,25 @@ enum XGASM {
 		}
 	}
 
+	static func loadImmediateShifted32bit(register: XGRegisters, value: UInt32) -> (XGASM, XGASM) {
+		
+		let lowOrder = value & 0xFFFF
+		let addition = lowOrder < 0x8000
+		let highOrder = value >> 16 + (addition ? 0 : 1)
+		
+		
+		let shift = XGASM.lis(register, highOrder.int)
+		var add = XGASM.nop
+		
+		if addition {
+			add = .addi(register, register, lowOrder.int)
+		} else {
+			add = .subi(register, register, 0x10000 - lowOrder.int)
+		}
+		
+		return (shift, add)
+	}
+	
 }
 
 

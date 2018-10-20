@@ -21,6 +21,7 @@ func < (p1: XGPokemon, p2: XGPokemon) -> Bool {
 enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 	
 	case pokemon(Int)
+	case nationalIndex(Int)
 	
 	var description : String {
 		get {
@@ -36,13 +37,14 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 					return 0
 				}
 				return i
+			case .nationalIndex(let ni):
+				for i in 0 ..< CommonIndexes.NumberOfPokemon.value {
+					if XGPokemon.pokemon(i).stats.nationalIndex == ni {
+						return i
+					}
+				}
+				return 0
 			}
-		}
-	}
-	
-	var hex : String {
-		get {
-			return String(format: "0x%x",self.index)
 		}
 	}
 	
@@ -54,7 +56,7 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var nameID : Int {
 		get {
-			return Int(XGFiles.common_rel.data.get4BytesAtOffset(startOffset + kNameIDOffset))
+			return Int(XGFiles.common_rel.data.getWordAtOffset(startOffset + kNameIDOffset))
 		}
 	}
 	
@@ -116,7 +118,7 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 	}
 	
 	func movesForLevel(_ pokeLevel: Int) -> [XGMoves] {
-		// Returns the last 4 moves a pokemon would have learned at a level. Gives automatic move sets like in the GBA games.
+		// Returns the last 4 moves a pokemon would have learned at a level. Gives default move sets like in the GBA games.
 		
 		var moves = [XGMoves](repeating: XGMoves.move(0), count: 4)
 		
@@ -200,7 +202,7 @@ enum XGOriginalPokemon {
 	
 	var nameID : Int {
 		get {
-			return Int(XGFiles.original(.common_rel).data.get4BytesAtOffset(startOffset + kNameIDOffset))
+			return Int(XGFiles.original(.common_rel).data.getWordAtOffset(startOffset + kNameIDOffset))
 		}
 	}
 	

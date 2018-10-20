@@ -418,7 +418,7 @@ indirect enum XDSExpr {
 			if c.asInt == 0 {
 				return XDSExpr.macroWithName("pokemon_none".uppercased())
 			}
-			return XDSExpr.macroWithName("POKEMON_" + XGPokemon.pokemon(c.asInt).name.string.simplified.uppercased())
+			return XDSExpr.macroWithName("POKEMON_" + XGPokemon.nationalIndex(c.asInt).name.string.simplified.uppercased())
 		case .item:
 			if c.asInt == 0 {
 				return XDSExpr.macroWithName("item_none".uppercased())
@@ -986,7 +986,7 @@ indirect enum XDSExpr {
 			return ([], nil)
 			
 			
-		case .function(let name, _):
+		case .function(_, _):
 			return ([XGScriptInstruction.reserve(count: locals.count)], nil)
 			
 		// shouldn't be able to access these through the script compiler but for completion sake:

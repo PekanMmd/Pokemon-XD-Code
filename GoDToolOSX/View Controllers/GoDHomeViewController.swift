@@ -28,12 +28,6 @@ class GoDHomeViewController: GoDTableViewController {
 		if game == .Colosseum {
 			self.title = "Colosseum Tool"
 		}
-		
-//		let indexes : [CommonIndexes] = [.AIDebugScenarios, .DebugScenarios, .StoryDebugOptions, .BattleDebugScenarios]
-//		for i in indexes {
-//			printg(i.startOffset.hexString())
-//		}
-		
     }
 	
 	override func viewDidAppear() {

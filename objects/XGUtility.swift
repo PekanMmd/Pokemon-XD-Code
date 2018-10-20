@@ -20,89 +20,100 @@ class XGUtility {
 		for folder in compressionFolders where folder.exists {
 			for file in folder.files {
 				printg("compressing file: " + file.fileName)
-				file.compress()
+				let lzss = file.compress()
+				if verbose {
+					printg("compressed to: \(lzss.fileName)")
+				}
 			}
 		}
 		
 	}
 	
 	class func compileMainFiles() {
-		prepareForQuickCompilation()
-		ISO.importFiles([.fsys("common.fsys"),.dol])
+		prepareForCompilation()
+		ISO.importFiles([.fsys("common"), .dol])
 		if game == .XD {
-			ISO.importFiles([.fsys("deck_archive.fsys")])
+			ISO.importFiles([.fsys("deck_archive")])
 		}
 	}
 	
 	class func compileCommonRel() {
-		XGFiles.fsys("common.fsys").fsysData.shiftAndReplaceFileWithIndex(0, withFile: XGFiles.common_rel.compress())
-		ISO.importFiles([.fsys("common.fsys")])
+		XGFiles.fsys("common").fsysData.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.common_rel.compress(), save: true)
+		ISO.importFiles([.fsys("common")])
 	}
 	
 	class func compileDol() {
 		ISO.importDol()
 	}
 	
+	class func compileAllMapFsys() {
+		printg("Compiling Map fsys...")
+		for file in XGFolders.AutoFSYS.files where file.fileType == .fsys {
+			if verbose {
+				printg("compiling: \(file.fileName)")
+			}
+			file.compileMapFsys()
+		}
+		ISO.importFiles(XGFolders.AutoFSYS.files.filter({  $0.fileType == .fsys }))
+	}
+	
+	class func compileAllMenuFsys() {
+		printg("Compiling Menu fsys...")
+		for file in XGFolders.MenuFSYS.files where file.fileType == .fsys {
+			if verbose {
+				printg("compiling: \(file.fileName)")
+			}
+			file.compileMenuFsys()
+		}
+		ISO.importFiles(XGFolders.MenuFSYS.files.filter({  $0.fileType == .fsys }))
+	}
+	
 	class func compileAllFiles() {
 		
 		prepareForCompilation()
-		
-		importStringTables()
-		importScripts()
-		importRels()
+		compileAllMapFsys()
+		compileAllMenuFsys()
+		importFsys()
 		
 		ISO.importAllFiles()
 	}
 	
 	class func importRels() {
-		for file in XGFolders.Rels.files where file.fileName.contains(".rel") {
+		for file in XGFolders.Rels.files where file.fileType == .rel {
 			
-			printg("importing relocation table: " + file.fileName)
+			if verbose { printg("importing relocation table: " + file.fileName) }
 			
-			let fsysName = file.fileName.replacingOccurrences(of: ".rel", with: ".fsys")
-			let lzssName = file.fileName + ".lzss"
-			
-			let fsysFile = XGFiles.nameAndFolder(fsysName, XGFolders.AutoFSYS)
-			let lzssFile = XGFiles.nameAndFolder(lzssName, XGFolders.LZSS)
-			
-			if fsysFile.exists && lzssFile.exists {
-				let fsys = fsysFile.fsysData
-				fsys.shiftAndReplaceFileWithType(.rel, withFile: lzssFile)
+			let fsysFile = XGFiles.fsys(file.fileName.removeFileExtensions())
+			if fsysFile.exists {
+				fsysFile.fsysData.shiftAndReplaceFileWithType(.rel, withFile: file.compress(), save: true)
 			}
 		}
 	}
 	
 	class func importScripts() {
-		for file in XGFolders.Scripts.files {
+		for file in XGFolders.Scripts.files where file.fileType == .scd {
 			
-			printg("importing script: " + file.fileName)
+			if verbose { printg("importing script: " + file.fileName) }
 			
-			let fsysName = file.fileName.replacingOccurrences(of: ".scd", with: ".fsys")
-			let lzssName = file.fileName + ".lzss"
-			
-			let fsysFile = XGFiles.nameAndFolder(fsysName, XGFolders.AutoFSYS)
-			let lzssFile = XGFiles.nameAndFolder(lzssName, XGFolders.LZSS)
-			
-			if fsysFile.exists && lzssFile.exists {
-				fsysFile.fsysData.shiftAndReplaceFileWithType(.scd, withFile: lzssFile)
+			let fsysFile = XGFiles.fsys(file.fileName.removeFileExtensions())
+			if fsysFile.exists {
+				fsysFile.fsysData.shiftAndReplaceFileWithType(.scd, withFile: file.compress(), save: true)
 			}
 		}
 	}
 	
 	class func importStringTables() {
 		
-		for file in XGFolders.StringTables.files {
+		for file in XGFolders.AutoFSYS.files where file.fileType == .fsys {
 			
-			printg("importing string table: " + file.fileName)
+			if verbose {
+				printg("importing string table: " + file.fileName.removeFileExtensions() + XGFileTypes.msg.fileExtension)
+			}
 			
-			let fsysName = file.fileName.replacingOccurrences(of: ".msg", with: ".fsys")
-			let lzssName = file.fileName + ".lzss"
+			let msgFile = XGFiles.msg(file.fileName.removeFileExtensions())
 			
-			let fsysFile = XGFiles.nameAndFolder(fsysName, XGFolders.AutoFSYS)
-			let lzssFile = XGFiles.nameAndFolder(lzssName, XGFolders.LZSS)
-			
-			if fsysFile.exists && lzssFile.exists {
-				fsysFile.fsysData.shiftAndReplaceFileWithType(.msg, withFile: lzssFile)
+			if msgFile.exists {
+				file.fsysData.shiftAndReplaceFileWithType(.msg, withFile: msgFile.compress(), save: true)
 			}
 		}
 		
@@ -111,6 +122,7 @@ class XGUtility {
 	}
 	
 	class func importTextures() {
+		// into the .gtx file, not into ISO
 		for file in XGFolders.Textures.files {
 			var imageFile : XGFiles!
 			for image in XGFolders.Import.files {
@@ -126,6 +138,7 @@ class XGUtility {
 	}
 	
 	class func exportTextures() {
+		// from .gtx file, not from ISO
 		for file in XGFolders.Textures.files {
 			let filename = file.fileName.removeFileExtensions() + ".png"
 			file.texture.saveImage(file: .nameAndFolder(filename, .Export))
@@ -134,30 +147,61 @@ class XGUtility {
 	
 	class func searchForFsysForFile(file: XGFiles) {
 		let iso = ISO
-		for name in iso.allFileNames where name.contains(".fsys") {
-			let fsys = XGFsys(data: iso.dataForFile(filename: name)!)
+		for name in iso.allFileNames where name.fileExtensions == ".fsys" {
+			let fsys = iso.dataForFile(filename: name)!.fsysData
 			for index in 0 ..< fsys.numberOfEntries {
 				if fsys.fileNames[index].contains(file.fileName.removeFileExtensions()) {
-					printg("fsys: ",name,", index: ", index, ",name: ", fsys.fileNames[index])
+					printg("fsys: ", name, ", index: ", index, ", file type: ", fsys.fileTypeForFile(index: index).fileExtension, ", name: ", fsys.fileNameForFileWithIndex(index: index))
 				}
 			}
 			
 		}
 	}
 	
-	class func searchForFsysForIdentifier(id: UInt32) -> XGFsys? {
+	class func searchForFsysForIdentifier(id: UInt32) -> [XGFsys] {
 		let iso = ISO
-		for name in iso.allFileNames where name.contains(".fsys") {
-			let fsys = XGFsys(data: iso.dataForFile(filename: name)!)
+		var found = [XGFsys]()
+		if verbose {
+			printg("Searching for fsys containing identifier: \(id.hexString())")
+		}
+		for name in iso.allFileNames where name.fileExtensions == ".fsys" {
+			let fsys = iso.dataForFile(filename: name)!.fsysData
 			for index in 0 ..< fsys.identifiers.count {
 				if fsys.identifiers[index] == id {
-					printg("found id: \(id), fsys: ",name,", index: ", index, ",name: ", fsys.fileNames[index])
-					return fsys
+					if verbose {
+						printg("found id: \(id), fsys: ",name,", index: ", index, ", name: ", fsys.fileNames[index])
+					}
+					found += [fsys]
 				}
 			}
 			
 		}
-		return nil
+		return found
+	}
+	
+	class func deleteSuperfluousFiles() {
+		// deletes files that the game doesn't use in order to create space in the ISO for larger fsys files
+		if game == .XD {
+			var substrings = ["ex_","M2_cave","M4","Script_t","test","TEST","carde", "debug", "DNA", "keydisc"]
+			if region != .EU  {
+				substrings += ["_fr.","_ge.","_it."]
+			}
+			for file in ISO.allFileNames {
+				for substring in substrings {
+					if file.contains(substring) {
+						ISO.deleteFileAndPreserve(name: file, save: false)
+					}
+				}
+				for i in 1 ... 7 {
+					let b1Name = "B1_\(i).fsys"
+					if file == b1Name {
+						ISO.deleteFileAndPreserve(name: file, save: false)
+					}
+				}
+			}
+			ISO.save()
+		}
+		
 	}
 	
 	//MARK: - Saving to disk
@@ -165,12 +209,24 @@ class XGUtility {
 		NSKeyedArchiver.archiveRootObject(obj, toFile: file.path)
 	}
 	
-	class func saveData(_ data: Data, toFile file: XGFiles) {
-		try? data.write(to: URL(fileURLWithPath: file.path), options: [.atomic])
+	class func saveData(_ data: Data, toFile file: XGFiles) -> Bool {
+		do {
+			try data.write(to: URL(fileURLWithPath: file.path), options: [.atomic])
+		} catch {
+			return false
+		}
+		return true
 	}
 	
 	class func saveString(_ str: String, toFile file: XGFiles) {
-		saveData(str.data(using: String.Encoding.utf8)!, toFile: file)
+		
+		if let string = str.data(using: String.Encoding.utf8) {
+			if !saveData(string, toFile: file) {
+				printg("Couldn't save string to file: \(file.path)")
+			}
+		} else {
+			printg("Couldn't encode string for file: \(file.path)")
+		}
 	}
 	
 	class func saveJSON(_ json: AnyObject, toFile file: XGFiles) {
@@ -195,16 +251,20 @@ class XGUtility {
 	class func transferStringTableFrom(_ from: XGStringTable, to: XGStringTable) {
 		
 		for s in to.allStrings() {
-			
 			let r = from.stringSafelyWithID(s.id)
-			s.duplicateWithString(r.string).replace()
-			
+			let new = s.duplicateWithString(r.string)
+			new.table = to.file
+			if !to.replaceString(new, alert: false, save: false) {
+				printg("string table transfer failed. the target file was probably too small.")
+				return
+			}
 		}
+		to.save()
 		
 	}
 	
 	class func defaultMoveCategories() {
-		let categories = XGFiles.nameAndFolder("Move Categories.json", .JSON).json as! [Int]
+		let categories = XGFiles.json("Move Categories").json as! [Int]
 		for i in 0 ..< kNumberOfMoves {
 			let move = XGMove(index: i)
 			move.category = XGMoveCategories(rawValue: categories[i]) ?? XGMoveCategories.none
@@ -228,6 +288,10 @@ class XGUtility {
 		}
 		if value <= kNumberOfPokemon {
 			printg("Pokemon: ",XGPokemon.pokemon(value).name.string,"\n")
+			
+			if value > 251 {
+				printg("Pokemon national index: ", XGPokemon.nationalIndex(value).name.string,"\n")
+			}
 		}
 		
 		if value <= kNumberOfAbilities {
@@ -236,11 +300,8 @@ class XGUtility {
 		
 		if value <= kNumberOfItems {
 			printg("Item: ",XGItems.item(value).name.string,"\n")
-		}
-		
-		// Key items
-		if value > kNumberOfItems && value < 0x250 {
-			printg("Item: ",XGItems.item(value - 150).name.string,"\n")
+		} else if value > kNumberOfItems && value < 0x250 {
+			printg("Item scriptIndex: ",XGItems.item(value - 150).name.string,"\n")
 		}
 		
 		if value < kNumberOfTypes {
@@ -257,10 +318,8 @@ class XGUtility {
 			}
 		}
 		
-		if value > 0x1000 {
-			loadAllStrings()
-			printg("String: ",getStringSafelyWithID(id: value),"\n")
-		}
+		loadAllStrings()
+		printg("String: ",getStringSafelyWithID(id: value),"\n")
 		
 		
 	}
@@ -289,24 +348,6 @@ class XGUtility {
 			
 			printg("\(0x300 + (j*2)):\t",item.index,item.name.string,tmName,"\n")
 		}
-		
-	}
-	
-	class func getMartItemAtOffset(_ offset: Int) -> XGItems {
-		
-		let dat = XGFiles.pocket_menu.data
-		
-		return XGItems.item(dat.get2BytesAtOffset(offset))
-		
-	}
-	
-	class func replaceMartItemAtOffset(_ offset: Int, withItem item: XGItems) {
-		
-		let dat = XGFiles.pocket_menu.data
-		
-		dat.replace2BytesAtOffset(offset, withBytes: item.index)
-		
-		dat.save()
 		
 	}
 	
@@ -393,7 +434,7 @@ class XGUtility {
 			return entry.name
 		}
 		let nameLength = names.map { (str : String) -> Int in
-			return str.characters.count
+			return str.length
 			}.max()!
 		
 		for e in 0 ..< entries {
@@ -420,10 +461,10 @@ class XGUtility {
 			return entry.name
 		}
 		var lengths = data.map { ( entry: (name: String, values: [String], spacedLeft: Bool) ) -> Int in
-			return entry.values.map({ (str: String) -> Int in return str.characters.count }).max()!
+			return entry.values.map({ (str: String) -> Int in return str.length }).max()!
 		}
 		for i in 0 ..< names.count {
-			lengths[i] = lengths[i] < names[i].characters.count ? names[i].characters.count : lengths[i]
+			lengths[i] = lengths[i] < names[i].length ? names[i].characters.count : lengths[i]
 		}
 		
 		var header = "\n"
@@ -460,25 +501,4 @@ class XGUtility {
 	
 }
 
-
-/*
-// FOR JETSPLIT --------------------------------------------------
-
-// everything can be shiny
-
-// generate PID to match criteria to load random value
-let dol = XGFiles.dol.data
-dol.replaceWordAtOffset(0x14155C - kDOLtoRAMOffsetDifference, withBytes: 0x3B40FFFF)
-// shiny calc to use fixed TID
-dol.replaceWordAtOffset(0x14416c - kDOLtoRAMOffsetDifference, withBytes: 0x38600000)
-dol.replaceWordAtOffset(0x14af84 - kDOLtoRAMOffsetDifference, withBytes: 0x38600000)
-
-// shadow lugia HUD
-dol.replaceWordAtOffset(0x1118b0 - kDOLtoRAMOffsetDifference, withBytes: kNopInstruction)
-
-dol.save()
-
-
-ISO.importFiles([.dol])
-*/
 

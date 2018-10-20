@@ -19,7 +19,7 @@ class GoDScriptViewController: GoDTableViewController {
 	
 	var scripts : [XGFiles] {
 		return XGFolders.Scripts.files.filter({ (file) -> Bool in
-			return file.fileName.contains(".scd")
+			return file.fileType == .scd
 		}).sorted(by: { (f1, f2) -> Bool in
 			return f1.fileName < f2.fileName
 		})
@@ -110,7 +110,7 @@ class GoDScriptViewController: GoDTableViewController {
 				colour = GoDDesign.colourYellow()
 			case .TheUnder:
 				colour = GoDDesign.colourGrey()
-			case .Unknown:
+			default:
 				colour = GoDDesign.colourWhite()
 			}
 			

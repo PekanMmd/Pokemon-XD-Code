@@ -36,7 +36,7 @@ class GoDCollisionViewController: GoDTableViewController {
 	
 	var cols : [XGFiles] {
 		return XGFolders.Col.files.filter({ (file) -> Bool in
-			return file.fileName.contains(".col")
+			return file.fileType == .col
 		}).sorted(by: { (f1, f2) -> Bool in
 			return f1.fileName < f2.fileName
 		})
@@ -87,7 +87,7 @@ class GoDCollisionViewController: GoDTableViewController {
 		
 		let str = cols[row].fileName
 		let index2 = str.index(str.startIndex, offsetBy: 2)
-		let prefix = str.substring(to: index2)
+		let prefix = str.substring(from: 0, to: 2)
 		
 		let map = XGMaps(rawValue: prefix)
 		
@@ -132,7 +132,7 @@ class GoDCollisionViewController: GoDTableViewController {
 				colour = GoDDesign.colourYellow()
 			case .TheUnder:
 				colour = GoDDesign.colourGrey()
-			case .Unknown:
+			default:
 				colour = GoDDesign.colourWhite()
 			}
 			

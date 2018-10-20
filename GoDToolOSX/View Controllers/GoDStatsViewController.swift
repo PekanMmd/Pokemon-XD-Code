@@ -81,7 +81,7 @@ class GoDStatsViewController: GoDTableViewController {
 			evos[i]!.delegate = self
 		}
 		
-		let tmwidth : NSNumber = (TMsContainer.frame.width - 10) as! NSNumber
+		let tmwidth : NSNumber = (TMsContainer.frame.width - 10) as NSNumber
 		let tmheight : NSNumber = 180
 		let tmdelegate = TMTableDelegate(delegate: self, width: tmwidth)
 		TMTable = GoDTableView(width: tmwidth, rows: kNumberOfTutorMoves + kNumberOfTMs, rowHeight: 30, delegate: tmdelegate, dataSource: tmdelegate)
@@ -93,7 +93,7 @@ class GoDStatsViewController: GoDTableViewController {
 		self.addConstraintAlignCenterX(view1: TMsContainer, view2: TMTable)
 		self.addConstraintAlignCenterY(view1: TMsContainer, view2: TMTable)
 		
-		let lumwidth : NSNumber = (LUMContainer.frame.width - 10) as! NSNumber
+		let lumwidth : NSNumber = (LUMContainer.frame.width - 10) as NSNumber
 		let lumheight : NSNumber = 180
 		let lumdelegate = LUMTableDelegate(delegate: self, width: lumwidth)
 		LUMTable = GoDTableView(width: tmwidth, rows: kNumberOfLevelUpMoves, rowHeight: 30, delegate: lumdelegate, dataSource: lumdelegate)

@@ -443,9 +443,6 @@ class GoDStatsViewController: GoDTableViewController {
 		init(delegate: GoDStatsViewController, width: NSNumber) {
 			super.init()
 			self.TMs = XGTMs.allTMs()
-//			for i in 1 ... kNumberOfTutorMoves {
-//				Tutors.append(XGTMs.tm(i))
-//			}
 			
 			self.width = width
 			self.delegate = delegate
@@ -498,9 +495,7 @@ class GoDStatsViewController: GoDTableViewController {
 			if row >= 0 {
 				if row < 58 {
 					delegate.pokemon.learnableTMs[row]  = !delegate.pokemon.learnableTMs[row]
-				} else {
-//					delegate.pokemon.tutorMoves[row - 58] = !delegate.pokemon.tutorMoves[row - 58]
-				}
+				} 
 			}
 			tableView.reloadData()
 		}

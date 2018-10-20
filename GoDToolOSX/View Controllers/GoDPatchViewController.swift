@@ -8,8 +8,34 @@
 
 import Cocoa
 
-let xdpatches = ["Apply Physical/Special move split","Remove Physical/Special move split","Assign default phys/spec categories to moves", "When a pokémon is KO'd it isn't replaced until the end of the turn","Remove foreign languages from common_rel (very useful if it gets too big to import)","Fix shiny glitch for shadow pokemon","Shadow pokemon can be shiny","Shadow pokemon are never shiny","Shadow pokemon are always shiny","Infinite use TMs", "Always show shadow pokemon natures", "Set Deoxys model to: Normal", "Set Deoxys model to: Attack", "Set Deoxys model to: Defense", "Set Deoxys model to: Speed","Allow female demo starter pokemon","Gen VII critical hit ratios"]
-let colopatches = ["Apply Physical/Special move split","Assign default phys/spec categories to moves", "Delete Battle Mode Data. (highly recommended)", "Allow female starter pokemon","Gen VII critical hit ratios"]
+let xdpatches = [
+	"Apply Physical/Special move split",
+	"Remove Physical/Special move split",
+	"Assign default phys/spec categories to moves",
+	"When a pokémon is KO'd it isn't replaced until the end of the turn",
+	"The HM Flag on moves determines whether it is a shadow move or not",
+	"Remove foreign languages from common_rel (very useful if it gets too big to import)",
+	"Delete unused files (creates much needed space in the ISO)","Fix shiny glitch for shadow pokemon",
+	"Shadow pokemon can be shiny",
+	"Shadow pokemon are never shiny",
+	"Shadow pokemon are always shiny",
+	"Infinite use TMs",
+	"Always show shadow pokemon natures",
+	"Set Deoxys model to: Normal",
+	"Set Deoxys model to: Attack",
+	"Set Deoxys model to: Defense",
+	"Set Deoxys model to: Speed",
+	"Allow female demo starter pokemon",
+	"Gen VII critical hit ratios",
+	"All tutor moves are available from the start"
+]
+let colopatches = [
+	"Apply Physical/Special move split",
+	"Assign default phys/spec categories to moves",
+	"Delete Battle Mode Data. (highly recommended)",
+	"Allow female starter pokemon",
+	"Gen VII critical hit ratios"
+]
 
 
 class GoDPatchViewController: GoDTableViewController {
@@ -21,8 +47,48 @@ class GoDPatchViewController: GoDTableViewController {
     }
 	
 	let patches = game == .XD ? xdpatches : colopatches
-	var funcs = game == .Colosseum ? [#selector(gen4Categories), #selector(defaultCategories), #selector(deleteBattleMode),  #selector(allowFemaleStarters),#selector(gen7CriticalRatios)] :
-		[#selector(gen4Categories), #selector(removeGen4Categories), #selector(defaultCategories), #selector(endOfTurnSwitchIns), #selector(removeLanguages), #selector(fixShinyGlitch), #selector(randomShinyShadows), #selector(neverShinyShadows), #selector(alwaysShinyShadows), #selector(infiniteTMs), #selector(shadowNature), #selector(deoxysN), #selector(deoxysA), #selector(deoxysD), #selector(deoxysS), #selector(allowFemaleStarters),#selector(gen7CriticalRatios)]
+	var funcs = game == .Colosseum ? [
+		#selector(gen4Categories),
+		#selector(defaultCategories),
+		#selector(deleteBattleMode),
+		#selector(allowFemaleStarters),
+		#selector(gen7CriticalRatios)
+		] :
+		[
+			#selector(gen4Categories),
+			#selector(removeGen4Categories),
+			#selector(defaultCategories),
+			#selector(endOfTurnSwitchIns),
+			#selector(shadowHMFlag),
+			#selector(removeLanguages),
+			#selector(deleteUnusedFiles),
+			#selector(fixShinyGlitch),
+			#selector(randomShinyShadows),
+			#selector(neverShinyShadows),
+			#selector(alwaysShinyShadows),
+			#selector(infiniteTMs),
+			#selector(shadowNature),
+			#selector(deoxysN),
+			#selector(deoxysA),
+			#selector(deoxysD),
+			#selector(deoxysS),
+			#selector(allowFemaleStarters),
+			#selector(gen7CriticalRatios),
+			#selector(immediateTutorMoves)
+	]
+	
+	@objc func immediateTutorMoves() {
+		XGDolPatcher.tutorMovesAvailableImmediately()
+	}
+	
+	@objc func shadowHMFlag() {
+		XGAssembly.setShadowMovesUseHMFlag()
+	}
+	
+	@objc func deleteUnusedFiles() {
+		XGUtility.deleteSuperfluousFiles()
+		printg("Delete the files in AutoFSYS with names beginning with 'M2_cave' and 'M4' so they don'y get reimported")
+	}
 	
 	@objc func gen7CriticalRatios() {
 		XGDolPatcher.gen7CritRatios()
@@ -128,7 +194,10 @@ class GoDPatchViewController: GoDTableViewController {
 		if row == -1 {
 			return
 		}
-		self.showActivityView { 
+		if verbose {
+			printg("Selected patch: ", self.patches[row])
+		}
+		self.showActivityView {
 			self.performSelector(onMainThread: self.funcs[row], with: nil, waitUntilDone: true)
 			self.hideActivityView()
 		}

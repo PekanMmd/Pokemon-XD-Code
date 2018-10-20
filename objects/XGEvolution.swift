@@ -19,7 +19,7 @@ class XGEvolution: NSObject, XGDictionaryRepresentable {
 	
 	var evolutionMethod	= XGEvolutionMethods.none
 	@objc var condition		= 0
-	@objc var evolvesInto		= 0
+	@objc var evolvesInto	= 0
 	
 	
 	@objc init(evolutionMethod: Int, condition: Int, evolvedForm: Int) {

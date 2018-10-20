@@ -105,7 +105,7 @@ class XGPokemonStats: NSObject {
 	
 	var species : XGString {
 		get {
-			let file = XGFiles.nameAndFolder("pda_menu.msg", .StringTables)
+			let file = XGFiles.msg("pda_menu")
 			return XGStringTable(file: file, startOffset: 0, fileSize: file.fileSize).stringSafelyWithID(self.speciesNameID)
 		}
 	}
@@ -135,7 +135,7 @@ class XGPokemonStats: NSObject {
 	}
 	
 	var face : Int {
-		return XGFiles.common_rel.data.get4BytesAtOffset(CommonIndexes.PokefaceTextures.startOffset + (faceIndex * 8) + 4).int
+		return XGFiles.common_rel.data.getWordAtOffset(CommonIndexes.PokefaceTextures.startOffset + (faceIndex * 8) + 4).int
 	}
 	
 	
@@ -148,8 +148,8 @@ class XGPokemonStats: NSObject {
 		self.startOffset	= CommonIndexes.PokemonStats.startOffset + ( kSizeOfPokemonStats * index )
 		self.index			= index
 		
-		self.nameID			= rel.get4BytesAtOffset(startOffset + kNameIDOffset).int
-		self.speciesNameID  = rel.get4BytesAtOffset(startOffset + kSpeciesNameIDOffset).int
+		self.nameID			= rel.getWordAtOffset(startOffset + kNameIDOffset).int
+		self.speciesNameID  = rel.getWordAtOffset(startOffset + kSpeciesNameIDOffset).int
 		self.cryIndex		= rel.get2BytesAtOffset(startOffset + kPokemonCryIndexOffset)
 		self.modelIndex		= rel.get2BytesAtOffset(startOffset + kPokemonModelIndexOffset)
 		self.faceIndex		= rel.get2BytesAtOffset(startOffset + kPokemonFaceIndexOffset)

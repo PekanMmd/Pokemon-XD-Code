@@ -23,7 +23,7 @@ func loadAllStrings() {
 		}
 		
 		XGFolders.StringTables.map{ (file: XGFiles) -> Void in
-			if file.fileName.fileExtensions.contains(".msg") {
+			if file.fileType == .msg {
 				let table = file.stringTable
 				if table.numberOfEntries > 0 {
 					allStringTables += [table]

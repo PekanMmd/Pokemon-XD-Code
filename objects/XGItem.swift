@@ -86,14 +86,14 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 		price				= data.get2BytesAtOffset(start + kItemPriceOffset)
 		couponPrice			= data.get2BytesAtOffset(start + kItemCouponCostOffset)
 		holdItemID			= data.getByteAtOffset(start + kItemBattleHoldItemIDOffset)
-		nameID				= data.get4BytesAtOffset(start + kItemNameIDOffset).int
-		descriptionID		= data.get4BytesAtOffset(start + kItemDescriptionIDOffset).int
+		nameID				= data.getWordAtOffset(start + kItemNameIDOffset).int
+		descriptionID		= data.getWordAtOffset(start + kItemDescriptionIDOffset).int
 		parameter			= data.getByteAtOffset(start + kItemParameterOffset)
 		canBeHeld			= data.getByteAtOffset(start + kItemCantBeHeldOffset) == 0
 		friendshipEffects	= data.getByteStreamFromOffset(start + kFirstFriendshipEffectOffset, length: kNumberOfFriendshipEffects)
 		
-		function1			= data.get4BytesAtOffset(start + kItemFunctionInRAMPointerOffset1)
-		function2			= data.get4BytesAtOffset(start + kItemFunctionInRAMPointerOffset2)
+		function1			= data.getWordAtOffset(start + kItemFunctionInRAMPointerOffset1)
+		function2			= data.getWordAtOffset(start + kItemFunctionInRAMPointerOffset2)
 		
 	}
 	

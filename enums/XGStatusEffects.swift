@@ -107,7 +107,7 @@ enum XGStatusEffects: Int {
 	}
 	
 	var nameID : Int {
-		return Int(XGFiles.dol.data.get4BytesAtOffset(startOffset + kStatusEffectNameIDOffset))
+		return Int(XGFiles.dol.data.getWordAtOffset(startOffset + kStatusEffectNameIDOffset))
 	}
 	
 	var duration : Int {

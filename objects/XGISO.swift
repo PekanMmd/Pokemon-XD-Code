@@ -51,9 +51,11 @@ class XGISO: NSObject {
 	@objc var allFileNames = [String]()
 	@objc var filesOrdered = [String]()
 	
-	@objc var data = XGFiles.iso.data
+	@objc var data : XGMutableData {
+		return XGFiles.iso.data
+	}
 	
-	@objc let TOCFirstStringOffset = Int(XGFiles.toc.data.get4BytesAtOffset(kTOCNumberEntriesOffset)) * kTOCEntrySize
+	@objc let TOCFirstStringOffset = XGFiles.toc.data.get4BytesAtOffset(kTOCNumberEntriesOffset) * kTOCEntrySize
 	
 	override init() {
 		super.init()
@@ -61,16 +63,18 @@ class XGISO: NSObject {
 		printg("Initialising ISO...")
 		
 		if !self.data.file.exists {
-			printg("ISO file doesn't exist. Please place your \(game == .XD ? "Pokemon XD" : "Pokemon Colosseum") file in the folder \(XGFolders.ISO.path) and name it \(self.data.file.fileName)")
+			printg("ISO file doesn't exist. Please place your \(game == .XD ? "Pokemon XD" : "Pokemon Colosseum") file in the folder \(XGFolders.ISO.path) and name it \(XGFiles.iso.fileName)")
 		}
 		
 		printg("ISO size: \(self.data.length.hexString())")
 		
-		let DOLStart = Int(self.data.get4BytesAtOffset(kDOLStartOffsetLocation))
-		let TOCStart = Int(self.data.get4BytesAtOffset(kTOCStartOffsetLocation))
-		let TOCLength = Int(self.data.get4BytesAtOffset(kTOCFileSizeLocation))
+		let DOLStart  = self.data.get4BytesAtOffset(kDOLStartOffsetLocation)
+		let TOCStart  = self.data.get4BytesAtOffset(kTOCStartOffsetLocation)
+		let TOCLength = self.data.get4BytesAtOffset(kTOCFileSizeLocation)
 		
-		printg("DOL start: \(DOLStart.hexString()), TOC start: \(TOCStart.hexString()), TOC size: \(TOCLength.hexString())")
+		if verbose {
+			printg("DOL start: \(DOLStart.hexString()), TOC start: \(TOCStart.hexString()), TOC size: \(TOCLength.hexString())")
+		}
 		
 		fileLocations["Start.dol"] = DOLStart
 		fileLocations["Game.toc"] = TOCStart
@@ -83,7 +87,7 @@ class XGISO: NSObject {
 		var size = kDolHeaderSize
 		for i in 0 ..< kDolSectionSizesCount {
 			let offset = DOLStart + (i * 4) + kDolSectionSizesStart
-			size += Int(self.data.get4BytesAtOffset(offset))
+			size += Int(self.data.getWordAtOffset(offset))
 		}
 		fileSizes["Start.dol"] = size
 		printg("DOL size: \(size.hexString())")
@@ -96,11 +100,11 @@ class XGISO: NSObject {
 			
 			if !folder {
 				
-				let nameOffset = Int(tocData.get4BytesAtOffset(i))
-				let fileOffset = Int(tocData.get4BytesAtOffset(i + 4))
-				let fileSize   = Int(tocData.get4BytesAtOffset(i + 8))
+				let nameOffset = Int(tocData.getWordAtOffset(i))
+				let fileOffset = Int(tocData.getWordAtOffset(i + 4))
+				let fileSize   = Int(tocData.getWordAtOffset(i + 8))
 				
-				let fileName = getStringAtOffset(nameOffset).string
+				let fileName = getStringAtOffset(nameOffset)
 				
 				allFileNames.append(fileName)
 				fileLocations[fileName] = fileOffset
@@ -125,27 +129,12 @@ class XGISO: NSObject {
 		printg("ISO initialised.")
 	}
 	
-	@objc func updateISO() {
-		
-		var files = XGFolders.FSYS.files ?? [XGFiles]()
-		files.append(.dol)
-		importFiles(files)
-		
-	}
-	
-	@objc func importRandomiserFiles() {
-		var files = XGFolders.FSYS.files ?? [XGFiles]()
-		files.append(.dol)
-		importFiles(files)
-	}
-	
 	@objc func importAllFiles() {
 		var files = XGFolders.FSYS.files ?? [XGFiles]()
 		files += XGFolders.AutoFSYS.files ?? [XGFiles]()
 		files += XGFolders.MenuFSYS.files ?? [XGFiles]()
 		files.append(.dol)
 		importFiles(files)
-//		importToc(saveWhenDone: true)
 	}
 	
 	@objc func importDol() {
@@ -154,7 +143,7 @@ class XGISO: NSObject {
 	
 	@objc func importToc(saveWhenDone save: Bool) {
 		
-		let TOCStart = Int(self.data.get4BytesAtOffset(kTOCStartOffsetLocation))
+		let TOCStart = self.data.get4BytesAtOffset(kTOCStartOffsetLocation)
 		let toc = XGFiles.toc.data.byteStream
 		self.data.replaceBytesFromOffset(TOCStart, withByteStream: toc)
 		if save {
@@ -162,65 +151,56 @@ class XGISO: NSObject {
 		}
 		
 	}
-
+	
 	func importFiles(_ fileList: [XGFiles]) {
 		
-		let isodata = self.data
-		
-		for file in fileList {
+		if increaseFileSizes {
+			for file in fileList {
+				printg("importing file to ISO: " + file.fileName)
+				self.shiftAndReplaceFileEfficiently(file)
+			}
+			self.save()
+		} else {
 			
-			let filename = file.fileName
-			let data = file.data
+			let isodata = self.data
 			
-			printg("importing file to ISO: " + filename)
-			
-			let start = self.locationForFile(filename)
-			let oldsize  = self.sizeForFile(filename)
-			let newsize = data.length
-			
-			if (start == nil) || (oldsize == nil) {
-				printg("file not found in ISO's .toc: " + filename)
-				continue
+			for file in fileList {
+				
+				let filename = file.fileName
+				let data = file.data
+				
+				
+				printg("importing file to ISO: " + filename)
+				
+				let start = self.locationForFile(filename)
+				let oldsize  = self.sizeForFile(filename)
+				let newsize = data.length
+				
+				if (start == nil) || (oldsize == nil) {
+					printg("file not found in ISO's .toc: " + filename)
+					continue
+				}
+				
+				if oldsize! != newsize {
+					printg("file size doesn't match: " + filename)
+					printg("Skipping file. In order to include this file, enable file size increases.")
+					continue
+				}
+				
+				var byteStream = data.byteStream
+				if newsize < oldsize! {
+					byteStream += [Int](repeatElement(0, count: oldsize! - newsize))
+				}
+				
+				isodata.replaceBytesFromOffset(start!, withByteStream: byteStream)
 			}
 			
-			if oldsize! < newsize {
-				printg("file too large: " + filename)
-				continue
-			}
-			
-			var byteStream = data.byteStream
-			if newsize < oldsize! {
-				byteStream += [Int](repeatElement(0, count: oldsize! - newsize))
-			}
-			
-			isodata.replaceBytesFromOffset(start!, withByteStream: byteStream)
+			isodata.save()
 		}
-		
-		isodata.save()
 	}
 	
-	fileprivate func getStringAtOffset(_ offset: Int) -> XGString {
-		
-		var currentOffset = offset + TOCFirstStringOffset
-		
-		var currChar = 0x0
-		var nextChar = 0x1
-		
-		let string = XGString(string: "", file: nil, sid: nil)
-		
-		while (nextChar != 0x00) {
-			
-			currChar = tocData.getByteAtOffset(currentOffset)
-			currentOffset += 1
-			
-			string.append(.unicode(currChar))
-			
-			nextChar = tocData.getByteAtOffset(currentOffset)
-			
-		}
-		
-		return string
-		
+	fileprivate func getStringAtOffset(_ offset: Int) -> String {
+		return tocData.getStringAtOffset(offset + TOCFirstStringOffset)
 	}
 	
 	func locationForFile(_ fileName: String) -> Int? {
@@ -261,7 +241,7 @@ class XGISO: NSObject {
 		
 	}
 	
-	@objc func replaceDataForFile(filename: String, withData data: XGMutableData) {
+	@objc func replaceDataForFile(filename: String, withData data: XGMutableData, saveWhenDone save: Bool) {
 		
 		let start = self.locationForFile(filename)
 		let oldsize  = self.sizeForFile(filename)
@@ -287,12 +267,55 @@ class XGISO: NSObject {
 		
 		let isodata = self.data
 		isodata.replaceBytesFromOffset(start!, withByteStream: data.byteStream)
-		isodata.save()
+		
+		if save {
+			isodata.save()
+		}
 		
 	}
 	
+	func shiftAndReplaceFileEfficiently(_ file: XGFiles) {
+		printg("shifting files and replacing file:", file.fileName)
+		if self.allFileNames.contains(file.fileName) {
+			self.shiftAndReplaceFileEfficiently(name: file.fileName, withData: file.data)
+		} else {
+			printg("file not found:", file.fileName)
+		}
+	}
+	
+	@objc func shiftAndReplaceFileEfficiently(name: String, withData newData: XGMutableData) {
+		
+		let oldSize = sizeForFile(name)!
+		var shift = newData.length - oldSize
+		let index = orderedIndexForFile(name: name)
+		
+		if shift > 0 {
+			for file in filesOrdered {
+				self.shiftUpFile(name: file)
+			}
+			
+			while shift % 16 != 0 {
+				shift += 1
+			}
+			let rev = (index + 1) ..< allFileNames.count
+			for i in rev.reversed() {
+				let file = filesOrdered[i]
+				if !self.shiftDownFile(name: file, byOffset: shift) {
+					printg("ISO doesn't have enough space for file: \(name). Aborting replacement. Try deleting unnecessary files from the ISO.")
+					return
+				}
+			}
+		}
+		
+		self.replaceDataForFile(filename: name, withData: newData, saveWhenDone: false)
+		
+		if shift > 0 {
+			self.importToc(saveWhenDone: false)
+		}
+	}
+	
 	func shiftAndReplaceFile(_ file: XGFiles) {
-		printg("shift and replacing file:", file.fileName)
+		printg("shifting files and replacing file:", file.fileName)
 		if self.allFileNames.contains(file.fileName) {
 			self.shiftAndReplaceFile(name: file.fileName, withData: file.data)
 		} else {
@@ -318,7 +341,23 @@ class XGISO: NSObject {
 			}
 		}
 		
-		self.replaceDataForFile(filename: name, withData: newData)
+		if index < allFileNames.count - 1 {
+			let nextFile = filesOrdered[index + 1]
+			if let availableEnd = self.locationForFile(nextFile) {
+				if availableEnd - self.locationForFile(name)! < 16 {
+					printg("ISO doesn't have enough space for file: \(name). Aborting replacement. Try deleting unnecessary files from the ISO.")
+					return
+				}
+			} else {
+				printg("Unable to calculate free space for file shift and replacement. Aborting replacement.")
+				return
+			}
+		} else {
+			printg("This file cannot be shift replaced as it is too risky. \(name) is the last file in the ISO.")
+			return
+		}
+		
+		self.replaceDataForFile(filename: name, withData: newData, saveWhenDone: false)
 		
 		if shift {
 			for i in 0 ..< self.allFileNames.count {
@@ -345,7 +384,7 @@ class XGISO: NSObject {
 		eraseData(start: start!, length: size!)
 	}
 	
-	@objc func eraseData(start: Int, length: Int) {
+	@objc private func eraseData(start: Int, length: Int) {
 		self.data.nullBytes(start: start, length: length)
 	}
 	
@@ -371,7 +410,7 @@ class XGISO: NSObject {
 		printg("deleted iso file:", name)
 	}
 	
-	@objc func setSize(size: Int, forFile name: String) {
+	@objc private func setSize(size: Int, forFile name: String) {
 		let start = fileDataOffsets[name]
 		if start != nil {
 			let toc = XGFiles.toc.data
@@ -381,7 +420,7 @@ class XGISO: NSObject {
 		fileSizes[name] = size
 	}
 	
-	@objc func setStartOffset(offset: Int, forFile name: String) {
+	@objc private func setStartOffset(offset: Int, forFile name: String) {
 		let start = fileDataOffsets[name]
 		if start != nil {
 			let toc = XGFiles.toc.data
@@ -394,7 +433,7 @@ class XGISO: NSObject {
 		
 	}
 	
-	@objc func orderedIndexForFile(name: String) -> Int {
+	@objc private func orderedIndexForFile(name: String) -> Int {
 		for i in 0 ..< allFileNames.count {
 			if filesOrdered[i] == name {
 				return i
@@ -403,7 +442,7 @@ class XGISO: NSObject {
 		return -1
 	}
 	
-	@objc func shiftUpFile(name: String) {
+	@objc private func shiftUpFile(name: String) {
 		// used to push a file closer to the file above it and create more space for other files
 		var previousEnd = 0x0
 		let index = orderedIndexForFile(name: name)
@@ -413,7 +452,7 @@ class XGISO: NSObject {
 		}
 		
 		if index == 0 {
-			previousEnd = self.data.get4BytesAtOffset(kISOFirstFileOffsetLocation).int
+			previousEnd = self.data.get4BytesAtOffset(kISOFirstFileOffsetLocation)
 		} else {
 			let previous = filesOrdered[index - 1]
 			previousEnd = self.locationForFile(previous)! + sizeForFile(previous)!
@@ -428,7 +467,7 @@ class XGISO: NSObject {
 		
 	}
 	
-	@objc func shiftDownFile(name: String) {
+	@objc private func shiftDownFile(name: String) {
 		// used to push a file closer to the file below it and create more space for other files
 		let size  = sizeForFile(name)!
 		let index = orderedIndexForFile(name: name)
@@ -452,13 +491,38 @@ class XGISO: NSObject {
 		
 	}
 	
+	@objc private func shiftDownFile(name: String, byOffset by: Int) -> Bool {
+		// used to push a file closer to the file below it and create more space for other files
+		let size  = sizeForFile(name)!
+		let index = orderedIndexForFile(name: name)
+		
+		if orderedIndexForFile(name: "bg2thumbcode.bin") >= index || orderedIndexForFile(name: "stm_bgm_00seaside32.fsys") <= index {
+			return false
+		}
+		
+		if by % 16 != 0 {
+			printg("Attempted to shift down file \(name) by \(by) bytes but offset must be a multiple of 16 for alignment.")
+			return false
+		}
+		
+		let nextStart = index == allFileNames.count - 1 ? self.data.length : locationForFile(filesOrdered[index + 1])!
+		let start = locationForFile(name)! + by
+		
+		if nextStart > start + size + 0x10 {
+			self.moveFile(name: name, toOffset: start)
+		}
+		return true
+	}
+	
 	@objc func moveFile(name: String, toOffset startOffset: Int) {
 		
 		if startOffset == locationForFile(name)! {
 			return
 		}
 		
-		printg("Moving iso file:", name, "to:", startOffset.hexString())
+		if verbose {
+			printg("Moving iso file:", name, "to:", startOffset.hexString())
+		}
 		
 		let bytes = self.dataForFile(filename: name)!.byteStream
 		
@@ -469,8 +533,11 @@ class XGISO: NSObject {
 	}
 	
 	@objc func save() {
-		printg("saving iso...")
+		if verbose {
+			printg("saving iso...")
+		}
 		self.data.save()
+		printg("saved iso!")
 	}
 	
 	@objc class func extractTOC() -> XGMutableData {
@@ -480,8 +547,8 @@ class XGISO: NSObject {
 		//let TOCStart = 0x442100
 		//let TOCLength = 0x15958
 		
-		let TOCStart = Int(iso.get4BytesAtOffset(kTOCStartOffsetLocation))
-		let TOCLength = Int(iso.get4BytesAtOffset(kTOCFileSizeLocation))
+		let TOCStart = Int(iso.getWordAtOffset(kTOCStartOffsetLocation))
+		let TOCLength = Int(iso.getWordAtOffset(kTOCFileSizeLocation))
 		
 		let bytes = iso.getCharStreamFromOffset(TOCStart, length: TOCLength)
 		
@@ -494,7 +561,7 @@ class XGISO: NSObject {
 			let start = self.locationForFile(file)!
 			
 			let details = self.data.get4BytesAtOffset(start + 0x60) // first fsys file details pointer
-			let identifier = self.data.get4BytesAtOffset(start + Int(details))
+			let identifier = self.data.getWordAtOffset(start + details)
 			
 			if identifier == id {
 				return self.dataForFile(filename: file)!.fsysData
@@ -506,12 +573,12 @@ class XGISO: NSObject {
 	
 	@objc func extractAutoFSYS() {
 		
-		if region != .EU {
-			for file in self.autoFsysList {
+		if region != .EU { // errrr... why did I write this?! leaving in for now just in case.
+			for file in ISO.allFileNames where XGMaps(rawValue: file.substring(from: 0, to: 2)) != nil {
 				let xgf = XGFiles.nameAndFolder(file, .AutoFSYS)
 				if !xgf.exists {
 					if verbose {
-						printg("extracting common file: \(xgf.fileName)")
+						printg("extracting auto fsys file: \(xgf.fileName)")
 					}
 					if let data = dataForFile(filename: file) {
 						data.file = xgf
@@ -525,11 +592,14 @@ class XGISO: NSObject {
 	}
 	
 	@objc func extractMenuFSYS() {
-		for file in self.menuFsysList {
+		let menus = self.allFileNames.filter { (s) -> Bool in
+			return s.contains("menu") && s.contains(".fsys")
+		}
+		for file in self.menuFsysList + menus {
 			let xgf = XGFiles.nameAndFolder(file, .MenuFSYS)
 			if !xgf.exists {
 				if verbose {
-					printg("extracting common file: \(xgf.fileName)")
+					printg("extracting menu fsys file: \(xgf.fileName)")
 				}
 				if let data = dataForFile(filename: file) {
 					data.file = xgf
@@ -574,23 +644,41 @@ class XGISO: NSObject {
 	}
 	
 	@objc func extractCommon() {
+		if verbose {
+			printg("extracting: \(XGFiles.common_rel.fileName)")
+		}
+		if !XGFiles.fsys("common").exists {
+			extractFSYS()
+		}
 		if !XGFiles.common_rel.exists {
-			let rel = XGFiles.fsys("common.fsys").fsysData.decompressedDataForFileWithIndex(index: 0)!
+			let rel = XGFiles.fsys("common").fsysData.decompressedDataForFileWithIndex(index: 0)!
 			rel.file = .common_rel
 			rel.save()
 		}
 		
+		if verbose {
+			printg("extracting: \(XGFiles.tableres2.fileName)")
+		}
 		if game == .XD {
+			if !XGFiles.fsys("common_dvdeth").exists {
+				extractFSYS()
+			}
 			if !XGFiles.tableres2.exists {
-				let tableres2 = XGFiles.fsys("common_dvdeth.fsys").fsysData.decompressedDataForFileWithIndex(index: 0)!
+				let tableres2 = XGFiles.fsys("common_dvdeth").fsysData.decompressedDataForFileWithIndex(index: 0)!
 				tableres2.file = .tableres2
 				tableres2.save()
 			}
 		}
 		
-		if !XGFiles.nameAndFolder("pocket_menu.rel", .Common).exists {
-			let pocket = XGFiles.nameAndFolder("pocket_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithIndex(index: 0)!
-			pocket.file = .nameAndFolder("pocket_menu.rel", .Common)
+		if verbose {
+			printg("extracting: \(XGFiles.pocket_menu.fileName)")
+		}
+		if !XGFiles.fsys("pocket_menu").exists {
+			extractMenuFSYS()
+		}
+		if !XGFiles.pocket_menu.exists {
+			let pocket = XGFiles.fsys("pocket_menu").fsysData.decompressedDataForFileWithIndex(index: 0)!
+			pocket.file = .pocket_menu
 			pocket.save()
 		}
 		
@@ -598,15 +686,15 @@ class XGISO: NSObject {
 	
 	@objc func extractAutoStringTables() {
 		
-		if region != .EU {
+		if region != .EU { // umm... why did I write this? Will leave it for now just in case.
 			
-			for file in XGFolders.AutoFSYS.filenames where file.fileExtensions == ".fsys" {
-				let msg = XGFiles.stringTable(file.replacingOccurrences(of: ".fsys", with: ".msg"))
+			for file in XGFolders.AutoFSYS.files where file.fileType == .fsys {
+				let msg = XGFiles.msg(file.fileName.removeFileExtensions())
 				if !msg.exists {
 					if verbose {
 						printg("extracting msg: \(msg.fileName)")
 					}
-					let fsys = XGFiles.nameAndFolder(file, .AutoFSYS).fsysData
+					let fsys = file.fsysData
 					let data = fsys.decompressedDataForFileWithFiletype(type: .msg)
 					if let d = data {
 						d.file = msg
@@ -623,8 +711,8 @@ class XGISO: NSObject {
 	}
 	
 	@objc func extractScripts() {
-		for file in XGFolders.AutoFSYS.files where autoFsysList.contains(file.fileName) {
-			let scd = XGFiles.script(file.fileName.replacingOccurrences(of: ".fsys", with: ".scd"))
+		for file in XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files where file.fileType == .fsys {
+			let scd = XGFiles.scd(file.fileName.removeFileExtensions())
 			if !scd.exists {
 				if verbose {
 					printg("extracting scd: \(scd.fileName)")
@@ -640,25 +728,24 @@ class XGISO: NSObject {
 	}
 	
 	@objc func extractRels() {
-		for file in XGFolders.AutoFSYS.files where autoFsysList.contains(file.fileName) {
-			let rel = XGFiles.rel(file.fileName.replacingOccurrences(of: ".fsys", with: ".rel"))
+		for file in XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files where file.fileType == .fsys {
+			let rel = XGFiles.rel(file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension)
 			if !rel.exists {
 				if verbose {
 					printg("extracting rel: \(rel.fileName)")
 				}
 				let fsys = file.fsysData
-				let data = fsys.decompressedDataForFileWithFiletype(type: .rel)
-				if let d = data {
-					d.file = rel
-					d.save()
+				if let data = fsys.decompressedDataForFileWithFiletype(type: .rel) {
+					data.file = rel
+					data.save()
 				}
 			}
 		}
 	}
 	
 	@objc func extractCols() {
-		for file in XGFolders.AutoFSYS.files where autoFsysList.contains(file.fileName) {
-			let col = XGFiles.col(file.fileName.replacingOccurrences(of: ".fsys", with: ".col"))
+		for file in XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files where file.fileType == .fsys {
+			let col = XGFiles.col(file.fileName.removeFileExtensions() + XGFileTypes.col.fileExtension)
 			if !col.exists {
 				if verbose {
 					printg("extracting col: \(col.fileName)")
@@ -675,61 +762,29 @@ class XGISO: NSObject {
 	
 	@objc func extractDOL() {
 		if !XGFiles.dol.exists {
-			let dol = dataForFile(filename: "Start.dol")!
+			let dol = dataForFile(filename: XGFiles.dol.fileName)!
 			dol.file = .dol
 			dol.save()
 		}
 	}
 	
-	@objc class func extractRandomiserFiles() {
-		extractTOC()
-		let iso = XGISO()
-		iso.extractDOL()
-		iso.extractFSYS()
-		iso.extractMenuFSYS()
-		iso.extractDecks()
-		iso.extractSpecificStringTables()
-		
-		if !XGFiles.common_rel.exists {
-			iso.extractCommon()
-			
-			if XGFiles.common_rel.data.get4BytesAtOffset(0x7e764) != 0x002d0000 {
-				XGDolPatcher.zeroForeignStringTables()
-			}
-			
-		}
-		
-		// for pokespots
-		for name in ["M2_guild_1F_2.fsys"] {
-			let file = XGFiles.nameAndFolder(name, .AutoFSYS)
-			if !file.exists {
-				let data = iso.dataForFile(filename: name)!
-				data.file = file
-				data.save()
-			}
-		}
-		
-		iso.extractScripts()
-	}
-	
 	 @objc class func extractAllFiles() {
-		let iso = XGISO()
 		printg("extracting: Start.dol")
-		iso.extractDOL()
+		ISO.extractDOL()
 		printg("extracting: FSYS archives")
-		iso.extractAllFSYS()
+		ISO.extractAllFSYS()
 		printg("extracting: common")
-		iso.extractCommon()
+		ISO.extractCommon()
 		printg("extracting: decks")
-		iso.extractDecks()
+		ISO.extractDecks()
 		printg("extracting: string tables")
-		iso.extractStringTables()
+		ISO.extractStringTables()
 		printg("extracting: scripts")
-		iso.extractScripts()
+		ISO.extractScripts()
 		printg("extracting: relocatable files")
-		iso.extractRels()
+		ISO.extractRels()
 		printg("extracting: collision data")
-		iso.extractCols()
+		ISO.extractCols()
 	}
 	
 }

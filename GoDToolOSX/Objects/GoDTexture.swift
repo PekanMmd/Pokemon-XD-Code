@@ -96,8 +96,8 @@ class GoDTexture: NSObject {
 		self.width = data.get2BytesAtOffset(startOffset + kTextureWidthOffset)
 		self.height = data.get2BytesAtOffset(startOffset + kTextureHeightOffset)
 		self.BPP = data.getByteAtOffset(startOffset + kTextureBPPOffset)
-		self.textureStart = startOffset + Int(data.get4BytesAtOffset(startOffset + kTexturePointerOffset))
-		self.paletteStart = startOffset + Int(data.get4BytesAtOffset(startOffset + kPalettePointerOffset))
+		self.textureStart = startOffset + Int(data.getWordAtOffset(startOffset + kTexturePointerOffset))
+		self.paletteStart = startOffset + Int(data.getWordAtOffset(startOffset + kPalettePointerOffset))
 		let formatIndex = data.getByteAtOffset(startOffset + kTextureFormatOffset)
 		self.format = GoDTextureFormats(rawValue: formatIndex) ?? .C8
 		self.paletteFormat = data.getByteAtOffset(startOffset + kPaletteFormatOffset)

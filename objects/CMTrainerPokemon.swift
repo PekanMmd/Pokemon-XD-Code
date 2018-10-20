@@ -108,7 +108,7 @@ class XGTrainerPokemon : NSObject {
 		let spec		= data.get2BytesAtOffset(start + kPokemonSpeciesOffset)
 		species			= XGPokemon.pokemon(spec)
 		level			= data.getByteAtOffset(start + kPokemonLevelOffset)
-		nameID			= data.get4BytesAtOffset(start + kPokemonNameIDOffset).int
+		nameID			= data.getWordAtOffset(start + kPokemonNameIDOffset).int
 		
 		shadowID		= data.getByteAtOffset(start + kPokemonShadowIDOffset)
 		

@@ -143,9 +143,9 @@ class XGBattleCD: NSObject {
 		
 		self.p1TID = data.get2BytesAtOffset(startOffset + kBattleCDPlayer1TrainerIDOffset)
 		
-		self.descriptionID = data.get4BytesAtOffset(startOffset + kBattleCDDescriptionIDOffset).int
-		self.conditionsID = data.get4BytesAtOffset(startOffset + kBattleCDConditionDescriptionIDOffset).int
-		self.conditionsBoldID = data.get4BytesAtOffset(startOffset + kBattleCDBoldConditionDescriptionIDOffset).int
+		self.descriptionID = data.getWordAtOffset(startOffset + kBattleCDDescriptionIDOffset).int
+		self.conditionsID = data.getWordAtOffset(startOffset + kBattleCDConditionDescriptionIDOffset).int
+		self.conditionsBoldID = data.getWordAtOffset(startOffset + kBattleCDBoldConditionDescriptionIDOffset).int
 		
 		
 	}

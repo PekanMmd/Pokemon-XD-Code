@@ -28,7 +28,7 @@ let kPokemonGenRandomOffset = 0x1F // If value is set to 1 then the pokemon is g
 let kPokemonshinynessOffset = 0x1C
 let kPokemonPriority2Offset	= 0x1F
 
-let isShinyAvailable = XGFiles.dol.data.get4BytesAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference) == 0xa0db001c
+let isShinyAvailable = XGFiles.dol.data.getWordAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference) == 0xa0db001c
 
 let kSizeOfShadowData		= 0x18
 
@@ -102,8 +102,11 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 			dictRep["item"] = self.item.dictionaryRepresentation as AnyObject?
 			dictRep["nature"] = self.nature.dictionaryRepresentation as AnyObject?
 			dictRep["gender"] = self.gender.dictionaryRepresentation as AnyObject?
-//			dictRep["shinyness"] = self.shinyness.dictionaryRepresentation as AnyObject?
 			
+			if isShinyAvailable {
+				dictRep["shinyness"] = self.shinyness.dictionaryRepresentation as AnyObject?
+			}
+				
 			var EVsArray = [AnyObject]()
 			for a in EVs {
 				EVsArray.append(a as AnyObject)
@@ -158,8 +161,10 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 			dictRep["item"] = self.item.name.string as AnyObject?
 			dictRep["nature"] = self.nature.string as AnyObject?
 			dictRep["gender"] = self.gender.string as AnyObject?
-//			dictRep["shinyness"] = self.shinyness.string as AnyObject?
-			
+			if isShinyAvailable {
+				dictRep["shinyness"] = self.shinyness.string as AnyObject?
+			}
+				
 			var EVsDict = [String : AnyObject]()
 			EVsDict["HP"] = EVs[0] as AnyObject?
 			EVsDict["attack"] = EVs[1] as AnyObject?
@@ -257,7 +262,6 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 			shadowCatchRate = data.getByteAtOffset(start + kShadowCatchRateOFfset)
 			shadowCounter	= data.get2BytesAtOffset(start + kShadowCounterOffset)
 			shadowFleeValue = data.getByteAtOffset(start + kFleeAfterBattleOffset)
-//			level			= data.getByteAtOffset(start + kShadowLevelOffset)
 			ShadowDataInUse	= data.getByteAtOffset(start + kShadowInUseFlagOffset) == 0x80
 			
 			shadowAggression = data.getByteAtOffset(start + kShadowAggressionOffset)

@@ -10,6 +10,7 @@ import Foundation
 
 enum XGTutorFlags : Int, XGDictionaryRepresentable {
 	
+	// value seems to be story flag divided by 10
 	case immediately		 = 0x01
 	case pyriteVisited		 = 0x24
 	case phenacVisited		 = 0x32

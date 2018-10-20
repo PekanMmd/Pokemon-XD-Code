@@ -95,11 +95,11 @@ enum XGTrainerModels : Int, XGDictionaryRepresentable {
 	
 	var pkxModelIdentifier : UInt32 {
 		let dol = XGFiles.dol.data
-		return dol.get4BytesAtOffset(kFirstTrainerPKXIdentifierOffset + (self.rawValue * 8) + kModelDictionaryModelOffset)
+		return dol.getWordAtOffset(kFirstTrainerPKXIdentifierOffset + (self.rawValue * 8) + kModelDictionaryModelOffset)
 	}
 	
 	var pkxFSYS : XGFsys? {
-		return XGISO().getPKXModelWithIdentifier(id: self.pkxModelIdentifier)
+		return ISO.getPKXModelWithIdentifier(id: self.pkxModelIdentifier)
 	}
 	
 	var pkxData : XGMutableData? {
@@ -109,6 +109,13 @@ enum XGTrainerModels : Int, XGDictionaryRepresentable {
 			return fsys!.decompressedDataForFileWithIndex(index: 0)
 		}
 		
+		return nil
+	}
+	
+	var pkxName : String? {
+		if let fsys = pkxFSYS {
+			return fsys.fileName.replacingOccurrences(of: "pkx_", with: "").removeFileExtensions()
+		}
 		return nil
 	}
 	

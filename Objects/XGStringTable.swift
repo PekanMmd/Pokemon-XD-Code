@@ -164,8 +164,8 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 		for _ in 0 ..< numberOfEntries {
 			
-			var id = stringTable.get4BytesAtOffset(currentOffset).int
-			let offset = stringTable.get4BytesAtOffset(currentOffset + 4).int
+			var id = stringTable.getWordAtOffset(currentOffset).int
+			let offset = stringTable.getWordAtOffset(currentOffset + 4).int
 			if self.stringTable.get2BytesAtOffset(offset) == 0x0 {
 				id = -1
 				needsUpdate = true

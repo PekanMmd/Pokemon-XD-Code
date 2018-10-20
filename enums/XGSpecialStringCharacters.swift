@@ -224,14 +224,8 @@ enum XGSpecialCharacters : Int {
 			case kFoeTrainerClass	: return .foeTrainerClass
 			case kFoeTrainerName	: return .foeTrainerName
 			case kWaitKeyPress		: return .WaitKeyPress
-			default					: return XGSpecialCharacters(rawValue: hexStringToInt(str) ) ?? .unused0A
+			default					: return XGSpecialCharacters(rawValue: str.hexStringToInt() ) ?? .unused0A
 		}
-	}
-	
-	static func hexStringToInt(_ hex: String) -> Int {
-		
-		return Int(strtoul(hex, nil, 16)) // converts hex string to uint and then cast as Int
-		
 	}
 
 }

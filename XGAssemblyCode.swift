@@ -49,10 +49,10 @@ class XGAssembly {
 		
 		var offset = kRelFreeSpaceStart
 		let rel = XGFiles.common_rel.data
-		var value = (rel.get4BytesAtOffset(offset - kRELtoRAMOffsetDifference), rel.get4BytesAtOffset(offset + 4 - kRELtoRAMOffsetDifference), rel.get4BytesAtOffset(offset + 8 - kRELtoRAMOffsetDifference), rel.get4BytesAtOffset(offset + 12 - kRELtoRAMOffsetDifference))
+		var value = (rel.getWordAtOffset(offset - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 4 - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 8 - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 12 - kRELtoRAMOffsetDifference))
 		while value != (0,0,0,0) {
 			offset = offset + 4
-			value = (rel.get4BytesAtOffset(offset - kRELtoRAMOffsetDifference), rel.get4BytesAtOffset(offset + 4 - kRELtoRAMOffsetDifference), rel.get4BytesAtOffset(offset + 8 - kRELtoRAMOffsetDifference), rel.get4BytesAtOffset(offset + 12 - kRELtoRAMOffsetDifference))
+			value = (rel.getWordAtOffset(offset - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 4 - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 8 - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 12 - kRELtoRAMOffsetDifference))
 		}
 		return offset
 	}
@@ -65,7 +65,7 @@ class XGAssembly {
 			
 			let off = offset + (i * 4)
 			
-			let original = XGFiles.original(.dol).data.get4BytesAtOffset(off)
+			let original = XGFiles.original(.dol).data.getWordAtOffset(off)
 			dol.replaceWordAtOffset(off, withBytes: original)
 			
 		}
@@ -78,7 +78,7 @@ class XGAssembly {
 		
 		for offset in offsets {
 			
-			let original = XGFiles.original(.dol).data.get4BytesAtOffset(offset)
+			let original = XGFiles.original(.dol).data.getWordAtOffset(offset)
 			dol.replaceWordAtOffset(offset, withBytes: original)
 			
 		}
@@ -147,7 +147,7 @@ class XGAssembly {
 	class func getWordAtRamOffsetFromR13(offset: Int) -> Int {
 		// this should be a pointer into common_rel
 		let ram = XGFiles.nameAndFolder("xg ram.raw", .Resources).data
-		return Int(ram.get4BytesAtOffset(ramPointerOffsetFromR13(offset: offset)))
+		return Int(ram.getWordAtOffset(ramPointerOffsetFromR13(offset: offset)))
 	}
 	
 	class func createBranchAndLinkFrom(offset: Int, toOffset to: Int) -> UInt32 {
@@ -221,6 +221,50 @@ class XGAssembly {
 		dol.save()
 	}
 	
+	class func setShadowMovesUseHMFlag() {
+		
+		if game == .XD && region == .US {
+			if !shadowMovesUseHMFlag {
+				for move in allMovesArray() where move.isShadowMove {
+					let data = move.data
+					data.HMFlag = true
+					data.save()
+				}
+				
+				let shadowPPstart = ASMfreeSpacePointer()
+				let shadowPPCodeStart = 0x146f28
+				let checkShadowMove = 0x13e514 // get hm flag but could use any function you like
+				let notShadow = 0x146f50
+				let (lis, addi) = XGASM.loadImmediateShifted32bit(register: .r0, value: shadowPPstart.unsigned)
+				let endBranch = 0x146f78
+					
+				// shadow move check function branches to hm flag
+				XGAssembly.replaceASM(startOffset: 0x13d048, newASM: [.bl(checkShadowMove)])
+				
+				replaceASM(startOffset: shadowPPCodeStart - kDOLtoRAMOffsetDifference, newASM: [
+					.mr(.r29, .r3),
+					.bl(checkShadowMove),
+					.cmpwi(.r3, 1),
+					.bne(notShadow),
+					.mr(.r4, .r29),
+					 lis,
+					.rlwinm(.r4, .r4, 2, 0 , 29), // multiply by 4
+					 addi,
+					.add(.r3, .r4, .r0),
+					.b(endBranch)
+					])
+				
+				let rel = XGFiles.common_rel.data
+				var currentOffset = shadowPPstart
+				for i in 0 ..< CommonIndexes.NumberOfMoves.value {
+					rel.replaceWordAtOffset(currentOffset, withBytes: (i.unsigned << 16) + (5 << 8))
+					currentOffset += 4
+				}
+				rel.save()
+			}
+		}
+	}
+	
 	class func infiniteUseTMs() {
 		let dol = XGFiles.dol.data
 		dol.replaceWordAtOffset(0x0a5158 - kDOLtoRAMOffsetDifference, withBytes: 0x38000000)
@@ -255,7 +299,7 @@ class XGAssembly {
 		for j in 0 ... kNumberOfAbilities {
 			
 			let offset = abilityStart + (j * 12)
-			allabilities.append((dol.get4BytesAtOffset(offset + 4),dol.get4BytesAtOffset(offset + 8)))
+			allabilities.append((dol.getWordAtOffset(offset + 4),dol.getWordAtOffset(offset + 8)))
 			
 		}
 		
@@ -334,17 +378,13 @@ class XGAssembly {
 		for offset in [0x1D8F8C, 0x1D900C] {
 			
 			let off = offset - kDOLtoRAMOffsetDifference
-			
 			dol.replaceWordAtOffset(off, withBytes: 0x54001838)
-			
 		}
 		
 		for offset in [0x1117F0,0x111840,0x1D8F88,0x1D9008] {
 			
 			let off = offset - kDOLtoRAMOffsetDifference
-			
 			dol.replaceWordAtOffset(off, withBytes: UInt32(0x38000000 + forme.rawValue))
-			
 		}
 		
 		dol.save()
@@ -358,9 +398,7 @@ class XGAssembly {
 		for offset in [0x212C48,0x212E04] {
 			
 			let off = offset - kDOLtoRAMOffsetDifference
-			
 			dol.replaceWordAtOffset(off, withBytes: kNopInstruction)
-			
 		}
 		
 		dol.save()
@@ -371,7 +409,7 @@ class XGAssembly {
 		
 		let dol = XGFiles.dol.data
 		
-		if dol.get4BytesAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference) == 0xA0DB001C {
+		if dol.getWordAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference) == 0xA0DB001C {
 			return
 		}
 		
@@ -407,20 +445,24 @@ class XGAssembly {
 	class func switchDPKMStructureToShinyStyle() {
 		// only do this once!
 		
-		let decks = TrainerDecksArray
-		
-		for deck in decks {
-			for p in deck.allPokemon {
+		if game == .XD {
+			if region == .US { // remove once other region offsets are found
+				let decks = TrainerDecksArray
 				
-				p.priority   = p.shinyness.rawValue
-				p.shinyness = .never
-				p.save()
+				for deck in decks {
+					for p in deck.allPokemon {
+						
+						p.priority   = p.shinyness.rawValue
+						p.shinyness = .never
+						p.save()
+						
+					}
+				}
 				
+				if region == .US {
+					XGAssembly.replaceASM(startOffset: 0x28bac0 - kDOLtoRAMOffsetDifference, newASM: [0x8863001f, kNopInstruction])
+				}
 			}
-		}
-		
-		if region == .US {
-			XGAssembly.replaceASM(startOffset: 0x28bac0 - kDOLtoRAMOffsetDifference, newASM: [0x8863001f, kNopInstruction])
 		}
 		
 	}
@@ -428,169 +470,175 @@ class XGAssembly {
 	class func fixShinyGlitch() {
 		// generated deck pokemon are given the player's tid
 		
-		if region == .US {
-			
-			let shinyStart = 0x1fa930
-			let getTrainerData = 0x1cefb4
-			let trainerGetTID = 0x14e118
-			replaceASM(startOffset: shinyStart - kDOLtoRAMOffsetDifference, newASM: [
-				0x38600000, // li r3, 0
-				0x38800002, // li r4, 2
-				createBranchAndLinkFrom(offset: shinyStart + 0x8, toOffset: getTrainerData),
-				createBranchAndLinkFrom(offset: shinyStart + 0xc, toOffset: trainerGetTID),
-			])
-			
-			printg("shiny glitch fixed")
-		} else if region == .EU {
-			
-			let shinyStart = 0x1fc650
-			let getTrainerData = 0x1d0a8c
-			let trainerGetTID = 0x14f9dc
-			replaceASM(startOffset: shinyStart - kDOLtoRAMOffsetDifference, newASM: [
-				0x38600000, // li r3, 0
-				0x38800002, // li r4, 2
-				createBranchAndLinkFrom(offset: shinyStart + 0x8, toOffset: getTrainerData),
-				createBranchAndLinkFrom(offset: shinyStart + 0xc, toOffset: trainerGetTID),
-			])
-			
-		} else {
-			printg("shiny glitch can't be fixed for JP region yet")
+		if game == .XD {
+			if region == .US {
+				
+				let shinyStart = 0x1fa930
+				let getTrainerData = 0x1cefb4
+				let trainerGetTID = 0x14e118
+				replaceASM(startOffset: shinyStart - kDOLtoRAMOffsetDifference, newASM: [
+					0x38600000, // li r3, 0
+					0x38800002, // li r4, 2
+					createBranchAndLinkFrom(offset: shinyStart + 0x8, toOffset: getTrainerData),
+					createBranchAndLinkFrom(offset: shinyStart + 0xc, toOffset: trainerGetTID),
+				])
+				
+				printg("shiny glitch fixed")
+			} else if region == .EU {
+				
+				let shinyStart = 0x1fc650
+				let getTrainerData = 0x1d0a8c
+				let trainerGetTID = 0x14f9dc
+				replaceASM(startOffset: shinyStart - kDOLtoRAMOffsetDifference, newASM: [
+					0x38600000, // li r3, 0
+					0x38800002, // li r4, 2
+					createBranchAndLinkFrom(offset: shinyStart + 0x8, toOffset: getTrainerData),
+					createBranchAndLinkFrom(offset: shinyStart + 0xc, toOffset: trainerGetTID),
+				])
+				
+			} else {
+				printg("shiny glitch can't be fixed for JP region yet")
+			}
 		}
 	}
 	
 	class func setShadowPokemonShininess(value: XGShinyValues) {
-		// gens deck pokemon with shiny always set to random (0xFFFF)
+		// gens deck pokemon with shiny always set to value
 		
-		if region == .JP {
-			printg("shadow pokemon shininess can't be changed for JP region yet")
-			return
+		if game == .XD {
+			if region == .JP {
+				printg("shadow pokemon shininess can't be changed for JP region yet")
+				return
+			}
+			
+			var startOffset = 0x0
+			
+			if region == .US {
+				startOffset = 0x1fc2b0
+			}
+			if region == .EU {
+				startOffset = 0x1fdfe4
+			}
+			
+			replaceASM(startOffset: startOffset - kDOLtoRAMOffsetDifference, newASM: [0x38c00000 + UInt32(value.rawValue)])
+			
+			printg("shadow pokemon shininess set to", value.string)
 		}
-		
-		var startOffset = 0x0
-		
-		if region == .US {
-			startOffset = 0x1fc2b0
-		}
-		if region == .EU {
-			startOffset = 0x1fdfe4
-		}
-		
-		replaceASM(startOffset: startOffset - kDOLtoRAMOffsetDifference, newASM: [0x38c00000 + UInt32(value.rawValue)])
-		
-		printg("shadow pokemon shininess set to", value.string)
 	}
 	
 	class func switchNextPokemonAtEndOfTurn() {
 		// you no longer send in a new pokemon as soon as one faints. Now waits until end of turn. Still experimental!
 		// pretty much a copy and paste of all the code that would be called at the end of the move routine with just a few lines of code where the switching happens being omitted. Not a very elegant solution but effective.
 		
-		let switchlessStart = ASMfreeSpacePointer()
-		let switchless2Start = switchlessStart + 0x74
-		let switchlessBranch = 0x20e36c
-		let executeCodeRoutine = 0x1f3bec
-		let intimidateRoutine = 0x225c04
-		let unkownRoutine = 0x225ac8
-		let battleEntryEffects = 0x226474
-		let animSoundCallback = 0x2236a8
-		let switchlessCode : [UInt32] = [
-			0x9421fff0,
-			0x7c0802a6,
-			0x3c808022,
-			0x38600000,
-			0x90010014,
-			0x388475f8,
-			0x38a00000,
-			0x38c00000,
-			createBranchAndLinkFrom(offset: switchlessStart + 0x20, toOffset: executeCodeRoutine),
+		if game == .XD && region == .US {
+			let switchlessStart = ASMfreeSpacePointer()
+			let switchless2Start = switchlessStart + 0x74
+			let switchlessBranch = 0x20e36c
+			let executeCodeRoutine = 0x1f3bec
+			let intimidateRoutine = 0x225c04
+			let unkownRoutine = 0x225ac8
+			let battleEntryEffects = 0x226474
+			let animSoundCallback = 0x2236a8
+			let switchlessCode : [UInt32] = [
+				0x9421fff0,
+				0x7c0802a6,
+				0x3c808022,
+				0x38600000,
+				0x90010014,
+				0x388475f8,
+				0x38a00000,
+				0x38c00000,
+				createBranchAndLinkFrom(offset: switchlessStart + 0x20, toOffset: executeCodeRoutine),
+				
+				createBranchAndLinkFrom(offset: switchlessStart + 0x24, toOffset: switchless2Start),
+				
+				0x3c608041,
+				0x386369f0,
+				createBranchAndLinkFrom(offset: switchlessStart + 0x30, toOffset: animSoundCallback),
+				0x38600001,
+				createBranchAndLinkFrom(offset: switchlessStart + 0x38, toOffset: intimidateRoutine),
+				createBranchAndLinkFrom(offset: switchlessStart + 0x3c, toOffset: unkownRoutine),
+				0x3c808022,
+				0x38600000,
+				0x38847588,
+				0x38a00000,
+				0x38c00000,
+				createBranchAndLinkFrom(offset: switchlessStart + 0x54, toOffset: executeCodeRoutine),
+				createBranchAndLinkFrom(offset: switchlessStart + 0x58, toOffset: battleEntryEffects),
+				0x80010014,
+				0x7c0803a6,
+				0x38210010,
+				0x38000002,
+				0x980dbb14,
+				0x4e800020
+			]
 			
-			createBranchAndLinkFrom(offset: switchlessStart + 0x24, toOffset: switchless2Start),
+			let moveRoutineGetPosition = 0x2236f8
+			let getPokemonPointer = 0x1efcac
+			let getCurrentMove = 0x148d64
+			let getAllyTrainerNumber = 0x1f7688
+			let getFoeTrainerNumber = 0x1f7640
+			let unknown = 0x1f87ac
+			let setAppropriateBattleResult = 0x1f3dac
+			let moveRoutineUpdatePosition = 0x2236dc
+			let switchless2Code : [UInt32] = [
+				0x9421ffe0,
+				0x7c0802a6,
+				0x90010024,
+				0xbf61000c,
+				createBranchAndLinkFrom(offset: switchless2Start + 0x10, toOffset: moveRoutineGetPosition),
+				0x80a30001,
+				0x38600011,
+				0x38800000,
+				0x3005ffff,
+				0x7c002910,
+				0x541f063e,
+				createBranchAndLinkFrom(offset: switchless2Start + 0x2c, toOffset: getPokemonPointer),
+				0x7c7e1b78,
+				createBranchAndLinkFrom(offset: switchless2Start + 0x34, toOffset: getCurrentMove),
+				0x7c601b78,
+				0x38600000,
+				0x7c1b0378,
+				createBranchAndLinkFrom(offset: switchless2Start + 0x44, toOffset: getAllyTrainerNumber),
+				0x547d063e,
+				0x38600000,
+				createBranchAndLinkFrom(offset: switchless2Start + 0x50, toOffset: getFoeTrainerNumber),
+				0x547c063e,
+				0x38600005,
+				0x38800000,
+				createBranchAndLinkFrom(offset: switchless2Start + 0x60, toOffset: getPokemonPointer),
+				0x7fa4eb78,
+				0x7f85e378,
+				createBranchAndLinkFrom(offset: switchless2Start + 0x6c, toOffset: unknown),
+				0x28030000,
+				0x40820010,
+				0x38600000,
+				0x38800002,
+				createBranchAndLinkFrom(offset: switchless2Start + 0x80, toOffset: setAppropriateBattleResult),
+				0x38600004,
+				0x38800000,
+				createBranchAndLinkFrom(offset: switchless2Start + 0x8c, toOffset: getPokemonPointer),
+				0x7fa4eb78,
+				0x7f85e378,
+				createBranchAndLinkFrom(offset: switchless2Start + 0x98, toOffset: unknown),
+				0x28030000,
+				0x40820010,
+				0x38600000,
+				0x38800003,
+				createBranchAndLinkFrom(offset: switchless2Start + 0xac, toOffset: setAppropriateBattleResult),
+				0x38600005,
+				createBranchAndLinkFrom(offset: switchless2Start + 0xb4, toOffset: moveRoutineUpdatePosition),
+				0xbb61000c,
+				0x80010024,
+				0x7c0803a6,
+				0x38210020,
+				powerPCBranchLinkReturn()
+				
+			]
 			
-			0x3c608041,
-			0x386369f0,
-			createBranchAndLinkFrom(offset: switchlessStart + 0x30, toOffset: animSoundCallback),
-			0x38600001,
-			createBranchAndLinkFrom(offset: switchlessStart + 0x38, toOffset: intimidateRoutine),
-			createBranchAndLinkFrom(offset: switchlessStart + 0x3c, toOffset: unkownRoutine),
-			0x3c808022,
-			0x38600000,
-			0x38847588,
-			0x38a00000,
-			0x38c00000,
-			createBranchAndLinkFrom(offset: switchlessStart + 0x54, toOffset: executeCodeRoutine),
-			createBranchAndLinkFrom(offset: switchlessStart + 0x58, toOffset: battleEntryEffects),
-			0x80010014,
-			0x7c0803a6,
-			0x38210010,
-			0x38000002,
-			0x980dbb14,
-			0x4e800020
-		]
-		
-		let moveRoutineGetPosition = 0x2236f8
-		let getPokemonPointer = 0x1efcac
-		let getCurrentMove = 0x148d64
-		let getAllyTrainerNumber = 0x1f7688
-		let getFoeTrainerNumber = 0x1f7640
-		let unknown = 0x1f87ac
-		let setAppropriateBattleResult = 0x1f3dac
-		let moveRoutineUpdatePosition = 0x2236dc
-		let switchless2Code : [UInt32] = [
-			0x9421ffe0,
-			0x7c0802a6,
-			0x90010024,
-			0xbf61000c,
-			createBranchAndLinkFrom(offset: switchless2Start + 0x10, toOffset: moveRoutineGetPosition),
-			0x80a30001,
-			0x38600011,
-			0x38800000,
-			0x3005ffff,
-			0x7c002910,
-			0x541f063e,
-			createBranchAndLinkFrom(offset: switchless2Start + 0x2c, toOffset: getPokemonPointer),
-			0x7c7e1b78,
-			createBranchAndLinkFrom(offset: switchless2Start + 0x34, toOffset: getCurrentMove),
-			0x7c601b78,
-			0x38600000,
-			0x7c1b0378,
-			createBranchAndLinkFrom(offset: switchless2Start + 0x44, toOffset: getAllyTrainerNumber),
-			0x547d063e,
-			0x38600000,
-			createBranchAndLinkFrom(offset: switchless2Start + 0x50, toOffset: getFoeTrainerNumber),
-			0x547c063e,
-			0x38600005,
-			0x38800000,
-			createBranchAndLinkFrom(offset: switchless2Start + 0x60, toOffset: getPokemonPointer),
-			0x7fa4eb78,
-			0x7f85e378,
-			createBranchAndLinkFrom(offset: switchless2Start + 0x6c, toOffset: unknown),
-			0x28030000,
-			0x40820010,
-			0x38600000,
-			0x38800002,
-			createBranchAndLinkFrom(offset: switchless2Start + 0x80, toOffset: setAppropriateBattleResult),
-			0x38600004,
-			0x38800000,
-			createBranchAndLinkFrom(offset: switchless2Start + 0x8c, toOffset: getPokemonPointer),
-			0x7fa4eb78,
-			0x7f85e378,
-			createBranchAndLinkFrom(offset: switchless2Start + 0x98, toOffset: unknown),
-			0x28030000,
-			0x40820010,
-			0x38600000,
-			0x38800003,
-			createBranchAndLinkFrom(offset: switchless2Start + 0xac, toOffset: setAppropriateBattleResult),
-			0x38600005,
-			createBranchAndLinkFrom(offset: switchless2Start + 0xb4, toOffset: moveRoutineUpdatePosition),
-			0xbb61000c,
-			0x80010024,
-			0x7c0803a6,
-			0x38210020,
-			powerPCBranchLinkReturn()
-		
-		]
-		
-		XGAssembly.replaceRELASM(startOffset: switchlessStart - kRELtoRAMOffsetDifference, newASM: switchlessCode + switchless2Code)
-		XGAssembly.replaceASM(startOffset: switchlessBranch - kDOLtoRAMOffsetDifference, newASM: [createBranchAndLinkFrom(offset: switchlessBranch, toOffset: switchlessStart)])
+			XGAssembly.replaceRELASM(startOffset: switchlessStart - kRELtoRAMOffsetDifference, newASM: switchlessCode + switchless2Code)
+			XGAssembly.replaceASM(startOffset: switchlessBranch - kDOLtoRAMOffsetDifference, newASM: [createBranchAndLinkFrom(offset: switchlessBranch, toOffset: switchlessStart)])
+		}
 		
 	}
 	
@@ -757,7 +805,7 @@ class XGAssembly {
 	class func getRoutineStartForMoveEffect(index: Int) -> Int {
 		let effectOffset = index * 4
 		let pointerOffset = moveEffectTableStartDOL + effectOffset
-		let pointer = XGFiles.dol.data.get4BytesAtOffset(pointerOffset) - 0x80000000
+		let pointer = XGFiles.dol.data.getWordAtOffset(pointerOffset) - 0x80000000
 		return Int(pointer)
 	}
 	
@@ -782,6 +830,10 @@ class XGAssembly {
 		
 		routine = data.getByteStreamFromOffset(start, length: 4)
 		
+		// just educated guesses but not guaranteed to be the correct end
+		// there's no real marker for the end
+		// the code just follows the branches and jumps from routine to routine
+		// until the routine ending function is hit
 		var i = 4
 		var endFound = false
 		while !endFound {
@@ -884,7 +936,7 @@ class XGAssembly {
 	
 	class func startOffsetForMoveRoutineFunction(index: Int) -> UInt32 {
 		let firstPointer = 0x2f8af8 - kDOLTableToRAMOffsetDifference
-		return XGFiles.dol.data.get4BytesAtOffset(firstPointer + (4 * index))
+		return XGFiles.dol.data.getWordAtOffset(firstPointer + (4 * index))
 	}
 	
 	class func intAsByteArray(_ i: Int) -> [Int] {

@@ -46,11 +46,11 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 	var panels				= [XGBattleBingoPanel]()
 	@objc var rewards				= [Int]()
 	
-//	var name : XGString {
-//		get {
-//			return
-//		}
-//	}
+	var name : XGString {
+		get {
+			return getStringSafelyWithID(id: nameID)
+		}
+	}
 	
 	@objc var startOffset : Int {
 		get {
@@ -93,8 +93,8 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 		difficulty = rel.getByteAtOffset(start + kBingoCardDifficultyLevelOffset)
 		subIndex = rel.getByteAtOffset(start + kBingoCardSubIndexOffset)
 		
-		nameID = Int(rel.get4BytesAtOffset(start + kBingoCardNameIDOffset))
-		detailsID = Int(rel.get4BytesAtOffset(start + kBingoCardDetailsIDOffset))
+		nameID = Int(rel.getWordAtOffset(start + kBingoCardNameIDOffset))
+		detailsID = Int(rel.getWordAtOffset(start + kBingoCardDetailsIDOffset))
 		
 		pokemonLevel = rel.getByteAtOffset(start + kBingoCardPokemonLevelOffset)
 		

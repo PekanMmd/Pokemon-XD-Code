@@ -100,11 +100,11 @@ enum XGTrainerModels : Int {
 	
 	var pkxModelIdentifier : UInt32 {
 		let dol = XGFiles.dol.data
-		return dol.get4BytesAtOffset(kFirstTrainerPKXIdentifierOffset + (self.rawValue * 12) + kModelDictionaryModelOffset)
+		return dol.getWordAtOffset(kFirstTrainerPKXIdentifierOffset + (self.rawValue * 12) + kModelDictionaryModelOffset)
 	}
 	
 	var pkxFSYS : XGFsys? {
-		return XGISO().getPKXModelWithIdentifier(id: self.pkxModelIdentifier)
+		return ISO.getPKXModelWithIdentifier(id: self.pkxModelIdentifier)
 	}
 	
 	var pkxData : XGMutableData? {
@@ -114,6 +114,13 @@ enum XGTrainerModels : Int {
 			return fsys!.decompressedDataForFileWithIndex(index: 0)
 		}
 		
+		return nil
+	}
+	
+	var pkxName : String? {
+		if let fsys = pkxFSYS {
+			return fsys.fileName.replacingOccurrences(of: "pkx_", with: "").removeFileExtensions()
+		}
 		return nil
 	}
 	

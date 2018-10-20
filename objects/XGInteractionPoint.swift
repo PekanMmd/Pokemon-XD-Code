@@ -60,7 +60,7 @@ class XGInteractionPointData: NSObject {
 		self.mapIndex = rel.getByteAtOffset(startOffset + kIPMapIndexOffset)
 		self.targetWarpRoom = XGRoom.roomWithID(rel.get2BytesAtOffset(startOffset + kIPWarpTargetMapOffset))
 		self.targetWarpIndex = rel.getByteAtOffset(startOffset + kIPWarpTargetIndexOffset)
-		self.textID = rel.get4BytesAtOffset(startOffset + kIPTextIDOffset).int
+		self.textID = rel.getWordAtOffset(startOffset + kIPTextIDOffset).int
 		self.IPType = rel.get2BytesAtOffset(startOffset + kIPTypeOffset)
 		
 	}
@@ -114,9 +114,9 @@ class XGInteractionLocation : NSObject {
 		
 		let data = file.data
 		
-		self.xCoordinate = data.get4BytesAtOffset(startOffset + kILXOffset).hexToSignedFloat()
-		self.yCoordinate = data.get4BytesAtOffset(startOffset + kILYOffset).hexToSignedFloat()
-		self.zCoordinate = data.get4BytesAtOffset(startOffset + kILZOffset).hexToSignedFloat()
+		self.xCoordinate = data.getWordAtOffset(startOffset + kILXOffset).hexToSignedFloat()
+		self.yCoordinate = data.getWordAtOffset(startOffset + kILYOffset).hexToSignedFloat()
+		self.zCoordinate = data.getWordAtOffset(startOffset + kILZOffset).hexToSignedFloat()
 		self.angle = data.get2BytesAtOffset(startOffset + kIPAngleOffset)
 		
 	}

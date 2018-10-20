@@ -11,7 +11,7 @@ import Foundation
 let kFirstAbilityNameID = 0xC1D
 let kFirstAbilityDescriptionID = 0xCE5
 
-let abilityListUpdated = game == .Colosseum ? false : XGFiles.dol.data.get4BytesAtOffset(kAbilitiesStartOffset + 8) != 0
+let abilityListUpdated = game == .Colosseum ? false : XGFiles.dol.data.getWordAtOffset(kAbilitiesStartOffset + 8) != 0
 
 let kNumberOfAbilities			= abilityListUpdated ? (0x3A8 / 8) : 0x4E
 let kAbilityNameIDOffset		= abilityListUpdated ? 0 : 4
@@ -49,7 +49,7 @@ enum XGAbilities : XGDictionaryRepresentable {
 	var nameID : Int {
 		get {
 			let dol = XGFiles.dol.data
-			return Int(dol.get4BytesAtOffset(nameIDOffset))
+			return Int(dol.getWordAtOffset(nameIDOffset))
 		}
 	}
 	
@@ -66,7 +66,7 @@ enum XGAbilities : XGDictionaryRepresentable {
 	var descriptionID : Int {
 		get {
 			let dol = XGFiles.dol.data
-			return Int(dol.get4BytesAtOffset(descriptionIDOffset))
+			return Int(dol.getWordAtOffset(descriptionIDOffset))
 		}
 	}
 	

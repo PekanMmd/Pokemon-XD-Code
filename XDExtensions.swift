@@ -9,9 +9,18 @@ import Foundation
 
 enum XGRegions : UInt32 {
 	
-	case US = 0x47585845
-	case EU = 0x47585850
-	case JP = 0x4758584A
+	case US = 0x47585845 // GXXE
+	case EU = 0x47585850 // GXXP
+	case JP = 0x4758584A // GXXJ
+	
+	var index : Int {
+		switch self {
+		// arbitrary values
+		case .US: return 0
+		case .EU: return 1
+		case .JP: return 2
+		}
+	}
 	
 }
 
@@ -24,7 +33,7 @@ class XGMapRel : XGRelocationTable {
 	@objc var roomID = 0
 	
 	@objc var script : XGScript? {
-		let scriptFile = XGFiles.script(file.fileName.replacingOccurrences(of: ".rel", with: ".scd"))
+		let scriptFile = XGFiles.scd(file.fileName.removeFileExtensions())
 		return scriptFile.exists ? scriptFile.scriptData : nil
 	}
 	
@@ -80,161 +89,6 @@ class XGMapRel : XGRelocationTable {
 }
 
 extension XGISO {
-	@objc var autoFsysList : [String] {
-		return [
-			"D1_labo_1F.fsys",
-			"D1_labo_B1.fsys",
-			"D1_labo_B2.fsys",
-			"D1_labo_B3.fsys",
-			"D1_out.fsys",
-			"D2_cloud_1.fsys",
-			"D2_cloud_2.fsys",
-			"D2_cloud_3.fsys",
-			"D2_cloud_4.fsys",
-			"D2_crater_colo.fsys",
-			"D2_magma_1.fsys",
-			"D2_magma_2.fsys",
-			"D2_magma_3.fsys",
-			"D2_out.fsys",
-			"D2_pc_1F.fsys",
-			"D2_rest_1.fsys",
-			"D2_rest_2.fsys",
-			"D2_rest_3.fsys",
-			"D2_rest_4.fsys",
-			"D2_rest_5.fsys",
-			"D2_rest_6.fsys",
-			"D2_rest_7.fsys",
-			"D2_rest_8.fsys",
-			"D2_rest_9.fsys",
-			"D2_valley_1.fsys",
-			"D2_valley_2.fsys",
-			"D2_valley_3.fsys",
-			"D3_out.fsys",
-			"D3_ship_B1_1.fsys",
-			"D3_ship_B1_2.fsys",
-			"D3_ship_B1_3.fsys",
-			"D3_ship_B2_1.fsys",
-			"D3_ship_B2_2.fsys",
-			"D3_ship_B2_3.fsys",
-			"D3_ship_bridge.fsys",
-			"D3_ship_cabine.fsys",
-			"D3_ship_deck.fsys",
-			"D4_dome_3.fsys",
-			"D4_dome_4.fsys",
-			"D4_out.fsys",
-			"D4_out_2.fsys",
-			"D4_tower_1F_1.fsys",
-			"D4_tower_1F_2.fsys",
-			"D4_tower_1F_3.fsys",
-			"D5_factory_1F.fsys",
-			"D5_factory_2F.fsys",
-			"D5_factory_3F.fsys",
-			"D5_factory_4F.fsys",
-			"D5_factory_B1.fsys",
-			"D5_factory_hat.fsys",
-			"D5_factory_top.fsys",
-			"D5_out.fsys",
-			"D6_cruiser.fsys",
-			"D6_dome_1F.fsys",
-			"D6_dome_2F.fsys",
-			"D6_dome_B1.fsys",
-			"D6_fort_1F.fsys",
-			"D6_fort_2F_1.fsys",
-			"D6_fort_2F_2.fsys",
-			"D6_fort_2F_3.fsys",
-			"D6_fort_3F_1.fsys",
-			"D6_fort_3F_2.fsys",
-			"D6_fort_4F.fsys",
-			"D6_fort_5F.fsys",
-			"D6_fort_6F.fsys",
-			"D6_fort_B1.fsys",
-			"D6_out_all.fsys",
-			"D6_out_dome.fsys",
-			"D6_out_foot.fsys",
-			"D7_out.fsys",
-			"esaba_A.fsys",
-			"esaba_B.fsys",
-			"esaba_C.fsys",
-			"M1_carde_1.fsys",
-			"M1_gym_1F.fsys",
-			"M1_gym_B1.fsys",
-			"M1_houseA_1F.fsys",
-			"M1_houseA_2F.fsys",
-			"M1_houseB_1F.fsys",
-			"M1_houseC_1F.fsys",
-			"M1_out.fsys",
-			"M1_pc_1F.fsys",
-			"M1_pc_B1.fsys",
-			"M1_shop_1F.fsys",
-			"M1_shop_2F.fsys",
-			"M1_water_colo_field.fsys",
-			"M2_building_1F.fsys",
-			"M2_building_2F.fsys",
-			"M2_building_3F.fsys",
-			"M2_building_4F.fsys",
-			"M2_enter_1F.fsys",
-			"M2_enter_1F_2.fsys",
-			"M2_guild_1F_1.fsys",
-			"M2_guild_1F_2.fsys",
-			"M2_hotel_1F.fsys",
-			"M2_houseA_1F.fsys",
-			"M2_out.fsys",
-			"M2_police_1F.fsys",
-			"M2_shop_1F.fsys",
-			"M2_uranai_1F.fsys",
-			"M2_windmill_1F.fsys",
-			"M3_cave_1F_1.fsys",
-			"M3_cave_1F_2.fsys",
-			"M3_houseA_1F.fsys",
-			"M3_houseB_1F.fsys",
-			"M3_houseC_1F.fsys",
-			"M3_houseC_2F.fsys",
-			"M3_houseD_1F.fsys",
-			"M3_out.fsys",
-			"M3_pc_1F.fsys",
-			"M3_shop_1F.fsys",
-			"M3_shrine_1F.fsys",
-			"M5_apart_1F.fsys",
-			"M5_apart_2F.fsys",
-			"M5_labo_1F.fsys",
-			"M5_labo_2F.fsys",
-			"M5_labo_B1.fsys",
-			"M5_out.fsys",
-			"M6_crab_1F.fsys",
-			"M6_crab_2F.fsys",
-			"M6_crab_B1.fsys",
-			"M6_houseA.fsys",
-			"M6_houseB.fsys",
-			"M6_houseC.fsys",
-			"M6_houseD.fsys",
-			"M6_junk_1F.fsys",
-			"M6_junk_2F.fsys",
-			"M6_out.fsys",
-			"M6_pc_1F.fsys",
-			"M6_pc_2F.fsys",
-			"M6_shop_1F.fsys",
-			"M6_shop_2F.fsys",
-			"M6_tower_1F.fsys",
-			"M6_tower_2F.fsys",
-			"M6_tower_4F.fsys",
-			"M6_tower_top.fsys",
-			"S1_out.fsys",
-			"S1_shop_1F.fsys",
-			"S2_bossroom_1.fsys",
-			"S2_building_1F_2.fsys",
-			"S2_building_2F_2.fsys",
-			"S2_building_3F_2.fsys",
-			"S2_hallway_1.fsys",
-			"S2_out_1.fsys",
-			"S2_out_2.fsys",
-			"S2_out_3.fsys",
-			"S2_snatchroom_1.fsys",
-			"S3_labo_1F.fsys",
-			"S3_labo_B1low.fsys",
-			"S3_labo_B1up.fsys",
-			"S3_out.fsys"
-		]
-	}
 	
 	@objc var fsysList : [String] {
 		return [
@@ -248,95 +102,34 @@ extension XGISO {
 	}
 	
 	@objc var menuFsysList : [String] {
+		// also any file with "menu" in the name
 		return [
 			"battle_disk.fsys",
-			"bingo_menu.fsys",
-			"carde_menu.fsys",
-			"colosseumbattle_menu.fsys",
-			"D2_present_room.fsys",
-			"hologram_menu.fsys",
-			"mailopen_menu.fsys",
+			"evolution",
 			"mewwaza.fsys",
-			"name_entry_menu.fsys",
-			"orre_menu.fsys",
-			"pcbox_menu.fsys",
-			"pcbox_name_entry_menu.fsys",
-			"pcbox_pocket_menu.fsys",
-			"pda_menu.fsys",
-			"pocket_menu.fsys",
-			"pokemonchange_menu.fsys",
-			"relivehall_menu.fsys",
 			"title.fsys",
-			"topmenu.fsys",
-			"waza_menu.fsys",
 			"worldmap.fsys"
-		]
-	}
-	
-	@objc var deckList : [String] {
-		return [
-			"DeckData_DarkPokemon.bin",
-			"DeckData_Story.bin",
-			"DeckData_Bingo.bin",
-			"DeckData_Colosseum.bin",
-			"DeckData_Hundred.bin",
-			"DeckData_Imasugu.bin",
-			"DeckData_Sample.bin",
-			"DeckData_Virtual.bin"
 		]
 	}
 	
 	
 	@objc func extractDecks() {
-		let deck = XGFiles.fsys("deck_archive.fsys").fsysData
-		let deckFiles : [XGFiles] = [.deck(.DeckColosseum), .deck(.DeckDarkPokemon), .deck(.DeckHundred), .deck(.DeckStory), .deck(.DeckVirtual), .deck(.DeckImasugu), .deck(.DeckSample), .deck(.DeckBingo)]
+		let deckData = XGFiles.fsys("deck_archive").fsysData
+		let decksOrdered : [XGDecks] = [.DeckBingo, .DeckColosseum, .DeckDarkPokemon, .DeckHundred, .DeckImasugu, .DeckSample, .DeckStory, .DeckVirtual]
 		
-		if !deckFiles[0].exists {
-			let deckFile = deck.decompressedDataForFileWithIndex(index: 2)!
-			deckFile.file = deckFiles[0]
-			deckFile.save()
-		}
-		
-		if !deckFiles[1].exists {
-			let deckFile = deck.decompressedDataForFileWithIndex(index: 4)!
-			deckFile.file = deckFiles[1]
-			deckFile.save()
-		}
-		
-		if !deckFiles[2].exists {
-			let deckFile = deck.decompressedDataForFileWithIndex(index: 6)!
-			deckFile.file = deckFiles[2]
-			deckFile.save()
-		}
-		
-		if !deckFiles[3].exists {
-			let deckFile = deck.decompressedDataForFileWithIndex(index: 12)!
-			deckFile.file = deckFiles[3]
-			deckFile.save()
-		}
-		
-		if !deckFiles[4].exists {
-			let deckFile = deck.decompressedDataForFileWithIndex(index: 14)!
-			deckFile.file = deckFiles[4]
-			deckFile.save()
-		}
-		
-		if !deckFiles[5].exists {
-			let deckFile = deck.decompressedDataForFileWithIndex(index: 8)!
-			deckFile.file = deckFiles[5]
-			deckFile.save()
-		}
-		
-		if !deckFiles[6].exists {
-			let deckFile = deck.decompressedDataForFileWithIndex(index: 10)!
-			deckFile.file = deckFiles[6]
-			deckFile.save()
-		}
-		
-		if !deckFiles[7].exists {
-			let deckFile = deck.decompressedDataForFileWithIndex(index: 0)!
-			deckFile.file = deckFiles[7]
-			deckFile.save()
+		for i in 0 ... decksOrdered.count {
+			let deck = decksOrdered[i]
+			if !deck.file.exists {
+				if verbose {
+					printg("Extracting deck: \(deck.file.fileName)")
+				}
+				if let data = deckData.decompressedDataForFileWithIndex(index: i * 2) {
+					data.file = deck.file
+					data.save()
+				} else {
+					printg("Couldn't extract deck \(deck.file.fileName), doesn't exist in deck archive")
+				}
+			}
 		}
 		
 	}
@@ -344,67 +137,66 @@ extension XGISO {
 	
 	@objc func extractSpecificStringTables() {
 		
-		let fightFile = XGFiles.stringTable("fight.msg")
+		let fightFile = XGFiles.msg("fight")
 		if !fightFile.exists {
-			let fight = XGFiles.fsys("fight_common.fsys").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let fight = XGFiles.fsys("fight_common").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			fight.file = fightFile
 			fight.save()
 		}
 		
-		
-		let pocket_menu = XGFiles.stringTable("pocket_menu.msg")
-		let nameentrymenu = XGFiles.stringTable("name_entry_menu.msg")
-		let system_tool = XGFiles.stringTable("system_tool.msg")
-		let m3shrine1frl = XGFiles.stringTable("M3_shrine_1F_rl.msg")
-		let relivehall_menu = XGFiles.stringTable("relivehall_menu.msg")
-		let pda_menu = XGFiles.stringTable("pda_menu.msg")
-		let p_exchange = XGFiles.stringTable("p_exchange.msg")
-		let world_map = XGFiles.stringTable("world_map.msg")
+		let pocket_menu = XGFiles.msg("pocket_menu")
+		let nameentrymenu = XGFiles.msg("name_entry_menu")
+		let system_tool = XGFiles.msg("system_tool")
+		let m3shrine1frl = XGFiles.msg("M3_shrine_1F_rl")
+		let relivehall_menu = XGFiles.msg("relivehall_menu")
+		let pda_menu = XGFiles.msg("pda_menu")
+		let p_exchange = XGFiles.msg("p_exchange")
+		let world_map = XGFiles.msg("world_map")
 		
 		if !pocket_menu.exists {
-			let pm = XGFiles.nameAndFolder("pcbox_pocket_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let pm = XGFiles.fsys("pocket_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			pm.file = pocket_menu
 			pm.save()
 		}
 		
 		if !nameentrymenu.exists {
-			let nem = XGFiles.nameAndFolder("pcbox_name_entry_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let nem = XGFiles.fsys("pcbox_name_entry_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			nem.file = nameentrymenu
 			nem.save()
 		}
 		
 		if !system_tool.exists {
-			let st = XGFiles.nameAndFolder("pcbox_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let st = XGFiles.fsys("pcbox_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			st.file = system_tool
 			st.save()
 		}
 		
 		if !m3shrine1frl.exists {
-			let m3rl = XGFiles.nameAndFolder("hologram_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let m3rl = XGFiles.fsys("hologram_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			m3rl.file = m3shrine1frl
 			m3rl.save()
 		}
 		
 		if !relivehall_menu.exists {
-			let rh = XGFiles.nameAndFolder("relivehall_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let rh = XGFiles.fsys("relivehall_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			rh.file = relivehall_menu
 			rh.save()
 		}
 		
 		if !pda_menu.exists {
-			let pda = XGFiles.nameAndFolder("pda_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let pda = XGFiles.fsys("pda_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			pda.file = pda_menu
 			pda.save()
 		}
 		
 		if !p_exchange.exists {
-			let pex = XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let pex = XGFiles.fsys("pokemonchange_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			pex.file = p_exchange
 			pex.save()
 		}
 		
 		if !world_map.exists {
-			let wm = XGFiles.nameAndFolder("worldmap.fsys",.MenuFSYS).fsysData.decompressedDataForFileWithFiletype(type: .msg)!
+			let wm = XGFiles.fsys("worldmap").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			wm.file = world_map
 			wm.save()
 		}
@@ -420,34 +212,50 @@ extension XGUtility {
 		if !DeckDataEmptyLZSS.file.exists {
 			DeckDataEmptyLZSS.save()
 		}
+		ISO.extractFSYS()
 		
-		let common = XGFiles.fsys("common.fsys").fsysData
-		common.shiftAndReplaceFileWithIndex(2, withFile: .lzss("DeckData_Empty.bin.lzss")) //EU file
-		common.shiftAndReplaceFileWithIndex(4, withFile: .lzss("DeckData_DarkPokemon.bin.lzss"))
-		common.shiftAndReplaceFileWithIndex(0, withFile: .lzss("common.rel.lzss"))
+		let common = XGFiles.fsys("common").fsysData
+		if XGFiles.common_rel.exists {
+			common.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.common_rel.compress(), save: false)
+		}
+		common.shiftAndReplaceFileWithIndexEfficiently(2, withFile: DeckDataEmptyLZSS.file, save: false) //EU file
+		if XGDecks.DeckDarkPokemon.file.exists {
+			common.shiftAndReplaceFileWithIndexEfficiently(4, withFile: XGFiles.deck(.DeckDarkPokemon).compress(), save: false)
+		}
+		common.save()
 		
-		XGFiles.fsys("common_dvdeth.fsys").fsysData.shiftAndReplaceFileWithIndex(0, withFile: .lzss("tableres2.rel.lzss"))
+		if XGFiles.tableres2.exists {
+			XGFiles.fsys("common_dvdeth").fsysData.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.tableres2.compress(), save: true)
+		}
 		
-		let deckArchive = XGFiles.fsys("deck_archive.fsys").fsysData
+		let deckArchive = XGFiles.fsys("deck_archive").fsysData
 		
 		for i in 0 ..< deckArchive.numberOfEntries {
 			// remove eu files to make space for increased file sizes assuming they're all the odd ones
 			if i % 2 == 1 {
-				deckArchive.shiftAndReplaceFileWithIndex(i, withFile: .lzss("DeckData_Empty.bin.lzss"))
+				deckArchive.shiftAndReplaceFileWithIndexEfficiently(i, withFile: DeckDataEmptyLZSS.file, save: false)
 			}
 		}
 		
-		deckArchive.shiftAndReplaceFileWithIndex(0, withFile: .lzss("DeckData_Bingo.bin.lzss"))
-		deckArchive.shiftAndReplaceFileWithIndex(2, withFile: .lzss("DeckData_Colosseum.bin.lzss"))
-		deckArchive.shiftAndReplaceFileWithIndex(4, withFile: .lzss("DeckData_DarkPokemon.bin.lzss"))
-		deckArchive.shiftAndReplaceFileWithIndex(6, withFile: .lzss("DeckData_Hundred.bin.lzss"))
-		deckArchive.shiftAndReplaceFileWithIndex(8, withFile: .lzss("DeckData_Imasugu.bin.lzss"))
-		deckArchive.shiftAndReplaceFileWithIndex(10, withFile: .lzss("DeckData_Sample.bin.lzss"))
-		deckArchive.shiftAndReplaceFileWithIndex(12, withFile: .lzss("DeckData_Story.bin.lzss"))
-		deckArchive.shiftAndReplaceFileWithIndex(14, withFile: .lzss("DeckData_Virtual.bin.lzss"))
+		let decksOrdered : [XGDecks] = [.DeckBingo, .DeckColosseum, .DeckDarkPokemon, .DeckHundred, .DeckImasugu, .DeckSample, .DeckStory, .DeckVirtual]
+		for i in 0 ..< decksOrdered.count {
+			let deck = decksOrdered[i]
+			if deck.file.exists {
+				deckArchive.shiftAndReplaceFileWithIndexEfficiently(i * 2, withFile: deck.file, save: false)
+			}
+		}
+		deckArchive.save()
 		
-		XGFiles.fsys("fight_common.fsys").fsysData.shiftAndReplaceFileWithType(.msg, withFile: .lzss("fight.msg.lzss"))
-		XGFiles.nameAndFolder("pocket_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithType(.rel, withFile: .lzss("pocket_menu.rel.lzss"))
+		if XGFiles.msg("fight").exists {
+			XGFiles.fsys("fight_common").fsysData.shiftAndReplaceFileWithType(.msg, withFile: XGFiles.msg("fight").compress(), save: true)
+		}
+		
+		if !XGFiles.fsys("pocket_menu").exists {
+			ISO.extractMenuFSYS()
+		}
+		if XGFiles.pocket_menu.exists {
+			XGFiles.fsys("pocket_menu").fsysData.shiftAndReplaceFileWithType(.rel, withFile: XGFiles.pocket_menu.compress(), save: true)
+		}
 
 	}
 	
@@ -477,10 +285,23 @@ extension XGUtility {
 		let healingItems = [13,19,20,21,22,26,27,28,29,30,31,32,33,44,45,139,142]
 		
 		for i in healingItems {
+			
 			let item = XGItem(index: i)
+			if i >= 30 && i <= 33 {
+				if item.parameter == 0 {
+					// for some reason these are 0 by default in xd
+					// the following code uses it so let's set it manually
+					item.parameter = [50, 200, 0, 255][i - 30]
+					item.save()
+				}
+			}
+			
+			
 			let id = item.inBattleUseID
-			let offset = kBattleItemDataStartOffset + (kSizeOfBattleItemEntry * id)
-			dol.replaceByteAtOffset(offset + kBattleItemHPToRestoreOffset, withByte: item.parameter)
+			if id > 0 {
+				let offset = kBattleItemDataStartOffset + (kSizeOfBattleItemEntry * id)
+				dol.replaceByteAtOffset(offset + kBattleItemHPToRestoreOffset, withByte: item.parameter)
+			}
 		}
 		
 		dol.save()
@@ -507,15 +328,7 @@ extension XGUtility {
 	}
 	
 	class func updateShadowMoves() {
-		// shadow move table
-		// create entry for every move so any move can be shadow
-		let tableStart = 0x73740
 		let rel = XGFiles.common_rel.data
-		for i in 0 ..< kNumberOfMoves {
-			let offset = tableStart + (i * 4)
-			rel.replaceWordAtOffset(offset, withBytes: UInt32(i << 16) + 0x0500)
-		}
-		
 		for i in 0 ..< kNumberOfMoves {
 			
 			let m = XGMoves.move(i).data
@@ -527,125 +340,70 @@ extension XGUtility {
 		rel.save()
 	}
 	
-	class func shadowMadnessAnimation() {
-		printg("updating shadow madness animation")
-		
-		let rel = XGFiles.common_rel.data
-		
-		let offset = move("shadow madness").data.startOffset + kAnimation2IndexOffset
-		rel.replace2BytesAtOffset(offset, withBytes: 0x173)
-		
-		let offset2 = move("coil").data.startOffset + kAnimationIndexOffset
-		rel.replace2BytesAtOffset(offset2, withBytes: 0x15d)
-		
-		let offset3 = move("cotton guard").data.startOffset + kAnimationIndexOffset
-		rel.replace2BytesAtOffset(offset3, withBytes: 0x15d)
-		
-		
-		rel.save()
-	}
-	
-	class func prepareXG() {
-		shadowMadnessAnimation()
-		
-		
-		for mon in XGDecks.DeckStory.allActivePokemon {
-			if mon.isShadowPokemon {
-				mon.shinyness = .random
-			} else {
-				mon.shinyness = mon.shinyness == .always ? .always : .never
+	class func prepareShinyness() {
+		if isShinyAvailable {
+			for mon in XGDecks.DeckStory.allActivePokemon {
+				if mon.isShadowPokemon {
+					mon.shinyness = .random
+				} else {
+					mon.shinyness = mon.shinyness == .always ? .always : .never
+				}
+				mon.save()
 			}
-			mon.save()
 		}
 	}
 	
 	class func prepareForQuickCompilation() {
-		updateShadowMoves()
 		updateValidItems()
 		updateHealingItems()
 		updateTutorMoves()
 		updatePokeSpots()
 		updateShadowMonitor()
-		XGFolders.Decks.map{$0.compress()}
-		XGFiles.common_rel.compress()
 		importFsys()
 	}
 	
 	class func prepareForCompilation() {
+		fixUpTrainerPokemon()
+		prepareShinyness()
 		updateShadowMoves()
 		updateValidItems()
 		updateHealingItems()
 		updateTutorMoves()
 		updatePokeSpots()
 		updateShadowMonitor()
-		compressFiles()
-		importFsys()
-	}
-	
-	class func compileForRandomiser() {
-		prepareForCompilation()
-		if XGFiles.common_rel.data.get4BytesAtOffset(0x7e764) != 0x002d0000 {
-			XGDolPatcher.zeroForeignStringTables()
-		}
-		ISO.importRandomiserFiles()
-	}
-	
-	class func compileForRelease(XG: Bool) {
-		prepareForRelease()
-		if XG { prepareXG() }
-		compileAllFiles()
 	}
 	
 	class func importSpecificStringTables() {
 		printg("importing menu string tables")
 		
-		let pocket_menu = XGFiles.lzss("pocket_menu.msg.lzss")
-		let d4tower1f3 = XGFiles.lzss("D4_tower_1F_3.msg.lzss")
-		let m5labo2f = XGFiles.lzss("M5_labo_2F.msg.lzss")
-		let d4tower1f2 = XGFiles.lzss("D4_tower_1F_2.msg.lzss")
-		let nameentrymenu = XGFiles.lzss("name_entry_menu.msg.lzss")
-		let system_tool = XGFiles.lzss("system_tool.msg.lzss")
-		let m3shrine1frl = XGFiles.lzss("M3_shrine_1F_rl.msg.lzss")
-		let relivehall_menu = XGFiles.lzss("relivehall_menu.msg.lzss")
-		let pda_menu = XGFiles.lzss("pda_menu.msg.lzss")
-		let d2pc1f = XGFiles.lzss("D2_pc_1F.msg.lzss")
-		let d7out = XGFiles.lzss("D7_out.msg.lzss")
-		let p_exchange = XGFiles.lzss("p_exchange.msg.lzss")
-		let world_map = XGFiles.lzss("world_map.msg.lzss")
-		let fight = XGFiles.lzss("fight.msg.lzss")
+		let pocket_menu = XGFiles.msg("pocket_menu")
+		let d4tower1f3 = XGFiles.msg("D4_tower_1F_3")
+		let m5labo2f = XGFiles.msg("M5_labo_2F")
+		let d4tower1f2 = XGFiles.msg("D4_tower_1F_2")
+		let nameentrymenu = XGFiles.msg("name_entry_menu")
+		let system_tool = XGFiles.msg("system_tool")
+		let m3shrine1frl = XGFiles.msg("M3_shrine_1F_rl")
+		let relivehall_menu = XGFiles.msg("relivehall_menu")
+		let pda_menu = XGFiles.msg("pda_menu")
+		let d2pc1f = XGFiles.msg("D2_pc_1F")
+		let d7out = XGFiles.msg("D7_out")
+		let p_exchange = XGFiles.msg("p_exchange")
+		let world_map = XGFiles.msg("world_map")
+		let fight = XGFiles.msg("fight")
 		
-		XGFiles.nameAndFolder("battle_disk.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: pocket_menu)
-		XGFiles.nameAndFolder("battle_disk.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: m5labo2f)
-		XGFiles.nameAndFolder("battle_disk.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(2, withFile: d4tower1f3)
-		XGFiles.nameAndFolder("bingo_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: d4tower1f2)
-		XGFiles.nameAndFolder("carde_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: system_tool)
-		XGFiles.fsys("fight_common.fsys").fsysData.shiftAndReplaceFileWithIndex(0, withFile: fight)
-		XGFiles.nameAndFolder("hologram_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: m3shrine1frl)
-		XGFiles.nameAndFolder("hologram_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: relivehall_menu)
-		XGFiles.nameAndFolder("mailopen_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: pda_menu)
-		XGFiles.nameAndFolder("mewwaza.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: d2pc1f)
-		XGFiles.nameAndFolder("name_entry_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile:nameentrymenu)
-		XGFiles.nameAndFolder("orre_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: d7out)
-		XGFiles.nameAndFolder("orre_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: pocket_menu)
-		XGFiles.nameAndFolder("orre_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(2, withFile: system_tool)
-		XGFiles.nameAndFolder("pcbox_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: system_tool)
-		XGFiles.nameAndFolder("pcbox_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: pocket_menu)
-		XGFiles.nameAndFolder("pcbox_name_entry_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: nameentrymenu)
-		XGFiles.nameAndFolder("pcbox_pocket_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: pocket_menu)
-		XGFiles.nameAndFolder("pda_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(2, withFile: pda_menu)
-		XGFiles.nameAndFolder("pocket_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: pocket_menu)
-		XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: system_tool)
-		XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: pocket_menu)
-		XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(2, withFile: p_exchange)
-		XGFiles.nameAndFolder("relivehall_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: relivehall_menu)
-		XGFiles.nameAndFolder("pokemonchange_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: system_tool)
-		XGFiles.nameAndFolder("title.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: system_tool)
-		XGFiles.nameAndFolder("topmenu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: system_tool)
-		XGFiles.nameAndFolder("waza_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: pocket_menu)
-		XGFiles.nameAndFolder("worldmap.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(1, withFile: world_map)
-		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(0, withFile: pocket_menu)
-		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(2, withFile: nameentrymenu)
-		XGFiles.nameAndFolder("colosseumbattle_menu.fsys",.MenuFSYS).fsysData.shiftAndReplaceFileWithIndex(3, withFile: system_tool)
+		let msgs = [pocket_menu, d4tower1f2, d4tower1f3, m5labo2f, nameentrymenu, system_tool, m3shrine1frl, relivehall_menu, pda_menu, d2pc1f, d7out, p_exchange, world_map, fight]
+		for file in XGFolders.MenuFSYS.files + [.fsys("fight_common"), .fsys("field_common")] where file.fileType == .fsys {
+			let fsys = file.fsysData
+			
+			for msg in msgs {
+				for i in 0 ..< fsys.numberOfEntries {
+					if fsys.fileTypeForFile(index: i) == .msg && fsys.fileNameForFileWithIndex(index: i) == msg.fileName {
+						fsys.shiftAndReplaceFileWithIndexEfficiently(i, withFile: msg.compress(), save: false)
+					}
+				}
+			}
+			fsys.save()
+		}
 	}
 	
 	
@@ -1016,56 +774,69 @@ extension XGUtility {
 		// You need the national dex index of the pokemon you trade.
 		// Then replace the values with 1000 + the national dex index.
 		// Wooper is 1194 0x4aa, trapinch is 1328 0x530, surskit is 1283 0x503.
-		// This code only does it for gen I-II since national id is same as index.
 		// Also need to get national ids for the pokemon you get from trade.
+		
+		// Now that the xds script editor is done it's not very reliable to hardcode the offsets
+		// Instead the xds scripts should be edited and compiled.
+		// However for those making simple modifications or using the randomiser
+		// it may still be preferrable to hard code if the script file
+		// won't be tampered with.
+		// I'm using the file size as the benchmark as it's really unlikely to remain the same after an xds compilation
+		// since the compiler strips all debug data. If it happens to be the same length
+		// after editing then oh well, unlucky mate :-p
 		
 		printg("updating pokespots")
 		
-		let script = XGFiles.script("M2_guild_1F_2.scd").data
-		
-		let trapinches = [0x0B4A,0x0D1E]
-		let surskits = [0x0B9A,0x0D62]
-		let woopers = [0x0BEA,0x0DA6]
-		
-		let trapinch = XGPokeSpotPokemon(index: 2, pokespot: .rock).pokemon.stats.nationalIndex
-		let surskit = XGPokeSpotPokemon(index: 2, pokespot: .oasis).pokemon.stats.nationalIndex
-		let wooper = XGPokeSpotPokemon(index: 2, pokespot: .cave).pokemon.stats.nationalIndex
-		
-		for offset in trapinches {
-			script.replace2BytesAtOffset(offset, withBytes: trapinch)
+		let scriptFile = XGFiles.scd("M2_guild_1F_2.scd")
+		if scriptFile.exists {
+			if scriptFile.fileSize == 0x1770 {
+				
+				let script = scriptFile.data
+				
+				let trapinches = [0x0B4A,0x0D1E]
+				let surskits = [0x0B9A,0x0D62]
+				let woopers = [0x0BEA,0x0DA6]
+				
+				let trapinch = XGPokeSpotPokemon(index: 2, pokespot: .rock).pokemon.stats.nationalIndex
+				let surskit = XGPokeSpotPokemon(index: 2, pokespot: .oasis).pokemon.stats.nationalIndex
+				let wooper = XGPokeSpotPokemon(index: 2, pokespot: .cave).pokemon.stats.nationalIndex
+				
+				for offset in trapinches {
+					script.replace2BytesAtOffset(offset, withBytes: trapinch)
+				}
+				
+				for offset in surskits {
+					script.replace2BytesAtOffset(offset, withBytes: surskit)
+				}
+				
+				for offset in woopers {
+					script.replace2BytesAtOffset(offset, withBytes: wooper)
+				}
+				
+				script.replace2BytesAtOffset(0x0D3A, withBytes: trapinch + 1000)
+				script.replace2BytesAtOffset(0x1756, withBytes: trapinch + 1000)
+				
+				
+				script.replace2BytesAtOffset(0x0D7E, withBytes: surskit + 1000)
+				script.replace2BytesAtOffset(0x175E, withBytes: surskit + 1000)
+				
+				
+				script.replace2BytesAtOffset(0x0DC2, withBytes: wooper + 1000)
+				script.replace2BytesAtOffset(0x1766, withBytes: wooper + 1000)
+				
+				
+				let meditite = XGTradePokemon(index: 1).species.stats.nationalIndex
+				let shuckle = XGTradePokemon(index: 2).species.stats.nationalIndex
+				let larvitar = XGTradePokemon(index: 3).species.stats.nationalIndex
+				
+				script.replace2BytesAtOffset(0x0D32, withBytes: meditite + 1000)
+				script.replace2BytesAtOffset(0x0D76, withBytes: shuckle + 1000)
+				script.replace2BytesAtOffset(0x0DBA, withBytes: larvitar + 1000)
+				
+				
+				script.save()
+			}
 		}
-		
-		for offset in surskits {
-			script.replace2BytesAtOffset(offset, withBytes: surskit)
-		}
-		
-		for offset in woopers {
-			script.replace2BytesAtOffset(offset, withBytes: wooper)
-		}
-		
-		script.replace2BytesAtOffset(0x0D3A, withBytes: trapinch + 1000)
-		script.replace2BytesAtOffset(0x1756, withBytes: trapinch + 1000)
-		
-		
-		script.replace2BytesAtOffset(0x0D7E, withBytes: surskit + 1000)
-		script.replace2BytesAtOffset(0x175E, withBytes: surskit + 1000)
-		
-		
-		script.replace2BytesAtOffset(0x0DC2, withBytes: wooper + 1000)
-		script.replace2BytesAtOffset(0x1766, withBytes: wooper + 1000)
-		
-		
-		let meditite = XGTradePokemon(index: 1).species.stats.nationalIndex
-		let shuckle = XGTradePokemon(index: 2).species.stats.nationalIndex
-		let larvitar = XGTradePokemon(index: 3).species.stats.nationalIndex
-		
-		script.replace2BytesAtOffset(0x0D32, withBytes: meditite + 1000)
-		script.replace2BytesAtOffset(0x0D76, withBytes: shuckle + 1000)
-		script.replace2BytesAtOffset(0x0DBA, withBytes: larvitar + 1000)
-		
-		
-		
-		script.save()
 	}
 	
 	
@@ -1398,14 +1169,13 @@ extension XGUtility {
 	
 	class func documentXDS() {
 		printg("documenting script: common.scd")
-		XGUtility.saveString(XGFiles.common_rel.scriptData.getXDSScript(), toFile: .nameAndFolder("common.xds", .XDS))
 		XGFolders.Scripts.map({ (file) in
 			printg("documenting script: ", file.fileName)
 			let script = file.scriptData.getXDSScript()
-			XGUtility.saveString(script, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + ".xds", .XDS))
+			XGUtility.saveString(script, toFile: .xds(file.fileName.removeFileExtensions()))
 		})
 		printg("documenting script: ", XGFiles.common_rel.fileName)
-		XGFiles.common_rel.scriptData.getXDSScript().save(toFile: .nameAndFolder("common" + ".xds", .XDS))
+		XGFiles.common_rel.scriptData.getXDSScript().save(toFile: .xds("common"))
 	}
 	
 	class func documentISO(forXG: Bool) {
@@ -1443,17 +1213,17 @@ extension XGUtility {
 		
 		// get number of padding 0s at end
 		var index = pkx.length - 4
-		var current = pkx.get4BytesAtOffset(index)
+		var current = pkx.getWordAtOffset(index)
 		
 		while current == 0 {
 			modelEndPaddingCounter += 4
 			index -= 4
-			current = pkx.get4BytesAtOffset(index)
+			current = pkx.getWordAtOffset(index)
 		}
 		modelEndPaddingCounter = pkx.length - (index + 4)
 		
-		let skipStart = Int(pkx.get4BytesAtOffset(pkx.length - modelEndPaddingCounter - 0x1C)) + modelStart
-		let skipEnd = Int(pkx.get4BytesAtOffset(modelHeader + 4)) + modelStart
+		let skipStart = Int(pkx.getWordAtOffset(pkx.length - modelEndPaddingCounter - 0x1C)) + modelStart
+		let skipEnd = Int(pkx.getWordAtOffset(modelHeader + 4)) + modelStart
 		
 		let part2 = pkx.getCharStreamFromOffset(modelStart, length: skipStart - modelStart)
 		let part3 = pkx.getCharStreamFromOffset(skipEnd, length: pkx.length - modelEndPaddingCounter - 0x1C - skipEnd)
@@ -1461,7 +1231,7 @@ extension XGUtility {
 		var rawBytes = part2 + part3 + part4
 		
 		let newLength = rawBytes.count + 0x20
-		let header4 = [newLength, skipStart - modelStart, Int(pkx.get4BytesAtOffset(modelHeader + 8)), 0x01]
+		let header4 = [newLength, skipStart - modelStart, Int(pkx.getWordAtOffset(modelHeader + 8)), 0x01]
 		var header = [UInt8]()
 		for h in header4 {
 			header.append(UInt8(h >> 24))
@@ -1487,18 +1257,18 @@ extension XGUtility {
 		backup.save()
 		
 		let headerSize = 0x20
-		let pointerListPointer = data.get4BytesAtOffset(4).int + headerSize
-		let numberOfPointers = data.get4BytesAtOffset(8).int
+		let pointerListPointer = data.getWordAtOffset(4).int + headerSize
+		let numberOfPointers = data.getWordAtOffset(8).int
 		let sceneDataPointerOffset = pointerListPointer + (numberOfPointers * 4)
-		let sceneDataPointer = data.get4BytesAtOffset(sceneDataPointerOffset).int + headerSize
-		let struct1Pointer = data.get4BytesAtOffset(sceneDataPointer).int + headerSize
-		let objectPointer = data.get4BytesAtOffset(struct1Pointer).int + headerSize
-		let animation0Pointer = data.get4BytesAtOffset(objectPointer + 4).int + headerSize
+		let sceneDataPointer = data.getWordAtOffset(sceneDataPointerOffset).int + headerSize
+		let struct1Pointer = data.getWordAtOffset(sceneDataPointer).int + headerSize
+		let objectPointer = data.getWordAtOffset(struct1Pointer).int + headerSize
+		let animation0Pointer = data.getWordAtOffset(objectPointer + 4).int + headerSize
 		var animationOffsets = [UInt32]()
 		var currentAnimationOffset = animation0Pointer
 		var currentAnimation : UInt32 = 0
 		repeat {
-			currentAnimation = data.get4BytesAtOffset(currentAnimationOffset)
+			currentAnimation = data.getWordAtOffset(currentAnimationOffset)
 			if currentAnimation != 0 {
 				animationOffsets.append(currentAnimation)
 			}
@@ -1553,9 +1323,6 @@ extension XGUtility {
 	}
 	
 	//MARK: - Release configuration
-	class func prepareForRelease() {
-		fixUpTrainerPokemon()
-	}
 	
 	class func fixUpTrainerPokemon() {
 		for deck in TrainerDecksArray {
@@ -2310,8 +2077,16 @@ extension XGUtility {
 }
 
 extension XGDolPatcher {
-	class func clearDebugData() { return }
 	class func deleteBattleModeData() { return }
+	
+	class func tutorMovesAvailableImmediately() {
+		if game == .XD {
+			for i in 1 ... CommonIndexes.NumberOfTutorMoves.value {
+				let tm = XGTMs.tutor(i)
+				tm.replaceTutorFlag(.immediately)
+			}
+		}
+	}
 }
 
 
