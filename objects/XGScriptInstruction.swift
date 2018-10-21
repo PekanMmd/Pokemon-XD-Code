@@ -56,6 +56,22 @@ class XGScriptInstruction: NSObject {
 		}
 	}
 	
+	var isVariable : Bool {
+		return self.opCode == .loadVariable || self.opCode == .loadNonCopyableVariable || self.opCode == .setVariable
+	}
+	
+	var isLocalVariable : Bool {
+		return self.isVariable && self.level == 1
+	}
+	
+	var isGlobalVariable : Bool {
+		return self.isVariable && self.level == 0
+	}
+	
+	var isArrayVariable : Bool {
+		return self.isVariable && self.level == 3 && self.parameter >= 0x200
+	}
+	
 	@objc var XDSVariable : String {
 		// add an asterisk to last result, local variables and script function parameters if the type of the varible isn't copyable.
 		// it is incredibly difficult to infer the underlying type for these variables.

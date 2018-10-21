@@ -68,7 +68,7 @@ enum XGScriptClassesInfo {
 	var name : String {
 		switch self {
 			case .operators			: return "Operator"
-			case .classes(let val)	: return ScriptClassNames[val] ?? "Class\(val)"
+			case .classes(let val)	: return ScriptClassNames[val]?.capitalized ?? "Class\(val)"
 		}
 	}
 	
@@ -117,6 +117,10 @@ enum XGScriptClassesInfo {
 		}
 		
 		return .unknown(id)
+	}
+	
+	func classDotFunction(_ id: Int) -> String {
+		return self.name + "." + self[id].name
 	}
 	
 	func functionWithName(_ name: String) -> XGScriptFunctionInfo? {

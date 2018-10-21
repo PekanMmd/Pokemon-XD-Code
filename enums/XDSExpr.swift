@@ -405,12 +405,12 @@ indirect enum XDSExpr {
 	static func stringFromMacroImmediate(c: XDSConstant, t: XDSMacroTypes) -> String {
 		switch t {
 		case .bool:
-			return c.asInt != 0 ? "True" : "False"
+			return c.asInt != 0 ? "Yes" : "No"
 		case .flag:
 			if let flag = XDSFlags(rawValue: c.asInt) {
 				return XDSExpr.macroWithName("FLAG_" + flag.name.simplified.uppercased())
 			}
-			return c.asInt.string
+			return XDSExpr.macroWithName("FLAG_" + c.asInt.string)
 		case .none:
 			printg("error: empty macro value")
 			return "error: empty macro value"
@@ -418,7 +418,12 @@ indirect enum XDSExpr {
 			if c.asInt == 0 {
 				return XDSExpr.macroWithName("pokemon_none".uppercased())
 			}
-			return XDSExpr.macroWithName("POKEMON_" + XGPokemon.nationalIndex(c.asInt).name.string.simplified.uppercased())
+			return XDSExpr.macroWithName("POKEMON_" + XGPokemon.pokemon(c.asInt).name.string.simplified.uppercased())
+		case .pokemonNational:
+			if c.asInt == 0 {
+				return XDSExpr.macroWithName("pokemon_national_id_none".uppercased())
+			}
+			return XDSExpr.macroWithName("POKEMON_NATIONAL_ID_" + XGPokemon.nationalIndex(c.asInt).name.string.simplified.uppercased())
 		case .item:
 			if c.asInt == 0 {
 				return XDSExpr.macroWithName("item_none".uppercased())
@@ -451,10 +456,9 @@ indirect enum XDSExpr {
 			return macroForString(xs: getStringSafelyWithID(id: c.asInt))
 		case .talk:
 			if let type = XDSTalkTypes(rawValue: c.asInt) {
-			return XDSExpr.macroWithName("SPEECH_TYPE_" + type.string.simplified.uppercased())
+				return XDSExpr.macroWithName("SPEECH_TYPE_" + type.string.simplified.uppercased())
 			} else {
-				printg("error: unknown speech type")
-				return "error: unknown speech type"
+				return XDSExpr.macroWithName("SPEECH_TYPE_" + c.asInt.string.simplified.uppercased())
 			}
 		case .ability:
 			if c.asInt == 0 {
@@ -462,7 +466,7 @@ indirect enum XDSExpr {
 			}
 			return XDSExpr.macroWithName("ABILITY_" + XGAbilities.ability(c.asInt).name.string.simplified.uppercased())
 		case .msgVar:
-			return XDSExpr.macroWithName("MSG_VAR" + c.asInt.hexString())
+			return XDSExpr.macroWithName("MSG_VAR_" + c.asInt.hexString())
 		case .battleResult:
 			switch c.asInt {
 				case 0: return XDSExpr.macroWithName("result_before_battle".uppercased())
@@ -618,7 +622,7 @@ indirect enum XDSExpr {
 		case .jumpTrue(let e, let l):
 			return "goto " + l + " if " + e.text
 		case .jumpFalse(let e, let l):
-			return "goto " + l + " ifFalse " + e.text
+			return "goto " + l + " ifnot " + e.text
 		case .jump(let l):
 			return "goto " + l
 		case .XDSReturn:
@@ -701,6 +705,54 @@ indirect enum XDSExpr {
 			return nil
 		}
 		return nil
+	}
+	
+	var macroVariable : String? {
+		switch self {
+		case .bracket(let e):
+			return e.macroVariable
+		case .callStandard(7, 17, let es):
+			return es[0].macroVariable
+		case .callStandard(7, 16, let es):
+			return es[0].macroVariable
+		case .callStandard(let c, let f, _):
+			return XGScriptClassesInfo.classes(c).classDotFunction(f)
+		case .loadVariable(let v):
+			return v
+		case .loadPointer(let v):
+			return v
+		case .call(let l, _):
+			return l
+		default:
+			return nil
+		}
+	}
+	
+	var paramMacroVariables : [String?] {
+		switch self {
+		case .call(_, let es):
+			return es.map { (e) -> String? in
+				return e.macroVariable
+			}
+		case .callStandard(7, 17, let es):
+			return [es[2].macroVariable]
+		case .callStandard(_, _, let es):
+			return es.map({ (e) -> String? in
+				return e.macroVariable
+			})
+		case .bracket(let e):
+			return e.paramMacroVariables
+		case .callVoid(_, let es):
+			return es.map { (e) -> String? in
+				return e.macroVariable
+			}
+		case .callStandardVoid(_, _, let es):
+			return es.map({ (e) -> String? in
+				return e.macroVariable
+			})
+		default:
+			return []
+		}
 	}
 	
 	var macros : [XDSExpr] {

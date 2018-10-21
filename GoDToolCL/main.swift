@@ -8,6 +8,13 @@
 //
 
 
+
+//let name = "M2_guild_1F_2"
+//let scd = XGFiles.scd(name).scriptData
+//scd.getXDSScript().save(toFile: .xds(name))
+//scd.description.save(toFile: .nameAndFolder(name, .Documents))
+
+
 XGUtility.documentXDS()
 
 

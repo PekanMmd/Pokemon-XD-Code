@@ -773,6 +773,7 @@ extension XGUtility {
 		// Need to change array values at bottom of m2 guild script.
 		// You need the national dex index of the pokemon you trade.
 		// Then replace the values with 1000 + the national dex index.
+		// I.E. the pokemon's name ID.
 		// Wooper is 1194 0x4aa, trapinch is 1328 0x530, surskit is 1283 0x503.
 		// Also need to get national ids for the pokemon you get from trade.
 		
@@ -797,9 +798,9 @@ extension XGUtility {
 				let surskits = [0x0B9A,0x0D62]
 				let woopers = [0x0BEA,0x0DA6]
 				
-				let trapinch = XGPokeSpotPokemon(index: 2, pokespot: .rock).pokemon.stats.nationalIndex
-				let surskit = XGPokeSpotPokemon(index: 2, pokespot: .oasis).pokemon.stats.nationalIndex
-				let wooper = XGPokeSpotPokemon(index: 2, pokespot: .cave).pokemon.stats.nationalIndex
+				let trapinch = XGPokeSpotPokemon(index: 2, pokespot: .rock).pokemon.nameID
+				let surskit = XGPokeSpotPokemon(index: 2, pokespot: .oasis).pokemon.nameID
+				let wooper = XGPokeSpotPokemon(index: 2, pokespot: .cave).pokemon.nameID
 				
 				for offset in trapinches {
 					script.replace2BytesAtOffset(offset, withBytes: trapinch)
@@ -813,25 +814,25 @@ extension XGUtility {
 					script.replace2BytesAtOffset(offset, withBytes: wooper)
 				}
 				
-				script.replace2BytesAtOffset(0x0D3A, withBytes: trapinch + 1000)
-				script.replace2BytesAtOffset(0x1756, withBytes: trapinch + 1000)
+				script.replace2BytesAtOffset(0x0D3A, withBytes: trapinch)
+				script.replace2BytesAtOffset(0x1756, withBytes: trapinch)
 				
 				
-				script.replace2BytesAtOffset(0x0D7E, withBytes: surskit + 1000)
-				script.replace2BytesAtOffset(0x175E, withBytes: surskit + 1000)
+				script.replace2BytesAtOffset(0x0D7E, withBytes: surskit)
+				script.replace2BytesAtOffset(0x175E, withBytes: surskit)
 				
 				
-				script.replace2BytesAtOffset(0x0DC2, withBytes: wooper + 1000)
-				script.replace2BytesAtOffset(0x1766, withBytes: wooper + 1000)
+				script.replace2BytesAtOffset(0x0DC2, withBytes: wooper)
+				script.replace2BytesAtOffset(0x1766, withBytes: wooper)
 				
 				
-				let meditite = XGTradePokemon(index: 1).species.stats.nationalIndex
-				let shuckle = XGTradePokemon(index: 2).species.stats.nationalIndex
-				let larvitar = XGTradePokemon(index: 3).species.stats.nationalIndex
+				let meditite = XGTradePokemon(index: 1).species.nameID
+				let shuckle = XGTradePokemon(index: 2).species.nameID
+				let larvitar = XGTradePokemon(index: 3).species.nameID
 				
-				script.replace2BytesAtOffset(0x0D32, withBytes: meditite + 1000)
-				script.replace2BytesAtOffset(0x0D76, withBytes: shuckle + 1000)
-				script.replace2BytesAtOffset(0x0DBA, withBytes: larvitar + 1000)
+				script.replace2BytesAtOffset(0x0D32, withBytes: meditite)
+				script.replace2BytesAtOffset(0x0D76, withBytes: shuckle)
+				script.replace2BytesAtOffset(0x0DBA, withBytes: larvitar)
 				
 				
 				script.save()
@@ -1170,9 +1171,11 @@ extension XGUtility {
 	class func documentXDS() {
 		printg("documenting script: common.scd")
 		XGFolders.Scripts.map({ (file) in
-			printg("documenting script: ", file.fileName)
-			let script = file.scriptData.getXDSScript()
-			XGUtility.saveString(script, toFile: .xds(file.fileName.removeFileExtensions()))
+			if file.fileType == .scd {
+				printg("documenting script: ", file.fileName)
+				let script = file.scriptData.getXDSScript()
+				XGUtility.saveString(script, toFile: .xds(file.fileName.removeFileExtensions()))
+			}
 		})
 		printg("documenting script: ", XGFiles.common_rel.fileName)
 		XGFiles.common_rel.scriptData.getXDSScript().save(toFile: .xds("common"))

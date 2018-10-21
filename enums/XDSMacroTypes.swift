@@ -10,6 +10,7 @@ import Foundation
 enum XDSMacroTypes : Int {
 	case none = 0
 	case pokemon
+	case pokemonNational
 	case item
 	case model
 	case move
@@ -47,6 +48,7 @@ enum XDSTalkTypes : Int {
 		case .speciesCry: return .pokemon
 		case .battle1: return .battleID
 		case .battle2: return .battleID
+		case .silentItem: return .item
 		default: return nil
 		}
 	}

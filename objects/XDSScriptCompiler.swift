@@ -474,7 +474,7 @@ class XDSScriptCompiler: NSObject {
 			}
 			return false
 		}
-		if ["define", "call", "return", "function", "goto", "if", "ifFalse", "Null", "global"].contains(tokens[1]) {
+		if ["define", "call", "return", "function", "goto", "if", "ifnot", "Null", "global"].contains(tokens[1]) {
 			error = "'\(tokens[1])' is a reserved keyword."
 			for i in 0 ..< tokens.count {
 				error += " " + tokens[i]
@@ -593,11 +593,11 @@ class XDSScriptCompiler: NSObject {
 			return (XDSConstantTypes.none_t, [XDSConstant.null])
 		}
 		
-		if text == "True" {
+		if ["True", "Yes", "YES", "TRUE"].contains(text) {
 			return (XDSConstantTypes.integer, [XDSConstant.integer(1)])
 		}
 		
-		if text == "False" {
+		if ["False", "No", "NO", "FALSE"].contains(text) {
 			return (XDSConstantTypes.integer, [XDSConstant.integer(0)])
 		}
 		
@@ -1147,7 +1147,7 @@ class XDSScriptCompiler: NSObject {
 								}
 								return nil
 							}
-						} else if tokens[2] == "ifFalse" {
+						} else if tokens[2] == "ifnot" {
 							if let expr = evalTokens(tokens: subTokens, subExpr: true) {
 								return .jumpFalse(expr, tokens[1])
 							} else {
@@ -1158,7 +1158,7 @@ class XDSScriptCompiler: NSObject {
 								return nil
 							}
 						}  else {
-							error = "Expected 'if' or 'ifFalse' after location.\nInvalid line: "
+							error = "Expected 'if' or 'ifnot' after location.\nInvalid line: "
 							for t in tokens {
 								error += " " + t
 							}

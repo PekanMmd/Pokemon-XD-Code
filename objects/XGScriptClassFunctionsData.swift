@@ -128,7 +128,7 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		("setPreviousMapID", 145, 1, [.room], nil), //# the game uses the term "floor"
 		("getPreviousMapID", 146, 0, nil, .room),
 		("unknownFunction147", 147, 2, nil, nil), //# (int, float)
-		("getPkmSpeciesName", 148, 1, [.pokemon], .msg),
+		("getPkmSpeciesName", 148, 1, [.msg], nil),
 		("getTreasureBoxCharacter", 149, 1, [.treasureID], nil), //# (int treasureID) returns a character object for the treasure
 		("speciesRelatedFunction148", 150, 1, [.pokemon], nil), //# take the species index as arg
 		("getArrayElement", 151, 1, nil, nil), //# (array, index)

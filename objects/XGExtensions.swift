@@ -309,6 +309,10 @@ extension String {
 		return true
 	}
 	
+	func isCapitalised() -> Bool {
+		return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(self.first!)
+	}
+	
 	func save(toFile file: XGFiles) {
 		XGUtility.saveString(self, toFile: file)
 	}
