@@ -1675,7 +1675,7 @@ class XGScript: NSObject {
 		
 		var uniqueMacros = [XDSExpr]()
 		for macro in macros {
-			if macro.macroName == "Yes" || macro.macroName == "No" {
+			if macro.macroName == "YES" || macro.macroName == "NO" {
 				continue
 			}
 			if !uniqueMacros.contains(where: { (expr) -> Bool in
