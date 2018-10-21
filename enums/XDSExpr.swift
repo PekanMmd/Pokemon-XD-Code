@@ -405,7 +405,7 @@ indirect enum XDSExpr {
 	static func stringFromMacroImmediate(c: XDSConstant, t: XDSMacroTypes) -> String {
 		switch t {
 		case .bool:
-			return c.asInt != 0 ? "Yes" : "No"
+			return c.asInt != 0 ? "YES" : "NO"
 		case .flag:
 			if let flag = XDSFlags(rawValue: c.asInt) {
 				return XDSExpr.macroWithName("FLAG_" + flag.name.simplified.uppercased())
@@ -506,13 +506,13 @@ indirect enum XDSExpr {
 		case .partyMember:
 			switch c.asInt {
 			case 0:
-				return "PARTY_MEMBER_NONE"
+				return XDSExpr.macroWithName("PARTY_MEMBER_NONE")
 			case 1:
-				return "PARTY_MEMBER_JOVI"
+				return XDSExpr.macroWithName("PARTY_MEMBER_JOVI")
 			case 2:
-				return "PARTY_MEMBER_KANDEE"
+				return XDSExpr.macroWithName("PARTY_MEMBER_KANDEE")
 			case 3:
-				return "PARTY_MEMBER_KRANE"
+				return XDSExpr.macroWithName("PARTY_MEMBER_KRANE")
 			default:
 				printg("error unknown party member");return "error unknown party member"
 			}

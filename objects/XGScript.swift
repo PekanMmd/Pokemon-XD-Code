@@ -984,7 +984,7 @@ class XGScript: NSObject {
 						}
 						
 						if !character.isVisible {
-							str += "Visible: False "
+							str += "Visible: NO "
 						}
 						
 						str += "Flags: " + character.flags.hexString() + " "
