@@ -36,6 +36,14 @@ class XDSScriptCompiler: NSObject {
 	static var currentFunction = ""
 	static var sugarVarCounter = 1
 	
+	class func clearCompilerFlags() {
+		writeDisassembly = false
+		decompileXDS = false
+		updateStringIDs = false
+		increaseMSGSize = false
+		scriptFile = nil
+	}
+	
 	// MARK: - specify file or text to compile
 	class func compile(textFile file: XGFiles) -> Bool {
 		let scdFile = XGFiles.scd(file.fileName.removeFileExtensions())
@@ -67,18 +75,19 @@ class XDSScriptCompiler: NSObject {
 					printg("Decompilation complete!")
 				}
 				
-				scriptFile = nil
+				clearCompilerFlags()
 				return true
 			} else {
 				
 				let errorString = "XDS compilation error, File: \(file.fileName) \nError- failed to save file."
 				printg(errorString)
 				
-				scriptFile = nil
+				clearCompilerFlags()
 				return false
 			}
 		}
 		
+		clearCompilerFlags()
 		let errorString = "XDS compilation error, File: \(file.fileName) \nError-" + error
 		
 		printg(errorString)
@@ -102,10 +111,6 @@ class XDSScriptCompiler: NSObject {
 		scriptID = 0
 		baseStringID = 0
 		xdsversion = 0
-		writeDisassembly = false
-		decompileXDS = false
-		updateStringIDs = false
-		increaseMSGSize = false
 		
 		let strippedComments = stripComments(text: script)
 		let stripped = stripWhiteSpace(text: strippedComments)

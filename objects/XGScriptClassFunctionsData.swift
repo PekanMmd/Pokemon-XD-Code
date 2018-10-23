@@ -250,13 +250,11 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		//Category(name = "Known methods", start = 16, nb=-1),
 		
 		("playSpecifiedSpeciesCry", 16, 2, [.pokemon], nil), //# (int species)
-		
-		("playCry", 16, 1, nil, nil),
 		("deleteMove", 17, 1, nil, nil), // (int move index)
 		
 		("countMoves", 20, 1, nil, nil),
 		("getPokeballCaughtWith", 1, 21, nil, .item),
-		("getNickname", 22, 1, nil, nil),
+		("getNickname", 22, 1, nil, .msg),
 		
 		//# index = 23 does not exist
 		
@@ -272,9 +270,10 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		("getHeldItem", 32, 1, nil, .item),
 		("getSIDTID", 33, 1, nil, nil),
 		
-		("teachMove", 34, 1, [.move, nil], nil), // (int move id)
+		("teachMove", 34, 1, [.move], nil), // (int move id)
 		("hasLearnedMove", 35, 1, [.move], .bool), // (int move id)
-	],
+		("canLearnTutorMove", 36, 1, [.move], .bool) // int move id
+,	],
 	
 //MARK: - Movement
 	38: [
@@ -330,6 +329,7 @@ let ScriptClassFunctions : [Int : [(String,Int,Int,[XDSMacroTypes?]?,XDSMacroTyp
 		("showWorldMapLocation", 60, 2, nil, nil),
 		
 		("openMoveRelearnerMenuForPartyMember", 64, 2, nil, .move), //# (int partyIndex)
+		("openMoveTutorMovesMenu", 65, 1, nil, nil),
 		
 		("openMoneyWindow", 67, 3, nil, nil), //# (int x, int y)
 		("closeMoneyWindow", 68, 1, nil, nil),

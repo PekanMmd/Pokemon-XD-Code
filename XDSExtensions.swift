@@ -571,8 +571,34 @@ extension XDSScriptCompiler {
 		var rid = -1
 		var name = ""
 		
-		let character = XGCharacter()
+		guard let file = scriptFile else {
+			if verbose {
+				printg("Skipping character assignment. File for script is unknown.")
+			}
+			return true
+		}
 		
+		var mapRel : XGFiles!
+		if file.folder.files.contains(where: { (rel) -> Bool in
+			return (rel.fileName.removeFileExtensions() == file.fileName.removeFileExtensions()) && rel.fileType = .rel
+		}) {
+			mapRel = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, file.folder)
+		} else {
+			if XGFiles.rel(file.fileName.removeFileExtensions()).exists {
+				mapRel = .rel(file.fileName.removeFileExtensions())
+			}
+		}
+		guard mapRel != nil else {
+			if verbose {
+				printg("Skipping character assignment. Map file for script was not found.")
+			}
+			return true
+		}
+		
+		var groupid = -1
+		var resourceid = -1
+		var characterid = -1
+		var modelid = -1
 		
 		var assignIndex = 0
 		while assignIndex < tokens.count {

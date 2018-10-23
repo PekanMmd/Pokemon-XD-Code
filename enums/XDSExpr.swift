@@ -496,6 +496,9 @@ indirect enum XDSExpr {
 			if c.asInt == 0 {
 				return macroWithName("pokemon_none".uppercased())
 			}
+			if c.asInt < 0 {
+				return macroWithName("POKEMON_CANCEL")
+			}
 			let mon = XGPokemon.pokemon(c.asInt)
 			if mon.nameID == 0 {
 				return macroWithName("POKEMON_" + c.asInt.string)
@@ -504,6 +507,9 @@ indirect enum XDSExpr {
 		case .item:
 			if c.asInt == 0 {
 				return macroWithName("item_none".uppercased())
+			}
+			if c.asInt < 0 {
+				return macroWithName("ITEM_CANCEL")
 			}
 			let item = XGItems.item(c.asInt)
 			if item.nameID == 0 {
@@ -522,6 +528,9 @@ indirect enum XDSExpr {
 		case .move:
 			if c.asInt == 0 {
 				return macroWithName("move_none".uppercased())
+			}
+			if c.asInt < 0 {
+				return macroWithName("MOVE_CANCEL")
 			}
 			let move = XGMoves.move(c.asInt)
 			if move.nameID == 0 {
@@ -780,8 +789,10 @@ indirect enum XDSExpr {
 				
 				var conditionText = ""
 				switch condition {
+				case .jumpFalse(.loadImmediate(let c), _):
+					conditionText = XDSExpr.macroImmediate(c, .bool).forcedBracketed.text[0]
 				case .jumpFalse(let c, _):
-					conditionText = c.bracketed.text[0]
+					conditionText = c.forcedBracketed.text[0]
 				case .jumpTrue(let c, _):
 					conditionText = "!" + c.forcedBracketed.text[0]
 				default:
@@ -817,6 +828,8 @@ indirect enum XDSExpr {
 			
 			var conditionText = ""
 			switch condition {
+			case .jumpFalse(.loadImmediate(let c), _):
+				conditionText = XDSExpr.macroImmediate(c, .bool).forcedBracketed.text[0]
 			case .jumpFalse(let c, _):
 				conditionText = c.bracketed.text[0]
 			case .jumpTrue(let c, _):
