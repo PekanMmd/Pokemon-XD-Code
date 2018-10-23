@@ -43,7 +43,7 @@ class XGScriptInstruction: NSObject {
 			return "#LastResult"
 		default:
 			if param < 0x80 && param > 0 {
-				return "#" + XGScriptClassesInfo.classes(param).name.lowercased() + "Object"
+				return "#" + XGScriptClass.classes(param).name.lowercased() + "Object"
 			} else if param == 0x80 {
 				return "#characters[player]"
 			} else if param <= 0x120 {
@@ -100,7 +100,7 @@ class XGScriptInstruction: NSObject {
 			return kXDSLastResultVariable + pointerAdd
 		default:
 			if param < 0x80 && param > 0 {
-				return XGScriptClassesInfo.classes(param).name.capitalized
+				return XGScriptClass.classes(param).name.capitalized
 			} else if param == 0x80 {
 				return "player_character"
 			} else if param <= 0x120 {
@@ -262,9 +262,9 @@ class XGScriptInstruction: NSObject {
 		case .loadImmediate:
 			sub = ""
 		case .callStandard:
-			sub = XGScriptClassesInfo.classes(self.subOpCode).name + "."
+			sub = XGScriptClass.classes(self.subOpCode).name + "."
 		case .xd_operator:
-			sub = XGScriptClassesInfo.operators[self.subOpCode].name
+			sub = XGScriptClass.operators[self.subOpCode].name
 		case .setVector:
 			let dimensions = ["vx ","vy ", "vz "]
 			let index = self.subSubOpCodes.0
@@ -290,7 +290,7 @@ class XGScriptInstruction: NSObject {
 		case .loadNonCopyableVariable:
 			paramString = self.SCDVariable
 		case .callStandard:
-			paramString = XGScriptClassesInfo.classes(self.subOpCode)[param].name + "()"
+			paramString = XGScriptClass.classes(self.subOpCode)[param].name + "()"
 		case .loadImmediate:
 			paramString = self.constant.description + " (" + param.hexString() + ")"
 		case .pop:

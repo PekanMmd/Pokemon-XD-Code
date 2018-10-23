@@ -10,10 +10,12 @@ import Foundation
 
 //MARK: - Class Names
 let ScriptClassNames : [Int : String] = [
-	// .xds script format requires classes to be named with first character capitalised and all subsequent characters in lowercase
+	// .xds script format requires classes to be named with first character capitalised
 	 0 : "Standard",
 	 4 : "Vector",
 	 7 : "Array",
+	 
+	// 33 is first object class, 60 is last
 	33 : "Camera",
 	35 : "Character",
 	37 : "Pokemon",
@@ -25,8 +27,8 @@ let ScriptClassNames : [Int : String] = [
 	43 : "Player",
 	47 : "Sound",
 	52 : "Daycare",
-	54 : "Taskmanager",
-	59 : "Shadowpokemon",
+	54 : "TaskManager",
+	59 : "ShadowPokemon",
 	60 : "Pokespot"
 ]
 
@@ -64,10 +66,10 @@ let ScriptOperators : [(String,Int,Int)] = [
 	//Category(name = "Comparison operators", start = 48, nb = 6),
 	
 	("=", 48, 2), //# For string equality comparison: '?' every character goes, '*' everything goes after here
-	("<=", 49, 2), //# ordering of strings is done comparing their respective lengths
-	("<", 50, 2),
-	(">=", 51, 2),
-	(">", 52, 2),
+	(">", 49, 2), //# ordering of strings is done comparing their respective lengths
+	(">=", 50, 2),
+	("<", 51, 2),
+	("<=", 52, 2),
 	("!=", 53, 2)
 	//#------------------------------------------------------------------
 ]

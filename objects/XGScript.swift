@@ -26,7 +26,7 @@ typealias FTBL = (codeOffset: Int, end: Int, name: String, index: Int)
 typealias GIRI = (groupID: Int, resourceID: Int)
 typealias VECT = (x: Float, y: Float, z: Float)
 
-let currentXDSVersion : Float = 1.0
+let currentXDSVersion : Float = 1.1
 
 class XGScript: NSObject {
 	
@@ -573,7 +573,7 @@ class XGScript: NSObject {
 		return ""
 	}
 	
-	private func getInstructionStack() -> XGStack<XDSExpr> {
+	private func getInstructionStack() -> (expressions: XGStack<XDSExpr>, macros: [XDSExpr]) {
 		let stack = XGStack<XDSExpr>()
 		
 		globalMacroTypes = [:]
@@ -622,7 +622,8 @@ class XGScript: NSObject {
 				if stack.peek().isReturn {
 					stack.push(.nop)
 				} else {
-					stack.push(.jumpTrue(stack.pop(), XDSExpr.locationWithIndex(instruction.parameter)))
+					// negate condition so can use jump false
+					stack.push(.jumpFalse( XDSExpr.unaryOperator(16, stack.pop()), XDSExpr.locationWithIndex(instruction.parameter)))
 				}
 				
 				
@@ -699,26 +700,22 @@ class XGScript: NSObject {
 						stack.push(.unaryOperator(instruction.subOpCode, stack.pop()))
 					}
 				} else if (instruction.subOpCode >= 32 && instruction.subOpCode <= 39) || (instruction.subOpCode <= 53 && instruction.subOpCode >= 48) {
-					// Must confirm ordering of variables otherwise / and % will be broken
-					// Tux documenting his binary operators the other way around
-					// (e.g. < as >=)
-					// but I think this way is more consistent with function parameters
-					// where the first parameter is at the top of the stack
-					// ultimately just depends on what the developers chose so could be either one
+					// operator parameters are the opposite ordering of function parameters
+					// e.g. e1 % e2 has e1 on the stack first and then e2
 					var e1 = XDSExpr.nop
 					var e2 = XDSExpr.nop
 					if !stack.peek().isReturn {
-						e1 = stack.pop()
-					}
-					if !stack.peek().isReturn {
 						e2 = stack.pop()
 					}
+					if !stack.peek().isReturn {
+						e1 = stack.pop()
+					}
 					
-					if e1.isNop {
+					if e2.isNop {
 						stack.push(.nop)
-					} else if e2.isNop {
+					} else if e1.isNop {
 						stack.push(.nop)
-						for _ in 0 ..< e1.instructionCount {
+						for _ in 0 ..< e2.instructionCount {
 							stack.push(.nop)
 						}
 						stack.push(.nop)
@@ -755,7 +752,7 @@ class XGScript: NSObject {
 							switch e1 {
 							case .callStandard(let c, let f, let es):
 								
-								let sclass = XGScriptClassesInfo.classes(c)
+								let sclass = XGScriptClass.classes(c)
 								if sclass.name == "Character" {
 									if sclass[f].name == "talk" {
 										if es[1].isImmediate {
@@ -863,12 +860,23 @@ class XGScript: NSObject {
 				
 				var params = [XDSExpr]()
 				
-				let c = instruction.subOpCode
-				let f = instruction.parameter
+				var c = instruction.subOpCode
+				var f = instruction.parameter
+				
+				// convert standard.getarrayelement to array.get
+				// as far as I can tell these are equivalent
+				// using just one prevents having to write double the code
+				// to account for both case
+				if c == XGScriptClass.getClassNamed("Standard")!.index {
+					if f == XGScriptClass.getClassNamed("Standard")!.functionWithName("getArrayElement")!.index {
+						c = XGScriptClass.getClassNamed("Array")!.index
+						f = XGScriptClass.getClassNamed("Array")!.functionWithName("get")!.index
+					}
+				}
 				
 				// get macro types if they have been documented
-				if let returnMacro = XGScriptClassesInfo.classes(c)[f].returnMacro {
-					globalMacroTypes[XGScriptClassesInfo.classes(c).classDotFunction(f)] = returnMacro
+				if let returnMacro = XGScriptClass.classes(c)[f].returnMacro {
+					globalMacroTypes[XGScriptClass.classes(c).classDotFunction(f)] = returnMacro
 				}
 				
 				var broken = false
@@ -908,180 +916,6 @@ class XGScript: NSObject {
 			
 		}
 		
-		return stack
-	}
-	
-	@objc private func generateXDSHeader() -> String {
-		// just arbitrary comments at the top of the file
-		let longline = "Decompiled using Gale of Darkness Tool by @StarsMmd"
-		let date = Date(timeIntervalSinceNow: 0)
-		let shortline = "on \(date).".spaceToLength(longline.count)
-		let filename = (self.file.fileName.removeFileExtensions() + XGFileTypes.xds.fileExtension).spaceToLength(longline.count)
-		return """
-		/////////////////////////////////////////////////////////////
-		/////////////////////////////////////////////////////////////
-		////                                                     ////
-		//// \(filename) ////
-		//// Decompiled using Gale of Darkness Tool by @StarsMmd ////
-		//// \(shortline) ////
-		////                                                     ////
-		/////////////////////////////////////////////////////////////
-		/////////////////////////////////////////////////////////////
-		"""
-	}
-	
-	private func getSpecialMacros() -> [String] {
-		var macs = [String]()
-		macs.append("define ++XDSVersion " + String(format: "%1.1f", currentXDSVersion) + " // lets future versions of the compiler know which rules to follow")
-		macs.append("define ++ScriptIdentifier \(self.scriptID.hexString()) // best not to change this")
-		macs.append("define ++BaseStringID 0x10000 // starts looking for free msg ids from this value")
-		macs.append("define ++UpdateStrings YES // when a new msg id is allocated this xds script can be automagically updated with the id")
-		macs.append("define ++IncreaseMSGSize NO // when replacing a string, the file can be made larger if the string is too long")
-		macs.append("define ++WriteDisassembly NO // a disassembly of the compiled code can be saved in the same folder for double checking")
-		macs.append("define ++WriteDecompilation NO // after compiling, the compiled code is decompiled into a new .xds file for double checking")
-		
-		return macs
-	}
-	
-	@objc private func generateFTBLHeader() -> String {
-		var s = ""
-		for f in ftbl {
-			s += kXDSCommentIndicator + " function \(f.index): " + f.name + " " + XDSExpr.locationWithIndex(f.codeOffset) + "\n"
-		}
-		return s
-	}
-	
-	func getGlobalVars() -> (text: String, macros: [XDSExpr]) {
-		var str = ""
-		var mac = [XDSExpr]()
-		
-		if giri.count > 0 {
-			for i in 0 ..< giri.count {
-				let variable = XGScriptInstruction(bytes: 0x03030080 + UInt32(i), next: 0).XDSVariable
-				let gid = giri[i].groupID
-				let rid = giri[i].resourceID
-				str += "assign " + variable + " GroupID: " + gid.string + " ResourceID: " + rid.string + " "
-				if let rel = mapRel {
-					let g = giri[i]
-					if g.groupID != 0 {
-						let character = rel.characters[g.resourceID]
-						let charID = character.characterID
-						if charID == 0 {
-							str += "CharacterID: " + charID.string + " "
-						} else {
-							let macroString = XDSExpr.macroWithName("CHARACTERID_" + character.name.simplified.uppercased())
-							str += "CharacterID: " + macroString + " "
-							mac.append(.macro(macroString, charID.string))
-						}
-						
-						let modelID = character.model.index
-						if modelID == 0 {
-							str += "ModelID: " + modelID.string + " "
-						} else {
-							let macroString = XDSExpr.macroWithName("MODELID_" + character.model.name.simplified.uppercased())
-							str += "ModelID: " + macroString + " "
-							mac.append(.macro(macroString, modelID.string))
-						}
-						
-						if !character.isVisible {
-							str += "Visible: NO "
-						}
-						
-						str += "Flags: " + character.flags.hexString() + " "
-						
-						str += "X: " + character.xCoordinate.string + " "
-						str += "Y: " + character.yCoordinate.string + " "
-						str += "Z: " + character.zCoordinate.string + " "
-						str += "Angle: " + character.angle.string   + " "
-						
-						if character.hasScript {
-							str += "Script: " + XDSExpr.locationWithName(ftbl[character.scriptIndex].name) + " "
-						}
-						if character.hasPassiveScript {
-							str += "Background: " + XDSExpr.locationWithName(ftbl[character.passiveScriptIndex].name) + " "
-						}
-						
-					}
-				}
-				if gid == 0 {
-					switch rid {
-					case 100: str += " // Michael"
-					case 101: str += " // Jovi"
-					case 104: str += " // Kandee"
-					case 105: str += " // Prof. Krane"
-					default: str += " // Invalid GIRI"
-					}
-				}
-				str += "\n"
-			}
-		}
-		str += "\n"
-		
-		for i in 0 ..< arry.count {
-			let array = arry[i]
-			
-			let variable = "array_" + String(format: "%02d", i)
-			let type = globalMacroTypes[variable]
-			
-			str += "global " + variable + " = ["
-			for val in array {
-				let value = val.rawValueString
-				
-				if let t = type {
-					let macroString = XDSExpr.stringFromMacroImmediate(c: val, t: t)
-					str += (type == .msg ? "\n" : " ") + macroString
-					if type != .msg {
-						mac.append(.macro(macroString, value))
-					}
-				} else {
-					str += " " + value
-				}
-			}
-			str += " ]\n"
-		}
-		str += "\n"
-		
-		for i in 0 ..< vect.count {
-			let vector = vect[i]
-			let variable = "vector_" + String(format: "%02d", i)
-			let x = String(format: "%.2f", vector.x)
-			let y = String(format: "%.2f", vector.y)
-			let z = String(format: "%.2f", vector.z)
-			str += "global " + variable + " = <\(x) \(y) \(z)>\n"
-			
-		}
-		str += "\n"
-		
-		for i in 0 ..< gvar.count {
-			let variable = "gvar_" + String(format: "%02d", i)
-			var value = gvar[i].rawValueString
-			str += "global " + variable + " = "
-			if let type = globalMacroTypes[variable] {
-				let macroString = XDSExpr.stringFromMacroImmediate(c: gvar[i], t: type)
-				str += macroString
-				if type != .msg {
-					mac.append(.macro(macroString, value))
-				}
-			} else {
-				var strgCount = 0
-				for i in 0 ..< strg.count {
-					strgCount += strg[i].count + 1
-				}
-				for i in 0 ..< strgCount {
-					value = value.replacingOccurrences(of: "String(" + i.string + ")", with: "\"" + getStringAtOffset(i + STRGStart  + kScriptSectionHeaderSize) + "\"")
-				}
-				str += value
-			}
-			str += "\n"
-		}
-		str += "\n"
-		
-		return (str, mac)
-	}
-	
-	@objc func getXDSScript() -> String {
-		let stack = getInstructionStack()
-		
 		var jumpLocations = [Int]()
 		var functionLocations = [Int : String]()
 		for f in ftbl {
@@ -1109,6 +943,7 @@ class XGScript: NSObject {
 		// so assume can take out reserves
 		var updatedStack = XGStack<XDSExpr>()
 		var macros = [XDSExpr]()
+		var locationsDictionary = [XDSLocation : Int]()
 		
 		var instructionIndex = 0
 		for expr in stack.asArray {
@@ -1122,13 +957,15 @@ class XGScript: NSObject {
 					params.append("arg_" + i.string)
 				}
 				
-				let function = XDSExpr.function(XDSExpr.locationWithName(fname), params)
+				let function = XDSExpr.functionDefinition(XDSExpr.locationWithName(fname), params)
 				updatedStack.push(function)
+				locationsDictionary[XDSExpr.locationWithName(fname)] = instructionIndex
 				
 			}
 			
 			if jumpLocations.contains(instructionIndex) {
-				updatedStack.push(XDSExpr.locationIndex(instructionIndex))
+				updatedStack.push(XDSExpr.location(XDSExpr.locationWithIndex(instructionIndex)))
+				locationsDictionary[XDSExpr.locationWithIndex(instructionIndex)] = instructionIndex
 			}
 			
 			// skips reserves as they should now be replaced by function headers
@@ -1448,14 +1285,14 @@ class XGScript: NSObject {
 				var params = es
 				var newInfo = false
 				
-				if let macs = XGScriptClassesInfo.classes(c)[f].macros {
+				if let macs = XGScriptClass.classes(c)[f].macros {
 					var macroTypes = (c > 3 ? [nil] : []) +  macs
 					while macroTypes.count < es.count {
 						macroTypes.append(nil)
 					}
 					
 					// add special/variable macros
-					let sclass = XGScriptClassesInfo.classes(c)
+					let sclass = XGScriptClass.classes(c)
 					if sclass.name == "Character" {
 						if sclass[f].name == "talk" {
 							if es[1].isImmediate {
@@ -1479,7 +1316,7 @@ class XGScript: NSObject {
 							}
 						}
 					}
-				
+					
 					for j in 0 ..< es.count {
 						let p1 = es[j]
 						let m1 = p1.macroVariable
@@ -1515,14 +1352,14 @@ class XGScript: NSObject {
 				var params = es
 				var newInfo = false
 				
-				if let macs = XGScriptClassesInfo.classes(c)[f].macros {
+				if let macs = XGScriptClass.classes(c)[f].macros {
 					var macroTypes = (c > 3 ? [nil] : []) +  macs
 					while macroTypes.count < es.count {
 						macroTypes.append(nil)
 					}
 					
 					// add special/variable macros
-					let sclass = XGScriptClassesInfo.classes(c)
+					let sclass = XGScriptClass.classes(c)
 					if sclass.name == "Character" {
 						if sclass[f].name == "talk" {
 							if es[1].isImmediate {
@@ -1643,7 +1480,7 @@ class XGScript: NSObject {
 			for expr in updatedStack.asArray {
 				
 				switch expr {
-				case .function(let loc, _):
+				case .functionDefinition(let loc, _):
 					currentFuncName = loc
 					newStack.push(expr)
 				default:
@@ -1664,6 +1501,423 @@ class XGScript: NSObject {
 			updatedStack = newStack
 		}
 		
+		// TODO: if statements, while loops, functions
+		// recursively compound statements into if, while or functions
+		
+		func compoundList(exprs: [XDSExpr]) -> [XDSExpr] {
+			
+			var list = [XDSExpr]()
+			var index = 0
+			var previousLocation = ""
+			
+			while index < exprs.count {
+				let expr = exprs[index]
+				switch expr {
+				case .functionDefinition(let location, _):
+					previousLocation = location
+					var subs = [XDSExpr.locationSilent(location)]
+					index += 1
+					
+					var notDone = true
+					while (index < exprs.count) && notDone {
+						switch exprs[index] {
+						case .functionDefinition:
+							notDone = false
+							break
+						case .location(let loc):
+							previousLocation = loc
+							subs.append(exprs[index])
+							index += 1
+						case .locationSilent(let loc):
+							previousLocation = loc
+							subs.append(exprs[index])
+							index += 1
+						default:
+							subs.append(exprs[index])
+							index += 1
+						}
+					}
+					
+					list.append(.function(expr, compoundList(exprs: [XDSExpr.location(location)] + subs)))
+					
+				case .location(let location):
+					previousLocation = location
+					index += 1
+					list.append(expr)
+				case .locationSilent(let location):
+					previousLocation = location
+					index += 1
+					list.append(expr)
+					
+				case .jumpFalse(let condition, let location):
+					// same for jump true
+					// jump trues are converted to jump false by this point so code needn't be duplicated
+					var ifSubs = [XDSExpr]()
+					index += 1
+					
+					if let currentIndex = locationsDictionary[previousLocation] {
+						if let newIndex = locationsDictionary[location] {
+							if newIndex > currentIndex {
+								
+								var notDone = true
+								let endLocation = location
+								while (index < exprs.count) && notDone {
+									
+									switch exprs[index] {
+										
+									case .location(let loc):
+										// if end location, end block
+										// add compound statement to list
+										// set done
+										
+										if loc == endLocation {
+											// don't increase index so location information remains for next section
+											notDone = false
+											
+											let ifSubscomp = compoundList(exprs: [.locationSilent(previousLocation)] + ifSubs + [.locationSilent(loc)])
+											let jumpCondition = XDSExpr.jumpFalse(condition, location)
+											let ifstatement = XDSExpr.ifStatement([(jumpCondition, ifSubscomp)])
+											list.append(ifstatement)
+											
+										} else {
+											ifSubs.append(exprs[index])
+											index += 1
+										}
+									case .locationSilent(let loc):
+										// if end location, end block
+										// add compound statement to list
+										// set done
+										
+										if loc == endLocation {
+											// don't increase index so location information remains for next section
+											notDone = false
+											
+											let ifSubscomp = compoundList(exprs: [.locationSilent(previousLocation)] + ifSubs + [.locationSilent(loc)])
+											let jumpCondition = XDSExpr.jumpFalse(condition, location)
+											let ifstatement = XDSExpr.ifStatement([(jumpCondition, ifSubscomp)])
+											list.append(ifstatement)
+											
+										} else {
+											ifSubs.append(exprs[index])
+											index += 1
+										}
+										
+									default:
+										// continue adding as normal
+										ifSubs.append(exprs[index])
+										index += 1
+									}
+									
+									// if end of list then add if subs then else subs
+									// as individual expressions
+									if index >= exprs.count && notDone {
+										list.append(expr)
+										list += compoundList(exprs: ifSubs)
+									}
+									
+								}
+							} else {
+								list.append(expr)
+							}
+						} else {
+							list.append(expr)
+							// already incremented
+						}
+					} else {
+						list.append(expr)
+						// already incremented
+					}
+					
+				default:
+					list.append(expr)
+					index += 1
+				}
+			}
+			
+			return list
+		}
+		
+		var list = compoundList(exprs: updatedStack.asArray.filter({ (expr) -> Bool in
+			switch expr {
+			case .setLine:
+				return false
+			case .nop:
+				return false
+			default:
+				return true
+			}
+		}))
+		
+		func getLocations(exprs: [XDSExpr]) -> [XDSLocation] {
+			var jumpLocations = [String]()
+			for expr in exprs {
+				
+				switch expr {
+				case .jump(let l):
+					jumpLocations.addUnique(l)
+				case .jumpTrue(_, let l):
+					jumpLocations.addUnique(l)
+				case .jumpFalse(_, let l):
+					jumpLocations.addUnique(l)
+				case .ifStatement(let parts):
+					for (_, block) in parts {
+						for loc in getLocations(exprs: block) {
+							jumpLocations.addUnique(loc)
+						}
+					}
+				case .whileLoop(_, let block):
+					for loc in getLocations(exprs: block) {
+						jumpLocations.addUnique(loc)
+					}
+				case .function(_, let block):
+					for loc in getLocations(exprs: block) {
+						jumpLocations.addUnique(loc)
+					}
+				default:
+					break
+				}
+				
+			}
+			return jumpLocations
+		}
+		
+		func filterLocations(exprs: [XDSExpr]) -> [XDSExpr] {
+			// first pass to get jump locations
+			let jumpLocations = getLocations(exprs: exprs)
+			
+			// second to filter unused locations
+			var filtered = [XDSExpr]()
+			
+			for expr in exprs {
+				
+				switch expr {
+				case .location(let loc):
+					if jumpLocations.contains(loc) {
+						filtered.append(expr)
+					}
+				case .ifStatement(let parts):
+					var total = [(XDSExpr,[XDSExpr])]()
+					
+					for (condition, block) in parts {
+						var newBlock = [XDSExpr]()
+						for expr in filterLocations(exprs: block) {
+							newBlock.append(expr)
+						}
+						total.append((condition, newBlock))
+					}
+					filtered.append(.ifStatement(total))
+				case .whileLoop(let condition, let block):
+					var newBlock = [XDSExpr]()
+					for expr in filterLocations(exprs: block) {
+						newBlock.append(expr)
+					}
+					filtered.append(.whileLoop(condition, newBlock))
+				case .function(let header, let block):
+					var newBlock = [XDSExpr]()
+					for expr in filterLocations(exprs: block) {
+						newBlock.append(expr)
+					}
+					filtered.append(.function(header, newBlock))
+				default:
+					filtered.append(expr)
+				}
+				
+			}
+			
+			return filtered
+		}
+		
+		list = filterLocations(exprs: list)
+		
+		let compoundStack = XGStack<XDSExpr>()
+		for expr in list {
+			switch expr {
+			case .nop:
+				fallthrough
+			case .locationSilent:
+				break
+			default:
+				compoundStack.push(expr)
+			}
+			
+		}
+		
+		return (compoundStack, macros)
+	}
+	
+	@objc private func generateXDSHeader() -> String {
+		// just arbitrary comments at the top of the file
+		let longline = "Decompiled using Gale of Darkness Tool by @StarsMmd"
+		let date = Date(timeIntervalSinceNow: 0)
+		let shortline = "on \(date).".spaceToLength(longline.count)
+		let filename = (self.file.fileName.removeFileExtensions() + XGFileTypes.xds.fileExtension).spaceToLength(longline.count)
+		return """
+		/////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////
+		////                                                     ////
+		//// \(filename) ////
+		//// Decompiled using Gale of Darkness Tool by @StarsMmd ////
+		//// \(shortline) ////
+		////                                                     ////
+		/////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////
+		"""
+	}
+	
+	private func getSpecialMacros() -> [String] {
+		var macs = [String]()
+		macs.append("define ++XDSVersion " + String(format: "%1.1f", currentXDSVersion) + " // lets future versions of the compiler know which rules to follow")
+		macs.append("define ++ScriptIdentifier \(self.scriptID.hexString()) // best not to change this")
+		macs.append("define ++BaseStringID 0x10000 // starts looking for free msg ids from this value")
+		macs.append("define ++UpdateStrings YES // when a new msg id is allocated this xds script can be automagically updated with the id")
+		macs.append("define ++IncreaseMSGSize NO // when replacing a string, the file can be made larger if the string is too long")
+		macs.append("define ++WriteDisassembly NO // a disassembly of the compiled code can be saved in the same folder for double checking")
+		macs.append("define ++WriteDecompilation NO // after compiling, the compiled code is decompiled into a new .xds file for double checking")
+		
+		return macs
+	}
+	
+	@objc private func generateFTBLHeader() -> String {
+		var s = ""
+		for f in ftbl {
+			s += kXDSCommentIndicator + " function \(f.index): " + f.name + " " + XDSExpr.locationWithIndex(f.codeOffset) + "\n"
+		}
+		return s
+	}
+	
+	func getGlobalVars() -> (text: String, macros: [XDSExpr]) {
+		var str = ""
+		var mac = [XDSExpr]()
+		
+		if giri.count > 0 {
+			for i in 0 ..< giri.count {
+				let variable = XGScriptInstruction(bytes: 0x03030080 + UInt32(i), next: 0).XDSVariable
+				let gid = giri[i].groupID
+				let rid = giri[i].resourceID
+				str += "assign " + variable + " GroupID: " + gid.string + " ResourceID: " + rid.string + " "
+				if let rel = mapRel {
+					let g = giri[i]
+					if g.groupID != 0 {
+						let character = rel.characters[g.resourceID]
+						let charID = character.characterID
+						if charID == 0 {
+							str += "CharacterID: " + charID.string + " "
+						} else {
+							let macroString = XDSExpr.macroWithName("CHARACTERID_" + character.name.simplified.uppercased())
+							str += "CharacterID: " + macroString + " "
+							mac.append(.macro(macroString, charID.string))
+						}
+						
+						let modelID = character.model.index
+						if modelID == 0 {
+							str += "ModelID: " + modelID.string + " "
+						} else {
+							let macroString = XDSExpr.macroWithName("MODELID_" + character.model.name.simplified.uppercased())
+							str += "ModelID: " + macroString + " "
+							mac.append(.macro(macroString, modelID.string))
+						}
+						
+						if !character.isVisible {
+							str += "Visible: NO "
+						}
+						
+						str += "Flags: " + character.flags.hexString() + " "
+						
+						str += "X: " + character.xCoordinate.string + " "
+						str += "Y: " + character.yCoordinate.string + " "
+						str += "Z: " + character.zCoordinate.string + " "
+						str += "Angle: " + character.angle.string   + " "
+						
+						if character.hasScript {
+							str += "Script: " + XDSExpr.locationWithName(ftbl[character.scriptIndex].name) + " "
+						}
+						if character.hasPassiveScript {
+							str += "Background: " + XDSExpr.locationWithName(ftbl[character.passiveScriptIndex].name) + " "
+						}
+						
+					}
+				}
+				if gid == 0 {
+					switch rid {
+					case 100: str += " // Michael"
+					case 101: str += " // Jovi"
+					case 104: str += " // Kandee"
+					case 105: str += " // Prof. Krane"
+					default: str += " // Invalid GIRI"
+					}
+				}
+				str += "\n"
+			}
+		}
+		str += "\n"
+		
+		for i in 0 ..< arry.count {
+			let array = arry[i]
+			
+			let variable = "array_" + String(format: "%02d", i)
+			let type = globalMacroTypes[variable]
+			
+			str += "global " + variable + " = ["
+			for val in array {
+				let value = val.rawValueString
+				
+				if let t = type {
+					let macroString = XDSExpr.stringFromMacroImmediate(c: val, t: t)
+					str += (type == .msg ? "\n" : " ") + macroString
+					if type != .msg {
+						mac.append(.macro(macroString, value))
+					}
+				} else {
+					str += " " + value
+				}
+			}
+			str += " ]\n"
+		}
+		str += "\n"
+		
+		for i in 0 ..< vect.count {
+			let vector = vect[i]
+			let variable = "vector_" + String(format: "%02d", i)
+			let x = String(format: "%.2f", vector.x)
+			let y = String(format: "%.2f", vector.y)
+			let z = String(format: "%.2f", vector.z)
+			str += "global " + variable + " = <\(x) \(y) \(z)>\n"
+			
+		}
+		str += "\n"
+		
+		for i in 0 ..< gvar.count {
+			let variable = "gvar_" + String(format: "%02d", i)
+			var value = gvar[i].rawValueString
+			str += "global " + variable + " = "
+			if let type = globalMacroTypes[variable] {
+				let macroString = XDSExpr.stringFromMacroImmediate(c: gvar[i], t: type)
+				str += macroString
+				if type != .msg {
+					mac.append(.macro(macroString, value))
+				}
+			} else {
+				var strgCount = 0
+				for i in 0 ..< strg.count {
+					strgCount += strg[i].count + 1
+				}
+				for i in 0 ..< strgCount {
+					value = value.replacingOccurrences(of: "String(" + i.string + ")", with: "\"" + getStringAtOffset(i + STRGStart  + kScriptSectionHeaderSize) + "\"")
+				}
+				str += value
+			}
+			str += "\n"
+		}
+		str += "\n"
+		
+		return (str, mac)
+	}
+	
+	@objc func getXDSScript() -> String {
+		// creates xds text from expressions
+		// can follow a similar process to decompile to other programming or scripting languages
+		let (exprStack, macs) = getInstructionStack()
+		
 		// write script headers
 		var script = generateXDSHeader()
 		script += "".addRepeated(s: "\n", count: 3)
@@ -1671,19 +1925,32 @@ class XGScript: NSObject {
 		script += "".addRepeated(s: "\n", count: 3)
 		
 		let (globalDefinitions, globalMacros) = getGlobalVars()
-		macros += globalMacros
+		let macros = globalMacros + macs
 		
 		var uniqueMacros = [XDSExpr]()
 		for macro in macros {
 			if macro.macroName == "YES" || macro.macroName == "NO" {
 				continue
 			}
-			if !uniqueMacros.contains(where: { (expr) -> Bool in
+			if uniqueMacros.contains(where: { (expr) -> Bool in
 				return expr.macroName == macro.macroName
 			}) {
+				if !uniqueMacros.contains(where: { (expr) -> Bool in
+					return (expr.macroName == macro.macroName) && (expr.macroRawValue == macro.macroRawValue)
+				}) {
+					var suffix = 2
+					while uniqueMacros.contains(where: { (expr) -> Bool in
+						return expr.macroName == macro.macroName + suffix.string
+					}) {
+						suffix += 1
+					}
+					uniqueMacros.append(.macro(macro.macroName + suffix.string, macro.macroRawValue))
+				}
+			} else {
 				uniqueMacros.append(macro)
 			}
 		}
+		
 		var uniqueCharacterMacros = [XDSExpr]()
 		var characterMacros = [String : XDSVariable]()
 		for g in  0 ..< self.giri.count {
@@ -1727,12 +1994,12 @@ class XGScript: NSObject {
 		for macro in uniqueMacros.sorted(by: { (m1, m2) -> Bool in
 			return m1.macroName < m2.macroName
 		}) {
-			script += macro.text + "\n"
+			script += macro.text[0] + "\n"
 		}
 		for macro in uniqueCharacterMacros.sorted(by: { (m1, m2) -> Bool in
 			return m1.macroName < m2.macroName
 		}) {
-			script += macro.text + "    \n"
+			script += macro.text[0] + "    \n"
 		}
 		
 		script += "\n"
@@ -1742,11 +2009,9 @@ class XGScript: NSObject {
 		script += globalDefinitions
 		
 		
-		// third pass to print
-		instructionIndex = 0
-		var indentation = 0
-		let indentationStack = XGStack<Int>()
-		let expressions = updatedStack.asArray
+		// write out text
+		var instructionIndex = 0
+		let expressions = exprStack.asArray
 		
 		for i in 0 ..< expressions.count {
 			
@@ -1761,37 +2026,20 @@ class XGScript: NSObject {
 				fallthrough
 			case .locationIndex:
 				newLines = 2
+			case .functionDefinition:
+				newLines = 2
 			case .function:
 				newLines = 2
 			default:
-				newLines = expr.text.count == 0 ? 0 : 1
+				newLines = expr.text[0].length == 0 ? 0 : 1
 			}
+			
 			for _ in 0 ..< newLines {
 				script += "\n"
 			}
 			
-			// decrement indentation
-			if indentation > 0 {
-				switch expr {
-				case .locationIndex(let i):
-					if i == indentationStack.peek() {
-						indentationStack.pop()
-						indentation -= 1
-					}
-				case .location(let l):
-					if XDSExpr.locationWithIndex(indentationStack.peek()) == l {
-						indentationStack.pop()
-						indentation -= 1
-					}
-				default:
-					break
-				}
-			}
-			
 			// print expression
-			
 			var text = expr.text
-			let indent = text.count > 0 ? "".addRepeated(s: "    ", count: indentation) : ""
 			
 			// override certain constants
 			var strgCount = 0
@@ -1799,13 +2047,17 @@ class XGScript: NSObject {
 				strgCount += strg[i].count + 1
 			}
 			for i in 0 ..< strgCount {
-				text = text.replacingOccurrences(of: "String(" + i.string + ")", with: "\"" + getStringAtOffset(i + STRGStart  + kScriptSectionHeaderSize) + "\"")
+				text = text.map { (s) -> String in
+					return s.replacingOccurrences(of: "String(" + i.string + ")", with: "\"" + getStringAtOffset(i + STRGStart  + kScriptSectionHeaderSize) + "\"")
+				}
 			}
 			
 			// override character object variable
 			for (macname, varname) in characterMacros {
 				for add in [" ", ".", ")", ">", "]", "\"", "\n"] {
-					text = text.replacingOccurrences(of: varname + add, with: macname + add)
+					text = text.map { (s) -> String in
+						return s.replacingOccurrences(of: varname + add, with: macname + add)
+					}
 				}
 			}
 			
@@ -1813,11 +2065,15 @@ class XGScript: NSObject {
 				let locname = XDSExpr.locationWithIndex(f.codeOffset)
 				let funname = XDSExpr.locationWithName(f.name)
 				for add in [" ", ".", ")", ">", "]", "\"", "\n"] {
-					text = text.replacingOccurrences(of: locname + add, with: funname + add)
+					text = text.map { (s) -> String in
+						return s.replacingOccurrences(of: locname + add, with: funname + add)
+					}
 				}
 			}
 			
-			script += indent + text
+			for line in text {
+				script += line
+			}
 			
 			// after expression
 			newLines = 0
@@ -1825,99 +2081,14 @@ class XGScript: NSObject {
 			case .exit:
 				newLines = 2
 			case .XDSReturn:
-				fallthrough
+				newLines = 1
 			case .XDSReturnResult:
-				newLines = 2
+				newLines = 1
 			default:
 				newLines = 0
 			}
 			for _ in 0 ..< newLines {
 				script += "\n"
-			}
-			
-			// increment indentation
-			if i < expressions.count - 1 {
-				switch expr {
-				case .jumpTrue(_, let l):
-					let target = XDSExpr.indexForLocation(l)
-					if target <= instructionIndex { continue }
-					var reached = false
-					var shouldIndent = false
-					for j in i + 1 ..< expressions.count {
-						if reached { continue }
-						
-						let test = expressions[j]
-						switch test {
-						case .jumpTrue(_, let l):
-							if XDSExpr.indexForLocation(l) >= target {
-								shouldIndent = false
-								reached = true
-							}
-						case .jumpFalse(_, let l):
-							if XDSExpr.indexForLocation(l) >= target {
-								shouldIndent = false
-								reached = true
-							}
-						case .location(let l):
-							if l == XDSExpr.locationWithIndex(target) && reached == false {
-								reached = true
-								shouldIndent = true
-							}
-						case .locationIndex(let i):
-							if i == target && reached == false {
-								reached = true
-								shouldIndent = true
-							}
-						default:
-							continue
-						}
-					}
-					if shouldIndent {
-						indentationStack.push(target)
-						indentation += 1
-					}
-				case .jumpFalse(_, let l):
-					let target = XDSExpr.indexForLocation(l)
-					if target <= instructionIndex { continue }
-					var reached = false
-					var shouldIndent = false
-					for j in i + 1 ..< expressions.count {
-						if reached { continue }
-						
-						let test = expressions[j]
-						switch test {
-						case .jumpTrue(_, let l):
-							if XDSExpr.indexForLocation(l) >= target {
-								shouldIndent = false
-								reached = true
-							}
-						case .jumpFalse(_, let l):
-							if XDSExpr.indexForLocation(l) >= target {
-								shouldIndent = false
-								reached = true
-							}
-						case .location(let l):
-							if l == XDSExpr.locationWithIndex(target) {
-								reached = true
-								shouldIndent = true
-							}
-						case .locationIndex(let i):
-							if i == target {
-								reached = true
-								shouldIndent = true
-							}
-						default:
-							continue
-						}
-					}
-					if shouldIndent {
-						indentationStack.push(target)
-						indentation += 1
-					}
-				default:
-					break
-				}
-				
 			}
 			
 			instructionIndex += expr.instructionCount
@@ -1927,6 +2098,89 @@ class XGScript: NSObject {
 		
 		return script
 	}
+	
+	
+	func getItems() -> [XGItems] {
+		// modified version of getXDSScript
+		// pared down to just the necessary parts
+		
+		// TODO: parse script to get possible values for variables at time of receive item
+		// anywhere in the script that the array has an element set or the gvar is set
+		// anywhere in the same function that the local variable is set
+		// anywhere in a function that the argument is passed in a call
+		
+		var items = [Int]()
+		let expressions = getInstructionStack().expressions.asArray
+		
+		for expression in expressions {
+			
+			switch expression {
+			case .callStandardVoid(let c, let f, let es):
+				var itemExpr = XDSExpr.nop
+				
+				if c == XGScriptClass.getClassNamed("Player")!.index {
+					let player = XGScriptClass.getClassNamed("Player")!
+					
+					if f == player.functionWithName("receiveItemSilently")!.index {
+						itemExpr = es[3]
+					}
+					if f == player.functionWithName("receiveItemSilently")!.index {
+						itemExpr = es[1]
+					}
+					if f == player.functionWithName("receiveItemSilently")!.index {
+						itemExpr = es[1]
+					}
+				}
+				if c == XGScriptClass.getClassNamed("Character")!.index {
+					let character = XGScriptClass.getClassNamed("Character")!
+					
+					if f == character.functionWithName("talk")!.index {
+						if let talkType = XDSTalkTypes(rawValue: es[1].constants[0].asInt) {
+							switch talkType {
+							case .silentItem:
+								itemExpr = es[3]
+							default:
+								break
+							}
+						}
+					}
+				}
+				switch itemExpr {
+					// array get
+				case .callStandard(7, 16, let es):
+					let array = es[0].variable!
+					let index = es[1]
+					if index.isImmediate {
+						let constant = index.constants[0]
+						items.addUnique(constant.asInt)
+					}
+				case .macroImmediate(let constant, _):
+					items.addUnique(constant.asInt)
+				case .loadImmediate(let constant):
+					items.addUnique(constant.asInt)
+				case .loadVariable(let variable):
+					if variable.contains("gvar_") {
+						let index = variable.substring(from: 5, to: variable.length).integerValue!
+						items.addUnique(gvar[index].asInt)
+					}
+				default: break
+				}
+				
+				
+			default: break
+			}
+		
+		}
+		
+		return items.map({ (id) -> XGItems in
+			return XGItems.item(id)
+		})
+	}
+	
+	
+	
+	
+	
 	
 }
 

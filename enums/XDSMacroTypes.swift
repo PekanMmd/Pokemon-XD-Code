@@ -10,7 +10,6 @@ import Foundation
 enum XDSMacroTypes : Int {
 	case none = 0
 	case pokemon
-	case pokemonNational
 	case item
 	case model
 	case move
@@ -31,7 +30,10 @@ enum XDSMacroTypes : Int {
 	case partyMember
 }
 
+let kNumberOfTalkTypes = 22
 enum XDSTalkTypes : Int {
+	
+	case none				= 0
 	case normal				= 1
 	case approachThenSpeak	= 2
 	case promptYesNo		= 3
@@ -48,13 +50,13 @@ enum XDSTalkTypes : Int {
 		case .speciesCry: return .pokemon
 		case .battle1: return .battleID
 		case .battle2: return .battleID
-		case .silentItem: return .item
 		default: return nil
 		}
 	}
 	
 	var string : String {
 		switch self {
+		case .none				: return "none"
 		case .normal			: return "normal"
 		case .approachThenSpeak	: return "approach"
 		case .promptYesNo		: return "yes_no"

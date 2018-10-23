@@ -420,7 +420,7 @@ extension XGUtility {
 	class func renameZaprong(newName: String) {
 		let offset = 0x420904
 		let dol = XGFiles.dol.data
-		dol.replaceBytesFromOffset(offset, withByteStream: newName.characters.map({ (c) -> Int in
+		dol.replaceBytesFromOffset(offset, withByteStream: newName.map({ (c) -> Int in
 			let charScalar = String(c).unicodeScalars
 			let charValue  = Int(charScalar[charScalar.startIndex].value)
 			return charValue
@@ -1168,9 +1168,100 @@ extension XGUtility {
 		
 	}
 	
+	class func getMacrosXDS() -> String {
+		
+		var text = ""
+		
+		func addMacro(value: Int, type: XDSMacroTypes) {
+			let constant = XDSConstant.integer(value)
+			text += "define \(XDSExpr.stringFromMacroImmediate(c: constant, t: type)) \(constant.rawValueString)\n"
+		}
+		
+		for i in 0 ..< CommonIndexes.NumberOfPokemon.value {
+			if i == 0 || XGPokemon.pokemon(i).nameID > 0 {
+				addMacro(value: i, type: .pokemon)
+			}
+		}
+		for i in 0 ..< CommonIndexes.NumberOfMoves.value {
+			if i == 0 || XGMoves.move(i).nameID > 0 {
+				addMacro(value: i, type: .move)
+			}
+		}
+		
+		for i in 0 ..< CommonIndexes.TotalNumberOfItems.value {
+			if i == 0 || (XGItems.item(i).scriptIndex == i && XGItems.item(i).nameID > 0) {
+				addMacro(value: i, type: .item)
+			}
+		}
+		
+		for i in 0 ..< kNumberOfAbilities {
+			if i == 0 || XGAbilities.ability(i).nameID > 0 {
+				addMacro(value: i, type: .ability)
+			}
+		}
+		
+		let people = XGFiles.fsys("people_archive").fsysData
+		for i in 0 ..< people.numberOfEntries {
+			let identifier = people.identifiers[i]
+			addMacro(value: identifier, type: .model)
+		}
+		
+		let rooms = XGFiles.json("Room IDs").json as! [String : String]
+		var roomList = [(Int, String)]()
+		for (id, room) in rooms {
+			roomList.append((id.integerValue!, room))
+		}
+		roomList.sort { (t1, t2) -> Bool in
+			return t1.1 < t2.1
+		}
+		for (id, _) in roomList {
+			addMacro(value: id, type: .room)
+		}
+		
+		let battleFieldsList = roomList.filter { (room) -> Bool in
+			return room.1.contains("_bf")
+		}
+		for (id, _) in battleFieldsList {
+			addMacro(value: id, type: .battlefield)
+		}
+		
+		for i in 0 ..< kNumberOfTalkTypes {
+			if let type = XDSTalkTypes(rawValue: i) {
+				addMacro(value: i, type: .talk)
+			}
+		}
+		
+		for i in 0 ... 2 {
+			addMacro(value: i, type: .battleResult)
+		}
+		for i in 0 ... 4 {
+			addMacro(value: i, type: .shadowStatus)
+		}
+		
+		for i in 0 ..< XGDecks.DeckDarkPokemon.DDPKEntries {
+			let mon = XGDeckPokemon.ddpk(i)
+			if mon.isSet {
+				addMacro(value: i, type: .shadowID)
+			}
+		}
+		
+		for i in 0 ... 2 {
+			addMacro(value: i, type: .pokespot)
+		}
+		
+		for i in 0 ... 3 {
+			addMacro(value: i, type: .partyMember)
+		}
+		
+		return text
+		
+	}
+	
 	class func documentXDS() {
-		printg("documenting script: common.scd")
-		XGFolders.Scripts.map({ (file) in
+		let files = XGFolders.Scripts.files.sorted { (s1, s2) -> Bool in
+			return s1.fileName < s2.fileName
+		}
+		files.map({ (file) in
 			if file.fileType == .scd {
 				printg("documenting script: ", file.fileName)
 				let script = file.scriptData.getXDSScript()
@@ -1179,6 +1270,18 @@ extension XGUtility {
 		})
 		printg("documenting script: ", XGFiles.common_rel.fileName)
 		XGFiles.common_rel.scriptData.getXDSScript().save(toFile: .xds("common"))
+		
+		// get macros.xds
+		// file containing common macros to use as reference
+		printg("documenting script macros...")
+		printg("This may take a while :-)")
+		let text = getMacrosXDS()
+		if text.length > 0 {
+			let file = XGFiles.xds("Common Macros")
+			printg("documenting script: ", file.fileName)
+			text.save(toFile: file)
+		}
+		
 	}
 	
 	class func documentISO(forXG: Bool) {

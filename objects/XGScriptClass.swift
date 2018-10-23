@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGScriptFunctionInfo {
+enum XGScriptFunction {
 	
 	case operators(String,Int,Int)
 	case unknownOperator(Int)
@@ -61,7 +61,7 @@ enum XGScriptFunctionInfo {
 	}
 }
 
-enum XGScriptClassesInfo {
+enum XGScriptClass {
 	case operators
 	case classes(Int)
 	
@@ -79,7 +79,7 @@ enum XGScriptClassesInfo {
 		}
 	}
 	
-	subscript(id: Int) -> XGScriptFunctionInfo {
+	subscript(id: Int) -> XGScriptFunction {
 		
 		switch self {
 			case .operators			: return operatorWithID(id)
@@ -88,7 +88,7 @@ enum XGScriptClassesInfo {
 		
 	}
 	
-	func operatorWithID(_ id: Int) -> XGScriptFunctionInfo {
+	func operatorWithID(_ id: Int) -> XGScriptFunction {
 		
 		for (name,index,parameters) in ScriptOperators {
 			if index == id {
@@ -103,7 +103,7 @@ enum XGScriptClassesInfo {
 		return .unknownOperator(id)
 	}
 	
-	func functionWithID(_ id: Int) -> XGScriptFunctionInfo {
+	func functionWithID(_ id: Int) -> XGScriptFunction {
 		let info = ScriptClassFunctions[self.index]
 		
 		if info == nil {
@@ -123,7 +123,7 @@ enum XGScriptClassesInfo {
 		return self.name + "." + self[id].name
 	}
 	
-	func functionWithName(_ name: String) -> XGScriptFunctionInfo? {
+	func functionWithName(_ name: String) -> XGScriptFunction? {
 		
 		let kMaxNumberOfXDSClassFunctions = 200 // theoretical limit is 0xffff but 200 is probably safe
 		for i in 0 ..< kMaxNumberOfXDSClassFunctions {
@@ -133,7 +133,7 @@ enum XGScriptClassesInfo {
 			}
 			
 			// so old scripts can still refer to renamed functions by "function" + number
-			if XGScriptFunctionInfo.unknown(i).name.lowercased() == name.lowercased() {
+			if XGScriptFunction.unknown(i).name.lowercased() == name.lowercased() {
 				return self[i]
 			}
 			
@@ -142,27 +142,70 @@ enum XGScriptClassesInfo {
 		return nil
 	}
 	
-	static func getClassNamed(_ name: String) -> XGScriptClassesInfo? {
+	static func getClassNamed(_ name: String) -> XGScriptClass? {
 		
 		// so old scripts can still refer to renamed classes by "Class" + number
 		if name.length > 5 {
 			if name.substring(from: 0, to: 5) == "Class" {
 				if let val = name.substring(from: 5, to: name.length).integerValue {
 					if val < 127 {
-						return XGScriptClassesInfo.classes(val)
+						return XGScriptClass.classes(val)
 					}
 				}
 			}
 		}
 		
-		let kNumberOfXDSClasses = 127 // don't know the number but script variables allow up to 127
+		let kNumberOfXDSClasses = 60
 		for i in 0 ..< kNumberOfXDSClasses {
-			let info = XGScriptClassesInfo.classes(i)
+			let info = XGScriptClass.classes(i)
 			if info.name.lowercased() == name.lowercased() {
 				return info
 			}
 		}
 		return nil
+	}
+	
+	var RAMOffset : UInt32? {
+		switch self {
+		case .operators:
+			return nil
+		case .classes(let c):
+			
+			if c == 0 {
+				return nil
+			}
+			
+			if c == 4 {
+				// vector
+				return 0x80242a70
+			}
+			if c == 7 {
+				// array
+				return 0x802426b4
+			}
+			
+			if c == 54 {
+				// task manager
+				return 0x80243098
+			}
+			
+			if c < 33 || c > 60 {
+				return nil
+			}
+			
+			let dol = XGFiles.dol.data
+			let branchCodeStart = dol.getWordAtOffset(0x40bc5c - kDOLTableToRAMOffsetDifference + ((c - 33) * 4)) - 0x80000000
+			let branchInstructionOffset = branchCodeStart + 0xc
+			let branchInstruction = dol.getWordAtOffset(branchInstructionOffset.int - kDOLtoRAMOffsetDifference)
+			var branchDifference = ((branchInstruction & 0x3FFFFFF) - 1)
+			// check if negative
+			if ((branchDifference >> 25) & 0x1.unsigned) == 1 {
+				// if so extend 1 bits to make in32 negative
+				branchDifference = branchDifference | 0xFC
+			}
+			return branchInstructionOffset + branchDifference + 0x80000000
+			
+		}
 	}
 	
 }

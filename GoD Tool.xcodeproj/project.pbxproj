@@ -980,6 +980,8 @@
 		B2450801208A365C00FEC54E /* XGDeoxysFormes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24507FF208A348E00FEC54E /* XGDeoxysFormes.swift */; };
 		B2450802208A365C00FEC54E /* XGDeoxysFormes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24507FF208A348E00FEC54E /* XGDeoxysFormes.swift */; };
 		B2450803208A365D00FEC54E /* XGDeoxysFormes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24507FF208A348E00FEC54E /* XGDeoxysFormes.swift */; };
+		B247ED41217E5D6B0034CAF5 /* XDSExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B247ED40217E5D6B0034CAF5 /* XDSExtensions.swift */; };
+		B247ED42217E5D6B0034CAF5 /* XDSExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B247ED40217E5D6B0034CAF5 /* XDSExtensions.swift */; };
 		B249085321516D520044947B /* XGASM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B249085221516D520044947B /* XGASM.swift */; };
 		B249085421516D520044947B /* XGASM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B249085221516D520044947B /* XGASM.swift */; };
 		B249085521516D520044947B /* XGASM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B249085221516D520044947B /* XGASM.swift */; };
@@ -3854,6 +3856,7 @@
 		B247ED3B21794A1C0034CAF5 /* SCD.sublime-color-scheme */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SCD.sublime-color-scheme"; sourceTree = "<group>"; };
 		B247ED3C21794A1C0034CAF5 /* SCD.sublime-syntax */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SCD.sublime-syntax"; sourceTree = "<group>"; };
 		B247ED3F217C33060034CAF5 /* XDScript.sublime-syntax */ = {isa = PBXFileReference; lastKnownFileType = text; name = "XDScript.sublime-syntax"; path = "../../../../../Library/Application Support/Sublime Text 3/Packages/User/XDScript.sublime-syntax"; sourceTree = "<group>"; };
+		B247ED40217E5D6B0034CAF5 /* XDSExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDSExtensions.swift; sourceTree = "<group>"; };
 		B249085221516D520044947B /* XGASM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGASM.swift; sourceTree = "<group>"; };
 		B24A9CB320A31C1900F0BBD0 /* GoDShadowPokemonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDShadowPokemonViewController.swift; sourceTree = "<group>"; };
 		B24A9CB520A321D100F0BBD0 /* GoDShadowPokemonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDShadowPokemonView.swift; sourceTree = "<group>"; };
@@ -5371,6 +5374,7 @@
 				B208E3E520C4CD3B00D298BF /* XDExtensions.swift */,
 				B208E3E720C4CD4B00D298BF /* ColosseumExtensions.swift */,
 				B250AB822135F341008CF9DB /* GoDOSXExtensions.swift */,
+				B247ED40217E5D6B0034CAF5 /* XDSExtensions.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -10359,6 +10363,7 @@
 				B2F5ECC31F49A1FF0075C6D2 /* XGString.swift in Sources */,
 				B2560A76213D4D9500137C37 /* GoDKeyCodes.swift in Sources */,
 				B2F5EC661F49A1FF0075C6D2 /* XGTutorFlags.swift in Sources */,
+				B247ED41217E5D6B0034CAF5 /* XDSExtensions.swift in Sources */,
 				B2F5EC451F49A1FE0075C6D2 /* XGPokemon.swift in Sources */,
 				B2F5ECD81F49A1FF0075C6D2 /* XGTrainer.swift in Sources */,
 				B25E46D51FC0DFB20030FBF9 /* XGTreasure.swift in Sources */,
@@ -10772,6 +10777,7 @@
 				B2560A83213D57C200137C37 /* GoDMetalShaders.metal in Sources */,
 				B28C4DB21FA9E49200EED1C9 /* XGPokemart.swift in Sources */,
 				B2FEC0931F6EE81900AC263D /* GoDPatchViewController.swift in Sources */,
+				B247ED42217E5D6B0034CAF5 /* XDSExtensions.swift in Sources */,
 				B2560A9A214CA25200137C37 /* XGRandomiser.swift in Sources */,
 				B2D1DF521F68717E0023A876 /* XGTexturePalette.swift in Sources */,
 				B2D1DF551F6872740023A876 /* GoDTexture.swift in Sources */,

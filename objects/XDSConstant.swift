@@ -36,7 +36,7 @@ enum XDSConstantTypes {
 				case .character			: return "Character"
 				case .pokemon			: return "Pokemon"
 				case .codeptr_t			: return "Pointer"
-				case .unknown(let val)	: return XGScriptClassesInfo.classes(val).name
+				case .unknown(let val)	: return XGScriptClass.classes(val).name
 			}
 		}
 	}
@@ -142,14 +142,14 @@ class XDSConstant : NSObject {
 		case .array:
 			return "array_" + String(format: "%02d", self.asInt)
 		case .msg:
-			return XDSExpr.msgMacro(getStringSafelyWithID(id: self.asInt)).text
+			return XDSExpr.msgMacro(getStringSafelyWithID(id: self.asInt)).text[0]
 		case .character:
 			return XGScriptInstruction(bytes: 0x03030080 + UInt32(self.asInt), next: 0).XDSVariable
 		case .codeptr_t:
-			return XDSExpr.locationIndex(self.asInt).text
+			return XDSExpr.locationIndex(self.asInt).text[0]
 		case .unknown(let i):
 			let mid = self.asInt == 0 ? "" : "\(self.asInt)"
-			return XGScriptClassesInfo.classes(i).name.capitalized + "(\(mid))"
+			return XGScriptClass.classes(i).name.capitalized + "(\(mid))"
 		}
 	}
 	
@@ -159,7 +159,10 @@ class XDSConstant : NSObject {
 		self.type = XDSConstantTypes.typeWithIndex(type)
 		self.value = rawValue
 		
-		
+	}
+	
+	convenience init(type: XDSConstantTypes, rawValue: Int) {
+		self.init(type: type.index, rawValue: rawValue.unsigned)
 	}
 	
 	var expression : XDSExpr {
