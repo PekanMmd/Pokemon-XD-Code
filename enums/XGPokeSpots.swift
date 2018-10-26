@@ -39,12 +39,12 @@ enum XGPokeSpots : Int, XGDictionaryRepresentable {
 	}
 	
 	func numberOfEntries() -> Int {
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		return Int(rel.getWordAtOffset(self.commonRelEntriesIndex.startOffset))
 	}
 	
 	func setEntries(entries: Int) {
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		rel.replace4BytesAtOffset(self.commonRelEntriesIndex.startOffset, withBytes: entries)
 		rel.save()
 	}

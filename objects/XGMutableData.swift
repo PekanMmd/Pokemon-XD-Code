@@ -75,6 +75,9 @@ class XGMutableData: NSObject {
 	}
 	
 	@objc func save() {
+		if !self.file.folder.exists {
+			self.file.folder.createDirectory()
+		}
 		self.data.write(toFile: self.file.path, atomically: true)
 	}
 	

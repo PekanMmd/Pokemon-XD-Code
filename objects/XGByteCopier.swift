@@ -23,9 +23,9 @@ class XGByteCopier: NSObject {
 		self.targetFile = targetFile
 		self.targetStartOffset = targetOffset
 		
-		self.data = targetFile.data
+		self.data = targetFile.data!
 		
-		let cData = copyFile.data
+		let cData = copyFile.data!
 		self.bytes = cData.getByteStreamFromOffset(copyOffset, length: length)
 		
 	}

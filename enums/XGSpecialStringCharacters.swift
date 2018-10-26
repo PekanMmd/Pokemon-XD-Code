@@ -11,23 +11,48 @@ import Foundation
 let k2ByteChars = [0x07, 0x09, 0x38, 0x52, 0x53, 0x5B, 0x5C]
 let k5ByteChars = [0x08]
 
-let kBold 			= "Font Bold"
-let kNewLine		= "New Line"
-let kDialogueEnd	= "Dialogue End"
-let kClearWindow	= "Clear Window"
-let kKanjiStart		= "Kanji"
-let kFuriganaStart	= "Furigana"
-let kFuriganaEnd	= "Furigana End"
-let kChangeColourP	= "Predef Colour"
-let kChangeColourS	= "Spec Colour"
-let kPause			= "Pause"
-let kBattlePlayer	= "Player B"
-let kFieldPlayer	= "Player F"
-let kSpeaker		= "Speaker"
-let kSetSpeaker		= "Set Speaker"
-let kFoeTrainerClass = "Foe Tr Class"
-let kFoeTrainerName	= "Foe Tr Name"
-let kWaitKeyPress	= "Wait Input"
+let kBold 				= "Font Bold"
+let kNewLine			= "New Line"
+let kDialogueEnd		= "Dialogue End"
+let kClearWindow		= "Clear Window"
+let kKanjiStart			= "Kanji"
+let kFuriganaStart		= "Furigana"
+let kFuriganaEnd		= "Furigana End"
+let kChangeColourP		= "Predef Colour"
+let kChangeColourS		= "Spec Colour"
+let kPause				= "Pause"
+let kBattlePlayer		= "Player B"
+let kFieldPlayer		= "Player F"
+let kSpeaker			= "Speaker"
+let kSetSpeaker			= "Set Speaker"
+let kFoeTrainerClass	= "Foe Tr Class"
+let kFoeTrainerName		= "Foe Tr Name"
+let kWaitKeyPress		= "Wait Input"
+let kSpeciesCry			= "Pokemon Cry"
+let kspecialMSG			= "MsgID"
+let kvarPokemon4E		= "Pokemon 0x4E"
+let kvarItem2D			= "Item 0x2D"
+let kvarItem2E			= "Item 0x2E"
+let kvarQuantity		= "Quantity 0x2F"
+let kvarMove28			= "Move 0x28"
+let kvarItem29			= "Item 0x29"
+let kvarPokemon20		= "Pokemon 0x20"
+let kvarPokemon21		= "Pokemon 0x21"
+let kvarPokemon0F		= "Pokemon 0x0F"
+let kvarPokemon10		= "Pokemon 0x10"
+let kvarPokemon11		= "Pokemon 0x11"
+let kvarPokemon12		= "Pokemon 0x12"
+let ksentOutPokemon1	= "Switch Pokemon 0x14"
+let ksentOutPokemon2	= "Switch Pokemon 0x15"
+let kvarPokemon16		= "Pokemon 0x16"
+let kvarPokemon17		= "Pokemon 0x17"
+let kvarPokemon18		= "Pokemon 0x18"
+let kvarPokemon19		= "Pokemon 0x19"
+let kvarAbility1A		= "Ability 0x1A"
+let kvarAbility1B		= "Ability 0x1B"
+let kvarAbility1C		= "Ability 0x1C"
+let kvarAbility1D		= "Ability 0x1D"
+let kvarPokemon1E		= "Pokemon 0x1E"
 
 
 enum XGSpecialCharacters : Int {
@@ -112,7 +137,7 @@ enum XGSpecialCharacters : Int {
 	case specialMSG				= 0x4D // loads another .msg string as the variable
 	case varPokemon4E			= 0x4E
 	case unused4F				= 0x4F
-	case special50				= 0x50
+	case pokemonSpeciesCry		= 0x50 // set var to a species to play it's cry as audio
 	case unused51				= 0x51
 	case unused52				= 0x52 // Apparently 2 bytes but not used in any US tables afaik)
 	case special53				= 0x53 // 2 bytes.
@@ -198,6 +223,31 @@ enum XGSpecialCharacters : Int {
 				case .foeTrainerClass			: mid = kFoeTrainerClass
 				case .foeTrainerName			: mid = kFoeTrainerName
 				case .WaitKeyPress				: mid = kWaitKeyPress
+				case .pokemonSpeciesCry			: mid = kSpeciesCry
+				case .specialMSG				: mid = kspecialMSG
+				case .varPokemon4E				: mid = kvarPokemon4E
+				case .varItem2D					: mid = kvarItem2D
+				case .varItem2E					: mid = kvarItem2E
+				case .varQuantity				: mid = kvarQuantity
+				case .varMove28					: mid = kvarMove28
+				case .varItem29					: mid = kvarItem29
+				case .varPokemon20				: mid = kvarPokemon20
+				case .varPokemon21				: mid = kvarPokemon21
+				case .varPokemon0F				: mid = kvarPokemon0F
+				case .varPokemon10				: mid = kvarPokemon10
+				case .varPokemon11				: mid = kvarPokemon11
+				case .varPokemon12				: mid = kvarPokemon12
+				case .sentOutPokemon1			: mid = ksentOutPokemon1
+				case .sentOutPokemon2			: mid = ksentOutPokemon2
+				case .varPokemon16				: mid = kvarPokemon16
+				case .varPokemon17				: mid = kvarPokemon17
+				case .varPokemon18				: mid = kvarPokemon18
+				case .varPokemon19				: mid = kvarPokemon19
+				case .varAbility1A				: mid = kvarAbility1A
+				case .varAbility1B				: mid = kvarAbility1B
+				case .varAbility1C				: mid = kvarAbility1C
+				case .varAbility1D				: mid = kvarAbility1D
+				case .varPokemon1E				: mid = kvarPokemon1E
 				default							: mid = String(format: "%02x", self.rawValue)
 			}
 			str = str + mid
@@ -224,6 +274,31 @@ enum XGSpecialCharacters : Int {
 			case kFoeTrainerClass	: return .foeTrainerClass
 			case kFoeTrainerName	: return .foeTrainerName
 			case kWaitKeyPress		: return .WaitKeyPress
+			case kSpeciesCry		: return .pokemonSpeciesCry
+		    case kspecialMSG		: return .specialMSG
+		    case kvarPokemon4E		: return .varPokemon4E
+		    case kvarItem2D			: return .varItem2D
+		    case kvarItem2E			: return .varItem2E
+		    case kvarQuantity		: return .varQuantity
+		    case kvarMove28			: return .varMove28
+		    case kvarItem29			: return .varItem29
+		    case kvarPokemon20		: return .varPokemon20
+		    case kvarPokemon21		: return .varPokemon21
+		    case kvarPokemon0F		: return .varPokemon0F
+		    case kvarPokemon10		: return .varPokemon10
+		    case kvarPokemon11		: return .varPokemon11
+		    case kvarPokemon12		: return .varPokemon12
+		    case ksentOutPokemon1	: return .sentOutPokemon1
+		    case ksentOutPokemon2	: return .sentOutPokemon2
+		    case kvarPokemon16		: return .varPokemon16
+		    case kvarPokemon17		: return .varPokemon17
+		    case kvarPokemon18		: return .varPokemon18
+		    case kvarPokemon19		: return .varPokemon19
+		    case kvarAbility1A		: return .varAbility1A
+		    case kvarAbility1B		: return .varAbility1B
+		    case kvarAbility1C		: return .varAbility1C
+		    case kvarAbility1D		: return .varAbility1D
+			case kvarPokemon1E		: return .varPokemon1E
 			default					: return XGSpecialCharacters(rawValue: str.hexStringToInt() ) ?? .unused0A
 		}
 	}

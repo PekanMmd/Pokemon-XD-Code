@@ -11,13 +11,14 @@ import Foundation
 class XGString: NSObject {
 	
 	var chars = [XGUnicodeCharacters]()
+	private var initString = "" // string used to initialise the xg string, just for reference
 	
 	var table = XGFiles.nameAndFolder("", .Documents)
 	@objc var id	  = 0
 	
 	@objc var dataLength : Int {
 		get {
-			var count = 0
+			var count = 1 // 1 for the null byte to terminate the string
 			for char in chars {
 				count += char.length
 			}
@@ -55,6 +56,7 @@ class XGString: NSObject {
 			for char in chars {
 				stream = stream + char.byteStream
 			}
+			stream += [0]
 			return stream
 		}
 	}
@@ -92,6 +94,7 @@ class XGString: NSObject {
 		
 		self.table = file ?? XGFiles.nameAndFolder("", .Documents)
 		self.id = sid ?? 0
+		self.initString = string
 		
 		var chars = [XGUnicodeCharacters]()
 		
@@ -162,6 +165,10 @@ class XGString: NSObject {
 	}
 	
 	@objc func replace(increaseSize: Bool) -> Bool {
+		return replaceDirectly(increaseSize: increaseSize, save: true)
+	}
+	
+	func replace(increaseSize: Bool, save: Bool) -> Bool {
 		if self.id == 0 {
 			return false
 		}
@@ -176,9 +183,9 @@ class XGString: NSObject {
 		return success
 	}
 	
-	func replaceDirectly() -> Bool {
+	func replaceDirectly(increaseSize: Bool, save: Bool) -> Bool {
 		stringsLoaded = false
-		return self.table.stringTable.replaceString(self, alert: false, save: true)
+		return self.table.stringTable.replaceString(self, alert: false, save: save, increaseLength: increaseSize)
 	}
 	
 	@objc func containsSubstring(_ sub: String) -> Bool {

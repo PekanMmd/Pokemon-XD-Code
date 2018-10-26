@@ -102,7 +102,7 @@ class XGTrainerPokemon : NSObject {
 		
 		self.index = index
 		
-		let data = XGFiles.common_rel.data
+		let data = XGFiles.common_rel.data!
 		let start = self.startOffset
 		
 		let spec		= data.get2BytesAtOffset(start + kPokemonSpeciesOffset)
@@ -151,7 +151,7 @@ class XGTrainerPokemon : NSObject {
 		
 		if self.isShadow {
 			
-			let data = XGFiles.common_rel.data
+			let data = XGFiles.common_rel.data!
 			let start = shadowStartOffset
 			
 			data.replaceByteAtOffset(start + kShadowCatchRateOffset, withByte: shadowCatchRate)
@@ -163,7 +163,7 @@ class XGTrainerPokemon : NSObject {
 			
 		}
 		
-		let data = XGFiles.common_rel.data
+		let data = XGFiles.common_rel.data!
 		let start = startOffset
 		
 		if self.species.index > 0 {
@@ -195,8 +195,6 @@ class XGTrainerPokemon : NSObject {
 		for i in 0 ..< kNumberOfEVs {
 			data.replaceByteAtOffset(start + kFirstPokemonEVOffset + (2 * i), withByte: EVs[i])
 		}
-		
-		data.replaceBytesFromOffset(start + kFirstPokemonEVOffset, withByteStream: self.EVs)
 		
 		data.replace2BytesAtOffset(start + kPokemonMove1Offset, withBytes: moves[0].index)
 		data.replace2BytesAtOffset(start + kPokemonMove2Offset, withBytes: moves[1].index)

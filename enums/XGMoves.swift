@@ -43,7 +43,7 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var nameID : Int {
 		get {
-			return Int(XGFiles.common_rel.data.getWordAtOffset(startOffset + kMoveNameIDOffset))
+			return Int(XGFiles.common_rel.data!.getWordAtOffset(startOffset + kMoveNameIDOffset))
 		}
 	}
 	
@@ -55,7 +55,7 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var descriptionID : Int {
 		get {
-			return Int(XGFiles.common_rel.data.getWordAtOffset(startOffset + kMoveDescriptionIDOffset))
+			return Int(XGFiles.common_rel.data!.getWordAtOffset(startOffset + kMoveDescriptionIDOffset))
 		}
 	}
 	
@@ -73,14 +73,14 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var type : XGMoveTypes {
 		get {
-			let index = XGFiles.common_rel.data.getByteAtOffset(startOffset + kMoveTypeOffset)
+			let index = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kMoveTypeOffset)
 			return XGMoveTypes(rawValue: index) ?? .normal
 		}
 	}
 	
 	var category : XGMoveCategories {
 		get {
-			let index = XGFiles.common_rel.data.getByteAtOffset(startOffset + kMoveCategoryOffset)
+			let index = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kMoveCategoryOffset)
 			return XGMoveCategories(rawValue: index) ?? .none
 		}
 	}
@@ -159,13 +159,13 @@ enum XGOriginalMoves {
 	
 	var nameID : Int {
 		get {
-			return XGFiles.original(.common_rel).data.get2BytesAtOffset(startOffset + kMoveNameIDOffset)
+			return XGFiles.original(.common_rel).data!.get2BytesAtOffset(startOffset + kMoveNameIDOffset)
 		}
 	}
 	
 	var descriptionID : Int {
 		get {
-			return XGFiles.original(.common_rel).data.get2BytesAtOffset(startOffset + kMoveDescriptionIDOffset)
+			return XGFiles.original(.common_rel).data!.get2BytesAtOffset(startOffset + kMoveDescriptionIDOffset)
 		}
 	}
 	
@@ -178,14 +178,14 @@ enum XGOriginalMoves {
 	
 	var type : XGMoveTypes {
 		get {
-			let index = XGFiles.original(.common_rel).data.getByteAtOffset(startOffset + kMoveTypeOffset)
+			let index = XGFiles.original(.common_rel).data!.getByteAtOffset(startOffset + kMoveTypeOffset)
 			return XGMoveTypes(rawValue: index) ?? .normal
 		}
 	}
 	
 	var animation : Int {
 		get {
-			return XGFiles.original(.common_rel).data.get2BytesAtOffset(startOffset + kAnimationIndexOffset)
+			return XGFiles.original(.common_rel).data!.get2BytesAtOffset(startOffset + kAnimationIndexOffset)
 		}
 	}
 	

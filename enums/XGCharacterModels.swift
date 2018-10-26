@@ -40,7 +40,7 @@ class XGCharacterModels : NSObject {
 	}
 	
 	@objc var rawData : [Int] {
-		return XGFiles.common_rel.data.getByteStreamFromOffset(self.startOffset, length: kSizeOfCharacterModel)
+		return XGFiles.common_rel.data!.getByteStreamFromOffset(self.startOffset, length: kSizeOfCharacterModel)
 	}
 	
 	@objc var modelData : XGMutableData {
@@ -50,7 +50,7 @@ class XGCharacterModels : NSObject {
 	@objc init(index: Int) {
 		super.init()
 		
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		
 		self.index = index
 		self.startOffset = CommonIndexes.CharacterModels.startOffset + (self.index * kSizeOfCharacterModel)
@@ -76,7 +76,7 @@ class XGCharacterModels : NSObject {
 	}
 	
 	func save() {
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		
 		rel.replaceWordAtOffset(self.startOffset + kCharacterModelFSYSIdentifier, withBytes: self.identifier)
 		for i in 0 ..< 8 {

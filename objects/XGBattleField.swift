@@ -27,7 +27,7 @@ class XGBattleField: NSObject {
 		self.index = index
 		self.startOffset = CommonIndexes.BattleFields.startOffset + (index * kSizeOfBattleFieldData)
 		
-		let data = XGFiles.common_rel.data
+		let data = XGFiles.common_rel.data!
 		
 		self.roomID = data.get2BytesAtOffset(startOffset + kBattleFieldRoomIDOffset)
 		

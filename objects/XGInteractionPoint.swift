@@ -55,7 +55,7 @@ class XGInteractionPointData: NSObject {
 		self.index = index
 		self.startOffset = CommonIndexes.InteractionPoints.startOffset + (index * kSizeOfInteractionPoint)
 		
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		self.mapRoom = XGRoom.roomWithID(rel.get2BytesAtOffset(startOffset + kIPMapIDOffset))
 		self.mapIndex = rel.getByteAtOffset(startOffset + kIPMapIndexOffset)
 		self.targetWarpRoom = XGRoom.roomWithID(rel.get2BytesAtOffset(startOffset + kIPWarpTargetMapOffset))
@@ -98,7 +98,7 @@ class XGInteractionLocation : NSObject {
 	
 	var file : XGFiles!
 	@objc var rawData : [Int] {
-		return file.data.getByteStreamFromOffset(startOffset, length: kSizeOfInteractionLocation)
+		return file.data!.getByteStreamFromOffset(startOffset, length: kSizeOfInteractionLocation)
 	}
 	
 	@objc var interactionData : XGInteractionPointData {
@@ -112,7 +112,7 @@ class XGInteractionLocation : NSObject {
 		self.startOffset = startOffset
 		self.file = file
 		
-		let data = file.data
+		let data = file.data!
 		
 		self.xCoordinate = data.getWordAtOffset(startOffset + kILXOffset).hexToSignedFloat()
 		self.yCoordinate = data.getWordAtOffset(startOffset + kILYOffset).hexToSignedFloat()
@@ -122,7 +122,7 @@ class XGInteractionLocation : NSObject {
 	}
 	
 	@objc func save() {
-		let data = file.data
+		let data = file.data!
 		
 		data.replace2BytesAtOffset(startOffset + kIPAngleOffset, withBytes: self.angle)
 		data.replaceWordAtOffset(startOffset + kILXOffset, withBytes: self.xCoordinate.bitPattern)

@@ -61,7 +61,7 @@ class XGTrainerClass: NSObject {
 		
 		self.tClass = tClass
 		
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		let start = self.startOffset
 		
 		self.payout = rel.get2BytesAtOffset(start + kTrainerClassPayoutOffset)
@@ -71,7 +71,7 @@ class XGTrainerClass: NSObject {
 	
 	@objc func save() {
 		
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		let start = self.startOffset
 		
 		rel.replaceWordAtOffset(start + kTrainerClassNameIDOffset, withBytes: UInt32(self.nameID))

@@ -327,10 +327,27 @@ extension String {
 			return false
 		}
 		
-		if self.substring(from: 0, to: 2) != "0x" {
+		var startIndex = 0
+		
+		if self.length > 2 {
+			if self.substring(from: 0, to: 2) == "0x" {
+				startIndex = 2
+			}
+		}
+		
+		if self.length > 3 {
+			if self.substring(from: 0, to: 3) == "-0x" {
+				startIndex = 3
+			}
+		}
+		
+		// remove this check to allow hex numbers without a leading 0x
+		// but must also add a case for negative numbers without leading 0x
+		if startIndex == 0 {
 			return false
 		}
-		let remaining = self.substring(from: 2, to: self.length).stack
+		
+		let remaining = self.substring(from: startIndex, to: self.length).stack
 		while !remaining.isEmpty {
 			let next = remaining.pop()
 			if !"0123456789abcdefABCDEF".contains(next) {
@@ -341,6 +358,9 @@ extension String {
 	}
 	
 	var integerValue : Int? {
+		if self.length == 0 {
+			return nil
+		}
 		if self.isHexInteger {
 			return self.hexStringToInt()
 		} else {
@@ -359,6 +379,13 @@ extension String {
 			s = s.replacingOccurrences(of: "/", with: "")
 			s = s.replacingOccurrences(of: "\\", with: "")
 			return s.lowercased()
+		}
+	}
+	
+	var underscoreSimplified : String {
+		get {
+			var s = self.replacingOccurrences(of: " ", with: "_")
+			return s.simplified
 		}
 	}
 	

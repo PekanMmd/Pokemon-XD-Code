@@ -15,15 +15,58 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	var homeViewController : GoDHomeViewController!
 	
+	@IBOutlet weak var decompileXDSMenuItem: NSMenuItem!
+	@IBOutlet weak var scriptMenuItem: NSMenuItem!
+	
+	@IBOutlet weak var godtoolmenuitem: NSMenuItem!
+	@IBOutlet weak var godtoolaboutmenuitem: NSMenuItem!
+	@IBOutlet weak var quitgodtoolmenuitem: NSMenuItem!
+	@IBOutlet weak var godtoolhelpmenuitem: NSMenuItem!
+	
+	
+	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		// Insert code here to initialize your application
 		createDirectories()
+		if game == .Colosseum {
+			scriptMenuItem.isHidden = true
+			godtoolmenuitem.title = "Colosseum Tool"
+			godtoolaboutmenuitem.title = "About Colosseum Tool"
+			quitgodtoolmenuitem.title = "Quit Colosseum Tool"
+			godtoolhelpmenuitem.title = "Colosseum Tool Help"
+		}
 		
 	}
 	
 	func applicationWillTerminate(_ aNotification: Notification) {
 		// Insert code here to tear down your application
 	}
+	
+	@IBAction func getFreeStringID(_ sender: Any) {
+		guard XGFiles.iso.exists else {
+			let text = "ISO file doesn't exist. Please place your \(game == .XD ? "Pokemon XD" : "Pokemon Colosseum") file in the folder \(XGFolders.ISO.path) and name it \(XGFiles.iso.fileName)"
+			printg("file \"\(XGFiles.iso.fileName)\" not in ISO folder")
+			
+			self.displayAlert(title: "Error", text: text)
+			return
+		}
+		XGThreadManager.manager.runInBackgroundAsync {
+			if let id = freeMSGID() {
+				self.displayAlert(title: "Free String ID", text: "The next free id is: \(id)")
+			} else {
+				self.displayAlert(title: "Free String ID", text: "Failed to find a free string id")
+			}
+		}
+	}
+	
+	@IBAction func importTextures(_ sender: Any) {
+		XGUtility.importTextures()
+	}
+	
+	@IBAction func exportTextures(_ sender: Any) {
+		XGUtility.exportTextures()
+	}
+	
 	
 	@IBAction func setVerboseLogs(_ sender: Any) {
 		verbose = true
@@ -50,14 +93,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		guard XGFiles.iso.exists else {
 			let text = "ISO file doesn't exist. Please place your \(game == .XD ? "Pokemon XD" : "Pokemon Colosseum") file in the folder \(XGFolders.ISO.path) and name it \(XGFiles.iso.fileName)"
 			printg("file \"\(XGFiles.iso.fileName)\" not in ISO folder")
-			GoDAlertViewController.alert(title: "Error", text: text).show(sender: self.homeViewController)
+			
+			self.displayAlert(title: "Error", text: text)
 			return
 		}
 		XGFolders.setUpFolderFormat()
 		XGISO.extractAllFiles()
 		
 		if game == .Colosseum && XGFiles.common_rel.exists {
-			let rel = XGFiles.common_rel.data
+			let rel = XGFiles.common_rel.data!
 			var zero = false
 			if region == .JP {
 				zero = rel.getWordAtOffset(0x4580 + 0x9cf8 - 4) != 0
@@ -72,38 +116,90 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 		
 		printg("extraction complete")
-		GoDAlertViewController.alert(title: "ISO Extraction Complete", text: "Done.").show(sender: self.homeViewController)
+		self.displayAlert(title: "ISO Extraction Complete", text: "Done.")
 	}
 	
+	var isBuilding = false
+	
 	@IBAction func quickBuildISO(_ sender: Any) {
-		XGUtility.compileMainFiles()
-		if commonTooLarge  {
-			commonTooLarge = false
-			compressionTooLarge = false
-			if game == .XD {
-				GoDAlertViewController.alert(title: "Quick Build Incomplete", text: "The compressed data for file \"common.rel\" is too large. Try using the patch to remove foreign languages.").show(sender: self.homeViewController)
+		guard !isBuilding else {
+			return
+		}
+		isBuilding = true
+		XGThreadManager.manager.runInBackgroundAsync {
+			XGUtility.compileMainFiles()
+			if filesTooLargeForReplacement != nil  {
+				filesTooLargeForReplacement = nil
+				var text = "Files too large to replace:"
+				
+				for file in filesTooLargeForReplacement! {
+					text += "\n\(file.fileName)"
+				}
+				
+				text += "\n\nSet 'ISO > Enable File Size Increases' to include them."
+				
+				self.displayAlert(title: "Quick Build Incomplete", text: text)
+				
 			} else {
-				GoDAlertViewController.alert(title: "Quick Build Incomplete", text: "The compressed data for file \"common.rel\" is too large. Try removing some pokemon from trainers or using the patch to remove all Battle mode data.").show(sender: self.homeViewController)
+				
+				self.displayAlert(title: "Done", text: "Quick build completed successfully!")
 			}
-		} else {
-			GoDAlertViewController.alert(title: "Quick Build Complete", text: "Done.").show(sender: self.homeViewController)
+			self.isBuilding = false
+		}
+	}
+	
+	@IBAction func rebuildISO(_ sender: AnyObject) {
+		guard !isBuilding else {
+			return
+		}
+		isBuilding = true
+		XGThreadManager.manager.runInBackgroundAsync {
+			XGUtility.compileAllFiles()
+			if filesTooLargeForReplacement != nil  {
+				filesTooLargeForReplacement = nil
+				var text = "Files too large to replace:"
+				
+				for file in filesTooLargeForReplacement! {
+					text += "\n\(file.fileName)"
+				}
+				
+				text += "\n\nSet 'ISO > Enable File Size Increases' to include them."
+				
+				self.displayAlert(title: "Reuild Incomplete", text: text)
+			} else {
+				self.displayAlert(title: "Done", text: "ISO rebuild completed successfully!")
+			}
+			self.isBuilding = false
 		}
 		
 	}
 	
-	@IBAction func rebuildISO(_ sender: AnyObject) {
-		XGUtility.compileAllFiles()
-		if commonTooLarge  {
-			commonTooLarge = false
-			compressionTooLarge = false
+	@IBAction func decompileXDS(_ sender: Any) {
+		XGThreadManager.manager.runInBackgroundAsync {
 			if game == .XD {
-				GoDAlertViewController.alert(title: "Quick Build Incomplete", text: "The compressed data for file \"common.rel\" is too large. Try using the patch to remove foreign languages.").show(sender: self.homeViewController)
-			} else {
-				GoDAlertViewController.alert(title: "Quick Build Incomplete", text: "The compressed data for file \"common.rel\" is too large. Try removing some pokemon from trainers or using the patch to remove all Battle mode data.").show(sender: self.homeViewController)
+				XGUtility.documentXDS()
 			}
-		} else {
-			GoDAlertViewController.alert(title: "ISO Rebuild Complete", text: "Done.").show(sender: self.homeViewController)
 		}
+	}
+	
+	@IBAction func getXDSMacros(_ sender: Any) {
+		XGThreadManager.manager.runInBackgroundAsync {
+			if game == .XD {
+				XGUtility.documentMacrosXDS()
+			}
+		}
+	}
+	
+	@IBAction func showHexCalculator(_ sender: Any) {
+		self.homeViewController.performSegue(withIdentifier: NSStoryboardSegue.Identifier(rawValue: "toHexCalcVC"), sender: self.homeViewController)
+	}
+	
+	@IBAction func showStringIDTool(_ sender: Any) {
+		self.performSegue("toStringVC")
+	}
+	
+	func present(_ controller: NSViewController) {
+		self.homeViewController.presentViewControllerAsModalWindow(controller)
 	}
 	
 	
@@ -125,5 +221,87 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		XGFolders.setUpFolderFormat()
 	}
 	
+	func displayAlert(title: String, text: String) {
+		XGThreadManager.manager.runInForegroundSync {
+			GoDAlertViewController.alert(title: title, text: text).show(sender: self.homeViewController)
+		}
+	}
+	
+	var isDocumenting = false
+	@IBAction func documentISO(_ sender: Any) {
+		guard !isDocumenting else {
+			return
+		}
+		isDocumenting = true
+		XGThreadManager.manager.runInBackgroundAsync {
+			XGUtility.documentISO(forXG: false)
+			self.isDocumenting = false
+		}
+	}
+	
+	func performSegue(_ name: String) {
+		guard XGFiles.iso.exists else {
+			let text = "ISO file doesn't exist. Please place your \(game == .XD ? "Pokemon XD" : "Pokemon Colosseum") file in the folder \(XGFolders.ISO.path) and name it \(XGFiles.iso.fileName)"
+			printg("file \"\(XGFiles.iso.fileName)\" not in ISO folder")
+			
+			self.displayAlert(title: "Error", text: text)
+			return
+		}
+		self.homeViewController.performSegue(withIdentifier: NSStoryboardSegue.Identifier(name), sender: self.homeViewController)
+	}
+	
+	@IBAction func openScriptCompiler(_ sender: Any) {
+		self.performSegue("toScriptVC")
+	}
+	
+	@IBAction func openStatsEditor(_ sender: Any) {
+		self.performSegue("toStatsVC")
+	}
+	
+	@IBAction func openMoveEditor(_ sender: Any) {
+		self.performSegue("toMoveVC")
+	}
+	
+	@IBAction func openGiftEditor(_ sender: Any) {
+		self.performSegue("toGiftVC")
+	}
+	
+	@IBAction func openPatchEditor(_ sender: Any) {
+		self.performSegue("toPatchVC")
+	}
+	
+	@IBAction func openContextTool(_ sender: Any) {
+		self.performSegue("toContextVC")
+	}
+	
+	@IBAction func openRandomiser(_ sender: Any) {
+		self.performSegue("toRandomiserVC")
+	}
+	
+	@IBAction func exporeISO(_ sender: Any) {
+		self.performSegue("toISOVC")
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

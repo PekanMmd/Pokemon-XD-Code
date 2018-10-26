@@ -56,16 +56,7 @@ class XGRandomiser : NSObject {
 			}
 		}
 		
-		var gifts : [XGGiftPokemon] = []
-		
-		for i in 0 ..< 2 {
-			gifts.append(XGDemoStarterPokemon(index: i))
-		}
-		for i in 0 ..< kNumberOfDistroPokemon {
-			gifts.append(CMGiftPokemon(index: i))
-		}
-		
-		for gift in gifts {
+		for gift in XGGiftPokemonManager.allGiftPokemon() {
 			
 			var pokemon = gift
 			pokemon.species = XGPokemon.random()
@@ -109,16 +100,8 @@ class XGRandomiser : NSObject {
 			}
 		}
 		
-		var gifts : [XGGiftPokemon] = []
 		
-		for i in 0 ..< 2 {
-			gifts.append(XGDemoStarterPokemon(index: i))
-		}
-		for i in 0 ..< kNumberOfDistroPokemon {
-			gifts.append(CMGiftPokemon(index: i))
-		}
-		
-		for gift in gifts {
+		for gift in XGGiftPokemonManager.allGiftPokemon() {
 			
 			var pokemon = gift
 			let moves = XGMoves.randomMoveset()

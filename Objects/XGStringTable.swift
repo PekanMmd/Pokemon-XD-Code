@@ -8,13 +8,41 @@
 
 import Foundation
 
+
 let kNumberOfStringsOffset = 0x04
 let kEndOfHeader		   = 0x10
+
+// high order 12 bits are compared with the string table's first 2 bytes
+// always seems to be 0 though
+let kMaxStringID 		   = 0xFFFFF
+
+enum XGLanguages : Int {
+	
+	case Japanese = 0
+	case EnglishUS
+	case EnglishUK
+	case German
+	case French
+	case Italian
+	case Spanish
+	
+	var name : String {
+		switch self {
+		case .Japanese: return "Japanese"
+		case .EnglishUK: return "English (UK)"
+		case .EnglishUS: return "English (US)"
+		case .French: return "French"
+		case .Spanish: return "Spanish"
+		case .German: return "German"
+		case .Italian: return "Italian"
+		}
+	}
+}
 
 class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 	var file = XGFiles.nameAndFolder("", .Documents)
-	@objc var startOffset = 0x0
+	@objc var startOffset = 0x0 // where in the file the string table is located. used for files like common.rel which have more than just the table
 	@objc var stringTable = XGMutableData()
 	@objc var stringOffsets = [Int : Int]()
 	var stringIDs = [Int]()
@@ -141,7 +169,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		
 		self.file = file
 		self.startOffset = startOffset
-		self.stringTable = XGMutableData(byteStream: file.data.charStream, file: file)
+		self.stringTable = XGMutableData(byteStream: file.data!.charStream, file: file)
 		
 		stringTable.deleteBytesInRange(NSMakeRange(0, startOffset))
 		stringTable.deleteBytesInRange(NSMakeRange(fileSize, stringTable.length - fileSize))
@@ -151,33 +179,55 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 	@objc func save() {
 		
-		let data = file.data
+		let data = file.data!
 		data.replaceBytesFromOffset(self.startOffset, withByteStream: stringTable.byteStream)
 		data.save()
 		
 	}
 	
+	func replaceString(_ string: XGString, save: Bool) -> Bool {
+		return self.replaceString(string, alert: false, save: save, increaseLength: false)
+	}
+	
+	func addString(_ string: XGString, increaseSize: Bool, save: Bool) -> Bool {
+		
+		if self.numberOfEntries == 0xFFFF {
+			printg("String table \(stringTable.file.fileName) has the maximum number of entries!")
+			return false
+		}
+		
+		if !self.containsStringWithId(string.id) {
+			let bytesRequired = string.dataLength + 8
+			if self.extraCharacters > bytesRequired {
+				self.stringTable.deleteBytes(start: stringTable.length - bytesRequired, count: bytesRequired)
+			} else {
+				if self.startOffset != 0 || !increaseSize {
+					printg("Couldn't add string to \(stringTable.file.fileName) because it doesn't have enough space.")
+					return false
+				}
+			}
+			
+			self.stringTable.insertRepeatedByte(byte: 0, count: bytesRequired, atOffset: (numberOfEntries * 8) + kEndOfHeader)
+			self.increaseOffsetsAfter(0, byCharacters: bytesRequired)
+			self.stringTable.replace2BytesAtOffset(kNumberOfStringsOffset, withBytes: numberOfEntries + 1)
+			self.updateOffsets()
+		}
+		
+		return self.replaceString(string, save: save)
+	}
+	
 	@objc func getOffsets() {
 		
 		var currentOffset = kEndOfHeader
-		var needsUpdate = false
 		
 		for _ in 0 ..< numberOfEntries {
 			
-			var id = stringTable.getWordAtOffset(currentOffset).int
+			let id = (stringTable.getWordAtOffset(currentOffset) & 0xFFFFF).int
 			let offset = stringTable.getWordAtOffset(currentOffset + 4).int
-			if self.stringTable.get2BytesAtOffset(offset) == 0x0 {
-				id = -1
-				needsUpdate = true
-			}
 			self.stringOffsets[id] = offset
 			self.stringIDs.append(id)
 			currentOffset += 8
 			
-		}
-		
-		if needsUpdate {
-			self.updateOffsets()
 		}
 		
 	}
@@ -317,6 +367,17 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 	@objc func containsStringWithId(_ stringID: Int) -> Bool {
 			return stringIDs.contains(stringID)
+	}
+	
+	@objc func numberOfFreeMSGIDsFrom(_ stringID: Int) -> Int {
+		var free = 0
+		for i in 0 ..< 10 { // just 10 to make it quick
+			if self.containsStringWithId(stringID + i) {
+				return free
+			}
+			free += 1
+		}
+		return free
 	}
 	
 	@objc func allStrings() -> [XGString] {

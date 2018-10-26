@@ -193,7 +193,7 @@ enum XGScriptClass {
 				return nil
 			}
 			
-			let dol = XGFiles.dol.data
+			let dol = XGFiles.dol.data!
 			let branchCodeStart = dol.getWordAtOffset(0x40bc5c - kDOLTableToRAMOffsetDifference + ((c - 33) * 4)) - 0x80000000
 			let branchInstructionOffset = branchCodeStart + 0xc
 			let branchInstruction = dol.getWordAtOffset(branchInstructionOffset.int - kDOLtoRAMOffsetDifference)

@@ -39,6 +39,24 @@ class GoDViewController: NSViewController {
 		
 	}
 	
+	var isActive = false
+	
+	override func viewWillAppear() {
+		super.viewWillAppear()
+		isActive = true
+	}
+	
+	override func viewWillDisappear() {
+		super.viewWillDisappear()
+		isActive = false
+	}
+	
+	override func presentViewControllerAsModalWindow(_ viewController: NSViewController) {
+		if isActive {
+			super.presentViewControllerAsModalWindow(viewController)
+		}
+	}
+	
 	@objc func showActivityView() {
 		self.showActivityView(nil)
 	}
@@ -69,13 +87,6 @@ class GoDViewController: NSViewController {
 			self.activityView.removeFromSuperview()
 		}
 		
-	}
-	
-	@objc func dispatchAfter(dispatchTime: Double, closure: @escaping () -> Void) {
-		
-		DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(dispatchTime * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
-			closure()
-		})
 	}
 	
 	

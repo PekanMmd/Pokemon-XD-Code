@@ -66,7 +66,7 @@ class XGBattleCD: NSObject {
 	}
 	
 	@objc var rawData : [Int] {
-		return XGFiles.common_rel.data.getByteStreamFromOffset(self.startOffset, length: kSizeOfBattleCDData)
+		return XGFiles.common_rel.data!.getByteStreamFromOffset(self.startOffset, length: kSizeOfBattleCDData)
 	}
 	
 	@objc var title : String {
@@ -123,7 +123,7 @@ class XGBattleCD: NSObject {
 		self.index = index
 		self.startOffset = CommonIndexes.BattleCDs.startOffset + (index * kSizeOfBattleCDData)
 		
-		let data = XGFiles.common_rel.data
+		let data = XGFiles.common_rel.data!
 		
 		self.turnLimit = data.getByteAtOffset(startOffset + kBattleCDTurnLimitOffset)
 		
@@ -152,7 +152,7 @@ class XGBattleCD: NSObject {
 	
 	@objc func save() {
 		
-		let data = XGFiles.common_rel.data
+		let data = XGFiles.common_rel.data!
 		
 		data.replaceByteAtOffset(startOffset + kBattleCDTurnLimitOffset, withByte: self.turnLimit)
 		data.replaceByteAtOffset(startOffset + kBattleStyleOffset, withByte: self.battleStyle.rawValue)

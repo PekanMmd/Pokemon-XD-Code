@@ -40,24 +40,7 @@ class GoDGiftViewController: GoDTableViewController {
 	
 	
 	func loadGifts() {
-		
-		self.gifts = []
-		self.gifts.append(XGStarterPokemon())
-		
-		for i in 0 ..< 2 {
-			self.gifts.append(XGDemoStarterPokemon(index: i))
-		}
-		
-		for i in 0 ..< 3 {
-			self.gifts.append(XGMtBattlePrizePokemon(index: i))
-		}
-		
-		self.gifts.append(XGTradeShadowPokemon())
-		
-		for i in 0 ..< 4 {
-			self.gifts.append(XGTradePokemon(index: i))
-		}
-		
+		self.gifts = XGGiftPokemonManager.allGiftPokemon()
 	}
 	
 	@IBAction func save(_ sender: Any) {

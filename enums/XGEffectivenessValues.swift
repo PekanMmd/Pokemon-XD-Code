@@ -22,10 +22,23 @@ enum XGEffectivenessValues : Int, XGDictionaryRepresentable {
 			switch self {
 				case .ineffective:			return "No Effect"
 				case .notVeryEffective:		return "Not Very Effective"
-				case .neutral:				return "Neutral Damage"
+				case .neutral:				return "Neutral"
 				case .superEffective:		return "Super Effective"
-				case .missed:				return "missed"
+				case .missed:				return "Missed"
 			}
+		}
+	}
+	
+	static func fromIndex(_ index: Int) -> XGEffectivenessValues {
+		switch index {
+		case 1:
+			return .neutral
+		case 2:
+			return .notVeryEffective
+		case 3:
+			return .ineffective
+		default:
+			return .superEffective
 		}
 	}
 	

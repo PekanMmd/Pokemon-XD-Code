@@ -99,7 +99,7 @@ enum XGTrainerModels : Int {
 	}
 	
 	var pkxModelIdentifier : UInt32 {
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		return dol.getWordAtOffset(kFirstTrainerPKXIdentifierOffset + (self.rawValue * 12) + kModelDictionaryModelOffset)
 	}
 	

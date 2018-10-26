@@ -51,11 +51,11 @@ class XGTradePokemon: NSObject, XGGiftPokemon {
 	@objc init(index: Int) {
 		super.init()
 		
-		let dol			= XGFiles.dol.data
+		let dol			= XGFiles.dol.data!
 		self.index		= index
 		
 		if index == 0 {
-			self.giftType = "Shadow Pokemon Trade"
+			self.giftType = "Hordel Trade"
 		}
 		
 		let start = startOffset
@@ -79,7 +79,7 @@ class XGTradePokemon: NSObject, XGGiftPokemon {
 	
 	@objc func save() {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		let start = startOffset
 		
 		dol.replaceByteAtOffset(start + kTradePokemonLevelOffset, withByte: level)

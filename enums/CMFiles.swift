@@ -134,17 +134,127 @@ indirect enum XGFiles {
 	}
 	
 	var text : String {
-		return data.string
+		return data!.string
 	}
 	
-	var data : XGMutableData {
+	var data : XGMutableData? {
 		get {
 			if self == .toc {
 				return tocData
 			}
+			switch self {
+			case .toc: return tocData
+			case .fsys("Null"): return NullFSYS
+			case .fsys("people_archive"): fallthrough
+			case .fsys("common"): fallthrough
+			case .fsys("fight_common"): fallthrough
+			case .fsys("field_common"): if !self.exists { ISO.extractFSYS() }
+			case .common_rel: if !self.exists { ISO.extractCommon() }
+			case .dol: if !self.exists { ISO.extractDOL() }
+			case .json:
+				if !self.exists {
+					let jsons = ["Move Effects", "Original Pokemon", "Original Moves", "Move Categories", "Room IDs"]
+					
+					for j in jsons {
+						let file = XGFiles.json(j)
+						if !file.exists {
+							let resource = XGResources.JSON(j)
+							let data = resource.data
+							data.file = file
+							data.save()
+						}
+					}
+				}
+			case .typeImage: fallthrough
+			case .trainerFace: fallthrough
+			case .pokeFace: fallthrough
+			case .pokeBody:
+				if !self.exists {
+					
+					var images = [XGFiles]()
+					
+					for i in 0 ... 17 {
+						images.append(.typeImage(i))
+					}
+					for i in 0 ... 414 {
+						images.append(.pokeBody(i))
+						images.append(.pokeFace(i))
+					}
+					for i in 0 ... 67 {
+						images.append(.trainerFace(i))
+					}
+					images.append(.nameAndFolder("type_fairy.png", .Types))
+					images.append(.nameAndFolder("type_shadow.png", .Types))
+					
+					for image in images {
+						if !image.exists {
+							let resource = XGResources.png(image.fileName.replacingOccurrences(of: ".png", with: ""))
+							let data = resource.data
+							data.file = image
+							data.save()
+						}
+					}
+					
+				}
+				
+			case .fsys:
+				if !self.exists {
+					let prefix = self.fileName.substring(from: 0, to: 2)
+					if XGMaps(rawValue: prefix) != nil {
+						if let d = ISO.dataForFile(filename: self.fileName) {
+							d.file = .nameAndFolder(self.fileName, .AutoFSYS)
+							d.save()
+						}
+					} else if ISO.menuFsysList.contains(self.fileName) || self.fileName.contains("menu") {
+						if let d = ISO.dataForFile(filename: self.fileName) {
+							d.file = .nameAndFolder(self.fileName, .MenuFSYS)
+							d.save()
+						}
+					} else {
+						if let d = ISO.dataForFile(filename: self.fileName) {
+							d.file = .nameAndFolder(self.fileName, .FSYS)
+							d.save()
+						}
+					}
+				}
+			case .msg(let name):
+				if !self.exists {
+					let fsys = XGFiles.fsys(name)
+					if fsys.exists || ISO.allFileNames.contains(fsys.fileName) {
+						let fdata = fsys.fsysData
+						if fdata.indexForFileType(type: .msg) >= 0 {
+							fdata.decompressedDataForFileWithFiletype(type: .msg)!.save()
+						}
+					}
+					
+				}
+			case .rel(let name):
+				if !self.exists {
+					let fsys = XGFiles.fsys(name)
+					if fsys.exists || ISO.allFileNames.contains(fsys.fileName) {
+						let fdata = fsys.fsysData
+						if fdata.indexForFileType(type: .rel) >= 0 {
+							fdata.decompressedDataForFileWithFiletype(type: .rel)!.save()
+						}
+					}
+				}
+			case .col(let name):
+				if !self.exists {
+					let fsys = XGFiles.fsys(name)
+					if fsys.exists || ISO.allFileNames.contains(fsys.fileName) {
+						let fdata = fsys.fsysData
+						if fdata.indexForFileType(type: .col) >= 0 {
+							fdata.decompressedDataForFileWithFiletype(type: .col)!.save()
+						}
+					}
+				}
+				
+			default: break
+			}
 			
 			if !self.exists {
 				printg("file doesn't exist:", self.path)
+				return nil
 			}
 			
 			var data : XGMutableData!
@@ -176,7 +286,12 @@ indirect enum XGFiles {
 	
 	var json : AnyObject {
 		get {
-			return try! JSONSerialization.jsonObject(with: self.data.data as Data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+			if self.exists {
+				return try! JSONSerialization.jsonObject(with: self.data!.data as Data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+			} else {
+				printg("File doesn't exist: \(self.path)")
+				return [String : String]() as AnyObject
+			}
 		}
 	}
 	
@@ -233,7 +348,7 @@ indirect enum XGFiles {
 	
 	var fileSize : Int {
 		get {
-			return self.data.length
+			return self.data!.length
 		}
 	}
 	
@@ -357,37 +472,69 @@ indirect enum XGFiles {
 }
 
 
-enum XGFolders : String {
+indirect enum XGFolders {
 	
-	case Documents			= "Documents"
-	case Common				= "Common"
-	case DOL				= "DOL"
-	case JSON				= "JSON"
-	case StringTables		= "String Tables"
-	case TextureImporter	= "Texture Importer"
-	case Import				= "Import"
-	case Export				= "Export"
-	case Textures			= "Textures"
-	case Images				= "Images"
-	case PokeFace			= "PokeFace"
-	case PokeBody			= "PokeBody"
-	case Trainers			= "Trainers"
-	case Types				= "Types"
-	case FSYS				= "FSYS"
-	case LZSS				= "LZSS"
-	case Scripts			= "Scripts"
-	case Reference			= "Reference"
-	case Resources			= "Resources"
-	case ISO				= "ISO"
-	case AutoFSYS			= "AutoFSYS"
-	case MenuFSYS			= "MenuFSYS"
-	case Logs				= "Logs"
-	case Rels				= "Relocation Tables"
-	case Col				= "Collision Data"
+	case Documents
+	case Common
+	case DOL
+	case JSON
+	case StringTables
+	case TextureImporter
+	case Import
+	case Export
+	case Textures
+	case Images
+	case PokeFace
+	case PokeBody
+	case Trainers
+	case Types
+	case FSYS
+	case LZSS
+	case Scripts
+	case Reference
+	case Resources
+	case ISO
+	case AutoFSYS
+	case MenuFSYS
+	case Logs
+	case Rels
+	case Col
+	case ISOExport(String)
+	case nameAndFolder(String, XGFolders)
+	
 	
 	var name : String {
 		get {
-			return self.rawValue
+			switch self {
+			case .Documents			: return "Documents"
+			case .Common			: return "Common"
+			case .DOL				: return "DOL"
+			case .JSON				: return "JSON"
+			case .StringTables		: return "String Tables"
+			case .TextureImporter	: return "Texture Importer"
+			case .Import			: return "Import"
+			case .Export			: return "Export"
+			case .Textures			: return "Textures"
+			case .Images			: return "Images"
+			case .PokeFace			: return "PokeFace"
+			case .PokeBody			: return "PokeBody"
+			case .Trainers			: return "Trainers"
+			case .Types				: return "Types"
+			case .FSYS				: return "FSYS"
+			case .LZSS				: return "LZSS"
+			case .Scripts			: return "Scripts"
+			case .Reference			: return "Reference"
+			case .Resources			: return "Resources"
+			case .ISO				: return "ISO"
+			case .AutoFSYS			: return "AutoFSYS"
+			case .MenuFSYS			: return "MenuFSYS"
+			case .Logs				: return "Logs"
+			case .Rels				: return "Relocation Tables"
+			case .Col				: return "Collision Data"
+			case .ISOExport     	: return "ISO Export"
+			case .nameAndFolder(let s, _): return s
+				
+			}
 		}
 	}
 	
@@ -399,6 +546,7 @@ enum XGFolders : String {
 			switch self {
 				
 			case .Documents	: return path
+			case .ISOExport(let folder): return path + ("/" + self.name) + ("/" + folder)
 			case .Import	: path = XGFolders.TextureImporter.path
 			case .Export	: path = XGFolders.TextureImporter.path
 			case .Textures	: path = XGFolders.TextureImporter.path
@@ -406,6 +554,7 @@ enum XGFolders : String {
 			case .PokeBody	: path = XGFolders.Images.path
 			case .Trainers	: path = XGFolders.Images.path
 			case .Types		: path = XGFolders.Images.path
+			case .nameAndFolder(_, let f): path = f.path
 			default: break
 				
 			}

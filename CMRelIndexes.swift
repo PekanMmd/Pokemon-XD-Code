@@ -22,6 +22,8 @@ enum CommonIndexes : Int {
 	case USStringTable = -2 // offset 0x59890 but not indexed apparently
 	case Doors = -3 // haven't been bothered to find
 	case NumberOfDoors = -4 // haven't been bothered to find
+	case BGM = -5 // haven't looked
+	case NumberOfBGMIDs = -6
 	
 	case LegendaryPokemon = 2
 	case NumberOfLegendaryPokemon = 3

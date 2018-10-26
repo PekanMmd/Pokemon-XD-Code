@@ -11,11 +11,11 @@ import Cocoa
 class GoDAlertViewController: GoDViewController {
 	
 	
-	var textLabel = NSTextField(frame: .zero)
+	var textLabel = NSTextView(frame: .zero)
 	
 	func setText(title: String, text: String) {
 		self.title = title
-		self.textLabel.stringValue = text
+		self.textLabel.string = text
 	}
 
     override func viewDidLoad() {
@@ -23,7 +23,7 @@ class GoDAlertViewController: GoDViewController {
 		
 		self.textLabel.alignment = .center
 		self.textLabel.sizeToFit()
-		let width = min(Float(self.textLabel.frame.width), 200)
+		let width = min(Float(self.textLabel.frame.width), 300)
 		self.addSubview(textLabel, name: "l")
 		self.addConstraintAlignAllEdges(view1: self.view, view2: textLabel)
 		self.addConstraintWidth(view: self.view, width: NSNumber(value: width))
@@ -32,7 +32,9 @@ class GoDAlertViewController: GoDViewController {
     }
 	
 	func show(sender: GoDViewController) {
-		sender.presentViewControllerAsModalWindow(self)
+		XGThreadManager.manager.runInForegroundSync {
+			sender.presentViewControllerAsModalWindow(self)
+		}
 	}
 	
 	class func alert(title: String, text: String) -> GoDAlertViewController {
@@ -41,7 +43,7 @@ class GoDAlertViewController: GoDViewController {
 		alertView.setText(title: title, text: text)
 		return alertView
 	}
-    
+	
 }
 
 

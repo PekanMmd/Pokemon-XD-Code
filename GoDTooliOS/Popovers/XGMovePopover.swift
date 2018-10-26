@@ -26,7 +26,7 @@ class XGMovePopover: XGPopover, UISearchResultsUpdating, UISearchBarDelegate {
 		searchController.searchBar.scopeButtonTitles = ["Name", "Type"]
 		searchController.searchBar.delegate = self
 		
-		let data = XGFiles.common_rel.data
+		let data = XGFiles.common_rel.data!
 		let table = XGFiles.common_rel.stringTable
 		
 		var offset = CommonIndexes.Moves.startOffset()

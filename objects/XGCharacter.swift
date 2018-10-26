@@ -24,13 +24,17 @@ let kZOffset = 0x20
 let kSizeOfCharacter = 0x24
 class XGCharacter : NSObject {
 	
+	// used by script compiler to make sure they are saved in the right order
+	var gid = -1
+	var rid = -1
+	
 	@objc var model : XGCharacterModels!
 	var movementType : XGCharacterMovements!
 	@objc var characterID = 0
 	
 	@objc var nameID : Int {
 		let start = CommonIndexes.PeopleIDs.startOffset + (self.characterID * 8)
-		return XGFiles.common_rel.data.getWordAtOffset(start + 4).int
+		return XGFiles.common_rel.data!.getWordAtOffset(start + 4).int
 	}
 	
 	@objc var name : String {
@@ -56,12 +60,13 @@ class XGCharacter : NSObject {
 	@objc var hasPassiveScript = false
 	@objc var passiveScriptIndex = 0
 	@objc var scriptName = "-"
+	@objc var passiveScriptName = "-"
 	@objc var characterIndex = 0
 	@objc var startOffset = 0
 	
 	var file : XGFiles!
 	@objc var rawData : [Int] {
-		return file.data.getByteStreamFromOffset(startOffset, length: kSizeOfCharacter)
+		return file.data!.getByteStreamFromOffset(startOffset, length: kSizeOfCharacter)
 	}
 	
 	override init() {
@@ -75,7 +80,7 @@ class XGCharacter : NSObject {
 		self.startOffset = startOffset
 		self.file = file
 		
-		let data = file.data
+		let data = file.data!
 		let m = data.get2BytesAtOffset(startOffset + kModelOffset)
 		self.model = XGCharacterModels(index: m)
 		self.characterID = data.get2BytesAtOffset(startOffset + kCharacterIDOffset)
@@ -95,7 +100,7 @@ class XGCharacter : NSObject {
 	}
 	
 	@objc func save() {
-		let data = file.data
+		let data = file.data!
 		
 		data.replace2BytesAtOffset(startOffset + kModelOffset, withBytes: self.model.index)
 		data.replace2BytesAtOffset(startOffset + kCharacterIDOffset, withBytes: self.characterID)

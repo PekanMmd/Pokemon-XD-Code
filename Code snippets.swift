@@ -16,7 +16,7 @@ import Foundation
 //loadAllStrings()
 //let list = [(20,"Blizzard-"),(32,"Scald-"),(51,"Thunder-"),(54,"Rock Slide-")]
 //var indices = [Int]()
-//let rel = XGFiles.common_rel.data
+//let rel = XGFiles.common_rel.data!
 //for (index,next) in list {
 //	let move = XGMoves.move(index).data
 //	let oldNameId = XGOriginalMoves.move(index).nameID
@@ -205,7 +205,7 @@ import Foundation
 //}
 
 
-//let dol = XGFiles.dol.data
+//let dol = XGFiles.dol.data!
 //var nextUnused = 0
 ////
 //let abNames = ["Hard Shell","Magic Bounce", "Pure Heart", "Adaptability","Multilayered","Solar Power","Regenerator","Snow Warning","Refrigerate","Slush Rush","Tough Claws","Prankster","Sand Force","Sand Rush","Amplifier", "No Guard"]
@@ -332,7 +332,7 @@ import Foundation
 //// shadow moves use HM flag
 //let shadowMovesCheckStartAddress = 0x8013d03c - kDOLtoRAMOffsetDifference
 //let shadowCheckInstructions : [UInt32] = [0x9421fff0,0x7c0802a6,0x90010014,0x480014cd,0x80010014,0x7c0803a6,0x38210010,0x4e800020]
-//let adol = XGFiles.dol.data
+//let adol = XGFiles.dol.data!
 //for i in 0 ..< shadowCheckInstructions.count {
 //	
 //	adol.replaceWordAtOffset(shadowMovesCheckStartAddress + (i * 4), withBytes: shadowCheckInstructions[i])
@@ -350,7 +350,7 @@ import Foundation
 
 ////snow warning
 //let snowWarningIndex = kNumberOfAbilities + 8
-//let bdol = XGFiles.dol.data
+//let bdol = XGFiles.dol.data!
 //let nops = [0x80225d24 - kDOLtoRAMOffsetDifference, 0x80225d54 - kDOLtoRAMOffsetDifference]
 //for offset in nops {
 //	bdol.replaceWordAtOffset(offset, withBytes: kNopInstruction)
@@ -371,7 +371,7 @@ import Foundation
 //// snow warning uses hail animation
 //let snowRoutineStart = 0xB9AC60
 //let snowWarningRoutine = [0x46, 0x19, 0x1e, 0x00, 0x00, 0x00, 0x00, 0x29, 0x80, 0x41, 0x78, 0x43]
-//let rel = XGFiles.common_rel.data
+//let rel = XGFiles.common_rel.data!
 //rel.replaceBytesFromOffset(snowRoutineStart - kRELtoRAMOffsetDifference, withByteStream: snowWarningRoutine)
 //rel.save()
 //
@@ -426,7 +426,7 @@ import Foundation
 //masquerain.speed = 80
 //masquerain.save()
 
-//let cdol = XGFiles.dol.data
+//let cdol = XGFiles.dol.data!
 //
 ////crit multipliers
 //let critOffsets = [0x8020dd7c,0x8020dd8c,0x8020dd9c,0x801f0968]
@@ -457,7 +457,7 @@ import Foundation
 //	let mov = XGMoves.move(m).data
 //	mov.HMFlag = true
 //	mov.save()
-//	let rel = XGFiles.common_rel.data
+//	let rel = XGFiles.common_rel.data!
 //	rel.replaceWordAtOffset(mov.startOffset + 0x14, withBytes: 0x00023101)
 //	rel.save()
 //	
@@ -530,7 +530,7 @@ import Foundation
 
 
 
-//let ddol = XGFiles.dol.data
+//let ddol = XGFiles.dol.data!
 //// sheer force
 //let sheerForceStart = 0x80213d6c
 //let sheerForceInstructions : [UInt32] = [0x7C7C1B78,0x7FA3EB78,0x4BFF1855,0x28030023,0x4082000C,0x3BA00000,0x48000024,0x7C7D1B78,0x7F83E378,0x4BF2A925,0x281D0020,0x7C7D1B78,0x4082000C,0x54600DFC,0x7C1D0378]
@@ -565,7 +565,7 @@ import Foundation
 //}
 //
 //ddol.save()
-//let dol2 = XGFiles.dol.data
+//let dol2 = XGFiles.dol.data!
 //// hard shell ability
 //let hardshellindex = 78
 //let hardoffset1 = 0x8022580c - kDOLtoRAMOffsetDifference
@@ -763,7 +763,7 @@ import Foundation
 
 
 
-//let ldol = XGFiles.dol.data
+//let ldol = XGFiles.dol.data!
 //
 //// old stat booster (r3 index of stat to boost, r4 battle pokemon)
 //let statBoosterStart = 0x8015258c - kDOLtoRAMOffsetDifference
@@ -883,7 +883,7 @@ import Foundation
 //}
 
 //// trick room tailwind part 2
-//let kdol = XGFiles.dol.data
+//let kdol = XGFiles.dol.data!
 //
 //let tr2BranchOffset = 0x80152498 - kDOLtoRAMOffsetDifference
 //let tr2BranchInstr  = createBranchFrom(offset: 0x152498, toOffset: 0x152520)
@@ -960,7 +960,7 @@ import Foundation
 //}
 
 // skill link part 2
-//let dol = XGFiles.dol.data
+//let dol = XGFiles.dol.data!
 //
 //dol.replaceWordAtOffset(0x80221d70 - kDOLtoRAMOffsetDifference, withBytes: createBranchAndLinkFrom(offset: 0x221d70, toOffset: 0x152548))
 //
@@ -980,7 +980,7 @@ import Foundation
 //0x4e800020, // return
 //]
 //
-//let bdol = XGFiles.dol.data
+//let bdol = XGFiles.dol.data!
 //bdol.replaceWordAtOffset(skillLinkBranchOffset, withBytes: skillLinkBranchInstruction)
 //for i in 0 ..< skillLinkCode.count {
 //	bdol.replaceWordAtOffset(skillLinkStart + (i * 4), withBytes: skillLinkCode[i])
@@ -1046,7 +1046,7 @@ import Foundation
 //}
 
 
-//let kdol = XGFiles.dol.data
+//let kdol = XGFiles.dol.data!
 //// trick room part 3
 //
 //let get_pointer_index_func = 0x801f3f3c - kDOLtoRAMOffsetDifference
@@ -3228,11 +3228,11 @@ import Foundation
 //}
 
 //// make taunt last 4 turns
-//let dol = XGFiles.dol.data
+//let dol = XGFiles.dol.data!
 //dol.replaceByteAtOffset(0x3f93e0 + (48 * 0x14) + 4, withByte: 4)
 //
 //// make tail wind last 4 turns
-////let dol = XGFiles.dol.data
+////let dol = XGFiles.dol.data!
 //dol.replaceByteAtOffset(0x3f93e0 + (75 * 0x14) + 4, withByte: 4)
 //
 //for tm in XGTMs.allTMs() {
@@ -3587,7 +3587,7 @@ import Foundation
 //
 //// roar move routine doesn't show animation etc.
 //let roarRoutineStart = 0x413f45
-//let dol = XGFiles.dol.data
+//let dol = XGFiles.dol.data!
 //dol.replaceBytesFromOffset(roarRoutineStart, withByteStream: [0x3b,0x3b,0x3b])
 //dol.save()
 
@@ -4000,7 +4000,7 @@ import Foundation
 //	// attack missed 0x41598e
 //	0x3a, 0x00, 0x20, 0x07, 0x46, 0x12, 0x17, 0x00, 0x00, 0x00, 0x00, 0x0f, 0x10, 0x13, 0x00, 0x50, 0x0b, 0x04, 0x2f, 0x80, 0x4e, 0xb9, 0x47, 0x00, 0x4a, 0x02, 0x10, 0x7c, 0x80, 0x41, 0x59, 0x09, 0x01, 0x3e,]
 //
-//let dol = XGFiles.dol.data
+//let dol = XGFiles.dol.data!
 //dol.replaceBytesFromOffset(earthquakeStart, withByteStream: earthquakeRoutine)
 //dol.save()
 
@@ -4500,7 +4500,7 @@ import Foundation
 //
 //])
 
-//let dol = XGFiles.dol.data
+//let dol = XGFiles.dol.data!
 //
 //let spreadAbsorbedStart = 0x2209f8  - kDOLtoRAMOffsetDifference
 //let spreadA : UInt32 = 0x8022
@@ -4599,7 +4599,7 @@ import Foundation
 //fsys.save()
 //
 //// increase number of tms by replacing hms
-//let dol = XGFiles.dol.data
+//let dol = XGFiles.dol.data!
 //dol.replaceWordAtOffset(0x15e92c - kDOLtoRAMOffsetDifference, withBytes: 0x28030038)
 //dol.replaceWordAtOffset(0x15e948 - kDOLtoRAMOffsetDifference, withBytes: 0x3803ffc8)
 //dol.save()
@@ -4813,7 +4813,7 @@ import Foundation
 //XGDecks.DeckColosseum.addTrainerEntries(count: 28)
 //
 //
-//let rel = XGFiles.common_rel.data
+//let rel = XGFiles.common_rel.data!
 //var oldbattles = [Int]()
 //var newbattles = [Int]()
 //for i in 41 ... 68 {
@@ -5761,7 +5761,7 @@ import Foundation
 //])
 //
 //// remove own tempo ability
-//let dol = XGFiles.dol.data
+//let dol = XGFiles.dol.data!
 //dol.replaceBytesFromOffset(0x411B31 , withByteStream: [0x3b,0x3b,0x3b,0x3b,0x3b,0x3b,0x3b,])
 //dol.save()
 //XGAssembly.replaceASM(startOffset: 0x21479c - kDOLtoRAMOffsetDifference, newASM: [
@@ -5980,7 +5980,7 @@ import Foundation
 //
 //let statBoostAnimationRoutineStart = 0xB9ADE4
 //let statBoostAnimationRoutine = [0x2f, 0xff, 0x01, 0x60, 0x1e, 0x00, 0x2f, 0x80, 0x4e, 0x85, 0xc3, 0x00, 0x29, 0x80, 0x41, 0x79, 0x63, 0x3b, 0x3b, 0x3b]
-//let rel = XGFiles.common_rel.data
+//let rel = XGFiles.common_rel.data!
 //rel.replaceBytesFromOffset(statBoostAnimationRoutineStart - kRELtoRAMOffsetDifference, withByteStream: statBoostAnimationRoutine)
 //rel.save()
 //

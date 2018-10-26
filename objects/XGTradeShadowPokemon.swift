@@ -28,7 +28,7 @@ class XGTradeShadowPokemon: NSObject, XGGiftPokemon {
 	var move3			= XGMoves.move(0)
 	var move4			= XGMoves.move(0)
 	
-	@objc var giftType		= "Given Shadow Pokemon"
+	@objc var giftType		= "Shadow Pokemon Gift"
 	
 	// unused
 	@objc var index			= 0
@@ -44,7 +44,7 @@ class XGTradeShadowPokemon: NSObject, XGGiftPokemon {
 	override init() {
 		super.init()
 		
-		let dol			= XGFiles.dol.data
+		let dol			= XGFiles.dol.data!
 		
 		let start = startOffset
 		
@@ -68,7 +68,7 @@ class XGTradeShadowPokemon: NSObject, XGGiftPokemon {
 	
 	@objc func save() {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		let start = startOffset
 		
 //		dol.replace2BytesAtOffset(start + kTradeShadowDDPKIDOffset, withBytes: DDPKID)

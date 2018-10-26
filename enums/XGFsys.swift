@@ -8,6 +8,7 @@
 
 import Foundation
 
+let kFSYSGroupIDOffset				= 0x08
 let kNumberOfEntriesOffset			= 0x0C
 let kFSYSFileSizeOffset				= 0x20
 let kFirstFileNamePointerOffset		= 0x44
@@ -78,6 +79,10 @@ class XGFsys : NSObject {
 		get {
 			return file.path
 		}
+	}
+	
+	var groupID : Int {
+		return self.data.get4BytesAtOffset(kFSYSGroupIDOffset)
 	}
 	
 	// some fsys files have 2 filenames per entry with the second containing the file extension
@@ -457,7 +462,7 @@ class XGFsys : NSObject {
 		}
 		
 		var file = newFile
-		if newFile.data.getWordAtOffset(0) != kLZSSbytes {
+		if newFile.data!.getWordAtOffset(0) != kLZSSbytes {
 			file = newFile.compress()
 		}
 		self.replaceFileWithIndex(index, withFile: file, saveWhenDone: false)
@@ -527,7 +532,7 @@ class XGFsys : NSObject {
 		}
 		
 		var file = newFile
-		if newFile.data.getWordAtOffset(0) != kLZSSbytes {
+		if newFile.data!.getWordAtOffset(0) != kLZSSbytes {
 			file = newFile.compress()
 		}
 		self.replaceFileWithIndex(index, withFile: file, saveWhenDone: save)
@@ -554,22 +559,20 @@ class XGFsys : NSObject {
 		if index < self.numberOfEntries - 1 {
 			if fileEnd > startOffsetForFile(index + 1) {
 				printg("file too large to replace: ", newFile.fileName, self.file.fileName)
-				compressionTooLarge = true
 				return
 			}
 		}
 		
 		if fileEnd > self.dataEnd {
 			printg("file too large to replace: ", newFile.fileName, self.file.fileName)
-			compressionTooLarge = true
 			return
 		}
 		
 		eraseDataForFile(index: index)
 		
 		
-		let fileSize = UInt32(newFile.data.length)
-		let newData = newFile.data
+		let fileSize = UInt32(newFile.data!.length)
+		let newData = newFile.data!
 		
 		let detailsStart = startOffsetForFileDetails(index)
 		data.replaceWordAtOffset(detailsStart + kCompressedSizeOffset, withBytes: fileSize)
@@ -623,7 +626,7 @@ class XGFsys : NSObject {
 	}
 	
 	func addFile(file: XGFiles, fileType: XGFileTypes, compress: Bool, shortID: Int) {
-		self.addFile(file.data, fileType: fileType, compress: compress, shortID: shortID)
+		self.addFile(file.data!, fileType: fileType, compress: compress, shortID: shortID)
 	}
 	
 	func addFile(_ fileData: XGMutableData, fileType: XGFileTypes, compress: Bool, shortID: Int) {
@@ -890,7 +893,7 @@ class XGFsys : NSObject {
 			var addendum = ""
 			if repeats[i] > 0 {
 				addendum = "\(repeats[i])"
-				while addendum.characters.count < 4 {
+				while addendum.length < 4 {
 					addendum = "0" + addendum
 				}
 				addendum = " " + addendum
@@ -903,12 +906,21 @@ class XGFsys : NSObject {
 			data[i].file = .nameAndFolder(updatedNames[i], folder)
 			
 			// save .rel file first in case it's needed for script data
-			if data[i].file.fileName.fileExtensions.contains(".rel") {
+			if data[i].file.fileType == .rel {
+				if verbose {
+					printg("extracting file: \(data[i].file.fileName)")
+				}
 				data[i].save()
 			}
 		}
 		
 		for i in 0 ..< data.count {
+			if data[i].file.fileType == .rel {
+				continue
+			}
+			if verbose {
+				printg("extracting file: \(data[i].file.fileName)")
+			}
 			data[i].save()
 			
 			if data[i].file.fileType == .gtx || data[i].file.fileType == .atx {

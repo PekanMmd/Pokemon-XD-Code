@@ -8,11 +8,11 @@
 
 import Cocoa
 
-let xdtools = ["Trainer Editor","Shadow Pokemon Editor","Pokemon Stats Editor","Move Editor","Item Editor (Incomplete)","Pokespot Editor","Gift Pokemon Editor", "Patches", "Randomiser", "Script Viewer", "Collision Viewer","Save Reference Data"]
-let xdsegues = ["toTrainerVC","toShadowVC","toStatsVC","toMoveVC","toItemVC","toSpotVC","toGiftVC","toPatchVC","toRandomiserVC","toScriptVC", "toCollisionVC"]
+let xdtools = ["Trainer Editor","Shadow Pokemon Editor","Pokemon Stats Editor","Move Editor","Item Editor","Pokespot Editor","Gift Pokemon Editor", "Type Editor", "Patches", "Randomiser", "Script Compiler", "Collision Viewer", "ISO Explorer"]
+let xdsegues = ["toTrainerVC","toShadowVC","toStatsVC","toMoveVC","toItemVC","toSpotVC","toGiftVC", "toTypeVC", "toPatchVC","toRandomiserVC","toScriptVC", "toCollisionVC", "toISOVC"]
 
-let colotools = ["Trainer Editor","Pokemon Stats Editor","Move Editor","Item Editor (Incomplete)","Gift Pokemon Editor", "Patches", "Randomiser", "Collision Viewer","Save Reference Data"]
-let colosegues = ["toTrainerVC","toStatsVC","toMoveVC","toItemVC","toGiftVC", "toPatchVC", "toRandomiserVC", "toCollisionVC"]
+let colotools = ["Trainer Editor","Pokemon Stats Editor","Move Editor","Item Editor","Gift Pokemon Editor", "Type Editor", "Patches", "Randomiser", "Collision Viewer", "ISO Explorer"]
+let colosegues = ["toTrainerVC","toStatsVC","toMoveVC","toItemVC","toGiftVC", "toTypeVC", "toPatchVC", "toRandomiserVC", "toCollisionVC", "toISOVC"]
 
 class GoDHomeViewController: GoDTableViewController {
 	
@@ -27,6 +27,13 @@ class GoDHomeViewController: GoDTableViewController {
 		
 		if game == .Colosseum {
 			self.title = "Colosseum Tool"
+		}
+		
+		Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { (_) in
+			let s = logString
+			if s != self.logView.string {
+				self.logView.string = s
+			}
 		}
     }
 	
@@ -63,12 +70,10 @@ class GoDHomeViewController: GoDTableViewController {
 		if row == -1 {
 			return
 		}
-		if !XGFiles.iso.exists || !XGFiles.common_rel.exists || !XGFiles.dol.exists {
+		if !XGFiles.iso.exists {
 			self.performSegue(withIdentifier: NSStoryboardSegue.Identifier(rawValue: "toHelpVC"), sender: self)
 		} else if row < segues.count && row >= 0 {
 			performSegue(withIdentifier: NSStoryboardSegue.Identifier(rawValue: segues[row]), sender: self)
-		} else {
-			XGUtility.documentISO(forXG: false)
 		}
 	}
 	

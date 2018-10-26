@@ -107,7 +107,7 @@ class XGDolPatcher: NSObject {
 	
 	@objc class func isClassSplitImplemented() -> Bool {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		for offset in kClassPatchOffsets {
 			let machineInstruction = dol.getWordAtOffset(offset)
@@ -125,7 +125,7 @@ class XGDolPatcher: NSObject {
 		
 		if game == .XD && region == .US {
 			
-			let dol = XGFiles.dol.data
+			let dol = XGFiles.dol.data!
 			for offset in kClassPatchOffsets {
 				dol.replaceWordAtOffset(offset, withBytes: kNopInstruction)
 			}
@@ -175,7 +175,7 @@ class XGDolPatcher: NSObject {
 	
 	@objc class func removePhysicalSpecialSplitPatch() {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		for offset in kClassPatchOffsets {
 			
@@ -199,13 +199,13 @@ class XGDolPatcher: NSObject {
 	//Allows the safe changing of type 9 (?) to another type, e.g. fairy.
 	
 	@objc class func isType9Independent() -> Bool {
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		return dol.getWordAtOffset(0x2C55B0) == kBranchInstruction9
 	}
 	
 	@objc class func removeType9Dependencies() {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		dol.replaceWordAtOffset(0x2C55B0, withBytes: kBranchInstruction9)
 		dol.replaceWordAtOffset(0x031230, withBytes: 0x3B400000)
@@ -224,13 +224,13 @@ class XGDolPatcher: NSObject {
 	// Changes the starters from eevee to the beta jolteon and vaporeon which can be edited.
 	
 	@objc class func areBetaStartersEnabled() -> Bool {
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		return dol.getWordAtOffset(kBetaStartersFirstOffset) == kBetaStartersInstruction1
 	}
 	
 	@objc class func enableBetaStarters() {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		let instructions = [kBetaStartersInstruction1, kBetaStartersInstruction2, kBetaStartersInstruction3]
 		
@@ -244,7 +244,7 @@ class XGDolPatcher: NSObject {
 	
 	@objc class func disableBetaStarters() {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		let instructions = [kOriginalStartersInstruction1, kOriginalStartersInstruction2, kOriginalStartersInstruction3]
 		
@@ -260,12 +260,12 @@ class XGDolPatcher: NSObject {
 	// Allows the name rater to nickname any pokemon
 	
 //	class func canRenameAnyPokemon() -> Bool {
-//		let dol = XGFiles.Dol.data
+//		let dol = XGFiles.dol.data!
 //		return dol.getWordAtOffset(kNameRaterOffset1) == kNopInstruction
 //	}
 //	
 	@objc class func allowRenamingAnyPokemon() {
-//		let dol = XGFiles.Dol.data
+//		let dol = XGFiles.dol.data!
 //		
 //		dol.replaceWordAtOffset(kNameRaterOffset1, withBytes: kNopInstruction)
 //		dol.replaceWordAtOffset(kNameRaterOffset2, withBytes: kNameRaterInstruction2)
@@ -276,13 +276,8 @@ class XGDolPatcher: NSObject {
 	
 	
 	@objc class func implementUnlimitedTutors() {
-		
-		let script = XGFiles.scd("M3_cave_1F_2.scd").data
-//		for i in [0,1] {
-//			script.replaceByteAtOffset(kUnlimitedTutorMovesJumpOffsets[i], withByte: kUnlimitedTutorMovesJumpInstruction)
-//			
-//		}
-		
+		// probably don't use this anymore, edit xds script directly
+		let script = XGFiles.scd("M3_cave_1F_2.scd").data!
 		for i in [0,1] {
 			script.replace2BytesAtOffset(kUnlimitedTutorMovesJumpOffsets2[i], withBytes: kUnlimitedTutorMovesJumpInstructions[i])
 		}
@@ -294,7 +289,7 @@ class XGDolPatcher: NSObject {
 	@objc class func removeShinyGlitch() {
 		// upon further inspection it seems this isn't necessary. I believe the player's tid is always used when generating shadow pokemon
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		dol.replaceWordAtOffset(kShinyCalcPIDOffset1, withBytes: kShinyCalcNewPIDInstruction)
 		dol.replaceWordAtOffset(kShinyCalcPIDOffset2, withBytes: kShinyCalcNewPIDInstruction)
@@ -303,7 +298,7 @@ class XGDolPatcher: NSObject {
 	}
 	
 	@objc class func replaceShinyGlitch() {
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		dol.replaceWordAtOffset(kShinyCalcPIDOffset1, withBytes: kShinyCalcOriginalPIDInstruction)
 		dol.replaceWordAtOffset(kShinyCalcPIDOffset2, withBytes: kShinyCalcOriginalPIDInstruction)
@@ -312,7 +307,7 @@ class XGDolPatcher: NSObject {
 	}
 	
 	@objc class func getShinyChance() -> Float {
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		let val = Float(dol.get2BytesAtOffset(kShinyCalcChanceOffset1))
 		return val / 0xFFFF * 100
@@ -327,7 +322,7 @@ class XGDolPatcher: NSObject {
 			return
 		}
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		var val = Int(newValue * 0xFFFF) / 100
 		
@@ -441,7 +436,7 @@ class XGDolPatcher: NSObject {
 		let critRatiosStartOffset  = game == .XD ? 0x41dd20 : (region == .US ? 0x397c18 : 0x384388)
 		//let numberCritRatiosOffset = critRatiosStartOffset + 8
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		dol.replaceBytesFromOffset(critRatiosStartOffset, withByteStream: [24,8,2,1,1])
 		dol.save()
 	}

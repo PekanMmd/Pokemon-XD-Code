@@ -77,25 +77,7 @@ class XGRandomiser : NSObject {
 				}
 			}
 			
-			var gifts : [XGGiftPokemon] = []
-			
-			gifts.append(XGStarterPokemon())
-			
-			for i in 0 ..< 2 {
-				gifts.append(XGDemoStarterPokemon(index: i))
-			}
-			
-			for i in 0 ..< 3 {
-				gifts.append(XGMtBattlePrizePokemon(index: i))
-			}
-			
-			for i in 0 ..< 4 {
-				gifts.append(XGTradePokemon(index: i))
-			}
-			
-			gifts.append(XGTradeShadowPokemon())
-			
-			for gift in gifts {
+			for gift in XGGiftPokemonManager.allGiftPokemon() {
 				
 				var pokemon = gift
 				pokemon.species = XGPokemon.random()
@@ -154,25 +136,9 @@ class XGRandomiser : NSObject {
 			}
 		}
 		
-		var gifts : [XGGiftPokemon] = []
 		
-		gifts.append(XGStarterPokemon())
 		
-		for i in 0 ..< 2 {
-			gifts.append(XGDemoStarterPokemon(index: i))
-		}
-		
-		for i in 0 ..< 3 {
-			gifts.append(XGMtBattlePrizePokemon(index: i))
-		}
-		
-		for i in 0 ..< 4 {
-			gifts.append(XGTradePokemon(index: i))
-		}
-		
-		gifts.append(XGTradeShadowPokemon())
-		
-		for gift in gifts {
+		for gift in XGGiftPokemonManager.allGiftPokemon() {
 			
 			var pokemon = gift
 			let moves = XGMoves.randomMoveset()

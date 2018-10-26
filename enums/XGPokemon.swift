@@ -56,7 +56,7 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var nameID : Int {
 		get {
-			return Int(XGFiles.common_rel.data.getWordAtOffset(startOffset + kNameIDOffset))
+			return Int(XGFiles.common_rel.data!.getWordAtOffset(startOffset + kNameIDOffset))
 		}
 	}
 	
@@ -69,27 +69,27 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var ability1 : String {
 		get {
-			let a1 = XGFiles.common_rel.data.getByteAtOffset(startOffset + kAbility1Offset)
+			let a1 = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kAbility1Offset)
 			return XGAbilities.ability(a1).name.string
 		}
 	}
 	var ability2 : String {
 		get {
-			let a2 = XGFiles.common_rel.data.getByteAtOffset(startOffset + kAbility2Offset)
+			let a2 = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kAbility2Offset)
 			return XGAbilities.ability(a2).name.string
 		}
 	}
 	
 	var type1 : XGMoveTypes {
 		get {
-			let type = XGFiles.common_rel.data.getByteAtOffset(startOffset + kType1Offset)
+			let type = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kType1Offset)
 			return XGMoveTypes(rawValue: type) ?? XGMoveTypes.normal
 		}
 	}
 	
 	var type2 : XGMoveTypes {
 		get {
-			let type = XGFiles.common_rel.data.getByteAtOffset(startOffset + kType2Offset)
+			let type = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kType2Offset)
 			return XGMoveTypes(rawValue: type) ?? XGMoveTypes.normal
 		}
 	}
@@ -100,13 +100,13 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 	
 	var catchRate : Int {
 		get {
-			return XGFiles.common_rel.data.getByteAtOffset(startOffset + kCatchRateOffset)
+			return XGFiles.common_rel.data!.getByteAtOffset(startOffset + kCatchRateOffset)
 		}
 	}
 	
 	var expRate : XGExpRate {
 		get {
-			let rate = XGFiles.common_rel.data.getByteAtOffset(startOffset + kEXPRateOffset)
+			let rate = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kEXPRateOffset)
 			return XGExpRate(rawValue: rate) ?? .slow
 		}
 	}
@@ -202,7 +202,7 @@ enum XGOriginalPokemon {
 	
 	var nameID : Int {
 		get {
-			return Int(XGFiles.original(.common_rel).data.getWordAtOffset(startOffset + kNameIDOffset))
+			return Int(XGFiles.original(.common_rel).data!.getWordAtOffset(startOffset + kNameIDOffset))
 		}
 	}
 	
@@ -215,14 +215,14 @@ enum XGOriginalPokemon {
 	
 	var type1 : XGMoveTypes {
 		get {
-			let type = XGFiles.original(.common_rel).data.getByteAtOffset(startOffset + kType1Offset)
+			let type = XGFiles.original(.common_rel).data!.getByteAtOffset(startOffset + kType1Offset)
 			return XGMoveTypes(rawValue: type) ?? XGMoveTypes.normal
 		}
 	}
 	
 	var type2 : XGMoveTypes {
 		get {
-			let type = XGFiles.original(.common_rel).data.getByteAtOffset(startOffset + kType2Offset)
+			let type = XGFiles.original(.common_rel).data!.getByteAtOffset(startOffset + kType2Offset)
 			return XGMoveTypes(rawValue: type) ?? XGMoveTypes.normal
 		}
 	}

@@ -51,7 +51,7 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 	@objc var descriptionID		= 0x0
 	@objc var parameter			= 0x0
 	@objc var friendshipEffects	= [Int](repeating: 0x0, count: kNumberOfFriendshipEffects)
-	@objc var canBeHeld 		= false
+	@objc var canBeHeld 		= false // more appropriate name would be "consumable"
 	
 	var function1 : UInt32 		= 0x0
 	var function2 : UInt32		= 0x0
@@ -78,7 +78,7 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 		self.index = index
 		
 		let start = startOffset
-		let data  = XGFiles.common_rel.data
+		let data  = XGFiles.common_rel.data!
 		
 		let bSlot			= data.getByteAtOffset(start + kBagSlotOffset)
 		bagSlot				= XGBagSlots(rawValue: bSlot) ?? XGBagSlots.items
@@ -99,7 +99,7 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 	
 	@objc func save() {
 		
-		let data = XGFiles.common_rel.data
+		let data = XGFiles.common_rel.data!
 		let start = self.startOffset
 		
 		data.replaceByteAtOffset(start + kBagSlotOffset, withByte: bagSlot.rawValue)

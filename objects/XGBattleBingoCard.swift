@@ -88,7 +88,7 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 		self.index = index
 		
 		let start = self.startOffset
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		
 		difficulty = rel.getByteAtOffset(start + kBingoCardDifficultyLevelOffset)
 		subIndex = rel.getByteAtOffset(start + kBingoCardSubIndexOffset)
@@ -134,7 +134,7 @@ class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
 	@objc func save() {
 		
 		let start = self.startOffset
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		
 		rel.replaceByteAtOffset(start + kBingoCardPokemonLevelOffset, withByte: self.pokemonLevel)
 		

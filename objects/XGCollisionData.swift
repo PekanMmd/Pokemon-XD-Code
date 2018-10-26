@@ -34,7 +34,7 @@ class XGCollisionData: NSObject {
 		
 		self.file = file
 		
-		let data = file.data
+		let data = file.data!
 		
 		let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
 		if relFile.exists {

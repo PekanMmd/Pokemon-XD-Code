@@ -48,7 +48,7 @@ class XGAssembly {
 		// returns the next free instruction address (from common_rel) as a pointer to ram
 		
 		var offset = kRelFreeSpaceStart
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		var value = (rel.getWordAtOffset(offset - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 4 - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 8 - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 12 - kRELtoRAMOffsetDifference))
 		while value != (0,0,0,0) {
 			offset = offset + 4
@@ -59,13 +59,13 @@ class XGAssembly {
 	
 	class func revertDolInstructionFromOffset(offset: Int, length: Int) {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		for i in 0 ..< length {
 			
 			let off = offset + (i * 4)
 			
-			let original = XGFiles.original(.dol).data.getWordAtOffset(off)
+			let original = XGFiles.original(.dol).data!.getWordAtOffset(off)
 			dol.replaceWordAtOffset(off, withBytes: original)
 			
 		}
@@ -74,11 +74,11 @@ class XGAssembly {
 	
 	class func revertDolInstructionAtOffsets(offsets: [Int]) {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		for offset in offsets {
 			
-			let original = XGFiles.original(.dol).data.getWordAtOffset(offset)
+			let original = XGFiles.original(.dol).data!.getWordAtOffset(offset)
 			dol.replaceWordAtOffset(offset, withBytes: original)
 			
 		}
@@ -86,7 +86,7 @@ class XGAssembly {
 	}
 	
 	class func replaceASM(startOffset: Int, newASM asm: ASM) {
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		for i in 0 ..< asm.count {
 			let offset = startOffset + (i * 4)
 			let instruction = asm[i].codeAtOffset(offset + kDOLtoRAMOffsetDifference)
@@ -97,7 +97,7 @@ class XGAssembly {
 	
 	class func replaceRELASM(startOffset: Int, newASM asm: ASM) {
 		let ramOffset = startOffset > kRELtoRAMOffsetDifference ? kRELtoRAMOffsetDifference : 0
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		for i in 0 ..< asm.count {
 			let offset = startOffset + (i * 4) - ramOffset
 			let instruction = asm[i].codeAtOffset(offset + kRELtoRAMOffsetDifference)
@@ -107,7 +107,7 @@ class XGAssembly {
 	}
 	
 	class func replaceASM(startOffset: Int, newASM asm: [UInt32]) {
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		for i in 0 ..< asm.count {
 			let offset = startOffset + (i * 4)
 			let instruction = asm[i]
@@ -118,7 +118,7 @@ class XGAssembly {
 	
 	class func replaceRELASM(startOffset: Int, newASM asm: [UInt32]) {
 		let ramOffset = startOffset > kRELtoRAMOffsetDifference ? kRELtoRAMOffsetDifference : 0
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		for i in 0 ..< asm.count {
 			let offset = startOffset + (i * 4) - ramOffset
 			let instruction = asm[i]
@@ -146,7 +146,7 @@ class XGAssembly {
 	
 	class func getWordAtRamOffsetFromR13(offset: Int) -> Int {
 		// this should be a pointer into common_rel
-		let ram = XGFiles.nameAndFolder("xg ram.raw", .Resources).data
+		let ram = XGFiles.nameAndFolder("xg ram.raw", .Resources).data!
 		return Int(ram.getWordAtOffset(ramPointerOffsetFromR13(offset: offset)))
 	}
 	
@@ -216,7 +216,7 @@ class XGAssembly {
 	}
 	
 	class func paralysisHalvesSpeed() {
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		dol.replaceWordAtOffset(0x203af8 - kDOLtoRAMOffsetDifference, withBytes: 0x56f7f87e)
 		dol.save()
 	}
@@ -254,7 +254,7 @@ class XGAssembly {
 					.b(endBranch)
 					])
 				
-				let rel = XGFiles.common_rel.data
+				let rel = XGFiles.common_rel.data!
 				var currentOffset = shadowPPstart
 				for i in 0 ..< CommonIndexes.NumberOfMoves.value {
 					rel.replaceWordAtOffset(currentOffset, withBytes: (i.unsigned << 16) + (5 << 8))
@@ -266,7 +266,7 @@ class XGAssembly {
 	}
 	
 	class func infiniteUseTMs() {
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		dol.replaceWordAtOffset(0x0a5158 - kDOLtoRAMOffsetDifference, withBytes: 0x38000000)
 		dol.save()
 	}
@@ -274,7 +274,7 @@ class XGAssembly {
 	class func increaseNumberOfAbilities() {
 		// only run this once!
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		let abilityStart = 0x3FCC50
 		
 		let newAbilityEntryMultiplier : UInt32 = 0x1c830008
@@ -328,7 +328,7 @@ class XGAssembly {
 	
 	class func gen6CriticalHitMultiplier() {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		let critMultsTo3 = [0x22a7a3,0x22a803,0x22a927,0x22a987,0x229d23,0x229d83,0x229e2f,0x229e8f,0x2155fb,0x21701b]
 		let critMultsTo2  = [0x22a89b,0x22a9f3,0x229dfb,0x229edb,0x21702b,0x21703b]
@@ -373,7 +373,7 @@ class XGAssembly {
 		
 		// cosmetic only
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		for offset in [0x1D8F8C, 0x1D900C] {
 			
@@ -393,7 +393,7 @@ class XGAssembly {
 	
 	class func shareEXPWithParty() {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		for offset in [0x212C48,0x212E04] {
 			
@@ -407,7 +407,7 @@ class XGAssembly {
 	
 	class func determineShininessFrom0x1CForDeckPokemon() {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		if dol.getWordAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference) == 0xA0DB001C {
 			return
@@ -805,7 +805,7 @@ class XGAssembly {
 	class func getRoutineStartForMoveEffect(index: Int) -> Int {
 		let effectOffset = index * 4
 		let pointerOffset = moveEffectTableStartDOL + effectOffset
-		let pointer = XGFiles.dol.data.getWordAtOffset(pointerOffset) - 0x80000000
+		let pointer = XGFiles.dol.data!.getWordAtOffset(pointerOffset) - 0x80000000
 		return Int(pointer)
 	}
 	
@@ -826,7 +826,7 @@ class XGAssembly {
 			
 		}
 		
-		let data = file.data
+		let data = file.data!
 		
 		routine = data.getByteStreamFromOffset(start, length: 4)
 		
@@ -893,12 +893,12 @@ class XGAssembly {
 		let pointerOffset = moveEffectTableStartDOL + effectOffset
 		let RAMOffset = UInt32(fileOffset + (rel ? kRELtoRAMOffsetDifference : kDOLTableToRAMOffsetDifference)) + 0x80000000
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		dol.replaceWordAtOffset(pointerOffset, withBytes: RAMOffset)
 		dol.save()
 		
 		if routine != nil {
-			let file = rel ? XGFiles.common_rel.data : XGFiles.dol.data
+			let file = rel ? XGFiles.common_rel.data! : XGFiles.dol.data!
 			file.replaceBytesFromOffset(fileOffset, withByteStream: routine!)
 			file.save()
 		}
@@ -909,7 +909,7 @@ class XGAssembly {
 		let pointerOffset = moveEffectTableStartDOL + effectOffset
 		let RAMOffset = offset + (offset > 0x80000000 ? 0 : 0x80000000)
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		dol.replaceWordAtOffset(pointerOffset, withBytes: RAMOffset)
 		dol.save()
 	}
@@ -936,7 +936,7 @@ class XGAssembly {
 	
 	class func startOffsetForMoveRoutineFunction(index: Int) -> UInt32 {
 		let firstPointer = 0x2f8af8 - kDOLTableToRAMOffsetDifference
-		return XGFiles.dol.data.getWordAtOffset(firstPointer + (4 * index))
+		return XGFiles.dol.data!.getWordAtOffset(firstPointer + (4 * index))
 	}
 	
 	class func intAsByteArray(_ i: Int) -> [Int] {
@@ -966,7 +966,7 @@ class XGAssembly {
 
 
 // colosseum shiny stuff
-//let dol = XGFiles.dol.data
+//let dol = XGFiles.dol.data!
 //
 ////shiny
 //dol.replaceWordAtOffset(0x8012442c - kColosseumDolToRamOffsetDifference, withBytes: 0x3B60FFFF)

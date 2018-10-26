@@ -118,7 +118,7 @@ class XGBattle: NSObject {
 	
 	
 	@objc var rawData : [Int] {
-		return XGFiles.common_rel.data.getByteStreamFromOffset(self.startOffset, length: kSizeOfBattleData)
+		return XGFiles.common_rel.data!.getByteStreamFromOffset(self.startOffset, length: kSizeOfBattleData)
 	}
 	
 	@objc var title : String {
@@ -185,7 +185,7 @@ class XGBattle: NSObject {
 		self.index = index
 		self.startOffset = CommonIndexes.Battles.startOffset + (index * kSizeOfBattleData)
 		
-		let data = XGFiles.common_rel.data
+		let data = XGFiles.common_rel.data!
 		
 		let style = data.getByteAtOffset(startOffset + kBattleStyleOffset)
 		self.battleStyle = XGBattleStyles(rawValue: style) ?? .other
@@ -234,7 +234,7 @@ class XGBattle: NSObject {
 	
 	@objc func save() {
 		
-		let data = XGFiles.common_rel.data
+		let data = XGFiles.common_rel.data!
 		
 		data.replaceByteAtOffset(startOffset + kBattleBattleTypeOffset, withByte: self.battleType.rawValue)
 		data.replaceByteAtOffset(startOffset + kBattleTrainersPerSideOffset, withByte: self.trainersPerSide)
@@ -278,7 +278,7 @@ class XGBattle: NSObject {
 		self.unknown2 = 6
 		self.save()
 		
-		let data = XGFiles.common_rel.data
+		let data = XGFiles.common_rel.data!
 		
 		data.replace2BytesAtOffset(self.startOffset + 0xE, withBytes: 0xf6ec)
 		

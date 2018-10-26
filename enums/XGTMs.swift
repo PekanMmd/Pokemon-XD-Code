@@ -57,8 +57,8 @@ enum XGTMs : XGDictionaryRepresentable {
 	var move : XGMoves {
 		get {
 			switch self {
-				case .tm : return .move( XGFiles.dol.data.get2BytesAtOffset(startOffset) )
-				case .tutor : return .move( XGFiles.common_rel.data.get2BytesAtOffset(startOffset + kTutorMoveMoveIndexOffset) )
+				case .tm : return .move( XGFiles.dol.data!.get2BytesAtOffset(startOffset) )
+				case .tutor : return .move( XGFiles.common_rel.data!.get2BytesAtOffset(startOffset + kTutorMoveMoveIndexOffset) )
 			}
 		}
 	}
@@ -123,7 +123,7 @@ enum XGTMs : XGDictionaryRepresentable {
 	
 	var tutorFlag : XGTutorFlags {
 		get {
-			let flag = XGFiles.common_rel.data.getByteAtOffset(startOffset + kAvailabilityFlagOffset)
+			let flag = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kAvailabilityFlagOffset)
 			return XGTutorFlags(rawValue: flag) ?? .immediately
 		}
 	}
@@ -134,21 +134,20 @@ enum XGTMs : XGDictionaryRepresentable {
 		
 		switch self {
 			case .tm    :
-				let dol = XGFiles.dol.data
+				let dol = XGFiles.dol.data!
 				dol.replace2BytesAtOffset(startOffset, withBytes: move.index)
 				dol.save()
 				
 				self.updateItemDescription()
 			
-			case .tutor : let rel = XGFiles.common_rel.data
+			case .tutor : let rel = XGFiles.common_rel.data!
 						rel.replace2BytesAtOffset(startOffset + kTutorMoveMoveIndexOffset, withBytes: move.index)
 						rel.save()
 		}
 	}
 	
-	func updateItemDescription() {
-		
-		let desc = self.move.mdescription.string
+	static func createItemDescriptionForMove(_ move: XGMoves) -> String {
+		let desc = move.mdescription.string
 		
 		let maxLineLength = 20
 		let newLine = "[New Line]"
@@ -181,13 +180,16 @@ enum XGTMs : XGDictionaryRepresentable {
 			lineLength += len + 1
 			
 		}
-		
-		self.item.descriptionString.duplicateWithString(splitDesc).replace()
+		return splitDesc
+	}
+	
+	func updateItemDescription() {
+		self.item.descriptionString.duplicateWithString(XGTMs.createItemDescriptionForMove(self.move)).replace()
 		
 	}
 	
 	func replaceTutorFlag(_ flag: XGTutorFlags) {
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		rel.replaceByteAtOffset(startOffset + kAvailabilityFlagOffset, withByte: flag.rawValue)
 		rel.save()
 	}

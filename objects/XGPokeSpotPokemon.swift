@@ -44,7 +44,7 @@ class XGPokeSpotPokemon: NSObject, XGDictionaryRepresentable {
 	init(index: Int, pokespot spot: XGPokeSpots) {
 		super.init()
 		
-		let rel			= XGFiles.common_rel.data
+		let rel			= XGFiles.common_rel.data!
 		self.index		= index
 		self.spot		= spot
 		
@@ -62,7 +62,7 @@ class XGPokeSpotPokemon: NSObject, XGDictionaryRepresentable {
 	
 	@objc func save() {
 		
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		let start = startOffset
 		
 		rel.replaceByteAtOffset(start + kMinLevelOffset, withByte: self.minLevel)

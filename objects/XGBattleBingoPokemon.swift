@@ -42,7 +42,7 @@ class XGBattleBingoPokemon: NSObject, XGDictionaryRepresentable {
 		super.init()
 		
 		self.startOffset = startOffset
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		
 		self.typeOnCard = rel.getByteAtOffset(startOffset + kBattleBingoPokemonPanelTypeOffset)
 		
@@ -68,7 +68,7 @@ class XGBattleBingoPokemon: NSObject, XGDictionaryRepresentable {
 			return
 		}
 		
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		
 		rel.replaceByteAtOffset(startOffset + kBattleBingoPokemonPanelTypeOffset, withByte: self.typeOnCard > 0 ? 1 : 0)
 		rel.replace2BytesAtOffset(startOffset + kBattleBingoPokemonSpeciesOffset, withBytes: self.species.index)

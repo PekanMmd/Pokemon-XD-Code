@@ -32,9 +32,22 @@ class XDSScriptCompiler: NSObject {
 	static var increaseMSGSize = false
 	
 	static var scriptFile : XGFiles?
+	static var stringTable : XGStringTable?
+	static var relFile     : XGMapRel?
+	static var targetFileName = ""
+	
 	static var error = ""
 	static var currentFunction = ""
 	static var sugarVarCounter = 1
+	
+	static var updatedText = ""
+	
+	class func setFlags(disassemble: Bool, decompile: Bool, updateStrings: Bool, increaseMSG: Bool) {
+		writeDisassembly = disassemble
+		decompileXDS = decompile
+		updateStringIDs = updateStrings
+		increaseMSGSize = increaseMSG
+	}
 	
 	class func clearCompilerFlags() {
 		writeDisassembly = false
@@ -42,6 +55,10 @@ class XDSScriptCompiler: NSObject {
 		updateStringIDs = false
 		increaseMSGSize = false
 		scriptFile = nil
+		relFile = nil
+		stringTable = nil
+		targetFileName = ""
+		updatedText = ""
 	}
 	
 	// MARK: - specify file or text to compile
@@ -59,9 +76,38 @@ class XDSScriptCompiler: NSObject {
 	}
 	
 	class func compile(text: String, toFile file: XGFiles) -> Bool {
+		
+		targetFileName = file.fileName.removeFileExtensions()
+		updatedText = text
+		if let file = XDSScriptCompiler.scriptFile {
+			
+			if file.folder.files.contains(where: { (rel) -> Bool in
+				return (targetFileName == file.fileName.removeFileExtensions()) && rel.fileType == .rel
+			}) {
+				relFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, file.folder).mapData
+			}
+			
+			if file.folder.files.contains(where: { (msg) -> Bool in
+				return (targetFileName == file.fileName.removeFileExtensions()) && msg.fileType == .msg
+			}) {
+				stringTable = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.msg.fileExtension, file.folder).stringTable
+			}
+			
+		}
+		
+		if relFile == nil && XGFiles.rel(targetFileName).exists {
+			relFile = XGFiles.rel(targetFileName).mapData
+		}
+		
+		if stringTable == nil && XGFiles.msg(targetFileName).exists {
+			stringTable = XGFiles.msg(targetFileName).stringTable
+		}
+		
 		if let data = compile(text) {
 			data.file = file
 			data.save()
+			saveFiles()
+			
 			if file.exists {
 				printg("Successfully compiled script: \(file.fileName)!")
 				if writeDisassembly {
@@ -92,6 +138,35 @@ class XDSScriptCompiler: NSObject {
 		
 		printg(errorString)
 		return false
+	}
+	
+	class func saveFiles() {
+		
+		loadAllStrings()
+		if let table = stringTable {
+			for stable in allStringTables where stable.file.path == table.file.path {
+				printg("saving string table:", stable.file.path)
+				stable.save()
+			}
+		}
+		
+		if relFile != nil {
+			printg("saving characters.")
+			for character in characters {
+				if verbose {
+					printg("saving character:", character.rid)
+				}
+				character.save()
+			}
+		}
+		
+		if updatedText.length > 0 {
+			if let file = scriptFile {
+				printg("saving updated text.")
+				updatedText.save(toFile: file)
+			}
+		}
+		
 	}
 	
 	class func compile(_ script: String) -> XGMutableData? {
@@ -164,6 +239,17 @@ class XDSScriptCompiler: NSObject {
 			for datum in data {
 				compiled.appendBytes(datum.charArray)
 			}
+			
+			if let rel = relFile {
+				if !writeCharacterDataToRel(file: rel.file, ftbl: ftbl) {
+					printg("failed to save character data")
+					printg(error)
+				}
+			} else {
+				printg("Skipping character assignment. Map file for script was not found.")
+			}
+			
+			
 			return compiled
 		}
 		return nil
@@ -178,38 +264,99 @@ class XDSScriptCompiler: NSObject {
 		// return -1 if failed to replace string and set error
 		
 		// return the strings finalised id or -1 if failed
-		
+		let uptext = text.replacingOccurrences(of: "[Quote]", with: "\"")
 		if verbose {
 			if text.length > 0 {
-				printg("Replacing msg\(id == nil ? " by creating new id:" +  text : "with id: \(id!.hexString()) " + text)")
+				printg("Replacing msg\(id == nil ? " by creating new id:" + text : "with id: \(id!.hexString()) " + text)")
 			}
 		}
 		
+		var newID : Int? = nil
+		
 		if id != nil {
-			if let msg = getStringWithID(id: id!) {
-				if !msg.duplicateWithString(text.replacingOccurrences(of: "[Quote]", with: "\"")).replace(increaseSize: increaseMSGSize) {
-					error = "Failed to replace msg: $:\(id!):\"\(text)\"\n either the msg doesn't exist in any file or the string was too large.\n In the event of the latter try setting '++IncreaseMSGSize' to 'YES'."
-					return -1
+			newID = id
+			if id! > kMaxStringID {
+				error = "The maximum string id is 0xFFFFF (1048575): \(id!) - \(text)"
+				return -1
+			}
+			
+			var found = false
+			if let table = stringTable {
+				if table.containsStringWithId(newID!) {
+					found = true
+					let string = XGString(string: uptext, file: table.file, sid: newID)
+					loadAllStrings()
+					for stable in allStringTables {
+						if stable.file.path == table.file.path {
+							if !stable.replaceString(string, alert: false, save: false, increaseLength: true) {
+								error = "Failed to replace msg: $:\(id!):\"\(text)\"\n maybe because the string was too large.\nTry setting '++IncreaseMSGSize' to 'YES'."
+								return -1
+							}
+						}
+					}
+				}
+			}
+			
+			if !found {
+				if let msg = getStringWithID(id: id!) {
+					if !msg.duplicateWithString(uptext).replace(increaseSize: increaseMSGSize, save: false) {
+						error = "Failed to replace msg: $:\(id!):\"\(text)\"\n either the msg doesn't exist in any file or the string was too large.\nIn the event of the latter try setting 'Increase MSG  Size' to 'YES'."
+						return -1
+					}
+				} else {
+					if let stable = stringTable {
+						loadAllStrings()
+						for table in allStringTables {
+							if table.file.path == stable.file.path {
+								let string = XGString(string: uptext, file: table.file, sid: newID)
+								if table.addString(string, increaseSize: increaseMSGSize, save: true) {
+									if verbose {
+										printg("Added string :\(text) to file: \(stable.file.path) with ID: \(newID!)")
+									}
+								} else {
+									error = "Failed to replace msg: $:\(id!):\"\(text)\"\n maybe because the string was too large.\nTry setting 'Increase MSG Size' to 'YES'."
+									return -1
+								}
+							}
+						}
+					}
 				}
 			}
 		} else {
-			// TODO: handle adding new string to msg
-		}
-		
-		let newID = id
-		
-		if id == nil {
-			if newID != nil {
-				printg("String: \"\(text)\" was added with msgID: $:\(newID!):")
-				if updateStringIDs {
-					if let file = scriptFile {
-						var scripttext = file.text
-						scripttext = scripttext.replacingOccurrences(of: "$" + "\"" + text + "\"", with: "$:\(newID!):" + "\"" + text + "\"")
-						scripttext = scripttext.replacingOccurrences(of: "$::" + "\"" + text + "\"", with: "$:\(newID!):" + "\"" + text + "\"")
-						scripttext.save(toFile: file)
+			if let stable = stringTable {
+				newID = freeMSGID(from: baseStringID)
+				if newID != nil {
+					loadAllStrings()
+					for table in allStringTables {
+						if table.file.path == stable.file.path {
+							let string = XGString(string: uptext, file: table.file, sid: newID)
+							if table.addString(string, increaseSize: increaseMSGSize, save: false) {
+								if verbose {
+									printg("Added string :\(text) to file: \(table.file.path) with ID: \(newID!)")
+								}
+								
+								if updateStringIDs {
+									if let file = scriptFile {
+										if file.fileType == .xds {
+											updatedText = updatedText.replacingOccurrences(of: "$" + "\"" + text + "\"", with: "$:\(newID!):" + "\"" + text + "\"")
+											updatedText = updatedText.replacingOccurrences(of: "$::" + "\"" + text + "\"", with: "$:\(newID!):" + "\"" + text + "\"")
+										}
+									}
+								}
+								
+							} else {
+								error = "Couldn't create string with id: \(id!)"
+								return -1
+							}
+						}
 					}
+				} else {
+					error = "Couldn't find a new string id after \(baseStringID)."
+					return -1
 				}
-				
+			} else {
+				error = "Failed to add msg: $:\(id!):\"\(text)\"\n as the msg file '\(targetFileName + XGFileTypes.msg.fileExtension)' couldn't be found."
+				return -1
 			}
 		}
 		
@@ -232,7 +379,7 @@ class XDSScriptCompiler: NSObject {
 	// simply create custom versions of these functions and
 	// add cases to the switch statements to determine which
 	// file extensions the format is for.
-	class func macroprocessor(text: String) -> String? {
+	private class func macroprocessor(text: String) -> String? {
 		if let file = XDSScriptCompiler.scriptFile {
 			let ext = file.fileExtension
 			switch ext {
@@ -243,7 +390,7 @@ class XDSScriptCompiler: NSObject {
 		return macroprocessorXDS(text: text)
 	}
 	
-	class func getLines(text: String) -> [String] {
+	private class func getLines(text: String) -> [String] {
 		if let file = XDSScriptCompiler.scriptFile {
 			let ext = file.fileExtension
 			switch ext {
@@ -254,7 +401,7 @@ class XDSScriptCompiler: NSObject {
 		return getLinesXDS(text: text)
 	}
 	
-	class func stripWhiteSpace(text: String) -> String? {
+	private class func stripWhiteSpace(text: String) -> String? {
 		if let file = XDSScriptCompiler.scriptFile {
 			let ext = file.fileExtension
 			switch ext {
@@ -265,7 +412,7 @@ class XDSScriptCompiler: NSObject {
 		return stripWhiteSpaceXDS(text: text)
 	}
 	
-	class func stripComments(text: String) -> String {
+	private class func stripComments(text: String) -> String {
 		if let file = XDSScriptCompiler.scriptFile {
 			let ext = file.fileExtension
 			switch ext {
@@ -276,7 +423,7 @@ class XDSScriptCompiler: NSObject {
 		return stripCommentsXDS(text: text)
 	}
 	
-	class func tokenise(text: String) -> [String]? {
+	private class func tokenise(text: String) -> [String]? {
 		if let file = XDSScriptCompiler.scriptFile {
 			let ext = file.fileExtension
 			switch ext {
@@ -287,7 +434,7 @@ class XDSScriptCompiler: NSObject {
 		return tokeniseXDS(text: text)
 	}
 	
-	class func evalTokens(tokens: [String]) -> XDSExpr? {
+	private class func evalTokens(tokens: [String]) -> XDSExpr? {
 		if let file = XDSScriptCompiler.scriptFile {
 			let ext = file.fileExtension
 			switch ext {
@@ -300,7 +447,7 @@ class XDSScriptCompiler: NSObject {
 
 	//MARK: - process the expressions
 	// realised I don't need this function but already designed logic around it so might as well use it :-)
-	class func createExprStack(_ exprs: [XDSExpr]) -> XGStack<XDSExpr> {
+	private class func createExprStack(_ exprs: [XDSExpr]) -> XGStack<XDSExpr> {
 		let stack = XGStack<XDSExpr>()
 		
 		for expr in exprs.reversed() {
@@ -310,7 +457,7 @@ class XDSScriptCompiler: NSObject {
 		return stack
 	}
 	
-	class func getLocations(_ exprs: [XDSExpr]) -> [String : Int] {
+	private class func getLocations(_ exprs: [XDSExpr]) -> [String : Int] {
 		
 		var locations = [String : Int]()
 		
@@ -350,7 +497,7 @@ class XDSScriptCompiler: NSObject {
 		return locations
 	}
 	
-	class func getFTBL(_ exprs: [XDSExpr]) -> [FTBL] {
+	private class func getFTBL(_ exprs: [XDSExpr]) -> [FTBL] {
 		var functions = [FTBL]()
 		
 		var currentLocation = 0
@@ -367,7 +514,7 @@ class XDSScriptCompiler: NSObject {
 		return functions
 	}
 	
-	class func getCODE(_ exprs: XGStack<XDSExpr>, gvar: [String], arry: [String], giri: [String]) -> [XGScriptInstruction]? {
+	private class func getCODE(_ exprs: XGStack<XDSExpr>, gvar: [String], arry: [String], giri: [String]) -> [XGScriptInstruction]? {
 		
 		var instructions = [XGScriptInstruction]()
 		
@@ -425,12 +572,61 @@ class XDSScriptCompiler: NSObject {
 		return instructions
 	}
 	
+	private class func writeCharacterDataToRel(file: XGFiles, ftbl: [FTBL]) -> Bool {
+		
+		let rel = XGMapRel(file: file, checkScript: false)
+		
+		
+		// cannot simply count characters as there's no guarantee the RIDs are consecutive
+		var maxRID = -1
+		for character in XDSScriptCompiler.characters {
+			maxRID = max(maxRID, character.rid)
+		}
+		if maxRID >= rel.characters.count {
+			// TODO: add space for extra characters
+			error = "Character resource id is larger than the file's maximum of \(rel.characters.count)"
+			return false
+		}
+		
+		
+		for character in XDSScriptCompiler.characters  {
+			character.file = file
+			character.characterIndex = character.rid
+			if character.rid >= 0 {
+				
+				for (_, _, name, index) in ftbl {
+					if name == character.scriptName {
+						character.scriptIndex = index
+						character.hasScript = true
+					}
+					if name == character.passiveScriptName {
+						character.passiveScriptIndex = index
+						character.hasPassiveScript = true
+					}
+				}
+				
+				if character.gid > 0 && character.rid < rel.characters.count {
+					character.startOffset = rel.characters[character.rid].startOffset
+				} else if character.gid == 0 {
+					printg("error: can't write character data for player or party characters with group id of 0")
+				} else {
+					printg("error: can't write character data for negative group id: \(character.rid)")
+				}
+			} else {
+				printg("error: can't write character data for negative character id: \(character.rid)")
+			}
+			
+		}
+		
+		return true
+	}
+	
 	// MARK: - compiling the script object to .scd format
-	class func compileTCOD(size: Int) -> XDSCode {
+	private class func compileTCOD(size: Int) -> XDSCode {
 		return [0x54434F44,UInt32(size + 0x10),0x0,0x0]
 	}
 	
-	class func compileFTBL(_ data: [FTBL]) -> XDSCode {
+	private class func compileFTBL(_ data: [FTBL]) -> XDSCode {
 		
 		var code = XDSCode()
 		code += [0x4654424C] // unicode 'FTBL'
@@ -512,7 +708,7 @@ class XDSScriptCompiler: NSObject {
 		return code
 	}
 	
-	class func compileHEAD(_ data: [FTBL]) -> XDSCode {
+	private class func compileHEAD(_ data: [FTBL]) -> XDSCode {
 		
 		var code = XDSCode()
 		code += [0x48454144] // unicode 'HEAD'
@@ -540,7 +736,7 @@ class XDSScriptCompiler: NSObject {
 		return code
 	}
 	
-	class func compileCODE(_ data: [XGScriptInstruction], _ header: [FTBL]) -> XDSCode {
+	private class func compileCODE(_ data: [XGScriptInstruction], _ header: [FTBL]) -> XDSCode {
 		
 		var code = XDSCode()
 		code += [0x434F4445] // unicode 'CODE'
@@ -577,7 +773,7 @@ class XDSScriptCompiler: NSObject {
 		return code
 	}
 	
-	class func compileGVAR(_ data: [XDSConstant]) -> XDSCode {
+	private class func compileGVAR(_ data: [XDSConstant]) -> XDSCode {
 		
 		var code = XDSCode()
 		code += [0x47564152] // unicode 'GVAR'
@@ -605,7 +801,7 @@ class XDSScriptCompiler: NSObject {
 		return code
 	}
 	
-	class func compileARRY(_ data: [[XDSConstant]]) -> XDSCode {
+	private class func compileARRY(_ data: [[XDSConstant]]) -> XDSCode {
 		
 		var code = XDSCode()
 		code += [0x41525259] // unicode 'ARRY'
@@ -660,7 +856,7 @@ class XDSScriptCompiler: NSObject {
 		return code
 	}
 	
-	class func compileSTRG(_ data: [String]) -> XDSCode {
+	private class func compileSTRG(_ data: [String]) -> XDSCode {
 		
 		var code = XDSCode()
 		code += [0x53545247] // unicode 'STRG'
@@ -712,7 +908,7 @@ class XDSScriptCompiler: NSObject {
 		return code
 	}
 	
-	class func compileVECT(_ data: [VECT]) -> XDSCode {
+	private class func compileVECT(_ data: [VECT]) -> XDSCode {
 		
 		var code = XDSCode()
 		code += [0x56454354] // unicode 'VECT'
@@ -740,7 +936,7 @@ class XDSScriptCompiler: NSObject {
 		return code
 	}
 	
-	class func compileGIRI(_ data: [GIRI]) -> XDSCode {
+	private class func compileGIRI(_ data: [GIRI]) -> XDSCode {
 		
 		var code = XDSCode()
 		code += [0x47495249] // unicode 'GIRI'

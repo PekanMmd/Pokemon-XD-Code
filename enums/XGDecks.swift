@@ -91,7 +91,7 @@ enum XGDecks : String, XGDictionaryRepresentable {
 	
 	var data : XGMutableData {
 		get {
-			return XGFiles.deck(self).data
+			return XGFiles.deck(self).data!
 		}
 	}
 	

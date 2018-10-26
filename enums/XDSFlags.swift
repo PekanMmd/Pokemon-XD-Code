@@ -11,6 +11,8 @@ enum XDSFlags : Int {
 	
 	case story = 964
 	
+	case dayCareVisited = 1124
+	
 	case mirorbNoDespawn = 1415 // miror radar won't lost signal while this is set
 	case mirorbLocation = 1452
 	
@@ -22,6 +24,7 @@ enum XDSFlags : Int {
 	var name : String {
 		switch self {
 		case .story						: return "STORY"
+		case .dayCareVisited			: return "DAY_CARE_VISITED"
 		case .mirorbNoDespawn			: return "MIROR_RADAR_KEEP_SIGNAL_ON"
 		case .mirorbLocation			: return "MIRORB_LOCATION"
 		case .pyriteColosseumWins		: return "PYRITE_COLO_WINS"

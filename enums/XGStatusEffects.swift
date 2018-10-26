@@ -107,15 +107,15 @@ enum XGStatusEffects: Int {
 	}
 	
 	var nameID : Int {
-		return Int(XGFiles.dol.data.getWordAtOffset(startOffset + kStatusEffectNameIDOffset))
+		return Int(XGFiles.dol.data!.getWordAtOffset(startOffset + kStatusEffectNameIDOffset))
 	}
 	
 	var duration : Int {
-		return XGFiles.dol.data.getByteAtOffset(startOffset + kStatusEffectDurationOffset)
+		return XGFiles.dol.data!.getByteAtOffset(startOffset + kStatusEffectDurationOffset)
 	}
 	
 	func setDuration(turns: Int) {
-		XGFiles.dol.data.replaceByteAtOffset(startOffset + kStatusEffectDurationOffset, withByte: turns)
+		XGFiles.dol.data!.replaceByteAtOffset(startOffset + kStatusEffectDurationOffset, withByte: turns)
 	}
 }
 

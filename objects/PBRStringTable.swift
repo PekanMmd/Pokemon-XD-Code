@@ -59,7 +59,7 @@ class PBRStringTable: NSObject {
 		
 		self.file = file
 		self.startOffset = startOffset
-		self.stringTable = file.data
+		self.stringTable = file.data!
 		
 		stringTable.deleteBytesInRange(NSMakeRange(0, startOffset))
 		stringTable.deleteBytesInRange(NSMakeRange(fileSize, stringTable.length - fileSize))
@@ -69,7 +69,7 @@ class PBRStringTable: NSObject {
 	
 	func save() {
 		
-		let data = file.data
+		let data = file.data!
 		
 		data.replaceBytesFromOffset(self.startOffset, withByteStream: stringTable.byteStream)
 		
@@ -456,19 +456,19 @@ class PBRStringTable: NSObject {
 	}
 	
 //	class func trainerNamesFromJSON() {
-//		
+//
 //		do {
 //			let data : [ [String] ] = try JSONSerialization.jsonObject( with: Data(contentsOf: URL(fileURLWithPath: XGFiles.nameAndFolder("Trainers.json", .JSON).path)), options: []) as! [[String]]
 //			print("\(data)")
-//			
+//
 //			for d in data {
 //				XGStringTable.common_rel().replaceString(XGString(string: d[0], file: .common_rel, sid: Int(d[1]) ), alert: false, save: true)
 //			}
-//			
+//
 //		} catch {
-//			
+//
 //		}
-//		
+//
 //	}
 	
 }

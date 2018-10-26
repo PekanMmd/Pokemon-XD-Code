@@ -78,6 +78,12 @@ enum CommonIndexes : Int {
 	case NumberOfPokemon = 89
 	case Natures = 94
 	case NumberOfNatures = 95
+	case SoundsMetaData = 102
+	case NumberOfSounds = 103
+	case PokemonCrySoundEffects = 104
+	case NumberCrySoundEffects = 105
+	
+	
 	case USStringTable = 116
 	case Moves = 124
 	case NumberOfMoves = 125

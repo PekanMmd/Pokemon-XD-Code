@@ -105,7 +105,7 @@ extension XGISO {
 		// also any file with "menu" in the name
 		return [
 			"battle_disk.fsys",
-			"evolution",
+			"evolution.fsys",
 			"mewwaza.fsys",
 			"title.fsys",
 			"worldmap.fsys"
@@ -136,6 +136,7 @@ extension XGISO {
 	
 	
 	@objc func extractSpecificStringTables() {
+		stringsLoaded = false
 		
 		let fightFile = XGFiles.msg("fight")
 		if !fightFile.exists {
@@ -280,7 +281,7 @@ extension XGUtility {
 		// byte 0x1 0x10 x defend, 0x1 x speed
 		// byte 0x2 0x10 x accuracy, 0x1 x special
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		let healingItems = [13,19,20,21,22,26,27,28,29,30,31,32,33,44,45,139,142]
 		
@@ -310,7 +311,7 @@ extension XGUtility {
 	
 	class func updateValidItems() {
 		let itemListStart = CommonIndexes.ValidItems.startOffset
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		
 		printg("Updating items list...")
 		
@@ -328,7 +329,7 @@ extension XGUtility {
 	}
 	
 	class func updateShadowMoves() {
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		for i in 0 ..< kNumberOfMoves {
 			
 			let m = XGMoves.move(i).data
@@ -419,7 +420,7 @@ extension XGUtility {
 	
 	class func renameZaprong(newName: String) {
 		let offset = 0x420904
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		dol.replaceBytesFromOffset(offset, withByteStream: newName.map({ (c) -> Int in
 			let charScalar = String(c).unicodeScalars
 			let charValue  = Int(charScalar[charScalar.startIndex].value)
@@ -722,7 +723,7 @@ extension XGUtility {
 			}
 		}
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		dol.replaceBytesFromOffset(start, withShortStream: indices)
 		
@@ -738,7 +739,7 @@ extension XGUtility {
 		
 		printg("updating tutor moves")
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		let offsets = [
 			0x1C2ECA, // 0
@@ -792,7 +793,7 @@ extension XGUtility {
 		if scriptFile.exists {
 			if scriptFile.fileSize == 0x1770 {
 				
-				let script = scriptFile.data
+				let script = scriptFile.data!
 				
 				let trapinches = [0x0B4A,0x0D1E]
 				let surskits = [0x0B9A,0x0D62]
@@ -1168,7 +1169,7 @@ extension XGUtility {
 		
 	}
 	
-	class func getMacrosXDS() -> String {
+	class func documentMacrosXDS() {
 		
 		var text = ""
 		
@@ -1253,7 +1254,16 @@ extension XGUtility {
 			addMacro(value: i, type: .partyMember)
 		}
 		
-		return text
+		
+		// get macros.xds
+		// file containing common macros to use as reference
+		printg("documenting script macros...")
+		printg("This may take a while :-)")
+		if text.length > 0 {
+			let file = XGFiles.xds("Common Macros")
+			printg("documenting script: ", file.fileName)
+			text.save(toFile: file)
+		}
 		
 	}
 	
@@ -1263,24 +1273,25 @@ extension XGUtility {
 		}
 		files.map({ (file) in
 			if file.fileType == .scd {
-				printg("documenting script: ", file.fileName)
-				let script = file.scriptData.getXDSScript()
-				XGUtility.saveString(script, toFile: .xds(file.fileName.removeFileExtensions()))
+				
+				let xds = XGFiles.xds(file.fileName.removeFileExtensions())
+				if !xds.exists {
+					printg("decompiling script: ", file.fileName)
+					let script = file.scriptData.getXDSScript()
+					XGUtility.saveString(script, toFile: xds)
+				} else {
+					if verbose {
+						printg("script already exists: \(xds.path)")
+					}
+				}
 			}
 		})
-		printg("documenting script: ", XGFiles.common_rel.fileName)
-		XGFiles.common_rel.scriptData.getXDSScript().save(toFile: .xds("common"))
-		
-		// get macros.xds
-		// file containing common macros to use as reference
-		printg("documenting script macros...")
-		printg("This may take a while :-)")
-		let text = getMacrosXDS()
-		if text.length > 0 {
-			let file = XGFiles.xds("Common Macros")
-			printg("documenting script: ", file.fileName)
-			text.save(toFile: file)
+		let xds = XGFiles.xds("common")
+		if !xds.exists {
+			printg("documenting script: ", XGFiles.common_rel.fileName)
+			XGFiles.common_rel.scriptData.getXDSScript().save(toFile: xds)
 		}
+		printg("Finished decompiling scripts.")
 		
 	}
 	
@@ -1357,8 +1368,8 @@ extension XGUtility {
 	class func copyOWPokemonIdleAnimationFromIndex(index: Int, forModel file: XGFiles) {
 		// almost always index 0 holds the idle animation
 		// for overworld need to copy that to index 3
-		let data = file.data
-		let backup = file.data
+		let data = file.data!
+		let backup = file.data!
 		backup.file = .nameAndFolder(file.fileName + ".bak", file.folder)
 		backup.save()
 		
@@ -1421,7 +1432,7 @@ extension XGUtility {
 		//bonsly munchlax
 		XGPokeSpots.all.relocatePokespotData(toOffset: spotStart)
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		let offset = 0x1faf50 - kDOLtoRAMOffsetDifference
 		dol.replace4BytesAtOffset(offset, withBytes: 0x280A0000 + n)
 		dol.save()
@@ -2088,7 +2099,7 @@ extension XGUtility {
 	
 	class func documentPokemarts() {
 		
-		let dat = XGFiles.pocket_menu.data
+		let dat = XGFiles.pocket_menu.data!
 		let itemHexList = dat.getShortStreamFromOffset(0x300, length: 0x170)
 		
 		let fileName = "Pokemarts"

@@ -94,7 +94,7 @@ enum XGTrainerModels : Int, XGDictionaryRepresentable {
 	case michael3WithoutSnagMachine	= 0x43
 	
 	var pkxModelIdentifier : UInt32 {
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		return dol.getWordAtOffset(kFirstTrainerPKXIdentifierOffset + (self.rawValue * 8) + kModelDictionaryModelOffset)
 	}
 	

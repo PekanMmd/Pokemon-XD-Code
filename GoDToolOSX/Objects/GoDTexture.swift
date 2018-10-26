@@ -72,7 +72,7 @@ class GoDTexture: NSObject {
 	@objc var startOffset = 0x0
 	
 	convenience init(file: XGFiles) {
-		self.init(data: file.data)
+		self.init(data: file.data!)
 	}
 	
 	@objc init(data: XGMutableData) {

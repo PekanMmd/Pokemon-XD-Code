@@ -70,7 +70,7 @@ class XGType: NSObject {
 	init(index: Int) {
 		super.init()
 		
-		let dol			= XGFiles.dol.data
+		let dol			= XGFiles.dol.data!
 		self.index		= index
 		startOffset		= kFirstTypeOffset + (index * kSizeOfTypeData)
 		
@@ -93,7 +93,7 @@ class XGType: NSObject {
 	
 	func save() {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		
 		dol.replaceByteAtOffset(startOffset + kCategoryOffset, withByte: self.category.rawValue)
 		

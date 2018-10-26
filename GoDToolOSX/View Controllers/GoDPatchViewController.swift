@@ -85,9 +85,26 @@ class GoDPatchViewController: GoDTableViewController {
 		XGAssembly.setShadowMovesUseHMFlag()
 	}
 	
+	var deletingSuper = false
 	@objc func deleteUnusedFiles() {
-		XGUtility.deleteSuperfluousFiles()
-		printg("Delete the files in AutoFSYS with names beginning with 'M2_cave' and 'M4' so they don'y get reimported")
+		if deletingSuper { return }
+		deletingSuper = true
+		XGThreadManager.manager.runInBackgroundSync {
+			XGUtility.deleteSuperfluousFiles()
+			var text = "Successfully deleted unused files."
+			if game == .XD {
+				if XGFolders.AutoFSYS.filenames.contains(where: { (s) -> Bool in
+					return s.contains("M2_cave") || s.contains("M4")
+				}) {
+					text += "\n\nDelete the files from the AutoFSYS folder with names beginning with 'M2_cave' or 'M4' to prevent them from being reimported."
+				}
+				
+			}
+			
+			GoDAlertViewController.alert(title: "Files deleted!", text: text).show(sender: self)
+			self.deletingSuper = false
+		}
+		
 	}
 	
 	@objc func gen7CriticalRatios() {

@@ -26,7 +26,7 @@ class XGRoom: NSObject {
 			return (ids as! [String : String])[roomID.hexString()] ?? "-"
 		} else {
 			let start = CommonIndexes.RoomData.startOffset + (0x18 * index)
-			let id =  XGFiles.common_rel.data.getWordAtOffset(start + 4).int
+			let id =  XGFiles.common_rel.data!.getWordAtOffset(start + 4).int
 			return XGFiles.common_rel.stringTable.stringSafelyWithID(id).string
 		}
 	}
@@ -46,7 +46,7 @@ class XGRoom: NSObject {
 	@objc var startOffset = 0
 	
 	@objc var rawData : [Int] {
-		return XGFiles.common_rel.data.getByteStreamFromOffset(startOffset, length: kSizeOfRoom)
+		return XGFiles.common_rel.data!.getByteStreamFromOffset(startOffset, length: kSizeOfRoom)
 	}
 
 	@objc init(index: Int) {
@@ -55,7 +55,7 @@ class XGRoom: NSObject {
 		self.index = index
 		self.startOffset = CommonIndexes.Rooms.startOffset + (index * kSizeOfRoom)
 		
-		let data = XGFiles.common_rel.data
+		let data = XGFiles.common_rel.data!
 		
 		self.roomID = data.get2BytesAtOffset(startOffset + kRoomIDOffset)
 		self.nameID = data.getWordAtOffset(startOffset + kRoomNameIDOffset).int

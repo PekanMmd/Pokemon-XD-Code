@@ -135,7 +135,7 @@ class XGPokemonStats: NSObject {
 	}
 	
 	var face : Int {
-		return XGFiles.common_rel.data.getWordAtOffset(CommonIndexes.PokefaceTextures.startOffset + (faceIndex * 8) + 4).int
+		return XGFiles.common_rel.data!.getWordAtOffset(CommonIndexes.PokefaceTextures.startOffset + (faceIndex * 8) + 4).int
 	}
 	
 	
@@ -143,7 +143,7 @@ class XGPokemonStats: NSObject {
 	init(index : Int!) {
 		super.init()
 		
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		
 		self.startOffset	= CommonIndexes.PokemonStats.startOffset + ( kSizeOfPokemonStats * index )
 		self.index			= index
@@ -220,7 +220,7 @@ class XGPokemonStats: NSObject {
 	
 	func save() {
 		
-		let rel	= XGFiles.common_rel.data
+		let rel	= XGFiles.common_rel.data!
 		
 		rel.replaceWordAtOffset(startOffset + kNameIDOffset, withBytes: UInt32(nameID))
 		rel.replaceWordAtOffset(startOffset + kSpeciesNameIDOffset, withBytes: UInt32(speciesNameID))

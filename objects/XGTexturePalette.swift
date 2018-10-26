@@ -31,7 +31,7 @@ class XGTexturePalette: NSObject {
 		
 		for i in 0 ..< palette.count {
 			
-			if palette[i].isEqual(to: colour, threshold: 2) {
+			if palette[i].isEqual(to: colour, threshold: 4) {
 				return i
 			}
 			

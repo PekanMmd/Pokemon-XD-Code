@@ -155,10 +155,7 @@ extension XGUtility {
 		if game == .XD {
 			common.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.common_rel.compress(), save: true)
 		} else {
-			common.replaceFileWithIndex(0, withFile: XGFiles.common_rel.compress(), saveWhenDone: true)
-			if game == .Colosseum && compressionTooLarge {
-				commonTooLarge = true
-			}
+			common.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.common_rel.compress(), save: true)
 		}
 		
 		XGFiles.fsys("fight_common").fsysData.shiftAndReplaceFileWithType(.msg, withFile: XGFiles.msg("fight").compress(), save: true)
@@ -236,6 +233,9 @@ extension XGUtility {
 	}
 	
 	//MARK: - Documentation
+	class func documentXDS() { }
+	class func documentMacrosXDS() { }
+	
 	class func documentPokemonStats(title: String, forXG: Bool) {
 		
 		let fileName = "Pokemon Stats"
@@ -541,7 +541,7 @@ extension XGUtility {
 	class func documentPokemarts() {
 		
 		let dat = XGFiles.pocket_menu.data
-		let itemHexList = dat.getShortStreamFromOffset(0x300, length: 0x170)
+		let itemHexList = dat!.getShortStreamFromOffset(0x300, length: 0x170)
 		
 		let fileName = "Pokemarts"
 		printg("documenting " + fileName + "...")
@@ -669,7 +669,7 @@ extension XGUtility {
 			var hum = [String : AnyObject]()
 			
 			let start = CommonIndexes.ShadowData.startOffset + (i * kSizeOfShadowData)
-			let rel = XGFiles.common_rel.data
+			let rel = XGFiles.common_rel.data!
 			let table =  XGStringTable.common_rel2()
 			
 			let species  = rel.get2BytesAtOffset(start + kShadowSpeciesOffset)

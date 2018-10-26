@@ -55,7 +55,7 @@ class XGTreasure: NSObject {
 		
 		self.index = index
 		
-		let data = XGFiles.common_rel.data
+		let data = XGFiles.common_rel.data!
 		self.startOffset = CommonIndexes.TreasureBoxData.startOffset + index * kSizeOfTreasure
 		
 		self.modelID = data.getByteAtOffset(self.startOffset + kTreasureModelIDOffset)
@@ -70,7 +70,7 @@ class XGTreasure: NSObject {
 	}
 	
 	@objc func save() {
-		let data = XGFiles.common_rel.data
+		let data = XGFiles.common_rel.data!
 		
 		data.replaceByteAtOffset(self.startOffset + kTreasureModelIDOffset, withByte: self.modelID)
 		data.replaceByteAtOffset(self.startOffset + kTreasureQuantityOffset, withByte: self.quantity)

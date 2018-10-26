@@ -32,7 +32,7 @@ enum XGLZSS {
 		}
 	}
 	
-	var originalData : XGMutableData {
+	var originalData : XGMutableData? {
 		get {
 			switch self {
 			case .Input(let f):
@@ -45,7 +45,7 @@ enum XGLZSS {
 	
 	var compressedData : XGMutableData {
 		get {
-			var stream  = originalData.charStream
+			var stream  = originalData!.charStream
 			let compressor = XGLZSSWrapper()
 			let bytes = compressor.compressFile(&stream, ofSize: Int32(stream.count))
 			let length = compressor.outLength
@@ -53,7 +53,7 @@ enum XGLZSS {
 			for i : Int32 in 0 ..< length {
 				compressedStream.append((bytes?[Int(i)])!)
 			}
-			let header = kLZSSbytes.charArray + originalData.length.charArray + (compressedStream.count + 0x10).charArray + 0.charArray
+			let header = kLZSSbytes.charArray + originalData!.length.charArray + (compressedStream.count + 0x10).charArray + 0.charArray
 			compressedStream = header + compressedStream
 			let compressedData = XGMutableData(byteStream: compressedStream, file: output)
 			return compressedData
@@ -62,7 +62,7 @@ enum XGLZSS {
 	
 	var decompressedData : XGMutableData {
 		get {
-			var stream  = originalData.charStream
+			var stream  = originalData!.charStream
 			let compressor = XGLZSSWrapper()
 			let bytes = compressor.decompressFile(&stream, ofSize: Int32(stream.count), decompressedSize: 0xFFFFFFF)
 			let length = compressor.outLength

@@ -52,14 +52,14 @@ class XGDemoStarterPokemon: NSObject, XGGiftPokemon {
 	
 	@objc var startOffset : Int {
 		get {
-			return index == 0 ? kVaporeonStartOffset : kJolteonStartOffset
+			return index == 1 ? kVaporeonStartOffset : kJolteonStartOffset
 		}
 	}
 	
 	@objc init(index: Int) {
 		super.init()
 		
-		let dol			= XGFiles.dol.data
+		let dol			= XGFiles.dol.data!
 		self.index		= index
 		
 		let start = startOffset
@@ -91,7 +91,7 @@ class XGDemoStarterPokemon: NSObject, XGGiftPokemon {
 	
 	@objc func save() {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		let start = startOffset
 		
 		dol.replaceByteAtOffset(start + kDemoStarterLevelOffset, withByte: level)

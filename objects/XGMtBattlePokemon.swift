@@ -54,7 +54,7 @@ class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon {
 	@objc init(index: Int) {
 		super.init()
 		
-		let dol			= XGFiles.dol.data
+		let dol			= XGFiles.dol.data!
 		self.index		= index
 		
 		let start = startOffset
@@ -76,7 +76,7 @@ class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon {
 	
 	@objc func save() {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		let start = startOffset
 		
 		dol.replace2BytesAtOffset(start + kMtBattlePokemonSpeciesOffset, withBytes: species.index)

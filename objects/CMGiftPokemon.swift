@@ -7,10 +7,10 @@
 
 import Foundation
 
-let kPlusleOffset			= 0x12D9C8
-let kHoohOffset				= 0x12D8E4
-let kCelebiOffset			= 0x12D6B4
-let kPikachuOffset			= 0x12D7C4
+let kPlusleOffset			= game == .Colosseum ? 0x12D9C8 : 0x1525b4 - kDOLtoRAMOffsetDifference
+let kHoohOffset				= game == .Colosseum ? 0x12D8E4 : 0x1524d0 - kDOLtoRAMOffsetDifference
+let kCelebiOffset			= game == .Colosseum ? 0x12D6B4 : 0x1522a0 - kDOLtoRAMOffsetDifference
+let kPikachuOffset			= game == .Colosseum ? 0x12D7C4 : 0x1523b0 - kDOLtoRAMOffsetDifference
 
 let kDistroPokemonSpeciesOffset		=  0x02
 let kDistroPokemonLevelOffset		=  0x07
@@ -48,7 +48,7 @@ class CMGiftPokemon: NSObject, XGGiftPokemon {
 	init(index: Int) {
 		super.init()
 		
-		let dol			= XGFiles.dol.data
+		let dol			= XGFiles.dol.data!
 		self.index		= index
 		
 		let start = startOffset
@@ -75,7 +75,7 @@ class CMGiftPokemon: NSObject, XGGiftPokemon {
 	
 	func save() {
 		
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		let start = startOffset
 		
 		dol.replaceByteAtOffset(start + kDistroPokemonLevelOffset, withByte: level)
@@ -86,3 +86,4 @@ class CMGiftPokemon: NSObject, XGGiftPokemon {
 	}
 	
 }
+

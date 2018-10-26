@@ -70,7 +70,7 @@ class XGType: NSObject {
 	@objc init(index: Int) {
 		super.init()
 		
-		let rel			= XGFiles.common_rel.data
+		let rel			= XGFiles.common_rel.data!
 		self.index		= index
 		startOffset		= CommonIndexes.Types.startOffset + (index * kSizeOfTypeData)
 		
@@ -93,7 +93,7 @@ class XGType: NSObject {
 	
 	@objc func save() {
 		
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		
 		rel.replaceByteAtOffset(startOffset + kCategoryOffset, withByte: self.category.rawValue)
 		rel.replaceWordAtOffset(startOffset + kTypeNameIDOffset, withBytes: UInt32(self.nameID))

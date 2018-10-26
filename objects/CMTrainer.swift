@@ -86,7 +86,7 @@ class XGTrainer: NSObject {
 		self.index = index
 		let start = startOffset
 		
-		let deck = XGFiles.common_rel.data
+		let deck = XGFiles.common_rel.data!
 		
 		self.nameID =  deck.getWordAtOffset(start + kTrainerNameIDOffset).int
 		self.preBattleTextID = deck.getWordAtOffset(start + kTrainerPreBattleTextIDOffset).int
@@ -112,7 +112,7 @@ class XGTrainer: NSObject {
 	func save() {
 		
 		let start = startOffset
-		let deck = XGFiles.common_rel.data
+		let deck = XGFiles.common_rel.data!
 		
 		deck.replaceWordAtOffset(start + kTrainerNameIDOffset, withBytes: UInt32(self.nameID))
 		deck.replaceWordAtOffset(start + kTrainerPreBattleTextIDOffset, withBytes: UInt32(self.preBattleTextID))

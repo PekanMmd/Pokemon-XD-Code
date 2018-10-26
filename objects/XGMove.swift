@@ -110,7 +110,7 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 	@objc init(index: Int) {
 		super.init()
 		
-		let rel   = XGFiles.common_rel.data
+		let rel   = XGFiles.common_rel.data!
 		
 		self.moveIndex       = index
 		self.startOffset     = CommonIndexes.Moves.startOffset + (index * kSizeOfMoveData)
@@ -166,7 +166,7 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		let newType		= type.rawValue
 		let newCategory = category.rawValue
 		
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		
 		rel.replaceByteAtOffset(startOffset + kContactFlagOffset, withByte: newContact)
 		rel.replaceByteAtOffset(startOffset + kProtectFlagOffset, withByte: newProtect)

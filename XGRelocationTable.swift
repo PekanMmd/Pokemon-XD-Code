@@ -13,7 +13,7 @@ class XGCommon : XGRelocationTable {
 	
 	@objc init() {
 		super.init(file: XGFiles.common_rel)
-		self.dataStart = Int(self.data.getWordAtOffset(kCommonRELDataStartOffsetLocation))
+		self.dataStart = Int(self.data!.getWordAtOffset(kCommonRELDataStartOffsetLocation))
 	}
 	
 	var dictionary : [Int : (Int, Int)] {
@@ -57,9 +57,11 @@ class XGRelocationTable: NSObject {
 		self.file = file
 		self.data = file.data
 		
-		self.dataStart = Int(data.getWordAtOffset(kRELDataStartOffsetLocation))
-		self.pointersStart = Int(data.getWordAtOffset(kRELPointersStartOffsetLocation))
-		self.firstPointer = pointersStart + kRELPointersFirstPointerOffset
+		if data != nil {
+			self.dataStart = Int(data.getWordAtOffset(kRELDataStartOffsetLocation))
+			self.pointersStart = Int(data.getWordAtOffset(kRELPointersStartOffsetLocation))
+			self.firstPointer = pointersStart + kRELPointersFirstPointerOffset
+		}
 		
 	}
 	

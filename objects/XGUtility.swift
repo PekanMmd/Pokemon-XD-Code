@@ -8,8 +8,6 @@
 
 import Foundation
 
-var compressionTooLarge = false
-var commonTooLarge = false
 
 class XGUtility {
 	
@@ -181,35 +179,47 @@ class XGUtility {
 	
 	class func deleteSuperfluousFiles() {
 		// deletes files that the game doesn't use in order to create space in the ISO for larger fsys files
+		// TODO: check if can delete fsys files used for creating prerendered cutscenes
+		
+		var substrings = [String]()
 		if game == .XD {
-			var substrings = ["ex_","M2_cave","M4","Script_t","test","TEST","carde", "debug", "DNA", "keydisc"]
+			substrings = ["ex_","M2_cave","M4","Script_t","test","TEST","carde", "debug", "DNA", "keydisc"]
 			if region != .EU  {
 				substrings += ["_fr.","_ge.","_it."]
 			}
-			for file in ISO.allFileNames {
-				for substring in substrings {
-					if file.contains(substring) {
-						ISO.deleteFileAndPreserve(name: file, save: false)
-					}
-				}
-				for i in 1 ... 7 {
-					let b1Name = "B1_\(i).fsys"
-					if file == b1Name {
-						ISO.deleteFileAndPreserve(name: file, save: false)
-					}
+		} else {
+			substrings = ["carde", "ex", "debug"]
+		}
+		
+		for file in ISO.allFileNames {
+			for substring in substrings {
+				if file.contains(substring) {
+					ISO.deleteFileAndPreserve(name: file, save: false)
 				}
 			}
-			ISO.save()
+			for i in 1 ... 7 {
+				let b1Name = "B1_\(i).fsys"
+				if file == b1Name {
+					ISO.deleteFileAndPreserve(name: file, save: false)
+				}
+			}
 		}
+		ISO.save()
 		
 	}
 	
 	//MARK: - Saving to disk
 	class func saveObject(_ obj: AnyObject, toFile file: XGFiles) {
+		if !file.folder.exists {
+			file.folder.createDirectory()
+		}
 		NSKeyedArchiver.archiveRootObject(obj, toFile: file.path)
 	}
 	
 	class func saveData(_ data: Data, toFile file: XGFiles) -> Bool {
+		if !file.folder.exists {
+			file.folder.createDirectory()
+		}
 		do {
 			try data.write(to: URL(fileURLWithPath: file.path), options: [.atomic])
 		} catch {
@@ -219,6 +229,9 @@ class XGUtility {
 	}
 	
 	class func saveString(_ str: String, toFile file: XGFiles) {
+		if !file.folder.exists {
+			file.folder.createDirectory()
+		}
 		
 		if let string = str.data(using: String.Encoding.utf8) {
 			if !saveData(string, toFile: file) {
@@ -230,6 +243,9 @@ class XGUtility {
 	}
 	
 	class func saveJSON(_ json: AnyObject, toFile file: XGFiles) {
+		if !file.folder.exists {
+			file.folder.createDirectory()
+		}
 		do {
 			try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted).write(to: URL(fileURLWithPath: file.path), options: [.atomic])
 		} catch {
@@ -239,7 +255,7 @@ class XGUtility {
 	
 	class func loadJSONFromFile(_ file: XGFiles) -> AnyObject? {
 		do {
-			let json = try JSONSerialization.jsonObject(with: file.data.data as Data, options: [])
+			let json = try JSONSerialization.jsonObject(with: file.data!.data as Data, options: [])
 			return json as AnyObject?
 		} catch {
 			printg("couldn't load json from file: \(file.path)")
@@ -326,7 +342,7 @@ class XGUtility {
 	
 	//MARK: - Pokemarts
 	class func printPokeMarts() {
-		let dat = XGFiles.pocket_menu.data
+		let dat = XGFiles.pocket_menu.data!
 		
 		let itemHexList = dat.getShortStreamFromOffset(0x300, length: 0x170)
 		
@@ -464,7 +480,7 @@ class XGUtility {
 			return entry.values.map({ (str: String) -> Int in return str.length }).max()!
 		}
 		for i in 0 ..< names.count {
-			lengths[i] = lengths[i] < names[i].length ? names[i].characters.count : lengths[i]
+			lengths[i] = lengths[i] < names[i].length ? names[i].length : lengths[i]
 		}
 		
 		var header = "\n"

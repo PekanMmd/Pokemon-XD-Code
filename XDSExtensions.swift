@@ -308,7 +308,7 @@ extension XDSScriptCompiler {
 				var inner = text
 				inner.removeFirst()
 				inner.removeLast()
-				if let parts = tokenise(text: inner) {
+				if let parts = tokeniseXDS(text: inner) {
 					
 					var params = [XDSConstant]()
 					for token in parts {
@@ -483,15 +483,6 @@ extension XDSScriptCompiler {
 			}
 		}
 		
-		if tokens[1] == "++BaseStringID" {
-			if let val = tokens[2].integerValue {
-				baseStringID = val
-				return true
-			} else {
-				error = "Invalid string id: \(tokens[0]) \(tokens[1]) \(tokens[2])"
-				return false
-			}
-		}
 		
 		if tokens[1] == "++XDSVersion" {
 			if let val = Float(tokens[2]) {
@@ -507,57 +498,6 @@ extension XDSScriptCompiler {
 			}
 		}
 		
-		if tokens[1] == "++WriteDisassembly" {
-			if tokens[2] == "YES" {
-				writeDisassembly = true
-				return true
-			} else if tokens[2] == "NO" {
-				writeDisassembly = false
-				return true
-			} else  {
-				error = "Invalid token, expected 'YES' or 'NO': \(tokens[0]) \(tokens[1]) \(tokens[2])"
-				return false
-			}
-		}
-		
-		if tokens[1] == "++WriteDecompilation" {
-			if tokens[2] == "YES" {
-				decompileXDS = true
-				return true
-			} else if tokens[2] == "NO" {
-				decompileXDS = false
-				return true
-			} else  {
-				error = "Invalid token, expected 'YES' or 'NO': \(tokens[0]) \(tokens[1]) \(tokens[2])"
-				return false
-			}
-		}
-		
-		if tokens[1] == "++UpdateStrings" {
-			if tokens[2] == "YES" {
-				updateStringIDs = true
-				return true
-			} else if tokens[2] == "NO" {
-				updateStringIDs = false
-				return true
-			} else  {
-				error = "Invalid token, expected 'YES' or 'NO': \(tokens[0]) \(tokens[1]) \(tokens[2])"
-				return false
-			}
-		}
-		
-		if tokens[1] == "++IncreaseMSGSize" {
-			if tokens[2] == "YES" {
-				increaseMSGSize = true
-				return true
-			} else if tokens[2] == "NO" {
-				increaseMSGSize = false
-				return true
-			} else  {
-				error = "Invalid token, expected 'YES' or 'NO': \(tokens[0]) \(tokens[1]) \(tokens[2])"
-				return false
-			}
-		}
 		
 		error = "Unrecognised special macro: \(tokens[1])"
 		return false
@@ -567,38 +507,27 @@ extension XDSScriptCompiler {
 		//TODO: complete handle assignments character data
 		// don't forget to check for duplicate variable names
 		
+		var flags = 0
+		var isVisible = false
+		
+		var xCoordinate : Float = 0
+		var yCoordinate : Float = 0
+		var zCoordinate : Float = 0
+		var angle = 0
+		
+		var hasScript = false
+		var scriptName = ""
+		var hasPassiveScript = false
+		var passiveScriptName = ""
+		
+		var model : XGCharacterModels!
+		var movementType = XGCharacterMovements.index(0)
+		var characterID = 0
+		
 		var gid = -1
 		var rid = -1
-		var name = ""
 		
-		guard let file = scriptFile else {
-			if verbose {
-				printg("Skipping character assignment. File for script is unknown.")
-			}
-			return true
-		}
-		
-		var mapRel : XGFiles!
-		if file.folder.files.contains(where: { (rel) -> Bool in
-			return (rel.fileName.removeFileExtensions() == file.fileName.removeFileExtensions()) && rel.fileType = .rel
-		}) {
-			mapRel = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, file.folder)
-		} else {
-			if XGFiles.rel(file.fileName.removeFileExtensions()).exists {
-				mapRel = .rel(file.fileName.removeFileExtensions())
-			}
-		}
-		guard mapRel != nil else {
-			if verbose {
-				printg("Skipping character assignment. Map file for script was not found.")
-			}
-			return true
-		}
-		
-		var groupid = -1
-		var resourceid = -1
-		var characterid = -1
-		var modelid = -1
+		var name = "" // just for sanity checking the variable, doesn't affect the character data
 		
 		var assignIndex = 0
 		while assignIndex < tokens.count {
@@ -630,13 +559,112 @@ extension XDSScriptCompiler {
 					return false
 				}
 				
-				// TODO: Complete handling assignments updating characters in rel
+			case "MovementID:":
+				if let val = nextToken.integerValue {
+					movementType = .index(val)
+				} else {
+					error = "Invalid \(token) value: '\(nextToken)'"
+					return false
+				}
+				
+			case "ModelID:":
+				if let val = nextToken.integerValue {
+					model = XGCharacterModels(index: val)
+				} else {
+					error = "Invalid \(token) value: '\(nextToken)'"
+					return false
+				}
+				
+			case "CharacterID:":
+				if let val = nextToken.integerValue {
+					characterID = val
+				} else {
+					error = "Invalid \(token) value: '\(nextToken)'"
+					return false
+				}
+				
+			case "Flags:":
+				if let val = nextToken.integerValue {
+					flags = val
+				} else {
+					error = "Invalid \(token) value: '\(nextToken)'"
+					return false
+				}
+				
+			case "Angle:":
+				if let val = nextToken.integerValue {
+					angle = val
+					while angle < 0 {
+						angle += 360
+					}
+					while angle >= 360 {
+						angle -= 360
+					}
+				} else {
+					error = "Invalid \(token) value: '\(nextToken)'"
+					return false
+				}
+				
+			case "X:":
+				if let val = Float(nextToken) {
+					xCoordinate = val
+				} else {
+					error = "Invalid \(token) value: '\(nextToken)'"
+					return false
+				}
+				
+			case "Y:":
+				if let val = Float(nextToken) {
+					yCoordinate = val
+				} else {
+					error = "Invalid \(token) value: '\(nextToken)'"
+					return false
+				}
+				
+			case "Z:":
+				if let val = Float(nextToken) {
+					zCoordinate = val
+				} else {
+					error = "Invalid \(token) value: '\(nextToken)'"
+					return false
+				}
+				
+			case "Script:":
+				let functionName = nextToken
+				if functionName.substring(from: 0, to: 1) == "@" && functionName.length > 1 {
+					scriptName = functionName
+					hasScript = true
+				} else {
+					error = "Invalid \(token) value: '\(nextToken)'"
+					return false
+				}
+				
+			case "Background:":
+				let functionName = nextToken
+				if functionName.substring(from: 0, to: 1) == "@" && functionName.length > 1 {
+					passiveScriptName = functionName
+					hasPassiveScript = true
+				} else {
+					error = "Invalid \(token) value: '\(nextToken)'"
+					return false
+				}
+				
+			case "Visible:":
+				let b = nextToken
+				if ["YES", "TRUE", "Yes", "True"].contains(b) {
+					isVisible = true
+				} else if ["NO", "FALSE", "No", "False"].contains(b) {
+					isVisible = false
+				} else {
+					error = "Invalid assignment variable: \(token)"
+					return false
+				}
+				
+				
 				
 			default:
-				break
-				// uncomment once fully implemented
-				//				error = "Invalid assignment variable: \(token)"
-				//				return false
+				error = "Invalid assignment variable: \(token)"
+				return false
 				
 			}
 			assignIndex += 2
@@ -669,7 +697,24 @@ extension XDSScriptCompiler {
 		giris.names.append(name)
 		giris.values.append((groupID: gid, resourceID: rid))
 		
-		if gid > 0 {
+		if gid > 0 && rid >= 0 {
+			
+			let character = XGCharacter()
+			
+			character.angle = angle
+			character.xCoordinate = xCoordinate
+			character.yCoordinate = yCoordinate
+			character.zCoordinate = zCoordinate
+			character.characterID = characterID
+			character.movementType = movementType
+			character.hasScript = hasScript
+			character.hasPassiveScript = hasPassiveScript
+			character.flags = flags
+			character.isVisible = isVisible
+			character.model = model
+			character.scriptName = scriptName
+			character.passiveScriptName = passiveScriptName
+			
 			characters.append(character)
 		}
 		
@@ -750,11 +795,11 @@ extension XDSScriptCompiler {
 	class func macroprocessorXDS(text: String) -> String? {
 		
 		var updated = ""
-		let lines = getLines(text: text)
+		let lines = getLinesXDS(text: text)
 		var macros = [(macro: XDSMacro, replacement: String)]()
 		
 		for line in lines {
-			if let tokens = tokenise(text: line) {
+			if let tokens = tokeniseXDS(text: line) {
 				if tokens.count > 0 {
 					if tokens[0] == "define" {
 						
@@ -882,7 +927,7 @@ extension XDSScriptCompiler {
 		})
 	}
 	
-	class func evalStatement(body: String) -> [XDSExpr]? {
+	class func evalStatementXDS(body: String) -> [XDSExpr]? {
 		var statements = [XDSExpr]()
 		let lines = separateBySemiColons(text: body)
 		for line in lines {
@@ -1032,7 +1077,7 @@ extension XDSScriptCompiler {
 				
 				// bracketed expression
 				if token.first! == "(" && token.last! == ")" {
-					if let inner = tokenise(text: token.substring(from: 1, to: token.length - 1)) {
+					if let inner = tokeniseXDS(text: token.substring(from: 1, to: token.length - 1)) {
 						return evalTokensXDS(tokens: inner, subExpr: true)
 					} else {
 						error = "Invalid bracket contents: \(token)"
@@ -1057,7 +1102,7 @@ extension XDSScriptCompiler {
 								index += ss.pop()
 							}
 							
-							if let subTokens = tokenise(text: index) {
+							if let subTokens = tokeniseXDS(text: index) {
 								if let indexpr = evalTokensXDS(tokens: subTokens, subExpr: true) {
 									return XDSExpr.callStandard(7, 16, [XDSExpr.loadPointer(variable), indexpr])
 								}
@@ -1088,7 +1133,7 @@ extension XDSScriptCompiler {
 							
 							func getParameters() -> [XDSExpr]? {
 								var paramList = [XDSExpr]()
-								if let tokens = tokenise(text: parameters) {
+								if let tokens = tokeniseXDS(text: parameters) {
 									for t in tokens {
 										if let expr = evalTokensXDS(tokens: [t], subExpr: true) {
 											paramList.append(expr)
@@ -1125,7 +1170,7 @@ extension XDSScriptCompiler {
 								// check if unary operator
 								for (name,id,params) in ScriptOperators where params == 1 {
 									if name == functionName {
-										if let tokens = tokenise(text: parameters) {
+										if let tokens = tokeniseXDS(text: parameters) {
 											if let expr =  evalTokensXDS(tokens: tokens, subExpr: true) {
 												return .unaryOperator(id, expr)
 											} else {
@@ -1334,7 +1379,7 @@ extension XDSScriptCompiler {
 					conditionBody.removeFirst()
 					conditionBody.removeLast()
 					
-					guard let conditionTokens = tokenise(text: conditionBody) else {
+					guard let conditionTokens = tokeniseXDS(text: conditionBody) else {
 						error = "Invalid if statement condition: \(tokens[1])"
 						return nil
 					}
@@ -1355,7 +1400,7 @@ extension XDSScriptCompiler {
 						if body.first! == "{" && body.last == "}" {
 							body.removeFirst()
 							body.removeLast()
-							if let subStatements = evalStatement(body: body) {
+							if let subStatements = evalStatementXDS(body: body) {
 								let sugar = XDSExpr.locationWithName(syntacticSugarVariableXDS())
 								let jumpCondition = XDSExpr.jumpFalse(condition, sugar)
 								return XDSExpr.ifStatement([(jumpCondition, subStatements + [XDSExpr.location(sugar)])])
@@ -1463,7 +1508,7 @@ extension XDSScriptCompiler {
 								if body.first! == "{" && body.last == "}" {
 									body.removeFirst()
 									body.removeLast()
-									if let subStatements = evalStatement(body: body) {
+									if let subStatements = evalStatementXDS(body: body) {
 										let header = XDSExpr.functionDefinition(functionName, params)
 										return XDSExpr.function(header, subStatements)
 									} else {
@@ -1657,7 +1702,7 @@ extension XDSScriptCompiler {
 								return nil
 							}
 							
-							if let subTokens = tokenise(text: index!) {
+							if let subTokens = tokeniseXDS(text: index!) {
 								if let indexpr = evalTokensXDS(tokens: subTokens, subExpr: true) {
 									return XDSExpr.callStandardVoid(7, 17, [XDSExpr.loadPointer(variable), indexpr, expr])
 								}

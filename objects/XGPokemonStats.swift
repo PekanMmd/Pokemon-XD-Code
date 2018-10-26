@@ -133,7 +133,7 @@ class XGPokemonStats: NSObject {
 	@objc var specialDefenseYield	= 0x0
 	
 	@objc var pkxModelIdentifier : UInt32 {
-		let dol = XGFiles.dol.data
+		let dol = XGFiles.dol.data!
 		return dol.getWordAtOffset(kFirstPokemonPKXIdentifierOffset + (self.modelIndex * 8) + kModelDictionaryModelOffset)
 	}
 	
@@ -193,7 +193,7 @@ class XGPokemonStats: NSObject {
 	init(index : Int!) {
 		super.init()
 		
-		let rel = XGFiles.common_rel.data
+		let rel = XGFiles.common_rel.data!
 		
 		self.startOffset	= CommonIndexes.PokemonStats.startOffset + ( kSizeOfPokemonStats * index )
 		self.index			= index
@@ -278,7 +278,7 @@ class XGPokemonStats: NSObject {
 	
 	@objc func save() {
 		
-		let rel	= XGFiles.common_rel.data
+		let rel	= XGFiles.common_rel.data!
 
 		rel.replaceWordAtOffset(startOffset + kNameIDOffset, withBytes: UInt32(nameID))
 		rel.replaceWordAtOffset(startOffset + kSpeciesNameIDOffset, withBytes: UInt32(speciesNameID))

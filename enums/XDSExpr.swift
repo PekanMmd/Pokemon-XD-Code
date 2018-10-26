@@ -490,8 +490,7 @@ indirect enum XDSExpr {
 			}
 			return macroWithName("FLAG_" + c.asInt.string)
 		case .none:
-			printg("error: empty macro value")
-			return "error: empty macro value"
+			return "Null"
 		case .pokemon:
 			if c.asInt == 0 {
 				return macroWithName("pokemon_none".uppercased())
@@ -571,7 +570,17 @@ indirect enum XDSExpr {
 			}
 			return macroWithName("ABILITY_" + ability.name.string.simplified.uppercased())
 		case .msgVar:
-			return macroWithName("MSG_VAR_" + c.asInt.hexString())
+			if let sp = XGSpecialCharacters(rawValue: c.asInt) {
+				var text = sp.string
+				text.removeFirst() // [
+				text.removeLast() // ]
+				if let val = text.integerValue {
+					return macroWithName("MSG_VAR_" + val.hexString())
+				}
+				return macroWithName("MSG_VAR_" + text.underscoreSimplified.uppercased())
+			} else {
+				printg("error unknown msg var");return "error unknown msg var"
+			}
 		case .battleResult:
 			switch c.asInt {
 				case 0: return macroWithName("result_during_battle".uppercased())
@@ -622,6 +631,121 @@ indirect enum XDSExpr {
 				printg("error unknown party member");return "error unknown party member"
 			}
 			
+		case .integerMoney:
+			return macroWithName("P$\(c.asInt)")
+		case .integerCoupons:
+			return macroWithName("C$\(c.asInt)")
+			
+		case .integerQuantity:
+			return macroWithName("X\(c.asInt)")
+		case .integerIndex:
+			if c.asInt < 0 {
+				return macroWithName("INDEX_CANCEL")
+			}
+			return macroWithName("INDEX_\(c.asInt)")
+			
+		case .vectorDimension:
+			switch c.asInt {
+			case 0: return macroWithName("V_X")
+			case 1: return macroWithName("V_Y")
+			case 2: return macroWithName("V_Z")
+			default: printg("error invalid vector dimension"); return macroWithName("INVALID_VECTOR_DIMENSION")
+			}
+			
+		case .giftPokemon:
+			if c.asInt < kNumberOfGiftPokemon && c.asInt > 0 {
+				let gift = XGGiftPokemonManager.allGiftPokemon()[c.asInt]
+				let type = gift.giftType.underscoreSimplified.uppercased()
+				let species = gift.species.name.string.simplified.uppercased()
+				return macroWithName(type + "_\(c.asInt)_" + species)
+			}
+			printg("error invalid gift pokemon"); return macroWithName("INVALID_GIFT_POKEMON")
+			
+		case .region:
+			switch c.asInt {
+				case 0: return macroWithName("REGION_JP")
+				case 1: return macroWithName("REGION_US")
+				case 2: return macroWithName("REGION_PAL")
+				default:
+					printg("error invalid region"); return macroWithName("INVALID_REGION")
+			}
+		case .language:
+			if let lang = XGLanguages(rawValue: c.asInt) {
+				return macroWithName("LANGUAGE_" + lang.name.underscoreSimplified.uppercased())
+			}
+			printg("error invalid language"); return macroWithName("INVALID_LANGUAGE")
+			
+		case .PCBox:
+			return "PCBOX_\(c.asInt)"
+			
+			
+			
+		// Just for completion but probably won't be displayed
+		case .integer:
+			return macroWithName("INTEGER_\(c.asInt)")
+		case .float:
+			return macroWithName("FLOAT_\(c.asFloat)")
+		case .integerFloatOverload:
+			if c.type.index == XDSConstantTypes.float.index {
+				return stringFromMacroImmediate(c: c, t: .float)
+			}
+			return stringFromMacroImmediate(c: c, t: .integer)
+		case .integerAngleDegrees:
+			var angle = c.asInt
+			while angle >= 360 {
+				angle -= 360
+			}
+			while angle < 0 {
+				angle += 360
+			}
+			return macroWithName("ANGLE_DEGREES_\(angle)")
+		case .floatAngleDegrees:
+			var angle = c.asFloat
+			while angle >= 360 {
+				angle -= 360
+			}
+			while angle < 0 {
+				angle += 360
+			}
+			return macroWithName("ANGLE_DEGREES_\(angle)")
+		case .floatAngleRadians:
+			return macroWithName("ANGLE_RADIANS_\(c.asFloat)")
+		case .floatFraction:
+			if c.asFloat < 0.0 || c.asFloat > 1.0 {
+				printg("Invalid fraction \(c.asFloat)")
+				return "INVALID FRACTION"
+			}
+			return macroWithName("ANGLE_RADIANS_\(c.asFloat)")
+		case .integerByte:
+			if c.asInt > 0 && c.asInt < 0x100 {
+				return macroWithName("BYTE_\(c.asInt)")
+			}
+			printg("invalid byte:", c.asInt)
+			return "INVALID BYTE"
+		case .integerUnsigned:
+			return macroWithName("UNSIGNED_INT_\(c.asInt.hexString())")
+			
+		case .vector:
+			return macroWithName("VECTOR_LITERAL_\(c.asInt)")
+		case .array:
+			return macroWithName("ARRAY_LITERAL_\(c.asInt)")
+		case .arrayIndex:
+			if c.asInt < 0 {
+				printg("error: invalid array index")
+				return macroWithName("INVALID_ARRAY_INDEX")
+			}
+			return macroWithName("ARRAY_INDEX_\(c.asInt)")
+		case .string:
+			return macroWithName("STRING_LITERAL_\(c.asInt)")
+		case .anyType:
+			return stringFromMacroImmediate(c: c, t:.object(c.type.index))
+		case .object(let cid):
+			return stringFromMacroImmediate(c: c, t: XDSMacroTypes.objectName(XGScriptClass.classes(cid).name))
+		case .objectName(let s):
+			return macroWithName(s.uppercased() + "_OBJECT")
+		case .invalid:
+			return "INVALID_FUNCTION_CALL_RESULT"
+		
 		}
 	}
 	

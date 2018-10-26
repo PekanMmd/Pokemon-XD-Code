@@ -44,7 +44,7 @@ class XGStarterPokemon: NSObject, XGGiftPokemon {
 		super.init()
 		
 		if game == .XD {
-			let dol			= XGFiles.dol.data
+			let dol			= XGFiles.dol.data!
 			
 			let start = startOffset
 			
@@ -69,7 +69,7 @@ class XGStarterPokemon: NSObject, XGGiftPokemon {
 	@objc func save() {
 		
 		if game == .XD {
-			let dol = XGFiles.dol.data
+			let dol = XGFiles.dol.data!
 			let start = startOffset
 			
 			dol.replaceByteAtOffset(start + kStarterLevelOffset, withByte: level)

@@ -9,7 +9,7 @@
 import Cocoa
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/GoD-Tool"
-let region = XGRegions(rawValue: XGFiles.iso.data.getWordAtOffset(0)) ?? .US
+let region = XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .US
 let game = XGGame.XD
 
 typealias TrainerInfo = (name:String,location:String,hasShadow: Bool,trainerModel:XGTrainerModels,index:Int,deck:XGDecks)

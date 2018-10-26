@@ -7,6 +7,10 @@
 //
 //
 
+
+//let name = "M5_apart_1F"
+//XDSScriptCompiler.compile(textFile: .xds(name), toFile: .nameAndFolder(name + ".scd", .Documents))
+
 //XGScriptClass.classes(43).RAMOffset!.hexString().println()
 
 //XGAssembly.ASMfreeSpacePointer().hexString().println()
@@ -19,7 +23,7 @@
 //XGUtility.compileForRelease(XG: true)
 //XGUtility.documentISO(forXG: true)
 
-XGUtility.documentXDS()
+//XGUtility.documentXDS()
 
 
 //XGAssembly.getWordAtRamOffsetFromR13(offset: -0x74b0).hexString().println() //number battle types

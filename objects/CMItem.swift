@@ -66,7 +66,7 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 		self.index = index
 		
 		let start = startOffset
-		let data  = XGFiles.dol.data
+		let data  = XGFiles.dol.data!
 		
 		let bSlot			= data.getByteAtOffset(start + kBagSlotOffset)
 		bagSlot				= XGBagSlots(rawValue: bSlot) ?? XGBagSlots.items
@@ -85,7 +85,7 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 	
 	func save() {
 		
-		let data = XGFiles.dol.data
+		let data = XGFiles.dol.data!
 		let start = self.startOffset
 		
 		data.replaceByteAtOffset(start + kBagSlotOffset, withByte: bagSlot.rawValue)

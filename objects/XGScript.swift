@@ -69,7 +69,7 @@ class XGScript: NSObject {
 	}
 	
 	convenience init(file: XGFiles) {
-		self.init(data: file.data)
+		self.init(data: file.data!)
 	}
 	
 	@objc init(data: XGMutableData) {
@@ -756,8 +756,10 @@ class XGScript: NSObject {
 								if sclass.name == "Character" {
 									if sclass[f].name == "talk" {
 										if es[1].isImmediate {
-											if es[1].constants[0].asInt == XDSTalkTypes.promptYesNo.rawValue || es[1].constants[0].asInt == XDSTalkTypes.promptYesNo2.rawValue {
+											if es[1].constants[0].asInt == XDSTalkTypes.promptYesNoBool.rawValue {
 												e2 = .macroImmediate(e2.constants[0], .bool)
+											} else if es[1].constants[0].asInt == XDSTalkTypes.promptYesNoIndex.rawValue {
+												e2 = .macroImmediate(e2.constants[0], .integerIndex)
 											}
 										}
 									}
@@ -1002,7 +1004,7 @@ class XGScript: NSObject {
 				let result = globalMacroTypes[v] == nil
 				// if type was already known check for consistency
 				if !result {
-					if globalMacroTypes[v] != to {
+					if globalMacroTypes[v]! != to {
 						printg("Warning: global var '\(v)' has conflicting macro types.")
 					}
 				} else {
@@ -1012,7 +1014,7 @@ class XGScript: NSObject {
 			} else if v.contains("var") || v.contains("arg") {
 				let result = localMacroTypes[currentFuncName]![v] == nil
 				if !result {
-					if localMacroTypes[currentFuncName]![v] != to {
+					if localMacroTypes[currentFuncName]![v]! != to {
 						printg("Warning: local var '\(v)' has conflicting macro types.")
 					}
 				} else {
@@ -1060,8 +1062,10 @@ class XGScript: NSObject {
 					if p2.isLoadImmediate {
 						if let type = macTypeForVar(v: m1!) {
 							let c = p2.constants[0]
-							p2 = .macroImmediate(c, type)
-							if type != .msg {
+							if type.printsAsMacro {
+								p2 = .macroImmediate(c, type)
+							}
+							if type.needsDefine {
 								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
 								macros.append(.macro(name, c.rawValueString))
 							}
@@ -1074,8 +1078,10 @@ class XGScript: NSObject {
 					if p1.isLoadImmediate {
 						if let type = macTypeForVar(v: m2!) {
 							let c = p1.constants[0]
-							p1 = .macroImmediate(c, type)
-							if type != .msg {
+							if type.printsAsMacro {
+								p1 = .macroImmediate(c, type)
+							}
+							if type.needsDefine {
 								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
 								macros.append(.macro(name, c.rawValueString))
 							}
@@ -1111,8 +1117,10 @@ class XGScript: NSObject {
 					if p2.isLoadImmediate {
 						if let type = macTypeForVar(v: v) {
 							let c = p2.constants[0]
-							p2 = .macroImmediate(c, type)
-							if type != .msg {
+							if type.printsAsMacro {
+								p2 = .macroImmediate(c, type)
+							}
+							if type.needsDefine {
 								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
 								macros.append(.macro(name, c.rawValueString))
 							}
@@ -1150,8 +1158,10 @@ class XGScript: NSObject {
 					if p2.isLoadImmediate {
 						if let type = macTypeForVar(v: m1!) {
 							let c = p2.constants[0]
-							p2 = .macroImmediate(c, type)
-							if type != .msg {
+							if type.printsAsMacro {
+								p2 = .macroImmediate(c, type)
+							}
+							if type.needsDefine {
 								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
 								macros.append(.macro(name, c.rawValueString))
 							}
@@ -1164,8 +1174,10 @@ class XGScript: NSObject {
 					if p1.isLoadImmediate {
 						if let type = macTypeForVar(v: m2!) {
 							let c = p1.constants[0]
-							p1 = .macroImmediate(c, type)
-							if type != .msg {
+							if type.printsAsMacro {
+								p1 = .macroImmediate(c, type)
+							}
+							if type.needsDefine {
 								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
 								macros.append(.macro(name, c.rawValueString))
 							}
@@ -1211,8 +1223,10 @@ class XGScript: NSObject {
 						if p1.isLoadImmediate {
 							if let type = localMacroTypes[loc]![m2] {
 								let c = p1.constants[0]
-								params[j] = .macroImmediate(c, type)
-								if type != .msg {
+								if type.printsAsMacro {
+									params[j] = .macroImmediate(c, type)
+								}
+								if type.needsDefine {
 									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
 									macros.append(.macro(name, c.rawValueString))
 								}
@@ -1253,8 +1267,10 @@ class XGScript: NSObject {
 						if p1.isLoadImmediate {
 							if let type = localMacroTypes[loc]![m2] {
 								let c = p1.constants[0]
-								params[j] = .macroImmediate(c, type)
-								if type != .msg {
+								if type.printsAsMacro {
+									params[j] = .macroImmediate(c, type)
+								}
+								if type.needsDefine {
 									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
 									macros.append(.macro(name, c.rawValueString))
 								}
@@ -1286,7 +1302,7 @@ class XGScript: NSObject {
 				var newInfo = false
 				
 				if let macs = XGScriptClass.classes(c)[f].macros {
-					var macroTypes = (c > 3 ? [nil] : []) +  macs
+					var macroTypes = macs
 					while macroTypes.count < es.count {
 						macroTypes.append(nil)
 					}
@@ -1300,14 +1316,15 @@ class XGScript: NSObject {
 									
 									switch talkType {
 									case .silentItem:
-										fallthrough
+										macroTypes[3] = talkType.extraMacro
+										macroTypes[4] = talkType.extraMacro2
 									case .battle1:
 										macroTypes[3] = talkType.extraMacro
 									case .battle2:
 										macroTypes[3] = talkType.extraMacro
 									case .speciesCry:
 										macroTypes[2] = talkType.extraMacro
-										macroTypes[3] = XDSMacroTypes.msg
+										macroTypes[3] = talkType.extraMacro2
 									default:
 										break
 									}
@@ -1329,8 +1346,10 @@ class XGScript: NSObject {
 							if p1.isLoadImmediate {
 								if let type = m2 {
 									let c = p1.constants[0]
-									params[j] = .macroImmediate(c, type)
-									if type != .msg {
+									if type.printsAsMacro {
+										params[j] = .macroImmediate(c, type)
+									}
+									if type.needsDefine {
 										let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
 										macros.append(.macro(name, c.rawValueString))
 									}
@@ -1353,7 +1372,7 @@ class XGScript: NSObject {
 				var newInfo = false
 				
 				if let macs = XGScriptClass.classes(c)[f].macros {
-					var macroTypes = (c > 3 ? [nil] : []) +  macs
+					var macroTypes =  macs
 					while macroTypes.count < es.count {
 						macroTypes.append(nil)
 					}
@@ -1367,14 +1386,15 @@ class XGScript: NSObject {
 									
 									switch talkType {
 									case .silentItem:
-										fallthrough
+										macroTypes[3] = talkType.extraMacro
+										macroTypes[4] = talkType.extraMacro2
 									case .battle1:
 										macroTypes[3] = talkType.extraMacro
 									case .battle2:
 										macroTypes[3] = talkType.extraMacro
 									case .speciesCry:
 										macroTypes[2] = talkType.extraMacro
-										macroTypes[3] = XDSMacroTypes.msg
+										macroTypes[3] = talkType.extraMacro2
 									default:
 										break
 									}
@@ -1395,8 +1415,10 @@ class XGScript: NSObject {
 							if p1.isLoadImmediate {
 								if let type = m2 {
 									let c = p1.constants[0]
-									params[j] = .macroImmediate(c, type)
-									if type != .msg {
+									if type.printsAsMacro {
+										params[j] = .macroImmediate(c, type)
+									}
+									if type.needsDefine {
 										let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
 										macros.append(.macro(name, c.rawValueString))
 									}
@@ -1438,8 +1460,10 @@ class XGScript: NSObject {
 						if let type = macTypeForVar(v: m2) {
 							
 							let c = p1.constants[0]
-							p1 = .macroImmediate(c, type)
-							if type != .msg {
+							if type.printsAsMacro {
+								p1 = .macroImmediate(c, type)
+							}
+							if type.needsDefine {
 								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
 								macros.append(.macro(name, c.rawValueString))
 							}
@@ -1768,11 +1792,6 @@ class XGScript: NSObject {
 		var macs = [String]()
 		macs.append("define ++XDSVersion " + String(format: "%1.1f", currentXDSVersion) + " // lets future versions of the compiler know which rules to follow")
 		macs.append("define ++ScriptIdentifier \(self.scriptID.hexString()) // best not to change this")
-		macs.append("define ++BaseStringID 0x10000 // starts looking for free msg ids from this value")
-		macs.append("define ++UpdateStrings YES // when a new msg id is allocated this xds script can be automagically updated with the id")
-		macs.append("define ++IncreaseMSGSize NO // when replacing a string, the file can be made larger if the string is too long")
-		macs.append("define ++WriteDisassembly NO // a disassembly of the compiled code can be saved in the same folder for double checking")
-		macs.append("define ++WriteDecompilation NO // after compiling, the compiled code is decompiled into a new .xds file for double checking")
 		
 		return macs
 	}
@@ -1800,9 +1819,7 @@ class XGScript: NSObject {
 					if g.groupID != 0 {
 						let character = rel.characters[g.resourceID]
 						let charID = character.characterID
-						if charID == 0 {
-							str += "CharacterID: " + charID.string + " "
-						} else {
+						if charID > 0 {
 							let macroString = XDSExpr.macroWithName("CHARACTERID_" + character.name.simplified.uppercased())
 							str += "CharacterID: " + macroString + " "
 							mac.append(.macro(macroString, charID.string))
@@ -1817,6 +1834,12 @@ class XGScript: NSObject {
 							mac.append(.macro(macroString, modelID.string))
 						}
 						
+						let movement = (character.movementType ?? .index(0)).index
+						if movement > 0 {
+							str += "MovementID: " + movement.string + " "
+						}
+						
+						
 						if !character.isVisible {
 							str += "Visible: NO "
 						}
@@ -1826,7 +1849,9 @@ class XGScript: NSObject {
 						str += "X: " + character.xCoordinate.string + " "
 						str += "Y: " + character.yCoordinate.string + " "
 						str += "Z: " + character.zCoordinate.string + " "
-						str += "Angle: " + character.angle.string   + " "
+						if character.angle != 0 {
+							str += "Angle: " + character.angle.string   + " "
+						}
 						
 						if character.hasScript {
 							str += "Script: " + XDSExpr.locationWithName(ftbl[character.scriptIndex].name) + " "
@@ -1851,30 +1876,6 @@ class XGScript: NSObject {
 		}
 		str += "\n"
 		
-		for i in 0 ..< arry.count {
-			let array = arry[i]
-			
-			let variable = "array_" + String(format: "%02d", i)
-			let type = globalMacroTypes[variable]
-			
-			str += "global " + variable + " = ["
-			for val in array {
-				let value = val.rawValueString
-				
-				if let t = type {
-					let macroString = XDSExpr.stringFromMacroImmediate(c: val, t: t)
-					str += (type == .msg ? "\n" : " ") + macroString
-					if type != .msg {
-						mac.append(.macro(macroString, value))
-					}
-				} else {
-					str += " " + value
-				}
-			}
-			str += " ]\n"
-		}
-		str += "\n"
-		
 		for i in 0 ..< vect.count {
 			let vector = vect[i]
 			let variable = "vector_" + String(format: "%02d", i)
@@ -1886,14 +1887,39 @@ class XGScript: NSObject {
 		}
 		str += "\n"
 		
+		for i in 0 ..< arry.count {
+			let array = arry[i]
+			
+			let variable = "array_" + String(format: "%02d", i)
+			let type = globalMacroTypes[variable]
+			
+			str += "global " + variable + " = ["
+			for val in array {
+				let value = val.rawValueString
+				
+				if let t = type {
+					let macroString = t.printsAsMacro ? XDSExpr.stringFromMacroImmediate(c: val, t: t) : value
+					str += (t == .msg ? "\n" : " ") + macroString
+					if t.needsDefine {
+						mac.append(.macro(macroString, value))
+					}
+				} else {
+					str += " " + value
+				}
+			}
+			str += " ]\n"
+		}
+		str += "\n"
+		
+		
 		for i in 0 ..< gvar.count {
 			let variable = "gvar_" + String(format: "%02d", i)
 			var value = gvar[i].rawValueString
 			str += "global " + variable + " = "
 			if let type = globalMacroTypes[variable] {
-				let macroString = XDSExpr.stringFromMacroImmediate(c: gvar[i], t: type)
+				let macroString = type.printsAsMacro ? XDSExpr.stringFromMacroImmediate(c: gvar[i], t: type) : gvar[i].rawValueString
 				str += macroString
-				if type != .msg {
+				if type.needsDefine {
 					mac.append(.macro(macroString, value))
 				}
 			} else {
