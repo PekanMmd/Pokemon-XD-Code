@@ -21,7 +21,7 @@ class XGTrainerClass: NSObject {
 	@objc var payout = 0
 	@objc var nameID = 0
 	
-	var tClass = XGTrainerClasses.none
+	var index = 0
 	
 	@objc var name : XGString {
 		get {
@@ -31,7 +31,7 @@ class XGTrainerClass: NSObject {
 	
 	@objc var startOffset : Int {
 		get {
-			return kFirstTrainerClassDataOffset + (self.tClass.rawValue * kSizeOfTrainerClassEntry)
+			return kFirstTrainerClassDataOffset + (self.index * kSizeOfTrainerClassEntry)
 		}
 	}
 	
@@ -52,17 +52,18 @@ class XGTrainerClass: NSObject {
 			dictRep["payout"] = self.payout as AnyObject?
 			
 			
-			return ["\(self.tClass.rawValue) " + self.name.string : dictRep as AnyObject]
+			return ["\(self.index) " + self.name.string : dictRep as AnyObject]
 		}
 	}
 	
-	init(tClass : XGTrainerClasses) {
+	init(index: Int) {
 		super.init()
 		
-		self.tClass = tClass
+		self.index = index
 		
 		let rel = XGFiles.common_rel.data!
 		let start = self.startOffset
+		
 		
 		self.payout = rel.get2BytesAtOffset(start + kTrainerClassPayoutOffset)
 		self.nameID = rel.getWordAtOffset(start + kTrainerClassNameIDOffset).int

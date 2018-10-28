@@ -27,6 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		// Insert code here to initialize your application
+		
 		createDirectories()
 		if game == .Colosseum {
 			scriptMenuItem.isHidden = true
@@ -43,18 +44,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func getFreeStringID(_ sender: Any) {
+		guard !isSearchingForFreeStringID else {
+			self.displayAlert(title: "Please wait", text: "Please wait for previous string id search to complete.")
+			return
+		}
 		guard XGFiles.iso.exists else {
 			let text = "ISO file doesn't exist. Please place your \(game == .XD ? "Pokemon XD" : "Pokemon Colosseum") file in the folder \(XGFolders.ISO.path) and name it \(XGFiles.iso.fileName)"
-			printg("file \"\(XGFiles.iso.fileName)\" not in ISO folder")
 			
 			self.displayAlert(title: "Error", text: text)
 			return
 		}
 		XGThreadManager.manager.runInBackgroundAsync {
 			if let id = freeMSGID() {
-				self.displayAlert(title: "Free String ID", text: "The next free id is: \(id)")
+				XGThreadManager.manager.runInForegroundAsync {
+					self.displayAlert(title: "Free String ID", text: "The next free id is: \(id) (\(id.hexString()))")
+				}
 			} else {
-				self.displayAlert(title: "Free String ID", text: "Failed to find a free string id")
+				XGThreadManager.manager.runInForegroundAsync {
+					self.displayAlert(title: "Free String ID", text: "Failed to find a free string id")
+				}
 			}
 		}
 	}
@@ -77,6 +85,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBOutlet weak var fileSizeMenuItem: NSMenuItem!
+	
+	@IBAction func deleteLogs(_ sender: Any) {
+		for file in XGFolders.Logs.files where file.fileType == .txt {
+			file.delete()
+		}
+	}
+	
 	
 	
 	@IBAction func toggleAllowIncreasedFileSizes(_ sender: Any) {
@@ -123,6 +138,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	@IBAction func quickBuildISO(_ sender: Any) {
 		guard !isBuilding else {
+			self.displayAlert(title: "Please wait", text: "Please wait for previous build to complete.")
 			return
 		}
 		isBuilding = true
@@ -138,11 +154,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				
 				text += "\n\nSet 'ISO > Enable File Size Increases' to include them."
 				
-				self.displayAlert(title: "Quick Build Incomplete", text: text)
+				XGThreadManager.manager.runInForegroundAsync {
+					self.displayAlert(title: "Quick Build Incomplete", text: text)
+				}
 				
 			} else {
-				
-				self.displayAlert(title: "Done", text: "Quick build completed successfully!")
+				XGThreadManager.manager.runInForegroundAsync {
+					self.displayAlert(title: "Done", text: "Quick build completed successfully!")
+				}
 			}
 			self.isBuilding = false
 		}
@@ -150,6 +169,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	@IBAction func rebuildISO(_ sender: AnyObject) {
 		guard !isBuilding else {
+			self.displayAlert(title: "Please wait", text: "Please wait for previous build to complete.")
 			return
 		}
 		isBuilding = true
@@ -165,13 +185,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				
 				text += "\n\nSet 'ISO > Enable File Size Increases' to include them."
 				
-				self.displayAlert(title: "Reuild Incomplete", text: text)
+				XGThreadManager.manager.runInForegroundAsync {
+					self.displayAlert(title: "Reuild Incomplete", text: text)
+				}
 			} else {
-				self.displayAlert(title: "Done", text: "ISO rebuild completed successfully!")
+				XGThreadManager.manager.runInForegroundAsync {
+					self.displayAlert(title: "Done", text: "ISO rebuild completed successfully!")
+				}
 			}
 			self.isBuilding = false
 		}
-		
+	
 	}
 	
 	@IBAction func decompileXDS(_ sender: Any) {
@@ -210,11 +234,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 		source code: https://github.com/PekanMmd/Pokemon-XD-Code.git
 		"""
-		GoDAlertViewController.alert(title: "About GoD Tool", text: text).show(sender: self.homeViewController)
+		GoDAlertViewController.displayAlert(title: "About GoD Tool", text: text)
 	}
 	
 	@IBAction func showHelp(_ sender: Any) {
-		self.homeViewController.performSegue(withIdentifier: NSStoryboardSegue.Identifier(rawValue: "toHelpVC"), sender: self.homeViewController)
+		self.performSegue("toHelpVC")
 	}
 	
 	func createDirectories() {
@@ -222,9 +246,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	func displayAlert(title: String, text: String) {
-		XGThreadManager.manager.runInForegroundSync {
-			GoDAlertViewController.alert(title: title, text: text).show(sender: self.homeViewController)
-		}
+		GoDAlertViewController.displayAlert(title: title, text: text)
 	}
 	
 	var isDocumenting = false
@@ -241,10 +263,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	func performSegue(_ name: String) {
 		guard XGFiles.iso.exists else {
-			let text = "ISO file doesn't exist. Please place your \(game == .XD ? "Pokemon XD" : "Pokemon Colosseum") file in the folder \(XGFolders.ISO.path) and name it \(XGFiles.iso.fileName)"
-			printg("file \"\(XGFiles.iso.fileName)\" not in ISO folder")
-			
-			self.displayAlert(title: "Error", text: text)
+			self.homeViewController.performSegue(withIdentifier: NSStoryboardSegue.Identifier("toHelpVC"), sender: self.homeViewController)
 			return
 		}
 		self.homeViewController.performSegue(withIdentifier: NSStoryboardSegue.Identifier(name), sender: self.homeViewController)

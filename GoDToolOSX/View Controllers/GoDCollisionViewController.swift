@@ -86,7 +86,6 @@ class GoDCollisionViewController: GoDTableViewController {
 		}
 		
 		let str = cols[row].fileName
-		let index2 = str.index(str.startIndex, offsetBy: 2)
 		let prefix = str.substring(from: 0, to: 2)
 		
 		let map = XGMaps(rawValue: prefix)

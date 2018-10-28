@@ -117,7 +117,7 @@ extension XGISO {
 		let deckData = XGFiles.fsys("deck_archive").fsysData
 		let decksOrdered : [XGDecks] = [.DeckBingo, .DeckColosseum, .DeckDarkPokemon, .DeckHundred, .DeckImasugu, .DeckSample, .DeckStory, .DeckVirtual]
 		
-		for i in 0 ... decksOrdered.count {
+		for i in 0 ..< decksOrdered.count {
 			let deck = decksOrdered[i]
 			if !deck.file.exists {
 				if verbose {
@@ -555,7 +555,7 @@ extension XGUtility {
 	class func saveObtainablePokemonByLocation(prefix: String) {
 		
 		func tabsForName(_ name: String) -> String {
-			return name.characters.count >= 9 ? "\t" : (name.characters.count >= 3 ? "\t\t" : "\t\t\t")
+			return name.length >= 9 ? "\t" : (name.length >= 3 ? "\t\t" : "\t\t\t")
 		}
 		
 		var string = "Pokemon XD Obtainable Pokemon by Location:\n\n"
@@ -578,8 +578,8 @@ extension XGUtility {
 			}
 			
 			var str = trainer.trainerString
-			var range = str.startIndex ..< str.characters.index(str.startIndex, offsetBy: 1)
-			let sub1 = str.substring(with: range)
+			var range = str.startIndex ..< str.index(str.startIndex, offsetBy: 1)
+			let sub1 = str.substring(from: 0, to: 1)
 			
 			if str == "NULL" {
 				str = "-"
@@ -604,8 +604,8 @@ extension XGUtility {
 			} else if sub1 == "T" {
 				str = str.replacingCharacters(in: range, with: "Tower Colosseum ")
 			} else {
-				range = str.startIndex ..< str.characters.index(str.startIndex, offsetBy: 2)
-				let sub = str.substring(with: range)
+				range = str.startIndex ..< str.index(str.startIndex, offsetBy: 2)
+				let sub = str.substring(from: 0, to: 2)
 				str = XGMaps(rawValue: sub)?.name ?? str
 			}
 			
@@ -628,7 +628,7 @@ extension XGUtility {
 						let name = trainer.trainerClass.name.string.replacingOccurrences(of: "[07]{00}", with: "") + " " + trainer.name.string
 						var spaces = " "
 						for i in 1 ... 20 {
-							if i > name.characters.count {
+							if i > name.length {
 								spaces += " "
 							}
 						}
@@ -1227,7 +1227,7 @@ extension XGUtility {
 		}
 		
 		for i in 0 ..< kNumberOfTalkTypes {
-			if let type = XDSTalkTypes(rawValue: i) {
+			if XDSTalkTypes(rawValue: i) != nil {
 				addMacro(value: i, type: .talk)
 			}
 		}
@@ -1442,7 +1442,7 @@ extension XGUtility {
 	//MARK: - Release configuration
 	
 	class func fixUpTrainerPokemon() {
-		for deck in TrainerDecksArray {
+		for deck in MainDecksArray {
 			for poke in deck.allPokemon {
 				let spec = poke.species.stats
 				
@@ -1860,7 +1860,7 @@ extension XGUtility {
 	
 	class func getItemLocations() -> [[String]] {
 		var locations = [[String]]()
-		for i in 0 ..< CommonIndexes.NumberOfItems.value {
+		for _ in 0 ..< CommonIndexes.NumberOfItems.value {
 			locations.append([String]())
 		}
 		
@@ -1885,7 +1885,6 @@ extension XGUtility {
 					if instruction.subOpCode == 35 { // Character
 						
 						if instruction.parameter == 73 { // talk
-							let instr = script.code[i - 3]
 							
 							let typeInstr = script.code[i - 2]
 							if typeInstr .opCode == .loadImmediate {

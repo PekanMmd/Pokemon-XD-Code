@@ -38,29 +38,6 @@ let kBattlePlayer4TrainerIDOffset = 0x36
 let kBattlePlayer4ControlOffset = 0x3B
 
 
-
-enum XGBattleStyles : Int {
-	
-	case none = 0
-	case single = 1
-	case double = 2
-	case other = 3
-	
-	var name: String {
-		switch self {
-		case .none:
-			return "none"
-		case .single:
-			return "single"
-		case .double:
-			return "double"
-		case .other:
-			return "other"
-		}
-	}
-	
-}
-
 class XGBattle: NSObject {
 	
 	@objc var index = 0

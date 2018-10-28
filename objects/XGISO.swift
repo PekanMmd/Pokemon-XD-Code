@@ -54,17 +54,22 @@ class XGISO: NSObject {
 	@objc var filesOrdered = [String]()
 	
 	@objc var data : XGMutableData {
-		return XGFiles.iso.data!
+		if let d = XGFiles.iso.data {
+			return d
+		}
+		return XGMutableData(byteStream: [], file: .iso)
 	}
 	
-	@objc let TOCFirstStringOffset = XGFiles.toc.data!.get4BytesAtOffset(kTOCNumberEntriesOffset) * kTOCEntrySize
+	@objc var TOCFirstStringOffset : Int {
+		return XGFiles.toc.data!.get4BytesAtOffset(kTOCNumberEntriesOffset) * kTOCEntrySize
+	}
 	
 	override init() {
 		super.init()
 		
 		printg("Initialising ISO...")
 		
-		if !self.data.file.exists {
+		if !XGFiles.iso.exists {
 			printg("ISO file doesn't exist. Please place your \(game == .XD ? "Pokemon XD" : "Pokemon Colosseum") file in the folder \(XGFolders.ISO.path) and name it \(XGFiles.iso.fileName)")
 		}
 		
@@ -96,36 +101,35 @@ class XGISO: NSObject {
 		
 		var i = 0x0
 		
-		while (i < TOCFirstStringOffset) {
+		while (i * 12 < TOCFirstStringOffset) {
 			
-			let folder = tocData.getByteAtOffset(i) == 1
+			let o = i * 12
+			let folder = tocData.getByteAtOffset(o) == 1
 			
 			if !folder {
 				
-				let nameOffset = Int(tocData.getWordAtOffset(i))
-				let fileOffset = Int(tocData.getWordAtOffset(i + 4))
-				let fileSize   = Int(tocData.getWordAtOffset(i + 8))
+				let nameOffset = Int(tocData.getWordAtOffset(o))
+				let fileOffset = Int(tocData.getWordAtOffset(o + 4))
+				let fileSize   = Int(tocData.getWordAtOffset(o + 8))
 				
 				let fileName = getStringAtOffset(nameOffset)
 				
 				allFileNames.append(fileName)
 				fileLocations[fileName] = fileOffset
 				fileSizes[fileName]     = fileSize
-				fileDataOffsets[fileName] = i
+				fileDataOffsets[fileName] = o
+				
+				if verbose {
+					printg("index \(i): found file \(fileName) @offset \(o.hexString())")
+				}
 				
 			}
 			
-			i += 0xC
+			i += 1
 		}
 		
 		self.filesOrdered = allFileNames.sorted { (s1, s2) -> Bool in
 			return locationForFile(s1)! < locationForFile(s2)!
-		}
-		
-		if verbose {
-			for file in filesOrdered {
-				printg("found file \(file) @offset \(locationForFile(file)!.hexString())")
-			}
 		}
 		
 		printg("ISO initialised.")
@@ -135,7 +139,7 @@ class XGISO: NSObject {
 		var files = XGFolders.FSYS.files ?? [XGFiles]()
 		files += XGFolders.AutoFSYS.files ?? [XGFiles]()
 		files += XGFolders.MenuFSYS.files ?? [XGFiles]()
-		files.filter { (f) -> Bool in
+		files = files.filter { (f) -> Bool in
 			return f.fileType == .fsys
 		}
 		files.append(.dol)
@@ -416,6 +420,7 @@ class XGISO: NSObject {
 			printg("\(name) cannot be deleted")
 			return
 		}
+		printg("deleting ISO file: \(name)")
 		eraseDataForFile(name: name)
 		
 		if locationForFile(name) != nil {
@@ -430,7 +435,7 @@ class XGISO: NSObject {
 		if save {
 			self.data.save()
 		}
-		printg("deleted iso file:", name)
+		printg("deleted ISO file:", name)
 	}
 	
 	@objc private func setSize(size: Int, forFile name: String) {

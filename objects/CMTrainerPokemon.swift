@@ -186,8 +186,8 @@ class XGTrainerPokemon : NSObject {
 		data.replaceByteAtOffset(start + kPokemonLevelOffset, withByte: level)
 		
 		data.replaceByteAtOffset(start + kPokemonAbilityOffset, withByte: ability)
-		data.replaceByteAtOffset(start + kPokemonNatureOffset, withByte: nature.rawValue)
-		data.replaceByteAtOffset(start + kPokemonGenderOffset, withByte: gender.rawValue)
+		data.replaceByteAtOffset(start + kPokemonNatureOffset, withByte: nature.rawValue & 0xFF)
+		data.replaceByteAtOffset(start + kPokemonGenderOffset, withByte: gender.rawValue & 0xFF)
 		
 		let IVs = [Int](repeating: self.IVs, count: kNumberOfIVs)
 		data.replaceBytesFromOffset(start + kFirstPokemonIVOffset, withByteStream: IVs)

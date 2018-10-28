@@ -34,7 +34,10 @@ class XGCollisionData: NSObject {
 		
 		self.file = file
 		
-		let data = file.data!
+		guard let data = file.data else {
+			XGFolders.nameAndFolder("Test", .Documents).createDirectory()
+			return
+		}
 		
 		let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
 		if relFile.exists {

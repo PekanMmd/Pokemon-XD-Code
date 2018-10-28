@@ -78,22 +78,40 @@ class GoDGiftViewController: GoDTableViewController {
 		cell.setBackgroundColour(GoDDesign.colourPurple())
 		
 		var colour = GoDDesign.colourWhite()
-		
-		if row == 0 {
-			colour = GoDDesign.colourYellow()
-		} else if row < 3 {
-			colour = GoDDesign.colourBlue()
-		} else if row < 6 {
-			colour = GoDDesign.colourRed()
-		} else if row == 6 {
-			colour = GoDDesign.colourPurple()
+		if game == .XD {
+			if row == 0 {
+				colour = GoDDesign.colourYellow()
+			} else if row < 3 {
+				colour = GoDDesign.colourBlue()
+			}  else if row < 7 {
+				colour = GoDDesign.colourGrey()
+			} else if row == 7 {
+				colour = GoDDesign.colourPurple()
+			} else if row == 8 {
+				colour = GoDDesign.colourOrange()
+			} else if row < 12 {
+				colour = GoDDesign.colourGreen()
+			} else {
+				colour = GoDDesign.colourRed()
+			}
+			cell.setBackgroundColour(colour)
+			
+			if self.table.selectedRow == row {
+				cell.setBackgroundColour(GoDDesign.colourOrange())
+			}
 		} else {
-			colour = GoDDesign.colourGreen()
-		}
-		cell.setBackgroundColour(colour)
-		
-		if self.table.selectedRow == row {
-			cell.setBackgroundColour(GoDDesign.colourOrange())
+			if row < 2 {
+				colour = GoDDesign.colourBlue()
+			} else if row < 4 {
+				colour = GoDDesign.colourRed()
+			} else {
+				colour = GoDDesign.colourGreen()
+			}
+			cell.setBackgroundColour(colour)
+			
+			if self.table.selectedRow == row {
+				cell.setBackgroundColour(GoDDesign.colourOrange())
+			}
 		}
 		
 		return cell

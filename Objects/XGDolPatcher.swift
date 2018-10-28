@@ -360,35 +360,46 @@ class XGDolPatcher: NSObject {
 	
 	@objc class func decapitalise() {
 		
-		for i in 0 ..< kNumberOfMoves {
+		for i in 0 ..< CommonIndexes.NumberOfMoves.value {
 			let name = XGMoves.move(i).name
-			name.duplicateWithString(name.string.capitalized).replace()
+			if !name.duplicateWithString(name.string.capitalized).replace() {
+				printg("Couldn't decapitalise name: \(name)")
+			}
 		}
 		
-		for i in 0 ..< CommonIndexes.NumberOfItems.value {
+		for i in 0 ..< kNumberOfItems {
 			let name = XGItems.item(i).name
-			name.duplicateWithString(name.string.capitalized).replace()
+			if !name.duplicateWithString(name.string.capitalized).replace() {
+				printg("Couldn't decapitalise name: \(name)")
+			}
 		}
 		
-		for i in 0 ..< kNumberOfPokemon {
+		for i in 0 ..< CommonIndexes.NumberOfPokemon.value {
 			let name = XGPokemon.pokemon(i).name
-			name.duplicateWithString(name.string.capitalized).replace()
+			if !name.duplicateWithString(name.string.capitalized).replace() {
+				printg("Couldn't decapitalise name: \(name)")
+			}
 		}
 		
 		for i in 0 ..< kNumberOfTrainerClasses {
 			let name = XGTrainerClasses(rawValue: i)!.name
-			name.duplicateWithString(name.string.capitalized).replace()
+			if !name.duplicateWithString(name.string.capitalized).replace() {
+				printg("Couldn't decapitalise name: \(name)")
+			}
 		}
 		
 		for i in 0 ..< kNumberOfAbilities {
 			let name = XGAbilities.ability(i).name
-			name.duplicateWithString(name.string.capitalized).replace()
+			if !name.duplicateWithString(name.string.capitalized).replace() {
+				printg("Couldn't decapitalise name: \(name)")
+			}
 		}
 		
 		
 	}
 	
 	@objc class func removeTradeEvolutions() {
+		printg("Setting pokemon that require a trade to evolve to evolve at level 36 instead")
 		
 		for i in 0 ..< kNumberOfPokemon {
 			
@@ -397,7 +408,7 @@ class XGDolPatcher: NSObject {
 			for j in 0 ..< kNumberOfEvolutions {
 				if (stats.evolutions[j].evolutionMethod == XGEvolutionMethods.trade) || (stats.evolutions[j].evolutionMethod == XGEvolutionMethods.tradeWithItem) {
 					stats.evolutions[j].evolutionMethod = .levelUp
-					stats.evolutions[j].condition = 40
+					stats.evolutions[j].condition = 36
 					stats.save()
 				}
 			}
@@ -463,7 +474,6 @@ class XGDolPatcher: NSObject {
 			case .tradeEvolutions				: XGDolPatcher.removeTradeEvolutions()
 		}
 		
-//		XGAlertView(title: "Patch Complete", message: "The Patch has been applied", doneButtonTitle: "Swag", otherButtonTitles: nil, buttonAction: nil).show()
 		printg("patch applied: ", patch.name)
 		
 	}

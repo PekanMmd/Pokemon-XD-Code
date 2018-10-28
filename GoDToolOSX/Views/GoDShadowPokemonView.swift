@@ -325,47 +325,47 @@ class GoDShadowPokemonView: NSImageView {
 	
 	@objc func setAbility(sender: GoDPopUpButton) {
 		self.delegate.currentPokemon.ability = sender.indexOfSelectedItem
-		self.setUp()
+		
 	}
 	
 	@objc func setMove1(sender: GoDMovePopUpButton) {
 		self.delegate.currentPokemon.moves[0] = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setMove2(sender: GoDMovePopUpButton) {
 		self.delegate.currentPokemon.moves[1] = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setMove3(sender: GoDMovePopUpButton) {
 		self.delegate.currentPokemon.moves[2] = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setMove4(sender: GoDMovePopUpButton) {
 		self.delegate.currentPokemon.moves[3] = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setShadowMove1(sender: GoDMovePopUpButton) {
 		self.delegate.currentPokemon.shadowMoves[0] = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setShadowMove2(sender: GoDMovePopUpButton) {
 		self.delegate.currentPokemon.shadowMoves[1] = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setShadowMove3(sender: GoDMovePopUpButton) {
 		self.delegate.currentPokemon.shadowMoves[2] = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setShadowMove4(sender: GoDMovePopUpButton) {
 		self.delegate.currentPokemon.shadowMoves[3] = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setShadowBoostLevel(sender: GoDLevelPopUpButton) {
@@ -374,7 +374,7 @@ class GoDShadowPokemonView: NSImageView {
 	
 	@objc func setItem(sender: GoDItemPopUpButton) {
 		self.delegate.currentPokemon.item = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setSpecies(sender: GoDPokemonPopUpButton) {
@@ -388,57 +388,107 @@ class GoDShadowPokemonView: NSImageView {
 		else if gr == .femaleOnly { self.delegate.currentPokemon.gender = .female }
 		else if gr == .genderless { self.delegate.currentPokemon.gender = .genderless }
 		
-		self.setUp()
+		
 	}
 	
 	@objc func setLevel(sender: GoDLevelPopUpButton) {
 		self.delegate.currentPokemon.level = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setGender(sender: GoDGenderPopUpButton) {
 		self.delegate.currentPokemon.gender = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setNature(sender: GoDNaturePopUpButton) {
 		self.delegate.currentPokemon.nature = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setCounter(sender: NSTextField) {
 		self.delegate.currentPokemon.shadowCounter = sender.integerValue
-		self.setUp()
+		
 	}
 	
 	@objc func setFlee(sender: NSTextField) {
 		self.delegate.currentPokemon.shadowFleeValue = sender.integerValue
-		self.setUp()
+		
 	}
 	
 	@objc func setAggression(sender: NSTextField) {
 		self.delegate.currentPokemon.shadowAggression = sender.integerValue
-		self.setUp()
+		
 	}
 	
 	@objc func setCatch(sender: NSTextField) {
 		self.delegate.currentPokemon.shadowCatchRate = sender.integerValue
-		self.setUp()
+		
 	}
 	
 	@objc func setIVs(sender: NSTextField) {
 		self.delegate.currentPokemon.IVs = sender.integerValue
-		self.setUp()
+		
 	}
 	
 	@objc func setHappiness(sender: NSTextField) {
 		self.delegate.currentPokemon.happiness = sender.integerValue
-		self.setUp()
+		
 	}
 	
 	@objc func setEV(sender: NSTextField) {
 		self.delegate.currentPokemon.EVs[sender.tag] = sender.integerValue
-		self.setUp()
+		
+	}
+	
+	func prepareForSave() {
+		for view in self.evs + [shadowFlee, shadowAggression, shadowCatchrate, happiness] {
+			if let val = view.stringValue.integerValue {
+				if val > 0xFF {
+					view.stringValue = "255"
+				}
+				if val < 0 {
+					view.stringValue = "0"
+				}
+			} else {
+				view.stringValue = "0"
+			}
+		}
+		for view in [ivs] {
+			if let val = view.stringValue.integerValue {
+				if val > 31 {
+					view.stringValue = "31"
+				}
+				if val < 0 {
+					view.stringValue = "0"
+				}
+			} else {
+				view.stringValue = "0"
+			}
+		}
+		for view in [shadowCounter] {
+			if let val = view.stringValue.integerValue {
+				if val > 0xFFFF {
+					view.stringValue = 0xFFFF.string
+				}
+				if val < 0 {
+					view.stringValue = "0"
+				}
+			} else {
+				view.stringValue = "0"
+			}
+		}
+		
+		for ev in self.evs {
+			self.setEV(sender: ev)
+		}
+		self.setHappiness(sender: happiness)
+		self.setIVs(sender: ivs)
+		self.setFlee(sender: shadowFlee)
+		self.setAggression(sender: shadowAggression)
+		self.setCatch(sender: shadowCatchrate)
+		self.setCounter(sender: shadowCounter)
+		
 	}
 	
 	

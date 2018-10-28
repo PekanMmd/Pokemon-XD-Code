@@ -428,6 +428,13 @@
                                                             <action selector="setFastLogs:" target="Voe-Tx-rLC" id="a1f-hU-KvW"/>
                                                         </connections>
                                                     </menuItem>
+                                                    <menuItem isSeparatorItem="YES" id="ZyR-oR-LYs"/>
+                                                    <menuItem title="Delete Log Files" id="EeO-4O-DGz">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="deleteLogs:" target="Voe-Tx-rLC" id="Ya6-Nj-mW2"/>
+                                                        </connections>
+                                                    </menuItem>
                                                 </items>
                                             </menu>
                                         </menuItem>
@@ -693,7 +700,7 @@
             <objects>
                 <viewController title="alert" storyboardIdentifier="alert" id="NNe-8y-O4O" customClass="GoDAlertViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="EHI-FW-Uko">
-                        <rect key="frame" x="0.0" y="0.0" width="217" height="176"/>
+                        <rect key="frame" x="0.0" y="0.0" width="200" height="60"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </view>
                 </viewController>
@@ -1942,7 +1949,7 @@ Twitter: @StarsMmd</string>
                         <outlet property="logView" destination="PzZ-Jv-CN9" id="fl6-iK-8pb"/>
                         <segue destination="7OK-Av-0ny" kind="show" identifier="toStatsVC" id="B9F-pI-6Cd"/>
                         <segue destination="JRm-IJ-Y9d" kind="modal" identifier="toHelpVC" id="PCr-YY-Lid"/>
-                        <segue destination="NNe-8y-O4O" kind="modal" id="KtO-3W-Do8"/>
+                        <segue destination="NNe-8y-O4O" kind="modal" identifier="toAlertVC" id="KtO-3W-Do8"/>
                         <segue destination="OJE-ty-xWI" kind="show" identifier="toPatchVC" id="ON3-p7-AdR"/>
                         <segue destination="Pft-Je-tH8" kind="show" identifier="toTrainerVC" id="ZV9-kU-Koc"/>
                         <segue destination="vSz-Wi-uwy" kind="show" identifier="toMoveVC" id="Alv-ao-LX4"/>
@@ -1957,7 +1964,7 @@ Twitter: @StarsMmd</string>
                         <segue destination="nun-9U-Gwd" kind="show" identifier="toStringVC" id="pXo-ug-2Wd"/>
                         <segue destination="lMC-xF-Deg" kind="show" identifier="toContextVC" id="JW7-5c-sZF"/>
                         <segue destination="bxX-wC-pW7" kind="show" identifier="toISOVC" id="keE-ZM-6Gg"/>
-                        <segue destination="c64-dF-HXy" kind="modal" identifier="toTypeVC" id="Wo1-R1-hvl"/>
+                        <segue destination="c64-dF-HXy" kind="show" identifier="toTypeVC" id="Wo1-R1-hvl"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -4768,7 +4775,7 @@ Twitter: @StarsMmd</string>
                 </viewController>
                 <customObject id="rna-RT-Qa5" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="701" y="603"/>
+            <point key="canvasLocation" x="823" y="538"/>
         </scene>
         <!--Randomiser-->
         <scene sceneID="RLC-BP-HlD">
@@ -4854,15 +4861,24 @@ Twitter: @StarsMmd</string>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bt0-6S-ONl">
+                                <rect key="frame" x="158" y="78" width="144" height="18"/>
+                                <buttonCell key="cell" type="check" title="Remove Trade Evolutions" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="VEZ-f8-8nH">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system" size="10"/>
+                                </buttonCell>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="IdL-GV-3WZ" firstAttribute="centerY" secondItem="Ggv-x8-P7o" secondAttribute="centerY" id="773-0v-POY"/>
                             <constraint firstItem="w7a-JO-od0" firstAttribute="top" secondItem="Ggv-x8-P7o" secondAttribute="bottom" constant="30" id="BNE-IH-LEf"/>
                             <constraint firstItem="DRo-Dc-sIh" firstAttribute="leading" secondItem="C41-co-vFw" secondAttribute="leading" id="Ekt-aJ-qd2"/>
                             <constraint firstItem="Ggv-x8-P7o" firstAttribute="leading" secondItem="m8a-C3-nFY" secondAttribute="leading" id="GNu-TH-jyZ"/>
+                            <constraint firstItem="Bt0-6S-ONl" firstAttribute="top" secondItem="w7a-JO-od0" secondAttribute="top" id="GOv-Pq-wx7"/>
                             <constraint firstItem="C41-co-vFw" firstAttribute="centerY" secondItem="m8a-C3-nFY" secondAttribute="centerY" id="Ghx-ex-rML"/>
                             <constraint firstAttribute="bottom" secondItem="bOX-gC-QF6" secondAttribute="bottom" constant="20" id="I1Y-rp-aSo"/>
                             <constraint firstItem="m8a-C3-nFY" firstAttribute="top" secondItem="XxS-rD-gwb" secondAttribute="top" constant="30" id="IJg-Xg-A4e"/>
+                            <constraint firstItem="Bt0-6S-ONl" firstAttribute="bottom" secondItem="w7a-JO-od0" secondAttribute="bottom" id="Iq3-NQ-GDm"/>
                             <constraint firstItem="IdL-GV-3WZ" firstAttribute="leading" secondItem="C41-co-vFw" secondAttribute="leading" id="Lrk-IZ-j4u"/>
                             <constraint firstItem="dl1-qm-izc" firstAttribute="top" secondItem="Meo-I9-p3a" secondAttribute="bottom" constant="30" id="N9T-yC-5Vb"/>
                             <constraint firstItem="dl1-qm-izc" firstAttribute="leading" secondItem="m8a-C3-nFY" secondAttribute="leading" id="O62-AQ-izk"/>
@@ -4874,6 +4890,7 @@ Twitter: @StarsMmd</string>
                             <constraint firstItem="5Jq-Yi-2jS" firstAttribute="centerY" secondItem="dl1-qm-izc" secondAttribute="centerY" id="dyS-Ee-nVq"/>
                             <constraint firstItem="m8a-C3-nFY" firstAttribute="top" secondItem="XxS-rD-gwb" secondAttribute="top" constant="30" id="g1O-sa-95D"/>
                             <constraint firstItem="DRo-Dc-sIh" firstAttribute="centerY" secondItem="Meo-I9-p3a" secondAttribute="centerY" id="mEU-Fb-0TP"/>
+                            <constraint firstItem="Bt0-6S-ONl" firstAttribute="leading" secondItem="IdL-GV-3WZ" secondAttribute="leading" id="qnv-ZT-Nx0"/>
                             <constraint firstItem="w7a-JO-od0" firstAttribute="leading" secondItem="m8a-C3-nFY" secondAttribute="leading" id="r9g-tD-4gR"/>
                             <constraint firstItem="Meo-I9-p3a" firstAttribute="top" secondItem="m8a-C3-nFY" secondAttribute="bottom" constant="30" id="twO-8T-fug"/>
                             <constraint firstItem="Meo-I9-p3a" firstAttribute="leading" secondItem="m8a-C3-nFY" secondAttribute="leading" id="uAD-8p-Lz4"/>
@@ -4888,6 +4905,7 @@ Twitter: @StarsMmd</string>
                         <outlet property="pspecies" destination="m8a-C3-nFY" id="Fvz-Jr-hT0"/>
                         <outlet property="pstats" destination="dl1-qm-izc" id="NZJ-gh-Jsf"/>
                         <outlet property="ptypes" destination="Meo-I9-p3a" id="Drh-iv-hbx"/>
+                        <outlet property="removeTrades" destination="Bt0-6S-ONl" id="ksF-ei-llN"/>
                         <outlet property="tmmoves" destination="IdL-GV-3WZ" id="nKc-Zg-R0Y"/>
                     </connections>
                 </viewController>
@@ -4949,7 +4967,7 @@ Twitter: @StarsMmd</string>
                 </viewController>
                 <customObject id="UUE-Hm-i0Y" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1026" y="1294"/>
+            <point key="canvasLocation" x="-1035" y="1357"/>
         </scene>
         <!--Gift Pokemon Editor-->
         <scene sceneID="m8T-yW-RfH">
@@ -5203,6 +5221,6 @@ Twitter: @StarsMmd</string>
         <image name="ball grey" width="500" height="500"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="PCr-YY-Lid"/>
+        <segue reference="NaH-4i-fmB"/>
     </inferredMetricsTieBreakers>
 </document>

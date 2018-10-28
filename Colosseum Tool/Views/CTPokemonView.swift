@@ -327,28 +327,33 @@ class GoDPokemonView: NSImageView {
 	}
 	
 	@objc func setAbility(sender: GoDPopUpButton) {
-		self.delegate.pokemon[self.index].ability = sender.indexOfSelectedItem
-		self.setUp()
+		if sender.indexOfSelectedItem == 2 {
+			// random
+			self.delegate.pokemon[self.index].ability = 0xFF
+		} else {
+			self.delegate.pokemon[self.index].ability = sender.indexOfSelectedItem
+		}
+		
 	}
 	
 	@objc func setMove1(sender: GoDMovePopUpButton) {
 		self.delegate.pokemon[self.index].moves[0] = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setMove2(sender: GoDMovePopUpButton) {
 		self.delegate.pokemon[self.index].moves[1] = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setMove3(sender: GoDMovePopUpButton) {
 		self.delegate.pokemon[self.index].moves[2] = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setMove4(sender: GoDMovePopUpButton) {
 		self.delegate.pokemon[self.index].moves[3] = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	func setShadowMove1(sender: GoDMovePopUpButton) { }
@@ -365,7 +370,7 @@ class GoDPokemonView: NSImageView {
 	
 	@objc func setItem(sender: GoDItemPopUpButton) {
 		self.delegate.pokemon[self.index].item = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setSpecies(sender: GoDPokemonPopUpButton) {
@@ -383,58 +388,94 @@ class GoDPokemonView: NSImageView {
 			self.delegate.pokemon[self.index].shadowCatchRate = sender.selectedValue.catchRate
 		}
 		
-		self.setUp()
+		
 	}
 	
 	@objc func setLevel(sender: GoDLevelPopUpButton) {
 		self.delegate.pokemon[self.index].level = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setGender(sender: GoDGenderPopUpButton) {
 		self.delegate.pokemon[self.index].gender = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setNature(sender: GoDNaturePopUpButton) {
 		self.delegate.pokemon[self.index].nature = sender.selectedValue
-		self.setUp()
+		
 	}
 	
 	@objc func setCounter(sender: NSTextField) {
 		self.delegate.pokemon[self.index].shadowCounter = sender.integerValue
-		self.setUp()
+		
 	}
 	
 	@objc func setFlee(sender: NSTextField) {
 //		self.delegate.pokemon[self.index].shadowFleeValue = sender.integerValue
-//		self.setUp()
+//
 	}
 	
 	@objc func setAggression(sender: NSTextField) {
 //		self.delegate.pokemon[self.index].shadowAggression = sender.integerValue
-//		self.setUp()
+//
 	}
 	
 	@objc func setCatch(sender: NSTextField) {
 		self.delegate.pokemon[self.index].shadowCatchRate = sender.integerValue
-		self.setUp()
+		
 	}
 	
 	@objc func setIVs(sender: NSTextField) {
 		let val = sender.integerValue > 31 ? 255 : sender.integerValue
 		self.delegate.pokemon[self.index].IVs = val
-		self.setUp()
+		
 	}
 	
 	@objc func setHappiness(sender: NSTextField) {
 		self.delegate.pokemon[self.index].happiness = sender.integerValue
-		self.setUp()
+		
 	}
 	
 	@objc func setEV(sender: NSTextField) {
 		self.delegate.pokemon[self.index].EVs[sender.tag] = sender.integerValue
-		self.setUp()
+		
+	}
+	
+	func prepareForSave() {
+		for view in self.evs + [shadowCatchrate, happiness, shadowCounter] {
+			if let val = view.stringValue.integerValue {
+				if val > 0xFF {
+					view.stringValue = "255"
+				}
+				if val < 0 {
+					view.stringValue = "0"
+				}
+			} else {
+				view.stringValue = "0"
+			}
+		}
+		for view in [ivs] {
+			if let val = view.stringValue.integerValue {
+				if val > 31 {
+					view.stringValue = "31"
+				}
+				if val < 0 {
+					view.stringValue = "0"
+				}
+			} else {
+				view.stringValue = "0"
+			}
+		}
+		
+		for ev in self.evs {
+			self.setEV(sender: ev)
+		}
+		self.setHappiness(sender: happiness)
+		self.setIVs(sender: ivs)
+		self.setCatch(sender: shadowCatchrate)
+		self.setCounter(sender: shadowCounter)
+		
 	}
 	
 	

@@ -67,25 +67,25 @@ enum XGTrainerClasses : Int, XGDictionaryRepresentable {
 	
 	var data : XGTrainerClass {
 		get {
-			return XGTrainerClass(tClass: self)
+			return XGTrainerClass(index: self.rawValue)
 		}
 	}
 	
 	var nameID : Int {
 		get {
-			return XGTrainerClass(tClass: self).nameID
+			return data.nameID
 		}
 	}
 	
 	var name : XGString {
 		get {
-			return XGTrainerClass(tClass: self).name
+			return data.name
 		}
 	}
 	
 	var payout : Int {
 		get {
-			return XGTrainerClass(tClass: self).payout
+			return data.payout
 		}
 	}
 	

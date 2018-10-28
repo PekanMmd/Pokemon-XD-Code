@@ -16,7 +16,7 @@ let kTypeNameIDOffset = 0x8
 let kFirstEffectivenessOffset = 0xD
 let kSizeOfTypeData = 0x30
 
-let kNumberOfTypes = 0x12
+let kNumberOfTypes = CommonIndexes.NumberOfTypes.value
 
 
 class XGType: NSObject {

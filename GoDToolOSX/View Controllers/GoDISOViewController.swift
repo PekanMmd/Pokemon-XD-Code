@@ -28,7 +28,7 @@ class GoDISOViewController: GoDTableViewController {
 				data.save()
 			}
 		} else {
-			GoDAlertViewController.alert(title: "File export failed", text: "Couldn't export data for file \(self.currentFile.fileName) from the ISO.").show(sender: self)
+			GoDAlertViewController.displayAlert(title: "File export failed", text: "Couldn't export data for file \(self.currentFile.fileName) from the ISO.")
 		}
 		self.isExporting = false
 		
@@ -68,7 +68,7 @@ class GoDISOViewController: GoDTableViewController {
 		}
 		printg("deleting file: \(currentFile.fileName)")
 		ISO.deleteFileAndPreserve(name: currentFile.fileName, save: true)
-		GoDAlertViewController.alert(title: "Deletion complete", text: "Deleted file \(currentFile.fileName) from the ISO.").show(sender: self)
+		GoDAlertViewController.displayAlert(title: "Deletion complete", text: "Deleted file \(currentFile.fileName) from the ISO.")
 	}
 	
 	@IBOutlet var filesText: NSTextView!
@@ -98,7 +98,10 @@ class GoDISOViewController: GoDTableViewController {
 					let fsys = data.fsysData
 					if fsys.numberOfEntries > 0 {
 						for i in  0 ..< fsys.numberOfEntries {
-							let filename = fsys.fileNameForFileWithIndex(index: i)
+							var filename = fsys.fileNameForFileWithIndex(index: i)
+							if filename.removeFileExtensions() == filename {
+								filename += fsys.fileTypeForFile(index: i).fileExtension
+							}
 							filesText.string += "\n\(i): \(filename)"
 						}
 					} else {

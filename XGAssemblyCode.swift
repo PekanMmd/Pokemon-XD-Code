@@ -225,9 +225,9 @@ class XGAssembly {
 		
 		if game == .XD && region == .US {
 			if !shadowMovesUseHMFlag {
-				for move in allMovesArray() where move.isShadowMove {
+				for move in allMovesArray() {
 					let data = move.data
-					data.HMFlag = true
+					data.HMFlag = move.isShadowMove
 					data.save()
 				}
 				

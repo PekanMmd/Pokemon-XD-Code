@@ -7,6 +7,13 @@
 //
 //
 
+for i in 0 ..< CommonIndexes.NumberOfBattles.value {
+	let battle = XGBattle(index: i)
+	printg(battle.BGMusicID, battle.BGMusicID.hexString(), battle.p2Trainer != nil ? battle.p2Trainer!.name.string : "-")
+}
+
+//XGUtility.documentXDS()
+
 
 //let name = "M5_apart_1F"
 //XDSScriptCompiler.compile(textFile: .xds(name), toFile: .nameAndFolder(name + ".scd", .Documents))

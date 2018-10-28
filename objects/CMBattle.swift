@@ -27,6 +27,21 @@ let kBattleTrainer4ControlOffset = 0x37
 
 class XGBattle: NSObject {
 	
+	var battleType : XGBattleTypes?
+	var battleStyle : XGBattleStyles?
+	var battleField : XGBattleField?
+	var trainersPerSide = 0
+	var pokemonPerPlayer = 6
+	var BGMusicID = 0
+	var round = XGColosseumRounds.none
+	var unknown = false
+	var unknown2 = 0
 	
-	
+	func save() {
+		
+	}
 }
+
+
+
+

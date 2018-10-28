@@ -16,9 +16,15 @@ class GoDStringViewController: GoDViewController {
 	
 	
 	@IBAction func findFreeID(_ sender: Any) {
+		guard !isSearchingForFreeStringID else {
+			GoDAlertViewController.displayAlert(title: "Please wait", text: "Please wait for previous string id search to complete.")
+			return
+		}
 		if let val = minimumid.stringValue.integerValue {
 			if let id = freeMSGID(from: val) {
-				freeid.stringValue = id.string
+				freeid.stringValue = id.string + " (\(id.hexString()))"
+			} else {
+				freeid.stringValue = "0"
 			}
 		}
 	}
@@ -32,18 +38,18 @@ class GoDStringViewController: GoDViewController {
 	@IBAction func replaceString(_ sender: Any) {
 		if let val = stringid.stringValue.integerValue {
 			if val < 1 {
-				GoDAlertViewController.alert(title: "Replacement failed!", text: "Please enter a valid string id").show(sender: self)
+				GoDAlertViewController.displayAlert(title: "Replacement failed!", text: "Please enter a valid string id")
 				return
 			}
 			if text.string.length > 0 {
 				if !XGString(string: text.string, file: nil, sid: val).replace() {
-					GoDAlertViewController.alert(title: "Replacement failed!", text: "The string could not be replaced").show(sender: self)
+					GoDAlertViewController.displayAlert(title: "Replacement failed!", text: "The string could not be replaced")
 				}
 			} else {
-				GoDAlertViewController.alert(title: "Replacement failed!", text: "Please add some text to replace").show(sender: self)
+				GoDAlertViewController.displayAlert(title: "Replacement failed!", text: "Please add some text to replace")
 			}
 		} else {
-			GoDAlertViewController.alert(title: "Replacement failed!", text: "Please enter a valid string id").show(sender: self)
+			GoDAlertViewController.displayAlert(title: "Replacement failed!", text: "Please enter a valid string id")
 		}
 	}
 	

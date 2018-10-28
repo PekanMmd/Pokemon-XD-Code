@@ -583,7 +583,7 @@ indirect enum XDSExpr {
 			}
 		case .battleResult:
 			switch c.asInt {
-				case 0: return macroWithName("result_during_battle".uppercased())
+				case 0: return macroWithName("result_none".uppercased())
 				case 1: return macroWithName("result_lose".uppercased())
 				case 2: return macroWithName("result_win".uppercased())
 				default: return macroWithName("result_unknown".uppercased() + c.asInt.string)

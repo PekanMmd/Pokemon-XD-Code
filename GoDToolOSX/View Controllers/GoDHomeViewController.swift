@@ -28,13 +28,8 @@ class GoDHomeViewController: GoDTableViewController {
 		if game == .Colosseum {
 			self.title = "Colosseum Tool"
 		}
+		self.logView.setBackgroundColour(GoDDesign.colourLightBlue())
 		
-		Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { (_) in
-			let s = logString
-			if s != self.logView.string {
-				self.logView.string = s
-			}
-		}
     }
 	
 	override func viewDidAppear() {

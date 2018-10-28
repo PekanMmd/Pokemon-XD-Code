@@ -21,7 +21,7 @@ class GoDHelpViewController: GoDViewController {
 		Whenever you open this app, it automatically creates a bunch of folders in:
 		"\(documentsPath)"
 		
-		Simple pop your ISO of
+		Simply pop your ISO of
 		\(game == .XD ? "Pokémon XD: Gale of Darkness" : "Pokemon Colosseum") (US version only)
 		into the folder called "ISO".
 		Make sure you rename the ISO: "\(XGFiles.iso.fileName)".

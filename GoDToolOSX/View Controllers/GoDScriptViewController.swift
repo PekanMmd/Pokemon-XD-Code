@@ -157,18 +157,18 @@ class GoDScriptViewController: GoDTableViewController {
 						XDSScriptCompiler.baseStringID = baseID
 					}
 					if !XDSScriptCompiler.compile(textFile: file) {
-						GoDAlertViewController.alert(title: "Compiler Error", text: "\(file.fileName)\n\n\(XDSScriptCompiler.error)").show(sender: self)
+						GoDAlertViewController.displayAlert(title: "Compiler Error", text: "\(file.fileName)\n\n\(XDSScriptCompiler.error)")
 					} else {
-						GoDAlertViewController.alert(title: "Compilation Complete", text: "Successfully compiled script for file" + file.path).show(sender: self)
+						GoDAlertViewController.displayAlert(title: "Compilation Complete", text: "Successfully compiled script for file" + file.path)
 					}
 				} else {
-					GoDAlertViewController.alert(title: "404", text: "File couldn't be found: " + file.fileName).show(sender: self)
+					GoDAlertViewController.displayAlert(title: "404", text: "File couldn't be found: " + file.fileName)
 				}
 			} else {
-				GoDAlertViewController.alert(title: "Select a file", text: "Please select a file to compile").show(sender: self)
+				GoDAlertViewController.displayAlert(title: "Select a file", text: "Please select a file to compile")
 			}
 		} else {
-			GoDAlertViewController.alert(title: "No text", text: "There is no text to compile").show(sender: self)
+			GoDAlertViewController.displayAlert(title: "No text", text: "There is no text to compile")
 		}
 	}
 	

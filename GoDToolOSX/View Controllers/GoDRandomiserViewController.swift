@@ -18,6 +18,7 @@ class GoDRandomiserViewController: GoDViewController {
 	@IBOutlet var mtypes: NSButton!
 	@IBOutlet var tmmoves: NSButton!
 	@IBOutlet var bbingo: NSButton!
+	@IBOutlet var removeTrades: NSButton!
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +54,9 @@ class GoDRandomiserViewController: GoDViewController {
 		}
 		if bbingo.state == .on {
 			XGRandomiser.randomiseBattleBingo()
+		}
+		if removeTrades.state == .on {
+			XGDolPatcher.removeTradeEvolutions()
 		}
 	}
 	

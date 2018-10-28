@@ -97,8 +97,11 @@ class GoDTrainerViewController: GoDTableViewController {
 	}
 	
 	@objc func save() {
-		self.showActivityView { 
-			self.currentTrainer.save()
+		self.showActivityView {
+			self.trainerView.save()
+			for view in self.pokemonViews {
+				view.prepareForSave()
+			}
 			for mon in self.pokemon {
 				mon.save()
 			}
@@ -167,7 +170,7 @@ class GoDTrainerViewController: GoDTableViewController {
 		self.showActivityView { 
 			let info = self.trainers[row]
 			self.currentTrainer = XGTrainer(index: info.index, deck: info.deck)
-			self.trainerView.setUp()
+			self.trainerView.setUp(loadBattleData: true)
 			for view in self.pokemonViews {
 				view.setUp()
 			}

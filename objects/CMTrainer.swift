@@ -30,7 +30,8 @@ class XGTrainer: NSObject {
 	
 	var index				= 0x0
 	
-	var ai					= 0x0
+	@objc var AI				= 0
+	@objc var cameraEffects		= 0 // xd only
 	
 	var nameID				= 0x0
 	var preBattleTextID		= 0x0
@@ -40,6 +41,10 @@ class XGTrainer: NSObject {
 	var pokemon				= [XGTrainerPokemon]()
 	var trainerClass		= XGTrainerClasses.none
 	var trainerModel		= XGTrainerModels.wes
+	
+	@objc var battleData : XGBattle? {
+		return nil
+	}
 	
 	var startOffset : Int {
 		get {
@@ -92,7 +97,7 @@ class XGTrainer: NSObject {
 		self.preBattleTextID = deck.getWordAtOffset(start + kTrainerPreBattleTextIDOffset).int
 		self.victoryTextID = deck.getWordAtOffset(start + kTrainerVictoryTextIDOffset).int
 		self.defeatTextID = deck.getWordAtOffset(start + kTrainerDefeatTextIDOffset).int
-		self.ai = deck.get2BytesAtOffset(start + kTrainerAIOffset)
+		self.AI = deck.get2BytesAtOffset(start + kTrainerAIOffset)
 		
 		let tClass = deck.getByteAtOffset(start + kTrainerClassOffset)
 		let tModel = deck.getByteAtOffset(start + kTrainerClassModelOffset)
@@ -119,7 +124,7 @@ class XGTrainer: NSObject {
 		deck.replaceWordAtOffset(start + kTrainerVictoryTextIDOffset, withBytes: UInt32(self.victoryTextID))
 		deck.replaceWordAtOffset(start + kTrainerDefeatTextIDOffset, withBytes: UInt32(self.defeatTextID))
 		
-		deck.replace2BytesAtOffset(start + kTrainerAIOffset, withBytes: self.ai)
+		deck.replace2BytesAtOffset(start + kTrainerAIOffset, withBytes: self.AI)
 		deck.replaceByteAtOffset(start + kTrainerClassOffset , withByte: self.trainerClass.rawValue)
 		deck.replaceByteAtOffset(start + kTrainerClassModelOffset, withByte: self.trainerModel.rawValue)
 		
@@ -146,7 +151,7 @@ class XGTrainer: NSObject {
 			dictRep["victoryTextID"] = self.victoryTextID as AnyObject?
 			dictRep["defeatTextID"] = self.defeatTextID as AnyObject?
 			dictRep["shadowMask"] = self.shadowMask as AnyObject?
-			dictRep["AI"] = self.ai as AnyObject?
+			dictRep["AI"] = self.AI as AnyObject?
 			
 			dictRep["trainerClass"] = self.trainerClass.dictionaryRepresentation as AnyObject?
 			dictRep["trainerModel"] = self.trainerModel.dictionaryRepresentation as AnyObject?
@@ -170,7 +175,7 @@ class XGTrainer: NSObject {
 			dictRep["victoryText"] = getStringSafelyWithID(id: self.victoryTextID).string as AnyObject
 			dictRep["defeatText"] = getStringSafelyWithID(id: self.defeatTextID).string as AnyObject
 			dictRep["hasShadowPokemon"] = (self.shadowMask > 0) as AnyObject?
-			dictRep["AI"] = self.ai as AnyObject?
+			dictRep["AI"] = self.AI as AnyObject?
 			
 			dictRep["trainerClass"] = self.trainerClass.name.string as AnyObject?
 			dictRep["trainerModel"] = self.trainerModel.name as AnyObject?

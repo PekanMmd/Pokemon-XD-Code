@@ -7,7 +7,7 @@
 
 import Cocoa
 
-let kNumberOfTrainerModels = 0x44
+let kNumberOfTrainerModels = 0x4b
 
 let kFirstTrainerPKXIdentifierOffset = region == .JP ? 0x359FA8 : 0x36d840 // in start.dol
 
@@ -122,10 +122,6 @@ enum XGTrainerModels : Int {
 			return fsys.fileName.replacingOccurrences(of: "pkx_", with: "").removeFileExtensions()
 		}
 		return nil
-	}
-	
-	var getImage : NSImage {
-		return XGFiles.trainerFace(self.rawValue).image
 	}
 	
 	var dictionaryRepresentation: [String : AnyObject] {

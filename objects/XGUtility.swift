@@ -183,7 +183,7 @@ class XGUtility {
 		
 		var substrings = [String]()
 		if game == .XD {
-			substrings = ["ex_","M2_cave","M4","Script_t","test","TEST","carde", "debug", "DNA", "keydisc"]
+			substrings = ["ex_","Script_t","test","TEST","carde", "debug", "DNA", "keydisc"]
 			if region != .EU  {
 				substrings += ["_fr.","_ge.","_it."]
 			}
@@ -197,10 +197,12 @@ class XGUtility {
 					ISO.deleteFileAndPreserve(name: file, save: false)
 				}
 			}
-			for i in 1 ... 7 {
-				let b1Name = "B1_\(i).fsys"
-				if file == b1Name {
-					ISO.deleteFileAndPreserve(name: file, save: false)
+			if game == .XD {
+				for i in 1 ... 7 {
+					let b1Name = "B1_\(i).fsys"
+					if file == b1Name {
+						ISO.deleteFileAndPreserve(name: file, save: false)
+					}
 				}
 			}
 		}
@@ -229,16 +231,23 @@ class XGUtility {
 	}
 	
 	class func saveString(_ str: String, toFile file: XGFiles) {
-		if !file.folder.exists {
-			file.folder.createDirectory()
-		}
 		
 		if let string = str.data(using: String.Encoding.utf8) {
 			if !saveData(string, toFile: file) {
-				printg("Couldn't save string to file: \(file.path)")
+				// if printging to a log fails, don't keep printging :)
+				if file.folder.name != XGFolders.Logs.name {
+					printg("Couldn't save string to file: \(file.path)")
+				} else {
+					print("Couldn't save string to file: \(file.path)")
+				}
 			}
 		} else {
-			printg("Couldn't encode string for file: \(file.path)")
+			// if printging to a log fails, don't keep printging :)
+			if file.folder.name != XGFolders.Logs.name {
+				printg("Couldn't encode string for file: \(file.path)")
+			} else {
+				print("Couldn't encode string for file: \(file.path)")
+			}
 		}
 	}
 	

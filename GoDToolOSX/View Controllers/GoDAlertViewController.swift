@@ -10,38 +10,34 @@ import Cocoa
 
 class GoDAlertViewController: GoDViewController {
 	
+	static var titleString = ""
+	static var text = ""
 	
 	var textLabel = NSTextView(frame: .zero)
 	
-	func setText(title: String, text: String) {
-		self.title = title
-		self.textLabel.string = text
+	class func setText(title: String, text: String) {
+		self.titleString = title
+		self.text = text
 	}
 
     override func viewDidLoad() {
         super.viewDidLoad()
 		
 		self.textLabel.alignment = .center
-		self.textLabel.sizeToFit()
-		let width = min(Float(self.textLabel.frame.width), 300)
+		self.textLabel.string = GoDAlertViewController.text
+		self.title = GoDAlertViewController.titleString
 		self.addSubview(textLabel, name: "l")
 		self.addConstraintAlignAllEdges(view1: self.view, view2: textLabel)
-		self.addConstraintWidth(view: self.view, width: NSNumber(value: width))
 		self.textLabel.isEditable = false
-		
+		self.view.addConstraint(NSLayoutConstraint(item: self.view, attribute: .width, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .width, multiplier: 1, constant: 200))
+		self.view.addConstraint(NSLayoutConstraint(item: self.view, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .height, multiplier: 1, constant: 60))
+		self.view.setBackgroundColour(GoDDesign.colourLightPurple())
     }
 	
-	func show(sender: GoDViewController) {
-		XGThreadManager.manager.runInForegroundSync {
-			sender.presentViewControllerAsModalWindow(self)
-		}
-	}
-	
-	class func alert(title: String, text: String) -> GoDAlertViewController {
-		let storyBoard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
-		let alertView = storyBoard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "alert")) as! GoDAlertViewController
-		alertView.setText(title: title, text: text)
-		return alertView
+	class func displayAlert(title: String, text: String) {
+		self.setText(title: title, text: text)
+		printg("\nAlert: \(title)\n\(text)\n")
+		appDelegate.performSegue("toAlertVC")
 	}
 	
 }

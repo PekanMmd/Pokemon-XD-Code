@@ -271,7 +271,7 @@ class XGFsys : NSObject {
 	}
 	
 	func fileTypeForFile(index: Int) -> XGFileTypes {
-		return XGFileTypes(rawValue: (identifierForFile(index: index) & 0xFF00) >> 8) ?? .none
+		return XGFileTypes(rawValue: (identifierForFile(index: index) & 0xFF00) >> 8) ?? .unknown
 	}
 	
 	@objc func dataForFileWithName(name: String) -> XGMutableData? {

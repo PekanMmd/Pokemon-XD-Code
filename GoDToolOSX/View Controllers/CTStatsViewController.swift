@@ -206,7 +206,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value > 255 ? 255 : value
 		
 		self.pokemon.hp = value
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setAtk(_ sender: NSTextField) {
@@ -216,7 +216,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.pokemon.attack = value
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setDef(_ sender: NSTextField) {
@@ -226,7 +226,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.pokemon.defense = value
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setSpAtk(_ sender: NSTextField) {
@@ -236,7 +236,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.pokemon.specialAttack = value
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setSpDef(_ sender: NSTextField) {
@@ -246,7 +246,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.pokemon.specialDefense = value
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setSpeed(_ sender: NSTextField) {
@@ -256,7 +256,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.pokemon.speed = value
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setHPEV(_ sender: NSTextField) {
@@ -265,7 +265,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value > 255 ? 255 : value
 		
 		self.pokemon.hpYield = value
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setAtkEV(_ sender: NSTextField) {
@@ -275,7 +275,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.pokemon.attackYield = value
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setDefEV(_ sender: NSTextField) {
@@ -285,7 +285,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.pokemon.defenseYield = value
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setSpAtkEV(_ sender: NSTextField) {
@@ -295,7 +295,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.pokemon.specialAttackYield = value
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setSpDefEV(_ sender: NSTextField) {
@@ -305,7 +305,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.pokemon.specialDefenseYield = value
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setSpeedEV(_ sender: NSTextField) {
@@ -315,7 +315,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.pokemon.speedYield = value
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setName(_ sender: NSTextField) {
@@ -325,65 +325,66 @@ class GoDStatsViewController: GoDTableViewController {
 		let value = sender.stringValue
 		_ = self.pokemon.name.duplicateWithString(value).replace()
 		
-		self.reloadView()
+		self.reloadViewWithActivity()
 	}
 	
 	@IBAction func setNameID(_ sender: NSTextField) {
 		var value = sender.integerValue
 		value = value < 0 ? 0 : value
-		value = value > 0xFFFF ? 0xFFFF : value
+		value = value > kMaxStringID ? kMaxStringID : value
 		
 		self.pokemon.nameID = value
+		self.reloadViewWithActivity()
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setType1(_ sender: GoDTypePopUpButton) {
 		self.pokemon.type1 = sender.selectedValue
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setType2(_ sender: GoDTypePopUpButton) {
 		self.pokemon.type2 = sender.selectedValue
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setAbility1(_ sender: GoDAbilityPopUpButton) {
 		self.pokemon.ability1 = sender.selectedValue
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setAbility2(_ sender: GoDAbilityPopUpButton) {
 		self.pokemon.ability2 = sender.selectedValue
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setItem1(_ sender: GoDItemPopUpButton) {
 		self.pokemon.heldItem1 = sender.selectedValue
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setItem2(_ sender: GoDItemPopUpButton) {
 		self.pokemon.heldItem2 = sender.selectedValue
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setExpRate(_ sender: GoDExpRatePopUpButton) {
 		self.pokemon.levelUpRate = sender.selectedValue
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setGenderRatio(_ sender: GoDGenderRatioPopUpButton) {
 		self.pokemon.genderRatio = sender.selectedValue
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setCatchRate(_ sender: NSTextField) {
@@ -393,7 +394,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.pokemon.catchRate = value
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setHappiness(_ sender: NSTextField) {
@@ -403,7 +404,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.pokemon.baseHappiness = value
 		
-		self.reloadView()
+		
 	}
 	
 	@IBAction func setBaseExp(_ sender: NSTextField) {
@@ -413,12 +414,34 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.pokemon.baseExp = value
 		
-		self.reloadView()
+		
+	}
+	
+	func prepareForSave() {
+		
+		setCatchRate(catchRateField)
+		setHappiness(happinessField)
+		setBaseExp(ExpYieldField)
+		setHP(HPField)
+		setAtk(attackField)
+		setDef(defField)
+		setSpeed(speedField)
+		setSpAtk(spatkField)
+		setSpDef(spdefField)
+		setHPEV(HPEVField)
+		setAtkEV(attackEVField)
+		setDefEV(defEVField)
+		setSpeedEV(speedEVField)
+		setSpAtkEV(spatkEVField)
+		setSpDefEV(spdefEVField)
+		setNameID(nameIDField)
+		
 	}
 	
 	
 	@IBAction func save(_ sender: NSButton) {
 		
+		prepareForSave()
 		self.pokemon.save()
 		
 		let current = self.mons[self.pokemon.index]

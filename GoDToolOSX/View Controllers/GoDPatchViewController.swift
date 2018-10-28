@@ -15,7 +15,8 @@ let xdpatches = [
 	"When a pokémon is KO'd it isn't replaced until the end of the turn",
 	"The HM Flag on moves determines whether it is a shadow move or not",
 	"Remove foreign languages from common_rel (very useful if it gets too big to import)",
-	"Delete unused files (creates much needed space in the ISO)","Fix shiny glitch for shadow pokemon",
+	"Delete unused files (creates much needed space in the ISO)",
+	"Fix shiny glitch for shadow pokemon",
 	"Shadow pokemon can be shiny",
 	"Shadow pokemon are never shiny",
 	"Shadow pokemon are always shiny",
@@ -27,14 +28,16 @@ let xdpatches = [
 	"Set Deoxys model to: Speed",
 	"Allow female demo starter pokemon",
 	"Gen VII critical hit ratios",
-	"All tutor moves are available from the start"
+	"All tutor moves are available from the start",
+	"Decapitalise text"
 ]
 let colopatches = [
 	"Apply Physical/Special move split",
 	"Assign default phys/spec categories to moves",
 	"Delete Battle Mode Data. (highly recommended)",
 	"Allow female starter pokemon",
-	"Gen VII critical hit ratios"
+	"Gen VII critical hit ratios",
+	"Decapitalise text"
 ]
 
 
@@ -52,7 +55,8 @@ class GoDPatchViewController: GoDTableViewController {
 		#selector(defaultCategories),
 		#selector(deleteBattleMode),
 		#selector(allowFemaleStarters),
-		#selector(gen7CriticalRatios)
+		#selector(gen7CriticalRatios),
+		#selector(decapitalise),
 		] :
 		[
 			#selector(gen4Categories),
@@ -74,8 +78,13 @@ class GoDPatchViewController: GoDTableViewController {
 			#selector(deoxysS),
 			#selector(allowFemaleStarters),
 			#selector(gen7CriticalRatios),
-			#selector(immediateTutorMoves)
+			#selector(immediateTutorMoves),
+			#selector(decapitalise),
 	]
+	
+	@objc func decapitalise() {
+		XGDolPatcher.decapitalise()
+	}
 	
 	@objc func immediateTutorMoves() {
 		XGDolPatcher.tutorMovesAvailableImmediately()
@@ -91,17 +100,10 @@ class GoDPatchViewController: GoDTableViewController {
 		deletingSuper = true
 		XGThreadManager.manager.runInBackgroundSync {
 			XGUtility.deleteSuperfluousFiles()
-			var text = "Successfully deleted unused files."
-			if game == .XD {
-				if XGFolders.AutoFSYS.filenames.contains(where: { (s) -> Bool in
-					return s.contains("M2_cave") || s.contains("M4")
-				}) {
-					text += "\n\nDelete the files from the AutoFSYS folder with names beginning with 'M2_cave' or 'M4' to prevent them from being reimported."
-				}
-				
+			let text = "Successfully deleted unused files."
+			XGThreadManager.manager.runInForegroundAsync {
+				GoDAlertViewController.displayAlert(title: "Files deleted!", text: text)
 			}
-			
-			GoDAlertViewController.alert(title: "Files deleted!", text: text).show(sender: self)
 			self.deletingSuper = false
 		}
 		

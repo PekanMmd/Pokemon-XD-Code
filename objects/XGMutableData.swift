@@ -98,6 +98,10 @@ class XGMutableData: NSObject {
 	
 	@objc func getCharAtOffset(_ start : Int) -> UInt8 {
 		
+		if start < 0 || start + 1 > self.length {
+			printg("Attempting to read byte from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		var byte : UInt8 = 0x0
 		self.data.getBytes(&byte, range: NSMakeRange(start, 1))
 		return byte 
@@ -105,6 +109,10 @@ class XGMutableData: NSObject {
 	}
 	
 	@objc func getByteAtOffset(_ start : Int) -> Int {
+		
+		if start < 0 || start + 1 > self.length {
+			printg("Attempting to read byte from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
 		
 		var byte : UInt8 = 0x0
 		self.data.getBytes(&byte, range: NSMakeRange(start, 1))
@@ -114,6 +122,10 @@ class XGMutableData: NSObject {
 	
 	@objc func get2BytesAtOffset(_ start : Int) -> Int {
 		
+		if start < 0 || start + 2  > self.length {
+			printg("Attempting to read 2 bytes from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		var bytes : UInt16 = 0x0
 		self.data.getBytes(&bytes, range: NSMakeRange(start, 2))
 		bytes = UInt16(bigEndian: bytes)
@@ -122,10 +134,19 @@ class XGMutableData: NSObject {
 	}
 	
 	@objc func get4BytesAtOffset(_ start : Int) -> Int {
+		
+		if start < 0 || start + 4 > self.length {
+			printg("Attempting to read 4 bytes from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		return getWordAtOffset(start).int
 	}
 	
 	@objc func getWordAtOffset(_ start : Int) -> UInt32 {
+		
+		if start < 0 || start + 4 > self.length {
+			printg("Attempting to read 4 bytes from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
 		
 		var bytes : UInt32 = 0x0
 		self.data.getBytes(&bytes, range: NSMakeRange(start, 4))
@@ -135,6 +156,11 @@ class XGMutableData: NSObject {
 	}
 	
 	@objc func getNibbleStreamFromOffset(_ offset: Int, length: Int) -> [Int] {
+		
+		if offset < 0 || offset + length > self.length {
+			printg("Attempting to read \(length.hexString()) bytes from offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		// length in bytes, not number of nibbles
 		var nibbles = [Int]()
 		
@@ -148,6 +174,10 @@ class XGMutableData: NSObject {
 	
 	@objc func getByteStreamFromOffset(_ offset: Int, length: Int) -> [Int] {
 		
+		if offset < 0 || offset + length > self.length {
+			printg("Attempting to read \(length.hexString()) bytes from offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		var byteStream = [Int]()
 		
 		for i in 0 ..< length {
@@ -160,6 +190,11 @@ class XGMutableData: NSObject {
 	}
 	
 	@objc func getShortStreamFromOffset(_ offset: Int, length: Int) -> [Int] {
+		
+		if offset < 0 || offset + length > self.length {
+			printg("Attempting to read \(length.hexString()) bytes from offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		// length in bytes, not number of shorts
 		
 		var byteStream = [Int]()
@@ -174,9 +209,9 @@ class XGMutableData: NSObject {
 	}
 	
 	@objc func getCharStreamFromOffset(_ offset: Int, length: Int) -> [UInt8] {
-		if verbose && (offset + length) > self.length {
-			printg("attempting to read data outside of data length")
-			return []
+		
+		if offset < 0 || offset + length > self.length {
+			printg("Attempting to read \(length.hexString()) bytes from offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
 		
 		var byteStream = [UInt8]()
@@ -191,6 +226,11 @@ class XGMutableData: NSObject {
 	}
 	
 	@objc func getWordStreamFromOffset(_ offset: Int, length: Int) -> [UInt32] {
+		
+		if offset < 0 || offset + length > self.length {
+			printg("Attempting to read \(length.hexString()) bytes from offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		// length in bytes, not number of words
 		
 		var byteStream = [UInt32]()
@@ -208,12 +248,20 @@ class XGMutableData: NSObject {
 	
 	@objc func replaceByteAtOffset(_ start : Int, withByte byte: Int) {
 		
+		if start < 0 || start + 1 > self.length {
+			printg("Attempting to write byte from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		var byte = UInt8(byte)
 		self.data.replaceBytes(in: NSMakeRange(start, 1), withBytes: &byte)
 		
 	}
 	
 	@objc func replace2BytesAtOffset(_ start : Int, withBytes bytes: Int) {
+		
+		if start < 0 || start + 2 > self.length {
+			printg("Attempting to read 2 bytes from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
 		
 		var bytes = UInt16(bytes)
 		bytes = UInt16(bigEndian: bytes)
@@ -223,6 +271,10 @@ class XGMutableData: NSObject {
 	
 	@objc func replaceWordAtOffset(_ start : Int, withBytes newbytes: UInt32) {
 		
+		if start < 0 || start + 4 > self.length {
+			printg("Attempting to read 4 bytes from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		var bytes = UInt32(newbytes)
 		bytes = UInt32(bigEndian: bytes)
 		self.data.replaceBytes(in: NSMakeRange(start, 4), withBytes: &bytes)
@@ -230,6 +282,10 @@ class XGMutableData: NSObject {
 	}
 	
 	@objc func replace4BytesAtOffset(_ start : Int, withBytes newbytes: Int) {
+		
+		if start < 0 || start + 4 > self.length {
+			printg("Attempting to read 4 bytes from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
 		
 		var bytes = newbytes.unsigned
 		bytes = UInt32(bigEndian: bytes)
@@ -239,6 +295,10 @@ class XGMutableData: NSObject {
 	
 	@objc func replaceBytesFromOffset(_ offset: Int, withByteStream bytes: [Int]) {
 		
+		if offset < 0 || offset + bytes.count > self.length {
+			printg("Attempting to write \(bytes.count) bytes from offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		for i in 0 ..< bytes.count {
 			
 			self.replaceByteAtOffset(offset + i, withByte: bytes[i])
@@ -247,6 +307,10 @@ class XGMutableData: NSObject {
 	}
 	
 	@objc func replaceBytesFromOffset(_ offset: Int, withShortStream bytes: [Int]) {
+		
+		if offset < 0 || offset + bytes.count > self.length {
+			printg("Attempting to write \(bytes.count * 2) bytes from offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
 		
 		for i in 0..<bytes.count {
 			
@@ -270,29 +334,48 @@ class XGMutableData: NSObject {
 	}
 	
 	@objc func increaseLength(by length: Int) {
-		
 		data.increaseLength(by: length)
 	}
 	
 	// insert bytes
 	
 	@objc func insertByte(byte: Int, atOffset offset: Int) {
+		
+		if offset < 0 || offset + 1 > self.length {
+			printg("Attempting to insert byte at offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		let range = NSMakeRange(offset, 0)
 		var b = UInt8(byte)
 		self.data.replaceBytes(in: range, withBytes: &b, length: 1)
 	}
 	
 	@objc func insertBytes(bytes: [Int], atOffset offset: Int) {
+		
+		if offset < 0 || offset + bytes.count > self.length {
+			printg("Attempting to insert \(bytes.count) bytes at offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		for i in 0 ..< bytes.count {
 			insertByte(byte: bytes[i], atOffset: offset + i)
 		}
 	}
 	
 	@objc func insertData(data: XGMutableData, atOffset offset: Int) {
+		
+		if offset < 0 || offset + data.length > self.length {
+			printg("Attempting to insert \(data.length) bytes at offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		self.data.replaceBytes(in: NSMakeRange(offset, 0), withBytes: data.rawBytes, length: data.length)
 	}
 	
 	@objc func insertRepeatedByte(byte: Int, count: Int, atOffset offset: Int) {
+		
+		if offset < 0 || offset + count > self.length {
+			printg("Attempting to insert \(count) bytes at offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		for _ in 0 ..< count {
 			insertByte(byte: byte, atOffset: offset)
 		}
@@ -305,11 +388,21 @@ class XGMutableData: NSObject {
 	}
 	
 	@objc func deleteBytes(start: Int, count: Int) {
+		
+		if start < 0 || start + count > self.length {
+			printg("Attempting to delete \(count) bytes at offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		let range = NSMakeRange(start, count)
 		self.deleteBytesInRange(range)
 	}
 	
 	@objc func nullBytes(start: Int, length: Int) {
+		
+		if start < 0 || start + length > self.length {
+			printg("Attempting to null \(length) bytes at offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		let null = [Int](repeating: 0, count: length)
 		self.replaceBytesFromOffset(start, withByteStream: null)
 	}
@@ -323,6 +416,11 @@ class XGMutableData: NSObject {
 	}
 	
 	func getStringAtOffset(_ offset: Int) -> String {
+		
+		if offset < 0 || offset + 2 > self.length {
+			printg("Attempting to read string at offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
 		
 		var currentOffset = offset
 		

@@ -46,8 +46,7 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 		get {
 			var str = self.trainerString
 			let index1 = str.index(str.startIndex, offsetBy: 1)
-			let index2 = str.index(str.startIndex, offsetBy: 2)
-			let sub1 = str.substring(to: index1)
+			let sub1 = str.substring(from: 0, to: 1)
 			
 			if str == "NULL" {
 				str = "-"
@@ -78,7 +77,7 @@ class XGTrainer: NSObject, XGDictionaryRepresentable {
 			} else if sub1 == "T" {
 				str = str.replacingCharacters(in: str.startIndex..<index1, with: "Tower Colosseum ")
 			} else {
-				let sub = str.substring(to: index2)
+				let sub = str.substring(from: 0, to: 2)
 				str = XGMaps(rawValue: sub)?.name ?? str
 			}
 			

@@ -74,7 +74,7 @@ class GoDTypeViewController: GoDTableViewController {
 				if name.stringValue.length > 0 {
 					if let s = getStringWithID(id: id) {
 						if !s.duplicateWithString(name.stringValue).replace() {
-							printg("Failed to save type name")
+							printg("Failed to save type name:", name.stringValue)
 						}
 					}
 				}
@@ -95,17 +95,19 @@ class GoDTypeViewController: GoDTableViewController {
 	func setUp() {
 		if let type = currentType {
 			nameID.stringValue = type.nameID.string
-			name.stringValue = getStringSafelyWithID(id: type.nameID).string
+			name.stringValue = type.name.string
 			for i in 0 ..< kNumberOfTypes {
 				popups[i].selectEffectiveness(eff: type.effectivenessTable[i])
 			}
+			
 			physical.state = .off
 			special.state = .off
 			neither.state = .off
+			
 			switch type.category {
-			case .physical: physical.state = .on
-			case .special: special.state = .on
-			default: neither.state = .on
+				case .physical: physical.state = .on
+				case .special: special.state = .on
+				default: neither.state = .on
 			}
 		}
 	}
@@ -116,6 +118,7 @@ class GoDTypeViewController: GoDTableViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		
 		labels = [normalLabel, fightLabel, flyLabel, poisonLabel, groundLabel, rockLabel, bugLabel, ghostLabel, steelLabel, fairyLabel, fireLabel, waterLabel, grassLabel, electricLabel, psychicLabel, iceLabel, dragonLabel, darkLabel]
 		popups = [normal, fight, fly, poison, ground, rock, bug, ghost, steel, fairy, fire, water, grass, electric, psychic, ice, dragon, dark]
 		

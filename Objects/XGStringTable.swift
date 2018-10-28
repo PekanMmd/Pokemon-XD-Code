@@ -127,8 +127,11 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		} else {
 			if region == .JP {
 				return XGStringTable(file: .dol, startOffset: 0x2bece0, fileSize: 0xd850)
-			} else {
+			} else if region == .US {
 				return XGStringTable(file: .dol, startOffset: 0x2cc810, fileSize: 0x124e0)
+			} else {
+				return XGStringTable(file: .dol, startOffset: 0x2c1b20, fileSize: 0x124e0)
+				
 			}
 		}
 		
@@ -136,33 +139,10 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 	@objc class func dol2() -> XGStringTable {
 		
-		return  XGStringTable(file: .dol, startOffset: 0x38c7c4, fileSize: 0x41c)
+		return  XGStringTable(file: .dol, startOffset: 0x38c87c, fileSize: 0x364)
 		
 	}
 	
-	@objc class func common_relOriginal() -> XGStringTable {
-		
-		return XGStringTable(file: .original(.common_rel), startOffset: 0x04E274, fileSize: 0x0DC70)
-		
-	}
-	
-	@objc class func tableres2Original() -> XGStringTable {
-		
-		return XGStringTable(file: .original(.tableres2), startOffset: 0x048F88, fileSize: 0x16E84)
-		
-	}
-	
-	@objc class func dolOriginal() -> XGStringTable {
-		
-		return  XGStringTable(file: .original(.dol), startOffset: 0x374FC0, fileSize: 0x178BE)
-		
-	}
-	
-	@objc class func dol2Original() -> XGStringTable {
-		
-		return  XGStringTable(file: .original(.dol), startOffset: 0x38c7c4, fileSize: 0x41c)
-		
-	}
 	
 	init(file: XGFiles, startOffset: Int, fileSize: Int) {
 		super.init()

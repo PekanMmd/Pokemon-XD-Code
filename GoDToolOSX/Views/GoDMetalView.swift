@@ -215,7 +215,7 @@ class GoDMetalView: NSView {
 		
 		setDefaultPositions()
 		
-		let fps : TimeInterval = 20.0
+		let fps : TimeInterval = 12.0
 		let frameTime = TimeInterval(1.0) / fps
 		self.timer = Timer.scheduledTimer(timeInterval: frameTime, target: self, selector: #selector(render), userInfo: nil, repeats: true)
 		previousTime = Float(CACurrentMediaTime())

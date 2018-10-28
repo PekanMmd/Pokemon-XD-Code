@@ -152,7 +152,27 @@ class GoDSpotViewController: GoDTableViewController {
 		currentMon.stepsPerSnack = sender.integerValue
 	}
 	
+	func prepareForSave() {
+		for view in [chance!, steps!] {
+			if let val = view.stringValue.integerValue {
+				if val > 0xFF {
+					view.stringValue = "255"
+				}
+				if val < 0 {
+					view.stringValue = "0"
+				}
+			} else {
+				view.stringValue = "0"
+			}
+		}
+		
+		self.setChanceAction(chance)
+		self.setStepsAction(steps)
+		
+	}
+	
 	@IBAction func saveAction(_ sender: GoDButton) {
+		prepareForSave()
 		currentMon.save()
 		self.reloadView()
 		self.table.reloadData()

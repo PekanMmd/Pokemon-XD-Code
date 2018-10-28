@@ -67,7 +67,9 @@ class GoDMovesViewController: GoDTableViewController {
 		self.accuracy.formatter = NumberFormatter.byteFormatter()
 		self.effectAcc.formatter = NumberFormatter.byteFormatter()
 		if game == .Colosseum {
-			self.category.isEnabled = XGFiles.dol.data!.getWordAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F
+			self.category.isEnabled = region == .US && XGFiles.dol.data!.getWordAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F
+		} else {
+			self.category.isEnabled = region == .US && XGDolPatcher.isClassSplitImplemented()
 		}
     }
 	
@@ -102,9 +104,13 @@ class GoDMovesViewController: GoDTableViewController {
 		self.targets.selectTarget(target: currentMove.target)
 		self.effectType.selectType(type: currentMove.effectType)
 		if game == .XD {
-			self.category.selectCategory(category: currentMove.category)
+			if region == .US && XGDolPatcher.isClassSplitImplemented() {
+				self.category.selectCategory(category: currentMove.category)
+			} else {
+				self.category.selectCategory(category: currentMove.type.category)
+			}
 		} else {
-			let enabled = XGFiles.dol.data!.getWordAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F
+			let enabled = (XGFiles.dol.data!.getWordAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F) && region == .US
 			if enabled {
 				self.category.selectCategory(category: currentMove.category)
 			} else {
@@ -199,7 +205,9 @@ class GoDMovesViewController: GoDTableViewController {
 		
 		let newDesc = sender.stringValue
 		
-		currentMove.mdescription.duplicateWithString(newDesc).replace()
+		if !currentMove.mdescription.duplicateWithString(newDesc).replace() {
+			printg("Failed to set description for move: \(currentMove.name.string)")
+		}
 		
 		self.reloadViewWithActivity()
 		
@@ -262,9 +270,11 @@ class GoDMovesViewController: GoDTableViewController {
 	}
 	
 	@IBAction func newPriority(_ sender: NSTextField) {
-		let value = sender.integerValue
+		var val = sender.integerValue
+		val = val < -128 ? -128 : val
+		val = val > 127 ? 127 : val
 		
-		self.currentMove.priority = value
+		self.currentMove.priority = val
 	}
 	
 	@IBAction func newEffectAcc(_ sender: NSTextField) {
@@ -321,7 +331,44 @@ class GoDMovesViewController: GoDTableViewController {
 		self.currentMove.mirrorMoveFlag = value
 	}
 	
+	func prepareForSave() {
+		for view in [power!, accuracy!, effectAcc!, pp! ] {
+			if let val = view.stringValue.integerValue {
+				if val > 0xFF {
+					view.stringValue = "255"
+				}
+				if val < 0 {
+					view.stringValue = "0"
+				}
+			} else {
+				view.stringValue = "0"
+			}
+		}
+		for view in [nameID!, descID!] {
+			if let val = view.stringValue.integerValue {
+				if val > kMaxStringID {
+					view.stringValue = kMaxStringID.string
+				}
+				if val < 0 {
+					view.stringValue = "0"
+				}
+			} else {
+				view.stringValue = "0"
+			}
+		}
+		
+		newPP(pp)
+		newPower(power)
+		newPriority(priority)
+		newEffectAcc(effectAcc)
+		newAccuracy(accuracy)
+		setMoveNameID(nameID)
+		setDescriptionID(descID)
+		
+	}
+	
 	@IBAction func save(_ sender: Any) {
+		self.prepareForSave()
 		self.currentMove.save()
 		
 		self.moves[currentMove.moveIndex].name = self.currentMove.name.string

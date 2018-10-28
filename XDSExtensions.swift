@@ -37,7 +37,7 @@ extension XDSScriptCompiler {
 			var done = false
 			while !done {
 				if stack.peek() == "\n" {
-					stack.pop()
+					stack.popVoid()
 				} else {
 					done = true
 				}
@@ -175,7 +175,7 @@ extension XDSScriptCompiler {
 				continue
 			} else if scope == .multiLine {
 				if currentChar == "*" && stack.peek() == "/" {
-					stack.pop()
+					stack.popVoid()
 					scope = .normal
 				}
 				continue
@@ -188,11 +188,11 @@ extension XDSScriptCompiler {
 			} else {
 				if currentChar == "/" && stack.peek() == "/" {
 					scope = .singleLine
-					stack.pop()
+					stack.popVoid()
 					continue
 				} else if currentChar == "/" && stack.peek() == "*" {
 					scope = .multiLine
-					stack.pop()
+					stack.popVoid()
 					continue
 				} else if currentChar == "\"" {
 					scope = .string
@@ -409,7 +409,7 @@ extension XDSScriptCompiler {
 				currentToken = ""
 			} else if scopeStack.peek() == .string {
 				if current == "\"" {
-					scopeStack.pop()
+					scopeStack.popVoid()
 				}
 				currentToken += current
 			} else if let bracket = BracketScopes(rawValue: current) {
@@ -444,7 +444,7 @@ extension XDSScriptCompiler {
 						
 						if !isOperator {
 							if scopeStack.peek() == bracket {
-								scopeStack.pop()
+								scopeStack.popVoid()
 							} else {
 								if scopeStack.peek() != .string {
 									error = "Extraneous bracket: " + current + ". " + currentToken
@@ -1097,7 +1097,7 @@ extension XDSScriptCompiler {
 							while ss.peek() != "[" {
 								variable += ss.pop()
 							}
-							ss.pop()
+							ss.popVoid()
 							while ss.count > 1 {
 								index += ss.pop()
 							}
@@ -1122,7 +1122,7 @@ extension XDSScriptCompiler {
 							while ss.peek() != "(" {
 								functionName += ss.pop()
 							}
-							ss.pop()
+							ss.popVoid()
 							while ss.count > 1 {
 								parameters += ss.pop()
 							}
@@ -1688,7 +1688,7 @@ extension XDSScriptCompiler {
 							while ss.peek() != "[" {
 								variable += ss.pop()
 							}
-							ss.pop()
+							ss.popVoid()
 							while ss.peek() != "]" {
 								subindex += ss.pop()
 							}

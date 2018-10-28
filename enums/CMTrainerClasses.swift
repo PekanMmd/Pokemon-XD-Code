@@ -55,21 +55,27 @@ enum XGTrainerClasses : Int {
 	case none5
 	case none6
 	
+	var data : XGTrainerClass {
+		get {
+			return XGTrainerClass(index: self.rawValue)
+		}
+	}
+	
 	var nameID : Int {
 		get {
-			return XGTrainerClass(tClass: self).nameID
+			return data.nameID
 		}
 	}
 	
 	var name : XGString {
 		get {
-			return XGTrainerClass(tClass: self).name
+			return data.name
 		}
 	}
 	
 	var payout : Int {
 		get {
-			return XGTrainerClass(tClass: self).payout
+			return data.payout
 		}
 	}
 	

@@ -20,8 +20,12 @@ func loadAllStrings() {
 		previousFree = []
 		
 		allStringTables = [XGFiles.common_rel.stringTable]
-		allStringTables += [XGStringTable.dol()]
-		allStringTables += [XGStringTable.dol2()]
+		if game == .Colosseum || region == .US {
+			allStringTables += [XGStringTable.dol()]
+		}
+		if game == .XD && region == .US {
+			allStringTables += [XGStringTable.dol2()]
+		}
 		if game == .XD {
 			allStringTables += [XGFiles.tableres2.stringTable]
 		}
@@ -47,9 +51,11 @@ func getStringWithID(id: Int) -> XGString? {
 		return nil
 	}
 	
-	for table in allStringTables where table.containsStringWithId(id) {
-		if let s = table.stringWithID(id) {
-			return s
+	for table in allStringTables {
+		if table.containsStringWithId(id) {
+			if let s = table.stringWithID(id) {
+				return s
+			}
 		}
 	}
 	return nil
@@ -62,9 +68,11 @@ func getStringSafelyWithID(id: Int) -> XGString {
 		return XGString(string: "-", file: nil, sid: nil)
 	}
 	
-	for table in allStringTables where table.containsStringWithId(id) {
-		if let s = table.stringWithID(id) {
-			return s
+	for table in allStringTables {
+		if table.containsStringWithId(id) {
+			if let s = table.stringWithID(id) {
+				return s
+			}
 		}
 	}
 	
@@ -106,6 +114,7 @@ private func numberOfFreeMSGIDsFrom(_ id: Int) -> Int {
 	return free
 }
 
+var isSearchingForFreeStringID = false
 func freeMSGID() -> Int? {
 	// start from 1000 just to be safe
 	// might have special rules for lower ids
@@ -114,6 +123,9 @@ func freeMSGID() -> Int? {
 	// plenty of ids available so no need to risk it
 	// even if unlikely
 	// can use freemsgid(from:) if below 1000 is desired
+	if isSearchingForFreeStringID {
+		return nil
+	}
 	return freeMSGID(from: 1000)
 }
 
@@ -122,6 +134,11 @@ private var previousFound = 0
 private var previousFree = [Int]()
 
 func freeMSGID(from: Int) -> Int? {
+	guard !isSearchingForFreeStringID else {
+		return nil
+	}
+	isSearchingForFreeStringID = true
+	
 	ISO.extractMenuFSYS()
 	ISO.extractSpecificStringTables()
 	ISO.extractCommon()
@@ -137,6 +154,7 @@ func freeMSGID(from: Int) -> Int? {
 		if previousFree.contains(i) {
 			previousFree.remove(at: previousFree.index(of: i)!)
 			previousFound = i
+			isSearchingForFreeStringID = false
 			return i
 		}
 	}
@@ -154,9 +172,11 @@ func freeMSGID(from: Int) -> Int? {
 					previousFree.addUnique(num + j)
 				}
 			}
+			isSearchingForFreeStringID = false
 			return i
 		}
 	}
+	isSearchingForFreeStringID = false
 	return nil
 }
 

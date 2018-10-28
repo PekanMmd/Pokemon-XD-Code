@@ -10,11 +10,14 @@ import Foundation
 func ==(lhs: XGFiles, rhs: XGFiles) -> Bool {
 	return lhs.path == rhs.path
 }
+func !=(lhs: XGFiles, rhs: XGFiles) -> Bool {
+	return lhs.path != rhs.path
+}
 
 var loadedFiles = [String : XGMutableData]()
 var loadedStringTables = [String : XGStringTable]()
 
-let loadableFiles = [XGFiles.common_rel.path,XGFiles.dol.path, XGFiles.iso.path,XGFiles.original(.common_rel).path,XGFiles.original(.dol).path,XGFiles.original(.tableres2).path, XGFiles.fsys("people_archive").path, XGFiles.pocket_menu.path]
+let loadableFiles = [XGFiles.common_rel.path,XGFiles.dol.path, XGFiles.iso.path,XGFiles.toc.path, XGFiles.fsys("people_archive").path, XGFiles.pocket_menu.path]
 let loadableStringTables = [XGFiles.tableres2.path,XGFiles.msg("pocket_menu").path,XGFiles.common_rel.path,XGFiles.dol.path,XGFiles.original(.common_rel).path,XGFiles.original(.dol).path,XGFiles.original(.tableres2).path]
 
 let compressionFolders = [XGFolders.Common, XGFolders.Textures, XGFolders.StringTables, XGFolders.Scripts, XGFolders.Rels]
@@ -138,143 +141,51 @@ indirect enum XGFiles {
 	}
 	
 	var data : XGMutableData? {
-		get {
-			if self == .toc {
-				return tocData
-			}
-			switch self {
-			case .toc: return tocData
-			case .fsys("Null"): return NullFSYS
-			case .fsys("people_archive"): fallthrough
-			case .fsys("common"): fallthrough
-			case .fsys("fight_common"): fallthrough
-			case .fsys("field_common"): if !self.exists { ISO.extractFSYS() }
-			case .common_rel: if !self.exists { ISO.extractCommon() }
-			case .dol: if !self.exists { ISO.extractDOL() }
-			case .json:
-				if !self.exists {
-					let jsons = ["Move Effects", "Original Pokemon", "Original Moves", "Move Categories", "Room IDs"]
-					
-					for j in jsons {
-						let file = XGFiles.json(j)
-						if !file.exists {
-							let resource = XGResources.JSON(j)
-							let data = resource.data
-							data.file = file
-							data.save()
-						}
-					}
-				}
-			case .typeImage: fallthrough
-			case .trainerFace: fallthrough
-			case .pokeFace: fallthrough
-			case .pokeBody:
-				if !self.exists {
-					
-					var images = [XGFiles]()
-					
-					for i in 0 ... 17 {
-						images.append(.typeImage(i))
-					}
-					for i in 0 ... 414 {
-						images.append(.pokeBody(i))
-						images.append(.pokeFace(i))
-					}
-					for i in 0 ... 67 {
-						images.append(.trainerFace(i))
-					}
-					images.append(.nameAndFolder("type_fairy.png", .Types))
-					images.append(.nameAndFolder("type_shadow.png", .Types))
-					
-					for image in images {
-						if !image.exists {
-							let resource = XGResources.png(image.fileName.replacingOccurrences(of: ".png", with: ""))
-							let data = resource.data
-							data.file = image
-							data.save()
-						}
-					}
-					
-				}
-				
-			case .fsys:
-				if !self.exists {
-					let prefix = self.fileName.substring(from: 0, to: 2)
-					if XGMaps(rawValue: prefix) != nil {
-						if let d = ISO.dataForFile(filename: self.fileName) {
-							d.file = .nameAndFolder(self.fileName, .AutoFSYS)
-							d.save()
-						}
-					} else if ISO.menuFsysList.contains(self.fileName) || self.fileName.contains("menu") {
-						if let d = ISO.dataForFile(filename: self.fileName) {
-							d.file = .nameAndFolder(self.fileName, .MenuFSYS)
-							d.save()
-						}
-					} else {
-						if let d = ISO.dataForFile(filename: self.fileName) {
-							d.file = .nameAndFolder(self.fileName, .FSYS)
-							d.save()
-						}
-					}
-				}
-			case .msg(let name):
-				if !self.exists {
-					let fsys = XGFiles.fsys(name)
-					if fsys.exists || ISO.allFileNames.contains(fsys.fileName) {
-						let fdata = fsys.fsysData
-						if fdata.indexForFileType(type: .msg) >= 0 {
-							fdata.decompressedDataForFileWithFiletype(type: .msg)!.save()
-						}
-					}
-					
-				}
-			case .rel(let name):
-				if !self.exists {
-					let fsys = XGFiles.fsys(name)
-					if fsys.exists || ISO.allFileNames.contains(fsys.fileName) {
-						let fdata = fsys.fsysData
-						if fdata.indexForFileType(type: .rel) >= 0 {
-							fdata.decompressedDataForFileWithFiletype(type: .rel)!.save()
-						}
-					}
-				}
-			case .col(let name):
-				if !self.exists {
-					let fsys = XGFiles.fsys(name)
-					if fsys.exists || ISO.allFileNames.contains(fsys.fileName) {
-						let fdata = fsys.fsysData
-						if fdata.indexForFileType(type: .col) >= 0 {
-							fdata.decompressedDataForFileWithFiletype(type: .col)!.save()
-						}
-					}
-				}
-				
-			default: break
-			}
-			
-			if !self.exists {
-				printg("file doesn't exist:", self.path)
-				return nil
-			}
-			
-			var data : XGMutableData!
-			if loadableFiles.contains(self.path) {
-				data = loadedFiles[self.path]
-				if data != nil {
-					return data!
-				}
-			}
-			
-			data = XGMutableData(contentsOfXGFile: self)
-			
-			if loadableFiles.contains(self.path) {
-				if data.length > 0 {
-					loadedFiles[self.path] = data
-				}
-			}
-			
-			return data
+		
+		switch self {
+		case .fsys("Null"): return NullFSYS
+		default: break
 		}
+		
+		let requiredFiles : [XGFiles] = [.common_rel, .dol, .pocket_menu, .fsys("people_archive")]
+		if requiredFiles.contains(where: { (f) -> Bool in
+			f == self
+		}) {
+			if !self.exists {
+				XGISO.extractAllFiles()
+			}
+		}
+		
+		if !self.exists && self != .toc {
+			printg("file doesn't exist and couldn't be extracted:", self.path)
+			return nil
+		}
+		
+		
+		var data : XGMutableData?
+		if loadableFiles.contains(self.path) {
+			
+			if let data = loadedFiles[self.path] {
+				return data
+			}
+		}
+		
+		if self == .toc {
+			data = tocData
+		} else {
+			data = XGMutableData(contentsOfXGFile: self)
+		}
+		
+		
+		if loadableFiles.contains(self.path) {
+			
+			if let d = data {
+				loadedFiles[self.path] = d
+			}
+		}
+		
+		return data
+		
 	}
 	
 	var exists : Bool {

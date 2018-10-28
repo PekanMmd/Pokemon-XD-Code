@@ -1000,12 +1000,16 @@ class XGScript: NSObject {
 			// returns true if the type was not previously known
 			// if so the expr should be considered updated
 			// to show new information was made available
+			if !to.printsAsMacro {
+				return false
+			}
+			
 			if v.contains("gvar") || v.contains("array") || v.first == "@" || v.contains(".") {
 				let result = globalMacroTypes[v] == nil
 				// if type was already known check for consistency
 				if !result {
 					if globalMacroTypes[v]! != to {
-						printg("Warning: global var '\(v)' has conflicting macro types.")
+						printg("Warning: global var '\(v)' has conflicting macro types \(globalMacroTypes[v]!.index) \(to.index).")
 					}
 				} else {
 					globalMacroTypes[v] = to
@@ -1015,7 +1019,7 @@ class XGScript: NSObject {
 				let result = localMacroTypes[currentFuncName]![v] == nil
 				if !result {
 					if localMacroTypes[currentFuncName]![v]! != to {
-						printg("Warning: local var '\(v)' has conflicting macro types.")
+						printg("Warning: local var '\(v)' has conflicting macro types. \(localMacroTypes[currentFuncName]![v]!.index) \(to.index)")
 					}
 				} else {
 					localMacroTypes[currentFuncName]![v] = to

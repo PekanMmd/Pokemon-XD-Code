@@ -16,8 +16,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		// Insert code here to initialize your application
 		
-		XGFolders.setUpFolderFormatForRandomiser()
-		
 	}
 
 	func applicationWillTerminate(_ aNotification: Notification) {

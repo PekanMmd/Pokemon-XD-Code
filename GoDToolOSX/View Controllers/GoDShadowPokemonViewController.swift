@@ -39,6 +39,7 @@ class GoDShadowPokemonViewController: GoDTableViewController {
 	
 	@IBAction func save(_ sender: Any) {
 		self.showActivityView {
+			self.pokemonView.prepareForSave()
 			self.currentPokemon.save()
 			self.reloadAllData()
 			self.hideActivityView()

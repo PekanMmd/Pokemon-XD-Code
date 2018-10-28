@@ -84,7 +84,7 @@ enum XGFileTypes : Int {
 		case .lzss : return ".lzss"
 		case .txt : return ".txt"
 		case .json: return ".json"
-		case .unknown: return ""
+		case .unknown: return ".bin"
 		}
 	}
 }
