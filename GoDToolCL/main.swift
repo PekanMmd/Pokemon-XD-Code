@@ -7,10 +7,6 @@
 //
 //
 
-for i in 0 ..< CommonIndexes.NumberOfBattles.value {
-	let battle = XGBattle(index: i)
-	printg(battle.BGMusicID, battle.BGMusicID.hexString(), battle.p2Trainer != nil ? battle.p2Trainer!.name.string : "-")
-}
 
 //XGUtility.documentXDS()
 

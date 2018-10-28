@@ -155,8 +155,8 @@ enum XGScriptClass {
 			}
 		}
 		
-		let kNumberOfXDSClasses = 60
-		for i in 0 ..< kNumberOfXDSClasses {
+		let kNumberOfXDSClasses = 100 // vanilla has max class of 60 but leave room for expansion
+		for i in 0 ... kNumberOfXDSClasses {
 			let info = XGScriptClass.classes(i)
 			if info.name.lowercased() == name.lowercased() {
 				return info

@@ -879,6 +879,7 @@ class XGScript: NSObject {
 				// get macro types if they have been documented
 				if let returnMacro = XGScriptClass.classes(c)[f].returnMacro {
 					globalMacroTypes[XGScriptClass.classes(c).classDotFunction(f)] = returnMacro
+					
 				}
 				
 				var broken = false
@@ -902,7 +903,7 @@ class XGScript: NSObject {
 						}
 					}
 				} else {
-					stack.push(.callStandardVoid(instruction.subOpCode, instruction.parameter, params))
+					stack.push(.callStandardVoid(c, f, params))
 				}
 				
 				
@@ -993,6 +994,11 @@ class XGScript: NSObject {
 			if macroType == nil {
 				macroType = localMacroTypes[currentFuncName]![v]
 			}
+			if let t = macroType {
+				if !t.printsAsMacro {
+					macroType = nil
+				}
+			}
 			return macroType
 		}
 		
@@ -1000,16 +1006,31 @@ class XGScript: NSObject {
 			// returns true if the type was not previously known
 			// if so the expr should be considered updated
 			// to show new information was made available
+			
 			if !to.printsAsMacro {
 				return false
 			}
 			
-			if v.contains("gvar") || v.contains("array") || v.first == "@" || v.contains(".") {
+			if v.first == "@" || v.contains(".") {
 				let result = globalMacroTypes[v] == nil
 				// if type was already known check for consistency
 				if !result {
-					if globalMacroTypes[v]! != to {
+					if globalMacroTypes[v]! != to && globalMacroTypes[v]!.printsAsMacro {
+						printg("Warning: function '\(v)' has conflicting macro types \(globalMacroTypes[v]!.index) \(to.index).")
+					}
+				} else {
+					globalMacroTypes[v] = to
+				}
+				return result
+			} else if v.contains("gvar") || v.contains("array") {
+				let result = globalMacroTypes[v] == nil
+				// if type was already known check for consistency
+				if !result {
+					if globalMacroTypes[v]! != to && globalMacroTypes[v]!.printsAsMacro {
 						printg("Warning: global var '\(v)' has conflicting macro types \(globalMacroTypes[v]!.index) \(to.index).")
+					} else if !globalMacroTypes[v]!.printsAsMacro {
+						globalMacroTypes[v] = to
+						return true
 					}
 				} else {
 					globalMacroTypes[v] = to
@@ -1019,7 +1040,7 @@ class XGScript: NSObject {
 				let result = localMacroTypes[currentFuncName]![v] == nil
 				if !result {
 					if localMacroTypes[currentFuncName]![v]! != to {
-						printg("Warning: local var '\(v)' has conflicting macro types. \(localMacroTypes[currentFuncName]![v]!.index) \(to.index)")
+						printg("Warning: function \(currentFuncName) - local var '\(v)' has conflicting macro types. \(localMacroTypes[currentFuncName]![v]!.index) \(to.index)")
 					}
 				} else {
 					localMacroTypes[currentFuncName]![v] = to
@@ -1068,12 +1089,15 @@ class XGScript: NSObject {
 							let c = p2.constants[0]
 							if type.printsAsMacro {
 								p2 = .macroImmediate(c, type)
+								possible = false
 							}
 							if type.needsDefine {
 								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
 								macros.append(.macro(name, c.rawValueString))
 							}
+							
 						}
+						
 					} else {
 						possible = false
 					}
@@ -1106,7 +1130,7 @@ class XGScript: NSObject {
 				}
 				
 				let (us, n, p) = updateMacrosList([p1, es[1], p2])
-				return (.callStandard(7, 17, us), newInfo || n, possible || p)
+				return (.callStandardVoid(7, 17, us), newInfo || n, possible || p)
 				
 			case .setVariable(let v, let e):
 				
@@ -2178,7 +2202,7 @@ class XGScript: NSObject {
 				switch itemExpr {
 					// array get
 				case .callStandard(7, 16, let es):
-					let array = es[0].variable!
+					_ = es[0].variable!
 					let index = es[1]
 					if index.isImmediate {
 						let constant = index.constants[0]

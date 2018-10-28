@@ -363,7 +363,7 @@ indirect enum XGFiles {
 			if msg.exists {
 				fsys.shiftAndReplaceFileWithType(.msg, withFile: msg.compress(), save: false)
 			}
-			if rel.exists {
+			if col.exists {
 				fsys.shiftAndReplaceFileWithType(.col, withFile: col.compress(), save: true)
 			}
 		}
@@ -389,7 +389,7 @@ indirect enum XGFiles {
 			if scd.exists {
 				fsys.shiftAndReplaceFileWithType(.scd, withFile: scd.compress(), save: false)
 			}
-			if rel.exists {
+			if col.exists {
 				fsys.shiftAndReplaceFileWithType(.col, withFile: col.compress(), save: true)
 			}
 		}

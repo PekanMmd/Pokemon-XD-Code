@@ -632,12 +632,12 @@ indirect enum XDSExpr {
 			}
 			
 		case .integerMoney:
-			return macroWithName("P$\(c.asInt)")
+			return macroWithName("P$\(c.asInt.string.replacingOccurrences(of: "-", with: "_"))")
 		case .integerCoupons:
-			return macroWithName("C$\(c.asInt)")
+			return macroWithName("C$\(c.asInt.string.replacingOccurrences(of: "-", with: "_"))")
 			
 		case .integerQuantity:
-			return macroWithName("X\(c.asInt)")
+			return macroWithName("X\(c.asInt.string.replacingOccurrences(of: "-", with: "_"))")
 		case .integerIndex:
 			if c.asInt < 0 {
 				return macroWithName("INDEX_CANCEL")
@@ -659,6 +659,9 @@ indirect enum XDSExpr {
 				let species = gift.species.name.string.simplified.uppercased()
 				return macroWithName(type + "_\(c.asInt)_" + species)
 			}
+			if c.asInt == 0 {
+				return macroWithName("GIFT_POKEMON_NONE")
+			}
 			printg("error invalid gift pokemon"); return macroWithName("INVALID_GIFT_POKEMON")
 			
 		case .region:
@@ -670,10 +673,13 @@ indirect enum XDSExpr {
 					printg("error invalid region"); return macroWithName("INVALID_REGION")
 			}
 		case .language:
-			if let lang = XGLanguages(rawValue: c.asInt) {
-				return macroWithName("LANGUAGE_" + lang.name.underscoreSimplified.uppercased())
+//			if let lang = XGLanguages(rawValue: c.asInt) {
+//				return macroWithName("LANGUAGE_" + lang.name.underscoreSimplified.uppercased())
+//			}
+			if c.asInt == 0 {
+				return macroWithName("LANGUAGE_NONE")
 			}
-			printg("error invalid language"); return macroWithName("INVALID_LANGUAGE")
+			return macroWithName("LANGUAGE_\(c.asInt)")
 			
 		case .PCBox:
 			return "PCBOX_\(c.asInt)"

@@ -139,7 +139,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("getTreasureBoxCharacter", 149, 1, [.treasureID], .objectName("Character")), //# (int treasureID) returns a character object for the treasure
 		("function148", 150, 1, [.pokemon], nil), //# take the species index as arg
 		("getArrayElement", 151, 1, [.arrayIndex], .anyType), //# (array, index)
-		("function152", 152, 1, nil, nil),
+		("isHMMove", 152, 1, [.move], .bool),
 		("distance", 153, 2, nil, .float),  //# between the two points whose coordinates are the vector args
 		("function154", 154, 1, [.objectName("Character")], nil), //# (character), returns 0 by default
 		("function155", 155, 6, [.float, .integer, .integer, .integer, .integer, .integer], .integer),  //# (float, int, int, int, int, int) -> 0
@@ -255,7 +255,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//Category(name = "Known methods", start = 16, nb=-1),
 		
 		("playSpecifiedSpeciesCry", 16, 2, [.objectName("Pokemon"), .pokemon], .none), //# (int species)
-		("deleteMove", 17, 1, [.objectName("Pokemon"), .move], .none), // (int move index)
+		("deleteMove", 17, 1, [.objectName("Pokemon"), .integerIndex], .none), // (int index to delete)
 		
 		("countMoves", 20, 1, [.objectName("Pokemon")], .integer),
 		("getPokeballCaughtWith", 1, 21, [.objectName("Pokemon")], .item),
@@ -264,7 +264,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//# index = 23 does not exist
 		
 		("isShadow", 24, 1, [.objectName("Pokemon")], .bool),
-		("getMoveAtIndex", 25, 1, [.objectName("Pokemon"), .integerIndex], .move), // (int move index)
+		("getMoveAtIndex", 25, 1, [.objectName("Pokemon"), .integerIndex], .move),
 		
 		("getCurrentHP", 26, 1, [.objectName("Pokemon")], .integer),
 		("getCurrentPurificationCounter", 27, 1, [.objectName("Pokemon")], .integer),
@@ -277,8 +277,10 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		("teachMove", 34, 2, [.objectName("Pokemon"), .move], .none), // (int move id)
 		("hasLearnedMove", 35, 2, [.objectName("Pokemon"), .move], .bool), // (int move id)
-		("canLearnTutorMove", 36, 2, [.objectName("Pokemon"), .move], .bool) // int move id
-,	],
+		("canLearnTutorMove", 36, 2, [.objectName("Pokemon"), .move], .bool), // int move id
+		("getIndexOfMove", 37, 2, [.objectName("Pokemon"), .move], .integerIndex),
+		("displayMoveDeleterMenu", 38, 1, [.objectName("Pokemon")], .integerIndex),
+	],
 	
 //MARK: - Movement
 	38: [
@@ -313,12 +315,12 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		("setMsgVar", 28, 3, [.objectName("Dialogue"), .msgVar, nil], .none), //# (int type, var val) macro type for value is set by compiler based on msgvar value
 		
-		("displayCustomMenu", 29, 6, [.objectName("Dialogue"), .array, .integer, .integer, .integer, .bool], .integerIndex), // array of msgids, int number of elements, int x, int y, bool unknown
+		("displayCustomMenu", 29, 6, [.objectName("Dialogue"), .msg, .integer, .integer, .integer, .integerIndex], .integerIndex), // array of msgids, int number of elements, int x, int y, int index to start cursor on
 		
 		("displayPartyPokemonMenu", 32, 1, [.objectName("Dialogue")], .integerIndex), //# these functions are **exactly** the same
 		("displayPartyPokemonMenu2", 33, 1, [.objectName("Dialogue")], .integerIndex),
 		("displayPokemonSummary", 34, 2, [.objectName("Dialogue"), .integerIndex], .none), //# int partyIndex
-		("displayMoveSelectionWindow", 35, 2, [.objectName("Dialogue"), .integer], .integerIndex), //# int partyIndex
+		("displayMoveMenuForPokemon", 35, 2, [.objectName("Dialogue"), .integerIndex], .integerIndex), //# int partyIndex
 		
 		("displayNameEntryMenu", 36, 3, [.objectName("Dialogue"), .integer, .integer], .none), //# (int forWhom, var target, int mode)
 		//# forWhom: 0 for Player, 1 for Sister, 2 for Poké. mode: 0 = enter Pokemon name, 1 = player name, 2 = sister name (not verified)
@@ -336,7 +338,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("hideMirorRadarIcon", 62, 1, [.objectName("Dialogue")], .none),
 		
 		("displayMoveRelearnerMenuForPartyMember", 64, 2, [.objectName("Dialogue"), .integerIndex], .move), //# (int partyIndex)
-		("displayMoveTutorMovesMenu", 65, 1, [.objectName("Dialogue")], .integerIndex),
+		("displayTutorMovesMenu", 65, 1, [.objectName("Dialogue")], .move),
 		
 		("showMoneyWindow", 67, 3, [.objectName("Dialogue"), .integer, .integer], .none), //# (int x, int y)
 		("hideMoneyWindow", 68, 1, [.objectName("Dialogue")], .none),
