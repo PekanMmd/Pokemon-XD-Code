@@ -548,7 +548,7 @@ indirect enum XDSExpr {
 			if c.asInt == 0 {
 				return macroWithName("battlefield_none".uppercased())
 			}
-			if let room = XGBattleField(index: c.asInt).room {
+			if let room = XGRoom.roomWithID(c.asInt) {
 				return macroWithName("BATTLEFIELD_" + room.name.simplified.uppercased())
 			}
 			return macroWithName("BATTLEFIELD_" + c.asInt.string)

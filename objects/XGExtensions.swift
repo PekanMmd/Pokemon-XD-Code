@@ -222,7 +222,7 @@ extension String {
 	func spaceLeftToLength(_ length: Int) -> String {
 		
 		var spaces = ""
-		let wordLength = self.characters.count
+		let wordLength = self.length
 		for i in 1 ... length {
 			if i > wordLength {
 				spaces += " "
@@ -233,13 +233,13 @@ extension String {
 	}
 	
 	func removeFileExtensions() -> String {
-		let extensionIndex = self.characters.index(of: ".") ?? self.endIndex
+		let extensionIndex = self.index(of: ".") ?? self.endIndex
 		
 		return self.substring(to: extensionIndex)
 	}
 	
 	var fileExtensions : String {
-		let extensionIndex = self.characters.index(of: ".") ?? self.endIndex
+		let extensionIndex = self.index(of: ".") ?? self.endIndex
 		
 		return self.substring(from: extensionIndex)
 	}
@@ -370,6 +370,18 @@ extension String {
 	
 	var simplified : String {
 		get {
+			var result = ""
+			let chars = self.stack
+			while !chars.isEmpty {
+				let char = chars.pop()
+				if char == "é" {
+					result += "e"
+				} else {
+					if "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_".contains(char) {
+						result += char
+					}
+				}
+			}
 			var s = self.replacingOccurrences(of: " ", with: "")
 			s = s.replacingOccurrences(of: "-", with: "")
 			s = s.replacingOccurrences(of: "é", with: "e")
@@ -384,7 +396,7 @@ extension String {
 	
 	var underscoreSimplified : String {
 		get {
-			var s = self.replacingOccurrences(of: " ", with: "_")
+			let s = self.replacingOccurrences(of: " ", with: "_")
 			return s.simplified
 		}
 	}
