@@ -171,10 +171,25 @@ class GoDMovesViewController: GoDTableViewController {
 	
 	
 	@IBAction func setMoveName(_ sender: NSTextField) {
-		let newName = sender.stringValue
-		
-		if currentMove.name.duplicateWithString(newName).replace() {
-			self.moves[currentMove.moveIndex].name = newName
+		if nameID.stringValue.integerValue != nil {
+			var value = nameID.stringValue.integerValue!
+			value = value < 0 ? 0 : value
+			value = value > kMaxStringID ? kMaxStringID : value
+			
+			self.currentMove.nameID = value
+			
+			if currentMove.nameID == 0 {
+				return
+			}
+			if sender.stringValue.length == 0 {
+				sender.stringValue = self.currentMove.name.string
+				return
+			}
+			
+			let string = XGString(string: sender.stringValue, file: XGFiles.common_rel, sid: currentMove.nameID)
+			if !XGFiles.common_rel.stringTable.addString(string, increaseSize: true, save: true) {
+				printg("Failed to set move name:", sender.stringValue)
+			}
 		}
 		
 		self.reloadViewWithActivity()

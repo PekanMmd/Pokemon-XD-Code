@@ -54,6 +54,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			self.displayAlert(title: "Error", text: text)
 			return
 		}
+		printg("Searching for free string id...")
 		XGThreadManager.manager.runInBackgroundAsync {
 			if let id = freeMSGID() {
 				XGThreadManager.manager.runInForegroundAsync {
@@ -77,19 +78,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	
 	@IBAction func setVerboseLogs(_ sender: Any) {
+		printg("Set verbose logs")
 		verbose = true
 	}
 	
 	@IBAction func setFastLogs(_ sender: Any) {
+		printg("Set fast logs")
 		verbose = false
 	}
 	
 	@IBOutlet weak var fileSizeMenuItem: NSMenuItem!
 	
 	@IBAction func deleteLogs(_ sender: Any) {
+		printg("Deleting logs...")
 		for file in XGFolders.Logs.files where file.fileType == .txt {
 			file.delete()
 		}
+		printg("Logs deleted")
 	}
 	
 	
@@ -142,6 +147,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			return
 		}
 		isBuilding = true
+		printg("Quick building ISO...")
 		XGThreadManager.manager.runInBackgroundAsync {
 			XGUtility.compileMainFiles()
 			if filesTooLargeForReplacement != nil  {
@@ -173,6 +179,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			return
 		}
 		isBuilding = true
+		printg("Rebuilding ISO...")
 		XGThreadManager.manager.runInBackgroundAsync {
 			XGUtility.compileAllFiles()
 			if filesTooLargeForReplacement != nil  {
@@ -199,6 +206,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func decompileXDS(_ sender: Any) {
+		printg("Decompiling XDS scripts...")
 		XGThreadManager.manager.runInBackgroundAsync {
 			if game == .XD {
 				XGUtility.documentXDS()
@@ -255,6 +263,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			return
 		}
 		isDocumenting = true
+		printg("Documenting ISO...")
 		XGThreadManager.manager.runInBackgroundAsync {
 			XGUtility.documentISO(forXG: false)
 			self.isDocumenting = false

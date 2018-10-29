@@ -68,15 +68,23 @@ class GoDTypeViewController: GoDTableViewController {
 	
 	
 	@IBAction func save(_ sender: Any) {
+		
 		if currentType != nil {
-			if let id = nameID.stringValue.integerValue {
-				currentType.nameID = id
+			
+			if nameID.stringValue.integerValue != nil {
+				var value = nameID.stringValue.integerValue!
+				value = value < 0 ? 0 : value
+				value = value > kMaxStringID ? kMaxStringID : value
+				
+				currentType.nameID = value
+				
 				if name.stringValue.length > 0 {
-					if let s = getStringWithID(id: id) {
-						if !s.duplicateWithString(name.stringValue).replace() {
-							printg("Failed to save type name:", name.stringValue)
-						}
+					
+					let string = XGString(string: name.stringValue, file: XGFiles.common_rel, sid: currentType.nameID)
+					if !XGFiles.common_rel.stringTable.addString(string, increaseSize: true, save: true) {
+						printg("Failed to set type name:", name.stringValue)
 					}
+					
 				}
 			}
 			
@@ -87,6 +95,7 @@ class GoDTypeViewController: GoDTableViewController {
 			currentType.save()
 		}
 		setUp()
+		self.table.reloadData()
 	}
 	
 	

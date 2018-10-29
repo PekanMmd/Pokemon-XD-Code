@@ -177,6 +177,12 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		}
 		
 		if !self.containsStringWithId(string.id) {
+			
+			if string.id == 0 {
+				printg("Cannot add string with id 0")
+				return false
+			}
+			
 			let bytesRequired = string.dataLength + 8
 			if self.extraCharacters > bytesRequired {
 				self.stringTable.deleteBytes(start: stringTable.length - bytesRequired, count: bytesRequired)
@@ -188,12 +194,27 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 			}
 			
 			self.stringTable.insertRepeatedByte(byte: 0, count: bytesRequired, atOffset: (numberOfEntries * 8) + kEndOfHeader)
+			let bytes = string.byteStream.map { (i) -> Int in
+				return Int(i)
+			}
+			self.stringTable.replaceBytesFromOffset( ((numberOfEntries + 1) * 8) + kEndOfHeader, withByteStream: bytes)
+			
 			self.increaseOffsetsAfter(0, byCharacters: bytesRequired)
+			self.stringOffsets[string.id] = ((numberOfEntries + 1) * 8) + kEndOfHeader
+			self.stringIDs.append(string.id)
+			
 			self.stringTable.replace2BytesAtOffset(kNumberOfStringsOffset, withBytes: numberOfEntries + 1)
 			self.updateOffsets()
+			
+			if save {
+				self.save()
+			}
+			return true
+			
+		} else {
+			
+			return self.replaceString(string, save: save)
 		}
-		
-		return self.replaceString(string, save: save)
 	}
 	
 	@objc func getOffsets() {

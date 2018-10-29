@@ -18,11 +18,7 @@ class XGString: NSObject {
 	
 	@objc var dataLength : Int {
 		get {
-			var count = 1 // 1 for the null byte to terminate the string
-			for char in chars {
-				count += char.length
-			}
-			return count
+			return self.byteStream.count
 		}
 	}
 	
@@ -56,7 +52,7 @@ class XGString: NSObject {
 			for char in chars {
 				stream = stream + char.byteStream
 			}
-			stream += [0]
+			stream += [0, 0]
 			return stream
 		}
 	}

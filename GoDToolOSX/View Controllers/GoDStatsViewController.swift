@@ -319,14 +319,29 @@ class GoDStatsViewController: GoDTableViewController {
 	}
 	
 	@IBAction func setName(_ sender: NSTextField) {
-		self.setNameID(nameIDField)
 		if nameIDField.stringValue.integerValue != nil {
-			if nameField.stringValue.length > 0 {
-				_ = self.pokemon.name.duplicateWithString(nameField.stringValue).replace()
+			var value = nameIDField.stringValue.integerValue!
+			value = value < 0 ? 0 : value
+			value = value > kMaxStringID ? kMaxStringID : value
+			
+			self.pokemon.nameID = value
+			
+			if pokemon.nameID == 0 {
+				return
+			}
+			if sender.stringValue.length == 0 {
+				sender.stringValue = self.pokemon.name.string
+				return
+			}
+			
+			let string = XGString(string: sender.stringValue, file: XGFiles.common_rel, sid: pokemon.nameID)
+			if !XGFiles.common_rel.stringTable.addString(string, increaseSize: true, save: true) {
+				printg("Failed to set pokemon name:", sender.stringValue)
 			}
 		}
 		
 		self.reloadView()
+		self.table.reloadData()
 	}
 	
 	@IBAction func setNameID(_ sender: NSTextField) {
