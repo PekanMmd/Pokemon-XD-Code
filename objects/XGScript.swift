@@ -614,16 +614,21 @@ class XGScript: NSObject {
 				
 			case .jumpIfFalse:
 				let predicate = stack.pop()
-				let location = XDSExpr.locationWithIndex(instruction.parameter)
-				stack.push(.jumpFalse(predicate, location))
+				if predicate.isReturn {
+					stack.push(.nop)
+				} else {
+					let location = XDSExpr.locationWithIndex(instruction.parameter)
+					stack.push(.jumpFalse(predicate, location))
+				}
 				
 				
             case .jumpIfTrue:
-				if stack.peek().isReturn {
+				let predicate = stack.pop()
+				if predicate.isReturn {
 					stack.push(.nop)
 				} else {
-					// negate condition so can use jump false
-					stack.push(.jumpFalse( XDSExpr.unaryOperator(16, stack.pop()), XDSExpr.locationWithIndex(instruction.parameter)))
+					let location = XDSExpr.locationWithIndex(instruction.parameter)
+					stack.push(.jumpTrue(predicate, location))
 				}
 				
 				
@@ -1553,11 +1558,12 @@ class XGScript: NSObject {
 			updatedStack = newStack
 		}
 		
-		// TODO: if statements, while loops, functions
+		// TODO: if else statements, while loops
 		// recursively compound statements into if, while or functions
 		
 		func compoundList(exprs: [XDSExpr]) -> [XDSExpr] {
 			
+			var exprs = exprs
 			var list = [XDSExpr]()
 			var index = 0
 			var previousLocation = ""
@@ -1600,6 +1606,35 @@ class XGScript: NSObject {
 					previousLocation = location
 					index += 1
 					list.append(expr)
+					
+				case .jumpTrue(let condition, let location):
+					// don't increase index so expr can be processed again as a jumpFalse
+					switch condition {
+					// swap binary operator direction if possible
+						
+					// == <-> !=
+					case .binaryOperator(48, let e1, let e2):
+						exprs[index] = .jumpFalse(.binaryOperator(53, e1, e2), location)
+					case .binaryOperator(53, let e1, let e2):
+						exprs[index] = .jumpFalse(.binaryOperator(48, e1, e2), location)
+						
+					// < <-> >=
+					case .binaryOperator(51, let e1, let e2):
+						exprs[index] = .jumpFalse(.binaryOperator(50, e1, e2), location)
+					case .binaryOperator(50, let e1, let e2):
+						exprs[index] = .jumpFalse(.binaryOperator(51, e1, e2), location)
+						
+					// > <-> <=
+					case .binaryOperator(49, let e1, let e2):
+						exprs[index] = .jumpFalse(.binaryOperator(52, e1, e2), location)
+					case .binaryOperator(52, let e1, let e2):
+						exprs[index] = .jumpFalse(.binaryOperator(49, e1, e2), location)
+						
+					default:
+						// otherwise negate the condition with the not operator
+						exprs[index] = .jumpFalse(.unaryOperator(16, condition), location)
+					}
+					
 					
 				case .jumpFalse(let condition, let location):
 					// same for jump true

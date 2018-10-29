@@ -123,7 +123,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	@objc class func dol() -> XGStringTable {
 		
 		if game == .XD {
-			return  XGStringTable(file: .dol, startOffset: 0x374FC0, fileSize: 0x178BE)
+			return  XGStringTable(file: .dol, startOffset: 0x374FC0, fileSize: 0x178BC)
 		} else {
 			if region == .JP {
 				return XGStringTable(file: .dol, startOffset: 0x2bece0, fileSize: 0xd850)

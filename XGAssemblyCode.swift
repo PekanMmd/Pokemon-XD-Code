@@ -221,6 +221,15 @@ class XGAssembly {
 		dol.save()
 	}
 	
+	class func setFirsHMIndex(_ index: Int) {
+		let off1 = 0x15e92c - kDOLtoRAMOffsetDifference
+		let off2 = 0x15e948 - kDOLtoRAMOffsetDifference
+		let ins1 = [XGASM.cmpwi(.r3, index)]
+		let ins2 = [XGASM.subi(.r0, .r3, index)]
+		replaceASM(startOffset: off1, newASM: ins1)
+		replaceASM(startOffset: off2, newASM: ins2)
+	}
+	
 	class func setShadowMovesUseHMFlag() {
 		
 		if game == .XD && region == .US {
