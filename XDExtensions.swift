@@ -242,7 +242,7 @@ extension XGUtility {
 		for i in 0 ..< decksOrdered.count {
 			let deck = decksOrdered[i]
 			if deck.file.exists {
-				deckArchive.shiftAndReplaceFileWithIndexEfficiently(i * 2, withFile: deck.file, save: false)
+				deckArchive.shiftAndReplaceFileWithIndexEfficiently(i * 2, withFile: deck.file.compress(), save: false)
 			}
 		}
 		deckArchive.save()
@@ -360,7 +360,6 @@ extension XGUtility {
 		updateTutorMoves()
 		updatePokeSpots()
 		updateShadowMonitor()
-		importFsys()
 	}
 	
 	class func prepareForCompilation() {

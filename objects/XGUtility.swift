@@ -28,8 +28,9 @@ class XGUtility {
 	}
 	
 	class func compileMainFiles() {
-		prepareForCompilation()
-		ISO.importFiles([.fsys("common"), .dol])
+		prepareForQuickCompilation()
+		importFsys()
+		ISO.importFiles([.fsys("common"), XGFiles.fsys("pocket_menu"), XGFiles.fsys("fight_common"), XGFiles.fsys("common_dvdeth"), .dol])
 		if game == .XD {
 			ISO.importFiles([.fsys("deck_archive")])
 		}
