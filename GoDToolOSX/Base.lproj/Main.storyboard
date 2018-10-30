@@ -321,6 +321,12 @@
                                                 <action selector="decompileXDS:" target="Voe-Tx-rLC" id="OfD-PK-0J2"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Save XDS Classes File" id="Zsg-MN-BjL">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="getXDSClasses:" target="Voe-Tx-rLC" id="z54-83-rpC"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Save XDS Macros File" id="vda-DR-005">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>

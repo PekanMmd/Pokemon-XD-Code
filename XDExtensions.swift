@@ -1267,11 +1267,83 @@ extension XGUtility {
 		
 	}
 	
+	class func documentXDSClasses() {
+		printg("documenting script classes...")
+		var text = ""
+		var classes = [(id: Int, name: String)]()
+		for (id, name) in ScriptClassNames {
+			classes.append((id, name))
+		}
+		classes.sort { (c1, c2) -> Bool in
+			return c1.id < c2.id
+		}
+		for (id, name) in classes {
+			if id > 0 {
+				text += "\n\n// " + name + "\n"
+			}
+			if let data = ScriptClassFunctions[id] {
+				let classPrefix = id == 0 ? "" : "\(name)."
+				for info in data {
+					text += classPrefix + info.name + "("
+					if info.parameterCount == 0 || (info.parameterCount == 1 && id > 3) {
+						text += ")\n"
+						continue
+					}
+					
+					for i in 0 ..< info.parameterCount {
+						
+						let index = id > 3 ? i + 1 : i
+						if index < info.parameterCount {
+							if info.parameterTypes != nil {
+								if index < info.parameterTypes!.count {
+									if let type = info.parameterTypes![index] {
+										text += " \(type.typeName)"
+									} else {
+										text += " Unknown"
+									}
+								} else {
+									text += " Unknown"
+								}
+							} else {
+								text += " Unknown"
+							}
+						}
+					}
+					if info.parameterTypes != nil {
+						for option in info.parameterTypes! {
+							if let o = option {
+								if o == XDSMacroTypes.optional(_) {
+									text += " \(o.typeName)"
+								}
+							}
+							
+						}
+					}
+					
+					text += " ) -> "
+					if let returnType = info.returnType {
+						if returnType != .none {
+							text += returnType.typeName
+						}
+					} else {
+						text += "Unknown"
+					}
+					text += "\n"
+				}
+			}
+		}
+		if text.length > 0 {
+			let file = XGFiles.xds("Classes")
+			printg("documenting script: ", file.fileName)
+			text.save(toFile: file)
+		}
+	}
+	
 	class func documentXDS() {
 		let files = XGFolders.Scripts.files.sorted { (s1, s2) -> Bool in
 			return s1.fileName < s2.fileName
 		}
-		files.map({ (file) in
+		_ = files.map({ (file) in
 			if file.fileType == .scd {
 				
 				let xds = XGFiles.xds(file.fileName.removeFileExtensions())

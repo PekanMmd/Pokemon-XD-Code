@@ -883,7 +883,9 @@ class XGScript: NSObject {
 				
 				// get macro types if they have been documented
 				if let returnMacro = XGScriptClass.classes(c)[f].returnMacro {
-					globalMacroTypes[XGScriptClass.classes(c).classDotFunction(f)] = returnMacro
+					if returnMacro != .array(.anyType) {
+						globalMacroTypes[XGScriptClass.classes(c).classDotFunction(f)] = returnMacro
+					}
 					
 				}
 				
@@ -1011,6 +1013,14 @@ class XGScript: NSObject {
 			// returns true if the type was not previously known
 			// if so the expr should be considered updated
 			// to show new information was made available
+			
+			var to = to
+			switch to {
+			case .array(let t):
+				to = t
+			default:
+				break
+			}
 			
 			if !to.printsAsMacro {
 				return false

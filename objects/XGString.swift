@@ -173,7 +173,7 @@ class XGString: NSObject {
 		var success = true
 		for table in allStringTables {
 			if table.containsStringWithId(self.id) {
-				success = success && table.replaceString(self, alert: false, save: true, increaseLength: increaseSize)
+				success = success && table.replaceString(self, alert: false, save: save, increaseLength: increaseSize)
 			}
 		}
 		return success

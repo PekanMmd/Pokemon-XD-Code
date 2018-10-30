@@ -260,7 +260,7 @@ class XGMutableData: NSObject {
 	@objc func replace2BytesAtOffset(_ start : Int, withBytes bytes: Int) {
 		
 		if start < 0 || start + 2 > self.length {
-			printg("Attempting to read 2 bytes from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+			printg("Attempting to write 2 bytes from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
 		
 		var bytes = UInt16(bytes)
@@ -272,7 +272,7 @@ class XGMutableData: NSObject {
 	@objc func replaceWordAtOffset(_ start : Int, withBytes newbytes: UInt32) {
 		
 		if start < 0 || start + 4 > self.length {
-			printg("Attempting to read 4 bytes from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+			printg("Attempting to write 4 bytes from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
 		
 		var bytes = UInt32(newbytes)
@@ -284,7 +284,7 @@ class XGMutableData: NSObject {
 	@objc func replace4BytesAtOffset(_ start : Int, withBytes newbytes: Int) {
 		
 		if start < 0 || start + 4 > self.length {
-			printg("Attempting to read 4 bytes from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+			printg("Attempting to write 4 bytes from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
 		
 		var bytes = newbytes.unsigned

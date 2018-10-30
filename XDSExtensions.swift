@@ -803,8 +803,7 @@ extension XDSScriptCompiler {
 				if tokens.count > 0 {
 					if tokens[0] == "define" {
 						
-						// special define statement for unknown identifier
-						// unsure how necessary it is but for now must be explicitly stated
+						// special define statements for compiler options
 						if tokens.count == 3 {
 							if tokens[1].contains("++") {
 								if !handleSpecialMacro(tokens: tokens) {
@@ -852,7 +851,7 @@ extension XDSScriptCompiler {
 					} else {
 						var updatedLine = line
 						for (macro, repl) in macros {
-							for add in [" ", ".", ")", ">", "]", "(", "<", "[", "\"", "\n", "}", "{"] {
+							for add in [" ", ".", ")", ">", "]", "(", "<", "[", "\"", "\n", "}", "{", ";"] {
 								updatedLine = updatedLine.replacingOccurrences(of: macro + add, with: repl + add)
 							}
 						}

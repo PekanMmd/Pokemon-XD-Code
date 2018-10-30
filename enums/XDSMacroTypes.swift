@@ -26,7 +26,7 @@ func >=(lhs: XDSMacroTypes, rhs: XDSMacroTypes) -> Bool {
 	return lhs.index >= rhs.index
 }
 
-enum XDSMacroTypes {
+indirect enum XDSMacroTypes {
 	
 	case invalid
 	case none
@@ -59,6 +59,8 @@ enum XDSMacroTypes {
 	case language
 	case PCBox
 	
+	case array(XDSMacroTypes)
+	
 	// replaced with special macro but not added as a define statement
 	case msg
 	case bool
@@ -75,10 +77,12 @@ enum XDSMacroTypes {
 	case integerUnsigned
 	
 	case vector
-	case array
 	case arrayIndex
 	case string // not msgs, raw strings used mainly by printf for debugging
+	case list(XDSMacroTypes) // multiple parameters of an unspecified number
 	case anyType // rare but some functions can take any value as parameter, usually when it is unused
+	case variableType // the type may vary depending on the other parameters
+	case optional(XDSMacroTypes) // may be included or discluded
 	case object(Int) // value of class type 33 or higher, same type as the class calling the function
 	case objectName(String) // same as object but specified by its name instead of index for convenience
 	
@@ -115,6 +119,8 @@ enum XDSMacroTypes {
 		case .language: return 25
 		case .PCBox: return 26
 			
+		case .array: return 99
+			
 		// leave a gap in case of future additions
 		case .msg: return 100
 		case .bool: return 101
@@ -132,11 +138,13 @@ enum XDSMacroTypes {
 			
 		// more gaps
 		case .vector: return 300
-		case .array: return 301
-		case .arrayIndex: return 302
-		case .string: return 303
+		case .arrayIndex: return 301
+		case .string: return 302
+		case .list: return 303
 			
 		// I hope you like gaps
+		case .optional: return 497
+		case .variableType: return 498
 		case .anyType: return 499
 		case .object(let cid): return 500 + cid
 		case .objectName(let s):
@@ -149,12 +157,127 @@ enum XDSMacroTypes {
 		}
 	}
 	
+	var macroType : XDSMacroTypes {
+		switch self {
+		case .array(let t):
+			return t
+		case .optional(let t):
+			return t
+		default:
+			return self
+		}
+	}
+	
 	var needsDefine : Bool {
 		return self < XDSMacroTypes.msg && self > XDSMacroTypes.none
 	}
 	
 	var printsAsMacro : Bool {
 		return self < XDSMacroTypes.integer && self > XDSMacroTypes.none
+	}
+	
+	var typeName : String {
+		switch self {
+		case .invalid:
+			return "Invalid"
+		case .none:
+			return "Null"
+		case .pokemon:
+			return "PokemonID"
+		case .item:
+			return "ItemID"
+		case .model:
+			return "ModelID"
+		case .move:
+			return "MoveID"
+		case .room:
+			return "RoomID"
+		case .flag:
+			return "FlagID"
+		case .talk:
+			return "SpeechType"
+		case .ability:
+			return "AbilityID"
+		case .msgVar:
+			return "MessageVariable"
+		case .battleResult:
+			return "BattleResult"
+		case .shadowStatus:
+			return "ShadowPokemonStatus"
+		case .pokespot:
+			return "PokespotID"
+		case .battleID:
+			return "BattleID"
+		case .shadowID:
+			return "ShadowPokemonID"
+		case .treasureID:
+			return "TreasureID"
+		case .battlefield:
+			return "RoomID"
+		case .partyMember:
+			return "NPCPartyMemberID"
+		case .integerMoney:
+			return "Pokedollars"
+		case .integerCoupons:
+			return "Pokecoupons"
+		case .integerQuantity:
+			return "Quantity"
+		case .integerIndex:
+			return "Index"
+		case .vectorDimension:
+			return "VectorDimension"
+		case .giftPokemon:
+			return "GiftID"
+		case .region:
+			return "RegionID"
+		case .language:
+			return "LanguageID"
+		case .PCBox:
+			return "PCBoxID"
+		case .msg:
+			return "StringID"
+		case .bool:
+			return "TrueOrFalse"
+		case .integer:
+			return "Integer"
+		case .float:
+			return "Decimal"
+		case .integerFloatOverload:
+			return "IntegerOrDecimal"
+		case .integerAngleDegrees:
+			return "Degrees"
+		case .floatAngleDegrees:
+			return "DecimalDegrees"
+		case .floatAngleRadians:
+			return "Radians"
+		case .floatFraction:
+			return "DecimalFromZeroToOne"
+		case .integerByte:
+			return "8BitInteger"
+		case .integerUnsigned:
+			return "8BitPositiveInteger"
+		case .vector:
+			return "Vector"
+		case .array(let t):
+			return "Array[\(t.typeName)]"
+		case .arrayIndex:
+			return "ArrayIndex"
+		case .string:
+			return "String"
+		case .list(let t):
+			return "\(t.typeName) ..."
+		case .variableType:
+			return "TypeVaries"
+		case .optional(let t):
+			return "Optional(\(t.typeName)"
+		case .anyType:
+			return "AnyType"
+		case .object(let id):
+			let name = XGScriptClass.classes(id).name
+			return "\(name)Object"
+		case .objectName(let name):
+			return "\(name)Object"
+		}
 	}
 	
 }

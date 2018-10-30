@@ -687,6 +687,8 @@ indirect enum XGFolders {
 			}
 		}
 		
+		
+		
 	}
 	
 	static func setUpFolderFormatForRandomiser() {

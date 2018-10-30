@@ -210,6 +210,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		XGThreadManager.manager.runInBackgroundAsync {
 			if game == .XD {
 				XGUtility.documentXDS()
+				printg("Finished decompiling XDS scripts.")
 			}
 		}
 	}
@@ -218,9 +219,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		XGThreadManager.manager.runInBackgroundAsync {
 			if game == .XD {
 				XGUtility.documentMacrosXDS()
+				printg("Finished saving XDS macros file.")
 			}
 		}
 	}
+	
+	@IBAction func getXDSClasses(_ sender: Any) {
+		XGThreadManager.manager.runInBackgroundAsync {
+			if game == .XD {
+				XGUtility.documentXDSClasses()
+				printg("Finished saving XDS classes file.")
+			}
+		}
+	}
+	
 	
 	@IBAction func showHexCalculator(_ sender: Any) {
 		self.homeViewController.performSegue(withIdentifier: NSStoryboardSegue.Identifier(rawValue: "toHexCalcVC"), sender: self.homeViewController)

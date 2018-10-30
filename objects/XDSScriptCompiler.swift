@@ -144,7 +144,7 @@ class XDSScriptCompiler: NSObject {
 		
 		loadAllStrings()
 		if let table = stringTable {
-			for stable in allStringTables where stable.file.path == table.file.path {
+			for stable in allStringTables where stable.file.path == table.file.path || stable.file == .common_rel {
 				printg("saving string table:", stable.file.path)
 				stable.save()
 			}
@@ -309,7 +309,7 @@ class XDSScriptCompiler: NSObject {
 						for table in allStringTables {
 							if table.file.path == stable.file.path {
 								let string = XGString(string: uptext, file: table.file, sid: newID)
-								if table.addString(string, increaseSize: increaseMSGSize, save: true) {
+								if table.addString(string, increaseSize: increaseMSGSize, save: false) {
 									if verbose {
 										printg("Added string :\(text) to file: \(stable.file.path) with ID: \(newID!)")
 									}

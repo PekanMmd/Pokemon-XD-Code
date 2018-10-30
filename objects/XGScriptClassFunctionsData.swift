@@ -85,49 +85,49 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 	0 : [
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Timer-related functions", start = 17, nb = 6),
-		("pause", 17, 1, nil, nil),
-		("yield", 18, 1, [.integer], nil),
-		("setTimer", 19, 1, nil, nil),
+		("pause", 17, 1, [.float], .none),
+		("yield", 18, 1, [.integer], .none),
+		("setTimer", 19, 1, nil, .none),
 		("getTimer", 20, 1, nil, nil),
-		("waitUntil", 21, 2, nil, nil),
-		("printString", 22, 1, [.string], nil),
-		("typename", 29, 1, nil, nil),
+		("waitUntil", 21, 2, nil, .none),
+		("printString", 22, 1, [.string], .none),
+		("typeName", 29, 1, [.anyType], .string),
 		("getCharacter", 30, 2, [.string, .integerIndex], nil), //# (str, index)
 		("setCharacter", 31, 1, nil, nil),
-		("findSubstring", 32, 2, nil, .invalid), //#BUGGED, returns -1
-		("setBit", 33, 2, nil, nil),
-		("clearBit", 34, 2, nil, nil),
-		("mergeBits", 35, 2, nil, nil),
-		("nand", 36, 2, nil, nil),
+		("findSubstring", 32, 2, [.string, nil], .invalid), //#BUGGED, returns -1
+		("setBit", 33, 2, [.integer, .integer], .integer),
+		("clearBit", 34, 2, [.integer, .integer], .integer),
+		("mergeBits", 35, 2, [.integer, .integer], .integer),
+		("nand", 36, 2, [.bool, .bool], .bool),
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Math functions", start = 48, nb = 6),
-		("sin", 48, 1, [.integer], .float), //# trigo. function below work with degrees
-		("cos", 49, 1, [.integer], .float),
-		("tan", 50, 1, [.integer], .float),
-		("atan2", 51, 1, nil, nil),
-		("acos", 52, 1, [.float], .integer),
-		("sqrt", 53, 1, nil, nil),
+		("sin", 48, 1, [.integerAngleDegrees], .float), //# trigo. function below work with degrees
+		("cos", 49, 1, [.integerAngleDegrees], .float),
+		("tan", 50, 1, [.integerAngleDegrees], .float),
+		("atan2", 51, 1, [.float], .integer),
+		("acos", 52, 1, [.float], .integerAngleDegrees),
+		("sqrt", 53, 1, [.float], .float),
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Functions manipulating a single flag", start = 129, nb = 5),
 		
-		("setFlagTotrue", 129, 1, [.flag], .none),
-		("setFlagTofalse", 130, 1, [.flag], .none),
+		("setFlagToTrue", 129, 1, [.flag], .none),
+		("setFlagToFalse", 130, 1, [.flag], .none),
 		("setFlag", 131, 2, [.flag, .integer], .none),
-		("checkFlag", 132, 2, [.flag, .integer], .bool),
+		("isFlagSet", 132, 2, [.flag, .integer], .bool),
 		("getFlag", 133, 1, [.flag], .integer),
 		
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Misc. 1", start = 136, nb = 5),
 		
-		("printf", 136, 1, [.string], .none), // params also includes pattern matches like %d
+		("printf", 136, 1, [.string, .optional(.list(.anyType))], .none), // params also include pattern matches like %d
 		("genRandomNumberMod", 137, 1, [.integer], .integer), // generates a random number between 0 and the parameter - 1
 		("setShadowPokemonStatus", 138, 2, [.shadowID, .shadowStatus], .none),
-		("checkMultiFlagsInv", 139, 1, nil, .bool),
-		("checkMultiFlags", 140, 1, nil, .bool),
+		("checkMultiFlagsInv", 139, 1, [.array(.flag)], .bool),
+		("checkMultiFlags", 140, 1, [.array(.flag)], .bool),
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Debugging functions", start = 142, nb = 2),
 		
-		("syncTaskFromLibraryScript", 142, 3, nil, nil), //#nbArgs, function ID, ... (args, nil)
+		("syncTaskFromLibraryScript", 142, 3, [.integer, .integer, .list(.anyType)], .none), //#nbArgs, function ID, ... (args, nil)
 		("setDebugMenuVisibility", 143, 1, [.bool], .none), //# not sure it works on release builds
 		
 		//Category(name = "Misc. 2", start = 145, nb = 16),
@@ -139,14 +139,11 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("getTreasureBoxCharacter", 149, 1, [.treasureID], .objectName("Character")), //# (int treasureID) returns a character object for the treasure
 		("function148", 150, 1, [.pokemon], nil), //# take the species index as arg
 		("getArrayElement", 151, 1, [.arrayIndex], .anyType), //# (array, index)
-		("isHMMove", 152, 1, [.move], .bool),
-		("distance", 153, 2, nil, .float),  //# between the two points whose coordinates are the vector args
-		("function154", 154, 1, [.objectName("Character")], nil), //# (character), returns 0 by default
-		("function155", 155, 6, [.float, .integer, .integer, .integer, .integer, .integer], .integer),  //# (float, int, int, int, int, int) -> 0
-		("GCComListenerDestroy", 154, 0, [.none], nil), //# so says Dolphin-Emu
-		("function155", 155, 5, [.integer, .float, .float, .float, .float], .integer),  //# (int, float, float, float, float) -> 0
-		("function156", 156, 1, nil, nil), //# return type: (int) -> character
-		("getScreenResfreshRate", 157, 0, [.none], .float), //# FPS as float
+		("isHM", 152, 1, [.move], .bool),
+		("distance", 153, 2, [.vector, .vector], .float),  //# between the two points whose coordinates are the vector args
+		("characterGetID", 154, 1, [.objectName("Character")], .integer), //# (character), returns 0 by default
+		("getCharacterWithID", 156, 1, [.integer], .objectName("Character")), //# return type: (int) -> character
+		("getFrameRate", 157, 0, [.none], .float), //# FPS as float
 		("getRegion", 158, 0, [.none], .region),
 		("getLanguage", 159, 0, [.none], .language)
 	],
@@ -161,18 +158,18 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		//Category(name = "Methods", start = 16, nb = 13),
 		
-		("clear", 16, 1, [.vector], nil),
-		("normalize", 17, 1, [.vector], nil),
-		("set", 18, 3, [.vector, .vectorDimension, .float], nil),
-		("set2", 19, 4, [.vector, nil, nil, nil], nil),
-		("fill", 20, 2, [.vector, nil], nil),
+		("clear", 16, 1, [.vector], .vector),
+		("normalize", 17, 1, [.vector], .vector),
+		("set", 18, 3, [.vector, .vectorDimension, .float], .vector),
+		("set2", 19, 4, [.vector, .vectorDimension, .float, nil], .vector),
+		("fill", 20, 2, [.vector, .float], .vector),
 		("abs", 21, 1, [.vector], .none), //#in place
 		("negate", 22, 1, [.vector], .none), //#in place
 		("isZero", 23, 1, [.vector], .bool),
 		("crossProduct", 24, 2, [.vector, .vector], .vector),
 		("dotProduct", 25, 2, [.vector, .vector], .float),
-		("norm", 26, 1, [.vector], nil),
-		("squaredNorm", 27, 1, [.vector], nil),
+		("norm", 26, 1, [.vector], .vector),
+		("squaredNorm", 27, 1, [.vector], .vector),
 		("angle", 28, 2, [.vector], .float)
 	],
 	
@@ -185,22 +182,22 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Type conversions", start = 3, nb = 1),
 		
-		("toString", 3, 1, [.array], .string),
+		("toString", 3, 1, [.array(.anyType)], .string),
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Methods (1)", start = 16, nb = 5),
 		
-		("get", 16, 2, [.array, .arrayIndex], .anyType), // array get
-		("set", 17, 3, [.array, .arrayIndex, .anyType], .none), // array set
-		("size", 18, 1, [.array], .integer),
-		("resize", 19, 2, [.array, .integer], .invalid), //#REMOVED
-		("extend", 20, 2, [.array, .integer], .invalid), //#REMOVED
+		("get", 16, 2, [.array(.anyType), .arrayIndex], .anyType), // array get
+		("set", 17, 3, [.array(.anyType), .arrayIndex, .anyType], .none), // array set
+		("size", 18, 1, [.array(.anyType)], .integer),
+		("resize", 19, 2, [.array(.anyType), .integer], .invalid), //#REMOVED
+		("extend", 20, 2, [.array(.anyType), .integer], .invalid), //#REMOVED
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Methods (2) : iterator functions", start = 22, nb = 4),
 		
-		("resetIterator", 22, 1, [.array], .none),
-		("derefIterator", 23, 2, [.array, nil], nil),
-		("getIteratorPos", 24, 2, [.array, nil], .integer),
-		("append", 25, 2, [.array, .anyType], .invalid) //#REMOVED
+		("resetIterator", 22, 1, [.array(.anyType)], .none),
+		("derefIterator", 23, 2, [.array(.anyType), nil], .none),
+		("getIteratorPos", 24, 2, [.array(.anyType), nil], .integer),
+		("append", 25, 2, [.array(.anyType), .anyType], .invalid) //#REMOVED
 	],
 	
 //MARK: - Camera
@@ -217,11 +214,11 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//Category(name = "Known methods", start = 16, nb=-1),
 		
 		("setVisibility", 16, 2, [.objectName("Character"), .bool], .none), //# (int visible)
-		("displayMsg", 21, 3, [.objectName("Character"), .msg, .bool], .none), //# (int msgID, int unk ?)
+		("displayMessage", 21, 3, [.objectName("Character"), .msg, .bool], .none), //# (int msgID, int unk ?)
 		
-		("checkIfWithin2DBounds", 25, 5, [.objectName("Character"), .float, .float, .float, .float], .bool), // # (Float x1, Float z1, Float x2, Float z2) ordering of ranges is interchangeable i.e. x1 > x2 == x2 > x1
-		("checkIsWithin2DBoundsOptions", 27, 7, [.objectName("Character"), .float, .float, .float, .float, .integer, .bool], .bool), //# x1 z1 x2 z2 unk unk
-		("setPosition", 29, 3, [.objectName("Character"), .integerFloatOverload, .integerFloatOverload, .integerFloatOverload], .none), //# (int/float x, int/float y, int/float z) accepts either int or float for any of the values and can mix and match as desired
+		("isWithinBounds", 25, 5, [.objectName("Character"), .float, .float, .float, .float], .bool), // # (Float x1, Float z1, Float x2, Float z2) ordering of ranges is interchangeable i.e. x1 > x2 == x2 > x1
+		("isWithinBoundsWithOptions", 27, 7, [.objectName("Character"), .float, .float, .float, .float, .integer, .bool], .bool), //# x1 z1 x2 z2 unk unk
+		("setPosition", 29, 4, [.objectName("Character"), .integerFloatOverload, .integerFloatOverload, .integerFloatOverload], .none), //# (int/float x, int/float y, int/float z) accepts either int or float for any of the values and can mix and match as desired
 		
 		("moveToPosition", 36, 4, [.objectName("Character"), .integer, .integer, .integer], .none), //# (int speed, int x, int y, int z)
 		
@@ -234,10 +231,10 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		("faceAngleInDegrees", 62, 2, [.objectName("Character"), .integerAngleDegrees], .none), // # (int direction) (0 = straight down)
 		
-		("setModel", 70, 2, [.objectName("Character"), .model], nil), //# (int id)
+		("setModel", 70, 2, [.objectName("Character"), .model], .none), //# (int id)
 		
 		("getMovementSpeed", 72, 2, [.objectName("Character")], .floatFraction), // float between 0.0 and 1.0
-		("talk", 73, 3, [.objectName("Character"), .talk, .msg,], nil), //# (int type, ...) // set last 2 macros based on talk type
+		("talk", 73, 3, [.objectName("Character"), .talk, .msg, .optional(.variableType), .optional(.variableType)], .anyType), //# (int type, ...) // set last 2 macros based on talk type
 		//# Some type of character dialogs (total: 22):
 		//# (Valid values for type : 1-3, 6-21).
 		//#	(1, msgID): normal msg
@@ -254,7 +251,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Known methods", start = 16, nb=-1),
 		
-		("playSpecifiedSpeciesCry", 16, 2, [.objectName("Pokemon"), .pokemon], .none), //# (int species)
+		("playSpeciesCry", 16, 2, [.anyType, .pokemon], .none), //# (int species) seems to ignore first parameter
 		("deleteMove", 17, 1, [.objectName("Pokemon"), .integerIndex], .none), // (int index to delete)
 		
 		("countMoves", 20, 1, [.objectName("Pokemon")], .integer),
@@ -263,15 +260,15 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		//# index = 23 does not exist
 		
-		("isShadow", 24, 1, [.objectName("Pokemon")], .bool),
+		("isShadowPokemon", 24, 1, [.objectName("Pokemon")], .bool),
 		("getMoveAtIndex", 25, 1, [.objectName("Pokemon"), .integerIndex], .move),
 		
 		("getCurrentHP", 26, 1, [.objectName("Pokemon")], .integer),
 		("getCurrentPurificationCounter", 27, 1, [.objectName("Pokemon")], .integer),
-		("getSpeciesIndex", 28, 1, [.objectName("Pokemon")], .pokemon),
+		("getSpecies", 28, 1, [.objectName("Pokemon")], .pokemon),
 		("isLegendary", 29, 1, [.objectName("Pokemon")], .bool),
 		("getHappiness", 30, 1, [.objectName("Pokemon")], .integerByte),
-		("getPokemonSpeciesNameID", 31, 1, [.objectName("Pokemon")], .msg), //# if it's 0 the species is invalid
+		("getSpeciesNameID", 31, 1, [.objectName("Pokemon")], .msg), //# if it's 0 the species is invalid
 		("getHeldItem", 32, 1, [.objectName("Pokemon")], .item),
 		("getSIDTID", 33, 1, [.objectName("Pokemon")], .integerUnsigned),
 		
@@ -301,7 +298,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//# HEAD sec. must be present
 		
 		("getLastReturnedInt", 20, 1, [.objectName("Tasks")], .integer),
-		("sleep", 21, 2, [.objectName("Tasks"), .float], nil) //# (float) (miliseconds)
+		("sleep", 21, 2, [.objectName("Tasks"), .float], .none) //# (float) (miliseconds)
 	],
 	
 //MARK: - Dialogue
@@ -309,13 +306,13 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Known methods", start = 16, nb=-1),
 		
-		("displaySilentMsgBox", 16, 4, [.objectName("Dialogue"), .msg, .bool, .bool], .none), //# (int msgID, bool isInForeground, bool printInstantly)
-		("displayMsgBox", 17, 5, [.objectName("Dialogue"), .msg, .bool, .bool, .integer], .none), //# (int msgID, bool isInForeground, bool printInstantly, int textSoundPitchLevel) makes the chirping sound as characters are displayed
+		("displayMessageSilently", 16, 4, [.objectName("Dialogue"), .msg, .bool, .bool], .none), //# (int msgID, bool isInForeground, bool printInstantly)
+		("displayMessage", 17, 5, [.objectName("Dialogue"), .msg, .bool, .bool, .integer], .none), //# (int msgID, bool isInForeground, bool printInstantly, int textSoundPitchLevel) makes the chirping sound as characters are displayed
 		("displayYesNoMenu", 21, 2, [.objectName("Dialogue"), .msg], .integerIndex), // result is not boolean but rather index of selected option, 0 indexed
 		
-		("setMsgVar", 28, 3, [.objectName("Dialogue"), .msgVar, nil], .none), //# (int type, var val) macro type for value is set by compiler based on msgvar value
+		("setMessageVariable", 28, 3, [.objectName("Dialogue"), .msgVar, .variableType], .none), //# (int type, var val) macro type for value is set by compiler based on msgvar value
 		
-		("displayCustomMenu", 29, 6, [.objectName("Dialogue"), .msg, .integer, .integer, .integer, .integerIndex], .integerIndex), // array of msgids, int number of elements, int x, int y, int index to start cursor on
+		("displayCustomMenu", 29, 6, [.objectName("Dialogue"), .array(.msg), .integer, .integer, .integer, .integerIndex], .integerIndex), // array of msgids, int number of elements, int x, int y, int index to start cursor on
 		
 		("displayPartyPokemonMenu", 32, 1, [.objectName("Dialogue")], .integerIndex), //# these functions are **exactly** the same
 		("displayPartyPokemonMenu2", 33, 1, [.objectName("Dialogue")], .integerIndex),
@@ -344,7 +341,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("hideMoneyWindow", 68, 1, [.objectName("Dialogue")], .none),
 		
 		("showCouponsWindow", 70, 3, [.objectName("Dialogue"), .integer, .integer], .none), //# (int x, int y)
-		("hidePkCouponsWindow", 71, 1, [.objectName("Dialogue")], .none),
+		("hideCouponsWindow", 71, 1, [.objectName("Dialogue")], .none),
 		
 		("startBattle", 72, 2, [.objectName("Dialogue"), .battleID], .none), //# (int battleid)
 		("getBattleResult", 74, 1, [.objectName("Dialogue")], .battleResult),
@@ -366,7 +363,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 	42 : [
 		
 		("startBattle", 16, 4, [.objectName("Battle"), .battleID, .bool, .bool], .none),// # (int isTrainer, int unknown, int battleID) (battleID list in reference folder)
-		("checkBattleResult", 18, 1, [.objectName("Battle")], .battleResult), // # sets last result to 2 if victory
+		("getBattleResult", 18, 1, [.objectName("Battle")], .battleResult), // # sets last result to 2 if victory
 		
 		("setBattlefield", 23, 2, [.objectName("Battle"), .battlefield], .none),
 		("setPostBattleText", 26, 3, [.objectName("Battle"), .battleResult, .msg], .none),
@@ -385,19 +382,19 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("freeMovement", 19, 1, [.objectName("Player")], .none),
 		
 		("receiveItem", 26, 3, [.objectName("Player"), .item, .integerQuantity], .none), //# (int amount, int ID)
-		("receiveItemWithoutMessage", 27, 3, [.objectName("Player"), .item, .integerQuantity], .none), //# (int amount, int ID)
+		("receiveItemSilently", 27, 3, [.objectName("Player"), .item, .integerQuantity], .none), //# (int item id, int quantity)
 		("hasItemInBag", 28, 2, [.objectName("Player"), .item], .bool), //# (int ID)
 		
 		("receiveMoney", 29, 2, [.objectName("Player"), .integerMoney], .none), //# (int amount) (can be < 0)
 		("getMoneyTotal", 30, 1, [.objectName("Player")], .integerMoney),
-		("getMoneyBuffer", 31, 1, [.objectName("Player")], .integerMoney),
+		("getMoneyStored", 31, 1, [.objectName("Player")], .integerMoney),
 		
 		("countPartyPokemon", 34, 1, [.objectName("Player")], .integer), //# (int amount)
 		("countShadowPartyPokemon", 35, 1, [.objectName("Player")], .integer), //# (int amount)
 		
-		("getPartyPokemonNameAsString", 36, 2, [.objectName("Player"), .integerIndex], .string), //# (int partyIndex)
+		("getPartyPokemonName", 36, 2, [.objectName("Player"), .integerIndex], .string), //# (int partyIndex)
 		
-		("receiveGiftOrEventPokemon", 37, 2, [.objectName("Player"), .giftPokemon], nil), //# (int ID)
+		("receiveGiftPokemon", 37, 2, [.objectName("Player"), .giftPokemon], nil), //# (int ID)
 		//# 1 to 14:
 		//# Male Jolteon (cannot be shiny), Male Vaporeon (cannot), Duking's Plusle (cannot),
 		//# Mt. Battle Ho-oh (cannot), Bonus Disc Pikachu (cannot), AGETO Celebi (cannot)
@@ -411,26 +408,26 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("countNonFaintedPartyPokemon", 41, 1, [.objectName("Player")], .integer),
 		("getFirstInvalidPartyPokemonIndex", 42, 1, [.objectName("Player")], .integerIndex), //# -1 if no invalid Pokemon
 		("countValidPartyPokemon", 43, 1, [.objectName("Player")], .integer),
-		("getPartyPokemon", 44, 2, [.objectName("Player"), .integerIndex], .objectName("Pokemon")), //# (int index)
+		("getPartyPokemonAtIndex", 44, 2, [.objectName("Player"), .integerIndex], .objectName("Pokemon")), //# (int index)
 		("checkPokemonOwnership", 45, 2, [.objectName("Player"), .integerIndex], .integer), //# (int index)
 		
-		("getFollowingCharacter", 47, 1, [.objectName("Player")], .partyMember), // # sets last result to character index of character following the player
+		("getNPCPartyMember", 47, 1, [.objectName("Player")], .partyMember), // # sets last result to character index of character following the player
 		
 		("countCaughtShadowPokemon", 49, 1, [.objectName("Player")], .integer),
 		
 		("isPCFull", 52, 1, [.objectName("Player")], .bool),
 		("countLegendaryPartyPokemon", 53, 1, [.objectName("Player")], .integer),
-		("setPartyMember", 54, 3, [.objectName("Player"), .partyMember, .bool], nil), // int party member character index (0 for none), int unknown. set party member to 0 to unset party member
+		("setNPCPartyMember", 54, 3, [.objectName("Player"), .partyMember, .bool], .none), // int party member character index (0 for none), int unknown. set party member to 0 to unset party member
 		
 		("countPurfiedPokemon", 59, 1, [.objectName("Player")], .integer),
 		("awardMtBattleRibbons", 60, 1, [.objectName("Player")], .none),
-		("getPkCouponsTotal", 61, 1, [.objectName("Player")], .integerCoupons),
-		("setPkCouponsTotal", 62, 2, [.objectName("Player"), .integerCoupons], .none), //# (int nb)
-		("receivePkCoupons", 63, 2, [.objectName("Player"), .integerCoupons], .none), //# (int amount) (can be < 0)
+		("getCouponsTotal", 61, 1, [.objectName("Player")], .integerCoupons),
+		("setCouponsTotal", 62, 2, [.objectName("Player"), .integerCoupons], .none), //# (int nb)
+		("receiveCoupons", 63, 2, [.objectName("Player"), .integerCoupons], .none), //# (int amount) (can be < 0)
 		("totalNumberOfShadowPokemon", 64, 1, [.objectName("Player")], .integer),
 		
-		("receiveItemSilently", 67, 5, [.objectName("Player"), .integer, .integer, .item, .integerQuantity], .none), //# (int unk, int unk, int itemid, int quantity)
-		("isSpeciesInPC", 68, 2, [.objectName("Player"), .pokemon], .bool), //# (int species)
+		("receiveItemSilentlyWithOptions", 67, 5, [.objectName("Player"), .integer, .integer, .item, .integerQuantity], .none), //# (int unk, int unk, int itemid, int quantity)
+		("hasSpeciesInPC", 68, 2, [.objectName("Player"), .pokemon], .bool), //# (int species)
 		("releasePartyPokemon", 69, 2, [.objectName("Player"), .integerIndex], .bool), //# (int index). Returns 1 iff there was a valid Pokémon, 0 otherwise.
 		
 		
@@ -458,7 +455,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//Category(name = "Methods (1) ", start = 16, nb = 4),
 		
 		("getLevelsGained", 17, 1, [.objectName("Daycare")], .integer),
-		("getNbOfHundredsOfShadowCtrLost", 18, 1, [.objectName("Daycare")], .integer), //# int((shadowPokemonCounter - initialShadowPokemonCounter)/100)
+		("getHundredsOfShadowCounterLost", 18, 1, [.objectName("Daycare")], .integer), //# int((shadowPokemonCounter - initialShadowPokemonCounter)/100)
 		("depositPokemon", 19, 2, [.objectName("Daycare"), .integerIndex], .none), // int party index
 		("withdrawPokemon", 20, 2, [.objectName("Daycare"), .integerIndex], .none), // int party index to set as withdrawn pokemon
 		
@@ -472,8 +469,8 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//# 0 if status != PokemonDeposited
 		("priceForLevels", 22, 2, [.objectName("Daycare"), .integer], .integerMoney), // int levels gained
 		//# NoPokemonDeposited = 0, PokemonDeposited = 1
-		("checkIfPokemonIsInDaycare", 23, 1, [.objectName("Daycare")], .bool),
-		("getPokemonInDaycare", 24, 1, [.objectName("Daycare")], .objectName("Pokemon")),
+		("checkIfHasPokemon", 23, 1, [.objectName("Daycare")], .bool),
+		("getCurrentPokemon", 24, 1, [.objectName("Daycare")], .objectName("Pokemon")),
 	],
 	
 //MARK: - Task Manager
@@ -485,10 +482,6 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("zeroFunction17", 17, 2, [.objectName("TaskManager"), .integer], nil), //# arg : taskUID
 		("getTaskCounter", 18, 1, [.objectName("TaskManager")], .integer),
 		("stopTask", 19, 2, [.objectName("TaskManager"), .integer], nil), //# unusable
-		("function20", 20, 2, [.objectName("TaskManager"), nil], nil), //#set
-		("function21", 21, 2, [.objectName("TaskManager"), nil], nil), //#get
-		("function22", 22, 3, [.objectName("TaskManager"), nil, nil], nil),
-		("function23", 23, 3, [.objectName("TaskManager"), nil, nil], nil)
 	],
 
 	
@@ -508,7 +501,6 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("setShadowPokemonStatus", 18, 3, [.objectName("ShadowPokemon"), .shadowID, .shadowStatus], .none),
 		("getShadowPokemonSpecies", 19, 2, [.objectName("ShadowPokemon"), .shadowID], .pokemon),
 		("getShadowPokemonStatus", 20, 2, [.objectName("ShadowPokemon"), .shadowID], .shadowStatus),
-		("function21", 21, 2, [.objectName("ShadowPokemon"), nil] , nil),
 		("setShadowPokemonPCBoxIndex", 22, 4, [.objectName("ShadowPokemon"), .shadowID, .PCBox, .integerIndex], .none), //# (int index, int subIndex)
 	],
 	
