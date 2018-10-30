@@ -152,9 +152,21 @@ enum XGASM {
 	case ble_f(Int, Int)
 	case bgt_f(Int, Int)
 	case bge_f(Int, Int)
+	// to label with name
+	case b_l(String)
+	case bl_l(String)
+	case beq_l(String)
+	case bne_l(String)
+	case blt_l(String)
+	case ble_l(String)
+	case bgt_l(String)
+	case bge_l(String)
 	
 	// raw binary
 	case raw(UInt32)
+	
+	// labels for conviently specifying addresses
+	case label(String)
 	
 	var code : UInt32 {
 		return codeAtOffset(0)
@@ -295,11 +307,18 @@ enum XGASM {
 		}
 	}
 	
-	private func codeFor() -> UInt32 {
+	func instructionForBranchToLabel(labels: [String : Int]) -> XGASM {
 		switch self {
-			
+		case .b_l(let name): return .b(labels[name] ?? 0)
+		case .bl_l(let name): return .bl(labels[name] ?? 0)
+		case .beq_l(let name): return .beq(labels[name] ?? 0)
+		case .bne_l(let name): return .bne(labels[name] ?? 0)
+		case .blt_l(let name): return .blt(labels[name] ?? 0)
+		case .ble_l(let name): return .ble(labels[name] ?? 0)
+		case .bgt_l(let name): return .bgt(labels[name] ?? 0)
+		case .bge_l(let name): return .bge(labels[name] ?? 0)
 		default:
-			return 0
+			return .nop
 		}
 	}
 	
@@ -487,6 +506,18 @@ enum XGASM {
 		// raw
 		case .raw(let value):
 			return value
+			
+		case .label:
+			return XGASM.nop.codeAtOffset(offset)
+		case .b_l: fallthrough
+		case .bl_l: fallthrough
+		case .beq_l: fallthrough
+		case .bne_l: fallthrough
+		case .blt_l: fallthrough
+		case .ble_l: fallthrough
+		case .bgt_l: fallthrough
+		case .bge_l: return XGASM.nop.codeAtOffset(offset)
+			
 		}
 	}
 

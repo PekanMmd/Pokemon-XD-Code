@@ -1378,6 +1378,58 @@ extension XGUtility {
 		
 	}
 	
+	class func documentXDSAutoCompletions() {
+		printg("Documenting XDS Autocompletions")
+		let file = XGFiles.nameAndFolder("XDScript.sublime-completions", .Reference)
+		var json = [String : AnyObject]()
+		json["scope"] = "xdscript" as AnyObject
+		var completions = [ [String: String] ]()
+		
+		for (id, name) in ScriptClassNames {
+			
+			if id != 0 {
+				var plainTextCompletion = [String : String]()
+				plainTextCompletion["trigger"] = name + "\t\(name) Class"
+				plainTextCompletion["contents"] = name
+				completions.append(plainTextCompletion)
+			}
+			
+			let functions = ScriptClassFunctions[id]!
+			let prefix = id == 0 ? "" : "."
+			for function in functions {
+				var completion = [String : String]()
+				var trigger = prefix + function.name + "\t\(name) Class Function"
+				if let returnType = function.returnType {
+					trigger += " (\(returnType.typeName))"
+				} else {
+					trigger += " (Unknown)"
+				}
+				
+				completion["trigger"] = trigger
+				
+				var contents = "\(function.name)("
+				if let params = function.parameterTypes {
+					let start = id > 3 ? 1 : 0
+					for i in start ..< params.count {
+						let param = params[i]
+						contents += param == nil ? "/*Unknown*/ " : "/*\(param!.typeName)*/ "
+					}
+				}
+				if contents.last! == " " {
+					contents.removeLast()
+				}
+				contents += ")"
+				
+				
+				completion["contents"] = contents
+				completions.append(completion)
+			}
+		}
+		
+		json["completions"] = completions as AnyObject
+		XGUtility.saveJSON(json as AnyObject, toFile: file)
+	}
+	
 	class func documentISO(forXG: Bool) {
 		
 		let prefix = game == .XD ? (forXG ? "XG " : "XD ") : " Colosseum"

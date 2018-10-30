@@ -1,0 +1,29 @@
+{
+	"color_scheme": "Packages/User/XDScript.sublime-color-scheme",
+	"font_size": 9,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"theme": "Adaptive.sublime-theme",
+	 // Enable auto complete to be triggered automatically when typing.
+    "auto_complete": true,
+
+    // The maximum file size where auto complete will be automatically triggered.
+    "auto_complete_size_limit": 4194304,
+
+    // The delay, in ms, before the auto complete window is shown after typing
+    "auto_complete_delay": 50,
+
+    "auto_complete_cycle": true,
+
+    "auto_complete_commit_on_tab": true,
+
+    // Additional situations to trigger auto complete
+    "auto_complete_triggers": [ {"selector": "xdscript", "characters": ".@#ABCDEFGHIJKLMNOPQRSTUVWXYZ"} ],
+
+    "highlight_line": true,
+    "translate_tabs_to_spaces": true,
+
+    "open_files_in_new_window": false
+}

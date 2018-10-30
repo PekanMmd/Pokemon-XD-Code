@@ -14,6 +14,10 @@ enum XGResources {
 	case png(String)
 	case bin(String)
 	case shader(String)
+	case sublimeColourScheme(String)
+	case sublimeSyntax(String)
+	case sublimeSettings(String)
+	case sublimeCompletions(String)
 	case nameAndFileType(String, String)
 	
 	var path : String {
@@ -29,7 +33,11 @@ enum XGResources {
 				case .png(let name)								: return name
 				case .bin(let name)								: return name
 				case .shader(let name)							: return name
-				case .nameAndFileType(let name, _)	: return name
+				case .sublimeColourScheme(let name)				: return name
+				case .sublimeSyntax(let name)					: return name
+				case .sublimeSettings(let name)					: return name
+				case .sublimeCompletions(let name)				: return name
+				case .nameAndFileType(let name, _)				: return name
 			}
 		}
 	}
@@ -41,6 +49,10 @@ enum XGResources {
 				case .png									: return ".png"
 				case .bin									: return ".bin"
 				case .shader								: return ".glsl"
+				case .sublimeColourScheme					: return ".sublime-color-scheme"
+				case .sublimeSyntax							: return ".sublime-syntax"
+				case .sublimeSettings						: return ".sublime-settings"
+				case .sublimeCompletions					: return ".sublime-completions"
 				case .nameAndFileType( _, let filetype)		: return filetype
 			}
 		}
@@ -60,7 +72,9 @@ enum XGResources {
 	
 	var data : XGMutableData {
 		get {
-			return XGMutableData(contentsOfFile: self.path)
+			let d = XGMutableData(contentsOfFile: self.path)
+			d.file = .nameAndFolder(self.fileName, .Documents)
+			return d
 		}
 	}
 	

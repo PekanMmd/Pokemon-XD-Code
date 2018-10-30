@@ -333,6 +333,19 @@
                                                 <action selector="getXDSMacros:" target="Voe-Tx-rLC" id="OMD-g0-ull"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="Vzn-Kx-ALG"/>
+                                        <menuItem title="Save Sublime Text 3 XDS Plugin" id="nnV-rJ-lyQ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="saveSublime:" target="Voe-Tx-rLC" id="LGF-jB-GGj"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Install Sublime Text 3 XDS Plugin" id="RTx-xc-R4X">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="installSublime:" target="Voe-Tx-rLC" id="dH3-2Q-hCA"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="H03-uh-lcM"/>
                                         <menuItem title="XDS Script Compiler" keyEquivalent="x" id="IsQ-hd-Wby">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>

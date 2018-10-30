@@ -253,9 +253,9 @@ indirect enum XDSMacroTypes {
 		case .floatFraction:
 			return "DecimalFromZeroToOne"
 		case .integerByte:
-			return "8BitInteger"
+			return "Integer8Bit"
 		case .integerUnsigned:
-			return "8BitPositiveInteger"
+			return "PositiveInteger8Bit"
 		case .vector:
 			return "Vector"
 		case .array(let t):
@@ -269,7 +269,7 @@ indirect enum XDSMacroTypes {
 		case .variableType:
 			return "TypeVaries"
 		case .optional(let t):
-			return "Optional(\(t.typeName)"
+			return "Optional(\(t.typeName))"
 		case .anyType:
 			return "AnyType"
 		case .object(let id):

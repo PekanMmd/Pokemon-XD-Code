@@ -458,6 +458,7 @@ indirect enum XGFolders {
 	case Col
 	case XDS
 	case ISOExport(String)
+	case nameAndPath(String, String)
 	case nameAndFolder(String, XGFolders)
 	
 	var name : String {
@@ -491,6 +492,7 @@ indirect enum XGFolders {
 			case .Col				: return "Collision Data"
 			case .XDS				: return "XDS"
 			case .ISOExport      	: return "ISO Export"
+			case .nameAndPath(let s, _): return s
 			case .nameAndFolder(let s, _): return s
 			}
 		}
@@ -504,6 +506,7 @@ indirect enum XGFolders {
 			switch self {
 				
 				case .Documents	: return path
+				case .nameAndPath(let name, let path): return path + "/\(name)"
 				case .ISOExport(let folder): return path + ("/" + self.name) + ("/" + folder)
 				case .Import	: path = XGFolders.TextureImporter.path
 				case .Export	: path = XGFolders.TextureImporter.path
@@ -527,6 +530,7 @@ indirect enum XGFolders {
 			
 			switch self {
 				
+			case .nameAndPath(let name, let path): return path + "/\(name)"
 			case .Documents	: return path
 			case .Import	: path = XGFolders.TextureImporter.resourcePath
 			case .Export	: path = XGFolders.TextureImporter.resourcePath

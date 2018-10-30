@@ -12,9 +12,10 @@ let kColosseumDolToRamOffsetDifference = 0x3000
 let kColosseumDolToISOOffsetDifference = 0x1EC00
 
 let kRELtoRAMOffsetDifference = 0xb18dc0 // add this value to a common_rel offset to get it's offset in RAM
-let kDOLtoRAMOffsetDifference = 0x30a0   // add this value to a start.dol [UInt32] offset to get it's offset in RAM
-let kDOLTableToRAMOffsetDifference = 0x3000 // add this value to a start.dol data table offset to get it's offset in RAM
-let kDoltoISOOffsetDifference = 0x20300 // add this value to a start.dol offset to get it's offset in the ISO
+let kDOLtoRAMOffsetDifference = 0x30a0   // add this value to a start.dol [UInt32] offset to get its offset in RAM
+let kDOLTableToRAMOffsetDifference = 0x3000 // add this value to a start.dol data table offset to get its offset in RAM
+let kDOLDataToRAMOffsetDifference = 0xCDE80 // add this value to a start.dol data offset (the values towards the end) to get its offset in RAM
+let kDOLtoISOOffsetDifference = 0x20300 // add this value to a start.dol offset to get it's offset in the ISO
 
 let kRELDataStartOffset = 0x1CB0
 let kRelFreeSpaceStart = 0x80590 + kRELtoRAMOffsetDifference
@@ -86,22 +87,83 @@ class XGAssembly {
 	}
 	
 	class func replaceASM(startOffset: Int, newASM asm: ASM) {
+		
+		var labels = [String : Int]()
+		var currentOffset = startOffset + kDOLtoRAMOffsetDifference
+		for inst in asm {
+			switch inst {
+			case .label(let name):
+				labels[name] = currentOffset
+			default:
+				currentOffset += 4
+			}
+		}
+		
 		let dol = XGFiles.dol.data!
-		for i in 0 ..< asm.count {
-			let offset = startOffset + (i * 4)
-			let instruction = asm[i].codeAtOffset(offset + kDOLtoRAMOffsetDifference)
-			dol.replaceWordAtOffset(offset, withBytes: instruction)
+		currentOffset = startOffset + kDOLtoRAMOffsetDifference
+		for inst in asm {
+			switch inst {
+			case .label:
+				break
+			case .b_l: fallthrough
+			case .bl_l: fallthrough
+			case .beq_l: fallthrough
+			case .bne_l: fallthrough
+			case .blt_l: fallthrough
+			case .ble_l: fallthrough
+			case .bgt_l: fallthrough
+			case .bge_l:
+				let code = inst.instructionForBranchToLabel(labels: labels).codeAtOffset(currentOffset)
+				dol.replaceWordAtOffset(currentOffset - kDOLtoRAMOffsetDifference, withBytes: code)
+				currentOffset += 4
+			default:
+				let code = inst.codeAtOffset(currentOffset)
+				dol.replaceWordAtOffset(currentOffset - kDOLtoRAMOffsetDifference, withBytes: code)
+				currentOffset += 4
+			}
+			
 		}
 		dol.save()
 	}
 	
 	class func replaceRELASM(startOffset: Int, newASM asm: ASM) {
 		let ramOffset = startOffset > kRELtoRAMOffsetDifference ? kRELtoRAMOffsetDifference : 0
+		
+		var labels = [String : Int]()
+		var currentOffset = startOffset - ramOffset
+		for inst in asm {
+			switch inst {
+			case .label(let name):
+				labels[name] = currentOffset
+			default:
+				currentOffset += 4
+			}
+		}
+		
+		
 		let rel = XGFiles.common_rel.data!
-		for i in 0 ..< asm.count {
-			let offset = startOffset + (i * 4) - ramOffset
-			let instruction = asm[i].codeAtOffset(offset + kRELtoRAMOffsetDifference)
-			rel.replaceWordAtOffset(offset, withBytes: instruction)
+		currentOffset = startOffset - ramOffset + kRELtoRAMOffsetDifference
+		for inst in asm {
+			switch inst {
+			case .label:
+				break
+			case .b_l: fallthrough
+			case .bl_l: fallthrough
+			case .beq_l: fallthrough
+			case .bne_l: fallthrough
+			case .blt_l: fallthrough
+			case .ble_l: fallthrough
+			case .bgt_l: fallthrough
+			case .bge_l:
+				let code = inst.instructionForBranchToLabel(labels: labels).codeAtOffset(currentOffset)
+				rel.replaceWordAtOffset(currentOffset - kRELtoRAMOffsetDifference, withBytes: code)
+				currentOffset += 4
+			default:
+				let code = inst.codeAtOffset(currentOffset)
+				rel.replaceWordAtOffset(currentOffset - kRELtoRAMOffsetDifference, withBytes: code)
+				currentOffset += 4
+			}
+			
 		}
 		rel.save()
 	}
@@ -125,6 +187,14 @@ class XGAssembly {
 			rel.replaceWordAtOffset(offset, withBytes: instruction)
 		}
 		rel.save()
+	}
+	
+	class func replaceRamASM(RAMOffset: Int, newASM asm: [XGASM]) {
+		if RAMOffset > kRELtoRAMOffsetDifference {
+			replaceRELASM(startOffset: RAMOffset - kRELtoRAMOffsetDifference, newASM: asm)
+		} else {
+			replaceASM(startOffset: RAMOffset - kDOLtoRAMOffsetDifference, newASM: asm)
+		}
 	}
 	
 	class func revertASM(startOffset: Int, newASM asm: [UInt32]) {
@@ -213,6 +283,18 @@ class XGAssembly {
 			print("conditional branch overflow")
 		}
 		return 0x40810000 + UInt32( (to - from) & 0xFFFF)
+	}
+	
+	class func setProtectRepeatChanceQuotient(_ divisor: UInt32) {
+		var currentValue : UInt32 = 0xFFFF
+		var currentOffset = 0x4eeb90 - kDOLDataToRAMOffsetDifference
+		let dol = XGFiles.dol.data!
+		for _ in 0 ..< 4 {
+			dol.replaceWordAtOffset(currentOffset, withBytes: currentValue)
+			currentOffset += 4
+			currentValue /= divisor
+		}
+		dol.save()
 	}
 	
 	class func paralysisHalvesSpeed() {

@@ -975,6 +975,12 @@
 		B208E78D20C8EF2D00D298BF /* XGPNGBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEE1F49A1FE0075C6D2 /* XGPNGBlock.swift */; };
 		B208E78E20C8EF3100D298BF /* XGTextureBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF91F49A1FE0075C6D2 /* XGTextureBlock.swift */; };
 		B208E78F20C8EF3300D298BF /* XGTexturePalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBFA1F49A1FE0075C6D2 /* XGTexturePalette.swift */; };
+		B20C401A2188B9D2006D7CD9 /* XDScript.sublime-completions in Resources */ = {isa = PBXBuildFile; fileRef = B20C40142188B9CF006D7CD9 /* XDScript.sublime-completions */; };
+		B20C401B2188B9D2006D7CD9 /* SCD.sublime-syntax in Resources */ = {isa = PBXBuildFile; fileRef = B20C40152188B9CF006D7CD9 /* SCD.sublime-syntax */; };
+		B20C401C2188B9D2006D7CD9 /* XDScript.sublime-color-scheme in Resources */ = {isa = PBXBuildFile; fileRef = B20C40162188B9D0006D7CD9 /* XDScript.sublime-color-scheme */; };
+		B20C401D2188B9D2006D7CD9 /* SCD.sublime-color-scheme in Resources */ = {isa = PBXBuildFile; fileRef = B20C40172188B9D1006D7CD9 /* SCD.sublime-color-scheme */; };
+		B20C401E2188B9D2006D7CD9 /* XDScript.sublime-settings in Resources */ = {isa = PBXBuildFile; fileRef = B20C40182188B9D1006D7CD9 /* XDScript.sublime-settings */; };
+		B20C401F2188B9D2006D7CD9 /* XDScript.sublime-syntax in Resources */ = {isa = PBXBuildFile; fileRef = B20C40192188B9D1006D7CD9 /* XDScript.sublime-syntax */; };
 		B21A7CFA20BC396300BDD04C /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = B21A7CF920BC396300BDD04C /* vertex.glsl */; };
 		B21A7CFC20BC42CA00BDD04C /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = B21A7CFB20BC42CA00BDD04C /* fragment.glsl */; };
 		B21A7CFF20BC68DA00BDD04C /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
@@ -3887,6 +3893,12 @@
 		B208E78620C85EAE00D298BF /* CMType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMType.swift; sourceTree = "<group>"; };
 		B208E78820C85F9E00D298BF /* CMTrainerPokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTrainerPokemon.swift; sourceTree = "<group>"; };
 		B208E78B20C8A07D00D298BF /* CMFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMFiles.swift; sourceTree = "<group>"; };
+		B20C40142188B9CF006D7CD9 /* XDScript.sublime-completions */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "XDScript.sublime-completions"; sourceTree = "<group>"; };
+		B20C40152188B9CF006D7CD9 /* SCD.sublime-syntax */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SCD.sublime-syntax"; sourceTree = "<group>"; };
+		B20C40162188B9D0006D7CD9 /* XDScript.sublime-color-scheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "XDScript.sublime-color-scheme"; sourceTree = "<group>"; };
+		B20C40172188B9D1006D7CD9 /* SCD.sublime-color-scheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SCD.sublime-color-scheme"; sourceTree = "<group>"; };
+		B20C40182188B9D1006D7CD9 /* XDScript.sublime-settings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "XDScript.sublime-settings"; sourceTree = "<group>"; };
+		B20C40192188B9D1006D7CD9 /* XDScript.sublime-syntax */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "XDScript.sublime-syntax"; sourceTree = "<group>"; };
 		B21A7CF920BC396300BDD04C /* vertex.glsl */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = vertex.glsl; sourceTree = "<group>"; };
 		B21A7CFB20BC42CA00BDD04C /* fragment.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
 		B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGCollisionData.swift; sourceTree = "<group>"; };
@@ -3897,13 +3909,9 @@
 		B22A1C4C2182B1DC001C41D3 /* GoDContextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDContextViewController.swift; sourceTree = "<group>"; };
 		B22A1C542182C48A001C41D3 /* GoDPocketPopUpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDPocketPopUpButton.swift; sourceTree = "<group>"; };
 		B22A1C5A218337FE001C41D3 /* GoDISOViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDISOViewController.swift; sourceTree = "<group>"; };
-		B23DD76E20C0B54500348D26 /* XDScript.sublime-color-scheme */ = {isa = PBXFileReference; lastKnownFileType = text; path = "XDScript.sublime-color-scheme"; sourceTree = "<group>"; };
 		B2445AF6209F474E00B5404E /* XGMoveEffectTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGMoveEffectTypes.swift; sourceTree = "<group>"; };
 		B2445AF8209F52CC00B5404E /* GoDMoveEffectTypePopUpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDMoveEffectTypePopUpButton.swift; sourceTree = "<group>"; };
 		B24507FF208A348E00FEC54E /* XGDeoxysFormes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGDeoxysFormes.swift; sourceTree = "<group>"; };
-		B247ED3B21794A1C0034CAF5 /* SCD.sublime-color-scheme */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SCD.sublime-color-scheme"; sourceTree = "<group>"; };
-		B247ED3C21794A1C0034CAF5 /* SCD.sublime-syntax */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SCD.sublime-syntax"; sourceTree = "<group>"; };
-		B247ED3F217C33060034CAF5 /* XDScript.sublime-syntax */ = {isa = PBXFileReference; lastKnownFileType = text; name = "XDScript.sublime-syntax"; path = "../../../../../Library/Application Support/Sublime Text 3/Packages/User/XDScript.sublime-syntax"; sourceTree = "<group>"; };
 		B247ED40217E5D6B0034CAF5 /* XDSExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDSExtensions.swift; sourceTree = "<group>"; };
 		B247ED4A2180C1150034CAF5 /* GoDHexCalculatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDHexCalculatorViewController.swift; sourceTree = "<group>"; };
 		B247ED502180D0350034CAF5 /* GoDStringViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDStringViewController.swift; sourceTree = "<group>"; };
@@ -5284,10 +5292,12 @@
 		B247ED3E217B9FF30034CAF5 /* Sublime */ = {
 			isa = PBXGroup;
 			children = (
-				B247ED3B21794A1C0034CAF5 /* SCD.sublime-color-scheme */,
-				B247ED3C21794A1C0034CAF5 /* SCD.sublime-syntax */,
-				B247ED3F217C33060034CAF5 /* XDScript.sublime-syntax */,
-				B23DD76E20C0B54500348D26 /* XDScript.sublime-color-scheme */,
+				B20C40172188B9D1006D7CD9 /* SCD.sublime-color-scheme */,
+				B20C40152188B9CF006D7CD9 /* SCD.sublime-syntax */,
+				B20C40162188B9D0006D7CD9 /* XDScript.sublime-color-scheme */,
+				B20C40142188B9CF006D7CD9 /* XDScript.sublime-completions */,
+				B20C40182188B9D1006D7CD9 /* XDScript.sublime-settings */,
+				B20C40192188B9D1006D7CD9 /* XDScript.sublime-syntax */,
 			);
 			path = Sublime;
 			sourceTree = "<group>";
@@ -9267,6 +9277,7 @@
 				B280AF3B20CABD660057A782 /* colo_trainer_27.png in Resources */,
 				B2F50BF71F4C5FAC0075C6D2 /* face_203.png in Resources */,
 				B2F509631F4C5FAB0075C6D2 /* body_288.png in Resources */,
+				B20C401D2188B9D2006D7CD9 /* SCD.sublime-color-scheme in Resources */,
 				B2F509051F4C5FAB0075C6D2 /* body_241.png in Resources */,
 				B2F50ACD1F4C5FAC0075C6D2 /* face_054.png in Resources */,
 				B2F50B071F4C5FAC0075C6D2 /* face_083.png in Resources */,
@@ -9495,6 +9506,7 @@
 				B2F50B211F4C5FAC0075C6D2 /* face_096.png in Resources */,
 				B2F508611F4C5FAB0075C6D2 /* body_159.png in Resources */,
 				B2F50D951F4C5FAC0075C6D2 /* face_410.png in Resources */,
+				B20C401C2188B9D2006D7CD9 /* XDScript.sublime-color-scheme in Resources */,
 				B2F509C71F4C5FAB0075C6D2 /* body_338.png in Resources */,
 				B2F509151F4C5FAB0075C6D2 /* body_249.png in Resources */,
 				B2F50C3F1F4C5FAC0075C6D2 /* face_239.png in Resources */,
@@ -9592,6 +9604,7 @@
 				B2F50CE31F4C5FAC0075C6D2 /* face_321.png in Resources */,
 				B2F5079B1F4C5FAB0075C6D2 /* body_060.png in Resources */,
 				B2F508A51F4C5FAB0075C6D2 /* body_193.png in Resources */,
+				B20C401A2188B9D2006D7CD9 /* XDScript.sublime-completions in Resources */,
 				B2F50D6F1F4C5FAC0075C6D2 /* face_391.png in Resources */,
 				B2F50AB11F4C5FAC0075C6D2 /* face_040.png in Resources */,
 				B2F50B851F4C5FAC0075C6D2 /* face_146.png in Resources */,
@@ -9766,6 +9779,7 @@
 				B2F50D271F4C5FAC0075C6D2 /* face_355.png in Resources */,
 				B2F50BC51F4C5FAC0075C6D2 /* face_178.png in Resources */,
 				B2F50D131F4C5FAC0075C6D2 /* face_345.png in Resources */,
+				B20C401E2188B9D2006D7CD9 /* XDScript.sublime-settings in Resources */,
 				B2F507491F4C5FAA0075C6D2 /* body_019.png in Resources */,
 				B2F50CA51F4C5FAC0075C6D2 /* face_290.png in Resources */,
 				B2F50AEB1F4C5FAC0075C6D2 /* face_069.png in Resources */,
@@ -9956,6 +9970,7 @@
 				B2F50D6D1F4C5FAC0075C6D2 /* face_390.png in Resources */,
 				B2F5073B1F4C5FAA0075C6D2 /* body_012.png in Resources */,
 				B2F508B71F4C5FAB0075C6D2 /* body_202.png in Resources */,
+				B20C401B2188B9D2006D7CD9 /* SCD.sublime-syntax in Resources */,
 				B2F509851F4C5FAB0075C6D2 /* body_305.png in Resources */,
 				B2F508691F4C5FAB0075C6D2 /* body_163.png in Resources */,
 				B2F509651F4C5FAB0075C6D2 /* body_289.png in Resources */,
@@ -10019,6 +10034,7 @@
 				B280AF4B20CABD660057A782 /* colo_trainer_15.png in Resources */,
 				B2F50C491F4C5FAC0075C6D2 /* face_244.png in Resources */,
 				B280AEFB20CABD660057A782 /* colo_trainer_55.png in Resources */,
+				B20C401F2188B9D2006D7CD9 /* XDScript.sublime-syntax in Resources */,
 				B2F5073F1F4C5FAA0075C6D2 /* body_014.png in Resources */,
 				B2F50D731F4C5FAC0075C6D2 /* face_393.png in Resources */,
 				B2F508711F4C5FAB0075C6D2 /* body_167.png in Resources */,
