@@ -752,6 +752,12 @@ indirect enum XDSExpr {
 		case .invalid:
 			return "INVALID_FUNCTION_CALL_RESULT"
 		
+		case .list(let t):
+			return stringFromMacroImmediate(c: c, t: t)
+		case .variableType:
+			return macroWithName("VARIABLE_TYPE_\(c.asInt)")
+		case .optional(let t):
+			return stringFromMacroImmediate(c: c, t: t)
 		}
 	}
 	

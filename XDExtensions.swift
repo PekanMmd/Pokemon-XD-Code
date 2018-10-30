@@ -1312,7 +1312,7 @@ extension XGUtility {
 					if info.parameterTypes != nil {
 						for option in info.parameterTypes! {
 							if let o = option {
-								if o == XDSMacroTypes.optional(_) {
+								if o == XDSMacroTypes.optional(.anyType) {
 									text += " \(o.typeName)"
 								}
 							}
