@@ -1171,6 +1171,9 @@ extension XGUtility {
 	
 	class func documentMacrosXDS() {
 		
+		printg("documenting script macros...")
+		printg("This may take a while :-)")
+		
 		var text = ""
 		
 		func addMacro(value: Int, type: XDSMacroTypes) {
@@ -1257,8 +1260,6 @@ extension XGUtility {
 		
 		// get macros.xds
 		// file containing common macros to use as reference
-		printg("documenting script macros...")
-		printg("This may take a while :-)")
 		if text.length > 0 {
 			let file = XGFiles.xds("Common Macros")
 			printg("documenting script: ", file.fileName)
