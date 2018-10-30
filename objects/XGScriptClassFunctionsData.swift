@@ -255,7 +255,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("deleteMove", 17, 1, [.objectName("Pokemon"), .integerIndex], .null), // (int index to delete)
 		
 		("countMoves", 20, 1, [.objectName("Pokemon")], .integer),
-		("getPokeballCaughtWith", 1, 21, [.objectName("Pokemon")], .item),
+		("getPokeballCaughtWith", 21, 1, [.objectName("Pokemon")], .item),
 		("getNickname", 22, 1, [.objectName("Pokemon")], .string),
 		
 		//# index = 23 does not exist

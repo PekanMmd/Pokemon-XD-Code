@@ -237,7 +237,7 @@ indirect enum XDSMacroTypes {
 		case .msg:
 			return "StringID"
 		case .bool:
-			return "TrueOrFalse"
+			return "YesOrNo"
 		case .integer:
 			return "Integer"
 		case .float:
