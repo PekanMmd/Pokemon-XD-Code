@@ -72,7 +72,7 @@ indirect enum XDSExpr {
 	}
 	
 	var isImmediate : Bool {
-		return self.isLoadImmediate || self.xdsID == XDSExpr.macroImmediate(XDSConstant.null, .none).xdsID
+		return self.isLoadImmediate || self.xdsID == XDSExpr.macroImmediate(XDSConstant.null, .null).xdsID
 	}
 	
 	var isVariable : Bool {
@@ -489,7 +489,7 @@ indirect enum XDSExpr {
 				return macroWithName("FLAG_" + flag.name.simplified.uppercased())
 			}
 			return macroWithName("FLAG_" + c.asInt.string)
-		case .none:
+		case .null:
 			return "Null"
 		case .pokemon:
 			if c.asInt == 0 {
@@ -590,11 +590,11 @@ indirect enum XDSExpr {
 			}
 		case .shadowStatus:
 			switch c.asInt {
-			case 0: return macroWithName("status_not_seen".uppercased())
-			case 1: return macroWithName("status_seen_in_world".uppercased())
-			case 2: return macroWithName("status_seen_in_battle".uppercased())
-			case 3: return macroWithName("status_caught".uppercased())
-			case 4: return macroWithName("status_purified".uppercased())
+			case 0: return macroWithName("shadow_status_not_seen".uppercased())
+			case 1: return macroWithName("shadow_status_seen_as_spectator".uppercased())
+			case 2: return macroWithName("shadow_status_seen_in_battle".uppercased())
+			case 3: return macroWithName("shadow_status_caught".uppercased())
+			case 4: return macroWithName("shadow_status_purified".uppercased())
 			default: printg("error unknown shadow pokemon status");return "error unknown shadow pokemon status"
 			}
 		case .battleID:

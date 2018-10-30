@@ -29,7 +29,7 @@ func >=(lhs: XDSMacroTypes, rhs: XDSMacroTypes) -> Bool {
 indirect enum XDSMacroTypes {
 	
 	case invalid
-	case none
+	case null
 	
 	// Types that can be replaced with macros
 	case pokemon
@@ -91,7 +91,7 @@ indirect enum XDSMacroTypes {
 			
 		case .invalid: return -1
 			
-		case .none: return 0
+		case .null: return 0
 		case .pokemon: return 1
 		case .item: return 2
 		case .model: return 3
@@ -169,18 +169,18 @@ indirect enum XDSMacroTypes {
 	}
 	
 	var needsDefine : Bool {
-		return self < XDSMacroTypes.msg && self > XDSMacroTypes.none
+		return self < XDSMacroTypes.msg && self > XDSMacroTypes.null
 	}
 	
 	var printsAsMacro : Bool {
-		return self < XDSMacroTypes.integer && self > XDSMacroTypes.none
+		return self < XDSMacroTypes.integer && self > XDSMacroTypes.null
 	}
 	
 	var typeName : String {
 		switch self {
 		case .invalid:
 			return "Invalid"
-		case .none:
+		case .null:
 			return "Null"
 		case .pokemon:
 			return "PokemonID"

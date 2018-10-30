@@ -1287,7 +1287,17 @@ extension XGUtility {
 				for info in data {
 					text += classPrefix + info.name + "("
 					if info.parameterCount == 0 || (info.parameterCount == 1 && id > 3) {
-						text += ")\n"
+						text += ")"
+						
+						if let returnType = info.returnType {
+							if returnType != .null {
+								text += " -> " + returnType.typeName
+							}
+						} else {
+							text += " -> Unknown"
+						}
+						
+						text += "\n"
 						continue
 					}
 					
@@ -1321,13 +1331,13 @@ extension XGUtility {
 						}
 					}
 					
-					text += " ) -> "
+					text += " )"
 					if let returnType = info.returnType {
-						if returnType != .none {
-							text += returnType.typeName
+						if returnType != .null {
+							text += " -> " + returnType.typeName
 						}
 					} else {
-						text += "Unknown"
+						text += " -> Unknown"
 					}
 					text += "\n"
 				}
