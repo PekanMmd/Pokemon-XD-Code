@@ -187,12 +187,14 @@ class GoDMovesViewController: GoDTableViewController {
 			}
 			
 			let string = XGString(string: sender.stringValue, file: XGFiles.common_rel, sid: currentMove.nameID)
-			if !XGFiles.common_rel.stringTable.addString(string, increaseSize: true, save: true) {
+			if !XGFiles.common_rel.stringTable.addString(string, increaseSize: false, save: true) {
 				printg("Failed to set move name:", sender.stringValue)
+				if XGFiles.common_rel.stringTable.extraCharacters < string.dataLength {
+					printg("Try shortening some strings in common.rel's string table.")
+				}
 			}
 		}
 		
-		self.reloadViewWithActivity()
 		self.table.reloadData()
 	}
 	
@@ -242,8 +244,11 @@ class GoDMovesViewController: GoDTableViewController {
 			}
 			
 			let string = XGString(string: sender.stringValue, file: XGFiles.common_rel, sid: currentMove.descriptionID)
-			if !XGFiles.common_rel.stringTable.addString(string, increaseSize: true, save: true) {
+			if !XGFiles.dol.stringTable.addString(string, increaseSize: false, save: true) {
 				printg("Failed to set move description:", sender.stringValue)
+				if XGFiles.dol.stringTable.extraCharacters < string.dataLength {
+					printg("Try shortening some strings in Start.dol's string table.")
+				}
 			}
 		}
 		
