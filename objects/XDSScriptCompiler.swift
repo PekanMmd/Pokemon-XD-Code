@@ -144,11 +144,13 @@ class XDSScriptCompiler: NSObject {
 		
 		loadAllStrings()
 		if let table = stringTable {
-			for stable in allStringTables where stable.file.path == table.file.path || stable.file == .common_rel {
-				printg("saving string table:", stable.file.path)
-				stable.save()
-			}
+			printg("saving string table:", table.file.path)
+			table.save()
 		}
+		
+		XGFiles.common_rel.stringTable.save()
+		XGFiles.dol.stringTable.save()
+		XGFiles.tableres2.stringTable.save()
 		
 		if relFile != nil {
 			printg("saving characters.")
@@ -156,7 +158,9 @@ class XDSScriptCompiler: NSObject {
 				if verbose {
 					printg("saving character:", character.rid)
 				}
-				character.save()
+				if character.gid > 0 && character.rid > 0 {
+					character.save()
+				}
 			}
 		}
 		
@@ -286,12 +290,10 @@ class XDSScriptCompiler: NSObject {
 					found = true
 					let string = XGString(string: uptext, file: table.file, sid: newID)
 					loadAllStrings()
-					for stable in allStringTables {
-						if stable.file.path == table.file.path {
-							if !stable.replaceString(string, alert: false, save: false, increaseLength: true) {
-								error = "Failed to replace msg: $:\(id!):\"\(text)\"\n maybe because the string was too large.\nTry setting '++IncreaseMSGSize' to 'YES'."
-								return -1
-							}
+					if let stable = stringTable {
+						if !stable.replaceString(string, alert: false, save: false, increaseLength: true) {
+							error = "Failed to replace msg: $:\(id!):\"\(text)\"\n maybe because the string was too large.\nTry setting '++IncreaseMSGSize' to 'YES'."
+							return -1
 						}
 					}
 				}
@@ -304,51 +306,49 @@ class XDSScriptCompiler: NSObject {
 						return -1
 					}
 				} else {
-					if let stable = stringTable {
-						loadAllStrings()
-						for table in allStringTables {
-							if table.file.path == stable.file.path {
-								let string = XGString(string: uptext, file: table.file, sid: newID)
-								if table.addString(string, increaseSize: increaseMSGSize, save: false) {
-									if verbose {
-										printg("Added string :\(text) to file: \(stable.file.path) with ID: \(newID!)")
-									}
-								} else {
-									error = "Failed to replace msg: $:\(id!):\"\(text)\"\n maybe because the string was too large.\nTry setting 'Increase MSG Size' to 'YES'."
-									return -1
-								}
+					if let table = stringTable {
+						let string = XGString(string: uptext, file: table.file, sid: newID)
+						if table.addString(string, increaseSize: increaseMSGSize, save: false) {
+							if verbose {
+								printg("Added string :\(text) to file: \(table.file.path) with ID: \(newID!)")
 							}
+						} else {
+							error = "Failed to replace msg: $:\(id!):\"\(text)\"\n maybe because the string was too large.\nTry setting 'Increase MSG Size' to 'YES'."
+							return -1
 						}
 					}
 				}
 			}
 		} else {
-			if let stable = stringTable {
-				newID = freeMSGID(from: baseStringID)
+			if let table = stringTable {
+				var foundID : Int? = 0
+				while foundID! == 0 || table.containsStringWithId(foundID!) {
+					foundID = freeMSGID(from: baseStringID)
+					baseStringID += 1
+					if foundID == nil {
+						break
+					}
+				}
+				newID = foundID
 				if newID != nil {
-					loadAllStrings()
-					for table in allStringTables {
-						if table.file.path == stable.file.path {
-							let string = XGString(string: uptext, file: table.file, sid: newID)
-							if table.addString(string, increaseSize: increaseMSGSize, save: false) {
-								if verbose {
-									printg("Added string :\(text) to file: \(table.file.path) with ID: \(newID!)")
+					let string = XGString(string: uptext, file: table.file, sid: newID)
+					if table.addString(string, increaseSize: increaseMSGSize, save: false) {
+						if verbose {
+							printg("Added string :\(text) to file: \(table.file.path) with ID: \(newID!)")
+						}
+						
+						if updateStringIDs {
+							if let file = scriptFile {
+								if file.fileType == .xds {
+									updatedText = updatedText.replacingOccurrences(of: "$" + "\"" + text + "\"", with: "$:\(newID!):" + "\"" + text + "\"")
+									updatedText = updatedText.replacingOccurrences(of: "$::" + "\"" + text + "\"", with: "$:\(newID!):" + "\"" + text + "\"")
 								}
-								
-								if updateStringIDs {
-									if let file = scriptFile {
-										if file.fileType == .xds {
-											updatedText = updatedText.replacingOccurrences(of: "$" + "\"" + text + "\"", with: "$:\(newID!):" + "\"" + text + "\"")
-											updatedText = updatedText.replacingOccurrences(of: "$::" + "\"" + text + "\"", with: "$:\(newID!):" + "\"" + text + "\"")
-										}
-									}
-								}
-								
-							} else {
-								error = "Couldn't create string with id: \(id!)"
-								return -1
 							}
 						}
+						
+					} else {
+						error = "Couldn't create string with id: \(id!)"
+						return -1
 					}
 				} else {
 					error = "Couldn't find a new string id after \(baseStringID)."
@@ -503,7 +503,7 @@ class XDSScriptCompiler: NSObject {
 		var currentLocation = 0
 		for expr in exprs {
 			switch expr {
-			case .function(.functionDefinition(let name, _), let block):
+			case .function(.functionDefinition(let name, _), let _):
 				functions += [(currentLocation, 0, name, functions.count)]
 			default:
 				break
@@ -576,7 +576,6 @@ class XDSScriptCompiler: NSObject {
 		
 		let rel = XGMapRel(file: file, checkScript: false)
 		
-		
 		// cannot simply count characters as there's no guarantee the RIDs are consecutive
 		var maxRID = -1
 		for character in XDSScriptCompiler.characters {
@@ -609,11 +608,14 @@ class XDSScriptCompiler: NSObject {
 					character.startOffset = rel.characters[character.rid].startOffset
 				} else if character.gid == 0 {
 					printg("error: can't write character data for player or party characters with group id of 0")
+					return false
 				} else {
 					printg("error: can't write character data for negative group id: \(character.rid)")
+					return false
 				}
 			} else {
 				printg("error: can't write character data for negative character id: \(character.rid)")
+				return false
 			}
 			
 		}

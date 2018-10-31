@@ -139,6 +139,14 @@ extension GoDTexture {
 		return imageData(fileType: .png)
 	}
 	
+	var jpegData : Data {
+		return imageData(fileType: .jpeg)
+	}
+	
+	var bmpData : Data {
+		return imageData(fileType: .bmp)
+	}
+	
 	var image : NSImage {
 		get {
 			return NSImage(data: self.pngData)!

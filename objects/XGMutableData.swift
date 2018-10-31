@@ -341,7 +341,7 @@ class XGMutableData: NSObject {
 	
 	@objc func insertByte(byte: Int, atOffset offset: Int) {
 		
-		if offset < 0 || offset + 1 > self.length {
+		if offset < 0 || offset > self.length {
 			printg("Attempting to insert byte at offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
 		
@@ -352,7 +352,7 @@ class XGMutableData: NSObject {
 	
 	@objc func insertBytes(bytes: [Int], atOffset offset: Int) {
 		
-		if offset < 0 || offset + bytes.count > self.length {
+		if offset < 0 || offset > self.length {
 			printg("Attempting to insert \(bytes.count) bytes at offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
 		
@@ -363,7 +363,7 @@ class XGMutableData: NSObject {
 	
 	@objc func insertData(data: XGMutableData, atOffset offset: Int) {
 		
-		if offset < 0 || offset + data.length > self.length {
+		if offset < 0 || offset > self.length {
 			printg("Attempting to insert \(data.length) bytes at offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
 		
@@ -372,7 +372,7 @@ class XGMutableData: NSObject {
 	
 	@objc func insertRepeatedByte(byte: Int, count: Int, atOffset offset: Int) {
 		
-		if offset < 0 || offset + count > self.length {
+		if offset < 0 || offset > self.length {
 			printg("Attempting to insert \(count) bytes at offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
 		

@@ -814,14 +814,14 @@ Twitter: @StarsMmd</string>
             <objects>
                 <viewController title="ISO Explorer" id="bxX-wC-pW7" customClass="GoDISOViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="3Yw-8u-ra2">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="380"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="J4c-eK-bUW" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
-                                <rect key="frame" x="210" y="10" width="260" height="340"/>
+                                <rect key="frame" x="210" y="10" width="260" height="360"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="449-BS-yMe">
-                                        <rect key="frame" x="154" y="246" width="92" height="41"/>
+                                        <rect key="frame" x="154" y="266" width="92" height="41"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="2cw-Qv-yUN"/>
                                             <constraint firstAttribute="width" constant="80" id="u24-27-fmr"/>
@@ -835,16 +835,16 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </button>
                                     <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZaN-Nt-34m">
-                                        <rect key="frame" x="10" y="10" width="240" height="162"/>
+                                        <rect key="frame" x="10" y="10" width="240" height="153"/>
                                         <clipView key="contentView" id="PzL-xZ-RXI">
-                                            <rect key="frame" x="0.0" y="0.0" width="240" height="162"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="240" height="153"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" smartInsertDelete="YES" id="zTF-RS-VU7">
-                                                    <rect key="frame" x="0.0" y="0.0" width="240" height="162"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="240" height="153"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                    <size key="minSize" width="240" height="162"/>
+                                                    <size key="minSize" width="240" height="153"/>
                                                     <size key="maxSize" width="463" height="10000000"/>
                                                     <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                 </textView>
@@ -856,12 +856,12 @@ Twitter: @StarsMmd</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="uIH-f7-zGQ">
-                                            <rect key="frame" x="224" y="0.0" width="16" height="162"/>
+                                            <rect key="frame" x="224" y="0.0" width="16" height="153"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RPc-NA-bVM">
-                                        <rect key="frame" x="8" y="172" width="244" height="20"/>
+                                        <rect key="frame" x="8" y="163" width="244" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="bO8-oa-QWN"/>
                                         </constraints>
@@ -872,9 +872,10 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0MI-Yz-bZJ">
-                                        <rect key="frame" x="84" y="205" width="92" height="32"/>
+                                        <rect key="frame" x="84" y="196" width="92" height="31"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="80" id="8RB-Yx-3zR"/>
+                                            <constraint firstAttribute="height" constant="20" id="Q1y-gY-OfF"/>
                                         </constraints>
                                         <buttonCell key="cell" type="push" title="Delete" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6Bw-dV-PeB">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -885,7 +886,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </button>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ww0-GG-60h">
-                                        <rect key="frame" x="18" y="313" width="104" height="17"/>
+                                        <rect key="frame" x="18" y="333" width="104" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="File name: -" id="HzW-1r-BsW">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -893,7 +894,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tQn-Gq-XCD">
-                                        <rect key="frame" x="138" y="313" width="104" height="17"/>
+                                        <rect key="frame" x="138" y="333" width="104" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="File size: -" id="ggy-JV-Sjh">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -901,7 +902,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cd3-cr-x8P">
-                                        <rect key="frame" x="14" y="246" width="92" height="41"/>
+                                        <rect key="frame" x="14" y="266" width="92" height="41"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="8Q0-3K-g9P"/>
                                             <constraint firstAttribute="width" constant="80" id="UKS-9n-QRX"/>
@@ -914,6 +915,32 @@ Twitter: @StarsMmd</string>
                                             <action selector="export:" target="bxX-wC-pW7" id="xZc-t2-fhd"/>
                                         </connections>
                                     </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="upR-aa-OyI">
+                                        <rect key="frame" x="154" y="236" width="92" height="31"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="OI6-hs-UnV"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="push" title="Quick Import" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vAf-BS-ifw">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system" size="9"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="quickImport:" target="bxX-wC-pW7" id="Gs1-55-r8X"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9O9-JT-xa4">
+                                        <rect key="frame" x="14" y="236" width="92" height="31"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="J6E-bu-K0E"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="push" title="Quick Export" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="EUV-ft-EF5">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system" size="9"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="quickExport:" target="bxX-wC-pW7" id="Dsw-aj-0qV"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="ZaN-Nt-34m" secondAttribute="trailing" constant="10" id="5Hw-9S-f3o"/>
@@ -921,22 +948,29 @@ Twitter: @StarsMmd</string>
                                     <constraint firstItem="tQn-Gq-XCD" firstAttribute="leading" secondItem="ww0-GG-60h" secondAttribute="trailing" constant="20" id="CQr-gh-XL5"/>
                                     <constraint firstAttribute="bottom" secondItem="ZaN-Nt-34m" secondAttribute="bottom" constant="10" id="CX2-zv-yH3"/>
                                     <constraint firstItem="ZaN-Nt-34m" firstAttribute="leading" secondItem="J4c-eK-bUW" secondAttribute="leading" constant="10" id="CYR-8D-Zcu"/>
+                                    <constraint firstItem="upR-aa-OyI" firstAttribute="top" secondItem="9O9-JT-xa4" secondAttribute="top" id="JSo-gW-siw"/>
                                     <constraint firstItem="ZaN-Nt-34m" firstAttribute="top" secondItem="RPc-NA-bVM" secondAttribute="bottom" id="LfO-ni-4Tq"/>
                                     <constraint firstItem="ww0-GG-60h" firstAttribute="top" secondItem="J4c-eK-bUW" secondAttribute="top" constant="10" id="NLk-3T-9be"/>
+                                    <constraint firstItem="9O9-JT-xa4" firstAttribute="top" secondItem="cd3-cr-x8P" secondAttribute="bottom" constant="10" id="Snq-5r-UMH"/>
                                     <constraint firstItem="449-BS-yMe" firstAttribute="top" secondItem="cd3-cr-x8P" secondAttribute="top" id="ThO-cn-Skp"/>
                                     <constraint firstItem="tQn-Gq-XCD" firstAttribute="bottom" secondItem="ww0-GG-60h" secondAttribute="bottom" id="YLB-c6-OgY"/>
                                     <constraint firstItem="RPc-NA-bVM" firstAttribute="leading" secondItem="ZaN-Nt-34m" secondAttribute="leading" id="bdh-B6-pL9"/>
-                                    <constraint firstItem="0MI-Yz-bZJ" firstAttribute="top" secondItem="cd3-cr-x8P" secondAttribute="bottom" constant="20" id="dPe-lU-ujM"/>
                                     <constraint firstItem="RPc-NA-bVM" firstAttribute="trailing" secondItem="ZaN-Nt-34m" secondAttribute="trailing" id="fUd-Cl-E50"/>
                                     <constraint firstItem="tQn-Gq-XCD" firstAttribute="top" secondItem="ww0-GG-60h" secondAttribute="top" id="iUT-lY-Ftd"/>
+                                    <constraint firstItem="9O9-JT-xa4" firstAttribute="leading" secondItem="cd3-cr-x8P" secondAttribute="leading" id="iZC-k7-oZh"/>
                                     <constraint firstItem="cd3-cr-x8P" firstAttribute="top" secondItem="ww0-GG-60h" secondAttribute="bottom" constant="30" id="ikc-at-ZzF"/>
+                                    <constraint firstItem="449-BS-yMe" firstAttribute="trailing" secondItem="upR-aa-OyI" secondAttribute="trailing" id="ozG-1G-kO5"/>
+                                    <constraint firstItem="0MI-Yz-bZJ" firstAttribute="top" secondItem="9O9-JT-xa4" secondAttribute="bottom" constant="20" id="pG5-Vf-b6S"/>
                                     <constraint firstItem="449-BS-yMe" firstAttribute="bottom" secondItem="cd3-cr-x8P" secondAttribute="bottom" id="s48-M7-H55"/>
+                                    <constraint firstItem="upR-aa-OyI" firstAttribute="bottom" secondItem="9O9-JT-xa4" secondAttribute="bottom" id="sVf-Da-KVy"/>
+                                    <constraint firstItem="449-BS-yMe" firstAttribute="leading" secondItem="upR-aa-OyI" secondAttribute="leading" id="sXK-X2-TgD"/>
                                     <constraint firstAttribute="trailing" secondItem="449-BS-yMe" secondAttribute="trailing" constant="20" id="tPg-FL-i7d"/>
                                     <constraint firstItem="tQn-Gq-XCD" firstAttribute="width" secondItem="ww0-GG-60h" secondAttribute="width" id="tzz-Xc-q27"/>
                                     <constraint firstItem="0MI-Yz-bZJ" firstAttribute="centerX" secondItem="J4c-eK-bUW" secondAttribute="centerX" id="u0Z-bA-EkL"/>
                                     <constraint firstItem="RPc-NA-bVM" firstAttribute="top" secondItem="0MI-Yz-bZJ" secondAttribute="bottom" constant="20" id="wOr-sQ-Bop"/>
                                     <constraint firstAttribute="trailing" secondItem="tQn-Gq-XCD" secondAttribute="trailing" constant="20" id="ytS-Vl-Vra"/>
                                     <constraint firstItem="ww0-GG-60h" firstAttribute="leading" secondItem="J4c-eK-bUW" secondAttribute="leading" constant="20" id="zFK-v3-TmX"/>
+                                    <constraint firstItem="9O9-JT-xa4" firstAttribute="trailing" secondItem="cd3-cr-x8P" secondAttribute="trailing" id="zNg-9v-teI"/>
                                 </constraints>
                             </customView>
                         </subviews>

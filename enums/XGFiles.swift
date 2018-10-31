@@ -583,11 +583,6 @@ indirect enum XGFolders {
 		if !pathExists {
 			
 			do {
-				try fm.removeItem(atPath: self.path)
-			} catch let error as NSError {
-				printg(error)
-			}
-			do {
 				try fm.createDirectory(atPath: self.path, withIntermediateDirectories: true, attributes: nil)
 			} catch let error as NSError {
 				printg(error)

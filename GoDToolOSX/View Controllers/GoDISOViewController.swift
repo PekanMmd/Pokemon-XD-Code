@@ -10,7 +10,7 @@ import Cocoa
 class GoDISOViewController: GoDTableViewController {
 	
 	var isExporting = false
-	@IBAction func export(_ sender: Any) {
+	func exportFiles(decode: Bool) {
 		XGFolders.nameAndFolder("ISO Export", .Documents).createDirectory()
 		
 		if isExporting {
@@ -23,7 +23,7 @@ class GoDISOViewController: GoDTableViewController {
 				data.file = self.currentFile
 				if self.currentFile.fileType == .fsys {
 					let fsysData = data.fsysData
-					fsysData.extractFilesToFolder(folder: self.currentFile.folder)
+					fsysData.extractFilesToFolder(folder: self.currentFile.folder, decode: decode)
 				}
 				data.save()
 			}
@@ -31,17 +31,45 @@ class GoDISOViewController: GoDTableViewController {
 			GoDAlertViewController.displayAlert(title: "File export failed", text: "Couldn't export data for file \(self.currentFile.fileName) from the ISO.")
 		}
 		self.isExporting = false
-		
 	}
 	
-	@IBAction func importFiles(_ sender: Any) {
+	@IBAction func export(_ sender: Any) {
+		self.exportFiles(decode: true)
+	}
+	
+	@IBAction func quickExport(_ sender: Any) {
+		self.exportFiles(decode: false)
+	}
+	
+	func importFsysFiles(encode: Bool) {
 		XGFolders.nameAndFolder("ISO Export", .Documents).createDirectory()
 		
 		if currentFile.exists {
 			if currentFile.fileType == .fsys {
+				
+				if encode {
+					for file in currentFile.folder.files {
+						if file.fileType == .xds {
+							XDSScriptCompiler.setFlags(disassemble: true, decompile: false, updateStrings: true, increaseMSG: true)
+							XDSScriptCompiler.baseStringID = 1000
+							if !XDSScriptCompiler.compile(textFile: file, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)) {
+								GoDAlertViewController.displayAlert(title: "Compilation Error", text: XDSScriptCompiler.error)
+								return
+							}
+						}
+						if file.fileType == .gtx || file.fileType == .atx {
+							for image in currentFile.folder.files where image.fileType == .png {
+								if image.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
+									file.texture.importImage(file: image)
+								}
+							}
+						}
+					}
+				}
+				
 				let fsysData = currentFile.fsysData
 				for i in 0 ..< fsysData.numberOfEntries {
-					let filename = fsysData.fileNames[i] + fsysData.fileTypeForFile(index: i).fileExtension
+					let filename = fsysData.fileNames[i].removeFileExtensions() + fsysData.fileTypeForFile(index: i).fileExtension
 					for file in currentFile.folder.files {
 						if file.fileName == filename {
 							if fsysData.isFileCompressed(index: i){
@@ -59,6 +87,14 @@ class GoDISOViewController: GoDTableViewController {
 			printg("The file: \(currentFile.path) doesn't exit")
 		}
 		printg("import complete")
+	}
+	
+	@IBAction func importFiles(_ sender: Any) {
+		self.importFsysFiles(encode: true)
+	}
+	
+	@IBAction func quickImport(_ sender: Any) {
+		self.importFsysFiles(encode: false)
 	}
 	
 	@IBAction func delete(_ sender: Any) {

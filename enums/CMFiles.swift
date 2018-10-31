@@ -411,6 +411,7 @@ indirect enum XGFolders {
 	case Rels
 	case Col
 	case ISOExport(String)
+	case nameAndPath(String, String)
 	case nameAndFolder(String, XGFolders)
 	
 	
@@ -443,6 +444,7 @@ indirect enum XGFolders {
 			case .Rels				: return "Relocation Tables"
 			case .Col				: return "Collision Data"
 			case .ISOExport     	: return "ISO Export"
+				case .nameAndPath(let s, _): return s
 			case .nameAndFolder(let s, _): return s
 				
 			}
@@ -457,6 +459,7 @@ indirect enum XGFolders {
 			switch self {
 				
 			case .Documents	: return path
+			case .nameAndPath(let name, let path): return path + "/\(name)"
 			case .ISOExport(let folder): return path + ("/" + self.name) + ("/" + folder)
 			case .Import	: path = XGFolders.TextureImporter.path
 			case .Export	: path = XGFolders.TextureImporter.path
@@ -534,11 +537,6 @@ indirect enum XGFolders {
 		
 		if !pathExists {
 			
-			do {
-				try fm.removeItem(atPath: self.path)
-			} catch let error1 as NSError {
-				error = error1
-			}
 			do {
 				try fm.createDirectory(atPath: self.path, withIntermediateDirectories: true, attributes: nil)
 			} catch let error1 as NSError {

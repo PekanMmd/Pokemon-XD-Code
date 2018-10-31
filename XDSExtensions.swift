@@ -478,7 +478,7 @@ extension XDSScriptCompiler {
 				scriptID = val
 				return true
 			} else {
-				error = "Invalid script identifier: \(tokens[0]) \(tokens[1]) \(tokens[2])"
+				error = "Invalid script identifier value: \(tokens[0]) \(tokens[1]) \(tokens[2])"
 				return false
 			}
 		}
@@ -494,6 +494,16 @@ extension XDSScriptCompiler {
 				return true
 			} else {
 				error = "Invalid xds version: \(tokens[0]) \(tokens[1]) \(tokens[2])"
+				return false
+			}
+		}
+		
+		if tokens[1] == "++BaseStringID" {
+			if let val = tokens[2].integerValue {
+				baseStringID = val
+				return true
+			} else {
+				error = "Invalid string id: \(tokens[0]) \(tokens[1]) \(tokens[2])"
 				return false
 			}
 		}
@@ -714,6 +724,8 @@ extension XDSScriptCompiler {
 			character.model = model
 			character.scriptName = scriptName
 			character.passiveScriptName = passiveScriptName
+			character.gid = gid
+			character.rid = rid
 			
 			characters.append(character)
 		}
@@ -1221,12 +1233,6 @@ extension XDSScriptCompiler {
 								variableName = String(functionParts[0])
 								functionName = String(functionParts[1])
 								
-								if let params = getParameters() {
-									functionParameters = [XDSExpr.loadPointer(variableName)] + params
-								} else {
-									return nil
-								}
-								
 								if let gvarIndex = gvars.names.index(of: variableName) {
 									classIndex = gvars.values[gvarIndex].type.index
 									
@@ -1236,16 +1242,26 @@ extension XDSScriptCompiler {
 										} else {
 											functionParameters = [XDSExpr.loadPointer(variableName)] + params
 										}
+									} else {
+										return nil
 									}
 									
 								} else if arrys.names.contains(variableName) {
 									classIndex = 7
+									
+									if let params = getParameters() {
+										functionParameters = [XDSExpr.loadPointer(variableName)] + params
+									} else {
+										return nil
+									}
 								} else if vects.names.contains(variableName) {
 									classIndex = 4
 									
 									if let params = getParameters() {
 										let immediate = XDSConstant(type: XDSConstantTypes.vector.index, rawValue: UInt32(vects.names.index(of: variableName)!))
 										functionParameters = [XDSExpr.loadImmediate(immediate)] + params
+									} else {
+										return nil
 									}
 								} else if giris.names.contains(variableName) {
 									classIndex = 35
@@ -1253,12 +1269,20 @@ extension XDSScriptCompiler {
 									if let params = getParameters() {
 										// character is loadvar instead of loadpointer(ldncpyvar) when using a character object directly
 										functionParameters = [XDSExpr.loadVariable(variableName)] + params
+									} else {
+										return nil
 									}
 									
 								} else if let cinfo = XGScriptClass.getClassNamed(variableName) {
 									classIndex = cinfo.index
 									if classIndex == 35 {
 										error = "Character functions must be applied to a character variable: \(token)"
+										return nil
+									}
+									
+									if let params = getParameters() {
+										functionParameters = [XDSExpr.loadPointer(variableName)] + params
+									} else {
 										return nil
 									}
 								} else {

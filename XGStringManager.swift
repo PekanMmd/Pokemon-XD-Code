@@ -123,6 +123,9 @@ func freeMSGID() -> Int? {
 	// plenty of ids available so no need to risk it
 	// even if unlikely
 	// can use freemsgid(from:) if below 1000 is desired
+	// Update: upon testing it seems starting at 1000 is smart.
+	// id 1 showed no text but id 1000 worked as expected
+	// don't know what the minimum is but 1000 is guaranteed
 	if isSearchingForFreeStringID {
 		return nil
 	}

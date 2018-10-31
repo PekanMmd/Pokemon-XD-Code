@@ -417,6 +417,11 @@ class XGFsys : NSObject {
 			return
 		}
 		
+		var newFile = newFile
+		if self.isFileCompressed(index: index) && newFile.data!.getWordAtOffset(0) != kLZSSbytes {
+			newFile = newFile.compress()
+		}
+		
 		
 		let oldSize = sizeForFile(index: index)
 		let shift = (newFile.fileSize > oldSize) && (self.numberOfEntries > 1)
@@ -461,11 +466,7 @@ class XGFsys : NSObject {
 			
 		}
 		
-		var file = newFile
-		if newFile.data!.getWordAtOffset(0) != kLZSSbytes {
-			file = newFile.compress()
-		}
-		self.replaceFileWithIndex(index, withFile: file, saveWhenDone: false)
+		self.replaceFileWithIndex(index, withFile: newFile, saveWhenDone: false)
 		
 		if shift {
 			for i in 0 ..< self.numberOfEntries {
@@ -482,60 +483,60 @@ class XGFsys : NSObject {
 			return
 		}
 		
-		let oldSize = sizeForFile(index: index)
+		var newFile = newFile
+		if self.isFileCompressed(index: index) && (newFile.data!.getWordAtOffset(0) != kLZSSbytes) {
+			newFile = newFile.compress()
+		}
+		
 		var fileEnd = startOffsetForFile(index) + newFile.fileSize
 		var nextStart = index < self.numberOfEntries - 1 ? startOffsetForFile(index + 1) : dataEnd
 		
 		let shift = fileEnd > nextStart
-		var shiftAmount = shift ? newFile.fileSize - oldSize : 0
-		while shiftAmount % 16 != 0 {
-			shiftAmount += 1
-		}
 		
 		if shift {
+			
 			for i in 0 ..< self.numberOfEntries {
 				self.shiftUpFileWithIndex(index: i)
 			}
 			
-			var rev = [Int]()
-			for i in (index + 1) ..< self.numberOfEntries {
-				rev.append(i)
+			
+			let end = dataEnd
+			let lastIndex = self.numberOfEntries - 1
+			var lastFileEnd = self.startOffsetForFile(lastIndex) + self.sizeForFile(index: lastIndex)
+			while lastFileEnd % 16 != 0 {
+				lastFileEnd += 1
 			}
-			for i in rev.reversed() {
-				self.shiftDownFileWithIndex(index: i, byOffset: shiftAmount)
+			let excess = end - lastFileEnd - 0xc
+			if excess > 0 {
+				self.data.deleteBytes(start: lastFileEnd, count: excess)
+				self.setFilesize(self.data.length)
 			}
 			
 			fileEnd = startOffsetForFile(index) + newFile.fileSize
 			var expansionRequired = 0
-			nextStart = index < self.numberOfEntries - 1 ? startOffsetForFile(index + 1) : dataEnd
+			let newNextStart = index < self.numberOfEntries - 1 ? startOffsetForFile(index + 1) : dataEnd
 			
-			if fileEnd > nextStart {
-				if !increaseFileSizes {
-					printg("file too large to replace: ", newFile.fileName, self.file.fileName + ".", "Enable file size increases to add this file but make sure your ISO has enough free space.")
-					return
-				}
-				expansionRequired = fileEnd - nextStart
+			if fileEnd > newNextStart {
+				expansionRequired = fileEnd - newNextStart + 0x10
 				while expansionRequired % 16 != 0 {
 					expansionRequired += 1
 				}
 			}
 			
 			if expansionRequired > 0 {
-				
 				// add a little extra free space so future size increases can be accounted for if they are small.
-				self.increaseDataLength(by: expansionRequired + 0x50)
-				
-				for i in rev.reversed() {
-					self.shiftDownFileWithIndex(index: i, byOffset: expansionRequired)
+				if index < self.numberOfEntries - 1 {
+					for i in index + 1 ..< self.numberOfEntries {
+						self.setStartOffsetForFile(index: i, newStart: startOffsetForFile(i) + expansionRequired)
+					}
 				}
+				self.data.insertRepeatedByte(byte: 0, count: expansionRequired, atOffset: newNextStart)
+				self.setFilesize(self.data.length)
+				
 			}
 		}
 		
-		var file = newFile
-		if newFile.data!.getWordAtOffset(0) != kLZSSbytes {
-			file = newFile.compress()
-		}
-		self.replaceFileWithIndex(index, withFile: file, saveWhenDone: save)
+		self.replaceFileWithIndex(index, withFile: newFile, saveWhenDone: save)
 	}
 	
 	func replaceFileWithIndex(_ index: Int, withFile newFile: XGFiles, saveWhenDone: Bool) {
@@ -632,9 +633,6 @@ class XGFsys : NSObject {
 	func addFile(_ fileData: XGMutableData, fileType: XGFileTypes, compress: Bool, shortID: Int) {
 		// not considered fsys with alternate filename data. might change things, might not.
 		
-		if !increaseFileSizes {
-			printg("Couldn't add file to to fsys: \(self.fileName). Enable file size increases first. Make sure your ISO has enough free space to handle the increase.")
-		}
 		
 		let file = fileData.file
 		let name = file.fileName.removeFileExtensions()
@@ -866,7 +864,7 @@ class XGFsys : NSObject {
 		self.data.save()
 	}
 	
-	func extractFilesToFolder(folder: XGFolders) {
+	func extractFilesToFolder(folder: XGFolders, decode: Bool) {
 		
 		var data = [XGMutableData]()
 		for i in 0 ..< self.numberOfEntries {
@@ -924,15 +922,17 @@ class XGFsys : NSObject {
 			data[i].save()
 			
 			if data[i].file.fileType == .gtx || data[i].file.fileType == .atx {
-				data[i].file.texture.saveImage(file: .nameAndFolder(updatedNames[i] + ".png", folder))
+				if decode {
+					data[i].file.texture.saveImage(file: .nameAndFolder(updatedNames[i] + ".png", folder))
+				}
 			}
 			
-			if data[i].file.fileType == .msg {
+			if data[i].file.fileType == .msg && decode {
 				XGUtility.saveJSON(data[i].file.stringTable.readableDictionaryRepresentation as AnyObject, toFile: .nameAndFolder(updatedNames[i] + ".json", folder))
 				
 			}
 			
-			if data[i].file.fileType == .scd && game == .XD {
+			if data[i].file.fileType == .scd && game == .XD && decode {
 				data[i].file.writeScriptData()
 			}
 			
