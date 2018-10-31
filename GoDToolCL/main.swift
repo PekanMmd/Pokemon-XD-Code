@@ -8,7 +8,21 @@
 //
 
 
+
 XGAssembly.ASMfreeSpacePointer().hexString().println()
+
+//// female demo starters
+//let femaleOffsets = [0x152830, 0x152708]
+//for off in femaleOffsets {
+//	XGAssembly.replaceRamASM(RAMOffset: off, newASM: [.li(.r4, -1)])
+//}
+
+// allow shinies in various scenarios
+//let shinyOffsets = [0x295464, 0x29561c, 0x152bfc, 0x06b0f0, 0x1cebec]
+//for off in shinyOffsets {
+//	XGAssembly.replaceRamASM(RAMOffset: off, newASM: [.li(.r6, -1)])
+//}
+
 
 // TODO: check that replace asm isn't broken now that I've added labels
 //XGAssembly.setProtectRepeatChanceQuotient(3)
@@ -19,6 +33,12 @@ XGAssembly.ASMfreeSpacePointer().hexString().println()
 //	.cmpwi(.r3, 0xaaaa), // 2 in 3
 //	.ble(0x227110), // not confused
 //])
+
+
+
+
+
+
 
 // sound moves through substitute
 //let subJumpBranch = 0x2135ac
@@ -62,24 +82,14 @@ XGAssembly.ASMfreeSpacePointer().hexString().println()
 //XGUtility.documentXDS()
 
 
-//let name = "M5_apart_1F"
-//XDSScriptCompiler.compile(textFile: .xds(name), toFile: .nameAndFolder(name + ".scd", .Documents))
+
+
+
+
+
+
 
 //XGScriptClass.classes(43).RAMOffset!.hexString().println()
-
-
-
-
-//XGUtility.compileDol()
-//XGUtility.compileCommonRel()
-//XGUtility.compileMainFiles()
-//XGUtility.compileAllFiles()
-//XGUtility.compileForRelease(XG: true)
-//XGUtility.documentISO(forXG: true)
-
-//XGUtility.documentXDS()
-
-
 //XGAssembly.getWordAtRamOffsetFromR13(offset: -0x74b0).hexString().println() //number battle types
 
 //let cd = item("Battle CD 01")

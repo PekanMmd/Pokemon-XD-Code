@@ -161,7 +161,7 @@ class XGString: NSObject {
 	}
 	
 	@objc func replace(increaseSize: Bool) -> Bool {
-		return replaceDirectly(increaseSize: increaseSize, save: true)
+		return replace(increaseSize: increaseSize, save: true)
 	}
 	
 	func replace(increaseSize: Bool, save: Bool) -> Bool {

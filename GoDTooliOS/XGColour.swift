@@ -63,6 +63,10 @@ class XGColour: NSObject {
 		return withinThreshold(c1: colour.red, c2: self.red) && withinThreshold(c1: colour.green, c2: self.green) && withinThreshold(c1: colour.blue, c2: self.blue) && (colour.alpha == self.alpha)
 	}
 	
+	class func compatibleFormats() -> [GoDTextureFormats] {
+		return [.I4, .I8, .IA4, .RGB565, .RGB5A3, .RGBA32]
+	}
+	
 	func representation(format: GoDTextureFormats) -> Int {
 		switch format {
 		case .I4:

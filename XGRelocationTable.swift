@@ -37,6 +37,7 @@ class XGPocket : XGRelocationTable {
 let kCommonRELDataStartOffsetLocation = 0x6c
 let kRELDataStartOffsetLocation = 0x64
 let kRELPointersStartOffsetLocation = 0x24
+let kRELPointersHeaderPointerOffset = 0x28
 let kRELPointersFirstPointerOffset = 0x8
 let kRELSizeOfPointer = 0x10
 let kRELPointerDataPointer1Offset = 0x4
@@ -50,6 +51,7 @@ class XGRelocationTable: NSObject {
 	@objc var dataStart = 0
 	@objc var pointersStart = 0
 	@objc var firstPointer = 0
+	var numberOfPointers = 0
 	
 	init(file: XGFiles) {
 		super.init()
@@ -61,6 +63,22 @@ class XGRelocationTable: NSObject {
 			self.dataStart = Int(data.getWordAtOffset(kRELDataStartOffsetLocation))
 			self.pointersStart = Int(data.getWordAtOffset(kRELPointersStartOffsetLocation))
 			self.firstPointer = pointersStart + kRELPointersFirstPointerOffset
+			
+			let pointersHeaderOffset = data.get4BytesAtOffset(kRELPointersHeaderPointerOffset)
+			let pointersEnd = data.get4BytesAtOffset(pointersHeaderOffset + 0xc)
+			var currentOffset = firstPointer
+			var found = false
+			while currentOffset < pointersEnd && !found {
+				let val = data.get4BytesAtOffset(currentOffset)
+				if val >= 0xca01 && val <= 0xcaff {
+					found = true
+				} else {
+					numberOfPointers += 1
+				}
+				
+				currentOffset += kRELSizeOfPointer
+			}
+			
 		}
 		
 	}

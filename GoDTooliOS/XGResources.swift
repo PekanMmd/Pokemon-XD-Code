@@ -13,6 +13,7 @@ enum XGResources {
 	case JSON(String)
 	case png(String)
 	case bin(String)
+	case msg(String)
 	case shader(String)
 	case sublimeColourScheme(String)
 	case sublimeSyntax(String)
@@ -32,6 +33,7 @@ enum XGResources {
 				case .JSON(let name)							: return name
 				case .png(let name)								: return name
 				case .bin(let name)								: return name
+				case .msg(let name)								: return name
 				case .shader(let name)							: return name
 				case .sublimeColourScheme(let name)				: return name
 				case .sublimeSyntax(let name)					: return name
@@ -48,6 +50,7 @@ enum XGResources {
 				case .JSON									: return ".json"
 				case .png									: return ".png"
 				case .bin									: return ".bin"
+				case .msg 									: return ".msg"
 				case .shader								: return ".glsl"
 				case .sublimeColourScheme					: return ".sublime-color-scheme"
 				case .sublimeSyntax							: return ".sublime-syntax"

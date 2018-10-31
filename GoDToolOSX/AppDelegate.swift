@@ -41,6 +41,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	func applicationWillTerminate(_ aNotification: Notification) {
 		// Insert code here to tear down your application
+		printg("The tool is now closing.")
+		printg("deleting LZSS files...")
+		for file in XGFolders.LZSS.files where file.fileType == .lzss {
+			file.delete()
+		}
+		printg("Good bye :-)")
+		sleep(3)
 	}
 	
 	@IBAction func getFreeStringID(_ sender: Any) {

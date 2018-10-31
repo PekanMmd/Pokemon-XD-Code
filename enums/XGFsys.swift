@@ -489,7 +489,7 @@ class XGFsys : NSObject {
 		}
 		
 		var fileEnd = startOffsetForFile(index) + newFile.fileSize
-		var nextStart = index < self.numberOfEntries - 1 ? startOffsetForFile(index + 1) : dataEnd
+		let nextStart = index < self.numberOfEntries - 1 ? startOffsetForFile(index + 1) : dataEnd
 		
 		let shift = fileEnd > nextStart
 		

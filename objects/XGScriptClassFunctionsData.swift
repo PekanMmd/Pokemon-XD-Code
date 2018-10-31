@@ -325,7 +325,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		("displayPokemartMenu", 39, 2, [.objectName("Dialogue"), .integer], .null), //# (int pokemart id)
 		
-		("displayPADMenu", 41, 1, [.objectName("Dialogue")], .null),
+		("displayPDAMenu", 41, 1, [.objectName("Dialogue")], .null),
 		("displayYesNoPrompt", 42, 1, [.objectName("Dialogue")], .bool), // result is boolean true or false
 		
 		("openItemMenu", 50, 1, [.objectName("Dialogue")], .null),

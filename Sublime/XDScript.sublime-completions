@@ -74,8 +74,8 @@
       "trigger" : ".displayPokemartMenu\tDialogue Class Function (Null)"
     },
     {
-      "contents" : "displayPADMenu()",
-      "trigger" : ".displayPADMenu\tDialogue Class Function (Null)"
+      "contents" : "displayPDAMenu()",
+      "trigger" : ".displayPDAMenu\tDialogue Class Function (Null)"
     },
     {
       "contents" : "displayYesNoPrompt()",

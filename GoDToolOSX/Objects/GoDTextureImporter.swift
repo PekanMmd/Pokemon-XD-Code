@@ -193,6 +193,9 @@ class GoDTextureImporter: NSObject {
 		
 		let pngPixels = self.pixelsFromPNGImage()
 		var pixelBytes = [Int]()
+		if !XGColour.compatibleFormats().contains(texture.format) {
+			printg("This texture format is current incompatible with GoD Tool (mainly because @StarsMmd got lazy :-p). Aborting import of file \(texture.file.path). If you want to import it send him a message to add support for the \(texture.format.name) format.")
+		}
 		if texture.isIndexed {
 			let texPixels = self.convertPNGPixelsToIndexedPixels(pixels: pngPixels)
 			pixelBytes = byteStreamFromTexturePixels(pixels: texPixels)

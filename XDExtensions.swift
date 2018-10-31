@@ -44,6 +44,13 @@ class XGMapRel : XGRelocationTable {
 	init(file: XGFiles, checkScript: Bool) {
 		super.init(file: file)
 		
+		if self.numberOfPointers < kNumberMapPointers {
+			if verbose {
+				printg("Map: \(file.path) has the incorrect number of map pointers. Possibly a colosseum file.")
+			}
+			return
+		}
+		
 		let firstIP = self.getPointer(index: MapRelIndexes.FirstInteractionLocation.rawValue)
 		let numberOfIPs = self.getValueAtPointer(index: MapRelIndexes.NumberOfInteractionLocations.rawValue)
 		

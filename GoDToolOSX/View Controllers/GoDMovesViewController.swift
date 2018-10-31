@@ -198,9 +198,13 @@ class GoDMovesViewController: GoDTableViewController {
 	
 	@IBAction func setMoveNameID(_ sender: NSTextField) {
 		
-		let id = sender.integerValue
-		
-		self.currentMove.nameID = id
+		if let id = sender.stringValue.integerValue {
+			var value = id
+			value = value < 0 ? 0 : value
+			value = value > kMaxStringID ? kMaxStringID : value
+			
+			self.currentMove.nameID = value
+		}
 		
 		self.reloadViewWithActivity()
 		self.table.reloadData()
@@ -208,9 +212,13 @@ class GoDMovesViewController: GoDTableViewController {
 	
 	@IBAction func setDescriptionID(_ sender: NSTextField) {
 		
-		let id = sender.integerValue
-		
-		self.currentMove.descriptionID = id
+		if let id = sender.stringValue.integerValue {
+			var value = id
+			value = value < 0 ? 0 : value
+			value = value > kMaxStringID ? kMaxStringID : value
+			
+			self.currentMove.descriptionID = value
+		}
 		
 		self.reloadViewWithActivity()
 		
@@ -218,10 +226,25 @@ class GoDMovesViewController: GoDTableViewController {
 	
 	@IBAction func setMoveDescription(_ sender: NSTextField) {
 		
-		let newDesc = sender.stringValue
-		
-		if !currentMove.mdescription.duplicateWithString(newDesc).replace() {
-			printg("Failed to set description for move: \(currentMove.name.string)")
+		if descID.stringValue.integerValue != nil {
+			var value = descID.stringValue.integerValue!
+			value = value < 0 ? 0 : value
+			value = value > kMaxStringID ? kMaxStringID : value
+			
+			self.currentMove.descriptionID = value
+			
+			if currentMove.descriptionID == 0 {
+				return
+			}
+			if sender.stringValue.length == 0 {
+				sender.stringValue = self.currentMove.mdescription.string
+				return
+			}
+			
+			let string = XGString(string: sender.stringValue, file: XGFiles.common_rel, sid: currentMove.descriptionID)
+			if !XGFiles.common_rel.stringTable.addString(string, increaseSize: true, save: true) {
+				printg("Failed to set move description:", sender.stringValue)
+			}
 		}
 		
 		self.reloadViewWithActivity()
@@ -377,8 +400,8 @@ class GoDMovesViewController: GoDTableViewController {
 		newPriority(priority)
 		newEffectAcc(effectAcc)
 		newAccuracy(accuracy)
-		setMoveNameID(nameID)
-		setDescriptionID(descID)
+		setMoveName(name)
+		setMoveDescription(desc)
 		
 	}
 	

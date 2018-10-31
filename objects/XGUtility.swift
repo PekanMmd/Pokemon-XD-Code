@@ -186,7 +186,7 @@ class XGUtility {
 		if game == .XD {
 			substrings = ["ex_","Script_t","test","TEST","carde", "debug", "DNA", "keydisc"]
 			if region != .EU  {
-				substrings += ["_fr.","_ge.","_it."]
+				substrings += ["_fr.","_ge.","_it.", "_sp."]
 			}
 		} else {
 			substrings = ["carde", "ex", "debug"]

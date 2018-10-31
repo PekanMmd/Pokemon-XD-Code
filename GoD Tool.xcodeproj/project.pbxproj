@@ -981,6 +981,7 @@
 		B20C401D2188B9D2006D7CD9 /* SCD.sublime-color-scheme in Resources */ = {isa = PBXBuildFile; fileRef = B20C40172188B9D1006D7CD9 /* SCD.sublime-color-scheme */; };
 		B20C401E2188B9D2006D7CD9 /* XDScript.sublime-settings in Resources */ = {isa = PBXBuildFile; fileRef = B20C40182188B9D1006D7CD9 /* XDScript.sublime-settings */; };
 		B20C401F2188B9D2006D7CD9 /* XDScript.sublime-syntax in Resources */ = {isa = PBXBuildFile; fileRef = B20C40192188B9D1006D7CD9 /* XDScript.sublime-syntax */; };
+		B20C40212189D5E7006D7CD9 /* Dol2.msg in Resources */ = {isa = PBXBuildFile; fileRef = B20C40202189D5E6006D7CD9 /* Dol2.msg */; };
 		B21A7CFA20BC396300BDD04C /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = B21A7CF920BC396300BDD04C /* vertex.glsl */; };
 		B21A7CFC20BC42CA00BDD04C /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = B21A7CFB20BC42CA00BDD04C /* fragment.glsl */; };
 		B21A7CFF20BC68DA00BDD04C /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
@@ -3899,6 +3900,7 @@
 		B20C40172188B9D1006D7CD9 /* SCD.sublime-color-scheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SCD.sublime-color-scheme"; sourceTree = "<group>"; };
 		B20C40182188B9D1006D7CD9 /* XDScript.sublime-settings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "XDScript.sublime-settings"; sourceTree = "<group>"; };
 		B20C40192188B9D1006D7CD9 /* XDScript.sublime-syntax */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "XDScript.sublime-syntax"; sourceTree = "<group>"; };
+		B20C40202189D5E6006D7CD9 /* Dol2.msg */ = {isa = PBXFileReference; lastKnownFileType = file; path = Dol2.msg; sourceTree = "<group>"; };
 		B21A7CF920BC396300BDD04C /* vertex.glsl */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = vertex.glsl; sourceTree = "<group>"; };
 		B21A7CFB20BC42CA00BDD04C /* fragment.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
 		B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGCollisionData.swift; sourceTree = "<group>"; };
@@ -6856,6 +6858,7 @@
 		B2F911661F6606C600129DC2 /* game files */ = {
 			isa = PBXGroup;
 			children = (
+				B20C40202189D5E6006D7CD9 /* Dol2.msg */,
 				B2FB65F31FB4B1CE00E056AB /* Null.fsys */,
 				B2F911671F6606E900129DC2 /* DeckData_Empty.bin */,
 			);
@@ -9776,6 +9779,7 @@
 				B2F507DD1F4C5FAB0075C6D2 /* body_093.png in Resources */,
 				B2F50E1B1F4C5FAD0075C6D2 /* trainer_65.png in Resources */,
 				B280AF5520CABD660057A782 /* colo_trainer_10.png in Resources */,
+				B20C40212189D5E7006D7CD9 /* Dol2.msg in Resources */,
 				B2F50D271F4C5FAC0075C6D2 /* face_355.png in Resources */,
 				B2F50BC51F4C5FAC0075C6D2 /* face_178.png in Resources */,
 				B2F50D131F4C5FAC0075C6D2 /* face_345.png in Resources */,

@@ -30,6 +30,7 @@ class XDSScriptCompiler: NSObject {
 	static var decompileXDS = false
 	static var updateStringIDs = false
 	static var increaseMSGSize = false
+	static var createBackup = true
 	
 	static var scriptFile : XGFiles?
 	static var stringTable : XGStringTable?
@@ -54,6 +55,7 @@ class XDSScriptCompiler: NSObject {
 		decompileXDS = false
 		updateStringIDs = false
 		increaseMSGSize = false
+		createBackup = true
 		scriptFile = nil
 		relFile = nil
 		stringTable = nil
@@ -104,6 +106,14 @@ class XDSScriptCompiler: NSObject {
 		}
 		
 		if let data = compile(text) {
+			
+			if createBackup {
+				if let olddata = file.data {
+					olddata.file = .nameAndFolder(file.fileName + ".bak", file.folder)
+					olddata.save()
+				}
+			}
+			
 			data.file = file
 			data.save()
 			saveFiles()

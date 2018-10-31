@@ -68,6 +68,33 @@ enum GoDTextureFormats: Int {
 		default    : return 4
 		}
 	}
+	
+	var name : String {
+		switch self {
+		case .C14X2:
+			return "C14X2"
+		case .I4:
+			return "I4"
+		case .I8:
+			return "I8"
+		case .IA4:
+			return "IA4"
+		case .IA8:
+			return "IA8"
+		case .RGB565:
+			return "RGB565"
+		case .RGB5A3:
+			return "RGB5A3"
+		case .RGBA32:
+			return "RGBA32"
+		case .C4:
+			return "C4"
+		case .C8:
+			return "C8"
+		case .CMPR:
+			return "CMPR"
+		}
+	}
     
 }
 

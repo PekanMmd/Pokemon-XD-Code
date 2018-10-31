@@ -261,12 +261,17 @@ indirect enum XGFiles {
 				rel = XGFiles.rel(self.fileName.removeFileExtensions())
 			}
 		}
+		
+		let scriptData = self.scriptData
 		if rel != nil {
-			let scriptData = self.scriptData
-			scriptData.mapRel = XGMapRel(file: rel!, checkScript: false)
-			XGUtility.saveString(scriptData.description, toFile: .nameAndFolder(self.fileName + XGFileTypes.txt.fileExtension, self.folder))
-			XGUtility.saveString(scriptData.getXDSScript(), toFile: .nameAndFolder(self.fileName.removeFileExtensions() + XGFileTypes.xds.fileExtension, folder))
+			let mapData = XGMapRel(file: rel!, checkScript: false)
+			if mapData.numberOfPointers >= kNumberMapPointers {
+				scriptData.mapRel = mapData
+			}
 		}
+		XGUtility.saveString(scriptData.description, toFile: .nameAndFolder(self.fileName + XGFileTypes.txt.fileExtension, self.folder))
+		XGUtility.saveString(scriptData.getXDSScript(), toFile: .nameAndFolder(self.fileName.removeFileExtensions() + XGFileTypes.xds.fileExtension, folder))
+		
 	}
 	
 	var stringTable : XGStringTable {

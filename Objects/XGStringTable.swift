@@ -139,6 +139,23 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 	@objc class func dol2() -> XGStringTable {
 		
+		// fix broken string table from previous versions of the tool
+		if game == .XD {
+			if let data = XGFiles.dol.data {
+				if data.get2BytesAtOffset(0x38c882) != 0x5553 {
+					// add string terminator just before on the off chance
+					// that the previous string table just so happened to use up
+					// the extra bytes given to it, the 0s will at least
+					// terminate the last string, albeit in the middle.
+					// better a cut off string than a crash.
+					// Most likely those values will already be 0s.
+					let msgData = [0, 0] + XGResources.msg("Dol2").data.byteStream
+					// start 2 bytes early for the preceding 0s
+					data.replaceBytesFromOffset(0x38c87a, withByteStream: msgData)
+				}
+			}
+		}
+		
 		return  XGStringTable(file: .dol, startOffset: 0x38c87c, fileSize: 0x364)
 		
 	}

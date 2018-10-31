@@ -508,6 +508,19 @@ extension XDSScriptCompiler {
 			}
 		}
 		
+		if tokens[1] == "++CreateBackup" {
+			if tokens[2] == "YES" || tokens[2] == "Yes" || tokens[2] == "TRUE" || tokens[2] == "True" {
+				createBackup = true
+				return true
+			} else if tokens[2] == "NO" || tokens[2] == "No" || tokens[2] == "FALSE" || tokens[2] == "False" {
+				createBackup = false
+				return true
+			} else {
+				error = "Invalid string id: \(tokens[0]) \(tokens[1]) \(tokens[2])"
+				return false
+			}
+		}
+		
 		
 		error = "Unrecognised special macro: \(tokens[1])"
 		return false
