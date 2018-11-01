@@ -78,11 +78,6 @@ class XGScript: NSObject {
 		self.file = data.file
 		self.data = data
 		
-		let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
-		if relFile.exists {
-			mapRel = XGMapRel(file: relFile, checkScript: false)
-		}
-		
 		self.scriptID = data.getWordAtOffset(kScriptUnknownIDOffset)
 		
 		self.FTBLStart = kScriptSizeOfTCOD
@@ -218,6 +213,16 @@ class XGScript: NSObject {
 		
 		let linebreak = "-----------------------------------\n"
 		
+		if self.mapRel == nil {
+			let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
+			if relFile.exists {
+				let rel = XGMapRel(file: relFile, checkScript: false)
+				if rel.numberOfPointers >= kNumberMapPointers {
+					mapRel = rel
+				}
+			}
+		}
+		
 		// file name
 		var desc = linebreak + self.file.fileName + "\n"
 		desc += linebreak
@@ -274,8 +279,10 @@ class XGScript: NSObject {
 					if index < giri.count {
 						if giri[index].groupID != 0 {
 							let charIndex = giri[index].resourceID
-							let char = mapRel.characters[charIndex]
-							desc += " " + char.model.name + " " + char.name + "\n"
+							if let rel = mapRel {
+								let char = rel.characters[charIndex]
+								desc += " " + char.model.name + " " + char.name + "\n"
+							}
 						}
 					}
 					
@@ -458,13 +465,15 @@ class XGScript: NSObject {
 			let currentGiri = self.giri[g]
 			
 			desc += "\(g): GroupID(\(currentGiri.groupID)), ResourceID(\(currentGiri.resourceID))"
-			if currentGiri.groupID != 0 && currentGiri.resourceID < mapRel.characters.count {
-				let char = mapRel.characters[currentGiri.resourceID]
-				desc += " " + char.model.name + " " + char.name + " <\(char.xCoordinate), \(char.yCoordinate), \(char.zCoordinate)>" + "\n"
-			} else if currentGiri.groupID == 0 && currentGiri.resourceID == 100 {
-				desc += " Player\n"
-			} else {
-				desc += "\n"
+			if let rel = self.mapRel {
+				if currentGiri.groupID != 0 && currentGiri.resourceID < rel.characters.count {
+					let char = rel.characters[currentGiri.resourceID]
+					desc += " " + char.model.name + " " + char.name + " <\(char.xCoordinate), \(char.yCoordinate), \(char.zCoordinate)>" + "\n"
+				} else if currentGiri.groupID == 0 && currentGiri.resourceID == 100 {
+					desc += " Player\n"
+				} else {
+					desc += "\n"
+				}
 			}
 		}
 		
@@ -2030,6 +2039,16 @@ class XGScript: NSObject {
 		// creates xds text from expressions
 		// can follow a similar process to decompile to other programming or scripting languages
 		let (exprStack, macs) = getInstructionStack()
+		
+		if self.mapRel == nil {
+			let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
+			if relFile.exists {
+				let rel = XGMapRel(file: relFile, checkScript: false)
+				if rel.numberOfPointers >= kNumberMapPointers {
+					mapRel = rel
+				}
+			}
+		}
 		
 		// write script headers
 		var script = generateXDSHeader()
