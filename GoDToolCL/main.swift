@@ -7,6 +7,11 @@
 //
 //
 
+if let battle = XGTrainer(index: 211, deck: .DeckStory).battleData {
+	printg(battle.description)
+} else {
+	printg("no battle data")
+}
 
 
 XGAssembly.ASMfreeSpacePointer().hexString().println()

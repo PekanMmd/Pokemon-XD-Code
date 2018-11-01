@@ -388,7 +388,7 @@ class GoDPokemonView: NSImageView {
 			self.delegate.pokemon[self.index].shadowCatchRate = sender.selectedValue.catchRate
 		}
 		
-		
+		self.setUp()
 	}
 	
 	@objc func setLevel(sender: GoDLevelPopUpButton) {

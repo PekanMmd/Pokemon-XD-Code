@@ -410,7 +410,7 @@ class GoDPokemonView: NSImageView {
 		else if gr == .femaleOnly { self.delegate.pokemon[self.index].gender = .female }
 		else if gr == .genderless { self.delegate.pokemon[self.index].gender = .genderless }
 		
-		
+		self.setUp()
 	}
 	
 	@objc func setLevel(sender: GoDLevelPopUpButton) {

@@ -388,7 +388,7 @@ class GoDShadowPokemonView: NSImageView {
 		else if gr == .femaleOnly { self.delegate.currentPokemon.gender = .female }
 		else if gr == .genderless { self.delegate.currentPokemon.gender = .genderless }
 		
-		
+		self.setUp()
 	}
 	
 	@objc func setLevel(sender: GoDLevelPopUpButton) {
