@@ -36,6 +36,7 @@ class XGBattle: NSObject {
 	var round = XGColosseumRounds.none
 	var unknown = false
 	var unknown2 = 0
+	var index = 0
 	
 	func save() {
 		

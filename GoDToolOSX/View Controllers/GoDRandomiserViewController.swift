@@ -28,6 +28,10 @@ class GoDRandomiserViewController: GoDViewController {
     }
 	
 	@IBAction func randomise(_ sender: Any) {
+		
+		XGUtility.deleteSuperfluousFiles()
+		increaseFileSizes = true
+		
 		if pspecies.state == .on {
 			XGRandomiser.randomisePokemon()
 		}
@@ -58,6 +62,8 @@ class GoDRandomiserViewController: GoDViewController {
 		if removeTrades.state == .on {
 			XGDolPatcher.removeTradeEvolutions()
 		}
+		
+		XGUtility.compileMainFiles()
 	}
 	
     

@@ -48,19 +48,21 @@ class GoDISOViewController: GoDTableViewController {
 			if currentFile.fileType == .fsys {
 				
 				if encode {
-					for file in currentFile.folder.files {
-						if file.fileType == .xds {
-							XDSScriptCompiler.setFlags(disassemble: true, decompile: false, updateStrings: true, increaseMSG: true)
-							XDSScriptCompiler.baseStringID = 1000
-							if !XDSScriptCompiler.compile(textFile: file, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)) {
-								GoDAlertViewController.displayAlert(title: "Compilation Error", text: XDSScriptCompiler.error)
-								return
+					if game == .XD {
+						for file in currentFile.folder.files {
+							if file.fileType == .xds {
+								XDSScriptCompiler.setFlags(disassemble: true, decompile: false, updateStrings: true, increaseMSG: true)
+								XDSScriptCompiler.baseStringID = 1000
+								if !XDSScriptCompiler.compile(textFile: file, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)) {
+									GoDAlertViewController.displayAlert(title: "Compilation Error", text: XDSScriptCompiler.error)
+									return
+								}
 							}
-						}
-						if file.fileType == .gtx || file.fileType == .atx {
-							for image in currentFile.folder.files where image.fileType == .png {
-								if image.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-									file.texture.importImage(file: image)
+							if file.fileType == .gtx || file.fileType == .atx {
+								for image in currentFile.folder.files where image.fileType == .png {
+									if image.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
+										file.texture.importImage(file: image)
+									}
 								}
 							}
 						}

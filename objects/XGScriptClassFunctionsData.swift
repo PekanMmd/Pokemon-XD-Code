@@ -25,10 +25,12 @@ let ScriptClassNames : [Int : String] = [
 	41 : "Transition",
 	42 : "Battle",
 	43 : "Player",
+	45 : "Room",
 	47 : "Sound",
 	49 : "PDA",
 	52 : "Daycare",
 	54 : "TaskManager",
+	58 : "Effects",
 	59 : "ShadowPokemon",
 	60 : "Pokespot"
 ]
@@ -203,6 +205,8 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 //MARK: - Camera
 	33 : [
 		("followCharacter", 18, 2, [.objectName("Camera"), .objectName("Character")], .null), // # (Character target)
+		
+		("setPosition", 21, 4, [.objectName("Camera"), .integerFloatOverload, .integerFloatOverload, .integerFloatOverload], .null), // x, y , z
 	
 	],
 	
@@ -219,8 +223,12 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("isWithinBounds", 25, 5, [.objectName("Character"), .float, .float, .float, .float], .bool), // # (Float x1, Float z1, Float x2, Float z2) ordering of ranges is interchangeable i.e. x1 > x2 == x2 > x1
 		("isWithinBoundsWithOptions", 27, 7, [.objectName("Character"), .float, .float, .float, .float, .integer, .bool], .bool), //# x1 z1 x2 z2 unk unk
 		("setPosition", 29, 4, [.objectName("Character"), .integerFloatOverload, .integerFloatOverload, .integerFloatOverload], .null), //# (int/float x, int/float y, int/float z) accepts either int or float for any of the values and can mix and match as desired
+		("fallToPosition", 30, 2, [.objectName("Character"), .float, .float, .float], .null),
+		("setRotation", 31, 4, [.objectName("Character"), .integerFloatOverload, .integerFloatOverload, .integerFloatOverload], .null), // int angle around x axis, int angle around y axis, int angle around z axis
 		
 		("moveToPosition", 36, 4, [.objectName("Character"), .integer, .integer, .integer], .null), //# (int speed, int x, int y, int z)
+		
+		("waitForAnimation", 39, 2, [.objectName("Character"), .bool], .null), // bool wait for completion
 		
 		("setCharacterFlags", 40, 2, [.objectName("Character"), .integer], .null), //# (int flags ?)
 		("clearCharacterFlags", 41, 2, [.objectName("Character"), .integer], .null), //# (int flags ?)
@@ -244,6 +252,10 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//# (quantity,itemID, 14, msgID) talks and then adds item to player's bag silently
 		//#	(15, species): plays the species' cry
 		//#	(16, msgID): informative dialog with no sound
+		
+		("getPosition", 75, 1, [.objectName("Character")], .vector),
+		
+		("useHealingMachine", 101, 3, [.objectName("Character"), .array(.integer), .array(.integer)], .null),
 	],
 	
 //MARK: - Pokemon
@@ -267,7 +279,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("getCurrentPurificationCounter", 27, 1, [.objectName("Pokemon")], .integer),
 		("getSpecies", 28, 1, [.objectName("Pokemon")], .pokemon),
 		("isLegendary", 29, 1, [.objectName("Pokemon")], .bool),
-		("getHappiness", 30, 1, [.objectName("Pokemon")], .integerByte),
+		("getHappiness", 30, 1, [.objectName("Pokemon")], .integerUnsignedByte),
 		("getSpeciesNameID", 31, 1, [.objectName("Pokemon")], .msg), //# if it's 0 the species is invalid
 		("getHeldItem", 32, 1, [.objectName("Pokemon")], .item),
 		("getSIDTID", 33, 1, [.objectName("Pokemon")], .integerUnsigned),
@@ -282,6 +294,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 //MARK: - Movement
 	38: [
 		("warpToRoom", 22, 2, [.objectName("Movement"), .room], .null), // # (int roomID, int unknown)
+		("warpToRoomWithOptions", 49, 2, [.objectName("Movement"), .room, .bool, .integerUnsigned, .integerUnsigned], .null), // # (int roomID, int unknown)
 	],
 	
 //MARK: - Tasks
@@ -298,7 +311,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//# HEAD sec. must be present
 		
 		("getLastReturnedInt", 20, 1, [.objectName("Tasks")], .integer),
-		("sleep", 21, 2, [.objectName("Tasks"), .float], .null) //# (float) (miliseconds)
+		("sleep", 21, 2, [.objectName("Tasks"), .integerFloatOverload], .null) //# (int/float) (seconds)
 	],
 	
 //MARK: - Dialogue
@@ -355,8 +368,9 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Methods", start = 16, nb = 2),
 		
-		("setup", 16, 3, [.objectName("Transition"), .integer, .float], .null), //#$transition, int flags, float duration
-		("checkStatus", 17, 2, [.objectName("Transition"), .bool], .null) //#$transition, int waitForCompletion
+		("begin", 16, 3, [.objectName("Transition"), .transitionID, .integerFloatOverload], .null), //#$transition, int transitionID, int/float duration in seconds
+		("wait", 17, 2, [.objectName("Transition"), .bool], .null) //#$transition, bool waitForCompletion. waits for transition to have started before running next instruction, will wait for transition complete before next instruction if parameter is set to true
+
 	],
 	
 //MARK: - Battle
@@ -430,7 +444,13 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("hasSpeciesInPC", 68, 2, [.objectName("Player"), .pokemon], .bool), //# (int species)
 		("releasePartyPokemon", 69, 2, [.objectName("Player"), .integerIndex], .bool), //# (int index). Returns 1 iff there was a valid Pokémon, 0 otherwise.
 		
-		
+	],
+	
+//MARK: - Room
+	45 : [
+	
+		("transformElement", 19, 5, [.objectName("Room"), .datsIdentifier, .integerIndex, .integer, .integer], .null),
+		("waitForElementAnimation", 21, 3, [.objectName("Room"), .datsIdentifier, .bool], .null), // bool wait for completion
 		
 	],
 	
@@ -481,9 +501,19 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("allocateTask", 16, 2, [.objectName("TaskManager"), .integer], .integer), //# returns taskUID ... allocates a task but seems to do nothing ... BROKEN ?
 		("zeroFunction17", 17, 2, [.objectName("TaskManager"), .integer], nil), //# arg : taskUID
 		("getTaskCounter", 18, 1, [.objectName("TaskManager")], .integer),
-		("stopTask", 19, 2, [.objectName("TaskManager"), .integer], nil), //# unusable
+		("stopTask", 19, 2, [.objectName("TaskManager"), .integer], .null), //# unusable
 	],
 
+//MARK: - Effects
+	58 : [
+		("newEffectsManager", 16, 1, [.anyType], .objectName("Effects")),
+		("beginAnimation", 17, 5, [.objectName("Effects"), .integer, .integer, .integer, .bool], .null), // int id, int duration, unk, unk
+		("setPosition", 18, 2, [.objectName("Effects"), .vector], .null),
+		
+		("waitForAnimation", 22, 1, [.objectName("Effects")], .null),
+		
+	
+	],
 	
 //MARK: - Shadow Pokemon
 	59 : [

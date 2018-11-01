@@ -235,6 +235,8 @@ extension XGUtility {
 	//MARK: - Documentation
 	class func documentXDS() { }
 	class func documentMacrosXDS() { }
+	class func documentXDSClasses() { }
+	class func documentXDSAutoCompletions(toFile file: XGFiles) { }
 	
 	class func documentPokemonStats(title: String, forXG: Bool) {
 		

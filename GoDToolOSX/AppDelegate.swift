@@ -241,47 +241,56 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func saveSublime(_ sender: Any) {
-		let files : [XGResources] = [
-			XGResources.sublimeSyntax("XDScript"),
-			XGResources.sublimeSettings("XDScript"),
-			XGResources.sublimeColourScheme("XDScript"),
-			XGResources.sublimeCompletions("XDScript"),
-			XGResources.sublimeSyntax("SCD"),
-			XGResources.sublimeColourScheme("SCD")
-		]
-		for file in files {
-			printg("Saving: \(file.fileName) to folder: \(XGFolders.Reference.path)")
-			let data = file.data
-			data.file = .nameAndFolder(file.fileName, .Reference)
-			data.save()
+		XGThreadManager.manager.runInBackgroundAsync {
+			let files : [XGResources] = [
+				XGResources.sublimeSyntax("XDScript"),
+				XGResources.sublimeSettings("XDScript"),
+				XGResources.sublimeColourScheme("XDScript"),
+				//			XGResources.sublimeCompletions("XDScript"),
+				XGResources.sublimeSyntax("SCD"),
+				XGResources.sublimeColourScheme("SCD")
+			]
+			for file in files {
+				printg("Saving: \(file.fileName) to folder: \(XGFolders.Reference.path)")
+				let data = file.data
+				data.file = .nameAndFolder(file.fileName, .Reference)
+				data.save()
+			}
+			printg("Saving: XDScript.sublime-completions to folder: \(XGFolders.Reference.path). This may take a while")
+			XGUtility.documentXDSAutoCompletions(toFile: .nameAndFolder("XDScript.sublime-completions", .Reference))
+			printg("saved sublime files.")
 		}
-		printg("saved sublime files.")
 	}
 	
 	@IBAction func installSublime(_ sender: Any) {
 		printg("Installing XDS Plugin files for Sublime Text 3...")
-		let files : [XGResources] = [
-			XGResources.sublimeSyntax("XDScript"),
-			XGResources.sublimeSettings("XDScript"),
-			XGResources.sublimeColourScheme("XDScript"),
-			XGResources.sublimeCompletions("XDScript"),
-			XGResources.sublimeSyntax("SCD"),
-			XGResources.sublimeColourScheme("SCD")
-		]
-		
-		let path = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0] + "/Application Support/Sublime Text 3/Packages"
-		let folder = XGFolders.nameAndPath("User", path)
-		if folder.exists {
-			for file in files {
-				let saveFile = XGFiles.nameAndFolder(file.fileName, folder)
-				printg("Installing: \(file.fileName) to path: \(saveFile.path)")
-				let data = file.data
-				data.file = saveFile
-				data.save()
+		XGThreadManager.manager.runInBackgroundAsync {
+			let files : [XGResources] = [
+				XGResources.sublimeSyntax("XDScript"),
+				XGResources.sublimeSettings("XDScript"),
+				XGResources.sublimeColourScheme("XDScript"),
+				//			XGResources.sublimeCompletions("XDScript"),
+				XGResources.sublimeSyntax("SCD"),
+				XGResources.sublimeColourScheme("SCD")
+			]
+			
+			let path = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0] + "/Application Support/Sublime Text 3/Packages"
+			let folder = XGFolders.nameAndPath("User", path)
+			if folder.exists {
+				for file in files {
+					let saveFile = XGFiles.nameAndFolder(file.fileName, folder)
+					printg("Installing: \(file.fileName) to path: \(saveFile.path)")
+					let data = file.data
+					data.file = saveFile
+					data.save()
+				}
+				let saveFile = XGFiles.nameAndFolder("XDScript.sublime-completions", folder)
+				printg("Installing: XDScript.sublime-completions to path: \(saveFile.path). This may take a while.")
+				XGUtility.documentXDSAutoCompletions(toFile: saveFile)
+				printg("Installation Complete.")
+			} else {
+				printg("Failed to install. Couldn't find folder: \(folder.path)")
 			}
-			printg("Installation Complete.")
-		} else {
-			printg("Failed to install. Couldn't find folder: \(folder.path)")
 		}
 	}
 	

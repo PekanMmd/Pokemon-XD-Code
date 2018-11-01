@@ -912,10 +912,7 @@
 		B208E73620C4D40A00D298BF /* Moves raw.json in Resources */ = {isa = PBXBuildFile; fileRef = B2F50E501F4C98650075C6D2 /* Moves raw.json */; };
 		B208E73720C4D40A00D298BF /* Pokemon Stats raw.json in Resources */ = {isa = PBXBuildFile; fileRef = B2F50E511F4C98650075C6D2 /* Pokemon Stats raw.json */; };
 		B208E73820C4D40A00D298BF /* Items.json in Resources */ = {isa = PBXBuildFile; fileRef = B2F5ED0C1F49AE950075C6D2 /* Items.json */; };
-		B208E73920C4D40A00D298BF /* Move Effects.json in Resources */ = {isa = PBXBuildFile; fileRef = B2F5ED0D1F49AE950075C6D2 /* Move Effects.json */; };
-		B208E73A20C4D40A00D298BF /* Original Moves.json in Resources */ = {isa = PBXBuildFile; fileRef = B2F5ED0E1F49AE950075C6D2 /* Original Moves.json */; };
 		B208E73B20C4D40A00D298BF /* Original Pokemon.json in Resources */ = {isa = PBXBuildFile; fileRef = B2F5ED0F1F49AE950075C6D2 /* Original Pokemon.json */; };
-		B208E73C20C4D40A00D298BF /* Move Categories.json in Resources */ = {isa = PBXBuildFile; fileRef = B2FEC0831F6D620F00AC263D /* Move Categories.json */; };
 		B208E74020C4D4A200D298BF /* XGAbilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBB61F49A1FE0075C6D2 /* XGAbilities.swift */; };
 		B208E74120C4D50B00D298BF /* XGBagSlots.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBB71F49A1FE0075C6D2 /* XGBagSlots.swift */; };
 		B208E74320C4D5B500D298BF /* XGEvolutionMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBBC1F49A1FE0075C6D2 /* XGEvolutionMethods.swift */; };
@@ -982,6 +979,12 @@
 		B20C401E2188B9D2006D7CD9 /* XDScript.sublime-settings in Resources */ = {isa = PBXBuildFile; fileRef = B20C40182188B9D1006D7CD9 /* XDScript.sublime-settings */; };
 		B20C401F2188B9D2006D7CD9 /* XDScript.sublime-syntax in Resources */ = {isa = PBXBuildFile; fileRef = B20C40192188B9D1006D7CD9 /* XDScript.sublime-syntax */; };
 		B20C40212189D5E7006D7CD9 /* Dol2.msg in Resources */ = {isa = PBXBuildFile; fileRef = B20C40202189D5E6006D7CD9 /* Dol2.msg */; };
+		B20C4029218AE3BD006D7CD9 /* Original Moves.json in Resources */ = {isa = PBXBuildFile; fileRef = B20C4025218AE3BC006D7CD9 /* Original Moves.json */; };
+		B20C402A218AE3BD006D7CD9 /* Colosseum Song IDs in Resources */ = {isa = PBXBuildFile; fileRef = B20C4026218AE3BD006D7CD9 /* Colosseum Song IDs */; };
+		B20C402B218AE3BD006D7CD9 /* Move Effects.json in Resources */ = {isa = PBXBuildFile; fileRef = B20C4027218AE3BD006D7CD9 /* Move Effects.json */; };
+		B20C402C218AE3BD006D7CD9 /* Move Categories.json in Resources */ = {isa = PBXBuildFile; fileRef = B20C4028218AE3BD006D7CD9 /* Move Categories.json */; };
+		B20C402F218AEBE5006D7CD9 /* CMScriptCompiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20C402E218AEBE5006D7CD9 /* CMScriptCompiler.swift */; };
+		B20C4030218AEBE5006D7CD9 /* CMScriptCompiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20C402E218AEBE5006D7CD9 /* CMScriptCompiler.swift */; };
 		B21A7CFA20BC396300BDD04C /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = B21A7CF920BC396300BDD04C /* vertex.glsl */; };
 		B21A7CFC20BC42CA00BDD04C /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = B21A7CFB20BC42CA00BDD04C /* fragment.glsl */; };
 		B21A7CFF20BC68DA00BDD04C /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
@@ -3901,6 +3904,11 @@
 		B20C40182188B9D1006D7CD9 /* XDScript.sublime-settings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "XDScript.sublime-settings"; sourceTree = "<group>"; };
 		B20C40192188B9D1006D7CD9 /* XDScript.sublime-syntax */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "XDScript.sublime-syntax"; sourceTree = "<group>"; };
 		B20C40202189D5E6006D7CD9 /* Dol2.msg */ = {isa = PBXFileReference; lastKnownFileType = file; path = Dol2.msg; sourceTree = "<group>"; };
+		B20C4025218AE3BC006D7CD9 /* Original Moves.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Original Moves.json"; sourceTree = "<group>"; };
+		B20C4026218AE3BD006D7CD9 /* Colosseum Song IDs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Colosseum Song IDs"; sourceTree = "<group>"; };
+		B20C4027218AE3BD006D7CD9 /* Move Effects.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Move Effects.json"; sourceTree = "<group>"; };
+		B20C4028218AE3BD006D7CD9 /* Move Categories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Move Categories.json"; sourceTree = "<group>"; };
+		B20C402E218AEBE5006D7CD9 /* CMScriptCompiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMScriptCompiler.swift; sourceTree = "<group>"; };
 		B21A7CF920BC396300BDD04C /* vertex.glsl */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = vertex.glsl; sourceTree = "<group>"; };
 		B21A7CFB20BC42CA00BDD04C /* fragment.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
 		B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGCollisionData.swift; sourceTree = "<group>"; };
@@ -3943,7 +3951,6 @@
 		B2562F4721349567004180F1 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		B2562F9D21349A44004180F1 /* ColosseumToolCLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColosseumToolCLExtensions.swift; sourceTree = "<group>"; };
 		B2562F9F21349AAD004180F1 /* CMOSXExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMOSXExtensions.swift; sourceTree = "<group>"; };
-		B257242420CB36230019A22E /* Colosseum Song IDs */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Colosseum Song IDs"; sourceTree = "<group>"; };
 		B257242520CB52D80019A22E /* XDSScriptCompiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDSScriptCompiler.swift; sourceTree = "<group>"; };
 		B25E46D41FC0DFB20030FBF9 /* XGTreasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGTreasure.swift; sourceTree = "<group>"; };
 		B26380D320B9BAC100B6C0D4 /* XGBattleCD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleCD.swift; sourceTree = "<group>"; };
@@ -5281,6 +5288,17 @@
 			path = "Colosseum Tool";
 			sourceTree = "<group>";
 		};
+		B20C4022218AE241006D7CD9 /* Colosseum */ = {
+			isa = PBXGroup;
+			children = (
+				B20C4026218AE3BD006D7CD9 /* Colosseum Song IDs */,
+				B20C4028218AE3BD006D7CD9 /* Move Categories.json */,
+				B20C4027218AE3BD006D7CD9 /* Move Effects.json */,
+				B20C4025218AE3BC006D7CD9 /* Original Moves.json */,
+			);
+			path = Colosseum;
+			sourceTree = "<group>";
+		};
 		B21A7CF820BC394400BDD04C /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
@@ -6587,6 +6605,7 @@
 				B27C5FDC1FA19FB000E0596F /* XGScriptInstruction.swift */,
 				B2F5EBF41F49A1FE0075C6D2 /* XGScriptClassFunctionsData.swift */,
 				B257242520CB52D80019A22E /* XDSScriptCompiler.swift */,
+				B20C402E218AEBE5006D7CD9 /* CMScriptCompiler.swift */,
 				B2EAFEFD20BDA43A009FC947 /* XGStack.swift */,
 				B2F5EBF61F49A1FE0075C6D2 /* XGStarterPokemon.swift */,
 				B2F5EBF71F49A1FE0075C6D2 /* XGString.swift */,
@@ -6622,6 +6641,7 @@
 		B2F5ED0B1F49AE950075C6D2 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
+				B20C4022218AE241006D7CD9 /* Colosseum */,
 				B2F50E501F4C98650075C6D2 /* Moves raw.json */,
 				B2F50E511F4C98650075C6D2 /* Pokemon Stats raw.json */,
 				B2F5ED0C1F49AE950075C6D2 /* Items.json */,
@@ -6632,7 +6652,6 @@
 				B29E56031FA6DEE5006BE597 /* Room IDs.json */,
 				B20249F01FBAF50100A2B7A6 /* BGM ids.json */,
 				B24A9CBF20A49F1400F0BBD0 /* XG Character Models.json */,
-				B257242420CB36230019A22E /* Colosseum Song IDs */,
 			);
 			path = JSON;
 			sourceTree = "<group>";
@@ -7098,7 +7117,6 @@
 				B208E44820C4D3BC00D298BF /* body_087.png in Resources */,
 				B208E58120C4D3BD00D298BF /* body_400.png in Resources */,
 				B208E70B20C4D3D800D298BF /* face_379.png in Resources */,
-				B208E73A20C4D40A00D298BF /* Original Moves.json in Resources */,
 				B208E6B220C4D3D700D298BF /* face_290.png in Resources */,
 				B208E6F720C4D3D700D298BF /* face_359.png in Resources */,
 				B208E67320C4D3D700D298BF /* face_227.png in Resources */,
@@ -7184,6 +7202,7 @@
 				B208E6C120C4D3D700D298BF /* face_305.png in Resources */,
 				B208E6F420C4D3D700D298BF /* face_356.png in Resources */,
 				B208E73720C4D40A00D298BF /* Pokemon Stats raw.json in Resources */,
+				B20C402A218AE3BD006D7CD9 /* Colosseum Song IDs in Resources */,
 				B208E4F520C4D3BD00D298BF /* body_260.png in Resources */,
 				B280AE6620C9B46A0057A782 /* trainer_30.png in Resources */,
 				B208E57620C4D3BD00D298BF /* body_389.png in Resources */,
@@ -7317,6 +7336,7 @@
 				B280AF2020CABD660057A782 /* colo_trainer_20.png in Resources */,
 				B208E71A20C4D3D800D298BF /* face_394.png in Resources */,
 				B208E71E20C4D3D800D298BF /* face_398.png in Resources */,
+				B20C4029218AE3BD006D7CD9 /* Original Moves.json in Resources */,
 				B208E39920C4CA3A00D298BF /* Assets.xcassets in Resources */,
 				B208E4CE20C4D3BD00D298BF /* body_221.png in Resources */,
 				B280AF7E20CABD660057A782 /* colo_trainer_70.png in Resources */,
@@ -7377,12 +7397,12 @@
 				B208E64120C4D3D700D298BF /* face_177.png in Resources */,
 				B208E47E20C4D3BD00D298BF /* body_141.png in Resources */,
 				B208E46520C4D3BD00D298BF /* body_116.png in Resources */,
+				B20C402B218AE3BD006D7CD9 /* Move Effects.json in Resources */,
 				B208E42B20C4D3BC00D298BF /* body_058.png in Resources */,
 				B208E45C20C4D3BD00D298BF /* body_107.png in Resources */,
 				B208E54720C4D3BD00D298BF /* body_342.png in Resources */,
 				B208E62E20C4D3D700D298BF /* face_158.png in Resources */,
 				B208E58320C4D3BD00D298BF /* body_402.png in Resources */,
-				B208E73C20C4D40A00D298BF /* Move Categories.json in Resources */,
 				B208E5CE20C4D3D700D298BF /* face_062.png in Resources */,
 				B208E58F20C4D3BD00D298BF /* body_414.png in Resources */,
 				B208E55E20C4D3BD00D298BF /* body_365.png in Resources */,
@@ -7875,6 +7895,7 @@
 				B208E5CB20C4D3D700D298BF /* face_059.png in Resources */,
 				B208E5F620C4D3D700D298BF /* face_102.png in Resources */,
 				B208E43820C4D3BC00D298BF /* body_071.png in Resources */,
+				B20C402C218AE3BD006D7CD9 /* Move Categories.json in Resources */,
 				B280AF8620CABD660057A782 /* colo_trainer_65.png in Resources */,
 				B208E6E620C4D3D700D298BF /* face_342.png in Resources */,
 				B208E55420C4D3BD00D298BF /* body_355.png in Resources */,
@@ -8049,7 +8070,6 @@
 				B208E63020C4D3D700D298BF /* face_160.png in Resources */,
 				B208E57D20C4D3BD00D298BF /* body_396.png in Resources */,
 				B208E62020C4D3D700D298BF /* face_144.png in Resources */,
-				B208E73920C4D40A00D298BF /* Move Effects.json in Resources */,
 				B280AE3A20C9B4560057A782 /* type_0.png in Resources */,
 				B208E5FD20C4D3D700D298BF /* face_109.png in Resources */,
 				B208E3FC20C4D3BC00D298BF /* body_011.png in Resources */,
@@ -10198,6 +10218,7 @@
 				B208E74F20C4D79C00D298BF /* XGMoves.swift in Sources */,
 				B257242A20CC2E230019A22E /* XGDeoxysFormes.swift in Sources */,
 				B2560A91214C7E7C00137C37 /* XGStarterPokemon.swift in Sources */,
+				B20C402F218AEBE5006D7CD9 /* CMScriptCompiler.swift in Sources */,
 				B249085521516D520044947B /* XGASM.swift in Sources */,
 				B2560A7F213D569F00137C37 /* GoDMetalView.swift in Sources */,
 				B208E76020C4DD3E00D298BF /* CMRelIndexes.swift in Sources */,
@@ -10249,6 +10270,7 @@
 				B2562F962134991F004180F1 /* XGInteractionPoint.swift in Sources */,
 				B2562F5B21349747004180F1 /* XGCharacterModels.swift in Sources */,
 				B2562F4821349567004180F1 /* main.swift in Sources */,
+				B20C4030218AEBE5006D7CD9 /* CMScriptCompiler.swift in Sources */,
 				B2562F6E2134979A004180F1 /* XGMoveTypes.swift in Sources */,
 				B2562F6621349789004180F1 /* XGGenderRatios.swift in Sources */,
 				B2562F73213497A3004180F1 /* XGStatBoosts.swift in Sources */,

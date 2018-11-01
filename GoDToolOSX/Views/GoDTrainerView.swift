@@ -20,6 +20,7 @@ class GoDTrainerView: NSView {
 	var bgm = NSTextField()
 	var battleType = GoDBattleTypePopUpButton()
 	var battleStyle = GoDBattleStylePopUpButton()
+	var battleID = NSTextField()
 	
 	var views = [String : NSView]()
 	
@@ -43,6 +44,7 @@ class GoDTrainerView: NSView {
 		self.addSubview(bgm)
 		self.addSubview(battleType)
 		self.addSubview(battleStyle)
+		self.addSubview(battleID)
 		views["modeli"] = modelimageview
 		views["modelp"] = modelPopup
 		views["intro"] = modelIntro
@@ -53,6 +55,7 @@ class GoDTrainerView: NSView {
 		views["bgm"] = bgm
 		views["bt"] = battleType
 		views["bs"] = battleStyle
+		views["bi"] = battleID
 		
 		for (_, view) in views {
 			view.translatesAutoresizingMaskIntoConstraints = false
@@ -61,9 +64,12 @@ class GoDTrainerView: NSView {
 		AI.placeholderString = "AI Index"
 		bgm.placeholderString = "BGM ID"
 		modelIntro.placeholderString = "Intro ID"
+		battleID.placeholderString = "Battle ID"
+		battleID.isEditable = false
+		battleID.isSelectable = true
 		
 		self.addConstraints(visualFormat: "V:|-(10)-[modeli(60)]-(10)-|", layoutFormat: [.alignAllLeft, .alignAllRight], metrics: nil, views: views)
-		self.addConstraints(visualFormat: "H:|-(20)-[modeli(60)]-(10)-[modelp(150)]-(10)-[class(150)]-(10)-[ai(150)]-(10)-[bs(150)]", layoutFormat: [.alignAllTop], metrics: nil, views: views)
+		self.addConstraints(visualFormat: "H:|-(20)-[modeli(60)]-(10)-[modelp(150)]-(10)-[class(150)]-(10)-[ai(100)]-(10)-[bs(150)]-(10)-[bi(100)]", layoutFormat: [.alignAllTop], metrics: nil, views: views)
 		self.addConstraints(visualFormat: "V:[modelp(25)]-(10)-[intro(25)]", layoutFormat: [.alignAllLeft, .alignAllRight], metrics: nil, views: views)
 		self.addConstraints(visualFormat: "V:[class(25)]-(10)-[name(25)]", layoutFormat: [.alignAllLeft, .alignAllRight], metrics: nil, views: views)
 		self.addConstraints(visualFormat: "V:[ai(25)]-(10)-[bgm(25)]", layoutFormat: [.alignAllLeft, .alignAllRight], metrics: nil, views: views)
@@ -113,11 +119,13 @@ class GoDTrainerView: NSView {
 					self.bgm.stringValue = battle.BGMusicID.hexString()
 					self.modelIntro.stringValue = trainer.cameraEffects.string
 					self.previousBGMID = battle.BGMusicID
+					self.battleID.stringValue = battle.index.string
 				} else {
 					self.battleStyle.isHidden = true
 					self.battleType.isHidden = true
 					self.bgm.isHidden = true
 					self.previousBGMID = 0
+					self.battleID.stringValue = "0"
 				}
 			}
 			

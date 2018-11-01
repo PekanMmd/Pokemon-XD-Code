@@ -657,7 +657,7 @@ indirect enum XDSExpr {
 				let gift = XGGiftPokemonManager.allGiftPokemon()[c.asInt]
 				let type = gift.giftType.underscoreSimplified.uppercased()
 				let species = gift.species.name.string.simplified.uppercased()
-				return macroWithName(type + "_\(c.asInt)_" + species)
+				return macroWithName(type + species)
 			}
 			if c.asInt == 0 {
 				return macroWithName("GIFT_POKEMON_NONE")
@@ -684,7 +684,17 @@ indirect enum XDSExpr {
 		case .PCBox:
 			return "PCBOX_\(c.asInt)"
 			
-			
+		case .transitionID:
+			var name = ""
+			switch c.asInt {
+			case 0: name = "NONE"
+			case 2: name = "FADE_IN_BLACK"
+			case 3: name = "FADE_OUT_BLACK"
+			case 4: name = "FADE_IN_WHITE"
+			case 5: name = "FADE_OUT_WHITE"
+			default: name = c.asInt.string
+			}
+			return macroWithName("TRANSITION_" + name.uppercased())
 			
 		// Just for completion but probably won't be displayed
 		case .integer:
@@ -758,6 +768,10 @@ indirect enum XDSExpr {
 			return macroWithName("VARIABLE_TYPE_\(c.asInt)")
 		case .optional(let t):
 			return stringFromMacroImmediate(c: c, t: t)
+		case .integerUnsignedByte:
+			return macroWithName("UINT32_\(c.asInt.hexString())")
+		case .datsIdentifier:
+			return macroWithName("DATS_\(c.asInt.hexString())")
 		}
 	}
 	
@@ -845,7 +859,7 @@ indirect enum XDSExpr {
 				// local variables and function parameters need additional class info
 				if c > 0 {
 					if es[0].text[0].contains("arg") || (es[0].text[0].contains("var") && !es[0].text[0].contains("gvar")) || es[0].text[0].contains(kXDSLastResultVariable) {
-						s += xdsclass.name.capitalized + "."
+						s += xdsclass.name + "."
 					}
 				}
 				s += xdsfunction.name + "("

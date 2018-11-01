@@ -1354,6 +1354,7 @@ extension XGUtility {
 			printg("documenting script: ", file.fileName)
 			text.save(toFile: file)
 		}
+		
 	}
 	
 	class func documentXDS() {
@@ -1384,9 +1385,9 @@ extension XGUtility {
 		
 	}
 	
-	class func documentXDSAutoCompletions() {
+	class func documentXDSAutoCompletions(toFile file: XGFiles) {
 		printg("Documenting XDS Autocompletions")
-		let file = XGFiles.nameAndFolder("XDScript.sublime-completions", .Reference)
+//		let file = XGFiles.nameAndFolder("XDScript.sublime-completions", .Reference)
 		var json = [String : AnyObject]()
 		json["scope"] = "xdscript" as AnyObject
 		var completions = [ [String: String] ]()
@@ -1429,6 +1430,106 @@ extension XGUtility {
 				
 				completion["contents"] = contents
 				completions.append(completion)
+			}
+		}
+		
+		var macros = [XDSExpr]()
+		
+		for i in -1 ..< CommonIndexes.NumberOfPokemon.value {
+			let constant = XDSConstant.integer(i)
+			macros.append(.macroImmediate(constant, .pokemon))
+		}
+		for i in -1 ..< CommonIndexes.NumberOfMoves.value {
+			let constant = XDSConstant.integer(i)
+			macros.append(.macroImmediate(constant, .move))
+		}
+		for i in -1 ..< CommonIndexes.NumberOfItems.value {
+			let constant = XDSConstant.integer(i)
+			macros.append(.macroImmediate(constant, .item))
+		}
+		let people = XGFiles.fsys("people_archive")
+		if people.exists {
+			let fsys = people.fsysData
+			for i in 0 ..< fsys.numberOfEntries {
+				let constant = XDSConstant.integer(fsys.identifiers[i])
+				macros.append(.macroImmediate(constant, .model))
+			}
+		}
+		let rooms = XGFiles.json("Room IDs")
+		if rooms.exists {
+			if let roomsDict = rooms.json as? [String : String] {
+				for (id, _) in roomsDict {
+					if let idValue = id.integerValue {
+						let constant = XDSConstant.integer(idValue)
+						macros.append(.macroImmediate(constant, .room))
+						
+						if idValue >= 0x1f4 && idValue <= 0x226 {
+							macros.append(.macroImmediate(constant, .battlefield))
+						}
+					}
+				}
+			}
+		}
+		
+		for i in 0 ... 20 {
+			let constant = XDSConstant.integer(i)
+			macros.append(.macroImmediate(constant, .talk))
+		}
+		
+		for i in 0 ... 0x6e {
+			let constant = XDSConstant.integer(i)
+			macros.append(.macroImmediate(constant, .msgVar))
+		}
+		
+		for i in 0 ... 2 {
+			let constant = XDSConstant.integer(i)
+			macros.append(.macroImmediate(constant, .battleResult))
+		}
+		
+		for i in 0 ... 4 {
+			let constant = XDSConstant.integer(i)
+			macros.append(.macroImmediate(constant, .shadowStatus))
+		}
+		
+		for i in 0 ..< XGDecks.DeckDarkPokemon.DDPKEntries {
+			let constant = XDSConstant.integer(i)
+			macros.append(.macroImmediate(constant, .shadowID))
+		}
+		
+		for i in 0 ... 2 {
+			let constant = XDSConstant.integer(i)
+			macros.append(.macroImmediate(constant, .pokespot))
+		}
+		
+		for i in 0 ... 3 {
+			let constant = XDSConstant.integer(i)
+			macros.append(.macroImmediate(constant, .partyMember))
+		}
+		
+		for i in 0 ..< kNumberOfGiftPokemon {
+			let constant = XDSConstant.integer(i)
+			macros.append(.macroImmediate(constant, .giftPokemon))
+		}
+		
+		for i in 0 ... 3 {
+			let constant = XDSConstant.integer(i)
+			macros.append(.macroImmediate(constant, .transitionID))
+		}
+		
+		macros.append(.macroImmediate(XDSConstant.integer(964), .flag))
+		
+		for macro in macros {
+			switch macro {
+			case .macroImmediate(let c, let t):
+				let val = c.asInt >= 0x200 ? c.asInt.hexString() + " // \(c.asInt)" : c.asInt.string + " // \(c.asInt.hexString())"
+				let contents = "define " + XDSExpr.stringFromMacroImmediate(c: c, t: t) + " \(val)"
+				let trigger = contents + "\t" + t.typeName
+				var completion = [String : String]()
+				completion["trigger"] = trigger
+				completion["contents"] = contents
+				completions.append(completion)
+			default:
+				break
 			}
 		}
 		

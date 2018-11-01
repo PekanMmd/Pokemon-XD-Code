@@ -58,6 +58,7 @@ indirect enum XDSMacroTypes {
 	case region
 	case language
 	case PCBox
+	case transitionID
 	
 	case array(XDSMacroTypes)
 	
@@ -74,7 +75,9 @@ indirect enum XDSMacroTypes {
 	case floatAngleRadians
 	case floatFraction // between 0.0 and 1.0
 	case integerByte
+	case integerUnsignedByte
 	case integerUnsigned
+	case datsIdentifier // id for a .dats model archive
 	
 	case vector
 	case arrayIndex
@@ -118,6 +121,7 @@ indirect enum XDSMacroTypes {
 		case .region: return 24
 		case .language: return 25
 		case .PCBox: return 26
+		case .transitionID: return 27
 			
 		case .array: return 99
 			
@@ -134,7 +138,9 @@ indirect enum XDSMacroTypes {
 		case .floatAngleRadians: return 205
 		case .floatFraction: return 206
 		case .integerByte: return 207
-		case .integerUnsigned: return 208
+		case .integerUnsignedByte: return 208
+		case .integerUnsigned: return 209
+		case .datsIdentifier: return 210
 			
 		// more gaps
 		case .vector: return 300
@@ -234,6 +240,8 @@ indirect enum XDSMacroTypes {
 			return "LanguageID"
 		case .PCBox:
 			return "PCBoxID"
+		case .transitionID:
+			return "TransitionID"
 		case .msg:
 			return "StringID"
 		case .bool:
@@ -253,9 +261,13 @@ indirect enum XDSMacroTypes {
 		case .floatFraction:
 			return "DecimalFromZeroToOne"
 		case .integerByte:
-			return "Integer8Bit"
+			return "Signed8BitInteger"
+		case .integerUnsignedByte:
+			return "Unsigned8BitInteger"
 		case .integerUnsigned:
-			return "PositiveInteger8Bit"
+			return "Unsigned32BitInteger"
+		case .datsIdentifier:
+			return "DatsID"
 		case .vector:
 			return "Vector"
 		case .array(let t):
@@ -279,6 +291,7 @@ indirect enum XDSMacroTypes {
 			return "\(name)Object"
 		}
 	}
+	
 	
 }
 

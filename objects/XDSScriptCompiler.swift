@@ -7,7 +7,6 @@
 
 import Cocoa
 
-var error = ""
 class XDSScriptCompiler: NSObject {
 	typealias XDSCode = [UInt32]
 	

@@ -1201,13 +1201,19 @@ class XGScript: NSObject {
 					if p2.isLoadImmediate {
 						if let type = macTypeForVar(v: m1!) {
 							let c = p2.constants[0]
-							if type.printsAsMacro {
-								p2 = .macroImmediate(c, type)
+							// only print as macro type for certain operator types
+							// prevents lines like #SHADOW_TEDDIURSA + #SHADOW_TEDDIURSA
+							// when incrementing shadow pokemon loop variables
+							if op == 48 || op == 53 || ((op >= 32) && (op <= 34)) {
+								if type.printsAsMacro {
+									p2 = .macroImmediate(c, type)
+								}
+								if type.needsDefine {
+									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
+									macros.append(.macro(name, c.rawValueString))
+								}
 							}
-							if type.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
-								macros.append(.macro(name, c.rawValueString))
-							}
+							possible = false
 						}
 					} else {
 						possible = false
@@ -1217,13 +1223,19 @@ class XGScript: NSObject {
 					if p1.isLoadImmediate {
 						if let type = macTypeForVar(v: m2!) {
 							let c = p1.constants[0]
-							if type.printsAsMacro {
-								p1 = .macroImmediate(c, type)
+							// only print as macro type for certain operator types
+							// prevents lines like #SHADOW_TEDDIURSA + #SHADOW_TEDDIURSA
+							// when incrementing shadow pokemon loop variables
+							if op == 48 || op == 53 || ((op >= 32) && (op <= 34)) {
+								if type.printsAsMacro {
+									p1 = .macroImmediate(c, type)
+								}
+								if type.needsDefine {
+									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
+									macros.append(.macro(name, c.rawValueString))
+								}
 							}
-							if type.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
-								macros.append(.macro(name, c.rawValueString))
-							}
+							possible = false
 						}
 					} else {
 						possible = false
