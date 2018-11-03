@@ -6464,7 +6464,31 @@ import Foundation
 //	.b(0x226d78)
 //])
 
+//// female demo starters
+//let femaleOffsets = [0x152830, 0x152708]
+//for off in femaleOffsets {
+//	XGAssembly.replaceRamASM(RAMOffset: off, newASM: [.li(.r4, -1)])
+//}
+//
+//// allow shinies in various scenarios
+//let shinyOffsets = [0x295464, 0x29561c, 0x152bfc, 0x06b0f0, 0x1cebec]
+//for off in shinyOffsets {
+//	XGAssembly.replaceRamASM(RAMOffset: off, newASM: [.li(.r6, -1)])
+//}
 
+// lode stone evolution item
+//let linkItem = XGItems.item(99).data
+//linkItem.function1 = 0x800a54ac
+//linkItem.function2 = 0x800a54ac
+//linkItem.inBattleUseID = 53
+//linkItem.save()
+
+//// set confusion chance to hurt user to 1 in 3
+//let confusionStart = 0x2270f0
+//XGAssembly.replaceASM(startOffset: confusionStart - kDOLtoRAMOffsetDifference, newASM: [
+//	.cmpwi(.r3, 0x5555), // 1 in 3
+//	.bgt(0x227110), // not confused
+//])
 
 
 

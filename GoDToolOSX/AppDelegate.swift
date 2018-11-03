@@ -47,7 +47,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			file.delete()
 		}
 		printg("Good bye :-)")
-		sleep(3)
 	}
 	
 	@IBAction func getFreeStringID(_ sender: Any) {
@@ -158,7 +157,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		XGThreadManager.manager.runInBackgroundAsync {
 			XGUtility.compileMainFiles()
 			if filesTooLargeForReplacement != nil  {
-				filesTooLargeForReplacement = nil
+				
 				var text = "Files too large to replace:"
 				
 				for file in filesTooLargeForReplacement! {
@@ -166,7 +165,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				}
 				
 				text += "\n\nSet 'ISO > Enable File Size Increases' to include them."
-				
+				filesTooLargeForReplacement = nil
 				XGThreadManager.manager.runInForegroundAsync {
 					self.displayAlert(title: "Quick Build Incomplete", text: text)
 				}

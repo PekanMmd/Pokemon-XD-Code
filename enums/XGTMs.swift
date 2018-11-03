@@ -222,7 +222,7 @@ enum XGTMs : XGDictionaryRepresentable {
 	
 	static func allTMs() -> [XGTMs] {
 		var tms = [XGTMs]()
-		for i in 1 ... kNumberOfTMs {
+		for i in 1 ... kNumberOfTMsAndHMs {
 			tms.append(.tm(i))
 		}
 		return tms
@@ -231,7 +231,7 @@ enum XGTMs : XGDictionaryRepresentable {
 
 func allTMsArray() -> [XGTMs] {
 	var tms: [XGTMs] = []
-	for i in 1 ... kNumberOfTMs {
+	for i in 1 ... kNumberOfTMsAndHMs {
 		tms.append(XGTMs.tm(i))
 	}
 	return tms

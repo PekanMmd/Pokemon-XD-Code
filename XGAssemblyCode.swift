@@ -303,11 +303,13 @@ class XGAssembly {
 		dol.save()
 	}
 	
-	class func setFirsHMIndex(_ index: Int) {
+	class func setFirsHM(_ tm: XGTMs) {
 		let off1 = 0x15e92c - kDOLtoRAMOffsetDifference
 		let off2 = 0x15e948 - kDOLtoRAMOffsetDifference
-		let ins1 = [XGASM.cmpwi(.r3, index)]
-		let ins2 = [XGASM.subi(.r0, .r3, index)]
+		// i.e. for tm51 to be first hm compare with 50
+		let compareIndex = tm.index - 1
+		let ins1 = [XGASM.cmpwi(.r3, compareIndex)]
+		let ins2 = [XGASM.subi(.r0, .r3, compareIndex)]
 		replaceASM(startOffset: off1, newASM: ins1)
 		replaceASM(startOffset: off2, newASM: ins2)
 	}

@@ -7,32 +7,11 @@
 //
 //
 
-
-
 XGAssembly.ASMfreeSpacePointer().hexString().println()
 
-//// female demo starters
-//let femaleOffsets = [0x152830, 0x152708]
-//for off in femaleOffsets {
-//	XGAssembly.replaceRamASM(RAMOffset: off, newASM: [.li(.r4, -1)])
-//}
-
-// allow shinies in various scenarios
-//let shinyOffsets = [0x295464, 0x29561c, 0x152bfc, 0x06b0f0, 0x1cebec]
-//for off in shinyOffsets {
-//	XGAssembly.replaceRamASM(RAMOffset: off, newASM: [.li(.r6, -1)])
-//}
 
 
-// TODO: check that replace asm isn't broken now that I've added labels
-//XGAssembly.setProtectRepeatChanceQuotient(3)
 
-//// set confusion chance to hurt user to 1 in 3
-//let confusionStart = 0x2270f0
-//XGAssembly.replaceASM(startOffset: confusionStart - kDOLtoRAMOffsetDifference, newASM: [
-//	.cmpwi(.r3, 0xaaaa), // 2 in 3
-//	.ble(0x227110), // not confused
-//])
 
 
 
@@ -42,7 +21,7 @@ XGAssembly.ASMfreeSpacePointer().hexString().println()
 
 // sound moves through substitute
 //let subJumpBranch = 0x2135ac
-////let subJumpStart = 0xBA0B2C
+////let subJumpStart = 0x0
 //let getPokemonPointer = 0x1efcac
 //let getCurrentMove = 0x148d64
 //let moveGetSoundFlag = 0x13e548
@@ -79,7 +58,6 @@ XGAssembly.ASMfreeSpacePointer().hexString().println()
 //let subReduceHPBranch = 0x215868
 //let subReduceHPStart = 0x0
 
-//XGUtility.documentXDS()
 
 
 

@@ -922,7 +922,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <buttonCell key="cell" type="push" title="Quick Import" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vAf-BS-ifw">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system" size="9"/>
+                                            <font key="font" metaFont="miniSystem"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="quickImport:" target="bxX-wC-pW7" id="Gs1-55-r8X"/>
@@ -935,7 +935,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <buttonCell key="cell" type="push" title="Quick Export" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="EUV-ft-EF5">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system" size="9"/>
+                                            <font key="font" metaFont="miniSystem"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="quickExport:" target="bxX-wC-pW7" id="Dsw-aj-0qV"/>
@@ -2460,12 +2460,12 @@ Twitter: @StarsMmd</string>
                                 <rect key="frame" x="210" y="190" width="210" height="80"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zIC-hd-66X">
-                                        <rect key="frame" x="18" y="28" width="124" height="24"/>
+                                        <rect key="frame" x="18" y="28" width="154" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="Ufx-Ay-elT"/>
-                                            <constraint firstAttribute="width" constant="120" id="dQF-Os-oh9"/>
+                                            <constraint firstAttribute="width" constant="150" id="dQF-Os-oh9"/>
                                         </constraints>
-                                        <buttonCell key="cell" type="check" title="Consumable" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="RDX-3t-EHk">
+                                        <buttonCell key="cell" type="check" title="Disposable/Holdable" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="RDX-3t-EHk">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
@@ -2758,7 +2758,7 @@ Twitter: @StarsMmd</string>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="90" id="BKI-P6-toQ"/>
                                         </constraints>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Battle Usage ID" id="pUZ-JX-x3e">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Usage ID" id="pUZ-JX-x3e">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

@@ -43,7 +43,7 @@ class GoDSpotViewController: GoDTableViewController {
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
-		return XGPokeSpots.all.numberOfEntries() + XGPokeSpots.rock.numberOfEntries() + XGPokeSpots.oasis.numberOfEntries() + XGPokeSpots.cave.numberOfEntries()
+		return XGPokeSpots.all.numberOfEntries + XGPokeSpots.rock.numberOfEntries + XGPokeSpots.oasis.numberOfEntries + XGPokeSpots.cave.numberOfEntries
 	}
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
@@ -80,9 +80,9 @@ class GoDSpotViewController: GoDTableViewController {
 	}
 	
 	func rowToSpot(row: Int) -> XGPokeSpots {
-		let rock = XGPokeSpots.rock.numberOfEntries()
-		let oasis = XGPokeSpots.oasis.numberOfEntries()
-		let cave = XGPokeSpots.cave.numberOfEntries()
+		let rock = XGPokeSpots.rock.numberOfEntries
+		let oasis = XGPokeSpots.oasis.numberOfEntries
+		let cave = XGPokeSpots.cave.numberOfEntries
 		
 		var spot = XGPokeSpots.all
 		
@@ -99,9 +99,9 @@ class GoDSpotViewController: GoDTableViewController {
 	}
 	
 	func rowToMon(row: Int) -> XGPokeSpotPokemon {
-		let rock = XGPokeSpots.rock.numberOfEntries()
-		let oasis = XGPokeSpots.oasis.numberOfEntries()
-		let cave = XGPokeSpots.cave.numberOfEntries()
+		let rock = XGPokeSpots.rock.numberOfEntries
+		let oasis = XGPokeSpots.oasis.numberOfEntries
+		let cave = XGPokeSpots.cave.numberOfEntries
 		
 		var index = 0
 		var spot = XGPokeSpots.all

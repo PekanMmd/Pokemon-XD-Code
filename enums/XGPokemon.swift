@@ -154,7 +154,7 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 	
 	static func random() -> XGPokemon {
 		var rand = 0
-		while (rand == 0) || ((rand > 251) && (rand < 277)) || (rand > 411) || (XGPokemon.pokemon(rand).name.string.length < 2) {
+		while (rand == 0) || (XGPokemon.pokemon(rand).catchRate == 0) {
 			rand = Int(arc4random_uniform(UInt32(kNumberOfPokemon - 1))) + 1
 		}
 		return XGPokemon.pokemon(rand)

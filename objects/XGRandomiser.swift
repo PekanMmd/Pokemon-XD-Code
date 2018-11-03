@@ -93,7 +93,7 @@ class XGRandomiser : NSObject {
 			
 			for p in 0 ... 2 {
 				let spot = XGPokeSpots(rawValue: p) ?? .rock
-				for i in 0 ..< spot.numberOfEntries() {
+				for i in 0 ..< spot.numberOfEntries {
 					let pokemon = XGPokeSpotPokemon(index: i, pokespot: spot)
 					pokemon.pokemon = XGPokemon.random()
 					pokemon.save()
@@ -101,8 +101,8 @@ class XGRandomiser : NSObject {
 				
 			}
 			
-			if XGPokeSpots.all.numberOfEntries() > 2 {
-				for i in 2 ..< XGPokeSpots.all.numberOfEntries() {
+			if XGPokeSpots.all.numberOfEntries > 2 {
+				for i in 2 ..< XGPokeSpots.all.numberOfEntries {
 					let pokemon = XGPokeSpotPokemon(index: i, pokespot: .all)
 					pokemon.pokemon = XGPokemon.random()
 					pokemon.save()

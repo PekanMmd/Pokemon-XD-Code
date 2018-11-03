@@ -15,7 +15,7 @@ let kNumberOfFriendshipEffects	= 0x03
 
 let kBagSlotOffset				 = 0x00
 let kItemCantBeHeldOffset		 = 0x01 // also can't be thrown away?
-let kInBattleUseItemIDOffset	 = 0x04 // Items that can be used on your pokemon in battle
+let kInBattleUseItemIDOffset	 = 0x04 // really more like a functional id which is compared with items that can be used rather than having passive uses
 let kItemPriceOffset			 = 0x06
 let kItemCouponCostOffset		 = 0x08
 let kItemBattleHoldItemIDOffset  = 0x0B

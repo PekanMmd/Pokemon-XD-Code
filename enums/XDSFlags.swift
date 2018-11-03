@@ -13,6 +13,11 @@ enum XDSFlags : Int {
 	
 	case dayCareVisited = 1124
 	
+	case currentPokespotPokemonRock = 1248
+	case currentPokespotPokemonOasis = 1249
+	case currentPokespotPokemonCave = 1250
+	
+	
 	case mirorbNoDespawn = 1415 // miror radar won't lost signal while this is set
 	
 	case MtBattleHighestClearedZone = 1433
@@ -36,6 +41,9 @@ enum XDSFlags : Int {
 		case .MtBattleHighestClearedZone	: return "MT_BATTLE_HIGHEST_CLEARED_ZONE"
 		case .MtBattleCurrentZone		: return "MT_BATTLE_CURRENT_ZONE"
 		case .MtBattleCanBeChallenged	: return "MT_BATTLE_CHALLENGE_AVAILABLE"
+		case .currentPokespotPokemonRock: return "POKESPOT_ROCK_CURRENT_POKEMON"
+		case .currentPokespotPokemonOasis: return "POKESPOT_OASIS_CURRENT_POKEMON"
+		case .currentPokespotPokemonCave: return "POKESPOT_CAVE_CURRENT_POKEMON"
 		}
 	}
 }

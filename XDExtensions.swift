@@ -288,32 +288,53 @@ extension XGUtility {
 		// byte 0x1 0x10 x defend, 0x1 x speed
 		// byte 0x2 0x10 x accuracy, 0x1 x special
 		
-		let dol = XGFiles.dol.data!
-		
-		let healingItems = [13,19,20,21,22,26,27,28,29,30,31,32,33,44,45,139,142]
-		
-		for i in healingItems {
+		if let dol = XGFiles.dol.data {
 			
-			let item = XGItem(index: i)
-			if i >= 30 && i <= 33 {
-				if item.parameter == 0 {
-					// for some reason these are 0 by default in xd
-					// the following code uses it so let's set it manually
-					item.parameter = [50, 200, 0, 255][i - 30]
-					item.save()
+			let healingItems = [13,19,20,21,22,26,27,28,29,30,31,32,33,44,45,139,142]
+			
+			for i in healingItems {
+				
+				let item = XGItem(index: i)
+				if i >= 30 && i <= 33 {
+					if item.parameter == 0 {
+						// for some reason these are 0 by default in xd
+						// the following code uses it so let's set it manually
+						item.parameter = [50, 200, 0, 255][i - 30]
+						item.save()
+					}
+				}
+				
+				
+				let id = item.inBattleUseID
+				if id > 0 {
+					let offset = kBattleItemDataStartOffset + (kSizeOfBattleItemEntry * id)
+					dol.replaceByteAtOffset(offset + kBattleItemHPToRestoreOffset, withByte: item.parameter)
 				}
 			}
 			
-			
-			let id = item.inBattleUseID
-			if id > 0 {
-				let offset = kBattleItemDataStartOffset + (kSizeOfBattleItemEntry * id)
-				dol.replaceByteAtOffset(offset + kBattleItemHPToRestoreOffset, withByte: item.parameter)
-			}
+			dol.save()
 		}
 		
-		dol.save()
-		
+	}
+	
+	class func updateFunctionalItems() {
+		// Maybe I should stop being so pedantic and use shorter variable names...
+		let kFunctionalItemDataStartOffset = 0x402570
+		let kSizeOfFunctionalItemEntry = 0x10
+		let kFunctionalItemFirstFriendshipOffset = 0x5
+		if let dol = XGFiles.dol.data {
+			for i in allItemsArray() {
+				let item = i.data
+				let index = item.inBattleUseID
+				if index > 0 && index <= 63 {
+					let start = kFunctionalItemDataStartOffset + (index * kSizeOfFunctionalItemEntry) + kFunctionalItemFirstFriendshipOffset
+					for i in 0 ... 2 {
+						dol.replaceByteAtOffset(start + i, withByte: item.friendshipEffects[i])
+					}
+				}
+			}
+			dol.save()
+		}
 	}
 	
 	class func updateValidItems() {
@@ -364,6 +385,7 @@ extension XGUtility {
 	class func prepareForQuickCompilation() {
 		updateValidItems()
 		updateHealingItems()
+		updateFunctionalItems()
 		updateTutorMoves()
 		updatePokeSpots()
 		updateShadowMonitor()
@@ -375,6 +397,7 @@ extension XGUtility {
 		updateShadowMoves()
 		updateValidItems()
 		updateHealingItems()
+		updateFunctionalItems()
 		updateTutorMoves()
 		updatePokeSpots()
 		updateShadowMonitor()
@@ -459,7 +482,7 @@ extension XGUtility {
 			
 			let spot = XGPokeSpots(rawValue: s)!
 			
-			for p in 0 ..< spot.numberOfEntries() {
+			for p in 0 ..< spot.numberOfEntries {
 				pokes.append(XGPokeSpotPokemon(index: p, pokespot: spot).pokemon)
 			}
 		}
@@ -520,7 +543,7 @@ extension XGUtility {
 			
 			let spot = XGPokeSpots(rawValue: s)!
 			
-			for p in 0 ..< spot.numberOfEntries() {
+			for p in 0 ..< spot.numberOfEntries {
 				pokes.append(XGPokeSpotPokemon(index: p, pokespot: spot).pokemon)
 			}
 		}
@@ -654,28 +677,28 @@ extension XGUtility {
 		
 		string += "----------------------------------\n"
 		string += "Rock Pokespot:\n"
-		for i in 0 ..< XGPokeSpots.rock.numberOfEntries() {
+		for i in 0 ..< XGPokeSpots.rock.numberOfEntries {
 			let poke = XGPokeSpotPokemon(index: i, pokespot: .rock)
 			string += "Wild " + poke.pokemon.name.string + "  \t\(tabsForName(poke.pokemon.name.string))Lv. " + "\(poke.minLevel) - \(poke.maxLevel)" + "\n"
 		}
 		
 		string += "----------------------------------\n"
 		string += "Oasis Pokespot:\n"
-		for i in 0 ..< XGPokeSpots.oasis.numberOfEntries() {
+		for i in 0 ..< XGPokeSpots.oasis.numberOfEntries {
 			let poke = XGPokeSpotPokemon(index: i, pokespot: .oasis)
 			string += "Wild " + poke.pokemon.name.string + "  \t\(tabsForName(poke.pokemon.name.string))Lv. " + "\(poke.minLevel) - \(poke.maxLevel)" + "\n"
 		}
 		
 		string += "----------------------------------\n"
 		string += "Cave Pokespot:\n"
-		for i in 0 ..< XGPokeSpots.cave.numberOfEntries() {
+		for i in 0 ..< XGPokeSpots.cave.numberOfEntries {
 			let poke = XGPokeSpotPokemon(index: i, pokespot: .cave)
 			string += "Wild " + poke.pokemon.name.string + "  \t\(tabsForName(poke.pokemon.name.string))Lv. " + "\(poke.minLevel) - \(poke.maxLevel)" + "\n"
 		}
 		
-		if XGPokeSpots.all.numberOfEntries() > 2 {
+		if XGPokeSpots.all.numberOfEntries > 2 {
 			string += "\n************************************************************************************\nBoss Encounters\n\n"
-			for i in 2 ..< XGPokeSpots.all.numberOfEntries() {
+			for i in 2 ..< XGPokeSpots.all.numberOfEntries {
 				let poke = XGPokeSpotPokemon(index: i, pokespot: .all)
 				if poke.pokemon.index > 0 {
 					string += "Wild " + poke.pokemon.name.string + "  \t\(tabsForName(poke.pokemon.name.string))Lv. " + "\(poke.minLevel) - \(poke.maxLevel)" + "\n"
@@ -1156,7 +1179,7 @@ extension XGUtility {
 			
 			let spot = XGPokeSpots(rawValue: s)!
 			
-			for p in 0 ..< spot.numberOfEntries() {
+			for p in 0 ..< spot.numberOfEntries {
 				let entry = XGPokeSpotPokemon(index: p, pokespot: spot)
 				
 				raw_array.append(entry.dictionaryRepresentation as AnyObject)
@@ -1516,7 +1539,11 @@ extension XGUtility {
 			macros.append(.macroImmediate(constant, .transitionID))
 		}
 		
-		macros.append(.macroImmediate(XDSConstant.integer(964), .flag))
+		for i in 1 ... 2000 {
+			if let _ = XDSFlags(rawValue: i) {
+				macros.append(.macroImmediate(XDSConstant.integer(i), .flag))
+			}
+		}
 		
 		for macro in macros {
 			switch macro {

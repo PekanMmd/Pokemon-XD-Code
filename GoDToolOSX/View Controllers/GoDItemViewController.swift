@@ -125,11 +125,6 @@ class GoDItemViewController: GoDTableViewController {
 		}
 	}
 	
-
-	var items = allItemsArray().map { (item) -> String in
-		return item.name.string
-	}
-	
 	var currentItem = XGItem(index: 0) {
 		didSet {
 			self.reloadViewWithActivity()
@@ -186,6 +181,8 @@ class GoDItemViewController: GoDTableViewController {
 			tmLabel.isHidden = true
 		}
 		
+		self.table.reloadData()
+		
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
@@ -198,11 +195,11 @@ class GoDItemViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let item = items[row]
+		let item = XGItems.item(row)
 		
 		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: NSImage(named: NSImage.Name(rawValue: "File Cell")), fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
-		cell.setTitle(item)
+		cell.setTitle(item.name.string)
 		
 		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		cell.translatesAutoresizingMaskIntoConstraints = false
