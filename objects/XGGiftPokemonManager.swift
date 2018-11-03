@@ -7,7 +7,7 @@
 
 import Foundation
 
-let kNumberOfGiftPokemon = 15
+let kNumberOfGiftPokemon = 14
 
 class XGGiftPokemonManager {
 	class func giftWithID(_ id: Int) -> XGGiftPokemon {
@@ -34,7 +34,7 @@ class XGGiftPokemonManager {
 	class func allGiftPokemon() -> [XGGiftPokemon] {
 		var gifts = [XGGiftPokemon]()
 		
-		for i in 0 ..< kNumberOfGiftPokemon {
+		for i in 0 ... kNumberOfGiftPokemon {
 			gifts.append(XGGiftPokemonManager.giftWithID(i))
 		}
 		

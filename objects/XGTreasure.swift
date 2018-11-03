@@ -8,6 +8,7 @@
 
 import Cocoa
 
+// all offsets are same for both games
 let kSizeOfTreasure = 0x1c
 
 let kTreasureModelIDOffset = 0x0

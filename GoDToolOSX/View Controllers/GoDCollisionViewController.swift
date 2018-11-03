@@ -75,7 +75,6 @@ class GoDCollisionViewController: GoDTableViewController {
 		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 12, width: self.table.width)) as! GoDTableCellView
 		
 		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
-		cell.titleField.maximumNumberOfLines = 2
 		
 		if cols.count == 0 {
 			
@@ -139,11 +138,11 @@ class GoDCollisionViewController: GoDTableViewController {
 			
 			cell.setTitle(cols[row].fileName + "\n" + map!.name)
 			
-			if self.table.selectedRow == row {
-				cell.setBackgroundColour(GoDDesign.colourOrange())
-			}
 		}
 		
+		if self.table.selectedRow == row {
+			cell.setBackgroundColour(GoDDesign.colourOrange())
+		}
 		
 		return cell
 	}

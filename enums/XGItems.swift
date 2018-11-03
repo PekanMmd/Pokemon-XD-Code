@@ -13,10 +13,8 @@ enum XGItems : XGDictionaryRepresentable {
 	case item(Int)
 	
 	var index : Int {
-		get {
-			switch self {
-				case .item(let i): return (i > CommonIndexes.NumberOfItems.value && i < 0x250) ? i - 150 : i
-			}
+		switch self {
+		case .item(let i): return (i > CommonIndexes.NumberOfItems.value && i < 0x250) ? i - 150 : i
 		}
 	}
 	

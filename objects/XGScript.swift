@@ -31,7 +31,7 @@ let currentXDSVersion : Float = 1.1
 class XGScript: NSObject {
 	
 	var file : XGFiles!
-	@objc var mapRel : XGMapRel!
+	@objc var mapRel : XGMapRel?
 	@objc var data : XGMutableData!
 	
 	@objc var FTBLStart = 0
@@ -2038,8 +2038,19 @@ class XGScript: NSObject {
 	@objc func getXDSScript() -> String {
 		// creates xds text from expressions
 		// can follow a similar process to decompile to other programming or scripting languages
-		let (exprStack, macs) = getInstructionStack()
 		
+		// check for rel file in same folder
+		if self.mapRel == nil {
+			let relFile = XGFiles.nameAndFolder(self.file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, self.file.folder)
+			if relFile.exists {
+				let rel = XGMapRel(file: relFile, checkScript: false)
+				if rel.numberOfPointers >= kNumberMapPointers {
+					mapRel = rel
+				}
+			}
+		}
+		
+		// if still not found, check for rel file in rels folder
 		if self.mapRel == nil {
 			let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
 			if relFile.exists {
@@ -2049,6 +2060,9 @@ class XGScript: NSObject {
 				}
 			}
 		}
+		
+		
+		let (exprStack, macs) = getInstructionStack()
 		
 		// write script headers
 		var script = generateXDSHeader()
@@ -2089,7 +2103,7 @@ class XGScript: NSObject {
 			let currentGiri = self.giri[g]
 			
 			if let rel = mapRel {
-				if currentGiri.groupID != 0 && currentGiri.resourceID < mapRel.characters.count {
+				if currentGiri.groupID != 0 && currentGiri.resourceID < rel.characters.count {
 					
 					let char = rel.characters[currentGiri.resourceID]
 					if char.name.count > 1 {
@@ -2122,7 +2136,7 @@ class XGScript: NSObject {
 		}
 		
 		// macros
-		script += "// Macro defintions\n"
+		script += "\n// Macro defintions\n"
 		for macro in uniqueMacros.sorted(by: { (m1, m2) -> Bool in
 			return m1.macroName < m2.macroName
 		}) {

@@ -255,7 +255,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		("getPosition", 75, 1, [.objectName("Character")], .vector),
 		
-		("useHealingMachine", 101, 3, [.objectName("Character"), .array(.integer), .array(.integer)], .null),
+		("useHealingMachine", 101, 3, [.objectName("Character"), .datsIdentifier, .array(.integer), .array(.integer)], .null),
 	],
 	
 //MARK: - Pokemon

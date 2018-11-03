@@ -792,7 +792,7 @@ class XGISO: NSObject {
 	
 	@objc func extractRels() {
 		for file in XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files where file.fileType == .fsys {
-			let rel = XGFiles.rel(file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension)
+			let rel = XGFiles.rel(file.fileName.removeFileExtensions())
 			if !rel.exists {
 				if verbose {
 					printg("extracting rel: \(rel.fileName)")
@@ -808,7 +808,7 @@ class XGISO: NSObject {
 	
 	@objc func extractCols() {
 		for file in XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files where file.fileType == .fsys {
-			let col = XGFiles.col(file.fileName.removeFileExtensions() + XGFileTypes.col.fileExtension)
+			let col = XGFiles.col(file.fileName.removeFileExtensions())
 			if !col.exists {
 				if verbose {
 					printg("extracting col: \(col.fileName)")

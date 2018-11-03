@@ -25,7 +25,7 @@ class XGGiftPokemonManager {
 	class func allGiftPokemon() -> [XGGiftPokemon] {
 		var gifts = [XGGiftPokemon]()
 		
-		for i in 1 ..< kNumberOfGiftPokemon {
+		for i in 1 ... kNumberOfGiftPokemon {
 			gifts.append(XGGiftPokemonManager.giftWithID(i))
 		}
 		

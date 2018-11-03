@@ -63,8 +63,8 @@ class GoDItemViewController: GoDTableViewController {
 		
 		let friends = [friend1, friend2, friend3]
 		for i in 0 ... 2 {
-			let friend = friends[i]
-			currentItem.friendshipEffects[i] = sanitise(friend?.stringValue.integerValue, bytes: 1)
+			let friend = friends[i]!
+			currentItem.friendshipEffects[i] = sanitise(friend.stringValue.integerValue, bytes: 1)
 		}
 		
 		var nameUpdate = false

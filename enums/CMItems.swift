@@ -12,19 +12,18 @@ enum XGItems : XGDictionaryRepresentable {
 	case item(Int)
 	
 	var index : Int {
-		get {
-			switch self {
-			case .item(let i):
-				if i > kNumberOfItems || i < 0 {
-					return 0
-				}
-				return (i > kNumberOfItems && i < 0x250) ? i - 150 : i
-			}
+		switch self {
+		case .item(let i): return (i > kNumberOfItems && i < 0x250) ? i - 151 : i
 		}
 	}
 	
 	var TMIndex : Int {
 		return self.index >= XGTMs.tm(1).item.index && self.index <= XGTMs.tm(kNumberOfTMsAndHMs).item.index ? self.index - XGTMs.tm(1).item.index + 1 : -1
+	}
+	
+	var scriptIndex : Int {
+		// index used in scripts and pokemarts is different for key items
+		return index >= 0x15e ? index + 151 : index
 	}
 	
 	var description : String {
