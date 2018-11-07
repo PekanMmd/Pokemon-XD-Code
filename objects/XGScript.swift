@@ -213,11 +213,23 @@ class XGScript: NSObject {
 		
 		let linebreak = "-----------------------------------\n"
 		
+		// check for rel file in same folder
+		if self.mapRel == nil {
+			let relFile = XGFiles.nameAndFolder(self.file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, self.file.folder)
+			if relFile.exists {
+				let rel = XGMapRel(file: relFile, checkScript: false)
+				if rel.isValid {
+					mapRel = rel
+				}
+			}
+		}
+		
+		// if still not found, check for rel file in rels folder
 		if self.mapRel == nil {
 			let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
 			if relFile.exists {
 				let rel = XGMapRel(file: relFile, checkScript: false)
-				if rel.numberOfPointers >= kNumberMapPointers {
+				if rel.isValid {
 					mapRel = rel
 				}
 			}
@@ -2044,7 +2056,7 @@ class XGScript: NSObject {
 			let relFile = XGFiles.nameAndFolder(self.file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, self.file.folder)
 			if relFile.exists {
 				let rel = XGMapRel(file: relFile, checkScript: false)
-				if rel.numberOfPointers >= kNumberMapPointers {
+				if rel.isValid {
 					mapRel = rel
 				}
 			}
@@ -2055,11 +2067,12 @@ class XGScript: NSObject {
 			let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
 			if relFile.exists {
 				let rel = XGMapRel(file: relFile, checkScript: false)
-				if rel.numberOfPointers >= kNumberMapPointers {
+				if rel.isValid {
 					mapRel = rel
 				}
 			}
 		}
+		
 		
 		
 		let (exprStack, macs) = getInstructionStack()
@@ -2250,77 +2263,41 @@ class XGScript: NSObject {
 		// modified version of getXDSScript
 		// pared down to just the necessary parts
 		
-		// TODO: parse script to get possible values for variables at time of receive item
-		// anywhere in the script that the array has an element set or the gvar is set
-		// anywhere in the same function that the local variable is set
-		// anywhere in a function that the argument is passed in a call
 		
-		var items = [Int]()
+		var items = [XGItems]()
 		let expressions = getInstructionStack().expressions.asArray
 		
 		for expression in expressions {
-			
-			switch expression {
-			case .callStandardVoid(let c, let f, let es):
-				var itemExpr = XDSExpr.nop
-				
-				if c == XGScriptClass.getClassNamed("Player")!.index {
-					let player = XGScriptClass.getClassNamed("Player")!
-					
-					if f == player.functionWithName("receiveItemSilently")!.index {
-						itemExpr = es[3]
-					}
-					if f == player.functionWithName("receiveItemSilently")!.index {
-						itemExpr = es[1]
-					}
-					if f == player.functionWithName("receiveItemSilently")!.index {
-						itemExpr = es[1]
-					}
-				}
-				if c == XGScriptClass.getClassNamed("Character")!.index {
-					let character = XGScriptClass.getClassNamed("Character")!
-					
-					if f == character.functionWithName("talk")!.index {
-						if let talkType = XDSTalkTypes(rawValue: es[1].constants[0].asInt) {
-							switch talkType {
-							case .silentItem:
-								itemExpr = es[3]
-							default:
-								break
-							}
-						}
-					}
-				}
-				switch itemExpr {
-					// array get
-				case .callStandard(7, 16, let es):
-					_ = es[0].variable!
-					let index = es[1]
-					if index.isImmediate {
-						let constant = index.constants[0]
-						items.addUnique(constant.asInt)
-					}
-				case .macroImmediate(let constant, _):
-					items.addUnique(constant.asInt)
-				case .loadImmediate(let constant):
-					items.addUnique(constant.asInt)
-				case .loadVariable(let variable):
-					if variable.contains("gvar_") {
-						let index = variable.substring(from: 5, to: variable.length).integerValue!
-						items.addUnique(gvar[index].asInt)
-					}
-				default: break
-				}
-				
-				
-			default: break
-			}
-		
+			items += expression.items
 		}
 		
-		return items.map({ (id) -> XGItems in
-			return XGItems.item(id)
-		})
+		for i in 0 ..< arry.count {
+			let array = arry[i]
+			
+			let variable = "array_" + String(format: "%02d", i)
+			if let type = globalMacroTypes[variable] {
+				
+				if type == .item {
+					for val in array {
+						items.append(.item(val.asInt))
+					}
+				}
+			}
+		}
+		
+		
+		for i in 0 ..< gvar.count {
+			let variable = "gvar_" + String(format: "%02d", i)
+			
+			if let type = globalMacroTypes[variable] {
+				if type == .item {
+					let value = gvar[i].asInt
+					items.append(.item(value))
+				}
+			}
+		}
+		
+		return items
 	}
 	
 	

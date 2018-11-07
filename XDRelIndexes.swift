@@ -12,7 +12,7 @@ enum MapRelIndexes : Int {
 	case FirstCharacter = 0
 	case NumberOfCharacters = 1
 	
-	case FirstInteractionLocation = 6
+	case FirstInteractionLocation = 6 // warp entry points
 	case NumberOfInteractionLocations = 7
 }
 

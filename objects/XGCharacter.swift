@@ -64,6 +64,10 @@ class XGCharacter : NSObject {
 	@objc var characterIndex = 0
 	@objc var startOffset = 0
 	
+	// a few rel files have different formats and it's tough to tell in advance
+	// set this to false if anything looks suspicious so it won't be used and lead to crashes
+	var isValid = true
+	
 	var file : XGFiles!
 	@objc var rawData : [Int] {
 		return file.data!.getByteStreamFromOffset(startOffset, length: kSizeOfCharacter)
@@ -82,42 +86,82 @@ class XGCharacter : NSObject {
 		
 		let data = file.data!
 		let m = data.get2BytesAtOffset(startOffset + kModelOffset)
-		self.model = XGCharacterModels(index: m)
+		
+		if m < CommonIndexes.NumberOfCharacterModels.value {
+			self.model = XGCharacterModels(index: m)
+		} else {
+			isValid = false
+		}
 		self.characterID = data.get2BytesAtOffset(startOffset + kCharacterIDOffset)
-		self.hasScript = data.getByteAtOffset(startOffset + kHasScriptOffset) == 1
+		if self.characterID >= CommonIndexes.NumberOfPeopleIDs.value {
+			isValid = false
+		}
+		let scriptCheck = data.getByteAtOffset(startOffset + kHasScriptOffset)
+		if scriptCheck > 1 {
+			isValid = false
+		} else {
+			self.hasScript = scriptCheck == 1
+		}
 		self.scriptIndex = data.get2BytesAtOffset(startOffset + kScriptIndexOffset)
-		self.hasPassiveScript = data.getByteAtOffset(startOffset + kHasPassiveScriptOffset) == 1
+		if self.scriptIndex > 0xff {
+			isValid = false
+		}
+		let passiveCheck = data.getByteAtOffset(startOffset + kHasPassiveScriptOffset)
+		if passiveCheck > 1 {
+			isValid = false
+		} else {
+			self.hasPassiveScript = passiveCheck == 1
+		}
 		self.passiveScriptIndex = data.get2BytesAtOffset(startOffset + kPassiveScriptIndexOffset)
+		if self.passiveScriptIndex > 0xff {
+			isValid = false
+		}
 		self.movementType = .index(data.getByteAtOffset(startOffset + kMovementOffset))
 		
 		self.xCoordinate = data.getWordAtOffset(startOffset + kXOffset).hexToSignedFloat()
 		self.yCoordinate = data.getWordAtOffset(startOffset + kYOffset).hexToSignedFloat()
 		self.zCoordinate = data.getWordAtOffset(startOffset + kZOffset).hexToSignedFloat()
 		self.angle = data.get2BytesAtOffset(startOffset + kCharacterAngleOffset)
+		if self.angle > 360 && angle < 0xff00 {
+			isValid = false
+		}
+		if self.xCoordinate > 1000 {
+			isValid = false
+		}
+		if self.yCoordinate > 1000 {
+			isValid = false
+		}
+		if self.zCoordinate > 1000 {
+			isValid = false
+		}
 		
 		self.flags = data.getByteAtOffset(startOffset + kCharacterFlagsOffset)
 		self.isVisible = self.flags >> 7 == 1
+		
+		
 	}
 	
 	@objc func save() {
-		let data = file.data!
-		
-		data.replace2BytesAtOffset(startOffset + kModelOffset, withBytes: self.model.index)
-		data.replace2BytesAtOffset(startOffset + kCharacterIDOffset, withBytes: self.characterID)
-		data.replaceByteAtOffset(startOffset + kHasScriptOffset, withByte: self.hasScript ? 1 : 0)
-		data.replace2BytesAtOffset(startOffset + kPassiveScriptIndexOffset, withBytes: self.passiveScriptIndex)
-		data.replaceByteAtOffset(startOffset + kHasPassiveScriptOffset, withByte: self.hasPassiveScript ? 1 : 0)
-		data.replace2BytesAtOffset(startOffset + kScriptIndexOffset, withBytes: self.scriptIndex)
-		data.replaceByteAtOffset(startOffset + kMovementOffset, withByte: self.movementType.index)
-		
-		data.replaceWordAtOffset(startOffset + kXOffset, withBytes: self.xCoordinate.bitPattern)
-		data.replaceWordAtOffset(startOffset + kYOffset, withBytes: self.yCoordinate.bitPattern)
-		data.replaceWordAtOffset(startOffset + kZOffset, withBytes: self.zCoordinate.bitPattern)
-		data.replace2BytesAtOffset(startOffset + kCharacterAngleOffset, withBytes: self.angle)
-		
-		let flagsUpdated = (self.flags & 0x7F) | (self.isVisible ? 0x80 : 0x00)
-		data.replaceByteAtOffset(startOffset + kCharacterFlagsOffset, withByte: flagsUpdated)
-		
-		data.save()
+		if self.isValid {
+			let data = file.data!
+			
+			data.replace2BytesAtOffset(startOffset + kModelOffset, withBytes: self.model.index)
+			data.replace2BytesAtOffset(startOffset + kCharacterIDOffset, withBytes: self.characterID)
+			data.replaceByteAtOffset(startOffset + kHasScriptOffset, withByte: self.hasScript ? 1 : 0)
+			data.replace2BytesAtOffset(startOffset + kPassiveScriptIndexOffset, withBytes: self.passiveScriptIndex)
+			data.replaceByteAtOffset(startOffset + kHasPassiveScriptOffset, withByte: self.hasPassiveScript ? 1 : 0)
+			data.replace2BytesAtOffset(startOffset + kScriptIndexOffset, withBytes: self.scriptIndex)
+			data.replaceByteAtOffset(startOffset + kMovementOffset, withByte: self.movementType.index)
+			
+			data.replaceWordAtOffset(startOffset + kXOffset, withBytes: self.xCoordinate.bitPattern)
+			data.replaceWordAtOffset(startOffset + kYOffset, withBytes: self.yCoordinate.bitPattern)
+			data.replaceWordAtOffset(startOffset + kZOffset, withBytes: self.zCoordinate.bitPattern)
+			data.replace2BytesAtOffset(startOffset + kCharacterAngleOffset, withBytes: self.angle)
+			
+			let flagsUpdated = (self.flags & 0x7F) | (self.isVisible ? 0x80 : 0x00)
+			data.replaceByteAtOffset(startOffset + kCharacterFlagsOffset, withByte: flagsUpdated)
+			
+			data.save()
+		}
 	}
 }

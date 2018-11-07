@@ -130,7 +130,7 @@ class XGAssembly {
 		let ramOffset = startOffset > kRELtoRAMOffsetDifference ? kRELtoRAMOffsetDifference : 0
 		
 		var labels = [String : Int]()
-		var currentOffset = startOffset - ramOffset
+		var currentOffset = startOffset - ramOffset + kRELtoRAMOffsetDifference
 		for inst in asm {
 			switch inst {
 			case .label(let name):

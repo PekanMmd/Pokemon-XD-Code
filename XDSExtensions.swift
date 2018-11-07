@@ -1685,7 +1685,7 @@ extension XDSScriptCompiler {
 							while ss.peek() != "." {
 								variable += ss.pop()
 							}
-							ss.pop()
+							ss.popVoid()
 							while !ss.isEmpty {
 								subindex += ss.pop()
 							}

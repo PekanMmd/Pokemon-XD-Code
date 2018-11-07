@@ -31,6 +31,7 @@ class XGMapRel : XGRelocationTable {
 	@objc var treasure = [XGTreasure]()
 	
 	@objc var roomID = 0
+	var isValid = true
 	
 	@objc var script : XGScript? {
 		let scriptFile = XGFiles.scd(file.fileName.removeFileExtensions())
@@ -48,6 +49,7 @@ class XGMapRel : XGRelocationTable {
 			if verbose {
 				printg("Map: \(file.path) has the incorrect number of map pointers. Possibly a colosseum file.")
 			}
+			self.isValid = false
 			return
 		}
 		
@@ -55,16 +57,15 @@ class XGMapRel : XGRelocationTable {
 		let numberOfIPs = self.getValueAtPointer(index: MapRelIndexes.NumberOfInteractionLocations.rawValue)
 		
 		for i in 0 ..< numberOfIPs {
-			let ip = XGInteractionLocation(file: file, index: i, startOffset: firstIP + (i * kSizeOfInteractionLocation))
-			interactionLocations.append(ip)
+			let startOffset = firstIP + (i * kSizeOfInteractionLocation)
+			if startOffset + 16 < file.fileSize {
+				let ip = XGInteractionLocation(file: file, index: i, startOffset: startOffset)
+				interactionLocations.append(ip)
+			}
 		}
 		
-		for i in 0 ..< CommonIndexes.NumberOfRooms.value {
-			if let room = XGRoom.roomWithID(i) {
-				if room.name == file.fileName.removeFileExtensions() {
-					self.roomID = room.roomID
-				}
-			}
+		if let room = XGRoom.roomWithName(file.fileName.removeFileExtensions()) {
+			self.roomID = room.roomID
 		}
 		
 		for i in 0 ..< CommonIndexes.NumberTreasureBoxes.value {
@@ -79,17 +80,24 @@ class XGMapRel : XGRelocationTable {
 		
 		let script = checkScript ? self.script : nil
 		for i in 0 ..< numberOfCharacters {
-			let character = XGCharacter(file: file, index: i, startOffset: firstCharacter + (i * kSizeOfCharacter))
-			
-			if character.hasScript {
-				if script != nil {
-					if character.scriptIndex < script!.ftbl.count {
-						character.scriptName = script!.ftbl[character.scriptIndex].name
+			let startOffset = firstCharacter + (i * kSizeOfCharacter)
+			if startOffset + kSizeOfCharacter < file.fileSize {
+				let character = XGCharacter(file: file, index: i, startOffset: startOffset)
+				
+				if character.isValid {
+					if character.hasScript {
+						if script != nil {
+							if character.scriptIndex < script!.ftbl.count {
+								character.scriptName = script!.ftbl[character.scriptIndex].name
+							}
+						}
 					}
+				} else {
+					self.isValid = false
 				}
+				
+				characters.append(character)
 			}
-			
-			characters.append(character)
 		}
 	}
 	
@@ -427,7 +435,7 @@ extension XGUtility {
 			
 			for msg in msgs {
 				for i in 0 ..< fsys.numberOfEntries {
-					if fsys.fileTypeForFile(index: i) == .msg && fsys.fileNameForFileWithIndex(index: i) == msg.fileName {
+					if fsys.fileTypeForFile(index: i) == .msg && fsys.fileNameForFileWithIndex(index: i).removeFileExtensions() == msg.fileName.removeFileExtensions() {
 						fsys.shiftAndReplaceFileWithIndexEfficiently(i, withFile: msg.compress(), save: false)
 					}
 				}
@@ -2138,69 +2146,12 @@ extension XGUtility {
 			locations[treasure.item.index].addUnique(treasure.room.map.name)
 		}
 		
-		for s in XGFolders.Scripts.files where s.fileName.fileExtensions == ".scd" {
+		for s in XGFolders.Scripts.files where s.fileType == .scd {
 			let script = s.scriptData
 			let map = (XGMaps(rawValue: s.fileName.substring(from: 0, to: 2)) ?? .Unknown).name
 			
-			var found = [Int]()
-			
-			for i in 0 ..< script.code.count {
-				
-				// convert instruction to string
-				let instruction = script.code[i]
-				
-				if instruction.opCode == .callStandard {
-					
-					if instruction.subOpCode == 35 { // Character
-						
-						if instruction.parameter == 73 { // talk
-							
-							let typeInstr = script.code[i - 2]
-							if typeInstr .opCode == .loadImmediate {
-								let type = typeInstr.parameter
-								if type == 14 {
-									let instr = script.code[i - 4]
-									if instr .opCode == .loadImmediate {
-										let itemid = instr.parameter
-										let item = XGItems.item(itemid)
-										found.addUnique(item.index)
-									}
-								}
-							}
-						}
-					}
-					
-					
-					if instruction.subOpCode == 40 { // Dialogue
-						
-						if instruction.parameter == 39 { // open poke mart menu
-							
-							let instr = script.code[i - 2]
-							if instr .opCode == .loadImmediate {
-								let mart = XGPokemart(index: instr.parameter).items
-								for i in mart {
-									found.addUnique(i.index)
-								}
-							}
-							
-						}
-					}
-					
-					if instruction.subOpCode == 43 { // Player
-						if instruction.parameter == 26 || instruction.parameter == 27 || instruction.parameter == 67 { // receive item
-							let instr = script.code[i - 2]
-							if instr .opCode == .loadImmediate {
-								let iid = instr.parameter - (instr.parameter < CommonIndexes.NumberOfItems.value ? 0 : 150)
-								let item = XGItems.item(iid)
-								found.addUnique(item.index)
-							}
-						}
-					}
-					
-				}
-			}
-			for index in found {
-				locations[index].addUnique(map)
+			for item in script.getItems() {
+				locations[item.index].addUnique(map)
 			}
 		}
 		

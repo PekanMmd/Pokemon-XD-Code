@@ -30,7 +30,7 @@ let kHMFlagOffset				= 0x12
 
 let kMoveCategoryOffset			= game == .XD ? 0x13 : 0x1F // added through hacking in colosseum
 let kBasePowerOffset			= game == .XD ? 0x19 : 0x17
-let kEffectOffset				= game == .XD ? 0x1D : 0x1B
+let kEffectOffset				= game == .XD ? 0x1C : 0x1A
 
 let kMoveNameIDOffset			= 0x20
 let kMoveDescriptionIDOffset	= 0x2C
@@ -128,7 +128,7 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		self.target			 = XGMoveTargets(rawValue: rel.getByteAtOffset(startOffset + kTargetsOffset)) ?? .selectedTarget
 		self.category		 = XGMoveCategories(rawValue: rel.getByteAtOffset(startOffset + kMoveCategoryOffset)) ?? .none
 		
-		self.effect			 = rel.getByteAtOffset(startOffset + kEffectOffset)
+		self.effect			 = rel.get2BytesAtOffset(startOffset + kEffectOffset)
 		self.effectAccuracy	 = rel.getByteAtOffset(startOffset + kEffectAccuracyOffset)
 		self.basePower		 = rel.getByteAtOffset(startOffset + kBasePowerOffset)
 		self.accuracy		 = rel.getByteAtOffset(startOffset + kAccuracyOffset)
@@ -181,7 +181,7 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		rel.replaceByteAtOffset(startOffset + kMoveTypeOffset, withByte: newType)
 		rel.replaceByteAtOffset(startOffset + kMoveCategoryOffset, withByte: newCategory)
 		
-		rel.replaceByteAtOffset(startOffset + kEffectOffset, withByte: self.effect)
+		rel.replace2BytesAtOffset(startOffset + kEffectOffset, withBytes: self.effect)
 		rel.replaceByteAtOffset(startOffset + kBasePowerOffset, withByte: self.basePower)
 		rel.replaceByteAtOffset(startOffset + kAccuracyOffset, withByte: self.accuracy)
 		rel.replaceByteAtOffset(startOffset + kPPOffset, withByte: self.pp)

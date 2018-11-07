@@ -17,9 +17,11 @@ let kStatusEffectNameIDOffset = 0x10
 
 enum XGStatusEffects: Int {
 	
-	case normal			= 0
+	case none			= 0
 	
 	// non volatile status
+	case no_status		= 1
+	case brn_psn_or_par = 2
 	case poison			= 3
 	case badPoison		= 4
 	case paralysis		= 5
@@ -32,6 +34,8 @@ enum XGStatusEffects: Int {
 	case attract = 10
 	case bound = 14
 	case focus_energy = 15
+	case flinched = 17
+	case must_recharge = 18
 	case rage = 19
 	case substitute = 20
 	case destiny_bond = 21

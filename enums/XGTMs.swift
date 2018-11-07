@@ -160,7 +160,7 @@ enum XGTMs : XGDictionaryRepresentable {
 		for w in 0 ..< words.count {
 			
 			let word = words[w]
-			let len  = word.characters.count
+			let len  = word.length
 			
 			if lineLength + len > maxLineLength {
 				
@@ -184,8 +184,7 @@ enum XGTMs : XGDictionaryRepresentable {
 	}
 	
 	func updateItemDescription() {
-		self.item.descriptionString.duplicateWithString(XGTMs.createItemDescriptionForMove(self.move)).replace()
-		
+		_ = self.item.descriptionString.duplicateWithString(XGTMs.createItemDescriptionForMove(self.move)).replace()
 	}
 	
 	func replaceTutorFlag(_ flag: XGTutorFlags) {

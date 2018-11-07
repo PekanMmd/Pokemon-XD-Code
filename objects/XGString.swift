@@ -146,7 +146,11 @@ class XGString: NSObject {
 				let charScalar = String(char).unicodeScalars
 				let charValue  = Int(charScalar[charScalar.startIndex].value)
 				
-				let ch = XGUnicodeCharacters.unicode(charValue)
+				var ch = XGUnicodeCharacters.unicode(charValue)
+				if char == "'" {
+					ch = .unicode(0x27)
+				}
+				
 				chars.append(ch)
 				
 			}
@@ -157,7 +161,7 @@ class XGString: NSObject {
 	}
 	
 	@objc func replace() -> Bool {
-		return replace(increaseSize: false)
+		return replace(increaseSize: true)
 	}
 	
 	@objc func replace(increaseSize: Bool) -> Bool {
@@ -190,7 +194,7 @@ class XGString: NSObject {
 	
 	@objc func replaceSubstring(_ sub: String, withString new: String, verbose: Bool) {
 		let str = self.string.replacingOccurrences(of: sub, with: new, options: [], range: nil)
-		self.duplicateWithString(str).replace()
+		_ = self.duplicateWithString(str).replace()
 	}
 	
 	@objc func duplicateWithString(_ str: String) -> XGString {

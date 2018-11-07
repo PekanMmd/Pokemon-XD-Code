@@ -653,7 +653,7 @@ indirect enum XDSExpr {
 			}
 			
 		case .giftPokemon:
-			if c.asInt < kNumberOfGiftPokemon && c.asInt > 0 {
+			if c.asInt <= kNumberOfGiftPokemon && c.asInt > 0 {
 				let gift = XGGiftPokemonManager.allGiftPokemon()[c.asInt]
 				let type = gift.giftType.underscoreSimplified.uppercased()
 				let species = gift.species.name.string.simplified.uppercased()
@@ -1184,6 +1184,89 @@ indirect enum XDSExpr {
 				macs += c.macros
 				for e in es {
 					macs += e.macros
+				}
+				return macs
+			}
+			return macs
+		default:
+			return []
+		}
+	}
+	
+	var items : [XGItems] {
+		switch self {
+			
+		case .bracket(let e):
+			return e.items
+		case .unaryOperator(_, let e):
+			return e.items
+		case .binaryOperator(_, let e1, let e2):
+			return e1.items + e2.items
+		case .macroImmediate(let c, let t):
+			switch t {
+			case .item:
+				return [XGItems.item(c.asInt)]
+			default:
+				return []
+			}
+		case .XDSReturnResult(let e):
+			return e.items
+		case .callStandard(_, _, let es):
+			var macs = [XGItems]()
+			for e in es {
+				macs += e.items
+			}
+			return macs
+		case .callStandardVoid(XGScriptClass.getClassNamed("Dialogue")!.index, 39, let es):
+			if es[1].isLoadImmediate {
+				let mart = XGPokemart(index: es[1].constants[0].asInt)
+				return mart.items
+			}
+			return []
+		case .callStandardVoid(_, _, let es):
+			var macs = [XGItems]()
+			for e in es {
+				macs += e.items
+			}
+			return macs
+		case .setVariable(_, let e):
+			return e.items
+		case .setVector(_, _, let e):
+			return e.items
+		case .call(_, let es):
+			var macs = [XGItems]()
+			for e in es {
+				macs += e.items
+			}
+			return macs
+		case .callVoid(_, let es):
+			var macs = [XGItems]()
+			for e in es {
+				macs += e.items
+			}
+			return macs
+		case .jumpTrue(let e, _):
+			return e.items
+		case .jumpFalse(let e, _):
+			return e.items
+		case .function(let def, let es):
+			var macs = def.items
+			for e in es {
+				macs += e.items
+			}
+			return macs
+		case .whileLoop(let c, let es):
+			var macs = c.items
+			for e in es {
+				macs += e.items
+			}
+			return macs
+		case .ifStatement(let parts):
+			var macs = [XGItems]()
+			for (c, es) in parts {
+				macs += c.items
+				for e in es {
+					macs += e.items
 				}
 				return macs
 			}

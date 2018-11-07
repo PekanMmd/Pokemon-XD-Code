@@ -512,7 +512,7 @@ class XDSScriptCompiler: NSObject {
 		var currentLocation = 0
 		for expr in exprs {
 			switch expr {
-			case .function(.functionDefinition(let name, _), let _):
+			case .function(.functionDefinition(let name, _), _):
 				functions += [(currentLocation, 0, name, functions.count)]
 			default:
 				break

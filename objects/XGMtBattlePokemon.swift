@@ -35,11 +35,7 @@ class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon {
 	// unused
 	var shinyValue		= XGShinyValues.random
 	@objc var exp				= -1
-	@objc var level			= 5 {
-		didSet {
-			level = 5
-		}
-	}
+	@objc var level			= 0
 	
 	@objc var startOffset : Int {
 		get {
@@ -61,6 +57,7 @@ class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon {
 		
 		let species = dol.get2BytesAtOffset(start + kMtBattlePokemonSpeciesOffset)
 		self.species = .pokemon(species)
+		self.level = dol.getByteAtOffset(kMtBattlePokemonLevelOffset)
 		
 		var moveIndex = dol.get2BytesAtOffset(start + kMtBattlePokemonMove1Offset)
 		move1 = .move(moveIndex)
@@ -80,6 +77,7 @@ class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon {
 		let start = startOffset
 		
 		dol.replace2BytesAtOffset(start + kMtBattlePokemonSpeciesOffset, withBytes: species.index)
+		dol.replaceByteAtOffset(kMtBattlePokemonLevelOffset, withByte: self.level)
 		dol.replace2BytesAtOffset(start + kMtBattlePokemonMove1Offset, withBytes: move1.index)
 		dol.replace2BytesAtOffset(start + kMtBattlePokemonMove2Offset, withBytes: move2.index)
 		dol.replace2BytesAtOffset(start + kMtBattlePokemonMove3Offset, withBytes: move3.index)

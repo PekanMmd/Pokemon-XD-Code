@@ -36,7 +36,7 @@ enum XGScriptFunction {
 	var parameters : Int {
 		switch self {
 			case .operators(_,_,let val)	: return val
-			case .unknownOperator(let val)  : return 0
+			case .unknownOperator(_)  : return 0
 			case .known(_,_,let val,_,_)	: return val
 			case .unknown					: return 0
 		}

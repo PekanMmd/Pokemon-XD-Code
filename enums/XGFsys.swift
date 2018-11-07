@@ -507,8 +507,8 @@ class XGFsys : NSObject {
 				lastFileEnd += 1
 			}
 			let excess = end - lastFileEnd - 0xc
-			if excess > 0 {
-				self.data.deleteBytes(start: lastFileEnd, count: excess)
+			if excess > 0x100 {
+				self.data.deleteBytes(start: lastFileEnd, count: (excess - 0x100))
 				self.setFilesize(self.data.length)
 			}
 			
@@ -517,7 +517,7 @@ class XGFsys : NSObject {
 			let newNextStart = index < self.numberOfEntries - 1 ? startOffsetForFile(index + 1) : dataEnd
 			
 			if fileEnd > newNextStart {
-				expansionRequired = fileEnd - newNextStart + 0x10
+				expansionRequired = fileEnd - newNextStart + 0x80
 				while expansionRequired % 16 != 0 {
 					expansionRequired += 1
 				}

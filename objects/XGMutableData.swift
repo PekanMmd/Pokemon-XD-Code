@@ -356,9 +356,11 @@ class XGMutableData: NSObject {
 			printg("Attempting to insert \(bytes.count) bytes at offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
 		
-		for i in 0 ..< bytes.count {
-			insertByte(byte: bytes[i], atOffset: offset + i)
+		let charStream = bytes.map { (b) -> UInt8 in
+			return UInt8(b)
 		}
+		let newData = XGMutableData(byteStream: charStream, file: .nameAndFolder("", .Documents))
+		self.insertData(data: newData, atOffset: offset)
 	}
 	
 	@objc func insertData(data: XGMutableData, atOffset offset: Int) {
@@ -376,9 +378,9 @@ class XGMutableData: NSObject {
 			printg("Attempting to insert \(count) bytes at offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
 		
-		for _ in 0 ..< count {
-			insertByte(byte: byte, atOffset: offset)
-		}
+		let bytes = [Int](repeating: byte, count: count)
+		self.insertBytes(bytes: bytes, atOffset: offset)
+		
 	}
 	
 	// delete bytes

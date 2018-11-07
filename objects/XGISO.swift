@@ -97,6 +97,7 @@ class XGISO: NSObject {
 			size += Int(self.data.getWordAtOffset(offset))
 		}
 		fileSizes["Start.dol"] = size
+		allFileNames = ["Start.dol", "Game.toc"]
 		printg("DOL size: \(size.hexString())")
 		
 		var i = 0x0
@@ -288,8 +289,12 @@ class XGISO: NSObject {
 	}
 	
 	func shiftAndReplaceFileEfficiently(_ file: XGFiles) {
-		printg("shifting files and replacing file:", file.fileName)
-		if self.allFileNames.contains(file.fileName) {
+		if verbose {
+			printg("shifting files and replacing file:", file.fileName)
+		}
+		if file.fileName == XGFiles.dol.fileName || file.fileName == XGFiles.toc.fileName {
+			self.replaceDataForFile(filename: file.fileName, withData: file.data!, saveWhenDone: false)
+		} else if self.allFileNames.contains(file.fileName) {
 			self.shiftAndReplaceFileEfficiently(name: file.fileName, withData: file.data!)
 		} else {
 			printg("file not found:", file.fileName)
@@ -299,28 +304,77 @@ class XGISO: NSObject {
 	@objc func shiftAndReplaceFileEfficiently(name: String, withData newData: XGMutableData) {
 		
 		let oldSize = sizeForFile(name)!
-		var shift = newData.length - oldSize
-		let index = orderedIndexForFile(name: name)
 		
-		if shift > 0 {
-			for file in filesOrdered {
-				self.shiftUpFile(name: file)
-			}
-			
-			while shift % 16 != 0 {
-				shift += 1
-			}
-			let rev = (index + 1) ..< allFileNames.count
-			for i in rev.reversed() {
-				let file = filesOrdered[i]
-				if !self.shiftDownFile(name: file, byOffset: shift) {
-					printg("ISO doesn't have enough space for file: \(name). Aborting replacement. Try deleting unnecessary files from the ISO.")
-					return
-				}
-			}
+		var shift = newData.length - oldSize
+		while shift % 0x10 != 0 {
+			shift += 1
 		}
 		
-		self.replaceDataForFile(filename: name, withData: newData, saveWhenDone: false)
+		var done = false
+		if shift > 0 {
+			
+			var deletedBytes = 0
+			var switchToShiftUp = false
+			var shiftUpFiles = [String]()
+			for file in filesOrdered.reversed() {
+				if orderedIndexForFile(name: "bg2thumbcode.bin") >= orderedIndexForFile(name: file) || orderedIndexForFile(name: "movie_auto_demo.fsys") <= orderedIndexForFile(name: file) {
+					continue
+				}
+				
+				let location = locationForFile(file)!
+				if !done {
+					
+					let size = sizeForFile(file)!
+					var end = location + size
+					while end % 0x10 != 0 {
+						end += 1
+					}
+					
+					let index = orderedIndexForFile(name: file)
+					let nextStart = index == filesOrdered.count - 1 ? self.data.length : locationForFile(filesOrdered[index + 1])!
+					let difference = nextStart - end - 0x10
+					
+					if difference > 0 {
+						deletedBytes += difference
+						self.data.deleteBytes(start: end, count: difference)
+						
+						if switchToShiftUp {
+							
+							for previous in shiftUpFiles {
+								self.setStartOffset(offset: locationForFile(previous)! - difference, forFile: previous, saveToc: false)
+							}
+						}
+					}
+					
+					shiftUpFiles = [file] + shiftUpFiles
+				}
+				
+				if file == name {
+					switchToShiftUp = true
+					shiftUpFiles = [file] + shiftUpFiles
+				}
+				
+				if !switchToShiftUp {
+					self.setStartOffset(offset: location + deletedBytes, forFile: file, saveToc: false)
+				}
+				
+				if deletedBytes >= shift  {
+					done = true
+				}
+			}
+			
+			let size = sizeForFile(name)!
+			let location = locationForFile(name)!
+			let end = location + size
+			self.data.insertRepeatedByte(byte: 0, count: deletedBytes, atOffset: end)
+			
+		}
+		
+		if done || shift <= 0 {
+			self.replaceDataForFile(filename: name, withData: newData, saveWhenDone: false)
+		} else {
+			printg("Couldn't replace file \(name) as it is too large and ISO is full. Try deleting some files and trying again.")
+		}
 		
 		if shift > 0 {
 			self.importToc(saveWhenDone: false)
@@ -449,11 +503,18 @@ class XGISO: NSObject {
 	}
 	
 	@objc private func setStartOffset(offset: Int, forFile name: String) {
+		self.setStartOffset(offset: offset, forFile: name, saveToc: true)
+		
+	}
+	
+	@objc private func setStartOffset(offset: Int, forFile name: String, saveToc: Bool) {
 		let start = fileDataOffsets[name]
 		if start != nil {
 			let toc = XGFiles.toc.data!
 			toc.replaceWordAtOffset(start! + 4, withBytes: UInt32(offset))
-			self.importToc(saveWhenDone: false)
+			if saveToc {
+				self.importToc(saveWhenDone: true)
+			}
 			fileLocations[name] = offset
 		} else {
 			printg("couldn't find toc data for file:", name)
@@ -461,8 +522,10 @@ class XGISO: NSObject {
 		
 	}
 	
+	
+	
 	@objc private func orderedIndexForFile(name: String) -> Int {
-		for i in 0 ..< allFileNames.count {
+		for i in 0 ..< filesOrdered.count {
 			if filesOrdered[i] == name {
 				return i
 			}
@@ -486,11 +549,11 @@ class XGISO: NSObject {
 			previousEnd = self.locationForFile(previous)! + sizeForFile(previous)!
 		}
 		
-		if locationForFile(name)! - previousEnd > 0x20 {
+		if locationForFile(name)! - previousEnd >= 0x10 {
 			while previousEnd % 16 != 0 {
 				previousEnd += 1 // byte alignment is required or game doesn't load
 			}
-			self.moveFile(name: name, toOffset: previousEnd)
+			self.shiftFileByDeletion(name: name, byOffset: previousEnd - locationForFile(name)!)
 		}
 		
 	}
@@ -508,13 +571,12 @@ class XGISO: NSObject {
 		
 		var start = nextStart - size
 		
-		if start - locationForFile(name)! > 0x20 {
+		if start - locationForFile(name)! >= 0x10 {
 			
 			while start % 16 != 0 {
 				start -= 1 // byte alignment is required or game doesn't load
 			}
-			
-			self.moveFile(name: name, toOffset: start)
+			self.shiftFileByDeletion(name: name, byOffset: start - locationForFile(name)!)
 		}
 		
 	}
@@ -537,7 +599,10 @@ class XGISO: NSObject {
 		let start = locationForFile(name)! + by
 		
 		if nextStart > start + size + 0x10 {
-			self.moveFile(name: name, toOffset: start)
+			self.shiftFileByDeletion(name: name, byOffset: by)
+		} else {
+			printg("couldn't shift down file \(name) as there is insufficient room.")
+			return false
 		}
 		return true
 	}
@@ -560,12 +625,40 @@ class XGISO: NSObject {
 		self.data.replaceBytesFromOffset(startOffset, withByteStream: bytes)
 	}
 	
+	@objc func shiftFileByDeletion(name: String, byOffset offset: Int) {
+		// shifts file by deleting empty bytes before/after and inserting empty bytes after/before the file
+		
+		if offset == 0 {
+			return
+		}
+		
+		if verbose {
+			printg("shifting iso file:", name, "by:", offset.hexString(), " bytes")
+		}
+		
+		let oldOffset = locationForFile(name)!
+		
+		if offset < 0 {
+			let zeroes = [Int](repeating: 0, count: -offset)
+			self.data.insertBytes(bytes: zeroes, atOffset: oldOffset + sizeForFile(name)!)
+			self.data.deleteBytes(start: oldOffset + offset, count: -offset)
+		} else {
+			self.data.deleteBytes(start: oldOffset + sizeForFile(name)!, count: offset)
+			let zeroes = [Int](repeating: 0, count: offset)
+			self.data.insertBytes(bytes: zeroes, atOffset: oldOffset)
+		}
+		
+		self.setStartOffset(offset: oldOffset + offset, forFile: name)
+	}
+	
 	@objc func save() {
 		if verbose {
 			printg("saving iso...")
 		}
 		self.data.save()
-		printg("saved iso!")
+		if verbose {
+			printg("saved iso")
+		}
 	}
 	
 	@objc class func extractTOC() -> XGMutableData {

@@ -395,8 +395,9 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("lockMovement", 18, 1, [.objectName("Player")], .null),
 		("freeMovement", 19, 1, [.objectName("Player")], .null),
 		
-		("receiveItem", 26, 3, [.objectName("Player"), .item, .integerQuantity], .null), //# (int amount, int ID)
-		("receiveItemSilently", 27, 3, [.objectName("Player"), .item, .integerQuantity], .null), //# (int item id, int quantity)
+		("receiveItem", 26, 3, [.objectName("Player"), .item, .integerQuantity], .bool), //# (int amount, int ID) -> bool success
+		// returns false if bag was full
+		("receiveItemSilently", 27, 3, [.objectName("Player"), .item, .integerQuantity], .bool), //# (int item id, int quantity) -> bool success
 		("hasItemInBag", 28, 2, [.objectName("Player"), .item], .bool), //# (int ID)
 		
 		("receiveMoney", 29, 2, [.objectName("Player"), .integerMoney], .null), //# (int amount) (can be < 0)
@@ -440,7 +441,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("receiveCoupons", 63, 2, [.objectName("Player"), .integerCoupons], .null), //# (int amount) (can be < 0)
 		("totalNumberOfShadowPokemon", 64, 1, [.objectName("Player")], .integer),
 		
-		("receiveItemSilentlyWithOptions", 67, 5, [.objectName("Player"), .integer, .integer, .item, .integerQuantity], .null), //# (int unk, int unk, int itemid, int quantity)
+		("obtainItem", 67, 5, [.objectName("Player"), .integerFloatOverload, .item, .integerQuantity, .bool], .null), //# (int message type, int itemid, int quantity, bool unknown)
 		("hasSpeciesInPC", 68, 2, [.objectName("Player"), .pokemon], .bool), //# (int species)
 		("releasePartyPokemon", 69, 2, [.objectName("Player"), .integerIndex], .bool), //# (int index). Returns 1 iff there was a valid Pokémon, 0 otherwise.
 		

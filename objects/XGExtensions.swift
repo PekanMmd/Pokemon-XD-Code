@@ -382,15 +382,7 @@ extension String {
 					}
 				}
 			}
-			var s = self.replacingOccurrences(of: " ", with: "")
-			s = s.replacingOccurrences(of: "-", with: "")
-			s = s.replacingOccurrences(of: "é", with: "e")
-			s = s.replacingOccurrences(of: ".", with: "")
-			s = s.replacingOccurrences(of: "'", with: "")
-			s = s.replacingOccurrences(of: "\"", with: "")
-			s = s.replacingOccurrences(of: "/", with: "")
-			s = s.replacingOccurrences(of: "\\", with: "")
-			return s.lowercased()
+			return result.lowercased()
 		}
 	}
 	
@@ -457,11 +449,11 @@ extension String {
 		if ss.peek() != "$" {
 			return -1
 		}
-		ss.pop() // remove leading $
+		ss.popVoid() // remove leading $
 		
 		// check if has an id
 		if ss.peek() == ":" {
-			ss.pop() // remove opening ':'
+			ss.popVoid() // remove opening ':'
 			var idText = ""
 			while ss.peek() != ":" {
 				idText += ss.pop()
@@ -495,19 +487,19 @@ extension String {
 		if ss.peek() != "$" {
 			return ""
 		}
-		ss.pop() // remove leading $
+		ss.popVoid() // remove leading $
 		
 		// check if has an id
 		if ss.peek() == ":" {
-			ss.pop() // remove opening ':'
+			ss.popVoid() // remove opening ':'
 			while ss.peek() != ":" {
-				ss.pop()
+				ss.popVoid()
 				if ss.isEmpty {
 					return ""
 				}
 			}
 			if ss.peek() == ":" {
-				ss.pop() // remove closing ':'
+				ss.popVoid() // remove closing ':'
 			}
 		}
 		

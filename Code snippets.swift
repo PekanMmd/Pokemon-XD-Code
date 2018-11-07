@@ -5505,74 +5505,6 @@ import Foundation
 //	.b(orbBranch + 0x4)
 //])
 
-//// poison touch ability
-//
-//// remove magma armour
-//XGAbilities.ability(40).name.duplicateWithString("Poison Touch").replace()
-//XGAbilities.ability(40).adescription.duplicateWithString("Contact may poison.").replace()
-//
-//let shadowFreezeRoutine =  [0x00, 0x02, 0x04, 0x1e, 0x12, 0x00, 0x00, 0x00, 0x14, 0x80, 0x41, 0x5c, 0x93, 0x1d, 0x12, 0x00, 0x00, 0x00, 0x07, 0x80, 0x41, 0x5e, 0xb9, 0x23, 0x12, 0x0f, 0x80, 0x41, 0x5c, 0xc6, 0x1f, 0x12, 0x19, 0x80, 0x41, 0x5e, 0x81, 0x1f, 0x12, 0x2f, 0x80, 0x41, 0x5e, 0x81, 0x1f, 0x12, 0x31, 0x80, 0x41, 0x5e, 0x81, 0x1d, 0x12, 0x00, 0x00, 0x00, 0x01, 0x80, 0x41, 0x5c, 0x93, 0x01, 0x80, 0x41, 0x5c, 0x93, 0x00, 0x00, 0x20, 0x12, 0x00, 0x4b, 0x80, 0x41, 0x6d, 0xb2, 0x0a, 0x0b, 0x04, 0x2f, 0x80, 0x4e, 0x85, 0xc3, 0x04, 0x17, 0x0b, 0x04, 0x29, 0x80, 0x41, 0x41, 0x0f,]
-//
-//let routine : (effect: Int, routine: [Int], offset: Int) = (162, shadowFreezeRoutine, 0xb99ce9)
-//XGAssembly.setMoveEffectRoutine(effect: routine.effect, fileOffset: routine.offset - kRELtoRAMOffsetDifference, moveToREL: true, newRoutine: routine.routine)
-//let magmaArmourOffset = 0x21443c - kDOLtoRAMOffsetDifference
-//XGAssembly.replaceASM(startOffset: magmaArmourOffset, newASM: [.nop,.nop,.nop])
-//
-//let poisonTouchBranch = 0x225580
-//let poisonTouchStart = 0xB9AA90
-//let poisonTouchReturn = poisonTouchStart + 0x70
-//let RNG16Bit = 0x25ca08
-//let animSoundCallback = 0x2236a8
-//let checkHasHP = 0x204a70
-//XGAssembly.replaceASM(startOffset: poisonTouchBranch - kDOLtoRAMOffsetDifference, newASM: [.b(poisonTouchStart)])
-//XGAssembly.replaceRELASM(startOffset: poisonTouchStart - kRELtoRAMOffsetDifference, newASM: [
-//
-//	.cmpwi(.r26, 1), // check move succeeded
-//	.bne(poisonTouchReturn),
-//
-//	.mr(.r3, .r30),
-//	.bl(checkHasHP),
-//	.cmpwi(.r3, 1),
-//	.bne(poisonTouchReturn),
-//
-//	.cmpwi(.r25, 1), // contact check
-//	.bne(poisonTouchReturn),
-//
-//	.cmpwi(.r16, ability("poison touch").index),
-//	.bne(poisonTouchReturn),
-//
-//	// get random number
-//	.bl(RNG16Bit),
-//
-//	// calculate random number % 10 (remainder)
-//	// result is random number between 0 and 9
-//	.mr(.r4, .r3),
-//	.li(.r3, 10),
-//	.divw(.r0, .r4, .r3),
-//	.mullw(.r0, .r0, .r3),
-//	.sub(.r0, .r4, .r0),
-//
-//	// activate if random number less than 3 (30% chance)
-//	.cmpwi(.r0, 2),
-//	.bgt(poisonTouchReturn),
-//
-//	// activate poison
-//	.lwz(.r0, .r13, -0x44e8),
-//	.ori(.r0, .r0, 0x2000),
-//	.stw(.r0, .r13, -0x44e8),
-//	.subi(.r5, .r13, 30816),
-//	.li(.r4, 2), // poison secondary effect
-//	.stb(.r4, .r5, 3),
-//	.lis(.r3, 0x8041),
-//	.addi(.r3, .r3, 31755),
-//	.bl(animSoundCallback),
-//	.li(.r17, 1),
-//
-//	// poison touch return 0x70
-//	.mr(.r3, .r17),
-//	.b(poisonTouchBranch + 4)
-//])
-
 //// ability capsule
 //
 //let capsuleFuncStart = 0xB9AB08
@@ -5883,7 +5815,7 @@ import Foundation
 //	.mr(.r4, .r25),
 //	.mr(.r25, .r3),
 //	.li(.r3, 0),
-//	.bl(0x1f65bc), // unknown func
+//	.bl(0x1f65bc), // set message param 41 to item
 //	.rlwinm(.r0, .r20, 0, 16, 31),
 //	.cmplwi(.r0, 23), // adjusted to max held item id for berries and white herb)
 //	.ble_f(0, 8),
@@ -6486,9 +6418,790 @@ import Foundation
 //// set confusion chance to hurt user to 1 in 3
 //let confusionStart = 0x2270f0
 //XGAssembly.replaceASM(startOffset: confusionStart - kDOLtoRAMOffsetDifference, newASM: [
-//	.cmpwi(.r3, 0x5555), // 1 in 3
+//	.cmplwi(.r3, 0x5555), // 1 in 3
 //	.bgt(0x227110), // not confused
 //])
+
+//// item activation function
+//let itemActivationStringID = 1426
+//let table = XGFiles.msg("fight")
+//let string = XGString(string: "[Pokemon 0x10]'s [Item 0x29] activated.", file: table, sid: itemActivationStringID)
+//_ = table.stringTable.addString(string, increaseSize: true, save: true)
+//
+//let itemActivationStart = 0xB9B3C0
+//let setMessageParam = 0x2370ec // r3 = param index, r4 = value
+//let getItemID = 0x203870
+//let getItemName = 0x15ef7c
+//let getString = 0x107300
+//let displayMessage = 0x20f568
+//let pause = 0x1ef5a4
+//let displayBattleMessage = 0xB9B41C
+//
+//// display an msg id in battle
+//let displayMessageStart = 0xB9B41C
+//XGAssembly.replaceRamASM(RAMOffset: displayMessageStart, newASM: [
+//	.stwu(.sp, .sp, -0x10),
+//	.mflr(.r0),
+//	.stw(.r0, .sp, 0x14),
+//	.bl(displayMessage),
+//	.li(.r3, 32),
+//	.bl(pause),
+//	.lwz(.r0, .sp, 0x14),
+//	.mtlr(.r0),
+//	.addi(.sp, .sp, 0x10),
+//	.blr
+//])
+//XGAssembly.replaceRamASM(RAMOffset: itemActivationStart, newASM: [
+//	.stwu(.sp, .sp, -0x10),
+//	.mflr(.r0),
+//	.stw(.r0, .sp, 0x14),
+//	.stmw(.r30, .sp, 0x8),
+//	.mr(.r31, .r3),
+//
+//	.mr(.r4, .r3),
+//	.li(.r3, 0x10),
+//	.bl(setMessageParam),
+//
+//	.mr(.r3, .r31),
+//	.bl(getItemID),
+//	.bl(getItemName),
+//	.bl(getString),
+//	.mr(.r4, .r3),
+//	.li(.r3, 0x29),
+//	.bl(setMessageParam),
+//
+//	.li(.r3, itemActivationStringID),
+//	.bl(displayBattleMessage),
+//	.nop,
+//
+//	.lmw(.r30, .sp, 0x8),
+//	.lwz(.r0, .sp, 0x14),
+//	.mtlr(.r0),
+//	.addi(.sp, .sp, 0x10),
+//	.blr
+//])
+//
+//// flame orb toxic orb poison heal
+//let orbBranch = 0x225ab4
+//let orbStart = 0xB9A8B4
+//let checkFullHP = 0x201d20
+//let checkStatus = 0x2025f0
+//let checkSetStatus = 0x20254c
+//let checkHasType = 0x2054fc
+//let setStatus = 0x2024a4
+//let checkNoStatus = 0x203744
+//let getHPFraction = 0x203688
+//let storeHPLoss = 0x13e094
+//let animSoundCallback = 0x2236a8
+//let getItem = 0x20384c // get item's hold item id
+//let itemMessage = 0xB9B3C0
+//
+//let healOffset = orbStart + 0x34
+//let flameOrbOffset = orbStart + 0x6c
+//let toxicOrbOffset = orbStart + 0xec
+//let returnOffset = orbStart + 0x174
+//
+//XGAssembly.replaceASM(startOffset: orbBranch - kDOLtoRAMOffsetDifference, newASM: [ .b(orbStart) ])
+//XGAssembly.replaceRELASM(startOffset: orbStart - kRELtoRAMOffsetDifference, newASM: [
+//
+//	.lhz(.r3, .r31, 0x80c), // get ability
+//	.cmpwi(.r3, ability("poison heal").index),
+//	.bne(flameOrbOffset),
+//	.mr(.r3, .r31),
+//	.li(.r4, 3), // poison
+//	.bl(checkStatus),
+//	.cmpwi(.r3, 1),
+//	.beq(healOffset),
+//	.mr(.r3, .r31),
+//	.li(.r4, 4), // bad poison
+//	.bl(checkStatus),
+//	.cmpwi(.r3, 1),
+//	.bne(flameOrbOffset),
+//
+//	//heal offset 0x34
+//	.mr(.r3, .r31),
+//	.bl(checkFullHP),
+//	.cmpwi(.r3, 1),
+//	.beq(flameOrbOffset),
+//	.mr(.r3, .r31),
+//	.li(.r4, 8), // 1/8 max hp
+//	.bl(getHPFraction),
+//	.rlwinm(.r0, .r3, 0, 16, 31),
+//	.neg(.r4, .r0),
+//	.mr(.r3, .r30),
+//	.bl(storeHPLoss),
+//	.lis(.r3, 0x8041),
+//	.addi(.r3, .r3, 31004),
+//	.bl(animSoundCallback),
+//
+//	// flame orb offset 0x6c
+//	.mr(.r3, .r31),
+//	.bl(getItem),
+//	.cmpwi(.r3, item("flame orb").data.holdItemID),
+//	.bne(toxicOrbOffset),
+//
+//	.mr(.r3, .r31),
+//	.li(.r4, XGMoveTypes.fire.rawValue),
+//	.bl(checkHasType),
+//	.cmpwi(.r3, 1),
+//	.beq(returnOffset),
+//
+//	.mr(.r3, .r31),
+//	.bl(checkNoStatus),
+//	.cmpwi(.r3, 1),
+//	.bne(returnOffset),
+//
+//	.nop,
+//	.nop,
+//	.nop,
+//
+//	// activate burn
+//	.mr(.r3, .r31),
+//	.li(.r4, 6), // burn
+//	.bl(checkSetStatus),
+//	.cmpwi(.r3, 2),
+//	.bne(returnOffset),
+//	.mr(.r3, .r31),
+//	.li(.r4, 6), // burn
+//	.li(.r5, 0),
+//	.bl(setStatus),
+//
+//
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.mr(.r3, .r31),
+//	.bl(itemMessage),
+//	.b(returnOffset),
+//
+//
+//	// toxic orb offset 0xec
+//	.cmpwi(.r3, item("toxic orb").data.holdItemID),
+//	.bne(returnOffset),
+//
+//	.mr(.r3, .r31),
+//	.li(.r4, XGMoveTypes.poison.rawValue),
+//	.bl(checkHasType),
+//	.cmpwi(.r3, 1),
+//	.beq(returnOffset),
+//
+//	.mr(.r3, .r31),
+//	.li(.r4, XGMoveTypes.steel.rawValue),
+//	.bl(checkHasType),
+//	.cmpwi(.r3, 1),
+//	.beq(returnOffset),
+//
+//	.mr(.r3, .r31),
+//	.bl(checkNoStatus),
+//	.cmpwi(.r3, 1),
+//	.bne(returnOffset),
+//
+//	.lhz(.r3, .r31, 0x80c), // get ability
+//	.cmpwi(.r3, ability("immunity").index),
+//	.beq(returnOffset),
+//
+//	// activate poison
+//
+//	.mr(.r3, .r31),
+//	.li(.r4, 4), // badly poisoned
+//	.bl(checkSetStatus),
+//	.cmpwi(.r3, 2),
+//	.bne(returnOffset),
+//	.mr(.r3, .r31),
+//	.li(.r4, 4), // badly poisoned
+//	.li(.r5, 0),
+//	.bl(setStatus),
+//
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.mr(.r3, .r31),
+//	.bl(itemMessage),
+//
+//	// return offset 0x174
+//	.lmw(.r28, .sp, 0x10), // overwritten code
+//	.b(orbBranch + 0x4)
+//])
+//
+//// sound moves hit through substitute
+//let subJumpBranch = 0x2135ac
+//let subJumpStart = 0xB9AF18
+//let getPokemonPointer = 0x1efcac
+//let getCurrentMove = 0x148d64
+//let moveGetSoundFlag = 0x13e548
+//let moveRoutineGetPosition = 0x2236f8
+//XGAssembly.replaceRamASM(RAMOffset: subJumpBranch, newASM: [
+//	.b(subJumpStart),
+//	.cmpwi(.r3, 1)
+//])
+//XGAssembly.replaceRamASM(RAMOffset: subJumpStart, newASM: [
+//	.cmpwi(.r3, 1),
+//	.beq_f(0, 8),
+//	.b(subJumpBranch + 4),
+//	.bl(moveRoutineGetPosition),
+//	.lwz(.r0, .r3, 2),
+//	.cmpwi(.r0, XGStatusEffects.substitute.rawValue),
+//	.beq_f(0, 8),
+//	.b(subJumpBranch + 4),
+//	.li(.r3, 17), // attacking pokemon
+//	.li(.r4, 0),
+//	.bl(getPokemonPointer),
+//	.bl(getCurrentMove),
+//	.bl(moveGetSoundFlag),
+//	.cmpwi(.r3, 1),
+//	.beq_f(0, 0xc),
+//	.li(.r3, 1),
+//	.b(subJumpBranch + 4),
+//	.li(.r3, 0),
+//	.b(subJumpBranch + 4),
+//
+//])
+//let subDamageBranch = 0x216054
+//let subDamageStart = 0xB9AF64
+////let moveGetSoundFlag = 0x13e548
+//XGAssembly.replaceRamASM(RAMOffset: subDamageBranch, newASM: [
+//	.b(subDamageStart),
+//	.nop
+//])
+//XGAssembly.replaceRamASM(RAMOffset: subDamageStart, newASM: [
+//	.cmpwi(.r3, 1),
+//	.beq_f(0, 0xc),
+//	.b(subDamageBranch + 8),
+//	// sound check
+//	.mr(.r3, .r28),
+//	.bl(moveGetSoundFlag),
+//	.cmpwi(.r3, 1),
+//	.bne_f(0, 8),
+//	// sound move so count as no sub
+//	.b(subDamageBranch + 8),
+//	// not sound move so count sub as normal
+//	.b(0x21614c)
+//])
+//let subReduceHPBranch = 0x215868
+//let subReduceHPStart = 0xB9AF88
+////let moveGetSoundFlag = 0x13e548
+//XGAssembly.replaceRamASM(RAMOffset: subReduceHPBranch, newASM: [
+//	.mr(.r18, .r3),
+//	.b(subReduceHPStart)
+//])
+//XGAssembly.replaceRamASM(RAMOffset: subReduceHPStart, newASM: [
+//	.cmpwi(.r3, 0),
+//	.bne_f(0, 8),
+//	.b(0x2158e0),
+//
+//	.mr(.r3, .r25),
+//	.bl(moveGetSoundFlag),
+//	.cmpwi(.r3, 1),
+//	.bne_f(0, 0xc),
+//
+//	.li(.r18, 0),
+//	.b(0x2158e0),
+//
+//	.b(subReduceHPBranch + 8)
+//
+//])
+//
+//let calcDamageBoostsBranch = 0x22a760
+//let calcDamageStart = 0xB9AFB0
+////let getItemID = 0x203870
+//XGAssembly.replaceRamASM(RAMOffset: calcDamageBoostsBranch, newASM: [
+//	.b(calcDamageStart)
+//])
+//XGAssembly.replaceRamASM(RAMOffset: calcDamageStart, newASM: [
+//	.label("muscle band check"),
+//	.cmpwi(.r28, item("muscle band").data.holdItemID),
+//	.bne_l("wise glasses check"),
+//	.cmpwi(.r24, XGMoveCategories.physical.rawValue),
+//	.bne_l("wise glasses check"),
+//	.lwz(.r3, .sp, 0x20), // item parameter
+//	.mullw(.r14, .r14, .r3),
+//	.li(.r3, 100),
+//	.divw(.r14, .r14, .r3),
+//
+//	.label("wise glasses check"),
+//	.cmpwi(.r28, item("wise glasses").data.holdItemID),
+//	.bne_l("knock off check"),
+//	.cmpwi(.r24, XGMoveCategories.special.rawValue),
+//	.bne_l("knock off check"),
+//	.lwz(.r3, .sp, 0x20), // item parameter
+//	.mullw(.r14, .r14, .r3),
+//	.li(.r3, 100),
+//	.divw(.r14, .r14, .r3),
+//
+//	.label("knock off check"),
+//	.mr(.r3, .r17),
+//	.lhz(.r3, .r3, 0x1c), // get move effect
+//	.cmpwi(.r3, move("knock off").data.effect),
+//	.bne_l("return"),
+//
+//	.mr(.r3, .r16), // defending pokemon
+//	.bl(getItemID),
+//	.cmpwi(.r3, 0),
+//	.beq_l("return"),
+//
+//	.mulli(.r14, .r14, 150),
+//	.li(.r3, 100),
+//	.divw(.r14, .r14, .r3),
+//
+//	.label("return"),
+//	.b(calcDamageBoostsBranch + 4)
+//])
+
+//// super effective type damage reducing berries
+//
+//for i in item("chople berry").index ... item("colbur berry").index {
+//	let itemData = XGItems.item(i).data
+//	let type = XGMoveTypes(rawValue: i - item("chilan berry").index) ?? .normal
+//	itemData.parameter = type.rawValue
+//	itemData.save()
+//	_ = itemData.descriptionString.duplicateWithString("Weakens one[New Line]super effective[New Line]\(type.name.lowercased()) type move.").replace()
+//}
+//var itemData = item("chilan berry").data
+//itemData.parameter = XGMoveTypes.normal.rawValue
+//itemData.save()
+//_ = itemData.descriptionString.duplicateWithString("A hold item[New Line]that weakens one[New Line]normal type move.").replace()
+//
+//itemData = item("dosha berry").data
+//itemData.parameter = 255
+//itemData.save()
+//_ = itemData.descriptionString.duplicateWithString("A hold item[New Line]that weakens one[New Line]shadow move.").replace()
+//
+//for i in item("chilan berry").index ... item("dosha berry").index {
+//	let itemData = XGItems.item(i).data
+//	itemData.holdItemID = 81
+//	itemData.friendshipEffects = [2,1,0]
+//	itemData.inBattleUseID = 0
+//	itemData.canBeHeld = true
+//	itemData.couponPrice = 50
+//	itemData.price = 20
+//	itemData.bagSlot = .berries
+//	itemData.save()
+//}
+//
+//let typeBerriesBranch = 0x215ffc
+//let typeBerriesStart = 0xB9B020
+//let getAdjustedMoveType = 0x13e134
+//let checkShadowMove = 0x13d03c
+//let getEffectiveness = 0x1f0684
+//let checkSetEffectiveness = 0x1f05d0
+//let setEffectiveness = 0x1f057c
+//let getStatsPointer = 0x148e0c
+////let getPokemonPointer = 0x1efcac
+//let getMoveRoutinePointer = 0x148da8
+//// set message id 20148 to pokemon's berry activated param 41 item
+//XGAssembly.replaceRamASM(RAMOffset: typeBerriesBranch, newASM: [.b(typeBerriesStart), .nop])
+//XGAssembly.replaceRamASM(RAMOffset: typeBerriesStart, newASM: [
+//	.cmpwi(.r23, item("haban berry").data.holdItemID), // all type berries use same id
+//	.bne_l("return"),
+//
+//	.mr(.r3, .r28),
+//	.bl(checkShadowMove),
+//	.cmpwi(.r3, 1),
+//	.bne_l("type check"),
+//
+//	.cmpwi(.r30, 0xff), // shadow berry parameter
+//	.beq_l("reduce damage"),
+//	.b_l("return"),
+//
+//	.label("type check"),
+//	.li(.r3, 17), // attacking pokemon
+//	.li(.r4, 0),
+//	.bl(getPokemonPointer),
+//	.bl(getMoveRoutinePointer),
+//	.bl(getAdjustedMoveType),
+//	.cmpw(.r3, .r30), // compare with item parameter
+//	.bne_l("return"),
+//
+//	.cmpwi(.r30, XGMoveTypes.normal.rawValue),
+//	.beq_l("reduce damage"),
+//
+//	.li(.r3, 17), // attacking pokemon
+//	.li(.r4, 0),
+//	.bl(getPokemonPointer),
+//	.bl(getMoveRoutinePointer),
+//	.li(.r4, XGStatusEffects.super_effective.rawValue),
+//	.bl(getEffectiveness),
+//	.cmpwi(.r3, 1),
+//	.bne_l("return"),
+//
+//	.label("reduce damage"),
+//	.mr(.r3, .r26),
+//	.li(.r4, XGStatusEffects.endured.rawValue),
+//	.bl(checkSetEffectiveness),
+//	.cmpwi(.r3, 2),
+//	.bne_l("return"),
+//
+//	.mr(.r3, .r26),
+//	.li(.r4, XGStatusEffects.endured.rawValue),
+//	.li(.r5, 0),
+//	.bl(setEffectiveness),
+//
+//	.li(.r3, 2),
+//	.divw(.r25, .r25, .r3), // halve damage
+//
+//	.label("return"),
+//	.cmpwi(.r25, 0),
+//	.bne_f(0, 8),
+//	.li(.r25, 1),
+//	.b(typeBerriesBranch + 4),
+//
+//])
+//let typeBerryRemoveBranches = [0x2152f0, 0x2153ec]
+//let typeBerryRemoveStart = 0xB9B0E8
+//let typeBerryRemoveEnd = 0x215470 // branch here when done
+//for branch in typeBerryRemoveBranches {
+//	XGAssembly.replaceRamASM(RAMOffset: branch, newASM: [
+//		.b(typeBerryRemoveStart),
+//		.nop
+//	])
+//}
+//XGAssembly.replaceRamASM(RAMOffset: typeBerryRemoveStart, newASM: [
+//	.li(.r28, 20148), // "[pokemon 0x10] endured the hit", changed to "[pokemon 0x10]'s [Item 0x29][New Line]weakened the move!"
+//	.li(.r3, 18), // defending pokemon
+//	.li(.r4, 0),
+//	.bl(getPokemonPointer),
+//	.lwz(.r3, .r3, 0),
+//	.li(.r4, 0),
+//	.sth(.r4, .r3, 6), // delete pokemon's item
+//	.b(typeBerryRemoveEnd)
+//])
+//
+//// Super luck
+//let superLuck = XGAbilities.ability(12)
+//_ = superLuck.name.duplicateWithString("Super Luck").replace()
+//_ = superLuck.adescription.duplicateWithString("Increases critical rate.").replace()
+//
+//let superLuckBranch = 0x216fa0
+//let superLuckStart = 0xB9B108
+//let getAbility = 0x2055c8
+////let getPokemonPointer = 0x1efcac
+//XGAssembly.replaceRamASM(RAMOffset: superLuckBranch, newASM: [.b(superLuckStart)])
+//XGAssembly.replaceRamASM(RAMOffset: superLuckStart, newASM: [
+//	.rlwinm(.r25, .r0, 0, 16, 31), // overwritten code
+//	.li(.r3, 17), // attacking pokemon
+//	.li(.r4, 0),
+//	.bl(getPokemonPointer),
+//	.bl(getAbility),
+//	.cmpwi(.r3, ability("super luck").index),
+//	.bne_f(0, 8),
+//	.addi(.r25, .r25, 1),
+//	.b(superLuckBranch + 4),
+//])
+//
+//// wide lens aura stabiliser
+//let lensBranch = 0x217968
+//let lensStart = 0xB9B12C
+////let getItemID = 0x203870
+//let getItemParameter = 0x15eee0
+////let getItem = 0x20384c // get item's hold item id
+////let getPokemonPointer = 0x1efcac
+////let checkShadowMove = 0x13d03c
+//XGAssembly.replaceRamASM(RAMOffset: lensBranch, newASM: [.b(lensStart)])
+//XGAssembly.replaceRamASM(RAMOffset: lensStart, newASM: [
+//
+//	.li(.r3, 17), // attacking pokemon
+//	.li(.r4, 0),
+//	.bl(getPokemonPointer),
+//	.bl(getItem),
+//	.cmpwi(.r3, item("wide lens").data.holdItemID),
+//	.beq_l("accuracy boost"),
+//
+//	.cmpwi(.r3, item("aura stabiliser").data.holdItemID),
+//	.bne_l("return"),
+//
+//	.mr(.r3, .r20), // current move
+//	.bl(checkShadowMove),
+//	.cmpwi(.r3, 1),
+//	.bne_l("return"),
+//
+//	.label("accuracy boost"),
+//	.li(.r3, 17), // attacking pokemon
+//	.li(.r4, 0),
+//	.bl(getPokemonPointer),
+//	.bl(getItemID),
+//	.bl(getItemParameter),
+//	.mullw(.r22, .r22, .r3),
+//	.li(.r3, 100),
+//	.divw(.r22, .r22, .r3),
+//
+//	.label("return"),
+//	.rlwinm(.r0, .r25, 0, 16, 31), // overwritten
+//	.b(lensBranch + 4)
+//])
+//
+//// function check if move was successful
+//// check flinched, frozen, sleep, move failed, missed, protected, etc.
+//let checkAttackedStart = 0xB9B300
+//let checkMoveDidntFail = 0x1f04fc
+////let getMoveRoutinePointer = 0x148da8
+////let checkStatus = 0x2025f0
+////let getPokemonPointer = 0x1efcac
+//XGAssembly.replaceRamASM(RAMOffset: checkAttackedStart, newASM: [
+//	.stwu(.sp, .sp, -0x20),
+//	.mflr(.r0),
+//	.stw(.r0, .sp, 0x24),
+//	.stmw(.r30, .sp, 0x10),
+//
+//	.li(.r3, 17), // attacking pokemon
+//	.li(.r4, 0),
+//	.bl(getPokemonPointer),
+//	.mr(.r30, .r3),
+//
+//	.li(.r4, XGStatusEffects.freeze.rawValue),
+//	.bl(checkStatus),
+//	.cmpwi(.r3, 1),
+//	.bne_f(0, 0xc),
+//	.li(.r3, 0),
+//	.b_l("return"),
+//
+//	.mr(.r3, .r30),
+//	.li(.r4, XGStatusEffects.sleep.rawValue),
+//	.bl(checkStatus),
+//	.cmpwi(.r3, 1),
+//	.bne_f(0, 0xc),
+//	.li(.r3, 0),
+//	.b_l("return"),
+//
+//	.mr(.r3, .r30),
+//	.li(.r4, XGStatusEffects.flinched.rawValue),
+//	.bl(checkStatus),
+//	.cmpwi(.r3, 1),
+//	.bne_f(0, 0xc),
+//	.li(.r3, 0),
+//	.b_l("return"),
+//
+//	.mr(.r3, .r30),
+//	.li(.r4, XGStatusEffects.must_recharge.rawValue),
+//	.bl(checkStatus),
+//	.cmpwi(.r3, 1),
+//	.bne_f(0, 0xc),
+//	.li(.r3, 0),
+//	.b_l("return"),
+//
+//	.lbz(.r3, .r30, 0x83c), // check fully paralysed
+//	.cmpwi(.r3, 1),
+//	.bne_f(0, 0xc),
+//	.li(.r3, 0),
+//	.b_l("return"),
+//
+//
+//	.mr(.r3, .r30),
+//	.bl(getMoveRoutinePointer),
+//	.bl(checkMoveDidntFail),
+//
+//	.label("return"),
+//	.lmw(.r30, .sp, 0x10),
+//	.lwz(.r0, .sp, 0x24),
+//	.mtlr(.r0),
+//	.addi(.sp, .sp, 0x20),
+//	.blr
+//])
+
+// poison touch ability
+//
+//// remove magma armour
+//XGAbilities.ability(40).name.duplicateWithString("Poison Touch").replace()
+//XGAbilities.ability(40).adescription.duplicateWithString("Contact may poison.").replace()
+//
+//let shadowFreezeRoutine =  [0x00, 0x02, 0x04, 0x1e, 0x12, 0x00, 0x00, 0x00, 0x14, 0x80, 0x41, 0x5c, 0x93, 0x1d, 0x12, 0x00, 0x00, 0x00, 0x07, 0x80, 0x41, 0x5e, 0xb9, 0x23, 0x12, 0x0f, 0x80, 0x41, 0x5c, 0xc6, 0x1f, 0x12, 0x19, 0x80, 0x41, 0x5e, 0x81, 0x1f, 0x12, 0x2f, 0x80, 0x41, 0x5e, 0x81, 0x1f, 0x12, 0x31, 0x80, 0x41, 0x5e, 0x81, 0x1d, 0x12, 0x00, 0x00, 0x00, 0x01, 0x80, 0x41, 0x5c, 0x93, 0x01, 0x80, 0x41, 0x5c, 0x93, 0x00, 0x00, 0x20, 0x12, 0x00, 0x4b, 0x80, 0x41, 0x6d, 0xb2, 0x0a, 0x0b, 0x04, 0x2f, 0x80, 0x4e, 0x85, 0xc3, 0x04, 0x17, 0x0b, 0x04, 0x29, 0x80, 0x41, 0x41, 0x0f,]
+//
+//let routine : (effect: Int, routine: [Int], offset: Int) = (162, shadowFreezeRoutine, 0xb99ce9)
+//XGAssembly.setMoveEffectRoutine(effect: routine.effect, fileOffset: routine.offset - kRELtoRAMOffsetDifference, moveToREL: true, newRoutine: routine.routine)
+//let magmaArmourOffset = 0x21443c - kDOLtoRAMOffsetDifference
+//XGAssembly.replaceASM(startOffset: magmaArmourOffset, newASM: [.nop,.nop,.nop])
+//
+//let poisonTouchBranch = 0x225580
+//let poisonTouchStart = 0xB9B1D8
+//let RNG16Bit = 0x25ca08
+////let animSoundCallback = 0x2236a8
+//let checkHasHP = 0x204a70
+//let checkAttackSuccess = 0xB9B184
+//XGAssembly.replaceASM(startOffset: poisonTouchBranch - kDOLtoRAMOffsetDifference, newASM: [.b(poisonTouchStart)])
+//XGAssembly.replaceRamASM(RAMOffset: poisonTouchStart, newASM: [
+//
+//	.cmpwi(.r26, 1), // check move succeeded
+//	.bne_l("return"),
+//
+//	.bl(checkAttackSuccess),
+//	.cmpwi(.r3, 1), // check wasn't prevented by status
+//	.bne_l("return"),
+//
+//	.mr(.r3, .r31), // defending pokemon
+//	.bl(checkHasHP),
+//	.cmpwi(.r3, 1),
+//	.bne_l("return"),
+//
+//	.cmpwi(.r25, 1), // contact check
+//	.bne_l("return"),
+//
+//	.cmpwi(.r16, ability("poison touch").index),
+//	.bne_l("return"),
+//
+//	// get random number
+//	.bl(RNG16Bit),
+//
+//	// calculate random number % 10 (remainder)
+//	// result is random number between 0 and 9
+//	.li(.r4, 10),
+//	.divw(.r0, .r3, .r4),
+//	.mullw(.r0, .r0, .r4),
+//	.sub(.r0, .r3, .r0),
+//
+//	// activate if random number less than 3 (30% chance)
+//	.cmpwi(.r0, 2),
+//	.bgt_l("return"),
+//
+//	// activate poison
+//	.lwz(.r0, .r13, -0x44e8),
+//	.ori(.r0, .r0, 0x2000),
+//	.stw(.r0, .r13, -0x44e8),
+//	.subi(.r5, .r13, 30816),
+//	.li(.r4, 2), // poison secondary effect
+//	.stb(.r4, .r5, 3),
+//	.lis(.r3, 0x8041),
+//	.addi(.r3, .r3, 31755),
+//	.bl(animSoundCallback),
+//	.li(.r17, 1),
+//
+//	.label("return"),
+//	.mr(.r3, .r17),
+//	.b(poisonTouchBranch + 4)
+//])
+//
+//// rocky helmet, spiky shield fix
+//let rockyHelmetFixBranch = 0xb99414
+//let rockyHelmetFixStart = 0xB9B2A8
+////let checkAttackSuccess = 0xB9B184
+//XGAssembly.replaceRamASM(RAMOffset: rockyHelmetFixBranch, newASM: [.b(rockyHelmetFixStart)])
+//XGAssembly.replaceRamASM(RAMOffset: rockyHelmetFixStart, newASM: [
+//	.cmpwi(.r26, 1),
+//	.bne_l("fail"),
+//	.bl(checkAttackSuccess),
+//	.cmpwi(.r3, 1),
+//	.bne_l("fail"),
+//
+//	.mr(.r3, .r30), // attacking pokemon
+//	.bl(checkHasHP),
+//	.cmpwi(.r3, 1),
+//	.bne_l("fail"),
+//
+//	.label("success"),
+//	.b(rockyHelmetFixBranch + 0xc),
+//	.label("fail"),
+//	.b(rockyHelmetFixBranch + 8),
+//
+//])
+//
+//let hpCheckStart = 0xB9B27C
+//XGAssembly.replaceRamASM(RAMOffset: hpCheckStart, newASM: [
+//	.stwu(.sp, .sp, -0x10),
+//	.mflr(.r0),
+//	.stw(.r0, .sp, 0x14),
+//
+//	.li(.r3, 17),
+//	.li(.r4, 0),
+//	.bl(getPokemonPointer),
+//	.bl(checkHasHP),
+//
+//	.lwz(.r0, .sp, 0x14),
+//	.mtlr(.r0),
+//	.addi(.sp, .sp, 0x10),
+//	.blr
+//
+//])
+//// life orb fix
+//let fixBranch = 0xb9a208
+//let lifeOrbFixStart = 0xB9B2D4
+//XGAssembly.replaceRamASM(RAMOffset: fixBranch, newASM: [
+//	.b(lifeOrbFixStart)
+//])
+//XGAssembly.replaceRamASM(RAMOffset: lifeOrbFixStart, newASM: [
+//	.cmpwi(.r26, 1),
+//	.bne_l("fail"),
+//	.bl(checkAttackSuccess),
+//	.cmpwi(.r3, 1),
+//	.bne_l("fail"),
+//
+//	.mr(.r3, .r30), // attacking pokemon
+//	.bl(checkHasHP),
+//	.cmpwi(.r3, 1),
+//	.bne_l("fail"),
+//
+//	.label("success"),
+//	.b(0xb9a20c),
+//	.label("fail"),
+//	.b(0xb9a28c),
+//])
+//
+//// remove sleep talk and snore
+//XGAssembly.replaceRamASM(RAMOffset: 0x226cdc, newASM: [
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//])
+//
+//// set confusion chance to hurt user to 1 in 3
+//let confusionStart = 0x2270f0
+//XGAssembly.replaceASM(startOffset: confusionStart - kDOLtoRAMOffsetDifference, newASM: [
+//	.cmplwi(.r3, 0xaaaa), // 1 in 3
+//	.blt(0x227110), // not confused
+//])
+//
+//// spread moves on water absorb, volt absorb, flash fire
+//XGAssembly.replaceRamASM(RAMOffset: 0x2255a4, newASM: [.stmw(.r23, .sp, 0x8)])
+//XGAssembly.replaceRamASM(RAMOffset: 0x2257bc, newASM: [.lmw(.r23, .sp, 0x8)])
+//XGAssembly.replaceRamASM(RAMOffset: 0x2255f0, newASM: [
+//	.mr(.r29, .r3),
+//	.li(.r23, 0),
+//	.mr(.r3, .r28),
+//])
+//for offset in [0x22566c, 0x22567c, 0x2256ac, 0x2256bc, 0x22573c, 0x22574c, 0x225784, 0x225794] {
+//	XGAssembly.replaceRamASM(RAMOffset: offset, newASM: [.mr(.r23, .r3)])
+//}
+//let absorbRoutineBranch = 0x2257b8
+//let absorbStart = 0xB9B444
+//let getTargets = 0x13e784
+//let setMoveRoutinePosition = 0x2236d4
+////let animSoundCallback = 0x2236a8
+//XGAssembly.replaceRamASM(RAMOffset: absorbRoutineBranch, newASM: [.b(absorbStart)])
+//XGAssembly.replaceRamASM(RAMOffset: absorbStart, newASM: [
+//
+//	.cmpwi(.r23, 0),
+//	.beq_l("return false"),
+//	.mr(.r3, .r23),
+//	.bl(animSoundCallback),
+//
+//	.mr(.r3, .r24),
+//	.bl(getTargets),
+//	.cmpwi(.r3, XGMoveTargets.bothFoesAndAlly.rawValue),
+//	.bne_l("end routine"),
+//
+//	.lis(.r3, 0x8041),
+//	.addi(.r3, .r3, 0x59a9),
+//	.bl(setMoveRoutinePosition),
+//	.b_l("return true"),
+//
+//	.label("end routine"),
+//	.lis(.r3, 0x8041),
+//	.addi(.r3, .r3, 0x4119),
+//	.bl(setMoveRoutinePosition),
+//
+//	.label("return true"),
+//	.li(.r3, 1),
+//	.b(absorbRoutineBranch + 4),
+//
+//	.label("return false"),
+//	.li(.r3, 0),
+//	.b(absorbRoutineBranch + 4)
+//])
+
+
+
+
 
 
 

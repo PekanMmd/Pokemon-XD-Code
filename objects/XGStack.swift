@@ -21,7 +21,7 @@ class XGStack<T>: NSObject {
 	
 	func popVoid() {
 		// so I don't get so many compiler warnings about not using the return value
-		self.pop()
+		self.popVoid()
 	}
 	
 	func peek() -> T {
