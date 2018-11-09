@@ -1236,6 +1236,9 @@ extension XDSScriptCompiler {
 										return nil
 									}
 									
+								} else if let newName = renamedFunctions[functionName] {
+									error = "Function: \(functionName) has been renamed to: \(newName)\nPlease edit the script."
+									return nil
 								} else {
 									error = "Unrecognised function: \(functionName)"
 									return nil
@@ -1298,6 +1301,9 @@ extension XDSScriptCompiler {
 									} else {
 										return nil
 									}
+								} else if let newName = renamedClasses[variableName] {
+									error = "Class: \(variableName) has been renamed to: \(newName)\nPlease edit the script."
+									return nil
 								} else {
 									error = "Invalid class or global variable name: '\(variableName)'"
 									return nil
@@ -1305,6 +1311,9 @@ extension XDSScriptCompiler {
 								
 								if let finfo = XGScriptClass.classes(classIndex).functionWithName(functionName) {
 									functionIndex = finfo.index
+								} else if let newName = renamedFunctions[XGScriptClass.classes(classIndex).name + "." + functionName] {
+									error = "\(XGScriptClass.classes(classIndex).name) function: \(functionName) has been renamed to: \(newName)\nPlease edit the script."
+									return nil
 								} else {
 									error = "Unrecognised function: '\(functionName)', for class: '\(XGScriptClass.classes(classIndex).name)'"
 									return nil
@@ -1319,6 +1328,9 @@ extension XDSScriptCompiler {
 								
 								if let cinfo = XGScriptClass.getClassNamed(localClassName) {
 									classIndex = cinfo.index
+								} else if let newName = renamedClasses[localClassName] {
+									error = "Class: \(localClassName) has been renamed to: \(newName)\nPlease edit the script."
+									return nil
 								} else {
 									error = "Invalid class name: '\(localClassName)' on token: '\(token)'"
 									return nil
@@ -1326,6 +1338,9 @@ extension XDSScriptCompiler {
 								
 								if let finfo = XGScriptClass.classes(classIndex).functionWithName(functionName) {
 									functionIndex = finfo.index
+								} else if let newName = renamedFunctions[XGScriptClass.classes(classIndex).name + "." + functionName] {
+									error = "\(XGScriptClass.classes(classIndex).name) function: \(functionName) has been renamed to: \(newName)\nPlease edit the script."
+									return nil
 								} else {
 									error = "Unrecognised function: '\(functionName)', for class: '\(XGScriptClass.classes(classIndex).name)'"
 									return nil

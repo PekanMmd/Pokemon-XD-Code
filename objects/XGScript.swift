@@ -213,24 +213,26 @@ class XGScript: NSObject {
 		
 		let linebreak = "-----------------------------------\n"
 		
-		// check for rel file in same folder
-		if self.mapRel == nil {
-			let relFile = XGFiles.nameAndFolder(self.file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, self.file.folder)
-			if relFile.exists {
-				let rel = XGMapRel(file: relFile, checkScript: false)
-				if rel.isValid {
-					mapRel = rel
+		if self.file != .common_rel {
+			// check for rel file in same folder
+			if self.mapRel == nil {
+				let relFile = XGFiles.nameAndFolder(self.file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, self.file.folder)
+				if relFile.exists {
+					let rel = XGMapRel(file: relFile, checkScript: false)
+					if rel.isValid {
+						mapRel = rel
+					}
 				}
 			}
-		}
-		
-		// if still not found, check for rel file in rels folder
-		if self.mapRel == nil {
-			let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
-			if relFile.exists {
-				let rel = XGMapRel(file: relFile, checkScript: false)
-				if rel.isValid {
-					mapRel = rel
+			
+			// if still not found, check for rel file in rels folder
+			if self.mapRel == nil {
+				let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
+				if relFile.exists {
+					let rel = XGMapRel(file: relFile, checkScript: false)
+					if rel.isValid {
+						mapRel = rel
+					}
 				}
 			}
 		}
@@ -2051,24 +2053,26 @@ class XGScript: NSObject {
 		// creates xds text from expressions
 		// can follow a similar process to decompile to other programming or scripting languages
 		
-		// check for rel file in same folder
-		if self.mapRel == nil {
-			let relFile = XGFiles.nameAndFolder(self.file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, self.file.folder)
-			if relFile.exists {
-				let rel = XGMapRel(file: relFile, checkScript: false)
-				if rel.isValid {
-					mapRel = rel
+		if self.file != .common_rel {
+			// check for rel file in same folder
+			if self.mapRel == nil {
+				let relFile = XGFiles.nameAndFolder(self.file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, self.file.folder)
+				if relFile.exists {
+					let rel = XGMapRel(file: relFile, checkScript: false)
+					if rel.isValid {
+						mapRel = rel
+					}
 				}
 			}
-		}
-		
-		// if still not found, check for rel file in rels folder
-		if self.mapRel == nil {
-			let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
-			if relFile.exists {
-				let rel = XGMapRel(file: relFile, checkScript: false)
-				if rel.isValid {
-					mapRel = rel
+			
+			// if still not found, check for rel file in rels folder
+			if self.mapRel == nil {
+				let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
+				if relFile.exists {
+					let rel = XGMapRel(file: relFile, checkScript: false)
+					if rel.isValid {
+						mapRel = rel
+					}
 				}
 			}
 		}

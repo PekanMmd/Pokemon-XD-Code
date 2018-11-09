@@ -6930,6 +6930,29 @@ import Foundation
 //	.rlwinm(.r0, .r25, 0, 16, 31), // overwritten
 //	.b(lensBranch + 4)
 //])
+
+//// aura stabiliser prevents reverse mode
+//let reverseBranch = 0x226818
+//let reverseStart = 0xB9B614
+//let getItem = 0x20384c // get item's hold item id
+//XGAssembly.replaceRamASM(RAMOffset: reverseBranch, newASM: [.b(reverseStart)])
+//XGAssembly.replaceRamASM(RAMOffset: reverseStart, newASM: [
+//
+//	.mr(.r3, .r30), // pokemon
+//	.bl(getItem),
+//	.cmpwi(.r3, item("aura stabiliser").data.holdItemID),
+//	.beq_l("skip"),
+//
+//	.label("no skip"),
+//	.mr(.r3, .r30), // overwritten
+//	.b(reverseBranch + 4),
+//
+//	.label("skip"),
+//	.li(.r3, 0),
+//	.b(0x226b20)
+//])
+
+
 //
 //// function check if move was successful
 //// check flinched, frozen, sleep, move failed, missed, protected, etc.
@@ -7199,6 +7222,197 @@ import Foundation
 //	.b(absorbRoutineBranch + 4)
 //])
 
+//// new gale wings, prankster
+//let priorityAbilitiesBranches = [0x1f43ec, 0x1f43f8]
+//let priorityAbilitiesStart = 0xB9B490
+//let getCurrentMove = 0x2045b4
+//let getPriority = 0x13e7b8
+//let getAbility = 0x2055c8
+//let getType = 0x13e870
+//let getCategory = 0x13e7f0
+//for branch in priorityAbilitiesBranches {
+//	XGAssembly.replaceRamASM(RAMOffset: branch, newASM: [.bl(priorityAbilitiesStart)])
+//}
+//XGAssembly.replaceRamASM(RAMOffset: priorityAbilitiesStart, newASM: [
+//	.stwu(.sp, .sp, -0x10),
+//	.mflr(.r0),
+//	.stw(.r0, .sp, 0x14),
+//	.stmw(.r30, .sp, 0x8),
+//
+//	.mr(.r31, .r3),
+//	.bl(getCurrentMove),
+//	.mr(.r30, .r3),
+//	.bl(getPriority),
+//	.cmpwi(.r3, 0),
+//	.bne_l("no boost"),
+//
+//	.mr(.r3, .r31),
+//	.bl(getAbility),
+//	.cmpwi(.r3, ability("prankster").index),
+//	.beq_l("prankster check"),
+//	.cmpwi(.r3, ability("gale wings").index),
+//	.bne_l("no boost"),
+//
+//	.label("gale wings check"),
+//	.mr(.r3, .r30),
+//	.bl(getType),
+//	.cmpwi(.r3, XGMoveTypes.flying.rawValue),
+//	.beq_l("boost priority"),
+//	.b_l("no boost"),
+//
+//	.label("prankster check"),
+//	.mr(.r3, .r30),
+//	.bl(getCategory),
+//	.cmpwi(.r3, XGMoveCategories.none.rawValue),
+//	.beq_l("boost priority"),
+//	.b_l("no boost"),
+//
+//	.label("boost priority"),
+//	.li(.r3, 1),
+//	.b_l("return"),
+//
+//	.label("no boost"),
+//	.mr(.r3, .r30),
+//	.bl(getPriority),
+//
+//	.label("return"),
+//	.lmw(.r30, .sp, 0x8),
+//	.lwz(.r0, .sp, 0x14),
+//	.mtlr(.r0),
+//	.addi(.sp, .sp, 0x10),
+//	.blr
+//])
+//
+//// new trick room tailwind
+//let trickStart = 0xB9B51C
+//let trickBranch = 0x1f4430
+//let getPokemonPointer = 0x1efcac
+//let getFieldEffect = 0x1f84e0
+//XGAssembly.replaceRamASM(RAMOffset: trickBranch, newASM: [.bl(trickStart)])
+//XGAssembly.replaceRamASM(RAMOffset: trickStart, newASM: [
+//	.stwu(.sp, .sp, -0x10),
+//	.mflr(.r0),
+//	.stw(.r0, .sp, 0x14),
+//	.stw(.r28, .sp, 0x8),
+//	.stw(.r31, .sp, 0xc),
+//
+//	.mr(.r3, .r26),
+//	.li(.r4, 2),
+//	.bl(getPokemonPointer),
+//	.mr(.r31, .r3),
+//
+//	.mr(.r3, .r25),
+//	.li(.r4, 2),
+//	.bl(getPokemonPointer),
+//	.mr(.r28, .r3),
+//
+//	.label("tail wind checks"),
+//	.li(.r4, XGStatusEffects.safeguard.rawValue), // edited to tailwind
+//	.bl(getFieldEffect),
+//	.cmpwi(.r3, 1),
+//	.bne_f(0, 8),
+//	.rlwinm(.r29, .r29, 1, 0, 30), // double speed
+//
+//	.mr(.r3, .r31),
+//	.li(.r4, XGStatusEffects.safeguard.rawValue), // edited to tailwind
+//	.bl(getFieldEffect),
+//	.cmpwi(.r3, 1),
+//	.bne_f(0, 8),
+//	.rlwinm(.r30, .r30, 1, 0, 30), // double speed
+//
+//	.label("trick room checks"),
+//	.mr(.r3, .r28),
+//	.li(.r4, XGStatusEffects.mist.rawValue), // edited to trick room
+//	.bl(getFieldEffect),
+//	.cmpwi(.r3, 1),
+//	.beq_l("compare reversed"),
+//
+//	.mr(.r3, .r31),
+//	.li(.r4, XGStatusEffects.mist.rawValue), // edited to trick room
+//	.bl(getFieldEffect),
+//	.cmpwi(.r3, 1),
+//	.beq_l("compare reversed"),
+//
+//	.label("compare normal"),
+//	.cmplw(.r29, .r30),
+//	.b_l("return"),
+//
+//	.label("compare reversed"),
+//	.cmplw(.r30, .r29),
+//
+//	.label("return"),
+//	.lwz(.r28, .sp, 0x8),
+//	.lwz(.r31, .sp, 0xc),
+//	.lwz(.r0, .sp, 0x14),
+//	.mtlr(.r0),
+//	.addi(.sp, .sp, 0x10),
+//	.blr
+//])
+//
+//
+//
+//// new skill link
+//let skillBranches = [0x221d70, 0x221d98]
+//let skillStart = 0xB9B5C8
+//for branch in skillBranches {
+//	XGAssembly.replaceRamASM(RAMOffset: branch, newASM: [.bl(skillStart)])
+//}
+//XGAssembly.replaceRamASM(RAMOffset: skillStart, newASM: [
+//	.rlwinm(.r4, .r0, 0, 24, 31),
+//	.subi(.r3, .r31, 1608),
+//	.lhz(.r3, .r3, 0x80c),
+//	.cmpwi(.r3, ability("skill link").index),
+//	.bne_l("return"),
+//	.li(.r4, 5),
+//
+//	.label("return"),
+//	.blr
+//])
+//
+//// new magic coat mirror match check
+//// prevents infinite loops of magic bounce
+//// if user has magic bounce then ignore target magic bounce
+//let magicBranch = 0x218568
+//let magicCheckStart  = 0xB9B5E4
+//let magicTrueOffset  = 0x21856c
+//let magicFalseOffset = 0x2185dc
+//let getAbilityb = 0x148898
+//XGAssembly.replaceRamASM(RAMOffset: magicBranch, newASM: [.b(magicCheckStart)])
+//XGAssembly.replaceRamASM(RAMOffset: magicCheckStart, newASM: [
+//
+//	.bne_l("magic false"),
+//	.mr(.r3, .r29),
+//	.bl(getAbilityb),
+//	.cmpwi(.r3, ability("magic bounce").index),
+//	.beq_l("magic false"),
+//
+//	.label("magic true"),
+//	.b(magicTrueOffset),
+//
+//	.label("magic false"),
+//	.b(magicFalseOffset)
+//])
+//
+//// new sash/sturdy shedinja check
+//// prevents focus sash from activating on shedinja since sash is infinite
+//// works by skipping focus sash checks if pokemon has 1hp
+////
+//let shedinjaBranch = 0x216010
+//let shedinjaTrueBranch = 0x216048
+//let shedinjaFalseBranch = 0x216014
+//let shedinjaCheckStart = 0xB9B600
+//XGAssembly.replaceRamASM(RAMOffset: shedinjaBranch, newASM: [.b(shedinjaCheckStart)])
+//XGAssembly.replaceRamASM(RAMOffset: shedinjaCheckStart, newASM: [
+//	.cmpwi(.r31, 1), // current hp
+//	.beq_l("skip sash"),
+//
+//	.cmpwi(.r23, item("focus sash").data.holdItemID),
+//	.label("check sash"),
+//	.b(shedinjaBranch + 4),
+//
+//	.label("skip sash"),
+//	.b(0x216048)
+//])
 
 
 

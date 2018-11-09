@@ -52,7 +52,7 @@ class GoDSpotViewController: GoDTableViewController {
 		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
 		let spot = rowToSpot(row: row)
-		cell.setTitle(pokemon.name.string + "\n" + spot.string + " Pokespot : " + pokemon.index.string)
+		cell.setTitle(pokemon.name.string)
 		cell.setImage(image: pokemon.face)
 		
 		switch spot {

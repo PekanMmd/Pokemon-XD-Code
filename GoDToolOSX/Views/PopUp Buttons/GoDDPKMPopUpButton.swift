@@ -30,7 +30,8 @@ class GoDDPKMPopUpButton: GoDPopUpButton {
 			values.append(XGDeckPokemon.dpkm(i, deck))
 		}
 		let titles = values.map { (mon) -> String in
-			return "(\(mon.DPKMIndex)) Lv." + "\(mon.level)" + " " + mon.pokemon.name.string
+			let free = mon.isSet || mon.DPKMIndex == 0 ? "" : "(unused) "
+			return free + "\(mon.DPKMIndex) Lv." + "\(mon.level) " + mon.pokemon.name.string
 		}
 		
 		self.setTitles(values: titles)

@@ -35,6 +35,8 @@ class GoDPokemonView: NSImageView {
 	var shadowFlee = NSTextField(frame: .zero)
 	var shadowBoost = GoDLevelPopUpButton()
 	
+	var updateDPKM = false
+	
 	var views = [String : NSView]()
 	var metrics = [String : NSNumber]()
 	
@@ -58,6 +60,11 @@ class GoDPokemonView: NSImageView {
 			self.setBackgroundColour(GoDDesign.colourPurple())
 		} else {
 			self.setBackgroundColour(GoDDesign.colourLightGrey())
+		}
+		
+		if updateDPKM {
+			self.dpkm.setUpItems()
+			updateDPKM = false
 		}
 		
 		for key in views.keys {
@@ -409,6 +416,7 @@ class GoDPokemonView: NSImageView {
 			 if gr == .maleOnly   { self.delegate.pokemon[self.index].gender = .male }
 		else if gr == .femaleOnly { self.delegate.pokemon[self.index].gender = .female }
 		else if gr == .genderless { self.delegate.pokemon[self.index].gender = .genderless }
+		updateDPKM = true
 		
 		self.setUp()
 	}
@@ -507,6 +515,7 @@ class GoDPokemonView: NSImageView {
 		self.setAggression(sender: shadowAggression)
 		self.setCatch(sender: shadowCatchrate)
 		self.setCounter(sender: shadowCounter)
+		
 		
 	}
 	

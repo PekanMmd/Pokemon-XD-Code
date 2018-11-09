@@ -191,8 +191,8 @@ class XGISO: NSObject {
 					continue
 				}
 				
-				if oldsize! != newsize {
-					printg("file size doesn't match: " + filename)
+				if oldsize! < newsize {
+					printg("file too large: " + filename)
 					printg("Skipping file. In order to include this file, enable file size increases.")
 					if filesTooLargeForReplacement == nil {
 						filesTooLargeForReplacement = [XGFiles]()
@@ -201,12 +201,7 @@ class XGISO: NSObject {
 					continue
 				}
 				
-				var byteStream = data.byteStream
-				if newsize < oldsize! {
-					byteStream += [Int](repeatElement(0, count: oldsize! - newsize))
-				}
-				
-				isodata.replaceBytesFromOffset(start!, withByteStream: byteStream)
+				self.replaceDataForFile(filename: file.fileName, withData: data, saveWhenDone: false)
 			}
 			
 			isodata.save()
@@ -274,12 +269,19 @@ class XGISO: NSObject {
 		let nextStart = index == allFileNames.count - 1 ? data.length : locationForFile(filesOrdered[index + 1])!
 		if start! + newsize > nextStart {
 			printg("file too large:", filename)
+			if filesTooLargeForReplacement == nil {
+				filesTooLargeForReplacement = [XGFiles]()
+			}
+			filesTooLargeForReplacement! += [data.file]
 			return
 		}
 		
 		self.setSize(size: newsize, forFile: filename)
 		
 		let isodata = self.data
+		if oldsize! > newsize {
+			self.eraseDataForFile(name: filename)
+		}
 		isodata.replaceBytesFromOffset(start!, withByteStream: data.byteStream)
 		
 		if save {
@@ -478,12 +480,19 @@ class XGISO: NSObject {
 		eraseDataForFile(name: name)
 		
 		if locationForFile(name) != nil {
-			if name.fileExtensions == ".fsys" {
-				// prevents crashes when querying fsys data
-				self.data.replaceBytesFromOffset(locationForFile(name)!, withByteStream: NullFSYS.byteStream)
-				setSize(size: NullFSYS.length, forFile: name)
-			} else {
-				setSize(size: 16, forFile: name)
+			if let size = sizeForFile(name) {
+				if name.fileExtensions == ".fsys" {
+					if size >= NullFSYS.length {
+						// prevents crashes when querying fsys data
+//						self.data.replaceBytesFromOffset(locationForFile(name)!, withByteStream: NullFSYS.byteStream)
+//						setSize(size: NullFSYS.length, forFile: name)
+						self.shiftAndReplaceFileEfficiently(name: name, withData: NullFSYS)
+					}
+				} else {
+					if size >= 16 {
+						setSize(size: 16, forFile: name)
+					}
+				}
 			}
 		}
 		if save {
@@ -747,8 +756,11 @@ class XGISO: NSObject {
 	
 	@objc func extractMenuFSYS() {
 		let menus = self.allFileNames.filter { (s) -> Bool in
-			return s.contains("menu") && s.contains(".fsys")
+			return s.contains("menu") && s.contains(".fsys") && !["ex_","Script_t","test","TEST","carde", "debug", "DNA", "keydisc","_fr.","_ge.","_it.", "_sp."].contains(where: { (str) -> Bool in
+				return s.contains(str)
+			})
 		}
+		
 		for file in self.menuFsysList + menus {
 			let xgf = XGFiles.nameAndFolder(file, .MenuFSYS)
 			if !xgf.exists {
@@ -942,6 +954,7 @@ class XGISO: NSObject {
 		ISO.extractRels()
 		printg("extracting: collision data")
 		ISO.extractCols()
+		printg("extraction complete")
 	}
 	
 }

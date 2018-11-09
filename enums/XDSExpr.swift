@@ -486,7 +486,7 @@ indirect enum XDSExpr {
 			return c.asInt != 0 ? "YES" : "NO"
 		case .flag:
 			if let flag = XDSFlags(rawValue: c.asInt) {
-				return macroWithName("FLAG_" + flag.name.simplified.uppercased())
+				return macroWithName("FLAG_" + flag.name.underscoreSimplified.uppercased())
 			}
 			return macroWithName("FLAG_" + c.asInt.string)
 		case .null:
@@ -502,7 +502,7 @@ indirect enum XDSExpr {
 			if mon.nameID == 0 {
 				return macroWithName("POKEMON_" + c.asInt.string)
 			}
-			return macroWithName("POKEMON_" + mon.name.string.simplified.uppercased())
+			return macroWithName("POKEMON_" + mon.name.string.underscoreSimplified.uppercased())
 		case .item:
 			if c.asInt == 0 {
 				return macroWithName("item_none".uppercased())
@@ -514,7 +514,7 @@ indirect enum XDSExpr {
 			if item.nameID == 0 {
 				return macroWithName("ITEM_" + c.asInt.string)
 			}
-			return macroWithName("ITEM_" + item.name.string.simplified.uppercased())
+			return macroWithName("ITEM_" + item.name.string.underscoreSimplified.uppercased())
 		case .model:
 			if c.asInt == 0 {
 				return macroWithName("model_none".uppercased())
@@ -523,7 +523,7 @@ indirect enum XDSExpr {
 			if !fsys.identifiers.contains(c.asInt) {
 				return macroWithName("MODEL_" + c.asInt.hex())
 			}
-			return macroWithName("MODEL_" + XGCharacterModels.modelWithIdentifier(id: c.asInt).name.simplified.uppercased())
+			return macroWithName("MODEL_" + XGCharacterModels.modelWithIdentifier(id: c.asInt).name.underscoreSimplified.uppercased())
 		case .move:
 			if c.asInt == 0 {
 				return macroWithName("move_none".uppercased())
@@ -535,13 +535,13 @@ indirect enum XDSExpr {
 			if move.nameID == 0 {
 				return macroWithName("MOVE_" + c.asInt.string)
 			}
-			return macroWithName("MOVE_" + move.name.string.simplified.uppercased())
+			return macroWithName("MOVE_" + move.name.string.underscoreSimplified.uppercased())
 		case .room:
 			if c.asInt == 0 {
 				return macroWithName("room_none".uppercased())
 			}
 			if let room = XGRoom.roomWithID(c.asInt) {
-				return macroWithName("ROOM_" + room.name.simplified.uppercased())
+				return macroWithName("ROOM_" + room.name.underscoreSimplified.uppercased())
 			}
 			return macroWithName("ROOM_" + (XGRoom.roomWithID(c.asInt) ?? XGRoom(index: 0)).name.simplified.uppercased())
 		case .battlefield:
@@ -549,14 +549,14 @@ indirect enum XDSExpr {
 				return macroWithName("battlefield_none".uppercased())
 			}
 			if let room = XGRoom.roomWithID(c.asInt) {
-				return macroWithName("BATTLEFIELD_" + room.name.simplified.uppercased())
+				return macroWithName("BATTLEFIELD_" + room.name.underscoreSimplified.uppercased())
 			}
 			return macroWithName("BATTLEFIELD_" + c.asInt.string)
 		case .msg:
 			return macroForString(xs: getStringSafelyWithID(id: c.asInt))
 		case .talk:
 			if let type = XDSTalkTypes(rawValue: c.asInt) {
-				return macroWithName("SPEECH_TYPE_" + type.string.simplified.uppercased())
+				return macroWithName("SPEECH_TYPE_" + type.string.underscoreSimplified.uppercased())
 			} else {
 				return macroWithName("SPEECH_TYPE_" + c.asInt.string.simplified.uppercased())
 			}
@@ -568,7 +568,7 @@ indirect enum XDSExpr {
 			if ability.nameID == 0 {
 				return macroWithName("ABILITY_" + c.asInt.string)
 			}
-			return macroWithName("ABILITY_" + ability.name.string.simplified.uppercased())
+			return macroWithName("ABILITY_" + ability.name.string.underscoreSimplified.uppercased())
 		case .msgVar:
 			if let sp = XGSpecialCharacters(rawValue: c.asInt) {
 				var text = sp.string
@@ -606,17 +606,17 @@ indirect enum XDSExpr {
 			if c.asInt == 0 {
 				return macroWithName("shadow_pokemon_none".uppercased())
 			}
-			return macroWithName("SHADOW_" + XGDeckPokemon.ddpk(c.asInt).pokemon.name.string.simplified.uppercased()  + String(format: "_%02d", c.asInt))
+			return macroWithName("SHADOW_" + XGDeckPokemon.ddpk(c.asInt).pokemon.name.string.underscoreSimplified.uppercased()  + String(format: "_%02d", c.asInt))
 		case .treasureID:
 			if c.asInt == 0 {
 				return macroWithName("treasure_none".uppercased())
 			}
-			return macroWithName("TREASURE_" + XGTreasure(index: c.asInt).item.name.string.simplified.uppercased() + String(format: "_%03d", c.asInt))
+			return macroWithName("TREASURE_" + XGTreasure(index: c.asInt).item.name.string.underscoreSimplified.uppercased() + String(format: "_%03d", c.asInt))
 		case .pokespot:
 			guard let spot = XGPokeSpots(rawValue: c.asInt) else {
 				printg("error unknown pokespot");return "error unknown pokespot"
 			}
-			return macroWithName("POKESPOT_" + spot.string.simplified.uppercased())
+			return macroWithName("POKESPOT_" + spot.string.underscoreSimplified.uppercased())
 		case .partyMember:
 			switch c.asInt {
 			case 0:
@@ -656,7 +656,7 @@ indirect enum XDSExpr {
 			if c.asInt <= kNumberOfGiftPokemon && c.asInt > 0 {
 				let gift = XGGiftPokemonManager.allGiftPokemon()[c.asInt]
 				let type = gift.giftType.underscoreSimplified.uppercased()
-				let species = gift.species.name.string.simplified.uppercased()
+				let species = gift.species.name.string.underscoreSimplified.uppercased()
 				return macroWithName(type + species)
 			}
 			if c.asInt == 0 {

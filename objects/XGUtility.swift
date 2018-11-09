@@ -184,7 +184,7 @@ class XGUtility {
 		
 		var substrings = [String]()
 		if game == .XD {
-			substrings = ["ex_","Script_t","test","TEST","carde", "debug", "DNA", "keydisc"]
+			substrings = ["ex_","Script_t","_test","TEST","carde", "debug", "DNA", "keydisc"]
 			if region != .EU  {
 				substrings += ["_fr.","_ge.","_it.", "_sp."]
 			}
@@ -194,7 +194,7 @@ class XGUtility {
 		
 		for file in ISO.allFileNames {
 			for substring in substrings {
-				if file.contains(substring) {
+				if file.contains(substring) && !file.contains("wzx") && !file.contains("pkx") {
 					ISO.deleteFileAndPreserve(name: file, save: false)
 				}
 			}

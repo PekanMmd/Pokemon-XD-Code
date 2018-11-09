@@ -9,7 +9,7 @@
 import Cocoa
 
 var verbose = false
-var increaseFileSizes = false
+var increaseFileSizes = true
 let date = Date(timeIntervalSinceNow: 0)
 var logString = ""
 

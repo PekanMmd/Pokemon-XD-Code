@@ -1723,14 +1723,27 @@ extension XGUtility {
 			for poke in deck.allPokemon {
 				let spec = poke.species.stats
 				
-				     if spec.genderRatio == .maleOnly { poke.gender = .male }
-				else if spec.genderRatio == .femaleOnly { poke.gender = .female }
-				else if spec.genderRatio == .genderless { poke.gender = .genderless }
-				else if poke.gender == .genderless { poke.gender = .female }
+				if spec.genderRatio == .maleOnly {
+					if poke.gender != .male {
+						poke.gender = .male
+						poke.save()
+					}
+				}
+				else if spec.genderRatio == .femaleOnly {
+					if poke.gender != .female {
+						poke.gender = .female
+						poke.save()
+					}
+				}
+				else if spec.genderRatio == .genderless {
+					if poke.gender != .genderless {
+						poke.gender = .genderless
+						poke.save()
+					}
+				}
 				
-				if (spec.ability2.index == 0) && (poke.ability == 1) { poke.ability = 0 }
+				if (spec.ability2.index == 0) && (poke.ability == 1) { poke.ability = 0; poke.save() }
 				
-				poke.save()
 			}
 		}
 	}

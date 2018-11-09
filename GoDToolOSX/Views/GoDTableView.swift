@@ -40,7 +40,7 @@ class GoDTableView: NSScrollView {
 		self.tableView.intercellSpacing = NSSize(width: 0, height: 0)
 		
 		let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "col"))
-		column.minWidth = CGFloat(width)
+		column.minWidth = CGFloat(truncating: width)
 		column.title = "XD:GoD"
 		self.tableView.addTableColumn(column)
 		

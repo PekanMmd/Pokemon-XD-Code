@@ -7,6 +7,12 @@
 
 import Cocoa
 
+// if a function or class needs to be renamed then set the old name as the key
+// and new name as value and compiler will give a warning if encountered
+// function name should include class name e.g. getFlag, Character.talk, Array.get
+let renamedFunctions = [String : String]()
+let renamedClasses = [String : String]()
+
 class XDSScriptCompiler: NSObject {
 	typealias XDSCode = [UInt32]
 	

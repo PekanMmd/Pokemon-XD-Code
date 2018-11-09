@@ -24,7 +24,7 @@ class GoDDDPKPopUpButton: GoDPopUpButton {
 			values.append(XGDeckPokemon.ddpk(i))
 		}
 		let titles = values.map { (mon) -> String in
-			return "(\(mon.index)) Shadow " + mon.pokemon.name.string
+			return  mon.pokemon.name.string + " (shadow) - \(mon.index)"
 		}
 		
 		self.setTitles(values: titles)
