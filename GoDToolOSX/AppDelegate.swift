@@ -166,6 +166,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				
 				text += "\n\nSet 'ISO > Enable File Size Increases' to include them."
 				filesTooLargeForReplacement = nil
+				
 				XGThreadManager.manager.runInForegroundAsync {
 					self.displayAlert(title: "Quick Build Incomplete", text: text)
 				}
@@ -189,7 +190,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		XGThreadManager.manager.runInBackgroundAsync {
 			XGUtility.compileAllFiles()
 			if filesTooLargeForReplacement != nil  {
-				filesTooLargeForReplacement = nil
+				
 				var text = "Files too large to replace:"
 				
 				for file in filesTooLargeForReplacement! {
@@ -197,6 +198,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				}
 				
 				text += "\n\nSet 'ISO > Enable File Size Increases' to include them."
+				filesTooLargeForReplacement = nil
 				
 				XGThreadManager.manager.runInForegroundAsync {
 					self.displayAlert(title: "Reuild Incomplete", text: text)

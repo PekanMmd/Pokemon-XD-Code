@@ -1556,12 +1556,18 @@ extension XGUtility {
 		for macro in macros {
 			switch macro {
 			case .macroImmediate(let c, let t):
+				let macroText = XDSExpr.stringFromMacroImmediate(c: c, t: t)
 				let val = c.asInt >= 0x200 ? c.asInt.hexString() + " // \(c.asInt)" : c.asInt.string + " // \(c.asInt.hexString())"
-				let contents = "define " + XDSExpr.stringFromMacroImmediate(c: c, t: t) + " \(val)"
+				let contents = "define " + macroText + " \(val)"
 				let trigger = contents + "\t" + t.typeName
 				var completion = [String : String]()
 				completion["trigger"] = trigger
 				completion["contents"] = contents
+				completions.append(completion)
+				
+				completion = [String : String]()
+				completion["trigger"] = macroText + "\t" + t.typeName + " " + val
+				completion["contents"] = macroText
 				completions.append(completion)
 			default:
 				break
@@ -1576,7 +1582,6 @@ extension XGUtility {
 		
 		let prefix = game == .XD ? (forXG ? "XG " : "XD ") : " Colosseum"
 		
-		documentTMs()
 		documentItems()
 		documentMoves(title: prefix + "Moves", forXG: forXG)
 		documentTrades()
@@ -1594,6 +1599,7 @@ extension XGUtility {
 		documentMtBattlePokemon()
 		documentGiftShadowPokemon()
 		saveObtainablePokemonByLocation(prefix: prefix)
+		documentTMs()
 	}
 	
 	
@@ -2187,7 +2193,7 @@ extension XGUtility {
 	class func documentTMs() {
 		
 		let fileName = "TM Locations"
-		printg("documenting " + fileName + "...")
+		printg("documenting " + fileName + "\nThis may take a while...")
 		
 		let locations = getTMLocations()
 		

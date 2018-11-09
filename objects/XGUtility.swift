@@ -73,8 +73,7 @@ class XGUtility {
 		compileAllMapFsys()
 		compileAllMenuFsys()
 		importFsys()
-		
-		ISO.importAllFiles()
+		ISO.importFiles(XGFolders.FSYS.files.filter({  $0.fileType == .fsys }) + [XGFiles.dol])
 	}
 	
 	class func importRels() {
@@ -184,7 +183,7 @@ class XGUtility {
 		
 		var substrings = [String]()
 		if game == .XD {
-			substrings = ["ex_","Script_t","_test","TEST","carde", "debug", "DNA", "keydisc"]
+			substrings = ["Script_t","_test", "debug", "DNA", "keydisc"]
 			if region != .EU  {
 				substrings += ["_fr.","_ge.","_it.", "_sp."]
 			}
@@ -196,14 +195,6 @@ class XGUtility {
 			for substring in substrings {
 				if file.contains(substring) && !file.contains("wzx") && !file.contains("pkx") {
 					ISO.deleteFileAndPreserve(name: file, save: false)
-				}
-			}
-			if game == .XD {
-				for i in 1 ... 7 {
-					let b1Name = "B1_\(i).fsys"
-					if file == b1Name {
-						ISO.deleteFileAndPreserve(name: file, save: false)
-					}
 				}
 			}
 		}

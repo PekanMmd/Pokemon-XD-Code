@@ -296,7 +296,7 @@ class XGISO: NSObject {
 		}
 		if file.fileName == XGFiles.dol.fileName || file.fileName == XGFiles.toc.fileName {
 			self.replaceDataForFile(filename: file.fileName, withData: file.data!, saveWhenDone: false)
-		} else if self.allFileNames.contains(file.fileName) {
+		} else if self.allFileNames.contains(file.fileName) && file.exists {
 			self.shiftAndReplaceFileEfficiently(name: file.fileName, withData: file.data!)
 		} else {
 			printg("file not found:", file.fileName)
@@ -334,7 +334,7 @@ class XGISO: NSObject {
 					
 					let index = orderedIndexForFile(name: file)
 					let nextStart = index == filesOrdered.count - 1 ? self.data.length : locationForFile(filesOrdered[index + 1])!
-					let difference = nextStart - end - 0x10
+					let difference = nextStart - end
 					
 					if difference > 0 {
 						deletedBytes += difference
@@ -345,15 +345,17 @@ class XGISO: NSObject {
 							for previous in shiftUpFiles {
 								self.setStartOffset(offset: locationForFile(previous)! - difference, forFile: previous, saveToc: false)
 							}
+							shiftUpFiles = [file] + shiftUpFiles
+							
 						}
 					}
 					
-					shiftUpFiles = [file] + shiftUpFiles
+					
 				}
 				
 				if file == name {
 					switchToShiftUp = true
-					shiftUpFiles = [file] + shiftUpFiles
+					shiftUpFiles = [file]
 				}
 				
 				if !switchToShiftUp {
@@ -472,14 +474,14 @@ class XGISO: NSObject {
 	
 	@objc func deleteFileAndPreserve(name: String, save: Bool) {
 		// replaces file with a dummy fsys container
-		if name == "Game.toc" || name == "Start.dol" {
+		if name == XGFiles.toc.fileName || name == XGFiles.dol.fileName {
 			printg("\(name) cannot be deleted")
 			return
 		}
 		printg("deleting ISO file: \(name)")
-		eraseDataForFile(name: name)
 		
 		if locationForFile(name) != nil {
+			eraseDataForFile(name: name)
 			if let size = sizeForFile(name) {
 				if name.fileExtensions == ".fsys" {
 					if size >= NullFSYS.length {
