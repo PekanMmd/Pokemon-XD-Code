@@ -7,7 +7,9 @@
 //
 //
 
-
+//for file in XGFolders.Col.files where file.fileExtension == .ccd {
+//	file.rename
+//}
 
 
 XGAssembly.ASMfreeSpacePointer().hexString().println()

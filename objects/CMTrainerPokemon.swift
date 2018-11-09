@@ -169,14 +169,8 @@ class XGTrainerPokemon : NSObject {
 		if self.species.index > 0 {
 			data.replaceByteAtOffset(start + kPokemonPokeballOffset, withByte: self.pokeball.index)
 			for offset in kFFOffsets {
-				data.replaceByteAtOffset(start + offset, withByte: 0xFF)
-			}
-		} else {
-			data.replaceByteAtOffset(start + kPokemonPokeballOffset, withByte: 0x0)
-			for offset in kFFOffsets {
 				data.replaceByteAtOffset(start + offset, withByte: 0x00)
 			}
-			self.purge()
 		}
 		
 		data.replace2BytesAtOffset(start + kPokemonSpeciesOffset, withBytes: species.index)
@@ -201,6 +195,13 @@ class XGTrainerPokemon : NSObject {
 		data.replace2BytesAtOffset(start + kPokemonMove3Offset, withBytes: moves[2].index)
 		data.replace2BytesAtOffset(start + kPokemonMove4Offset, withBytes: moves[3].index)
 		
+		if self.species.index == 0 {
+			data.replaceByteAtOffset(start + kPokemonPokeballOffset, withByte: 0x0)
+			for offset in kFFOffsets {
+				data.replaceByteAtOffset(start + offset, withByte: 0xFF)
+			}
+			self.purge()
+		}
 		
 		
 		data.save()

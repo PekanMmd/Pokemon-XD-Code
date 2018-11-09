@@ -21,7 +21,11 @@ class GoDItemPopUpButton: GoDPopUpButton {
 	}
 	
 	func selectItem(item: XGItems) {
-		self.selectItem(withTitle: item.name.string)
+		if item.index < kNumberOfItems {
+			self.selectItem(withTitle: item.name.string)
+		} else {
+			self.selectItem(at: 0)
+		}
 	}
 	
 	override func setUpItems() {

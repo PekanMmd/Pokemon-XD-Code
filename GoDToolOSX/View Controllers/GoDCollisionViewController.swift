@@ -36,7 +36,7 @@ class GoDCollisionViewController: GoDTableViewController {
 	
 	var cols : [XGFiles] {
 		return XGFolders.Col.files.filter({ (file) -> Bool in
-			return file.fileType == .col
+			return file.fileType == .ccd
 		}).sorted(by: { (f1, f2) -> Bool in
 			return f1.fileName < f2.fileName
 		})
@@ -79,7 +79,7 @@ class GoDCollisionViewController: GoDTableViewController {
 		if cols.count == 0 {
 			
 			cell.setBackgroundColour(GoDDesign.colourWhite())
-			cell.setTitle("No .col files found in collision data folder.\nExtract ISO and try again.")
+			cell.setTitle("No .ccd files found in collision data folder.\nExtract ISO and try again.")
 			
 			return cell
 		}

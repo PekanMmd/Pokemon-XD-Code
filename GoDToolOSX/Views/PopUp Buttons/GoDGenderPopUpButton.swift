@@ -20,8 +20,11 @@ class GoDGenderPopUpButton: GoDPopUpButton {
 	
 	override func setUpItems() {
 		var values = [String]()
-		
-		for g in [XGGenders.male,XGGenders.female,XGGenders.genderless, XGGenders.random] {
+		var genders : [XGGenders] =  [.male,.female,.genderless]
+		if game == .Colosseum {
+			genders += [.random]
+		}
+		for g in genders {
 			values.append(g.string)
 		}
 		

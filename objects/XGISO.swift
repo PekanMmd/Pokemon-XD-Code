@@ -915,13 +915,13 @@ class XGISO: NSObject {
 	
 	@objc func extractCols() {
 		for file in XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files where file.fileType == .fsys {
-			let col = XGFiles.col(file.fileName.removeFileExtensions())
+			let col = XGFiles.ccd(file.fileName.removeFileExtensions())
 			if !col.exists {
 				if verbose {
 					printg("extracting col: \(col.fileName)")
 				}
 				let fsys = file.fsysData
-				let data = fsys.decompressedDataForFileWithFiletype(type: .col)
+				let data = fsys.decompressedDataForFileWithFiletype(type: .ccd)
 				if let d = data {
 					d.file = col
 					d.save()

@@ -52,7 +52,7 @@ indirect enum XGFiles {
 	case xds(String)
 	case texture(String)
 	case rel(String)
-	case col(String)
+	case ccd(String)
 	case json(String)
 	case iso
 	case toc
@@ -95,7 +95,7 @@ indirect enum XGFiles {
 				case .toc					: return "Game" + XGFileTypes.toc.fileExtension
 				case .log(let d)			: return d.description + XGFileTypes.txt.fileExtension
 				case .rel(let s)			: return s + XGFileTypes.rel.fileExtension
-				case .col(let s)			: return s + XGFileTypes.col.fileExtension
+				case .ccd(let s)			: return s + XGFileTypes.ccd.fileExtension
 				case .json(let s)			: return s + XGFileTypes.json.fileExtension
 				case .iso					: return (game == .Colosseum ? "Colosseum" : "XD") + XGFileTypes.iso.fileExtension
 				case .nameAndFolder(let name, _) : return name
@@ -127,7 +127,7 @@ indirect enum XGFiles {
 				case .toc				: folder = .Documents
 				case .log				: folder = .Logs
 				case .rel				: folder = .Rels
-				case .col				: folder = .Col
+				case .ccd				: folder = .Col
 				case .json				: folder = .JSON
 				case .original(let f)	: folder = f.folder
 				case .fsys				: 		 if XGFolders.FSYS.filenames.contains(self.fileName) { folder = .FSYS}
@@ -350,7 +350,7 @@ indirect enum XGFiles {
 		let baseName = self.fileName.removeFileExtensions()
 		let fsysFile = XGFiles.nameAndFolder(baseName + XGFileTypes.fsys.fileExtension, .AutoFSYS)
 		let rel = XGFiles.rel(baseName)
-		let col = XGFiles.col(baseName)
+		let col = XGFiles.ccd(baseName)
 		let scd = XGFiles.scd(baseName)
 		let msg = XGFiles.msg(baseName)
 		
@@ -369,7 +369,7 @@ indirect enum XGFiles {
 				fsys.shiftAndReplaceFileWithType(.msg, withFile: msg.compress(), save: false)
 			}
 			if col.exists {
-				fsys.shiftAndReplaceFileWithType(.col, withFile: col.compress(), save: true)
+				fsys.shiftAndReplaceFileWithType(.ccd, withFile: col.compress(), save: true)
 			}
 		}
 		
@@ -380,7 +380,7 @@ indirect enum XGFiles {
 		let baseName = self.fileName.removeFileExtensions()
 		let fsysFile = XGFiles.nameAndFolder(baseName + XGFileTypes.fsys.fileExtension, .MenuFSYS)
 		let rel = XGFiles.rel(baseName)
-		let col = XGFiles.col(baseName)
+		let col = XGFiles.ccd(baseName)
 		let scd = XGFiles.scd(baseName)
 		
 		if fsysFile.exists {
@@ -395,7 +395,7 @@ indirect enum XGFiles {
 				fsys.shiftAndReplaceFileWithType(.scd, withFile: scd.compress(), save: false)
 			}
 			if col.exists {
-				fsys.shiftAndReplaceFileWithType(.col, withFile: col.compress(), save: true)
+				fsys.shiftAndReplaceFileWithType(.ccd, withFile: col.compress(), save: true)
 			}
 		}
 		

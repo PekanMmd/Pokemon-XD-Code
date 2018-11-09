@@ -12,7 +12,7 @@ enum XGFileTypes : Int {
 	case none = 0x00
 	case rdat = 0x02 // room model in hal dat format (unknown if it uses a different file extension)
 	case dat  = 0x04 // character model in hal dat format
-	case col  = 0x06 // collision file
+	case ccd  = 0x06 // collision file
 	case samp = 0x08 // shorter music files for fanfares etc.
 	case msg  = 0x0a // string table
 	case fnt  = 0x0c // font
@@ -56,7 +56,7 @@ enum XGFileTypes : Int {
 		case .none: return ""
 		case .rdat: return ".rdat"
 		case .dat : return ".dat"
-		case .col : return ".col"
+		case .ccd : return ".ccd"
 		case .samp: return ".samp"
 		case .msg : return ".msg"
 		case .fnt : return ".fnt"
