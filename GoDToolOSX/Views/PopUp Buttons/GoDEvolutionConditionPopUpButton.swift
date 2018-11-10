@@ -46,15 +46,25 @@ class GoDEvolutionConditionPopUpButton: GoDPopUpButton {
 		
 		switch method {
 		case .levelUp:
-			values = levelPopUp.itemTitles
+			fallthrough
+		case .equalAttack:
+			fallthrough
+		case .moreAttack:
+			fallthrough
+		case .moreDefense:
+			fallthrough
+		case .silcoon:
+			fallthrough
+		case .cascoon:
+			fallthrough
 		case .shedinja:
-			values = levelPopUp.itemTitles
+			fallthrough
 		case .ninjask:
 			values = levelPopUp.itemTitles
 		case .evolutionStone:
-			values = allItemsList()
+			fallthrough
 		case .levelUpWithKeyItem:
-			values = allItemsList()
+			fallthrough
 		case .tradeWithItem:
 			values = allItemsList()
 		default:
