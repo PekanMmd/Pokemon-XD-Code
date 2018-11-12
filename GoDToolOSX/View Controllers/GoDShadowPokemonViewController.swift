@@ -31,7 +31,6 @@ class GoDShadowPokemonViewController: GoDTableViewController {
 			let row = self.table.selectedRow
 			self.allShadows = XGDecks.DeckDarkPokemon.allPokemon
 			self.table.reloadData()
-			self.table.selectedRow = row
 			self.tableView(self.table, didSelectRow: row)
 			self.hideActivityView()
 		}
@@ -41,7 +40,9 @@ class GoDShadowPokemonViewController: GoDTableViewController {
 		self.showActivityView {
 			self.pokemonView.prepareForSave()
 			self.currentPokemon.save()
-			self.reloadAllData()
+			let row = self.table.selectedRow
+			self.table.reloadData()
+			self.tableView(self.table, didSelectRow: row)
 			self.hideActivityView()
 		}
 	}
@@ -80,15 +81,15 @@ class GoDShadowPokemonViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		super.tableView(tableView, didSelectRow: row)
 		if row == -1 {
 			return
 		}
 		self.showActivityView {
-			self.currentPokemon = XGDeckPokemon.ddpk(row).data
+			self.currentPokemon = self.allShadows[row]
 			
 			self.pokemonView.setUp()
 			
-			self.table.reloadData()
 			self.hideActivityView()
 		}
 		

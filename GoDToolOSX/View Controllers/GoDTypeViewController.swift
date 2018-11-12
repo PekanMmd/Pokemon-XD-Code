@@ -164,6 +164,7 @@ class GoDTypeViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		super.tableView(tableView, didSelectRow: row)
 		if row >= 0 {
 			self.currentType = XGType(index: row)
 			self.setUp()

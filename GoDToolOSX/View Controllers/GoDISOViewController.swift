@@ -191,6 +191,7 @@ class GoDISOViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		super.tableView(tableView, didSelectRow: row)
 		if row >= 0 {
 			let name = ISO.allFileNames.sorted()[row]
 			self.currentFile = .nameAndFolder(name, .ISOExport(name.removeFileExtensions()))

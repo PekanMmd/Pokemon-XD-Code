@@ -77,7 +77,9 @@ indirect enum XDSMacroTypes {
 	case integerByte
 	case integerUnsignedByte
 	case integerUnsigned
-	case datsIdentifier // id for a .dats model archive
+	case integerBitMask
+	case datsIdentifier // id for a .dats model archive]
+	case camIdentifier // id for a .cam file
 	
 	case vector
 	case arrayIndex
@@ -140,7 +142,9 @@ indirect enum XDSMacroTypes {
 		case .integerByte: return 207
 		case .integerUnsignedByte: return 208
 		case .integerUnsigned: return 209
-		case .datsIdentifier: return 210
+		case .integerBitMask: return 210
+		case .datsIdentifier: return 211
+		case .camIdentifier: return 212
 			
 		// more gaps
 		case .vector: return 300
@@ -180,6 +184,37 @@ indirect enum XDSMacroTypes {
 	
 	var printsAsMacro : Bool {
 		return self < XDSMacroTypes.integer && self > XDSMacroTypes.null
+	}
+	
+	var printsAsHexadecimal : Bool {
+		switch self {
+		case .room:
+			fallthrough
+		case .battlefield:
+			fallthrough
+		case .integerUnsigned:
+			fallthrough
+		case .datsIdentifier:
+			fallthrough
+		case .camIdentifier:
+			fallthrough
+		case .flag:
+			fallthrough
+		case .integerBitMask:
+			fallthrough
+		case .invalid:
+			fallthrough
+		case .model:
+			return true
+		case .optional(let t):
+			return t.printsAsHexadecimal
+		case .list(let t):
+			return t.printsAsHexadecimal
+		case .array(let t):
+			return t.printsAsHexadecimal
+		default:
+			return false
+		}
 	}
 	
 	var typeName : String {
@@ -266,8 +301,12 @@ indirect enum XDSMacroTypes {
 			return "Unsigned8BitInteger"
 		case .integerUnsigned:
 			return "Unsigned32BitInteger"
+		case .integerBitMask:
+			return "IntegerBitMask"
 		case .datsIdentifier:
 			return "DatsID"
+		case .camIdentifier:
+			return "CameraRoutineID"
 		case .vector:
 			return "Vector"
 		case .array(let t):

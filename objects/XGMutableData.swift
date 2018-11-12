@@ -252,7 +252,7 @@ class XGMutableData: NSObject {
 			printg("Attempting to write byte from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
 		
-		var byte = UInt8(byte)
+		var byte = UInt8(byte & 0xFF)
 		self.data.replaceBytes(in: NSMakeRange(start, 1), withBytes: &byte)
 		
 	}
@@ -263,7 +263,7 @@ class XGMutableData: NSObject {
 			printg("Attempting to write 2 bytes from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
 		
-		var bytes = UInt16(bytes)
+		var bytes = UInt16(bytes & 0xFFFF)
 		bytes = UInt16(bigEndian: bytes)
 		self.data.replaceBytes(in: NSMakeRange(start, 2), withBytes: &bytes)
 		

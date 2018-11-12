@@ -1475,7 +1475,8 @@ extension XGUtility {
 			macros.append(.macroImmediate(constant, .move))
 		}
 		for i in -1 ..< CommonIndexes.NumberOfItems.value {
-			let constant = XDSConstant.integer(i)
+			let item = XGItems.item(i)
+			let constant = XDSConstant.integer(item.scriptIndex)
 			macros.append(.macroImmediate(constant, .item))
 		}
 		let people = XGFiles.fsys("people_archive")
@@ -1557,7 +1558,7 @@ extension XGUtility {
 			switch macro {
 			case .macroImmediate(let c, let t):
 				let macroText = XDSExpr.stringFromMacroImmediate(c: c, t: t)
-				let val = c.asInt >= 0x200 ? c.asInt.hexString() + " // \(c.asInt)" : c.asInt.string + " // \(c.asInt.hexString())"
+				let val = t.printsAsHexadecimal ? c.asInt.hexString() + " // \(c.asInt)" : c.asInt.string + " // \(c.asInt.hexString())"
 				let contents = "define " + macroText + " \(val)"
 				let trigger = contents + "\t" + t.typeName
 				var completion = [String : String]()

@@ -149,7 +149,7 @@ class XDSConstant : NSObject {
 			return XDSExpr.locationIndex(self.asInt).text[0]
 		case .unknown(let i):
 			let mid = self.asInt == 0 ? "" : "\(self.asInt)"
-			return XGScriptClass.classes(i).name.capitalized + "(\(mid))"
+			return XGScriptClass.classes(i).name + "(\(mid))"
 		}
 	}
 	

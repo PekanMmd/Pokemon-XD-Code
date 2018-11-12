@@ -4035,7 +4035,7 @@ import Foundation
 //let routines : [(effect: Int, routine: [Int], offset: Int)] = [
 //
 //	(28,dragonTailRoutine, 0xb99524),
-//	(57, uturnRoutine, 0x0xb9a670),
+//	(57, uturnRoutine, 0xb9a670),
 //	(213, shadowGiftRoutine, 0xb995c2),
 //	(191, skillSwap, 0xb995fa),
 //	(122, shadowAnalysisRoutine, 0xb99622),
@@ -7040,7 +7040,7 @@ import Foundation
 //let RNG16Bit = 0x25ca08
 ////let animSoundCallback = 0x2236a8
 //let checkHasHP = 0x204a70
-//let checkAttackSuccess = 0xB9B184
+//let checkAttackSuccess = 0xB9B300
 //XGAssembly.replaceASM(startOffset: poisonTouchBranch - kDOLtoRAMOffsetDifference, newASM: [.b(poisonTouchStart)])
 //XGAssembly.replaceRamASM(RAMOffset: poisonTouchStart, newASM: [
 //
@@ -7096,7 +7096,7 @@ import Foundation
 //// rocky helmet, spiky shield fix
 //let rockyHelmetFixBranch = 0xb99414
 //let rockyHelmetFixStart = 0xB9B2A8
-////let checkAttackSuccess = 0xB9B184
+////let checkAttackSuccess = 0xB9B300
 //XGAssembly.replaceRamASM(RAMOffset: rockyHelmetFixBranch, newASM: [.b(rockyHelmetFixStart)])
 //XGAssembly.replaceRamASM(RAMOffset: rockyHelmetFixStart, newASM: [
 //	.cmpwi(.r26, 1),
@@ -7117,7 +7117,9 @@ import Foundation
 //
 //])
 //
+// checks if attacking pokemon has hp
 //let hpCheckStart = 0xB9B27C
+////let getPokemonPointer = 0x1efcac
 //XGAssembly.replaceRamASM(RAMOffset: hpCheckStart, newASM: [
 //	.stwu(.sp, .sp, -0x10),
 //	.mflr(.r0),
@@ -7414,6 +7416,221 @@ import Foundation
 //	.b(0x216048)
 //])
 
+//// new uturn routine using update jump if status so volt switch won't trigger on ground types
+//let uturnRoutine = XGAssembly.routineRegularHitOpenEnded() + [
+//	// after move, rough skin, poison touch, life orb etc.
+//	0x2f, 0x80, 0x4e, 0xb9, 0x47, 0x00, 0x4a, 0x00, 0x00,
+//	// special updated jump if status, jump to end of move routine
+//	0x1e, 0x11, 0x00, 0x00, 0x00, 0xff, 0x80, 0x41, 0x41, 0x18,
+//	// baton pass routine
+//	0x77, 0x11, 0x07, 0x51, 0x11, 0x80, 0x41, 0x5c, 0xb4, 0xe1, 0x11, 0x3b, 0x52, 0x11, 0x02, 0x59, 0x11, 0x4d, 0x11, 0x4e, 0x11, 0x02, 0x74, 0x11, 0x14, 0x80, 0x2f, 0x90, 0xe0, 0x4f, 0x11, 0x01, 0x13, 0x00, 0x00, 0x3b, 0x53, 0x11, 0x3b, 0x3e,
+//]
+//let uturnOffset = 0xB9B634
+//XGAssembly.setMoveEffectRoutine(effect: 57, fileOffset: uturnOffset - kRELtoRAMOffsetDifference, moveToREL: true, newRoutine: uturnRoutine)
+//XGAssembly.ASMfreeSpacePointer().hexString().println()
+//
+//// move routine jump if status >0xff will jump if move failed (protect, type immunity, flinched, etc.), and if move target is set, will jump if target doesn't have hp
+//let jumpBranch = 0x21354c
+//let jumpStart = 0xB9B6A4
+//let checkAttackSuccess = 0xB9B300
+//let checkHasHP = 0x204a70
+//XGAssembly.replaceRamASM(RAMOffset: jumpBranch, newASM: [.b(jumpStart)])
+//XGAssembly.replaceRamASM(RAMOffset: jumpStart, newASM: [
+//	.cmpwi(.r4, 1),
+//	.bne_l("check custom"),
+//	.b(jumpBranch + 8),
+//
+//	.label("check custom"),
+//	.cmplwi(.r4, 0x80),
+//	.bge_l("custom status"),
+//	.b(0x213578),
+//
+//	.label("custom status"),
+//	.cmplwi(.r4, 0xff),
+//	.bne_l("reserved for future expansion"),
+//
+//	.bl(checkAttackSuccess),
+//	.cmpwi(.r3, 1),
+//	.beq_l("check hp"),
+//	.b_l("jump"),
+//
+//	.label("check hp"),
+//	.mr(.r3, .r31),
+//	.bl(checkHasHP),
+//	.cmpwi(.r3, 1),
+//	.bne_l("jump"),
+//	.b_l("no jump"),
+//
+//	.label("reserved for future expansion"),
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//	.nop,
+//
+//	.label("no jump"),
+//	.b(0x2135d8),
+//	.label("jump"),
+//	.b(0x213560),
+//	.nop,
+//	.nop
+//])
+//
+//
+//let poisonTouchBranch = 0x225580
+//let poisonTouchStart = 0xB9B1D8
+//let RNG16Bit = 0x25ca08
+//let animSoundCallback = 0x2236a8
+////let checkHasHP = 0x204a70
+////let checkAttackSuccess = 0xB9B300
+//XGAssembly.replaceASM(startOffset: poisonTouchBranch - kDOLtoRAMOffsetDifference, newASM: [.b(poisonTouchStart)])
+//XGAssembly.replaceRamASM(RAMOffset: poisonTouchStart, newASM: [
+//
+//	.cmpwi(.r26, 1), // check move succeeded
+//	.bne_l("return"),
+//
+//	.bl(checkAttackSuccess),
+//	.cmpwi(.r3, 1), // check wasn't prevented by status
+//	.bne_l("return"),
+//
+//	.mr(.r3, .r31), // defending pokemon
+//	.bl(checkHasHP),
+//	.cmpwi(.r3, 1),
+//	.bne_l("return"),
+//
+//	.cmpwi(.r25, 1), // contact check
+//	.bne_l("return"),
+//
+//	.cmpwi(.r16, ability("poison touch").index),
+//	.bne_l("return"),
+//
+//	// get random number
+//	.bl(RNG16Bit),
+//
+//	// calculate random number % 10 (remainder)
+//	// result is random number between 0 and 9
+//	.li(.r4, 10),
+//	.divw(.r0, .r3, .r4),
+//	.mullw(.r0, .r0, .r4),
+//	.sub(.r0, .r3, .r0),
+//
+//	// activate if random number less than 3 (30% chance)
+//	.cmpwi(.r0, 2),
+//	.bgt_l("return"),
+//
+//	// activate poison
+//	.lwz(.r0, .r13, -0x44e8),
+//	.ori(.r0, .r0, 0x2000),
+//	.stw(.r0, .r13, -0x44e8),
+//	.subi(.r5, .r13, 30816),
+//	.li(.r4, 2), // poison secondary effect
+//	.stb(.r4, .r5, 3),
+//	.lis(.r3, 0x8041),
+//	.addi(.r3, .r3, 31755),
+//	.bl(animSoundCallback),
+//	.li(.r17, 1),
+//
+//	.label("return"),
+//	.mr(.r3, .r17),
+//	.b(poisonTouchBranch + 4)
+//])
+//
+//// rocky helmet, spiky shield fix
+//let rockyHelmetFixBranch = 0xb99414
+//let rockyHelmetFixStart = 0xB9B2A8
+////let checkAttackSuccess = 0xB9B300
+//XGAssembly.replaceRamASM(RAMOffset: rockyHelmetFixBranch, newASM: [.b(rockyHelmetFixStart)])
+//XGAssembly.replaceRamASM(RAMOffset: rockyHelmetFixStart, newASM: [
+//	.cmpwi(.r26, 1),
+//	.bne_l("fail"),
+//	.bl(checkAttackSuccess),
+//	.cmpwi(.r3, 1),
+//	.bne_l("fail"),
+//
+//	.mr(.r3, .r30), // attacking pokemon
+//	.bl(checkHasHP),
+//	.cmpwi(.r3, 1),
+//	.bne_l("fail"),
+//
+//	.label("success"),
+//	.b(rockyHelmetFixBranch + 0xc),
+//	.label("fail"),
+//	.b(rockyHelmetFixBranch + 8),
+//
+//])
+//
+//let hpCheckStart = 0xB9B27C
+//let getPokemonPointer = 0x1efcac
+//XGAssembly.replaceRamASM(RAMOffset: hpCheckStart, newASM: [
+//	.stwu(.sp, .sp, -0x10),
+//	.mflr(.r0),
+//	.stw(.r0, .sp, 0x14),
+//
+//	.li(.r3, 17),
+//	.li(.r4, 0),
+//	.bl(getPokemonPointer),
+//	.bl(checkHasHP),
+//
+//	.lwz(.r0, .sp, 0x14),
+//	.mtlr(.r0),
+//	.addi(.sp, .sp, 0x10),
+//	.blr
+//
+//])
+//// life orb fix
+//let fixBranch = 0xb9a208
+//let lifeOrbFixStart = 0xB9B2D4
+//XGAssembly.replaceRamASM(RAMOffset: fixBranch, newASM: [
+//	.b(lifeOrbFixStart)
+//])
+//XGAssembly.replaceRamASM(RAMOffset: lifeOrbFixStart, newASM: [
+//	.cmpwi(.r26, 1),
+//	.bne_l("fail"),
+//	.bl(checkAttackSuccess),
+//	.cmpwi(.r3, 1),
+//	.bne_l("fail"),
+//
+//	.mr(.r3, .r30), // attacking pokemon
+//	.bl(checkHasHP),
+//	.cmpwi(.r3, 1),
+//	.bne_l("fail"),
+//
+//	.label("success"),
+//	.b(0xb9a20c),
+//	.label("fail"),
+//	.b(0xb9a28c),
+//])
 
 
 

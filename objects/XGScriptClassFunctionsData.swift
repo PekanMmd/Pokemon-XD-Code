@@ -207,7 +207,11 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("followCharacter", 18, 2, [.objectName("Camera"), .objectName("Character")], .null), // # (Character target)
 		
 		("setPosition", 21, 4, [.objectName("Camera"), .integerFloatOverload, .integerFloatOverload, .integerFloatOverload], .null), // x, y , z
-	
+		
+		("performPresetFromFile", 27, 2, [.objectName("Camera"), nil, .camIdentifier, .integer, .integer], .null), // performs a series of transformations and translations from a .cam file
+		
+		("reset", 47, 1, [.objectName("Camera")], .null),
+		
 	],
 	
 //MARK: - Character
@@ -233,11 +237,13 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("setCharacterFlags", 40, 2, [.objectName("Character"), .integer], .null), //# (int flags ?)
 		("clearCharacterFlags", 41, 2, [.objectName("Character"), .integer], .null), //# (int flags ?)
 		
+		("turnToAngle", 47, 2, [.objectName("Character"), .integerAngleDegrees], .null),
 		("faceCharacter", 49, 3, [.objectName("Character"), .objectName("Character"), .float], .null), // # (Character target, float unknown(speed?))
 		
 		("runToPosition", 55, 4, [.objectName("Character"), .float, .float, .float], .null), // (float x, float y, float z)
 		
-		("faceAngleInDegrees", 62, 2, [.objectName("Character"), .integerAngleDegrees], .null), // # (int direction) (0 = straight down)
+		("surprisedAnimation", 61, 2, [.objectName("Character"), .bool], .null), // the little flash above the character's head. will automatically turn the character to face the player unless the boolean parameter is set to true
+		("faceFront", 62, 2, [.objectName("Character"), .bool], .null), // # (bool wait for completion)
 		
 		("setModel", 70, 2, [.objectName("Character"), .model], .null), //# (int id)
 		

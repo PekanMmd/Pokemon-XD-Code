@@ -80,17 +80,19 @@ class GoDGiftViewController: GoDTableViewController {
 		var colour = GoDDesign.colourWhite()
 		if game == .XD {
 			if row == 0 {
-				colour = GoDDesign.colourYellow()
+				colour = GoDDesign.colourBrown()
 			} else if row < 3 {
 				colour = GoDDesign.colourBlue()
-			}  else if row < 7 {
-				colour = GoDDesign.colourGrey()
+			}  else if row < 5 {
+				colour = GoDDesign.colourYellow()
+			} else if row < 7 {
+				colour = GoDDesign.colourGreen()
 			} else if row == 7 {
 				colour = GoDDesign.colourPurple()
 			} else if row == 8 {
-				colour = GoDDesign.colourOrange()
+				colour = GoDDesign.colourBabyPink()
 			} else if row < 12 {
-				colour = GoDDesign.colourGreen()
+				colour = GoDDesign.colourGrey()
 			} else {
 				colour = GoDDesign.colourRed()
 			}
@@ -118,6 +120,7 @@ class GoDGiftViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		super.tableView(tableView, didSelectRow: row)
 		if row == -1 {
 			return
 		}

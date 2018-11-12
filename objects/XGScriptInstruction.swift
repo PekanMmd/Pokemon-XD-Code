@@ -100,7 +100,7 @@ class XGScriptInstruction: NSObject {
 			return kXDSLastResultVariable + pointerAdd
 		default:
 			if param < 0x80 && param > 0 {
-				return XGScriptClass.classes(param).name.capitalized
+				return XGScriptClass.classes(param).name
 			} else if param == 0x80 {
 				return "player_character"
 			} else if param <= 0x120 {

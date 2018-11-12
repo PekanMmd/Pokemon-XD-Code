@@ -161,11 +161,10 @@ class GoDMovesViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		super.tableView(tableView, didSelectRow: row)
 		if row >= 0 {
 			self.currentMove = XGMove(index: row)
 		}
-		self.table.reloadData()
-		self.table.tableView.selectRowIndexes([row], byExtendingSelection: false)
 		
 	}
 	

@@ -51,6 +51,7 @@ class GoDCollisionViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		super.tableView(tableView, didSelectRow: row)
 		if row == -1 {
 			return
 		}
@@ -64,9 +65,6 @@ class GoDCollisionViewController: GoDTableViewController {
 					self.openglView.render()
 				}
 			}
-			self.table.reloadData()
-		} else {
-			self.table.reloadData()
 		}
 	}
 	

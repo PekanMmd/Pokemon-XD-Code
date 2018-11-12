@@ -68,7 +68,7 @@ enum XGScriptClass {
 	var name : String {
 		switch self {
 			case .operators			: return "Operator"
-			case .classes(let val)	: return ScriptClassNames[val]?.capitalized ?? "Class\(val)"
+			case .classes(let val)	: return ScriptClassNames[val] ?? "Class\(val)"
 		}
 	}
 	

@@ -142,6 +142,7 @@ class GoDTrainerViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		super.tableView(tableView, didSelectRow: row)
 		self.showActivityView {
 			let info = self.trainers[row]
 			self.currentTrainer = XGTrainer(index: info.index)
@@ -149,7 +150,6 @@ class GoDTrainerViewController: GoDTableViewController {
 			for view in self.pokemonViews {
 				view.setUp()
 			}
-			self.table.reloadData()
 			self.hideActivityView()
 		}
 		

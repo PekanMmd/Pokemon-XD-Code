@@ -124,6 +124,7 @@ class GoDSpotViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		super.tableView(tableView, didSelectRow: row)
 		if row == -1 {
 			return
 		}

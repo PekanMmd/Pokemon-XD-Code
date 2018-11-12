@@ -45,6 +45,7 @@ class GoDScriptViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
+		super.tableView(tableView, didSelectRow: row)
 		if row == -1 {
 			return
 		}
@@ -54,9 +55,6 @@ class GoDScriptViewController: GoDTableViewController {
 				self.scriptView.string = scripts[row].text
 				self.scriptView.scrollToBeginningOfDocument(nil)
 			}
-			self.table.reloadData()
-		} else {
-			self.table.reloadData()
 		}
 	}
 	

@@ -44,6 +44,7 @@ class GoDShadowPokemonView: NSImageView {
 	init() {
 		super.init(frame: .zero)
 		self.layoutViews()
+		self.dpkm.deck = .DeckStory
 	}
 	
 	required init?(coder: NSCoder) {
@@ -272,7 +273,6 @@ class GoDShadowPokemonView: NSImageView {
 		}
 		
 		self.ddpk.isHidden = true
-		self.dpkm.deck = .DeckStory
 		
 		self.name.selectPokemon(pokemon: pokemon.species)
 		self.dpkm.selectItem(at: pokemon.deckData.DPKMIndex)

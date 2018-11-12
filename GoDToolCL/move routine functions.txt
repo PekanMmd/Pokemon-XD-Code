@@ -47,7 +47,7 @@ move routine pointers in ram = 0x802f8af8
 2c: jump if word
 2d: jump if arrays are equal
 2e: jump if arrays not equal
-2f: store byte at offset
+2f: store byte at offset									HALF: offset Byte: value
 30: increase value at offset by byte
 31: decrease value at offset by byte
 32: copy array
@@ -71,7 +71,7 @@ move routine pointers in ram = 0x802f8af8
 44: jump if ability present
 45: set end of knockout checks 3
 46: prepare animation (usually followed by function 0xb)
-47: unknown
+47: after move (rough skin, cute charm, etc.)   BYTE: unknown BYTE: unknown
 48: stat boost calculate animation index
 49: stat change animation
 4a: after attack

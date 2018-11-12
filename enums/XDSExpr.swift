@@ -772,6 +772,10 @@ indirect enum XDSExpr {
 			return macroWithName("UINT32_\(c.asInt.hexString())")
 		case .datsIdentifier:
 			return macroWithName("DATS_\(c.asInt.hexString())")
+		case .integerBitMask:
+			return macroWithName("BIT_MASK_\(c.asInt.hexString())")
+		case .camIdentifier:
+			return macroWithName("CAM_\(c.asInt.hexString())")
 		}
 	}
 	
@@ -1130,8 +1134,9 @@ indirect enum XDSExpr {
 			return e.macros
 		case .binaryOperator(_, let e1, let e2):
 			return e1.macros + e2.macros
-		case .macroImmediate(let c, _):
-			return [.macro(self.text[0], c.rawValueString)]
+		case .macroImmediate(let c, let t):
+			let hex = t.printsAsHexadecimal
+			return [.macro(self.text[0], hex ? c.asInt.hexString() : c.asInt.string)]
 		case .XDSReturnResult(let e):
 			return e.macros
 		case .callStandard(_, _, let es):
