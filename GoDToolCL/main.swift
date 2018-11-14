@@ -7,7 +7,7 @@
 //
 //
 
-
+XGBattleField(index: 31).room?.name.println()
 
 XGAssembly.ASMfreeSpacePointer().hexString().println()
 
