@@ -312,7 +312,7 @@ class XGMutableData: NSObject {
 			printg("Attempting to write \(bytes.count * 2) bytes from offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
 		
-		for i in 0..<bytes.count {
+		for i in 0 ..< bytes.count {
 			
 			self.replace2BytesAtOffset(offset + (i*2), withBytes: bytes[i])
 			

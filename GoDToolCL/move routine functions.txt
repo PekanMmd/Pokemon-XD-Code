@@ -66,7 +66,7 @@ move routine pointers in ram = 0x802f8af8
 3f: set end of move 2
 40: set end of knock out checks 2
 41: pokemon protected itself message
-42: perform animation at offset
+42: call routine at offset
 43: jump if type 2
 44: jump if ability present
 45: set end of knockout checks 3
@@ -91,7 +91,7 @@ move routine pointers in ram = 0x802f8af8
 64: jump to attack
 65: status animation
 ---> unknown
-6b: remove item
+6b: remove item permanently
 ---> unknown
 77: switch/flee									BYTE: target BYTE: function index (7 baton pass, 2 teleport)
 78: unknown

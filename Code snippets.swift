@@ -7689,6 +7689,15 @@ import Foundation
 //	.b(expBranch + 4)
 //])
 
+//// remove sticky hold on knock off
+//XGAssembly.replaceRamASM(RAMOffset: 0x214f1c, newASM: [.b(0x214f48)])
+//
+//// shadow pokemon receive full exp instead of 80%
+//XGAssembly.replaceRamASM(RAMOffset: 0x212eac, newASM: [
+//	.mr(.r0, .r18),
+//	.nop,
+//	.nop
+//])
 
 
 

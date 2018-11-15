@@ -383,9 +383,9 @@ enum XDSTalkTypes : Int {
 }
 
 enum XDSMSGVarTypes : Int {
+	// incomplete but unnecessary. full list in xgspecialstringcharacter
 	case pokemon = 0x4e
 	case item = 0x2d
-	// incomplete but unnecessary. full list in xgspecialstringcharacter
 	
 	static func macroForVarType(_ type: Int) -> XDSMacroTypes? {
 		switch type {
@@ -393,7 +393,7 @@ enum XDSMSGVarTypes : Int {
 		case 0x0f: fallthrough
 		case 0x10: fallthrough
 		case 0x11: fallthrough
-		case 0x12: return .pokemon
+		case 0x12: fallthrough
 			
 		case 0x16: fallthrough
 		case 0x17: fallthrough

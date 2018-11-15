@@ -252,8 +252,8 @@ class XGISO: NSObject {
 	
 	@objc func replaceDataForFile(filename: String, withData data: XGMutableData, saveWhenDone save: Bool) {
 		
-		let start = self.locationForFile(filename)
-		let oldsize  = self.sizeForFile(filename)
+		let start   = self.locationForFile(filename)
+		let oldsize = self.sizeForFile(filename)
 		let newsize = data.length
 		
 		if (start == nil) || (oldsize == nil) {
@@ -276,13 +276,13 @@ class XGISO: NSObject {
 			return
 		}
 		
-		self.setSize(size: newsize, forFile: filename)
-		
 		let isodata = self.data
 		if oldsize! > newsize {
 			self.eraseDataForFile(name: filename)
 		}
 		isodata.replaceBytesFromOffset(start!, withByteStream: data.byteStream)
+		
+		self.setSize(size: newsize, forFile: filename)
 		
 		if save {
 			isodata.save()
@@ -324,17 +324,17 @@ class XGISO: NSObject {
 				}
 				
 				let location = locationForFile(file)!
+				let size = sizeForFile(file)!
+				var end = location + size
+				while end % 0x10 != 0 {
+					end += 1
+				}
+				
+				let index = orderedIndexForFile(name: file)
+				let nextStart = index == filesOrdered.count - 1 ? self.data.length : locationForFile(filesOrdered[index + 1])!
+				let difference = nextStart - end
+				
 				if !done {
-					
-					let size = sizeForFile(file)!
-					var end = location + size
-					while end % 0x10 != 0 {
-						end += 1
-					}
-					
-					let index = orderedIndexForFile(name: file)
-					let nextStart = index == filesOrdered.count - 1 ? self.data.length : locationForFile(filesOrdered[index + 1])!
-					let difference = nextStart - end
 					
 					if difference > 0 {
 						deletedBytes += difference
@@ -349,8 +349,6 @@ class XGISO: NSObject {
 							
 						}
 					}
-					
-					
 				}
 				
 				if file == name {
@@ -359,7 +357,7 @@ class XGISO: NSObject {
 				}
 				
 				if !switchToShiftUp {
-					self.setStartOffset(offset: location + deletedBytes, forFile: file, saveToc: false)
+					self.setStartOffset(offset: location + difference, forFile: file, saveToc: false)
 				}
 				
 				if deletedBytes >= shift  {
@@ -380,7 +378,7 @@ class XGISO: NSObject {
 			printg("Couldn't replace file \(name) as it is too large and ISO is full. Try deleting some files and trying again.")
 		}
 		
-		if shift > 0 {
+		if shift != 0 {
 			self.importToc(saveWhenDone: false)
 		}
 	}
@@ -484,12 +482,8 @@ class XGISO: NSObject {
 			eraseDataForFile(name: name)
 			if let size = sizeForFile(name) {
 				if name.fileExtensions == ".fsys" {
-					if size >= NullFSYS.length {
-						// prevents crashes when querying fsys data
-//						self.data.replaceBytesFromOffset(locationForFile(name)!, withByteStream: NullFSYS.byteStream)
-//						setSize(size: NullFSYS.length, forFile: name)
-						self.shiftAndReplaceFileEfficiently(name: name, withData: NullFSYS)
-					}
+					// prevents crashes when querying fsys data
+					self.shiftAndReplaceFileEfficiently(name: name, withData: NullFSYS)
 				} else {
 					if size >= 16 {
 						setSize(size: 16, forFile: name)
@@ -523,9 +517,7 @@ class XGISO: NSObject {
 		if start != nil {
 			let toc = XGFiles.toc.data!
 			toc.replaceWordAtOffset(start! + 4, withBytes: UInt32(offset))
-			if saveToc {
-				self.importToc(saveWhenDone: true)
-			}
+			self.importToc(saveWhenDone: saveToc)
 			fileLocations[name] = offset
 		} else {
 			printg("couldn't find toc data for file:", name)

@@ -1412,6 +1412,16 @@ class XGScript: NSObject {
 						}
 					}
 					
+					if sclass.name == "Dialogue" {
+						if sclass[f].name == "setMessageVariable" {
+							if es[1].isImmediate {
+								if let varType = XDSMSGVarTypes.macroForVarType(es[1].constants[0].asInt) {
+									macroTypes[2] = varType
+								}
+							}
+						}
+					}
+					
 					for j in 0 ..< es.count {
 						let p1 = es[j]
 						let m1 = p1.macroVariable
@@ -1478,6 +1488,16 @@ class XGScript: NSObject {
 									}
 								}
 								
+							}
+						}
+					}
+					
+					if sclass.name == "Dialogue" {
+						if sclass[f].name == "setMessageVariable" {
+							if es[1].isImmediate {
+								if let varType = XDSMSGVarTypes.macroForVarType(es[1].constants[0].asInt) {
+									macroTypes[2] = varType
+								}
 							}
 						}
 					}

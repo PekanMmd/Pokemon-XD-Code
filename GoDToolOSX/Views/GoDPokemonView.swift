@@ -54,17 +54,12 @@ class GoDPokemonView: NSImageView {
 		
 		let pokemon = self.delegate.pokemon[self.index]
 		
-		if !pokemon.isSet {
+		if pokemon.species.index == 0 {
 			self.setBackgroundColour(GoDDesign.colourGrey())
 		} else if pokemon.isShadowPokemon {
 			self.setBackgroundColour(GoDDesign.colourPurple())
 		} else {
 			self.setBackgroundColour(GoDDesign.colourLightGrey())
-		}
-		
-		if updateDPKM {
-			self.dpkm.setUpItems()
-			updateDPKM = false
 		}
 		
 		for key in views.keys {
@@ -516,7 +511,10 @@ class GoDPokemonView: NSImageView {
 		self.setCatch(sender: shadowCatchrate)
 		self.setCounter(sender: shadowCounter)
 		
-		
+		if updateDPKM {
+			self.dpkm.setUpItems()
+			updateDPKM = false
+		}
 	}
 	
 }

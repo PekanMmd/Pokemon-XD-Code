@@ -19,7 +19,7 @@ let ScriptClassNames : [Int : String] = [
 	33 : "Camera",
 	35 : "Character",
 	37 : "Pokemon",
-	38 : "Movement",
+	38 : "Map",
 	39 : "Tasks",
 	40 : "Dialogue",
 	41 : "Transition",
@@ -208,7 +208,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		("setPosition", 21, 4, [.objectName("Camera"), .integerFloatOverload, .integerFloatOverload, .integerFloatOverload], .null), // x, y , z
 		
-		("performPresetFromFile", 27, 2, [.objectName("Camera"), nil, .camIdentifier, .integer, .integer], .null), // performs a series of transformations and translations from a .cam file
+		("performPresetFromFile", 27, 2, [.objectName("Camera"), .integer, .camIdentifier, .integer, .integer], .null), // performs a series of transformations and translations from a .cam file in fsys with specified group id
 		
 		("reset", 47, 1, [.objectName("Camera")], .null),
 		
@@ -297,10 +297,13 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("displayMoveDeleterMenu", 38, 1, [.objectName("Pokemon")], .integerIndex),
 	],
 	
-//MARK: - Movement
+//MARK: - Map
 	38: [
-		("warpToRoom", 22, 2, [.objectName("Movement"), .room], .null), // # (int roomID, int unknown)
-		("warpToRoomWithOptions", 49, 2, [.objectName("Movement"), .room, .bool, .integerUnsigned, .integerUnsigned], .null), // # (int roomID, int unknown)
+		("getGroupID", 17, 1, [.objectName("Map")], .integer),
+		("newMapManager", 18, 1, [.anyType], .objectName("Map")),
+		("warpToMap", 22, 2, [.objectName("Map"), .room], .null), // # (int roomID, int entry warp number)
+		("enterMenuMap", 38, 2, [.objectName("Map"), .room], .null),
+		("warpToMapWithOptions", 49, 2, [.objectName("Map"), .room, .bool, .integerUnsigned, .integerUnsigned], .null), // # (int roomID, int unknown)
 	],
 	
 //MARK: - Tasks

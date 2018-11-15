@@ -183,9 +183,11 @@ class XGUtility {
 		
 		var substrings = [String]()
 		if game == .XD {
-			substrings = ["Script_t","_test", "debug", "DNA", "keydisc"]
+			substrings = ["Script_t","_test", "debug", "DNA", "keydisc", "M2_cave"]
 			if region != .EU  {
 				substrings += ["_fr.","_ge.","_it.", "_sp."]
+				substrings += ["l_fr","l_ge","l_it", "l_sp"]
+				substrings += ["g_fr","g_ge","g_it", "g_sp"]
 			}
 		} else {
 			substrings = ["carde", "ex", "debug"]
