@@ -7,17 +7,12 @@
 //
 //
 
-XGUtility.deleteSuperfluousFiles()
-XGUtility.compileAllFiles()
-
-for i in 0 ..< ISO.filesOrdered.count {
-	let file = ISO.filesOrdered[i]
-	let start = ISO.locationForFile(file)!
-	let end = start + ISO.sizeForFile(file)!
-	let next = i == ISO.filesOrdered.count - 1 ? ISO.data.length : ISO.locationForFile(ISO.filesOrdered[i + 1])!
-	printg(file.spaceToLength(40), start.hexString(), end.hexString(), end > next ? "bruh" : "", ISO.sizeForFile(file)! <= 0x60 ? "deleted" : "" )
+let folder = XGFolders.nameAndFolder("updated scripts", .Documents)
+let file = XGFiles.nameAndFolder("M1_pc_B1.xds", folder)
+XDSScriptCompiler.setFlags(disassemble: true, decompile: true, updateStrings: true, increaseMSG: true)
+if !XDSScriptCompiler.compile(textFile: file) {
+	printg(file.fileName, XDSScriptCompiler.error)
 }
-
 
 XGAssembly.ASMfreeSpacePointer().hexString().println()
 
