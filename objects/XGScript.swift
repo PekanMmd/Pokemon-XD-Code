@@ -1605,6 +1605,14 @@ class XGScript: NSObject {
 				case .functionDefinition(let loc, _):
 					currentFuncName = loc
 					newStack.push(expr)
+				case .location:
+					fallthrough
+				case .locationIndex:
+					fallthrough
+				case .locationSilent:
+					fallthrough
+				case .comment:
+					newStack.push(expr)
 				default:
 					if noUpdate.contains(instructionIndex) {
 						newStack.push(expr)

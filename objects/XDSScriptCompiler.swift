@@ -286,7 +286,7 @@ class XDSScriptCompiler: NSObject {
 		let uptext = text.replacingOccurrences(of: "[Quote]", with: "\"")
 		if verbose {
 			if text.length > 0 {
-				printg("Replacing msg\(id == nil ? " by creating new id:" + text : "with id: \(id!.hexString()) " + text)")
+				printg("Replacing msg \(id == nil ? "by creating new id:" + text : "with id: \(id!.hexString()) " + text)")
 			}
 		}
 		

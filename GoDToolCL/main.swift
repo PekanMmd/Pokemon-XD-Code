@@ -7,12 +7,6 @@
 //
 //
 
-let folder = XGFolders.nameAndFolder("updated scripts", .Documents)
-let file = XGFiles.nameAndFolder("M1_pc_B1.xds", folder)
-XDSScriptCompiler.setFlags(disassemble: true, decompile: true, updateStrings: true, increaseMSG: true)
-if !XDSScriptCompiler.compile(textFile: file) {
-	printg(file.fileName, XDSScriptCompiler.error)
-}
 
 XGAssembly.ASMfreeSpacePointer().hexString().println()
 
