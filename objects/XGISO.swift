@@ -280,7 +280,7 @@ class XGISO: NSObject {
 		if oldsize! > newsize {
 			self.eraseDataForFile(name: filename)
 		}
-		isodata.replaceBytesFromOffset(start!, withByteStream: data.byteStream)
+		isodata.replaceData(data: data, atOffset: start!)
 		
 		self.setSize(size: newsize, forFile: filename)
 		
@@ -318,6 +318,7 @@ class XGISO: NSObject {
 			var deletedBytes = 0
 			var switchToShiftUp = false
 			var shiftUpFiles = [String]()
+			
 			for file in filesOrdered.reversed() {
 				if orderedIndexForFile(name: "bg2thumbcode.bin") >= orderedIndexForFile(name: file) || orderedIndexForFile(name: "movie_auto_demo.fsys") <= orderedIndexForFile(name: file) {
 					continue
@@ -332,7 +333,10 @@ class XGISO: NSObject {
 				
 				let index = orderedIndexForFile(name: file)
 				let nextStart = index == filesOrdered.count - 1 ? self.data.length : locationForFile(filesOrdered[index + 1])!
-				let difference = nextStart - end
+				var difference = nextStart - end
+				if !switchToShiftUp {
+					difference -= deletedBytes
+				}
 				
 				if !done {
 					
@@ -341,14 +345,17 @@ class XGISO: NSObject {
 						self.data.deleteBytes(start: end, count: difference)
 						
 						if switchToShiftUp {
-							
 							for previous in shiftUpFiles {
 								self.setStartOffset(offset: locationForFile(previous)! - difference, forFile: previous, saveToc: false)
 							}
-							shiftUpFiles = [file] + shiftUpFiles
-							
 						}
+					} else if difference < 0 {
+						printg("yuh")
 					}
+				}
+				
+				if switchToShiftUp && !done {
+					shiftUpFiles = [file] + shiftUpFiles
 				}
 				
 				if file == name {
@@ -357,7 +364,7 @@ class XGISO: NSObject {
 				}
 				
 				if !switchToShiftUp {
-					self.setStartOffset(offset: location + difference, forFile: file, saveToc: false)
+					self.setStartOffset(offset: location + deletedBytes, forFile: file, saveToc: false)
 				}
 				
 				if deletedBytes >= shift  {
@@ -378,9 +385,6 @@ class XGISO: NSObject {
 			printg("Couldn't replace file \(name) as it is too large and ISO is full. Try deleting some files and trying again.")
 		}
 		
-		if shift != 0 {
-			self.importToc(saveWhenDone: false)
-		}
 	}
 	
 	func shiftAndReplaceFile(_ file: XGFiles) {
@@ -476,25 +480,34 @@ class XGISO: NSObject {
 			printg("\(name) cannot be deleted")
 			return
 		}
-		printg("deleting ISO file: \(name)")
+		printg("deleting ISO file: \(name)...")
 		
-		if locationForFile(name) != nil {
-			eraseDataForFile(name: name)
+		if let start = locationForFile(name) {
 			if let size = sizeForFile(name) {
+				eraseDataForFile(name: name)
 				if name.fileExtensions == ".fsys" {
 					// prevents crashes when querying fsys data
 					self.shiftAndReplaceFileEfficiently(name: name, withData: NullFSYS)
+					printg("deleted ISO file:", name)
 				} else {
 					if size >= 16 {
-						setSize(size: 16, forFile: name)
+						// hex for string "DELETED DELETED "
+						let deleted = [0x44, 0x45, 0x4C, 0x45, 0x54, 0x45, 0x44, 0x20, 0x44, 0x45, 0x4C, 0x45, 0x54, 0x45, 0x44, 0x00]
+						self.data.replaceBytesFromOffset(start, withByteStream: deleted)
+						setSize(size: deleted.count, forFile: name)
+						printg("deleted ISO file:", name)
 					}
 				}
+				if save {
+					self.data.save()
+				}
+			} else {
+				printg("Couldn't delete ISO file:", name, ". It doesn't exist!")
 			}
+		} else {
+			printg("Couldn't delete ISO file:", name, ". It doesn't exist!")
 		}
-		if save {
-			self.data.save()
-		}
-		printg("deleted ISO file:", name)
+		
 	}
 	
 	@objc private func setSize(size: Int, forFile name: String) {
@@ -517,7 +530,9 @@ class XGISO: NSObject {
 		if start != nil {
 			let toc = XGFiles.toc.data!
 			toc.replaceWordAtOffset(start! + 4, withBytes: UInt32(offset))
-			self.importToc(saveWhenDone: saveToc)
+			if saveToc {
+				self.importToc(saveWhenDone: true)
+			}
 			fileLocations[name] = offset
 		} else {
 			printg("couldn't find toc data for file:", name)
@@ -658,6 +673,7 @@ class XGISO: NSObject {
 		if verbose {
 			printg("saving iso...")
 		}
+		self.importToc(saveWhenDone: false)
 		self.data.save()
 		if verbose {
 			printg("saved iso")

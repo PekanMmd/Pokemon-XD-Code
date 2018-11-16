@@ -7,8 +7,11 @@
 //
 //
 
+let fsys = XGFiles.fsys("M1_pc_B1")
+fsys.compileMapFsys()
+ISO.importFiles([fsys])
 
-XGAssembly.ASMfreeSpacePointer().hexString().println()
+//XGAssembly.ASMfreeSpacePointer().hexString().println()
 
 
 

@@ -323,6 +323,15 @@ class XGMutableData: NSObject {
 		data.replaceBytes(in: range, withBytes: bytes)
 	}
 	
+	@objc func replaceData(data: XGMutableData, atOffset offset: Int) {
+		
+		if offset < 0 || offset + data.length > self.length {
+			printg("Attempting to write \(data.length) bytes from offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
+		self.data.replaceBytes(in: NSMakeRange(offset, data.length), withBytes: data.rawBytes, length: data.length)
+	}
+	
 	
 	// append bytes
 	@objc func appendBytes(_ bytes: [UInt8]) {
