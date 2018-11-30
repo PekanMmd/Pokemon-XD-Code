@@ -12,14 +12,14 @@ enum XGScriptFunction {
 	
 	case operators(String,Int,Int)
 	case unknownOperator(Int)
-	case known(String,Int,Int,[XDSMacroTypes?]?, XDSMacroTypes?)
+	case known(String,Int,Int,[XDSMacroTypes?]?, XDSMacroTypes?,String)
 	case unknown(Int)
 	
 	var name : String {
 		switch self {
 			case .operators(let name,_,_)	: return name
 			case .unknownOperator(let val)  : return "operator\(val)"
-			case .known(let name,_,_,_,_)	: return name
+			case .known(let name,_,_,_,_,_)	: return name
 			case .unknown(let val)			: return "function\(val)"
 		}
 	}
@@ -28,7 +28,7 @@ enum XGScriptFunction {
 		switch self {
 			case .operators(_,let val,_)	: return val
 			case .unknownOperator(let val)	: return val
-			case .known(_,let val,_,_,_)	: return val
+			case .known(_,let val,_,_,_,_)	: return val
 			case .unknown(let val)			: return val
 		}
 	}
@@ -36,27 +36,36 @@ enum XGScriptFunction {
 	var parameters : Int {
 		switch self {
 			case .operators(_,_,let val)	: return val
-			case .unknownOperator(_)  : return 0
-			case .known(_,_,let val,_,_)	: return val
+			case .unknownOperator(_) 		: return 0
+			case .known(_,_,let val,_,_,_)	: return val
 			case .unknown					: return 0
 		}
 	}
 	
 	var macros : [XDSMacroTypes?]? {
 		switch self {
-			case .operators				: return nil
-			case .unknownOperator		: return nil
-			case .known(_,_,_,let val,_): return val
-			case .unknown				: return nil
+			case .operators					: return nil
+			case .unknownOperator			: return nil
+			case .known(_,_,_,let val,_,_)	: return val
+			case .unknown					: return nil
 		}
 	}
 	
 	var returnMacro : XDSMacroTypes? {
 		switch self {
-			case .operators				: return nil
-			case .unknownOperator		: return nil
-			case .known(_,_,_,_,let val): return val
-			case .unknown				: return nil
+			case .operators					: return nil
+			case .unknownOperator			: return nil
+			case .known(_,_,_,_,let val,_)	: return val
+			case .unknown					: return nil
+		}
+	}
+	
+	var hint : String {
+		switch self {
+		case .operators					: return ""
+		case .unknownOperator			: return ""
+		case .known(_,_,_,_,_,let val)	: return val
+		case .unknown					: return ""
 		}
 	}
 }
@@ -90,7 +99,7 @@ enum XGScriptClass {
 	
 	func operatorWithID(_ id: Int) -> XGScriptFunction {
 		
-		for (name,index,parameters) in ScriptOperators {
+		for (name,index,parameters,_) in ScriptOperators {
 			if index == id {
 				return .operators(name, index, parameters)
 			}
@@ -110,9 +119,9 @@ enum XGScriptClass {
 			return .unknown(id)
 		}
 		
-		for (name,index,parameters,macros, macro) in info! {
+		for (name,index,parameters,macros, macro, hint) in info! {
 			if index == id {
-				return .known(name, index, parameters, macros, macro)
+				return .known(name, index, parameters, macros, macro, hint)
 			}
 		}
 		

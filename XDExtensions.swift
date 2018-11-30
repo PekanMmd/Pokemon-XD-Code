@@ -1334,7 +1334,7 @@ extension XGUtility {
 							text += " -> Unknown"
 						}
 						
-						text += "\n"
+						text += " // \(info.hint)\n"
 						continue
 					}
 					
@@ -1418,7 +1418,6 @@ extension XGUtility {
 	
 	class func documentXDSAutoCompletions(toFile file: XGFiles) {
 		printg("Documenting XDS Autocompletions")
-//		let file = XGFiles.nameAndFolder("XDScript.sublime-completions", .Reference)
 		var json = [String : AnyObject]()
 		json["scope"] = "xdscript" as AnyObject
 		var completions = [ [String: String] ]()
@@ -1433,14 +1432,14 @@ extension XGUtility {
 			}
 			
 			let functions = ScriptClassFunctions[id]!
-			let prefix = id == 0 ? "" : "."
+			let prefix = id == 0 ? "" : "\(name)."
 			for function in functions {
 				var completion = [String : String]()
-				var trigger = prefix + function.name + "\t\(name) Class Function"
+				var trigger = prefix + function.name + "\t" + function.hint
 				if let returnType = function.returnType {
-					trigger += " (\(returnType.typeName))"
+					trigger += " -> \(returnType.typeName)"
 				} else {
-					trigger += " (Unknown)"
+					trigger += " -> Unknown"
 				}
 				
 				completion["trigger"] = trigger

@@ -824,7 +824,13 @@ extension XDSScriptCompiler {
 		var macros = [(macro: XDSMacro, replacement: String)]()
 		
 		for line in lines {
-			if let tokens = tokeniseXDS(text: line) {
+			var updatedLine = line
+			for (macro, repl) in macros {
+				for add in [" ", ".", ")", ">", "]", "(", "<", "[", "\"", "\n", "}", "{", ";"] {
+					updatedLine = updatedLine.replacingOccurrences(of: macro + add, with: repl + add)
+				}
+			}
+			if let tokens = tokeniseXDS(text: updatedLine) {
 				if tokens.count > 0 {
 					if tokens[0] == "define" {
 						
@@ -874,12 +880,6 @@ extension XDSScriptCompiler {
 							return nil
 						}
 					} else {
-						var updatedLine = line
-						for (macro, repl) in macros {
-							for add in [" ", ".", ")", ">", "]", "(", "<", "[", "\"", "\n", "}", "{", ";"] {
-								updatedLine = updatedLine.replacingOccurrences(of: macro + add, with: repl + add)
-							}
-						}
 						updated += updatedLine
 					}
 				}
@@ -1192,7 +1192,7 @@ extension XDSScriptCompiler {
 								}
 								
 								// check if unary operator
-								for (name,id,params) in ScriptOperators where params == 1 {
+								for (name,id,params,_) in ScriptOperators where params == 1 {
 									if name == functionName {
 										if let tokens = tokeniseXDS(text: parameters) {
 											if let expr =  evalTokensXDS(tokens: tokens, subExpr: true) {
@@ -1490,7 +1490,7 @@ extension XDSScriptCompiler {
 			
 			// binary operators
 			if tokens.count == 3 {
-				for (name,id,params) in ScriptOperators where params == 2 {
+				for (name,id,params,_) in ScriptOperators where params == 2 {
 					if name == tokens[1] {
 						if let e1 = evalTokensXDS(tokens: [tokens[0]], subExpr: true){
 							if let e2 = evalTokensXDS(tokens: [tokens[2]], subExpr: true){
