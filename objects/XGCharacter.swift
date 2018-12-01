@@ -125,13 +125,13 @@ class XGCharacter : NSObject {
 		if self.angle > 360 && angle < 0xff00 {
 			isValid = false
 		}
-		if self.xCoordinate > 1000 {
+		if self.xCoordinate > 2000 {
 			isValid = false
 		}
-		if self.yCoordinate > 1000 {
+		if self.yCoordinate > 2000 {
 			isValid = false
 		}
-		if self.zCoordinate > 1000 {
+		if self.zCoordinate > 2000 {
 			isValid = false
 		}
 		

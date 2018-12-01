@@ -543,7 +543,7 @@ extension XDSScriptCompiler {
 		var hasPassiveScript = false
 		var passiveScriptName = ""
 		
-		var model : XGCharacterModels!
+		var model = XGCharacterModels(index: 0)
 		var movementType = XGCharacterMovements.index(0)
 		var characterID = 0
 		
@@ -1707,11 +1707,18 @@ extension XDSScriptCompiler {
 							index = subindex
 							
 							if !vects.names.contains(variable) && !locals[currentFunction]!.contains(variable) && !args[currentFunction]!.contains(variable) && !gvars.names.contains(variable)  {
-								error = "Vector \(variable) doesn't exist.\nInvalid line: "
-								for t in tokens {
-									error += " " + t
+								
+								if variable.isValidXDSVariable() {
+									var locs = locals[currentFunction]!
+									locs.addUnique(variable)
+									locals[currentFunction] = locs
+								} else {
+									error = "Invalid variable name: \(variable)\nInvalid line: "
+									for t in tokens {
+										error += " " + t
+									}
+									return nil
 								}
-								return nil
 							}
 							
 							switch index! {

@@ -303,6 +303,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("getGroupID", 17, 1, [.objectName("Map")], .integer, ""),
 		("newMapManager", 18, 1, [.anyType], .objectName("Map"), ""),
 		("warpToMap", 22, 2, [.objectName("Map"), .room, .integerIndex], .null, "room id and entry point index"), // # (int roomID, int entry warp index)
+		("showTitleScreen", 37, 1, [.anyType], .null, ""),
 		("enterMenuMap", 38, 2, [.objectName("Map"), .room], .null, ""),
 		("warpToMapWithOptions", 49, 2, [.objectName("Map"), .room, .bool, .integerUnsigned, .integerUnsigned], .null, ""), // # (int roomID, int unknown)
 	],
@@ -547,6 +548,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 //MARK: - Pokespot
 	60 : [
 		("getCurrentWildPokemon", 17, 2, [.objectName("Pokespot"), .pokespot], .pokemon, "(pokespot id)"), //# (int pokespotId)
+		("setSnacksTotal", 18, 3, [.objectName("Pokespot"), .pokespot, .integerQuantity], .null, "(pokespot id, total)"),
 	]
 	
 ]

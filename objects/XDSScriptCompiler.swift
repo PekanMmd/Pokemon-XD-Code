@@ -168,20 +168,22 @@ class XDSScriptCompiler: NSObject {
 		XGFiles.tableres2.stringTable.save()
 		
 		if relFile != nil {
-			printg("saving characters.")
-			for character in characters {
-				if verbose {
-					printg("saving character:", character.rid)
-				}
-				if character.gid > 0 && character.rid > 0 {
-					character.save()
+			if relFile!.isValid {
+				printg("saving characters...")
+				for character in characters {
+					if verbose {
+						printg("saving character:", character.rid)
+					}
+					if character.gid > 0 && character.rid > 0 {
+						character.save()
+					}
 				}
 			}
 		}
 		
 		if updatedText.length > 0 {
 			if let file = scriptFile {
-				printg("saving updated text.")
+				printg("saving updated text...")
 				updatedText.save(toFile: file)
 			}
 		}

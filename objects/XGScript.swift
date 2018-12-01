@@ -1928,7 +1928,7 @@ class XGScript: NSObject {
 		var macs = [String]()
 		macs.append("define ++XDSVersion " + String(format: "%1.1f", currentXDSVersion) + " // lets future versions of the compiler know which rules to follow")
 		macs.append("define ++ScriptIdentifier \(self.scriptID.hexString()) // best not to change this")
-		macs.append("define ++CreateBackup YES // before saving the compiled .scd file, if it already exists it will be backed up")
+		macs.append("// define ++CreateBackup YES // before saving the compiled .scd file, if it already exists it will be backed up")
 		macs.append("// define ++BaseStringID 0x10000 // This overrides the compiler's base string id when searching for unused string ids")
 		
 		return macs
