@@ -531,7 +531,7 @@ extension XDSScriptCompiler {
 		// don't forget to check for duplicate variable names
 		
 		var flags = 0
-		var isVisible = false
+		var isVisible = true
 		
 		var xCoordinate : Float = 0
 		var yCoordinate : Float = 0
@@ -982,13 +982,14 @@ extension XDSScriptCompiler {
 		if tokens.count == 1 {
 			let token = tokens[0]
 			
+			// check for undefined macros
+			if token.substring(from: 0, to: 1) == "#" {
+				error = "Undefined macro: \(token)"
+				return nil
+			}
+			
 			// accept bracketed expressions, function calls, location markers, return statements or any sub expression
 			if (token.contains("(") && token.contains(")")) || token.substring(from: 0, to: 1) == "@" || subExpr || token == "return" {
-				
-				if token.length == 0 {
-					error = "Invalid token: \(token)"
-					return nil
-				}
 				
 				// return statement
 				if token == "return" {
