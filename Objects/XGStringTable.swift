@@ -176,10 +176,13 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 	@objc func save() {
 		
-		let data = file.data!
-		data.replaceBytesFromOffset(self.startOffset, withByteStream: stringTable.byteStream)
-		data.save()
-		
+		if self.startOffset == 0 {
+			stringTable.save()
+		} else {
+			let data = file.data!
+			data.replaceBytesFromOffset(self.startOffset, withByteStream: stringTable.byteStream)
+			data.save()
+		}
 	}
 	
 	func replaceString(_ string: XGString, save: Bool) -> Bool {
