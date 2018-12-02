@@ -174,7 +174,7 @@ class XDSScriptCompiler: NSObject {
 					if verbose {
 						printg("saving character:", character.rid)
 					}
-					if character.gid > 0 && character.rid > 0 {
+					if character.gid > 0 && character.rid >= 0 {
 						character.save()
 					}
 				}
