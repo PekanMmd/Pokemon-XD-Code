@@ -74,6 +74,7 @@ class XGUtility {
 		compileAllMenuFsys()
 		importFsys()
 		ISO.importFiles(XGFolders.FSYS.files.filter({  $0.fileType == .fsys }) + [XGFiles.dol])
+		
 	}
 	
 	class func importRels() {

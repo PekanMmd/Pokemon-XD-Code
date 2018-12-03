@@ -413,7 +413,7 @@ class XGFsys : NSObject {
 	
 	func shiftAndReplaceFileWithIndex(_ index: Int, withFile newFile: XGFiles) {
 		if !(index < self.numberOfEntries) {
-			printg("index doesn't exist:", index)
+			printg("skipping fsys import: \(newFile.fileName) to \(self.fileName)\nindex doesn't exist:", index)
 			return
 		}
 		
@@ -479,7 +479,7 @@ class XGFsys : NSObject {
 	
 	func shiftAndReplaceFileWithIndexEfficiently(_ index: Int, withFile newFile: XGFiles, save: Bool) {
 		if !(index < self.numberOfEntries) {
-			printg("index doesn't exist:", index)
+			printg("skipping fsys import: \(newFile.fileName) to \(self.fileName)\nindex doesn't exist:", index)
 			return
 		}
 		
@@ -550,7 +550,7 @@ class XGFsys : NSObject {
 		}
 		
 		if !(index < self.numberOfEntries) {
-			printg("index doesn't exist:", index)
+			printg("skipping fsys import: \(newFile.fileName) to \(self.fileName)\nindex doesn't exist:", index)
 			return
 		}
 		

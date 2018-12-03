@@ -3007,7 +3007,7 @@ Twitter: @StarsMmd</string>
                                 <rect key="frame" x="440" y="190" width="400" height="80"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RcD-uE-mIl">
-                                        <rect key="frame" x="133" y="30" width="49" height="20"/>
+                                        <rect key="frame" x="143" y="30" width="49" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="45" id="H17-UN-n5s"/>
                                         </constraints>
@@ -3018,11 +3018,11 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="O8H-GE-DXe">
-                                        <rect key="frame" x="243" y="30" width="94" height="20"/>
+                                        <rect key="frame" x="263" y="30" width="64" height="20"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="90" id="BKI-P6-toQ"/>
+                                            <constraint firstAttribute="width" constant="60" id="BKI-P6-toQ"/>
                                         </constraints>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Usage ID" id="pUZ-JX-x3e">
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Usage ID" id="pUZ-JX-x3e">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -3041,7 +3041,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SIe-ez-UnT">
-                                        <rect key="frame" x="75" y="30" width="50" height="20"/>
+                                        <rect key="frame" x="75" y="30" width="60" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="mmY-PT-g8c">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -3049,7 +3049,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7gK-A2-0Pe">
-                                        <rect key="frame" x="185" y="30" width="50" height="20"/>
+                                        <rect key="frame" x="195" y="30" width="60" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="AQP-kb-UkO">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -3057,7 +3057,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tfq-Jf-u9X">
-                                        <rect key="frame" x="340" y="30" width="50" height="20"/>
+                                        <rect key="frame" x="330" y="30" width="60" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="WWs-aG-Bll">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>

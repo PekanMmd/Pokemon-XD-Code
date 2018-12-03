@@ -397,6 +397,7 @@ extension XGUtility {
 		updateTutorMoves()
 		updatePokeSpots()
 		updateShadowMonitor()
+		importSpecificStringTables()
 	}
 	
 	class func prepareForCompilation() {
@@ -409,6 +410,7 @@ extension XGUtility {
 		updateTutorMoves()
 		updatePokeSpots()
 		updateShadowMonitor()
+		importSpecificStringTables()
 	}
 	
 	class func importSpecificStringTables() {
@@ -434,9 +436,11 @@ extension XGUtility {
 			let fsys = file.fsysData
 			
 			for msg in msgs {
-				for i in 0 ..< fsys.numberOfEntries {
-					if fsys.fileTypeForFile(index: i) == .msg && fsys.fileNameForFileWithIndex(index: i).removeFileExtensions() == msg.fileName.removeFileExtensions() {
-						fsys.shiftAndReplaceFileWithIndexEfficiently(i, withFile: msg.compress(), save: false)
+				if msg.exists {
+					for i in 0 ..< fsys.numberOfEntries {
+						if fsys.fileTypeForFile(index: i) == .msg && fsys.fileNameForFileWithIndex(index: i).removeFileExtensions() == msg.fileName.removeFileExtensions() {
+							fsys.shiftAndReplaceFileWithIndexEfficiently(i, withFile: msg.compress(), save: false)
+						}
 					}
 				}
 			}

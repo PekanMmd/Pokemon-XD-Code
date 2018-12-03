@@ -6484,8 +6484,77 @@ import Foundation
 //	.blr
 //])
 //
+//// new trick room tailwind
+//let trickStart = 0xB9B51C
+//let trickBranch = 0x1f4430
+//let getPokemonPointer = 0x1efcac
+//let getFieldEffect = 0x1f84e0
+//XGAssembly.replaceRamASM(RAMOffset: trickBranch, newASM: [.bl(trickStart)])
+//XGAssembly.replaceRamASM(RAMOffset: trickStart, newASM: [
+//	.stwu(.sp, .sp, -0x10),
+//	.mflr(.r0),
+//	.stw(.r0, .sp, 0x14),
+//	.stw(.r28, .sp, 0x8),
+//	.stw(.r31, .sp, 0xc),
+//
+//	.mr(.r4, .r26),
+//	.li(.r3, 2),
+//	.bl(getPokemonPointer),
+//	.mr(.r31, .r3),
+//
+//	.mr(.r4, .r25),
+//	.li(.r3, 2),
+//	.bl(getPokemonPointer),
+//	.mr(.r28, .r3),
+//
+//	.label("tail wind checks"),
+//	.li(.r4, XGStatusEffects.safeguard.rawValue), // edited to tailwind
+//	.bl(getFieldEffect),
+//	.cmpwi(.r3, 1),
+//	.bne_f(0, 8),
+//	.rlwinm(.r29, .r29, 1, 0, 30), // double speed
+//
+//	.mr(.r3, .r31),
+//	.li(.r4, XGStatusEffects.safeguard.rawValue), // edited to tailwind
+//	.bl(getFieldEffect),
+//	.cmpwi(.r3, 1),
+//	.bne_f(0, 8),
+//	.rlwinm(.r30, .r30, 1, 0, 30), // double speed
+//
+//	.label("trick room checks"),
+//	.mr(.r3, .r28),
+//	.li(.r4, XGStatusEffects.mist.rawValue), // edited to trick room
+//	.bl(getFieldEffect),
+//	.cmpwi(.r3, 1),
+//	.beq_l("compare reversed"),
+//
+//	.mr(.r3, .r31),
+//	.li(.r4, XGStatusEffects.mist.rawValue), // edited to trick room
+//	.bl(getFieldEffect),
+//	.cmpwi(.r3, 1),
+//	.beq_l("compare reversed"),
+//
+//	.label("compare normal"),
+//	.cmplw(.r29, .r30),
+//	.b_l("return"),
+//
+//	.label("compare reversed"),
+//	.cmplw(.r30, .r29),
+//
+//	.label("return"),
+//	.lwz(.r28, .sp, 0x8),
+//	.lwz(.r31, .sp, 0xc),
+//	.lwz(.r0, .sp, 0x14),
+//	.mtlr(.r0),
+//	.addi(.sp, .sp, 0x10),
+//	.blr
+//])
+//
+//// rewrite original code
+//XGAssembly.replaceRamASM(RAMOffset: 0x225ab4, newASM: [.lmw(.r28, .sp, 0x10)])
+//
 //// flame orb toxic orb poison heal
-//let orbBranch = 0x225ab4
+//let orbBranch = 0x227eb4
 //let orbStart = 0xB9A8B4
 //let checkFullHP = 0x201d20
 //let checkStatus = 0x2025f0
@@ -6624,9 +6693,10 @@ import Foundation
 //	.bl(itemMessage),
 //
 //	// return offset 0x174
-//	.lmw(.r28, .sp, 0x10), // overwritten code
+//	.lwz(.r0, .r13, -0x44e8), // overwritten code
 //	.b(orbBranch + 0x4)
 //])
+
 //
 //// sound moves hit through substitute
 //let subJumpBranch = 0x2135ac
@@ -7288,71 +7358,6 @@ import Foundation
 //	.blr
 //])
 //
-//// new trick room tailwind
-//let trickStart = 0xB9B51C
-//let trickBranch = 0x1f4430
-//let getPokemonPointer = 0x1efcac
-//let getFieldEffect = 0x1f84e0
-//XGAssembly.replaceRamASM(RAMOffset: trickBranch, newASM: [.bl(trickStart)])
-//XGAssembly.replaceRamASM(RAMOffset: trickStart, newASM: [
-//	.stwu(.sp, .sp, -0x10),
-//	.mflr(.r0),
-//	.stw(.r0, .sp, 0x14),
-//	.stw(.r28, .sp, 0x8),
-//	.stw(.r31, .sp, 0xc),
-//
-//	.mr(.r3, .r26),
-//	.li(.r4, 2),
-//	.bl(getPokemonPointer),
-//	.mr(.r31, .r3),
-//
-//	.mr(.r3, .r25),
-//	.li(.r4, 2),
-//	.bl(getPokemonPointer),
-//	.mr(.r28, .r3),
-//
-//	.label("tail wind checks"),
-//	.li(.r4, XGStatusEffects.safeguard.rawValue), // edited to tailwind
-//	.bl(getFieldEffect),
-//	.cmpwi(.r3, 1),
-//	.bne_f(0, 8),
-//	.rlwinm(.r29, .r29, 1, 0, 30), // double speed
-//
-//	.mr(.r3, .r31),
-//	.li(.r4, XGStatusEffects.safeguard.rawValue), // edited to tailwind
-//	.bl(getFieldEffect),
-//	.cmpwi(.r3, 1),
-//	.bne_f(0, 8),
-//	.rlwinm(.r30, .r30, 1, 0, 30), // double speed
-//
-//	.label("trick room checks"),
-//	.mr(.r3, .r28),
-//	.li(.r4, XGStatusEffects.mist.rawValue), // edited to trick room
-//	.bl(getFieldEffect),
-//	.cmpwi(.r3, 1),
-//	.beq_l("compare reversed"),
-//
-//	.mr(.r3, .r31),
-//	.li(.r4, XGStatusEffects.mist.rawValue), // edited to trick room
-//	.bl(getFieldEffect),
-//	.cmpwi(.r3, 1),
-//	.beq_l("compare reversed"),
-//
-//	.label("compare normal"),
-//	.cmplw(.r29, .r30),
-//	.b_l("return"),
-//
-//	.label("compare reversed"),
-//	.cmplw(.r30, .r29),
-//
-//	.label("return"),
-//	.lwz(.r28, .sp, 0x8),
-//	.lwz(.r31, .sp, 0xc),
-//	.lwz(.r0, .sp, 0x14),
-//	.mtlr(.r0),
-//	.addi(.sp, .sp, 0x10),
-//	.blr
-//])
 //
 //
 //

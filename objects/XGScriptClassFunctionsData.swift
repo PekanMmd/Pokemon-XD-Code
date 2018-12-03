@@ -333,6 +333,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("displayMessageSilently", 16, 4, [.objectName("Dialogue"), .msg, .bool, .bool], .null, "(msgId, inForeground?, print imm.?)"), //# (int msgID, bool isInForeground, bool printInstantly)
 		("displayMessage", 17, 5, [.objectName("Dialogue"), .msg, .bool, .bool, .integer], .null, "(msgId, inForeground?, print imm.?, pitch)"), //# (int msgID, bool isInForeground, bool printInstantly, int textSoundPitchLevel) makes the chirping sound as characters are displayed
 		("displayYesNoMenu", 21, 2, [.objectName("Dialogue"), .msg], .integerIndex, "returns 0 = YES, 1 = NO"), // result is not boolean but rather index of selected option, 0 indexed
+		("displayColosseumEntryMenu", 23, 2, [.objectName("Dialogue"), .msg], .integerIndex, "returns 0 = Enter, 1 = Info"),
 		
 		("setMessageVariable", 28, 3, [.objectName("Dialogue"), .msgVar, .variableType], .null, ""), //# (int type, var val) macro type for value is set by compiler based on msgvar value
 		

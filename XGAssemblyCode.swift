@@ -285,13 +285,13 @@ class XGAssembly {
 		return 0x40810000 + UInt32( (to - from) & 0xFFFF)
 	}
 	
-	class func setProtectRepeatChanceQuotient(_ divisor: UInt32) {
-		var currentValue : UInt32 = 0xFFFF
+	class func setProtectRepeatChanceQuotient(_ divisor: Int) {
+		var currentValue = 0xFFFF
 		var currentOffset = 0x4eeb90 - kDOLDataToRAMOffsetDifference
 		let dol = XGFiles.dol.data!
 		for _ in 0 ..< 4 {
-			dol.replaceWordAtOffset(currentOffset, withBytes: currentValue)
-			currentOffset += 4
+			dol.replace2BytesAtOffset(currentOffset, withBytes: currentValue)
+			currentOffset += 2
 			currentValue /= divisor
 		}
 		dol.save()
