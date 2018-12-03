@@ -29,7 +29,7 @@ class XDSScriptCompiler: NSObject {
 	
 	// special variables
 	static var scriptID = 0 // currently unknown what this value represents
-	static var baseStringID = 0
+	static var baseStringID = 100
 	static var xdsversion : Float = 0.0
 	static var writeDisassembly = false
 	static var decompileXDS = false
@@ -66,6 +66,7 @@ class XDSScriptCompiler: NSObject {
 		stringTable = nil
 		targetFileName = ""
 		updatedText = ""
+		baseStringID = 100
 	}
 	
 	// MARK: - specify file or text to compile
@@ -205,7 +206,6 @@ class XDSScriptCompiler: NSObject {
 		sugarVarCounter = 1
 		
 		scriptID = 0
-		baseStringID = 0
 		xdsversion = 0
 		
 		let strippedComments = stripComments(text: script)

@@ -291,7 +291,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("getHeldItem", 32, 1, [.objectName("Pokemon")], .item, ""),
 		("getSIDTID", 33, 1, [.objectName("Pokemon")], .integerUnsigned, ""),
 		
-		("teachMove", 34, 2, [.objectName("Pokemon"), .move], .null, ""), // (int move id)
+		("teachMove", 34, 3, [.objectName("Pokemon"), .move, .integer], .null, ""), // (int move id)
 		("hasLearnedMove", 35, 2, [.objectName("Pokemon"), .move], .bool, ""), // (int move id)
 		("canLearnTutorMove", 36, 2, [.objectName("Pokemon"), .move], .bool, ""), // int move id
 		("getIndexOfMove", 37, 2, [.objectName("Pokemon"), .move], .integerIndex, ""),
@@ -361,6 +361,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		("displayMoveRelearnerMenuForPartyMember", 64, 2, [.objectName("Dialogue"), .integerIndex], .move, ""), //# (int partyIndex)
 		("displayTutorMovesMenu", 65, 1, [.objectName("Dialogue")], .move, ""),
+		("setTutorMoveLearned", 66, 2, [.objectName("Dialogue"), .move], .null, ""),
 		
 		("showMoneyWindow", 67, 3, [.objectName("Dialogue"), .integer, .integer], .null, "(x, y)"), //# (int x, int y)
 		("hideMoneyWindow", 68, 1, [.objectName("Dialogue")], .null, ""),
@@ -372,6 +373,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("getBattleResult", 74, 1, [.objectName("Dialogue")], .battleResult, "1 = lose, 2 = win"),
 		
 		("displayMewMenuQuestionWithIndex", 78, 2, [.objectName("Dialogue"), .integer], .move, ""),
+		("displayPartyMenuToLearnMove", 79, 2, [.objectName("Dialogue"), .move], .integerIndex, "shows which pokemon can learn the move"),
 		
 	],
 	

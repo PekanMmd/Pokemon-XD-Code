@@ -1561,18 +1561,20 @@ extension XGUtility {
 			switch macro {
 			case .macroImmediate(let c, let t):
 				let macroText = XDSExpr.stringFromMacroImmediate(c: c, t: t)
-				let val = t.printsAsHexadecimal ? c.asInt.hexString() + " // \(c.asInt)" : c.asInt.string + " // \(c.asInt.hexString())"
-				let contents = "define " + macroText + " \(val)"
-				let trigger = contents + "\t" + t.typeName
-				var completion = [String : String]()
-				completion["trigger"] = trigger
-				completion["contents"] = contents
-				completions.append(completion)
-				
-				completion = [String : String]()
-				completion["trigger"] = macroText + "\t" + t.typeName + " " + val
-				completion["contents"] = macroText
-				completions.append(completion)
+				if macroText.length > 1 {
+					let val = t.printsAsHexadecimal ? c.asInt.hexString() + " // \(c.asInt)" : c.asInt.string + " // \(c.asInt.hexString())"
+					let contents = "define " + macroText + " \(val)"
+					let trigger = contents + "\t" + t.typeName
+					var completion = [String : String]()
+					completion["trigger"] = trigger
+					completion["contents"] = contents
+					completions.append(completion)
+					
+					completion = [String : String]()
+					completion["trigger"] = macroText + "\t" + t.typeName + " " + val
+					completion["contents"] = macroText.substring(from: 1, to: macroText.length)
+					completions.append(completion)
+				}
 			default:
 				break
 			}

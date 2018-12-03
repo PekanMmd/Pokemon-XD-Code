@@ -7640,6 +7640,16 @@ import Foundation
 //	.b(0xb9a28c),
 //])
 
+//// remove sticky hold on knock off
+//XGAssembly.replaceRamASM(RAMOffset: 0x214f1c, newASM: [.b(0x214f48)])
+//
+//// shadow pokemon receive full exp instead of 80%
+//XGAssembly.replaceRamASM(RAMOffset: 0x212eac, newASM: [
+//	.mr(.r0, .r18),
+//	.nop,
+//	.nop
+//])
+
 //// scale experience based on level
 //// defeating a higher level pokemon than the player's pokemon yields more exp
 //// defeating a lower level pokemon yields less exp
@@ -7671,8 +7681,8 @@ import Foundation
 //	// ------------------------
 //	// (recipient level + fainted level) ^ 3 (same here)
 //
-//	.mulli(.r3, .r3, 2), // fainted level x 2
 //	.add(.r15, .r15, .r3), // recipient level + fainted level
+//	.mulli(.r3, .r3, 2), // fainted level x 2
 //	// watch out for integer overflow
 //	// do each individual multiplication and division in pairs 3 times
 //
@@ -7693,17 +7703,6 @@ import Foundation
 //	// return
 //	.b(expBranch + 4)
 //])
-
-//// remove sticky hold on knock off
-//XGAssembly.replaceRamASM(RAMOffset: 0x214f1c, newASM: [.b(0x214f48)])
-//
-//// shadow pokemon receive full exp instead of 80%
-//XGAssembly.replaceRamASM(RAMOffset: 0x212eac, newASM: [
-//	.mr(.r0, .r18),
-//	.nop,
-//	.nop
-//])
-
 
 
 
