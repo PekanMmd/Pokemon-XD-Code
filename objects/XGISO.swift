@@ -35,6 +35,7 @@ let kISOFirstFileOffsetLocation = 0x434
 enum XGGame {
 	case Colosseum
 	case XD
+	case PBR
 }
 
 var tocData = XGISO.extractTOC()

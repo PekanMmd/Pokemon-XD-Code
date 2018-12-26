@@ -8,6 +8,10 @@
 
 import Foundation
 
+enum console : Int {
+	case ngc
+	case wii
+}
 
 extension Sequence where Iterator.Element == Int {
 	var byteString : String {
@@ -33,6 +37,20 @@ extension Array where Element == Int {
 		if !self.contains(new) {
 			self.append(new)
 		}
+	}
+	
+}
+
+extension Array where Element == Bool {
+	
+	func binaryBitsToInt() -> Int {
+		var power = 0
+		var value = 0
+		for bit in self {
+			value += (bit ? 1 : 0) << power
+			power += 1
+		}
+		return value
 	}
 	
 }
@@ -95,6 +113,18 @@ extension Int {
 		return "0x" + hex()
 	}
 	
+	func binary() -> String {
+		var s = String(self, radix: 2)
+		while s.length % 8 != 0 {
+			s = "0" + s
+		}
+		return s
+	}
+	
+	func binaryString() -> String {
+		return "0b" + binary()
+	}
+	
 	var byteArray : [Int] {
 		var val = self
 		var array = [0,0,0,0]
@@ -109,6 +139,17 @@ extension Int {
 		return byteArray.map({ (i) -> UInt8 in
 			return UInt8(i)
 		})
+	}
+	
+	func bitArray(count: Int) -> [Bool] {
+		// least significant bit first
+		var value = self
+		var bits = [Bool]()
+		for _ in 0 ..< count {
+			bits.append((value & 0x1) == 1)
+			value = value >> 1
+		}
+		return bits
 	}
 	
 	func stringIDToString() -> XGString {

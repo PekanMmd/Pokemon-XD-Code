@@ -52,7 +52,11 @@ class XGString: NSObject {
 			for char in chars {
 				stream = stream + char.byteStream
 			}
-			stream += [0, 0]
+			if game == .PBR {
+				stream += XGSpecialCharacters.dialogueEnd.byteStream
+			} else {
+				stream += [0, 0]
+			}
 			return stream
 		}
 	}
@@ -71,11 +75,6 @@ class XGString: NSObject {
 		
 		return self.string == cmpstr.string
 		
-	}
-	
-	@objc func copyString() {
-//		let pb = UIPasteboard.generalPasteboard()
-//		pb.string = self.string
 	}
 	
 	func append(_ char: XGUnicodeCharacters) {
@@ -116,29 +115,8 @@ class XGString: NSObject {
 				}
 				
 				let sp = XGSpecialCharacters.fromString(midString)
-				var extraBytes = [Int]()
 				
-				if sp.extraBytes > 0 {
-					current += 1
-					
-					for _ in 0 ..< sp.extraBytes {
-						
-						var byte = ""
-						char = string.substring(from: current, to: current + 1)
-						current += 1
-						byte = byte + char
-						
-						char = string.substring(from: current, to: current + 1)
-						current += 1
-						byte = byte + char
-						
-						extraBytes.append(XGUnicodeCharacters.hexStringToInt(byte))
-						
-					}
-					current += 1
-				}
-				
-				let ch = XGUnicodeCharacters.special(sp, extraBytes)
+				let ch = XGUnicodeCharacters.special(sp)
 				chars.append(ch)
 				
 			} else {
@@ -201,11 +179,21 @@ class XGString: NSObject {
 		return XGString(string: str, file: self.table, sid: self.id)
 	}
 	
+	var unformattedString : String {
+		var s = self.string
+		if game == .PBR {
+			for rep in ["[0xF001]", "[0xF101]"] {
+				s = s.replacingOccurrences(of: rep, with: "")
+			}
+		} else {
+			for rep in ["[Bold]",] {
+				s = s.replacingOccurrences(of: rep, with: "")
+			}
+		}
+		return s
+	}
    
 }
-
-
-
 
 
 

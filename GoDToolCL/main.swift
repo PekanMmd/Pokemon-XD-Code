@@ -7,25 +7,26 @@
 //
 //
 
-
 ////let updated = XGFolders.nameAndFolder("updated scripts", .Documents)
 ////for filename in updated.filenames {
-for filename in ["M2_building_3F.xds", "M3_out.xds"] {
-	let name = filename.removeFileExtensions()
-	XDSScriptCompiler.setFlags(disassemble: false, decompile: false, updateStrings: true, increaseMSG: true)
-	XDSScriptCompiler.baseStringID = 0x10000
-	if XDSScriptCompiler.compile(textFile: .xds(name)) {
-		printg("success: ", filename)
-		let fsys = XGFiles.fsys(name)
-		fsys.compileMapFsys()
-		ISO.importFiles([fsys])
-	} else {
-		printg("\nCompilation error: \(filename)\n\(XDSScriptCompiler.error)\n")
-	}
-}
+//for filename in ["D6_dome_2F.xds"] {
+//	let name = filename.removeFileExtensions()
+//	XDSScriptCompiler.setFlags(disassemble: false, decompile: false, updateStrings: true, increaseMSG: true)
+//	XDSScriptCompiler.baseStringID = 0x10000
+//	if XDSScriptCompiler.compile(textFile: .xds(name)) {
+//		printg("success: ", filename)
+//		let fsys = XGFiles.fsys(name)
+//		fsys.compileMapFsys()
+//		ISO.importFiles([fsys])
+//	} else {
+//		printg("\nCompilation error: \(filename)\n\(XDSScriptCompiler.error)\n")
+//	}
+//}
 
+//XGUtility.compileCommonRel()
 //XGUtility.compileMainFiles()
 //XGUtility.compileAllFiles()
+
 
 //XGAssembly.ASMfreeSpacePointer().hexString().println()
 

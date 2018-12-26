@@ -105,6 +105,10 @@ class GoDTrainerViewController: GoDTableViewController {
 			for mon in self.pokemon {
 				mon.save()
 			}
+			for view in self.pokemonViews {
+				view.didSave()
+			}
+			
 			self.hideActivityView()
 		}
 	}

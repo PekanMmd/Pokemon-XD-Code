@@ -511,8 +511,12 @@ class GoDPokemonView: NSImageView {
 		self.setCatch(sender: shadowCatchrate)
 		self.setCounter(sender: shadowCounter)
 		
+	}
+	
+	func didSave() {
 		if updateDPKM {
-			self.dpkm.setUpItems()
+			//takes a second or two which feels really laggy
+			//self.dpkm.setUpItems()
 			updateDPKM = false
 		}
 	}

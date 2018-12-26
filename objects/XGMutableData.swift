@@ -61,6 +61,14 @@ class XGMutableData: NSObject {
 		
 	}
 	
+	init(byteStream: [UInt8]) {
+		super.init()
+		
+		self.data = NSMutableData()
+		self.appendBytes(byteStream)
+		
+	}
+	
 	init(contentsOfXGFile file: XGFiles) {
 		super.init()
 		

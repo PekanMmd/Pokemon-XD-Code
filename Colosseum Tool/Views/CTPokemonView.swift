@@ -478,5 +478,9 @@ class GoDPokemonView: NSImageView {
 		
 	}
 	
+	func didSave() {
+		
+		
+	}
 	
 }

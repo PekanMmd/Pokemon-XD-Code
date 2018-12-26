@@ -302,6 +302,8 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 	38: [
 		("getGroupID", 17, 1, [.objectName("Map")], .integer, ""),
 		("newMapManager", 18, 1, [.anyType], .objectName("Map"), ""),
+		("getPreviousMapID", 19, 1, [.objectName("Map")], .room, ""),
+		
 		("warpToMap", 22, 2, [.objectName("Map"), .room, .integerIndex], .null, "room id and entry point index"), // # (int roomID, int entry warp index)
 		("showTitleScreen", 37, 1, [.anyType], .null, ""),
 		("enterMenuMap", 38, 2, [.objectName("Map"), .room], .null, ""),
@@ -332,6 +334,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		("displayMessageSilently", 16, 4, [.objectName("Dialogue"), .msg, .bool, .bool], .null, "(msgId, inForeground?, print imm.?)"), //# (int msgID, bool isInForeground, bool printInstantly)
 		("displayMessage", 17, 5, [.objectName("Dialogue"), .msg, .bool, .bool, .integer], .null, "(msgId, inForeground?, print imm.?, pitch)"), //# (int msgID, bool isInForeground, bool printInstantly, int textSoundPitchLevel) makes the chirping sound as characters are displayed
+		("waitForMessage", 18, 2, [.objectName("Dialogue"), .bool], .null, "(wait for completion?)"),
 		("displayYesNoMenu", 21, 2, [.objectName("Dialogue"), .msg], .integerIndex, "returns 0 = YES, 1 = NO"), // result is not boolean but rather index of selected option, 0 indexed
 		("displayColosseumEntryMenu", 23, 2, [.objectName("Dialogue"), .msg], .integerIndex, "returns 0 = Enter, 1 = Info"),
 		
