@@ -33,10 +33,11 @@ let NullFSYS = XGMutableData(byteStream: [0x46, 0x53, 0x59, 0x53, 0x00, 0x00, 0x
 indirect enum XGFiles {
 	
 	case dol
-	case common(Int, XGFileTypes)
+	case common(Int)
 	case msg(String)
 	case dckp(Int)
 	case dckt(Int)
+	case dcka
 	case pokeFace(Int)
 	case pokeBody(Int)
 	case typeImage(Int)
@@ -58,12 +59,13 @@ indirect enum XGFiles {
 			switch self {
 				
 			case .dol					: return "main" + XGFileTypes.dol.fileExtension
-			case .common(let i, let f)	: return "common_" + String(format: "%04d", i) + f.fileExtension
+			case .common(let i)			: return "common_" + String(format: "%02d", i) + XGFileTypes.dta.fileExtension
 			case .msg(let s)			: return s + XGFileTypes.msg.fileExtension
-			case .dckp(let i)			: return "decks_" + String(format: "%04d", i) + XGFileTypes.dckp
+			case .dckp(let i)			: return "pokemon deck_" + String(format: "%02d", i) + XGFileTypes.dckp
 				.fileExtension
-			case .dckt(let i)			: return "decks_" + String(format: "%04d", i) + XGFileTypes.dckt
+			case .dckt(let i)			: return "trainer deck_" + String(format: "%02d", i) + XGFileTypes.dckt
 				.fileExtension
+			case .dcka					: return "AI deck" + XGFileTypes.dcka.fileExtension
 			case .pokeFace(let id)		: return "face_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
 			case .pokeBody(let id)		: return "body_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
 			case .typeImage(let id)		: return "type_" + String(id) + XGFileTypes.png.fileExtension
@@ -88,6 +90,7 @@ indirect enum XGFiles {
 			case .msg				: folder = .MSG
 			case .dckp				: folder = .Decks
 			case .dckt				: folder = .Decks
+			case .dcka				: folder = .Decks
 			case .pokeFace			: folder = .PokeFace
 			case .pokeBody			: folder = .PokeBody
 			case .typeImage			: folder = .Types
@@ -124,7 +127,6 @@ indirect enum XGFiles {
 			return nil
 		}
 		
-		
 		var data : XGMutableData?
 		if let data = loadedFiles[self.path] {
 			return data
@@ -138,15 +140,6 @@ indirect enum XGFiles {
 				loadedFiles[self.path] = d
 			}
 		}
-//		else {
-//			switch self {
-//			case.common:
-//				if let d = data {
-//					loadedFiles[self.path] = d
-//				}
-//			default: break
-//			}
-//		}
 		
 		return data
 		
@@ -288,7 +281,6 @@ indirect enum XGFolders {
 	case DOL
 	case Decks
 	case JSON
-	case StringTables
 	case TextureImporter
 	case Import
 	case Export
@@ -303,7 +295,6 @@ indirect enum XGFolders {
 	case MSG
 	case Reference
 	case Resources
-	case ISO
 	case Logs
 	case ISOExport(String)
 	case nameAndPath(String, String)
@@ -317,7 +308,6 @@ indirect enum XGFolders {
 			case .DOL				: return "DOL"
 			case .Decks				: return "Decks"
 			case .JSON				: return "JSON"
-			case .StringTables		: return "String Tables"
 			case .TextureImporter	: return "Texture Importer"
 			case .Import			: return "Import"
 			case .Export			: return "Export"
@@ -332,9 +322,8 @@ indirect enum XGFolders {
 			case .MSG				: return "String Tables"
 			case .Reference			: return "Reference"
 			case .Resources			: return "Resources"
-			case .ISO				: return "ISO"
 			case .Logs				: return "Logs"
-			case .ISOExport      	: return "ISO Export"
+			case .ISOExport      	: return "FSYS Export"
 			case .nameAndPath(let s, _): return s
 			case .nameAndFolder(let s, _): return s
 			}
@@ -467,7 +456,6 @@ indirect enum XGFolders {
 			.MSG,
 			.Decks,
 			.JSON,
-			.StringTables,
 			.TextureImporter,
 			.Import,
 			.Export,
@@ -481,7 +469,6 @@ indirect enum XGFolders {
 			.LZSS,
 			.Reference,
 			.Resources,
-			.ISO,
 			.Logs,
 			]
 		
@@ -501,7 +488,6 @@ indirect enum XGFolders {
 			images.append(.trainerFace(i))
 		}
 		images.append(.nameAndFolder("type_fairy.png", .Types))
-		images.append(.nameAndFolder("type_shadow.png", .Types))
 		
 		for image in images {
 			if !image.exists {

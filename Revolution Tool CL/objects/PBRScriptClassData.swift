@@ -14,6 +14,8 @@ let ScriptClassNames : [Int : String] = [
 	0 : "Standard",
 	4 : "Vector",
 	7 : "Array",
+	
+	36 : "BattlePokemon",
 ]
 
 //MARK: - Operators
@@ -82,6 +84,8 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("atan2", 51, 1),
 		("acos", 52, 1),
 		("sqrt", 53, 1),
+		("printf", 136, 1), // params also include pattern matches like %d. debug only
+		("genRandomNumberMod", 137, 1), // generates a random number between 0 and the parameter - 1
 	],
 	
 	//MARK: - Vector
@@ -124,6 +128,11 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("getIteratorPos", 24, 2),
 		("append", 25, 2) //#REMOVED
 	],
+	
+	36 : [
+		("getCurrentMove", 23, 1),
+	
+	]
 	
 ]
 

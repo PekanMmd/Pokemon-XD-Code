@@ -8,9 +8,9 @@
 
 import Foundation
 
-let kNumberOfItems				= PBRDataTable.tableWithID(19)!.numberOfEntries // 465
+let kNumberOfItems = PBRDataTable.items.numberOfEntries // 465
 
-class XGItem: NSObject, XGDictionaryRepresentable {
+class XGItem: NSObject, XGDictionaryRepresentable, XGIndexedValue {
 	
 	var index				= 0
 	
@@ -27,6 +27,7 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 	var price				= 0
 	var flingPower			= 0 // base power of the move fling when this item is held
 	
+	var unknown 			= 0
 	var unknownBool			= false
 	
 	
@@ -48,11 +49,12 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 		super.init()
 		
 		self.index = index
-		let data  = PBRDataTableEntry(index: index + 1, tableId: 19)
+		let data  = PBRDataTableEntry.items(index: self.index)
 		
 		price = data.getShort(0)
 		nameID = data.getShort(2)
 		descriptionID = data.getShort(4)
+		unknown = data.getShort(6)
 		holdItemID = data.getByte(8)
 		parameter = data.getByte(9)
 		flingPower = data.getByte(12)
@@ -68,11 +70,12 @@ class XGItem: NSObject, XGDictionaryRepresentable {
 	
 	@objc func save() {
 		
-		let data  = PBRDataTableEntry(index: self.index + 1, tableId: 19)
+		let data  = PBRDataTableEntry.items(index: self.index)
 		
 		data.setShort(0, to: price)
 		data.setShort(2, to: nameID)
 		data.setShort(4, to: descriptionID)
+		data.setShort(6, to: unknown)
 		data.setByte(8, to: holdItemID)
 		data.setByte(9, to: parameter)
 		data.setByte(12, to: flingPower)

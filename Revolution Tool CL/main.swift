@@ -7,51 +7,56 @@
 
 import Foundation
 
-//XGFolders.setUpFolderFormat()
-
-//XGFiles.fsys("common").fsysData.extractFilesToFolder(folder: .Common, decode: true)
-////XGFiles.fsys("common").fsysData.extractFilesToFolder(folder: .Common, decode: true)
-//let msg = XGFiles.fsys("mes_common").fsysData.decompressedDataForFileWithIndex(index: 1)!
-//msg.file = .msg("mes_common")
-//msg.save()
-//for file in XGFolders.FSYS.files where file.fileType == .fsys {
-//	let fsys = file.fsysData
-//	if let msg = fsys.decompressedDataForFileWithFiletype(type: .msg) {
-//		msg.file = .msg(msg.file.fileName.removeFileExtensions())
-//		msg.save()
-//	}
+//for i in 0x1906 ... 0x191d {
+//	getStringSafelyWithID(id: i).unformattedString.println()
 //}
-//move("surf").nameID.hexString().println()
-//for move in allMovesArray() {
-//	let data  = PBRDataTableEntry(index: move.index + 1, tableId: 30)
-//	printg(move.name.unformattedString.spaceToLength(15), data.getByte(19).binary(), data.getByte(22))
-//}
-//XGFiles.fsys("wzx_waza_001").fsysData.extractFilesToFolder(folder: .Documents, decode: true)
-XGFiles.nameAndFolder("wzx_waza_001 0000.scd", .Documents).writeScriptData()
+for i in [4] {
+	let deck = XGDecks.dckp(i)
+	
+	let indices = 0 ..< deck.numberOfEntries
+	let mons = indices.map { (index) -> XGTrainerPokemon  in
+		return XGDeckPokemon.deck(index, deck).data
+	}
+	
+	for mon in mons.sorted(by: { (p1, p2) -> Bool in
+		p1.deckData.index < p2.deckData.index
+	}) {
+		mon.species.formeName.println()
+		mon.ability.name.unformattedString.println()
+		for move in mon.moves {
+			move.name.unformattedString.println()
+		}
+		
+		"".println()
+	}
+	
+}
 
-//for i in 0 ... 0x1f4 {
-//	let entry = PBRDataTableEntry(index: i, tableId: 9)
-//	for j in 0 ... 6 {
-//		let start = j * 6
-//		let method = entry.getShort(start)
-//		let condition = entry.getShort(start + 2)
-//		let newspec = entry.getShort(start + 4)
-//		let oldspec = i
-//
-//		if newspec > 0 {
-//
-//			let oldname = getStringSafelyWithID(id: oldspec + 9).string
-//			let newname = getStringSafelyWithID(id: newspec + 9).string
-//
-//			printg(i, sanitise(oldname), sanitise(newname), method, condition)
-//		}
-//
-//	}
+
+//getStringWithID(id: 0x1907)?.println()
+//XGPokemon.pokemon(0x15f).name.unformattedString.println()
+
+//XGUtility.extractAllFiles()
+
+//let deck = XGDecks.dckp(10)
+//for i in 0 ..< deck.numberOfEntries {
+//	PBRDataTableEntry(index: i, deck: deck).data.byteStream.hexStream.println()
 //}
 
-
-
-//for file in XGFolders.Common.files.sorted(by: { $0.fileName < $1.fileName }) where file.fileType == .dta {
-//	let table = PBRDataTable(file: file)
-//	printg(table, "\n\n")
+//for m in [0xe6,0x113,0xd5, 0xbf] {
+//	XGItems.item(m).name.unformattedString.println()
 //}
+//XGPokemon.pokemon(0x1a1).name.unformattedString.println()
+//item("black belt").index.hexString().println()
+
+//let castform = pokemon("castform").stats
+//let id = castform.faces[0].femaleID
+//let id : UInt32 = 0x27c70c00
+//if let fsys = XGUtility.getFSYSForIdentifier(id: id) {
+//	fsys.fileName.println()
+//	let index = fsys.indexForIdentifier(identifier: id.int32)
+//	index.string.println()
+//	fsys.fullFileNameForFileWithIndex(index: index).println()
+//}
+
+

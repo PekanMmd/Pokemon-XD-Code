@@ -11,6 +11,8 @@ import Foundation
 enum XGDeckTypes : UInt32 {
 	case DCKT = 0x44434B54
 	case DCKP = 0x44434B50
+	case DCKA = 0x44434B41
+	case none = 0x00000000
 }
 
 enum XGDecks {
@@ -18,6 +20,7 @@ enum XGDecks {
 	case null
 	case dckp(Int)
 	case dckt(Int)
+	case dcka
 	
 	var file : XGFiles {
 		get {
@@ -25,6 +28,7 @@ enum XGDecks {
 				case .null: return .nameAndFolder("", .Documents)
 				case .dckp(let i): return .dckp(i)
 				case .dckt(let i): return .dckt(i)
+				case .dcka: return .dcka
 			}
 		}
 	}
@@ -32,32 +36,37 @@ enum XGDecks {
 	var type : XGDeckTypes {
 		switch self {
 			case .dckp	: return .DCKP
-			default		: return .DCKT
+			case .dckt	: return .DCKT
+			case .dcka  : return .DCKA
+			default		: return .none
 		}
 	}
 	
-	var NumberOfEntries : Int {
-		get {
-			return self.file.data!.get4BytesAtOffset(0x08)
-		}
+	var numberOfEntries : Int {
+		return self.dataTable.numberOfEntries
+	}
+	
+	var entrySize : Int {
+		return self.dataTable.entrySize
 	}
 	
 	static var headerSize : Int {
 		return 0x10
 	}
 	
-	func addEntries(count: Int) {
-		let data = self.file.data!
+	var dataTable : PBRDataTable {
+		switch self {
+		case .dcka: return PBRDataTable.AIDeck()!
+		case .dckt(let i): return PBRDataTable.trainerDeckWithID(i)!
+		case .dckp(let i): return PBRDataTable.pokemonDeckWithID(i)!
+		case .null: return PBRDataTable(file: self.file)
+		}
 		
-		let entrySize = self.type == .DCKT ? kSizeOfTrainerData : kSizeOfPokemonData
-		data.insertRepeatedByte(byte: 0, count: count * entrySize, atOffset: data.length)
-		
-		data.replace4BytesAtOffset(0x4, withBytes: data.length)
-		data.replace4BytesAtOffset(0x8, withBytes: self.NumberOfEntries + count)
-		
-		data.save()
 	}
 	
+	static var level30opendouble : XGDecks { return .dckp(0) }
+	static var masters : XGDecks { return .dckp(4) }
+	static var rentalpasses : XGDecks { return .dckp(7) }
 	
 	
 }

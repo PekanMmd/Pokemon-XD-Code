@@ -27,6 +27,10 @@ enum XGSpecialCharacters {
 		}
 	}
 	
+	var extraBytes : Int {
+		return 0 // unused but required for consistency with colosseum and xd
+	}
+	
 	var byteStream : [UInt8] {
 		get {
 			return [UInt8(0xFF), UInt8(0xFF), UInt8((self.id >> 8) & 0xFF), UInt8(self.id & 0xFF)]
@@ -35,7 +39,7 @@ enum XGSpecialCharacters {
 	
 	var unicode : XGUnicodeCharacters {
 		get {
-			return .special(self)
+			return .special(self, [])
 		}
 	}
 	

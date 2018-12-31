@@ -252,7 +252,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 				if sp.id == 0xFFFF {
 					complete = true
 				} else {
-					string.append(.special(sp))
+					string.append(.special(sp, []))
 				}
 				
 			} else {

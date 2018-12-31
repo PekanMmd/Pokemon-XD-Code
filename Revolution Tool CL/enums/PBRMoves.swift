@@ -8,27 +8,65 @@
 
 import Foundation
 
-enum XGMoves : XGDictionaryRepresentable {
+enum PBRRandomMoveStyle : Int {
+	case offsensive = 0
+	case defensive = 1
+	
+	var string : String {
+		return self.rawValue == 1 ? "Offensive" : "Defensive"
+	}
+}
+
+enum PBRRandomMoveType : Int {
+	case levelup = 0
+	// not sure of the difference yet
+	case tm = 1
+	case tm2 = 2
+	case tm3 = 3
+	case tm4 = 4
+	
+	var string : String {
+		return self.rawValue == 0 ? "Level-up Move" : "TM \(self.rawValue)"
+	}
+}
+
+enum XGMoves : XGDictionaryRepresentable, XGIndexedValue {
 	
 	case move(Int)
+	case randomMove(PBRRandomMoveStyle, PBRRandomMoveType)
 	
 	var index : Int {
 		get {
 			switch self {
 				case .move(let i): return i
+				case .randomMove(let s, let t): return 0x8000 + (s.rawValue << 4) + t.rawValue
+				
 			}
 		}
 	}
 	
 	var nameID : Int {
 		get {
-			return data.nameID
+			switch self {
+			case .move:
+				return data.nameID
+			default:
+				return 0
+			}
+			
 		}
 	}
 	
 	var name : XGString {
 		get {
-			return getStringSafelyWithID(id: nameID)
+			switch self {
+			case .move:
+				return getStringSafelyWithID(id: nameID)
+			case .randomMove(let s, let t):
+				let text = "Random " + s.string + " " + t.string
+				return XGString(string: text, file: nil, sid: nil)
+			}
+			
 		}
 	}
 	

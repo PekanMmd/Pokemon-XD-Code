@@ -382,7 +382,7 @@ class XGScript: NSObject {
 		return ""
 	}
 	
-	private func getInstructionStack() -> (expressions: XGStack<XDSExpr>, macros: [XDSExpr]) {
+	private func getInstructionStack() -> XGStack<XDSExpr> {
 		let stack = XGStack<XDSExpr>()
 		
 		var functionParams = [String : Int]()
@@ -720,13 +720,10 @@ class XGScript: NSObject {
 		// function headers should replace reserve statements
 		// so assume can take out reserves
 		var updatedStack = XGStack<XDSExpr>()
-		var macros = [XDSExpr]()
 		var locationsDictionary = [XDSLocation : Int]()
 		
 		var instructionIndex = 0
 		for expr in stack.asArray {
-			
-			macros += expr.macros
 			
 			if let fname = functionLocations[instructionIndex] {
 				let paramCount = getParameterCountForFunction(named: fname)
@@ -1035,7 +1032,7 @@ class XGScript: NSObject {
 			
 		}
 		
-		return (compoundStack, macros)
+		return compoundStack
 	}
 	
 	@objc private func generateXDSHeader() -> String {
@@ -1119,7 +1116,7 @@ class XGScript: NSObject {
 		// creates xds text from expressions
 		// can follow a similar process to decompile to other programming or scripting languages
 		
-		let (exprStack, macs) = getInstructionStack()
+		let exprStack = getInstructionStack()
 		
 		// write script headers
 		var script = generateXDSHeader()

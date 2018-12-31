@@ -16,7 +16,7 @@ let kFirstFileOffset				= 0x48
 let kFirstFileDetailsPointerOffset	= 0x60
 let kFirstFileNameOffset			= 0x70
 
-let kSizeOfArchiveEntry				= game == .XD ? 0x70 : 0x50
+let kSizeOfArchiveEntry				= game == .Colosseum ? 0x50 : 0x70
 
 let kFileIdentifierOffset			= 0x00 // 3rd byte is the file format, 1st half is an arbitrary identifier
 let kFileFormatOffset				= 0x02
@@ -919,9 +919,8 @@ class XGFsys : NSObject {
 				while addendum.length < 4 {
 					addendum = "0" + addendum
 				}
+				addendum = " " + addendum
 			}
-			
-			addendum = " " + addendum
 			
 			updatedNames.append(filenames[i].removeFileExtensions() + addendum + filenames[i].fileExtensions)
 		}

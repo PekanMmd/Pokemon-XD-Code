@@ -73,12 +73,6 @@ enum XGEvolutionMethods : Int, XGDictionaryRepresentable {
 		}
 	}
 	
-	func cycle() -> XGEvolutionMethods {
-		
-		return XGEvolutionMethods(rawValue: self.rawValue + 1) ?? XGEvolutionMethods(rawValue: 0)!
-		
-	}
-	
 	var dictionaryRepresentation: [String : AnyObject] {
 		get {
 			return ["Value" : self.rawValue as AnyObject]

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGDeckPokemon : XGDictionaryRepresentable {
+enum XGDeckPokemon : XGDictionaryRepresentable, XGIndexedValue {
 	
 	case deck(Int, XGDecks)
 	
@@ -39,20 +39,13 @@ enum XGDeckPokemon : XGDictionaryRepresentable {
 	
 	var pokemon : XGPokemon {
 		get {
-			let species = self.deck.file.data!.get2BytesAtOffset(startOffset + kPokemonIndexOffset)
-			return XGPokemon.pokemon(species)
-		}
-	}
-	
-	var level : Int {
-		get {
-			return self.deck.file.data!.getByteAtOffset(startOffset + kPokemonLevelOffset)
+			return data.species
 		}
 	}
 	
 	var data : XGTrainerPokemon {
 		get {
-			return XGTrainerPokemon(DeckData: self)
+			return XGTrainerPokemon(deckData: self)
 		}
 	}
 	

@@ -43,10 +43,8 @@ class XGScriptInstruction: NSObject {
 		default:
 			if param < 0x80 && param > 0 {
 				return "#Class\(param)Object"
-			} else if param == 0x80 {
-				return "#PlayerCharacter"
 			} else if param <= 0x120 {
-				return "#Character_\(param - 0x80)"
+				return "#Object_\(param - 0x80)"
 			} else if param < 0x300 && param >= 0x200 {
 				return "#Array_\(param - 0x200)"
 			} else {
@@ -78,7 +76,7 @@ class XGScriptInstruction: NSObject {
 			if param < 0x80 && param > 0 {
 				return XGScriptClass.classes(param).name
 			} else if param <= 0x120 {
-				return "character_" + String(format: "%02d", param - 0x80)
+				return "object_" + String(format: "%02d", param - 0x80)
 			} else if param < 0x300 && param >= 0x200 {
 				return "array_" + String(format: "%02d", param - 0x200)
 			} else {

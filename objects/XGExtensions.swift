@@ -13,6 +13,31 @@ enum console : Int {
 	case wii
 }
 
+protocol XGIndexedValue {
+	
+	var index : Int { get }
+	
+}
+
+func ==(lhs: XGIndexedValue, rhs: XGIndexedValue) -> Bool {
+	return lhs.index == rhs.index
+}
+func !=(lhs: XGIndexedValue, rhs: XGIndexedValue) -> Bool {
+	return lhs.index != rhs.index
+}
+func ==(lhs: XGIndexedValue, rhs: Int) -> Bool {
+	return lhs.index == rhs
+}
+func !=(lhs: XGIndexedValue, rhs: Int) -> Bool {
+	return lhs.index != rhs
+}
+func ==(lhs: Int, rhs: XGIndexedValue) -> Bool {
+	return lhs == rhs.index
+}
+func !=(lhs: Int, rhs: XGIndexedValue) -> Bool {
+	return lhs != rhs.index
+}
+
 extension Sequence where Iterator.Element == Int {
 	var byteString : String {
 		var s = ""
@@ -42,10 +67,21 @@ extension Array where Element == Int {
 }
 
 extension Array where Element == Bool {
+	// least significant bit first
 	
 	func binaryBitsToInt() -> Int {
 		var power = 0
 		var value = 0
+		for bit in self {
+			value += (bit ? 1 : 0) << power
+			power += 1
+		}
+		return value
+	}
+	
+	func binaryBitsToUInt32() -> UInt32 {
+		var power = 0
+		var value : UInt32 = 0
 		for bit in self {
 			value += (bit ? 1 : 0) << power
 			power += 1
@@ -185,6 +221,17 @@ extension UInt32 {
 		return byteArray.map({ (i) -> UInt8 in
 			return UInt8(i)
 		})
+	}
+	
+	func bitArray() -> [Bool] {
+		// least significant bit first
+		var value = self
+		var bits = [Bool]()
+		for _ in 0 ... 3 {
+			bits.append((value & 0x1) == 1)
+			value = value >> 1
+		}
+		return bits
 	}
 	
 	var int : Int {

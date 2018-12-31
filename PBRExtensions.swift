@@ -116,6 +116,98 @@ class XGUtility {
 			return nil
 		}
 	}
+	
+	// extraction
+	class func extractMainFiles() {
+		XGFolders.setUpFolderFormat()
+		
+		printg("extracting required files...")
+		let requiredFiles : [XGFiles] = [.dol, .fsys("common"), .fsys("mes_common"), .fsys("deck")]
+		var fileMissing = false
+		for file in requiredFiles {
+			if !file.exists {
+				printg("Error: required file '\(file.path)' doesn't exist")
+				fileMissing = true
+			}
+		}
+		if fileMissing { return }
+		
+		let fsys = XGFiles.fsys("deck").fsysData
+		for i in 0 ... 25 {
+			if !XGFiles.dckt(i).exists {
+				let data = fsys.decompressedDataForFileWithIndex(index: i)!
+				data.file = .dckt(i)
+				data.save()
+			}
+		}
+		for i in 26 ... 44 {
+			if !XGFiles.dckp(i - 26).exists {
+				let data = fsys.decompressedDataForFileWithIndex(index: i)!
+				data.file = .dckp(i - 26)
+				data.save()
+			}
+		}
+		if !XGFiles.dcka.exists {
+			let data = fsys.decompressedDataForFileWithIndex(index: 45)!
+			data.file = .dcka
+			data.save()
+		}
+		
+		let common = XGFiles.fsys("common").fsysData
+		for i in 0 ... 32 {
+			if !XGFiles.common(i).exists {
+				let data = common.decompressedDataForFileWithIndex(index: i)!
+				data.file = .common(i)
+				data.save()
+			}
+		}
+		
+		if !XGFiles.msg("mes_common").exists {
+			let msg = XGFiles.fsys("mes_common").fsysData.decompressedDataForFileWithIndex(index: 1)!
+			msg.file = .msg("mes_common")
+			msg.save()
+		}
+		printg("extraction complete!")
+		
+	}
+	
+	class func extractAllFiles() {
+		XGFolders.setUpFolderFormat()
+		extractMainFiles()
+//		XGThreadManager.manager.runInBackgroundAsync {
+			printg("extracting fsys files...")
+			for file in XGFolders.FSYS.files where file.fileType == .fsys {
+				let fsys = file.fsysData
+				if let msg = fsys.decompressedDataForFileWithFiletype(type: .msg) {
+					if msg.get2BytesAtOffset(12) == 0x5553 { // US in unicode
+						msg.file = .msg(msg.file.fileName.removeFileExtensions())
+						msg.save()
+					}
+				}
+				let folder = XGFolders.ISOExport(fsys.fileName.removeFileExtensions())
+				folder.createDirectory()
+				fsys.extractFilesToFolder(folder: folder, decode: true)
+			}
+			printg("extraction complete!")
+//		}
+	}
+	
+	class func getFSYSForIdentifier(id: UInt32) -> XGFsys? {
+		for file in XGFolders.FSYS.files where file.fileName.contains(".fsys") {
+			let fsys = file.data!
+			let entries = fsys.get4BytesAtOffset(kNumberOfEntriesOffset)
+			
+			for i in 0 ..< entries {
+				let details = fsys.get4BytesAtOffset(0x60)
+				let identifier = fsys.getWordAtOffset(details + (i * kSizeOfArchiveEntry))
+				if identifier == id {
+					return file.fsysData
+				}
+			}
+			
+		}
+		return nil
+	}
 }
 
 

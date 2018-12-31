@@ -86,7 +86,15 @@ class XGMutableData: NSObject {
 		if !self.file.folder.exists {
 			self.file.folder.createDirectory()
 		}
-		self.data.write(toFile: self.file.path, atomically: true)
+		if self.data.write(toFile: self.file.path, atomically: true) {
+			if verbose {
+				printg("data successfully written to file:", self.file.path)
+			}
+		} else {
+			if verbose {
+				printg("data failed to be written to file:", self.file.path)
+			}
+		}
 	}
 	
 	@objc func copyDataAtOffset(_ origin: Int, ofSize bytes: Int, toOffset target: Int) {

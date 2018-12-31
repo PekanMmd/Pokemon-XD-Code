@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGDeckTrainer : XGDictionaryRepresentable {
+enum XGDeckTrainer : XGDictionaryRepresentable, XGIndexedValue {
 	
 	case deck(Int, XGDecks)
 	

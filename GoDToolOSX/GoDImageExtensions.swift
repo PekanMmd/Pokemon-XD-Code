@@ -19,6 +19,14 @@ extension XGFiles {
 	}
 }
 
+extension XGMutableData {
+	var texture : GoDTexture {
+		get {
+			return GoDTexture(data: self)
+		}
+	}
+}
+
 extension XGTrainerModels {
 	var image : NSImage {
 		let val = self.rawValue >= XGFolders.Trainers.files.count ? 0 : self.rawValue

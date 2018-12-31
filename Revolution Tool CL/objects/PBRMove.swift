@@ -8,16 +8,16 @@
 
 import Foundation
 
-let kNumberOfMoves			= PBRDataTable.tableWithID(30)!.numberOfEntries // 468
+let kNumberOfMoves = PBRDataTable.moves.numberOfEntries // 468
 
-class XGMove: NSObject, XGDictionaryRepresentable {
+class XGMove: NSObject, XGDictionaryRepresentable, XGIndexedValue {
 	
 	var startOffset			= 0x0
 	var index				= 0x0
 	
 	var nameID				= 0x0
 	var descriptionID   	= 0x0
-	var animationID     	= 0x0
+	var animationID     	= 0x0 // wzx file id
 	
 	var priority			= 0x0
 	var pp					= 0x0
@@ -25,7 +25,7 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 	var effectAccuracy		= 0x0
 	var basePower			= 0x0
 	var accuracy			= 0x0
-	var type				= XGMoveTypes.normal
+	var type				= XGMoveTypes.type(0)
 	var target				= XGMoveTargets.selectedTarget
 	var category			= XGMoveCategories.none
 	var effectType			= XGMoveEffectTypes.none
@@ -41,7 +41,6 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 	var flag6			= false
 	var flag7			= false
 	
-	var unknown1		= 0
 	var unknown2		= 0
 	var unknown3		= 0
 	
@@ -62,22 +61,27 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		super.init()
 		
 		self.index = index
-		let data  = PBRDataTableEntry(index: self.index + 1, tableId: 30)
+		let data  = PBRDataTableEntry.moves(index: self.index)
 		
-		nameID = data.getShort(0)
-		descriptionID = data.getShort(2)
-		animationID = data.getShort(4)
+		effect = data.getShort(0)
+		unknown2 = data.getShort(2)
+		unknown3 = data.getByte(6)
 		
-		category = XGMoveCategories(rawValue: data.getByte(6)) ?? .none
-		basePower = data.getByte(7)
-		type = XGMoveTypes(rawValue: data.getByte(8)) ?? .normal
-		accuracy = data.getByte(9)
-		pp = data.getByte(10)
-		effectAccuracy = data.getByte(11)
-		priority = data.getSignedByte(12)
-		effectType = XGMoveEffectTypes(rawValue: data.getByte(14)) ?? .none
+		nameID = data.getShort(8)
+		descriptionID = data.getShort(10)
+		animationID = data.getShort(12)
 		
-		let flags = data.getByte(13).bitArray(count: 8)
+		category = XGMoveCategories(rawValue: data.getByte(14)) ?? .none
+		basePower = data.getByte(15)
+		type = XGMoveTypes.type(data.getByte(16))
+		accuracy = data.getByte(17)
+		pp = data.getByte(18)
+		effectAccuracy = data.getByte(19)
+		priority = data.getSignedByte(20)
+		effectType = XGMoveEffectTypes(rawValue: data.getByte(22)) ?? .none
+		
+		
+		let flags = data.getByte(21).bitArray(count: 8)
 		contactFlag = flags[0]
 		protectFlag = flags[1]
 		magicCoatFlag = flags[2]
@@ -86,22 +90,34 @@ class XGMove: NSObject, XGDictionaryRepresentable {
 		kingsRockFlag = flags[5]
 		flag6 = flags[6]
 		flag7 = flags[7]
+		// unsure of the use of flags 6-7 but my best guess is that 7 is set on moves that some pokemon have a unique animation for such as blastoise using its cannons in the hydropump animation.
 		
-		// flags 6-7 may be used for something like affecting how the
-		// announcer reacts to it or my best guess is they are moves that
-		// some pokemon have a unique animation for such as blastoise using
-		// its cannons in the hydropump animation
-		// 6/7 are 0/1 for a few really powerful or special moves
 		
-		unknown1 = data.getShort(16)
-		unknown2 = data.getShort(18)
-		unknown3 = data.getByte(22)
 		
 	}
 
 	@objc func save() {
 		
+		let data  = PBRDataTableEntry.moves(index: self.index)
 		
+		data.setShort(0, to: effect)
+		data.setShort(2, to: unknown2)
+		data.setByte(6, to: unknown3)
+		data.setShort(8, to: nameID)
+		data.setShort(10, to: descriptionID)
+		data.setShort(12, to: animationID)
+		data.setByte(14, to: category.rawValue)
+		data.setByte(15, to: basePower)
+		data.setByte(16, to: type.rawValue)
+		data.setByte(17, to: accuracy)
+		data.setByte(18, to: pp)
+		data.setByte(19, to: effectAccuracy)
+		data.setSignedByte(20, to: priority)
+		data.setByte(22, to: effectType.rawValue)
+		let flags = [contactFlag, protectFlag, magicCoatFlag, snatchFlag, mirrorMoveFlag, kingsRockFlag, flag6, flag7]
+		data.setByte(21, to: flags.binaryBitsToInt())
+		
+		data.save()
 	}
 	
 	@objc var dictionaryRepresentation : [String : AnyObject] {

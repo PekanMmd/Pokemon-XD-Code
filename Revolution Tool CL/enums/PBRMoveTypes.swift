@@ -8,26 +8,19 @@
 
 import Foundation
 
-enum XGMoveTypes : Int, XGDictionaryRepresentable {
+enum XGMoveTypes : XGDictionaryRepresentable, XGIndexedValue {
 	
-	case normal		= 0x00
-	case fighting	= 0x01
-	case flying		= 0x02
-	case poison		= 0x03
-	case ground		= 0x04
-	case rock		= 0x05
-	case bug		= 0x06
-	case ghost		= 0x07
-	case steel		= 0x08
-	case none		= 0x09
-	case fire		= 0x0A
-	case water		= 0x0B
-	case grass		= 0x0C
-	case electric	= 0x0D
-	case psychic	= 0x0E
-	case ice		= 0x0F
-	case dragon		= 0x10
-	case dark		= 0x11
+	case type(Int)
+	
+	var index : Int {
+		switch self {
+			case .type(let i): return i
+		}
+	}
+	
+	var rawValue : Int {
+		return self.index
+	}
 	
 	var name : String {
 		get {
@@ -36,18 +29,12 @@ enum XGMoveTypes : Int, XGDictionaryRepresentable {
 	}
 	
 	var data : XGType {
-		return XGType(index: self.rawValue)
-	}
-	
-	func cycle() -> XGMoveTypes {
-		
-		return XGMoveTypes(rawValue: self.rawValue + 1) ?? XGMoveTypes(rawValue: 0)!
-		
+		return XGType(index: index)
 	}
 	
 	var dictionaryRepresentation: [String : AnyObject] {
 		get {
-			return ["Value" : self.rawValue as AnyObject]
+			return ["Value" : self.index as AnyObject]
 		}
 	}
 	
@@ -61,7 +48,7 @@ enum XGMoveTypes : Int, XGDictionaryRepresentable {
 		get {
 			var t = [XGMoveTypes]()
 			for i in 0 ..< kNumberOfTypes {
-				t.append(XGMoveTypes(rawValue: i)!)
+				t.append(XGMoveTypes.type(i))
 			}
 			return t
 		}
@@ -69,7 +56,7 @@ enum XGMoveTypes : Int, XGDictionaryRepresentable {
 	
 	static func random() -> XGMoveTypes {
 		let rand = Int(arc4random_uniform(UInt32(kNumberOfTypes)))
-		return XGMoveTypes(rawValue: rand) ?? .normal
+		return XGMoveTypes.type(rand)
 	}
 	
 }

@@ -38,7 +38,7 @@ let kBattlePlayer4TrainerIDOffset = 0x36
 let kBattlePlayer4ControlOffset = 0x3B
 
 
-class XGBattle: NSObject {
+class XGBattle: NSObject, XGIndexedValue {
 	
 	@objc var index = 0
 	@objc var startOffset = 0

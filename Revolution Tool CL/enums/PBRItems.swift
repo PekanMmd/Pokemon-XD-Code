@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGItems : XGDictionaryRepresentable {
+enum XGItems : XGDictionaryRepresentable, XGIndexedValue {
 	
 	case item(Int)
 	
@@ -49,7 +49,7 @@ enum XGItems : XGDictionaryRepresentable {
 	
 	static func allItems() -> [XGItems] {
 		var items = [XGItems]()
-		for i in -1 ..< kNumberOfItems - 1 {
+		for i in 0 ..< kNumberOfItems {
 			items.append(.item(i))
 		}
 		return items
@@ -62,11 +62,11 @@ func allItems() -> [String : XGItems] {
 	
 	var dic = [String : XGItems]()
 	
-	for i in -1 ..< kNumberOfItems - 1 {
+	for i in 0 ..< kNumberOfItems {
 		
 		let a = XGItems.item(i)
 		
-		dic[a.name.string.simplified] = a
+		dic[a.name.unformattedString.simplified] = a
 		
 	}
 	
@@ -82,7 +82,7 @@ func item(_ name: String) -> XGItems {
 
 func allItemsArray() -> [XGItems] {
 	var items : [XGItems] = []
-	for i in -1 ..< kNumberOfItems - 1 {
+	for i in 0 ..< kNumberOfItems {
 		items.append(XGItems.item(i))
 	}
 	return items

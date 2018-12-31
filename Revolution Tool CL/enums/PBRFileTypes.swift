@@ -12,7 +12,7 @@ enum XGFileTypes : Int {
 	case none = 0x00
 	
 	case dta  = 0x02 // data table
-	case pkx  = 0x04 // 3d model. format is documented in online forums
+	case sdr  = 0x04 // 3d model. PBR model format is documented in online forums and tool to convert to .onj exists
 	
 	case wzx  = 0x0a // move animation
 	case gtx  = 0x0c // texture
@@ -22,18 +22,20 @@ enum XGFileTypes : Int {
 	
 	case msg  = 0x18 // string table
 	
-	case esq  = 0x20 // some kind of gfx
+	case esq  = 0x20 // effect sequence. gfx format
 	
 	case dckp = 0x28 // pokemon deck
 	case dckt = 0x2a // trainer deck
+	case dcka = 0x2e // ai deck
+	
 	
 	// placeholders while still doing research to confirm
 	case rdat = 0xd0 // room model in hal dat format (unknown if it uses a different file extension)
 
 	case ccd  = 0xd2 // collision file
-	case samp = 0xd4 // shorter music files for fanfares etc.
 	
-	case fnt  = 0xd8 // font
+	case fnt  = 0xd6 // font
+	case f3d  = 0xd8 // 3d font
 
 	case dats = 0xda // multiple .dat models in one archive
 
@@ -41,16 +43,12 @@ enum XGFileTypes : Int {
 	case cam  = 0xde // camera data
 	case rel  = 0xe0 // relocation table
 
-
-	case isd  = 0xe2 // audio file header
-	case ish  = 0xe4 // audio file
 	case gsw  = 0xe6 // multi texture
 	case atx  = 0xe8 // animated texture (official file extension is currently unknown)
-	case dat  = 0xea
 	case bin  = 0xec
 	
 	// all arbitrary values
-	case fsys = 0xf0 // don't know if it has its own identifier
+	case fsys = 0xf0
 	
 	case json = 0xf5
 	case txt  = 0xf6
@@ -74,23 +72,21 @@ enum XGFileTypes : Int {
 		case .none: return ""
 		case .dta : return ".dta"
 		case .rdat: return ".rdat"
-		case .dat : return ".dat"
 		case .dckp: return ".dckp"
 		case .dckt: return ".dckt"
+		case .dcka: return ".dcka"
 		case .ccd : return ".ccd"
-		case .samp: return ".samp"
 		case .msg : return ".msg"
 		case .fnt : return ".fnt"
+		case .f3d : return ".f3d"
 		case .scd : return ".scd"
 		case .dats: return ".dats"
 		case .gtx : return ".gtx"
 		case .gpt1: return ".gpt1"
 		case .cam : return ".cam"
 		case .rel : return ".rel"
-		case .pkx : return ".pkx"
+		case .sdr : return ".sdr"
 		case .wzx : return ".wzx"
-		case .isd : return ".isd"
-		case .ish : return ".ish"
 		case .gsw : return ".gsw"
 		case .atx : return ".atx"
 		case .bin : return ".bin"

@@ -116,8 +116,35 @@ class XGString: NSObject {
 				
 				let sp = XGSpecialCharacters.fromString(midString)
 				
-				let ch = XGUnicodeCharacters.special(sp)
-				chars.append(ch)
+				if game == .PBR {
+					let ch = XGUnicodeCharacters.special(sp, [])
+					chars.append(ch)
+				} else {
+					var extraBytes = [Int]()
+					
+					if sp.extraBytes > 0 {
+						current += 1
+						
+						for _ in 0 ..< sp.extraBytes {
+							
+							var byte = ""
+							char = string.substring(from: current, to: current + 1)
+							current += 1
+							byte = byte + char
+							
+							char = string.substring(from: current, to: current + 1)
+							current += 1
+							byte = byte + char
+							
+							extraBytes.append(byte.hexStringToInt())
+							
+						}
+						current += 1
+					}
+					
+					let ch = XGUnicodeCharacters.special(sp, extraBytes)
+					chars.append(ch)
+				}
 				
 			} else {
 				

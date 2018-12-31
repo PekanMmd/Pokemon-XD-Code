@@ -8,12 +8,12 @@
 
 import Foundation
 
-let kFirstAbilityNameID = 0xbad
-let kFirstAbilityDescriptionID = 0xc29
+let kFirstAbilityNameID = 0xbae
+let kFirstAbilityDescriptionID = 0xc2a
 
-let kNumberOfAbilities			= 124
+let kNumberOfAbilities	= 124
 
-enum XGAbilities : XGDictionaryRepresentable {
+enum XGAbilities : XGDictionaryRepresentable, XGIndexedValue {
 	
 	case ability(Int)
 	
@@ -68,14 +68,14 @@ enum XGAbilities : XGDictionaryRepresentable {
 	
 	static func allAbilities() -> [XGAbilities] {
 		var abs = [XGAbilities]()
-		for i in 0 ... kNumberOfAbilities {
+		for i in 0 ..< kNumberOfAbilities {
 			abs.append(.ability(i))
 		}
 		return abs
 	}
 	
 	static func random() -> XGAbilities {
-		let rand = Int(arc4random_uniform(UInt32(kNumberOfAbilities - 1))) + 1
+		let rand = Int(arc4random_uniform(UInt32(kNumberOfAbilities))) + 1
 		return XGAbilities.ability(rand)
 	}
 	
@@ -85,11 +85,11 @@ func allAbilities() -> [String : XGAbilities] {
 	
 	var dic = [String : XGAbilities]()
 	
-	for i in 0 ... kNumberOfAbilities {
+	for i in 0 ..< kNumberOfAbilities {
 		
 		let a = XGAbilities.ability(i)
 		
-		dic[a.name.string.simplified] = a
+		dic[a.name.unformattedString.simplified] = a
 		
 	}
 	

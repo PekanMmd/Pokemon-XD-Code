@@ -8,17 +8,23 @@
 
 import Foundation
 
-let kNumberOfTypes = 0x12
+let kNumberOfTypes = PBRDataTable.typeMatchups.entrySize // 18
+let kFirstTypeNameID = 0xca6
 
-class XGType: NSObject {
+class XGType: NSObject, XGIndexedValue {
 	
-	@objc var index			 = 0
-	@objc var nameID		 = 0
-	var effectivenessTable	 = [XGEffectivenessValues]()
+	var index			 	= 0
+	var effectivenessTable	= [XGEffectivenessValues]()
 	
-	@objc var name : XGString {
+	var nameID : Int {
+		if self.index < 0 || self.index > kNumberOfTypes {
+			return 0
+		}
+		return kFirstTypeNameID + self.index
+	}
+	var name : XGString {
 		get {
-			return XGString(string: "", file: nil, sid: nil)
+			return getStringSafelyWithID(id: self.nameID)
 		}
 	}
 	
@@ -51,39 +57,30 @@ class XGType: NSObject {
 		}
 	}
 	
+	func damageDealtToType(_ type: XGMoveTypes) -> XGEffectivenessValues {
+		return effectivenessTable[type.index]
+	}
+	
 	@objc init(index: Int) {
 		super.init()
 		
-		self.nameID		= 0
+		self.index = index
+		let data = PBRDataTableEntry.typeMatchups(index: self.index)
 		
-		if let data	= PBRDataTable.typeMatchups!.dataForEntryWithIndex(index) {
-			self.index		= index
-			
-			for offset in 0 ..< kNumberOfTypes {
-				
-				let value = data.getByteAtOffset(offset)
-				let effectiveness = XGEffectivenessValues(rawValue: value)!
-				effectivenessTable.append(effectiveness)
-				
-			}
+		for i in 0 ..< kNumberOfTypes {
+			effectivenessTable.append(XGEffectivenessValues(rawValue: data.getByte(i))!)
 		}
 		
 	}
 	
 	@objc func save() {
 		
-		if let data	= PBRDataTable.typeMatchups!.dataForEntryWithIndex(index) {
-			for i in 0 ..< self.effectivenessTable.count {
-				
-				let value = effectivenessTable[i].rawValue
-				data.replaceByteAtOffset(i, withByte: value)
-				
-			}
-			
-			PBRDataTable.typeMatchups!.replaceData(data: data, forIndex: index)
-			PBRDataTable.typeMatchups!.save()
+		let data = PBRDataTableEntry.typeMatchups(index: self.index)
+		for i in 0 ..< self.effectivenessTable.count {
+			data.setByte(i, to: effectivenessTable[i].rawValue)
 		}
 		
+		data.save()
 	}
 	
 	
