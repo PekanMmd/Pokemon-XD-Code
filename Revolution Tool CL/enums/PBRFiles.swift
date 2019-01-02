@@ -480,18 +480,25 @@ indirect enum XGFolders {
 		for i in 0 ... 17 {
 			images.append(.typeImage(i))
 		}
-		for i in 0 ... 414 {
-			images.append(.pokeBody(i))
-			images.append(.pokeFace(i))
-		}
-		for i in 0 ... 67 {
-			images.append(.trainerFace(i))
-		}
 		images.append(.nameAndFolder("type_fairy.png", .Types))
-		
 		for image in images {
 			if !image.exists {
 				let resource = XGResources.png(image.fileName.replacingOccurrences(of: ".png", with: ""))
+				let data = resource.data
+				data.file = image
+				data.save()
+			}
+		}
+		
+		images = [XGFiles]()
+		for i in 0 ... 494 {
+			images.append(.pokeBody(i))
+			images.append(.pokeFace(i))
+		}
+		
+		for image in images {
+			if !image.exists {
+				let resource = XGResources.png("PBR_" + image.fileName.replacingOccurrences(of: ".png", with: ""))
 				let data = resource.data
 				data.file = image
 				data.save()
