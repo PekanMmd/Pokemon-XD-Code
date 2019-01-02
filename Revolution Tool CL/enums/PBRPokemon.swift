@@ -44,7 +44,7 @@ enum XGPokemon: XGDictionaryRepresentable, XGIndexedValue {
 				case .normal:
 					return 386
 				default:
-					return 496 + f.rawValue
+					return 495 + f.rawValue
 				}
 			case .burmy: return 412
 			case .wormadam(let c):
@@ -52,7 +52,7 @@ enum XGPokemon: XGDictionaryRepresentable, XGIndexedValue {
 				case .plant:
 					return 413
 				default:
-					return 499 + c.rawValue
+					return 498 + c.rawValue
 				}
 			}
 		}

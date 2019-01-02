@@ -133,24 +133,26 @@ class XGUtility {
 		if fileMissing { return }
 		
 		let fsys = XGFiles.fsys("deck").fsysData
-		for i in 0 ... 25 {
+		
+		var tid = 0
+		var pid = 0
+		for i in 0 ..< fsys.numberOfEntries {
 			if !XGFiles.dckt(i).exists {
 				let data = fsys.decompressedDataForFileWithIndex(index: i)!
-				data.file = .dckt(i)
+				
+				if let type = XGDeckTypes(rawValue: data.getWordAtOffset(0)) {
+					switch type {
+						case .DCKA: data.file = .dcka
+						case .DCKP: data.file = .dckp(pid); pid += 1
+						case .DCKT: data.file = .dckt(tid); tid += 1
+						case .none: data.file = .nameAndFolder("deck_\(i)", .Decks)
+					}
+					
+				} else {
+					data.file = .nameAndFolder("deck_\(i)", .Decks)
+				}
 				data.save()
 			}
-		}
-		for i in 26 ... 44 {
-			if !XGFiles.dckp(i - 26).exists {
-				let data = fsys.decompressedDataForFileWithIndex(index: i)!
-				data.file = .dckp(i - 26)
-				data.save()
-			}
-		}
-		if !XGFiles.dcka.exists {
-			let data = fsys.decompressedDataForFileWithIndex(index: 45)!
-			data.file = .dcka
-			data.save()
 		}
 		
 		let common = XGFiles.fsys("common").fsysData
@@ -208,6 +210,58 @@ class XGUtility {
 		}
 		return nil
 	}
+	
+	class func compileDecks() {
+		printg("Compiling decks...")
+		var pid = 0
+		var tid = 0
+		
+		var deckDict = [Int : XGFiles]()
+		for i in 0 ... 25 {
+			deckDict[i] = .dckt(tid)
+			tid += 1
+		}
+		for i in 0 ... 7 {
+			deckDict[i + 26] = .dckp(pid)
+			pid += 1
+		}
+		deckDict[34] = .dckt(tid)
+		tid += 1
+		for i in 0 ... 5 {
+			deckDict[35 + i] = .dckp(pid)
+			pid += 1
+		}
+		for i in 0 ... 1 {
+			deckDict[41 + i] = .dckt(tid)
+			tid += 1
+		}
+		for i in 0 ... 1 {
+			deckDict[43 + i] = .dckp(pid)
+			pid += 1
+		}
+		deckDict[45] = .dcka
+		
+		let file = XGFiles.fsys("deck")
+		if file.exists {
+			let fsys = XGFiles.fsys("deck").fsysData
+			
+			for (index, file) in deckDict {
+				if file.exists {
+					if verbose {
+						printg("Compiling deck:", file.path)
+					}
+					fsys.shiftAndReplaceFileWithIndexEfficiently(index, withFile: file.compress(), save: false)
+				}
+			}
+			
+			fsys.save()
+			printg("Finished compiling decks.")
+		} else {
+			printg("Couldn't compile decks as \(file.path) doesn't exist")
+		}
+		
+	}
+	
 }
 
 

@@ -9,11 +9,11 @@
 import Foundation
 
 enum PBRRandomMoveStyle : Int {
-	case offsensive = 0
+	case offensive = 0
 	case defensive = 1
 	
 	var string : String {
-		return self.rawValue == 1 ? "Offensive" : "Defensive"
+		return self.rawValue == 0 ? "Offensive" : "Defensive"
 	}
 }
 

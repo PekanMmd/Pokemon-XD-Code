@@ -65,8 +65,21 @@ enum XGDecks {
 	}
 	
 	static var level30opendouble : XGDecks { return .dckp(0) }
+	static var level30opensingle : XGDecks { return .dckp(1) }
+	static var level50alldouble : XGDecks { return .dckp(2) }
+	static var level50allsingle : XGDecks { return .dckp(3) }
 	static var masters : XGDecks { return .dckp(4) }
+	static var tradedouble : XGDecks { return .dckp(5) }
+	static var tradesingle : XGDecks { return .dckp(6) }
 	static var rentalpasses : XGDecks { return .dckp(7) }
+	static var level30opendouble2 : XGDecks { return .dckp(8) }
+	static var level30opensingle2 : XGDecks { return .dckp(9) }
+	static var level50alldouble2 : XGDecks { return .dckp(10) }
+	static var level50allsingle2 : XGDecks { return .dckp(11) }
+	static var empty : XGDecks { return .dckp(12) }
+	static var sample : XGDecks { return .dckp(13) }
+	static var littledouble : XGDecks { return .dckp(14) }
+	static var littlesingle : XGDecks { return .dckp(15) }
 	
 	
 }
