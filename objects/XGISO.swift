@@ -58,7 +58,7 @@ class XGISO: NSObject {
 		if let d = XGFiles.iso.data {
 			return d
 		}
-		return XGMutableData(byteStream: [], file: .iso)
+		return XGMutableData(byteStream: [Int](), file: .iso)
 	}
 	
 	@objc var TOCFirstStringOffset : Int {
@@ -697,20 +697,41 @@ class XGISO: NSObject {
 		
 	}
 	
+	var fsysGroupIDs = [Int : String]()
+	var fsysGroupIDsData = [Int : XGFsys]()
+	
 	func getFSYSNameWithGroupID(_ id: Int) -> String? {
+		
+		if let name = fsysGroupIDs[id] {
+			return name == "n/a" ? nil : name
+		}
+		
 		for file in self.allFileNames where file.fileExtensions == ".fsys" {
 			let start = locationForFile(file)!
 			let groupID = self.data.get4BytesAtOffset(start + kFSYSGroupIDOffset)
 			if groupID == id {
+				fsysGroupIDs[id] = file
 				return file
 			}
 		}
+		
+		fsysGroupIDs[id] = "n/a"
 		return nil
 	}
 	
 	func getFSYSDataWithGroupID(_ id: Int) -> XGFsys? {
-		let name = getFSYSNameWithGroupID(id)
-		return name == nil ? nil : dataForFile(filename: name!)!.fsysData
+		if let data = fsysGroupIDsData[id] {
+			return data
+		}
+		
+		if let name = getFSYSNameWithGroupID(id) {
+			let data = dataForFile(filename: name)!.fsysData
+			if name.contains("stm_se_nakigoe_archive") {
+				fsysGroupIDsData[id] = data
+			}
+			return data
+		}
+		return nil
 	}
 	
 	@objc func getPKXModelWithIdentifier(id: UInt32) -> XGFsys? {

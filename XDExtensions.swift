@@ -27,7 +27,7 @@ enum XGRegions : UInt32 {
 class XGMapRel : XGRelocationTable {
 	
 	@objc var characters = [XGCharacter]()
-	@objc var interactionLocations = [XGInteractionLocation]()
+	@objc var entryLocations = [XGMapEntryLocation]()
 	@objc var treasure = [XGTreasure]()
 	
 	@objc var roomID = 0
@@ -57,10 +57,10 @@ class XGMapRel : XGRelocationTable {
 		let numberOfIPs = self.getValueAtPointer(index: MapRelIndexes.NumberOfInteractionLocations.rawValue)
 		
 		for i in 0 ..< numberOfIPs {
-			let startOffset = firstIP + (i * kSizeOfInteractionLocation)
+			let startOffset = firstIP + (i * kSizeOfMapEntryLocation)
 			if startOffset + 16 < file.fileSize {
-				let ip = XGInteractionLocation(file: file, index: i, startOffset: startOffset)
-				interactionLocations.append(ip)
+				let ip = XGMapEntryLocation(file: file, index: i, startOffset: startOffset)
+				entryLocations.append(ip)
 			}
 		}
 		
@@ -1298,6 +1298,16 @@ extension XGUtility {
 			addMacro(value: i, type: .partyMember)
 		}
 		
+		for i in 0 ..< CommonIndexes.NumberOfSounds.value {
+			let sound = XGMusicMetaData(index: i)
+			if sound.sfxID == 0 {
+				let music = sound.music
+				if music.ishID == 0 && music.isdID == 0 && music.fsysID != 0 {
+					addMacro(value: i, type: .sfxID)
+				}
+			}
+		}
+		
 		
 		// get macros.xds
 		// file containing common macros to use as reference
@@ -1557,6 +1567,16 @@ extension XGUtility {
 			}
 		}
 		
+		for i in 0 ..< CommonIndexes.NumberOfSounds.value {
+			let sound = XGMusicMetaData(index: i)
+			if sound.sfxID == 0 {
+				let music = sound.music
+				if music.ishID == 0 && music.isdID == 0 && music.fsysID != 0 {
+					macros.append(.macroImmediate(XDSConstant.integer(i), .sfxID))
+				}
+			}
+		}
+		
 		for macro in macros {
 			switch macro {
 			case .macroImmediate(let c, let t):
@@ -1655,16 +1675,23 @@ extension XGUtility {
 	}
 	
 	class func copyOWPokemonIdleAnimationFromIndex(index: Int, forModel file: XGFiles) {
+		copyPokemonModelAnimationFromIndex(index: index, toIndex: 0, forModel: file)
+	}
+	
+	class func copyPokemonModelAnimationFromIndex(index: Int, toIndex to: Int, forModel file: XGFiles, backUp: Bool = false) {
 		// almost always index 0 holds the idle animation
 		// for overworld need to copy that to index 3
 		let data = file.data!
-		let backup = file.data!
-		backup.file = .nameAndFolder(file.fileName + ".bak", file.folder)
-		backup.save()
+		if backUp {
+			let backup = file.data!
+			backup.file = .nameAndFolder(file.fileName + ".bak", file.folder)
+			backup.save()
+		}
 		
-		let headerSize = 0x20
-		let pointerListPointer = data.getWordAtOffset(4).int + headerSize
-		let numberOfPointers = data.getWordAtOffset(8).int
+		let pkxHeaderSize = file.fileType == .pkx ? 0xe60 : 0
+		let headerSize = 0x20 + pkxHeaderSize
+		let pointerListPointer = data.getWordAtOffset(4 + pkxHeaderSize).int + headerSize
+		let numberOfPointers = data.getWordAtOffset(8 + pkxHeaderSize).int
 		let sceneDataPointerOffset = pointerListPointer + (numberOfPointers * 4)
 		let sceneDataPointer = data.getWordAtOffset(sceneDataPointerOffset).int + headerSize
 		let struct1Pointer = data.getWordAtOffset(sceneDataPointer).int + headerSize
@@ -1691,7 +1718,7 @@ extension XGUtility {
 			return
 		}
 		
-		data.replaceWordAtOffset(animation0Pointer + 0xc, withBytes: animationOffsets[index])
+		data.replaceWordAtOffset(animation0Pointer + (to * 4), withBytes: animationOffsets[index])
 		data.save()
 		
 	}
@@ -2450,6 +2477,16 @@ extension XGDolPatcher {
 	}
 }
 
+extension XGRoom {
+	var script : XGScript? {
+		for file in XGFolders.Scripts.files where file.fileType == .scd {
+			if file.fileName.removeFileExtensions() == self.name {
+				return file.scriptData
+			}
+		}
+		return nil
+	}
+}
 
 
 

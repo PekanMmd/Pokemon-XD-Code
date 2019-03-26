@@ -83,7 +83,7 @@ class XGRelocationTable: NSObject {
 		
 	}
 	
-	@objc var pointers = [Int : Int]()
+	@objc private var pointers = [Int : Int]()
 	
 	@objc func getPointerOffset(index: Int) -> Int {
 		return firstPointer + (index * kRELSizeOfPointer) + kRELPointerDataPointer1Offset
@@ -122,5 +122,23 @@ class XGRelocationTable: NSObject {
 		pointers[index] = newOffset
 	}
 	
+	func allPointers() -> [Int] {
+		var p = [Int]()
+		
+		for i in 0 ..< self.numberOfPointers {
+			p.append(self.getPointer(index: i))
+		}
+		
+		return p
+	}
 
 }
+
+
+
+
+
+
+
+
+

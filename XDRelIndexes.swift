@@ -20,6 +20,10 @@ enum MapRelIndexes : Int {
 let kNumberRelPointers = 0x84
 enum CommonIndexes : Int {
 	
+	// 0xf6c is debug menu options
+	// each entry is used to set the story flag to the specified value
+	// then calls common.scd's "@flagshop" function (0x5960017) to set other necessary flags
+	
 	// colosseum only
 	case PokefaceTextures = -1
 	case RoomData = -2
@@ -66,6 +70,8 @@ enum CommonIndexes : Int {
 	case NumberOfDoors = 61
 	case InteractionPoints = 62 // warps and inanimate objects
 	case NumberOfInteractionPoints = 63
+	case RoomBGM = 64 // byte 1 = volume, short 2 = room id, short 4 = bgm id
+	case NumberOfRoomBGMs = 65
 	case TreasureBoxData = 66 // 0x1c bytes each
 	case NumberTreasureBoxes = 67
 	case ValidItems = 68 // list of items which are actually available in XD
@@ -80,8 +86,8 @@ enum CommonIndexes : Int {
 	case NumberOfNatures = 95
 	case SoundsMetaData = 102
 	case NumberOfSounds = 103
-	case PokemonCrySoundEffects = 104
-	case NumberCrySoundEffects = 105
+	case BGM = 104
+	case NumberBGM = 105
 	
 	
 	case USStringTable = 116

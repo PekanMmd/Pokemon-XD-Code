@@ -12,7 +12,9 @@ let kNumberOfMoves = PBRDataTable.moves.numberOfEntries // 468
 
 class XGMove: NSObject, XGDictionaryRepresentable, XGIndexedValue {
 	
-	var startOffset			= 0x0
+	var startOffset			: Int {
+		return PBRDataTable.moves.offsetForEntryWithIndex(self.index)
+	}
 	var index				= 0x0
 	
 	var nameID				= 0x0
@@ -29,6 +31,7 @@ class XGMove: NSObject, XGDictionaryRepresentable, XGIndexedValue {
 	var target				= XGMoveTargets.selectedTarget
 	var category			= XGMoveCategories.none
 	var effectType			= XGMoveEffectTypes.none
+	var contestAppeal		= XGContestAppeals.cool
 	
 	var contactFlag		= false
 	var protectFlag		= false
@@ -40,9 +43,6 @@ class XGMove: NSObject, XGDictionaryRepresentable, XGIndexedValue {
 	var HMFlag			= false
 	var flag6			= false
 	var flag7			= false
-	
-	var unknown2		= 0
-	var unknown3		= 0
 	
 	@objc var name : XGString {
 		get {
@@ -64,8 +64,10 @@ class XGMove: NSObject, XGDictionaryRepresentable, XGIndexedValue {
 		let data  = PBRDataTableEntry.moves(index: self.index)
 		
 		effect = data.getShort(0)
-		unknown2 = data.getShort(2)
-		unknown3 = data.getByte(6)
+		let targets = data.getShort(2)
+		self.target = XGMoveTargets(rawValue: targets) ?? .selectedTarget
+		let appeal = data.getByte(6)
+		self.contestAppeal = XGContestAppeals(rawValue: appeal) ?? .cool
 		
 		nameID = data.getShort(8)
 		descriptionID = data.getShort(10)
@@ -101,8 +103,8 @@ class XGMove: NSObject, XGDictionaryRepresentable, XGIndexedValue {
 		let data  = PBRDataTableEntry.moves(index: self.index)
 		
 		data.setShort(0, to: effect)
-		data.setShort(2, to: unknown2)
-		data.setByte(6, to: unknown3)
+		data.setShort(2, to: self.target.rawValue)
+		data.setByte(6, to: contestAppeal.rawValue)
 		data.setShort(8, to: nameID)
 		data.setShort(10, to: descriptionID)
 		data.setShort(12, to: animationID)

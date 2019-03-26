@@ -95,11 +95,15 @@ class PBRDataTable : CustomStringConvertible {
 		return text
 	}
 	
-	var startOffset = 0
-	var subStartOffset = 0
-	var entries = [XGMutableData]()
-	var file = XGFiles.common(0)
-	var predata = [UInt8]()
+	var startOffset 	= 0
+	var subStartOffset  = 0
+	
+	var entries  = [XGMutableData]()
+	var file     = XGFiles.common(0)
+	var unknown = 0
+	var postCount = 0
+	var predata  = [UInt8]()
+	var postdata = [UInt8]()
 	
 	var numberOfEntries : Int {
 		return entries.count
@@ -119,6 +123,7 @@ class PBRDataTable : CustomStringConvertible {
 				entryCount = data.get4BytesAtOffset(0)
 				entrySize  = data.get4BytesAtOffset(4)
 				self.subStartOffset = data.get4BytesAtOffset(8)
+				self.unknown = data.get4BytesAtOffset(12)
 				self.startOffset = data.get4BytesAtOffset(16)
 				
 			case .dckt:
@@ -153,6 +158,12 @@ class PBRDataTable : CustomStringConvertible {
 					let entry = XGMutableData(byteStream: bytes)
 					self.entries.append(entry)
 				}
+				
+				let dataEnd = startOffset + (entryCount * entrySize)
+				let postCount = data.length - (dataEnd)
+				if postCount > 0 {
+					postdata = data.getCharStreamFromOffset(dataEnd, length: postCount)
+				}
 			} else {
 				printg("Error: invalid data table \(self.file.path)")
 			}
@@ -165,6 +176,10 @@ class PBRDataTable : CustomStringConvertible {
 			return entries[index]
 		}
 		return nil
+	}
+	
+	func offsetForEntryWithIndex(_ index: Int) -> Int {
+		return self.startOffset + (index * self.entrySize)
 	}
 	
 	func replaceData(data: XGMutableData, forIndex index: Int) {
@@ -214,6 +229,7 @@ class PBRDataTable : CustomStringConvertible {
 		while bytes.count % 16 != 0 {
 			bytes.append(0)
 		}
+		bytes += postdata
 		
 		let start = self.startOffset
 		let subStart = self.subStartOffset
@@ -228,9 +244,12 @@ class PBRDataTable : CustomStringConvertible {
 			d.replace4BytesAtOffset(0, withBytes: entryCount)
 			d.replace4BytesAtOffset(4, withBytes: entrySize)
 			d.replace4BytesAtOffset(8, withBytes: subStart)
+			d.replace4BytesAtOffset(12, withBytes: unknown)
 			d.replace4BytesAtOffset(16, withBytes: start)
 			d.replace4BytesAtOffset(20, withBytes: dataSize)
-			d.replace4BytesAtOffset(24, withBytes: fileSize)
+			d.replace4BytesAtOffset(24, withBytes: fileSize - (postCount * 4))
+			d.replace4BytesAtOffset(28, withBytes: postCount)
+			d.replace4BytesAtOffset(32, withBytes: dataSize + startOffset)
 			
 		case .dckt:
 			d.replaceWordAtOffset(0, withBytes: XGDeckTypes.DCKT.rawValue)

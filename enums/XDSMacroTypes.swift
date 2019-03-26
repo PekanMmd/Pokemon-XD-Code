@@ -59,6 +59,9 @@ indirect enum XDSMacroTypes {
 	case language
 	case PCBox
 	case transitionID
+	case yesNoIndex
+	case scriptFunction
+	case sfxID
 	
 	case array(XDSMacroTypes)
 	
@@ -124,6 +127,9 @@ indirect enum XDSMacroTypes {
 		case .language: return 25
 		case .PCBox: return 26
 		case .transitionID: return 27
+		case .yesNoIndex: return 28
+		case .scriptFunction: return 29
+		case .sfxID: return 30
 			
 		case .array: return 99
 			
@@ -191,6 +197,8 @@ indirect enum XDSMacroTypes {
 		case .room:
 			fallthrough
 		case .battlefield:
+			fallthrough
+		case .scriptFunction:
 			fallthrough
 		case .integerUnsigned:
 			fallthrough
@@ -265,6 +273,12 @@ indirect enum XDSMacroTypes {
 			return "Quantity"
 		case .integerIndex:
 			return "Index"
+		case .yesNoIndex:
+			return "YesNoIndex"
+		case .scriptFunction:
+			return "ScriptFunction"
+		case .sfxID:
+			return "SoundEffectID"
 		case .vectorDimension:
 			return "VectorDimension"
 		case .giftPokemon:
@@ -371,7 +385,7 @@ enum XDSTalkTypes : Int {
 		case .none				: return "none"
 		case .normal			: return "normal"
 		case .approachThenSpeak	: return "approach"
-		case .promptYesNoBool		: return "yes_no"
+		case .promptYesNoBool	: return "yes_no"
 		case .battle1			: return "battle_alt"
 		case .battle2			: return "battle"
 		case .silentItem		: return "get_item"

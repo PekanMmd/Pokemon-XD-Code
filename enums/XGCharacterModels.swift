@@ -32,10 +32,10 @@ class XGCharacterModels : NSObject {
 		if game == .XD {
 			return XGFiles.fsys("people_archive").fsysData
 		}
-		let files = XGUtility.searchForFsysForIdentifier(id: identifier)
-		if files.count > 0 {
-			return files[0]
-		}
+//		let files = XGUtility.searchForFsysForIdentifier(id: identifier)
+//		if files.count > 0 {
+//			return files[0]
+//		}
 		return nil
 	}
 	
@@ -66,6 +66,8 @@ class XGCharacterModels : NSObject {
 					self.fileSize = arch.sizeForFile(index: fsysIndex)
 				}
 			}
+		} else {
+			self.name = "CharacterModel_\(index)"
 		}
 		
 		for i in 0 ..< 8 {

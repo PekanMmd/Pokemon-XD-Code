@@ -20,7 +20,8 @@ class GoDEffectivenessPopUpButton: GoDPopUpButton {
 	override func setUpItems() {
 		var values = [String]()
 		
-		for i in 0 ... 3 {
+		let max = game == .PBR ? 5 : 3
+		for i in 0 ... max {
 			values.append(XGEffectivenessValues.fromIndex(i).string)
 		}
 		

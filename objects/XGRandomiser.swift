@@ -129,11 +129,10 @@ class XGRandomiser : NSObject {
 		}
 		
 		for shadow in XGDecks.DeckDarkPokemon.allActivePokemon {
-			for i in 0 ..< shadow.shadowMoves.count {
-				if shadow.shadowMoves[i].index > 0 {
-					shadow.shadowMoves[i] = XGMoves.randomShadow()
-				}
-			}
+			let count = shadow.shadowMoves.filter { (m) -> Bool in
+				return m.index != 0
+			}.count
+			shadow.shadowMoves = XGMoves.randomShadowMoveset(count: count)
 		}
 		
 		
@@ -250,13 +249,21 @@ class XGRandomiser : NSObject {
 	}
 	
 	class func randomiseTMs() {
-		printg("randomising TMs...")
-		for tm in allTMsArray() {
-			tm.replaceWithMove(XGMoves.random())
+		printg("randomising TMs and Tutor Moves...")
+		
+		var tmIndexes = [Int]()
+		while tmIndexes.count < kNumberOfTMsAndHMs + kNumberOfTutorMoves {
+			tmIndexes.addUnique(XGMoves.random().index)
 		}
-		for i in 0 ..< kNumberOfTutorMoves {
+		
+		for i in 1 ... kNumberOfTMsAndHMs {
+			let tm = XGTMs.tm(i)
+			tm.replaceWithMove(.move(tmIndexes[i - 1]))
+		}
+		for i in 1 ... kNumberOfTutorMoves {
 			let tm = XGTMs.tutor(i)
 			tm.replaceWithMove(XGMoves.random())
+			tm.replaceWithMove(.move(tmIndexes[i + kNumberOfTMsAndHMs - 1]))
 		}
 		printg("done!")
 	}

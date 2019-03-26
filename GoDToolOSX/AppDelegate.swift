@@ -352,6 +352,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		self.homeViewController.performSegue(withIdentifier: NSStoryboardSegue.Identifier(name), sender: self.homeViewController)
 	}
 	
+	
+	@IBAction func openTextureImporter(_ sender: Any) {
+		self.performSegue("toTextureVC")
+	}
+	
 	@IBAction func openScriptCompiler(_ sender: Any) {
 		self.performSegue("toScriptVC")
 	}

@@ -80,7 +80,6 @@ class GoDTextureImporter: NSObject {
 			currentColour =  currentColour >> 8
 			let blue	  = Int(currentColour % 0x100)
 			
-			// alpha value is only 1 bit so anything over 0 is considered 100% opaque.
 			currentColour =  currentColour >> 8
 			let alpha	  = Int(currentColour)
 			
@@ -181,6 +180,13 @@ class GoDTextureImporter: NSObject {
 				if texture.BPP == 16 {
 					bytes.append(raw >> 8)
 					bytes.append(raw %  0x100)
+				} else if texture.BPP == 32 {
+					bytes.append(raw >> 24)
+					bytes.append(raw >> 16 & 0xFF)
+					bytes.append(raw >> 8 & 0xFF)
+					bytes.append(raw & 0xFF)
+				} else {
+					bytes.append(raw)
 				}
 			}
 		}
@@ -189,23 +195,27 @@ class GoDTextureImporter: NSObject {
 		
 	}
 	
-	private func replaceTextureData() {
+	func replaceTextureData() {
+		
+		if texture.format == .CMPR {
+			printg("This texture format is currently incompatible with GoD Tool (mainly because @StarsMmd got lazy :-p). Aborting import of file \(texture.file.path). If you want to import it send him a message to add support for the \(texture.format.name) format.")
+			return
+		}
 		
 		let pngPixels = self.pixelsFromPNGImage()
 		var pixelBytes = [Int]()
-		if !XGColour.compatibleFormats().contains(texture.format) {
-			printg("This texture format is current incompatible with GoD Tool (mainly because @StarsMmd got lazy :-p). Aborting import of file \(texture.file.path). If you want to import it send him a message to add support for the \(texture.format.name) format.")
-		}
+		
 		if texture.isIndexed {
 			let texPixels = self.convertPNGPixelsToIndexedPixels(pixels: pngPixels)
 			pixelBytes = byteStreamFromTexturePixels(pixels: texPixels)
 			self.updatePalette()
 		} else {
+			
 			if texture.format == .RGBA32 {
 				let bytes = self.byteStreamFromPNGPixels(pixels: pngPixels)
 				var splitBytes = [Int]()
-				// rg and ba values of rgba32 are separated within blocks so must restructure first
-				let blockCount = splitBytes.count / 64 // 64 bytes per block, 4 pixelsperrow x 4 pixelspercolumn x 4 bytesperpixel
+				// ar and gb values of rgba32 are separated within blocks so must restructure first
+				let blockCount = bytes.count / 64 // 64 bytes per block, 4 pixelsperrow x 4 pixelspercolumn x 4 bytesperpixel
 				
 				for i in 0 ..< blockCount {
 					let blockStart = i * 64
@@ -263,7 +273,7 @@ class GoDTextureImporter: NSObject {
 		
 	}
 	
-	class func replaceTextureData(texture: GoDTexture, withImage newImageFile: XGFiles) {
+	class func replaceTextureData(texture: GoDTexture, withImage newImageFile: XGFiles, save: Bool = true) {
 		
 		if !newImageFile.exists {
 			return
@@ -275,9 +285,40 @@ class GoDTextureImporter: NSObject {
 		let importer = GoDTextureImporter(oldTextureData: texture, newImage: image)
 		importer.replaceTextureData()
 		
-		importer.texture.save()
+		if save {
+			importer.texture.save()
+		}
 	}
 	
+	class func getTextureData(image: NSImage, format: GoDTextureFormats, paletteFormat: GoDTextureFormats = .RGB5A3) -> GoDTexture {
+		
+		let texture  = GoDTexture(forImage: image, format: format, paletteFormat: paletteFormat)
+		
+		let importer = GoDTextureImporter(oldTextureData: texture, newImage: image)
+		importer.replaceTextureData()
+		
+		return importer.texture
+	}
+	
+	class func getTextureData(image: NSImage) -> GoDTexture {
+		
+		let colourCount = image.colourCount
+		var format = GoDTextureFormats.C8
+		
+		if colourCount <= GoDTextureFormats.C4.paletteCount {
+			format = .C4
+		} else if colourCount <= GoDTextureFormats.C8.paletteCount {
+			format = .C8
+		} else if image.colourCount(threshold: 8) <= GoDTextureFormats.C8.paletteCount {
+			format = .C8
+		} else if image.colourCount(threshold: 16) <= GoDTextureFormats.C8.paletteCount {
+			format = .C8
+		} else {
+			format = .RGBA32
+		}
+		
+		return getTextureData(image: image, format: format)
+	}
 	
 }
 

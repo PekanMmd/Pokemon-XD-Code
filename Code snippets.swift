@@ -6787,51 +6787,6 @@ import Foundation
 //
 //])
 //
-//let calcDamageBoostsBranch = 0x22a760
-//let calcDamageStart = 0xB9AFB0
-////let getItemID = 0x203870
-//XGAssembly.replaceRamASM(RAMOffset: calcDamageBoostsBranch, newASM: [
-//	.b(calcDamageStart)
-//])
-//XGAssembly.replaceRamASM(RAMOffset: calcDamageStart, newASM: [
-//	.label("muscle band check"),
-//	.cmpwi(.r28, item("muscle band").data.holdItemID),
-//	.bne_l("wise glasses check"),
-//	.cmpwi(.r24, XGMoveCategories.physical.rawValue),
-//	.bne_l("wise glasses check"),
-//	.lwz(.r3, .sp, 0x20), // item parameter
-//	.mullw(.r14, .r14, .r3),
-//	.li(.r3, 100),
-//	.divw(.r14, .r14, .r3),
-//
-//	.label("wise glasses check"),
-//	.cmpwi(.r28, item("wise glasses").data.holdItemID),
-//	.bne_l("knock off check"),
-//	.cmpwi(.r24, XGMoveCategories.special.rawValue),
-//	.bne_l("knock off check"),
-//	.lwz(.r3, .sp, 0x20), // item parameter
-//	.mullw(.r14, .r14, .r3),
-//	.li(.r3, 100),
-//	.divw(.r14, .r14, .r3),
-//
-//	.label("knock off check"),
-//	.mr(.r3, .r17),
-//	.lhz(.r3, .r3, 0x1c), // get move effect
-//	.cmpwi(.r3, move("knock off").data.effect),
-//	.bne_l("return"),
-//
-//	.mr(.r3, .r16), // defending pokemon
-//	.bl(getItemID),
-//	.cmpwi(.r3, 0),
-//	.beq_l("return"),
-//
-//	.mulli(.r14, .r14, 150),
-//	.li(.r3, 100),
-//	.divw(.r14, .r14, .r3),
-//
-//	.label("return"),
-//	.b(calcDamageBoostsBranch + 4)
-//])
 
 //// super effective type damage reducing berries
 //
@@ -7106,6 +7061,56 @@ import Foundation
 //	.blr
 //])
 
+//// muscle band, wise glasses and knock off damage boost
+//let calcDamageBoostsBranch = 0x22a760
+//let calcDamageStart = 0xB9AFB0
+//let getItemID = 0x203870
+//let getMoveEffect = 0x13e6e8
+////let getItemID = 0x203870
+//XGAssembly.replaceRamASM(RAMOffset: calcDamageBoostsBranch, newASM: [
+//	.b(calcDamageStart)
+//])
+//XGAssembly.replaceRamASM(RAMOffset: calcDamageStart, newASM: [
+//	.label("muscle band check"),
+//	.cmpwi(.r28, item("muscle band").data.holdItemID),
+//	.bne_l("wise glasses check"),
+//	.cmpwi(.r24, XGMoveCategories.physical.rawValue),
+//	.bne_l("wise glasses check"),
+//	.lwz(.r3, .sp, 0x20), // item parameter
+//	.mullw(.r14, .r14, .r3),
+//	.li(.r3, 100),
+//	.divw(.r14, .r14, .r3),
+//
+//	.label("wise glasses check"),
+//	.cmpwi(.r28, item("wise glasses").data.holdItemID),
+//	.bne_l("knock off check"),
+//	.cmpwi(.r24, XGMoveCategories.special.rawValue),
+//	.bne_l("knock off check"),
+//	.lwz(.r3, .sp, 0x20), // item parameter
+//	.mullw(.r14, .r14, .r3),
+//	.li(.r3, 100),
+//	.divw(.r14, .r14, .r3),
+//
+//	.label("knock off check"),
+//	.mr(.r3, .r17),
+//	.bl(getMoveEffect), // get move effect
+//	.cmpwi(.r3, move("knock off").data.effect),
+//	.bne_l("return"),
+//
+//	.mr(.r3, .r16), // defending pokemon
+//	.bl(getItemID),
+//	.cmpwi(.r3, 0),
+//	.beq_l("return"),
+//
+//	.mulli(.r14, .r14, 150),
+//	.li(.r3, 100),
+//	.divw(.r14, .r14, .r3),
+//
+//	.label("return"),
+//	.b(calcDamageBoostsBranch + 4)
+//])
+
+
 // poison touch ability
 //
 //// remove magma armour
@@ -7370,6 +7375,13 @@ import Foundation
 //])
 //
 //
+//// fix type damage reducing berries ending multi hit moves
+//let dol = XGFiles.dol.data!
+//dol.replaceWordAtOffset(0x414659 - kDOLTableToRAMOffsetDifference, withBytes: 0x80414659)
+//dol.save()
+//
+// fix berry glitch on moves like earthquake
+//XGAssembly.replaceRamASM(RAMOffset: 0x210214, newASM: [.nop])
 //
 //
 //// new skill link
@@ -7810,9 +7822,29 @@ import Foundation
 
 
 
-
-
-
+//// xds script for pokespots to only load models that are available
+//// prevents randomised versions from crashing
+//
+//var models = [Int]()
+//for i in 0 ... 2 {
+//
+//	let spot = XGPokeSpots(rawValue: i)!
+//	for index in 0 ..< spot.numberOfEntries {
+//		let mon = XGPokeSpotPokemon(index: index, pokespot: spot)
+//		let species = mon.pokemon.index
+//		if species != 414 && species != 415 && species != 0 {
+//			models.append(species)
+//		}
+//	}
+//}
+//
+//var string = "global pokemonModels = ["
+//for species in models.sorted() {
+//	string += " \(species)"
+//}
+//string += " ]"
+//printg(models.count)
+//printg(string)
 
 
 

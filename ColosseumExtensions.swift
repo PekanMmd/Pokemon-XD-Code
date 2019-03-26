@@ -18,7 +18,7 @@ enum XGRegions : UInt32 {
 class XGMapRel : XGRelocationTable {
 	
 	@objc var characters = [XGCharacter]()
-	@objc var interactionLocations = [XGInteractionLocation]()
+	@objc var interactionLocations = [XGMapEntryLocation]()
 	
 	@objc var roomID = 0
 	
@@ -33,7 +33,7 @@ class XGMapRel : XGRelocationTable {
 		let numberOfIPs = self.getValueAtPointer(index: MapRelIndexes.NumberOfInteractionLocations.rawValue)
 		
 		for i in 0 ..< numberOfIPs {
-			let ip = XGInteractionLocation(file: file, index: i, startOffset: firstIP + (i * kSizeOfInteractionLocation))
+			let ip = XGMapEntryLocation(file: file, index: i, startOffset: firstIP + (i * kSizeOfMapEntryLocation))
 			interactionLocations.append(ip)
 		}
 		
@@ -1041,7 +1041,11 @@ extension XGDolPatcher {
 	class func tutorMovesAvailableImmediately() { }
 }
 
-
+extension XGRoom {
+	var script : XGScript? {
+		return XGScript(file: .scd(self.name))
+	}
+}
 
 
 

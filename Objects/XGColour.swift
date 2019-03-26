@@ -10,6 +10,8 @@ import Foundation
 
 class XGColour: NSObject {
 	
+	static var colourThreshold = 4
+	
 	@objc var red	= 0
 	@objc var green	= 0
 	@objc var blue	= 0
@@ -26,32 +28,10 @@ class XGColour: NSObject {
 		
 	}
 	
-	override func isEqual(_ object: Any?) -> Bool {
-		
-		if object == nil {
-			return false
-		}
-		
-		if (object! as AnyObject).isKind(of: XGColour.self) {
-			let colour = object! as! XGColour
-			
-			if (colour.alpha == 0) && (self.alpha == 0) {
-				// both are transparent so accept as equivalent. Helps with compression since all transparent pixels will have the same value.
-				
-				return true
-			}
-			
-			return (colour.red == self.red) && (colour.green == self.green) && (colour.blue == self.blue) && (colour.alpha == self.alpha)
-			
-		}
-		
-		return false
-	}
-	
-	@objc func isEqual(to colour: XGColour, threshold: Int) -> Bool {
+	func isEqual(to colour: XGColour) -> Bool {
 		
 		func withinThreshold(c1: Int, c2: Int) -> Bool {
-			return abs(c1 - c2) < threshold
+			return abs(c1 - c2) <= max(XGColour.colourThreshold, 0)
 		}
 		
 		if (colour.alpha == 0) && (self.alpha == 0) {
@@ -61,10 +41,6 @@ class XGColour: NSObject {
 		}
 		
 		return withinThreshold(c1: colour.red, c2: self.red) && withinThreshold(c1: colour.green, c2: self.green) && withinThreshold(c1: colour.blue, c2: self.blue) && (colour.alpha == self.alpha)
-	}
-	
-	class func compatibleFormats() -> [GoDTextureFormats] {
-		return [.I4, .I8, .IA4, .RGB565, .RGB5A3, .RGBA32]
 	}
 	
 	func representation(format: GoDTextureFormats) -> Int {
@@ -81,6 +57,8 @@ class XGColour: NSObject {
 			return RGB565Representation
 		case .RGB5A3:
 			return RGB5A3Representation
+		case .RGBA32:
+			return RGBA32IntRepresentation
 		default:
 			return 0
 		}
@@ -140,6 +118,10 @@ class XGColour: NSObject {
 		})
 	}
 	
+	var RGBA32IntRepresentation : Int {
+		return (alpha << 24) + (red << 16) + (green << 8) + blue
+	}
+	
 	@objc class func none() -> XGColour {
 		return XGColour(red: 0, green: 0, blue: 0, alpha: 0)
 	}
@@ -171,6 +153,18 @@ class XGColour: NSObject {
 		switch format {
 		case .RGBA32:
 			setRGBA32(raw: raw)
+		case .I4:
+			setI4(raw: raw.int)
+		case .I8:
+			setI8(raw: raw.int)
+		case .IA4:
+			setIA4(raw: raw.int)
+		case .IA8:
+			setIA8(raw: raw.int)
+		case .RGB565:
+			setRGB565(raw: raw.int)
+		case .RGB5A3:
+			setRGB5A3(raw: raw.int)
 		default:
 			break
 		}

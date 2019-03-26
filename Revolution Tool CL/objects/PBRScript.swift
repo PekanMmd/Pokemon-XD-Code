@@ -539,7 +539,7 @@ class XGScript: NSObject {
 						// swap variable ordering if immediate followed by longer expression
 						if e1.isImmediate && !e2.isImmediate {
 							// swap expression order if possible
-							if [37,48,49,50,51,52,53,32,33,35,36].contains(op) {
+							if [37,48,49,50,51,52,53,32,33,35].contains(op) {
 								let temp = e1
 								e1 = e2
 								e2 = temp

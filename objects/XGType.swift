@@ -21,10 +21,13 @@ let kNumberOfTypes = CommonIndexes.NumberOfTypes.value
 
 class XGType: NSObject {
 	
-	@objc var index				 = 0
-	@objc var nameID				 = 0
+	@objc var index			 = 0
+	@objc var nameID		 = 0
 	var category			 = XGMoveCategories.none
 	var effectivenessTable	 = [XGEffectivenessValues]()
+	
+	var iconBigID   = 0
+	var iconSmallID = 0
 	
 	@objc var name : XGString {
 		get {
@@ -77,6 +80,9 @@ class XGType: NSObject {
 		self.nameID		= rel.getWordAtOffset(startOffset + kTypeNameIDOffset).int
 		self.category	= XGMoveCategories(rawValue: rel.getByteAtOffset(startOffset + kCategoryOffset))!
 		
+		self.iconBigID   = rel.get2BytesAtOffset(startOffset + kTypeIconBigIDOffset)
+		self.iconSmallID = rel.get2BytesAtOffset(startOffset + kTypeIconSmallIDOffset)
+		
 		var offset = startOffset + kFirstEffectivenessOffset
 		
 		for _ in 0 ..< kNumberOfTypes {
@@ -97,6 +103,8 @@ class XGType: NSObject {
 		
 		rel.replaceByteAtOffset(startOffset + kCategoryOffset, withByte: self.category.rawValue)
 		rel.replaceWordAtOffset(startOffset + kTypeNameIDOffset, withBytes: UInt32(self.nameID))
+		rel.replace2BytesAtOffset(startOffset + kTypeIconBigIDOffset, withBytes: self.iconBigID)
+		rel.replace2BytesAtOffset(startOffset + kTypeIconSmallIDOffset, withBytes: self.iconSmallID)
 		
 		for i in 0 ..< self.effectivenessTable.count {
 			

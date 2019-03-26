@@ -574,7 +574,7 @@ indirect enum XDSExpr {
 				var text = sp.string
 				text.removeFirst() // [
 				text.removeLast() // ]
-				if let val = text.integerValue {
+				if let val = text.hexValue {
 					return macroWithName("MSG_VAR_" + val.hexString())
 				}
 				return macroWithName("MSG_VAR_" + text.underscoreSimplified.uppercased())
@@ -643,7 +643,34 @@ indirect enum XDSExpr {
 				return macroWithName("INDEX_CANCEL")
 			}
 			return macroWithName("INDEX_\(c.asInt)")
+		case .yesNoIndex:
+			return c.asInt == 0 ? "INDEX_YES" : "INDEX_NO"
+		case .scriptFunction:
+			if c.asInt == 0 {
+				return "NULL_SCRIPT_FUNCTION"
+			}
 			
+			let scriptIdentifier = (c.asInt & 0xFFFF0000) >> 16
+			let functionIndex = c.asInt & 0xFFFF
+			
+			if scriptIdentifier == 0x596 {
+				if XGFiles.common_rel.exists {
+					let commonScript = XGFiles.common_rel.scriptData
+					let functions = commonScript.ftbl
+					if functionIndex < functions.count {
+						let function = functions[functionIndex]
+						return "COMMON_SCRIPT_" + function.name.uppercased()
+					}
+				}
+				
+				return "COMMON_SCRIPT_FUNCTION_\(functionIndex)"
+			} else if scriptIdentifier == 0x100 {
+				return "CURRENT_SCRIPT_FUNCTION_\(functionIndex)"
+			} else {
+				return "SCRIPT_\(scriptIdentifier.hexString())_" + "FUNCTION_\(functionIndex)"
+			}
+		case .sfxID:
+			return "SFX_" + XGMusicMetaData(index: c.asInt).name.uppercased()
 		case .vectorDimension:
 			switch c.asInt {
 			case 0: return macroWithName("V_X")

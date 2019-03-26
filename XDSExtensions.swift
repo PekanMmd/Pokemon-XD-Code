@@ -240,6 +240,11 @@ extension XDSScriptCompiler {
 			return nil
 		}
 		
+		if text.first == "#" {
+			error = "Undefined Macro: \(text)"
+			return nil
+		}
+		
 		if text.first! == "@" {
 			error = "Uh oh, location as a literal! Technically allowed but hoped this day would never come. If you wrote this line yourself then it's probably wrong otherwise tell @StarsMmd he has to implement location literals. \(text)"
 			return nil

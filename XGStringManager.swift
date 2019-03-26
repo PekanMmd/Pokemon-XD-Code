@@ -45,11 +45,12 @@ func loadAllStrings() {
 }
 
 func getStringWithID(id: Int) -> XGString? {
-	loadAllStrings()
 	
 	if id == 0 {
 		return nil
 	}
+	
+	loadAllStrings()
 	
 	for table in allStringTables {
 		if table.containsStringWithId(id) {
@@ -62,11 +63,12 @@ func getStringWithID(id: Int) -> XGString? {
 }
 
 func getStringSafelyWithID(id: Int) -> XGString {
-	loadAllStrings()
 	
 	if id == 0 {
 		return XGString(string: "-", file: nil, sid: nil)
 	}
+	
+	loadAllStrings()
 	
 	for table in allStringTables {
 		if table.containsStringWithId(id) {

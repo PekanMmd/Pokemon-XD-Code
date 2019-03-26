@@ -133,8 +133,30 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 		return XGMoves.move(rand)
 	}
 	
-	static func randomMoveset() -> [XGMoves] {
-		return [XGMoves.random(),XGMoves.random(),XGMoves.random(),XGMoves.random()]
+	static func randomMoveset(count: Int = 4) -> [XGMoves] {
+		var set = [Int]()
+		while set.count < count {
+			set.addUnique(XGMoves.random().index)
+		}
+		while set.count < 4 {
+			set.append(0)
+		}
+		return set.map({ (i) -> XGMoves in
+			return .move(i)
+		})
+	}
+	
+	static func randomShadowMoveset(count: Int = 4) -> [XGMoves] {
+		var set = [Int]()
+		while set.count < count {
+			set.addUnique(XGMoves.randomShadow().index)
+		}
+		while set.count < 4 {
+			set.append(0)
+		}
+		return set.map({ (i) -> XGMoves in
+			return .move(i)
+		})
 	}
 	
 }

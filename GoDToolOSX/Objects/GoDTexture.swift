@@ -6,11 +6,12 @@
 //
 //
 
-import Foundation
+import Cocoa
 
 let kTextureWidthOffset = 0x00
 let kTextureHeightOffset = 0x02
 let kTextureBPPOffset = 0x04      // bits per pixel
+let kTextureIndexOffset = 0x5
 let kTextureFormatOffset = 0xb
 let kPaletteFormatOffset = 0xf
 let kTexturePointerOffset = 0x28
@@ -27,7 +28,6 @@ class GoDTexture: NSObject {
 	
 	@objc var width = 0
 	@objc var height = 0
-	@objc var BPP = 0
 	@objc var textureStart = 0
 	@objc var paletteStart = 0
 	var format = GoDTextureFormats.C8
@@ -35,6 +35,10 @@ class GoDTexture: NSObject {
 	
 	@objc var isIndexed : Bool {
 		return format.isIndexed
+	}
+	
+	var BPP : Int {
+		return format.bitsPerPixel
 	}
 	
 	@objc var blockWidth : Int {
@@ -91,11 +95,40 @@ class GoDTexture: NSObject {
 		self.setUp()
 	}
 	
+	init(forImage image: NSImage, format: GoDTextureFormats, paletteFormat: GoDTextureFormats = .RGB565) {
+		super.init()
+		
+		self.width = Int(image.size.width)
+		self.height = Int(image.size.height)
+		self.format = format
+		self.textureStart = 0x80
+		
+		var requiredPixelsPerRow = self.width
+		while requiredPixelsPerRow % format.blockWidth != 0 {
+			requiredPixelsPerRow += 1
+		}
+		var requiredPixelsPerCol = self.height
+		while requiredPixelsPerCol % format.blockHeight != 0 {
+			requiredPixelsPerCol += 1
+		}
+		
+		let requiredTextureBytes = requiredPixelsPerRow * requiredPixelsPerCol * self.BPP / 8
+		let requiredPaletteBytes = format.paletteCount * paletteFormat.bitsPerPixel / 8
+		
+		if self.format.isIndexed {
+			self.paletteFormat = paletteFormat.paletteID ?? GoDTextureFormats.RGB5A3.paletteID!
+			self.paletteStart = 0x80 + requiredTextureBytes
+		}
+		
+		self.data = XGMutableData(byteStream: [Int](repeating: 0, count: 0x80 + requiredTextureBytes + requiredPaletteBytes))
+		
+		self.writeMetaData()
+	}
+	
 	@objc func setUp() {
 		
 		self.width = data.get2BytesAtOffset(startOffset + kTextureWidthOffset)
 		self.height = data.get2BytesAtOffset(startOffset + kTextureHeightOffset)
-		self.BPP = data.getByteAtOffset(startOffset + kTextureBPPOffset)
 		self.textureStart = startOffset + Int(data.getWordAtOffset(startOffset + kTexturePointerOffset))
 		self.paletteStart = startOffset + Int(data.getWordAtOffset(startOffset + kPalettePointerOffset))
 		let formatIndex = data.getByteAtOffset(startOffset + kTextureFormatOffset)
@@ -104,8 +137,7 @@ class GoDTexture: NSObject {
 		
 	}
 	
-	@objc func save() {
-		
+	func writeMetaData() {
 		self.data.replace2BytesAtOffset(startOffset + kTextureWidthOffset, withBytes: self.width)
 		self.data.replace2BytesAtOffset(startOffset + kTextureHeightOffset, withBytes: self.height)
 		self.data.replaceByteAtOffset(startOffset + kTextureBPPOffset, withByte: self.BPP)
@@ -113,7 +145,11 @@ class GoDTexture: NSObject {
 		self.data.replaceWordAtOffset(startOffset + kPalettePointerOffset, withBytes: UInt32(self.paletteStart - startOffset))
 		self.data.replaceByteAtOffset(startOffset + kTextureFormatOffset, withByte: self.format.rawValue)
 		self.data.replaceByteAtOffset(startOffset + kPaletteFormatOffset, withByte: self.paletteFormat)
-		
+		self.data.replaceByteAtOffset(startOffset + kTextureIndexOffset, withByte: self.isIndexed ? 1 : 0)
+	}
+	
+	@objc func save() {
+		self.writeMetaData()
 		self.data.save()
 	}
 	

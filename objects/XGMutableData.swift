@@ -52,7 +52,7 @@ class XGMutableData: NSObject {
 		super.init()
 	}
 	
-	init(byteStream: [UInt8], file: XGFiles) {
+	init(byteStream: [UInt8], file: XGFiles = XGFiles.nameAndFolder("", .Documents)) {
 		super.init()
 		
 		self.data = NSMutableData()
@@ -61,12 +61,8 @@ class XGMutableData: NSObject {
 		
 	}
 	
-	init(byteStream: [UInt8]) {
-		super.init()
-		
-		self.data = NSMutableData()
-		self.appendBytes(byteStream)
-		
+	convenience init(byteStream: [Int], file: XGFiles = XGFiles.nameAndFolder("", .Documents)) {
+		self.init(byteStream: byteStream.map({ (byte) -> UInt8 in return UInt8(byte) }), file: file)
 	}
 	
 	init(contentsOfXGFile file: XGFiles) {
@@ -254,6 +250,25 @@ class XGMutableData: NSObject {
 		for i in stride(from: 0, to: length, by: 4) {
 			
 			byteStream.append(self.getWordAtOffset(offset + i))
+			
+		}
+		
+		return byteStream
+	}
+	
+	func getLongStreamFromOffset(_ offset: Int, length: Int) -> [(UInt32, UInt32)] {
+		
+		if offset < 0 || offset + length > self.length {
+			printg("Attempting to read \(length.hexString()) bytes from offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+		
+		// length in bytes, not number of longs
+		
+		var byteStream = [(UInt32, UInt32)]()
+		
+		for i in stride(from: 0, to: length, by: 8) {
+			
+			byteStream.append((self.getWordAtOffset(offset + i), self.getWordAtOffset(offset + i + 4)))
 			
 		}
 		
@@ -467,6 +482,35 @@ class XGMutableData: NSObject {
 		return string.string
 	}
 	
+	//MARK: - search for data
+	func occurencesOfBytes(_ bytes: [Int]) -> [Int] {
+		
+		let searchData = XGMutableData(byteStream: bytes)
+		return self.occurencesOfData(searchData)
+		
+	}
+	
+	func occurencesOfData(_ data: XGMutableData) -> [Int] {
+		
+		var complete = false
+		var offsets = [Int]()
+		let searchData = data.data as Data
+		var currentStart = 0
+		
+		while !complete {
+			let searchRange = NSRange(location: currentStart, length: self.length - currentStart)
+			let resultRange = self.data.range(of: searchData, options: [], in: searchRange)
+			let resultOffset = resultRange.location
+			if resultOffset == NSNotFound {
+				complete = true
+			} else {
+				offsets.append(resultOffset)
+				currentStart = resultOffset + 1
+			}
+		}
+		
+		return offsets
+	}
 	
 }
 

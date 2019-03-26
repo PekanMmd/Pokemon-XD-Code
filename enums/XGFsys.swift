@@ -925,42 +925,48 @@ class XGFsys : NSObject {
 			updatedNames.append(filenames[i].removeFileExtensions() + addendum + filenames[i].fileExtensions)
 		}
 		
+		// save all files before decoding as some require each other
 		for i in 0 ..< data.count {
 			data[i].file = .nameAndFolder(updatedNames[i], folder)
 			
-			// save .rel file first in case it's needed for script data
-			if data[i].file.fileType == .rel {
-				if verbose {
-					printg("extracting file: \(data[i].file.fileName)")
-				}
-				data[i].save()
-			}
-		}
-		
-		for i in 0 ..< data.count {
-			if data[i].file.fileType == .rel {
-				continue
-			}
 			if verbose {
 				printg("extracting file: \(data[i].file.fileName)")
 			}
 			data[i].save()
-			
-			if data[i].file.fileType == .gtx || data[i].file.fileType == .atx {
-				if decode {
+		}
+		
+		// decode certain file types
+		if decode {
+			for i in 0 ..< data.count {
+				if verbose {
+					printg("decoding file: \(data[i].file.fileName)")
+				}
+				
+				if data[i].file.fileType == .gsw {
+					let gsw = XGGSWTextures(data: data[i])
+					let textures = gsw.extractTextureData()
+					for texture in textures {
+						texture.save()
+						
+						let imageFilename = texture.file.fileName.removeFileExtensions() + ".png"
+						let imageFile = XGFiles.nameAndFolder(imageFilename, folder)
+						texture.file.texture.saveImage(file: imageFile)
+					}
+				}
+				
+				if data[i].file.fileType == .gtx || data[i].file.fileType == .atx {
 					data[i].file.texture.saveImage(file: .nameAndFolder(updatedNames[i] + ".png", folder))
 				}
-			}
-			
-			if data[i].file.fileType == .msg && decode {
-				XGUtility.saveJSON(data[i].file.stringTable.readableDictionaryRepresentation as AnyObject, toFile: .nameAndFolder(updatedNames[i] + ".json", folder))
 				
+				if data[i].file.fileType == .msg {
+					XGUtility.saveJSON(data[i].file.stringTable.readableDictionaryRepresentation as AnyObject, toFile: .nameAndFolder(updatedNames[i] + ".json", folder))
+					
+				}
+				
+				if data[i].file.fileType == .scd && game != .Colosseum {
+					data[i].file.writeScriptData()
+				}
 			}
-			
-			if data[i].file.fileType == .scd && game != .Colosseum && decode {
-				data[i].file.writeScriptData()
-			}
-			
 			
 		}
 		

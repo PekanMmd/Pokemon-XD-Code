@@ -19,7 +19,7 @@ enum GoDTextureFormats: Int {
 	case RGBA32 = 0x45
 	case C4 = 0x0
 	case C8 = 0x1
-	case C14X2 = 10
+	case C14X2 = 0xa
 	case CMPR = 0xB0
 
 	var standardRawValue : Int {
@@ -48,6 +48,15 @@ enum GoDTextureFormats: Int {
 		default     : return false
 		}
 	}
+	
+	var paletteCount : Int {
+		switch self {
+		case .C4: return 16
+		case .C8: return 256
+		case .C14X2: return 16_384
+		default: return 0
+		}
+	}
 
 	var blockWidth : Int {
 		switch self {
@@ -66,6 +75,33 @@ enum GoDTextureFormats: Int {
 		case .C4   : fallthrough
 		case .CMPR : return 8
 		default    : return 4
+		}
+	}
+	
+	var bitsPerPixel : Int {
+		switch self {
+		case .I4:
+			return 4
+		case .I8:
+			return 8
+		case .IA4:
+			return 8
+		case .IA8:
+			return 16
+		case .RGB565:
+			return 16
+		case .RGB5A3:
+			return 16
+		case .RGBA32:
+			return 32
+		case .C4:
+			return 4
+		case .C8:
+			return 8
+		case .C14X2:
+			return 16
+		case .CMPR:
+			return 4
 		}
 	}
 	
@@ -93,6 +129,15 @@ enum GoDTextureFormats: Int {
 			return "C8"
 		case .CMPR:
 			return "CMPR"
+		}
+	}
+	
+	var paletteID : Int? {
+		switch self {
+		case .IA8: return 0
+		case .RGB565: return 1
+		case .RGB5A3: return 3
+		default: return nil
 		}
 	}
     

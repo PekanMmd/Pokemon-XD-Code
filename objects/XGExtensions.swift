@@ -445,6 +445,11 @@ extension String {
 		return true
 	}
 	
+	var hexValue : Int? {
+		// get the value of the integer, treating it as a hexadecimal value even if it isn't prefixed with 0x
+		return self.hexStringToInt()
+	}
+	
 	var integerValue : Int? {
 		if self.length == 0 {
 			return nil

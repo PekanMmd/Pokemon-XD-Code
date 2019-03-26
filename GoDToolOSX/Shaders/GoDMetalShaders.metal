@@ -13,7 +13,7 @@ struct VertexIn {
 	float type;
 	float index;
 	packed_float3  normal;
-	float isWarp;
+	float isInteractable;
 	float interactionIndex;
 };
 
@@ -50,27 +50,28 @@ vertex VertexOut shader_vertex(const device VertexIn* vertex_array [[ buffer(0) 
 	}
 	
 	switch (int(in.type)) {
-		case 0: out.colour = float4(0.2,0.2,0.2, 1.0); break;
-		case 1: out.colour = float4(0.3,0.3,0.4, 1.0); break;
-		case 2: out.colour = float4(0.2,0.3,0.5, 1.0); break;
-		case 3: out.colour = float4(0.2,0.2,0.6, 1.0); break;
-		case 4: out.colour = float4(0.0,0.3,0.7, 1.0); break;
-		case 5: out.colour = float4(0.0,0.2,0.8, 1.0); break;
-		case 6: out.colour = float4(0.0,0.1,0.9, 1.0); break;
-		case 7: out.colour = float4(0.0,0.0,1.0, 1.0); break;
-		case 11: out.colour = float4(0.2,0.0,1.0, 1.0); break;
-		case 14: out.colour = float4(0.3,0.0,1.0, 1.0); break;
-		case 100: out.colour = float4(1.0,1.0,0.3, 1.0); break;
-		case 65280: out.colour = float4(0.6,0.3,0.4, 1.0); break;
-		default: out.colour = float4(0.8,0.8,0.8, 1.0); break;
+//		case 0: out.colour = float4(0.2,0.2,0.2, 1.0); break;
+//		case 1: out.colour = float4(0.3,0.3,0.4, 1.0); break;
+//		case 2: out.colour = float4(0.2,0.3,0.5, 1.0); break;
+//		case 3: out.colour = float4(0.2,0.2,0.6, 1.0); break;
+//		case 4: out.colour = float4(0.0,0.3,0.7, 1.0); break;
+//		case 5: out.colour = float4(0.0,0.2,0.8, 1.0); break;
+//		case 6: out.colour = float4(0.0,0.1,0.9, 1.0); break;
+//		case 7: out.colour = float4(0.0,0.0,1.0, 1.0); break;
+//		case 11: out.colour = float4(0.2,0.0,1.0, 1.0); break;
+//		case 14: out.colour = float4(0.3,0.0,1.0, 1.0); break;
+//		case 100: out.colour = float4(1.0,1.0,0.3, 1.0); break;
+//		case 65280: out.colour = float4(0.6,0.3,0.4, 1.0); break;
+		default: out.colour = float4(0.5,0.2,0.2, 1.0); break;
 	}
 	
 	if (in.type > 7000) {
-		out.colour = float4(0.7,0.4,0.0,1.0);
+		// walkable floor
+		out.colour = float4(0.4, 0.6, 1.0, 1.0);
 	}
 	
-	if (in.isWarp == 1.0) {
-		out.colour = float4(1.0, 0.2, 0.7, 1.0);
+	if (in.isInteractable == 1.0) {
+		out.colour = float4(0.9, 0.8, 0.5, 1.0);
 		
 		if (in.interactionIndex == uniforms->interactionIndexToHighlight) {
 			out.colour = float4(0.6, 1.0, 0.4, 1.0);

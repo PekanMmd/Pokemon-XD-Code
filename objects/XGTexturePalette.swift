@@ -10,7 +10,7 @@ import Foundation
 
 class XGTexturePalette: NSObject {
 	
-	var palette = [XGColour]()
+	private var palette = [XGColour]()
 	
 	var length : Int {
 		
@@ -20,7 +20,7 @@ class XGTexturePalette: NSObject {
 	}
 	
 	subscript(index: Int) -> XGColour {
-		return palette[index]
+		return self.palette[index]
 	}
 	
 	func append(_ colour : XGColour) {
@@ -31,7 +31,7 @@ class XGTexturePalette: NSObject {
 		
 		for i in 0 ..< palette.count {
 			
-			if palette[i].isEqual(to: colour, threshold: 4) {
+			if self.palette[i].isEqual(to: colour) {
 				return i
 			}
 			

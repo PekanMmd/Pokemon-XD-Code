@@ -67,3 +67,66 @@ extension XGResources {
 		}
 	}
 }
+
+
+extension NSImage {
+	var bitmap : [XGColour] {
+		let imageWidth  = Int(self.size.width)
+		let imageHeight = Int(self.size.height)
+		
+		let numberOfPixels = imageWidth * imageHeight
+		var pixels = [UInt32](repeating: 0, count: numberOfPixels)
+		
+		let bytesPerPixel = 4
+		let bytesPerRow = bytesPerPixel * imageWidth
+		let bitsPerComponent = 8
+		var rect = CGRect(x: 0, y: 0, width: imageWidth, height: imageHeight)
+		
+		let colourSpace = CGColorSpaceCreateDeviceRGB()
+		let info = CGBitmapInfo.byteOrder32Big.union(CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)).rawValue
+		
+		let context = CGContext(data: &pixels, width: imageWidth, height: imageHeight, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colourSpace, bitmapInfo: info)!
+		
+		let graphicsContext = NSGraphicsContext(cgContext: context, flipped: false)
+		
+		let imageAsCGRef = self.cgImage(forProposedRect: &rect, context: graphicsContext, hints: nil)!
+		
+		context.draw(imageAsCGRef, in: rect)
+		
+		return pixels.map({ (raw) -> XGColour in
+			var currentColour = raw
+			
+			let red		  = Int(currentColour & 0xFF)
+			
+			currentColour =  currentColour >> 8
+			let green	  = Int(currentColour & 0xFF)
+			
+			currentColour =  currentColour >> 8
+			let blue	  = Int(currentColour & 0xFF)
+			
+			currentColour =  currentColour >> 8
+			let alpha	  = Int(currentColour)
+			
+			return XGColour(red: red, green: green, blue: blue, alpha: alpha)
+		})
+	}
+	
+	var colourCount : Int {
+		return self.colourCount(threshold: 0)
+	}
+	
+	func colourCount(threshold: Int) -> Int {
+		XGColour.colourThreshold = threshold
+		let palette = XGTexturePalette()
+		for colour in self.bitmap {
+			if palette.indexForColour(colour) == nil {
+				palette.append(colour)
+			}
+		}
+		return palette.length
+	}
+	
+	var texture : GoDTexture {
+		return GoDTextureImporter.getTextureData(image: self)
+	}
+}

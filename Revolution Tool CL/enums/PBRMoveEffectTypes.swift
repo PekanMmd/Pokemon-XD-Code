@@ -25,6 +25,7 @@ enum XGMoveEffectTypes: Int, XGDictionaryRepresentable {
 	case weatherBall		= 13
 	case nerf				= 14
 	case itemBasedType		= 15
+	case unknown			= 16
 	
 	var string : String {
 		switch self {
@@ -44,6 +45,7 @@ enum XGMoveEffectTypes: Int, XGDictionaryRepresentable {
 		case .weatherBall		: return "Weather Ball"
 		case .nerf				: return "Nerf"
 		case .itemBasedType		: return "Item Based Type"
+		case .unknown			: return "Unknown"
 		}
 	}
 	

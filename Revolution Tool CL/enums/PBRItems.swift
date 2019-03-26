@@ -55,6 +55,13 @@ enum XGItems : XGDictionaryRepresentable, XGIndexedValue {
 		return items
 	}
 	
+	static func pokeballs() -> [XGItems] {
+		var items = [XGItems]()
+		for i in 0 ... 16 {
+			items.append(.item(i))
+		}
+		return items
+	}
 }
 
 

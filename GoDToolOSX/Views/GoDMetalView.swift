@@ -154,8 +154,9 @@ class GoDMetalView: NSView {
 			if let f = file {
 				let data = f.collisionData
 				metalManager.createVertexBuffer(collisionData: data)
-				self.warpIndexes = data.warpIndexes
+				self.interactionIndexes = data.interactableIndexes
 				setDefaultPositions()
+				metalManager.interactionIndexToHighlight = -1
 			}
 		}
 	}
@@ -165,11 +166,11 @@ class GoDMetalView: NSView {
 	}
 	
 	var popup = GoDPopUpButton()
-	var warpIndexes : [Int]! {
+	var interactionIndexes : [Int]! {
 		didSet {
 			var titles = ["-"]
-			for i in warpIndexes {
-				titles.append("warp \(i)")
+			for i in interactionIndexes {
+				titles.append("region \(i)")
 			}
 			popup.setTitles(values: titles)
 		}
@@ -220,8 +221,8 @@ class GoDMetalView: NSView {
 		self.timer = Timer.scheduledTimer(timeInterval: frameTime, target: self, selector: #selector(render), userInfo: nil, repeats: true)
 		previousTime = Float(CACurrentMediaTime())
 		
-		popup.setTitles(values: ["Warps Picker"])
-		popup.action = #selector(setWarp)
+		popup.setTitles(values: ["Region Picker"])
+		popup.action = #selector(setInteraction)
 		popup.target = self
 		popup.translatesAutoresizingMaskIntoConstraints = false
 		self.addSubview(popup)
@@ -239,9 +240,9 @@ class GoDMetalView: NSView {
 		setDefaultPositions()
 	}
 	
-	@objc func setWarp(sender: GoDPopUpButton) {
+	@objc func setInteraction(sender: GoDPopUpButton) {
 		let index = sender.indexOfSelectedItem - 1
-		metalManager.interactionIndexToHighlight = index == -1 ? index : warpIndexes[index]
+		metalManager.interactionIndexToHighlight = index == -1 ? index : interactionIndexes[index]
 	}
 	
 	@objc func render() {
@@ -284,7 +285,7 @@ class GoDMetalView: NSView {
 			case (KeyCodeName.enter, true):
 				metalManager.projectionMatrix = zoomedProjectionMatrix
 				
-			// set warp to highlight
+			// set interactable region to highlight
 			case (KeyCodeName.zero, true):
 				metalManager.interactionIndexToHighlight = 0
 			case (KeyCodeName.one, true):

@@ -120,7 +120,7 @@ func allMoves() -> [String : XGMoves] {
 	
 	var dic = [String : XGMoves]()
 	
-	for i in -1 ..< kNumberOfMoves - 1 {
+	for i in 0 ..< kNumberOfMoves {
 		
 		let a = XGMoves.move(i)
 		
@@ -141,7 +141,7 @@ func move(_ name: String) -> XGMoves {
 
 func allMovesArray() -> [XGMoves] {
 	var moves: [XGMoves] = []
-	for i in -1 ..< kNumberOfMoves - 1 {
+	for i in 0 ..< kNumberOfMoves {
 		moves.append(XGMoves.move(i))
 	}
 	return moves

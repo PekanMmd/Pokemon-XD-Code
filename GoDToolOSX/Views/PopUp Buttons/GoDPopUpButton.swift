@@ -38,26 +38,29 @@ class GoDPopUpButton: NSPopUpButton {
 			self.removeAllItems()
 		}
 		
+		
 		var titles = values
 		
-		for i in 1 ..< titles.count {
-			
-			let original = titles[i]
-			
-			let previous = titles[0 ..< i]
-			if previous.contains(original) {
+		if titles.count > 0 {
+			for i in 1 ..< titles.count {
 				
-				var current = original
-				var counter = 2
+				let original = titles[i]
 				
-				while previous.contains(current) {
-					current = original + " (\(counter))"
-					counter += 1
+				let previous = titles[0 ..< i]
+				if previous.contains(original) {
+					
+					var current = original
+					var counter = 2
+					
+					while previous.contains(current) {
+						current = original + " (\(counter))"
+						counter += 1
+					}
+					
+					titles[i] = current
 				}
 				
-				titles[i] = current
 			}
-			
 		}
 		
 		self.addItems(withTitles: titles)

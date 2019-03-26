@@ -26,6 +26,7 @@ class GoDISOViewController: GoDTableViewController {
 					fsysData.extractFilesToFolder(folder: self.currentFile.folder, decode: decode)
 				}
 				data.save()
+				GoDAlertViewController.displayAlert(title: "Export Complete", text: "Exported \(currentFile.fileName) to \(self.currentFile.folder.path)")
 			}
 		} else {
 			GoDAlertViewController.displayAlert(title: "File export failed", text: "Couldn't export data for file \(self.currentFile.fileName) from the ISO.")
@@ -48,6 +49,7 @@ class GoDISOViewController: GoDTableViewController {
 			if currentFile.fileType == .fsys {
 				
 				if encode {
+					XGColour.colourThreshold = 0
 					if game == .XD {
 						for file in currentFile.folder.files {
 							if file.fileType == .xds {
@@ -59,11 +61,26 @@ class GoDISOViewController: GoDTableViewController {
 								}
 							}
 							if file.fileType == .gtx || file.fileType == .atx {
-								for image in currentFile.folder.files where image.fileType == .png {
+								for image in currentFile.folder.files where XGFileTypes.imageFormats.contains(image.fileType) {
 									if image.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
 										file.texture.importImage(file: image)
 									}
 								}
+							}
+						}
+						
+						// encode gsws after all gtxs have been encoded
+						for file in currentFile.folder.files {
+							if file.fileType == .gsw {
+								let gsw = XGGSWTextures(data: file.data!)
+								
+								for subFile in currentFile.folder.files where subFile.fileName.contains(gsw.subFilenamesPrefix) && subFile.fileType == .gtx {
+									if let id = subFile.fileName.removeFileExtensions().replacingOccurrences(of: gsw.subFilenamesPrefix, with: "").integerValue {
+										gsw.importTextureData(subFile.data!, withID: id)
+									}
+								}
+								
+								gsw.save()
 							}
 						}
 					}
@@ -88,7 +105,7 @@ class GoDISOViewController: GoDTableViewController {
 		} else {
 			printg("The file: \(currentFile.path) doesn't exit")
 		}
-		printg("import complete")
+		GoDAlertViewController.displayAlert(title: "Import Complete", text: "Finished importing \(currentFile.fileName) to ISO.")
 	}
 	
 	@IBAction func importFiles(_ sender: Any) {

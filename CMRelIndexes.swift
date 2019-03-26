@@ -21,11 +21,9 @@ enum CommonIndexes : Int {
 	case NumberOfItems = -1 // items are in dol in colosseum
 	case USStringTable = -2 // offset 0x59890 but not indexed apparently
 	// haven't looked for these in colosseum yet
-	case Doors = -3
-	case NumberOfDoors = -4
-	case BGM = -5
-	case NumberOfBGMIDs = -6
-	case BattleFields = -7
+	case BGM = -3
+	case NumberOfBGMIDs = -4
+	case BattleFields = -5
 	
 	
 	case LegendaryPokemon = 2
@@ -38,6 +36,9 @@ enum CommonIndexes : Int {
 	
 	case TrainerClasses = 24
 	case NumberOfTrainerClasses = 25
+	
+	case Doors = 30
+	case NumberOfDoors = 31
 	
 	case Trainers = 44
 	case NumberOfTrainers = 45

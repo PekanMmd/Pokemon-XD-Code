@@ -30,6 +30,23 @@ enum XGEffectivenessValues : Int, XGDictionaryRepresentable {
 		}
 	}
 	
+	static func fromIndex(_ index: Int) -> XGEffectivenessValues {
+		switch index {
+		case 0:
+			return .superEffective
+		case 1:
+			return .neutral
+		case 2:
+			return .notVeryEffective
+		case 3:
+			return .ineffective
+		case 4:
+			return .unknown1
+		default:
+			return .unknown2
+		}
+	}
+	
 	var dictionaryRepresentation: [String : AnyObject] {
 		get {
 			return ["Value" : self.rawValue as AnyObject]

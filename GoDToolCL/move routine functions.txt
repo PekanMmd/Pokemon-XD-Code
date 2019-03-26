@@ -176,7 +176,7 @@ c9: follow me
 ce: 25% recoil
 
 e1: switch out abilities (natural cure)			BYTE: target
-
+e2: jump if fainted								BYTE: target WORD: offset
 e3: nature power
 
 e6: 33% recoil

@@ -96,7 +96,7 @@ class XDSScriptCompiler: NSObject {
 			}
 			
 			if file.folder.files.contains(where: { (msg) -> Bool in
-				return (targetFileName == file.fileName.removeFileExtensions()) && msg.fileType == .msg
+				return (targetFileName == msg.fileName.removeFileExtensions()) && msg.fileType == .msg
 			}) {
 				stringTable = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.msg.fileExtension, file.folder).stringTable
 			}

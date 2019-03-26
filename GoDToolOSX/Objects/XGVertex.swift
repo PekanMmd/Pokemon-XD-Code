@@ -21,7 +21,7 @@ class XGVertex : NSObject {
 	var z : GLfloat = 0.0
 	var type : GLfloat = 0.0
 	var index : GLfloat = 0.0
-	var isWarp = false
+	var isInteractable = false
 	var interactionIndex : GLfloat = 0.0
 	
 	// normal
@@ -39,7 +39,7 @@ class XGVertex : NSObject {
 		data.append(nx)
 		data.append(ny)
 		data.append(nz)
-		data.append(isWarp ? 1.0 : 0.0)
+		data.append(isInteractable ? 1.0 : 0.0)
 		data.append(interactionIndex)
 		
 		return data

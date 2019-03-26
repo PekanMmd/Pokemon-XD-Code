@@ -130,7 +130,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Debugging functions", start = 142, nb = 2),
 		
-		("syncTaskFromLibraryScript", 142, 3, [.integer, .integer, .list(.anyType)], .null, ""), //#nbArgs, function ID, ... (args, nil)
+		("syncTaskFromLibraryScript", 142, 3, [.scriptFunction, .integer, .list(.anyType)], .null, ""), //#nbArgs, function ID, ... (args, nil)
 		("setDebugMenuVisibility", 143, 1, [.bool], .null, "doesn't work on release builds"), //# not sure it works on release builds
 		
 		//Category(name = "Misc. 2", start = 145, nb = 16),
@@ -307,7 +307,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("warpToMap", 22, 2, [.objectName("Map"), .room, .integerIndex], .null, "room id and entry point index"), // # (int roomID, int entry warp index)
 		("showTitleScreen", 37, 1, [.anyType], .null, ""),
 		("enterMenuMap", 38, 2, [.objectName("Map"), .room], .null, ""),
-		("warpToMapWithOptions", 49, 2, [.objectName("Map"), .room, .bool, .integerUnsigned, .integerUnsigned], .null, ""), // # (int roomID, int unknown)
+		("warpToMapWithOptions", 49, 2, [.objectName("Map"), .room, .bool, .scriptFunction, .scriptFunction], .null, ""), // # (int roomID, int unknown)
 	],
 	
 //MARK: - Tasks
@@ -315,12 +315,14 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//#------------------------------------------------------------------------------------
 		//Category(name = "Task creation functions", start = 16, nb = 4),
 		//# Function IDs : if (id & 0x59600000) != 0 : current script, otherwise common script (mask = 0x10000000 iirc)
+		// id starts with 0x596 for common script, 0x100 for current script
+		// id & 0xFFFF gives function index
 		
 		("createSyncTaskByID", 16, 6, [.objectName("Tasks"), .integer, .integer, .integer, .integer, .integer], .null, ""), //# (functionID, then 4 ints passed as parameters)
-		("createSyncTaskByName", 17, 6, [.objectName("Tasks"), .string, .integer, .integer, .integer, .integer], .null, ""), //# the function is selected by its name in the CURRENT script.
+		("createSyncTaskByName", 17, 6, [.objectName("Tasks"), .scriptFunction, .integer, .integer, .integer, .integer], .null, ""), //# the function is selected by its name in the CURRENT script.
 		//# HEAD sec. must be present
 		("createAsyncTaskByID", 18, 6, [.objectName("Tasks"), .integer, .integer, .integer, .integer, .integer], .null, ""), //# (functionID, then 4 ints passed as parameters)
-		("createAsyncTaskByName", 19, 6, [.objectName("Tasks"), .string, .integer, .integer, .integer, .integer], .null, ""), //# the function is selected by its name in the CURRENT script.
+		("createAsyncTaskByName", 19, 6, [.objectName("Tasks"), .scriptFunction, .integer, .integer, .integer, .integer], .null, ""), //# the function is selected by its name in the CURRENT script.
 		//# HEAD sec. must be present
 		
 		("getLastReturnedInt", 20, 1, [.objectName("Tasks")], .integer, ""),
@@ -335,7 +337,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("displayMessageSilently", 16, 4, [.objectName("Dialogue"), .msg, .bool, .bool], .null, "(msgId, inForeground?, print imm.?)"), //# (int msgID, bool isInForeground, bool printInstantly)
 		("displayMessage", 17, 5, [.objectName("Dialogue"), .msg, .bool, .bool, .integer], .null, "(msgId, inForeground?, print imm.?, pitch)"), //# (int msgID, bool isInForeground, bool printInstantly, int textSoundPitchLevel) makes the chirping sound as characters are displayed
 		("waitForMessage", 18, 2, [.objectName("Dialogue"), .bool], .null, "(wait for completion?)"),
-		("displayYesNoMenu", 21, 2, [.objectName("Dialogue"), .msg], .integerIndex, "returns 0 = YES, 1 = NO"), // result is not boolean but rather index of selected option, 0 indexed
+		("displayYesNoMenu", 21, 2, [.objectName("Dialogue"), .msg], .yesNoIndex, "returns 0 = YES, 1 = NO"), // result is not boolean but rather index of selected option, 0 indexed
 		("displayColosseumEntryMenu", 23, 2, [.objectName("Dialogue"), .msg], .integerIndex, "returns 0 = Enter, 1 = Info"),
 		
 		("setMessageVariable", 28, 3, [.objectName("Dialogue"), .msgVar, .variableType], .null, ""), //# (int type, var val) macro type for value is set by compiler based on msgvar value
@@ -474,9 +476,9 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 //MARK: - Sound
 	47 : [
 		
-		("playSoundEffect", 16, 4, [.objectName("Sound"), .integer, .integer, .integer], .null, "(id, unk, volume)"), // int songid, int unk, int volume
-		
-		("setBGM", 25, 5, [.objectName("Sound"), .integer, .integer, .integer, .integer], .null, "(id, unk, unk, volume)"), //# (int bgm id, int unk1, int unk2, int volume)
+		("playSoundEffect", 16, 4, [.objectName("Sound"), .sfxID, .integer, .integer], .null, "(id, unk, volume)"), // int songid, int unk, int volume
+		("function18", 18, 3, [.objectName("Sound"), .sfxID, .integer], .null, "(id, unk, volume)"),
+		("setBGM", 25, 5, [.objectName("Sound"), .sfxID, .integer, .integer, .integer], .null, "(id, unk, unk, volume)"), //# (int bgm id, int unk1, int unk2, int volume)
 	
 	],
 	

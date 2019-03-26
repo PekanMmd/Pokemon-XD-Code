@@ -7,7 +7,7 @@ layout (location = 0) in vec3  position;
 layout (location = 1) in float type;
 layout (location = 2) in float index;
 layout (location = 3) in vec3  normal;
-layout (location = 4) in float isWarp; // 1.0 for ture, 0.0 for false
+layout (location = 4) in float isInteractable; // 1.0 for true, 0.0 for false
 
 out vec3 passPosition;
 out vec3 passNormal;
@@ -53,7 +53,7 @@ void main() {
 		passColour = vec3(0.7,0.4,0.0);
 	}
 	
-	if (isWarp == 1.0) {
+	if (isInteractable == 1.0) {
 		passColour = vec3(0.8,0.0,1.0);
 	}
 }

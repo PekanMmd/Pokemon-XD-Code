@@ -122,6 +122,31 @@ class XGUtility {
 	
 	class func importTextures() {
 		// into the .gtx file, not into ISO
+		
+		for image in XGFolders.Import.files where [XGFileTypes.png, .jpeg, .bmp].contains(image.fileType) {
+			
+			let textureFilename = image.fileName.removeFileExtensions() + XGFileTypes.gtx.fileExtension
+			let animTextureFilename = image.fileName.removeFileExtensions() + XGFileTypes.atx.fileExtension
+			
+			let tFile = XGFiles.nameAndFolder(textureFilename, .TextureImporter)
+			let aFile = XGFiles.nameAndFolder(animTextureFilename, .TextureImporter)
+			
+			if tFile.exists || aFile.exists {
+				if tFile.exists {
+					GoDTextureImporter.replaceTextureData(texture: tFile.texture, withImage: image, save: true)
+				}
+				if aFile.exists {
+					GoDTextureImporter.replaceTextureData(texture: aFile.texture, withImage: image, save: true)
+				}
+			} else {
+				let texture = image.image.texture
+				texture.file = tFile
+				texture.save()
+			}
+			
+		}
+		
+		XGColour.colourThreshold = 0
 		for file in XGFolders.Textures.files {
 			var imageFile : XGFiles!
 			for image in XGFolders.Import.files {

@@ -7,33 +7,74 @@
 //
 //
 
-////let updated = XGFolders.nameAndFolder("updated scripts", .Documents)
-////for filename in updated.filenames {
-//for filename in ["D6_dome_2F.xds"] {
-//	let name = filename.removeFileExtensions()
-//	XDSScriptCompiler.setFlags(disassemble: false, decompile: false, updateStrings: true, increaseMSG: true)
-//	XDSScriptCompiler.baseStringID = 0x10000
-//	if XDSScriptCompiler.compile(textFile: .xds(name)) {
-//		printg("success: ", filename)
-//		let fsys = XGFiles.fsys(name)
-//		fsys.compileMapFsys()
-//		ISO.importFiles([fsys])
-//	} else {
-//		printg("\nCompilation error: \(filename)\n\(XDSScriptCompiler.error)\n")
+//XGUtility.exportTextures()
+
+let filename = "types"
+let image = XGFiles.nameAndFolder(filename + ".png", .Import).image
+let t = GoDTextureImporter.getTextureData(image: image)
+t.file = .nameAndFolder(filename + ".gtx", .TextureImporter)
+t.save()
+t.saveImage(file: .nameAndFolder(filename + ".png", .TextureImporter))
+
+
+//for image in XGFolders.Import.files where image.fileType == .png {
+//	let texture = GoDTextureImporter.getTextureData(image: image.image)
+//	let filename = image.fileName + "_" + texture.format.name
+//	texture.file = .nameAndFolder(filename + ".gtx", .TextureImporter)
+//	texture.save()
+//	texture.saveImage(file: .nameAndFolder(filename + ".png", .TextureImporter))
+//}
+
+
+//let count = CommonIndexes.NumberBGM.value
+//let start = CommonIndexes.BGM.startOffset
+////let rel = XGFiles.common_rel.data!
+//
+//printg(count)
+//for i in 0 ..< count {
+//	let offset = start + (i * 12)
+//	let fsysID = rel.get2BytesAtOffset(offset + 2)
+//	if let fsys = ISO.getFSYSNameWithGroupID(fsysID) {
+//		printg(i, fsys)
 //	}
 //}
 
+//let p = common.allPointers()
+//for i in 0 ..< p.count {
+//	printg(i, p[i].hexString())
+//}
+
+//for i in 0 ..< CommonIndexes.NumberOfInteractionPoints.value {
+//	let p = XGInteractionPointData(index: i)
+//	switch p.info {
+//	case .Script(let scriptIndex, let parameter):
+//		if parameter != 0 {
+//			printg(i, p.roomID, scriptIndex)
+//		}
+//	default: break
+//	}
+//}
+
+
+//let folder = XGFolders.ISOExport("pkx_usohachi")
+//let bonsly = XGFiles.nameAndFolder("usohachi.pkx", folder).data!
+//let munchlax = XGFiles.nameAndFolder("gonbe_0100.fdat", folder).data!
+//
+//let munchSize = munchlax.get4BytesAtOffset(0)
+//let bonSize = bonsly.get4BytesAtOffset(0)
+//
+//var paddedMunchSize = munchSize
+//paddedMunchSize += (16 - paddedMunchSize % 16)
+//
+//bonsly.replace4BytesAtOffset(0, withBytes: munchSize)
+//bonsly.replaceBytesFromOffset(0xE60, withByteStream: [Int](repeating: 0, count: paddedMunchSize))
+//bonsly.replaceData(data: munchlax, atOffset: 0xE60)
+//bonsly.deleteBytes(start: paddedMunchSize + 0xe60, count: bonSize - paddedMunchSize - 0xe60)
+//
+//bonsly.save()
+
 //XGUtility.compileCommonRel()
-//XGUtility.compileMainFiles()
-//XGUtility.compileAllFiles()
-
-
-//XGAssembly.ASMfreeSpacePointer().hexString().println()
-
-
-
-//XGScriptClass.classes(43).RAMOffset!.hexString().println()
-//XGAssembly.getWordAtRamOffsetFromR13(offset: -0x74b0).hexString().println() //number battle types
+//CommonIndexes.Doors.startOffset.hexString().println()
 
 //let cd = item("Battle CD 01")
 //let locations = XGUtility.getItemLocations()

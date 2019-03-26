@@ -13,9 +13,9 @@ class XGCollisionData: NSObject {
 	
 	var file : XGFiles!
 	var mapRel : XGMapRel!
-	var warpIndexes = [Int]()
-	var numberOfWarps : Int {
-		return warpIndexes.count
+	var interactableIndexes = [Int]()
+	var numberOfInteractableRegions : Int {
+		return interactableIndexes.count
 	}
 	
 	var vertexes = [XGVertex]()
@@ -27,6 +27,28 @@ class XGCollisionData: NSObject {
 		}
 		
 		return buffer
+	}
+	
+	private func addVertex(_ vertex: XGVertex) {
+		for i in 0 ..< self.vertexes.count {
+			let compare = self.vertexes[i]
+			if compare.x == vertex.x && compare.y == vertex.y && compare.z == vertex.z {
+				if compare.nx == vertex.nx && compare.ny == vertex.ny && compare.nz == vertex.nz {
+					if !compare.isInteractable && vertex.isInteractable {
+						self.vertexes[i].isInteractable = true
+						self.vertexes[i].interactionIndex = vertex.interactionIndex
+						return
+					}
+				}
+			}
+		}
+		self.vertexes.append(vertex)
+	}
+	
+	private func addVertices(_ vertices: [XGVertex]) {
+		for vertex in vertices {
+			self.addVertex(vertex)
+		}
 	}
 	
 	init(file: XGFiles) {
@@ -49,35 +71,37 @@ class XGCollisionData: NSObject {
 		
 		var maxD : GLfloat = 0
 		
-		for i in 0 ... entry_count {
-			// add an extra  loop for data not pointed to but comes straight after pointer table
+		for i in 0 ..< entry_count {
 			
 			let entry_size = 0x40;
-			var o = i == entry_count ? 0x0 : 0x24
+			var o = 0x24
 			let offset = list_start + (entry_size * i)
 			
-			while o < ( i == entry_count ? 0x4 : entry_size ) {
+			while o < entry_size {
 				
 				let a_o = data.getWordAtOffset(offset + o).int
 				if  a_o > 0 {
-					var isWarp = false
-					if o == 0x2c {
-						// this is a warp point
-						isWarp = true
+					var isInteractable = false
+					if o == 0x2c || o == 0x30 {
+						// this is a warp point, door, pc, etc.
+						isInteractable = true
 					}
 					
-					let data_start = i == entry_count ? a_o : data.getWordAtOffset(a_o).int
-					let num = i == entry_count ? data.getWordAtOffset(offset + o + 4).int : data.getWordAtOffset(a_o + 0x4).int
+					let data_start = data.getWordAtOffset(a_o).int
+					let num = data.getWordAtOffset(a_o + 0x4).int
 					let face_size = 0x34
 					
 					for s in 0 ..< num {
 						let s_o = data_start + (s * face_size)
 						var triangle = [XGVertex]()
 						
-						let type = data.get2BytesAtOffset(s_o + 0x30)
-						let interactionIndex = data.get2BytesAtOffset(s_o + 0x32)
-						if isWarp {
-							warpIndexes.addUnique(interactionIndex)
+						let typeOffset = o == 0x30 ? 0x32 : 0x30
+						let indexOffset = o == 0x30 ? 0x30 : 0x32
+						
+						let type = data.get2BytesAtOffset(s_o + typeOffset)
+						let interactionIndex = data.get2BytesAtOffset(s_o + indexOffset)
+						if isInteractable {
+							interactableIndexes.addUnique(interactionIndex)
 						}
 						
 						for c in 0 ..< 3 { // 4th element is normal vector
@@ -107,13 +131,13 @@ class XGCollisionData: NSObject {
 							v.ny = ny.gl
 							v.nz = nz.gl
 							v.type = GLfloat(type)
-							v.isWarp = isWarp
+							v.isInteractable = isInteractable
 							v.interactionIndex = GLfloat(interactionIndex)
 						}
 						if !types.contains(type) {
 							types.append(type)
 						}
-						self.vertexes += triangle
+						self.addVertices(triangle)
 					}
 				}
 				

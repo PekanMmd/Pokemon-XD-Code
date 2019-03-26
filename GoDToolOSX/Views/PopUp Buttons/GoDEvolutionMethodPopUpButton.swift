@@ -20,7 +20,9 @@ class GoDEvolutionMethodPopUpButton: GoDPopUpButton {
 	
 	override func setUpItems() {
 		var values = [String]()
-		for i in 0 ... 0x11 {
+		
+		let max = game == .PBR ? 0x1A : 0x11
+		for i in 0 ... max {
 			values.append(XGEvolutionMethods(rawValue: i)!.string)
 		}
 		
