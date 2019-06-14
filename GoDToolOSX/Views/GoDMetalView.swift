@@ -89,6 +89,10 @@ class GoDMetalManager : NSObject {
 	func createVertexBuffer(collisionData data: XGCollisionData) {
 		
 		let vertexData = data.rawVertexBuffer as [Float]
+		guard vertexData.count > 0 else {
+			vertexCount = 0
+			return
+		}
 		let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
 		
 		vertexBuffer = device.makeBuffer(bytes: vertexData, length: dataSize, options: [])
