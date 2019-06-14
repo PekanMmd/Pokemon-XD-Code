@@ -32,7 +32,7 @@ class GoDTrainerView: NSView {
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.wantsLayer = true
 		self.layer?.borderWidth = 1
-		self.layer?.borderColor = GoDDesign.colourBlack().cgColor
+		self.layer?.borderColor = NSColor.controlHighlightColor.cgColor
 		
 		self.addSubview(modelimageview)
 		self.addSubview(modelPopup)

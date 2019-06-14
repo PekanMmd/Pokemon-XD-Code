@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
-        <plugIn identifier="com.apple.imagekit.ibplugin" version="14113"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.imagekit.ibplugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -146,7 +145,7 @@
                                 </textFieldCell>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WJM-Xd-Z8W" customClass="GoDRoomPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                <rect key="frame" x="208" y="392" width="265" height="26"/>
+                                <rect key="frame" x="208" y="392" width="265" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="PHZ-7k-N8u"/>
                                 </constraints>
@@ -180,7 +179,7 @@
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="0" drawsBackground="YES" id="6GE-ML-B7E">
                                     <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="gAn-iw-yy3"/>
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
@@ -579,7 +578,7 @@
                                 </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="ICd-2A-G0p">
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
@@ -590,7 +589,7 @@
                                 </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="ABI-f2-TFg">
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
@@ -602,7 +601,7 @@
                                 </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" drawsBackground="YES" id="L5c-I1-0vy">
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
@@ -981,7 +980,7 @@
                                 </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="1000" drawsBackground="YES" id="a4a-uB-jlN">
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
@@ -1066,26 +1065,26 @@
                             </button>
                             <scrollView verticalCompressionResistancePriority="1000" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hRh-Tx-sXp">
                                 <rect key="frame" x="20" y="20" width="440" height="75"/>
-                                <clipView key="contentView" id="n2V-bm-Fle">
+                                <clipView key="contentView" drawsBackground="NO" id="n2V-bm-Fle">
                                     <rect key="frame" x="1" y="1" width="438" height="73"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" smartInsertDelete="YES" id="YQi-S6-pk0">
                                             <rect key="frame" x="0.0" y="0.0" width="438" height="73"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <size key="minSize" width="438" height="73"/>
                                             <size key="maxSize" width="463" height="10000000"/>
-                                            <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                         </textView>
                                     </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="is7-T8-1dI">
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="is7-T8-1dI">
                                     <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="hKN-9Z-DJ8">
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="hKN-9Z-DJ8">
                                     <rect key="frame" x="423" y="1" width="16" height="73"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -1224,7 +1223,7 @@ Twitter: @StarsMmd</string>
                                 <rect key="frame" x="205" y="5" width="240" height="347"/>
                                 <subviews>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vIX-s3-exP" customClass="GoDPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="234" width="110" height="35"/>
+                                        <rect key="frame" x="8" y="234" width="110" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="oOh-6M-EIc"/>
                                         </constraints>
@@ -1247,12 +1246,12 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="1yf-IP-Cx2">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2Bn-sP-7RM" customClass="GoDItemPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="123" y="234" width="110" height="35"/>
+                                        <rect key="frame" x="123" y="234" width="110" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="YpV-g1-LwP"/>
                                         </constraints>
@@ -1286,7 +1285,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="soF-H2-rJB">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -1302,7 +1301,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yp3-eJ-uzY" customClass="GoDRoomPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="294" width="225" height="35"/>
+                                        <rect key="frame" x="8" y="294" width="225" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="O3Y-MB-BrV"/>
                                         </constraints>
@@ -1330,7 +1329,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="cBz-2F-gfe">
                                             <font key="font" metaFont="smallSystem"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -1338,7 +1337,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="87" y="70" width="71" height="30"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="Z4G-3X-b3z">
                                             <font key="font" metaFont="smallSystem"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -1346,7 +1345,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="163" y="70" width="72" height="30"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="2sI-jX-gCR">
                                             <font key="font" metaFont="smallSystem"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -1469,7 +1468,7 @@ Twitter: @StarsMmd</string>
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController showSeguePresentationStyle="single" id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="GoD Tool" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="GoD Tool" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
                         <rect key="contentRect" x="50" y="59" width="111" height="41"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
@@ -1520,19 +1519,20 @@ Twitter: @StarsMmd</string>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" smartInsertDelete="YES" id="zTF-RS-VU7">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="153"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <size key="minSize" width="240" height="153"/>
                                                     <size key="maxSize" width="463" height="10000000"/>
-                                                    <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 </textView>
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="OeM-NF-O4O">
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="OeM-NF-O4O">
                                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="uIH-f7-zGQ">
+                                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="uIH-f7-zGQ">
                                             <rect key="frame" x="224" y="0.0" width="16" height="153"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -1684,7 +1684,7 @@ Twitter: @StarsMmd</string>
                                 </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="Cs9-Dx-Itu">
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                                 <connections>
@@ -1693,26 +1693,26 @@ Twitter: @StarsMmd</string>
                             </textField>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Itt-1m-QBs">
                                 <rect key="frame" x="20" y="20" width="320" height="125"/>
-                                <clipView key="contentView" id="ohJ-fn-8RN">
+                                <clipView key="contentView" drawsBackground="NO" id="ohJ-fn-8RN">
                                     <rect key="frame" x="1" y="1" width="318" height="123"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" smartInsertDelete="YES" id="y1l-eK-jSn">
                                             <rect key="frame" x="0.0" y="0.0" width="318" height="123"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <size key="minSize" width="318" height="123"/>
                                             <size key="maxSize" width="463" height="10000000"/>
-                                            <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                         </textView>
                                     </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="ksj-qa-Yb0">
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="ksj-qa-Yb0">
                                     <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="4Ar-oW-XDp">
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="4Ar-oW-XDp">
                                     <rect key="frame" x="303" y="1" width="16" height="123"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -1861,7 +1861,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="285" y="446" width="115" height="30"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="rfS-go-2XT">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -1869,12 +1869,12 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="90" y="446" width="115" height="30"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="aR4-Tp-Hop">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iHs-tS-KYc" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="18" y="357" width="125" height="25"/>
+                                        <rect key="frame" x="18" y="357" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="VPS-8F-sHr"/>
                                             <constraint firstAttribute="width" constant="120" id="bjx-ec-dtZ"/>
@@ -1903,7 +1903,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NUL-Ym-HFg" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="148" y="357" width="125" height="25"/>
+                                        <rect key="frame" x="148" y="357" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="9GO-up-Eyd"/>
                                             <constraint firstAttribute="width" constant="120" id="hCC-LO-qzK"/>
@@ -1932,7 +1932,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7hS-14-598" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="278" y="357" width="125" height="25"/>
+                                        <rect key="frame" x="278" y="357" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="6QI-tt-yNw"/>
                                             <constraint firstAttribute="width" constant="120" id="uZQ-o8-NTE"/>
@@ -1961,7 +1961,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OaI-v1-0Au" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="18" y="297" width="125" height="25"/>
+                                        <rect key="frame" x="18" y="297" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="0m0-GS-Oru"/>
                                             <constraint firstAttribute="width" constant="120" id="zLT-VU-cAA"/>
@@ -1990,7 +1990,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cit-tv-kXx" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="148" y="297" width="125" height="25"/>
+                                        <rect key="frame" x="148" y="297" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="120" id="NID-VB-Rrx"/>
                                             <constraint firstAttribute="height" constant="20" id="hL0-0d-XJS"/>
@@ -2019,7 +2019,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xQA-2U-OqE" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="278" y="297" width="125" height="25"/>
+                                        <rect key="frame" x="278" y="297" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="4Yh-Kc-gib"/>
                                             <constraint firstAttribute="width" constant="120" id="PKY-if-wGo"/>
@@ -2048,7 +2048,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JlA-yo-nyf" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="18" y="237" width="125" height="25"/>
+                                        <rect key="frame" x="18" y="237" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="eug-cH-vhX"/>
                                             <constraint firstAttribute="width" constant="120" id="qb7-m7-IxX"/>
@@ -2077,7 +2077,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qgM-nE-Kuj" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="148" y="237" width="125" height="25"/>
+                                        <rect key="frame" x="148" y="237" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="UHc-8I-axG"/>
                                             <constraint firstAttribute="width" constant="120" id="zbW-KF-C1v"/>
@@ -2106,7 +2106,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XSx-VN-m1X" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="278" y="237" width="125" height="25"/>
+                                        <rect key="frame" x="278" y="237" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="QGg-bE-Upi"/>
                                             <constraint firstAttribute="width" constant="120" id="zFa-wh-izh"/>
@@ -2135,7 +2135,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2ou-vK-bzS" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="18" y="177" width="125" height="25"/>
+                                        <rect key="frame" x="18" y="177" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="120" id="9TF-XZ-xL4"/>
                                             <constraint firstAttribute="height" constant="20" id="rUc-hG-1cw"/>
@@ -2164,7 +2164,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Y5-et-rtf" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="148" y="177" width="125" height="25"/>
+                                        <rect key="frame" x="148" y="177" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="64w-1Q-Sfy"/>
                                             <constraint firstAttribute="width" constant="120" id="PEq-dG-VTv"/>
@@ -2193,7 +2193,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="V8b-h1-cpo" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="278" y="177" width="125" height="25"/>
+                                        <rect key="frame" x="278" y="177" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="CzX-iB-8yg"/>
                                             <constraint firstAttribute="width" constant="120" id="x9q-29-F0b"/>
@@ -2222,7 +2222,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kx0-Ju-PIo" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="18" y="117" width="125" height="25"/>
+                                        <rect key="frame" x="18" y="117" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="72B-Ub-RQS"/>
                                             <constraint firstAttribute="width" constant="120" id="PND-1b-otT"/>
@@ -2251,7 +2251,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="srg-xK-LBw" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="148" y="117" width="125" height="25"/>
+                                        <rect key="frame" x="148" y="117" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="XaP-yI-VeK"/>
                                             <constraint firstAttribute="width" constant="120" id="pC3-uS-LzV"/>
@@ -2280,7 +2280,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NgM-EI-QEs" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="278" y="117" width="125" height="25"/>
+                                        <rect key="frame" x="278" y="117" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="7Z1-oW-NXA"/>
                                             <constraint firstAttribute="width" constant="120" id="n9s-25-VLX"/>
@@ -2309,7 +2309,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fLs-ZB-ebI" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="18" y="57" width="125" height="25"/>
+                                        <rect key="frame" x="18" y="57" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="120" id="1dN-qr-fnI"/>
                                             <constraint firstAttribute="height" constant="20" id="3Rg-Nt-RAl"/>
@@ -2338,7 +2338,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qSa-7W-9el" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="148" y="57" width="125" height="25"/>
+                                        <rect key="frame" x="148" y="57" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="OeC-Cn-MXX"/>
                                             <constraint firstAttribute="width" constant="120" id="djs-f3-Rce"/>
@@ -2367,7 +2367,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Svc-cM-Tkv" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="278" y="57" width="125" height="25"/>
+                                        <rect key="frame" x="278" y="57" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="120" id="CWs-7p-Kyk"/>
                                             <constraint firstAttribute="height" constant="20" id="HxH-hO-cjF"/>
@@ -2629,26 +2629,26 @@ Twitter: @StarsMmd</string>
                         <subviews>
                             <scrollView wantsLayer="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bfj-SI-Yap">
                                 <rect key="frame" x="200" y="0.0" width="440" height="460"/>
-                                <clipView key="contentView" id="mQC-q8-Jd2">
+                                <clipView key="contentView" drawsBackground="NO" id="mQC-q8-Jd2">
                                     <rect key="frame" x="1" y="1" width="438" height="458"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" allowsCharacterPickerTouchBarItem="NO" usesRuler="YES" allowsNonContiguousLayout="YES" textCompletion="NO" id="PzZ-Jv-CN9">
                                             <rect key="frame" x="0.0" y="0.0" width="438" height="458"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <size key="minSize" width="438" height="458"/>
                                             <size key="maxSize" width="6198" height="10000000"/>
                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         </textView>
                                     </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="EMn-oZ-Jb1">
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="EMn-oZ-Jb1">
                                     <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="C7E-oC-wyH">
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="C7E-oC-wyH">
                                     <rect key="frame" x="423" y="1" width="16" height="458"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -2716,7 +2716,7 @@ Twitter: @StarsMmd</string>
                                 <rect key="frame" x="210" y="10" width="260" height="340"/>
                                 <subviews>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WU3-Ql-W0k" customClass="GoDPokemonPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="78" y="182" width="105" height="26"/>
+                                        <rect key="frame" x="78" y="182" width="105" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="Q2U-qd-oh7"/>
                                         </constraints>
@@ -2736,7 +2736,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </popUpButton>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="x3C-hG-Te6" customClass="GoDLevelPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="3" y="117" width="105" height="26"/>
+                                        <rect key="frame" x="3" y="117" width="105" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="SQu-7z-nyo"/>
                                             <constraint firstAttribute="height" constant="21" id="arK-gE-5GP"/>
@@ -2757,7 +2757,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </popUpButton>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cjY-5e-xMo" customClass="GoDLevelPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="153" y="117" width="95" height="26"/>
+                                        <rect key="frame" x="153" y="117" width="95" height="25"/>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9mY-hw-vAi" id="OXZ-nD-6Um">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu"/>
@@ -2780,7 +2780,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="D6b-W7-GJq">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -2791,7 +2791,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="155" y="55" width="90" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="Ko4-kh-Rqr">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -3044,7 +3044,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="-" bezelStyle="round" id="xEe-kh-9x5">
                                             <font key="font" metaFont="cellTitle"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -3055,7 +3055,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="-" bezelStyle="round" id="uvb-UG-veq">
                                             <font key="font" metaFont="cellTitle"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -3191,7 +3191,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="qkC-yB-Ogw">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -3202,7 +3202,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" drawsBackground="YES" id="xQN-xX-XJN">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -3250,7 +3250,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="273" y="15" width="107" height="30"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="flz-rs-ez2">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -3258,7 +3258,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="65" y="15" width="108" height="30"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="5Ac-Qj-WlF">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -3284,7 +3284,7 @@ Twitter: @StarsMmd</string>
                                 <rect key="frame" x="210" y="100" width="210" height="80"/>
                                 <subviews>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="H8T-eh-x34" customClass="GoDPocketPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="78" y="27" width="125" height="25"/>
+                                        <rect key="frame" x="78" y="27" width="125" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="nkx-Hx-a7g"/>
                                         </constraints>
@@ -3352,7 +3352,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PM5-Ge-Zpa" customClass="GoDMovePopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="278" y="27" width="105" height="25"/>
+                                        <rect key="frame" x="278" y="27" width="105" height="24"/>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="W4I-yU-sQ1" id="5dV-6K-87a">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu"/>
@@ -3375,7 +3375,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="Ovb-Sh-Ld0">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -3383,7 +3383,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="150" y="30" width="40" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="41L-4D-UYn">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -3391,7 +3391,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="200" y="30" width="40" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="FDZ-SC-0ml">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -3460,7 +3460,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="75" y="30" width="60" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="mmY-PT-g8c">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -3468,7 +3468,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="195" y="30" width="60" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="AQP-kb-UkO">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -3476,7 +3476,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="330" y="30" width="60" height="20"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="WWs-aG-Bll">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -3661,7 +3661,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="-" bezelStyle="round" id="eEG-Z0-zhC">
                                             <font key="font" metaFont="cellTitle"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -3675,7 +3675,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="-" bezelStyle="round" id="Ige-k7-dwF">
                                             <font key="font" metaFont="cellTitle"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -3805,7 +3805,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="Q6S-0O-CTG">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="P6a-Js-2T0"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -3817,7 +3817,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="8Gi-mL-Q5v">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="OaG-U7-CDl"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -3829,7 +3829,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="NeW-zB-9Vl">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="L2e-sy-sWk"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -3841,7 +3841,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="RvG-o9-xZr">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="2YY-qa-e5p"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -3853,7 +3853,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="MGr-rd-iE9">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="9E0-pV-AuW"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -4047,7 +4047,7 @@ Twitter: @StarsMmd</string>
                                         <rect key="frame" x="100" y="10" width="329" height="25"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" drawsBackground="YES" id="uUP-mq-hB7">
                                             <font key="font" metaFont="system" size="10"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -4062,7 +4062,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="Rhd-hj-Y4R">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="g8x-uz-fUj"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -4102,7 +4102,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IrO-CI-fVg" customClass="GoDEffectsPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="7" width="419" height="30"/>
+                                        <rect key="frame" x="8" y="7" width="419" height="29"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="nFa-rF-I4E"/>
                                         </constraints>
@@ -4152,7 +4152,7 @@ Twitter: @StarsMmd</string>
                                 <rect key="frame" x="210" y="40" width="210" height="275"/>
                                 <subviews>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DtU-wV-TRq" customClass="GoDCategoryPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="163" width="195" height="30"/>
+                                        <rect key="frame" x="8" y="163" width="195" height="29"/>
                                         <popUpButtonCell key="cell" type="push" title="Category" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="n4M-6i-4cA" id="Xe7-7f-ujh">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu"/>
@@ -4169,7 +4169,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </popUpButton>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cbn-C5-gLz" customClass="GoDTargetsPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="111" width="195" height="30"/>
+                                        <rect key="frame" x="8" y="111" width="195" height="29"/>
                                         <popUpButtonCell key="cell" type="push" title="Targets" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="DrE-rE-sSC" id="Nyb-q0-a24">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu"/>
@@ -4186,7 +4186,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </popUpButton>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fCb-rM-EEP" customClass="GoDTypePopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="215" width="195" height="30"/>
+                                        <rect key="frame" x="8" y="215" width="195" height="29"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="CA8-mu-nCX"/>
                                         </constraints>
@@ -4233,7 +4233,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KtA-Zs-4qY" customClass="GoDOriginalMovesPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="59" width="195" height="30"/>
+                                        <rect key="frame" x="8" y="59" width="195" height="29"/>
                                         <popUpButtonCell key="cell" type="push" title="Animation" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="kcR-xy-ESW" id="EIu-8s-oeC">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" size="11" name=".AppleSystemUIFont"/>
@@ -4258,7 +4258,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dST-Sl-Rbz" customClass="GoDMoveEffectTypesPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="14" width="195" height="26"/>
+                                        <rect key="frame" x="8" y="14" width="195" height="25"/>
                                         <popUpButtonCell key="cell" type="push" title="Effect Type" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="XPn-P1-q1P" id="HAo-9o-BIb">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" size="11" name=".AppleSystemUIFont"/>
@@ -4478,7 +4478,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="-" bezelStyle="round" id="B5z-2e-mKi">
                                             <font key="font" metaFont="cellTitle"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -4492,7 +4492,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="-" bezelStyle="round" id="6ub-GZ-2dF">
                                             <font key="font" metaFont="cellTitle"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -4630,7 +4630,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="1y9-Hy-4UG">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="xBx-SB-J1Y"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -4642,7 +4642,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="x52-lg-u3E">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="lxQ-vS-Pbm"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -4654,7 +4654,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="LYt-5u-jIg">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="maA-9T-7x3"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -4666,7 +4666,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="nMa-et-hpD">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="eJO-Jb-anm"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -4678,7 +4678,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="8qj-72-8iD">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="jmN-d8-Z0E"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -4690,7 +4690,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="UeZ-Qj-hR5">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="RBS-Bx-nek"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -4755,7 +4755,7 @@ Twitter: @StarsMmd</string>
                                 </constraints>
                             </customView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i5E-G5-aap">
-                                <rect key="frame" x="480" y="11" width="100" height="25"/>
+                                <rect key="frame" x="480" y="12" width="100" height="23"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="0xE-t3-016"/>
                                 </constraints>
@@ -4785,7 +4785,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OFO-mC-9hE" customClass="GoDTypePopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="6" y="7" width="100" height="25"/>
+                                        <rect key="frame" x="6" y="7" width="100" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="3wt-WP-4pA"/>
                                             <constraint firstAttribute="width" constant="95" id="Xf2-lp-thc"/>
@@ -4806,7 +4806,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </popUpButton>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="D2b-ak-pcy" customClass="GoDTypePopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="106" y="7" width="100" height="25"/>
+                                        <rect key="frame" x="106" y="7" width="100" height="24"/>
                                         <popUpButtonCell key="cell" type="push" title="type 2" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="BZm-qu-agu" id="3Uu-Bk-gxv">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" size="12" name=".AppleSystemUIFont"/>
@@ -4860,7 +4860,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wQr-pY-CfQ" customClass="GoDAbilityPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="6" y="7" width="100" height="25"/>
+                                        <rect key="frame" x="6" y="7" width="100" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="Qcn-4J-YTk"/>
                                         </constraints>
@@ -4880,7 +4880,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </popUpButton>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9et-WE-ocv" customClass="GoDAbilityPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="106" y="7" width="100" height="25"/>
+                                        <rect key="frame" x="106" y="7" width="100" height="24"/>
                                         <popUpButtonCell key="cell" type="push" title="ability 2" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="VZv-uw-y68" id="1RJ-wC-TP8">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" size="12" name=".AppleSystemUIFont"/>
@@ -4934,7 +4934,7 @@ Twitter: @StarsMmd</string>
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iBK-PZ-GMd" customClass="GoDItemPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="6" y="7" width="100" height="25"/>
+                                        <rect key="frame" x="6" y="7" width="100" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="8h5-BB-4dr"/>
                                         </constraints>
@@ -4954,7 +4954,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </popUpButton>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ngy-rW-f8Z" customClass="GoDItemPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="106" y="7" width="100" height="25"/>
+                                        <rect key="frame" x="106" y="7" width="100" height="24"/>
                                         <popUpButtonCell key="cell" type="push" title="Item 2" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="DhL-04-CSJ" id="CNG-IG-ogv">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" size="12" name=".AppleSystemUIFont"/>
@@ -5054,7 +5054,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="w8g-vR-dH9">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="7IB-sV-yZq"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -5066,7 +5066,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="jB8-ls-988">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="BQy-1s-j3I"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -5078,7 +5078,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iLh-zU-fr2">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="SAA-oB-yyr"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -5090,7 +5090,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iLk-zF-jVh">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="U6O-Ti-cz0"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -5102,7 +5102,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="iOb-If-5dt">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="K27-E3-zDw"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -5114,7 +5114,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" bezelStyle="round" id="EQ3-6Z-g5g">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="TLl-dp-5KO"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -5314,7 +5314,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" drawsBackground="YES" id="BWM-3D-Nqu">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="MTM-ug-LRt"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -5326,7 +5326,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" drawsBackground="YES" id="zyS-JK-CQg">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="PlN-M0-eI3"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -5338,7 +5338,7 @@ Twitter: @StarsMmd</string>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" drawsBackground="YES" id="EbL-pQ-srS">
                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="yj1-a3-p1J"/>
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                         <connections>
@@ -5346,7 +5346,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cgw-9Z-LGt" customClass="GoDExpRatePopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="58" y="57" width="50" height="25"/>
+                                        <rect key="frame" x="58" y="57" width="50" height="24"/>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="gqK-hh-7RZ" id="cvK-6j-SZA">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" size="8" name=".AppleSystemUIFont"/>
@@ -5363,7 +5363,7 @@ Twitter: @StarsMmd</string>
                                         </connections>
                                     </popUpButton>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gWJ-Rv-90R" customClass="GoDGenderRatioPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="58" y="17" width="50" height="25"/>
+                                        <rect key="frame" x="58" y="17" width="50" height="24"/>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Wpv-9P-3p9" id="GT0-tu-ZJb">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" size="8" name=".AppleSystemUIFont"/>
@@ -5775,18 +5775,19 @@ Twitter: @StarsMmd</string>
                                         <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" incrementalSearchingEnabled="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" textReplacement="YES" id="H5U-ch-V3F">
                                             <rect key="frame" x="0.0" y="0.0" width="440" height="260"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <size key="minSize" width="440" height="260"/>
                                             <size key="maxSize" width="6198" height="10000000"/>
                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         </textView>
                                     </subviews>
                                 </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="qPN-Rz-oYa">
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="qPN-Rz-oYa">
                                     <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="7mU-Zd-M5i">
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="7mU-Zd-M5i">
                                     <rect key="frame" x="424" y="0.0" width="16" height="260"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -5869,7 +5870,7 @@ Twitter: @StarsMmd</string>
                                         </constraints>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="0x1000" drawsBackground="YES" id="ABh-pA-shf">
                                             <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>

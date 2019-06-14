@@ -9,12 +9,12 @@
 
 //XGUtility.exportTextures()
 
-let filename = "types"
-let image = XGFiles.nameAndFolder(filename + ".png", .Import).image
-let t = GoDTextureImporter.getTextureData(image: image)
-t.file = .nameAndFolder(filename + ".gtx", .TextureImporter)
-t.save()
-t.saveImage(file: .nameAndFolder(filename + ".png", .TextureImporter))
+//let filename = "types"
+//let image = XGFiles.nameAndFolder(filename + ".png", .Import).image
+//let t = GoDTextureImporter.getTextureData(image: image)
+//t.file = .nameAndFolder(filename + ".gtx", .TextureImporter)
+//t.save()
+//t.saveImage(file: .nameAndFolder(filename + ".png", .TextureImporter))
 
 
 //for image in XGFolders.Import.files where image.fileType == .png {

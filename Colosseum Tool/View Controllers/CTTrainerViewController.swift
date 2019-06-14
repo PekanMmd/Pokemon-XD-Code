@@ -55,7 +55,7 @@ class GoDTrainerViewController: GoDTableViewController {
 		self.pokemonContainer.layer?.borderColor = GoDDesign.colourBlack().cgColor
 		self.pokemonContainer.layer?.borderWidth = 1
 		
-		self.saveButton = GoDButton(title: "Save", colour: GoDDesign.colourGrey(), textColour: GoDDesign.colourLightBlack(), buttonType: NSButton.ButtonType.momentaryPushIn, target: self, action: #selector(save))
+		self.saveButton = GoDButton(title: "Save", buttonType: NSButton.ButtonType.momentaryPushIn, target: self, action: #selector(save))
 		
 		self.saveButton.keyEquivalent = "⌘S"
 		

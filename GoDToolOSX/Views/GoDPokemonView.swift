@@ -54,12 +54,15 @@ class GoDPokemonView: NSImageView {
 		
 		let pokemon = self.delegate.pokemon[self.index]
 		
-		if pokemon.species.index == 0 {
+		if !pokemon.isSet {
 			self.setBackgroundColour(GoDDesign.colourGrey())
+			self.alphaValue = 0.5
 		} else if pokemon.isShadowPokemon {
 			self.setBackgroundColour(GoDDesign.colourPurple())
+			self.alphaValue = 1.0
 		} else {
-			self.setBackgroundColour(GoDDesign.colourLightGrey())
+			self.setBackgroundColour(NSColor.controlBackgroundColor)
+			self.alphaValue = 1.0
 		}
 		
 		for key in views.keys {
@@ -117,7 +120,7 @@ class GoDPokemonView: NSImageView {
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.wantsLayer = true
 		self.layer?.cornerRadius = 12
-		self.layer?.borderColor = GoDDesign.colourBlack().cgColor
+		self.layer?.borderColor = NSColor.controlHighlightColor.cgColor
 		self.layer?.borderWidth = 1
 		
 		let moveSelectors = [#selector(setMove1(sender:)),#selector(setMove2(sender:)),#selector(setMove3(sender:)),#selector(setMove4(sender:)),]
@@ -516,7 +519,7 @@ class GoDPokemonView: NSImageView {
 	func didSave() {
 		if updateDPKM {
 			//takes a second or two which feels really laggy
-			//self.dpkm.setUpItems()
+//			self.dpkm.setUpItems()
 			updateDPKM = false
 		}
 	}

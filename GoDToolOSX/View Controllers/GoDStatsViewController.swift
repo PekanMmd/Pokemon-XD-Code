@@ -105,6 +105,11 @@ class GoDStatsViewController: GoDTableViewController {
 		self.addConstraintAlignCenterX(view1: LUMContainer, view2: LUMTable)
 		self.addConstraintAlignCenterY(view1: LUMContainer, view2: LUMTable)
 		
+		for view in [HPField, attackField, defField, spatkField, spdefField, speedField] {
+			view?.backgroundColor = NSColor.controlBackgroundColor
+			view?.textColor = NSColor.controlTextColor
+		}
+		
 		reloadViewWithActivity()
     }
 	

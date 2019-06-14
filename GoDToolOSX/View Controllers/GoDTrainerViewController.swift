@@ -24,7 +24,7 @@ class GoDTrainerViewController: GoDTableViewController {
 	
 	
 	var pokemonViews = [GoDPokemonView]()
-	let pokemonContainer = NSView()
+	let pokemonContainer = GoDContainerView()
 	let trainerView = GoDTrainerView()
 	
 	var saveButton : GoDButton!
@@ -56,13 +56,12 @@ class GoDTrainerViewController: GoDTableViewController {
 		
 		self.trainerView.delegate = self
 		
-		self.pokemonContainer.setBackgroundColour(GoDDesign.colourWhite())
 		self.pokemonContainer.translatesAutoresizingMaskIntoConstraints = false
 		self.pokemonContainer.wantsLayer = true
 		self.pokemonContainer.layer?.borderColor = GoDDesign.colourBlack().cgColor
 		self.pokemonContainer.layer?.borderWidth = 1
 		
-		self.saveButton = GoDButton(title: "Save", colour: GoDDesign.colourGrey(), textColour: GoDDesign.colourLightBlack(), buttonType: NSButton.ButtonType.momentaryPushIn, target: self, action: #selector(save))
+		self.saveButton = GoDButton(title: "Save", buttonType: NSButton.ButtonType.momentaryPushIn, target: self, action: #selector(save))
 		
 		self.saveButton.keyEquivalent = "⌘S"
 		

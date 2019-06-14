@@ -57,7 +57,7 @@ class GoDShadowPokemonView: NSImageView {
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.wantsLayer = true
 		self.layer?.cornerRadius = 12
-		self.layer?.borderColor = GoDDesign.colourBlack().cgColor
+		self.layer?.borderColor = NSColor.controlHighlightColor.cgColor
 		self.layer?.borderWidth = 1
 		
 		let moveSelectors = [#selector(setMove1(sender:)),#selector(setMove2(sender:)),#selector(setMove3(sender:)),#selector(setMove4(sender:)),]
@@ -269,7 +269,7 @@ class GoDShadowPokemonView: NSImageView {
 		if !pokemon.isSet {
 			self.setBackgroundColour(GoDDesign.colourGrey())
 		} else {
-			self.setBackgroundColour(GoDDesign.colourWhite())
+			self.setBackgroundColour(NSColor.controlBackgroundColor)
 		}
 		
 		self.ddpk.isHidden = true

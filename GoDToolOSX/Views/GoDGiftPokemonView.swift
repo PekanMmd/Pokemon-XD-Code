@@ -57,7 +57,7 @@ class GoDGiftPokemonView: NSImageView {
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.wantsLayer = true
 		self.layer?.cornerRadius = 12
-		self.layer?.borderColor = GoDDesign.colourBlack().cgColor
+		self.layer?.borderColor = NSColor.controlHighlightColor.cgColor
 		self.layer?.borderWidth = 1
 		
 		let moveSelectors = [#selector(setMove1(sender:)),#selector(setMove2(sender:)),#selector(setMove3(sender:)),#selector(setMove4(sender:)),]
@@ -258,7 +258,7 @@ class GoDGiftPokemonView: NSImageView {
 		
 		let pokemon = self.delegate.currentGift
 		
-		self.setBackgroundColour(GoDDesign.colourWhite())
+		self.setBackgroundColour(NSColor.controlBackgroundColor)
 		
 		self.ddpk.isHidden = true
 		self.dpkm.isHidden = true
