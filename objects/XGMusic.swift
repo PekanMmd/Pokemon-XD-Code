@@ -9,7 +9,7 @@ import Foundation
 
 let kSizeOfMusicData = 0xc
 
-class XGMusic {
+class XGMusic: Codable {
 	
 	var index = 0
 	var fsysID = 0

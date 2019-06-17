@@ -18,7 +18,7 @@ let kStarterMove3Offset			= 0x1A
 let kStarterMove4Offset			= 0x1E
 let kStarterExpValueOffset		= 0x66
 
-class XGStarterPokemon: NSObject, XGGiftPokemon {
+class XGStarterPokemon: NSObject, XGGiftPokemon, Codable {
 	
 	@objc var level			= 0
 	@objc var exp				= 0

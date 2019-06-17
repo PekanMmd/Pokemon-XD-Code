@@ -171,6 +171,16 @@ extension Int {
 		return array
 	}
 	
+	var byteArrayU16 : [Int] {
+		var val = self
+		var array = [0,0]
+		for j in [1,0] {
+			array[j] = Int(val % 0x100)
+			val = val >> 8
+		}
+		return array
+	}
+	
 	var charArray : [UInt8] {
 		return byteArray.map({ (i) -> UInt8 in
 			return UInt8(i)
@@ -542,11 +552,11 @@ extension String {
 		if ss.peek() != "$" {
 			return -1
 		}
-		ss.popVoid() // remove leading $
+		ss.pop() // remove leading $
 		
 		// check if has an id
 		if ss.peek() == ":" {
-			ss.popVoid() // remove opening ':'
+			ss.pop() // remove opening ':'
 			var idText = ""
 			while ss.peek() != ":" {
 				idText += ss.pop()
@@ -580,19 +590,19 @@ extension String {
 		if ss.peek() != "$" {
 			return ""
 		}
-		ss.popVoid() // remove leading $
+		ss.pop() // remove leading $
 		
 		// check if has an id
 		if ss.peek() == ":" {
-			ss.popVoid() // remove opening ':'
+			ss.pop() // remove opening ':'
 			while ss.peek() != ":" {
-				ss.popVoid()
+				ss.pop()
 				if ss.isEmpty {
 					return ""
 				}
 			}
 			if ss.peek() == ":" {
-				ss.popVoid() // remove closing ':'
+				ss.pop() // remove closing ':'
 			}
 		}
 		
@@ -617,7 +627,34 @@ extension String {
 	
 }
 
+extension Encodable {
+	func JSONRepresentation() throws -> Data {
+		return try JSONEncoder().encode(self)
+	}
+	
+	func writeJSON(to file: XGFiles) {
+		do {
+			let data = try JSONRepresentation()
+			if XGUtility.saveData(data, toFile: file) {
+				return
+			}
+		} catch { }
+		
+		printg("Failed to write JSON to:", file.path)
+	}
+}
 
+extension Decodable {
+	static func fromJSON(data: Data) throws -> Self {
+		return try JSONDecoder().decode(Self.self, from: data)
+	}
+	
+	static func fromJSONFile(file: XGFiles) throws -> Self {
+		let url = URL(fileURLWithPath: file.path)
+		let data = try Data(contentsOf: url)
+		return try fromJSON(data: data)
+	}
+}
 
 
 

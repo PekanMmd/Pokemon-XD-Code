@@ -139,9 +139,12 @@ class XGUtility {
 					GoDTextureImporter.replaceTextureData(texture: aFile.texture, withImage: image, save: true)
 				}
 			} else {
-				let texture = image.image.texture
-				texture.file = tFile
-				texture.save()
+				let textures = image.image.textures
+				for texture in textures {
+					let filename = tFile.fileName.removeFileExtensions() + "_\(texture.format.name)" + XGFileTypes.gtx.fileExtension
+					texture.file = .nameAndFolder(filename, tFile.folder)
+					texture.save()
+				}
 			}
 			
 		}
@@ -238,7 +241,7 @@ class XGUtility {
 		NSKeyedArchiver.archiveRootObject(obj, toFile: file.path)
 	}
 	
-	class func saveData(_ data: Data, toFile file: XGFiles) -> Bool {
+	@discardableResult class func saveData(_ data: Data, toFile file: XGFiles) -> Bool {
 		if !file.folder.exists {
 			file.folder.createDirectory()
 		}

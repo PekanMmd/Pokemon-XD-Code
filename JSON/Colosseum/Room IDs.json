@@ -51,9 +51,9 @@
 "0x2F" : "M4_out",
 
 "0x30" : "M4_junk_1F",
-"0x31" : "M4_junk_B1
+"0x31" : "M4_junk_B1",
 "0x32" : "M4_hotel_1F",
-"0x33" : "M4_hotel_B1
+"0x33" : "M4_hotel_B1",
 "0x34" : "M4_shop_1F",
 "0x35" : "M4_labo_1F",
 "0x36" : "M4_labo_B1",

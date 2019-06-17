@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGNatures : Int, XGDictionaryRepresentable {
+enum XGNatures : Int, XGDictionaryRepresentable, Codable {
 	
 	case hardy		= 0x00
 	case lonely		= 0x01
@@ -99,6 +99,16 @@ enum XGNatures : Int, XGDictionaryRepresentable {
 			n.append(XGNatures(rawValue: i)!)
 		}
 		return n
+	}
+	
+	enum CodingKeys: String, CodingKey {
+		case type, name
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.string, forKey: .name)
 	}
 	
 }

@@ -129,4 +129,22 @@ extension NSImage {
 	var texture : GoDTexture {
 		return GoDTextureImporter.getTextureData(image: self)
 	}
+	
+	var textures : [GoDTexture] {
+		return GoDTextureImporter.getMultiFormatTextureData(image: self)
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

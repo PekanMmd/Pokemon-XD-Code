@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class XGPokemart: NSObject {
+class XGPokemart: NSObject, Codable {
 	
 	@objc var index = 0
 	

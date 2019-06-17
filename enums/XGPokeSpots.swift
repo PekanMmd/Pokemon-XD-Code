@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGPokeSpots : Int, XGDictionaryRepresentable {
+enum XGPokeSpots : Int, XGDictionaryRepresentable, Codable {
 	
 	case rock		= 0x00
 	case oasis		= 0x01
@@ -84,6 +84,16 @@ enum XGPokeSpots : Int, XGDictionaryRepresentable {
 		
 		common.replacePointer(index: self.commonRelIndex.rawValue, newAbsoluteOffset: offset)
 		
+	}
+	
+	enum CodingKeys: String, CodingKey {
+		case type, name
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.string, forKey: .name)
 	}
 }
 

@@ -16,7 +16,7 @@ let kNumberOfTrainerClasses			= CommonIndexes.NumberOfTrainerClasses.value
 let kTrainerClassPayoutOffset		= 0x00
 let kTrainerClassNameIDOffset		= 0x04
 
-class XGTrainerClass: NSObject {
+class XGTrainerClass: NSObject, Codable {
 	
 	@objc var payout = 0
 	@objc var nameID = 0

@@ -12,7 +12,7 @@ let kNumberOfTrainerModels = 0x44
 
 let kFirstTrainerPKXIdentifierOffset = 0x409e88 // in start.dol
 
-enum XGTrainerModels : Int, XGDictionaryRepresentable {
+enum XGTrainerModels : Int, XGDictionaryRepresentable, Codable {
 	
 	case none						= 0x00
 	

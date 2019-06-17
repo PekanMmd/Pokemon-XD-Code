@@ -8,7 +8,7 @@
 import Foundation
 
 // values are possibly image ids for colosseum intro images
-enum XGColosseumRounds : Int {
+enum XGColosseumRounds : Int, Codable {
 	case none = 0
 	case first = 0x95
 	case second = 0x96
@@ -23,5 +23,15 @@ enum XGColosseumRounds : Int {
 			case .semifinal: return "Colosseum Semifinal"
 			case .final: return "Colosseum Final"
 		}
+	}
+	
+	enum CodingKeys: String, CodingKey {
+		case type, name
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.name, forKey: .name)
 	}
 }

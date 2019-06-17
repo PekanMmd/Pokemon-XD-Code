@@ -2471,7 +2471,7 @@ extension XGDolPatcher {
 		if game == .XD {
 			for i in 1 ... CommonIndexes.NumberOfTutorMoves.value {
 				let tm = XGTMs.tutor(i)
-				tm.replaceTutorFlag(.immediately)
+				tm.replaceTutorFlag(10)
 			}
 		}
 	}

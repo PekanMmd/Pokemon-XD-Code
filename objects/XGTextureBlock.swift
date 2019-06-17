@@ -10,7 +10,7 @@ import Foundation
 
 class XGTextureBlock: NSObject {
 	
-	var pixels = [Int]()
+	private var pixels = [Int]()
 	
 	var length : Int {
 		
@@ -25,8 +25,8 @@ class XGTextureBlock: NSObject {
 		
 	}
 	
-	func append(_ pixel: Int) {
-		pixels.append(pixel)
+	func append(_ byte: Int) {
+		pixels.append(byte)
 	}
    
 }

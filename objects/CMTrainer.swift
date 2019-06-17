@@ -26,7 +26,7 @@ let kTrainerDefeatTextIDOffset		= 0x2C
 let kFirstTrainerLoseText2Offset	= 0x32
 let kTrainerFirstItemOffset			= 0x14
 
-class XGTrainer: NSObject {
+class XGTrainer: NSObject, Codable {
 	
 	var index				= 0x0
 	

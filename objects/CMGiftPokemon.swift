@@ -17,7 +17,7 @@ let kDistroPokemonLevelOffset		=  0x07
 
 let kNumberOfDistroPokemon = 4
 
-class CMGiftPokemon: NSObject, XGGiftPokemon {
+class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
 	
 	var index			= 0
 	

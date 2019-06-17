@@ -268,7 +268,23 @@ func allOriginalMovesArray() -> [XGOriginalMoves] {
 	
 }
 
-
+extension XGMoves: Codable {
+	enum CodingKeys: String, CodingKey {
+		case index, name
+	}
+	
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let index = try container.decode(Int.self, forKey: .index)
+		self = .move(index)
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.index, forKey: .index)
+		try container.encode(self.name.string, forKey: .name)
+	}
+}
 
 
 

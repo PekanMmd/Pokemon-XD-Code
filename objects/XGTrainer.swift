@@ -24,18 +24,18 @@ let kTrainerDefeatTextIDOffset		= 0x18
 let kFirstTrainerPokemonOffset		= 0x1C
 let kTrainerAIOffset				= 0x28 // 2bytes
 
-class XGTrainer: NSObject, XGDictionaryRepresentable {
+class XGTrainer: NSObject, XGDictionaryRepresentable, Codable {
 
 	@objc var index				= 0x0
-	var deck				= XGDecks.DeckStory
+	var deck					= XGDecks.DeckStory
 	
-	@objc var nameID				= 0x0
-	@objc var trainerStringID		= 0x0
+	@objc var nameID			= 0x0
+	@objc var trainerStringID	= 0x0
 	@objc var trainerString		= ""
-	@objc var preBattleTextID		= 0x0
+	@objc var preBattleTextID	= 0x0
 	@objc var victoryTextID		= 0x0
 	@objc var defeatTextID		= 0x0
-	@objc var shadowMask			= 0x0
+	@objc var shadowMask		= 0x0
 	var pokemon				= [XGDeckPokemon]()
 	var trainerClass		= XGTrainerClasses.michael1
 	var trainerModel		= XGTrainerModels.michael1WithoutSnagMachine

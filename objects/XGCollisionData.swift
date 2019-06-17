@@ -17,6 +17,10 @@ class XGCollisionData: NSObject {
 	var numberOfInteractableRegions : Int {
 		return interactableIndexes.count
 	}
+	var sectionIndexes = [Int]()
+	var numberOfSections : Int {
+		return sectionIndexes.count
+	}
 	
 	var vertexes = [XGVertex]()
 	var rawVertexBuffer : [GLfloat] {
@@ -37,6 +41,7 @@ class XGCollisionData: NSObject {
 					if !compare.isInteractable && vertex.isInteractable {
 						self.vertexes[i].isInteractable = true
 						self.vertexes[i].interactionIndex = vertex.interactionIndex
+						self.vertexes[i].sectionIndex2 = vertex.sectionIndex
 						return
 					}
 				}
@@ -70,6 +75,7 @@ class XGCollisionData: NSObject {
 		let entry_count = data.getWordAtOffset(0x4).int
 		
 		var maxD : GLfloat = 0
+		var currentSectionIndex = -1
 		
 		for i in 0 ..< entry_count {
 			
@@ -87,9 +93,15 @@ class XGCollisionData: NSObject {
 						isInteractable = true
 					}
 					
+					
 					let data_start = data.getWordAtOffset(a_o).int
 					let num = data.getWordAtOffset(a_o + 0x4).int
 					let face_size = 0x34
+					
+					if num > 0 {
+						currentSectionIndex += 1
+						self.sectionIndexes.append(currentSectionIndex)
+					}
 					
 					for s in 0 ..< num {
 						let s_o = data_start + (s * face_size)
@@ -133,6 +145,8 @@ class XGCollisionData: NSObject {
 							v.type = GLfloat(type)
 							v.isInteractable = isInteractable
 							v.interactionIndex = GLfloat(interactionIndex)
+							v.sectionIndex = GLfloat(currentSectionIndex)
+							v.sectionIndex2 = v.sectionIndex
 						}
 						if !types.contains(type) {
 							types.append(type)

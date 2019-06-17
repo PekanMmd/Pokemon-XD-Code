@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XGWormadamCloaks : Int {
+enum XGWormadamCloaks : Int, Codable {
 	case plant = 0
 	case sandy = 1
 	case trash = 2

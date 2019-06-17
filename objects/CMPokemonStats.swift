@@ -48,7 +48,7 @@ let kPokemonFaceIndexOffset	 = 0x10E // Same as Pokemon's national dex index
 
 let kModelDictionaryModelOffset = 0x4
 
-class XGPokemonStats: NSObject {
+class XGPokemonStats: NSObject, Codable {
 	
 	var index			= 0x0
 	var startOffset		= 0x0

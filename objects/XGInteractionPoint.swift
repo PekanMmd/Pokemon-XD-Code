@@ -39,19 +39,19 @@ let kIPDoorValue = 0x5
 let kIPElevatorValue = 0x6
 let kIPTextValue = game == .XD ? 0xC : 0xB
 let kIPCutsceneValue = game == .XD ? 0xD : 0xC
-let kIPPCValue = 0xE
+let kIPPCValue = game == .XD ? 0xE : 0xD
 let kIPTVValue = 0x13
 
 
 
-enum XGInteractionMethods : Int {
+enum XGInteractionMethods : Int, Codable {
 	case None = 0
 	case WalkThrough = 1
 	case WalkInFront = 2
 	case PressAButton = 3
 	case PressAButton2 = 4 // colosseum only
 }
-enum XGElevatorDirections : Int {
+enum XGElevatorDirections : Int, Codable {
 	case up = 0
 	case down = 1
 	
@@ -71,6 +71,105 @@ enum XGInteractionPointInfo {
 	case PC(roomID: Int, unknown: Int) // parameters are unused
 	case TV // colosseum only
 	
+}
+
+extension XGInteractionPointInfo: Codable {
+	enum XGInteractionPointDecodingError: Error {
+		case invalidType(key: String)
+	}
+	
+	enum CodingKeys: String, CodingKey {
+		case type, value1, value2, value3, value4
+	}
+	
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let type = try container.decode(String.self, forKey: .type)
+		switch type {
+		case "None":
+			self = .None
+		case "Warp":
+			let value1 = try container.decode(Int.self, forKey: .value1)
+			let value2 = try container.decode(Int.self, forKey: .value2)
+			let value3 = try container.decode(Bool.self, forKey: .value3)
+			self = .Warp(targetRoom: value1, targetEntryID: value2, sound: value3)
+		case "Door":
+			let value1 = try container.decode(Int.self, forKey: .value1)
+			self = .Door(id: value1)
+		case "Text":
+			let value1 = try container.decode(Int.self, forKey: .value1)
+			self = .Text(stringID: value1)
+		case "Script":
+			let value1 = try container.decode(Int.self, forKey: .value1)
+			let value2 = try container.decode(Int.self, forKey: .value2)
+			let value3 = try container.decode(Int.self, forKey: .value3)
+			let value4 = try container.decode(Int.self, forKey: .value4)
+			self = .Script(scriptIndex: value1, parameter1: value2, parameter2: value3, parameter3: value4)
+		case "Elevator":
+			let value1 = try container.decode(Int.self, forKey: .value1)
+			let value2 = try container.decode(Int.self, forKey: .value2)
+			let value3 = try container.decode(Int.self, forKey: .value3)
+			let value4 = try container.decode(XGElevatorDirections.self, forKey: .value4)
+			self = .Elevator(elevatorID: value1, targetRoomID: value2, targetElevatorID: value3, direction: value4)
+		case "Cutscene":
+			let value1 = try container.decode(Int.self, forKey: .value1)
+			let value2 = try container.decode(Int.self, forKey: .value2)
+			let value3 = try container.decode(Int.self, forKey: .value3)
+			let value4 = try container.decode(Int.self, forKey: .value4)
+			self = .CutsceneWarp(targetRoom: value1, targetEntryID: value2, cutsceneID: value3, cameraFSYSID: value4)
+		case "TV":
+			self = .TV
+		case "PC":
+			let value1 = try container.decode(Int.self, forKey: .value1)
+			let value2 = try container.decode(Int.self, forKey: .value2)
+			self = .PC(roomID: value1, unknown: value2)
+		default:
+			throw XGInteractionPointDecodingError.invalidType(key: type)
+		}
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		switch self {
+		case .None:
+			try container.encode("None", forKey: .type)
+		case .Warp(let targetRoom, let targetEntryID, let sound):
+			try container.encode("Warp", forKey: .type)
+			try container.encode(targetRoom, forKey: .value1)
+			try container.encode(targetEntryID, forKey: .value2)
+			try container.encode(sound, forKey: .value3)
+		case .Door(let id):
+			try container.encode("Door", forKey: .type)
+			try container.encode(id, forKey: .value1)
+		case .Text(let stringID):
+			try container.encode("Text", forKey: .type)
+			try container.encode(stringID, forKey: .value1)
+		case .Script(let scriptIndex, let parameter1, let parameter2, let parameter3):
+			try container.encode("Script", forKey: .type)
+			try container.encode(scriptIndex, forKey: .value1)
+			try container.encode(parameter1, forKey: .value2)
+			try container.encode(parameter2, forKey: .value3)
+			try container.encode(parameter3, forKey: .value4)
+		case .Elevator(let elevatorID, let targetRoomID, let targetElevatorID, let direction):
+			try container.encode("Elevator", forKey: .type)
+			try container.encode(elevatorID, forKey: .value1)
+			try container.encode(targetRoomID, forKey: .value2)
+			try container.encode(targetElevatorID, forKey: .value3)
+			try container.encode(direction, forKey: .value4)
+		case .CutsceneWarp(let targetRoom, let targetEntryID, let cutsceneID, let cameraFSYSID):
+			try container.encode("Cutscene", forKey: .type)
+			try container.encode(targetRoom, forKey: .value1)
+			try container.encode(targetEntryID, forKey: .value2)
+			try container.encode(cutsceneID, forKey: .value3)
+			try container.encode(cameraFSYSID, forKey: .value4)
+		case .PC(let roomID, let unknown):
+			try container.encode("PC", forKey: .type)
+			try container.encode(roomID, forKey: .value1)
+			try container.encode(unknown, forKey: .value2)
+		case .TV:
+			try container.encode("TV", forKey: .type)
+		}
+	}
 }
 
 

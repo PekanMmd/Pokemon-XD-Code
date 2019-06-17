@@ -19,7 +19,7 @@ let kNumberOfTypes = 0x12
 
 // name id list in dol in colo 0x2e2458
 
-class XGType: NSObject {
+class XGType: NSObject, Codable {
 	
 	var index				 = 0
 	var nameID				 = 0

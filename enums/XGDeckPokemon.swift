@@ -153,7 +153,27 @@ enum XGDeckPokemon : CustomStringConvertible {
 	
 }
 
-
+extension XGDeckPokemon: Codable {
+	enum CodingKeys: String, CodingKey {
+		case deck, index
+	}
+	
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let deck = try container.decode(XGDecks.self, forKey: .deck)
+		let index = try container.decode(Int.self, forKey: .index)
+		switch deck {
+		case .DeckDarkPokemon: self = .ddpk(index)
+		default: self = .dpkm(index, deck)
+		}
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.index, forKey: .index)
+		try container.encode(self.deck, forKey: .deck)
+	}
+}
 
 
 

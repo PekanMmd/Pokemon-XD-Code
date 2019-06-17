@@ -463,6 +463,7 @@ indirect enum XGFolders {
 	case Col
 	case XDS
 	case ISOExport(String)
+	case path(String)
 	case nameAndPath(String, String)
 	case nameAndFolder(String, XGFolders)
 	
@@ -497,6 +498,7 @@ indirect enum XGFolders {
 			case .Col				: return "Collision Data"
 			case .XDS				: return "XDS"
 			case .ISOExport      	: return "ISO Export"
+			case .path(let s) 		: return s
 			case .nameAndPath(let s, _): return s
 			case .nameAndFolder(let s, _): return s
 			}
@@ -521,6 +523,7 @@ indirect enum XGFolders {
 				case .Trainers	: path = XGFolders.Images.path
 				case .Types		: path = XGFolders.Images.path
 				case .nameAndFolder(_, let f): path = f.path
+				case .path(let s): return s
 				default: break
 				
 			}
@@ -603,7 +606,6 @@ indirect enum XGFolders {
 		}
 		
 	}
-	
 	
 	func map(_ function: ((_ file: XGFiles) -> Void) ) {
 		
@@ -733,8 +735,42 @@ indirect enum XGFolders {
 	
 }
 
+extension XGFolders: Codable {
+	enum CodingKeys: String, CodingKey {
+		case path
+	}
+	
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let url = try container.decode(String.self, forKey: .path)
+		self = .path(documentsPath + url)
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		let path = self.path.replacingOccurrences(of: documentsPath, with: "")
+		try container.encode(path, forKey: .path)
+	}
+}
 
-
+extension XGFiles: Codable {
+	enum CodingKeys: String, CodingKey {
+		case name, folder
+	}
+	
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let name = try container.decode(String.self, forKey: .name)
+		let folder = try container.decode(XGFolders.self, forKey: .folder)
+		self = .nameAndFolder(name, folder)
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(fileName, forKey: .name)
+		try container.encode(folder, forKey: .folder)
+	}
+}
 
 
 

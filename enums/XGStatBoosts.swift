@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGStats : Int {
+enum XGStats : Int, Codable {
 	case attack = 1
 	case defense = 2
 	case speed = 3
@@ -30,7 +30,7 @@ enum XGStats : Int {
 	}
 }
 
-enum XGStatStages : Int {
+enum XGStatStages : Int, Codable {
 	
 	// legit
 	case plus_1 = 0x10

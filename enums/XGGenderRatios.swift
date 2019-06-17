@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGGenderRatios : Int, XGDictionaryRepresentable {
+enum XGGenderRatios : Int, XGDictionaryRepresentable, Codable {
 	
 	case maleOnly		= 0x00
 	case male87			= 0x1F
@@ -65,6 +65,15 @@ enum XGGenderRatios : Int, XGDictionaryRepresentable {
 		return [.maleOnly,.male87,.male75,.male50,.female75,.female87,.femaleOnly,.genderless]
 	}
 	
+	enum CodingKeys: String, CodingKey {
+		case type, name
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.string, forKey: .name)
+	}
 }
 
 

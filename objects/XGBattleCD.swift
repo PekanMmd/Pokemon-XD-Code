@@ -21,7 +21,7 @@ let kBattleCDBoldConditionDescriptionIDOffset = 0x14
 let kBattleCDConditionDescriptionIDOffset = 0x18
 
 
-class XGBattleCD: NSObject {
+class XGBattleCD: NSObject, Codable {
 	
 	var battleStyle : XGBattleStyles!
 	@objc var battleField : XGBattleField!

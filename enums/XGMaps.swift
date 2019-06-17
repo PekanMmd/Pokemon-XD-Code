@@ -11,7 +11,7 @@ import Foundation
 let kStartOfMapData = 0xa7b8 // in common_rel
 let kSizeOfMapEntry = 0x18
 
-enum XGMaps : String, XGDictionaryRepresentable {
+enum XGMaps : String, XGDictionaryRepresentable, Codable {
 	
 	case Demo			= "B1"
 	case ShadowLab		= "D1"
@@ -75,6 +75,16 @@ enum XGMaps : String, XGDictionaryRepresentable {
 		get {
 			return ["Value" : self.name as AnyObject]
 		}
+	}
+	
+	enum CodingKeys: String, CodingKey {
+		case type, name
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.name, forKey: .name)
 	}
 	
 }

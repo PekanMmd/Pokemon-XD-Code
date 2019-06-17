@@ -47,7 +47,7 @@ let kShadowCounterOffset		= 0x09
 let kShadowIDOffset				= 0x0B
 let kShadowJapaneseMSGOffset	= 0x22
 
-class XGTrainerPokemon : NSObject {
+class XGTrainerPokemon : NSObject, Codable {
 	
 	var shadowID	= 0
 	var index		= 0
@@ -60,7 +60,6 @@ class XGTrainerPokemon : NSObject {
 	var nameID		= 0
 	var level		= 0
 	var happiness	= 0
-	var ability		= 0
 	var pokeball	= XGItems.item(0)
 	var item		= XGItems.item(0)
 	var nature		= XGNatures.hardy
@@ -68,6 +67,14 @@ class XGTrainerPokemon : NSObject {
 	var IVs			= 0x0 // All IVs will be the same. Not much point in varying them.
 	var EVs			= [Int]()
 	var moves		= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
+
+	var ability		= 0x0 {
+		didSet {
+			if ![0,1].contains(ability) {
+				ability = 0xFF // set to random in colosseum
+			}
+		}
+	}
 	
 	// not in colosseum but user for compatibility with GoD tool
 	var shinyness = XGShinyValues.never

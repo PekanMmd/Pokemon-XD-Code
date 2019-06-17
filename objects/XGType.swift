@@ -19,7 +19,7 @@ let kSizeOfTypeData = 0x30
 let kNumberOfTypes = CommonIndexes.NumberOfTypes.value
 
 
-class XGType: NSObject {
+class XGType: NSObject, Codable {
 	
 	@objc var index			 = 0
 	@objc var nameID		 = 0

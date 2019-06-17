@@ -224,7 +224,7 @@ class XGStringSearchViewController: XGTableViewController {
 		return XGFiles.common_rel.stringTable
 	}
 	
-	func replace() {
+	@discardableResult func replace() {
 		self.showActivityView{ (Bool) -> Void in
 			let new = self.selectedString.duplicateWithString(self.resultsBox.text)
 			

@@ -20,7 +20,7 @@ let kMtBattlePokemonMove2Offset		=  0x0A
 let kMtBattlePokemonMove3Offset		=  0x0E
 let kMtBattlePokemonMove4Offset		=  0x12
 
-class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon {
+class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon, Codable {
 	
 	@objc var index			= 0
 	

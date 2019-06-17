@@ -169,7 +169,22 @@ let TMLocations = [
 	"-",
 ]
 
-
+extension XGTMs: Codable {
+	enum CodingKeys: String, CodingKey {
+		case index
+	}
+	
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let index = try container.decode(Int.self, forKey: .index)
+		self = .tm(index)
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.index, forKey: .index)
+	}
+}
 
 
 

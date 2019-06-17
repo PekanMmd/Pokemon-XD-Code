@@ -10,7 +10,7 @@ import Foundation
 
 class XGPNGBlock: NSObject {
 	
-	var pixels = [XGColour]()
+	private var pixels = [XGColour]()
 	
 	var length : Int {
 		

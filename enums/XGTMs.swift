@@ -121,11 +121,18 @@ enum XGTMs : XGDictionaryRepresentable {
 		}
 	}
 	
-	var tutorFlag : XGTutorFlags {
+	var tutorFlag : Int {
 		get {
+			// Determines what the story progression flag must have reached for the move to be available. The value is the flag divided by 10
 			let flag = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kAvailabilityFlagOffset)
-			return XGTutorFlags(rawValue: flag) ?? .immediately
+			return flag * 10
 		}
+	}
+	
+	func replaceTutorFlag(_ flag: Int) {
+		let rel = XGFiles.common_rel.data!
+		rel.replaceByteAtOffset(startOffset + kAvailabilityFlagOffset, withByte: flag / 10)
+		rel.save()
 	}
 	
 	func replaceWithMove(_ move: XGMoves) {
@@ -137,8 +144,6 @@ enum XGTMs : XGDictionaryRepresentable {
 				let dol = XGFiles.dol.data!
 				dol.replace2BytesAtOffset(startOffset, withBytes: move.index)
 				dol.save()
-				
-//				self.updateItemDescription()
 			
 			case .tutor : let rel = XGFiles.common_rel.data!
 						rel.replace2BytesAtOffset(startOffset + kTutorMoveMoveIndexOffset, withBytes: move.index)
@@ -187,19 +192,13 @@ enum XGTMs : XGDictionaryRepresentable {
 		_ = self.item.descriptionString.duplicateWithString(XGTMs.createItemDescriptionForMove(self.move)).replace()
 	}
 	
-	func replaceTutorFlag(_ flag: XGTutorFlags) {
-		let rel = XGFiles.common_rel.data!
-		rel.replaceByteAtOffset(startOffset + kAvailabilityFlagOffset, withByte: flag.rawValue)
-		rel.save()
-	}
-	
 	var dictionaryRepresentation: [String : AnyObject] {
 		get {
 			var rep =  ["Value" : self.index as AnyObject]
 			
 			switch self {
 			case .tutor( _):
-				rep["Available"] = self.tutorFlag.rawValue as AnyObject?
+				rep["Available"] = self.tutorFlag as AnyObject?
 			default:
 				break
 			}
@@ -236,7 +235,36 @@ func allTMsArray() -> [XGTMs] {
 	return tms
 }
 
-
+extension XGTMs: Codable {
+	enum XGTMDecodingError: Error {
+		case invalidType(key: String)
+	}
+	
+	enum CodingKeys: String, CodingKey {
+		case type, index
+	}
+	
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let type = try container.decode(String.self, forKey: .type)
+		let index = try container.decode(Int.self, forKey: .index)
+		switch type {
+		case "TM": self = .tm(index)
+		case "tutor": self = .tutor(index)
+		default: throw XGTMDecodingError.invalidType(key: type)
+		}
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		switch self {
+		case .tm: try container.encode("TM", forKey: .type)
+		case .tutor: try container.encode("tutor", forKey: .type)
+		}
+		
+		try container.encode(self.index, forKey: .index)
+	}
+}
 
 
 

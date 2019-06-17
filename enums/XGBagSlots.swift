@@ -10,7 +10,7 @@ import Foundation
 
 let kNumberOfBagSlots = game == .Colosseum ? 7 : 8
 
-enum XGBagSlots : Int, CustomStringConvertible, XGDictionaryRepresentable {
+enum XGBagSlots : Int, CustomStringConvertible, XGDictionaryRepresentable, Codable {
 	
 	case none	    = 0x0
 	case pokeballs  = 0x1
@@ -62,9 +62,16 @@ enum XGBagSlots : Int, CustomStringConvertible, XGDictionaryRepresentable {
 		}
 	}
 	
+	enum CodingKeys: String, CodingKey {
+		case type, name
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.name, forKey: .name)
+	}
 }
-
-
 
 
 

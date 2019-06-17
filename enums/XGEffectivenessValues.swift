@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGEffectivenessValues : Int, XGDictionaryRepresentable {
+enum XGEffectivenessValues : Int, XGDictionaryRepresentable, Codable {
 
 	case ineffective		= 0x43
 	case notVeryEffective	= 0x42
@@ -68,6 +68,15 @@ enum XGEffectivenessValues : Int, XGDictionaryRepresentable {
 		}
 	}
 	
+	enum CodingKeys: String, CodingKey {
+		case type, name
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.string, forKey: .name)
+	}
 }
 
 

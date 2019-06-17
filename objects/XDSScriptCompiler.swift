@@ -176,7 +176,9 @@ class XDSScriptCompiler: NSObject {
 						printg("saving character:", character.rid)
 					}
 					if character.gid > 0 && character.rid >= 0 {
-						character.save()
+						if character.characterIndex < relFile!.characters.count {
+							character.save()
+						}
 					}
 				}
 			}

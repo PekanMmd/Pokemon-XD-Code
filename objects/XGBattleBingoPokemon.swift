@@ -17,10 +17,10 @@ let kBattleBingoPokemonGenderOffset		= 0x03
 let kBattleBingoPokemonSpeciesOffset	= 0x04
 let kBattleBingoPokemonMoveOffset		= 0x06
 
-class XGBattleBingoPokemon: NSObject, XGDictionaryRepresentable {
+class XGBattleBingoPokemon: NSObject, XGDictionaryRepresentable, Codable {
 	
 	@objc var typeOnCard	= 0x0
-	var species		= XGPokemon.pokemon(0)
+	var species				= XGPokemon.pokemon(0)
 	@objc var ability		= 0x0
 	var nature		= XGNatures.hardy
 	var gender		= XGGenders.male

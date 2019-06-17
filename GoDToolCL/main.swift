@@ -7,8 +7,17 @@
 //
 //
 
-//XGUtility.exportTextures()
+let imageFile = XGFiles.nameAndFolder("uv_icn_type_big_00.gtx.png", .Import)
+let image = imageFile.image
+for texture in GoDTextureImporter.getMultiFormatTextureData(image: image) {
+	let fileName = imageFile.fileName.removeFileExtensions() + "_" + texture.format.name + ".gtx"
+	texture.file = .nameAndFolder(fileName, .Documents)
+	texture.save()
+	texture.saveImage(file: .nameAndFolder(fileName + ".png", .Documents))
+}
 
+//XGUtility.exportTextures()
+//
 //let filename = "types"
 //let image = XGFiles.nameAndFolder(filename + ".png", .Import).image
 //let t = GoDTextureImporter.getTextureData(image: image)

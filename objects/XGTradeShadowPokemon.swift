@@ -18,7 +18,7 @@ let kTradeShadowPokemonMove2Offset		=  0x12
 let kTradeShadowPokemonMove3Offset		=  0x16
 let kTradeShadowPokemonMove4Offset		=  0x1A
 
-class XGTradeShadowPokemon: NSObject, XGGiftPokemon {
+class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
 	
 	@objc var level			= 0x0
 //	var DDPKID			= 0x0

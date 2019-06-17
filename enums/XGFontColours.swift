@@ -11,7 +11,7 @@ import Foundation
 let kNumberOfPredefinedFontColours =  6
 let kNumberOfSpecifiedFontColours  = 12
 
-enum XGFontColours : Int {
+enum XGFontColours : Int, Codable {
 	
 	case white		= 0x00
 	case yellow		= 0x01

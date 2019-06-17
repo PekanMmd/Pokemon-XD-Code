@@ -15,13 +15,8 @@ class XGStack<T>: NSObject {
 		data.append(value)
 	}
 	
-	func pop() -> T {
+	@discardableResult func pop() -> T {
 		return data.removeLast()
-	}
-	
-	func popVoid() {
-		// so I don't get so many compiler warnings about not using the return value
-		let _ = self.pop()
 	}
 	
 	func peek() -> T {

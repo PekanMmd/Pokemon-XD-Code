@@ -1992,10 +1992,14 @@ class XGScript: NSObject {
 						}
 						
 						if character.hasScript {
-							str += "Script: " + XDSExpr.locationWithName(ftbl[character.scriptIndex].name) + " "
+							if character.scriptIndex < ftbl.count {
+								str += "Script: " + XDSExpr.locationWithName(ftbl[character.scriptIndex].name) + " "
+							}
 						}
 						if character.hasPassiveScript {
-							str += "Background: " + XDSExpr.locationWithName(ftbl[character.passiveScriptIndex].name) + " "
+							if character.passiveScriptIndex < ftbl.count {
+								str += "Background: " + XDSExpr.locationWithName(ftbl[character.passiveScriptIndex].name) + " "
+							}
 						}
 						
 					}

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGMoveTypes : Int, XGDictionaryRepresentable {
+enum XGMoveTypes : Int, XGDictionaryRepresentable, Codable {
 	
 	case normal		= 0x00
 	case fighting	= 0x01
@@ -78,6 +78,16 @@ enum XGMoveTypes : Int, XGDictionaryRepresentable {
 	static func random() -> XGMoveTypes {
 		let rand = Int(arc4random_uniform(UInt32(kNumberOfTypes)))
 		return XGMoveTypes(rawValue: rand) ?? .normal
+	}
+	
+	enum CodingKeys: String, CodingKey {
+		case type, name
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.name, forKey: .name)
 	}
 	
 }

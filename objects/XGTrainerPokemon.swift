@@ -46,30 +46,31 @@ let kPurificationExperienceOffset = 0xA // Should always be 0. The value gets in
 
 class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 	
-	var deckData	= XGDeckPokemon.dpkm(0, XGDecks.DeckStory)
+	var deckData			= XGDeckPokemon.dpkm(0, XGDecks.DeckStory)
 	
-	var species		= XGPokemon.pokemon(0)
-	@objc var level		= 0x0
-	@objc var happiness	= 0x0
-	var item		= XGItems.item(0)
-	var nature		= XGNatures.hardy
-	var gender		= XGGenders.male
+	var species				= XGPokemon.pokemon(0)
+	@objc var level			= 0x0
+	@objc var happiness		= 0x0
+	var item				= XGItems.item(0)
+	var nature				= XGNatures.hardy
+	var gender				= XGGenders.male
 	@objc var IVs			= 0x0 // All IVs will be the same. Not much point in varying them.
 	@objc var EVs			= [0,0,0,0,0,0]
-	var moves		= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
+	var moves				= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
+	
 	@objc var ability		= 0x0 {
 		didSet {
-			if ability != 0 && ability != 1 {
+			if ![0,1].contains(ability) {
 				ability = 0xFF // set to random in colosseum
 			}
 		}
 	}
 	
-	@objc var shadowCatchRate = 0x0
-	@objc var shadowCounter	= 0x0
-	@objc var ShadowDataInUse = false
-	var shadowMoves		= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
-	@objc var shadowFleeValue = 0x0
+	@objc var shadowCatchRate 	= 0x0
+	@objc var shadowCounter		= 0x0
+	@objc var ShadowDataInUse 	= false
+	var shadowMoves				= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
+	@objc var shadowFleeValue 	= 0x0
 	
 	@objc var shadowAggression = 0x0
 	@objc var shadowAlwaysFlee = 0x0

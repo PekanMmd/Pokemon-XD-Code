@@ -11,7 +11,7 @@ let kNumberOfTrainerModels = 0x4b
 
 let kFirstTrainerPKXIdentifierOffset = region == .JP ? 0x359FA8 : 0x36d840 // in start.dol
 
-enum XGTrainerModels : Int {
+enum XGTrainerModels : Int, Codable {
 	
 	case none	= 0x00
 	

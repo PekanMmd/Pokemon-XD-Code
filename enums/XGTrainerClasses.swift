@@ -10,7 +10,7 @@ import Foundation
 
 let kFirstTrainerClassStringID = 0x1B59
 
-enum XGTrainerClasses : Int, XGDictionaryRepresentable {
+enum XGTrainerClasses : Int, XGDictionaryRepresentable, Codable {
 	
 	
 	case none			= 0x00

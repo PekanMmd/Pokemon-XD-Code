@@ -11,7 +11,7 @@ import Cocoa
 let kSizeOfBattleFieldData = 0x18
 let kBattleFieldRoomIDOffset = 0x02
 
-class XGBattleField: NSObject {
+class XGBattleField: NSObject, Codable {
 	
 	@objc var roomID = 0
 	@objc var room : XGRoom? {

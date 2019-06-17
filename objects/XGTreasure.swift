@@ -22,7 +22,7 @@ let kTreasureYCoordOffset = 0x14
 let kTreasureZCoordOffset = 0x18
 
 
-class XGTreasure: NSObject {
+class XGTreasure: NSObject, Codable {
 	
 	@objc var index = 0
 	

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGEvolutionMethods : Int, XGDictionaryRepresentable {
+enum XGEvolutionMethods : Int, XGDictionaryRepresentable, Codable {
 	
 	case none				= 0x00
 	case maxHappiness		= 0x01
@@ -72,6 +72,15 @@ enum XGEvolutionMethods : Int, XGDictionaryRepresentable {
 		}
 	}
 	
+	enum CodingKeys: String, CodingKey {
+		case type, name
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.string, forKey: .name)
+	}
 }
 
 

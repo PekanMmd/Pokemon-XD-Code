@@ -20,7 +20,7 @@ let kTradePokemonMove2Offset		=  0x2A
 let kTradePokemonMove3Offset		=  0x2E
 let kTradePokemonMove4Offset		=  0x32
 
-class XGTradePokemon: NSObject, XGGiftPokemon {
+class XGTradePokemon: NSObject, XGGiftPokemon, Codable {
 	
 	@objc var index			= 0
 	

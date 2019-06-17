@@ -16,7 +16,7 @@ let kEndOfHeader		   = 0x10
 // always seems to be 0 though
 let kMaxStringID 		   = 0xFFFFF
 
-enum XGLanguages : Int {
+enum XGLanguages : Int, Codable {
 	
 	case Japanese = 0
 	case EnglishUS
@@ -138,26 +138,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	}
 	
 	@objc class func dol2() -> XGStringTable {
-		
-		// fix broken string table from previous versions of the tool
-		if game == .XD {
-			if let data = XGFiles.dol.data {
-				if data.get2BytesAtOffset(0x38c882) != 0x5553 {
-					// add string terminator just before on the off chance
-					// that the previous string table just so happened to use up
-					// the extra bytes given to it, the 0s will at least
-					// terminate the last string, albeit in the middle.
-					// better a cut off string than a crash.
-					// Most likely those values will already be 0s.
-					let msgData = [0, 0] + XGResources.msg("Dol2").data.byteStream
-					// start 2 bytes early for the preceding 0s
-					data.replaceBytesFromOffset(0x38c87a, withByteStream: msgData)
-				}
-			}
-		}
-		
 		return  XGStringTable(file: .dol, startOffset: 0x38c87c, fileSize: 0x364)
-		
 	}
 	
 	
@@ -189,7 +170,7 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 		return self.replaceString(string, alert: false, save: save, increaseLength: false)
 	}
 	
-	func addString(_ string: XGString, increaseSize: Bool, save: Bool) -> Bool {
+	@discardableResult func addString(_ string: XGString, increaseSize: Bool, save: Bool) -> Bool {
 		
 		if self.numberOfEntries == 0xFFFF {
 			printg("String table \(stringTable.file.fileName) has the maximum number of entries!")
@@ -208,7 +189,9 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 				self.stringTable.deleteBytes(start: stringTable.length - bytesRequired, count: bytesRequired)
 			} else {
 				if self.startOffset != 0 || !increaseSize {
-					printg("Couldn't add string to \(stringTable.file.fileName) because it doesn't have enough space.")
+					printg("Couldn't add string \(string.string) to \(stringTable.file.fileName) because it doesn't have enough space.")
+					printg("Requires: \(bytesRequired) bytes but only has \(self.extraCharacters) bytes available.")
+					printg("Try shortening some other strings.")
 					return false
 				}
 			}
@@ -538,7 +521,54 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	
 }
 
+struct XGStringTableMetaData: Codable {
+	let file: XGFiles
+	let startOffset: Int
+	let fixedFileSize: Int
+	let strings: [XGString]
+}
 
+extension XGStringTable: Encodable {
+	enum XGStringTableDecodingError: Error {
+		case invalidFile(file: XGFiles)
+	}
+	
+	enum CodingKeys: String, CodingKey {
+		case file, startOffset, fixedFileSize, strings
+	}
+	
+	static func fromJSON(data: Data, save: Bool) throws -> XGStringTable {
+		let metaData = try JSONDecoder().decode(XGStringTableMetaData.self, from: data)
+		let file = metaData.file
+		guard file.exists else {
+			throw XGStringTableDecodingError.invalidFile(file: file)
+		}
+		let startOffset = metaData.startOffset
+		let fixedFileSize = metaData.fixedFileSize
+		
+		let table = XGStringTable(file: file, startOffset: startOffset, fileSize: startOffset == 0 ? file.fileSize : fixedFileSize)
+		
+		let strings = metaData.strings
+		for string in strings {
+			table.addString(string, increaseSize: startOffset == 0, save: save)
+		}
+		return table
+	}
+	
+	static func fromJSONFile(file: XGFiles, save: Bool) throws -> XGStringTable {
+		let url = URL(fileURLWithPath: file.path)
+		let data = try Data(contentsOf: url)
+		return try fromJSON(data: data, save: save)
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.file, forKey: .file)
+		try container.encode(self.startOffset, forKey: .startOffset)
+		try container.encode(self.startOffset == 0 ? 0 : self.fileSize, forKey: .fixedFileSize)
+		try container.encode(self.allStrings(), forKey: .strings)
+	}
+}
 
 
 

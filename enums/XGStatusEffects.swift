@@ -15,7 +15,7 @@ let kNumberOfStatusEffects = 87
 let kStatusEffectDurationOffset = 0x4
 let kStatusEffectNameIDOffset = 0x10
 
-enum XGStatusEffects: Int {
+enum XGStatusEffects: Int, Codable {
 	
 	case none			= 0
 	

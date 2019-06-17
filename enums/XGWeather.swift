@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGWeather : Int, XGDictionaryRepresentable {
+enum XGWeather : Int, XGDictionaryRepresentable, Codable {
 	
 	case none	    = 0x0
 	case sun		= 0x1

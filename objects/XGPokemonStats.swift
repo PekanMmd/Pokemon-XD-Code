@@ -75,19 +75,19 @@ let kPokemonBodyOffset		 = 0x118
 let kPokemonBodyShinyOffset	 = 0x120
 let kPokemonFaceIndexOffset	 = 0x116
 
-class XGPokemonStats: NSObject {
+class XGPokemonStats: NSObject, Codable {
 	
 	@objc var index			= 0x0
-	@objc var startOffset		= 0x0
+	@objc var startOffset	= 0x0
 	
-	@objc var nameID			= 0x0
+	@objc var nameID		= 0x0
 	@objc var speciesNameID	= 0x0
 	@objc var cryIndex		= 0x0
-	@objc var modelIndex		= 0x0
+	@objc var modelIndex	= 0x0
 	@objc var faceIndex		= 0x0
 	
 	@objc var bodyID		: UInt32 = 0x0
-	@objc var bodyShinyID  : UInt32 = 0x0
+	@objc var bodyShinyID	: UInt32 = 0x0
 	
 	@objc var bodyName : String {
 		let dance =  XGFiles.fsys("poke_dance").fsysData
@@ -99,7 +99,7 @@ class XGPokemonStats: NSObject {
 	var genderRatio     = XGGenderRatios.maleOnly
 	
 	@objc var catchRate		= 0x0
-	@objc var baseExp			= 0x0
+	@objc var baseExp		= 0x0
 	@objc var baseHappiness	= 0x0
 	
 	var type1			= XGMoveTypes.normal
@@ -112,23 +112,23 @@ class XGPokemonStats: NSObject {
 	var heldItem2		= XGItems.item(0)
 	
 	@objc var hp				= 0x0
-	@objc var speed			= 0x0
+	@objc var speed				= 0x0
 	@objc var attack			= 0x0
 	@objc var defense			= 0x0
-	@objc var specialAttack	= 0x0
+	@objc var specialAttack		= 0x0
 	@objc var specialDefense	= 0x0
 	
 	@objc var levelUpMoves	= [XGLevelUpMove]()
 	@objc var learnableTMs	= [Bool]()
-	@objc var tutorMoves		= [Bool]()
-	@objc var evolutions		= [XGEvolution]()
+	@objc var tutorMoves	= [Bool]()
+	@objc var evolutions	= [XGEvolution]()
 	
 	@objc var nationalIndex	= 0
 	
 	@objc var hpYield				= 0x0
 	@objc var speedYield			= 0x0
 	@objc var attackYield			= 0x0
-	@objc var defenseYield		= 0x0
+	@objc var defenseYield			= 0x0
 	@objc var specialAttackYield	= 0x0
 	@objc var specialDefenseYield	= 0x0
 	

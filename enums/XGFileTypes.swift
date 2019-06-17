@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGFileTypes : Int {
+enum XGFileTypes : Int, Codable {
 	case none = 0x00
 	case rdat = 0x02 // room model in hal dat format (unknown if it uses a different file extension)
 	case dat  = 0x04 // character model in hal dat format
@@ -89,6 +89,16 @@ enum XGFileTypes : Int {
 	}
 	
 	static let imageFormats : [XGFileTypes] = [.png, .jpeg, .bmp]
+	
+	enum CodingKeys: String, CodingKey {
+		case type, fileExtension
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.fileExtension, forKey: .fileExtension)
+	}
 }
 
 

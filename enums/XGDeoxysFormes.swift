@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XGDeoxysFormes : Int {
+enum XGDeoxysFormes : Int, Codable {
 	case normal  = 0
 	case attack  = 1
 	case defense = 2
@@ -20,5 +20,15 @@ enum XGDeoxysFormes : Int {
 			case .defense: return "Defense"
 			case .speed: return "Speed"
 		}
+	}
+	
+	enum CodingKeys: String, CodingKey {
+		case type, name
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.name, forKey: .name)
 	}
 }

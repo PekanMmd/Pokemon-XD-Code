@@ -16,7 +16,7 @@ let kDoorIdentifierOffset = 0xe
 let kDoorUnknown2Offset = 0x10
 let kDoorFileIdentifierOffset = 0x14
 
-class XGDoor {
+class XGDoor: Codable {
 	
 	var index = 0
 	

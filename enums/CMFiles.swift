@@ -686,3 +686,50 @@ indirect enum XGFolders {
 	}
 	
 }
+
+
+extension XGFolders: Codable {
+	enum CodingKeys: String, CodingKey {
+		case path
+	}
+	
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let url = try container.decode(String.self, forKey: .path)
+		self = .path(documentsPath + url)
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		let path = self.path.replacingOccurrences(of: documentsPath, with: "")
+		try container.encode(path, forKey: .path)
+	}
+}
+
+extension XGFiles: Codable {
+	enum CodingKeys: String, CodingKey {
+		case name, folder
+	}
+	
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let name = try container.decode(String.self, forKey: .name)
+		let folder = try container.decode(XGFolders.self, forKey: .folder)
+		self = .nameAndFolder(name, folder)
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(fileName, forKey: .name)
+		try container.encode(folder, forKey: .folder)
+	}
+}
+
+
+
+
+
+
+
+
+

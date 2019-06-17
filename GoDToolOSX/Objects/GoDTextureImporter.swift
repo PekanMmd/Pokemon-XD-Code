@@ -110,18 +110,47 @@ class GoDTextureImporter: NSObject {
 			}
 		}
 		
-		return pngblock
+		return pngblock.map(restructurePNGBlockForCMPR)
+	}
+	
+	private func restructurePNGBlockForCMPR(_ block: XGPNGBlock) -> XGPNGBlock {
+		guard texture.format == .CMPR else { return block }
+		
+		var sub4x4Blocks = [[XGColour]](repeating: [XGColour](), count: 4)
+		let subBlockSize = 16
+		let subBlockWidth = 4
+		
+		for pixelIndex in 0 ..< block.length {
+			let colour = block[pixelIndex]
+			var subBlockIndex = 0
+			if pixelIndex % (subBlockWidth * 2) >= subBlockWidth {
+				subBlockIndex += 1
+			}
+			if pixelIndex >= subBlockSize * 2 {
+				subBlockIndex += 2
+			}
+			sub4x4Blocks[subBlockIndex].append(colour)
+		}
+		
+		let restructuredBlock = XGPNGBlock()
+		for subBlock in sub4x4Blocks {
+			for colour in subBlock {
+				restructuredBlock.append(colour)
+			}
+		}
+		
+		return restructuredBlock
 	}
 	
 	private func convertPNGPixelsToIndexedPixels(pixels: [XGPNGBlock]) -> [XGTextureBlock] {
 		
-		var textureBlock = [XGTextureBlock]()
+		var textureBlocks = [XGTextureBlock]()
 		
 		for block in pixels {
 			
 			let tex = XGTextureBlock()
 			
-			for i in 0 ..< (texture.blockWidth * texture.blockHeight) {
+			for i in 0 ..< block.length {
 				
 				if texture.isIndexed {
 					var index = Palette.indexForColour(block[i])
@@ -142,14 +171,170 @@ class GoDTextureImporter: NSObject {
 				
 			}
 			
-			textureBlock.append(tex)
+			textureBlocks.append(tex)
 		}
 		
 		while Palette.length < texture.paletteCount {
 			Palette.append(XGColour.none())
 		}
 		
-		return textureBlock
+		return textureBlocks
+	}
+	
+	private func compressPNGPixels(pixels: [XGPNGBlock]) -> [XGTextureBlock] {
+		
+		var textureBlocks = [XGTextureBlock]()
+		let subBlockSize = 16
+		
+		for block in pixels {
+			
+			let tex = XGTextureBlock()
+			
+			for subBlockIndex in 0 ... 3 {
+				
+				var subBlockColours = [XGColour]()
+				var uniqueColours = [Int]()
+				let subBlockStartIndex = subBlockSize * subBlockIndex
+				var hasTransparency = false
+				
+				for pixelIndex in subBlockStartIndex ..< subBlockStartIndex + subBlockSize {
+					let colour = block[pixelIndex]
+					hasTransparency = hasTransparency || colour.alpha < 0x80
+					if colour.alpha >= 0x80 {
+						uniqueColours.addUnique(colour.representation(format: .CMPR))
+					}
+					subBlockColours.append(colour)
+				}
+				
+				if uniqueColours.count == 0 {
+					// all transparent
+					for _ in 0 ..< 4 {
+						tex.append(0)
+					}
+					for _ in 0 ..< 4 {
+						tex.append(0xFF)
+					}
+				} else if uniqueColours.count == 1 {
+					let colour = uniqueColours[0]
+					for _ in 0 ..< 2 {
+						for byte in colour.byteArrayU16 {
+							tex.append(byte)
+						}
+					}
+					
+					var indexes = 0
+					for colour in subBlockColours {
+						indexes = indexes << 2
+						indexes |= colour.alpha < 0x80 ? 3 : 0
+					}
+					for byte in indexes.byteArray {
+						tex.append(byte)
+					}
+					
+				} else {
+					func range(_ c0: XGColour, _ c1: XGColour) -> Int {
+						let red = abs(c0.red - c1.red)
+						let green = abs(c0.green - c1.green)
+						let blue = abs(c0.blue - c1.blue)
+						return red + green + blue
+					}
+					
+					var bestC0 = 0
+					var bestC1 = 0
+					var greatestRange = 0
+					for testC0 in uniqueColours.map({ XGColour(raw: $0, format: .RGB565) }) {
+						for testC1 in uniqueColours.map({ XGColour(raw: $0, format: .RGB565) }) {
+							let currentRange = range(testC0, testC1)
+							if currentRange > greatestRange {
+								greatestRange = currentRange
+								bestC0 = testC0.RGB565Representation
+								bestC1 = testC1.RGB565Representation
+							}
+						}
+					}
+					
+					let hex1: Int
+					let hex2: Int
+					if hasTransparency {
+						hex1 = min(bestC0, bestC1)
+						hex2 = max(bestC0, bestC1)
+					} else {
+						hex1 = max(bestC0, bestC1)
+						hex2 = min(bestC0, bestC1)
+					}
+					
+					var hexPalette = [XGColour]()
+					let colour1 = XGColour(raw: hex1, format: .RGB565)
+					let colour2 = XGColour(raw: hex2, format: .RGB565)
+					hexPalette.append(colour1)
+					hexPalette.append(colour2)
+					
+					if hex1 > hex2 {
+						let r1 = (2 * colour1.red + colour2.red) / 3
+						let g1 = (2 * colour1.green + colour2.green) / 3
+						let b1 = (2 * colour1.blue + colour2.blue) / 3
+						let r2 = (2 * colour2.red + colour1.red) / 3
+						let g2 = (2 * colour2.green + colour1.green) / 3
+						let b2 = (2 * colour2.blue + colour1.blue) / 3
+						
+						let colour3 = XGColour(red: r1, green: g1, blue: b1, alpha: 0xFF)
+						let colour4 = XGColour(red: r2, green: g2, blue: b2, alpha: 0xFF)
+						
+						hexPalette.append(colour3)
+						hexPalette.append(colour4)
+						
+					} else {
+						
+						let r1 = (colour1.red + colour2.red) / 2
+						let g1 = (colour1.green + colour2.green) / 2
+						let b1 = (colour1.blue + colour2.blue) / 2
+						
+						let colour3 = XGColour(red: r1, green: g1, blue: b1, alpha: 0xFF)
+						let colour4 = XGColour(red: 0, green: 0, blue: 0, alpha: 0)
+						
+						hexPalette.append(colour3)
+						hexPalette.append(colour4)
+						
+					}
+					
+					let indexesArray = subBlockColours.map { (colour) -> Int in
+						if colour.alpha < 0x80 {
+							return 3
+						}
+						var index = 0
+						var minRange = 255 * 255 * 255
+						for i in 0 ..< hexPalette.count {
+							let currentRange = range(colour, hexPalette[i])
+							if currentRange < minRange {
+								minRange = currentRange
+								index = i
+							}
+						}
+						return index
+					}
+					
+					var indexes = 0
+					for index in indexesArray {
+						indexes = indexes << 2
+						indexes |= index
+					}
+					
+					for colour in [colour1.RGB565Representation, colour2.RGB565Representation] {
+						for byte in colour.byteArrayU16 {
+							tex.append(byte)
+						}
+					}
+					for byte in indexes.byteArray {
+						tex.append(byte)
+					}
+				}
+				
+			}
+			
+			textureBlocks.append(tex)
+		}
+		
+		return textureBlocks
 	}
 	
 	private func byteStreamFromTexturePixels(pixels: [XGTextureBlock]) -> [Int] {
@@ -158,9 +343,20 @@ class GoDTextureImporter: NSObject {
 		
 		for block in pixels {
 			
-			for i in 0 ..< block.length {
-				let byte = block[i]
-				bytes.append(byte)
+			if texture.format.bitsPerPixel == 4 && texture.format != .CMPR {
+				
+				for i in 0 ..< block.length / 2 {
+					let highBits = block[i * 2]
+					let lowBits = block[(i * 2) + 1]
+					let byte = highBits << 4 | lowBits
+					bytes.append(byte)
+				}
+				
+			} else {
+				for i in 0 ..< block.length {
+					let byte = block[i]
+					bytes.append(byte)
+				}
 			}
 		}
 		
@@ -197,10 +393,10 @@ class GoDTextureImporter: NSObject {
 	
 	func replaceTextureData() {
 		
-		if texture.format == .CMPR {
-			printg("This texture format is currently incompatible with GoD Tool (mainly because @StarsMmd got lazy :-p). Aborting import of file \(texture.file.path). If you want to import it send him a message to add support for the \(texture.format.name) format.")
-			return
-		}
+//		if texture.format == .CMPR {
+//			printg("This texture format is currently incompatible with GoD Tool (mainly because @StarsMmd got lazy :-p). Aborting import of file \(texture.file.path). If you want to import it send him a message to add support for the \(texture.format.name) format.")
+//			return
+//		}
 		
 		let pngPixels = self.pixelsFromPNGImage()
 		var pixelBytes = [Int]()
@@ -209,34 +405,38 @@ class GoDTextureImporter: NSObject {
 			let texPixels = self.convertPNGPixelsToIndexedPixels(pixels: pngPixels)
 			pixelBytes = byteStreamFromTexturePixels(pixels: texPixels)
 			self.updatePalette()
-		} else {
+		} else if texture.format == .RGBA32 {
+			let bytes = self.byteStreamFromPNGPixels(pixels: pngPixels)
+			var splitBytes = [Int]()
+			// ar and gb values of rgba32 are separated within blocks so must restructure first
+			let blockCount = bytes.count / 64 // 64 bytes per block, 4 pixelsperrow x 4 pixelspercolumn x 4 bytesperpixel
 			
-			if texture.format == .RGBA32 {
-				let bytes = self.byteStreamFromPNGPixels(pixels: pngPixels)
-				var splitBytes = [Int]()
-				// ar and gb values of rgba32 are separated within blocks so must restructure first
-				let blockCount = bytes.count / 64 // 64 bytes per block, 4 pixelsperrow x 4 pixelspercolumn x 4 bytesperpixel
-				
-				for i in 0 ..< blockCount {
-					let blockStart = i * 64
-					var blockARs = [Int]()
-					var blockGBs = [Int]()
-					for j in 0 ..< 16 {
-						let currentPixel = blockStart + (j * 4)
-						blockARs.append(bytes[currentPixel])
-						blockARs.append(bytes[currentPixel + 1])
-						blockGBs.append(bytes[currentPixel + 2])
-						blockGBs.append(bytes[currentPixel + 3])
-					}
-					splitBytes += blockARs + blockGBs
+			for i in 0 ..< blockCount {
+				let blockStart = i * 64
+				var blockARs = [Int]()
+				var blockGBs = [Int]()
+				for j in 0 ..< 16 {
+					let currentPixel = blockStart + (j * 4)
+					blockARs.append(bytes[currentPixel])
+					blockARs.append(bytes[currentPixel + 1])
+					blockGBs.append(bytes[currentPixel + 2])
+					blockGBs.append(bytes[currentPixel + 3])
 				}
-				
-				pixelBytes = splitBytes
-				
-			} else {
-				pixelBytes = self.byteStreamFromPNGPixels(pixels: pngPixels)
+				splitBytes += blockARs + blockGBs
 			}
+			
+			pixelBytes = splitBytes
+			
+		} else if texture.format == .CMPR {
+			
+			let compressedBlocks = compressPNGPixels(pixels: pngPixels)
+			pixelBytes = byteStreamFromTexturePixels(pixels: compressedBlocks)
+			
+			
+		} else {
+			pixelBytes = self.byteStreamFromPNGPixels(pixels: pngPixels)
 		}
+		
 		
 		texture.replaceTextureData(newBytes: pixelBytes)
 	}
@@ -314,10 +514,30 @@ class GoDTextureImporter: NSObject {
 		} else if image.colourCount(threshold: 16) <= GoDTextureFormats.C8.paletteCount {
 			format = .C8
 		} else {
-			format = .RGBA32
+			format = .RGB5A3
 		}
 		
 		return getTextureData(image: image, format: format)
+	}
+	
+	class func getMultiFormatTextureData(image: NSImage) -> [GoDTexture] {
+		
+		var textures = [GoDTexture]()
+		
+		for format in [/*GoDTextureFormats.C8, .C4, .RGB5A3, .RGBA32,*/ GoDTextureFormats.CMPR] {
+			var colourThreshold = 0
+			if format == .C4 || format == .C8 {
+				while image.colourCount(threshold: colourThreshold) > format.paletteCount && colourThreshold <= 24 {
+					colourThreshold += 4
+				}
+			}
+			XGColour.colourThreshold = colourThreshold
+			
+			let texture = getTextureData(image: image, format: format)
+			textures.append(texture)
+		}
+		
+		return textures
 	}
 	
 }

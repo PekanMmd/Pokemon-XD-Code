@@ -37,7 +37,7 @@ extension XDSScriptCompiler {
 			var done = false
 			while !done {
 				if stack.peek() == "\n" {
-					stack.popVoid()
+					stack.pop()
 				} else {
 					done = true
 				}
@@ -70,11 +70,11 @@ extension XDSScriptCompiler {
 				let right = stack.peek()
 				let left = bracketStack.peek()
 				if right == "}" && left == "{" {
-					bracketStack.popVoid()
+					bracketStack.pop()
 				} else if right == "]" && left == "[" {
-					bracketStack.popVoid()
+					bracketStack.pop()
 				} else if right == ")" && left == "(" {
-					bracketStack.popVoid()
+					bracketStack.pop()
 				} else {
 					error = "Error: Unclosed '\(left)' bracket in text."
 				}
@@ -84,7 +84,7 @@ extension XDSScriptCompiler {
 			// replace with semi colons if within curly braces
 			if bracketLevel > 0 {
 				if stack.peek() == "\n" {
-					stack.popVoid()
+					stack.pop()
 					if bracketStack.peek() == "{" {
 						stack.push(";")
 					} else {
@@ -175,7 +175,7 @@ extension XDSScriptCompiler {
 				continue
 			} else if scope == .multiLine {
 				if currentChar == "*" && stack.peek() == "/" {
-					stack.popVoid()
+					stack.pop()
 					scope = .normal
 				}
 				continue
@@ -188,11 +188,11 @@ extension XDSScriptCompiler {
 			} else {
 				if currentChar == "/" && stack.peek() == "/" {
 					scope = .singleLine
-					stack.popVoid()
+					stack.pop()
 					continue
 				} else if currentChar == "/" && stack.peek() == "*" {
 					scope = .multiLine
-					stack.popVoid()
+					stack.pop()
 					continue
 				} else if currentChar == "\"" {
 					scope = .string
@@ -414,7 +414,7 @@ extension XDSScriptCompiler {
 				currentToken = ""
 			} else if scopeStack.peek() == .string {
 				if current == "\"" {
-					scopeStack.popVoid()
+					scopeStack.pop()
 				}
 				currentToken += current
 			} else if let bracket = BracketScopes(rawValue: current) {
@@ -449,7 +449,7 @@ extension XDSScriptCompiler {
 						
 						if !isOperator {
 							if scopeStack.peek() == bracket {
-								scopeStack.popVoid()
+								scopeStack.pop()
 							} else {
 								if scopeStack.peek() != .string {
 									error = "Extraneous bracket: " + current + ". " + currentToken
@@ -927,7 +927,7 @@ extension XDSScriptCompiler {
 				currentToken = ""
 			} else if scopeStack.peek() == .string {
 				if current == "\"" {
-					scopeStack.popVoid()
+					scopeStack.pop()
 				}
 				currentToken += current
 			} else if let bracket = BracketScopes(rawValue: current) {
@@ -938,7 +938,7 @@ extension XDSScriptCompiler {
 			} else {
 				if current == "}" {
 					if scopeStack.peek() == .curly {
-						scopeStack.popVoid()
+						scopeStack.pop()
 					}
 				}
 				currentToken += current
@@ -1127,7 +1127,7 @@ extension XDSScriptCompiler {
 							while ss.peek() != "[" {
 								variable += ss.pop()
 							}
-							ss.popVoid()
+							ss.pop()
 							while ss.count > 1 {
 								index += ss.pop()
 							}
@@ -1152,7 +1152,7 @@ extension XDSScriptCompiler {
 							while ss.peek() != "(" {
 								functionName += ss.pop()
 							}
-							ss.popVoid()
+							ss.pop()
 							while ss.count > 1 {
 								parameters += ss.pop()
 							}
@@ -1706,7 +1706,7 @@ extension XDSScriptCompiler {
 							while ss.peek() != "." {
 								variable += ss.pop()
 							}
-							ss.popVoid()
+							ss.pop()
 							while !ss.isEmpty {
 								subindex += ss.pop()
 							}
@@ -1752,7 +1752,7 @@ extension XDSScriptCompiler {
 							while ss.peek() != "[" {
 								variable += ss.pop()
 							}
-							ss.popVoid()
+							ss.pop()
 							while ss.peek() != "]" {
 								subindex += ss.pop()
 							}

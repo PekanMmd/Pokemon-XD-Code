@@ -27,6 +27,12 @@ class GoDMetalManager : NSObject {
 		}
 	}
 	
+	var sectionIndexToHighlight = -1  {
+		didSet {
+			createUniformBuffer()
+		}
+	}
+	
 	var projectionMatrix = GoDMatrix4() {
 		didSet {
 			createUniformBuffer()
@@ -55,6 +61,8 @@ class GoDMetalManager : NSObject {
 	var ambientLight :  Float  = 0.35
 	var specular : Float = 1.0
 	var shininess : Float = 32
+	
+	var clearColour = GoDDesign.colourLightGrey()
 	
 	override init() {
 		super.init()
@@ -101,9 +109,9 @@ class GoDMetalManager : NSObject {
 	}
 	
 	func createUniformBuffer() {
-		let uniformData = projectionMatrix.rawArray() + viewMatrix.rawArray() + [Float(interactionIndexToHighlight)]
+		let uniformData = projectionMatrix.rawArray() + viewMatrix.rawArray() + [Float(interactionIndexToHighlight)] + [Float(sectionIndexToHighlight)]
 		// hard code because either compiler is being dumb or I'm being dumb
-		let dataSize = 144 //uniformData.count * MemoryLayout.size(ofValue: uniformData[0])
+		let dataSize = 148 //uniformData.count * MemoryLayout.size(ofValue: uniformData[0])
 		
 		uniformBuffer = device.makeBuffer(bytes: uniformData, length: dataSize, options: [])
 	}
@@ -123,7 +131,7 @@ class GoDMetalManager : NSObject {
 		let renderPassDescriptor = MTLRenderPassDescriptor()
 		renderPassDescriptor.colorAttachments[0].texture = drawable.texture
 		renderPassDescriptor.colorAttachments[0].loadAction = .clear
-		renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+		renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: Double(self.clearColour.redComponent), green: Double(self.clearColour.greenComponent), blue: Double(self.clearColour.blueComponent), alpha: 1.0)
 		renderPassDescriptor.colorAttachments[0].storeAction = .store
 		
 		let depth = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .depth32Float, width: Int(metalLayer.frame.width), height: Int(metalLayer.frame.height), mipmapped: false)
@@ -159,8 +167,10 @@ class GoDMetalView: NSView {
 				let data = f.collisionData
 				metalManager.createVertexBuffer(collisionData: data)
 				self.interactionIndexes = data.interactableIndexes
+				self.sectionIndexes = data.sectionIndexes
 				setDefaultPositions()
 				metalManager.interactionIndexToHighlight = -1
+				metalManager.sectionIndexToHighlight = -1
 			}
 		}
 	}
@@ -174,9 +184,20 @@ class GoDMetalView: NSView {
 		didSet {
 			var titles = ["-"]
 			for i in interactionIndexes {
-				titles.append("region \(i)")
+				titles.append("interactable region \(i)")
 			}
 			popup.setTitles(values: titles)
+		}
+	}
+	
+	var popup2 = GoDPopUpButton()
+	var sectionIndexes : [Int]! {
+		didSet {
+			var titles = ["-"]
+			for i in sectionIndexes {
+				titles.append("section \(i)")
+			}
+			popup2.setTitles(values: titles)
 		}
 	}
 	
@@ -225,14 +246,23 @@ class GoDMetalView: NSView {
 		self.timer = Timer.scheduledTimer(timeInterval: frameTime, target: self, selector: #selector(render), userInfo: nil, repeats: true)
 		previousTime = Float(CACurrentMediaTime())
 		
-		popup.setTitles(values: ["Region Picker"])
+		popup.setTitles(values: ["Interactable Region Picker"])
 		popup.action = #selector(setInteraction)
 		popup.target = self
 		popup.translatesAutoresizingMaskIntoConstraints = false
 		self.addSubview(popup)
 		self.addConstraintAlignTopEdges(view1: self, view2: popup)
 		self.addConstraintAlignLeftEdges(view1: self, view2: popup)
-		self.addConstraintSize(view: popup, height: 20, width: 80)
+		self.addConstraintSize(view: popup, height: 20, width: 120)
+		
+		popup2.setTitles(values: ["Section Picker"])
+		popup2.action = #selector(setSection)
+		popup2.target = self
+		popup2.translatesAutoresizingMaskIntoConstraints = false
+		self.addSubview(popup2)
+		self.addConstraintAlignTopEdges(view1: self, view2: popup2)
+		self.addConstraintAlignRightEdges(view1: self, view2: popup2)
+		self.addConstraintSize(view: popup2, height: 20, width: 120)
 	}
 	
 	override func viewDidEndLiveResize() {
@@ -247,6 +277,11 @@ class GoDMetalView: NSView {
 	@objc func setInteraction(sender: GoDPopUpButton) {
 		let index = sender.indexOfSelectedItem - 1
 		metalManager.interactionIndexToHighlight = index == -1 ? index : interactionIndexes[index]
+	}
+	
+	@objc func setSection(sender: GoDPopUpButton) {
+		let index = sender.indexOfSelectedItem - 1
+		metalManager.sectionIndexToHighlight = index == -1 ? index : sectionIndexes[index]
 	}
 	
 	@objc func render() {
@@ -292,24 +327,34 @@ class GoDMetalView: NSView {
 			// set interactable region to highlight
 			case (KeyCodeName.zero, true):
 				metalManager.interactionIndexToHighlight = 0
+				self.popup.selectItem(at: 1)
 			case (KeyCodeName.one, true):
 				metalManager.interactionIndexToHighlight = 1
+				self.popup.selectItem(at: 2)
 			case (KeyCodeName.two, true):
 				metalManager.interactionIndexToHighlight = 2
+				self.popup.selectItem(at: 3)
 			case (KeyCodeName.three, true):
 				metalManager.interactionIndexToHighlight = 3
+				self.popup.selectItem(at: 4)
 			case (KeyCodeName.four, true):
 				metalManager.interactionIndexToHighlight = 4
+				self.popup.selectItem(at: 5)
 			case (KeyCodeName.five, true):
 				metalManager.interactionIndexToHighlight = 5
+				self.popup.selectItem(at: 6)
 			case (KeyCodeName.six, true):
 				metalManager.interactionIndexToHighlight = 6
+				self.popup.selectItem(at: 7)
 			case (KeyCodeName.seven, true):
 				metalManager.interactionIndexToHighlight = 7
+				self.popup.selectItem(at: 8)
 			case (KeyCodeName.eight, true):
 				metalManager.interactionIndexToHighlight = 8
+				self.popup.selectItem(at: 9)
 			case (KeyCodeName.nine, true):
 				metalManager.interactionIndexToHighlight = 9
+				self.popup.selectItem(at: 10)
 			
 			// change camera speed
 			case (KeyCodeName.plus, true):

@@ -327,7 +327,7 @@ class XGMutableData: NSObject {
 	@objc func replaceBytesFromOffset(_ offset: Int, withByteStream bytes: [Int]) {
 		
 		if offset < 0 || offset + bytes.count > self.length {
-			printg("Attempting to write \(bytes.count) bytes from offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+			printg("Attempting to write \(bytes.count.hexString()) bytes from offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
 		
 		for i in 0 ..< bytes.count {

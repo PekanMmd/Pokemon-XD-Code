@@ -14,7 +14,7 @@ let kRoomIDOffset = game == .XD ? 0x2 : 0xe
 let kRoomNameIDOffset = game == .XD ? 0x18 : 0x24
 let kRoomGroupIDOffset = game == .XD ? 0x2e : 0x6 // groupid of fsys archive for room
 
-class XGRoom: NSObject {
+class XGRoom: NSObject, Codable {
 	
 	@objc var nameID = 0
 	@objc var location : String {
@@ -22,13 +22,9 @@ class XGRoom: NSObject {
 	}
 	
 	@objc var name : String {
-		if game == .XD {
-			if XGFiles.json("Room IDs").exists {
-				let ids = XGFiles.json("Room IDs").json
-				return (ids as! [String : String])[roomID.hexString()] ?? (ISO.getFSYSNameWithGroupID(self.groupID) ?? "-")
-			} else {
-				return ISO.getFSYSNameWithGroupID(self.groupID) ?? "-"
-			}
+		if XGFiles.json("Room IDs").exists {
+			let ids = XGFiles.json("Room IDs").json
+			return (ids as! [String : String])[roomID.hexString()] ?? (ISO.getFSYSNameWithGroupID(self.groupID) ?? "-")
 		} else {
 			return ISO.getFSYSNameWithGroupID(self.groupID) ?? "-"
 		}

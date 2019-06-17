@@ -8,7 +8,7 @@
 
 import Foundation
 
-class XGString: NSObject {
+class XGString: NSObject, Codable {
 	
 	var chars = [XGUnicodeCharacters]()
 	private var initString = "" // string used to initialise the xg string, just for reference
@@ -165,15 +165,15 @@ class XGString: NSObject {
 		self.chars = chars
 	}
 	
-	@objc func replace() -> Bool {
+	@objc @discardableResult func replace() -> Bool {
 		return replace(increaseSize: true)
 	}
 	
-	@objc func replace(increaseSize: Bool) -> Bool {
+	@objc @discardableResult func replace(increaseSize: Bool) -> Bool {
 		return replace(increaseSize: increaseSize, save: true)
 	}
 	
-	func replace(increaseSize: Bool, save: Bool) -> Bool {
+	@discardableResult func replace(increaseSize: Bool, save: Bool) -> Bool {
 		if self.id == 0 {
 			return false
 		}
@@ -219,9 +219,26 @@ class XGString: NSObject {
 		}
 		return s
 	}
-   
+	
+	enum CodingKeys: String, CodingKey {
+		case text, file, id
+	}
+	
+	required convenience init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let text = try container.decode(String.self, forKey: .text)
+		let file = try container.decode(XGFiles?.self, forKey: .file)
+		let id = try container.decode(Int?.self, forKey: .id)
+		self.init(string: text, file: file, sid: id)
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.string, forKey: .text)
+		try container.encode(self.table, forKey: .file)
+		try container.encode(self.id, forKey: .id)
+	}
 }
-
 
 
 

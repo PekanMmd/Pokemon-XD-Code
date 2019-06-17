@@ -63,7 +63,14 @@ class GoDISOViewController: GoDTableViewController {
 							if file.fileType == .gtx || file.fileType == .atx {
 								for image in currentFile.folder.files where XGFileTypes.imageFormats.contains(image.fileType) {
 									if image.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-										file.texture.importImage(file: image)
+										if file.fileName.contains(".gsw.") {
+											file.texture.importImage(file: image)
+										} else {
+											let imageData = image.image
+											let textureData = GoDTextureImporter.getTextureData(image: imageData)
+											textureData.file = file
+											textureData.save()
+										}
 									}
 								}
 							}

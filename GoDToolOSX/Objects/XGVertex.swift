@@ -23,6 +23,10 @@ class XGVertex : NSObject {
 	var index : GLfloat = 0.0
 	var isInteractable = false
 	var interactionIndex : GLfloat = 0.0
+	var sectionIndex : GLfloat = 0.0
+	
+	// sometimes interactable vertices overlap with regular ones and only one can be displayed at a time
+	var sectionIndex2 : GLfloat = 0.0
 	
 	// normal
 	var nx : GLfloat = 0.0
@@ -41,6 +45,8 @@ class XGVertex : NSObject {
 		data.append(nz)
 		data.append(isInteractable ? 1.0 : 0.0)
 		data.append(interactionIndex)
+		data.append(sectionIndex)
+		data.append(sectionIndex2)
 		
 		return data
 	}

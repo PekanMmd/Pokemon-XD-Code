@@ -14,7 +14,7 @@ func ^^ (radix: Int, power: Int) -> Int {
 	return Int(pow(Double(radix), Double(power)))
 }
 
-enum XGExpRate: Int, XGDictionaryRepresentable {
+enum XGExpRate: Int, XGDictionaryRepresentable, Codable {
 	
 	case standard			= 0x0
 	case veryFast			= 0x1
@@ -120,6 +120,16 @@ enum XGExpRate: Int, XGDictionaryRepresentable {
 		get {
 			return ["Value" : self.string as AnyObject]
 		}
+	}
+	
+	enum CodingKeys: String, CodingKey {
+		case type, name
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.string, forKey: .name)
 	}
 	
 }

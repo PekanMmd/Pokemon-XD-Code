@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XGTrainerController : Int {
+enum XGTrainerController : Int, Codable {
 	
 	case AI = 0
 	case P1 = 1

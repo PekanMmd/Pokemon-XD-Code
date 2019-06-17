@@ -22,7 +22,7 @@ let kYOffset = 0x1C
 let kZOffset = 0x20
 
 let kSizeOfCharacter = 0x24
-class XGCharacter : NSObject {
+class XGCharacter : NSObject, Codable {
 	
 	// used by script compiler to make sure they are saved in the right order
 	var gid = -1

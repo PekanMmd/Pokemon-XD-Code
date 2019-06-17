@@ -52,25 +52,25 @@ let kMoveContestAppealTypeOffset = game == .XD ? 0x17: 0x15 // beauty: 2, tough:
 let kMoveUnusedStringIDOffset = 0x26
 let kMoveExclamationPointStringIDOffset = 0x2a
 
-class XGMove: NSObject, XGDictionaryRepresentable {
+class XGMove: NSObject, XGDictionaryRepresentable, Codable {
 	
-	@objc var startOffset		= 0x0
+	@objc var startOffset	= 0x0
 	@objc var moveIndex		= 0x0
 	
-	var unusedString = 0
-	var exclamationString = 0
+	var unusedString 		= 0
+	var exclamationString 	= 0
 	
-	@objc var nameID			= 0x0
-	@objc var descriptionID   = 0x0
-	@objc var animationID     = 0x0
+	@objc var nameID		= 0x0
+	@objc var descriptionID = 0x0
+	@objc var animationID   = 0x0
 	@objc var animation2ID	= 0x0
 	
-	@objc var priority		= 0x0
+	@objc var priority			= 0x0
 	@objc var pp				= 0x0
 	@objc var effect			= 0x0
 	@objc var effectAccuracy	= 0x0
-	@objc var basePower		= 0x0
-	@objc var accuracy		= 0x0
+	@objc var basePower			= 0x0
+	@objc var accuracy			= 0x0
 	var type			= XGMoveTypes.normal
 	var target			= XGMoveTargets.selectedTarget
 	var category		= XGMoveCategories.none

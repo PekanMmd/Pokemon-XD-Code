@@ -31,20 +31,20 @@ let kBingoCardFirstPokemonOffset		= 0x24
 let kBingoCardFirstMysteryPanelOffset	= 0xB0
 
 
-class XGBattleBingoCard: NSObject, XGDictionaryRepresentable {
+class XGBattleBingoCard: NSObject, XGDictionaryRepresentable, Codable {
 	
-	@objc var difficulty			= 0
+	@objc var difficulty		= 0
 	@objc var subIndex			= 0
 	
 	@objc var index				= 0
 	
-	@objc var nameID				= 0
+	@objc var nameID			= 0
 	@objc var detailsID			= 0
 	
 	@objc var pokemonLevel		= 0
-	@objc var startingPokemon		: XGBattleBingoPokemon!
-	var panels				= [XGBattleBingoPanel]()
-	@objc var rewards				= [Int]()
+	@objc var startingPokemon	: XGBattleBingoPokemon!
+	var panels					= [XGBattleBingoPanel]()
+	@objc var rewards			= [Int]()
 	
 	var name : XGString {
 		get {

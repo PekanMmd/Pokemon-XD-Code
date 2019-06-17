@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XGBattleStyles : Int {
+enum XGBattleStyles : Int, Codable {
 	
 	case none = 0
 	case single = 1
@@ -27,9 +27,18 @@ enum XGBattleStyles : Int {
 		}
 	}
 	
+	enum CodingKeys: String, CodingKey {
+		case type, name
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.name, forKey: .name)
+	}
 }
 
-enum XGBattleTypes : Int {
+enum XGBattleTypes : Int, Codable {
 	
 	case none = 0
 	case story_admin_colo = 1 // colosseum only
@@ -92,4 +101,21 @@ enum XGBattleTypes : Int {
 		}
 	}
 	
+	enum CodingKeys: String, CodingKey {
+		case type, name
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.name, forKey: .name)
+	}
 }
+
+
+
+
+
+
+
+

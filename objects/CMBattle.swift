@@ -25,7 +25,7 @@ let kBattleTrainer4ControlOffset = 0x37
 
 
 
-class XGBattle: NSObject {
+class XGBattle: NSObject, Codable {
 	
 	var battleType : XGBattleTypes?
 	var battleStyle : XGBattleStyles?

@@ -15,6 +15,8 @@ struct VertexIn {
 	packed_float3  normal;
 	float isInteractable;
 	float interactionIndex;
+	float sectionIndex;
+	float sectionIndex2;
 };
 
 struct VertexOut {
@@ -28,6 +30,7 @@ struct Uniforms {
 	float4x4 projectionMatrix;
 	float4x4 viewMatrix;
 	float interactionIndexToHighlight;
+	float sectionIndexToHighlight;
 };
 
 
@@ -75,6 +78,12 @@ vertex VertexOut shader_vertex(const device VertexIn* vertex_array [[ buffer(0) 
 		
 		if (in.interactionIndex == uniforms->interactionIndexToHighlight) {
 			out.colour = float4(0.6, 1.0, 0.4, 1.0);
+		}
+	}
+	
+	if (uniforms->sectionIndexToHighlight != -1) {
+		if (uniforms->sectionIndexToHighlight != in.sectionIndex && uniforms->sectionIndexToHighlight != in.sectionIndex2) {
+			out.colour = float4(0.3,0.3,0.3, 1.0);
 		}
 	}
 	

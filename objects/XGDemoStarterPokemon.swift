@@ -22,7 +22,7 @@ let kDemoStarterNatureOffset		= 0x5a
 let kDemoStarterShinyValueOffset	= 0x5e
 let kDemoStarterExpValueOffset		= 0x92
 
-class XGDemoStarterPokemon: NSObject, XGGiftPokemon {
+class XGDemoStarterPokemon: NSObject, XGGiftPokemon, Codable {
 	
 	@objc var index			= 0
 	

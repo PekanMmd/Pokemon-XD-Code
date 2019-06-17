@@ -26,7 +26,7 @@ let kFirstFriendshipEffectOffset = 0x24 // Signed Int
 
 let kItemFunctionInRAMPointerOffset = 0x20 // value is only filled in RAM at runtime and is empty in common_rel
 
-class XGItem: NSObject, XGDictionaryRepresentable {
+class XGItem: NSObject, XGDictionaryRepresentable, Codable {
 	
 	var startOffset : Int {
 		get{

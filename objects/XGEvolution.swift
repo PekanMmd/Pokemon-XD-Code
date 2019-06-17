@@ -15,7 +15,7 @@ let kEvolutionMethodOffset		= 0x0 // 1 byte
 let kEvolutionConditionOffset	= 0x2 // 2 bytes
 let kEvolvedFormOffset			= 0x4 // 2 bytes
 
-class XGEvolution: NSObject, XGDictionaryRepresentable {
+class XGEvolution: NSObject, XGDictionaryRepresentable, Codable {
 	
 	var evolutionMethod	= XGEvolutionMethods.none
 	@objc var condition		= 0

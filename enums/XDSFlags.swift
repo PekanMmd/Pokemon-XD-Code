@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XDSFlags : Int {
+enum XDSFlags : Int, Codable {
 	
 	case story = 964
 	

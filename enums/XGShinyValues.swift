@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGShinyValues : Int, XGDictionaryRepresentable {
+enum XGShinyValues : Int, XGDictionaryRepresentable, Codable {
 	
 	case never		= 0x0000
 	case always		= 0x0001
@@ -44,6 +44,15 @@ enum XGShinyValues : Int, XGDictionaryRepresentable {
 		}
 	}
 	
+	enum CodingKeys: String, CodingKey {
+		case type, name
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.rawValue, forKey: .type)
+		try container.encode(self.string, forKey: .name)
+	}
 }
 
 

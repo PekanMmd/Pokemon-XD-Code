@@ -8,7 +8,7 @@
 
 import Foundation
 
-class XGColour: NSObject {
+class XGColour: NSObject, Codable {
 	
 	static var colourThreshold = 4
 	
@@ -59,6 +59,8 @@ class XGColour: NSObject {
 			return RGB5A3Representation
 		case .RGBA32:
 			return RGBA32IntRepresentation
+		case .CMPR:
+			return RGB565Representation
 		default:
 			return 0
 		}
@@ -220,7 +222,7 @@ class XGColour: NSObject {
 		let top = raw >> 15
 		
 		if top == 1 {
-			var currentColour = (raw << 1) >> 1
+			var currentColour = raw & 0x7FFF
 			
 			self.blue = (currentColour % 0x20) * 8
 			
@@ -232,7 +234,7 @@ class XGColour: NSObject {
 			
 			self.alpha = 0xFF
 		} else {
-			var currentColour = (raw << 1) >> 1
+			var currentColour = raw & 0x7FFF
 			
 			self.blue = (currentColour % 0x10) * 0x11
 			

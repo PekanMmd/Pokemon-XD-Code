@@ -18,7 +18,7 @@ let kPokeSpotSpeciesOffset		= 0x02
 let kEncounterPercentageOffset	= 0x07
 let kStepsPerPokeSnackOffset	= 0x0A
 
-class XGPokeSpotPokemon: NSObject, XGDictionaryRepresentable {
+class XGPokeSpotPokemon: NSObject, XGDictionaryRepresentable, Codable {
 	
 	@objc var index				= 0
 	var spot				= XGPokeSpots.rock
