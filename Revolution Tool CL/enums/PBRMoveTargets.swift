@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XGMoveTargets: Int, XGDictionaryRepresentable {
+enum XGMoveTargets: Int {
 	
 	case selectedTarget			= 0x00
 	case dependsOnMove			= 0x01
@@ -45,18 +45,6 @@ enum XGMoveTargets: Int, XGDictionaryRepresentable {
 		
 		return XGMoveTargets(rawValue: self.rawValue + 1) ?? XGMoveTargets(rawValue: 0)!
 		
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
-		}
 	}
 	
 }

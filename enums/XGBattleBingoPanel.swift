@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGBattleBingoPanel : CustomStringConvertible, XGDictionaryRepresentable {
+enum XGBattleBingoPanel : CustomStringConvertible {
 	
 	case mysteryPanel(XGBattleBingoItem)
 	case pokemon(XGBattleBingoPokemon)
@@ -31,31 +31,11 @@ enum XGBattleBingoPanel : CustomStringConvertible, XGDictionaryRepresentable {
 		}
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			switch self {
-			case .mysteryPanel(let item):
-				return ["Mystery panel" : item.dictionaryRepresentation as AnyObject]
-			case .pokemon(let pokemon) :
-				return ["Pokemon panel" : pokemon.dictionaryRepresentation as AnyObject]
-			}
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			switch self {
-			case .mysteryPanel(let item):
-				return item.readableDictionaryRepresentation
-			case .pokemon(let pokemon) :
-				return pokemon.readableDictionaryRepresentation
-			}
-		}	}
-	
 }
 
-enum XGBattleBingoItem : Int, CustomStringConvertible, XGDictionaryRepresentable, Codable {
+enum XGBattleBingoItem : Int, CustomStringConvertible, Codable, CaseIterable {
 	
+	case none			= 0x0
 	case masterBall = 0x1
 	case ePx1		= 0x2
 	case ePx2		= 0x3
@@ -63,6 +43,7 @@ enum XGBattleBingoItem : Int, CustomStringConvertible, XGDictionaryRepresentable
 	var name : String {
 		get {
 			switch self {
+				case .none			: return "None"
 				case .masterBall	: return "Master Ball"
 				case .ePx1			: return "EP x1"
 				case .ePx2			: return "EP x2"
@@ -74,28 +55,6 @@ enum XGBattleBingoItem : Int, CustomStringConvertible, XGDictionaryRepresentable
 		get {
 			return self.name
 		}
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["mystery panel" : self.name as AnyObject]
-		}
-	}
-	
-	enum CodingKeys: String, CodingKey {
-		case type, name
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.name, forKey: .name)
 	}
 	
 }
@@ -138,7 +97,23 @@ extension XGBattleBingoPanel: Codable {
 	}
 }
 
-
+extension XGBattleBingoItem: XGEnumerable {
+	var enumerableName: String {
+		return name
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Battle Bingo Items"
+	}
+	
+	static var allValues: [XGBattleBingoItem] {
+		return allCases
+	}
+}
 
 
 

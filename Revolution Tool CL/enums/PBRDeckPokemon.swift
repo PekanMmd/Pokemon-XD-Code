@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGDeckPokemon : XGDictionaryRepresentable, XGIndexedValue {
+enum XGDeckPokemon : XGIndexedValue {
 	
 	case deck(Int, XGDecks)
 	
@@ -46,18 +46,6 @@ enum XGDeckPokemon : XGDictionaryRepresentable, XGIndexedValue {
 	var data : XGTrainerPokemon {
 		get {
 			return XGTrainerPokemon(deckData: self)
-		}
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return self.data.dictionaryRepresentation
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return self.data.readableDictionaryRepresentation
 		}
 	}
 	

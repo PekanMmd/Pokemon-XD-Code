@@ -139,18 +139,6 @@ enum XGDeckPokemon : CustomStringConvertible {
 		}
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return self.data.dictionaryRepresentation
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return self.data.readableDictionaryRepresentation
-		}
-	}
-	
 }
 
 extension XGDeckPokemon: Codable {
@@ -175,7 +163,27 @@ extension XGDeckPokemon: Codable {
 	}
 }
 
-
+extension XGDeckPokemon: XGEnumerable {
+	var enumerableName: String {
+		return "Shadow" + data.species.name.string
+	}
+	
+	var enumerableValue: String? {
+		return index.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Shadow Pokemon"
+	}
+	
+	static var allValues: [XGDeckPokemon] {
+		var pokemon = [XGDeckPokemon]()
+		for i in 0 ..< XGDecks.DeckDarkPokemon.DDPKEntries {
+			pokemon.append(.ddpk(i))
+		}
+		return pokemon
+	}
+}
 
 
 

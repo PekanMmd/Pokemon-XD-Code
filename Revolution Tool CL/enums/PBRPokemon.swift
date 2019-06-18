@@ -18,7 +18,7 @@ func < (p1: XGPokemon, p2: XGPokemon) -> Bool {
 	return p1.index < p2.index
 }
 
-enum XGPokemon: XGDictionaryRepresentable, XGIndexedValue {
+enum XGPokemon: XGIndexedValue {
 	
 	case pokemon(Int)
 	case deoxys(XGDeoxysFormes)
@@ -166,18 +166,6 @@ enum XGPokemon: XGDictionaryRepresentable, XGIndexedValue {
 			rand = Int(arc4random_uniform(UInt32(kNumberOfPokemon - 1))) + 1
 		}
 		return XGPokemon.pokemon(rand)
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.index as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name.string as AnyObject]
-		}
 	}
 	
 	static func allPokemon() -> [XGPokemon] {

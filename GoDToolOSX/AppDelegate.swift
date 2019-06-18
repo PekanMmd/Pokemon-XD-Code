@@ -339,7 +339,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		isDocumenting = true
 		printg("Documenting ISO...")
 		XGThreadManager.manager.runInBackgroundAsync {
-			XGUtility.documentISO(forXG: false)
+			XGUtility.documentISO()
 			self.isDocumenting = false
 		}
 	}

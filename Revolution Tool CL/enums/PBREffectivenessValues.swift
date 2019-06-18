@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGEffectivenessValues : Int, XGDictionaryRepresentable {
+enum XGEffectivenessValues : Int {
 
 	case superEffective		= 0
 	case neutral			= 1
@@ -44,18 +44,6 @@ enum XGEffectivenessValues : Int, XGDictionaryRepresentable {
 			return .unknown1
 		default:
 			return .unknown2
-		}
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
 		}
 	}
 	

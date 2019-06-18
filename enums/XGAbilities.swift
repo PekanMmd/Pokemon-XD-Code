@@ -13,14 +13,14 @@ let kFirstAbilityDescriptionID = 0xCE5
 
 let abilityListUpdated = game == .Colosseum ? false : XGFiles.dol.data!.getWordAtOffset(kAbilitiesStartOffset + 8) != 0
 
-let kNumberOfAbilities			= abilityListUpdated ? (0x3A8 / 8) : 0x4E
+let kNumberOfAbilities		= abilityListUpdated ? (0x3A8 / 8) : 0x4E
 let kAbilityNameIDOffset		= abilityListUpdated ? 0 : 4
 let kAbilityDescriptionIDOffset = abilityListUpdated ? 4 : 8
 let kSizeOfAbilityEntry			= abilityListUpdated ? 8 : 12
 
 let kAbilitiesStartOffset = game == .XD ? 0x3FCC50 : (region == .JP ? 0x348D20 : 0x35C5E0)
 
-enum XGAbilities : XGDictionaryRepresentable {
+enum XGAbilities {
 	
 	case ability(Int)
 	
@@ -88,26 +88,6 @@ enum XGAbilities : XGDictionaryRepresentable {
 		dol.save()
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.index as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name.string as AnyObject]
-		}
-	}
-	
-	static func allAbilities() -> [XGAbilities] {
-		var abs = [XGAbilities]()
-		for i in 0 ..< kNumberOfAbilities {
-			abs.append(.ability(i))
-		}
-		return abs
-	}
-	
 	static func random() -> XGAbilities {
 		var rand = 0
 		while (XGAbilities.ability(rand).nameID == 0) || (XGAbilities.ability(rand).name.string.length < 2) {
@@ -136,11 +116,57 @@ extension XGAbilities: Codable {
 	}
 }
 
-func allAbilities() -> [String : XGAbilities] {
+extension XGAbilities: XGEnumerable {
+	var enumerableName: String {
+		return name.string
+	}
 	
+	var enumerableValue: String? {
+		return index.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Abilities"
+	}
+	
+	static var allValues: [XGAbilities] {
+		var values = [XGAbilities]()
+		for i in 0 ..< kNumberOfAbilities {
+			values.append(.ability(i))
+		}
+		return values
+	}
+}
+
+extension XGAbilities: XGDocumentable {
+	var documentableName: String {
+		return name.string + "(\(index))"
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "hex index", "name", "description"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return index.string
+		case "hex index":
+			return index.hexString()
+		case "name":
+			return name.string
+		case "description":
+			return adescription.string
+		default:
+			return ""
+		}
+	}
+}
+
+func allAbilities() -> [String : XGAbilities] {
 	var dic = [String : XGAbilities]()
 	
-	for i in 0 ... kNumberOfAbilities {
+	for i in 0 ..< kNumberOfAbilities {
 		
 		let a = XGAbilities.ability(i)
 		dic[a.name.string.simplified] = a

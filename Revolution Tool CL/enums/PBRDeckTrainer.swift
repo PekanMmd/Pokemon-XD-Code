@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGDeckTrainer : XGDictionaryRepresentable, XGIndexedValue {
+enum XGDeckTrainer : XGIndexedValue {
 	
 	case deck(Int, XGDecks)
 	
@@ -40,18 +40,6 @@ enum XGDeckTrainer : XGDictionaryRepresentable, XGIndexedValue {
 	var data : XGTrainer {
 		get {
 			return XGTrainer(deckData: self)
-		}
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return self.data.dictionaryRepresentation
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return self.data.readableDictionaryRepresentation
 		}
 	}
 	

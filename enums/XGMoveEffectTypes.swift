@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XGMoveEffectTypes: Int, XGDictionaryRepresentable, Codable {
+enum XGMoveEffectTypes: Int, Codable, CaseIterable {
 	
 	case none			= 0x00
 	case attack			= 0x01
@@ -48,26 +48,22 @@ enum XGMoveEffectTypes: Int, XGDictionaryRepresentable, Codable {
 		}
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
+}
+
+extension XGMoveEffectTypes: XGEnumerable {
+	var enumerableName: String {
+		return string
 	}
 	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
-		}
+	var enumerableValue: String? {
+		return rawValue.string
 	}
 	
-	enum CodingKeys: String, CodingKey {
-		case type, name
+	static var enumerableClassName: String {
+		return "Move Effect types"
 	}
 	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.string, forKey: .name)
+	static var allValues: [XGMoveEffectTypes] {
+		return allCases
 	}
-	
 }

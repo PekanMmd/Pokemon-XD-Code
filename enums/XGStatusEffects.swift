@@ -15,7 +15,7 @@ let kNumberOfStatusEffects = 87
 let kStatusEffectDurationOffset = 0x4
 let kStatusEffectNameIDOffset = 0x10
 
-enum XGStatusEffects: Int, Codable {
+enum XGStatusEffects: Int, Codable, CaseIterable {
 	
 	case none			= 0
 	
@@ -121,9 +121,178 @@ enum XGStatusEffects: Int, Codable {
 	func setDuration(turns: Int) {
 		XGFiles.dol.data!.replaceByteAtOffset(startOffset + kStatusEffectDurationOffset, withByte: turns)
 	}
+	
+	var string: String {
+		switch self {
+			
+		case .none:
+			return "none"
+		case .no_status:
+			return "no status"
+		case .brn_psn_or_par:
+			return "burn, poison or paralysis"
+		case .poison:
+			return "poison"
+		case .badPoison:
+			return "bad poison"
+		case .paralysis:
+			return "paralysis"
+		case .burn:
+			return "burn"
+		case .freeze:
+			return "freeze"
+		case .sleep:
+			return "sleep"
+		case .confusion:
+			return "confusion"
+		case .attract:
+			return "attract"
+		case .bound:
+			return "bound"
+		case .focus_energy:
+			return "focus energy"
+		case .flinched:
+			return "flinched"
+		case .must_recharge:
+			return "needs recharge"
+		case .rage:
+			return "rage"
+		case .substitute:
+			return "substitute"
+		case .destiny_bond:
+			return "destiny bond"
+		case .trapped:
+			return "trapped"
+		case .nightmare:
+			return "nightmare"
+		case .cursed:
+			return "cursed"
+		case .foresight:
+			return "foresight"
+		case .tormented:
+			return "tormented"
+		case .leech_seeded:
+			return "leech see"
+		case .locked_on_to:
+			return "locked on"
+		case .perish_song:
+			return "perish song"
+		case .fly:
+			return "fly"
+		case .dig:
+			return "dig"
+		case .dive:
+			return "dive"
+		case .charge:
+			return "charge"
+		case .ingrain:
+			return "ingrain"
+		case .disabled:
+			return "disabled"
+		case .encored:
+			return "encore"
+		case .protected:
+			return "protected"
+		case .endure:
+			return "endure"
+		case .pressure:
+			return "pressure"
+		case .bide:
+			return "bide"
+		case .taunted:
+			return "taunted"
+		case .helping_hand:
+			return "helping hand"
+		case .future_sight:
+			return "future sight"
+		case .choice_locked:
+			return "choice locked"
+		case .magic_coat:
+			return "magic coat"
+		case .mudsport:
+			return "mud sport"
+		case .watersport:
+			return "water sport"
+		case .flash_fire:
+			return "flash fire boost"
+		case .intimidated:
+			return "intimidated"
+		case .traced_ability:
+			return "traced ability"
+		case .no_held_item:
+			return "held item used/lost"
+		case .reverse_mode:
+			return "reverse mode"
+		case .neutral:
+			return "neutral move"
+		case .missed:
+			return "move missed"
+		case .super_effective:
+			return "super effective move"
+		case .ineffective:
+			return "not very effective move"
+		case .no_effect:
+			return "no effect move"
+		case .OHKO:
+			return "OHKO"
+		case .failed:
+			return "move failed"
+		case .endured:
+			return "endured"
+		case .hung_on:
+			return "hung on with focus band"
+		case .reflect:
+			return "reflect"
+		case .light_screen:
+			return "light screen"
+		case .spikes:
+			return "spikes"
+		case .safeguard:
+			return "safeguard"
+		case .mist:
+			return "mist"
+		case .follow_me:
+			return "follow me"
+		case .no_weather:
+			return "no weather"
+		case .permanent_sun:
+			return "permanent sun"
+		case .permanent_rain:
+			return "permanent rain"
+		case .permanent_sand:
+			return "permanent sand"
+		case .shadow_sky:
+			return "shadow sky"
+		case .hail:
+			return "hail"
+		case .sun:
+			return "sun"
+		case .rain:
+			return "rain"
+		case .sandstorm:
+			return "sandstorm"
+		}
+	}
+	
 }
 
-
+extension XGStatusEffects: XGEnumerable {
+	var enumerableName: String {
+		return string
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Status Effects"
+	}
+	
+	static var allValues: [XGStatusEffects] {
+		return allCases
+	}
+}
 
 
 

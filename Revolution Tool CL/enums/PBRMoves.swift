@@ -30,7 +30,7 @@ enum PBRRandomMoveType : Int {
 	}
 }
 
-enum XGMoves : XGDictionaryRepresentable, XGIndexedValue {
+enum XGMoves : XGIndexedValue {
 	
 	case move(Int)
 	case randomMove(PBRRandomMoveStyle, PBRRandomMoveType)
@@ -79,18 +79,6 @@ enum XGMoves : XGDictionaryRepresentable, XGIndexedValue {
 	var data : XGMove {
 		get {
 			return XGMove(index: self.index)
-		}
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.index as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name.string as AnyObject]
 		}
 	}
 	

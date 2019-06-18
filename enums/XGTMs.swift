@@ -23,7 +23,7 @@ let kNumberOfTutorMoves			= 0x0C
 let kTutorMoveMoveIndexOffset	= 0x00
 let kAvailabilityFlagOffset		= 0x07
 
-enum XGTMs : XGDictionaryRepresentable {
+enum XGTMs {
 	
 	case tm(Int)
 	case tutor(Int) // not available in colosseum
@@ -192,36 +192,18 @@ enum XGTMs : XGDictionaryRepresentable {
 		_ = self.item.descriptionString.duplicateWithString(XGTMs.createItemDescriptionForMove(self.move)).replace()
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			var rep =  ["Value" : self.index as AnyObject]
-			
-			switch self {
-			case .tutor( _):
-				rep["Available"] = self.tutorFlag as AnyObject?
-			default:
-				break
-			}
-			
-			return rep
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			switch self {
-			case .tm(let i):
-				return ["TM \(i)" : ["Move" : self.move.name.string, "Location" : self.location] as AnyObject]
-			case .tutor(let i):
-				return ["Tutor Move \(i)" : ["Move" : self.move.name.string, "Activated" : self.tutorFlag.string] as AnyObject]
-			}
-		}
-	}
-	
 	static func allTMs() -> [XGTMs] {
 		var tms = [XGTMs]()
 		for i in 1 ... kNumberOfTMsAndHMs {
 			tms.append(.tm(i))
+		}
+		return tms
+	}
+	
+	static func allTutors() -> [XGTMs] {
+		var tms = [XGTMs]()
+		for i in 1 ... kNumberOfTutorMoves {
+			tms.append(.tutor(i))
 		}
 		return tms
 	}
@@ -266,7 +248,28 @@ extension XGTMs: Codable {
 	}
 }
 
-
+extension XGTMs: XGEnumerable {
+	var enumerableName: String {
+		switch self {
+		case .tm(let index):
+			return "TM" + String(format: "%02d", index)
+		case .tutor(let index):
+			return "Tutor Move " + String(format: "%02d", index)
+		}
+	}
+	
+	var enumerableValue: String? {
+		return move.name.string
+	}
+	
+	static var enumerableClassName: String {
+		return "TMs"
+	}
+	
+	static var allValues: [XGTMs] {
+		return XGTMs.allTMs() + XGTMs.allTutors()
+	}
+}
 
 
 

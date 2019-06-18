@@ -411,6 +411,7 @@ indirect enum XGFolders {
 	case Rels
 	case Col
 	case ISOExport(String)
+	case path(String)
 	case nameAndPath(String, String)
 	case nameAndFolder(String, XGFolders)
 	
@@ -444,7 +445,8 @@ indirect enum XGFolders {
 			case .Rels				: return "Relocatable Objects"
 			case .Col				: return "Collision Data"
 			case .ISOExport     	: return "ISO Export"
-				case .nameAndPath(let s, _): return s
+			case .path(let s) 		: return s
+			case .nameAndPath(let s, _): return s
 			case .nameAndFolder(let s, _): return s
 				
 			}
@@ -469,12 +471,17 @@ indirect enum XGFolders {
 			case .Trainers	: path = XGFolders.Images.path
 			case .Types		: path = XGFolders.Images.path
 			case .nameAndFolder(_, let f): path = f.path
+			case .path(let s): return s
 			default: break
 				
 			}
 			
 			return path + ("/" + self.name)
 		}
+	}
+	
+	var projectPath: String {
+		return path.replacingOccurrences(of: documentsPath, with: "")
 	}
 	
 	var resourcePath : String {
@@ -649,42 +656,6 @@ indirect enum XGFolders {
 		}
 		
 	}
-	
-	static func setUpFolderFormatForRandomiser() {
-		
-		let folders : [XGFolders] = [
-			.Documents,
-			.Common,
-			.DOL,
-			.StringTables,
-			.FSYS,
-			.LZSS,
-			.ISO,
-			.MenuFSYS,
-			.AutoFSYS,
-			.Scripts,
-			.Logs,
-			.Reference,
-			]
-		
-		for folder in folders {
-			folder.createDirectory()
-		}
-		
-		let jsons = ["Move Effects", "Original Pokemon", "Original Moves", "Move Categories"]
-		
-		for j in jsons {
-			let file = XGFiles.json(j)
-			if !file.exists {
-				let resource = XGResources.JSON(j)
-				let data = resource.data
-				data.file = file
-				data.save()
-			}
-		}
-		
-	}
-	
 }
 
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGNatures : Int, XGDictionaryRepresentable, Codable {
+enum XGNatures : Int, Codable, CaseIterable {
 	
 	case hardy		= 0x00
 	case lonely		= 0x01
@@ -81,18 +81,6 @@ enum XGNatures : Int, XGDictionaryRepresentable, Codable {
 		
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
-		}
-	}
-	
 	static func allNatures() -> [XGNatures] {
 		var n = [XGNatures]()
 		for i in 0 ... 24 {
@@ -100,20 +88,25 @@ enum XGNatures : Int, XGDictionaryRepresentable, Codable {
 		}
 		return n
 	}
-	
-	enum CodingKeys: String, CodingKey {
-		case type, name
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.string, forKey: .name)
-	}
-	
 }
 
-
+extension XGNatures: XGEnumerable {
+	var enumerableName: String {
+		return string
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Natures"
+	}
+	
+	static var allValues: [XGNatures] {
+		return allCases
+	}
+}
 
 
 

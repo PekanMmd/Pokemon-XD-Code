@@ -124,17 +124,23 @@ enum XGTrainerModels : Int, Codable {
 		return nil
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name as AnyObject]
-		}
-	}
-	
-	
 }
+
+extension XGTrainerModels: XGEnumerable {
+	var enumerableName: String {
+		return name
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Trainer Models"
+	}
+	
+	static var allValues: [XGTrainerModels] {
+		return allCases
+	}
+}
+

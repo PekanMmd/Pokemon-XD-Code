@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGEvolutionMethods : Int, XGDictionaryRepresentable, Codable {
+enum XGEvolutionMethods : Int, Codable, CaseIterable {
 	
 	case none				= 0x00
 	case maxHappiness		= 0x01
@@ -49,7 +49,7 @@ enum XGEvolutionMethods : Int, XGDictionaryRepresentable, Codable {
 				case .shedinja				:	return "Shedinja evolution method"
 				case .maxBeauty				:	return "Max Beauty"
 				case .levelUpWithKeyItem	:	return "Level Up With Key Item"
-				case .Gen4					:	return "Evolves in Generation 4"
+				case .Gen4					:	return "Evolves in Generation 4 (XG)"
 			}
 		}
 	}
@@ -60,30 +60,25 @@ enum XGEvolutionMethods : Int, XGDictionaryRepresentable, Codable {
 		
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
-		}
-	}
-	
-	enum CodingKeys: String, CodingKey {
-		case type, name
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.string, forKey: .name)
-	}
 }
 
-
+extension XGEvolutionMethods: XGEnumerable {
+	var enumerableName: String {
+		return string
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Evolution Methods"
+	}
+	
+	static var allValues: [XGEvolutionMethods] {
+		return allCases
+	}
+}
 
 
 

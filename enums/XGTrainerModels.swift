@@ -12,7 +12,7 @@ let kNumberOfTrainerModels = 0x44
 
 let kFirstTrainerPKXIdentifierOffset = 0x409e88 // in start.dol
 
-enum XGTrainerModels : Int, XGDictionaryRepresentable, Codable {
+enum XGTrainerModels : Int, Codable, CaseIterable {
 	
 	case none						= 0x00
 	
@@ -262,23 +262,25 @@ enum XGTrainerModels : Int, XGDictionaryRepresentable, Codable {
 		}
 	}
 	
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name as AnyObject]
-		}
-	}
-	
-	
 }
 
-
+extension XGTrainerModels: XGEnumerable {
+	var enumerableName: String {
+		return name
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Trainer Models"
+	}
+	
+	static var allValues: [XGTrainerModels] {
+		return allCases
+	}
+}
 
 
 

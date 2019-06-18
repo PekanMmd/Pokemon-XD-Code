@@ -11,7 +11,7 @@ import Foundation
 let kSizeOfTrainerData				= 0x98
 let kNumberOfTrainerPokemon			= 0x06
 
-class XGTrainer: NSObject, XGDictionaryRepresentable, XGIndexedValue {
+class XGTrainer: NSObject, XGIndexedValue {
 
 	var index				= 0x0
 	var deckData			= XGDeckTrainer.deck(0, .null)
@@ -19,42 +19,6 @@ class XGTrainer: NSObject, XGDictionaryRepresentable, XGIndexedValue {
 	var nameID				= 0x0
 	var pokemon				= [XGDeckPokemon]()
 	var trainerModel		= XGTrainerModels.none
-	
-	@objc var dictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			dictRep["index"] = self.index as AnyObject?
-			dictRep["nameID"] = self.nameID as AnyObject?
-			
-			dictRep["trainerModel"] = self.trainerModel.dictionaryRepresentation as AnyObject?
-			
-			var pokemonArray = [ [String : AnyObject] ]()
-			for a in pokemon {
-				pokemonArray.append(a.dictionaryRepresentation)
-			}
-			dictRep["pokemon"] = pokemonArray as AnyObject?
-			
-			return dictRep
-		}
-	}
-	
-	@objc var readableDictionaryRepresentation : [String : AnyObject] {
-		get {
-			
-			var dictRep = [String : AnyObject]()
-			dictRep["index"] = self.index as AnyObject?
-			
-			dictRep["trainerModel"] = self.trainerModel.name as AnyObject?
-			
-			var pokemonArray = [AnyObject]()
-			for a in pokemon {
-				pokemonArray.append(a.readableDictionaryRepresentation as AnyObject)
-			}
-			dictRep["pokemon"] = pokemonArray as AnyObject?
-			
-			return [self.name.string : dictRep as AnyObject]
-		}
-	}
 	
 	override var description : String {
 		get {

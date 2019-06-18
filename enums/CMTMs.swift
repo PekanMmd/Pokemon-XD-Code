@@ -16,7 +16,7 @@ let kNumberOfTMs	   = 0x32
 
 let kNumberOfTutorMoves = 0
 
-enum XGTMs : XGDictionaryRepresentable {
+enum XGTMs {
 	
 	case tm(Int)
 	
@@ -89,14 +89,6 @@ enum XGTMs : XGDictionaryRepresentable {
 	func updateItemDescription() {
 		self.item.descriptionString.duplicateWithString(XGTMs.createItemDescriptionForMove(self.move)).replace()
 		
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		return  ["Value" : self.index as AnyObject]
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		return ["TM \(self.index)" : self.move.name.string as AnyObject]
 	}
 	
 	static func allTMs() -> [XGTMs] {
@@ -186,7 +178,23 @@ extension XGTMs: Codable {
 	}
 }
 
-
+extension XGTMs: XGEnumerable {
+	var enumerableName: String {
+		return "TM" + String(format: "%02d", index)
+	}
+	
+	var enumerableValue: String? {
+		return move.name.string
+	}
+	
+	static var enumerableClassName: String {
+		return "TMs"
+	}
+	
+	static var allValues: [XGEffectivenessValues] {
+		return allCases
+	}
+}
 
 
 

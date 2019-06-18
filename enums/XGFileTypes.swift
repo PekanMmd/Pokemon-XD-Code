@@ -90,15 +90,6 @@ enum XGFileTypes : Int, Codable {
 	
 	static let imageFormats : [XGFileTypes] = [.png, .jpeg, .bmp]
 	
-	enum CodingKeys: String, CodingKey {
-		case type, fileExtension
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.fileExtension, forKey: .fileExtension)
-	}
 }
 
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGMoveTypes : Int, XGDictionaryRepresentable, Codable {
+enum XGMoveTypes : Int, Codable, CaseIterable {
 	
 	case normal		= 0x00
 	case fighting	= 0x01
@@ -53,46 +53,30 @@ enum XGMoveTypes : Int, XGDictionaryRepresentable, Codable {
 		
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name as AnyObject]
-		}
-	}
-	
-	static var allTypes : [XGMoveTypes] {
-		get {
-			var t = [XGMoveTypes]()
-			for i in 0 ..< kNumberOfTypes {
-				t.append(XGMoveTypes(rawValue: i)!)
-			}
-			return t
-		}
-	}
-	
 	static func random() -> XGMoveTypes {
 		let rand = Int(arc4random_uniform(UInt32(kNumberOfTypes)))
 		return XGMoveTypes(rawValue: rand) ?? .normal
 	}
 	
-	enum CodingKeys: String, CodingKey {
-		case type, name
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.name, forKey: .name)
-	}
-	
 }
 
-
+extension XGMoveTypes: XGEnumerable {
+	var enumerableName: String {
+		return name
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Types"
+	}
+	
+	static var allValues: [XGMoveTypes] {
+		return allCases
+	}
+}
 
 
 

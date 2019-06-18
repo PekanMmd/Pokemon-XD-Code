@@ -14,7 +14,7 @@ let kNumberOfPokemonMoves	= 0x04
 let kNumberOfEVs			= 0x06
 let kNumberOfIVs			= 0x06
 
-class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
+class XGTrainerPokemon : NSObject {
 	
 	var deckData		= XGDeckPokemon.deck(0, XGDecks.null)
 	
@@ -41,7 +41,6 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 	var ability : XGAbilities {
 		return abilityIndex == 0 ? self.species.stats.ability1 : self.species.stats.ability2
 	}
-	
 	
 	init(deckData: XGDeckPokemon) {
 		super.init()
@@ -130,62 +129,6 @@ class XGTrainerPokemon : NSObject, XGDictionaryRepresentable {
 		
 	}
 
-
-	@objc var dictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			dictRep["ability"] = self.ability as AnyObject?
-			dictRep["IVs"] = self.IVs as AnyObject?
-			
-			dictRep["species"] = self.species.dictionaryRepresentation as AnyObject?
-			dictRep["nature"] = self.nature.dictionaryRepresentation as AnyObject?
-			dictRep["gender"] = self.gender.dictionaryRepresentation as AnyObject?
-			
-			var EVsArray = [AnyObject]()
-			for a in EVs {
-				EVsArray.append(a as AnyObject)
-			}
-			dictRep["EVs"] = EVsArray as AnyObject?
-			
-			var movesArray = [ [String : AnyObject] ]()
-			for a in moves {
-				movesArray.append(a.dictionaryRepresentation)
-			}
-			dictRep["moves"] = movesArray as AnyObject?
-			
-			return dictRep
-		}
-	}
-	
-	@objc var readableDictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			
-			dictRep["ability"] = (self.ability == 0 ? self.species.stats.ability1.name.string : self.species.stats.ability2.name.string ) as AnyObject?
-			dictRep["IVs"] = self.IVs as AnyObject?
-			
-			dictRep["nature"] = self.nature.string as AnyObject?
-			dictRep["gender"] = self.gender.string as AnyObject?
-			
-			var EVsDict = [String : AnyObject]()
-			EVsDict["HP"] = EVs[0] as AnyObject?
-			EVsDict["attack"] = EVs[1] as AnyObject?
-			EVsDict["defense"] = EVs[2] as AnyObject?
-			EVsDict["sp.atk"] = EVs[3] as AnyObject?
-			EVsDict["sp.def"] = EVs[4] as AnyObject?
-			EVsDict["speed"] = EVs[5] as AnyObject?
-			dictRep["EVs"] = EVsDict as AnyObject?
-			
-			var movesArray = [AnyObject]()
-			for a in moves {
-				movesArray.append(a.name.string as AnyObject)
-			}
-			dictRep["moves"] = movesArray as AnyObject?
-			
-			return [self.species.name.string : dictRep as AnyObject]
-		}
-	}
-	
 }
 
 

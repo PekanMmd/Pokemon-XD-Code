@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGStats : Int, Codable {
+enum XGStats : Int, Codable, CaseIterable {
 	case attack = 1
 	case defense = 2
 	case speed = 3
@@ -28,9 +28,28 @@ enum XGStats : Int, Codable {
 		}
 		return mask
 	}
+	
+	var name: String {
+		switch self {
+		case .attack:
+			return "attack"
+		case .defense:
+			return "defense"
+		case .speed:
+			return "speed"
+		case .special_attack:
+			return "special attack"
+		case .special_defense:
+			return "special defense"
+		case .accuracy:
+			return "accuracy"
+		case .evasion:
+			return "evasion"
+		}
+	}
 }
 
-enum XGStatStages : Int, Codable {
+enum XGStatStages : Int, Codable, CaseIterable {
 	
 	// legit
 	case plus_1 = 0x10
@@ -61,7 +80,23 @@ enum XGStatStages : Int, Codable {
 	}
 }
 
-
+extension XGStats: XGEnumerable {
+	var enumerableName: String {
+		return name
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Stats"
+	}
+	
+	static var allValues: [XGStats] {
+		return allCases
+	}
+}
 
 
 

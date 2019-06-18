@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGMoveCategories : Int, XGDictionaryRepresentable {
+enum XGMoveCategories : Int {
 	
 	case physical  = 0x0
 	case special   = 0x1
@@ -28,18 +28,6 @@ enum XGMoveCategories : Int, XGDictionaryRepresentable {
 		
 		return XGMoveCategories(rawValue: self.rawValue + 1) ?? XGMoveCategories(rawValue: 0)!
 		
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
-		}
 	}
 	
 }

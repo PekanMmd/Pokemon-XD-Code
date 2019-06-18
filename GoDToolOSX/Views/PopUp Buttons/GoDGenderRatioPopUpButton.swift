@@ -11,7 +11,7 @@ import Cocoa
 class GoDGenderRatioPopUpButton: GoDPopUpButton {
 	
 	var selectedValue : XGGenderRatios {
-		return XGGenderRatios.allRatios()[self.indexOfSelectedItem]
+		return XGGenderRatios.allValues[self.indexOfSelectedItem]
 	}
 	
 	func selectGenderRatio(ratio: XGGenderRatios) {
@@ -21,7 +21,7 @@ class GoDGenderRatioPopUpButton: GoDPopUpButton {
 	override func setUpItems() {
 		var values = [String]()
 		
-		for gr in XGGenderRatios.allRatios() {
+		for gr in XGGenderRatios.allValues {
 			values.append(gr.string)
 		}
 		

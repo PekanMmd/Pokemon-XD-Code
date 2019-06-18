@@ -10,7 +10,7 @@ import Foundation
 
 let kNumberOfBagSlots = game == .Colosseum ? 7 : 8
 
-enum XGBagSlots : Int, CustomStringConvertible, XGDictionaryRepresentable, Codable {
+enum XGBagSlots : Int, CustomStringConvertible, Codable, CaseIterable {
 	
 	case none	    = 0x0
 	case pokeballs  = 0x1
@@ -38,18 +38,6 @@ enum XGBagSlots : Int, CustomStringConvertible, XGDictionaryRepresentable, Codab
 		}
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name as AnyObject]
-		}
-	}
-	
 	func cycle() -> XGBagSlots {
 		
 		return XGBagSlots(rawValue: self.rawValue + 1) ?? XGBagSlots(rawValue: 0)!
@@ -61,19 +49,25 @@ enum XGBagSlots : Int, CustomStringConvertible, XGDictionaryRepresentable, Codab
 			return self.name
 		}
 	}
-	
-	enum CodingKeys: String, CodingKey {
-		case type, name
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.name, forKey: .name)
-	}
 }
 
-
+extension XGBagSlots: XGEnumerable {
+	var enumerableName: String {
+		return name
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Bag Slots"
+	}
+	
+	static var allValues: [XGBagSlots] {
+		return allCases
+	}
+}
 
 
 
