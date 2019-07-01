@@ -12,7 +12,7 @@ let kColosseumDolToRamOffsetDifference = 0x3000
 let kColosseumDolToISOOffsetDifference = 0x1EC00
 
 let kRELtoRAMOffsetDifference = 0xb18dc0 // add this value to a common_rel offset to get it's offset in RAM
-let kDOLtoRAMOffsetDifference = 0x30a0   // add this value to a start.dol [UInt32] offset to get its offset in RAM
+let kDOLtoRAMOffsetDifference = 0x30a0   // add this value to a start.dol offset to get its offset in RAM
 let kDOLTableToRAMOffsetDifference = 0x3000 // add this value to a start.dol data table offset to get its offset in RAM
 let kDOLDataToRAMOffsetDifference = 0xCDE80 // add this value to a start.dol data offset (the values towards the end) to get its offset in RAM
 let kDOLtoISOOffsetDifference = 0x20300 // add this value to a start.dol offset to get it's offset in the ISO
