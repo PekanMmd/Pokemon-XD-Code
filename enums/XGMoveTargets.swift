@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGMoveTargets: Int, XGDictionaryRepresentable, Codable {
+enum XGMoveTargets: Int, Codable, CaseIterable {
 	
 	case selectedTarget			= 0x00
 	case dependsOnMove			= 0x01
@@ -40,29 +40,23 @@ enum XGMoveTargets: Int, XGDictionaryRepresentable, Codable {
 		
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
-		}
-	}
-	
-	enum CodingKeys: String, CodingKey {
-		case type, name
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.string, forKey: .name)
-	}
-	
 }
 
-
+extension XGMoveTargets: XGEnumerable {
+	var enumerableName: String {
+		return string
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Move Targets"
+	}
+	
+	static var allValues: [XGMoveTargets] {
+		return allCases
+	}
+}
 

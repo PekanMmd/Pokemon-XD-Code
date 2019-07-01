@@ -49,7 +49,7 @@ class GoDPokemonView: NSImageView {
 		if !pokemon.isSet {
 			self.setBackgroundColour(GoDDesign.colourGrey())
 			self.alphaValue = 0.5
-		} else if pokemon.isShadowPokemon {
+		} else if pokemon.isShadow {
 			self.setBackgroundColour(GoDDesign.colourPurple())
 			self.alphaValue = 1.0
 		} else {

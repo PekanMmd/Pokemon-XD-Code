@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XGBattleStyles : Int, Codable {
+enum XGBattleStyles : Int, Codable, CaseIterable {
 	
 	case none = 0
 	case single = 1
@@ -26,19 +26,9 @@ enum XGBattleStyles : Int, Codable {
 			return "other"
 		}
 	}
-	
-	enum CodingKeys: String, CodingKey {
-		case type, name
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.name, forKey: .name)
-	}
 }
 
-enum XGBattleTypes : Int, Codable {
+enum XGBattleTypes : Int, Codable, CaseIterable {
 	
 	case none = 0
 	case story_admin_colo = 1 // colosseum only
@@ -100,21 +90,43 @@ enum XGBattleTypes : Int, Codable {
 			return "Battle Mode Mt. Battle (colosseum)"
 		}
 	}
-	
-	enum CodingKeys: String, CodingKey {
-		case type, name
+}
+
+extension XGBattleTypes: XGEnumerable {
+	var enumerableName: String {
+		return name
 	}
 	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.name, forKey: .name)
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Battle Types"
+	}
+	
+	static var allValues: [XGBattleTypes] {
+		return allCases
 	}
 }
 
-
-
-
+extension XGBattleStyles: XGEnumerable {
+	var enumerableName: String {
+		return name
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Battle Styles"
+	}
+	
+	static var allValues: [XGBattleStyles] {
+		return allCases
+	}
+}
 
 
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGMoveTypes : XGDictionaryRepresentable, XGIndexedValue {
+enum XGMoveTypes : XGIndexedValue {
 	
 	case type(Int)
 	
@@ -30,18 +30,6 @@ enum XGMoveTypes : XGDictionaryRepresentable, XGIndexedValue {
 	
 	var data : XGType {
 		return XGType(index: index)
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.index as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name as AnyObject]
-		}
 	}
 	
 	static var allTypes : [XGMoveTypes] {

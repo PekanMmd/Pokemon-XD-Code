@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGShinyValues : Int, XGDictionaryRepresentable, Codable {
+enum XGShinyValues : Int, Codable, CaseIterable {
 	
 	case never		= 0x0000
 	case always		= 0x0001
@@ -32,29 +32,25 @@ enum XGShinyValues : Int, XGDictionaryRepresentable, Codable {
 		}
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
-		}
-	}
-	
-	enum CodingKeys: String, CodingKey {
-		case type, name
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.string, forKey: .name)
-	}
 }
 
+extension XGShinyValues: XGEnumerable {
+	var enumerableName: String {
+		return string
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Shiny Values"
+	}
+	
+	static var allValues: [XGShinyValues] {
+		return allCases
+	}
+}
 
 
 

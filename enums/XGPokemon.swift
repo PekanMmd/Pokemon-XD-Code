@@ -18,7 +18,7 @@ func < (p1: XGPokemon, p2: XGPokemon) -> Bool {
 	return p1.index < p2.index
 }
 
-enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
+enum XGPokemon: CustomStringConvertible {
 	
 	case pokemon(Int)
 	case nationalIndex(Int)
@@ -160,18 +160,6 @@ enum XGPokemon: CustomStringConvertible, XGDictionaryRepresentable {
 		return XGPokemon.pokemon(rand)
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.index as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name.string as AnyObject]
-		}
-	}
-	
 	static func allPokemon() -> [XGPokemon] {
 		var mons = [XGPokemon]()
 		for i in 0 ..< kNumberOfPokemon {
@@ -297,7 +285,23 @@ extension XGPokemon: Codable {
 	}
 }
 
-
+extension XGPokemon: XGEnumerable {
+	var enumerableName: String {
+		return name.string
+	}
+	
+	var enumerableValue: String? {
+		return index.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Pokemon"
+	}
+	
+	static var allValues: [XGPokemon] {
+		return XGPokemon.allPokemon()
+	}
+}
 
 
 

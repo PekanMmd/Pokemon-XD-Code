@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGMoveCategories : Int, XGDictionaryRepresentable, Codable {
+enum XGMoveCategories : Int, Codable, CaseIterable {
 	
 	case none	   = 0x0
 	case physical  = 0x1
@@ -30,29 +30,24 @@ enum XGMoveCategories : Int, XGDictionaryRepresentable, Codable {
 		
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
-		}
-	}
-	
-	enum CodingKeys: String, CodingKey {
-		case type, name
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.string, forKey: .name)
-	}
 }
 
-
+extension XGMoveCategories: XGEnumerable {
+	var enumerableName: String {
+		return string
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Move Categories"
+	}
+	
+	static var allValues: [XGMoveCategories] {
+		return allCases
+	}
+}
 
 

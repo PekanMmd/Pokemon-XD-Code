@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGEvolutionMethods : Int, XGDictionaryRepresentable {
+enum XGEvolutionMethods : Int {
 	
 	case none					= 0x00
 	case maxHappiness			= 0x01
@@ -70,18 +70,6 @@ enum XGEvolutionMethods : Int, XGDictionaryRepresentable {
 				case .levelUpAtMossRock		:	return "Level up near moss rock"
 				case .levelUpAtIceRock		:	return "Level up near ice rock"
 			}
-		}
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
 		}
 	}
 	

@@ -8,12 +8,12 @@
 
 import Foundation
 
-enum XGPokeSpots : Int, XGDictionaryRepresentable, Codable {
+enum XGPokeSpots : Int, Codable, CaseIterable {
 	
 	case rock		= 0x00
 	case oasis		= 0x01
 	case cave		= 0x02
-	case all		= 0x03
+	case all			= 0x03
 	
 	var string : String {
 		get {
@@ -23,18 +23,6 @@ enum XGPokeSpots : Int, XGDictionaryRepresentable, Codable {
 				case .cave	: return "Cave"
 				case .all	: return "All"
 			}
-		}
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
 		}
 	}
 	
@@ -86,14 +74,23 @@ enum XGPokeSpots : Int, XGDictionaryRepresentable, Codable {
 		
 	}
 	
-	enum CodingKeys: String, CodingKey {
-		case type, name
+}
+
+extension XGPokeSpots: XGEnumerable {
+	var enumerableName: String {
+		return string
 	}
 	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.string, forKey: .name)
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Pokespots"
+	}
+	
+	static var allValues: [XGPokeSpots] {
+		return allCases
 	}
 }
 

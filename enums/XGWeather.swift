@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGWeather : Int, XGDictionaryRepresentable, Codable {
+enum XGWeather : Int, Codable, CaseIterable {
 	
 	case none	    = 0x0
 	case sun		= 0x1
@@ -36,21 +36,25 @@ enum XGWeather : Int, XGDictionaryRepresentable, Codable {
 		
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
-		}
-	}
-	
 }
 
-
+extension XGWeather: XGEnumerable {
+	var enumerableName: String {
+		return string
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Weather"
+	}
+	
+	static var allValues: [XGWeather] {
+		return allCases
+	}
+}
 
 
 

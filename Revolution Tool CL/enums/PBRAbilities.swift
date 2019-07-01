@@ -13,7 +13,7 @@ let kFirstAbilityDescriptionID = 0xc2a
 
 let kNumberOfAbilities	= 124
 
-enum XGAbilities : XGDictionaryRepresentable, XGIndexedValue {
+enum XGAbilities : XGIndexedValue {
 	
 	case ability(Int)
 	
@@ -51,18 +51,6 @@ enum XGAbilities : XGDictionaryRepresentable, XGIndexedValue {
 	var adescription : XGString {
 		get {
 			return getStringSafelyWithID(id: descriptionID)
-		}
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.index as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name.string as AnyObject]
 		}
 	}
 	

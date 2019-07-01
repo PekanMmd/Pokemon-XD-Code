@@ -38,7 +38,7 @@ enum XGLanguages : Int {
 	}
 }
 
-class XGStringTable: NSObject, XGDictionaryRepresentable {
+class XGStringTable: NSObject {
 	
 	var file = XGFiles.nameAndFolder("", .Documents)
 	@objc var startOffset = 0x0 // where in the file the string table is located. used for files like common.rel which have more than just the table
@@ -382,52 +382,6 @@ class XGStringTable: NSObject, XGDictionaryRepresentable {
 	@objc func printAllStrings() {
 		for string in self.allStrings() {
 			print(string.string,"\n")
-		}
-	}
-	
-	@objc var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			let strings = self.allStrings()
-			
-			var strArray = [ [String : String] ]()
-			
-			for str in strings {
-				
-				strArray.append(["\(str.id)" : str.string])
-				
-			}
-			
-			var dictRep = [String : AnyObject]()
-			
-			dictRep["fileName"] = self.file.fileName as AnyObject
-			dictRep["numberOfStrings"] = self.numberOfEntries as AnyObject
-			dictRep["spareCharacters"] = self.extraCharacters as AnyObject?
-			
-			return ["metadata" : dictRep as AnyObject, "strings" : strArray as AnyObject]
-		}
-	}
-	
-	@objc var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			let strings = self.allStrings()
-			
-			var strArray = [ [String : String] ]()
-			
-			for str in strings {
-				
-				strArray.append([String(format: "0x%x", str.id) : str.string])
-				
-			}
-			
-			var dictRep = [String : AnyObject]()
-			
-			dictRep["fileName"] = self.file.fileName as AnyObject
-			dictRep["numberOfStrings"] = self.numberOfEntries as AnyObject
-			dictRep["spareCharacters"] = self.extraCharacters as AnyObject?
-			
-			let rep = [ ["metadata" : dictRep as AnyObject], ["strings" : strArray as AnyObject] ]
-			
-			return [self.file.fileName : rep as AnyObject]
 		}
 	}
 	

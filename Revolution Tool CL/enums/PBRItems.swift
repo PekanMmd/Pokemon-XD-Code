@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGItems : XGDictionaryRepresentable, XGIndexedValue {
+enum XGItems : XGIndexedValue {
 	
 	case item(Int)
 	
@@ -32,18 +32,6 @@ enum XGItems : XGDictionaryRepresentable, XGIndexedValue {
 	var data : XGItem {
 		get {
 			return XGItem(index: self.index)
-		}
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.index as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name.string as AnyObject]
 		}
 	}
 	

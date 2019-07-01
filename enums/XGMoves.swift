@@ -13,7 +13,7 @@ let kLastShadowMoveIndex	= game == .XD ? 0x176 : 0x164
 
 let shadowMovesUseHMFlag	= XGMove(index: kFirstShadowMoveIndex).HMFlag
 
-enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
+enum XGMoves : CustomStringConvertible {
 	
 	case move(Int)
 	
@@ -94,18 +94,6 @@ enum XGMoves : CustomStringConvertible, XGDictionaryRepresentable {
 	var data : XGMove {
 		get {
 			return XGMove(index: self.index)
-		}
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.index as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name.string as AnyObject]
 		}
 	}
 	
@@ -286,7 +274,23 @@ extension XGMoves: Codable {
 	}
 }
 
-
+extension XGMoves: XGEnumerable {
+	var enumerableName: String {
+		return name.string
+	}
+	
+	var enumerableValue: String? {
+		return index.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Moves"
+	}
+	
+	static var allValues: [XGMoves] {
+		return XGMoves.allMoves()
+	}
+}
 
 
 

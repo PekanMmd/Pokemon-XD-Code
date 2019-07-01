@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGGenderRatios : Int, XGDictionaryRepresentable, Codable {
+enum XGGenderRatios : Int, Codable, CaseIterable {
 	
 	case maleOnly		= 0x00
 	case male87			= 0x1F
@@ -35,48 +35,25 @@ enum XGGenderRatios : Int, XGDictionaryRepresentable, Codable {
 		}
 	}
 	
-	func cycle() -> XGGenderRatios {
-		
-		if self.rawValue == 0xFF {
-			return XGGenderRatios(rawValue: 0)!
-		}
-		
-		var value = self.rawValue + 1
-		
-		while XGGenderRatios(rawValue: value) == nil { value += 1 }
-		
-		return XGGenderRatios(rawValue: value)!
-		
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
-		}
-	}
-	
-	static func allRatios() -> [XGGenderRatios] {
-		return [.maleOnly,.male87,.male75,.male50,.female75,.female87,.femaleOnly,.genderless]
-	}
-	
-	enum CodingKeys: String, CodingKey {
-		case type, name
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.string, forKey: .name)
-	}
 }
 
-
+extension XGGenderRatios: XGEnumerable {
+	var enumerableName: String {
+		return string
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.hexString()
+	}
+	
+	static var enumerableClassName: String {
+		return "Gender Ratios"
+	}
+	
+	static var allValues: [XGGenderRatios] {
+		return allCases
+	}
+}
 
 
 

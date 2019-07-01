@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XGItems : XGDictionaryRepresentable {
+enum XGItems {
 	
 	case item(Int)
 	
@@ -73,18 +73,6 @@ enum XGItems : XGDictionaryRepresentable {
 	var data : XGItem {
 		get {
 			return XGItem(index: self.index)
-		}
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.index as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name.string as AnyObject]
 		}
 	}
 	
@@ -154,7 +142,23 @@ extension XGItems: Codable {
 	}
 }
 
-
+extension XGItems: XGEnumerable {
+	var enumerableName: String {
+		return name.string
+	}
+	
+	var enumerableValue: String? {
+		return index.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Items"
+	}
+	
+	static var allValues: [XGEffectivenessValues] {
+		return XGItems.allItems()
+	}
+}
 
 
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGGenders : Int, XGDictionaryRepresentable, Codable {
+enum XGGenders : Int, Codable, CaseIterable {
 	
 	case male		= 0x0
 	case female		= 0x1
@@ -32,30 +32,24 @@ enum XGGenders : Int, XGDictionaryRepresentable, Codable {
 		
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
-		}
-	}
-	
-	enum CodingKeys: String, CodingKey {
-		case type, name
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.string, forKey: .name)
-	}
-	
 }
 
-
+extension XGGenders: XGEnumerable {
+	var enumerableName: String {
+		return string
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Genders"
+	}
+	
+	static var allValues: [XGGenders] {
+		return allCases
+	}
+}
 
 

@@ -36,7 +36,7 @@ enum XGAI : Int {
 	case cycle 		= 4 // Copied from battle CDs. Uses each of the pokemon's moves in order.
 }
 
-enum XGDecks : String, XGDictionaryRepresentable, Codable {
+enum XGDecks : String, Codable, CaseIterable {
 	
 	case DeckDarkPokemon	= "DeckData_DarkPokemon"
 	case DeckStory			= "DeckData_Story"
@@ -354,70 +354,6 @@ enum XGDecks : String, XGDictionaryRepresentable, Codable {
 		}
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			if self == .DeckDarkPokemon {
-				
-				var rep = [AnyObject]()
-				
-				for i in 0 ..< self.DDPKEntries {
-					let poke = XGDeckPokemon.ddpk(i)
-					
-					rep.append(poke.dictionaryRepresentation as AnyObject)
-					
-				}
-				
-				return ["Shadow Pokemon" : rep as AnyObject]
-				
-			} else {
-				var rep : [String : AnyObject] = ["Deck" : self.fileName as AnyObject]
-				
-				var trainers = [ [String : AnyObject] ]()
-				
-				for trainer in self.allTrainers {
-					trainers.append(trainer.dictionaryRepresentation)
-				}
-				
-				rep["Trainers"] = trainers as AnyObject?
-				
-				return rep
-			}
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			
-			if self == .DeckDarkPokemon {
-				
-				var rep = [AnyObject]()
-				
-				for mon in self.allActivePokemon {
-					let poke = mon.deckData
-					
-					rep.append(poke.readableDictionaryRepresentation as AnyObject)
-					
-				}
-				
-				return ["Shadow Pokemon" : rep as AnyObject]
-				
-			} else {
-				
-				var rep : [String : AnyObject] = ["Deck" : self.fileName as AnyObject]
-				
-				var trainers = [ [String : AnyObject] ]()
-				
-				for trainer in self.allTrainers {
-					trainers.append(trainer.readableDictionaryRepresentation)
-				}
-				
-				rep["Trainers"] = trainers as AnyObject?
-				
-				return [self.fileName : rep as AnyObject]
-			}
-		}
-	}
-	
 	func trainersString() -> String {
 		
 		
@@ -489,7 +425,23 @@ enum XGDecks : String, XGDictionaryRepresentable, Codable {
 	
 }
 
-
+extension XGDecks: XGEnumerable {
+	var enumerableName: String {
+		return rawValue
+	}
+	
+	var enumerableValue: String? {
+		return nil
+	}
+	
+	static var enumerableClassName: String {
+		return "Decks"
+	}
+	
+	static var allValues: [XGDecks] {
+		return allCases
+	}
+}
 
 
 

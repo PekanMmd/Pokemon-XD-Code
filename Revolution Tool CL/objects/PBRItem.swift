@@ -10,7 +10,7 @@ import Foundation
 
 let kNumberOfItems = PBRDataTable.items.numberOfEntries // 465
 
-class XGItem: NSObject, XGDictionaryRepresentable, XGIndexedValue {
+class XGItem: NSObject, XGIndexedValue {
 	
 	var index				= 0
 	
@@ -93,30 +93,6 @@ class XGItem: NSObject, XGDictionaryRepresentable, XGIndexedValue {
 		
 		data.save()
 		
-	}
-	
-	
-	@objc var dictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			dictRep["name"] = self.name.string as AnyObject?
-			dictRep["description"] = self.descriptionString.string as AnyObject?
-			dictRep["holdItemID"] = self.holdItemID as AnyObject?
-			dictRep["parameter"] = self.parameter as AnyObject?
-			
-			return dictRep
-		}
-	}
-	
-	@objc var readableDictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			dictRep["description"] = self.descriptionString.string as AnyObject?
-			dictRep["holdItemID"] = self.holdItemID as AnyObject?
-			dictRep["parameter"] = self.parameter as AnyObject?
-			
-			return ["\(self.index) " + self.name.string : dictRep as AnyObject]
-		}
 	}
 	
 }

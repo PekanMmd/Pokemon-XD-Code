@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XGContestCategories: Int, Codable {
+enum XGContestCategories: Int, Codable, CaseIterable {
 	case cool = 0
 	case beauty
 	case cute
@@ -29,13 +29,22 @@ enum XGContestCategories: Int, Codable {
 		}
 	}
 	
-	enum CodingKeys: String, CodingKey {
-		case type, name
+}
+
+extension XGContestCategories: XGEnumerable {
+	var enumerableName: String {
+		return name
 	}
 	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.rawValue, forKey: .type)
-		try container.encode(self.name, forKey: .name)
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Contest Categories"
+	}
+	
+	static var allValues: [XGContestCategories] {
+		return allCases
 	}
 }

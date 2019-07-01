@@ -4195,7 +4195,7 @@ import Foundation
 //let relk = XGMapRel(file: .rel("M1_water_colo_field.rel"))
 //let kyogre = relk.characters[6]
 //kyogre.characterID = 0
-//kyogre.model = XGCharacterModels(index: 42)
+//kyogre.model = XGCharacterModel(index: 42)
 //kyogre.xCoordinate = 0.0
 //kyogre.yCoordinate = 0.0
 //kyogre.zCoordinate = 0.0
@@ -4206,7 +4206,7 @@ import Foundation
 //let relg = XGMapRel(file: .rel("D6_fort_3F_1.rel"))
 //let groudon = relg.characters[3]
 //groudon.characterID = 0
-//groudon.model = XGCharacterModels(index: 103)
+//groudon.model = XGCharacterModel(index: 103)
 //groudon.xCoordinate = 75.0
 //groudon.yCoordinate = 0
 //groudon.zCoordinate = 11.9
@@ -4219,7 +4219,7 @@ import Foundation
 //let relr = XGMapRel(file: .rel("D5_factory_top.rel"))
 //let rayquaza = relr.characters[0]
 //rayquaza.characterID = 0
-//rayquaza.model = XGCharacterModels(index: 41)
+//rayquaza.model = XGCharacterModel(index: 41)
 //rayquaza.xCoordinate = -79.0
 //rayquaza.yCoordinate = 29.99
 //rayquaza.zCoordinate = 118.0
@@ -4238,7 +4238,7 @@ import Foundation
 //	let model = XGFiles.nameAndFolder(models[i] + "_ow.dat", .TextureImporter)
 //	copyOWPokemonIdleAnimationFromIndex(index: anims[i], forModel: model)
 //	archive.shiftAndReplaceFileWithIndex(indices[i], withFile: model.compress())
-//	let modelData = XGCharacterModels(index: i)
+//	let modelData = XGCharacterModel(index: i)
 //	modelData.boundBox = [22.00, 52.00, 8.00, -300.00, 300.00, -120.00, 120.00, 6.00]
 //	modelData.save()
 //}
@@ -4269,7 +4269,7 @@ import Foundation
 //let rel = XGMapRel(file: .rel("D5_out.rel"))
 //let raikou = rel.characters[10]
 //raikou.characterID = 0
-//raikou.model = XGCharacterModels(index: 40)
+//raikou.model = XGCharacterModel(index: 40)
 //raikou.scriptIndex = 7
 //raikou.zCoordinate = -160
 //raikou.save()
@@ -4277,14 +4277,14 @@ import Foundation
 //let rel = XGMapRel(file: .rel("D3_ship_deck.rel"))
 //let entei = rel.characters[5]
 //entei.characterID = 0
-//entei.model = XGCharacterModels(index: 39)
+//entei.model = XGCharacterModel(index: 39)
 //entei.xCoordinate = 0
 //entei.save()
 
 //let rel = XGMapRel(file: .rel("M1_out.rel"))
 //let suicune = rel.characters[13]
 //suicune.characterID = 0
-//suicune.model = XGCharacterModels(index: 38)
+//suicune.model = XGCharacterModel(index: 38)
 //suicune.xCoordinate = 0.0
 //suicune.yCoordinate = 66.04
 //suicune.zCoordinate = -210.0
@@ -7943,7 +7943,7 @@ import Foundation
 //	let rel = file.mapData
 //	print(file.fileName)
 //	for chara in rel.characters {
-//		print("id:", chara.characterID.hexString(), "model", chara.model.hexString(), (XGCharacterModels(rawValue: chara.model) ?? .none).name, "script:", chara.scriptIndex.hexString(), chara.scriptName)
+//		print("id:", chara.characterID.hexString(), "model", chara.model.hexString(), (XGCharacterModel(rawValue: chara.model) ?? .none).name, "script:", chara.scriptIndex.hexString(), chara.scriptName)
 //	}
 //	print("")
 //}

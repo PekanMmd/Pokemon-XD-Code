@@ -10,7 +10,7 @@ import Foundation
 
 let kNumberOfTrainerModels = 0
 
-enum XGTrainerModels : Int, XGDictionaryRepresentable {
+enum XGTrainerModels : Int {
 	
 	case none	= 0x00
 	
@@ -29,19 +29,6 @@ enum XGTrainerModels : Int, XGDictionaryRepresentable {
 	var pkxData : XGMutableData? {
 		return nil
 	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name as AnyObject]
-		}
-	}
-	
 	
 }
 

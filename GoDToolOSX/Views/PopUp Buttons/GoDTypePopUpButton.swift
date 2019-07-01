@@ -19,7 +19,7 @@ class GoDTypePopUpButton: GoDPopUpButton {
 	}
 	
 	override func setUpItems() {
-		let values = XGMoveTypes.allTypes.map { (t) -> String in
+		let values = XGMoveTypes.allValues.map { (t) -> String in
 			return t.name
 		}
 		

@@ -532,6 +532,10 @@ indirect enum XGFolders {
 		}
 	}
 	
+	var projectPath: String {
+		return path.replacingOccurrences(of: documentsPath, with: "")
+	}
+	
 	var resourcePath : String {
 		get {
 			var path = XGFolders.Documents.path + "/Original"
@@ -692,45 +696,6 @@ indirect enum XGFolders {
 				data.save()
 			}
 		}
-		
-		
-		
-	}
-	
-	static func setUpFolderFormatForRandomiser() {
-		
-		let folders : [XGFolders] = [
-			.Documents,
-			.Common,
-			.DOL,
-			.Decks,
-			.StringTables,
-			.FSYS,
-			.LZSS,
-			.ISO,
-			.MenuFSYS,
-			.AutoFSYS,
-			.Scripts,
-			.Logs,
-			.Reference,
-			]
-		
-		for folder in folders {
-			folder.createDirectory()
-		}
-		
-		let jsons = ["Move Effects", "Original Pokemon", "Original Moves", "Move Categories"]
-		
-		for j in jsons {
-			let file = XGFiles.json(j)
-			if !file.exists {
-				let resource = XGResources.JSON(j)
-				let data = resource.data
-				data.file = file
-				data.save()
-			}
-		}
-		
 	}
 	
 }

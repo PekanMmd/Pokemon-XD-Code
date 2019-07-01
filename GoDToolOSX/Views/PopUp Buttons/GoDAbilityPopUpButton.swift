@@ -8,7 +8,7 @@
 
 import Cocoa
 
-var abilitiesAlphabetical = XGAbilities.allAbilities().filter { (a1) -> Bool in
+var abilitiesAlphabetical = XGAbilities.allValues.filter { (a1) -> Bool in
 	return a1.nameID > 0 || a1.index == 0
 }.sorted { (a1, a2) -> Bool in
 	return a1.index == 0 || a1.name.string < a2.name.string

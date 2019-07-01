@@ -10,7 +10,7 @@ import Foundation
 
 let kNumberOfMoves = PBRDataTable.moves.numberOfEntries // 468
 
-class XGMove: NSObject, XGDictionaryRepresentable, XGIndexedValue {
+class XGMove: NSObject, XGIndexedValue {
 	
 	var startOffset			: Int {
 		return PBRDataTable.moves.offsetForEntryWithIndex(self.index)
@@ -121,64 +121,6 @@ class XGMove: NSObject, XGDictionaryRepresentable, XGIndexedValue {
 		
 		data.save()
 	}
-	
-	@objc var dictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			dictRep["name"] = self.name.string as AnyObject?
-			dictRep["description"] = self.mdescription.string as AnyObject?
-			dictRep["moveAnimation"] = self.animationID as AnyObject?
-			dictRep["priority"] = self.priority as AnyObject?
-			dictRep["pp"] = self.pp as AnyObject?
-			dictRep["effect"] = self.effect as AnyObject?
-			dictRep["effectAccuracy"] = self.effectAccuracy as AnyObject?
-			dictRep["basePower"] = self.basePower as AnyObject?
-			dictRep["accuracy"] = self.accuracy as AnyObject?
-			dictRep["contactFlag"] = self.contactFlag as AnyObject?
-			dictRep["protectFlag"] = self.protectFlag as AnyObject?
-			dictRep["magicCoatFlag"] = self.magicCoatFlag as AnyObject?
-			dictRep["snatchFlag"] = self.snatchFlag as AnyObject?
-			dictRep["mirrorMoveFlag"] = self.mirrorMoveFlag as AnyObject?
-			dictRep["kingsRockFlag"] = self.kingsRockFlag as AnyObject?
-			dictRep["soundBasedFlag"] = self.soundBasedFlag as AnyObject?
-			dictRep["HMFlag"] = self.HMFlag as AnyObject?
-			
-			dictRep["type"] = self.type.dictionaryRepresentation as AnyObject?
-			dictRep["target"] = self.target.dictionaryRepresentation as AnyObject?
-			dictRep["category"] = self.category.dictionaryRepresentation as AnyObject?
-			
-			return dictRep
-		}
-	}
-	
-	@objc var readableDictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			dictRep["description"] = self.mdescription.string as AnyObject?
-			dictRep["moveAnimation"] = (XGFiles.nameAndFolder("Original Moves.json", .JSON).json as! [String])[self.animationID] as AnyObject?
-			dictRep["priority"] = self.priority as AnyObject?
-			dictRep["pp"] = self.pp as AnyObject?
-			dictRep["effect"] = self.effect as AnyObject?
-			dictRep["effectAccuracy"] = self.effectAccuracy as AnyObject?
-			dictRep["basePower"] = self.basePower as AnyObject?
-			dictRep["accuracy"] = self.accuracy as AnyObject?
-			dictRep["contactFlag"] = self.contactFlag as AnyObject?
-			dictRep["protectFlag"] = self.protectFlag as AnyObject?
-			dictRep["magicCoatFlag"] = self.magicCoatFlag as AnyObject?
-			dictRep["snatchFlag"] = self.snatchFlag as AnyObject?
-			dictRep["mirrorMoveFlag"] = self.mirrorMoveFlag as AnyObject?
-			dictRep["kingsRockFlag"] = self.kingsRockFlag as AnyObject?
-			dictRep["soundBasedFlag"] = self.soundBasedFlag as AnyObject?
-			dictRep["HMFlag"] = self.HMFlag as AnyObject?
-			
-			dictRep["type"] = self.type.name as AnyObject?
-			dictRep["target"] = self.target.string as AnyObject?
-			dictRep["category"] = self.category.string as AnyObject?
-			
-			return ["\(self.index) " + self.name.string : dictRep as AnyObject]
-		}
-	}
-	
 	
 }
 

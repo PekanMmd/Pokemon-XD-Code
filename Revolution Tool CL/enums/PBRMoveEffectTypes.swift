@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XGMoveEffectTypes: Int, XGDictionaryRepresentable {
+enum XGMoveEffectTypes: Int {
 	
 	case none				=  0
 	case regularAttack		=  1
@@ -46,18 +46,6 @@ enum XGMoveEffectTypes: Int, XGDictionaryRepresentable {
 		case .nerf				: return "Nerf"
 		case .itemBasedType		: return "Item Based Type"
 		case .unknown			: return "Unknown"
-		}
-	}
-	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.string as AnyObject]
 		}
 	}
 	

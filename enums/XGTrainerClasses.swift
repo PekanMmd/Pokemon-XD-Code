@@ -10,8 +10,7 @@ import Foundation
 
 let kFirstTrainerClassStringID = 0x1B59
 
-enum XGTrainerClasses : Int, XGDictionaryRepresentable, Codable {
-	
+enum XGTrainerClasses : Int, Codable, CaseIterable {
 	
 	case none			= 0x00
 	case michael1		= 0x01
@@ -89,21 +88,25 @@ enum XGTrainerClasses : Int, XGDictionaryRepresentable, Codable {
 		}
 	}
 	
-	var dictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.rawValue as AnyObject]
-		}
-	}
-	
-	var readableDictionaryRepresentation: [String : AnyObject] {
-		get {
-			return ["Value" : self.name.string as AnyObject]
-		}
-	}
-	
 }
 
-
+extension XGTrainerClasses: XGEnumerable {
+	var enumerableName: String {
+		return name.string
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Trainer Classes"
+	}
+	
+	static var allValues: [XGTrainerClasses] {
+		return allCases
+	}
+}
 
 
 
