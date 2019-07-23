@@ -929,10 +929,12 @@ final class XGFsys : NSObject {
 		for i in 0 ..< data.count {
 			data[i].file = .nameAndFolder(updatedNames[i], folder)
 			
-			if verbose {
-				printg("extracting file: \(data[i].file.fileName)")
+			if !data[i].file.exists {
+				if verbose {
+					printg("extracting file: \(data[i].file.fileName)")
+				}
+				data[i].save()
 			}
-			data[i].save()
 		}
 		
 		// decode certain file types
@@ -971,24 +973,7 @@ final class XGFsys : NSObject {
 	
 }
 
-extension XGFsys: XGEnumerable {
-	var enumerableName: String {
-		return path
-	}
-	
-	var enumerableValue: String? {
-		return nil
-	}
-	
-	static var enumerableClassName: String {
-		return "Fsys"
-	}
-	
-	static var allValues: [XGFsys] {
-		let files = XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files + XGFolders.FSYS.files
-		return files.map { $0.fsysData }
-	}
-}
+
 
 
 

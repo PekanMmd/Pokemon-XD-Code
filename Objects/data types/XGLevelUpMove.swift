@@ -14,7 +14,7 @@ let kSizeOfLevelUpData = 0x4
 let kLevelUpMoveLevelOffset = 0x0 // 1 byte
 let kLevelUpMoveIndexOffset = 0x2 // 2 bytes
 
-class XGLevelUpMove: NSObject, Codable {
+class XGLevelUpMove: NSObject {
 	
 	@objc var level = 0x0
 	var move  = XGMoves.move(0)

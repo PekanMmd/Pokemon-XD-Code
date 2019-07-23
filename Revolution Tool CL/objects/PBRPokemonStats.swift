@@ -276,59 +276,6 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 		
 	}
 	
-	
-	@objc var dictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			dictRep["name"] = self.name.string as AnyObject?
-			dictRep["species"] = self.species.string as AnyObject?
-			dictRep["cry"] = self.cryFileIndex as AnyObject?
-			dictRep["type1"] = self.type1.dictionaryRepresentation as AnyObject?
-			dictRep["type2"] = self.type2.dictionaryRepresentation as AnyObject?
-			dictRep["ability1"] = self.ability1.dictionaryRepresentation as AnyObject?
-			dictRep["ability2"] = self.ability2.dictionaryRepresentation as AnyObject?
-			dictRep["hp"] = self.hp as AnyObject?
-			dictRep["attack"] = self.attack as AnyObject?
-			dictRep["defense"] = self.defense as AnyObject?
-			dictRep["sp.attack"] = self.specialAttack as AnyObject?
-			dictRep["sp.defense"] = self.specialDefense as AnyObject?
-			dictRep["speed"] = self.speed as AnyObject?
-			return dictRep
-		}
-	}
-	
-	@objc var readableDictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			
-			dictRep["species"] = self.species.string as AnyObject?
-			dictRep["cry"] = self.cryFileIndex as AnyObject?
-			
-			var types = [String : AnyObject]()
-			types["type1"] = self.type1.readableDictionaryRepresentation as AnyObject?
-			types["type2"] = self.type2.readableDictionaryRepresentation as AnyObject?
-			dictRep["Types"] = types as AnyObject?
-			
-			var abilities = [String : AnyObject]()
-			abilities["ability1"] = self.ability1.readableDictionaryRepresentation as AnyObject?
-			abilities["ability2"] = self.ability2.readableDictionaryRepresentation as AnyObject?
-			dictRep["Abilities"] = abilities as AnyObject?
-			
-			var stats = [String : AnyObject]()
-			stats["hp"] = self.hp as AnyObject?
-			stats["attack"] = self.attack as AnyObject?
-			stats["defense"] = self.defense as AnyObject?
-			stats["sp.attack"] = self.specialAttack as AnyObject?
-			stats["sp.defense"] = self.specialDefense as AnyObject?
-			stats["speed"] = self.speed as AnyObject?
-			dictRep["BaseStats"] = stats as AnyObject?
-			
-			
-			return ["\(self.index) " + self.name.string : dictRep as AnyObject]
-		}
-	}
-	
-	
 }
 
 

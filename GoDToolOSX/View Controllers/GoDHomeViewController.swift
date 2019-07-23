@@ -14,12 +14,33 @@ let xdsegues = ["toTrainerVC","toShadowVC","toStatsVC","toMoveVC","toItemVC","to
 let colotools = ["Trainer Editor","Pokemon Stats Editor","Move Editor","Item Editor","Gift Pokemon Editor", "Type Editor", "Treasure Editor", "Patches", "Randomiser", "Message Editor", "Collision Viewer", "Interaction Editor", "ISO Explorer"]
 let colosegues = ["toTrainerVC","toStatsVC","toMoveVC","toItemVC","toGiftVC", "toTypeVC", "toTreasureVC", "toPatchVC", "toRandomiserVC", "toMessageVC", "toCollisionVC", "toInteractionVC", "toISOVC"]
 
+let pbrtools = ["Type Editor", "Message Editor", "ISO Explorer"]
+let pbrsegues = ["toTypeVC", "toMessageVC", "toISOVC"]
+
 class GoDHomeViewController: GoDTableViewController {
 	
 	@IBOutlet var logView: NSTextView!
 	
-	let tools  = game == .XD ? xdtools : colotools
-	let segues = game == .XD ? xdsegues : colosegues
+	var tools: [String] {
+		switch game {
+		case .Colosseum:
+			colotools
+		case .XD:
+			xdtools
+		case .PBR:
+			pbrtools
+		}
+	}
+	var segues: [String] {
+		switch game {
+		case .Colosseum:
+			colosegues
+		case .XD:
+			xdsegues
+		case .PBR:
+			pbrsegues
+		}
+	}
 
     override func viewDidLoad() {
         super.viewDidLoad()

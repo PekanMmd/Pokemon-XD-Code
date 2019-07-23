@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGEffectivenessValues : Int {
+enum XGEffectivenessValues : Int, Codable {
 
 	case superEffective		= 0
 	case neutral			= 1

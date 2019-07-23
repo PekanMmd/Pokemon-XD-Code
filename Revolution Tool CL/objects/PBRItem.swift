@@ -10,7 +10,7 @@ import Foundation
 
 let kNumberOfItems = PBRDataTable.items.numberOfEntries // 465
 
-class XGItem: NSObject, XGIndexedValue {
+class XGItem: NSObject, XGIndexedValue, Codable {
 	
 	var index				= 0
 	

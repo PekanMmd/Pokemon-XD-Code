@@ -179,10 +179,11 @@ class XGUtility {
 //		XGThreadManager.manager.runInBackgroundAsync {
 			printg("extracting fsys files...")
 			for file in XGFolders.FSYS.files where file.fileType == .fsys {
+				printg("extracting:", file.path)
 				let fsys = file.fsysData
 				if let msg = fsys.decompressedDataForFileWithFiletype(type: .msg) {
-					if msg.get2BytesAtOffset(12) == 0x5553 { // US in unicode
-						msg.file = .msg(msg.file.fileName.removeFileExtensions())
+					msg.file = .msg(msg.file.fileName.removeFileExtensions())
+					if !msg.file.exists {
 						msg.save()
 					}
 				}

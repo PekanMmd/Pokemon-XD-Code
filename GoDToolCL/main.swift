@@ -7,14 +7,34 @@
 //
 //
 
-let imageFile = XGFiles.nameAndFolder("uv_icn_type_big_00.gtx.png", .Import)
-let image = imageFile.image
-for texture in GoDTextureImporter.getMultiFormatTextureData(image: image) {
-	let fileName = imageFile.fileName.removeFileExtensions() + "_" + texture.format.name + ".gtx"
-	texture.file = .nameAndFolder(fileName, .Documents)
-	texture.save()
-	texture.saveImage(file: .nameAndFolder(fileName + ".png", .Documents))
-}
+//for id in [20, 83, 18] {
+//	let mon = XGTrainerPokemon(DeckData: .ddpk(id))
+//	mon.shadowAlwaysFlee = 0
+//	mon.save()
+//}
+//
+//for id in [31, 16, 22] {
+//	let mon = XGTrainerPokemon(DeckData: .ddpk(id))
+//	mon.shadowAlwaysFlee = 1
+//	mon.save()
+//}
+//XGUtility.compileAllFiles()
+//
+//for mon in XGDecks.DeckDarkPokemon.allPokemon {
+//	print(mon.deckData.index,mon.species.name, mon.shadowAlwaysFlee)
+//}
+
+//XGUtility.printOccurencesOfMove(search: move("bounce"))
+//XGUtility.documentISO()
+
+//let imageFile = XGFiles.nameAndFolder("uv_icn_type_big_00.gtx.png", .Import)
+//let image = imageFile.image
+//for texture in GoDTextureImporter.getMultiFormatTextureData(image: image) {
+//	let fileName = imageFile.fileName.removeFileExtensions() + "_" + texture.format.name + ".gtx"
+//	texture.file = .nameAndFolder(fileName, .Documents)
+//	texture.save()
+//	texture.saveImage(file: .nameAndFolder(fileName + ".png", .Documents))
+//}
 
 //XGUtility.exportTextures()
 //

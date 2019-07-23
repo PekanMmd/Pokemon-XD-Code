@@ -19,7 +19,24 @@ extension XGTrainer {
 	}
 }
 
-
+extension XGFsys: XGEnumerable {
+	var enumerableName: String {
+		return path
+	}
+	
+	var enumerableValue: String? {
+		return nil
+	}
+	
+	static var enumerableClassName: String {
+		return "Fsys"
+	}
+	
+	static var allValues: [XGFsys] {
+		let files = XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files + XGFolders.FSYS.files
+		return files.map { $0.fsysData }
+	}
+}
 
 
 

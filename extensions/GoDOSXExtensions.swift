@@ -206,7 +206,7 @@ extension GoDTexture {
 		let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: cWidth, pixelsHigh: cHeight, bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: NSColorSpaceName.deviceRGB, bitmapFormat: NSBitmapImageRep.Format(rawValue: UInt(CGBitmapInfo.byteOrder32Big.union(CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)).rawValue)), bytesPerRow: bytesPerRow, bitsPerPixel: 32)!
 		
 		
-		for index in 0 ..< pixelsPerRow * height {
+		for index in 0 ..< pixelsPerRow * pixelsPerCol {
 			
 			let rowsPerBlock = self.blockHeight
 			let columnsPerBlock = self.blockWidth

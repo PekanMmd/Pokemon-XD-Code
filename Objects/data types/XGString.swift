@@ -227,7 +227,7 @@ class XGString: NSObject, Codable {
 	required convenience init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		let text = try container.decode(String.self, forKey: .text)
-		let file = try container.decode(XGFiles?.self, forKey: .file)
+		let file: XGFiles? = nil
 		let id = try container.decode(Int?.self, forKey: .id)
 		self.init(string: text, file: file, sid: id)
 	}
@@ -235,7 +235,7 @@ class XGString: NSObject, Codable {
 	func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 		try container.encode(self.string, forKey: .text)
-		try container.encode(self.table, forKey: .file)
+		try container.encode(self.table.fileName, forKey: .file)
 		try container.encode(self.id, forKey: .id)
 	}
 }

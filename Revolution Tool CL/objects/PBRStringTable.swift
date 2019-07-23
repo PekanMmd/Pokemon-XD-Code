@@ -385,4 +385,40 @@ class XGStringTable: NSObject {
 		}
 	}
 	
+	func writeJSON(to file: XGFiles) {
+		do {
+			let data = try JSONRepresentation()
+			if XGUtility.saveData(data, toFile: file) {
+				return
+			}
+		} catch { }
+		
+		printg("Failed to write JSON to:", file.path)
+	}
+	
+}
+
+struct XGStringTableMetaData {
+	let file: XGFiles
+	let startOffset: Int
+	let fixedFileSize: Int
+	let strings: [XGString]
+}
+
+extension XGStringTable: Encodable {
+	enum XGStringTableDecodingError: Error {
+		case invalidFile(file: XGFiles)
+	}
+	
+	enum CodingKeys: String, CodingKey {
+		case file, startOffset, fixedFileSize, strings
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.file.fileName, forKey: .file)
+		try container.encode(self.startOffset, forKey: .startOffset)
+		try container.encode(self.startOffset == 0 ? 0 : self.fileSize, forKey: .fixedFileSize)
+		try container.encode(self.allStrings(), forKey: .strings)
+	}
 }

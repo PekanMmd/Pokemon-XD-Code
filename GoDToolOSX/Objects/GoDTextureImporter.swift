@@ -393,11 +393,6 @@ class GoDTextureImporter: NSObject {
 	
 	func replaceTextureData() {
 		
-//		if texture.format == .CMPR {
-//			printg("This texture format is currently incompatible with GoD Tool (mainly because @StarsMmd got lazy :-p). Aborting import of file \(texture.file.path). If you want to import it send him a message to add support for the \(texture.format.name) format.")
-//			return
-//		}
-		
 		let pngPixels = self.pixelsFromPNGImage()
 		var pixelBytes = [Int]()
 		
@@ -524,7 +519,7 @@ class GoDTextureImporter: NSObject {
 		
 		var textures = [GoDTexture]()
 		
-		for format in [/*GoDTextureFormats.C8, .C4, .RGB5A3, .RGBA32,*/ GoDTextureFormats.CMPR] {
+		for format in [GoDTextureFormats.C8, .C4, .RGB5A3, .RGBA32, GoDTextureFormats.CMPR] {
 			var colourThreshold = 0
 			if format == .C4 || format == .C8 {
 				while image.colourCount(threshold: colourThreshold) > format.paletteCount && colourThreshold <= 24 {

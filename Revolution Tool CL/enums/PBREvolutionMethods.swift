@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGEvolutionMethods : Int {
+enum XGEvolutionMethods : Int, Codable {
 	
 	case none					= 0x00
 	case maxHappiness			= 0x01

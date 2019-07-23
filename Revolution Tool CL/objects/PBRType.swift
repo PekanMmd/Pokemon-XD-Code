@@ -11,7 +11,7 @@ import Foundation
 let kNumberOfTypes = PBRDataTable.typeMatchups.entrySize // 18
 let kFirstTypeNameID = 0xca6
 
-class XGType: NSObject, XGIndexedValue {
+class XGType: NSObject, XGIndexedValue, Codable {
 	
 	var index			 	= 0
 	var effectivenessTable	= [XGEffectivenessValues]()
@@ -28,36 +28,11 @@ class XGType: NSObject, XGIndexedValue {
 		}
 	}
 	
-	@objc var dictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			dictRep["name"] = self.name
-			
-			var effectivenessTableArray = [ [String : AnyObject] ]()
-			for a in effectivenessTable {
-				effectivenessTableArray.append(a.dictionaryRepresentation)
-			}
-			dictRep["effectivenessTable"] = effectivenessTableArray as AnyObject?
-			
-			return dictRep
-		}
+	func setEffectiveness(_ effectiveness: XGEffectivenessValues, againstType type: XGMoveTypes) {
+		effectivenessTable[type.index] = effectiveness
 	}
 	
-	@objc var readableDictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			
-			var effectivenessTableArray = [AnyObject]()
-			for a in effectivenessTable {
-				effectivenessTableArray.append(a.string as AnyObject)
-			}
-			dictRep["effectivenessTable"] = effectivenessTableArray as AnyObject?
-			
-			return ["\(self.index) " + self.name.string : dictRep as AnyObject]
-		}
-	}
-	
-	func damageDealtToType(_ type: XGMoveTypes) -> XGEffectivenessValues {
+	func damageDealtTo(type: XGMoveTypes) -> XGEffectivenessValues {
 		return effectivenessTable[type.index]
 	}
 	
