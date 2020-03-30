@@ -103,7 +103,7 @@ class GoDHexCalculatorViewController: GoDViewController {
 	
 	
 	func show(sender: GoDViewController) {
-		sender.presentViewControllerAsModalWindow(self)
+		sender.presentAsModalWindow(self)
 	}
     
 }

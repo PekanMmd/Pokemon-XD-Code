@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGMoveCategories : Int {
+enum XGMoveCategories: Int, Codable {
 	
 	case physical  = 0x0
 	case special   = 0x1

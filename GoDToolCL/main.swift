@@ -7,6 +7,26 @@
 //
 //
 
+print(documentsPath)
+
+//XGDecks.DeckDarkPokemon.allDeckPokemon.forEach { (mon) in
+//    if mon.data.species.catchRate != mon.data.shadowCatchRate {
+//        print(mon.data.species.name, mon.data.species.catchRate, mon.data.shadowCatchRate)
+//    }
+//}
+//XGUtility.documentISO()
+
+//XGTrainerClasses.documentEnumerationData()
+//XGUtility.encodeISO()
+//
+//var shouldEnd = false
+//while !shouldEnd {
+//	if let input = readLine(), input.contains("c") {
+//		XGUtility.cancelEncoding()
+//		shouldEnd = true
+//	}
+//}
+//
 //for id in [20, 83, 18] {
 //	let mon = XGTrainerPokemon(DeckData: .ddpk(id))
 //	mon.shadowAlwaysFlee = 0

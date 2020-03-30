@@ -37,8 +37,8 @@ enum XGBattleBingoItem : Int, CustomStringConvertible, Codable, CaseIterable {
 	
 	case none			= 0x0
 	case masterBall = 0x1
-	case ePx1		= 0x2
-	case ePx2		= 0x3
+	case ePx1			= 0x2
+	case ePx2			= 0x3
 	
 	var name : String {
 		get {

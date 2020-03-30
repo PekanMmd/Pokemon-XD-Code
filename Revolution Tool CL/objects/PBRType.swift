@@ -15,12 +15,18 @@ class XGType: NSObject, XGIndexedValue, Codable {
 	
 	var index			 	= 0
 	var effectivenessTable	= [XGEffectivenessValues]()
+    var category = XGMoveCategories.none // dummy for gc compatibility
 	
-	var nameID : Int {
-		if self.index < 0 || self.index > kNumberOfTypes {
-			return 0
-		}
-		return kFirstTypeNameID + self.index
+    var nameID : Int {
+        get {
+            if self.index < 0 || self.index > kNumberOfTypes {
+                return 0
+            }
+            return kFirstTypeNameID + self.index
+        }
+        set {
+            // get only atm, set will be ignored
+        }
 	}
 	var name : XGString {
 		get {
@@ -49,7 +55,6 @@ class XGType: NSObject, XGIndexedValue, Codable {
 	}
 	
 	@objc func save() {
-		
 		let data = PBRDataTableEntry.typeMatchups(index: self.index)
 		for i in 0 ..< self.effectivenessTable.count {
 			data.setByte(i, to: effectivenessTable[i].rawValue)
@@ -57,8 +62,6 @@ class XGType: NSObject, XGIndexedValue, Codable {
 		
 		data.save()
 	}
-	
-	
 }
 
 

@@ -69,7 +69,7 @@ class XGMovePopover: XGPopover, UISearchResultsUpdating, UISearchBarDelegate {
 		}
 		
 		for i in 0 ..< kNumberOfTypes {
-			typeNames.append(XGMoveTypes(rawValue: i)!.name)
+			typeNames.append(XGMoveTypes.type(i).name)
 		}
 		
 	}

@@ -213,8 +213,8 @@ final class XGPokemonStats: NSObject, Codable {
 		self.baseExp		= rel.getByteAtOffset(startOffset + kBaseEXPOffset)
 		self.baseHappiness	= rel.getByteAtOffset(startOffset + kBaseHappinessOffset)
 		
-		self.type1			= XGMoveTypes(rawValue: rel.getByteAtOffset(startOffset + kType1Offset)) ?? .normal
-		self.type2			= XGMoveTypes(rawValue: rel.getByteAtOffset(startOffset + kType2Offset)) ?? .normal
+		self.type1			= XGMoveTypes.type(rel.getByteAtOffset(startOffset + kType1Offset))
+		self.type2			= XGMoveTypes.type(rel.getByteAtOffset(startOffset + kType2Offset))
 		
 		let a1				= rel.getByteAtOffset(startOffset + kAbility1Offset)
 		let a2				= rel.getByteAtOffset(startOffset + kAbility2Offset)
@@ -244,13 +244,10 @@ final class XGPokemonStats: NSObject, Codable {
 		
 		for i in 0 ..< kNumberOfTMsAndHMs  {
 			self.learnableTMs.append(rel.getByteAtOffset(startOffset + kFirstTMOffset + i) == 1)
-			
 		}
 		
 		for i in 0 ..< kNumberOfTutorMoves  {
-			
 			self.tutorMoves.append(rel.getByteAtOffset(startOffset + kFirstTutorMoveOffset + i) == 1)
-			
 		}
 		
 		for i in 0 ..< kNumberOfLevelUpMoves {
@@ -382,7 +379,111 @@ extension XGPokemonStats: XGEnumerable {
 	}
 }
 
-
+extension XGPokemonStats: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "Pokemon Stats"
+	}
+	
+	var isDocumentable: Bool {
+		return catchRate != 0
+	}
+	
+	var documentableName: String {
+		return enumerableName + " - " + (enumerableValue ?? "")
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "hex index", "national index", "name", "type 1", "type 2", "ability 1", "ability 2", "base HP", "base attack", "base defense", "base special attack", "base special defense", "base speed", "species", "level up rate", "gender ratio", "catch rate", "exp yield", "base happiness", "wild item 1", "wild item 2", "HP yield", "attack yield", "defense yield", "special attack yield", "special defense yield", "speed yield", "evolutions", "learnable tutor moves", "learnable TMs", "level up moves"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return index.string
+		case "hex index":
+			return index.hexString()
+		case "name":
+			return name.string
+		case "national index":
+			return nationalIndex.string
+		case "type 1":
+			return type1.name
+		case "type 2":
+			return type2.name
+		case "ability 1":
+			return ability1.name.string
+		case "ability 2":
+			return ability2.name.string
+		case "base attack":
+			return attack.string
+		case "base HP":
+			return hp.string
+		case "base defense":
+			return defense.string
+		case "base special attack":
+			return specialAttack.string
+		case "base special defense":
+			return specialDefense.string
+		case "base speed":
+			return speed.string
+		case "species":
+			return species.string
+		case "level up rate":
+			return levelUpRate.string
+		case "gender ratio":
+			return genderRatio.string
+		case "catch rate":
+			return catchRate.string
+		case "exp yield":
+			return baseExp.string
+		case "base happiness":
+			return baseHappiness.string
+		case "wild item 1":
+			return heldItem1.name.string
+		case "wild item 2":
+			return heldItem2.name.string
+		case "attack yield":
+			return attackYield.string
+		case "defense yield":
+			return defenseYield.string
+		case "HP yield":
+			return hpYield.string
+		case "special attack yield":
+			return specialAttackYield.string
+		case "special defense yield":
+			return specialDefenseYield.string
+		case "speed yield":
+			return speedYield.string
+		case "evolutions":
+			var evolutionString = ""
+			for evolution in evolutions where evolution.evolutionMethod != .none {
+				evolutionString += "\n" + evolution.documentableFields
+			}
+			return evolutionString
+		case "learnable tutor moves":
+			var tutorString = ""
+			for i in 0 ..< tutorMoves.count {
+				tutorString += "\n" + XGTMs.tutor(i).move.name.string + ": " + tutorMoves[i].string
+			}
+			return tutorString
+		case "learnable TMs":
+			var tmString = ""
+			for i in 0 ..< learnableTMs.count {
+				tmString += "\n" + XGTMs.tm(i).move.name.string + ": " + learnableTMs[i].string
+			}
+			return tmString
+		case "level up moves":
+			var movesString = ""
+			for lum in levelUpMoves where lum.move.index != 0 {
+				movesString += "\n" + lum.documentableFields
+			}
+			return movesString
+		default:
+			return ""
+		}
+	}
+}
 
 
 

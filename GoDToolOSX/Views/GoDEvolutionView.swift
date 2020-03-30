@@ -75,8 +75,8 @@ class GoDEvolutionView: NSView {
 			let evolution = self.delegate.pokemon.evolutions[self.index]
 			let evolvesInto = XGPokemon.pokemon(evolution.evolvesInto)
 			let method = evolution.evolutionMethod
-			self.pokemonPopUp.selectPokemon(pokemon: evolvesInto)
-			self.methodPopUp.selectEvolutionMethod(method: method)
+			self.pokemonPopUp.select(evolvesInto)
+			self.methodPopUp.select(method)
 			self.coniditionPopUp.method = method
 			self.coniditionPopUp.selectCondition(condition: evolution.condition)
 			

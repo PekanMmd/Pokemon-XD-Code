@@ -36,6 +36,14 @@ enum XGGame {
 	case Colosseum
 	case XD
 	case PBR
+
+	var name: String {
+		switch self {
+		case .Colosseum: return "Pokemon Colosseum"
+		case .XD: return "Pokemon XD: Gale of Darkness"
+		case .PBR: return "Pokemon Battle Revolution"
+		}
+	}
 }
 
 var tocData = XGISO.extractTOC()
@@ -80,7 +88,7 @@ class XGISO: NSObject {
 		let TOCStart  = self.data.get4BytesAtOffset(kTOCStartOffsetLocation)
 		let TOCLength = self.data.get4BytesAtOffset(kTOCFileSizeLocation)
 		
-		if verbose {
+		if settings.verbose {
 			printg("DOL start: \(DOLStart.hexString()), TOC start: \(TOCStart.hexString()), TOC size: \(TOCLength.hexString())")
 		}
 		
@@ -121,7 +129,7 @@ class XGISO: NSObject {
 				fileSizes[fileName]     = fileSize
 				fileDataOffsets[fileName] = o
 				
-				if verbose {
+				if settings.verbose {
 					printg("index \(i): found file \(fileName) @offset \(o.hexString())")
 				}
 				
@@ -138,9 +146,9 @@ class XGISO: NSObject {
 	}
 	
 	@objc func importAllFiles() {
-		var files = XGFolders.FSYS.files ?? [XGFiles]()
-		files += XGFolders.AutoFSYS.files ?? [XGFiles]()
-		files += XGFolders.MenuFSYS.files ?? [XGFiles]()
+		var files = XGFolders.FSYS.files
+		files += XGFolders.AutoFSYS.files
+		files += XGFolders.MenuFSYS.files
 		files = files.filter { (f) -> Bool in
 			return f.fileType == .fsys
 		}
@@ -165,7 +173,7 @@ class XGISO: NSObject {
 	
 	func importFiles(_ fileList: [XGFiles]) {
 		
-		if increaseFileSizes {
+		if settings.increaseFileSizes {
 			for file in fileList {
 				printg("importing file to ISO: " + file.fileName)
 				self.shiftAndReplaceFileEfficiently(file)
@@ -236,14 +244,14 @@ class XGISO: NSObject {
 			return nil
 		}
 		
-		if verbose {
+		if settings.verbose {
 			printg("\(filename) - start: \(start!.hexString()) size: \(size!.hexString())")
 		}
 		
 		let data = self.data
 		let bytes = data.getCharStreamFromOffset(start!, length: size!)
 		
-		if verbose {
+		if settings.verbose {
 			printg("\(filename): read \(bytes.count) bytes")
 		}
 		
@@ -292,7 +300,7 @@ class XGISO: NSObject {
 	}
 	
 	func shiftAndReplaceFileEfficiently(_ file: XGFiles) {
-		if verbose {
+		if settings.verbose {
 			printg("shifting files and replacing file:", file.fileName)
 		}
 		if file.fileName == XGFiles.dol.fileName || file.fileName == XGFiles.toc.fileName {
@@ -632,7 +640,7 @@ class XGISO: NSObject {
 			return
 		}
 		
-		if verbose {
+		if settings.verbose {
 			printg("Moving iso file:", name, "to:", startOffset.hexString())
 		}
 		
@@ -651,7 +659,7 @@ class XGISO: NSObject {
 			return
 		}
 		
-		if verbose {
+		if settings.verbose {
 			printg("shifting iso file:", name, "by:", offset.hexString(), " bytes")
 		}
 		
@@ -671,12 +679,12 @@ class XGISO: NSObject {
 	}
 	
 	@objc func save() {
-		if verbose {
+		if settings.verbose {
 			printg("saving iso...")
 		}
 		self.importToc(saveWhenDone: false)
 		self.data.save()
-		if verbose {
+		if settings.verbose {
 			printg("saved iso")
 		}
 	}
@@ -772,7 +780,7 @@ class XGISO: NSObject {
 			for file in ISO.allFileNames where XGMaps(rawValue: file.substring(from: 0, to: 2)) != nil {
 				let xgf = XGFiles.nameAndFolder(file, .AutoFSYS)
 				if !xgf.exists {
-					if verbose {
+					if settings.verbose {
 						printg("extracting auto fsys file: \(xgf.fileName)")
 					}
 					if let data = dataForFile(filename: file) {
@@ -796,7 +804,7 @@ class XGISO: NSObject {
 		for file in self.menuFsysList + menus {
 			let xgf = XGFiles.nameAndFolder(file, .MenuFSYS)
 			if !xgf.exists {
-				if verbose {
+				if settings.verbose {
 					printg("extracting menu fsys file: \(xgf.fileName)")
 				}
 				if let data = dataForFile(filename: file) {
@@ -813,7 +821,7 @@ class XGISO: NSObject {
 		for file in self.fsysList {
 			let xgf = XGFiles.nameAndFolder(file, .FSYS)
 			if !xgf.exists {
-				if verbose {
+				if settings.verbose {
 					printg("extracting common file: \(xgf.fileName)")
 				}
 				if let data = dataForFile(filename: file) {
@@ -827,15 +835,15 @@ class XGISO: NSObject {
 	}
 	
 	@objc func extractAllFSYS() {
-		if verbose {
+		if settings.verbose {
 			printg("extracting: AutoFSYS")
 		}
 		extractAutoFSYS()
-		if verbose {
+		if settings.verbose {
 			printg("extracting: MenuFSYS")
 		}
 		extractMenuFSYS()
-		if verbose {
+		if settings.verbose {
 			printg("extracting: FSYS")
 		}
 		extractFSYS()
@@ -843,7 +851,7 @@ class XGISO: NSObject {
 	
 	@objc func extractCommon() {
 		stringsLoaded = false
-		if verbose {
+		if settings.verbose {
 			printg("extracting: \(XGFiles.common_rel.fileName)")
 		}
 		if !XGFiles.fsys("common").exists {
@@ -855,7 +863,7 @@ class XGISO: NSObject {
 			rel.save()
 		}
 		
-		if verbose {
+		if settings.verbose {
 			printg("extracting: \(XGFiles.tableres2.fileName)")
 		}
 		if game == .XD {
@@ -869,7 +877,7 @@ class XGISO: NSObject {
 			}
 		}
 		
-		if verbose {
+		if settings.verbose {
 			printg("extracting: \(XGFiles.pocket_menu.fileName)")
 		}
 		if !XGFiles.fsys("pocket_menu").exists {
@@ -891,7 +899,7 @@ class XGISO: NSObject {
 			for file in XGFolders.AutoFSYS.files where file.fileType == .fsys {
 				let msg = XGFiles.msg(file.fileName.removeFileExtensions())
 				if !msg.exists {
-					if verbose {
+					if settings.verbose {
 						printg("extracting msg: \(msg.fileName)")
 					}
 					let fsys = file.fsysData
@@ -914,7 +922,7 @@ class XGISO: NSObject {
 		for file in XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files where file.fileType == .fsys {
 			let scd = XGFiles.scd(file.fileName.removeFileExtensions())
 			if !scd.exists {
-				if verbose {
+				if settings.verbose {
 					printg("extracting scd: \(scd.fileName)")
 				}
 				let fsys = file.fsysData
@@ -931,7 +939,7 @@ class XGISO: NSObject {
 		for file in XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files where file.fileType == .fsys {
 			let rel = XGFiles.rel(file.fileName.removeFileExtensions())
 			if !rel.exists {
-				if verbose {
+				if settings.verbose {
 					printg("extracting rel: \(rel.fileName)")
 				}
 				let fsys = file.fsysData
@@ -947,7 +955,7 @@ class XGISO: NSObject {
 		for file in XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files where file.fileType == .fsys {
 			let col = XGFiles.ccd(file.fileName.removeFileExtensions())
 			if !col.exists {
-				if verbose {
+				if settings.verbose {
 					printg("extracting col: \(col.fileName)")
 				}
 				let fsys = file.fsysData
@@ -986,7 +994,7 @@ class XGISO: NSObject {
 		ISO.extractRels()
 		printg("extracting: collision data")
 		ISO.extractCols()
-		printg("extraction complete")
+		printg("extracted all files.")
 	}
 	
 }

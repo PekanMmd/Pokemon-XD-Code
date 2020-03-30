@@ -106,6 +106,8 @@ enum XGFileTypes : Int {
 		case .unknown: return ".bin"
 		}
 	}
+
+	static let imageFormats : [XGFileTypes] = [.png, .jpeg, .bmp]
 }
 
 

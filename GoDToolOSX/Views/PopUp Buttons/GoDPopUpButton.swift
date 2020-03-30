@@ -12,20 +12,18 @@ class GoDPopUpButton: NSPopUpButton {
 
 	required init?(coder: NSCoder) {
 		super.init(coder: coder)
-		
 		self.initialise()
 	}
 	
 	init() {
 		super.init(frame: .zero, pullsDown: false)
-		
 		self.initialise()
 	}
 	
 	func initialise() {
 		self.removeAllItems()
 		self.alignment = .center
-		self.setUpItems()
+		setUpItems()
 	}
 	
 	func setUpItems() {

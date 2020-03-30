@@ -30,56 +30,48 @@ enum PBRRandomMoveType : Int {
 	}
 }
 
-enum XGMoves : XGIndexedValue {
+enum XGMoves: XGIndexedValue {
 	
 	case move(Int)
 	case randomMove(PBRRandomMoveStyle, PBRRandomMoveType)
 	
 	var index : Int {
-		get {
-			switch self {
-				case .move(let i): return i
-				case .randomMove(let s, let t): return 0x8000 + (s.rawValue << 4) + t.rawValue
-				
-			}
+		switch self {
+		case .move(let i): return i
+		case .randomMove(let s, let t): return 0x8000 + (s.rawValue << 4) + t.rawValue
+			
 		}
 	}
 	
 	var nameID : Int {
-		get {
-			switch self {
-			case .move:
-				return data.nameID
-			default:
-				return 0
-			}
-			
+		switch self {
+		case .move:
+			return data.nameID
+		default:
+			return 0
 		}
 	}
 	
 	var name : XGString {
-		get {
-			switch self {
-			case .move:
-				return getStringSafelyWithID(id: nameID)
-			case .randomMove(let s, let t):
-				let text = "Random " + s.string + " " + t.string
-				return XGString(string: text, file: nil, sid: nil)
-			}
-			
+		switch self {
+		case .move:
+			return getStringSafelyWithID(id: nameID)
+		case .randomMove(let s, let t):
+			let text = "Random " + s.string + " " + t.string
+			return XGString(string: text, file: nil, sid: nil)
 		}
 	}
 	
 	var type : XGMoveTypes {
-		get {
-			return data.type
-		}
+		return data.type
 	}
 	
 	var data : XGMove {
-		get {
-			return XGMove(index: self.index)
-		}
+		return XGMove(index: self.index)
+	}
+	
+	var isShadowMove: Bool {
+		return false
 	}
 	
 	static func allMoves() -> [XGMoves] {
@@ -109,11 +101,8 @@ func allMoves() -> [String : XGMoves] {
 	var dic = [String : XGMoves]()
 	
 	for i in 0 ..< kNumberOfMoves {
-		
 		let a = XGMoves.move(i)
-		
 		dic[a.name.unformattedString.simplified] = a
-		
 	}
 	
 	return dic
@@ -136,7 +125,41 @@ func allMovesArray() -> [XGMoves] {
 }
 
 
+extension XGMoves: Codable {
+	enum CodingKeys: String, CodingKey {
+		case index, name
+	}
+	
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let index = try container.decode(Int.self, forKey: .index)
+		self = .move(index)
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.index, forKey: .index)
+		try container.encode(self.name.string, forKey: .name)
+	}
+}
 
+extension XGMoves: XGEnumerable {
+	var enumerableName: String {
+		return name.string.spaceToLength(20)
+	}
+	
+	var enumerableValue: String? {
+		return index.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Moves"
+	}
+	
+	static var allValues: [XGMoves] {
+		return XGMoves.allMoves()
+	}
+}
 
 
 

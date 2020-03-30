@@ -11,7 +11,7 @@ let kNumberOfTrainerModels = 0x4b
 
 let kFirstTrainerPKXIdentifierOffset = region == .JP ? 0x359FA8 : 0x36d840 // in start.dol
 
-enum XGTrainerModels : Int, Codable {
+enum XGTrainerModels : Int, Codable, CaseIterable {
 	
 	case none	= 0x00
 	
@@ -144,3 +144,34 @@ extension XGTrainerModels: XGEnumerable {
 	}
 }
 
+extension XGTrainerModels: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "Trainer Models"
+	}
+	
+	var documentableName: String {
+		return enumerableName
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "hex index", "name", "file name", "fsys ID"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return rawValue.string
+		case "hex index":
+			return rawValue.hexString()
+		case "name":
+			return name
+		case "filename":
+			return pkxName ?? ""
+		case "fsys ID":
+			return String(pkxModelIdentifier)
+		default:
+			return ""
+		}
+	}
+}

@@ -914,15 +914,15 @@ indirect enum XDSExpr {
 			if variable == kXDSLastResultVariable {
 				return (2,0)
 			} else if gvar.contains(variable) {
-				return (0, gvar.index(of: variable)!)
+				return (0, gvar.firstIndex(of: variable)!)
 			} else if arry.contains(variable) {
-				return (3, arry.index(of: variable)! + 0x200)
+				return (3, arry.firstIndex(of: variable)! + 0x200)
 			} else if giri.contains(variable) {
-				return (3, giri.index(of: variable)! + 0x80)
+				return (3, giri.firstIndex(of: variable)! + 0x80)
 			} else if locals.contains(variable) {
-				return (1, (0x10000 - (locals.index(of: variable)! + 1)) & 0xFFFF)
+				return (1, (0x10000 - (locals.firstIndex(of: variable)! + 1)) & 0xFFFF)
 			} else if args.contains(variable) {
-				return (1, args.index(of: variable)! + 1)
+				return (1, args.firstIndex(of: variable)! + 1)
 			} else if let classInfo = XGScriptClass.getClassNamed(variable) {
 				return (3, classInfo.index)
 			} else {

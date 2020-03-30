@@ -10,13 +10,13 @@ import Foundation
 
 // Data is found in common_rel
 
-//let kFirstNatureStartOffset			= 0x47728
-let kSizeOfNatureData					= 0x28
+//let kFirstNatureStartOffset		    = 0x47728
+let kSizeOfNatureData				= 0x28
 let kNumberOfNatures				= 0x19
 
-let kBattlePurificationOffset			= 0x00
+let kBattlePurificationOffset		= 0x00
 let kWalkingPurificationOffset		= 0x01
-let kCallPurificationOffset				= 0x02
+let kCallPurificationOffset			= 0x02
 let kDayCarePurificationOffset		= 0x03
 let kColognePurificationOffset		= 0x04
 
@@ -26,7 +26,7 @@ let kSpAtkModificationOffset		= 0x07
 let kSpDefModificationOffset		= 0x08
 let kSpeedModificationOffset		= 0x09
 
-let kNatureNameIDOffset			= 0x14
+let kNatureNameIDOffset				= 0x14
 
 class XGNature: NSObject {
 	

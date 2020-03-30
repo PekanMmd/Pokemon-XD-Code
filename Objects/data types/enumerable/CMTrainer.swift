@@ -26,7 +26,7 @@ let kTrainerDefeatTextIDOffset		= 0x2C
 let kFirstTrainerLoseText2Offset	= 0x32
 let kTrainerFirstItemOffset			= 0x14
 
-class XGTrainer: NSObject, Codable {
+final class XGTrainer: NSObject, Codable {
 	
 	var index				= 0x0
 	
@@ -142,56 +142,6 @@ class XGTrainer: NSObject, Codable {
 		
 	}
 	
-	var dictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			dictRep["index"] = self.index as AnyObject?
-			dictRep["nameID"] = self.nameID as AnyObject?
-			dictRep["preBattleTextID"] = self.preBattleTextID as AnyObject?
-			dictRep["victoryTextID"] = self.victoryTextID as AnyObject?
-			dictRep["defeatTextID"] = self.defeatTextID as AnyObject?
-			dictRep["shadowMask"] = self.shadowMask as AnyObject?
-			dictRep["AI"] = self.AI as AnyObject?
-			
-			dictRep["trainerClass"] = self.trainerClass.dictionaryRepresentation as AnyObject?
-			dictRep["trainerModel"] = self.trainerModel.dictionaryRepresentation as AnyObject?
-			
-			var pokemonArray = [ [String : AnyObject] ]()
-			for a in pokemon {
-				pokemonArray.append(a.dictionaryRepresentation)
-			}
-			dictRep["pokemon"] = pokemonArray as AnyObject?
-			
-			return dictRep
-		}
-	}
-	
-	var readableDictionaryRepresentation : [String : AnyObject] {
-		get {
-			
-			var dictRep = [String : AnyObject]()
-			dictRep["index"] = self.index as AnyObject?
-			dictRep["preBattleText"] = getStringSafelyWithID(id: self.preBattleTextID).string as AnyObject
-			dictRep["victoryText"] = getStringSafelyWithID(id: self.victoryTextID).string as AnyObject
-			dictRep["defeatText"] = getStringSafelyWithID(id: self.defeatTextID).string as AnyObject
-			dictRep["hasShadowPokemon"] = (self.shadowMask > 0) as AnyObject?
-			dictRep["AI"] = self.AI as AnyObject?
-			
-			dictRep["trainerClass"] = self.trainerClass.name.string as AnyObject?
-			dictRep["trainerModel"] = self.trainerModel.name as AnyObject?
-			
-			var pokemonArray = [AnyObject]()
-			for a in pokemon {
-				if a.isSet {
-					pokemonArray.append(a.readableDictionaryRepresentation as AnyObject)
-				}
-			}
-			dictRep["pokemon"] = pokemonArray as AnyObject?
-			
-			return [self.name.string : dictRep as AnyObject]
-		}
-	}
-	
 }
 
 func allTrainers() -> [XGTrainer] {
@@ -220,7 +170,7 @@ extension XGTrainer: XGEnumerable {
 	static var allValues: [XGTrainer] {
 		var values = [XGTrainer]()
 		for i in 0 ..< CommonIndexes.NumberOfTrainers.value {
-			values.append(Trainer(index: i))
+			values.append(XGTrainer(index: i))
 		}
 		return values
 	}

@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="c64-dF-HXy">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Type Editor-->
+        <scene sceneID="taU-gM-Sph">
+            <objects>
+                <viewController title="Type Editor" id="c64-dF-HXy" customClass="GoDTypeViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="aje-fz-fPh">
+                        <rect key="frame" x="0.0" y="0.0" width="640" height="516"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="T0k-0W-ify" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
+                                <rect key="frame" x="210" y="10" width="420" height="496"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8mI-Mf-UPc">
+                                        <rect key="frame" x="233" y="446" width="44" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="cbv-5H-tjp"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Name:" id="JqS-GD-nY2">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MOA-o1-Tih">
+                                        <rect key="frame" x="18" y="446" width="64" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="d1t-tV-62Y"/>
+                                            <constraint firstAttribute="width" constant="60" id="hge-lr-Qvw"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Name ID:" id="K4C-vb-4Ty">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OPL-yF-GZb">
+                                        <rect key="frame" x="285" y="446" width="115" height="30"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="rfS-go-2XT">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TSX-ow-dl3">
+                                        <rect key="frame" x="90" y="446" width="115" height="30"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="aR4-Tp-Hop">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iHs-tS-KYc" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="18" y="357" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="VPS-8F-sHr"/>
+                                            <constraint firstAttribute="width" constant="120" id="bjx-ec-dtZ"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="NiL-l9-9Xb" id="zr7-YY-baA">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="mCr-Uy-6iP">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="NiL-l9-9Xb"/>
+                                                    <menuItem title="Item 2" id="pgs-Sc-TY5"/>
+                                                    <menuItem title="Item 3" id="QxX-dP-8PY"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QnQ-QK-3l5">
+                                        <rect key="frame" x="18" y="380" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="TQb-g3-j9i"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Normal" id="A2x-Ch-ZEX">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NUL-Ym-HFg" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="148" y="357" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="9GO-up-Eyd"/>
+                                            <constraint firstAttribute="width" constant="120" id="hCC-LO-qzK"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="EL9-wY-h3r" id="YQm-Jt-V4P">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="kW9-TE-xK1">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="EL9-wY-h3r"/>
+                                                    <menuItem title="Item 2" id="CLf-nY-mQv"/>
+                                                    <menuItem title="Item 3" id="9yj-Yc-Mqg"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ynx-Vo-SMC">
+                                        <rect key="frame" x="148" y="380" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="Mia-E7-5pA"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Fight" id="Ggo-xU-xT2">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7hS-14-598" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="278" y="357" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="6QI-tt-yNw"/>
+                                            <constraint firstAttribute="width" constant="120" id="uZQ-o8-NTE"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="QeS-ce-u9j" id="iGd-ZN-RNv">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="rTX-RD-vQ3">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="QeS-ce-u9j"/>
+                                                    <menuItem title="Item 2" id="119-Zk-nZb"/>
+                                                    <menuItem title="Item 3" id="lRl-gz-eCK"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HWM-gX-ago">
+                                        <rect key="frame" x="278" y="380" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="cBH-BD-4Na"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Flying" id="vFj-2U-uT0">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OaI-v1-0Au" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="18" y="297" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="0m0-GS-Oru"/>
+                                            <constraint firstAttribute="width" constant="120" id="zLT-VU-cAA"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9FZ-2e-u5k" id="ENV-wD-5Dv">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="bMe-mf-UYn">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="9FZ-2e-u5k"/>
+                                                    <menuItem title="Item 2" id="4Xw-oe-pM8"/>
+                                                    <menuItem title="Item 3" id="rlZ-op-Zes"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wfV-02-3yr">
+                                        <rect key="frame" x="18" y="320" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="48N-4T-lFJ"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Poison" id="Rmv-3f-DpA">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cit-tv-kXx" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="148" y="297" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="120" id="NID-VB-Rrx"/>
+                                            <constraint firstAttribute="height" constant="20" id="hL0-0d-XJS"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="zQ8-db-hR1" id="B00-Up-wzC">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="3UR-L2-XFc">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="zQ8-db-hR1"/>
+                                                    <menuItem title="Item 2" id="TdC-ue-iqB"/>
+                                                    <menuItem title="Item 3" id="S2q-6S-Hb9"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6ha-TK-0hO">
+                                        <rect key="frame" x="148" y="320" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="jEa-Cd-Xue"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Ground" id="zxG-G7-lnA">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xQA-2U-OqE" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="278" y="297" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="4Yh-Kc-gib"/>
+                                            <constraint firstAttribute="width" constant="120" id="PKY-if-wGo"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Ogr-vA-WLH" id="pqf-k0-ScD">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="BOx-dR-Pkq">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="Ogr-vA-WLH"/>
+                                                    <menuItem title="Item 2" id="LI3-eM-C6k"/>
+                                                    <menuItem title="Item 3" id="Du0-JN-f2w"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VCE-Cq-008">
+                                        <rect key="frame" x="278" y="320" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="XNe-my-RpY"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Rock" id="rVr-UU-7rr">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JlA-yo-nyf" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="18" y="237" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="eug-cH-vhX"/>
+                                            <constraint firstAttribute="width" constant="120" id="qb7-m7-IxX"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Yq2-mD-LDN" id="DwX-Fq-Apv">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="Q0X-2x-iQG">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="Yq2-mD-LDN"/>
+                                                    <menuItem title="Item 2" id="hw1-yh-aLJ"/>
+                                                    <menuItem title="Item 3" id="jcb-hM-zIQ"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GoO-CQ-wSC">
+                                        <rect key="frame" x="18" y="260" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="gUP-XF-5si"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Bug" id="eMK-S6-AI6">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qgM-nE-Kuj" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="148" y="237" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="UHc-8I-axG"/>
+                                            <constraint firstAttribute="width" constant="120" id="zbW-KF-C1v"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ave-my-sv3" id="uJV-Ie-R57">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="IDY-Ob-UcR">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="ave-my-sv3"/>
+                                                    <menuItem title="Item 2" id="Pst-DT-aRK"/>
+                                                    <menuItem title="Item 3" id="ftM-JX-KbP"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="F9c-lm-hcK">
+                                        <rect key="frame" x="148" y="260" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="FOp-mZ-sT8"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Ghost" id="g79-vY-FDd">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XSx-VN-m1X" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="278" y="237" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="QGg-bE-Upi"/>
+                                            <constraint firstAttribute="width" constant="120" id="zFa-wh-izh"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Cch-e5-TTh" id="Czu-kk-ss5">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="cyJ-so-kmG">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="Cch-e5-TTh"/>
+                                                    <menuItem title="Item 2" id="2ui-Ul-GyU"/>
+                                                    <menuItem title="Item 3" id="5V0-Sz-avQ"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sBX-cw-2C4">
+                                        <rect key="frame" x="278" y="260" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="VlW-18-2lg"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Steel" id="fgf-ne-7yQ">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2ou-vK-bzS" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="18" y="177" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="120" id="9TF-XZ-xL4"/>
+                                            <constraint firstAttribute="height" constant="20" id="rUc-hG-1cw"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="s3b-yN-aLY" id="PvP-sG-Lca">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="9kT-lL-pUC">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="s3b-yN-aLY"/>
+                                                    <menuItem title="Item 2" id="4W4-o5-0xN"/>
+                                                    <menuItem title="Item 3" id="oa0-pE-28R"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bf4-KL-cCm">
+                                        <rect key="frame" x="18" y="200" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="ngm-E0-S08"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="???" id="1He-vL-01z">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Y5-et-rtf" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="148" y="177" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="64w-1Q-Sfy"/>
+                                            <constraint firstAttribute="width" constant="120" id="PEq-dG-VTv"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="GQv-Fe-QXh" id="Hlb-pT-Yph">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="Yyq-sv-ETK">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="GQv-Fe-QXh"/>
+                                                    <menuItem title="Item 2" id="FH2-d7-Ssr"/>
+                                                    <menuItem title="Item 3" id="Qex-Nd-69a"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zbZ-GB-0OG">
+                                        <rect key="frame" x="148" y="200" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="v9i-iZ-B0V"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Fire" id="0WL-t6-n7W">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="V8b-h1-cpo" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="278" y="177" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="CzX-iB-8yg"/>
+                                            <constraint firstAttribute="width" constant="120" id="x9q-29-F0b"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="akP-YR-ES8" id="ImQ-Qz-Ej6">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="YAS-l7-RTe">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="akP-YR-ES8"/>
+                                                    <menuItem title="Item 2" id="RQ6-so-MeR"/>
+                                                    <menuItem title="Item 3" id="JJM-HH-QUJ"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vv0-vE-JwB">
+                                        <rect key="frame" x="278" y="200" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="lxe-DC-raD"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Water" id="n5h-r3-vp7">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kx0-Ju-PIo" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="18" y="117" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="72B-Ub-RQS"/>
+                                            <constraint firstAttribute="width" constant="120" id="PND-1b-otT"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Csh-XA-Axs" id="4eQ-j7-Gz8">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="mmj-5f-9lp">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="Csh-XA-Axs"/>
+                                                    <menuItem title="Item 2" id="7KD-ev-F3K"/>
+                                                    <menuItem title="Item 3" id="gcz-Tn-J4m"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tjH-N6-odi">
+                                        <rect key="frame" x="18" y="140" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="35p-P2-HMw"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Grass" id="wh8-H5-h6n">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="srg-xK-LBw" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="148" y="117" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="XaP-yI-VeK"/>
+                                            <constraint firstAttribute="width" constant="120" id="pC3-uS-LzV"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="cbJ-6P-oUM" id="bAK-1T-ErB">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="VIV-ln-uir">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="cbJ-6P-oUM"/>
+                                                    <menuItem title="Item 2" id="yJp-Cv-TDX"/>
+                                                    <menuItem title="Item 3" id="keu-sH-a8v"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Lyx-sF-7hb">
+                                        <rect key="frame" x="148" y="140" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="F7x-1G-4GY"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Electrc" id="WjI-OL-REi">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NgM-EI-QEs" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="278" y="117" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="7Z1-oW-NXA"/>
+                                            <constraint firstAttribute="width" constant="120" id="n9s-25-VLX"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="34w-Vq-Mdy" id="j72-pE-3Sv">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="Zic-Gs-5GF">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="34w-Vq-Mdy"/>
+                                                    <menuItem title="Item 2" id="Uyz-Fi-Ojz"/>
+                                                    <menuItem title="Item 3" id="sUh-Qp-vER"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="o6R-Sr-sbu">
+                                        <rect key="frame" x="278" y="140" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="4h3-Ow-9iS"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Psychc" id="pff-Rm-JFa">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fLs-ZB-ebI" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="18" y="57" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="120" id="1dN-qr-fnI"/>
+                                            <constraint firstAttribute="height" constant="20" id="3Rg-Nt-RAl"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="gTB-xn-VHE" id="17Z-xu-UrH">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="NDS-hL-Ee2">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="gTB-xn-VHE"/>
+                                                    <menuItem title="Item 2" id="mqe-6k-xTe"/>
+                                                    <menuItem title="Item 3" id="hdE-bH-eLv"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7dn-qU-m88">
+                                        <rect key="frame" x="18" y="80" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="UfB-Jl-13B"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Ice" id="apr-uo-Q7l">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qSa-7W-9el" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="148" y="57" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="OeC-Cn-MXX"/>
+                                            <constraint firstAttribute="width" constant="120" id="djs-f3-Rce"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="sc6-4C-kFT" id="eWq-iZ-eNA">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="lVU-JD-7s8">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="sc6-4C-kFT"/>
+                                                    <menuItem title="Item 2" id="KFp-6R-09N"/>
+                                                    <menuItem title="Item 3" id="Ahx-lf-g8e"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8Iy-MK-Sk4">
+                                        <rect key="frame" x="148" y="80" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="l6Y-c5-IyE"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Dragon" id="n9a-Tt-UJD">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Svc-cM-Tkv" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="278" y="57" width="125" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="120" id="CWs-7p-Kyk"/>
+                                            <constraint firstAttribute="height" constant="20" id="HxH-hO-cjF"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Ubw-tt-ol7" id="rXt-FW-nhh">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <menu key="menu" title="Super Effective" id="tLN-pQ-aFu">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="Ubw-tt-ol7"/>
+                                                    <menuItem title="Item 2" id="Efd-iW-d1n"/>
+                                                    <menuItem title="Item 3" id="d4H-69-S4e"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hap-b1-cmo">
+                                        <rect key="frame" x="278" y="80" width="124" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="6QC-Zz-8sg"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Dark" id="Xx2-3e-M6J">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="l81-b6-xEY">
+                                        <rect key="frame" x="84" y="409" width="73" height="18"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="70" id="DgF-XC-AJL"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="radio" title="Physical" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="5Sa-qX-PjD">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="radioCategory:" target="c64-dF-HXy" id="S3z-SR-fH5"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hqt-rg-hec">
+                                        <rect key="frame" x="174" y="409" width="73" height="18"/>
+                                        <buttonCell key="cell" type="radio" title="  Special" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="ZcY-gj-zco">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="radioCategory:" target="c64-dF-HXy" id="SzH-c8-2Br"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tk2-L1-Eaz">
+                                        <rect key="frame" x="264" y="409" width="73" height="18"/>
+                                        <buttonCell key="cell" type="radio" title=" Neither" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="wYd-pi-mM5">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="radioCategory:" target="c64-dF-HXy" id="qjH-g1-9tE"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NSB-II-D6f">
+                                        <rect key="frame" x="144" y="13" width="132" height="31"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="120" id="DkY-pS-SFF"/>
+                                            <constraint firstAttribute="height" constant="20" id="U3Y-CA-yZ0"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Nm4-RN-UQ9">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="save:" target="c64-dF-HXy" id="QEo-pO-Eud"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="vv0-vE-JwB" firstAttribute="top" secondItem="Bf4-KL-cCm" secondAttribute="top" id="08e-nh-CTg"/>
+                                    <constraint firstItem="JlA-yo-nyf" firstAttribute="leading" secondItem="GoO-CQ-wSC" secondAttribute="leading" id="0ft-y5-mG0"/>
+                                    <constraint firstItem="xQA-2U-OqE" firstAttribute="top" secondItem="VCE-Cq-008" secondAttribute="bottom" id="1Nm-dg-pgq"/>
+                                    <constraint firstItem="OaI-v1-0Au" firstAttribute="trailing" secondItem="wfV-02-3yr" secondAttribute="trailing" id="1g8-Kg-M3V"/>
+                                    <constraint firstItem="ynx-Vo-SMC" firstAttribute="centerX" secondItem="T0k-0W-ify" secondAttribute="centerX" id="228-GE-E3w"/>
+                                    <constraint firstItem="8Iy-MK-Sk4" firstAttribute="top" secondItem="7dn-qU-m88" secondAttribute="top" id="2Jg-by-xLU"/>
+                                    <constraint firstItem="HWM-gX-ago" firstAttribute="leading" secondItem="ynx-Vo-SMC" secondAttribute="trailing" constant="10" id="2rA-yQ-H2d"/>
+                                    <constraint firstItem="xQA-2U-OqE" firstAttribute="leading" secondItem="VCE-Cq-008" secondAttribute="leading" id="3AV-JW-beq"/>
+                                    <constraint firstItem="MOA-o1-Tih" firstAttribute="top" secondItem="T0k-0W-ify" secondAttribute="top" constant="20" id="4bH-2n-keC"/>
+                                    <constraint firstItem="qgM-nE-Kuj" firstAttribute="leading" secondItem="F9c-lm-hcK" secondAttribute="leading" id="53k-CW-I28"/>
+                                    <constraint firstItem="6ha-TK-0hO" firstAttribute="leading" secondItem="wfV-02-3yr" secondAttribute="trailing" constant="10" id="5lh-RP-Rvf"/>
+                                    <constraint firstItem="Cit-tv-kXx" firstAttribute="leading" secondItem="6ha-TK-0hO" secondAttribute="leading" id="6ZL-dO-hMf"/>
+                                    <constraint firstItem="TSX-ow-dl3" firstAttribute="bottom" secondItem="MOA-o1-Tih" secondAttribute="bottom" id="6zO-SV-3kd"/>
+                                    <constraint firstItem="8Iy-MK-Sk4" firstAttribute="leading" secondItem="7dn-qU-m88" secondAttribute="trailing" constant="10" id="73S-FP-f5o"/>
+                                    <constraint firstItem="srg-xK-LBw" firstAttribute="trailing" secondItem="Lyx-sF-7hb" secondAttribute="trailing" id="74K-4D-vSe"/>
+                                    <constraint firstItem="2ou-vK-bzS" firstAttribute="trailing" secondItem="Bf4-KL-cCm" secondAttribute="trailing" id="7Rt-TV-N7d"/>
+                                    <constraint firstItem="GoO-CQ-wSC" firstAttribute="top" secondItem="OaI-v1-0Au" secondAttribute="bottom" constant="20" id="7yS-wo-2fU"/>
+                                    <constraint firstItem="Hqt-rg-hec" firstAttribute="centerX" secondItem="T0k-0W-ify" secondAttribute="centerX" id="8kZ-hr-1Kn"/>
+                                    <constraint firstItem="6Y5-et-rtf" firstAttribute="trailing" secondItem="zbZ-GB-0OG" secondAttribute="trailing" id="91w-UM-e7j"/>
+                                    <constraint firstItem="zbZ-GB-0OG" firstAttribute="leading" secondItem="Bf4-KL-cCm" secondAttribute="trailing" constant="10" id="93T-g1-c7b"/>
+                                    <constraint firstItem="kx0-Ju-PIo" firstAttribute="top" secondItem="tjH-N6-odi" secondAttribute="bottom" id="A02-8O-3yb"/>
+                                    <constraint firstItem="F9c-lm-hcK" firstAttribute="leading" secondItem="GoO-CQ-wSC" secondAttribute="trailing" constant="10" id="Axq-po-QDf"/>
+                                    <constraint firstItem="Hqt-rg-hec" firstAttribute="top" secondItem="l81-b6-xEY" secondAttribute="top" id="CYH-yd-L2f"/>
+                                    <constraint firstItem="o6R-Sr-sbu" firstAttribute="leading" secondItem="Lyx-sF-7hb" secondAttribute="trailing" constant="10" id="Cqv-pd-gAP"/>
+                                    <constraint firstItem="Cit-tv-kXx" firstAttribute="trailing" secondItem="6ha-TK-0hO" secondAttribute="trailing" id="DK3-Jx-MBR"/>
+                                    <constraint firstItem="Lyx-sF-7hb" firstAttribute="leading" secondItem="tjH-N6-odi" secondAttribute="trailing" constant="10" id="EAB-cW-u2Z"/>
+                                    <constraint firstItem="vv0-vE-JwB" firstAttribute="leading" secondItem="zbZ-GB-0OG" secondAttribute="trailing" constant="10" id="F7q-g1-Mpl"/>
+                                    <constraint firstItem="Svc-cM-Tkv" firstAttribute="leading" secondItem="Hap-b1-cmo" secondAttribute="leading" id="FcR-Lp-Qcg"/>
+                                    <constraint firstItem="8mI-Mf-UPc" firstAttribute="bottom" secondItem="MOA-o1-Tih" secondAttribute="bottom" id="G9d-ll-wum"/>
+                                    <constraint firstItem="tk2-L1-Eaz" firstAttribute="leading" secondItem="Hqt-rg-hec" secondAttribute="trailing" constant="20" id="GE0-VA-a4z"/>
+                                    <constraint firstItem="V8b-h1-cpo" firstAttribute="trailing" secondItem="vv0-vE-JwB" secondAttribute="trailing" id="Gxm-B5-sBM"/>
+                                    <constraint firstItem="OPL-yF-GZb" firstAttribute="top" secondItem="MOA-o1-Tih" secondAttribute="top" id="HTU-af-rkC"/>
+                                    <constraint firstItem="tk2-L1-Eaz" firstAttribute="top" secondItem="l81-b6-xEY" secondAttribute="top" id="HwV-hn-TI0"/>
+                                    <constraint firstItem="NgM-EI-QEs" firstAttribute="top" secondItem="o6R-Sr-sbu" secondAttribute="bottom" id="Hxx-Ie-PPM"/>
+                                    <constraint firstItem="OPL-yF-GZb" firstAttribute="width" secondItem="TSX-ow-dl3" secondAttribute="width" id="I8L-qI-DBD"/>
+                                    <constraint firstItem="2ou-vK-bzS" firstAttribute="leading" secondItem="Bf4-KL-cCm" secondAttribute="leading" id="I8T-1V-kkP"/>
+                                    <constraint firstItem="iHs-tS-KYc" firstAttribute="top" secondItem="QnQ-QK-3l5" secondAttribute="bottom" id="J0j-cS-orz"/>
+                                    <constraint firstItem="8mI-Mf-UPc" firstAttribute="height" secondItem="MOA-o1-Tih" secondAttribute="height" id="JnE-2g-TRc"/>
+                                    <constraint firstItem="Bf4-KL-cCm" firstAttribute="leading" secondItem="QnQ-QK-3l5" secondAttribute="leading" id="JsU-Tj-I6E"/>
+                                    <constraint firstItem="VCE-Cq-008" firstAttribute="leading" secondItem="6ha-TK-0hO" secondAttribute="trailing" constant="10" id="K8R-c3-2s4"/>
+                                    <constraint firstItem="NgM-EI-QEs" firstAttribute="leading" secondItem="o6R-Sr-sbu" secondAttribute="leading" id="KVn-lf-xzg"/>
+                                    <constraint firstItem="HWM-gX-ago" firstAttribute="top" secondItem="QnQ-QK-3l5" secondAttribute="top" id="LC8-Ml-8Yr"/>
+                                    <constraint firstItem="Svc-cM-Tkv" firstAttribute="trailing" secondItem="Hap-b1-cmo" secondAttribute="trailing" id="LQL-vE-oAe"/>
+                                    <constraint firstItem="Lyx-sF-7hb" firstAttribute="top" secondItem="tjH-N6-odi" secondAttribute="top" id="LmW-u3-CEL"/>
+                                    <constraint firstItem="NSB-II-D6f" firstAttribute="top" secondItem="qSa-7W-9el" secondAttribute="bottom" constant="20" id="MZ0-Ts-CQ8"/>
+                                    <constraint firstItem="JlA-yo-nyf" firstAttribute="trailing" secondItem="GoO-CQ-wSC" secondAttribute="trailing" id="N7e-R4-8UB"/>
+                                    <constraint firstItem="fLs-ZB-ebI" firstAttribute="top" secondItem="7dn-qU-m88" secondAttribute="bottom" id="NCV-nt-FgJ"/>
+                                    <constraint firstItem="NSB-II-D6f" firstAttribute="centerX" secondItem="T0k-0W-ify" secondAttribute="centerX" id="NDa-hE-z6R"/>
+                                    <constraint firstItem="7hS-14-598" firstAttribute="trailing" secondItem="HWM-gX-ago" secondAttribute="trailing" id="NcW-Xk-0yG"/>
+                                    <constraint firstItem="2ou-vK-bzS" firstAttribute="top" secondItem="Bf4-KL-cCm" secondAttribute="bottom" id="Ndg-Zw-egS"/>
+                                    <constraint firstItem="8mI-Mf-UPc" firstAttribute="leading" secondItem="TSX-ow-dl3" secondAttribute="trailing" constant="30" id="OZi-vP-KOt"/>
+                                    <constraint firstItem="Bf4-KL-cCm" firstAttribute="top" secondItem="JlA-yo-nyf" secondAttribute="bottom" constant="20" id="OhA-uc-8Gu"/>
+                                    <constraint firstItem="F9c-lm-hcK" firstAttribute="top" secondItem="GoO-CQ-wSC" secondAttribute="top" id="PeI-cK-Na4"/>
+                                    <constraint firstItem="OaI-v1-0Au" firstAttribute="top" secondItem="wfV-02-3yr" secondAttribute="bottom" id="Qb9-4W-myr"/>
+                                    <constraint firstItem="Hqt-rg-hec" firstAttribute="leading" secondItem="l81-b6-xEY" secondAttribute="trailing" constant="20" id="RvU-3D-UQA"/>
+                                    <constraint firstItem="7hS-14-598" firstAttribute="top" secondItem="HWM-gX-ago" secondAttribute="bottom" id="Rya-Fi-Qtx"/>
+                                    <constraint firstItem="Hqt-rg-hec" firstAttribute="width" secondItem="l81-b6-xEY" secondAttribute="width" id="S84-xd-Zaf"/>
+                                    <constraint firstItem="ynx-Vo-SMC" firstAttribute="top" secondItem="l81-b6-xEY" secondAttribute="bottom" constant="10" id="T1u-Qh-Wvu"/>
+                                    <constraint firstItem="Hqt-rg-hec" firstAttribute="bottom" secondItem="l81-b6-xEY" secondAttribute="bottom" id="TVB-fl-v1c"/>
+                                    <constraint firstItem="JlA-yo-nyf" firstAttribute="top" secondItem="GoO-CQ-wSC" secondAttribute="bottom" id="U6c-AN-ii4"/>
+                                    <constraint firstItem="iHs-tS-KYc" firstAttribute="leading" secondItem="QnQ-QK-3l5" secondAttribute="leading" id="UbZ-gn-770"/>
+                                    <constraint firstItem="V8b-h1-cpo" firstAttribute="leading" secondItem="vv0-vE-JwB" secondAttribute="leading" id="W1y-Kw-ScH"/>
+                                    <constraint firstItem="TSX-ow-dl3" firstAttribute="top" secondItem="MOA-o1-Tih" secondAttribute="top" id="X75-ud-XF0"/>
+                                    <constraint firstItem="VCE-Cq-008" firstAttribute="top" secondItem="wfV-02-3yr" secondAttribute="top" id="XTI-bL-uE9"/>
+                                    <constraint firstItem="kx0-Ju-PIo" firstAttribute="leading" secondItem="tjH-N6-odi" secondAttribute="leading" id="XVK-yS-iMa"/>
+                                    <constraint firstItem="tk2-L1-Eaz" firstAttribute="bottom" secondItem="l81-b6-xEY" secondAttribute="bottom" id="XgJ-lO-ybF"/>
+                                    <constraint firstAttribute="trailing" secondItem="OPL-yF-GZb" secondAttribute="trailing" constant="20" id="Xuo-gG-tg3"/>
+                                    <constraint firstItem="XSx-VN-m1X" firstAttribute="leading" secondItem="sBX-cw-2C4" secondAttribute="leading" id="ZEg-of-82V"/>
+                                    <constraint firstItem="GoO-CQ-wSC" firstAttribute="leading" secondItem="QnQ-QK-3l5" secondAttribute="leading" id="ZFR-Am-tnw"/>
+                                    <constraint firstItem="Cit-tv-kXx" firstAttribute="top" secondItem="6ha-TK-0hO" secondAttribute="bottom" id="aDa-7t-v84"/>
+                                    <constraint firstItem="6Y5-et-rtf" firstAttribute="leading" secondItem="zbZ-GB-0OG" secondAttribute="leading" id="aWG-5Y-QA0"/>
+                                    <constraint firstItem="NUL-Ym-HFg" firstAttribute="leading" secondItem="ynx-Vo-SMC" secondAttribute="leading" id="b3s-8r-TLQ"/>
+                                    <constraint firstItem="OPL-yF-GZb" firstAttribute="bottom" secondItem="MOA-o1-Tih" secondAttribute="bottom" id="bzZ-1g-bWS"/>
+                                    <constraint firstItem="XSx-VN-m1X" firstAttribute="trailing" secondItem="sBX-cw-2C4" secondAttribute="trailing" id="cL1-DR-aQx"/>
+                                    <constraint firstItem="sBX-cw-2C4" firstAttribute="top" secondItem="GoO-CQ-wSC" secondAttribute="top" id="dKf-lY-ZAO"/>
+                                    <constraint firstItem="sBX-cw-2C4" firstAttribute="leading" secondItem="F9c-lm-hcK" secondAttribute="trailing" constant="10" id="dN5-l9-GFx"/>
+                                    <constraint firstItem="qSa-7W-9el" firstAttribute="top" secondItem="8Iy-MK-Sk4" secondAttribute="bottom" id="dPV-ZI-fO9"/>
+                                    <constraint firstItem="qSa-7W-9el" firstAttribute="leading" secondItem="8Iy-MK-Sk4" secondAttribute="leading" id="fPm-sj-I85"/>
+                                    <constraint firstItem="6ha-TK-0hO" firstAttribute="top" secondItem="wfV-02-3yr" secondAttribute="top" id="fZi-Co-fYB"/>
+                                    <constraint firstItem="xQA-2U-OqE" firstAttribute="trailing" secondItem="VCE-Cq-008" secondAttribute="trailing" id="fhN-Sb-5rl"/>
+                                    <constraint firstItem="ynx-Vo-SMC" firstAttribute="top" secondItem="QnQ-QK-3l5" secondAttribute="top" id="glX-m7-b6l"/>
+                                    <constraint firstItem="7dn-qU-m88" firstAttribute="top" secondItem="kx0-Ju-PIo" secondAttribute="bottom" constant="20" id="hKC-ty-26U"/>
+                                    <constraint firstItem="Hap-b1-cmo" firstAttribute="leading" secondItem="8Iy-MK-Sk4" secondAttribute="trailing" constant="10" id="iCx-2e-O87"/>
+                                    <constraint firstItem="qgM-nE-Kuj" firstAttribute="top" secondItem="F9c-lm-hcK" secondAttribute="bottom" id="kbA-g6-qAz"/>
+                                    <constraint firstItem="7hS-14-598" firstAttribute="leading" secondItem="HWM-gX-ago" secondAttribute="leading" id="kdP-P9-xz1"/>
+                                    <constraint firstItem="fLs-ZB-ebI" firstAttribute="leading" secondItem="7dn-qU-m88" secondAttribute="leading" id="l6w-U1-6R0"/>
+                                    <constraint firstItem="iHs-tS-KYc" firstAttribute="trailing" secondItem="QnQ-QK-3l5" secondAttribute="trailing" id="lP9-AS-okQ"/>
+                                    <constraint firstItem="srg-xK-LBw" firstAttribute="leading" secondItem="Lyx-sF-7hb" secondAttribute="leading" id="lb7-dN-bPo"/>
+                                    <constraint firstAttribute="bottom" secondItem="NSB-II-D6f" secondAttribute="bottom" constant="20" id="le0-gg-uCg"/>
+                                    <constraint firstItem="qSa-7W-9el" firstAttribute="trailing" secondItem="8Iy-MK-Sk4" secondAttribute="trailing" id="lrR-uL-7Wm"/>
+                                    <constraint firstItem="Hqt-rg-hec" firstAttribute="top" secondItem="8mI-Mf-UPc" secondAttribute="bottom" constant="20" id="lzt-Hz-Z6B"/>
+                                    <constraint firstItem="XSx-VN-m1X" firstAttribute="top" secondItem="sBX-cw-2C4" secondAttribute="bottom" id="n6P-Pm-JLG"/>
+                                    <constraint firstItem="TSX-ow-dl3" firstAttribute="leading" secondItem="MOA-o1-Tih" secondAttribute="trailing" constant="10" id="nFM-po-22d"/>
+                                    <constraint firstItem="zbZ-GB-0OG" firstAttribute="top" secondItem="Bf4-KL-cCm" secondAttribute="top" id="nG3-WF-3Fh"/>
+                                    <constraint firstItem="MOA-o1-Tih" firstAttribute="leading" secondItem="T0k-0W-ify" secondAttribute="leading" constant="20" id="nzG-kD-8hy"/>
+                                    <constraint firstItem="NUL-Ym-HFg" firstAttribute="trailing" secondItem="ynx-Vo-SMC" secondAttribute="trailing" id="onc-v3-VIo"/>
+                                    <constraint firstItem="NUL-Ym-HFg" firstAttribute="top" secondItem="ynx-Vo-SMC" secondAttribute="bottom" id="pTV-Ev-Mm6"/>
+                                    <constraint firstItem="NgM-EI-QEs" firstAttribute="trailing" secondItem="o6R-Sr-sbu" secondAttribute="trailing" id="qav-eg-kvN"/>
+                                    <constraint firstItem="kx0-Ju-PIo" firstAttribute="trailing" secondItem="tjH-N6-odi" secondAttribute="trailing" id="qnq-sc-J32"/>
+                                    <constraint firstItem="tjH-N6-odi" firstAttribute="top" secondItem="2ou-vK-bzS" secondAttribute="bottom" constant="20" id="rU8-Z2-sX2"/>
+                                    <constraint firstItem="srg-xK-LBw" firstAttribute="top" secondItem="Lyx-sF-7hb" secondAttribute="bottom" id="rqm-Jq-AJ4"/>
+                                    <constraint firstItem="Svc-cM-Tkv" firstAttribute="top" secondItem="Hap-b1-cmo" secondAttribute="bottom" id="rsB-y2-zND"/>
+                                    <constraint firstItem="wfV-02-3yr" firstAttribute="top" secondItem="iHs-tS-KYc" secondAttribute="bottom" constant="20" id="tEg-Bo-HWi"/>
+                                    <constraint firstItem="tjH-N6-odi" firstAttribute="leading" secondItem="QnQ-QK-3l5" secondAttribute="leading" id="tdA-WV-MMv"/>
+                                    <constraint firstItem="8mI-Mf-UPc" firstAttribute="top" secondItem="MOA-o1-Tih" secondAttribute="top" id="tfb-KK-e7Q"/>
+                                    <constraint firstItem="6Y5-et-rtf" firstAttribute="top" secondItem="zbZ-GB-0OG" secondAttribute="bottom" id="tsd-HV-Kcz"/>
+                                    <constraint firstItem="OaI-v1-0Au" firstAttribute="leading" secondItem="wfV-02-3yr" secondAttribute="leading" id="uJh-Rt-dE6"/>
+                                    <constraint firstItem="V8b-h1-cpo" firstAttribute="top" secondItem="vv0-vE-JwB" secondAttribute="bottom" id="ulc-jq-A8P"/>
+                                    <constraint firstItem="7dn-qU-m88" firstAttribute="leading" secondItem="QnQ-QK-3l5" secondAttribute="leading" id="vek-lk-dre"/>
+                                    <constraint firstItem="wfV-02-3yr" firstAttribute="leading" secondItem="QnQ-QK-3l5" secondAttribute="leading" id="wdc-dl-znf"/>
+                                    <constraint firstItem="Hap-b1-cmo" firstAttribute="top" secondItem="7dn-qU-m88" secondAttribute="top" id="xFP-hN-lTk"/>
+                                    <constraint firstItem="NUL-Ym-HFg" firstAttribute="leading" secondItem="iHs-tS-KYc" secondAttribute="trailing" constant="10" id="xOb-ib-QA0"/>
+                                    <constraint firstItem="qgM-nE-Kuj" firstAttribute="trailing" secondItem="F9c-lm-hcK" secondAttribute="trailing" id="xa1-Lc-BLL"/>
+                                    <constraint firstItem="OPL-yF-GZb" firstAttribute="leading" secondItem="8mI-Mf-UPc" secondAttribute="trailing" constant="10" id="xat-l5-qZm"/>
+                                    <constraint firstItem="o6R-Sr-sbu" firstAttribute="top" secondItem="tjH-N6-odi" secondAttribute="top" id="yiH-K6-9XB"/>
+                                    <constraint firstItem="tk2-L1-Eaz" firstAttribute="width" secondItem="l81-b6-xEY" secondAttribute="width" id="yu9-O3-Rf4"/>
+                                    <constraint firstItem="fLs-ZB-ebI" firstAttribute="trailing" secondItem="7dn-qU-m88" secondAttribute="trailing" id="z40-gn-rRf"/>
+                                </constraints>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="T0k-0W-ify" firstAttribute="leading" secondItem="aje-fz-fPh" secondAttribute="leading" constant="210" id="5Oh-wu-dkx"/>
+                            <constraint firstAttribute="trailing" secondItem="T0k-0W-ify" secondAttribute="trailing" constant="10" id="NVI-0C-pl8"/>
+                            <constraint firstAttribute="bottom" secondItem="T0k-0W-ify" secondAttribute="bottom" constant="10" id="WDS-yi-Rvc"/>
+                            <constraint firstItem="T0k-0W-ify" firstAttribute="top" secondItem="aje-fz-fPh" secondAttribute="top" constant="10" id="rEf-ni-Slp"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="bug" destination="JlA-yo-nyf" id="cbX-qY-eNl"/>
+                        <outlet property="bugLabel" destination="GoO-CQ-wSC" id="MHo-ve-VWo"/>
+                        <outlet property="dark" destination="Svc-cM-Tkv" id="71b-3z-nes"/>
+                        <outlet property="darkLabel" destination="Hap-b1-cmo" id="Y7m-TV-BOR"/>
+                        <outlet property="dragon" destination="qSa-7W-9el" id="N7p-jH-83C"/>
+                        <outlet property="dragonLabel" destination="8Iy-MK-Sk4" id="nY4-5T-DVc"/>
+                        <outlet property="electric" destination="srg-xK-LBw" id="nod-cd-OyC"/>
+                        <outlet property="electricLabel" destination="Lyx-sF-7hb" id="4wQ-tw-mg0"/>
+                        <outlet property="fairy" destination="2ou-vK-bzS" id="kMi-uW-79H"/>
+                        <outlet property="fairyLabel" destination="Bf4-KL-cCm" id="KZC-ys-VXi"/>
+                        <outlet property="fight" destination="NUL-Ym-HFg" id="po7-IY-yXY"/>
+                        <outlet property="fightLabel" destination="ynx-Vo-SMC" id="PnE-7s-pdz"/>
+                        <outlet property="fire" destination="6Y5-et-rtf" id="zNA-ct-THm"/>
+                        <outlet property="fireLabel" destination="zbZ-GB-0OG" id="JfN-Vt-GcG"/>
+                        <outlet property="fly" destination="7hS-14-598" id="fAz-iZ-fxD"/>
+                        <outlet property="flyLabel" destination="HWM-gX-ago" id="3zO-l8-ZGp"/>
+                        <outlet property="ghost" destination="qgM-nE-Kuj" id="mgU-6c-NWe"/>
+                        <outlet property="ghostLabel" destination="F9c-lm-hcK" id="a3C-Li-2tN"/>
+                        <outlet property="grass" destination="kx0-Ju-PIo" id="hem-rW-VNR"/>
+                        <outlet property="grassLabel" destination="tjH-N6-odi" id="Rxn-EI-pJv"/>
+                        <outlet property="ground" destination="Cit-tv-kXx" id="SYQ-2y-FED"/>
+                        <outlet property="groundLabel" destination="6ha-TK-0hO" id="9fp-h5-wdh"/>
+                        <outlet property="ice" destination="fLs-ZB-ebI" id="plP-d8-x4s"/>
+                        <outlet property="iceLabel" destination="7dn-qU-m88" id="M5q-Vj-kG4"/>
+                        <outlet property="name" destination="OPL-yF-GZb" id="QnJ-Oe-TzK"/>
+                        <outlet property="nameID" destination="TSX-ow-dl3" id="tj2-Cp-CLV"/>
+                        <outlet property="neither" destination="tk2-L1-Eaz" id="jUt-Jh-6Vj"/>
+                        <outlet property="normal" destination="iHs-tS-KYc" id="LYB-e1-bhm"/>
+                        <outlet property="normalLabel" destination="QnQ-QK-3l5" id="6Ml-iM-LSO"/>
+                        <outlet property="physical" destination="l81-b6-xEY" id="yco-0Z-4AR"/>
+                        <outlet property="poison" destination="OaI-v1-0Au" id="PXW-nN-zV2"/>
+                        <outlet property="poisonLabel" destination="wfV-02-3yr" id="O8w-kd-anl"/>
+                        <outlet property="psychic" destination="NgM-EI-QEs" id="v2n-KX-BFz"/>
+                        <outlet property="psychicLabel" destination="o6R-Sr-sbu" id="aEx-Eg-m2F"/>
+                        <outlet property="rock" destination="xQA-2U-OqE" id="JzP-f4-6mK"/>
+                        <outlet property="rockLabel" destination="VCE-Cq-008" id="egS-rM-DQr"/>
+                        <outlet property="special" destination="Hqt-rg-hec" id="UMH-nX-1US"/>
+                        <outlet property="steel" destination="XSx-VN-m1X" id="fK2-sm-aGL"/>
+                        <outlet property="steelLabel" destination="sBX-cw-2C4" id="KSJ-qH-y1r"/>
+                        <outlet property="water" destination="V8b-h1-cpo" id="kYA-uF-dbL"/>
+                        <outlet property="waterLabel" destination="vv0-vE-JwB" id="RCR-yv-rec"/>
+                    </connections>
+                </viewController>
+                <customObject id="EQr-h0-H6S" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1570" y="1640"/>
+        </scene>
+    </scenes>
+</document>

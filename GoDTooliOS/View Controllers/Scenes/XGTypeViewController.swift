@@ -47,7 +47,7 @@ class XGTypeViewController: XGTableViewController {
 			
 			let inx = i
 			
-			effectivenessButtons[inx] = XGButtonField(title: XGMoveTypes(rawValue: i)!.name, text: self.type.effectivenessTable[i].string, height: 50, width: 90, action: {
+			effectivenessButtons[inx] = XGButtonField(title: XGMoveTypes.type(i).name, text: self.type.effectivenessTable[i].string, height: 50, width: 90, action: {
 				self.type.effectivenessTable[inx] = self.type.effectivenessTable[inx].cycle()
 				self.updateUI()
 			})

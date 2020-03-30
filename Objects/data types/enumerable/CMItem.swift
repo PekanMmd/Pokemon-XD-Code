@@ -26,7 +26,7 @@ let kFirstFriendshipEffectOffset = 0x24 // Signed Int
 
 let kItemFunctionInRAMPointerOffset = 0x20 // value is only filled in RAM at runtime and is empty in common_rel
 
-class XGItem: NSObject, Codable {
+final class XGItem: NSObject, Codable {
 	
 	var startOffset : Int {
 		get{
@@ -124,5 +124,50 @@ extension XGItem: XGEnumerable {
 			values.append(XGItem(index: i))
 		}
 		return values
+	}
+}
+
+extension XGItem: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "Items"
+	}
+	
+	var documentableName: String {
+		return enumerableName + " - " + (enumerableValue ?? "")
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "hex index", "name", "description", "bag slot", "price", "coupon price", "parameter", "friendship"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return index.string
+		case "hex index":
+			return index.hexString()
+		case "name":
+			return name.string
+		case "description":
+			return descriptionString.string
+		case "bag slot":
+			return bagSlot.name
+		case "price":
+			return price.string
+		case "coupon price":
+			return couponPrice.string
+		case "parameter":
+			return parameter.string
+		case "friendship":
+			var text = ""
+			friendshipEffects.forEach {
+				text += $0.string + ", "
+			}
+			text.removeLast()
+			return text
+		default:
+			return ""
+		}
 	}
 }

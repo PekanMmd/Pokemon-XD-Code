@@ -68,14 +68,14 @@ class GoDPokemonView: NSImageView {
 			}
 		}
 		
-		self.name.selectPokemon(pokemon: pokemon.species)
+		self.name.select(pokemon.species)
 		self.dpkm.isHidden = true
 		self.ddpk.isHidden = true
 		self.body.image = pokemon.species.body
 		self.level.selectLevel(level: pokemon.level)
-		self.item.selectItem(item: pokemon.item)
+		self.item.select(pokemon.item)
 		for move in self.moves {
-			move.selectMove(move: pokemon.moves[move.tag])
+			move.select(pokemon.moves[move.tag])
 		}
 		for move in self.shadowMoves {
 			move.isHidden = true
@@ -94,15 +94,15 @@ class GoDPokemonView: NSImageView {
 		} else {
 			self.ability.selectItem(at: 2)
 		}
-		self.nature.selectNature(nature: pokemon.nature)
-		self.gender.selectGender(gender: pokemon.gender)
+		self.nature.select(pokemon.nature)
+		self.gender.select(pokemon.gender)
 		self.happiness.integerValue = pokemon.happiness
 		
 		self.shadowCounter.integerValue = pokemon.shadowCounter
 		self.shadowAggression.isHidden = true
 		self.shadowFlee.isHidden = true
 		self.shadowCatchrate.integerValue = pokemon.shadowCatchRate
-		self.pokeball.selectItem(item: pokemon.pokeball)
+		self.pokeball.select(pokemon.pokeball)
 		
 	}
 	
@@ -178,7 +178,6 @@ class GoDPokemonView: NSImageView {
 		self.item.font = GoDDesign.fontOfSize(8)
 		
 		let byteFormat = NumberFormatter.byteFormatter()
-		let shortFormat = NumberFormatter.shortFormatter()
 		
 		let ivFormat = NumberFormatter()
 		ivFormat.minimum = 0

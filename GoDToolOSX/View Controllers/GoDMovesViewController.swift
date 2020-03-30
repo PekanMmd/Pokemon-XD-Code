@@ -100,21 +100,21 @@ class GoDMovesViewController: GoDTableViewController {
 		
 		self.animation.selectItem(at: currentMove.animationID)
 		
-		self.type.selectType(type: currentMove.type)
-		self.targets.selectTarget(target: currentMove.target)
-		self.effectType.selectType(type: currentMove.effectType)
+		self.type.select(currentMove.type)
+		self.targets.select(currentMove.target)
+		self.effectType.select(currentMove.effectType)
 		if game == .XD {
 			if region == .US && XGDolPatcher.isClassSplitImplemented() {
-				self.category.selectCategory(category: currentMove.category)
+				self.category.select(currentMove.category)
 			} else {
-				self.category.selectCategory(category: currentMove.type.category)
+				self.category.select(currentMove.type.category)
 			}
 		} else {
 			let enabled = (XGFiles.dol.data!.getWordAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F) && region == .US
 			if enabled {
-				self.category.selectCategory(category: currentMove.category)
+				self.category.select(currentMove.category)
 			} else {
-				self.category.selectCategory(category: currentMove.type.category)
+				self.category.select(currentMove.type.category)
 			}
 		}
 		

@@ -61,6 +61,10 @@ class XGMove: NSObject, XGIndexedValue {
 		super.init()
 		
 		self.index = index
+		guard index >= 0 else {
+
+			return
+		}
 		let data  = PBRDataTableEntry.moves(index: self.index)
 		
 		effect = data.getShort(0)
@@ -93,13 +97,12 @@ class XGMove: NSObject, XGIndexedValue {
 		flag6 = flags[6]
 		flag7 = flags[7]
 		// unsure of the use of flags 6-7 but my best guess is that 7 is set on moves that some pokemon have a unique animation for such as blastoise using its cannons in the hydropump animation.
-		
-		
-		
+
 	}
 
 	@objc func save() {
-		
+		guard index >= 0 else { return }
+
 		let data  = PBRDataTableEntry.moves(index: self.index)
 		
 		data.setShort(0, to: effect)

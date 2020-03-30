@@ -96,7 +96,7 @@ extension XGNatures: XGEnumerable {
 	}
 	
 	var enumerableValue: String? {
-		return rawValue.string
+		return self == .random ? rawValue.hexString() : rawValue.string
 	}
 	
 	static var enumerableClassName: String {

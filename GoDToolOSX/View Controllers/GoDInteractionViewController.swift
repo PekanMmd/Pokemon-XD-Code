@@ -46,7 +46,7 @@ class GoDInteractionViewController: GoDTableViewController {
 	
 	func setUpForData(_ data: XGInteractionPointData) {
 		self.currentIndex = data.index
-		self.roomPopup.selectItem(room: XGRoom.roomWithID(data.roomID) ?? XGRoom(index: 0))
+		self.roomPopup.select(XGRoom.roomWithID(data.roomID) ?? XGRoom(index: 0))
 		self.regionField.stringValue = data.interactionPointIndex.string
 		switch data.interactionMethod {
 			
@@ -88,7 +88,7 @@ class GoDInteractionViewController: GoDTableViewController {
 		case .Warp(let targetRoom, let targetEntryID, let sound):
 			self.warp.state = .on
 			self.targetRoom.isHidden = false
-			self.targetRoom.selectItem(room: XGRoom.roomWithID(targetRoom) ?? XGRoom(index: 0xAF))
+			self.targetRoom.select(XGRoom.roomWithID(targetRoom) ?? XGRoom(index: 0xAF))
 			self.field1.isHidden = false
 			self.label1.isHidden = false
 			field1.stringValue = targetEntryID.string
@@ -158,8 +158,8 @@ class GoDInteractionViewController: GoDTableViewController {
 			self.label2.stringValue = "Target Elevator ID"
 			self.field1.stringValue = elevatorID.string
 			self.field2.stringValue = targetElevatorID.string
-			self.targetRoom.selectItem(room: XGRoom.roomWithID(targetRoomID) ?? XGRoom(index: 0xAF))
-			self.direction.selectDirection(direction)
+			self.targetRoom.select(XGRoom.roomWithID(targetRoomID) ?? XGRoom(index: 0xAF))
+			self.direction.select(direction)
 			
 		case .CutsceneWarp(let targetRoom, let targetEntryID, let cutsceneID, let cameraFSYSID):
 			self.cutscene.state = .on
@@ -170,7 +170,7 @@ class GoDInteractionViewController: GoDTableViewController {
 			self.label3.isHidden = false
 			self.field3.isHidden = false
 			self.targetRoom.isHidden = false
-			self.targetRoom.selectItem(room: XGRoom.roomWithID(targetRoom) ?? XGRoom(index: 0xAF))
+			self.targetRoom.select(XGRoom.roomWithID(targetRoom) ?? XGRoom(index: 0xAF))
 			label1.stringValue = "Entry ID"
 			label2.stringValue = "Cutscene ID"
 			label3.stringValue = "Camera ID"
@@ -184,7 +184,7 @@ class GoDInteractionViewController: GoDTableViewController {
 			self.label1.isHidden = false
 			self.field1.isHidden = false
 			self.targetRoom.isHidden = false
-			self.targetRoom.selectItem(room: XGRoom.roomWithID(roomID) ?? XGRoom(index: 0xAF))
+			self.targetRoom.select(XGRoom.roomWithID(roomID) ?? XGRoom(index: 0xAF))
 			self.label1.stringValue = "Unknown"
 			self.field1.stringValue = unknown.string
 			

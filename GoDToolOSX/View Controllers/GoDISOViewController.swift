@@ -8,10 +8,12 @@
 import Cocoa
 
 class GoDISOViewController: GoDTableViewController {
-	
+
+	let allFileNames = ISO.allFileNames.sorted()
+
 	var isExporting = false
 	func exportFiles(decode: Bool) {
-		XGFolders.nameAndFolder("ISO Export", .Documents).createDirectory()
+		XGFolders.ISOExport("").createDirectory()
 		
 		if isExporting {
 			return
@@ -43,52 +45,48 @@ class GoDISOViewController: GoDTableViewController {
 	}
 	
 	func importFsysFiles(encode: Bool) {
-		XGFolders.nameAndFolder("ISO Export", .Documents).createDirectory()
-		
 		if currentFile.exists {
 			if currentFile.fileType == .fsys {
 				
 				if encode {
 					XGColour.colourThreshold = 0
-					if game == .XD {
-						for file in currentFile.folder.files {
-							if file.fileType == .xds {
-								XDSScriptCompiler.setFlags(disassemble: true, decompile: false, updateStrings: true, increaseMSG: true)
-								XDSScriptCompiler.baseStringID = 1000
-								if !XDSScriptCompiler.compile(textFile: file, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)) {
-									GoDAlertViewController.displayAlert(title: "Compilation Error", text: XDSScriptCompiler.error)
-									return
-								}
+					for file in currentFile.folder.files {
+						if file.fileType == .xds && game != .PBR {
+							XDSScriptCompiler.setFlags(disassemble: true, decompile: false, updateStrings: true, increaseMSG: true)
+							XDSScriptCompiler.baseStringID = 1000
+							if !XDSScriptCompiler.compile(textFile: file, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)) {
+								GoDAlertViewController.displayAlert(title: "Compilation Error", text: XDSScriptCompiler.error)
+								return
 							}
-							if file.fileType == .gtx || file.fileType == .atx {
-								for image in currentFile.folder.files where XGFileTypes.imageFormats.contains(image.fileType) {
-									if image.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-										if file.fileName.contains(".gsw.") {
-											file.texture.importImage(file: image)
-										} else {
-											let imageData = image.image
-											let textureData = GoDTextureImporter.getTextureData(image: imageData)
-											textureData.file = file
-											textureData.save()
-										}
+						}
+						if file.fileType == .gtx || file.fileType == .atx {
+							for image in currentFile.folder.files where XGFileTypes.imageFormats.contains(image.fileType) {
+								if image.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
+									if file.fileName.contains(".gsw.") {
+										file.texture.importImage(file: image)
+									} else {
+										let imageData = image.image
+										let textureData = GoDTextureImporter.getTextureData(image: imageData)
+										textureData.file = file
+										textureData.save()
 									}
 								}
 							}
 						}
-						
-						// encode gsws after all gtxs have been encoded
-						for file in currentFile.folder.files {
-							if file.fileType == .gsw {
-								let gsw = XGGSWTextures(data: file.data!)
-								
-								for subFile in currentFile.folder.files where subFile.fileName.contains(gsw.subFilenamesPrefix) && subFile.fileType == .gtx {
-									if let id = subFile.fileName.removeFileExtensions().replacingOccurrences(of: gsw.subFilenamesPrefix, with: "").integerValue {
-										gsw.importTextureData(subFile.data!, withID: id)
-									}
+					}
+
+					// encode gsws after all gtxs have been encoded
+					for file in currentFile.folder.files {
+						if file.fileType == .gsw {
+							let gsw = XGGSWTextures(data: file.data!)
+
+							for subFile in currentFile.folder.files where subFile.fileName.contains(gsw.subFilenamesPrefix) && subFile.fileType == .gtx {
+								if let id = subFile.fileName.removeFileExtensions().replacingOccurrences(of: gsw.subFilenamesPrefix, with: "").integerValue {
+									gsw.importTextureData(subFile.data!, withID: id)
 								}
-								
-								gsw.save()
 							}
+
+							gsw.save()
 						}
 					}
 				}
@@ -138,7 +136,6 @@ class GoDISOViewController: GoDTableViewController {
 	@IBOutlet var filesize: NSTextField!
 	
 	var currentFile = XGFiles.dol
-	
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -180,10 +177,8 @@ class GoDISOViewController: GoDTableViewController {
 		}
 	}
 	
-	
-	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
-		return ISO.allFileNames.count
+		return allFileNames.count
 	}
 	
 	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -192,7 +187,7 @@ class GoDISOViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let file = ISO.allFileNames.sorted()[row]
+		let file = allFileNames[row]
 		
 		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourWhite(), showsImage: false, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
@@ -217,7 +212,7 @@ class GoDISOViewController: GoDTableViewController {
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
 		super.tableView(tableView, didSelectRow: row)
 		if row >= 0 {
-			let name = ISO.allFileNames.sorted()[row]
+			let name = allFileNames[row]
 			self.currentFile = .nameAndFolder(name, .ISOExport(name.removeFileExtensions()))
 			self.setMetaData()
 		}

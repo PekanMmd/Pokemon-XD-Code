@@ -9,12 +9,12 @@
 import Cocoa
 
 let xdpatches = [
+    "Remove foreign languages from common_rel (Highly recommended. Required for some patches.)",
 	"Apply Physical/Special move split",
 	"Remove Physical/Special move split",
 	"Assign default phys/spec categories to moves",
 	"When a pokémon is KO'd it isn't replaced until the end of the turn",
-	"The HM Flag on moves determines whether it is a shadow move or not",
-	"Remove foreign languages from common_rel (very useful if it gets too big to import)",
+	"The HM Flag on moves determines whether it is a shadow move or not (requires foreign languages to be removed.)",
 	"Delete unused files (creates much needed space in the ISO)",
 	"Fix shiny glitch for shadow pokemon",
 	"Shadow pokemon can be shiny",
@@ -214,7 +214,7 @@ class GoDPatchViewController: GoDTableViewController {
 		if row == -1 {
 			return
 		}
-		if verbose {
+		if settings.verbose {
 			printg("Selected patch: ", self.patches[row])
 		}
 		self.showActivityView {

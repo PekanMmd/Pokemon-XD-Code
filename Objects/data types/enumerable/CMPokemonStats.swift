@@ -48,7 +48,7 @@ let kPokemonFaceIndexOffset	 = 0x10E // Same as Pokemon's national dex index
 
 let kModelDictionaryModelOffset = 0x4
 
-class XGPokemonStats: NSObject, Codable {
+final class XGPokemonStats: NSObject, Codable {
 	
 	var index			= 0x0
 	var startOffset		= 0x0
@@ -161,8 +161,8 @@ class XGPokemonStats: NSObject, Codable {
 		self.baseExp		= rel.getByteAtOffset(startOffset + kBaseEXPOffset)
 		self.baseHappiness	= rel.getByteAtOffset(startOffset + kBaseHappinessOffset)
 		
-		self.type1			= XGMoveTypes(rawValue: rel.getByteAtOffset(startOffset + kType1Offset)) ?? .normal
-		self.type2			= XGMoveTypes(rawValue: rel.getByteAtOffset(startOffset + kType2Offset)) ?? .normal
+        self.type1			= XGMoveTypes.type(rel.getByteAtOffset(startOffset + kType1Offset))
+        self.type2			= XGMoveTypes.type(rel.getByteAtOffset(startOffset + kType2Offset))
 		
 		let a1				= rel.getByteAtOffset(startOffset + kAbility1Offset)
 		let a2				= rel.getByteAtOffset(startOffset + kAbility2Offset)
@@ -259,11 +259,10 @@ class XGPokemonStats: NSObject, Codable {
 		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0xa, withBytes: self.speedYield)
 		
 		
-		var currentOffset = startOffset + kFirstTMOffset
-		
+		let firstTMOffset = startOffset + kFirstTMOffset
 		for i in 0 ..< kNumberOfTMsAndHMs {
 			
-			rel.replaceByteAtOffset(currentOffset + i, withByte: learnableTMs[i] ? 1 : 0)
+			rel.replaceByteAtOffset(firstTMOffset + i, withByte: learnableTMs[i] ? 1 : 0)
 			
 		}
 		
@@ -291,132 +290,6 @@ class XGPokemonStats: NSObject, Codable {
 	}
 	
 	
-	var dictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			dictRep["name"] = self.name.string as AnyObject?
-			dictRep["species"] = self.species.string as AnyObject?
-			dictRep["cry"] = self.cryIndex as AnyObject?
-			dictRep["model"] = self.modelIndex as AnyObject?
-			dictRep["face"] = self.faceIndex as AnyObject?
-			dictRep["levelUpRate"] = self.levelUpRate.dictionaryRepresentation as AnyObject?
-			dictRep["genderRatio"] = self.genderRatio.dictionaryRepresentation as AnyObject?
-			dictRep["catchRate"] = self.catchRate as AnyObject?
-			dictRep["baseExp"] = self.baseExp as AnyObject?
-			dictRep["baseHappiness"] = self.baseHappiness as AnyObject?
-			dictRep["type1"] = self.type1.dictionaryRepresentation as AnyObject?
-			dictRep["type2"] = self.type2.dictionaryRepresentation as AnyObject?
-			dictRep["ability1"] = self.ability1.dictionaryRepresentation as AnyObject?
-			dictRep["ability2"] = self.ability2.dictionaryRepresentation as AnyObject?
-			dictRep["heldItem1"] = self.heldItem1.dictionaryRepresentation as AnyObject?
-			dictRep["heldItem2"] = self.heldItem2.dictionaryRepresentation as AnyObject?
-			dictRep["hp"] = self.hp as AnyObject?
-			dictRep["attack"] = self.attack as AnyObject?
-			dictRep["defense"] = self.defense as AnyObject?
-			dictRep["sp.attack"] = self.specialAttack as AnyObject?
-			dictRep["sp.defense"] = self.specialDefense as AnyObject?
-			dictRep["speed"] = self.speed as AnyObject?
-			dictRep["hpEV"] = self.hpYield as AnyObject?
-			dictRep["attackEV"] = self.attackYield as AnyObject?
-			dictRep["defenseEV"] = self.defenseYield as AnyObject?
-			dictRep["sp.attackEV"] = self.specialAttackYield as AnyObject?
-			dictRep["sp.defenseEV"] = self.specialDefenseYield as AnyObject?
-			dictRep["speedEV"] = self.speedYield as AnyObject?
-			
-			var levelUpMovesArray = [AnyObject]()
-			for a in levelUpMoves {
-				levelUpMovesArray.append(a.dictionaryRepresentation as AnyObject)
-			}
-			dictRep["levelUpMoves"] = levelUpMovesArray as AnyObject?
-			
-			var evolutionsArray = [AnyObject]()
-			for a in evolutions {
-				evolutionsArray.append(a.dictionaryRepresentation as AnyObject)
-			}
-			dictRep["evolutions"] = evolutionsArray as AnyObject?
-			
-			dictRep["learnableTMs"] = self.learnableTMs as AnyObject?
-			dictRep["learnableTutorMoves"] = self.tutorMoves as AnyObject?
-			
-			return dictRep
-		}
-	}
-	
-	var readableDictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			
-			dictRep["species"] = self.species.string as AnyObject?
-			dictRep["cry"] = self.cryIndex as AnyObject?
-			dictRep["model"] = self.modelIndex as AnyObject?
-			dictRep["face"] = self.faceIndex as AnyObject?
-			dictRep["levelUpRate"] = self.levelUpRate.readableDictionaryRepresentation as AnyObject?
-			dictRep["genderRatio"] = self.genderRatio.readableDictionaryRepresentation as AnyObject?
-			dictRep["catchRate"] = self.catchRate as AnyObject?
-			dictRep["baseExp"] = self.baseExp as AnyObject?
-			dictRep["baseHappiness"] = self.baseHappiness as AnyObject?
-			
-			var types = [String : AnyObject]()
-			types["type1"] = self.type1.readableDictionaryRepresentation as AnyObject?
-			types["type2"] = self.type2.readableDictionaryRepresentation as AnyObject?
-			dictRep["Types"] = types as AnyObject?
-			
-			var abilities = [String : AnyObject]()
-			abilities["ability1"] = self.ability1.readableDictionaryRepresentation as AnyObject?
-			abilities["ability2"] = self.ability2.readableDictionaryRepresentation as AnyObject?
-			dictRep["Abilities"] = abilities as AnyObject?
-			
-			var items = [String : AnyObject]()
-			items["heldItem1"] = self.heldItem1.readableDictionaryRepresentation as AnyObject?
-			items["heldItem2"] = self.heldItem2.readableDictionaryRepresentation as AnyObject?
-			dictRep["WildHoldItems"] = items as AnyObject?
-			
-			var stats = [String : AnyObject]()
-			stats["hp"] = self.hp as AnyObject?
-			stats["attack"] = self.attack as AnyObject?
-			stats["defense"] = self.defense as AnyObject?
-			stats["sp.attack"] = self.specialAttack as AnyObject?
-			stats["sp.defense"] = self.specialDefense as AnyObject?
-			stats["speed"] = self.speed as AnyObject?
-			dictRep["BaseStats"] = stats as AnyObject?
-			
-			var EVYields = [String : AnyObject]()
-			EVYields["hp"] = self.hpYield as AnyObject?
-			EVYields["attack"] = self.attackYield as AnyObject?
-			EVYields["defense"] = self.defenseYield as AnyObject?
-			EVYields["sp.attack"] = self.specialAttackYield as AnyObject?
-			EVYields["sp.defense"] = self.specialDefenseYield as AnyObject?
-			EVYields["speed"] = self.speedYield as AnyObject?
-			dictRep["EVYields"] = EVYields as AnyObject?
-			
-			
-			
-			var levelUpMovesArray = [AnyObject]()
-			for a in levelUpMoves {
-				levelUpMovesArray.append(a.readableDictionaryRepresentation as AnyObject)
-			}
-			dictRep["levelUpMoves"] = levelUpMovesArray as AnyObject?
-			
-			var evolutionsArray = [AnyObject]()
-			for a in evolutions {
-				evolutionsArray.append(a.readableDictionaryRepresentation as AnyObject)
-			}
-			dictRep["evolutions"] = evolutionsArray as AnyObject?
-			
-			var learnableTMsArray = [String]()
-			for i in 1...50 {
-				if self.learnableTMs[i - 1] {
-					learnableTMsArray.append(XGTMs.tm(i).move.name.string)
-				}
-			}
-			dictRep["learnableTMs"] = learnableTMsArray as AnyObject?
-			
-			
-			return ["\(self.index) " + self.name.string : dictRep as AnyObject]
-		}
-	}
-	
-	
 }
 
 extension XGPokemonStats: XGEnumerable {
@@ -438,5 +311,105 @@ extension XGPokemonStats: XGEnumerable {
 			values.append(XGPokemonStats(index: i))
 		}
 		return values
+	}
+}
+
+extension XGPokemonStats: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "Pokemon Stats"
+	}
+	
+	var isDocumentable: Bool {
+		return catchRate != 0
+	}
+	
+	var documentableName: String {
+		return enumerableName + " - " + (enumerableValue ?? "")
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "hex index", "national index", "name", "type 1", "type 2", "ability 1", "ability 2", "base HP", "base attack", "base defense", "base special attack", "base special defense", "base speed", "species", "level up rate", "gender ratio", "catch rate", "exp yield", "base happiness", "wild item 1", "wild item 2", "HP yield", "attack yield", "defense yield", "special attack yield", "special defense yield", "speed yield", "evolutions", "learnable TMs", "level up moves"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return index.string
+		case "hex index":
+			return index.hexString()
+		case "name":
+			return name.string
+		case "national index":
+			return nationalIndex.string
+		case "type 1":
+			return type1.name
+		case "type 2":
+			return type2.name
+		case "ability 1":
+			return ability1.name.string
+		case "ability 2":
+			return ability2.name.string
+		case "base attack":
+			return attack.string
+		case "base HP":
+			return hp.string
+		case "base defense":
+			return defense.string
+		case "base special attack":
+			return specialAttack.string
+		case "base special defense":
+			return specialDefense.string
+		case "base speed":
+			return speed.string
+		case "species":
+			return species.string
+		case "level up rate":
+			return levelUpRate.string
+		case "gender ratio":
+			return genderRatio.string
+		case "catch rate":
+			return catchRate.string
+		case "exp yield":
+			return baseExp.string
+		case "base happiness":
+			return baseHappiness.string
+		case "wild item 1":
+			return heldItem1.name.string
+		case "wild item 2":
+			return heldItem2.name.string
+		case "attack yield":
+			return attackYield.string
+		case "defense yield":
+			return defenseYield.string
+		case "HP yield":
+			return hpYield.string
+		case "special attack yield":
+			return specialAttackYield.string
+		case "special defense yield":
+			return specialDefenseYield.string
+		case "speed yield":
+			return speedYield.string
+		case "evolutions":
+			var evolutionString = ""
+			for evolution in evolutions where evolution.evolutionMethod != .none {
+				evolutionString += "\n" + evolution.documentableFields
+			}
+			return evolutionString
+		case "learnable TMs":
+			var tmString = ""
+			for i in 0 ..< learnableTMs.count {
+				tmString += "\n" + XGTMs.tm(i).move.name.string + ": " + learnableTMs[i].string
+			}
+			return tmString
+		case "level up moves":
+			var movesString = ""
+			for lum in levelUpMoves where lum.move.index != 0 {
+				movesString += "\n" + lum.documentableFields
+			}
+			return movesString
+		default:
+			return ""
+		}
 	}
 }

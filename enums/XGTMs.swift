@@ -223,7 +223,7 @@ extension XGTMs: Codable {
 	}
 	
 	enum CodingKeys: String, CodingKey {
-		case type, index
+		case type, index, move, flag
 	}
 	
 	init(from decoder: Decoder) throws {
@@ -237,13 +237,36 @@ extension XGTMs: Codable {
 		}
 	}
 	
+	static func update(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let type = try container.decode(String.self, forKey: .type)
+		let index = try container.decode(Int.self, forKey: .index)
+		let move = try container.decode(XGMoves.self, forKey: .move)
+		switch type {
+		case "TM":
+			let tm = XGTMs.tm(index)
+			tm.replaceWithMove(move)
+			tm.updateItemDescription()
+		case "tutor":
+			let flag = try container.decode(Int.self, forKey: .flag)
+			let tutor = XGTMs.tutor(index)
+			tutor.replaceWithMove(move)
+			tutor.replaceTutorFlag(flag)
+		default: throw XGTMDecodingError.invalidType(key: type)
+		}
+	}
+	
 	func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 		switch self {
-		case .tm: try container.encode("TM", forKey: .type)
-		case .tutor: try container.encode("tutor", forKey: .type)
+		case .tm:
+			try container.encode("TM", forKey: .type)
+		case .tutor:
+			try container.encode("tutor", forKey: .type)
+			try container.encode(tutorFlag, forKey: .flag)
 		}
 		
+		try container.encode(move, forKey: .move)
 		try container.encode(self.index, forKey: .index)
 	}
 }
@@ -271,7 +294,45 @@ extension XGTMs: XGEnumerable {
 	}
 }
 
-
+extension XGTMs: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "TMs"
+	}
+	
+	var documentableName: String {
+		return enumerableName
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "hex index", "name", "description", "flag"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return index.string
+		case "hex index":
+			return index.hexString()
+		case "name":
+			return move.name.string
+		case "description":
+			switch self {
+			case .tm:
+				return item.descriptionString.string
+			case .tutor:
+				return move.mdescription.string
+			}
+		case "flag":
+			switch self {
+			case .tm: return ""
+			case .tutor: return tutorFlag.string
+			}
+		default:
+			return ""
+		}
+	}
+}
 
 
 

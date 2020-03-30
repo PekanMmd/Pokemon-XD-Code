@@ -36,6 +36,17 @@ enum XGUnicodeCharacters {
 			return self.byteStream.count
 		}
 	}
+
+	var isFormattingChar: Bool {
+		switch self {
+		case .special(let c, _) where c.isNewLine:
+			return false
+		case .special:
+			return true
+		case .unicode:
+			return false
+		}
+	}
 	
 	var string : String {
 		get {
@@ -50,12 +61,7 @@ enum XGUnicodeCharacters {
 	}
 	
 	var name : String {
-		get {
-			switch self {
-				case .unicode			: return self.string
-				case .special			: return self.string
-			}
-		}
+		self.string
 	}
 	
 }

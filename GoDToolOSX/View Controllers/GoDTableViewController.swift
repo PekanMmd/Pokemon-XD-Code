@@ -53,7 +53,7 @@ class GoDTableViewController: GoDViewController, GoDTableViewDelegate, NSTableVi
 			
 			imageView.imageAlignment = .alignCenter
 			imageView.imageScaling = .scaleAxesIndependently
-			imageView.image = row % 2 == 0 ? NSImage(named: NSImage.Name(rawValue: "cell")) : NSImage(named: NSImage.Name(rawValue: "Tool Cell"))
+			imageView.image = row % 2 == 0 ? NSImage(named: "cell") : NSImage(named: "Tool Cell")
 		}
 		
 		return cell

@@ -39,6 +39,16 @@ class XGString: NSObject, Codable {
 			return str
 		}
 	}
+
+	var unformattedString : String {
+		get {
+			var str = ""
+			for char in chars where !char.isFormattingChar {
+				str = str + char.string
+			}
+			return str
+		}
+	}
 	
 	@objc var stringPlusIDAndFile : String {
 		get {
@@ -90,12 +100,13 @@ class XGString: NSObject, Codable {
 		self.table = file ?? XGFiles.nameAndFolder("", .Documents)
 		self.id = sid ?? 0
 		self.initString = string
-		
+		let string = string.replacingOccurrences(of: "\n", with: "[New Line]")
+
 		var chars = [XGUnicodeCharacters]()
 		
 		var current   = 0
 		let end		  = string.length
-		
+
 		while current != end {
 			
 			var char = string.substring(from: current, to: current + 1)
@@ -149,15 +160,16 @@ class XGString: NSObject, Codable {
 			} else {
 				
 				let charScalar = String(char).unicodeScalars
-				let charValue  = Int(charScalar[charScalar.startIndex].value)
-				
-				var ch = XGUnicodeCharacters.unicode(charValue)
-				if char == "'" {
-					ch = .unicode(0x27)
+				for char in charScalar {
+					let charValue  = Int(char.value)
+
+					var ch = XGUnicodeCharacters.unicode(charValue)
+					if char == "'" {
+						ch = .unicode(0x27)
+					}
+
+					chars.append(ch)
 				}
-				
-				chars.append(ch)
-				
 			}
 			
 		}
@@ -197,27 +209,13 @@ class XGString: NSObject, Codable {
 		return self.string.contains(sub)
 	}
 	
-	@objc func replaceSubstring(_ sub: String, withString new: String, verbose: Bool) {
+	@objc func replaceSubstring(_ sub: String, withString new: String) {
 		let str = self.string.replacingOccurrences(of: sub, with: new, options: [], range: nil)
 		_ = self.duplicateWithString(str).replace()
 	}
 	
 	@objc func duplicateWithString(_ str: String) -> XGString {
 		return XGString(string: str, file: self.table, sid: self.id)
-	}
-	
-	var unformattedString : String {
-		var s = self.string
-		if game == .PBR {
-			for rep in ["[0xF001]", "[0xF101]"] {
-				s = s.replacingOccurrences(of: rep, with: "")
-			}
-		} else {
-			for rep in ["[Bold]",] {
-				s = s.replacingOccurrences(of: rep, with: "")
-			}
-		}
-		return s
 	}
 	
 	enum CodingKeys: String, CodingKey {
@@ -240,7 +238,33 @@ class XGString: NSObject, Codable {
 	}
 }
 
-
+extension XGString: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "String"
+	}
+	
+	var documentableName: String {
+		return table.fileName + " - " + id.hexString()
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["id", "encoded length", "text"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "id":
+			return id.hexString()
+		case "encoded length":
+			return dataLength.string
+		case "text":
+			return string
+		default:
+			return ""
+		}
+	}
+}
 
 
 

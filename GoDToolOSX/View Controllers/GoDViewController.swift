@@ -51,9 +51,9 @@ class GoDViewController: NSViewController {
 		isActive = false
 	}
 	
-	override func presentViewControllerAsModalWindow(_ viewController: NSViewController) {
+	override func presentAsModalWindow(_ viewController: NSViewController) {
 		if isActive {
-			super.presentViewControllerAsModalWindow(viewController)
+			super.presentAsModalWindow(viewController)
 		}
 	}
 	

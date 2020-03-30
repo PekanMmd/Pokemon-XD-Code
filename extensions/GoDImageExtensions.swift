@@ -130,6 +130,10 @@ extension NSImage {
 		return GoDTextureImporter.getTextureData(image: self)
 	}
 	
+	func getTexture(format: GoDTextureFormats) -> GoDTexture {
+		return GoDTextureImporter.getTextureData(image: self, format: format)
+	}
+	
 	var textures : [GoDTexture] {
 		return GoDTextureImporter.getMultiFormatTextureData(image: self)
 	}

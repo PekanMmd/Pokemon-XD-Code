@@ -283,15 +283,15 @@ extension XDSScriptCompiler {
 			return (XDSConstantTypes.integer, [XDSConstant.integer(0)])
 		}
 		
-		if let index = arrys.names.index(of: text) {
+		if let index = arrys.names.firstIndex(of: text) {
 			return (XDSConstantTypes.none_t, [XDSConstant(type: XDSConstantTypes.array.index, rawValue: UInt32(index))])
 		}
 		
-		if let index = vects.names.index(of: text) {
+		if let index = vects.names.firstIndex(of: text) {
 			return (XDSConstantTypes.none_t, [XDSConstant(type: XDSConstantTypes.vector.index, rawValue: UInt32(index))])
 		}
 		
-		if let index = giris.names.index(of: text) {
+		if let index = giris.names.firstIndex(of: text) {
 			return (XDSConstantTypes.none_t, [XDSConstant(type: XDSConstantTypes.character.index, rawValue: UInt32(index))])
 		}
 		
@@ -1033,7 +1033,7 @@ extension XDSScriptCompiler {
 				
 				for name in gvars.names {
 					if token == name {
-						let index = gvars.names.index(of: name)!
+						let index = gvars.names.firstIndex(of: name)!
 						let val = gvars.values[index]
 						let type = val.type.index
 						if type <= 4 {
@@ -1058,7 +1058,7 @@ extension XDSScriptCompiler {
 				
 				for name in vects.names {
 					if token == name {
-						return .loadImmediate(XDSConstant(type: XDSConstantTypes.vector.index, rawValue: UInt32(vects.names.index(of: token)!)))
+						return .loadImmediate(XDSConstant(type: XDSConstantTypes.vector.index, rawValue: UInt32(vects.names.firstIndex(of: token)!)))
 					}
 				}
 				
@@ -1255,7 +1255,7 @@ extension XDSScriptCompiler {
 								variableName = String(functionParts[0])
 								functionName = String(functionParts[1])
 								
-								if let gvarIndex = gvars.names.index(of: variableName) {
+								if let gvarIndex = gvars.names.firstIndex(of: variableName) {
 									classIndex = gvars.values[gvarIndex].type.index
 									
 									if let params = getParameters() {
@@ -1280,7 +1280,7 @@ extension XDSScriptCompiler {
 									classIndex = 4
 									
 									if let params = getParameters() {
-										let immediate = XDSConstant(type: XDSConstantTypes.vector.index, rawValue: UInt32(vects.names.index(of: variableName)!))
+										let immediate = XDSConstant(type: XDSConstantTypes.vector.index, rawValue: UInt32(vects.names.firstIndex(of: variableName)!))
 										functionParameters = [XDSExpr.loadImmediate(immediate)] + params
 									} else {
 										return nil

@@ -20,8 +20,8 @@ let kStarterExpValueOffset		= 0x66
 
 final class XGStarterPokemon: NSObject, XGGiftPokemon, Codable {
 	
-	@objc var level			= 0
-	@objc var exp				= 0
+	@objc var level		= 0
+	@objc var exp		= 0
 	var species			= XGPokemon.pokemon(0)
 	var move1			= XGMoves.move(0)
 	var move2			= XGMoves.move(0)
@@ -31,8 +31,10 @@ final class XGStarterPokemon: NSObject, XGGiftPokemon, Codable {
 	@objc var giftType		= "Starter Pokemon"
 	
 	// unused
-	@objc var index			= 0
-	var shinyValue		= XGShinyValues.random
+	@objc var index				= 0
+	var shinyValue				= XGShinyValues.random
+	private(set) var gender	= XGGenders.random
+	private(set) var nature	= XGNatures.random
 	
 	@objc var startOffset : Int {
 		get {
@@ -105,7 +107,46 @@ extension XGStarterPokemon: XGEnumerable {
 }
 
 
-
+extension XGStarterPokemon: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "Starter Pokemon"
+	}
+	
+	var documentableName: String {
+		return (enumerableValue ?? "") + " - " + enumerableName
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "name", "level", "gender", "nature", "shininess", "moves"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return index.string
+		case "name":
+			return species.name.string
+		case "level":
+			return level.string
+		case "gender":
+			return gender.string
+		case "nature":
+			return nature.string
+		case "shininess":
+			return shinyValue.string
+		case "moves":
+			var text = ""
+			text += "\n" + move1.name.string
+			text += "\n" + move2.name.string
+			text += "\n" + move3.name.string
+			text += "\n" + move4.name.string
+			return text
+		default:
+			return ""
+		}
+	}
+}
 
 
 

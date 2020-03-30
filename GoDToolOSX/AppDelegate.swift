@@ -36,11 +36,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			quitgodtoolmenuitem.title = "Quit Colosseum Tool"
 			godtoolhelpmenuitem.title = "Colosseum Tool Help"
 		}
-		
 	}
+    
+    func application(_ application: NSApplication, open urls: [URL]) {
+        printg("opening files")
+        for fileURL in urls {
+            let file = fileURL.file
+            
+            guard file.exists else {
+                printg("cannot open file:", file.path)
+                continue
+            }
+            printg("opening filepath:", file.path)
+            
+            switch file.fileType {
+            case .gtx, .atx:
+                let texture = file.texture
+                let vc = GoDGTXViewController()
+                vc.texture = texture
+                present(vc)
+            default:
+                break
+            }
+        }
+    }
 	
 	func applicationWillTerminate(_ aNotification: Notification) {
-		// Insert code here to tear down your application
 		printg("The tool is now closing.")
 		printg("deleting LZSS files...")
 		for file in XGFolders.LZSS.files where file.fileType == .lzss {
@@ -50,6 +71,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func getFreeStringID(_ sender: Any) {
+		guard game != .PBR else { return }
+		
 		guard !isSearchingForFreeStringID else {
 			self.displayAlert(title: "Please wait", text: "Please wait for previous string id search to complete.")
 			return
@@ -85,12 +108,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	@IBAction func setVerboseLogs(_ sender: Any) {
 		printg("Set verbose logs")
-		verbose = true
+		settings.verbose = true
+		settings.save()
 	}
 	
 	@IBAction func setFastLogs(_ sender: Any) {
 		printg("Set fast logs")
-		verbose = false
+		settings.verbose = false
+		settings.save()
 	}
 	
 	@IBOutlet weak var fileSizeMenuItem: NSMenuItem!
@@ -103,14 +128,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		printg("Logs deleted")
 	}
 	
-	
-	
 	@IBAction func toggleAllowIncreasedFileSizes(_ sender: Any) {
-		increaseFileSizes = !increaseFileSizes
-		if increaseFileSizes {
+		settings.increaseFileSizes = !settings.increaseFileSizes
+		settings.save()
+		if settings.increaseFileSizes {
 			printg("Enabled file size increases. This will stop the file importer from ignoring files that are larger than the original but importing might take a lot longer if the files are larger. Make sure your ISO has enough free space if using larger files.")
 		}
-		fileSizeMenuItem.title = increaseFileSizes ? "Disable File Size Increases" : "Enable File Size Increases"
+		fileSizeMenuItem.title = settings.increaseFileSizes ? "Disable File Size Increases" : "Enable File Size Increases"
 	}
 	
 	
@@ -124,7 +148,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			return
 		}
 		XGFolders.setUpFolderFormat()
-		XGISO.extractAllFiles()
+		XGUtility.extractAllFiles()
 		
 		if game == .Colosseum && XGFiles.common_rel.exists {
 			let rel = XGFiles.common_rel.data!
@@ -137,6 +161,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			}
 			
 			if zero {
+                printg("Clearing foreign language string tables.\nThis may take a while but only needs to be done once.")
 				XGDolPatcher.zeroForeignStringTables()
 			}
 		}
@@ -297,7 +322,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	
 	@IBAction func showHexCalculator(_ sender: Any) {
-		self.homeViewController.performSegue(withIdentifier: NSStoryboardSegue.Identifier(rawValue: "toHexCalcVC"), sender: self.homeViewController)
+		self.homeViewController.performSegue(withIdentifier: "toHexCalcVC", sender: self.homeViewController)
 	}
 	
 	@IBAction func showStringIDTool(_ sender: Any) {
@@ -305,7 +330,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	func present(_ controller: NSViewController) {
-		self.homeViewController.presentViewControllerAsModalWindow(controller)
+		self.homeViewController.presentAsModalWindow(controller)
 	}
 	
 	
@@ -343,13 +368,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			self.isDocumenting = false
 		}
 	}
+    
+    var isEncoding = false
+    @IBAction func encodeISO(_ sender: Any) {
+        guard !isEncoding else {
+            return
+        }
+        isEncoding = true
+        XGThreadManager.manager.runInBackgroundAsync {
+            XGUtility.encodeISO()
+            self.isDocumenting = false
+        }
+    }
 	
 	func performSegue(_ name: String) {
 		guard XGFiles.iso.exists else {
-			self.homeViewController.performSegue(withIdentifier: NSStoryboardSegue.Identifier("toHelpVC"), sender: self.homeViewController)
+			self.homeViewController.performSegue(withIdentifier: "toHelpVC", sender: self.homeViewController)
 			return
 		}
-		self.homeViewController.performSegue(withIdentifier: NSStoryboardSegue.Identifier(name), sender: self.homeViewController)
+		self.homeViewController.performSegue(withIdentifier: name, sender: self.homeViewController)
 	}
 	
 	

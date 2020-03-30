@@ -8,8 +8,8 @@
 
 import Foundation
 
-let kFirstShadowMoveIndex	= game == .XD ? 0x164 : 0x164
-let kLastShadowMoveIndex	= game == .XD ? 0x176 : 0x164
+let kFirstShadowMoveIndex	= game == .XD ? 0x164 : 0x163
+let kLastShadowMoveIndex	= game == .XD ? 0x176 : 0x163
 
 let shadowMovesUseHMFlag	= XGMove(index: kFirstShadowMoveIndex).HMFlag
 
@@ -74,7 +74,7 @@ enum XGMoves : CustomStringConvertible {
 	var type : XGMoveTypes {
 		get {
 			let index = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kMoveTypeOffset)
-			return XGMoveTypes(rawValue: index) ?? .normal
+			return XGMoveTypes.type(index)
 		}
 	}
 	
@@ -189,7 +189,7 @@ enum XGOriginalMoves {
 	var type : XGMoveTypes {
 		get {
 			let index = XGFiles.original(.common_rel).data!.getByteAtOffset(startOffset + kMoveTypeOffset)
-			return XGMoveTypes(rawValue: index) ?? .normal
+			return XGMoveTypes.type(index)
 		}
 	}
 	
@@ -276,7 +276,7 @@ extension XGMoves: Codable {
 
 extension XGMoves: XGEnumerable {
 	var enumerableName: String {
-		return name.string
+		return name.string.spaceToLength(20)
 	}
 	
 	var enumerableValue: String? {

@@ -191,3 +191,48 @@ extension XGBattleCD: XGEnumerable {
 		return values
 	}
 }
+
+extension XGBattleCD: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "Battle CDs"
+	}
+	
+	var documentableName: String {
+		return (enumerableValue ?? "") + " - " + enumerableName
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "sub index", "name", "difficulty", "pokemon level", "starting pokemon", "panels", "rewards"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+//		case "index":
+//			return index.string
+//		case "sub index":
+//			return subIndex.string
+//		case "name":
+//			return name.string
+//		case "difficulty":
+//			return difficulty.string
+//		case "pokemon level":
+//			return pokemonLevel.string
+//		case "starting pokemon":
+//			return "\n" + startingPokemon.documentableFields
+//		case "panels":
+//			var text = ""
+//			for panel in panels {
+//				switch panel {
+//				case .mysteryPanel(let item):
+//					text += "\n\n" + item.description
+//				case .pokemon(let pokemon):
+//					text += "\n\n" + pokemon.documentableFields
+//				}
+//			}
+//			return text
+		default:
+			return ""
+		}
+	}
+}

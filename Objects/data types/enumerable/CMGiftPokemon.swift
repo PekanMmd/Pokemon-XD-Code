@@ -17,7 +17,7 @@ let kDistroPokemonLevelOffset		=  0x07
 
 let kNumberOfDistroPokemon = 4
 
-class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
+final class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
 	
 	var index			= 0
 	
@@ -31,8 +31,10 @@ class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
 	var giftType		= ""
 	
 	// unused
-	var exp				= -1
-	var shinyValue		= XGShinyValues.random
+	var exp							= -1
+	var shinyValue				= XGShinyValues.random
+	private(set) var gender 	= XGGenders.random
+	private(set) var nature 	= XGNatures.random
 	
 	var startOffset : Int {
 		get {
@@ -87,6 +89,65 @@ class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
 	
 }
 
+extension CMGiftPokemon: XGEnumerable {
+	var enumerableName: String {
+		return species.name.string
+	}
+	
+	var enumerableValue: String? {
+		return index.string
+	}
+	
+	static var enumerableClassName: String {
+		return game == .XD ? "Colosseum Gift Pokemon" : "Gift Pokemon"
+	}
+	
+	static var allValues: [CMGiftPokemon] {
+		var values = [CMGiftPokemon]()
+		for i in 0 ... 3 {
+			values.append(CMGiftPokemon(index: i))
+		}
+		return values
+	}
+}
 
-
-
+extension CMGiftPokemon: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return game == .XD ? "Colosseum Gift Pokemon" : "Gift Pokemon"
+	}
+	
+	var documentableName: String {
+		return (enumerableValue ?? "") + " - " + enumerableName
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "name", "level", "gender", "nature", "shininess", "moves"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return index.string
+		case "name":
+			return species.name.string
+		case "level":
+			return level.string
+		case "gender":
+			return gender.string
+		case "nature":
+			return nature.string
+		case "shininess":
+			return shinyValue.string
+		case "moves":
+			var text = ""
+			text += "\n" + move1.name.string
+			text += "\n" + move2.name.string
+			text += "\n" + move3.name.string
+			text += "\n" + move4.name.string
+			return text
+		default:
+			return ""
+		}
+	}
+}

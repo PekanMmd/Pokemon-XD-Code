@@ -77,7 +77,7 @@ class GoDTreasureViewController: GoDTableViewController {
 	
 	func reloadView() {
 		
-		self.room.selectItem(room: self.currentTreasure.room)
+		self.room.select(self.currentTreasure.room)
 		self.model.selectItem(at: 0)
 		if currentTreasure.modelID == 0x24 {
 			self.model.selectItem(at: 1)
@@ -85,7 +85,7 @@ class GoDTreasureViewController: GoDTableViewController {
 		if currentTreasure.modelID == 0x44 {
 			self.model.selectItem(at: 2)
 		}
-		self.item.selectItem(item: self.currentTreasure.item)
+		self.item.select(self.currentTreasure.item)
 		self.angle.stringValue = self.currentTreasure.angle.string
 		self.x.stringValue = self.currentTreasure.xCoordinate.string
 		self.y.stringValue = self.currentTreasure.yCoordinate.string

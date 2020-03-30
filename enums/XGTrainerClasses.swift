@@ -92,7 +92,7 @@ enum XGTrainerClasses : Int, Codable, CaseIterable {
 
 extension XGTrainerClasses: XGEnumerable {
 	var enumerableName: String {
-		return name.string
+		return name.unformattedString
 	}
 	
 	var enumerableValue: String? {

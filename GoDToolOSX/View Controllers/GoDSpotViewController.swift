@@ -32,7 +32,7 @@ class GoDSpotViewController: GoDTableViewController {
 		self.showActivityView {
 			
 			self.image.image = self.currentMon.pokemon.body
-			self.species.selectPokemon(pokemon: self.currentMon.pokemon)
+			self.species.select(self.currentMon.pokemon)
 			self.minLevel.selectLevel(level: self.currentMon.minLevel)
 			self.maxLevel.selectLevel(level: self.currentMon.maxLevel)
 			self.chance.integerValue = self.currentMon.encounterPercentage

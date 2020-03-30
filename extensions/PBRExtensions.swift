@@ -28,41 +28,25 @@ enum XGGame {
 	case Colosseum
 	case XD
 	case PBR
+    
+    var name: String {
+		switch self {
+		case .Colosseum: return "Pokemon Colosseum"
+		case .XD: return "Pokemon XD: Gale of Darkness"
+		case .PBR: return "Pokemon Battle Revolution"
+		}
+	}
 }
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/Revolution-Tool"
 let region = XGRegions.US
 let game = XGGame.PBR
 
-
-var verbose = false
-var increaseFileSizes = true
 let date = Date(timeIntervalSinceNow: 0)
 var logString = ""
 
 
-func printg(_ args: Any...) {
-	for arg in args {
-		print(arg, separator: " ", terminator: " ")
-	}
-	print("") // automatically adds new line
-	
-	for arg in args {
-		logString = logString + String(describing: arg) + " "
-	}
-	logString = logString + "\n"
-	
-	XGUtility.saveString(logString, toFile: .log(date))
-}
-
 class XGUtility {
-	class func saveObject(_ obj: AnyObject, toFile file: XGFiles) {
-		if !file.folder.exists {
-			file.folder.createDirectory()
-		}
-		NSKeyedArchiver.archiveRootObject(obj, toFile: file.path)
-	}
-	
 	class func saveData(_ data: Data, toFile file: XGFiles) -> Bool {
 		if !file.folder.exists {
 			file.folder.createDirectory()
@@ -118,11 +102,24 @@ class XGUtility {
 	}
 	
 	// extraction
+	@discardableResult
+	class func decompileISO(printOutput: Bool = true) -> String? {
+        printg("decompiling ISO using wit. This will overwrite any existing files...")
+        if !XGFiles.iso.exists {
+            printg("ISO doesn't exist:", XGFiles.iso.path)
+            return nil
+        }
+        let verbose = settings.verbose ? "-v " : ""
+        let overwrite = "-o"
+        let args = "extract \(verbose) \(overwrite) \(XGFiles.iso.path) \(XGFolders.ISODump.path)"
+        return GoDShellManager.run(.wit, args: args, printOutput: printOutput)
+    }
+    
 	class func extractMainFiles() {
 		XGFolders.setUpFolderFormat()
 		
 		printg("extracting required files...")
-		let requiredFiles : [XGFiles] = [.dol, .fsys("common"), .fsys("mes_common"), .fsys("deck")]
+		let requiredFiles : [XGFiles] = [.fsys("common"), .fsys("mes_common"), .fsys("deck")]
 		var fileMissing = false
 		for file in requiredFiles {
 			if !file.exists {
@@ -130,7 +127,10 @@ class XGUtility {
 				fileMissing = true
 			}
 		}
-		if fileMissing { return }
+		if fileMissing {
+            printg("At least one required file was missing, try decompiling the ISO first.")
+            return
+        }
 		
 		let fsys = XGFiles.fsys("deck").fsysData
 		
@@ -169,31 +169,59 @@ class XGUtility {
 			msg.file = .msg("mes_common")
 			msg.save()
 		}
+        
+        if !XGFiles.msg("mes_fight_e").exists {
+            let msg = XGFiles.fsys("mes_fight_e").fsysData.decompressedDataForFileWithIndex(index: 1)!
+            msg.file = .msg("mes_fight_e")
+            msg.save()
+        }
+        
+        if !XGFiles.msg("mes_name_e").exists {
+            let msg = XGFiles.fsys("mes_name_e").fsysData.decompressedDataForFileWithIndex(index: 1)!
+            msg.file = .msg("mes_name_e")
+            msg.save()
+        }
+        
 		printg("extraction complete!")
 		
 	}
 	
 	class func extractAllFiles() {
 		XGFolders.setUpFolderFormat()
-		extractMainFiles()
-//		XGThreadManager.manager.runInBackgroundAsync {
-			printg("extracting fsys files...")
-			for file in XGFolders.FSYS.files where file.fileType == .fsys {
-				printg("extracting:", file.path)
-				let fsys = file.fsysData
-				if let msg = fsys.decompressedDataForFileWithFiletype(type: .msg) {
-					msg.file = .msg(msg.file.fileName.removeFileExtensions())
-					if !msg.file.exists {
-						msg.save()
-					}
-				}
-				let folder = XGFolders.ISOExport(fsys.fileName.removeFileExtensions())
-				folder.createDirectory()
-				fsys.extractFilesToFolder(folder: folder, decode: true)
-			}
-			printg("extraction complete!")
-//		}
-	}
+        extractMainFiles()
+        printg("extracting fsys files...\nThis may take a while")
+        for file in XGFolders.FSYS.files where file.fileType == .fsys {
+            printg("extracting:", file.path)
+            let fsys = file.fsysData
+            if let msg = fsys.decompressedDataForFileWithFiletype(type: .msg) {
+                msg.file = .msg(msg.file.fileName.removeFileExtensions())
+                if !msg.file.exists {
+                    msg.save()
+                }
+            }
+            let folder = XGFolders.ISOExport(fsys.fileName.removeFileExtensions())
+            folder.createDirectory()
+            fsys.extractFilesToFolder(folder: folder, decode: true)
+        }
+        printg("extraction complete!")
+    }
+    
+    class func compileMainFiles() {
+        XGFolders.setUpFolderFormat()
+        printg("compiling all files...")
+        compileDecks()
+        compileCommon()
+        compileMSG()
+    }
+
+	@discardableResult
+	class func compileISO(printOutput: Bool = true) -> String? {
+        printg("compiling ISO...\nThis will overwrite the existing ISO")
+        let verbose = settings.verbose ? "-v " : ""
+        let overwrite = "-o"
+        let args = "copy --raw \(overwrite) \(verbose) \(XGFolders.ISODump.path) \(XGFiles.iso.path)"
+        return GoDShellManager.run(.wit, args: args, printOutput: printOutput)
+    }
 	
 	class func getFSYSForIdentifier(id: UInt32) -> XGFsys? {
 		for file in XGFolders.FSYS.files where file.fileName.contains(".fsys") {
@@ -248,7 +276,7 @@ class XGUtility {
 			
 			for (index, file) in deckDict {
 				if file.exists {
-					if verbose {
+					if settings.verbose {
 						printg("Compiling deck:", file.path)
 					}
 					fsys.shiftAndReplaceFileWithIndexEfficiently(index, withFile: file.compress(), save: false)
@@ -262,6 +290,47 @@ class XGUtility {
 		}
 		
 	}
+    
+    class func compileCommon() {
+        printg("Compiling common...")
+        let file = XGFiles.fsys("common")
+        if file.exists {
+            let fsys = XGFiles.fsys("common").fsysData
+            
+            for cid in 0 ... 32 {
+                let cFile = XGFiles.common(cid)
+                if cFile.exists {
+                    if settings.verbose {
+                        printg("Compiling common:", cFile.path)
+                    }
+                    fsys.shiftAndReplaceFileWithIndexEfficiently(cid, withFile: cFile.compress(), save: false)
+                }
+            }
+            
+            fsys.save()
+            printg("Finished compiling common.")
+        } else {
+            printg("Couldn't compile common as \(file.path) doesn't exist")
+        }
+        
+    }
+    
+    class func compileMSG() {
+        printg("Compiling msgs...")
+        
+        for filename in ["mes_common", "mes_fight_e", "mes_name_e"] {
+            let fsys = XGFiles.fsys(filename)
+            let msg = XGFiles.msg(filename)
+            if fsys.exists && msg.exists {
+                if settings.verbose {
+                    printg("Compiling msg:", msg.path)
+                }
+                let fsysData = fsys.fsysData
+                fsysData.shiftAndReplaceFileWithIndexEfficiently(1, withFile: msg.compress(), save: true)
+            }
+        }
+        printg("Finished compiling msgs.")
+    }
 	
 }
 
@@ -323,8 +392,17 @@ func getStringsContaining(substring: String) -> [XGString] {
 }
 
 
-
-
+extension XGUtility {
+	//MARK: - Documentation
+	class func documentXDS() { }
+	class func documentMacrosXDS() { }
+	class func documentXDSClasses() { }
+	class func documentXDSAutoCompletions(toFile file: XGFiles) { }
+	
+	class func documentISO() {
+		
+	}
+}
 
 
 

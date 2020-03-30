@@ -124,7 +124,7 @@ final class XGMove: NSObject, Codable {
 		self.soundBasedFlag	 = rel.getByteAtOffset(startOffset + kSoundBasedFlagOffset) == 1
 		self.HMFlag			 = rel.getByteAtOffset(startOffset + kHMFlagOffset)		    == 1
 		
-		self.type			 = XGMoveTypes(rawValue: rel.getByteAtOffset(startOffset + kMoveTypeOffset)) ?? .normal
+		self.type			 = XGMoveTypes.type(rel.getByteAtOffset(startOffset + kMoveTypeOffset))
 		self.target			 = XGMoveTargets(rawValue: rel.getByteAtOffset(startOffset + kTargetsOffset)) ?? .selectedTarget
 		self.category		 = XGMoveCategories(rawValue: rel.getByteAtOffset(startOffset + kMoveCategoryOffset)) ?? .none
 		
@@ -228,7 +228,79 @@ extension XGMove: XGEnumerable {
 	}
 }
 
+extension XGMove: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "Moves"
+	}
+	
+	var isDocumentable: Bool {
+		return descriptionID != 0
+	}
+	
+	var documentableName: String {
+		return enumerableName + " - " + (enumerableValue ?? "")
+	}
 
+	static var DocumentableKeys: [String] {
+		return ["index", "hex index", "name", "description", "type", "base pp", "base power", "category", "accuracy", "priority", "effect", "effect accuracy", "targets", "is shadow move", "is HM", "makes contact", "can be protected", "reflected by magic coat", "stolen by snatch", "copyable by mirror move", "affected by king's rock", "is sound based"]
+	}
+	
+	static var DocumentableKeysForXG: [String] {
+		return ["index", "hex index", "name", "is shadow move", "description", "type", "base pp", "base power", "category", "accuracy", "priority", "effect", "effect accuracy", "targets", "makes contact", "can be protected", "reflected by magic bounce", "blocked by bulletproof", "boosted by mega launcher", "affected by king's rock", "is sound based"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return moveIndex.string
+		case "hex index":
+			return moveIndex.hexString()
+		case "name":
+			return name.string
+		case "description":
+			return mdescription.string
+		case "type":
+			return type.name
+		case "base pp":
+			return pp.string
+		case "base power":
+			return basePower.string
+		case "category":
+			return category.string
+		case "accuracy":
+			return accuracy.string
+		case "priority":
+			return priority.string
+		case "effect":
+			return effect.string
+		case "effect accuracy":
+			return effectAccuracy.string
+		case "targets":
+			return target.string
+		case "is shadow move":
+			return isShadowMove.string
+		case "is HM":
+			return HMFlag.string
+		case "makes contact":
+			return contactFlag.string
+		case "can be protected":
+			return protectFlag.string
+		case "reflected by magic coat", "reflected by magic bounce":
+			return magicCoatFlag.string
+		case "stolen by snatch", "blocked by bulletproof":
+			return snatchFlag.string
+		case "copyable by mirror move", "boosted by mega launcher":
+			return mirrorMoveFlag.string
+		case "affected by king's rock":
+			return kingsRockFlag.string
+		case "is sound based":
+			return soundBasedFlag.string
+		default:
+			return ""
+		}
+	}
+}
 
 
 

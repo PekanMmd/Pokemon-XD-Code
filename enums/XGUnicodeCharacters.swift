@@ -53,6 +53,17 @@ enum XGUnicodeCharacters {
 			}
 		}
 	}
+
+	var isFormattingChar: Bool {
+		switch self {
+		case .special(let c, _) where c.isNewLine:
+			return false
+		case .unicode:
+			return false
+		default:
+			return true
+		}
+	}
 	
 	var string : String {
 		get {

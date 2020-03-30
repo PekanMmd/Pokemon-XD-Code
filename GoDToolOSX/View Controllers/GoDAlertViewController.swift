@@ -22,16 +22,17 @@ class GoDAlertViewController: GoDViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-		
+
+		textLabel.translatesAutoresizingMaskIntoConstraints = false
 		self.textLabel.alignment = .center
 		self.textLabel.string = GoDAlertViewController.text
 		self.title = GoDAlertViewController.titleString
 		self.addSubview(textLabel, name: "l")
 		self.addConstraintAlignAllEdges(view1: self.view, view2: textLabel)
 		self.textLabel.isEditable = false
-		self.view.addConstraint(NSLayoutConstraint(item: self.view, attribute: .width, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .width, multiplier: 1, constant: 200))
-		self.view.addConstraint(NSLayoutConstraint(item: self.view, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .height, multiplier: 1, constant: 60))
-		self.view.setBackgroundColour(GoDDesign.colourLightPurple())
+		self.view.addConstraint(NSLayoutConstraint(item: self.view, attribute: .width, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .width, multiplier: 1, constant: 300))
+		self.view.addConstraint(NSLayoutConstraint(item: self.view, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .height, multiplier: 1, constant: 100))
+		self.view.setBackgroundColour(GoDDesign.colourClear())
     }
 	
 	class func displayAlert(title: String, text: String) {

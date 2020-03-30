@@ -83,11 +83,11 @@ class XGMutableData: NSObject {
 			self.file.folder.createDirectory()
 		}
 		if self.data.write(toFile: self.file.path, atomically: true) {
-			if verbose {
+			if settings.verbose {
 				printg("data successfully written to file:", self.file.path)
 			}
 		} else {
-			if verbose {
+			if settings.verbose {
 				printg("data failed to be written to file:", self.file.path)
 			}
 		}

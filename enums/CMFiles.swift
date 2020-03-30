@@ -116,7 +116,6 @@ indirect enum XGFiles {
 			case .typeImage			: folder = .Types
 			case .trainerFace		: folder = .Trainers
 			case .msg		: folder = .StringTables
-			case .fsys				: folder = .FSYS
 			case .lzss				: folder = .LZSS
 			case .scd				: folder = .Scripts
 			case .xds				: folder = .Documents
@@ -128,6 +127,9 @@ indirect enum XGFiles {
 			case .ccd				: folder = .Col
 			case .json				: folder = .JSON
 			case .original(let f)	: folder = f.folder
+            case .fsys              : if XGFolders.FSYS.filenames.contains(self.fileName) { folder = .FSYS}
+                                      else if XGFolders.MenuFSYS.filenames.contains(self.fileName) { folder = .MenuFSYS}
+                                      else {folder = .AutoFSYS}
 			case .nameAndFolder( _, let aFolder) : folder = aFolder
 				
 			}
@@ -178,7 +180,6 @@ indirect enum XGFiles {
 		
 		
 		if loadableFiles.contains(self.path) {
-			
 			if let d = data {
 				loadedFiles[self.path] = d
 			}
@@ -290,7 +291,7 @@ indirect enum XGFiles {
 		}
 	}
 	
-	func compress() -> XGFiles {
+	@discardableResult func compress() -> XGFiles {
 		if self.exists {
 			XGLZSS.Input(self).compress()
 		}
@@ -462,7 +463,8 @@ indirect enum XGFolders {
 				
 			case .Documents	: return path
 			case .nameAndPath(let name, let path): return path + "/\(name)"
-			case .ISOExport(let folder): return path + ("/" + self.name) + ("/" + folder)
+			case .ISOExport(let folder): return path + "/" + self.name +
+			(folder == "" ? "" : "/" + folder)
 			case .Import	: path = XGFolders.TextureImporter.path
 			case .Export	: path = XGFolders.TextureImporter.path
 			case .Textures	: path = XGFolders.TextureImporter.path
@@ -506,16 +508,16 @@ indirect enum XGFolders {
 		}
 	}
 	
-	var filenames : [String]! {
+	var filenames : [String] {
 		get {
-			let names = (try? FileManager.default.contentsOfDirectory(atPath: self.path)) as [String]!
-			return names!.filter{ $0.substring( to: $0.characters.index($0.startIndex, offsetBy: 1)) != "." }
+            let names = (try? FileManager.default.contentsOfDirectory(atPath: self.path))
+            return names?.filter { $0.substring(from: 0, to: 1) != "." } ?? []
 		}
 	}
 	
-	var files : [XGFiles]! {
+	var files : [XGFiles] {
 		get {
-			let fileNames = self.filenames ?? []
+			let fileNames = self.filenames
 			var xgfs = [XGFiles]()
 			
 			for file in fileNames {
@@ -555,8 +557,11 @@ indirect enum XGFolders {
 				try (fileURL as NSURL).setResourceValue(false, forKey: URLResourceKey.isExcludedFromBackupKey)
 			} catch let error1 as NSError {
 				error = error1
-				printg(error)
 			}
+            
+            if let error = error {
+                printg(error)
+            }
 			
 		}
 		
@@ -565,7 +570,7 @@ indirect enum XGFolders {
 	
 	func map(_ function: ((_ file: XGFiles) -> Void) ) {
 		
-		let files = self.files ?? []
+		let files = self.files
 		
 		for file in files {
 			function(file)
@@ -637,9 +642,7 @@ indirect enum XGFolders {
 				}
 				
 				let resource = XGResources.png(filename.replacingOccurrences(of: ".png", with: ""))
-				let data = resource.data
-				data.file = image
-				data.save()
+                resource.copy(to: image)
 			}
 		}
 		
@@ -648,10 +651,7 @@ indirect enum XGFolders {
 		for j in jsons {
 			let file = XGFiles.nameAndFolder(j + ".json", .JSON)
 			if !file.exists {
-				let resource = XGResources.JSON(j)
-				let data = resource.data
-				data.file = file
-				data.save()
+                XGResources.JSON(j).copy(to: file)
 			}
 		}
 		

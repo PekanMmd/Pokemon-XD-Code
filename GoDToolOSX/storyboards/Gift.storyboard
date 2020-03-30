@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="ggV-ux-Xw2">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Gift Pokemon Editor-->
+        <scene sceneID="m8T-yW-RfH">
+            <objects>
+                <viewController title="Gift Pokemon Editor" id="ggV-ux-Xw2" customClass="GoDGiftViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="Tw2-ma-Ii5">
+                        <rect key="frame" x="0.0" y="0.0" width="560" height="330"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cf7-hR-wGd">
+                                <rect key="frame" x="0.0" y="0.0" width="200" height="330"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="1YU-Db-YkH"/>
+                                </constraints>
+                            </customView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="MAt-xW-M9s" customClass="GoDGiftPokemonView" customModule="Colosseum_Tool" customModuleProvider="target">
+                                <rect key="frame" x="215" y="40" width="330" height="280"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="280" id="W36-we-Svg"/>
+                                    <constraint firstAttribute="width" constant="330" id="Yew-Fu-I0z"/>
+                                </constraints>
+                            </customView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zc5-8x-ZJf">
+                                <rect key="frame" x="334" y="2" width="92" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="NdA-wy-2sV"/>
+                                    <constraint firstAttribute="width" constant="80" id="hX8-2G-CuP"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="i7Z-Cr-tKO">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent">s</string>
+                                    <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="save:" target="ggV-ux-Xw2" id="4GX-bE-Oa5"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="MAt-xW-M9s" firstAttribute="leading" secondItem="Cf7-hR-wGd" secondAttribute="trailing" constant="15" id="3C4-Uj-Ugp"/>
+                            <constraint firstItem="zc5-8x-ZJf" firstAttribute="centerX" secondItem="MAt-xW-M9s" secondAttribute="centerX" id="Dj6-DK-TRl"/>
+                            <constraint firstItem="Cf7-hR-wGd" firstAttribute="top" secondItem="Tw2-ma-Ii5" secondAttribute="top" id="R7a-ZN-Jj2"/>
+                            <constraint firstAttribute="bottom" secondItem="Cf7-hR-wGd" secondAttribute="bottom" id="XNT-JX-W5K"/>
+                            <constraint firstItem="zc5-8x-ZJf" firstAttribute="top" secondItem="MAt-xW-M9s" secondAttribute="bottom" constant="10" id="tKl-Jd-ETa"/>
+                            <constraint firstItem="MAt-xW-M9s" firstAttribute="top" secondItem="Tw2-ma-Ii5" secondAttribute="top" constant="10" id="tZP-Bz-K6D"/>
+                            <constraint firstItem="Cf7-hR-wGd" firstAttribute="leading" secondItem="Tw2-ma-Ii5" secondAttribute="leading" id="ubo-MQ-bL7"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="pokemonView" destination="MAt-xW-M9s" id="wIh-1R-fmi"/>
+                    </connections>
+                </viewController>
+                <customObject id="q9h-ur-ImT" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1897" y="1205"/>
+        </scene>
+    </scenes>
+</document>

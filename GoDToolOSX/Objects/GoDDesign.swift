@@ -151,7 +151,7 @@ class GoDDesign: NSObject {
 	
 	//MARK: - Photos
 	@objc class func photoDefault() -> NSImage {
-		let image = NSImage(named: NSImage.Name(rawValue: "PhotoDefault"))!
+		let image = NSImage(named: "PhotoDefault")!
 		return image
 	}
 	

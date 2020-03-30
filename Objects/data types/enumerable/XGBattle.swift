@@ -37,7 +37,6 @@ let kBattlePlayer4DeckIDOffset = 0x34
 let kBattlePlayer4TrainerIDOffset = 0x36
 let kBattlePlayer4ControlOffset = 0x3B
 
-
 final class XGBattle: NSObject, Codable {
 	
 	@objc var index = 0
@@ -168,7 +167,7 @@ final class XGBattle: NSObject, Codable {
 		self.battleStyle = XGBattleStyles(rawValue: style) ?? .other
 		
 		let t = data.getByteAtOffset(startOffset + kBattleBattleTypeOffset)
-		self.battleType = XGBattleTypes(rawValue: t) ?? .none
+		self.battleType = XGBattleTypes(rawValue: t) ?? XGBattleTypes.none
 		
 		let r = data.getByteAtOffset(startOffset + kBattleColosseumRoundOffset)
 		self.round = XGColosseumRounds(rawValue: r) ?? .none
@@ -285,7 +284,7 @@ final class XGBattle: NSObject, Codable {
 
 extension XGBattle: XGEnumerable {
 	var enumerableName: String {
-		return title
+		return title.spaceToLength(40)
 	}
 	
 	var enumerableValue: String? {
@@ -305,7 +304,34 @@ extension XGBattle: XGEnumerable {
 	}
 }
 
-
+extension XGBattle: XGDocumentable {
+	static var documentableClassName: String {
+		return "Battles"
+	}
+	
+	var documentableName: String {
+		return (enumerableValue ?? "") + " - " + enumerableName
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "hex index", "title", "description"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+            return index.string
+		case "hex index":
+			return index.hexString()
+		case "title":
+            return title
+        case "description":
+            return description
+		default:
+			return ""
+		}
+	}
+}
 
 
 

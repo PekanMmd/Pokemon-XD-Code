@@ -46,7 +46,7 @@ class XGMapRel : XGRelocationTable {
 		super.init(file: file)
 		
 		if self.numberOfPointers < kNumberMapPointers {
-			if verbose {
+			if settings.verbose {
 				printg("Map: \(file.path) has the incorrect number of map pointers. Possibly a colosseum file.")
 			}
 			self.isValid = false
@@ -135,7 +135,7 @@ extension XGISO {
 		for i in 0 ..< decksOrdered.count {
 			let deck = decksOrdered[i]
 			if !deck.file.exists {
-				if verbose {
+				if settings.verbose {
 					printg("Extracting deck: \(deck.file.fileName)")
 				}
 				if let data = deckData.decompressedDataForFileWithIndex(index: i * 2) {
@@ -220,6 +220,10 @@ extension XGISO {
 }
 
 extension XGUtility {
+	
+	class func extractAllFiles() {
+		XGISO.extractAllFiles()
+	}
 	
 	class func importFsys() {
 		
@@ -583,7 +587,7 @@ extension XGUtility {
 		
 		var string = "XG Obtainable types count:\n"
 		for i in 0...17 {
-			let name = XGMoveTypes(rawValue: i)!.name
+			let name = XGMoveTypes.type(i).name
 			
 			string += name
 			string += "\t:\t"
@@ -1151,7 +1155,7 @@ extension XGUtility {
 					let script = file.scriptData.getXDSScript()
 					XGUtility.saveString(script, toFile: xds)
 				} else {
-					if verbose {
+					if settings.verbose {
 						printg("script already exists: \(xds.path)")
 					}
 				}
@@ -1340,10 +1344,513 @@ extension XGUtility {
 		XGUtility.saveJSON(json as AnyObject, toFile: file)
 	}
 	
+	private static var isDocumentingISO = false
+	private static var shouldCancelDocumentation = false
+	static func cancelDocumentation() {
+		shouldCancelDocumentation = true
+	}
 	class func documentISO() {
-		saveObtainablePokemonByLocation()
+		
+		guard !isDocumentingISO else {
+			printg("Already Documenting ISO!")
+			return
+		}
+		
+		isDocumentingISO = true
+		shouldCancelDocumentation = false
+		printg("Documenting ISO.\nThis may take a while...")
+		XGThreadManager.manager.runInBackgroundAsync {
+			printg("Documenting Enumerations...")
+			// Enumerations
+			if !shouldCancelDocumentation {
+				printg("Enumerating Abilities...")
+				XGAbilities.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating Battles...")
+				XGBattle.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating Character Models...")
+				XGCharacterModel.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating B-G Enumerations...")
+				XGBagSlots.documentEnumerationData()
+				XGBattleBingoCard.documentEnumerationData()
+				XGBattleField.documentEnumerationData()
+				XGBattleTypes.documentEnumerationData()
+				XGBattleStyles.documentEnumerationData()
+				XGColosseumRounds.documentEnumerationData()
+				XGDecks.documentEnumerationData()
+				XGDeoxysFormes.documentEnumerationData()
+				XGEffectivenessValues.documentEnumerationData()
+				XGEvolutionMethods.documentEnumerationData()
+				XGExpRate.documentEnumerationData()
+				XGGenderRatios.documentEnumerationData()
+				XGGenders.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating Gift Pokemon...")
+				XGStarterPokemon.documentEnumerationData()
+				XGDemoStarterPokemon.documentEnumerationData()
+				CMGiftPokemon.documentEnumerationData()
+				XGTradeShadowPokemon.documentEnumerationData()
+				XGTradePokemon.documentEnumerationData()
+				XGMtBattlePrizePokemon.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating Items...")
+				XGItems.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating Moves...")
+				XGMoves.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating M-N Enumerations...")
+				XGMaps.documentEnumerationData()
+				XGMoveCategories.documentEnumerationData()
+				XGMoveEffectTypes.documentEnumerationData()
+				XGMoveTargets.documentEnumerationData()
+				XGMoveTypes.documentEnumerationData()
+				XGNatures.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating Pokemon...")
+				XGPokemon.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating Pokespot Encounters...")
+				XGPokeSpotPokemon.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating P-S Enumerations...")
+				XGPokeSpots.documentEnumerationData()
+				XGShinyValues.documentEnumerationData()
+				XGStats.documentEnumerationData()
+				XGStatusEffects.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating Rooms...")
+				XGRoom.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating Treasure...")
+				XGTreasure.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating T-W Enumerations...")
+				XGTMs.documentEnumerationData()
+				XGTrainerClasses.documentEnumerationData()
+				XGTrainerModels.documentEnumerationData()
+				XGWeather.documentEnumerationData()
+			}
+			// Documents
+			if !shouldCancelDocumentation {
+				printg("Documenting data...")
+			}
+			if !shouldCancelDocumentation {
+				saveObtainablePokemonByLocation()
+				// if we're in here then it's too late to cancel anyway
+				shouldCancelDocumentation = false
+			}
+			
+			if !shouldCancelDocumentation {
+				printg("Finished Documenting ISO.")
+			} else {
+				printg("Cancelled Documenting ISO.")
+			}
+			isDocumentingISO = false
+		}
+			
 	}
 	
+	private static var isEncodingISO = false
+	private static var shouldCancelEncoding = false
+	static func cancelEncoding() {
+		shouldCancelEncoding = true
+	}
+	class func encodeISO() {
+		
+		guard !isEncodingISO else {
+			printg("Already Encoding ISO!")
+			return
+		}
+		
+		isEncodingISO = true
+		shouldCancelEncoding = false
+		printg("Encoding ISO.\nThis may take a while...")
+		XGThreadManager.manager.runInBackgroundAsync {
+			if !shouldCancelEncoding {
+				printg("Encoding Abilities...")
+				XGAbilities.encodeData(filename: { (value) -> String in
+					(value as? XGAbilities)?.index.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Trainers...")
+				
+				for deck in TrainerDecksArray {
+					for trainer in deck.allTrainers {
+						if !shouldCancelEncoding {
+							trainer.writeJSON(to: .nameAndFolder(trainer.deck.rawValue + " " + trainer.index.string + ".json", XGTrainer.encodedDataFolder()))
+						}
+					}
+				}
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding TMs...")
+				XGTMs.encodeData(filename: { (value) -> String in
+					if let value = (value as? XGTMs) {
+						switch value {
+						case .tm(let i): return "TM \(i)"
+						case .tutor(let i): return "Tutor \(i)"
+						}
+					}
+					return "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Battle Bingo Cards...")
+				XGBattleBingoCard.encodeData(filename: { (value) -> String in
+					(value as? XGBattleBingoCard)?.index.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Battles...")
+				XGBattle.encodeData(filename: { (value) -> String in
+					(value as? XGBattle)?.index.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Character Models...")
+				XGCharacterModel.encodeData(filename: { (value) -> String in
+					(value as? XGCharacterModel)?.index.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Gift Pokemon...")
+				XGDemoStarterPokemon.encodeData(filename: { (value) -> String in
+					(value as? XGDemoStarterPokemon)?.index.string ?? "-"
+				})
+				XGStarterPokemon.encodeData(filename: { (value) -> String in
+					(value as? XGStarterPokemon)?.index.string ?? "-"
+				})
+				CMGiftPokemon.encodeData(filename: { (value) -> String in
+					(value as? CMGiftPokemon)?.index.string ?? "-"
+				})
+				XGTradePokemon.encodeData(filename: { (value) -> String in
+					(value as? XGTradePokemon)?.index.string ?? "-"
+				})
+				XGTradeShadowPokemon.encodeData(filename: { (value) -> String in
+					(value as? XGTradeShadowPokemon)?.index.string ?? "-"
+				})
+				XGMtBattlePrizePokemon.encodeData(filename: { (value) -> String in
+					(value as? XGMtBattlePrizePokemon)?.index.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Doors...")
+				XGDoor.encodeData(filename: { (value) -> String in
+					(value as? XGDoor)?.index.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Interaction Points...")
+				XGInteractionPointData.encodeData(filename: { (value) -> String in
+					(value as? XGInteractionPointData)?.index.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Items...")
+				XGItem.encodeData(filename: { (value) -> String in
+					(value as? XGItem)?.index.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Moves...")
+				XGMove.encodeData(filename: { (value) -> String in
+					(value as? XGMove)?.moveIndex.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Music...")
+				XGMusic.encodeData(filename: { (value) -> String in
+					(value as? XGMusic)?.index.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Pokemarts...")
+				XGPokemart.encodeData(filename: { (value) -> String in
+					(value as? XGPokemart)?.index.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Pokemon Stats...")
+				XGPokemonStats.encodeData(filename: { (value) -> String in
+					(value as? XGPokemonStats)?.index.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Pokespot Encounters...")
+				XGPokeSpotPokemon.encodeData(filename: { (value) -> String in
+					if let value = value as? XGPokeSpotPokemon {
+						return value.spot.string + " " + value.index.string
+					}
+					return "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Rooms...")
+				XGRoom.encodeData(filename: { (value) -> String in
+					(value as? XGRoom)?.index.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Trainer Classes...")
+				XGTrainerClass.encodeData(filename: { (value) -> String in
+					(value as? XGTrainerClass)?.index.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Treasure...")
+				XGTreasure.encodeData(filename: { (value) -> String in
+					(value as? XGTreasure)?.index.string ?? "-"
+				})
+			}
+			if !shouldCancelEncoding {
+				printg("Encoding Types...")
+				XGType.encodeData(filename: { (value) -> String in
+					(value as? XGType)?.index.string ?? "-"
+				})
+				// if we're in here then it's too late to cancel anyway
+				shouldCancelEncoding = false
+			}
+			
+			if !shouldCancelEncoding {
+				printg("Finished Encoding ISO.")
+			} else {
+				printg("Cancelled Encoding ISO.")
+			}
+			isEncodingISO = false
+		}
+		
+	}
+	
+	private static var isDecodingISO = false
+	private static var shouldCancelDecoding = false
+	static func cancelDecoding() {
+		shouldCancelDecoding = true
+	}
+	class func decodeISO() {
+		
+		guard !isDecodingISO else {
+			printg("Already Decoding ISO!")
+			return
+		}
+		
+		isDecodingISO = true
+		shouldCancelDecoding = false
+		printg("Decoding ISO.\nThis may take a while...")
+		XGThreadManager.manager.runInBackgroundAsync {
+			if !shouldCancelDecoding {
+				printg("Decoding Trainers...")
+				for file in XGTrainer.encodedJSONFiles() {
+					do {
+						try XGTrainer.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+			}
+			if !shouldCancelDecoding {
+				printg("Decoding Battle Bingo Cards...")
+				for file in XGBattleBingoCard.encodedJSONFiles() {
+					do {
+						try XGBattleBingoCard.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+			}
+			if !shouldCancelDecoding {
+				printg("Decoding Battles...")
+				for file in XGBattle.encodedJSONFiles() {
+					do {
+						try XGBattle.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+			}
+			if !shouldCancelDecoding {
+				printg("Decoding Character Models...")
+				for file in XGCharacterModel.encodedJSONFiles() {
+					do {
+						try XGCharacterModel.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+			}
+			if !shouldCancelDecoding {
+				printg("Decoding Gift Pokemon...")
+				for file in XGDemoStarterPokemon.encodedJSONFiles() {
+					do {
+						try XGDemoStarterPokemon.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+				for file in XGStarterPokemon.encodedJSONFiles() {
+					do {
+						try XGStarterPokemon.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+				for file in CMGiftPokemon.encodedJSONFiles() {
+					do {
+						try CMGiftPokemon.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+				for file in XGTradePokemon.encodedJSONFiles() {
+					do {
+						try XGTradePokemon.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+				for file in XGTradeShadowPokemon.encodedJSONFiles() {
+					do {
+						try XGTradeShadowPokemon.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+				for file in XGMtBattlePrizePokemon.encodedJSONFiles() {
+					do {
+						try XGMtBattlePrizePokemon.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+			}
+			if !shouldCancelDecoding {
+				printg("Decoding Doors...")
+				for file in XGDoor.encodedJSONFiles() {
+					do {
+						try XGDoor.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+			}
+			if !shouldCancelDecoding {
+				printg("Decoding Interaction Points...")
+				for file in XGInteractionPointData.encodedJSONFiles() {
+					do {
+						try XGInteractionPointData.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+			}
+			if !shouldCancelDecoding {
+				printg("Decoding Items...")
+				for file in XGItem.encodedJSONFiles() {
+					do {
+						try XGItem.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+			}
+			if !shouldCancelDecoding {
+				printg("Decoding Moves...")
+				for file in XGMove.encodedJSONFiles() {
+					do {
+						try XGMove.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+			}
+			if !shouldCancelDecoding {
+				printg("Decoding Pokemarts...")
+				for file in XGPokemart.encodedJSONFiles() {
+					do {
+						try XGPokemart.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+			}
+			if !shouldCancelDecoding {
+				printg("Decoding Pokemon Stats...")
+				for file in XGPokemonStats.encodedJSONFiles() {
+					do {
+						try XGPokemonStats.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+			}
+			if !shouldCancelDecoding {
+				printg("Decoding Pokespot Encounters...")
+				for file in XGPokeSpotPokemon.encodedJSONFiles() {
+					do {
+						try XGPokeSpotPokemon.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+			}
+			if !shouldCancelDecoding {
+				printg("Decoding Trainer Classes...")
+				for file in XGTrainerClass.encodedJSONFiles() {
+					do {
+						try XGTrainerClass.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+			}
+			if !shouldCancelDecoding {
+				printg("Decoding Treasure...")
+				for file in XGTreasure.encodedJSONFiles() {
+					do {
+						try XGTreasure.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+			}
+			if !shouldCancelDecoding {
+				printg("Decoding Types...")
+				for file in XGType.encodedJSONFiles() {
+					do {
+						try XGType.fromJSON(file: file).save()
+					} catch {
+						printg("Failed to decode file:", file.path)
+					}
+				}
+				// if we're in here then it's too late to cancel anyway
+				shouldCancelDecoding = false
+			}
+			
+			if !shouldCancelDecoding {
+				printg("Finished Decoding ISO.")
+			} else {
+				printg("Cancelled Decoding ISO.")
+			}
+			isDecodingISO = false
+		}
+		
+	}
 	
 	//MARK: - Model Utilities
 	class func convertFromPKXToOverWorldModel(pkx: XGMutableData) -> XGMutableData {
@@ -1528,7 +2035,7 @@ extension XGUtility {
 	}
 	
 	class func getTMLocations() -> [(tm:XGTMs, locations:[String])] {
-		var locations = getItemLocations()
+		let locations = getItemLocations()
 		var tmLocations = [(XGTMs,[String])]()
 		
 		let firstIndex = XGTMs.tm(1).item.index

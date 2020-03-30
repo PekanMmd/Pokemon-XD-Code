@@ -19,7 +19,7 @@ let kNumberOfTypes = 0x12
 
 // name id list in dol in colo 0x2e2458
 
-class XGType: NSObject, Codable {
+final class XGType: NSObject, Codable {
 	
 	var index				 = 0
 	var nameID				 = 0
@@ -33,39 +33,6 @@ class XGType: NSObject, Codable {
 	}
 	
 	var startOffset = 0
-	
-	var dictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			dictRep["name"] = self.name
-			
-			dictRep["category"] = self.category.dictionaryRepresentation as AnyObject?
-			
-			var effectivenessTableArray = [ [String : AnyObject] ]()
-			for a in effectivenessTable {
-				effectivenessTableArray.append(a.dictionaryRepresentation)
-			}
-			dictRep["effectivenessTable"] = effectivenessTableArray as AnyObject?
-			
-			return dictRep
-		}
-	}
-	
-	var readableDictionaryRepresentation : [String : AnyObject] {
-		get {
-			var dictRep = [String : AnyObject]()
-			
-			dictRep["category"] = self.category.string as AnyObject?
-			
-			var effectivenessTableArray = [AnyObject]()
-			for a in effectivenessTable {
-				effectivenessTableArray.append(a.string as AnyObject)
-			}
-			dictRep["effectivenessTable"] = effectivenessTableArray as AnyObject?
-			
-			return ["\(self.index) " + self.name.string : dictRep as AnyObject]
-		}
-	}
 	
 	init(index: Int) {
 		super.init()
@@ -126,7 +93,7 @@ extension XGType: XGEnumerable {
 	
 	static var allValues: [XGType] {
 		var values = [XGType]()
-		for i in 0 ..< CommonIndexes.NumberOfTypes.value {
+		for i in 0 ..< kNumberOfTypes {
 			values.append(XGType(index: i))
 		}
 		return values

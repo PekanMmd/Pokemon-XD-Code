@@ -172,7 +172,7 @@ class PBRDataTable : CustomStringConvertible {
 	}
 	
 	func dataForEntryWithIndex(_ index: Int) -> XGMutableData? {
-		if index < self.entries.count {
+		if index >= 0, index < self.entries.count {
 			return entries[index]
 		}
 		return nil

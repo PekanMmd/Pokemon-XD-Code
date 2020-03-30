@@ -10,7 +10,6 @@ import Foundation
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
 let region = XGRegions.US
-var verbose = true
 
 let date = Date(timeIntervalSinceNow: 0)
 var logString = ""

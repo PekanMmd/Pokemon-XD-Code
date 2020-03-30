@@ -80,7 +80,7 @@ enum XGFileTypes : Int, Codable {
 		case .toc : return ".toc"
 		case .png : return ".png"
 		case .bmp : return ".bmp"
-		case .jpeg: return ".jpeg"
+		case .jpeg: return ".jpg"
 		case .lzss : return ".lzss"
 		case .txt : return ".txt"
 		case .json: return ".json"

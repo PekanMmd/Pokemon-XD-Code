@@ -327,23 +327,26 @@ enum XGDecks : String, Codable, CaseIterable {
 		}
 	}
 	
-	var allPokemon : [XGTrainerPokemon] {
-		get {
-			
-			var pokes = [XGTrainerPokemon]()
-			
-			if self == .DeckDarkPokemon {
-				for i in 0 ..< self.DDPKEntries {
-					pokes.append(XGTrainerPokemon(DeckData: .ddpk(i)))
-				}
-			} else {
-				for i in 0 ..< self.DPKMEntries {
-					pokes.append(XGTrainerPokemon(DeckData: .dpkm(i, self)))
-				}
+	var allDeckPokemon: [XGDeckPokemon] {
+		var pokes = [XGDeckPokemon]()
+		
+		if self == .DeckDarkPokemon {
+			for i in 0 ..< self.DDPKEntries {
+				pokes.append(.ddpk(i))
 			}
-			
-			return pokes
+		} else {
+			for i in 0 ..< self.DPKMEntries {
+				pokes.append(.dpkm(i, self))
+			}
 		}
+		
+		return pokes
+	}
+	
+	var allPokemon: [XGTrainerPokemon] {
+		return allDeckPokemon.map({ (dpkm) -> XGTrainerPokemon in
+			return XGTrainerPokemon(DeckData: dpkm)
+		})
 	}
 	
 	var allActivePokemon : [XGTrainerPokemon] {

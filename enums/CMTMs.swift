@@ -63,7 +63,7 @@ enum XGTMs {
 		for w in 0 ..< words.count {
 			
 			let word = words[w]
-			let len  = word.characters.count
+			let len  = word.count
 			
 			if lineLength + len > maxLineLength {
 				
@@ -163,7 +163,7 @@ let TMLocations = [
 
 extension XGTMs: Codable {
 	enum CodingKeys: String, CodingKey {
-		case index
+		case index, move
 	}
 	
 	init(from decoder: Decoder) throws {
@@ -172,9 +172,19 @@ extension XGTMs: Codable {
 		self = .tm(index)
 	}
 	
+	static func update(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let index = try container.decode(Int.self, forKey: .index)
+		let move = try container.decode(XGMoves.self, forKey: .move)
+		let tm = XGTMs.tm(index)
+		tm.replaceWithMove(move)
+		tm.updateItemDescription()
+	}
+	
 	func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.index, forKey: .index)
+		try container.encode(index, forKey: .index)
+		try container.encode(move, forKey: .move)
 	}
 }
 
@@ -191,12 +201,40 @@ extension XGTMs: XGEnumerable {
 		return "TMs"
 	}
 	
-	static var allValues: [XGEffectivenessValues] {
-		return allCases
+	static var allValues: [XGTMs] {
+		return allTMs()
 	}
 }
 
-
+extension XGTMs: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "TMs"
+	}
+	
+	var documentableName: String {
+		return enumerableName
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "hex index", "name", "description"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return index.string
+		case "hex index":
+			return index.hexString()
+		case "name":
+			return move.name.string
+		case "description":
+			return item.descriptionString.string
+		default:
+			return ""
+		}
+	}
+}
 
 
 

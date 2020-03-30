@@ -30,7 +30,7 @@ class GoDRandomiserViewController: GoDViewController {
 	@IBAction func randomise(_ sender: Any) {
 		
 		XGUtility.deleteSuperfluousFiles()
-		increaseFileSizes = true
+		settings.increaseFileSizes = true
 		
 		if pspecies.state == .on {
 			XGRandomiser.randomisePokemon()

@@ -365,7 +365,7 @@ extension XGStringTable {
 		} else {
 			if increaseLength {
 				if self.startOffset == 0 {
-					if verbose {
+					if settings.verbose {
 						printg("string was too long, adding \(difference + 0x50) bytes to table \(self.file.fileName)")
 					}
 					// add a little extra so it doesn't keep hitting this case every time there's even a 1 character increase

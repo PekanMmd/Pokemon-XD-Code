@@ -94,7 +94,35 @@ extension XGPokeSpots: XGEnumerable {
 	}
 }
 
-
+extension XGPokeSpots: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "Pokespot Encounters"
+	}
+	
+	var documentableName: String {
+		return string
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["Encounters"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "Encounters":
+			var text = ""
+			for i in 0 ..< self.numberOfEntries {
+				let encounter = XGPokeSpotPokemon(index: i, pokespot: self)
+				text += "\n" + encounter.pokemon.name.string.spaceToLength(20)
+				text += " Lv. " + encounter.minLevel.string + " - " + encounter.maxLevel.string
+			}
+			return text
+		default:
+			return ""
+		}
+	}
+}
 
 
 

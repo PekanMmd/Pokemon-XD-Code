@@ -18,7 +18,7 @@ class GoDItemViewController: GoDTableViewController {
 	@IBOutlet var descriptionIDField: NSTextField!
 	@IBOutlet var descriptionField: NSTextField!
 	
-	@IBAction func setDescription(_ sender: GoDMovePopUpButton) {
+	@IBAction func setDescription(_ sender: AnyObject) {
 		self.descriptionField.stringValue = XGTMs.createItemDescriptionForMove(self.tmButton.selectedValue)
 	}
 	
@@ -156,7 +156,7 @@ class GoDItemViewController: GoDTableViewController {
 		descriptionIDField.stringValue = currentItem.descriptionID.string
 		
 		consumable.state = currentItem.canBeHeld ? .on : .off
-		pocketPopupButton.selectPocket(pocket: currentItem.bagSlot)
+		pocketPopupButton.select(currentItem.bagSlot)
 		price.stringValue = currentItem.price.string
 		coupon.stringValue = currentItem.couponPrice.string
 		parameter.stringValue = currentItem.parameter.string
@@ -172,7 +172,7 @@ class GoDItemViewController: GoDTableViewController {
 			if tm.item.index == currentItem.index {
 				isTM = true
 				tmButton.isHidden = false
-				tmButton.selectMove(move: tm.move)
+				tmButton.select(tm.move)
 				tmLabel.isHidden = false
 			}
 		}
@@ -197,7 +197,7 @@ class GoDItemViewController: GoDTableViewController {
 		
 		let item = XGItems.item(row)
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: NSImage(named: NSImage.Name(rawValue: "File Cell")), fontSize: 16, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: NSImage(named: "File Cell"), fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
 		cell.setTitle(item.name.string)
 		

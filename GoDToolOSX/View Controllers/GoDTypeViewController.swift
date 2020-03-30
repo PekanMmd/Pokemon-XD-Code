@@ -79,12 +79,10 @@ class GoDTypeViewController: GoDTableViewController {
 				currentType.nameID = value
 				
 				if name.stringValue.length > 0 {
-					
-					let string = XGString(string: name.stringValue, file: XGFiles.common_rel, sid: currentType.nameID)
-					if !XGFiles.common_rel.stringTable.addString(string, increaseSize: true, save: true) {
+                    let string = currentType.name.duplicateWithString(name.stringValue)
+                    if !string.table.stringTable.addString(string, increaseSize: true, save: true) {
 						printg("Failed to set type name:", name.stringValue)
 					}
-					
 				}
 			}
 			
@@ -106,7 +104,7 @@ class GoDTypeViewController: GoDTableViewController {
 			nameID.stringValue = type.nameID.string
 			name.stringValue = type.name.string
 			for i in 0 ..< kNumberOfTypes {
-				popups[i].selectEffectiveness(eff: type.effectivenessTable[i])
+				popups[i].select(type.effectivenessTable[i])
 			}
 			
 			physical.state = .off
@@ -127,14 +125,20 @@ class GoDTypeViewController: GoDTableViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
+
+		if game == .PBR {
+			physical.isHidden = true
+			special.isHidden = true
+			neither.isHidden = true
+		}
+
 		labels = [normalLabel, fightLabel, flyLabel, poisonLabel, groundLabel, rockLabel, bugLabel, ghostLabel, steelLabel, fairyLabel, fireLabel, waterLabel, grassLabel, electricLabel, psychicLabel, iceLabel, dragonLabel, darkLabel]
 		popups = [normal, fight, fly, poison, ground, rock, bug, ghost, steel, fairy, fire, water, grass, electric, psychic, ice, dragon, dark]
 		
 		for i in 0 ..< kNumberOfTypes {
-			let type = XGMoveTypes(rawValue: i)!
-			labels[i].stringValue = type.name
-			popups[i].selectEffectiveness(eff: .neutral)
+			let type = XGMoveTypes.type(i)
+			labels[i].stringValue = type.enumerableName
+			popups[i].select(.neutral)
 		}
 	}
 	
@@ -146,8 +150,8 @@ class GoDTypeViewController: GoDTableViewController {
 		
 		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: XGFiles.typeImage(row).image, fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
-		let type = XGMoveTypes(rawValue: row)!
-		cell.setTitle(type.name)
+		let type = XGMoveTypes.type(row)
+		cell.setTitle(type.data.name.unformattedString)
 		cell.setBackgroundImage(XGFiles.typeImage(row).image)
 		
 		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")

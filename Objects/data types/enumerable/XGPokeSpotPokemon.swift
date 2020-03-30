@@ -21,13 +21,13 @@ let kStepsPerPokeSnackOffset	= 0x0A
 final class XGPokeSpotPokemon: NSObject, Codable {
 	
 	@objc var index				= 0
-	var spot				= XGPokeSpots.rock
-	var pokemon				= XGPokemon.pokemon(0)
+	var spot					= XGPokeSpots.rock
+	var pokemon					= XGPokemon.pokemon(0)
 	
-	@objc var minLevel			= 0
-	@objc var maxLevel			= 0
+	@objc var minLevel				= 0
+	@objc var maxLevel				= 0
 	@objc var encounterPercentage	= 0
-	@objc var stepsPerSnack		= 0
+	@objc var stepsPerSnack			= 0
 
 	@objc var location : String {
 		get {
@@ -79,7 +79,7 @@ final class XGPokeSpotPokemon: NSObject, Codable {
 
 extension XGPokeSpotPokemon: XGEnumerable {
 	var enumerableName: String {
-		return pokemon.name.string
+		return pokemon.name.string.spaceToLength(20)
 	}
 	
 	var enumerableValue: String? {
@@ -101,9 +101,42 @@ extension XGPokeSpotPokemon: XGEnumerable {
 	}
 }
 
-
-
-
+extension XGPokeSpotPokemon: XGDocumentable {
+	static var documentableClassName: String {
+		return "Pokespot Pokemon"
+	}
+	
+	var documentableName: String {
+		return pokemon.name.string
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "hex index", "location", "species", "min level", "max level", "encounter percentage", "steps per snack"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+        switch key {
+        case "index":
+            return index.string
+        case "hex index":
+            return index.hexString()
+        case "location":
+            return location
+        case "species":
+            return pokemon.name.string
+        case "min level":
+            return minLevel.string
+        case "max level":
+            return maxLevel.string
+        case "encounter percentage":
+            return encounterPercentage.string
+        case "steps per snack":
+            return stepsPerSnack.string
+        default:
+            return ""
+        }
+	}
+}
 
 
 

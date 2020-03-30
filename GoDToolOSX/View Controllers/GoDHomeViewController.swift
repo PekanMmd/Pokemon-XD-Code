@@ -24,21 +24,21 @@ class GoDHomeViewController: GoDTableViewController {
 	var tools: [String] {
 		switch game {
 		case .Colosseum:
-			colotools
+			return colotools
 		case .XD:
-			xdtools
+			return xdtools
 		case .PBR:
-			pbrtools
+			return pbrtools
 		}
 	}
 	var segues: [String] {
 		switch game {
 		case .Colosseum:
-			colosegues
+			return colosegues
 		case .XD:
-			xdsegues
+			return xdsegues
 		case .PBR:
-			pbrsegues
+			return pbrsegues
 		}
 	}
 
@@ -59,7 +59,7 @@ class GoDHomeViewController: GoDTableViewController {
 		(NSApp.delegate as! AppDelegate).homeViewController = self
 		
 		if !XGFiles.iso.exists {
-			self.performSegue(withIdentifier: NSStoryboardSegue.Identifier(rawValue: "toHelpVC"), sender: self)
+			self.performSegue(withIdentifier: "toHelpVC", sender: self)
 		}
 	}
 	
@@ -73,7 +73,7 @@ class GoDHomeViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let image = (row % 2 == 0 ? NSImage(named: NSImage.Name(rawValue: "Item Cell")) : NSImage(named: NSImage.Name(rawValue: "Tool Cell")))!
+		let image = (row % 2 == 0 ? NSImage(named: "Item Cell") : NSImage(named: "Tool Cell"))!
 		
 		let view = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: tools[row], colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: image, fontSize: 14, width: self.table.width)) as! GoDTableCellView
 		
@@ -84,13 +84,12 @@ class GoDHomeViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
 		super.tableView(tableView, didSelectRow: row)
-		if row == -1 {
+		guard row > -1, checkRequiredFiles() else {
 			return
 		}
-		if !XGFiles.iso.exists {
-			self.performSegue(withIdentifier: NSStoryboardSegue.Identifier(rawValue: "toHelpVC"), sender: self)
-		} else if row < segues.count && row >= 0 {
-			performSegue(withIdentifier: NSStoryboardSegue.Identifier(rawValue: segues[row]), sender: self)
+		
+		if row < segues.count {
+			performSegue(withIdentifier: segues[row], sender: self)
 		}
 	}
 	
@@ -99,6 +98,18 @@ class GoDHomeViewController: GoDTableViewController {
 		NSApplication.shared.terminate(self)
 	}
 	
+    @discardableResult
+    private func checkRequiredFiles() -> Bool {
+        if game != .PBR && !XGFiles.iso.exists {
+			self.performSegue(withIdentifier: "toHelpVC", sender: self)
+            return false
+        }
+        if game == .PBR && (!XGFiles.fsys("common").exists || !XGFiles.iso.exists) {
+			self.performSegue(withIdentifier: "toHelpVC", sender: self)
+            return false
+        }
+        return true
+    }
 }
 
 

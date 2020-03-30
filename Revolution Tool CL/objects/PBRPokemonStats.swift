@@ -169,7 +169,7 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 		unknown = data.getByte(50)
 		colourID = data.getByte(51)
 		
-		var EVs = data.getShort(40).bitArray(count: 16)
+		let EVs = data.getShort(40).bitArray(count: 16)
 		// bit mask of EV yields. Each stat is 2 bits starting from the most significant bit being hp.
 		if EVs[15] { hpEV += 2 }
 		if EVs[14] { hpEV += 1 }

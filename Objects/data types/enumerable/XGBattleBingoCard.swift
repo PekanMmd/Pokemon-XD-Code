@@ -33,17 +33,17 @@ let kBingoCardFirstMysteryPanelOffset	= 0xB0
 
 final class XGBattleBingoCard: NSObject, Codable {
 	
-	@objc var difficulty		= 0
+	@objc var difficulty				= 0
 	@objc var subIndex			= 0
 	
-	@objc var index				= 0
+	@objc var index					= 0
 	
-	@objc var nameID			= 0
+	@objc var nameID				= 0
 	@objc var detailsID			= 0
 	
 	@objc var pokemonLevel		= 0
 	@objc var startingPokemon	: XGBattleBingoPokemon!
-	var panels					= [XGBattleBingoPanel]()
+	var panels						= [XGBattleBingoPanel]()
 	@objc var rewards			= [Int]()
 	
 	var name : XGString {
@@ -62,7 +62,7 @@ final class XGBattleBingoCard: NSObject, Codable {
 		get {
 			var s = ""
 			s += "Battle Bingo Card - \(self.index)\n"
-			s += "\(startingPokemon)\n\n"
+			s += startingPokemon.description + "\n\n"
 			for i in 0 ..< 4 {
 				for j in 0 ..< 4 {
 					var r = "\(panels[i*4 + j])"
@@ -184,7 +184,50 @@ extension XGBattleBingoCard: XGEnumerable {
 	}
 }
 
-
+extension XGBattleBingoCard: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "Battle Bingo Card"
+	}
+	
+	var documentableName: String {
+		return (enumerableValue ?? "") + " - " + enumerableName
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "sub index", "name", "difficulty", "pokemon level", "starting pokemon", "panels", "rewards"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return index.string
+		case "sub index":
+			return subIndex.string
+		case "name":
+			return name.string
+		case "difficulty":
+			return difficulty.string
+		case "pokemon level":
+			return pokemonLevel.string
+		case "starting pokemon":
+			return "\n" + startingPokemon.documentableFields
+		case "panels":
+			var text = ""
+			for panel in panels {
+				switch panel {
+				case .mysteryPanel(let item):
+					text += "\n\n" + item.description
+				case .pokemon(let pokemon):
+					text += "\n\n" + pokemon.documentableFields
+				}
+			}
+			return text
+		default:
+			return ""
+		}
+	}
+}
 
 
 

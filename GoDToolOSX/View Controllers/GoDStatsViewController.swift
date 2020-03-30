@@ -184,16 +184,16 @@ class GoDStatsViewController: GoDTableViewController {
 		self.hexField.stringValue = self.pokemon.index.hexString()
 		self.startField.stringValue = self.pokemon.startOffset.hexString()
 		
-		self.type1PopUp.selectType(type: self.pokemon.type1)
-		self.type2PopUp.selectType(type: self.pokemon.type2)
-		self.ability1PopUp.selectAbility(ability: self.pokemon.ability1)
-		self.ability2PopUp.selectAbility(ability: self.pokemon.ability2)
-		self.item1PopUp.selectItem(item: self.pokemon.heldItem1)
-		self.item2PopUp.selectItem(item: self.pokemon.heldItem2)
+		self.type1PopUp.select(self.pokemon.type1)
+		self.type2PopUp.select(self.pokemon.type2)
+		self.ability1PopUp.select(self.pokemon.ability1)
+		self.ability2PopUp.select(self.pokemon.ability2)
+		self.item1PopUp.select(self.pokemon.heldItem1)
+		self.item2PopUp.select(self.pokemon.heldItem2)
 		
-		self.ExpRatePopUp.selectExpRate(rate: self.pokemon.levelUpRate)
-		self.genderPopUp.selectGenderRatio(ratio: self.pokemon.genderRatio)
-		
+		self.ExpRatePopUp.select(self.pokemon.levelUpRate)
+		self.genderPopUp.select(self.pokemon.genderRatio)
+        
 		let evos = [evo1,evo2,evo3,evo4,evo5]
 		for evo in evos {
 			evo?.reloadData()

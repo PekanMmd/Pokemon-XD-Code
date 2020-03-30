@@ -72,7 +72,7 @@ class GoDLevelUpMoveView: NSView {
 			let move = self.delegate.pokemon.levelUpMoves[self.index].move
 			let level = self.delegate.pokemon.levelUpMoves[self.index].level
 			
-			self.movePopUp.selectMove(move: move)
+			self.movePopUp.select(move)
 			self.levelPopUp.selectLevel(level: level)
 			
 		}

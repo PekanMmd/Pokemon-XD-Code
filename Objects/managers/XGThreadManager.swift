@@ -12,7 +12,7 @@ class XGThreadManager {
 
 	// thought I'd make a singleton object just for the banter
 	static let manager = XGThreadManager()
-
+	private init() {}
 
 	// Wow, recent swift versions have really streamlined the whole multi threading process
 	// This is about all I really need

@@ -83,7 +83,39 @@ class XGBattleBingoPokemon: NSObject, Codable {
    
 }
 
-
+extension XGBattleBingoPokemon: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "Battle Bingo Pokemon"
+	}
+	
+	var documentableName: String {
+		return species.name.string
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["name", "type", "ability", "nature", "gender", "move"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "name":
+			return species.name.string
+		case "type":
+			return typeOnCard == 0 ? species.type1.name : species.type2.name
+		case "ability":
+			return ability == 0 ? species.ability1 : species.ability2
+		case "nature":
+			return nature.string
+		case "gender":
+			return gender.string
+		case "move":
+			return move.name.string
+		default:
+			return ""
+		}
+	}
+}
 
 
 

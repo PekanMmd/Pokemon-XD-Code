@@ -32,6 +32,8 @@ final class XGTradePokemon: NSObject, XGGiftPokemon, Codable {
 	var move4			= XGMoves.move(0)
 	
 	@objc var giftType		= "Duking Trade"
+	private(set) var gender	= XGGenders.random
+	private(set) var nature	= XGNatures.random
 	
 	// unused
 	@objc var exp				= -1
@@ -105,19 +107,58 @@ extension XGTradePokemon: XGEnumerable {
 	}
 	
 	static var enumerableClassName: String {
-		return "Duking Trades"
+		return "Trades"
 	}
 	
 	static var allValues: [XGTradePokemon] {
 		var values = [XGTradePokemon]()
-		for i in 0 ..< 3 {
+		for i in 0 ... 3 {
 			values.append(XGTradePokemon(index: i))
 		}
 		return values
 	}
 }
 
-
+extension XGTradePokemon: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "Trade Pokemon"
+	}
+	
+	var documentableName: String {
+		return (enumerableValue ?? "") + " - " + enumerableName
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "name", "level", "gender", "nature", "shininess", "moves"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return index.string
+		case "name":
+			return species.name.string
+		case "level":
+			return level.string
+		case "gender":
+			return gender.string
+		case "nature":
+			return nature.string
+		case "shininess":
+			return shinyValue.string
+		case "moves":
+			var text = ""
+			text += "\n" + move1.name.string
+			text += "\n" + move2.name.string
+			text += "\n" + move3.name.string
+			text += "\n" + move4.name.string
+			return text
+		default:
+			return ""
+		}
+	}
+}
 
 
 

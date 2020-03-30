@@ -19,9 +19,8 @@ class GoDContextViewController: GoDViewController {
 				
 				if value >= 0 {
 					if value < kNumberOfTypes {
-						if let type = XGMoveTypes(rawValue: value) {
-							text += "\n\("Type:".spaceToLength(20)) \(type.name)"
-						}
+						let type = XGMoveTypes.type(value)
+						text += "\n\("Type:".spaceToLength(20)) \(type.name)"
 					}
 				}
 				

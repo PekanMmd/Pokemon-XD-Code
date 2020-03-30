@@ -83,14 +83,14 @@ enum XGPokemon: CustomStringConvertible {
 	var type1 : XGMoveTypes {
 		get {
 			let type = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kType1Offset)
-			return XGMoveTypes(rawValue: type) ?? XGMoveTypes.normal
+			return XGMoveTypes.type(type)
 		}
 	}
 	
 	var type2 : XGMoveTypes {
 		get {
 			let type = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kType2Offset)
-			return XGMoveTypes(rawValue: type) ?? XGMoveTypes.normal
+			return XGMoveTypes.type(type)
 		}
 	}
 	
@@ -204,14 +204,14 @@ enum XGOriginalPokemon {
 	var type1 : XGMoveTypes {
 		get {
 			let type = XGFiles.original(.common_rel).data!.getByteAtOffset(startOffset + kType1Offset)
-			return XGMoveTypes(rawValue: type) ?? XGMoveTypes.normal
+			return XGMoveTypes.type(type)
 		}
 	}
 	
 	var type2 : XGMoveTypes {
 		get {
 			let type = XGFiles.original(.common_rel).data!.getByteAtOffset(startOffset + kType2Offset)
-			return XGMoveTypes(rawValue: type) ?? XGMoveTypes.normal
+			return XGMoveTypes.type(type)
 		}
 	}
 	
@@ -287,7 +287,7 @@ extension XGPokemon: Codable {
 
 extension XGPokemon: XGEnumerable {
 	var enumerableName: String {
-		return name.string
+		return name.string.spaceToLength(20)
 	}
 	
 	var enumerableValue: String? {

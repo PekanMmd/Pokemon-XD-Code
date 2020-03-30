@@ -185,8 +185,8 @@ class GoDOpenGLView: NSOpenGLView {
 		super.prepareOpenGL()
 		
 		self.timer = Timer(timeInterval: 0.001, target: self, selector: #selector(redraw), userInfo: nil, repeats: true)
-		RunLoop.current.add(self.timer, forMode: RunLoopMode.defaultRunLoopMode)
-		RunLoop.current.add(self.timer, forMode: RunLoopMode.eventTrackingRunLoopMode)
+		RunLoop.current.add(self.timer, forMode: RunLoop.Mode.default)
+		RunLoop.current.add(self.timer, forMode: RunLoop.Mode.eventTracking)
 		
 		// set clear view colour
 		let bg = background.vec3

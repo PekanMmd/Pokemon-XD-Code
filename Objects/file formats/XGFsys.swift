@@ -29,6 +29,7 @@ let kFileDetailsFilenameOffset		= 0x24
 
 let kLZSSUncompressedSizeOffset		= 0x04
 let kLZSSCompressedSizeOffset		= 0x08
+let kLZSSUnkownOffset				= 0x0C // PBR only, unused in Colo/XD
 
 let kSizeOfLZSSHeader				= 0x10
 
@@ -134,7 +135,12 @@ final class XGFsys : NSObject {
 		let offset = Int(self.data.getWordAtOffset(startOffsetForFileDetails(index) + kFileDetailsFilenameOffset))
 		var name = getStringAtOffset(offset:offset)
 		if game == .PBR {
-			name = name.replacingOccurrences(of: "(null)", with: self.fileName.removeFileExtensions())
+			var addendum = "\(index)"
+			while addendum.length < 4 {
+				addendum = "0" + addendum
+			}
+			addendum = " " + addendum
+			name = fileName.removeFileExtensions() + addendum
 		}
 		return name
 	}
@@ -160,7 +166,6 @@ final class XGFsys : NSObject {
 	
 	@objc var fileNames : [String] {
 		get {
-			
 			var names = [String]()
 			
 			for i in 0 ..< self.numberOfEntries {
@@ -299,7 +304,7 @@ final class XGFsys : NSObject {
 	func decompressedDataForFileWithFiletype(type: XGFileTypes) -> XGMutableData? {
 		if let index = indexForFileType(type: type) {
 			if index < 0 || index > self.numberOfEntries {
-				if verbose {
+				if settings.verbose {
 					printg(self.fileName + " - file type: " + type.fileExtension + " doesn't exists.")
 				}
 				return nil
@@ -357,7 +362,7 @@ final class XGFsys : NSObject {
 		}
 		let decompressedData = XGMutableData(byteStream: decompressedStream, file: .nameAndFolder("", .Documents))
 		
-		var filename = self.usesFileExtensions ? self.fullFileNames[index] : self.fileNames[index].removeFileExtensions()
+		var filename = self.usesFileExtensions ? fullFileNameForFileWithIndex(index: index) : fileNameForFileWithIndex(index: index)
 		if filename == "common_rel" {
 			filename = "common"
 		}
@@ -375,6 +380,10 @@ final class XGFsys : NSObject {
 	@objc func isFileCompressed(index: Int) -> Bool {
 		return self.data.getWordAtOffset(startOffsetForFile(index)) == kLZSSbytes
 	}
+
+	@objc func getUnknownLZSSForFileWithIndex(_ index: Int) -> UInt32 {
+		return self.data.getWordAtOffset(startOffsetForFile(index) + kLZSSUnkownOffset)
+	}
 	
 	@objc func extractDataForFileWithIndex(index: Int) -> XGMutableData? {
 		// checks if the file is compressed or not and returns the appropriate data
@@ -386,7 +395,7 @@ final class XGFsys : NSObject {
 	}
 	
 	func indexForFile(filename: String) -> Int? {
-		return self.fileNames.index(of: filename)
+		return self.fileNames.firstIndex(of: filename)
 	}
 	
 	func replaceFileWithName(name: String, withFile newFile: XGFiles) {
@@ -567,6 +576,11 @@ final class XGFsys : NSObject {
 			printg("skipping fsys import: \(newFile.fileName) to \(self.fileName)\nindex doesn't exist:", index)
 			return
 		}
+
+		var unknownLZSSBytes: UInt32?
+		if game == .PBR, isFileCompressed(index: index) {
+			unknownLZSSBytes = getUnknownLZSSForFileWithIndex(index)
+		}
 		
 		let fileStart = startOffsetForFile(index)
 		let fileEnd = fileStart + newFile.fileSize
@@ -585,7 +599,6 @@ final class XGFsys : NSObject {
 		
 		eraseDataForFile(index: index)
 		
-		
 		let fileSize = UInt32(newFile.data!.length)
 		let newData = newFile.data!
 		
@@ -594,6 +607,9 @@ final class XGFsys : NSObject {
 		
 		let lzssCheck = newData.getWordAtOffset(0) == kLZSSbytes
 		if lzssCheck {
+			if let unknown = unknownLZSSBytes {
+				newData.replaceWordAtOffset(kLZSSUnkownOffset, withBytes: unknown)
+			}
 			data.replaceWordAtOffset(detailsStart + kUncompressedSizeOffset, withBytes: newData.getWordAtOffset(kLZSSUncompressedSizeOffset))
 		} else {
 			data.replaceWordAtOffset(detailsStart + kUncompressedSizeOffset, withBytes: fileSize)
@@ -878,14 +894,13 @@ final class XGFsys : NSObject {
 		self.data.save()
 	}
 	
-	func extractFilesToFolder(folder: XGFolders, decode: Bool) {
-		
+	var numberedFileNames: [String] {
 		var data = [XGMutableData]()
 		for i in 0 ..< self.numberOfEntries {
 			data.append(extractDataForFileWithIndex(index: i)!)
 		}
 		
-		var filenames = data.map { (d) -> String in
+		let filenames = data.map { (d) -> String in
 			let name = d.file.fileName
 			return name
 		}
@@ -924,13 +939,53 @@ final class XGFsys : NSObject {
 			
 			updatedNames.append(filenames[i].removeFileExtensions() + addendum + filenames[i].fileExtensions)
 		}
+		return updatedNames
+	}
+	
+	func extractFilesToFolder(folder: XGFolders, decode: Bool) {
+		
+		var data = [XGMutableData]()
+		for i in 0 ..< self.numberOfEntries {
+			data.append(extractDataForFileWithIndex(index: i)!)
+		}
+		
+		let filenames = data.map { $0.file.fileName }
+		
+		var repeats = [Int]()
+		for i in 0 ..< filenames.count {
+			let current = filenames[i]
+			var counter = 0
+			for j in 0 ..< i {
+				if filenames[j] == current {
+					counter += 1
+				}
+			}
+			repeats.append(counter)
+		}
+		
+		var updatedNames = [String]()
+		for i in 0 ..< filenames.count {
+			var addendum = ""
+			if repeats[i] > 0 {
+				addendum = "\(repeats[i])"
+			}
+			
+			if addendum.length > 0 {
+				while addendum.length < 4 {
+					addendum = "0" + addendum
+				}
+				addendum = " " + addendum
+			}
+			
+			updatedNames.append(filenames[i].removeFileExtensions() + addendum + filenames[i].fileExtensions)
+		}
 		
 		// save all files before decoding as some require each other
 		for i in 0 ..< data.count {
 			data[i].file = .nameAndFolder(updatedNames[i], folder)
 			
 			if !data[i].file.exists {
-				if verbose {
+				if settings.verbose {
 					printg("extracting file: \(data[i].file.fileName)")
 				}
 				data[i].save()
@@ -940,7 +995,7 @@ final class XGFsys : NSObject {
 		// decode certain file types
 		if decode {
 			for i in 0 ..< data.count {
-				if verbose {
+				if settings.verbose {
 					printg("decoding file: \(data[i].file.fileName)")
 				}
 				

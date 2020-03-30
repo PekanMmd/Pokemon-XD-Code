@@ -186,7 +186,7 @@ var allInteractionPointData : [XGInteractionPointData] {
 	return IPData
 }
 
-final class XGInteractionPointData: NSObject {
+final class XGInteractionPointData: NSObject, Codable {
 	
 	// Each entry is actually a script function call
 	// if the script value is 0x596 then the script function is from common.scd
@@ -488,5 +488,23 @@ extension XGInteractionPointData: XGEnumerable {
 			values.append(XGInteractionPointData(index: i))
 		}
 		return values
+	}
+}
+
+extension XGElevatorDirections: XGEnumerable {
+	var enumerableName: String {
+		return string
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Elevator Directions"
+	}
+	
+	static var allValues: [XGElevatorDirections] {
+		return [.up, .down]
 	}
 }

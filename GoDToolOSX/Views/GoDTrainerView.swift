@@ -100,8 +100,8 @@ class GoDTrainerView: NSView {
 		self.setBackgroundColour(trainer.hasShadow ? GoDDesign.colourPurple() : GoDDesign.colourRed())
 		
 		self.modelimageview.image = trainer.trainerModel.image
-		self.classPopup.selectClass(tclass: trainer.trainerClass.data)
-		self.modelPopup.selectModel(model: trainer.trainerModel)
+		self.classPopup.select(trainer.trainerClass)
+		self.modelPopup.select(trainer.trainerModel)
 		self.AI.stringValue = trainer.AI.string
 		self.name.stringValue = trainer.nameID.stringIDToString().string
 		
@@ -111,8 +111,8 @@ class GoDTrainerView: NSView {
 			
 			if loadBattleData {
 				if let battle = trainer.battleData {
-					self.battleType.selectType(type: battle.battleType!)
-					self.battleStyle.selectStyle(style: battle.battleStyle!)
+					self.battleType.select(battle.battleType!)
+					self.battleStyle.select(battle.battleStyle!)
 					self.battleStyle.isHidden = false
 					self.battleType.isHidden = false
 					self.bgm.isHidden = false
@@ -144,7 +144,7 @@ class GoDTrainerView: NSView {
 	
 	func save() {
 		
-		if let c = XGTrainerClasses(rawValue: classPopup.selectedValue.index) {
+        if let c = XGTrainerClasses(rawValue: classPopup.selectedValue.data.index) {
 			self.delegate.currentTrainer.trainerClass = c
 		}
 		

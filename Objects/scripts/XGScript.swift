@@ -152,7 +152,7 @@ class XGScript: NSObject {
 			self.arry.append(arr)
 		}
 		
-		var rawCode = data.getWordStreamFromOffset(CODEStart + kScriptSectionHeaderSize, length: GVARStart - (CODEStart + kScriptSectionHeaderSize))
+		let rawCode = data.getWordStreamFromOffset(CODEStart + kScriptSectionHeaderSize, length: GVARStart - (CODEStart + kScriptSectionHeaderSize))
 		
 		var codePointer = 0
 		while codePointer < rawCode.count {

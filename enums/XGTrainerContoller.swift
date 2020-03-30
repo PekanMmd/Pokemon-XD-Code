@@ -15,4 +15,19 @@ enum XGTrainerController : Int, Codable, CaseIterable {
 	case P3 = 3
 	case P4 = 4
 	
+	var string: String {
+		switch self {
+		case .AI:
+			return "AI"
+		case .P1:
+			return "P1"
+		case .P2:
+			return "P2"
+		case .P3:
+			return "P3"
+		case .P4:
+			return "P4"
+		}
+	}
+	
 }

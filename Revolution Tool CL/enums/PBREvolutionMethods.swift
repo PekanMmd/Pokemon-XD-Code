@@ -10,6 +10,8 @@ import Foundation
 
 enum XGEvolutionMethods : Int, Codable {
 	
+	case levelUpWithKeyItem		= -1
+	
 	case none					= 0x00
 	case maxHappiness			= 0x01
 	case happinessDay			= 0x02
@@ -42,6 +44,7 @@ enum XGEvolutionMethods : Int, Codable {
 	var string : String {
 		get {
 			switch self {
+				case .levelUpWithKeyItem	: return "-"
 				case .none					:	return "None"
 				case .maxHappiness			:	return "Max Happiness"
 				case .happinessDay			:	return "Happiness (Day)"

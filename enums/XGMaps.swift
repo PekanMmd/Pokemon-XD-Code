@@ -69,11 +69,11 @@ enum XGMaps : String, Codable, CaseIterable {
 
 extension XGMaps: XGEnumerable {
 	var enumerableName: String {
-		return name
+		return rawValue
 	}
 	
 	var enumerableValue: String? {
-		return rawValue
+		return name
 	}
 	
 	static var enumerableClassName: String {

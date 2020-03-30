@@ -356,7 +356,7 @@ indirect enum XGFiles {
 		
 		if fsysFile.exists {
 			let fsys = fsysFile.fsysData
-			if verbose {
+			if settings.verbose {
 				printg("compiling \(baseName).fsys...")
 			}
 			if rel.exists {
@@ -385,7 +385,7 @@ indirect enum XGFiles {
 		
 		if fsysFile.exists {
 			let fsys = fsysFile.fsysData
-			if verbose {
+			if settings.verbose {
 				printg("compiling \(baseName).fsys...")
 			}
 			if rel.exists {
@@ -514,7 +514,8 @@ indirect enum XGFolders {
 				
 				case .Documents	: return path
 				case .nameAndPath(let name, let path): return path + "/\(name)"
-				case .ISOExport(let folder): return path + ("/" + self.name) + ("/" + folder)
+				case .ISOExport(let folder): return path + "/" + self.name +
+				(folder == "" ? "" : "/" + folder)
 				case .Import	: path = XGFolders.TextureImporter.path
 				case .Export	: path = XGFolders.TextureImporter.path
 				case .Textures	: path = XGFolders.TextureImporter.path
@@ -559,27 +560,25 @@ indirect enum XGFolders {
 		}
 	}
 	
-	var filenames : [String] {
-		if self.exists {
-			let names = (try? FileManager.default.contentsOfDirectory(atPath: self.path)) as [String]?
-			return names!.filter{ $0.substring(from: 0, to: 1) != "." }
-		} else {
-			return []
-		}
-	}
-	
-	var files : [XGFiles]! {
-		get {
-			let fileNames = self.filenames
-			var xgfs = [XGFiles]()
-			
-			for file in fileNames {
-				let xgf = XGFiles.nameAndFolder(file, self)
-				xgfs.append(xgf)
-			}
-			return xgfs
-		}
-	}
+	var filenames: [String] {
+        get {
+            let names = (try? FileManager.default.contentsOfDirectory(atPath: self.path))
+            return names?.filter { $0.substring(from: 0, to: 1) != "." } ?? []
+        }
+    }
+    
+    var files : [XGFiles] {
+        get {
+            let fileNames = self.filenames
+            var xgfs = [XGFiles]()
+            
+            for file in fileNames {
+                let xgf = XGFiles.nameAndFolder(file, self)
+                xgfs.append(xgf)
+            }
+            return xgfs
+        }
+    }
 	
 	var exists : Bool {
 		return FileManager.default.fileExists(atPath: self.path)
@@ -613,7 +612,7 @@ indirect enum XGFolders {
 	
 	func map(_ function: ((_ file: XGFiles) -> Void) ) {
 		
-		let files = self.files ?? []
+		let files = self.files
 		
 		for file in files {
 			function(file)
@@ -679,9 +678,7 @@ indirect enum XGFolders {
 		for image in images {
 			if !image.exists {
 				let resource = XGResources.png(image.fileName.replacingOccurrences(of: ".png", with: ""))
-				let data = resource.data
-				data.file = image
-				data.save()
+                resource.copy(to: image)
 			}
 		}
 		
@@ -690,10 +687,7 @@ indirect enum XGFolders {
 		for j in jsons {
 			let file = XGFiles.json(j)
 			if !file.exists {
-				let resource = XGResources.JSON(j)
-				let data = resource.data
-				data.file = file
-				data.save()
+                XGResources.JSON(j).copy(to: file)
 			}
 		}
 	}

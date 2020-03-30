@@ -44,7 +44,7 @@ let kShadowAlwaysFleeOffset	= 0x15 // the shadow pokemon is sent to miror b. eve
 
 let kPurificationExperienceOffset = 0xA // Should always be 0. The value gets increased as the pokemon gains exp and it is all gained at once upon purification.
 
-class XGTrainerPokemon : NSObject {
+final class XGTrainerPokemon : NSObject, Codable {
 	
 	var deckData			= XGDeckPokemon.dpkm(0, XGDecks.DeckStory)
 	
@@ -251,8 +251,68 @@ class XGTrainerPokemon : NSObject {
 
 }
 
+extension XGTrainerPokemon: XGEnumerable {
+	var enumerableName: String {
+		return deckData.enumerableName
+	}
+	
+	var enumerableValue: String? {
+		return deckData.enumerableValue
+	}
+	
+	static var enumerableClassName: String {
+		return XGDeckPokemon.enumerableClassName
+	}
+	
+	static var allValues: [XGTrainerPokemon] {
+		return XGDeckPokemon.allValues.map({ (dpkm) -> XGTrainerPokemon in
+			return dpkm.data
+		})
+	}
+	
+	
+}
 
-
+extension XGTrainerPokemon: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "Trainer Pokemon"
+	}
+	
+	var documentableName: String {
+		return (enumerableValue ?? "") + " - " + enumerableName
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "name", "level", "gender", "nature", "shininess", "moves"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return deckData.index.string
+		case "name":
+			return species.name.string
+		case "level":
+			return level.string
+		case "gender":
+			return gender.string
+		case "nature":
+			return nature.string
+		case "shininess":
+			return shinyness.string
+		case "moves":
+			var text = ""
+			text += "\n" + moves[0].name.string
+			text += "\n" + moves[1].name.string
+			text += "\n" + moves[2].name.string
+			text += "\n" + moves[3].name.string
+			return text
+		default:
+			return ""
+		}
+	}
+}
 
 
 

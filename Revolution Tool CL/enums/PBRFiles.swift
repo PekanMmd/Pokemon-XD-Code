@@ -46,7 +46,9 @@ indirect enum XGFiles {
 	case lzss(String)
 	case json(String)
 	case log(Date)
+    case wit
 	case nameAndFolder(String, XGFolders)
+	case iso // mostly just for compatibility. ISO is handle by the wit tool because it's more complicated on wii.
 	
 	var path : String {
 		get {
@@ -74,7 +76,9 @@ indirect enum XGFiles {
 			case .lzss(let s)			: return s + XGFileTypes.lzss.fileExtension
 			case .log(let d)			: return d.description + XGFileTypes.txt.fileExtension
 			case .json(let s)			: return s + XGFileTypes.json.fileExtension
+            case .wit                   : return "wit"
 			case .nameAndFolder(let name, _) : return name
+            case .iso					: return "pbr" + XGFileTypes.iso.fileExtension
 			}
 		}
 	}
@@ -99,7 +103,9 @@ indirect enum XGFiles {
 			case .log				: folder = .Logs
 			case .json				: folder = .JSON
 			case .fsys				: folder = .FSYS
+            case .wit               : folder = .Resources
 			case .nameAndFolder( _, let aFolder) : folder = aFolder
+			case .iso				: folder = .ISO
 				
 			}
 			
@@ -121,6 +127,15 @@ indirect enum XGFiles {
 		case .fsys("Null"): return NullFSYS
 		default: break
 		}
+        
+        let requiredFiles : [XGFiles] = [.dol, .fsys("common"), .fsys("mes_common"), .fsys("deck"), XGFiles.msg("mes_common"), XGFiles.msg("mes_fight_e"), XGFiles.msg("mes_name_e")]
+        if requiredFiles.contains(where: { (f) -> Bool in
+            f == self
+        }) {
+            if !self.exists {
+                XGUtility.extractMainFiles()
+            }
+        }
 		
 		if !self.exists {
 			printg("file doesn't exist:", self.path)
@@ -296,7 +311,11 @@ indirect enum XGFolders {
 	case Reference
 	case Resources
 	case Logs
+    case DATA
+    case ISO
+    case ISODump
 	case ISOExport(String)
+    case path(String)
 	case nameAndPath(String, String)
 	case nameAndFolder(String, XGFolders)
 	
@@ -305,7 +324,7 @@ indirect enum XGFolders {
 			switch self {
 			case .Documents			: return "Documents"
 			case .Common			: return "Common"
-			case .DOL				: return "DOL"
+			case .DOL				: return "sys"
 			case .Decks				: return "Decks"
 			case .JSON				: return "JSON"
 			case .TextureImporter	: return "Texture Importer"
@@ -317,13 +336,17 @@ indirect enum XGFolders {
 			case .PokeBody			: return "PokeBody"
 			case .Trainers			: return "Trainers"
 			case .Types				: return "Types"
-			case .FSYS				: return "FSYS"
+			case .FSYS				: return "files"
 			case .LZSS				: return "LZSS"
 			case .MSG				: return "String Tables"
 			case .Reference			: return "Reference"
 			case .Resources			: return "Resources"
 			case .Logs				: return "Logs"
+            case .ISO               : return "ISO"
+            case .ISODump           : return "Dump"
+            case .DATA              : return "DATA"
 			case .ISOExport      	: return "FSYS Export"
+            case .path(let s)   : return s
 			case .nameAndPath(let s, _): return s
 			case .nameAndFolder(let s, _): return s
 			}
@@ -339,7 +362,9 @@ indirect enum XGFolders {
 				
 			case .Documents	: return path
 			case .nameAndPath(let name, let path): return path + "/\(name)"
-			case .ISOExport(let folder): return path + ("/" + self.name) + ("/" + folder)
+			case .ISOExport(let folder): return path + "/" + self.name +
+				(folder == "" ? "" : "/" + folder)
+            case .ISODump   : path = XGFolders.ISO.path
 			case .Import	: path = XGFolders.TextureImporter.path
 			case .Export	: path = XGFolders.TextureImporter.path
 			case .Textures	: path = XGFolders.TextureImporter.path
@@ -347,7 +372,10 @@ indirect enum XGFolders {
 			case .PokeBody	: path = XGFolders.Images.path
 			case .Trainers	: path = XGFolders.Images.path
 			case .Types		: path = XGFolders.Images.path
-			case .nameAndFolder(_, let f): path = f.path
+            case .DATA      : path = XGFolders.ISODump.path
+            case .DOL, .FSYS: path = XGFolders.DATA.path
+            case .nameAndFolder(_, let f): path = f.path
+            case .path(let s): return s
 			default: break
 				
 			}
@@ -469,6 +497,8 @@ indirect enum XGFolders {
 			.LZSS,
 			.Reference,
 			.Resources,
+            .ISO,
+            .ISODump,
 			.Logs,
 			]
 		
@@ -484,9 +514,7 @@ indirect enum XGFolders {
 		for image in images {
 			if !image.exists {
 				let resource = XGResources.png(image.fileName.replacingOccurrences(of: ".png", with: ""))
-				let data = resource.data
-				data.file = image
-				data.save()
+                resource.copy(to: image)
 			}
 		}
 		
@@ -499,9 +527,7 @@ indirect enum XGFolders {
 		for image in images {
 			if !image.exists {
 				let resource = XGResources.png("PBR_" + image.fileName.replacingOccurrences(of: ".png", with: ""))
-				let data = resource.data
-				data.file = image
-				data.save()
+                resource.copy(to: image)
 			}
 		}
 		
@@ -510,27 +536,18 @@ indirect enum XGFolders {
 		for j in jsons {
 			let file = XGFiles.json(j)
 			if !file.exists {
-				let resource = XGResources.JSON(j)
-				let data = resource.data
-				data.file = file
-				data.save()
+                XGResources.JSON(j).copy(to: file)
 			}
 		}
 		
-		
+        let wit = XGFiles.wit
+        if !wit.exists {
+            XGResources.tool("wit").copy(to: wit)
+        }
 		
 	}
 	
-	
 }
-
-
-
-
-
-
-
-
 
 
 

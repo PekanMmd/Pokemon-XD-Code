@@ -172,7 +172,7 @@ class XDSScriptCompiler: NSObject {
 			if relFile!.isValid {
 				printg("saving characters...")
 				for character in characters {
-					if verbose {
+					if settings.verbose {
 						printg("saving character:", character.rid)
 					}
 					if character.gid > 0 && character.rid >= 0 {
@@ -288,7 +288,7 @@ class XDSScriptCompiler: NSObject {
 		
 		// return the strings finalised id or -1 if failed
 		let uptext = text.replacingOccurrences(of: "[Quote]", with: "\"")
-		if verbose {
+		if settings.verbose {
 			if text.length > 0 {
 				printg("Replacing msg \(id == nil ? "by creating new id:" + text : "with id: \(id!.hexString()) " + text)")
 			}
@@ -328,7 +328,7 @@ class XDSScriptCompiler: NSObject {
 					if let table = stringTable {
 						let string = XGString(string: uptext, file: table.file, sid: newID)
 						if table.addString(string, increaseSize: increaseMSGSize, save: false) {
-							if verbose {
+							if settings.verbose {
 								printg("Added string :\(text) to file: \(table.file.path) with ID: \(newID!)")
 							}
 						} else {
@@ -352,7 +352,7 @@ class XDSScriptCompiler: NSObject {
 				if newID != nil {
 					let string = XGString(string: uptext, file: table.file, sid: newID)
 					if table.addString(string, increaseSize: increaseMSGSize, save: false) {
-						if verbose {
+						if settings.verbose {
 							printg("Added string :\(text) to file: \(table.file.path) with ID: \(newID!)")
 						}
 						
@@ -986,40 +986,6 @@ class XDSScriptCompiler: NSObject {
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

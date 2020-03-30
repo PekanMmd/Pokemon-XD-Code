@@ -157,7 +157,7 @@ func freeMSGID(from: Int) -> Int? {
 	
 	for i in min ..< min + 10 {
 		if previousFree.contains(i) {
-			previousFree.remove(at: previousFree.index(of: i)!)
+			previousFree.remove(at: previousFree.firstIndex(of: i)!)
 			previousFound = i
 			isSearchingForFreeStringID = false
 			return i
@@ -165,7 +165,7 @@ func freeMSGID(from: Int) -> Int? {
 	}
 	
 	for i in min ... kMaxStringID {
-		if verbose {
+		if settings.verbose {
 			printg("checking id: \(i)")
 		}
 		

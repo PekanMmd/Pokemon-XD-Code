@@ -24,6 +24,7 @@ enum CommonIndexes : Int {
 	case BGM = -3
 	case NumberOfBGMIDs = -4
 	case BattleFields = -5
+	case NumberOfBattleFields = -6
 	
 	
 	case LegendaryPokemon = 2

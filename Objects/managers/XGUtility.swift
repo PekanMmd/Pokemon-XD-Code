@@ -19,7 +19,7 @@ class XGUtility {
 			for file in folder.files {
 				printg("compressing file: " + file.fileName)
 				let lzss = file.compress()
-				if verbose {
+				if settings.verbose {
 					printg("compressed to: \(lzss.fileName)")
 				}
 			}
@@ -48,7 +48,7 @@ class XGUtility {
 	class func compileAllMapFsys() {
 		printg("Compiling Map fsys...")
 		for file in XGFolders.AutoFSYS.files where file.fileType == .fsys {
-			if verbose {
+			if settings.verbose {
 				printg("compiling: \(file.fileName)")
 			}
 			file.compileMapFsys()
@@ -59,7 +59,7 @@ class XGUtility {
 	class func compileAllMenuFsys() {
 		printg("Compiling Menu fsys...")
 		for file in XGFolders.MenuFSYS.files where file.fileType == .fsys {
-			if verbose {
+			if settings.verbose {
 				printg("compiling: \(file.fileName)")
 			}
 			file.compileMenuFsys()
@@ -80,7 +80,7 @@ class XGUtility {
 	class func importRels() {
 		for file in XGFolders.Rels.files where file.fileType == .rel {
 			
-			if verbose { printg("importing relocation table: " + file.fileName) }
+			if settings.verbose { printg("importing relocation table: " + file.fileName) }
 			
 			let fsysFile = XGFiles.fsys(file.fileName.removeFileExtensions())
 			if fsysFile.exists {
@@ -92,7 +92,7 @@ class XGUtility {
 	class func importScripts() {
 		for file in XGFolders.Scripts.files where file.fileType == .scd {
 			
-			if verbose { printg("importing script: " + file.fileName) }
+			if settings.verbose { printg("importing script: " + file.fileName) }
 			
 			let fsysFile = XGFiles.fsys(file.fileName.removeFileExtensions())
 			if fsysFile.exists {
@@ -105,7 +105,7 @@ class XGUtility {
 		
 		for file in XGFolders.AutoFSYS.files where file.fileType == .fsys {
 			
-			if verbose {
+			if settings.verbose {
 				printg("importing string table: " + file.fileName.removeFileExtensions() + XGFileTypes.msg.fileExtension)
 			}
 			
@@ -188,14 +188,14 @@ class XGUtility {
 	class func searchForFsysForIdentifier(id: UInt32) -> [XGFsys] {
 		let iso = ISO
 		var found = [XGFsys]()
-		if verbose {
+		if settings.verbose {
 			printg("Searching for fsys containing identifier: \(id.hexString())")
 		}
 		for name in iso.allFileNames where name.fileExtensions == ".fsys" {
 			let fsys = iso.dataForFile(filename: name)!.fsysData
 			for index in 0 ..< fsys.identifiers.count {
 				if fsys.identifiers[index] == id {
-					if verbose {
+					if settings.verbose {
 						printg("found id: \(id), fsys: ",name,", index: ", index, ", name: ", fsys.fileNames[index])
 					}
 					found += [fsys]
@@ -353,7 +353,7 @@ class XGUtility {
 		}
 		
 		if value < kNumberOfTypes {
-			printg("Type: ",XGMoveTypes(rawValue: value)!,"\n")
+			printg("Type: ",XGMoveTypes.type(value),"\n")
 		}
 		
 		for i in 1 ..< kNumberOfItems {

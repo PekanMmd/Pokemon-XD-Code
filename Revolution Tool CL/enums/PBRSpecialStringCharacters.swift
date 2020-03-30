@@ -42,8 +42,15 @@ enum XGSpecialCharacters {
 			return .special(self, [])
 		}
 	}
+
+	var isNewLine: Bool {
+		id == XGSpecialCharacters.newLine.id
+	}
 	
 	var string : String {
+		if isNewLine {
+			return "\n"
+		}
 		return "[" + (specialNames[self.id] ?? self.id.hexString()) + "]"
 	}
 	

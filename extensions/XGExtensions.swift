@@ -14,9 +14,7 @@ enum console : Int {
 }
 
 protocol XGIndexedValue {
-	
 	var index : Int { get }
-	
 }
 
 func ==(lhs: XGIndexedValue, rhs: XGIndexedValue) -> Bool {
@@ -298,6 +296,18 @@ extension Float {
 	
 }
 
+extension URL {
+    var file: XGFiles {
+        let filename = clean(lastPathComponent)
+        let folder = clean(deletingLastPathComponent().path)
+        return .nameAndFolder(filename, .path(folder))
+    }
+    
+    private func clean(_ string: String) -> String {
+       return string.replacingOccurrences(of: "%20", with: "")
+    }
+}
+
 extension String {
 	
 	func println() {
@@ -331,13 +341,13 @@ extension String {
 	}
 	
 	func removeFileExtensions() -> String {
-		let extensionIndex = self.index(of: ".") ?? self.endIndex
+		let extensionIndex = self.firstIndex(of: ".") ?? self.endIndex
 		
 		return self.substring(to: extensionIndex)
 	}
 	
 	var fileExtensions : String {
-		let extensionIndex = self.index(of: ".") ?? self.endIndex
+		let extensionIndex = self.firstIndex(of: ".") ?? self.endIndex
 		
 		return self.substring(from: extensionIndex)
 	}
@@ -455,7 +465,7 @@ extension String {
 		return true
 	}
 	
-	var hexValue : Int? {
+	var hexValue : Int {
 		// get the value of the integer, treating it as a hexadecimal value even if it isn't prefixed with 0x
 		return self.hexStringToInt()
 	}
@@ -628,8 +638,12 @@ extension String {
 }
 
 extension Encodable {
-	func JSONRepresentation() throws -> Data {
-		return try JSONEncoder().encode(self)
+	func JSONRepresentation(prettyPrint: Bool = true) throws -> Data {
+		let encoder = JSONEncoder()
+		if prettyPrint {
+			encoder.outputFormatting = .prettyPrinted
+		}
+		return try encoder.encode(self)
 	}
 	
 	func writeJSON(to file: XGFiles) {

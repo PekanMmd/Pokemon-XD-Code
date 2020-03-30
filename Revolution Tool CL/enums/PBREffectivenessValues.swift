@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGEffectivenessValues : Int, Codable {
+enum XGEffectivenessValues : Int, Codable, CaseIterable {
 
 	case superEffective		= 0
 	case neutral			= 1
@@ -49,6 +49,25 @@ enum XGEffectivenessValues : Int, Codable {
 	
 }
 
+extension XGEffectivenessValues: XGEnumerable {
+    var enumerableName: String {
+        return string
+    }
+    
+    var enumerableValue: String? {
+        return rawValue.string
+    }
+    
+    static var enumerableClassName: String {
+        return "Effectiveness Values"
+    }
+    
+    static var allValues: [XGEffectivenessValues] {
+        return allCases
+    }
+    
+    
+}
 
 
 

@@ -11,7 +11,7 @@ import Foundation
 let k2ByteChars = [0x07, 0x09, 0x38, 0x52, 0x53, 0x5B, 0x5C]
 let k5ByteChars = [0x08]
 
-let kBold 				= "Font Bold"
+let kBold 				= "Bold"
 let kNewLine			= "New Line"
 let kDialogueEnd		= "Dialogue End"
 let kClearWindow		= "Clear Window"
@@ -201,36 +201,44 @@ enum XGSpecialCharacters : Int {
 			return .special(self, [Int](repeating: 0, count: self.extraBytes))
 		}
 	}
-	
+
+	var isNewLine: Bool {
+		rawValue == XGSpecialCharacters.newLine.rawValue
+	}
+
 	var string : String {
 		get {
+			if isNewLine {
+				return "\n"
+			}
+			
 			var str = "["
 			var mid = ""
 			switch self {
 				case .changeColourPredefined	: mid = kChangeColourP
-				case .changeColourSpecified		: mid = kChangeColourS
-				case .clearWindow				: mid = kClearWindow
-				case .dialogueEnd				: mid = kDialogueEnd
-				case .newLine					: mid = kNewLine
-				case .pause						: mid = kPause
-				case .kanjiStart				: mid = kKanjiStart
-				case .furiganaStart				: mid = kFuriganaStart
-				case .furiganaEnd				: mid = kFuriganaEnd
-				case .player13					: mid = kBattlePlayer
-				case .playerInField				: mid = kFieldPlayer
-				case .speaker					: mid = kSpeaker
-				case .setSpeaker				: mid = kSetSpeaker
-				case .foeTrainerClass			: mid = kFoeTrainerClass
-				case .foeTrainerName			: mid = kFoeTrainerName
-				case .WaitKeyPress				: mid = kWaitKeyPress
-				case .pokemonSpeciesCry			: mid = kSpeciesCry
-				case .specialMSG				: mid = kspecialMSG
+				case .changeColourSpecified	: mid = kChangeColourS
+				case .clearWindow					: mid = kClearWindow
+				case .dialogueEnd					: mid = kDialogueEnd
+				case .newLine						: mid = kNewLine
+				case .pause							: mid = kPause
+				case .kanjiStart						: mid = kKanjiStart
+				case .furiganaStart					: mid = kFuriganaStart
+				case .furiganaEnd					: mid = kFuriganaEnd
+				case .player13						: mid = kBattlePlayer
+				case .playerInField					: mid = kFieldPlayer
+				case .speaker							: mid = kSpeaker
+				case .setSpeaker					: mid = kSetSpeaker
+				case .foeTrainerClass				: mid = kFoeTrainerClass
+				case .foeTrainerName				: mid = kFoeTrainerName
+				case .WaitKeyPress					: mid = kWaitKeyPress
+				case .pokemonSpeciesCry		: mid = kSpeciesCry
+				case .specialMSG					: mid = kspecialMSG
 				case .varPokemon4E				: mid = kvarPokemon4E
-				case .varItem2D					: mid = kvarItem2D
-				case .varItem2E					: mid = kvarItem2E
-				case .varQuantity				: mid = kvarQuantity
+				case .varItem2D						: mid = kvarItem2D
+				case .varItem2E						: mid = kvarItem2E
+				case .varQuantity					: mid = kvarQuantity
 				case .varMove28					: mid = kvarMove28
-				case .varItem29					: mid = kvarItem29
+				case .varItem29						: mid = kvarItem29
 				case .varPokemon20				: mid = kvarPokemon20
 				case .varPokemon21				: mid = kvarPokemon21
 				case .varPokemon0F				: mid = kvarPokemon0F
@@ -243,12 +251,12 @@ enum XGSpecialCharacters : Int {
 				case .varPokemon17				: mid = kvarPokemon17
 				case .varPokemon18				: mid = kvarPokemon18
 				case .varPokemon19				: mid = kvarPokemon19
-				case .varAbility1A				: mid = kvarAbility1A
-				case .varAbility1B				: mid = kvarAbility1B
-				case .varAbility1C				: mid = kvarAbility1C
-				case .varAbility1D				: mid = kvarAbility1D
+				case .varAbility1A					: mid = kvarAbility1A
+				case .varAbility1B					: mid = kvarAbility1B
+				case .varAbility1C					: mid = kvarAbility1C
+				case .varAbility1D					: mid = kvarAbility1D
 				case .varPokemon1E				: mid = kvarPokemon1E
-				default							: mid = String(format: "%02x", self.rawValue)
+				default									: mid = String(format: "%02x", self.rawValue)
 			}
 			str = str + mid
 			str = str + "]"
@@ -299,6 +307,7 @@ enum XGSpecialCharacters : Int {
 		    case kvarAbility1C		: return .varAbility1C
 		    case kvarAbility1D		: return .varAbility1D
 			case kvarPokemon1E		: return .varPokemon1E
+			case kBold						: return .changeFont
 			default					: return XGSpecialCharacters(rawValue: str.hexStringToInt() ) ?? .unused0A
 		}
 	}

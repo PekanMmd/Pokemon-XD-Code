@@ -19,6 +19,7 @@ enum XGResources {
 	case sublimeSyntax(String)
 	case sublimeSettings(String)
 	case sublimeCompletions(String)
+    case tool(String)
 	case nameAndFileType(String, String)
 	
 	var path : String {
@@ -39,6 +40,7 @@ enum XGResources {
 				case .sublimeSyntax(let name)					: return name
 				case .sublimeSettings(let name)					: return name
 				case .sublimeCompletions(let name)				: return name
+                case .tool(let name)                            : return name
 				case .nameAndFileType(let name, _)				: return name
 			}
 		}
@@ -56,6 +58,7 @@ enum XGResources {
 				case .sublimeSyntax							: return ".sublime-syntax"
 				case .sublimeSettings						: return ".sublime-settings"
 				case .sublimeCompletions					: return ".sublime-completions"
+                case .tool                                  : return ""
 				case .nameAndFileType( _, let filetype)		: return filetype
 			}
 		}
@@ -87,9 +90,25 @@ enum XGResources {
 		}
 	}
 	
-	
-	
-	
+    func copy(to file: XGFiles) {
+        guard path != "" else {
+            printg("resource doesn't exist:", name)
+            return
+        }
+        guard file.path != "" else {
+            assertionFailure("no path specified for file")
+            return
+        }
+
+        do {
+            try FileManager.default.copyItem(atPath: path, toPath: file.path)
+        } catch {
+            let data = self.data
+            data.file = file
+            data.save()
+        }
+        
+    }
 }
 
 

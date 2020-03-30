@@ -357,7 +357,46 @@ extension XGTrainer: XGEnumerable {
 	}
 }
 
-
+//extension XGTrainer: XGDocumentable {
+//	
+//	static var documentableClassName: String {
+//		return"Trainers"
+//	}
+//	
+//	var documentableName: String {
+//		return (enumerableValue ?? "") + " - " + enumerableName
+//	}
+//	
+//	static var DocumentableKeys: [String] {
+//		return ["index", "name", "level", "gender", "nature", "shininess", "moves"]
+//	}
+//	
+//	func documentableValue(for key: String) -> String {
+//		switch key {
+//		case "index":
+//			return index.string
+//		case "name":
+//			return species.name.string
+//		case "level":
+//			return level.string
+//		case "gender":
+//			return gender.string
+//		case "nature":
+//			return nature.string
+//		case "shininess":
+//			return shinyValue.string
+//		case "moves":
+//			var text = ""
+//			text += "\n" + move1.name.string
+//			text += "\n" + move2.name.string
+//			text += "\n" + move3.name.string
+//			text += "\n" + move4.name.string
+//			return text
+//		default:
+//			return ""
+//		}
+//	}
+//}
 
 
 

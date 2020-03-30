@@ -282,7 +282,37 @@ extension XGTrainerModels: XGEnumerable {
 	}
 }
 
-
+extension XGTrainerModels: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "Trainer Models"
+	}
+	
+	var documentableName: String {
+		return enumerableName
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "hex index", "name", "file name", "fsys ID"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return rawValue.string
+		case "hex index":
+			return rawValue.hexString()
+		case "name":
+			return name
+		case "filename":
+			return pkxName ?? ""
+		case "fsys ID":
+			return String(pkxModelIdentifier)
+		default:
+			return ""
+		}
+	}
+}
 
 
 

@@ -20,8 +20,8 @@ class GoDDPKMPopUpButton: GoDPopUpButton {
 		return XGDeckPokemon.dpkm(self.indexOfSelectedItem, deck)
 	}
 	
-	func selectPokemon(pokemon: XGDeckPokemon) {
-		self.selectItem(at: pokemon.DPKMIndex)
+    func select(_ value: XGDeckPokemon) {
+		self.selectItem(at: value.DPKMIndex)
 	}
 	
 	override func setUpItems() {

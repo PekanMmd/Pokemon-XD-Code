@@ -75,5 +75,31 @@ extension XGPokemart: XGEnumerable {
 	}
 }
 
-
+extension XGPokemart: XGDocumentable {
+	static var documentableClassName: String {
+		return "Pokemarts"
+	}
+	
+	var documentableName: String {
+		return "Mart \(self.index)"
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["items"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "item":
+			var itemsString = ""
+			for item in items {
+				itemsString += "\n" + item.name.string
+			}
+			return itemsString
+		default: return ""
+		}
+	}
+	
+	
+}
 

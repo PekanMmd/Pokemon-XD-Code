@@ -122,6 +122,12 @@ class XGStringTable: NSObject {
 				printg("Cannot add string with id 0")
 				return false
 			}
+
+			if string.id > numberOfEntries + 1 {
+				printg("Cannot add string with id \(string.id). Must add string ids in order.")
+				printg("Next available id is \(numberOfEntries + 1)")
+				return false
+			}
 			
 			let bytesRequired = string.dataLength + 4
 			if self.extraCharacters > bytesRequired {
@@ -271,7 +277,6 @@ class XGStringTable: NSObject {
 		let offset = offsetForStringID(stringID)
 		
 		if offset != nil  {
-			
 			if offset! + 2 >= self.stringTable.length {
 				return nil
 			}
@@ -286,9 +291,7 @@ class XGStringTable: NSObject {
 	}
 	
 	@objc func stringSafelyWithID(_ stringID: Int) -> XGString {
-		
 		let string = stringWithID(stringID)
-		
 		return string ?? XGString(string: "-", file: nil, sid: 0)
 	}
 	

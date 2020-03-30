@@ -15,8 +15,8 @@ class GoDPokeballPopUpButton: GoDPopUpButton {
 		return pokeballs[self.indexOfSelectedItem]
 	}
 	
-	func selectItem(item: XGItems) {
-		self.selectItem(withTitle: item.name.string)
+	func select(_ value: XGItems) {
+		self.selectItem(withTitle: value.name.string)
 	}
 	
 	override func setUpItems() {

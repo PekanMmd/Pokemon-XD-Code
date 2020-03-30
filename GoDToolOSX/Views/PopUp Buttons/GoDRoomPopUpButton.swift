@@ -22,18 +22,16 @@ var roomNames : [String] {
 let rooms = roomNames
 
 class GoDRoomPopUpButton: GoDPopUpButton {
-
 	var selectedValue : XGRoom {
 		let name = rooms[self.indexOfSelectedItem]
 		return XGRoom.roomWithName(name) ?? XGRoom(index: 0)
 	}
 	
-	func selectItem(room: XGRoom) {
-		self.selectItem(withTitle: room.name)
+	func select(_ value: XGRoom) {
+		self.selectItem(withTitle: value.name)
 	}
 	
 	override func setUpItems() {
 		self.setTitles(values: rooms)
 	}
-    
 }

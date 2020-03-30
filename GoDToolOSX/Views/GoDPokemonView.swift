@@ -76,17 +76,17 @@ class GoDPokemonView: NSImageView {
 			}
 		}
 		
-		self.name.selectPokemon(pokemon: pokemon.species)
+		self.name.select(pokemon.species)
 		self.dpkm.selectItem(at: pokemon.deckData.DPKMIndex)
 		self.ddpk.selectItem(at: pokemon.isShadowPokemon ? pokemon.deckData.index : 0)
 		self.body.image = pokemon.species.body
 		self.level.selectLevel(level: pokemon.level)
-		self.item.selectItem(item: pokemon.item)
+		self.item.select(pokemon.item)
 		for move in self.moves {
-			move.selectMove(move: pokemon.moves[move.tag])
+			move.select(pokemon.moves[move.tag])
 		}
 		for move in self.shadowMoves {
-			move.selectMove(move: pokemon.shadowMoves[move.tag])
+			move.select(pokemon.shadowMoves[move.tag])
 		}
 		
 		self.ivs.integerValue = pokemon.IVs
@@ -102,8 +102,8 @@ class GoDPokemonView: NSImageView {
 		} else {
 			self.ability.selectItem(at: 2)
 		}
-		self.nature.selectNature(nature: pokemon.nature)
-		self.gender.selectGender(gender: pokemon.gender)
+		self.nature.select(pokemon.nature)
+		self.gender.select(pokemon.gender)
 		self.happiness.integerValue = pokemon.happiness
 		
 		self.shadowCounter.integerValue = pokemon.shadowCounter

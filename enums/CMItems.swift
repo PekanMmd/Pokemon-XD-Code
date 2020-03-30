@@ -144,7 +144,7 @@ extension XGItems: Codable {
 
 extension XGItems: XGEnumerable {
 	var enumerableName: String {
-		return name.string
+		return name.string.spaceToLength(20)
 	}
 	
 	var enumerableValue: String? {
@@ -155,7 +155,7 @@ extension XGItems: XGEnumerable {
 		return "Items"
 	}
 	
-	static var allValues: [XGEffectivenessValues] {
+	static var allValues: [XGItems] {
 		return XGItems.allItems()
 	}
 }

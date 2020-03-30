@@ -69,6 +69,32 @@ enum XGAbilities : XGIndexedValue {
 	
 }
 
+extension XGAbilities: XGEnumerable {
+	var enumerableName: String {
+		return name.string
+	}
+	
+	var enumerableValue: String? {
+		return index.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Abilities"
+	}
+	
+	static var allValues: [XGAbilities] {
+		var values = [XGAbilities]()
+		
+		for i in 0 ..< kNumberOfAbilities {
+			values.append(.ability(i))
+		}
+		
+		return values
+	}
+	
+	
+}
+
 func allAbilities() -> [String : XGAbilities] {
 	
 	var dic = [String : XGAbilities]()

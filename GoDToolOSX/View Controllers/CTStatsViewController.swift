@@ -81,7 +81,7 @@ class GoDStatsViewController: GoDTableViewController {
 			evos[i]!.delegate = self
 		}
 		
-		let tmwidth : NSNumber = (TMsContainer.frame.width - 10) as! NSNumber
+		let tmwidth : NSNumber = (TMsContainer.frame.width - 10) as NSNumber
 		let tmheight : NSNumber = 180
 		let tmdelegate = TMTableDelegate(delegate: self, width: tmwidth)
 		TMTable = GoDTableView(width: tmwidth, rows: kNumberOfTutorMoves + kNumberOfTMs, rowHeight: 30, delegate: tmdelegate, dataSource: tmdelegate)
@@ -93,7 +93,7 @@ class GoDStatsViewController: GoDTableViewController {
 		self.addConstraintAlignCenterX(view1: TMsContainer, view2: TMTable)
 		self.addConstraintAlignCenterY(view1: TMsContainer, view2: TMTable)
 		
-		let lumwidth : NSNumber = (LUMContainer.frame.width - 10) as! NSNumber
+		let lumwidth : NSNumber = (LUMContainer.frame.width - 10) as NSNumber
 		let lumheight : NSNumber = 180
 		let lumdelegate = LUMTableDelegate(delegate: self, width: lumwidth)
 		LUMTable = GoDTableView(width: tmwidth, rows: kNumberOfLevelUpMoves, rowHeight: 30, delegate: lumdelegate, dataSource: lumdelegate)
@@ -179,15 +179,15 @@ class GoDStatsViewController: GoDTableViewController {
 		self.hexField.stringValue = self.pokemon.index.hexString()
 		self.startField.stringValue = self.pokemon.startOffset.hexString()
 		
-		self.type1PopUp.selectType(type: self.pokemon.type1)
-		self.type2PopUp.selectType(type: self.pokemon.type2)
-		self.ability1PopUp.selectAbility(ability: self.pokemon.ability1)
-		self.ability2PopUp.selectAbility(ability: self.pokemon.ability2)
-		self.item1PopUp.selectItem(item: self.pokemon.heldItem1)
-		self.item2PopUp.selectItem(item: self.pokemon.heldItem2)
+		self.type1PopUp.select(self.pokemon.type1)
+		self.type2PopUp.select(self.pokemon.type2)
+		self.ability1PopUp.select(self.pokemon.ability1)
+		self.ability2PopUp.select(self.pokemon.ability2)
+		self.item1PopUp.select(self.pokemon.heldItem1)
+		self.item2PopUp.select(self.pokemon.heldItem2)
 		
-		self.ExpRatePopUp.selectExpRate(rate: self.pokemon.levelUpRate)
-		self.genderPopUp.selectGenderRatio(ratio: self.pokemon.genderRatio)
+		self.ExpRatePopUp.select(self.pokemon.levelUpRate)
+		self.genderPopUp.select(self.pokemon.genderRatio)
 		
 		let evos = [evo1,evo2,evo3,evo4,evo5]
 		for evo in evos {

@@ -165,7 +165,7 @@ extension XGDeckPokemon: Codable {
 
 extension XGDeckPokemon: XGEnumerable {
 	var enumerableName: String {
-		return "Shadow" + data.species.name.string
+		return deck.enumerableName + " " + DPKMIndex.string
 	}
 	
 	var enumerableValue: String? {
@@ -173,13 +173,15 @@ extension XGDeckPokemon: XGEnumerable {
 	}
 	
 	static var enumerableClassName: String {
-		return "Shadow Pokemon"
+		return "Trainer Pokemon"
 	}
 	
 	static var allValues: [XGDeckPokemon] {
 		var pokemon = [XGDeckPokemon]()
-		for i in 0 ..< XGDecks.DeckDarkPokemon.DDPKEntries {
-			pokemon.append(.ddpk(i))
+		for id in 1 ... 7 {
+			if let deck = XGDecks.deckWithID(id) {
+				pokemon += deck.allDeckPokemon
+			}
 		}
 		return pokemon
 	}

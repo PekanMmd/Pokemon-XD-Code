@@ -15,7 +15,7 @@ class GoDMessageViewController: GoDTableViewController {
 	@IBOutlet var messageField: NSTextView!
 	@IBOutlet var saveButton: NSButton!
 	@IBOutlet var messageScrollView: NSScrollView!
-	
+
 	var currentTable : XGStringTable? {
 		didSet {
 			setUpForFile()
@@ -25,7 +25,7 @@ class GoDMessageViewController: GoDTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		loadAllStrings()
-		self.filesPopup.setTitles(values: allStringTables.map { $0.file.fileName }.sorted())
+		self.filesPopup.setTitles(values: ["-"] + allStringTables.map { $0.file.fileName }.sorted())
 		self.hideInterface()
     }
 	
@@ -44,12 +44,18 @@ class GoDMessageViewController: GoDTableViewController {
 	}
 	
 	func setUpForFile() {
-		self.table.reloadData()
+		self.stringIDField.stringValue = ""
+		self.messageField.string = ""
 		hideInterface()
+		self.table.reloadData()
 	}
 	
 	@IBAction func setFile(_ sender: GoDPopUpButton) {
-		currentTable = allStringTables.sorted { $0.file.fileName < $1.file.fileName }[sender.indexOfSelectedItem]
+		guard sender.indexOfSelectedItem > 0 else {
+			currentTable = nil
+			return
+		}
+		currentTable = allStringTables.sorted { $0.file.fileName < $1.file.fileName }[sender.indexOfSelectedItem - 1]
 	}
 	
 	@IBAction func save(_ sender: Any) {
@@ -79,20 +85,20 @@ class GoDMessageViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
-		return 80
+		return 50
 	}
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
 		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: nil, fontSize: 12, width: self.table.width)) as! GoDTableCellView
 		
-		guard let table = currentTable else {
+		guard let currentTable = currentTable else {
 			return cell
 		}
-		let strings = table.allStrings().sorted { $0.id < $1.id }
-		
-		let string = strings[row]
-		cell.setTitle(string.id.hexString() + ": " + string.string)
+
+		let id = currentTable.stringIDs[row]
+		let string = currentTable.stringSafelyWithID(id)
+		cell.setTitle(string.id.hexString() + ": " + string.unformattedString)
 		cell.titleField.maximumNumberOfLines = 3
 		cell.addBorder(colour: GoDDesign.colourBlack(), width: 1)
 		
@@ -111,16 +117,16 @@ class GoDMessageViewController: GoDTableViewController {
 			guard let table = currentTable else {
 				return
 			}
-			let strings = table.allStrings().sorted { $0.id < $1.id }
-			let string = strings[row]
+
+			let id = table.stringIDs[row]
+			let string = table.stringSafelyWithID(id)
 			
 			self.stringIDField.stringValue = string.id.hexString()
 			self.messageField.string = string.string
 			showInterface()
 		}
 	}
-	
-	
+
 }
 
 

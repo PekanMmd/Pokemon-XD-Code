@@ -19,7 +19,7 @@ class XGPokemonPopover: XGPopover, UISearchResultsUpdating, UISearchBarDelegate 
 		
 		var typeNames = [String]()
 		for i in 0..<kNumberOfTypes {
-			typeNames.append(XGMoveTypes(rawValue: i)!.name)
+			typeNames.append(XGMoveTypes.type(i).name)
 		}
 		
 		for i in 0 ..< kNumberOfPokemon {

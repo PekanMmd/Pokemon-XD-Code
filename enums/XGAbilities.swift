@@ -118,7 +118,7 @@ extension XGAbilities: Codable {
 
 extension XGAbilities: XGEnumerable {
 	var enumerableName: String {
-		return name.string
+		return name.string.spaceToLength(20)
 	}
 	
 	var enumerableValue: String? {
@@ -139,6 +139,11 @@ extension XGAbilities: XGEnumerable {
 }
 
 extension XGAbilities: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return "Abilities"
+	}
+	
 	var documentableName: String {
 		return name.string + "(\(index))"
 	}

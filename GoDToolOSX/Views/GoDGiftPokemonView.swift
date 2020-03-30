@@ -277,13 +277,13 @@ class GoDGiftPokemonView: NSImageView {
 		}
 		self.level.isHidden = false
 		
-		self.name.selectPokemon(pokemon: pokemon.species)
+		self.name.select(pokemon.species)
 		self.body.image = pokemon.species.body
 		self.level.selectLevel(level: pokemon.level)
 		
 		let giftmoves = [pokemon.move1, pokemon.move2, pokemon.move3, pokemon.move4]
 		for move in self.moves {
-			move.selectMove(move: giftmoves[move.tag])
+			move.select(giftmoves[move.tag])
 		}
 		
 		

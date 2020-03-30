@@ -102,10 +102,25 @@ enum XGMoveTypes : XGIndexedValue {
 		return .type(17)
 	}
 	
-	
 }
 
-
+extension XGMoveTypes: XGEnumerable {
+	var enumerableName: String {
+		return data.name.unformattedString
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var enumerableClassName: String {
+		return "Types"
+	}
+	
+	static var allValues: [XGMoveTypes] {
+		return allTypes
+	}
+}
 
 
 

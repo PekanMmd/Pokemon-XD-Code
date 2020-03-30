@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="Ymc-o2-mcc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Collision Viewer-->
+        <scene sceneID="qMG-ZI-rGv">
+            <objects>
+                <viewController title="Collision Viewer" id="Ymc-o2-mcc" customClass="GoDCollisionViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="afM-LZ-PTR">
+                        <rect key="frame" x="0.0" y="0.0" width="840" height="480"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hdw-Eq-kuR">
+                                <rect key="frame" x="0.0" y="0.0" width="200" height="480"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="DWX-2A-ks9"/>
+                                </constraints>
+                            </customView>
+                            <openGLView wantsLayer="YES" colorSize="5bit_RGB_8bit_Alpha" depthSize="32bit" rendererType="accelerated" useAuxiliaryDepthBufferStencil="NO" useDoubleBufferingEnabled="YES" allowOffline="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LQC-Tu-ilY" customClass="GoDOpenGLView" customModule="Colosseum_Tool" customModuleProvider="target">
+                                <rect key="frame" x="200" y="0.0" width="640" height="480"/>
+                            </openGLView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="WuW-EJ-zRl" customClass="GoDMetalView" customModule="Colosseum_Tool" customModuleProvider="target">
+                                <rect key="frame" x="200" y="0.0" width="640" height="480"/>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="hdw-Eq-kuR" firstAttribute="leading" secondItem="afM-LZ-PTR" secondAttribute="leading" id="1Va-hx-WZp"/>
+                            <constraint firstItem="LQC-Tu-ilY" firstAttribute="top" secondItem="afM-LZ-PTR" secondAttribute="top" id="A5K-FD-gC9"/>
+                            <constraint firstAttribute="bottom" secondItem="hdw-Eq-kuR" secondAttribute="bottom" id="B2l-B7-4cq"/>
+                            <constraint firstAttribute="bottom" secondItem="WuW-EJ-zRl" secondAttribute="bottom" id="Gsh-zu-JkV"/>
+                            <constraint firstItem="hdw-Eq-kuR" firstAttribute="top" secondItem="afM-LZ-PTR" secondAttribute="top" id="Qt7-dk-0rd"/>
+                            <constraint firstItem="LQC-Tu-ilY" firstAttribute="leading" secondItem="hdw-Eq-kuR" secondAttribute="trailing" id="UAW-Sa-LzK"/>
+                            <constraint firstItem="WuW-EJ-zRl" firstAttribute="top" secondItem="afM-LZ-PTR" secondAttribute="top" id="fuX-ou-QwJ"/>
+                            <constraint firstAttribute="bottom" secondItem="LQC-Tu-ilY" secondAttribute="bottom" id="ijA-ap-9dx"/>
+                            <constraint firstAttribute="trailing" secondItem="LQC-Tu-ilY" secondAttribute="trailing" id="kSl-a8-VFB"/>
+                            <constraint firstAttribute="trailing" secondItem="WuW-EJ-zRl" secondAttribute="trailing" id="w4a-eY-ejp"/>
+                            <constraint firstItem="WuW-EJ-zRl" firstAttribute="leading" secondItem="hdw-Eq-kuR" secondAttribute="trailing" id="y2s-Lf-ldX"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="metalView" destination="WuW-EJ-zRl" id="rHk-el-kqP"/>
+                        <outlet property="openglView" destination="LQC-Tu-ilY" id="4tB-Xw-RxJ"/>
+                    </connections>
+                </viewController>
+                <customObject id="48L-Kl-1eE" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1917" y="-409"/>
+        </scene>
+    </scenes>
+</document>

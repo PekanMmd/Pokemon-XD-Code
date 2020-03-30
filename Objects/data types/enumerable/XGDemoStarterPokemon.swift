@@ -43,7 +43,7 @@ final class XGDemoStarterPokemon: NSObject, XGGiftPokemon, Codable {
 	var move2			= XGMoves.move(0)
 	var move3			= XGMoves.move(0)
 	var move4			= XGMoves.move(0)
-	var shinyValue		= XGShinyValues.random
+	var shinyValue	= XGShinyValues.random
 	
 	var nature			= XGNatures.random
 	var gender			= XGGenders.random
@@ -121,7 +121,7 @@ extension XGDemoStarterPokemon: XGEnumerable {
 	}
 	
 	static var enumerableClassName: String {
-		return game == .XD ? "Demo Starters" : "Starter Pokemon"
+		return game == .XD ? "Demo Starter Pokemon" : "Starter Pokemon"
 	}
 	
 	static var allValues: [XGDemoStarterPokemon] {
@@ -133,7 +133,46 @@ extension XGDemoStarterPokemon: XGEnumerable {
 	}
 }
 
-
+extension XGDemoStarterPokemon: XGDocumentable {
+	
+	static var documentableClassName: String {
+		return game == .XD ? "Demo Starter Pokemon" : "Starter Pokemon"
+	}
+	
+	var documentableName: String {
+		return (enumerableValue ?? "") + " - " + enumerableName
+	}
+	
+	static var DocumentableKeys: [String] {
+		return ["index", "name", "level", "gender", "nature", "shininess", "moves"]
+	}
+	
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return index.string
+		case "name":
+			return species.name.string
+		case "level":
+			return level.string
+		case "gender":
+			return gender.string
+		case "nature":
+			return nature.string
+		case "shininess":
+			return shinyValue.string
+		case "moves":
+			var text = ""
+			text += "\n" + move1.name.string
+			text += "\n" + move2.name.string
+			text += "\n" + move3.name.string
+			text += "\n" + move4.name.string
+			return text
+		default:
+			return ""
+		}
+	}
+}
 
 
 
