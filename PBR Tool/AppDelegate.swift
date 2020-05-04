@@ -134,7 +134,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			return
 		}
 		isBuilding = true
-		printg("Rebuilding ISO...")
 		XGThreadManager.manager.runInBackgroundAsync {
 			let result = XGUtility.compileISO(printOutput: false) ?? "No logs recorded"
 

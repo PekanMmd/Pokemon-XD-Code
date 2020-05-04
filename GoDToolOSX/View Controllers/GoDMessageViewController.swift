@@ -16,6 +16,10 @@ class GoDMessageViewController: GoDTableViewController {
 	@IBOutlet var saveButton: NSButton!
 	@IBOutlet var messageScrollView: NSScrollView!
 
+	lazy var allStringTables = XGFolders.MSG.files
+							  .filter { $0.fileType == .msg }
+							  .map { $0.stringTable }
+
 	var currentTable : XGStringTable? {
 		didSet {
 			setUpForFile()
@@ -24,7 +28,6 @@ class GoDMessageViewController: GoDTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-		loadAllStrings()
 		self.filesPopup.setTitles(values: ["-"] + allStringTables.map { $0.file.fileName }.sorted())
 		self.hideInterface()
     }
@@ -48,6 +51,7 @@ class GoDMessageViewController: GoDTableViewController {
 		self.messageField.string = ""
 		hideInterface()
 		self.table.reloadData()
+		table.scrollToTop()
 	}
 	
 	@IBAction func setFile(_ sender: GoDPopUpButton) {

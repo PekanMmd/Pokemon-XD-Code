@@ -32,6 +32,13 @@
 		1C6295FB243022080085C22F /* PBRScriptCompiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6295FA243022080085C22F /* PBRScriptCompiler.swift */; };
 		1C6295FC243022080085C22F /* PBRScriptCompiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6295FA243022080085C22F /* PBRScriptCompiler.swift */; };
 		1C6295FE24302F6D0085C22F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20EEA2721E9203600E87D01 /* AppDelegate.swift */; };
+		1C64CF4024562E28004C0C8F /* XGAssemblyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC031F49A1FE0075C6D2 /* XGAssemblyCode.swift */; };
+		1C64CF4124562E29004C0C8F /* XGAssemblyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC031F49A1FE0075C6D2 /* XGAssemblyCode.swift */; };
+		1C64CF4324562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
+		1C64CF4424562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
+		1C64CF4524562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
+		1C64CF4624562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
+		1C64CF4724562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
 		1CA2386F24113823000E56AB /* HexCalculator.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA2386A24113822000E56AB /* HexCalculator.storyboard */; };
 		1CA2387024113823000E56AB /* HexCalculator.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA2386A24113822000E56AB /* HexCalculator.storyboard */; };
 		1CA2387124113823000E56AB /* Help.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA2386B24113822000E56AB /* Help.storyboard */; };
@@ -5029,6 +5036,7 @@
 		1C6295DF242A948B0085C22F /* Move Effects.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Move Effects.json"; sourceTree = "<group>"; };
 		1C6295F724300F1B0085C22F /* PBRISO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRISO.swift; sourceTree = "<group>"; };
 		1C6295FA243022080085C22F /* PBRScriptCompiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRScriptCompiler.swift; sourceTree = "<group>"; };
+		1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGAssemblyCodeExtensions.swift; sourceTree = "<group>"; };
 		1CA2386A24113822000E56AB /* HexCalculator.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = HexCalculator.storyboard; sourceTree = "<group>"; };
 		1CA2386B24113822000E56AB /* Help.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Help.storyboard; sourceTree = "<group>"; };
 		1CA2386C24113823000E56AB /* Interactions.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Interactions.storyboard; sourceTree = "<group>"; };
@@ -7692,6 +7700,7 @@
 			isa = PBXGroup;
 			children = (
 				B2F5EC031F49A1FE0075C6D2 /* XGAssemblyCode.swift */,
+				1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */,
 				B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */,
 				B2F5EBC01F49A1FE0075C6D2 /* XGFsys.swift */,
 				B24547802229C2670043F991 /* XGGSWTextures.swift */,
@@ -10498,7 +10507,8 @@
 				TargetAttributes = {
 					B208E39120C4CA3A00D298BF = {
 						CreatedOnToolsVersion = 9.2;
-						DevelopmentTeam = 2H7J5B23U9;
+						DevelopmentTeam = PL9D4W4S2M;
+						LastSwiftMigration = 1120;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
@@ -10508,33 +10518,33 @@
 					};
 					B20EEA2421E9203600E87D01 = {
 						CreatedOnToolsVersion = 9.4.1;
-						DevelopmentTeam = 2H7J5B23U9;
+						DevelopmentTeam = PL9D4W4S2M;
 						LastSwiftMigration = 1120;
 						ProvisioningStyle = Automatic;
 					};
 					B24A501B21D10D93009C707C = {
 						CreatedOnToolsVersion = 9.4.1;
-						DevelopmentTeam = 2H7J5B23U9;
+						DevelopmentTeam = PL9D4W4S2M;
 						ProvisioningStyle = Automatic;
 					};
 					B2562F4421349567004180F1 = {
 						CreatedOnToolsVersion = 9.4.1;
-						DevelopmentTeam = 2H7J5B23U9;
+						DevelopmentTeam = PL9D4W4S2M;
 						ProvisioningStyle = Automatic;
 					};
 					B2F5EB821F49A11A0075C6D2 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 2H7J5B23U9;
+						DevelopmentTeam = PL9D4W4S2M;
 						ProvisioningStyle = Automatic;
 					};
 					B2F5EB8E1F49A1610075C6D2 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 2H7J5B23U9;
+						DevelopmentTeam = PL9D4W4S2M;
 						ProvisioningStyle = Automatic;
 					};
 					B2F5EBA41F49A1980075C6D2 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 2H7J5B23U9;
+						DevelopmentTeam = PL9D4W4S2M;
 						LastSwiftMigration = 1120;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -14693,6 +14703,7 @@
 				B2C1EE6D20C8F5C000D7C2F7 /* GoDHomeViewController.swift in Sources */,
 				B2C1EE6820C8EFBA00D7C2F7 /* ViewController.swift in Sources */,
 				B2C1EE8420C8F6C800D7C2F7 /* GoDLevelPopUpButton.swift in Sources */,
+				1C64CF4624562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */,
 				1CED5D9A24004864008566B0 /* GoDGCEnumerablePopUpButtons.swift in Sources */,
 				B2C1EE7220C8F66D00D7C2F7 /* GoDItemViewController.swift in Sources */,
 				B2C1EE9420C8F71700D7C2F7 /* CTPokemonView.swift in Sources */,
@@ -14896,6 +14907,7 @@
 				B20EEA4321E920F400E87D01 /* PBRPokemon.swift in Sources */,
 				B20EEE9821EF78DA00E87D01 /* XGLZSS.swift in Sources */,
 				B20EEEAC21EF79AE00E87D01 /* XGVertex.swift in Sources */,
+				1C64CF4024562E28004C0C8F /* XGAssemblyCode.swift in Sources */,
 				B20EEEA521EF796800E87D01 /* GoDMetalShaders.metal in Sources */,
 				B20EEA6521E9214D00E87D01 /* PBRScriptInstruction.swift in Sources */,
 				B24E5FB52238879C00C55758 /* PBRMoveTargets.swift in Sources */,
@@ -14959,6 +14971,7 @@
 				B24A50FD21D2D724009C707C /* PBRDataTable.swift in Sources */,
 				B24A507D21D129A5009C707C /* XGNatures.swift in Sources */,
 				B20EE63E21D6DB1E00E87D01 /* PBRTMs.swift in Sources */,
+				1C64CF4124562E29004C0C8F /* XGAssemblyCode.swift in Sources */,
 				B24A503C21D122E8009C707C /* XGByteCopier.swift in Sources */,
 				B24A502921D11DE8009C707C /* GoDImageExtensions.swift in Sources */,
 				B24A50FB21D2C7F1009C707C /* GoDOSXExtensions.swift in Sources */,
@@ -15117,6 +15130,7 @@
 				B2562F7E21349814004180F1 /* XGCharacter.swift in Sources */,
 				B2562F602134976C004180F1 /* XGEvolutionMethods.swift in Sources */,
 				B2560A90213D5A3D00137C37 /* GoDMatrix4.swift in Sources */,
+				1C64CF4724562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */,
 				B2562F8B213498DE004180F1 /* XGMutableData.swift in Sources */,
 				B22A1C4B21829D7A001C41D3 /* XGThreadManager.swift in Sources */,
 				B2562F942134990E004180F1 /* CMTrainerPokemon.swift in Sources */,
@@ -15145,6 +15159,7 @@
 			files = (
 				B2F5EC271F49A1FE0075C6D2 /* XGFsys.swift in Sources */,
 				B2560A7C213D546000137C37 /* XGCollisionData.swift in Sources */,
+				1C64CF4324562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */,
 				B2F5EC2A1F49A1FE0075C6D2 /* XGGenderRatios.swift in Sources */,
 				B2F5EC781F49A1FF0075C6D2 /* XGByteCopier.swift in Sources */,
 				B208E37D20C4569900D298BF /* XDSMacroTypes.swift in Sources */,
@@ -15279,6 +15294,7 @@
 				B2F5ED6E1F49AEBC0075C6D2 /* XGDeckViewController.swift in Sources */,
 				B2F5ED821F49AEBC0075C6D2 /* XGPopoverField.swift in Sources */,
 				B208E38B20C46C1E00D298BF /* XGStack.swift in Sources */,
+				1C64CF4424562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */,
 				B2F5F8BD1F4C4E680075C6D2 /* UIViewExtensions.swift in Sources */,
 				B2F5EC251F49A1FE0075C6D2 /* XGFontColours.swift in Sources */,
 				B27C5FDF1FA1A37800E0596F /* XGScriptInstruction.swift in Sources */,
@@ -15522,6 +15538,7 @@
 				B2F5F8A41F49CD050075C6D2 /* GoDTableViewDelegate.swift in Sources */,
 				B23DD76D20BEE5E100348D26 /* XDSExpr.swift in Sources */,
 				B27AA62A1F8646EA001D06CF /* GoDOriginalMovePopUpButton.swift in Sources */,
+				1C64CF4524562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */,
 				B2FEC09B1F7032F300AC263D /* GoDTrainerView.swift in Sources */,
 				B21A7CFF20BC68DA00BDD04C /* XGCollisionData.swift in Sources */,
 				B27C5FDE1FA1A37600E0596F /* XGScriptInstruction.swift in Sources */,
@@ -15701,7 +15718,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 2H7J5B23U9;
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -15722,7 +15739,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -15746,7 +15763,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 2H7J5B23U9;
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -15760,7 +15777,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -15785,7 +15802,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 2H7J5B23U9;
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -15832,7 +15849,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 2H7J5B23U9;
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -15869,7 +15886,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 2H7J5B23U9;
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -15910,7 +15927,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 2H7J5B23U9;
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -15944,7 +15961,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 2H7J5B23U9;
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -15985,7 +16002,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 2H7J5B23U9;
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -16098,7 +16115,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 2H7J5B23U9;
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -16150,7 +16167,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 2H7J5B23U9;
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -16195,7 +16212,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 2H7J5B23U9;
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -16253,7 +16270,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 2H7J5B23U9;
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -16306,7 +16323,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 2H7J5B23U9;
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -16365,7 +16382,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 2H7J5B23U9;
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

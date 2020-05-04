@@ -51,20 +51,30 @@ class GoDISOViewController: GoDTableViewController {
 				if encode {
 					XGColour.colourThreshold = 0
 					for file in currentFile.folder.files {
-						if file.fileType == .xds && game != .PBR {
-							XDSScriptCompiler.setFlags(disassemble: true, decompile: false, updateStrings: true, increaseMSG: true)
-							XDSScriptCompiler.baseStringID = 1000
-							if !XDSScriptCompiler.compile(textFile: file, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)) {
-								GoDAlertViewController.displayAlert(title: "Compilation Error", text: XDSScriptCompiler.error)
-								return
+
+						// encode string tables before compiling scripts
+						if file.fileType == .msg {
+							for json in currentFile.folder.files where json.fileType == .json {
+								if json.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
+									let table = try? XGStringTable.fromJSONFile(file: json)
+									if let table = table {
+										table.save()
+									} else {
+										printg("Failed to decode string table from: ", json.path)
+									}
+								}
 							}
 						}
+
+
 						if file.fileType == .gtx || file.fileType == .atx {
 							for image in currentFile.folder.files where XGFileTypes.imageFormats.contains(image.fileType) {
 								if image.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
 									if file.fileName.contains(".gsw.") {
+										// preserves the image format so can easily be imported into gsw
 										file.texture.importImage(file: image)
 									} else {
+										// automatically chooses a good format for the new image
 										let imageData = image.image
 										let textureData = GoDTextureImporter.getTextureData(image: imageData)
 										textureData.file = file
@@ -74,6 +84,7 @@ class GoDISOViewController: GoDTableViewController {
 							}
 						}
 					}
+
 
 					// encode gsws after all gtxs have been encoded
 					for file in currentFile.folder.files {
@@ -88,12 +99,27 @@ class GoDISOViewController: GoDTableViewController {
 
 							gsw.save()
 						}
+
+						// strings in the xds scripts will override those particular strings in the msg's json
+						if file.fileType == .xds && game != .PBR {
+							XDSScriptCompiler.setFlags(disassemble: true, decompile: false, updateStrings: true, increaseMSG: true)
+							XDSScriptCompiler.baseStringID = 1000
+							if !XDSScriptCompiler.compile(textFile: file, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)) {
+								GoDAlertViewController.displayAlert(title: "Compilation Error", text: XDSScriptCompiler.error)
+								return
+							}
+						}
 					}
 				}
 				
 				let fsysData = currentFile.fsysData
 				for i in 0 ..< fsysData.numberOfEntries {
-					let filename = fsysData.fileNames[i].removeFileExtensions() + fsysData.fileTypeForFile(index: i).fileExtension
+					var filename = ""
+					if fsysData.usesFileExtensions {
+						filename = fsysData.fullFileNames[i]
+					} else {
+						filename = fsysData.fileNames[i].removeFileExtensions() + fsysData.fileTypeForFile(index: i).fileExtension
+					}
 					for file in currentFile.folder.files {
 						if file.fileName == filename {
 							if fsysData.isFileCompressed(index: i){
@@ -157,7 +183,7 @@ class GoDISOViewController: GoDTableViewController {
 					let fsys = data.fsysData
 					if fsys.numberOfEntries > 0 {
 						for i in  0 ..< fsys.numberOfEntries {
-							var filename = fsys.fileNameForFileWithIndex(index: i)
+							var filename = fsys.fullFileNameForFileWithIndex(index: i)
 							if filename.removeFileExtensions() == filename {
 								filename += fsys.fileTypeForFile(index: i).fileExtension
 							}

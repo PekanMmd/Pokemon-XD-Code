@@ -20,7 +20,7 @@ enum XDSConstantTypes {
 	case msg			
 	case character		
 	case pokemon
-	case codeptr_t
+	case codePointer
 	case unknown(Int)
 	
 	var string : String {
@@ -35,7 +35,7 @@ enum XDSConstantTypes {
 				case .msg				: return "Msg"
 				case .character			: return "Character"
 				case .pokemon			: return "Pokemon"
-				case .codeptr_t			: return "Pointer"
+				case .codePointer			: return "Pointer"
 				case .unknown(let val)	: return XGScriptClass.classes(val).name
 			}
 		}
@@ -52,7 +52,7 @@ enum XDSConstantTypes {
 		case .msg				: return 8
 		case .character			: return 35
 		case .pokemon			: return 37
-		case .codeptr_t			: return 53
+		case .codePointer			: return 53
 		case .unknown(let val)	: return val
 		}
 	}
@@ -68,7 +68,7 @@ enum XDSConstantTypes {
 			case  8 : return .msg
 			case 35 : return .character
 			case 37 : return .pokemon
-			case 53 : return .codeptr_t
+			case 53 : return .codePointer
 			default : return .unknown(id)
 		}
 	}
@@ -145,7 +145,7 @@ class XDSConstant : NSObject {
 			return XDSExpr.msgMacro(getStringSafelyWithID(id: self.asInt)).text[0]
 		case .character:
 			return XGScriptInstruction(bytes: 0x03030080 + UInt32(self.asInt), next: 0).XDSVariable
-		case .codeptr_t:
+		case .codePointer:
 			return XDSExpr.locationIndex(self.asInt).text[0]
 		case .unknown(let i):
 			let mid = self.asInt == 0 ? "" : "\(self.asInt)"

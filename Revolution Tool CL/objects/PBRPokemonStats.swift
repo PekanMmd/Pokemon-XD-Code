@@ -8,7 +8,7 @@
 
 import Foundation
 
-let kNumberOfPokemon = PBRDataTable.baseStats.numberOfEntries // 501
+let kNumberOfPokemon = PBRDataTable.pokemonBaseStats.numberOfEntries // 501
 let kNumberOfTMsAndHMs = 100
 let kSizeOfEvolution = 6
 let kSizeOfLevelUpMove = 4
@@ -215,9 +215,9 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 		for i in 0 ... 3 {
 			let start = i * 32
 			let offset = i * 4
-			let slice = TMFlags[start ..< start + 32]
 			var bits = [Bool]()
-			for bit in slice {
+			for b in 0 ..< 32 {
+				let bit = TMFlags[start + b]
 				bits.append(bit)
 			}
 			data.setWord(offset, to: bits.binaryBitsToUInt32())

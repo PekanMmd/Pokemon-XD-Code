@@ -15,11 +15,11 @@ class GoDHelpViewController: GoDViewController {
         super.viewDidLoad()
         // Do view setup here.
 
-		let extraction = game == .PBR ? "Unpack ISO, then Extract FSYS"
-									  : "Extract ISO"
+		let extraction = game == .PBR ? "File -> Unpack ISO, then Extract Files"
+									  : "File -> Extract ISO"
 
-		let compilation = game == .PBR ? "import FSYS, then Build ISO"
-									   : "Rebuild ISO"
+		let compilation = game == .PBR ? "File -> Import Files, then Build ISO"
+									   : "File -> Rebuild ISO"
 		
 		var textData =
 		"""

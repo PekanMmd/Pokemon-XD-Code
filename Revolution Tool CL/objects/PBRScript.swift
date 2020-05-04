@@ -265,6 +265,13 @@ class XGScript: NSObject {
 		for g in  0 ..< self.gvar.count {
 			desc += "\(g): " + self.gvar[g].description + "\n"
 		}
+
+		desc += "\nSTRG: \(self.strg.count)\n" + linebreak
+		var strgPosition = 0
+		for str in strg {
+			desc += "\(strgPosition): " + str + "\n"
+			strgPosition += str.length + 1
+		}
 		
 		desc += "\nARRY: \(self.arry.count)\n" + linebreak
 		for a in 0 ..< self.arry.count {
@@ -334,10 +341,10 @@ class XGScript: NSObject {
 			let f = ftbl[i]
 			
 			if f.name == name {
-				var params = [Int]()
+				var paramsCount = 0
 				var currentIndex = f.codeOffset
 				let lastIndex = f.end
-				
+
 				var counter = 0
 				var lastI = 0
 				func getCodeIndexForInstruction(index: Int) -> Int {
@@ -355,18 +362,13 @@ class XGScript: NSObject {
 					let currentInstruction = self.code[getCodeIndexForInstruction(index: currentIndex)]
 					
 					switch currentInstruction.opCode {
-					case .loadVariable:
-						fallthrough
-					case .loadNonCopyableVariable:
-						if currentInstruction.level == 1 && currentInstruction.parameter > 0 && currentInstruction.parameter < 200 {
-							params.addUnique(currentInstruction.parameter)
-						}
-						currentIndex += currentInstruction.length
+					case .reserve:
+						return currentInstruction.subOpCode
 					default:
 						currentIndex += currentInstruction.length
 					}
 				}
-				return params.count
+				return 0
 			}
 		}
 		printg("couldn't get function parameter count: function \"\(name)\" doesn't exist")

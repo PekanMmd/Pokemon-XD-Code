@@ -9,6 +9,8 @@
 import Foundation
 
 private let specialNames = [
+	0x0001 : "Furigana", // parameters: first byte is number of hiragana chars, followed by number of kanji chars
+	0x0002 : "Pause", // parameter is duration (possibly in frames)
 	0xfffe : "New Line",
 	0xffff : "End",
 ]
@@ -16,31 +18,32 @@ private let specialNames = [
 enum XGSpecialCharacters {
 	
 	case id(Int)
+	case pause
 	case newLine
 	case dialogueEnd
 	
 	var id : Int {
 		switch self {
 		case .id(let i): return i
+		case .pause: return 2
 		case .newLine: return 0xFFFE
 		case .dialogueEnd: return 0xFFFF
 		}
 	}
 	
 	var extraBytes : Int {
-		return 0 // unused but required for consistency with colosseum and xd
+		switch self.id {
+		case 1,2,3,4,5: return 2
+		default: return 0
+		}
 	}
 	
 	var byteStream : [UInt8] {
-		get {
-			return [UInt8(0xFF), UInt8(0xFF), UInt8((self.id >> 8) & 0xFF), UInt8(self.id & 0xFF)]
-		}
+		return [UInt8(0xFF), UInt8(0xFF), UInt8((self.id >> 8) & 0xFF), UInt8(self.id & 0xFF)]
 	}
 	
 	var unicode : XGUnicodeCharacters {
-		get {
-			return .special(self, [])
-		}
+		return .special(self, [Int](repeating: 0, count: self.extraBytes))
 	}
 
 	var isNewLine: Bool {

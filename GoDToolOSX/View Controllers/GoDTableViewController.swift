@@ -60,8 +60,7 @@ class GoDTableViewController: GoDViewController, GoDTableViewDelegate, NSTableVi
 	}
 	
 	func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
-		self.table.selectedRow = row
-		self.table.reloadData()
+		
 	}
 	
 	

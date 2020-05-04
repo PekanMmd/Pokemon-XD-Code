@@ -63,24 +63,34 @@ class GoDTableView: NSScrollView {
 	
 	@objc func didClickCell() {
 		if self.tableView.selectedRow >= 0 {
-			self.selectedRow = self.tableView.selectedRow
-			self.delegate.tableView(self, didSelectRow: self.tableView.selectedRow)
+			let previousRow = selectedRow
+			selectedRow = tableView.selectedRow
+			reload(indexes: [previousRow, selectedRow])
+			delegate.tableView(self, didSelectRow: tableView.selectedRow)
 		}
-		
 	}
 	
 	func reloadData() {
 		self.tableView.reloadData()
+		selectedRow = -1
 	}
 	
-	func reloadIndex(_ index: Int) {
+	func reload(index: Int) {
 		self.tableView.reloadData(forRowIndexes: [index], columnIndexes: [0])
+	}
+
+	func reload(indexes: IndexSet) {
+		tableView.reloadData(forRowIndexes: indexes, columnIndexes: [0])
 	}
 	
 	func setBGColour(_ colour: NSColor) {
 		super.setBackgroundColour(colour)
 		self.tableView.backgroundColor = colour
 		self.tableView.enclosingScrollView?.drawsBackground = colour.alphaComponent > 0
+	}
+
+	func scrollToTop() {
+		tableView.scrollRowToVisible(0)
 	}
     
 }

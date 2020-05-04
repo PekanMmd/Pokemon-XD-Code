@@ -39,7 +39,7 @@ enum XGGame {
 }
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/Revolution-Tool"
-let region = XGRegions.US
+let region = XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .EU
 let game = XGGame.PBR
 
 let date = Date(timeIntervalSinceNow: 0)
@@ -111,7 +111,7 @@ class XGUtility {
         }
         let verbose = settings.verbose ? "-v " : ""
         let overwrite = "-o"
-        let args = "extract \(verbose) \(overwrite) \(XGFiles.iso.path) \(XGFolders.ISODump.path)"
+        let args = "extract --raw \(verbose) \(overwrite) \(XGFiles.iso.path) \(XGFolders.ISODump.path)"
         return GoDShellManager.run(.wit, args: args, printOutput: printOutput)
     }
     
@@ -214,12 +214,26 @@ class XGUtility {
         compileMSG()
     }
 
+	class func disableAntiModChecks() {
+		// Modifies a function in main.dol to prevent the game from softlocking when the ISO has been modified.
+		printg("Disabling anti modification code.")
+		guard let dol = XGFiles.dol.data else {
+			printg("File doesn't exist: \(XGFiles.dol.path)")
+			return
+		}
+		// offset 0x8022965c in RAM
+		dol.replace4BytesAtOffset(0x2252bc, withBytes: 0x48000100)
+		dol.save()
+	}
+
 	@discardableResult
 	class func compileISO(printOutput: Bool = true) -> String? {
+		disableAntiModChecks()
+
         printg("compiling ISO...\nThis will overwrite the existing ISO")
         let verbose = settings.verbose ? "-v " : ""
         let overwrite = "-o"
-        let args = "copy --raw \(overwrite) \(verbose) \(XGFolders.ISODump.path) \(XGFiles.iso.path)"
+        let args = "copy \(overwrite) \(verbose) \(XGFolders.ISODump.path) \(XGFiles.iso.path)"
         return GoDShellManager.run(.wit, args: args, printOutput: printOutput)
     }
 	
@@ -329,6 +343,21 @@ class XGUtility {
                 fsysData.shiftAndReplaceFileWithIndexEfficiently(1, withFile: msg.compress(), save: true)
             }
         }
+
+		let mes_bpass_e = XGFiles.fsys("mes_bpass_e")
+		let mes_fight_e = XGFiles.msg("mes_fight_e")
+		let mes_name_e = XGFiles.msg("mes_name_e")
+		if mes_bpass_e.exists {
+			let fsys = mes_bpass_e.fsysData
+
+			if mes_fight_e.exists {
+				fsys.shiftAndReplaceFileWithIndexEfficiently(2, withFile: mes_fight_e.compress(), save: true)
+			}
+			if mes_name_e.exists {
+				fsys.shiftAndReplaceFileWithIndexEfficiently(3, withFile: mes_name_e.compress(), save: true)
+			}
+		}
+
         printg("Finished compiling msgs.")
     }
 	
@@ -345,7 +374,15 @@ func loadAllStrings() {
 		// very specific order based on the id at index 0xb in the .msg file
 		// files with the same id are identical but may be loaded at different times
 		// the first stringid in the next file is one greater than the last stringid of the previous file
-		allStringTables = [XGFiles.msg("mes_common").stringTable, XGFiles.msg("mes_fight_e").stringTable, XGFiles.msg("mes_name_e").stringTable]
+		allStringTables = [XGStringTable]()
+
+		for file in [XGFiles.msg("mes_common"), XGFiles.msg("mes_fight_e"), XGFiles.msg("mes_name_e")] {
+			if file.exists {
+				allStringTables.append(file.stringTable)
+			} else {
+				printg("Error loading strings. File doesn't exist:", file.path)
+			}
+		}
 		
 		stringsLoaded = true
 	}

@@ -395,6 +395,9 @@ final class XGFsys : NSObject {
 	}
 	
 	func indexForFile(filename: String) -> Int? {
+		if self.usesFileExtensions {
+			return self.fullFileNames.firstIndex(of: filename)
+		}
 		return self.fileNames.firstIndex(of: filename)
 	}
 	
@@ -997,6 +1000,12 @@ final class XGFsys : NSObject {
 			for i in 0 ..< data.count {
 				if settings.verbose {
 					printg("decoding file: \(data[i].file.fileName)")
+				}
+
+				if data[i].file.fileType == .msg {
+					let file = data[i].file
+					let msg = XGStringTable(file: file, startOffset: 0, fileSize: file.fileSize)
+					msg.writeJSON(to: .nameAndFolder(file.fileName + ".json", file.folder))
 				}
 				
 				if data[i].file.fileType == .gsw {

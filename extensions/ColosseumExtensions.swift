@@ -245,6 +245,10 @@ extension XGUtility {
 	class func documentISO() {
 		
 	}
+
+	class func encodeISO() {
+		
+	}
 	
 }
 

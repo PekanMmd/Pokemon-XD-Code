@@ -7,41 +7,18 @@
 
 import Foundation
 
-let mon = pokemon("omastar")
-mon.name.println()
-mon.nameID.hexString().println()
 
-//let string = XGString(string: "カイオーガ", file: nil, sid: 1)
-//print(string.chars)
-
-//XGMoves.allMoves().map{$0.data}.sorted(by: { (m1, m2) -> Bool in
-//	m1.target.rawValue < m2.target.rawValue
-//}).forEach { (move) in
-//	printg("\(move.name.unformattedString) - \(move.target)")
+//for file in XGFolders.MSG.files {
+//	let jsonFile = XGFiles.nameAndFolder(file.fileName + ".json", .Documents)
+//	file.stringTable.writeJSON(to: jsonFile)
 //}
 
-//GoDShellManager.run(.wit, args: "-h")
-//settings.verbose = true
-//XGUtility.decompileISO()
-//XGUtility.compileISO()
+let table = try? XGStringTable.fromJSONFile(file: .nameAndFolder("mes_fight_e.msg.json", .Documents))
+if let table = table {
+	table.save()
+}
 
-
-//XGUtility.extractAllFiles()
-//let fsysData = XGFiles.fsys("mes_common").fsysData
-//let folder = XGFolders.ISOExport("mes_common")
-//for i in 0 ..< fsysData.numberOfEntries {
-//	let filename = fsysData.numberedFileNames[i].removeFileExtensions() + fsysData.fileTypeForFile(index: i).fileExtension
-//	for file in folder.files {
-//		if file.fileName == filename {
-//			if fsysData.isFileCompressed(index: i){
-//				fsysData.shiftAndReplaceFileWithIndexEfficiently(i, withFile: file.compress(), save: false)
-//			} else {
-//				fsysData.shiftAndReplaceFileWithIndexEfficiently(i, withFile: file, save: false)
-//			}
-//		}
-//	}
-//}
-//fsysData.save()
+//XGFiles.msg("mes_common").stringTable.writeJSON(to: .nameAndFolder("mes_common.msg.json", .Documents))
 
 //for i in 0 ..< kNumberOfTypes {
 //	let type = XGMoveTypes.type(i).data
@@ -92,4 +69,6 @@ mon.nameID.hexString().println()
 //	mon.type2 = .type(fairy.index)
 //	mon.save()
 //}
-
+//
+//XGUtility.compileMainFiles()
+//XGUtility.compileISO()

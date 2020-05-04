@@ -126,36 +126,32 @@ class XGString: NSObject, Codable {
 				}
 				
 				let sp = XGSpecialCharacters.fromString(midString)
-				
-				if game == .PBR {
-					let ch = XGUnicodeCharacters.special(sp, [])
-					chars.append(ch)
-				} else {
-					var extraBytes = [Int]()
-					
-					if sp.extraBytes > 0 {
+
+				var extraBytes = [Int]()
+
+				if sp.extraBytes > 0 {
+					current += 1
+
+					for _ in 0 ..< sp.extraBytes {
+
+						var byte = ""
+						char = string.substring(from: current, to: current + 1)
 						current += 1
-						
-						for _ in 0 ..< sp.extraBytes {
-							
-							var byte = ""
-							char = string.substring(from: current, to: current + 1)
-							current += 1
-							byte = byte + char
-							
-							char = string.substring(from: current, to: current + 1)
-							current += 1
-							byte = byte + char
-							
-							extraBytes.append(byte.hexStringToInt())
-							
-						}
+						byte = byte + char
+
+						char = string.substring(from: current, to: current + 1)
 						current += 1
+						byte = byte + char
+
+						extraBytes.append(byte.hexStringToInt())
+
 					}
-					
-					let ch = XGUnicodeCharacters.special(sp, extraBytes)
-					chars.append(ch)
+					current += 1
 				}
+
+				let ch = XGUnicodeCharacters.special(sp, extraBytes)
+				chars.append(ch)
+
 				
 			} else {
 				
@@ -219,22 +215,23 @@ class XGString: NSObject, Codable {
 	}
 	
 	enum CodingKeys: String, CodingKey {
-		case text, file, id
+		case text, id
 	}
 	
 	required convenience init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		let text = try container.decode(String.self, forKey: .text)
 		let file: XGFiles? = nil
-		let id = try container.decode(Int?.self, forKey: .id)
+		let id = try? container.decode(Int.self, forKey: .id)
 		self.init(string: text, file: file, sid: id)
 	}
 	
 	func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 		try container.encode(self.string, forKey: .text)
-		try container.encode(self.table.fileName, forKey: .file)
-		try container.encode(self.id, forKey: .id)
+		if game != .PBR {
+			try container.encode(self.id, forKey: .id)
+		}
 	}
 }
 

@@ -199,15 +199,21 @@ class PBRDataTable : CustomStringConvertible {
 	}
 	
 	func setEntrySize(_ size: Int) {
-		// common only
-		if size > 0 {
-			for entry in self.entries {
-				while entry.length > size {
-					entry.deleteBytes(start: entry.length - 1, count: 1)
-				}
-				while entry.length < size {
-					entry.appendBytes([0])
-				}
+		guard case .common = file else {
+			printg("Cannot set data table entry size for non common file \(file.path)")
+			return
+		}
+		guard size > 0 else {
+			printg("Cannot set data table entry size to 0.")
+			return
+		}
+
+		for entry in self.entries {
+			while entry.length > size {
+				entry.deleteBytes(start: entry.length - 1, count: 1)
+			}
+			while entry.length < size {
+				entry.appendBytes([0])
 			}
 		}
 	}
@@ -295,25 +301,74 @@ class PBRDataTable : CustomStringConvertible {
 	class func AIDeck() -> PBRDataTable? {
 		return deckWithID(kNumberOfPokemonDecks + kNumberOfTrainerDecks)
 	}
+
+	/* File names from JP ISO (different order)
+	0: FlagID.bin
+	1: FloorEvent.bin
+	2: ItemData.bin
+	3: MenuBattleRule.bin
+	4: MenuPokemonBody.bin
+	5: MenuPokemonFace.bin
+	6: MenuPokemonIcon.bin
+	7: MenuProfileCountryTbl.bin
+	8: MenuShopItem.bin
+	9: MenuTutorialData.bin
+	10: MenuWazaZokuseiTbl.bin
+	11: PokemonGrowTbl.bin
+	12: PokemonModel.bin
+	13: PokemonModelEffect.bin
+	14: PokemonPersonalData.bin
+	15: PokemonShinkaTable.bin
+	16: PokemonWazaOboe.bin
+	17: TokuseiDataList.bin
+	18: TrainerCustomParts.bin
+	19: TrainerCustomTable.bin
+	20: TrainerEvent.bin
+	21: TrainerModel.bin
+	22: TrainerTitle.bin
+	23: BallModel.bin
+	24: ColosseumRule.bin
+	25: FightAiBattlePass.bin
+	26: FightAiExpectData.bin
+	27: FightAiPokemonPartData.bin
+	28: FightAiValueData.bin
+	29: FightAiWazaData.bin
+	30: WazaMachineData.bin
+	31: WazaTableData.bin
+	*/
 	
-	static var pokemonImages = tableWithID(0)!
+	static var pokemonIcons = tableWithID(0)!
 	static var countries = tableWithID(1)!
-	static var holdItems = tableWithID(2)!
-//	static var colosseums? = tableWithID(3)!
+	static var shopItems = tableWithID(2)!
+//	static var colosseums? = tableWithID(3)! Doesn't exist in JP ISO
 	static var typeMatchups = tableWithID(4)!
+	static var expTables = tableWithID(5)!
 	static var pokemonModels = tableWithID(6)!
-	static var baseStats = tableWithID(8)!
+	static var pokemonModelEffect = tableWithID(7)!
+	static var pokemonBaseStats = tableWithID(8)!
 	static var evolutions = tableWithID(9)!
-	static var wzxbthr = tableWithID(10)!
-	//	static var colosseums2? = tableWithID(11)!
+	static var ballModels = tableWithID(10)!
+	static var colosseumsRules = tableWithID(11)!
+	static var fightAIBattlePass = tableWithID(12)!
+	static var fightAIExpectData = tableWithID(13)!
+	static var fightAIPokemonPartData = tableWithID(14)!
+	static var fightAIValues = tableWithID(15)!
+	static var fightAIMoveData = tableWithID(16)!
+	static var flagIDs = tableWithID(17)!
+	static var floorEvent = tableWithID(18)!
 	static var items = tableWithID(19)!
-	static var formeSprites = tableWithID(21)!
-	static var formeModels = tableWithID(22)!
-	static var clothes = tableWithID(24)!
-	static var wzxbthr2 = tableWithID(26)!
-	static var presetTrainerModels = tableWithID(27)!
+	static var menuBattleRules = tableWithID(20)!
+	static var pokemonBodies = tableWithID(21)!
+	static var pokemonFaces = tableWithID(22)!
+	static var abilities = tableWithID(23)!
+	static var trainerCustomParts = tableWithID(24)!
+	static var trainerCustomTable = tableWithID(25)!
+	static var trainerEvent = tableWithID(26)!
+	static var trainerModels = tableWithID(27)!
+	static var trainerTitles = tableWithID(28)!
 	static var TMs = tableWithID(29)!
 	static var moves = tableWithID(30)!
+	static var tutorialData = tableWithID(31)!
 	static var levelUpMoves = tableWithID(32)!
 	
 }

@@ -8,8 +8,10 @@
 
 import Foundation
 
-let kNumberOfStringsOffset = 0x06
-let kEndOfHeader		   = 0x10
+let kNumberOfStringsOffset		 = 0x06
+let kStringTableIDOffset   		 = 0x08
+let kStringTableLanguageOffset   = 0x0C
+let kEndOfHeader		  		 = 0x10
 
 // high order 12 bits are compared with the string table's first 2 bytes
 // always seems to be 0 though
@@ -45,6 +47,9 @@ class XGStringTable: NSObject {
 	@objc var stringTable = XGMutableData()
 	@objc var stringOffsets = [Int : Int]()
 	var stringIDs = [Int]()
+
+	var tableID = 0
+	var language = XGStringTableLanguages.english
 	
 	@objc var numberOfEntries : Int {
 		get {
@@ -86,11 +91,29 @@ class XGStringTable: NSObject {
 		
 		self.file = file
 		self.startOffset = startOffset
-		self.stringTable = XGMutableData(byteStream: file.data!.charStream, file: file)
+		self.stringTable = file.data!
 		
 		stringTable.deleteBytesInRange(NSMakeRange(0, startOffset))
 		stringTable.deleteBytesInRange(NSMakeRange(fileSize, stringTable.length - fileSize))
-		
+
+		setup()
+	}
+
+	init(data: XGMutableData) {
+		super.init()
+
+		self.file = data.file
+		self.startOffset = 0
+		self.stringTable = data
+
+		setup()
+	}
+
+	private func setup() {
+		tableID = stringTable.get4BytesAtOffset(kStringTableIDOffset)
+		let languageBinary = stringTable.getWordAtOffset(kStringTableLanguageOffset)
+		language = XGStringTableLanguages.fromBinary(languageBinary)
+
 		getOffsets()
 	}
 	
@@ -108,7 +131,8 @@ class XGStringTable: NSObject {
 	func replaceString(_ string: XGString, save: Bool) -> Bool {
 		return self.replaceString(string, alert: false, save: save, increaseLength: false)
 	}
-	
+
+	@discardableResult
 	func addString(_ string: XGString, increaseSize: Bool, save: Bool) -> Bool {
 		
 		if self.numberOfEntries == 0xFFFF {
@@ -246,10 +270,8 @@ class XGStringTable: NSObject {
 			
 			currChar = stringTable.get2BytesAtOffset(currentOffset)
 			currentOffset += 2
-			
-			
+
 			// These are special characters used by the game. Similar to escape sequences like \n or \t for newlines and tabs.
-			// It is to be hoped that we'll be able to figure out what they all mean eventually.
 			if currChar == 0xFFFF {
 				
 				let sp = XGSpecialCharacters.id(stringTable.get2BytesAtOffset(currentOffset))
@@ -258,7 +280,12 @@ class XGStringTable: NSObject {
 				if sp.id == 0xFFFF {
 					complete = true
 				} else {
-					string.append(.special(sp, []))
+					let extra = sp.extraBytes
+
+					let stream = stringTable.getByteStreamFromOffset(currentOffset, length: extra)
+					currentOffset += extra
+
+					string.append(.special(sp, stream))
 				}
 				
 			} else {
@@ -401,27 +428,108 @@ class XGStringTable: NSObject {
 	
 }
 
-struct XGStringTableMetaData {
+enum XGStringTableLanguages: String, CaseIterable, Codable {
+	case japanese
+	case english
+	case french
+	case german
+	case italian
+	case spanish
+
+	var binary: UInt32 {
+		switch self {
+		case .japanese:
+			return 0x4A504A50
+		case .english:
+			return 0x5553554B
+		case .french:
+			return 0x46524652
+		case .german:
+			return 0x53505350
+		case .italian:
+			return 0x49544954
+		case .spanish:
+			return 0x47524752
+		}
+	}
+
+	static func fromBinary(_ binary: UInt32) -> XGStringTableLanguages {
+		for language in allCases {
+			if language.binary == binary {
+				return language
+			}
+		}
+		return .english
+	}
+}
+
+struct XGStringTableMetaData: Codable {
 	let file: XGFiles
-	let startOffset: Int
-	let fixedFileSize: Int
-	let strings: [XGString]
+	let tableID: Int
+	let language: XGStringTableLanguages
+	let strings: [String]
 }
 
 extension XGStringTable: Encodable {
 	enum XGStringTableDecodingError: Error {
-		case invalidFile(file: XGFiles)
+		case invalidData
 	}
 	
 	enum CodingKeys: String, CodingKey {
-		case file, startOffset, fixedFileSize, strings
+		case file, tableID, language, strings
+	}
+
+	static func fromJSON(data: Data) throws -> XGStringTable {
+		let decodedMetaData = try? JSONDecoder().decode(XGStringTableMetaData.self, from: data)
+		guard let metaData = decodedMetaData else {
+			throw XGStringTableDecodingError.invalidData
+		}
+
+		let numberOfStrings = metaData.strings.count
+
+		let data = XGMutableData()
+		data.file = metaData.file
+
+		// Header
+		data.appendBytes([0x4D, 0x45, 0x53, 0x47]) // MESG magic bytes
+		data.appendBytes(numberOfStrings.charArray)
+		data.appendBytes(metaData.tableID.charArray)
+		data.appendBytes(metaData.language.binary.charArray)
+
+		// Pointers
+		let headerSize = 16
+		let pointerSize = 4 * numberOfStrings
+		let endOfPointers = headerSize + pointerSize
+
+		let pointerInitData = [UInt8](repeating: 0, count: pointerSize)
+		data.appendBytes(pointerInitData)
+
+		var currentStringOffset = endOfPointers
+		var currentPointerOffset = headerSize
+
+		for str in metaData.strings {
+			data.replace4BytesAtOffset(currentPointerOffset, withBytes: currentStringOffset)
+			let string = XGString(string: str, file: nil, sid: nil)
+			let stringData = string.byteStream
+			data.appendBytes(stringData)
+			currentStringOffset += stringData.count
+			currentPointerOffset += 4
+		}
+
+		return XGStringTable(data: data)
+	}
+
+	static func fromJSONFile(file: XGFiles) throws -> XGStringTable {
+		let url = URL(fileURLWithPath: file.path)
+		let data = try Data(contentsOf: url)
+		return try fromJSON(data: data)
 	}
 	
 	func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.file.fileName, forKey: .file)
-		try container.encode(self.startOffset, forKey: .startOffset)
-		try container.encode(self.startOffset == 0 ? 0 : self.fileSize, forKey: .fixedFileSize)
-		try container.encode(self.allStrings(), forKey: .strings)
+		try container.encode(file, forKey: .file)
+		try container.encode(tableID, forKey: .tableID)
+		try container.encode(language, forKey: .language)
+		try container.encode(allStrings().map { $0.string }, forKey: .strings)
 	}
 }

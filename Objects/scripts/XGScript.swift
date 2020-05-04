@@ -463,6 +463,13 @@ class XGScript: NSObject {
 		for g in  0 ..< self.gvar.count {
 			desc += "\(g): " + self.gvar[g].description + "\n"
 		}
+
+		desc += "\nSTRG: \(self.strg.count)\n" + linebreak
+		var strgPosition = 0
+		for str in strg {
+			desc += "\(strgPosition): " + str + "\n"
+			strgPosition += str.length + 1
+		}
 		
 		desc += "\nARRY: \(self.arry.count)\n" + linebreak
 		for a in 0 ..< self.arry.count {

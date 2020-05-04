@@ -16,6 +16,7 @@ enum XDSConstantTypes {
 	case string
 	case vector
 	case array
+	case codePointer
 	case unknown(Int)
 	
 	var string : String {
@@ -27,6 +28,7 @@ enum XDSConstantTypes {
 			case .string			: return "String"
 			case .vector			: return "Vector"
 			case .array				: return "Array"
+			case .codePointer		: return "Pointer"
 			case .unknown(let val)	: return "Class\(val)"
 			}
 		}
@@ -40,6 +42,7 @@ enum XDSConstantTypes {
 		case .string			: return 3
 		case .vector			: return 4
 		case .array				: return 7
+		case .codePointer	: return 8
 		case .unknown(let val)	: return val
 		}
 	}
@@ -52,6 +55,7 @@ enum XDSConstantTypes {
 		case  3 : return .string
 		case  4 : return .vector
 		case  7 : return .array
+		case  8 : return .codePointer
 		default : return .unknown(id)
 		}
 	}
@@ -111,6 +115,8 @@ class XDSConstant : NSObject {
 			return "Null"
 		case .array:
 			return "array_" + String(format: "%02d", self.asInt)
+		case .codePointer:
+			return XDSExpr.locationIndex(self.asInt).text[0]
 		case .unknown(let i):
 			return XGScriptClass.classes(i).name + "(\(self.asInt))"
 		}

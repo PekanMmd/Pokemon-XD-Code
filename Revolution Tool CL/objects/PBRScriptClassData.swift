@@ -14,8 +14,10 @@ let ScriptClassNames : [Int : String] = [
 	0 : "Standard",
 	4 : "Vector",
 	7 : "Array",
+	8 : "ScriptInstruction",
 	
 	36 : "BattlePokemon",
+	54 : "TaskManager"
 ]
 
 //MARK: - Operators
@@ -132,6 +134,17 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 	36 : [
 		("getCurrentMove", 23, 1),
 	
+	],
+
+	//MARK: - Task Manager
+	54 : [
+		//#------------------------------------------------------------------------------------
+		//Category(name = "Methods", start = 16, nb = 8),
+
+		("allocateTask", 16, 2), //# returns taskUID ... allocates a task but seems to do nothing ... BROKEN ?
+		("zeroFunction17", 17, 2), //# arg : taskUID
+		("getTaskCounter", 18, 1),
+		("stopTask", 19, 2),
 	]
 	
 ]

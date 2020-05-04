@@ -235,7 +235,7 @@ extension UInt32 {
 		// least significant bit first
 		var value = self
 		var bits = [Bool]()
-		for _ in 0 ... 3 {
+		for _ in 0 ... 32 {
 			bits.append((value & 0x1) == 1)
 			value = value >> 1
 		}
