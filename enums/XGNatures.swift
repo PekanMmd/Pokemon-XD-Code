@@ -104,7 +104,11 @@ extension XGNatures: XGEnumerable {
 	}
 	
 	static var allValues: [XGNatures] {
-		return allCases
+		var values = allCases
+		if game != .Colosseum {
+			values.removeLast()
+		}
+		return values
 	}
 }
 

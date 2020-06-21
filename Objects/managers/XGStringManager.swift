@@ -70,11 +70,15 @@ func getStringSafelyWithID(id: Int) -> XGString {
 	
 	loadAllStrings()
 	
-	for table in allStringTables {
+	for i in 0 ..< allStringTables.count {
+		let table = allStringTables[i]
 		if table.containsStringWithId(id) {
+			allStringTables.remove(at: i)
+			allStringTables.insert(table, at: 0)
 			if let s = table.stringWithID(id) {
 				return s
 			}
+
 		}
 	}
 	

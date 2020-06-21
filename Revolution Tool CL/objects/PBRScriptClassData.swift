@@ -130,7 +130,8 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("getIteratorPos", 24, 2),
 		("append", 25, 2) //#REMOVED
 	],
-	
+
+	//MARK: - Battle Pokemon
 	36 : [
 		("getCurrentMove", 23, 1),
 	

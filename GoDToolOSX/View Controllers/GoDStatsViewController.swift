@@ -125,7 +125,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		let pokemon = mons[row]
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
 		cell.setBackgroundImage(pokemon.type1.image)
 		cell.setTitle(pokemon.name)
@@ -463,7 +463,7 @@ class GoDStatsViewController: GoDTableViewController {
 		self.mons[self.pokemon.index] = (self.pokemon.name.string, self.pokemon.type1, current.index)
 		
 		self.reloadViewWithActivity()
-		self.table.reloadIndex(current.index)
+		self.table.reload(index: current.index)
 		
 		printg("saved updated stats:",self.pokemon.name)
 	}
@@ -503,7 +503,7 @@ class GoDStatsViewController: GoDTableViewController {
 			let isTM = row < 58
 			let tm = isTM ? XGTMs.tm(row + 1) : XGTMs.tutor(row - 57)
 			
-			let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: nil, fontSize: 12, width: self.width)) as! GoDTableCellView
+			let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: self.width)) as! GoDTableCellView
 			
 			cell.setBackgroundImage(tm.move.type.image)
 			if tm.move.isShadowMove {

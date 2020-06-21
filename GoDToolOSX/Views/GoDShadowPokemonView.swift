@@ -50,6 +50,7 @@ class GoDShadowPokemonView: NSImageView {
 	required init?(coder: NSCoder) {
 		super.init(coder: coder)
 		self.layoutViews()
+		self.dpkm.deck = .DeckStory
 	}
 	
 	func layoutViews() {
@@ -267,7 +268,8 @@ class GoDShadowPokemonView: NSImageView {
 		let pokemon = self.delegate.currentPokemon
 		
 		if !pokemon.isSet {
-			self.setBackgroundColour(GoDDesign.colourGrey())
+			let grey = GoDDesign.isDarkModeEnabled ? GoDDesign.colourDarkGrey() : GoDDesign.colourGrey()
+			self.setBackgroundColour(grey)
 		} else {
 			self.setBackgroundColour(NSColor.controlBackgroundColor)
 		}

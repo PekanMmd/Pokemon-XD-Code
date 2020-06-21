@@ -38,7 +38,8 @@ enum XGItems {
 	
 	var startOffset : Int {
 		get{
-			return kFirstItemOffset + (index * kSizeOfItemData)
+			let safeIndex = index < kNumberOfItems ? index : 0
+			return kFirstItemOffset + (safeIndex * kSizeOfItemData)
 		}
 	}
 	

@@ -16,7 +16,8 @@ class GoDMessageViewController: GoDTableViewController {
 	@IBOutlet var saveButton: NSButton!
 	@IBOutlet var messageScrollView: NSScrollView!
 
-	lazy var allStringTables = XGFolders.MSG.files
+	var singleTable: XGStringTable?
+	lazy var allStringTables = XGFolders.StringTables.files
 							  .filter { $0.fileType == .msg }
 							  .map { $0.stringTable }
 
@@ -26,24 +27,39 @@ class GoDMessageViewController: GoDTableViewController {
 		}
 	}
 
+	init(singleTable: XGStringTable) {
+		self.singleTable = singleTable
+		super.init(nibName: nil, bundle: nil)
+	}
+
+	required init?(coder: NSCoder) {
+		super.init(coder: coder)
+	}
+
     override func viewDidLoad() {
         super.viewDidLoad()
-		self.filesPopup.setTitles(values: ["-"] + allStringTables.map { $0.file.fileName }.sorted())
+		if let table = singleTable {
+			self.filesPopup.setTitles(values: [table.file.fileName])
+			self.filesPopup.isEnabled = false
+			currentTable = table
+		} else {
+			self.filesPopup.setTitles(values: ["-"] + allStringTables.map { $0.file.fileName }.sorted())
+		}
 		self.hideInterface()
     }
 	
 	func hideInterface() {
-		let views : [NSView] = [stringIDField, stringIDLabel, messageScrollView, saveButton]
-		for view in views {
-			view.isHidden = true
-		}
+		stringIDField.isEnabled = false
+		stringIDLabel.isEnabled = false
+		messageField.isEditable = false
+		saveButton.isEnabled = false
 	}
 	
 	func showInterface() {
-		let views : [NSView] = [stringIDField, stringIDLabel, messageScrollView, saveButton]
-		for view in views {
-			view.isHidden = false
-		}
+		stringIDField.isEnabled = true
+		stringIDLabel.isEnabled = true
+		messageField.isEditable = true
+		saveButton.isEnabled = true
 	}
 	
 	func setUpForFile() {
@@ -94,7 +110,7 @@ class GoDMessageViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: nil, fontSize: 12, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: self.table.width)) as! GoDTableCellView
 		
 		guard let currentTable = currentTable else {
 			return cell

@@ -128,10 +128,10 @@ final class XGTrainerPokemon : NSObject, Codable {
 		ability		= pid % 2
 		
 		let gender	= (pid / 2) % 4
-		self.gender = XGGenders(rawValue: gender)!
+		self.gender = XGGenders(rawValue: gender) ?? .genderless
 		
 		let nature	= pid / 8
-		self.nature	= XGNatures(rawValue: nature)!
+		self.nature	= XGNatures(rawValue: nature) ?? .hardy
 		
 		self.EVs = data.getByteStreamFromOffset(start + kFirstPokemonEVOffset, length: kNumberOfEVs)
 		

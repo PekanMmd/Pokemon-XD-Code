@@ -376,8 +376,9 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		("startBattle", 72, 2, [.objectName("Dialogue"), .battleID], .null, ""), //# (int battleid)
 		("getBattleResult", 74, 1, [.objectName("Dialogue")], .battleResult, "1 = lose, 2 = win"),
-		
-		("displayMewMenuQuestionWithIndex", 78, 2, [.objectName("Dialogue"), .integer], .move, ""),
+
+		("beginMewMoveTutorQuestions", 77, 1, [.objectName("Dialogue")], .integer, ""),
+		("getGeneratedMewTutorMoveWithIndex", 78, 2, [.objectName("Dialogue"), .integer], .move, "After the questions have been asked this function is used to retrieve the moveset"),
 		("displayPartyMenuToLearnMove", 79, 2, [.objectName("Dialogue"), .move], .integerIndex, "shows which pokemon can learn the move"),
 		
 	],

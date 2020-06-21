@@ -142,7 +142,7 @@ class GoDMovesViewController: GoDTableViewController {
 		
 		let move = moves[row]
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
 		cell.setBackgroundImage(move.isShadow ? XGMoveTypes.shadowImage : move.type.image)
 		cell.setTitle(move.name)

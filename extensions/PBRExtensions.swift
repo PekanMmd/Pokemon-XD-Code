@@ -46,6 +46,45 @@ let date = Date(timeIntervalSinceNow: 0)
 var logString = ""
 
 
+extension XGString {
+	var hasFurigana: Bool {
+		return chars.contains(where: { (c) -> Bool in
+			switch c {
+			case .special(.id(1), _): // check for furigana character
+				return true
+			default:
+				return false
+			}
+		})
+	}
+
+	func removeKanji() {
+		// Looks for any instances of furigana. Uses the furigana as regular text and removes the kanji after it.
+		var updatedChars = [XGUnicodeCharacters]()
+		var includeCounter = 0
+		var skipCounter = 0
+		for char in chars {
+			if includeCounter > 0 {
+				updatedChars.append(char)
+				includeCounter -= 1
+			} else if skipCounter > 0 {
+				skipCounter -= 1
+			} else {
+				switch char {
+				case .unicode:
+					updatedChars.append(char)
+				case .special(.id(1), let args): // furigana
+					includeCounter = args[0]
+					skipCounter = args[1]
+				default:
+					updatedChars.append(char)
+				}
+			}
+		}
+		chars = updatedChars
+	}
+}
+
 class XGUtility {
 	class func saveData(_ data: Data, toFile file: XGFiles) -> Bool {
 		if !file.folder.exists {
@@ -90,6 +129,17 @@ class XGUtility {
 			printg("couldn't save json to file: \(file.path)")
 		}
 	}
+
+	class func encodeJSONObject<T: Encodable>(_ object: T, toFile file: XGFiles) {
+		if !file.folder.exists {
+			file.folder.createDirectory()
+		}
+		object.writeJSON(to: file)
+	}
+
+	class func decodeJSONObject<T: Decodable>(from file: XGFiles) -> T? {
+		return try? T.fromJSON(file: file)
+	}
 	
 	class func loadJSONFromFile(_ file: XGFiles) -> AnyObject? {
 		do {
@@ -119,7 +169,9 @@ class XGUtility {
 		XGFolders.setUpFolderFormat()
 		
 		printg("extracting required files...")
-		let requiredFiles : [XGFiles] = [.fsys("common"), .fsys("mes_common"), .fsys("deck")]
+		let requiredFiles : [XGFiles] = region == .JP ?
+			[.fsys("common"), .fsys("deck")] :
+			[.fsys("common"), .fsys("mes_common"), .fsys("deck")]
 		var fileMissing = false
 		for file in requiredFiles {
 			if !file.exists {
@@ -156,32 +208,36 @@ class XGUtility {
 		}
 		
 		let common = XGFiles.fsys("common").fsysData
-		for i in 0 ... 32 {
-			if !XGFiles.common(i).exists {
-				let data = common.decompressedDataForFileWithIndex(index: i)!
+		let numberOfCommonBinaries = region == .JP ? 32 : 33
+		for i in 0 ..< numberOfCommonBinaries {
+			if !XGFiles.common(i).exists, let data = common.decompressedDataForFileWithIndex(index: i) {
 				data.file = .common(i)
 				data.save()
 			}
 		}
-		
-		if !XGFiles.msg("mes_common").exists {
-			let msg = XGFiles.fsys("mes_common").fsysData.decompressedDataForFileWithIndex(index: 1)!
-			msg.file = .msg("mes_common")
-			msg.save()
+
+		for filename in
+			["menu_btutorial",
+			(region == .JP ? "menu_fight_s" : "mes_fight_e"),
+			(region == .JP ? "menu_name2" : "mes_name_e")] {
+				if XGFiles.fsys(filename).exists {
+					if let msg = XGFiles.fsys(filename).fsysData.decompressedDataForFileWithIndex(index: 1) {
+						msg.file = .msg(filename)
+						msg.save()
+					}
+				}
 		}
-        
-        if !XGFiles.msg("mes_fight_e").exists {
-            let msg = XGFiles.fsys("mes_fight_e").fsysData.decompressedDataForFileWithIndex(index: 1)!
-            msg.file = .msg("mes_fight_e")
-            msg.save()
-        }
-        
-        if !XGFiles.msg("mes_name_e").exists {
-            let msg = XGFiles.fsys("mes_name_e").fsysData.decompressedDataForFileWithIndex(index: 1)!
-            msg.file = .msg("mes_name_e")
-            msg.save()
-        }
-        
+
+		if region == .JP {
+			let filename = "common"
+			if XGFiles.fsys(filename).exists {
+				if let msg = XGFiles.fsys(filename).fsysData.decompressedDataForFileWithIndex(index: 35) {
+					msg.file = .msg(filename)
+					msg.save()
+				}
+			}
+		}
+
 		printg("extraction complete!")
 		
 	}
@@ -221,8 +277,9 @@ class XGUtility {
 			printg("File doesn't exist: \(XGFiles.dol.path)")
 			return
 		}
-		// offset 0x8022965c in RAM
-		dol.replace4BytesAtOffset(0x2252bc, withBytes: 0x48000100)
+		// offset 0x8022965c in RAM (0x8021de60 JP)
+		let offset = region == .JP ? 0x219Ac0 : 0x2252bc
+		dol.replace4BytesAtOffset(offset, withBytes: 0x48000100)
 		dol.save()
 	}
 
@@ -310,8 +367,9 @@ class XGUtility {
         let file = XGFiles.fsys("common")
         if file.exists {
             let fsys = XGFiles.fsys("common").fsysData
-            
-            for cid in 0 ... 32 {
+
+			let numberOfCommonBinaries = region == .JP ? 32 : 33
+            for cid in 0 ..< numberOfCommonBinaries {
                 let cFile = XGFiles.common(cid)
                 if cFile.exists {
                     if settings.verbose {
@@ -331,8 +389,24 @@ class XGUtility {
     
     class func compileMSG() {
         printg("Compiling msgs...")
+
+		if region == .JP {
+			let filename = "common"
+			let fsys = XGFiles.fsys(filename)
+            let msg = XGFiles.msg(filename)
+            if fsys.exists && msg.exists {
+                if settings.verbose {
+                    printg("Compiling msg:", msg.path)
+                }
+                let fsysData = fsys.fsysData
+                fsysData.shiftAndReplaceFileWithIndexEfficiently(35, withFile: msg.compress(), save: true)
+            }
+		}
         
-        for filename in ["mes_common", "mes_fight_e", "mes_name_e"] {
+        for filename in
+			["mes_common", "menu_btutorial",
+			(region == .JP ? "menu_fight_s" : "mes_fight_e"),
+			(region == .JP ? "menu_name2" : "mes_name_e")] {
             let fsys = XGFiles.fsys(filename)
             let msg = XGFiles.msg(filename)
             if fsys.exists && msg.exists {
@@ -344,17 +418,19 @@ class XGUtility {
             }
         }
 
-		let mes_bpass_e = XGFiles.fsys("mes_bpass_e")
+		let mes_bpass_e = XGFiles.fsys(region == .JP ? "menu_bpass2" : "mes_bpass_e")
 		let mes_fight_e = XGFiles.msg("mes_fight_e")
 		let mes_name_e = XGFiles.msg("mes_name_e")
 		if mes_bpass_e.exists {
 			let fsys = mes_bpass_e.fsysData
 
 			if mes_fight_e.exists {
-				fsys.shiftAndReplaceFileWithIndexEfficiently(2, withFile: mes_fight_e.compress(), save: true)
+				let index = region == .JP ? 3 : 2
+				fsys.shiftAndReplaceFileWithIndexEfficiently(index, withFile: mes_fight_e.compress(), save: true)
 			}
 			if mes_name_e.exists {
-				fsys.shiftAndReplaceFileWithIndexEfficiently(3, withFile: mes_name_e.compress(), save: true)
+				let index = region == .JP ? 2 : 3
+				fsys.shiftAndReplaceFileWithIndexEfficiently(index, withFile: mes_name_e.compress(), save: true)
 			}
 		}
 
@@ -376,17 +452,27 @@ func loadAllStrings() {
 		// the first stringid in the next file is one greater than the last stringid of the previous file
 		allStringTables = [XGStringTable]()
 
-		for file in [XGFiles.msg("mes_common"), XGFiles.msg("mes_fight_e"), XGFiles.msg("mes_name_e")] {
-			if file.exists {
-				allStringTables.append(file.stringTable)
-			} else {
-				printg("Error loading strings. File doesn't exist:", file.path)
-			}
+		for filename in
+			[region == .JP ? "common" : "mes_common",
+			(region == .JP ? "menu_fight_s" : "mes_fight_e"),
+			(region == .JP ? "menu_name2" : "mes_name_e")]
+			+ (region == .JP ? [] : ["menu_btutorial"])
+		{
+
+				let file = XGFiles.msg(filename)
+				if file.exists {
+					allStringTables.append(file.stringTable)
+				} else {
+					printg("Error loading strings. File doesn't exist:", file.path)
+
+				}
+
+				stringsLoaded = true
 		}
-		
-		stringsLoaded = true
+		allStringTables.sort { (s1, s2) -> Bool in
+			s1.tableID < s2.tableID
+		}
 	}
-	
 }
 
 func getStringWithID(id: Int) -> XGString? {

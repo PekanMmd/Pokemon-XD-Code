@@ -315,29 +315,21 @@ extension String {
 	}
 	
 	func spaceToLength(_ length: Int) -> String {
-		
-		var spaces = ""
-		let wordLength = self.length
-		for i in 1 ... length {
-			if i > wordLength {
-				spaces += " "
-			}
+		var spaced = self
+		while spaced.length < length {
+			spaced += " "
 		}
 		
-		return self + spaces
+		return spaced
 	}
 	
 	func spaceLeftToLength(_ length: Int) -> String {
-		
-		var spaces = ""
-		let wordLength = self.length
-		for i in 1 ... length {
-			if i > wordLength {
-				spaces += " "
-			}
+		var spaced = self
+		while spaced.length < length {
+			spaced = " " + spaced
 		}
-		
-		return spaces + self
+
+		return spaced
 	}
 	
 	func removeFileExtensions() -> String {

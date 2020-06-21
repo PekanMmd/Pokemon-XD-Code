@@ -11,7 +11,7 @@ private var tablesLoaded = false
 private var tables = [Int : PBRDataTable]()
 private var decksLoaded = false
 private var decks = [Int : PBRDataTable]()
-private let kNumberOfDataTables = 0x21
+private let kNumberOfDataTables = region == .JP ? 32 : 33
 private let kNumberOfPokemonDecks = 19
 private let kNumberOfTrainerDecks = 26
 
@@ -177,6 +177,10 @@ class PBRDataTable : CustomStringConvertible {
 		}
 		return nil
 	}
+
+	func entryWithIndex(_ index: Int) -> PBRDataTableEntry? {
+		return PBRDataTableEntry(index: index, table: self)
+	}
 	
 	func offsetForEntryWithIndex(_ index: Int) -> Int {
 		return self.startOffset + (index * self.entrySize)
@@ -337,39 +341,39 @@ class PBRDataTable : CustomStringConvertible {
 	31: WazaTableData.bin
 	*/
 	
-	static var pokemonIcons = tableWithID(0)!
-	static var countries = tableWithID(1)!
-	static var shopItems = tableWithID(2)!
-//	static var colosseums? = tableWithID(3)! Doesn't exist in JP ISO
-	static var typeMatchups = tableWithID(4)!
-	static var expTables = tableWithID(5)!
-	static var pokemonModels = tableWithID(6)!
-	static var pokemonModelEffect = tableWithID(7)!
-	static var pokemonBaseStats = tableWithID(8)!
-	static var evolutions = tableWithID(9)!
-	static var ballModels = tableWithID(10)!
-	static var colosseumsRules = tableWithID(11)!
-	static var fightAIBattlePass = tableWithID(12)!
-	static var fightAIExpectData = tableWithID(13)!
-	static var fightAIPokemonPartData = tableWithID(14)!
-	static var fightAIValues = tableWithID(15)!
-	static var fightAIMoveData = tableWithID(16)!
-	static var flagIDs = tableWithID(17)!
-	static var floorEvent = tableWithID(18)!
-	static var items = tableWithID(19)!
-	static var menuBattleRules = tableWithID(20)!
-	static var pokemonBodies = tableWithID(21)!
-	static var pokemonFaces = tableWithID(22)!
-	static var abilities = tableWithID(23)!
-	static var trainerCustomParts = tableWithID(24)!
-	static var trainerCustomTable = tableWithID(25)!
-	static var trainerEvent = tableWithID(26)!
-	static var trainerModels = tableWithID(27)!
-	static var trainerTitles = tableWithID(28)!
-	static var TMs = tableWithID(29)!
-	static var moves = tableWithID(30)!
-	static var tutorialData = tableWithID(31)!
-	static var levelUpMoves = tableWithID(32)!
+	static var pokemonIcons = tableWithID(region == .JP ? 6 : 0)!
+	static var countries = tableWithID(region == .JP ? 7 : 1)!
+	static var shopItems = tableWithID(region == .JP ? 8 : 2)!
+	static var colosseumsUnknown = region == .JP ? nil : tableWithID(3) //Doesn't exist in JP ISO
+	static var typeMatchups = tableWithID(region == .JP ? 10 : 4)!
+	static var expTables = tableWithID(region == .JP ? 11 : 5)!
+	static var pokemonModels = tableWithID(region == .JP ? 12 : 6)!
+	static var pokemonModelEffect = tableWithID(region == .JP ? 13 : 7)!
+	static var pokemonBaseStats = tableWithID(region == .JP ? 14 : 8)!
+	static var evolutions = tableWithID(region == .JP ? 15 : 9)!
+	static var ballModels = tableWithID(region == .JP ? 23 : 10)!
+	static var colosseumsRules = tableWithID(region == .JP ? 24 : 11)!
+	static var fightAIBattlePass = tableWithID(region == .JP ? 25 : 12)!
+	static var fightAIExpectData = tableWithID(region == .JP ? 26 : 13)!
+	static var fightAIPokemonPartData = tableWithID(region == .JP ? 27 : 14)!
+	static var fightAIValues = tableWithID(region == .JP ? 28 : 15)!
+	static var fightAIMoveData = tableWithID(region == .JP ? 29 : 16)!
+	static var flagIDs = tableWithID(region == .JP ? 0 : 17)!
+	static var floorEvent = tableWithID(region == .JP ? 1 : 18)!
+	static var items = tableWithID(region == .JP ? 2 : 19)!
+	static var menuBattleRules = tableWithID(region == .JP ? 3 : 20)!
+	static var pokemonBodies = tableWithID(region == .JP ? 4 : 21)!
+	static var pokemonFaces = tableWithID(region == .JP ? 5 : 22)!
+	static var abilities = tableWithID(region == .JP ? 17 : 23)!
+	static var trainerCustomParts = tableWithID(region == .JP ? 18 : 24)!
+	static var trainerCustomTable = tableWithID(region == .JP ? 19 : 25)!
+	static var trainerEvent = tableWithID(region == .JP ? 20 : 26)!
+	static var trainerModels = tableWithID(region == .JP ? 21 : 27)!
+	static var trainerTitles = tableWithID(region == .JP ? 22 : 28)!
+	static var TMs = tableWithID(region == .JP ? 30 : 29)!
+	static var moves = tableWithID(region == .JP ? 31 : 30)!
+	static var tutorialData = tableWithID(region == .JP ? 9 : 31)!
+	static var levelUpMoves = tableWithID(region == .JP ? 16 : 32)!
 	
 }
 

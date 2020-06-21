@@ -91,7 +91,7 @@ indirect enum XGFiles {
 				
 			case .dol				: folder = .DOL
 			case .common			: folder = .Common
-			case .msg				: folder = .MSG
+			case .msg				: folder = .StringTables
 			case .dckp				: folder = .Decks
 			case .dckt				: folder = .Decks
 			case .dcka				: folder = .Decks
@@ -307,7 +307,7 @@ indirect enum XGFolders {
 	case Types
 	case FSYS
 	case LZSS
-	case MSG
+	case StringTables
 	case Reference
 	case Resources
 	case Logs
@@ -338,7 +338,7 @@ indirect enum XGFolders {
 			case .Types				: return "Types"
 			case .FSYS				: return "files"
 			case .LZSS				: return "LZSS"
-			case .MSG				: return "String Tables"
+			case .StringTables		: return "String Tables"
 			case .Reference			: return "Reference"
 			case .Resources			: return "Resources"
 			case .Logs				: return "Logs"
@@ -481,7 +481,7 @@ indirect enum XGFolders {
 			.Documents,
 			.Common,
 			.DOL,
-			.MSG,
+			.StringTables,
 			.Decks,
 			.JSON,
 			.TextureImporter,
@@ -531,7 +531,7 @@ indirect enum XGFolders {
 			}
 		}
 		
-		let jsons = ["Move Effects", "Original Pokemon", "Original Moves",]
+		let jsons = ["Move Effects", "Original Pokemon", "Original Moves", "Original Items"]
 		
 		for j in jsons {
 			let file = XGFiles.json(j)

@@ -336,6 +336,11 @@ class XGMutableData: NSObject {
 			
 		}
 	}
+
+	func replaceBytesFromOffset(_ offset: Int, withByteStream bytes: [UInt8]) {
+
+		replaceBytesFromOffset(offset, withByteStream: bytes.map{Int($0)})
+	}
 	
 	@objc func replaceBytesFromOffset(_ offset: Int, withShortStream bytes: [Int]) {
 		

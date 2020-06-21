@@ -43,7 +43,8 @@ enum XGAbilities {
 	}
 	
 	var nameIDOffset : Int {
-		return kAbilitiesStartOffset + (index * kSizeOfAbilityEntry) + kAbilityNameIDOffset
+		let safeIndex = index < kNumberOfItems ? index : 0
+		return kAbilitiesStartOffset + (safeIndex * kSizeOfAbilityEntry) + kAbilityNameIDOffset
 	}
 	
 	var nameID : Int {

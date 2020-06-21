@@ -9,6 +9,11 @@
 import AppKit
 
 class GoDDesign: NSObject {
+
+	static var isDarkModeEnabled: Bool {
+		let mode = UserDefaults.standard.string(forKey: "AppleInterfaceStyle")
+		return mode == "Dark"
+	}
 	
 	//MARK: - Fonts
 	@objc class func fontOfSize(_ size: CGFloat) -> NSFont {

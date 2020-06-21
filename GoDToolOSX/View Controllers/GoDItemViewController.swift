@@ -197,7 +197,28 @@ class GoDItemViewController: GoDTableViewController {
 		
 		let item = XGItems.item(row)
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: NSImage(named: "File Cell"), fontSize: 16, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), image: nil, fontSize: 12, width: self.table.width)) as! GoDTableCellView
+
+		var colour = GoDDesign.colourWhite()
+		switch item.data.bagSlot {
+		case .none:
+			colour = GoDDesign.colourWhite()
+		case .pokeballs:
+			colour = GoDDesign.colourRed()
+		case .items:
+			colour = GoDDesign.colourYellow()
+		case .berries:
+			colour = GoDDesign.colourGreen()
+		case .tms:
+			colour = GoDDesign.colourBlue()
+		case .keyItems:
+			colour = GoDDesign.colourPurple()
+		case .colognes:
+			colour = GoDDesign.colourPink()
+		case .battleCDs:
+			colour = GoDDesign.colourGrey()
+		}
+		cell.setBackgroundColour(colour)
 		
 		cell.setTitle(item.name.string)
 		

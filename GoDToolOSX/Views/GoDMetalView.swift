@@ -62,7 +62,7 @@ class GoDMetalManager : NSObject {
 	var specular : Float = 1.0
 	var shininess : Float = 32
 	
-	var clearColour = GoDDesign.colourLightGrey()
+	var clearColour = GoDDesign.isDarkModeEnabled ? GoDDesign.colourDarkGrey() : GoDDesign.colourLightGrey()
 	
 	override init() {
 		super.init()
@@ -384,7 +384,7 @@ class GoDMetalView: NSView {
 	}
 	
 	func mouseEvent(deltaX x: Float, deltaY y: Float) {
-		circumnavigate(x: x/100 * cameraSpeed, y: y/100 * cameraSpeed)
+		circumnavigate(x: -x/100 * cameraSpeed, y: y/100 * cameraSpeed)
 	}
 	
 	func circumnavigate(x: Float, y: Float) {

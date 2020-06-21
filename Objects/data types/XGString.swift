@@ -11,7 +11,7 @@ import Foundation
 class XGString: NSObject, Codable {
 	
 	var chars = [XGUnicodeCharacters]()
-	private var initString = "" // string used to initialise the xg string, just for reference
+	private var initString = "" // just for debugging
 	
 	var table = XGFiles.nameAndFolder("", .Documents)
 	@objc var id	  = 0
@@ -27,7 +27,7 @@ class XGString: NSObject, Codable {
 	}
 	
 	override var description : String {
-		return self.string
+		return self.unformattedString
 	}
 	
 	@objc var string : String {
@@ -89,6 +89,7 @@ class XGString: NSObject, Codable {
 	
 	func append(_ char: XGUnicodeCharacters) {
 		self.chars.append(char)
+		initString += char.string
 	}
 	
 	init(string: String, file: XGFiles?, sid: Int?) {

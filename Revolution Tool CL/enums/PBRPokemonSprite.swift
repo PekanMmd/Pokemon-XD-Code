@@ -7,7 +7,7 @@
 
 import Cocoa
 
-enum PBRPokemonSprite : XGIndexedValue {
+enum PBRPokemonImage : XGIndexedValue {
 	
 	case face(Int)
 	case body(Int)
@@ -22,8 +22,8 @@ enum PBRPokemonSprite : XGIndexedValue {
 	
 	private var entry : PBRDataTableEntry {
 		switch self {
-		case .face: return PBRDataTableEntry.pokemonImages(index: index)
-		case .body: return PBRDataTableEntry.pokemonImages(index: index)
+		case .face: return PBRDataTableEntry.pokemonFaces(index: index)
+		case .body: return PBRDataTableEntry.pokemonBodies(index: index)
 		}
 	}
 	
@@ -77,7 +77,7 @@ enum PBRPokemonModel : XGIndexedValue {
 	}
 	
 	private var entry : PBRDataTableEntry {
-		return PBRDataTableEntry.pokemonImages(index: index)
+		return PBRDataTableEntry.pokemonModels(index: index)
 	}
 	
 	var fsysFileIndex : Int {

@@ -14,8 +14,9 @@ let xdsegues = ["toTrainerVC","toShadowVC","toStatsVC","toMoveVC","toItemVC","to
 let colotools = ["Trainer Editor","Pokemon Stats Editor","Move Editor","Item Editor","Gift Pokemon Editor", "Type Editor", "Treasure Editor", "Patches", "Randomiser", "Message Editor", "Collision Viewer", "Interaction Editor", "ISO Explorer"]
 let colosegues = ["toTrainerVC","toStatsVC","toMoveVC","toItemVC","toGiftVC", "toTypeVC", "toTreasureVC", "toPatchVC", "toRandomiserVC", "toMessageVC", "toCollisionVC", "toInteractionVC", "toISOVC"]
 
-let pbrtools = ["Type Editor", "Message Editor", "ISO Explorer"]
-let pbrsegues = ["toTypeVC", "toMessageVC", "toISOVC"]
+// The type editor doesn't seem to affect the game for some reason
+let pbrtools = /*["Type Editor",*/ ["Message Editor", "ISO Explorer"]
+let pbrsegues = /*["toTypeVC",*/ ["toMessageVC", "toISOVC"]
 
 class GoDHomeViewController: GoDTableViewController {
 	
@@ -75,7 +76,7 @@ class GoDHomeViewController: GoDTableViewController {
 		
 		let image = (row % 2 == 0 ? NSImage(named: "Item Cell") : NSImage(named: "Tool Cell"))!
 		
-		let view = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: tools[row], colour: GoDDesign.colourBlack(), showsImage: false, image: nil, background: image, fontSize: 14, width: self.table.width)) as! GoDTableCellView
+		let view = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: tools[row], colour: GoDDesign.colourBlack(), background: image, fontSize: 14, width: self.table.width)) as! GoDTableCellView
 		
 		view.setTitle(tools[row])
 		

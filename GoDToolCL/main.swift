@@ -6,8 +6,8 @@
 //  Copyright © 2015 StarsMmd. All rights reserved.
 //
 //
-
-print(documentsPath)
+XGUtility.saveMewTutorMovePairs()
+//print((XGDemoStarterPokemon(index: 1).startOffset + kDOLtoRAMOffsetDifference + 0x92).hexString())
 
 //XGDecks.DeckDarkPokemon.allDeckPokemon.forEach { (mon) in
 //    if mon.data.species.catchRate != mon.data.shadowCatchRate {

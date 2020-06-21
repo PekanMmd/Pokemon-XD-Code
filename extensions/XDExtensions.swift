@@ -470,8 +470,38 @@ extension XGUtility {
 			let charScalar = String(c).unicodeScalars
 			let charValue  = Int(charScalar[charScalar.startIndex].value)
 			return charValue
-		}))
+		}) + [0])
 		dol.save()
+	}
+
+	class func getPotentialMewTutorMovePairs() -> [(move1: XGMoves, move2: XGMoves)] {
+		let startOffset = 0x4198fc
+		let endOffset = startOffset + 0x1d4
+		guard let dol = XGFiles.dol.data else {
+			return []
+		}
+
+		var currentOffset = startOffset
+		var pairs = [(move1: XGMoves, move2: XGMoves)]()
+
+		while currentOffset < endOffset {
+			let move1 = XGMoves.move(dol.get2BytesAtOffset(currentOffset + 4))
+			let move2 = XGMoves.move(dol.get2BytesAtOffset(currentOffset + 6))
+			pairs.append((move1: move1, move2: move2))
+			currentOffset += 12
+		}
+
+		return pairs
+	}
+
+	class func saveMewTutorMovePairs() {
+		let moves = getPotentialMewTutorMovePairs()
+		var s = "XD Mew Tutor Move Pairs:\t\(moves.count) pairs\n\n"
+		for (m1, m2) in moves {
+			s += "\(m1), \(m2)\n"
+		}
+
+		saveString(s, toFile: .nameAndFolder("Mew Tutor Moves.txt", .Reference))
 	}
 	
 	//MARK: - Obtainable pokemon
@@ -527,12 +557,12 @@ extension XGUtility {
 	
 	class func saveObtainablePokemon() {
 		let k = obtainablePokemon().sorted{$0 < $1}.filter{$0.index != 0}
-		var s = "XG Obtainable Pokemon:\t\(k.count)\n"
+		var s = "XD Obtainable Pokemon:\t\(k.count)\n"
 		for p in k {
 			s += "\(p.index):\t\(p)\n"
 		}
 		
-		saveString(s, toFile: .nameAndFolder("output/obtainable pokemon.txt",.Documents))
+		saveString(s, toFile: .nameAndFolder("obtainable pokemon.txt",.Reference))
 	}
 	
 	class func saveObtainableTypes() {
@@ -1500,7 +1530,7 @@ extension XGUtility {
 				}
 			}
 			if !shouldCancelEncoding {
-				printg("Encoding TMs...")
+				printg("Encoding TMs and Tutor Moves...")
 				XGTMs.encodeData(filename: { (value) -> String in
 					if let value = (value as? XGTMs) {
 						switch value {
@@ -1510,6 +1540,7 @@ extension XGUtility {
 					}
 					return "-"
 				})
+				saveMewTutorMovePairs()
 			}
 			if !shouldCancelEncoding {
 				printg("Encoding Battle Bingo Cards...")

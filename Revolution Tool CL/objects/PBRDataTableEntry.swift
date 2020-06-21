@@ -8,39 +8,16 @@
 import Foundation
 
 class PBRDataTableEntry : XGIndexedValue {
+
+	var index = 0
+
+	private weak var table: PBRDataTable?
+	private var data = XGMutableData()
 	
-	var data = XGMutableData()
-	internal var index = 0
-	private  var table = 0
-	private  var deckType = XGDeckTypes.none
-	
-	init(index: Int, tableId: Int) {
-		self.data = PBRDataTable.tableWithID(tableId)!.dataForEntryWithIndex(index)!
+	init(index: Int, table: PBRDataTable) {
+		self.data = table.dataForEntryWithIndex(index) ?? XGMutableData()
 		self.index = index
-		self.table = tableId
-		self.deckType = .none
-	}
-	
-	init(index: Int, deck: XGDecks) {
-		self.index = index
-		
-		switch deck {
-		case .dckt(let i):
-			self.data = PBRDataTable.trainerDeckWithID(i)!.dataForEntryWithIndex(index)!
-			self.table = i
-			self.deckType = .DCKT
-		case .dckp(let i):
-			self.data = PBRDataTable.pokemonDeckWithID(i)!.dataForEntryWithIndex(index)!
-			self.table = i
-			self.deckType = .DCKP
-		case .dcka:
-			self.data = PBRDataTable.AIDeck()!.dataForEntryWithIndex(index)!
-			self.table = 0
-			self.deckType = .DCKA
-		case .null:
-			break
-		}
-		
+		self.table = table
 	}
 	
 	func getBool(_ off: Int) -> Bool {
@@ -116,35 +93,26 @@ class PBRDataTableEntry : XGIndexedValue {
 	}
 	
 	func save() {
-		if deckType == .none {
-			PBRDataTable.tableWithID(self.table)!.replaceData(data: self.data, forIndex: self.index)
-			PBRDataTable.tableWithID(self.table)!.save()
-		} else if deckType == .DCKT {
-			PBRDataTable.trainerDeckWithID(self.table)!.replaceData(data: self.data, forIndex: self.index)
-			PBRDataTable.trainerDeckWithID(self.table)!.save()
-		} else if deckType == .DCKP {
-			PBRDataTable.pokemonDeckWithID(self.table)!.replaceData(data: self.data, forIndex: self.index)
-			PBRDataTable.pokemonDeckWithID(self.table)!.save()
-		} else if deckType == .DCKA {
-			PBRDataTable.AIDeck()!.replaceData(data: self.data, forIndex: self.index)
-			PBRDataTable.AIDeck()!.save()
+		guard let table = self.table else {
+			printg("Couldn't save table for entry with index:", index)
+			return
 		}
+		table.replaceData(data: data, forIndex: index)
+		table.save()
 	}
 	
-	static func pokemonImages(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, tableId: 0)}
-	static func countries(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, tableId: 1) }
-	static func holdItems(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, tableId: 2) }
-	//	static func colosseums(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, tableId: 3) }?
-	static func typeMatchups(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, tableId: 4) }
-	static func pokemonModels(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, tableId: 6) }
-	static func baseStats(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, tableId: 8) }
-	static func evolutions(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, tableId: 9) }
-	static func items(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, tableId: 19) }
-	static func formeSprites(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, tableId: 21) }
-	static func clothes(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, tableId: 24) }
-	static func TMs(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, tableId: 29)}
-	static func moves(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, tableId: 30) }
-	static func levelUpMoves(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, tableId: 32) }
+	static func pokemonIcons(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.pokemonIcons)}
+	static func shopItems(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.items) }
+	static func typeMatchups(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.typeMatchups) }
+	static func pokemonModels(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.pokemonModels) }
+	static func baseStats(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.pokemonBaseStats) }
+	static func evolutions(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.evolutions) }
+	static func items(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.items) }
+	static func pokemonFaces(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.pokemonFaces) }
+	static func pokemonBodies(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.pokemonBodies) }
+	static func TMs(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.TMs)}
+	static func moves(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.moves) }
+	static func levelUpMoves(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.levelUpMoves) }
 	
 }
 

@@ -298,62 +298,36 @@ extension GoDTexture {
 }
 
 extension XGStringTable {
-	
-	func replaceString(_ string: XGString, alert: Bool, save: Bool) -> Bool {
-		return self.replaceString(string, alert: alert, save: save, increaseLength: false)
-	}
-	
-	func replaceString(_ string: XGString, alert: Bool, save: Bool, increaseLength: Bool) -> Bool {
+
+	@discardableResult
+	func replaceString(_ string: XGString, alert: Bool = false, save: Bool = false, increaseLength: Bool = false) -> Bool {
 		
-		if self.stringWithID(string.id) == nil {
+		guard let oldText = self.stringWithID(string.id), let stringOffset = offsetForStringID(string.id)  else {
 			printg("String table '\(self.file.fileName)' doesn't contain string with id: \(string.id)")
 			return false
 		}
-		
-		let copyStream = self.stringTable.getCharStreamFromOffset(0, length: self.stringOffsets[string.id]!)
-		let dataCopy = XGMutableData(byteStream: copyStream, file: self.file)
-		
-		let oldText = self.stringWithID(string.id)!
+
 		let difference = string.dataLength - oldText.dataLength
 		
 		if difference <= self.extraCharacters {
-			
-			let stream = string.byteStream
-			dataCopy.appendBytes(stream)
-			
-			
-			let oldEnd = self.endOffsetForStringId(string.id)
-			let newEnd = stringTable.getCharStreamFromOffset(oldEnd, length: fileSize - oldEnd)
-			let endData = XGMutableData(byteStream: newEnd, file: self.file)
-			dataCopy.appendBytes(endData.charStream)
+
+			if difference < 0 {
+				stringTable.deleteBytes(start: stringOffset, count: abs(difference))
+				stringTable.appendBytes([UInt8](repeating: 0, count: abs(difference))) // preserve file size
+			} else if difference > 0 {
+				stringTable.insertRepeatedByte(byte: 0, count: difference, atOffset: stringOffset)
+				stringTable.deleteBytes(start: stringTable.length - difference, count: difference) // preserve file size
+			}
+
+			stringTable.replaceBytesFromOffset(stringOffset, withByteStream: string.byteStream)
 			
 			if string.dataLength > oldText.dataLength {
-				
-				for _ in 0 ..< difference {
-					
-					let currentOff = dataCopy.length - 1
-					let range = NSMakeRange(currentOff, 1)
-					
-					dataCopy.deleteBytesInRange(range)
-					
-				}
-				
-				self.increaseOffsetsAfter(stringOffsets[string.id]!, byCharacters: difference)
-			}
-			
-			if string.dataLength < oldText.dataLength {
-				
+				self.increaseOffsetsAfter(stringOffset, by: difference)
+
+			} else if string.dataLength < oldText.dataLength {
 				let difference = oldText.dataLength - string.dataLength
-				var emptyByte : UInt8 = 0x0
-				
-				for _ in 0 ..< difference {
-					dataCopy.data.append(&emptyByte, length: 1)
-				}
-				
-				self.decreaseOffsetsAfter(stringOffsets[string.id]!, byCharacters: difference)
+				self.decreaseOffsetsAfter(stringOffset, by: difference)
 			}
-			
-			self.stringTable = dataCopy
 			
 			self.updateOffsets()
 			if save {
@@ -366,10 +340,10 @@ extension XGStringTable {
 			if increaseLength {
 				if self.startOffset == 0 {
 					if settings.verbose {
-						printg("string was too long, adding \(difference + 0x50) bytes to table \(self.file.fileName)")
+						printg("string was too long, adding \(difference + 0x50 - extraCharacters) bytes to table \(self.file.fileName)")
 					}
 					// add a little extra so it doesn't keep hitting this case every time there's even a 1 character increase
-					self.stringTable.insertRepeatedByte(byte: 0, count: difference + 0x50, atOffset: stringTable.length)
+					self.stringTable.insertRepeatedByte(byte: 0, count: difference + 0x50 - extraCharacters, atOffset: stringTable.length)
 					return self.replaceString(string, alert: alert, save: true, increaseLength: true)
 				}
 			}

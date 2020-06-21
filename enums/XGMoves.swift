@@ -37,7 +37,8 @@ enum XGMoves : CustomStringConvertible {
 	
 	var startOffset : Int {
 		get {
-			return CommonIndexes.Moves.startOffset + (index * kSizeOfMoveData)
+			let safeIndex = index < kNumberOfMoves ? index : 0
+			return CommonIndexes.Moves.startOffset + (safeIndex * kSizeOfMoveData)
 		}
 	}
 	

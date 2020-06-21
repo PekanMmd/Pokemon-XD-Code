@@ -202,7 +202,7 @@ class XGStringTable: NSObject {
 			}
 			self.stringTable.replaceBytesFromOffset( ((numberOfEntries + 1) * 8) + kEndOfHeader, withByteStream: bytes)
 			
-			self.increaseOffsetsAfter(0, byCharacters: bytesRequired)
+			self.increaseOffsetsAfter(0, by: bytesRequired)
 			self.stringOffsets[string.id] = ((numberOfEntries + 1) * 8) + kEndOfHeader
 			self.stringIDs.append(string.id)
 			
@@ -256,30 +256,28 @@ class XGStringTable: NSObject {
 	
 	
 	
-	@objc func decreaseOffsetsAfter(_ offset: Int, byCharacters characters: Int) {
-		
+	@objc func decreaseOffsetsAfter(_ offset: Int, by bytes: Int) {
+
 		for sid in self.stringIDs {
-			
 			if let off = stringOffsets[sid] {
 				if off > offset {
-					stringOffsets[sid] = off - characters
+					stringOffsets[sid] = off - bytes
 				}
 			}
 		}
-		
+
 	}
-	
-	@objc func increaseOffsetsAfter(_ offset: Int, byCharacters characters: Int) {
-		
+
+	@objc func increaseOffsetsAfter(_ offset: Int, by bytes: Int) {
+
 		for sid in self.stringIDs {
-			
 			if let off = stringOffsets[sid] {
 				if off > offset {
-					stringOffsets[sid] = off + characters
+					stringOffsets[sid] = off + bytes
 				}
 			}
 		}
-		
+
 	}
 	
 	func offsetForStringID(_ stringID : Int) -> Int? {
@@ -437,7 +435,7 @@ class XGStringTable: NSObject {
 						
 					}
 					
-					self.increaseOffsetsAfter(stringOffsets[string.id]!, byCharacters: difference)
+					self.increaseOffsetsAfter(stringOffsets[string.id]!, by: difference)
 				}
 				
 				if string.dataLength < oldText.dataLength {
@@ -451,7 +449,7 @@ class XGStringTable: NSObject {
 						
 					}
 					
-					self.decreaseOffsetsAfter(stringOffsets[string.id]!, byCharacters: difference)
+					self.decreaseOffsetsAfter(stringOffsets[string.id]!, by: difference)
 				}
 				
 			}
@@ -491,7 +489,7 @@ extension XGStringTable: Encodable {
 		case file, startOffset, fixedFileSize, strings
 	}
 	
-	static func fromJSON(data: Data, save: Bool) throws -> XGStringTable {
+	static func fromJSON(data: Data, save: Bool = false) throws -> XGStringTable {
 		let metaData = try JSONDecoder().decode(XGStringTableMetaData.self, from: data)
 		let file = metaData.file
 		guard file.exists else {
@@ -509,7 +507,7 @@ extension XGStringTable: Encodable {
 		return table
 	}
 	
-	static func fromJSONFile(file: XGFiles, save: Bool) throws -> XGStringTable {
+	static func fromJSONFile(file: XGFiles, save: Bool = false) throws -> XGStringTable {
 		let url = URL(fileURLWithPath: file.path)
 		let data = try Data(contentsOf: url)
 		return try fromJSON(data: data, save: save)

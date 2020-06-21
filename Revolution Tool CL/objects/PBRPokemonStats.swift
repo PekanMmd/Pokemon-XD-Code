@@ -67,11 +67,11 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 	var evolutions = [XGEvolution]()
 	var levelUpMoves = [XGLevelUpMove]()
 	
-	var faces : [PBRPokemonSprite] {
+	var faces : [PBRPokemonImage] {
 		let baseIndex = XGPokemon.pokemon(self.index).baseIndex
-		let formesData = PBRDataTableEntry.formeSprites(index: baseIndex)
+		let formesData = PBRDataTableEntry.pokemonFaces(index: baseIndex)
 		let numberOfFormes = formesData.getByte(7)
-		var formes = [PBRPokemonSprite]()
+		var formes = [PBRPokemonImage]()
 		let firstAlternate = formesData.getShort(4)
 		for i in 0 ..< numberOfFormes {
 			formes.append(.face(firstAlternate + i))
@@ -79,11 +79,11 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 		return formes
 	}
 	
-	var bodies : [PBRPokemonSprite] {
+	var bodies : [PBRPokemonImage] {
 		let baseIndex = XGPokemon.pokemon(self.index).baseIndex
-		let formesData = PBRDataTableEntry.formeSprites(index: baseIndex)
+		let formesData = PBRDataTableEntry.pokemonBodies(index: baseIndex)
 		let numberOfFormes = formesData.getByte(7)
-		var formes = [PBRPokemonSprite]()
+		var formes = [PBRPokemonImage]()
 		let firstAlternate = formesData.getShort(4)
 		for i in 0 ..< numberOfFormes {
 			formes.append(.body(firstAlternate + i))

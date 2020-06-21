@@ -10,60 +10,61 @@ import AppKit
 
 class GoDTableCellView: NSImageView {
 	
-	var titleField = NSTextField()
-	var imageView = NSImageView()
+	let titleField = NSTextField()
+	private let imageView = NSImageView()
+	private var imageViewConstraint: NSLayoutConstraint? {
+		willSet {
+			imageViewConstraint?.isActive = false
+		}
+		didSet {
+			imageViewConstraint?.isActive = true
+		}
+	}
 
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
     }
 	
-	init(title: String, colour: NSColor, showsImage: Bool, image: NSImage?, background: NSImage?, fontSize: CGFloat, width: NSNumber) {
+	init(title: String, colour: NSColor, image: NSImage? = nil, background: NSImage? = nil, fontSize: CGFloat, width: NSNumber) {
 		super.init(frame: .zero)
 		
-		self.addConstraintWidth(view: self, width: width)
+		addConstraintWidth(view: self, width: width)
 		
-		self.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
+		identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		
-		self.imageAlignment = .alignCenter
-		self.imageScaling   = .scaleAxesIndependently
+		imageAlignment = .alignCenter
+		imageScaling   = .scaleAxesIndependently
 		
-		self.setTitleColour(colour)
-		self.setTitle(title)
-		if background != nil {
-			self.setBackgroundImage(background!)
-		}
-		if image != nil {
-			self.imageView.image = image!
-		}
+		setTitleColour(colour)
+		setTitle(title)
+		setBackgroundImage(background)
+		imageView.image = image
 		
-		self.translatesAutoresizingMaskIntoConstraints = false
-		self.titleField.translatesAutoresizingMaskIntoConstraints = false
-		self.imageView.translatesAutoresizingMaskIntoConstraints = false
-		self.addSubview(titleField)
-		self.addSubview(imageView)
+		translatesAutoresizingMaskIntoConstraints = false
+		titleField.translatesAutoresizingMaskIntoConstraints = false
+		imageView.translatesAutoresizingMaskIntoConstraints = false
+		addSubview(titleField)
+		addSubview(imageView)
 		
-		self.titleField.maximumNumberOfLines = title.contains("\n") ? 2 : 1
-		self.titleField.isBezeled         = false
-		self.titleField.isEditable        = false
-		self.titleField.drawsBackground   = false
-		self.titleField.refusesFirstResponder = true
-		self.titleField.setBackgroundColour(GoDDesign.colourClear())
-		self.titleField.font = GoDDesign.fontOfSize(fontSize)
-		self.titleField.alignment = .center
+		titleField.maximumNumberOfLines = title.contains("\n") ? 2 : 1
+		titleField.isBezeled         = false
+		titleField.isEditable        = false
+		titleField.drawsBackground   = false
+		titleField.refusesFirstResponder = true
+		titleField.setBackgroundColour(GoDDesign.colourClear())
+		titleField.font = GoDDesign.fontOfSize(fontSize)
+		titleField.alignment = .center
 		
 		
 		let views : [String : NSView] = ["t":titleField,"i":imageView]
-		
-		if showsImage {
-		self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[i][t]|", options: [.alignAllTop,.alignAllBottom], metrics: nil, views: views))
+
+		addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[i][t]|", options: [.alignAllTop,.alignAllBottom], metrics: nil, views: views))
+		addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[i]|", options: [], metrics: nil, views: views))
+		if image == nil {
+			imageViewConstraint = imageView.widthAnchor.constraint(equalToConstant: 0)
 		} else {
-			self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[t]|", options: [], metrics: nil, views: views))
-			self.imageView.isHidden = true
+			imageViewConstraint = NSLayoutConstraint(item: self.imageView, attribute: .width, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 1, constant: 0)
 		}
-		self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[i]|", options: [], metrics: nil, views: views))
-		
-		self.addConstraint(NSLayoutConstraint(item: self.imageView, attribute: .width, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 1, constant: 0))
-		
 	}
 	
 	required init?(coder: NSCoder) {
@@ -79,7 +80,7 @@ class GoDTableCellView: NSImageView {
 		self.titleField.textColor = colour
 	}
 	
-	func setBackgroundImage(_ image: NSImage) {
+	func setBackgroundImage(_ image: NSImage?) {
 		self.image = image
 	}
 	

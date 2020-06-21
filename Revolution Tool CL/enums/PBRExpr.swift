@@ -482,7 +482,9 @@ indirect enum XDSExpr {
 			return "$:0:"
 		}
 		// must replace double quotes with special character since xds doesn't use escaped characters
-		return "$:\(xs.id):" + "\"\(xs.string.replacingOccurrences(of: "\"", with: "[Quote]"))\""
+		var updatedString = xs.string.replacingOccurrences(of: "\"", with: "[Quote]")
+		updatedString = updatedString.replacingOccurrences(of: "\n", with: "[New Line]")
+		return "$:\(xs.id):" + "\"\(updatedString)\""
 	}
 	
 	static func indexForLocation(_ l: XDSLocation) -> Int {

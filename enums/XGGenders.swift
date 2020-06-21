@@ -48,7 +48,7 @@ extension XGGenders: XGEnumerable {
 	}
 	
 	static var allValues: [XGGenders] {
-		return allCases
+		return game == .Colosseum ?  allCases : [.male, .female, .genderless]
 	}
 }
 

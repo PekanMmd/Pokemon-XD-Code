@@ -55,7 +55,8 @@ class GoDPokemonView: NSImageView {
 		let pokemon = self.delegate.pokemon[self.index]
 		
 		if !pokemon.isSet {
-			self.setBackgroundColour(GoDDesign.colourGrey())
+			let grey = GoDDesign.isDarkModeEnabled ? GoDDesign.colourDarkGrey() : GoDDesign.colourGrey()
+			self.setBackgroundColour(grey)
 			self.alphaValue = 0.5
 		} else if pokemon.isShadowPokemon {
 			self.setBackgroundColour(GoDDesign.colourPurple())

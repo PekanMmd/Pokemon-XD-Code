@@ -49,7 +49,7 @@ class GoDSpotViewController: GoDTableViewController {
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		let pokemon = rowToMon(row: row).pokemon
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), showsImage: true, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
 		let spot = rowToSpot(row: row)
 		cell.setTitle(pokemon.name.string)
@@ -59,11 +59,11 @@ class GoDSpotViewController: GoDTableViewController {
 		case .rock:
 			cell.setBackgroundImage(XGMoveTypes.rock.image)
 		case .oasis:
-			cell.setBackgroundImage(XGMoveTypes.grass.image)
-		case .cave:
 			cell.setBackgroundImage(XGMoveTypes.water.image)
+		case .cave:
+			cell.setBackgroundImage(XGMoveTypes.dark.image)
 		case .all:
-			cell.setBackgroundImage(XGMoveTypes.steel.image)
+			cell.setBackgroundImage(XGMoveTypes.normal.image)
 		}
 		
 		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")

@@ -30,7 +30,8 @@ final class XGItem: NSObject, Codable {
 	
 	var startOffset : Int {
 		get{
-			return kFirstItemOffset + (index * kSizeOfItemData)
+			let safeIndex = index < kNumberOfItems ? index : 0
+			return kFirstItemOffset + (safeIndex * kSizeOfItemData)
 		}
 	}
 	
@@ -84,6 +85,10 @@ final class XGItem: NSObject, Codable {
 	}
 	
 	func save() {
+
+		guard index > 0, index < kNumberOfItems else {
+			return
+		}
 		
 		let data = XGFiles.dol.data!
 		let start = self.startOffset

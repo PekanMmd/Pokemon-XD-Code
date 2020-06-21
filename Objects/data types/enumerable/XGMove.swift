@@ -113,7 +113,9 @@ final class XGMove: NSObject, Codable {
 		let rel   = XGFiles.common_rel.data!
 		
 		self.moveIndex       = index
-		self.startOffset     = CommonIndexes.Moves.startOffset + (index * kSizeOfMoveData)
+
+		let safeIndex = index < kNumberOfItems ? index : 0
+		self.startOffset     = CommonIndexes.Moves.startOffset + (safeIndex * kSizeOfMoveData)
 		
 		self.contactFlag	 = rel.getByteAtOffset(startOffset + kContactFlagOffset)    == 1
 		self.protectFlag	 = rel.getByteAtOffset(startOffset + kProtectFlagOffset)    == 1
@@ -152,6 +154,10 @@ final class XGMove: NSObject, Codable {
 	}
 
 	@objc func save() {
+
+		guard moveIndex > 0, moveIndex < kNumberOfMoves else {
+			return
+		}
 		
 		let newContact	= contactFlag	 ? 1 : 0
 		let newProtect	= protectFlag	 ? 1 : 0

@@ -58,6 +58,7 @@ class GoDISOViewController: GoDTableViewController {
 								if json.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
 									let table = try? XGStringTable.fromJSONFile(file: json)
 									if let table = table {
+										table.file = file
 										table.save()
 									} else {
 										printg("Failed to decode string table from: ", json.path)
@@ -215,7 +216,7 @@ class GoDISOViewController: GoDTableViewController {
 		
 		let file = allFileNames[row]
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourWhite(), showsImage: false, image: nil, background: nil, fontSize: 16, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourWhite(), fontSize: 16, width: self.table.width)) as! GoDTableCellView
 		
 		cell.setTitle(file)
 		cell.setBackgroundColour(GoDDesign.colourWhite())

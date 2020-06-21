@@ -55,6 +55,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 let vc = GoDGTXViewController()
                 vc.texture = texture
                 present(vc)
+			case .msg:
+				let table = file.stringTable
+				let vc = GoDMessageViewController(singleTable: table)
+				present(vc)
             default:
                 break
             }

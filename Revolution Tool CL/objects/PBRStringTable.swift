@@ -41,8 +41,14 @@ enum XGLanguages : Int {
 }
 
 class XGStringTable: NSObject {
+
+	static var mes_common = XGFiles.msg(region == .JP ? "common" : "mes_common")
 	
-	var file = XGFiles.nameAndFolder("", .Documents)
+	var file = XGFiles.nameAndFolder("", .Documents) {
+		didSet {
+			stringTable.file = file
+		}
+	}
 	@objc var startOffset = 0x0 // where in the file the string table is located. used for files like common.rel which have more than just the table
 	@objc var stringTable = XGMutableData()
 	@objc var stringOffsets = [Int : Int]()
@@ -127,7 +133,8 @@ class XGStringTable: NSObject {
 			data.save()
 		}
 	}
-	
+
+	@discardableResult
 	func replaceString(_ string: XGString, save: Bool) -> Bool {
 		return self.replaceString(string, alert: false, save: save, increaseLength: false)
 	}
@@ -164,12 +171,10 @@ class XGStringTable: NSObject {
 			}
 			
 			self.stringTable.insertRepeatedByte(byte: 0, count: bytesRequired, atOffset: (numberOfEntries * 4) + kEndOfHeader)
-			let bytes = string.byteStream.map { (i) -> Int in
-				return Int(i)
-			}
-			self.stringTable.replaceBytesFromOffset( ((numberOfEntries + 1) * 4) + kEndOfHeader, withByteStream: bytes)
+
+			self.stringTable.replaceBytesFromOffset( ((numberOfEntries + 1) * 4) + kEndOfHeader, withByteStream: string.byteStream)
 			
-			self.increaseOffsetsAfter(0, byCharacters: bytesRequired)
+			self.increaseOffsetsAfter(0, by: bytesRequired)
 			self.stringOffsets[string.id] = ((numberOfEntries + 1) * 4) + kEndOfHeader
 			self.stringIDs.append(string.id)
 			
@@ -218,26 +223,24 @@ class XGStringTable: NSObject {
 		
 	}
 	
-	@objc func decreaseOffsetsAfter(_ offset: Int, byCharacters characters: Int) {
+	@objc func decreaseOffsetsAfter(_ offset: Int, by bytes: Int) {
 		
 		for sid in self.stringIDs {
-			
 			if let off = stringOffsets[sid] {
 				if off > offset {
-					stringOffsets[sid] = off - characters
+					stringOffsets[sid] = off - bytes
 				}
 			}
 		}
 		
 	}
 	
-	@objc func increaseOffsetsAfter(_ offset: Int, byCharacters characters: Int) {
-		
+	@objc func increaseOffsetsAfter(_ offset: Int, by bytes: Int) {
+
 		for sid in self.stringIDs {
-			
 			if let off = stringOffsets[sid] {
 				if off > offset {
-					stringOffsets[sid] = off + characters
+					stringOffsets[sid] = off + bytes
 				}
 			}
 		}
@@ -343,64 +346,8 @@ class XGStringTable: NSObject {
 		
 		let strings = self.allStrings()
 		for str in strings {
-			
-			let string = XGString(string: "-", file: self.file, sid: str.id)
-			
-			let copyStream = self.stringTable.getCharStreamFromOffset(0, length: self.stringOffsets[str.id]!)
-			
-			let dataCopy = XGMutableData(byteStream: copyStream, file: self.file)
-			
-			let oldText = self.stringWithID(str.id)!
-			let difference = string.dataLength - oldText.dataLength
-			
-			if difference <= self.extraCharacters {
-				
-				let stream = string.byteStream
-				
-				dataCopy.appendBytes(stream)
-				
-				
-				let oldEnd = self.endOffsetForStringId(string.id)
-				
-				let newEnd = stringTable.getCharStreamFromOffset(oldEnd, length: fileSize - oldEnd)
-				
-				let endData = XGMutableData(byteStream: newEnd, file: self.file)
-				
-				dataCopy.appendBytes(endData.charStream)
-				
-				if string.dataLength > oldText.dataLength {
-					
-					for _ in 0 ..< difference {
-						
-						let currentOff = dataCopy.length - 1
-						let range = NSMakeRange(currentOff, 1)
-						
-						dataCopy.deleteBytesInRange(range)
-						
-					}
-					
-					self.increaseOffsetsAfter(stringOffsets[string.id]!, byCharacters: difference)
-				}
-				
-				if string.dataLength < oldText.dataLength {
-					
-					let difference = oldText.dataLength - string.dataLength
-					var emptyByte : UInt8 = 0x0
-					
-					for _ in 0 ..< difference {
-						
-						dataCopy.data.append(&emptyByte, length: 1)
-						
-					}
-					
-					self.decreaseOffsetsAfter(stringOffsets[string.id]!, byCharacters: difference)
-				}
-				
-			}
-			
-			self.stringTable = dataCopy
-			self.updateOffsets()
-			
+			let empty = str.duplicateWithString("-")
+			replaceString(empty)
 		}
 		
 		self.save()
@@ -424,6 +371,13 @@ class XGStringTable: NSObject {
 		} catch { }
 		
 		printg("Failed to write JSON to:", file.path)
+	}
+
+	func removeKanji() {
+		for string in self.allStrings() where string.hasFurigana {
+			string.removeKanji()
+			replaceString(string, save: false)
+		}
 	}
 	
 }
@@ -479,7 +433,7 @@ extension XGStringTable: Encodable {
 		case file, tableID, language, strings
 	}
 
-	static func fromJSON(data: Data) throws -> XGStringTable {
+	static func fromJSON(data: Data, removeKanji: Bool = false) throws -> XGStringTable {
 		let decodedMetaData = try? JSONDecoder().decode(XGStringTableMetaData.self, from: data)
 		guard let metaData = decodedMetaData else {
 			throw XGStringTableDecodingError.invalidData
@@ -510,6 +464,9 @@ extension XGStringTable: Encodable {
 		for str in metaData.strings {
 			data.replace4BytesAtOffset(currentPointerOffset, withBytes: currentStringOffset)
 			let string = XGString(string: str, file: nil, sid: nil)
+			if removeKanji {
+				string.removeKanji()
+			}
 			let stringData = string.byteStream
 			data.appendBytes(stringData)
 			currentStringOffset += stringData.count

@@ -46,7 +46,11 @@ class XGTrainerPokemon : NSObject {
 		super.init()
 		
 		self.deckData = deckData
-		let data = PBRDataTableEntry(index: deckData.index, deck: deckData.deck)
+		let table = PBRDataTable(file: deckData.deck.file)
+		guard let data =  table.entryWithIndex(deckData.index) else {
+			printg("Failed to load trainer pokemon:", deckData.deck.file.path, "\nindex:", deckData.index)
+			return
+		}
 		
 		id = data.getShort(0)
 		flags = data.getShort(2).bitArray(count: 16)
@@ -106,7 +110,11 @@ class XGTrainerPokemon : NSObject {
 	
 	@objc func save() {
 		
-		let data = PBRDataTableEntry(index: deckData.index, deck: deckData.deck)
+		let table = PBRDataTable(file: deckData.deck.file)
+		guard let data =  table.entryWithIndex(deckData.index) else {
+			printg("Failed to load trainer pokemon:", deckData.deck.file.path, "\nindex:", deckData.index)
+			return
+		}
 		
 		data.setShort(0, to: id)
 		

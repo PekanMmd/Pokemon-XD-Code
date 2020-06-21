@@ -39,6 +39,7 @@
 		1C64CF4524562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
 		1C64CF4624562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
 		1C64CF4724562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
+		1C8601D92478625C00A5B267 /* Original Items.json in Resources */ = {isa = PBXBuildFile; fileRef = 1C8601D82478625900A5B267 /* Original Items.json */; };
 		1CA2386F24113823000E56AB /* HexCalculator.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA2386A24113822000E56AB /* HexCalculator.storyboard */; };
 		1CA2387024113823000E56AB /* HexCalculator.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA2386A24113822000E56AB /* HexCalculator.storyboard */; };
 		1CA2387124113823000E56AB /* Help.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA2386B24113822000E56AB /* Help.storyboard */; };
@@ -5037,6 +5038,7 @@
 		1C6295F724300F1B0085C22F /* PBRISO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRISO.swift; sourceTree = "<group>"; };
 		1C6295FA243022080085C22F /* PBRScriptCompiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRScriptCompiler.swift; sourceTree = "<group>"; };
 		1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGAssemblyCodeExtensions.swift; sourceTree = "<group>"; };
+		1C8601D82478625900A5B267 /* Original Items.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Original Items.json"; sourceTree = "<group>"; };
 		1CA2386A24113822000E56AB /* HexCalculator.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = HexCalculator.storyboard; sourceTree = "<group>"; };
 		1CA2386B24113822000E56AB /* Help.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Help.storyboard; sourceTree = "<group>"; };
 		1CA2386C24113823000E56AB /* Interactions.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Interactions.storyboard; sourceTree = "<group>"; };
@@ -7502,6 +7504,7 @@
 				1C6295DF242A948B0085C22F /* Move Effects.json */,
 				1C6295DE242A948B0085C22F /* Original Moves.json */,
 				1C6295DD242A948B0085C22F /* Original Pokemon.json */,
+				1C8601D82478625900A5B267 /* Original Items.json */,
 			);
 			path = PBR;
 			sourceTree = "<group>";
@@ -12096,6 +12099,7 @@
 				B20EEE5621EF77FD00E87D01 /* PBR_face_250.png in Resources */,
 				B20EEBBB21EF77E100E87D01 /* PBR_body_209.png in Resources */,
 				B20EEE2121EF77FD00E87D01 /* PBR_face_451.png in Resources */,
+				1C8601D92478625C00A5B267 /* Original Items.json in Resources */,
 				B20EEBAB21EF77E100E87D01 /* PBR_body_397.png in Resources */,
 				B20EEBFC21EF77E100E87D01 /* PBR_body_279.png in Resources */,
 				B20EEDFE21EF77FD00E87D01 /* PBR_face_308.png in Resources */,
