@@ -15,7 +15,7 @@ let game = XGGame.XD
 typealias TrainerInfo = (name:String,location:String,hasShadow: Bool,trainerModel:XGTrainerModels,index:Int,deck:XGDecks)
 extension XGTrainer {
 	var trainerInfo : TrainerInfo {
-		return (self.trainerClass.name.string + " " + self.name.string, self.locationString,self.hasShadow,self.trainerModel,self.index,self.deck)
+		return (self.trainerClass.name.string + " " + self.name.unformattedString, self.locationString,self.hasShadow,self.trainerModel,self.index,self.deck)
 	}
 }
 

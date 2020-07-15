@@ -43,7 +43,7 @@ class GoDMovesViewController: GoDTableViewController {
 	@IBOutlet var mirror: NSButton!
 	
 	
-	
+	var filteredMoves = [(name: String, type: XGMoveTypes, index: Int, isShadow: Bool)]()
 	var moves = allMovesArray().map { (move) -> (name: String, type : XGMoveTypes, index : Int, isShadow: Bool) in
 		return (move.name.string, move.type, move.index, move.isShadowMove)
 	}
@@ -56,7 +56,6 @@ class GoDMovesViewController: GoDTableViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do view setup here.
 		
 		self.title = "Move Editor"
 		self.nameID.formatter = NumberFormatter.shortFormatter()
@@ -66,11 +65,10 @@ class GoDMovesViewController: GoDTableViewController {
 		self.power.formatter = NumberFormatter.byteFormatter()
 		self.accuracy.formatter = NumberFormatter.byteFormatter()
 		self.effectAcc.formatter = NumberFormatter.byteFormatter()
-		if game == .Colosseum {
-			self.category.isEnabled = region == .US && XGFiles.dol.data!.getWordAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F
-		} else {
-			self.category.isEnabled = region == .US && XGDolPatcher.isClassSplitImplemented()
-		}
+		self.category.isEnabled = XGDolPatcher.isClassSplitImplemented()
+
+		filteredMoves = moves
+		table.reloadData()
     }
 	
 	func reloadViewWithActivity() {
@@ -103,21 +101,13 @@ class GoDMovesViewController: GoDTableViewController {
 		self.type.select(currentMove.type)
 		self.targets.select(currentMove.target)
 		self.effectType.select(currentMove.effectType)
-		if game == .XD {
-			if region == .US && XGDolPatcher.isClassSplitImplemented() {
-				self.category.select(currentMove.category)
-			} else {
-				self.category.select(currentMove.type.category)
-			}
+
+		if XGDolPatcher.isClassSplitImplemented() {
+			self.category.select(currentMove.category)
 		} else {
-			let enabled = (XGFiles.dol.data!.getWordAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F) && region == .US
-			if enabled {
-				self.category.select(currentMove.category)
-			} else {
-				self.category.select(currentMove.type.category)
-			}
+			self.category.select(currentMove.type.category)
 		}
-		
+
 		self.contact.state = currentMove.contactFlag ? NSControl.StateValue.on : NSControl.StateValue.off
 		self.mirror.state = currentMove.mirrorMoveFlag ? NSControl.StateValue.on : NSControl.StateValue.off
 		self.protect.state = currentMove.protectFlag ? NSControl.StateValue.on : NSControl.StateValue.off
@@ -131,7 +121,7 @@ class GoDMovesViewController: GoDTableViewController {
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
-		return kNumberOfMoves
+		return filteredMoves.count
 	}
 	
 	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -140,9 +130,9 @@ class GoDMovesViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let move = moves[row]
+		let move = filteredMoves[row]
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 16, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 16, width: widthForTable())) as! GoDTableCellView
 		
 		cell.setBackgroundImage(move.isShadow ? XGMoveTypes.shadowImage : move.type.image)
 		cell.setTitle(move.name)
@@ -163,9 +153,29 @@ class GoDMovesViewController: GoDTableViewController {
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
 		super.tableView(tableView, didSelectRow: row)
 		if row >= 0 {
-			self.currentMove = XGMove(index: row)
+			let move = filteredMoves[row]
+			self.currentMove = XGMove(index: move.index)
 		}
-		
+	}
+
+	override func searchBarBehaviourForTableView(_ tableView: GoDTableView) -> GoDSearchBarBehaviour {
+		.onTextChange
+	}
+
+	override func tableView(_ tableView: GoDTableView, didSearchForText text: String) {
+
+		defer {
+			tableView.reloadData()
+		}
+
+		guard !text.isEmpty else {
+			filteredMoves = moves
+			return
+		}
+
+		filteredMoves = moves.filter({ (move) -> Bool in
+			move.name.simplified.contains(text.simplified)
+		})
 	}
 	
 	

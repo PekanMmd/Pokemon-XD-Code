@@ -8,28 +8,27 @@
 
 import AppKit
 
-class GoDTableViewController: GoDViewController, GoDTableViewDelegate, NSTableViewDataSource {
+class GoDTableViewController: GoDViewController, GoDTableViewDelegate, GoDTableViewDataSource {
 
 	var table : GoDTableView!
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
 
-		self.table = GoDTableView(width: self.widthForTable(), rows: 0, rowHeight: 0, delegate: self, dataSource: self)
-		self.table.translatesAutoresizingMaskIntoConstraints = false
-		self.addSubview(table, name: "table")
-		self.metrics["tableWidth"] = self.widthForTable()
-		
-		self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[table(tableWidth)]", options: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views))
-		self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[table]|", options: [], metrics: nil, views: views))
+		table = GoDTableView(width: widthForTable(), delegate: self, dataSource: self)
+		view.addSubview(table)
+
+		table.pinTop(to: view)
+		table.pinLeading(to: view)
+		table.pinBottom(to: view)
+		table.pinWidth(as: widthForTable())
 		
 		table.backgroundColor = NSColor.black
 		table.reloadData()
 		
 	}
 	
-	func widthForTable() -> NSNumber {
+	func widthForTable() -> CGFloat {
 		return 200
 	}
 	
@@ -42,7 +41,7 @@ class GoDTableViewController: GoDViewController, GoDTableViewDelegate, NSTableVi
 	}
 	
 	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-		let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? NSImageView(frame: NSMakeRect(0,0,200,0))
+		let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? NSImageView(frame: NSMakeRect(0,0,widthForTable(),0))
 		
 		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		cell.translatesAutoresizingMaskIntoConstraints = false
@@ -59,11 +58,11 @@ class GoDTableViewController: GoDViewController, GoDTableViewDelegate, NSTableVi
 		return cell
 	}
 	
-	func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
-		
+	func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {}
+	func tableView(_ tableView: GoDTableView, didSearchForText text: String) {}
+	func searchBarBehaviourForTableView(_ tableView: GoDTableView) -> GoDSearchBarBehaviour {
+		return .none
 	}
-	
-	
 }
 
 

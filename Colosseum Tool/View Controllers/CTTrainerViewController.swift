@@ -16,7 +16,8 @@ class GoDTrainerViewController: GoDTableViewController {
 	}
 	
 	var pokemon = [XGTrainerPokemon]()
-	
+
+	var filteredTrainers = [TrainerInfo]()
 	var trainers = [TrainerInfo]()
 	
 	
@@ -36,9 +37,11 @@ class GoDTrainerViewController: GoDTableViewController {
 		trainers = XGDecks.DeckStory.allTrainers.map { (trainer) -> TrainerInfo in
 				return trainer.trainerInfo
 		}
-		
+
+		filteredTrainers = trainers
+
 		self.table.reloadData()
-		self.table.tableView.intercellSpacing = NSSize(width: 0, height: 1)
+		table.setShouldUseIntercellSpacing(to: true)
 		
 		for i in 0 ... 5 {
 			let mon = GoDPokemonView()
@@ -49,7 +52,6 @@ class GoDTrainerViewController: GoDTableViewController {
 		
 		self.trainerView.delegate = self
 		
-		self.pokemonContainer.setBackgroundColour(GoDDesign.colourWhite())
 		self.pokemonContainer.translatesAutoresizingMaskIntoConstraints = false
 		self.pokemonContainer.wantsLayer = true
 		self.pokemonContainer.layer?.borderColor = GoDDesign.colourBlack().cgColor
@@ -63,30 +65,50 @@ class GoDTrainerViewController: GoDTableViewController {
 	}
 	
 	func layoutViews() {
-		self.addSubview(trainerView, name: "tv")
-		self.addSubview(pokemonContainer, name: "cv")
-		self.addSubview(saveButton, name: "sb")
-		
-		for view in self.pokemonViews {
-			self.pokemonContainer.addSubview(view)
-			self.views["pv\(view.index)"] = view
+		view.addSubview(trainerView)
+		view.addSubview(pokemonContainer)
+		view.addSubview(saveButton)
+
+		pokemonViews.forEach(pokemonContainer.addSubview)
+
+		pokemonViews[0].pinWidth(as: 330)
+		(1...5).forEach { (index) in
+			pokemonViews[index].constrainWidthEqual(to: pokemonViews[0])
+			pokemonViews[index].constrainHeightEqual(to: pokemonViews[0])
 		}
-		
-		self.addConstraintWidth(view: pokemonViews[0], width: 330)
-		for i in 1 ... 5 {
-			self.addConstraintEqualSizes(view1: pokemonViews[0], view2: pokemonViews[i])
+
+		trainerView.pinLeadingToTrailing(of: table)
+		trainerView.pinTrailing(to: view)
+		trainerView.pinHeight(as: 80)
+		trainerView.pinTop(to: view)
+		pokemonContainer.pinTopToBottom(of: trainerView)
+		pokemonContainer.pinLeadingToTrailing(of: table)
+		pokemonContainer.pinTrailing(to: view)
+		pokemonContainer.pinBottom(to: view)
+
+		[0, 3].forEach { (index) in
+			pokemonViews[index].pinLeading(to: pokemonContainer, padding: 10)
+			pokemonViews[index + 1].pinLeadingToTrailing(of: pokemonViews[index], padding: 10)
+			pokemonViews[index + 1].pinTop(to: pokemonViews[index])
+			pokemonViews[index + 1].pinBottom(to: pokemonViews[index])
+			pokemonViews[index + 2].pinLeadingToTrailing(of: pokemonViews[index + 1], padding: 10)
+			pokemonViews[index + 2].pinTop(to: pokemonViews[index])
+			pokemonViews[index + 2].pinBottom(to: pokemonViews[index])
+			pokemonViews[index + 2].pinTrailing(to: pokemonContainer, padding: 10)
 		}
-		
-		self.addConstraints(visualFormat: "H:|[table][tv]|", layoutFormat: [])
-		self.addConstraintHeight(view: trainerView, height: 80)
-		self.addConstraints(visualFormat: "V:|[tv][cv]|", layoutFormat: [.alignAllLeft, .alignAllRight])
-		self.addMetric(value: 10, name: "g")
-		self.pokemonContainer.addConstraints(visualFormat: "H:|-(g)-[pv0]-(g)-[pv1]-(g)-[pv2]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
-		self.pokemonContainer.addConstraints(visualFormat: "H:|-(g)-[pv3]-(g)-[pv4]-(g)-[pv5]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
-		self.pokemonContainer.addConstraints(visualFormat: "V:|-(g)-[pv0]-(g)-[pv3]-(40)-|", layoutFormat: [.alignAllLeft], metrics: metrics, views: views)
-		self.addConstraints(visualFormat: "V:[pv4]-(g)-[sb(20)]", layoutFormat: [.alignAllCenterX])
-		self.addConstraintWidth(view: saveButton, width: 100)
-		
+
+		[0, 1, 2].forEach { (index) in
+			pokemonViews[index].pinTopToBottom(of: trainerView, padding: 10)
+			pokemonViews[index + 3].pinTopToBottom(of: pokemonViews[index], padding: 10)
+			pokemonViews[index + 3].pinLeading(to: pokemonViews[index])
+			pokemonViews[index + 3].pinTrailing(to: pokemonViews[index])
+		}
+
+		saveButton.pinHeight(as: 20)
+		saveButton.pinWidth(as: 100)
+		saveButton.pinCenterX(to: pokemonViews[4])
+		saveButton.pinTopToBottom(of: pokemonViews[4], padding: 10)
+		saveButton.pinBottom(to: pokemonContainer, padding: 10)
 	}
 	
 	@objc func save() {
@@ -102,12 +124,12 @@ class GoDTrainerViewController: GoDTableViewController {
 		}
 	}
 	
-	override func widthForTable() -> NSNumber {
+	override func widthForTable() -> CGFloat {
 		return 250
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
-		return trainers.count
+		return filteredTrainers.count
 	}
 	
 	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -116,14 +138,14 @@ class GoDTrainerViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: widthForTable())) as! GoDTableCellView
 		
 		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		
 		cell.titleField.maximumNumberOfLines = 2
 		
-		let trainer = trainers[row]
-		cell.setTitle(trainer.name.replacingOccurrences(of: "[07]{00}", with: "") + "\n" + "\(trainer.index): " + trainer.fullname.replacingOccurrences(of: "[07]{00}", with: ""))
+		let trainer = filteredTrainers[row]
+		cell.setTitle(trainer.name + "\n" + "\(trainer.index): " + trainer.fullname)
 		cell.setImage(image: trainer.trainerModel.image)
 		
 		var colour = GoDDesign.colourWhite()
@@ -143,8 +165,11 @@ class GoDTrainerViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
 		super.tableView(tableView, didSelectRow: row)
+		if row == -1 {
+			return
+		}
 		self.showActivityView {
-			let info = self.trainers[row]
+			let info = self.filteredTrainers[row]
 			self.currentTrainer = XGTrainer(index: info.index)
 			self.trainerView.setUp(loadBattleData: true)
 			for view in self.pokemonViews {
@@ -152,7 +177,33 @@ class GoDTrainerViewController: GoDTableViewController {
 			}
 			self.hideActivityView()
 		}
-		
+	}
+
+	override func searchBarBehaviourForTableView(_ tableView: GoDTableView) -> GoDSearchBarBehaviour {
+		.onEndEditing
+	}
+
+	override func tableView(_ tableView: GoDTableView, didSearchForText text: String) {
+		func searchFilter(info: TrainerInfo) -> Bool {
+			let trainer = XGTrainer(index: info.index)
+			return (info.hasShadow && text.lowercased() == "shadow")
+				|| info.name.simplified.contains(text.simplified)
+				|| trainer.className.simplified.contains(text.simplified)
+				|| trainer.pokemon.contains(where: { (mon) -> Bool in
+					mon.species.name.string.simplified.contains(text.simplified)
+				})
+		}
+
+		defer {
+			tableView.reloadData()
+		}
+
+		guard !text.isEmpty else {
+			filteredTrainers = trainers
+			return
+		}
+
+		filteredTrainers = trainers.filter(searchFilter)
 	}
 	
 }

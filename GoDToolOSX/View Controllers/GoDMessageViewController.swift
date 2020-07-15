@@ -21,6 +21,9 @@ class GoDMessageViewController: GoDTableViewController {
 							  .filter { $0.fileType == .msg }
 							  .map { $0.stringTable }
 
+	var stringIDs = [Int]()
+
+	var currentString: XGString?
 	var currentTable : XGStringTable? {
 		didSet {
 			setUpForFile()
@@ -50,23 +53,24 @@ class GoDMessageViewController: GoDTableViewController {
 	
 	func hideInterface() {
 		stringIDField.isEnabled = false
-		stringIDLabel.isEnabled = false
 		messageField.isEditable = false
 		saveButton.isEnabled = false
 	}
 	
 	func showInterface() {
 		stringIDField.isEnabled = true
-		stringIDLabel.isEnabled = true
 		messageField.isEditable = true
+		stringIDField.isEditable = game != .PBR
 		saveButton.isEnabled = true
 	}
 	
 	func setUpForFile() {
-		self.stringIDField.stringValue = ""
-		self.messageField.string = ""
+		currentString = nil
+		stringIDs = currentTable?.stringIDs ?? []
+		stringIDField.stringValue = ""
+		messageField.string = ""
 		hideInterface()
-		self.table.reloadData()
+		table.reloadData()
 		table.scrollToTop()
 	}
 	
@@ -83,8 +87,15 @@ class GoDMessageViewController: GoDTableViewController {
 			GoDAlertViewController.displayAlert(title: "Error", text: "No File selected")
 			return
 		}
-		
-		if let stringID = stringIDField.stringValue.integerValue {
+
+		var sid: Int?
+		if game == .PBR {
+			sid = currentString?.id
+		} else {
+			sid = stringIDField.stringValue.integerValue
+		}
+
+		if let stringID = sid {
 			
 			let message = messageField.string == "" ? "-" : messageField.string
 			let string = XGString(string: message, file: table.file, sid: stringID)
@@ -101,7 +112,7 @@ class GoDMessageViewController: GoDTableViewController {
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
-		return currentTable?.numberOfEntries ?? 0
+		return stringIDs.count
 	}
 	
 	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -110,13 +121,13 @@ class GoDMessageViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: widthForTable())) as! GoDTableCellView
 		
 		guard let currentTable = currentTable else {
 			return cell
 		}
 
-		let id = currentTable.stringIDs[row]
+		let id = stringIDs[row]
 		let string = currentTable.stringSafelyWithID(id)
 		cell.setTitle(string.id.hexString() + ": " + string.unformattedString)
 		cell.titleField.maximumNumberOfLines = 3
@@ -138,15 +149,37 @@ class GoDMessageViewController: GoDTableViewController {
 				return
 			}
 
-			let id = table.stringIDs[row]
+			let id = stringIDs[row]
 			let string = table.stringSafelyWithID(id)
+			currentString = string
 			
-			self.stringIDField.stringValue = string.id.hexString()
-			self.messageField.string = string.string
+			stringIDField.stringValue = string.id.hexString()
+			messageField.string = string.string
 			showInterface()
 		}
 	}
 
+	override func searchBarBehaviourForTableView(_ tableView: GoDTableView) -> GoDSearchBarBehaviour {
+		.onEndEditing
+	}
+
+	override func tableView(_ tableView: GoDTableView, didSearchForText text: String) {
+
+		defer {
+			tableView.reloadData()
+		}
+
+		guard !text.isEmpty else {
+			stringIDs = currentTable?.stringIDs ?? []
+			return
+		}
+
+		stringIDs = currentTable?.allStrings().filter({ (s) -> Bool in
+			s.string.simplified.contains(text.simplified)
+		}).map({ (s) -> Int in
+			s.id
+		}) ?? []
+	}
 }
 
 

@@ -9,7 +9,6 @@ import Cocoa
 
 class GoDCollisionViewController: GoDTableViewController {
 	
-	
 	@IBOutlet var openglView: GoDOpenGLView!
 	@IBOutlet var metalView: GoDMetalView!
 	
@@ -17,10 +16,21 @@ class GoDCollisionViewController: GoDTableViewController {
 	var renderView : NSView {
 		return useMetal ? self.metalView : self.openglView
 	}
+
+	var filteredCols = [XGFiles]()
+
+	var cols: [XGFiles] {
+		return XGFolders.Col.files.filter({ (file) -> Bool in
+			return file.fileType == .ccd
+		}).sorted(by: { (f1, f2) -> Bool in
+			return f1.fileName < f2.fileName
+		})
+	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		self.table.tableView.intercellSpacing = NSSize(width: 0, height: 1)
+		table.setShouldUseIntercellSpacing(to: true)
+		filteredCols = cols
 		self.table.reloadData()
 		
 		if useMetal {
@@ -34,16 +44,8 @@ class GoDCollisionViewController: GoDTableViewController {
 		
 	}
 	
-	var cols : [XGFiles] {
-		return XGFolders.Col.files.filter({ (file) -> Bool in
-			return file.fileType == .ccd
-		}).sorted(by: { (f1, f2) -> Bool in
-			return f1.fileName < f2.fileName
-		})
-	}
-	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
-		return cols.count == 0 ? 1 : cols.count
+		return filteredCols.count == 0 ? 1 : filteredCols.count
 	}
 	
 	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -55,13 +57,13 @@ class GoDCollisionViewController: GoDTableViewController {
 		if row == -1 {
 			return
 		}
-		if cols.count > 0 {
-			if self.cols[row].exists {
+		if filteredCols.count > 0 {
+			if filteredCols[row].exists {
 				if useMetal {
-					self.metalView.file = self.cols[row]
+					self.metalView.file = self.filteredCols[row]
 					metalManager.render()
 				} else {
-					self.openglView.file = self.cols[row]
+					self.openglView.file = self.filteredCols[row]
 					self.openglView.render()
 				}
 			}
@@ -70,26 +72,26 @@ class GoDCollisionViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: widthForTable())) as! GoDTableCellView
 		
 		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		
-		if cols.count == 0 {
+		if filteredCols.count == 0 {
 			
 			cell.setBackgroundColour(GoDDesign.colourWhite())
-			cell.setTitle("No .ccd files found in collision data folder.\nExtract ISO and try again.")
+			cell.setTitle("No \(XGFileTypes.ccd.fileExtension) files found in \(XGFolders.Col.path).\nExtract ISO and try again.")
 			
 			return cell
 		}
 		
-		let str = cols[row].fileName
+		let str = filteredCols[row].fileName
 		let prefix = str.substring(from: 0, to: 2)
 		
 		let map = XGMaps(rawValue: prefix)
 		
 		if map == nil {
 			cell.setBackgroundColour(GoDDesign.colourWhite())
-			cell.setTitle(cols[row].fileName)
+			cell.setTitle(filteredCols[row].fileName)
 		} else {
 			var colour = GoDDesign.colourWhite()
 			
@@ -134,7 +136,7 @@ class GoDCollisionViewController: GoDTableViewController {
 			
 			cell.setBackgroundColour(colour)
 			
-			cell.setTitle(cols[row].fileName + "\n" + map!.name)
+			cell.setTitle(filteredCols[row].fileName + "\n" + map!.name)
 			
 		}
 		
@@ -168,6 +170,26 @@ class GoDCollisionViewController: GoDTableViewController {
 		if let view = self.metalView {
 			view.mouseEvent(deltaX: Float(event.deltaX), deltaY: Float(event.deltaY))
 		}
+	}
+
+	override func searchBarBehaviourForTableView(_ tableView: GoDTableView) -> GoDSearchBarBehaviour {
+		.onTextChange
+	}
+
+	override func tableView(_ tableView: GoDTableView, didSearchForText text: String) {
+
+		defer {
+			tableView.reloadData()
+		}
+
+		guard !text.isEmpty else {
+			filteredCols = cols
+			return
+		}
+
+		filteredCols = cols.filter({ (file) -> Bool in
+			file.fileName.lowercased().contains(text.lowercased())
+		})
 	}
 	
 }

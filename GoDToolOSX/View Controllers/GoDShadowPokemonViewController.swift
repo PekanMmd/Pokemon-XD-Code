@@ -11,21 +11,22 @@ class GoDShadowPokemonViewController: GoDTableViewController {
 	
 	var currentPokemon  = XGDeckPokemon.ddpk(0).data
 	var allShadows		= XGDecks.DeckDarkPokemon.allPokemon
+	var filteredShadows = [XGTrainerPokemon]()
 	
 	@IBOutlet var pokemonView: GoDShadowPokemonView!
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		self.title = "Shadow Pokemon Editor"
+		title = "Shadow Pokemon Editor"
 		
 		pokemonView.delegate = self
+		filteredShadows = allShadows
 		
-		self.table.reloadData()
-		self.table.tableView.intercellSpacing = NSSize(width: 0, height: 1)
-		
+		table.reloadData()
+		table.setShouldUseIntercellSpacing(to: true)
 	}
-	
+
 	func reloadAllData() {
 		self.showActivityView {
 			let row = self.table.selectedRow
@@ -47,12 +48,12 @@ class GoDShadowPokemonViewController: GoDTableViewController {
 		}
 	}
 	
-	override func widthForTable() -> NSNumber {
+	override func widthForTable() -> CGFloat {
 		return 200
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
-		return XGDecks.DeckDarkPokemon.DDPKEntries
+		return filteredShadows.count
 	}
 	
 	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -61,13 +62,13 @@ class GoDShadowPokemonViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: widthForTable())) as! GoDTableCellView
 		
 		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		
 		cell.titleField.maximumNumberOfLines = 2
 		
-		let mon = allShadows[row]
+		let mon = filteredShadows[row]
 		cell.setTitle("\(mon.deckData.index): Shadow " + mon.species.name.string + "\nLv. \(mon.level)+")
 		cell.setImage(image: mon.species.face)
 		
@@ -86,13 +87,31 @@ class GoDShadowPokemonViewController: GoDTableViewController {
 			return
 		}
 		self.showActivityView {
-			self.currentPokemon = self.allShadows[row]
+			self.currentPokemon = self.filteredShadows[row]
 			
 			self.pokemonView.setUp()
 			
 			self.hideActivityView()
 		}
-		
+	}
+
+	override func searchBarBehaviourForTableView(_ tableView: GoDTableView) -> GoDSearchBarBehaviour {
+		.onTextChange
+	}
+
+	override func tableView(_ tableView: GoDTableView, didSearchForText text: String) {
+		defer {
+			tableView.reloadData()
+		}
+
+		guard !text.isEmpty else {
+			filteredShadows = allShadows
+			return
+		}
+
+		filteredShadows = allShadows.filter({ (mon) -> Bool in
+			mon.species.name.string.simplified.contains(text.simplified)
+		})
 	}
 
 }

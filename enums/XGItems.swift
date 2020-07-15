@@ -195,7 +195,7 @@ extension XGItems: Codable {
 	}
 }
 
-extension XGItems: XGEnumerable {
+extension XGItems: XGEnumerable, Equatable {
 	var enumerableName: String {
 		return name.string.spaceToLength(20)
 	}
@@ -210,6 +210,9 @@ extension XGItems: XGEnumerable {
 	
 	static var allValues: [XGItems] {
 		return XGItems.allItems()
+	}
+	public static func != (lhs: Self, rhs: Self) -> Bool {
+		lhs.enumerableValue != rhs.enumerableValue
 	}
 }
 

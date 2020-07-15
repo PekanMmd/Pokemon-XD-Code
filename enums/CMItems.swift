@@ -78,19 +78,15 @@ enum XGItems {
 	}
 	
 	static func allItems() -> [XGItems] {
-		var items = [XGItems]()
-		for i in 0 ..< kNumberOfItems {
-			items.append(.item(i))
-		}
-		return items
+		(0 ..< kNumberOfItems).map({ (index) -> XGItems in
+			.item(index)
+		})
 	}
 	
 	static func pokeballs() -> [XGItems] {
-		var items = [XGItems]()
-		for i in 0 ... 12 {
-			items.append(.item(i))
-		}
-		return items
+		(0 ... 12).map({ (index) -> XGItems in
+			.item(index)
+		})
 	}
 	
 }

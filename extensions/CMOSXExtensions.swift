@@ -14,7 +14,7 @@ let region = XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .US
 typealias TrainerInfo = (fullname:String,name:String,location:String,hasShadow: Bool,trainerModel:XGTrainerModels,index:Int, deck: XGDecks)
 extension XGTrainer {
 	var trainerInfo : TrainerInfo {
-		return (self.trainerClass.name.string + " " + self.name.string, self.name.string,"",self.hasShadow,self.trainerModel,self.index, .DeckStory)
+		return (self.trainerClass.name.string + " " + self.name.unformattedString, self.name.unformattedString,"",self.hasShadow,self.trainerModel,self.index, .DeckStory)
 	}
 }
 

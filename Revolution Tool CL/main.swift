@@ -7,6 +7,9 @@
 
 import Foundation
 
+PBRTypeManager.typeMatchupDataDolOffset?.hexString().println()
+
+XGUtility.extractMainFiles()
 
 //let itemData = item("quick claw").data
 //for register: XGRegisters in [.r0, .r3, .r4, .r5, .r6] {
@@ -18,10 +21,10 @@ import Foundation
 
 //itemData.writeJSON(to: .nameAndFolder("Quick Claw.json", .Documents))
 
-for item in XGItems.allItems() where item.data.holdItemID > 0 {
-	let data = item.data
-	print(item.name.unformattedString.spaceToLength(20), data.holdItemID)
-}
+//for item in XGItems.allItems() where item.data.holdItemID > 0 {
+//	let data = item.data
+//	print(item.name.unformattedString.spaceToLength(20), data.holdItemID)
+//}
 
 //XGFiles.msg("mes_common").stringTable.writeJSON(to: .nameAndFolder("mes_common.msg.json", .Documents))
 

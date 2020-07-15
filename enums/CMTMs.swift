@@ -19,9 +19,15 @@ let kNumberOfTutorMoves = 0
 enum XGTMs {
 	
 	case tm(Int)
+	case tutor(Int)
 	
 	var index : Int {
-		switch self { case .tm(let i): return i }
+		switch self {
+		case .tm(let i): return i
+		default:
+			assertionFailure("This is only for XD compatibility")
+			return -1
+		}
 	}
 	
 	var startOffset : Int {

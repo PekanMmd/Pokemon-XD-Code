@@ -45,7 +45,6 @@ class GoDPatchViewController: GoDTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do view setup here.
 		self.title = "Patches"
     }
 	
@@ -197,7 +196,7 @@ class GoDPatchViewController: GoDTableViewController {
 		
 		let colour = row % 2 == 0 ? GoDDesign.colourWhite() : GoDDesign.colourLightGrey()
 		
-		let view = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: patches[row], colour: GoDDesign.colourBlack(), fontSize: 10, width: self.table.width)) as! GoDTableCellView
+		let view = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: patches[row], colour: GoDDesign.colourBlack(), fontSize: 10, width: widthForTable())) as! GoDTableCellView
 		
 		view.setBackgroundColour(colour)
 		view.setTitle(patches[row])
@@ -205,7 +204,7 @@ class GoDPatchViewController: GoDTableViewController {
 		return view
 	}
 	
-	override func widthForTable() -> NSNumber {
+	override func widthForTable() -> CGFloat {
 		return 400
 	}
 	
@@ -220,6 +219,7 @@ class GoDPatchViewController: GoDTableViewController {
 		self.showActivityView {
 			self.performSelector(onMainThread: self.funcs[row], with: nil, waitUntilDone: true)
 			self.hideActivityView()
+			printg("Patch completed")
 		}
 		
 	}

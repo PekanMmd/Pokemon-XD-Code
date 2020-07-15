@@ -107,17 +107,20 @@ class XGDolPatcher: NSObject {
 	
 	@objc class func isClassSplitImplemented() -> Bool {
 		
-		let dol = XGFiles.dol.data!
-		
-		for offset in kClassPatchOffsets {
-			let machineInstruction = dol.getWordAtOffset(offset)
-			
-			if machineInstruction == kNopInstruction {
-				return true
-			}
-			
+		guard game != .PBR, let dol = XGFiles.dol.data else {
+			return game == .PBR
 		}
-		
+
+		if game == .XD, region == .US {
+
+			let offset = kClassPatchOffsets[0] 
+			let machineInstruction = dol.getWordAtOffset(offset)
+			return machineInstruction == kNopInstruction
+
+		} else if game == .Colosseum, region == .US {
+			return dol.getWordAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F
+		}
+
 		return false
 	}
 	

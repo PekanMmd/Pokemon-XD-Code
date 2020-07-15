@@ -10,6 +10,9 @@ import Foundation
 class PBRDataTableEntry : XGIndexedValue {
 
 	var index = 0
+	var size: Int {
+		data.length
+	}
 
 	private weak var table: PBRDataTable?
 	private var data = XGMutableData()

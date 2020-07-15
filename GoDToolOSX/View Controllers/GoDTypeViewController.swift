@@ -148,7 +148,7 @@ class GoDTypeViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), background: XGFiles.typeImage(row).image, fontSize: 16, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), background: XGFiles.typeImage(row).image, fontSize: 16, width: widthForTable())) as! GoDTableCellView
 		
 		let type = XGMoveTypes.type(row)
 		cell.setTitle(type.data.name.unformattedString)

@@ -16,16 +16,8 @@ class GoDScriptViewController: GoDTableViewController {
 	@IBOutlet var decompileWhenDone: NSButton!
 	@IBOutlet var disassembleWhenDone: NSButton!
 	@IBOutlet var baseStringIDTextView: NSTextField!
-	
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		self.table.tableView.intercellSpacing = NSSize(width: 0, height: 1)
-		self.table.reloadData()
-		
-		XDSScriptCompiler.clearCompilerFlags()
-		self.currentFile = nil
-	}
-	
+
+	var filteredScripts = [XGFiles]()
 	var scripts : [XGFiles] {
 		return XGFolders.XDS.files.filter({ (file) -> Bool in
 			return file.fileType == .xds
@@ -33,11 +25,21 @@ class GoDScriptViewController: GoDTableViewController {
 			return f1.fileName < f2.fileName
 		})
 	}
-	
+
 	var currentFile : XGFiles?
 	
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		table.setShouldUseIntercellSpacing(to: true)
+		filteredScripts = scripts
+		self.table.reloadData()
+		
+		XDSScriptCompiler.clearCompilerFlags()
+		self.currentFile = nil
+	}
+
 	override func numberOfRows(in tableView: NSTableView) -> Int {
-		return scripts.count == 0 ? 1 : scripts.count
+		return filteredScripts.count == 0 ? 1 : filteredScripts.count
 	}
 	
 	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -49,22 +51,22 @@ class GoDScriptViewController: GoDTableViewController {
 		if row == -1 {
 			return
 		}
-		if scripts.count > 0 {
-			if self.scripts[row].exists {
-				self.currentFile = scripts[row]
-				self.scriptView.string = scripts[row].text
-				self.scriptView.scrollToBeginningOfDocument(nil)
+		if filteredScripts.count > 0 {
+			if filteredScripts[row].exists {
+				currentFile = filteredScripts[row]
+				scriptView.string = filteredScripts[row].text
+				scriptView.scrollToBeginningOfDocument(nil)
 			}
 		}
 	}
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: widthForTable())) as! GoDTableCellView
 		
 		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		
-		if scripts.count == 0 {
+		if filteredScripts.count == 0 {
 			
 			cell.setBackgroundColour(GoDDesign.colourWhite())
 			cell.setTitle("No scripts found in XDS folder.\nselect 'ISO > Decompile Scripts' and try again.")
@@ -72,14 +74,14 @@ class GoDScriptViewController: GoDTableViewController {
 			return cell
 		}
 		
-		let str = scripts[row].fileName
+		let str = filteredScripts[row].fileName
 		let prefix = str.substring(from: 0, to: 2)
 		
 		let map = XGMaps(rawValue: prefix)
 		
 		if map == nil {
 			cell.setBackgroundColour(GoDDesign.colourWhite())
-			cell.setTitle(scripts[row].fileName)
+			cell.setTitle(filteredScripts[row].fileName)
 		} else {
 			var colour = GoDDesign.colourWhite()
 			
@@ -124,7 +126,7 @@ class GoDScriptViewController: GoDTableViewController {
 			
 			cell.setBackgroundColour(colour)
 			
-			cell.setTitle(scripts[row].fileName + "\n" + map!.name)
+			cell.setTitle(filteredScripts[row].fileName + "\n" + map!.name)
 		}
 		
 		if self.table.selectedRow == row {
@@ -133,7 +135,26 @@ class GoDScriptViewController: GoDTableViewController {
 		
 		return cell
 	}
-	
+
+	override func searchBarBehaviourForTableView(_ tableView: GoDTableView) -> GoDSearchBarBehaviour {
+		.onTextChange
+	}
+
+	override func tableView(_ tableView: GoDTableView, didSearchForText text: String) {
+
+		defer {
+			tableView.reloadData()
+		}
+
+		guard !text.isEmpty else {
+			filteredScripts = scripts
+			return
+		}
+
+		filteredScripts = scripts.filter({ (file) -> Bool in
+			file.fileName.simplified.contains(text.simplified)
+		})
+	}
 	
 	@IBAction func compile(_ sender: Any) {
 		XDSScriptCompiler.clearCompilerFlags()

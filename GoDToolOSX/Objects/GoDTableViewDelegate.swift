@@ -8,8 +8,25 @@
 
 import AppKit
 
-protocol GoDTableViewDelegate : NSTableViewDelegate {
+protocol GoDTableViewDelegate: NSTableViewDelegate {
 	
 	func tableView(_ tableView: GoDTableView, didSelectRow row: Int)
-	
+}
+
+enum GoDSearchBarBehaviour {
+	case none, onTextChange, onEndEditing
+}
+
+protocol GoDTableViewDataSource: NSTableViewDataSource {
+
+	func searchBarBehaviourForTableView(_ tableView: GoDTableView) -> GoDSearchBarBehaviour
+	func tableView(_ tableView: GoDTableView, didSearchForText text: String)
+}
+
+extension GoDTableViewDataSource {
+
+	func tableView(_ tableView: GoDTableView, didSearchForText text: String) {}
+	func searchBarBehaviourForTableView(_ tableView: GoDTableView) -> GoDSearchBarBehaviour {
+		.none
+	}
 }

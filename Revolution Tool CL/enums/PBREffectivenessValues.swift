@@ -16,6 +16,23 @@ enum XGEffectivenessValues : Int, Codable, CaseIterable {
 	case ineffective		= 3
 	case unknown1			= 4
 	case unknown2			= 5
+
+	var multiplier: Int {
+		switch self {
+		case .superEffective:
+			return 20
+		case .neutral:
+			return 10
+		case .notVeryEffective:
+			return 5
+		case .ineffective:
+			return 0
+		case .unknown1:
+			return 10
+		case .unknown2:
+			return 10
+		}
+	}
 	
 	var string : String {
 		get {

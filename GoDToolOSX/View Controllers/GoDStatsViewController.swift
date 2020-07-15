@@ -55,11 +55,15 @@ class GoDStatsViewController: GoDTableViewController {
 	
 	@IBOutlet var TMsContainer: GoDContainerView!
 	@IBOutlet var LUMContainer: GoDContainerView!
+
+	lazy var tmdelegate = TMTableDelegate(delegate: self, width: 100)
+	lazy var lumdelegate = LUMTableDelegate(delegate: self)
 	
-	var TMTable : GoDTableView!
-	var LUMTable : GoDTableView!
+	var TMTable: GoDTableView!
+	var LUMTable: GoDTableView!
 	
-	
+
+	var filteredMons = [(name: String, type1: XGMoveTypes, index: Int)]()
 	var mons = allPokemonArray().map { (mon) -> (name: String, type1 : XGMoveTypes, index : Int) in
 		return (mon.name.string, mon.type1, mon.index)
 	}
@@ -80,41 +84,36 @@ class GoDStatsViewController: GoDTableViewController {
 			evos[i]!.index = i
 			evos[i]!.delegate = self
 		}
-		
-		let tmwidth : NSNumber = (TMsContainer.frame.width - 10) as NSNumber
-		let tmheight : NSNumber = 180
-		let tmdelegate = TMTableDelegate(delegate: self, width: tmwidth)
-		TMTable = GoDTableView(width: tmwidth, rows: kNumberOfTutorMoves + kNumberOfTMs, rowHeight: 30, delegate: tmdelegate, dataSource: tmdelegate)
-		TMTable.setBackgroundColour(GoDDesign.colourClear())
-		TMTable.tableView.intercellSpacing = NSSize(width: 0, height: 2)
-		self.addSubview(TMTable, name: "TMs")
-		self.addConstraintWidth(view: TMTable, width: tmwidth)
-		self.addConstraintHeight(view: TMTable, height: tmheight)
-		self.addConstraintAlignCenterX(view1: TMsContainer, view2: TMTable)
-		self.addConstraintAlignCenterY(view1: TMsContainer, view2: TMTable)
-		
-		let lumwidth : NSNumber = (LUMContainer.frame.width - 10) as NSNumber
-		let lumheight : NSNumber = 180
-		let lumdelegate = LUMTableDelegate(delegate: self, width: lumwidth)
-		LUMTable = GoDTableView(width: tmwidth, rows: kNumberOfLevelUpMoves, rowHeight: 30, delegate: lumdelegate, dataSource: lumdelegate)
-		LUMTable.setBackgroundColour(GoDDesign.colourClear())
-		LUMTable.tableView.intercellSpacing = NSSize(width: 0, height: 2)
-		self.addSubview(LUMTable, name: "LUM")
-		self.addConstraintWidth(view: LUMTable, width: lumwidth)
-		self.addConstraintHeight(view: LUMTable, height: lumheight)
-		self.addConstraintAlignCenterX(view1: LUMContainer, view2: LUMTable)
-		self.addConstraintAlignCenterY(view1: LUMContainer, view2: LUMTable)
+
+		TMTable = GoDTableView(width: 100, delegate: tmdelegate, dataSource: tmdelegate)
+		TMTable.setShouldUseIntercellSpacing(to: true)
+		TMsContainer.addSubview(TMTable)
+		TMTable.pinTop(to: TMsContainer, padding: 3)
+		TMTable.pinBottom(to: TMsContainer, padding: 3)
+		TMTable.pinCenterX(to: TMsContainer)
+		TMTable.pinWidth(as: 100)
+
+		LUMTable = GoDTableView(width: 200, delegate: lumdelegate, dataSource: lumdelegate)
+		LUMTable.setShouldUseIntercellSpacing(to: true)
+		LUMContainer.addSubview(LUMTable)
+		LUMTable.pinTop(to: LUMContainer, padding: 3)
+		LUMTable.pinBottom(to: LUMContainer, padding: 3)
+		LUMTable.pinCenterX(to: LUMContainer)
+		LUMTable.pinWidth(as: 200)
 		
 		for view in [HPField, attackField, defField, spatkField, spdefField, speedField] {
 			view?.backgroundColor = NSColor.controlBackgroundColor
 			view?.textColor = NSColor.controlTextColor
 		}
+
+		filteredMons = mons
+		table.reloadData()
 		
 		reloadViewWithActivity()
     }
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
-		return kNumberOfPokemon
+		return filteredMons.count
 	}
 	
 	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -123,9 +122,9 @@ class GoDStatsViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let pokemon = mons[row]
+		let pokemon = filteredMons[row]
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 16, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 16, width: widthForTable())) as! GoDTableCellView
 		
 		cell.setBackgroundImage(pokemon.type1.image)
 		cell.setTitle(pokemon.name)
@@ -134,7 +133,7 @@ class GoDStatsViewController: GoDTableViewController {
 		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		cell.translatesAutoresizingMaskIntoConstraints = false
 		
-		cell.alphaValue = self.table.selectedRow == row ? 1 : 0.75
+		cell.alphaValue = table.selectedRow == row ? 1 : 0.75
 		if self.table.selectedRow == row {
 			cell.addBorder(colour: GoDDesign.colourBlack(), width: 1)
 		} else {
@@ -147,12 +146,32 @@ class GoDStatsViewController: GoDTableViewController {
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
 		super.tableView(tableView, didSelectRow: row)
 		if row >= 0 {
-			self.pokemon = XGPokemonStats(index: row)
+			let mon = filteredMons[row]
+			self.pokemon = XGPokemonStats(index: mon.index)
 		}
+	}
+
+	override func searchBarBehaviourForTableView(_ tableView: GoDTableView) -> GoDSearchBarBehaviour {
+		.onTextChange
+	}
+
+	override func tableView(_ tableView: GoDTableView, didSearchForText text: String) {
+		defer {
+			tableView.reloadData()
+		}
+
+		guard !text.isEmpty else {
+			filteredMons = mons
+			return
+		}
+
+		filteredMons = mons.filter({ (mon) -> Bool in
+			mon.name.simplified.contains(text.simplified)
+		})
 	}
 	
 	func reloadViewWithActivity() {
-		self.showActivityView {
+		showActivityView {
 			self.reloadView()
 			self.hideActivityView()
 		}
@@ -160,47 +179,47 @@ class GoDStatsViewController: GoDTableViewController {
 	
 	func reloadView() {
 		
-		self.HPField.integerValue = self.pokemon.hp
-		self.attackField.integerValue = self.pokemon.attack
-		self.defField.integerValue = self.pokemon.defense
-		self.spatkField.integerValue = self.pokemon.specialAttack
-		self.spdefField.integerValue = self.pokemon.specialDefense
-		self.speedField.integerValue = self.pokemon.speed
+		HPField.integerValue = pokemon.hp
+		attackField.integerValue = pokemon.attack
+		defField.integerValue = pokemon.defense
+		spatkField.integerValue = pokemon.specialAttack
+		spdefField.integerValue = pokemon.specialDefense
+		speedField.integerValue = pokemon.speed
 		
-		self.HPEVField.integerValue = self.pokemon.hpYield
-		self.attackEVField.integerValue = self.pokemon.attackYield
-		self.defEVField.integerValue = self.pokemon.defenseYield
-		self.spatkEVField.integerValue = self.pokemon.specialAttackYield
-		self.spdefEVField.integerValue = self.pokemon.specialDefenseYield
-		self.speedEVField.integerValue = self.pokemon.speedYield
+		HPEVField.integerValue = pokemon.hpYield
+		attackEVField.integerValue = pokemon.attackYield
+		defEVField.integerValue = pokemon.defenseYield
+		spatkEVField.integerValue = pokemon.specialAttackYield
+		spdefEVField.integerValue = pokemon.specialDefenseYield
+		speedEVField.integerValue = pokemon.speedYield
 		
-		self.catchRateField.integerValue = self.pokemon.catchRate
-		self.ExpYieldField.integerValue = self.pokemon.baseExp
-		self.happinessField.integerValue = self.pokemon.baseHappiness
+		catchRateField.integerValue = pokemon.catchRate
+		ExpYieldField.integerValue = pokemon.baseExp
+		happinessField.integerValue = pokemon.baseHappiness
 		
-		self.nameField.stringValue = self.pokemon.name.string
-		self.nameIDField.stringValue = self.pokemon.nameID.string
-		self.indexField.integerValue = self.pokemon.index
-		self.hexField.stringValue = self.pokemon.index.hexString()
-		self.startField.stringValue = self.pokemon.startOffset.hexString()
+		nameField.stringValue = pokemon.name.string
+		nameIDField.stringValue = pokemon.nameID.string
+		indexField.integerValue = pokemon.index
+		hexField.stringValue = pokemon.index.hexString()
+		startField.stringValue = pokemon.startOffset.hexString()
 		
-		self.type1PopUp.select(self.pokemon.type1)
-		self.type2PopUp.select(self.pokemon.type2)
-		self.ability1PopUp.select(self.pokemon.ability1)
-		self.ability2PopUp.select(self.pokemon.ability2)
-		self.item1PopUp.select(self.pokemon.heldItem1)
-		self.item2PopUp.select(self.pokemon.heldItem2)
+		type1PopUp.select(pokemon.type1)
+		type2PopUp.select(pokemon.type2)
+		ability1PopUp.select(pokemon.ability1)
+		ability2PopUp.select(pokemon.ability2)
+		item1PopUp.select(pokemon.heldItem1)
+		item2PopUp.select(pokemon.heldItem2)
 		
-		self.ExpRatePopUp.select(self.pokemon.levelUpRate)
-		self.genderPopUp.select(self.pokemon.genderRatio)
+		ExpRatePopUp.select(pokemon.levelUpRate)
+		genderPopUp.select(pokemon.genderRatio)
         
 		let evos = [evo1,evo2,evo3,evo4,evo5]
 		for evo in evos {
 			evo?.reloadData()
 		}
 		
-		self.TMTable.reloadData()
-		self.LUMTable.reloadData()
+		TMTable.reloadData()
+		LUMTable.reloadData()
 		
 	}
 	
@@ -209,7 +228,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.hp = value
+		pokemon.hp = value
 		
 	}
 	
@@ -218,7 +237,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.attack = value
+		pokemon.attack = value
 		
 		
 	}
@@ -228,7 +247,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.defense = value
+		pokemon.defense = value
 		
 		
 	}
@@ -238,7 +257,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.specialAttack = value
+		pokemon.specialAttack = value
 		
 		
 	}
@@ -248,7 +267,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.specialDefense = value
+		pokemon.specialDefense = value
 		
 		
 	}
@@ -258,7 +277,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.speed = value
+		pokemon.speed = value
 		
 		
 	}
@@ -268,7 +287,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.hpYield = value
+		pokemon.hpYield = value
 		
 	}
 	
@@ -277,7 +296,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.attackYield = value
+		pokemon.attackYield = value
 		
 		
 	}
@@ -287,7 +306,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.defenseYield = value
+		pokemon.defenseYield = value
 		
 		
 	}
@@ -297,7 +316,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.specialAttackYield = value
+		pokemon.specialAttackYield = value
 		
 		
 	}
@@ -307,7 +326,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.specialDefenseYield = value
+		pokemon.specialDefenseYield = value
 		
 		
 	}
@@ -317,7 +336,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.speedYield = value
+		pokemon.speedYield = value
 		
 		
 	}
@@ -334,7 +353,7 @@ class GoDStatsViewController: GoDTableViewController {
 				return
 			}
 			if sender.stringValue.length == 0 {
-				sender.stringValue = self.pokemon.name.string
+				sender.stringValue = pokemon.name.string
 				return
 			}
 			
@@ -344,8 +363,8 @@ class GoDStatsViewController: GoDTableViewController {
 			}
 		}
 		
-		self.reloadView()
-		self.table.reloadData()
+		reloadView()
+		table.reloadData()
 	}
 	
 	@IBAction func setNameID(_ sender: NSTextField) {
@@ -353,55 +372,55 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > kMaxStringID ? kMaxStringID : value
 		
-		self.pokemon.nameID = value
+		pokemon.nameID = value
 		
-		self.reloadView()
+		reloadView()
 	}
 	
 	@IBAction func setType1(_ sender: GoDTypePopUpButton) {
-		self.pokemon.type1 = sender.selectedValue
+		pokemon.type1 = sender.selectedValue
 		
 		
 	}
 	
 	@IBAction func setType2(_ sender: GoDTypePopUpButton) {
-		self.pokemon.type2 = sender.selectedValue
+		pokemon.type2 = sender.selectedValue
 		
 		
 	}
 	
 	@IBAction func setAbility1(_ sender: GoDAbilityPopUpButton) {
-		self.pokemon.ability1 = sender.selectedValue
+		pokemon.ability1 = sender.selectedValue
 		
 		
 	}
 	
 	@IBAction func setAbility2(_ sender: GoDAbilityPopUpButton) {
-		self.pokemon.ability2 = sender.selectedValue
+		pokemon.ability2 = sender.selectedValue
 		
 		
 	}
 	
 	@IBAction func setItem1(_ sender: GoDItemPopUpButton) {
-		self.pokemon.heldItem1 = sender.selectedValue
+		pokemon.heldItem1 = sender.selectedValue
 		
 		
 	}
 	
 	@IBAction func setItem2(_ sender: GoDItemPopUpButton) {
-		self.pokemon.heldItem2 = sender.selectedValue
+		pokemon.heldItem2 = sender.selectedValue
 		
 		
 	}
 	
 	@IBAction func setExpRate(_ sender: GoDExpRatePopUpButton) {
-		self.pokemon.levelUpRate = sender.selectedValue
+		pokemon.levelUpRate = sender.selectedValue
 		
 		
 	}
 	
 	@IBAction func setGenderRatio(_ sender: GoDGenderRatioPopUpButton) {
-		self.pokemon.genderRatio = sender.selectedValue
+		pokemon.genderRatio = sender.selectedValue
 		
 	}
 	
@@ -410,7 +429,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.catchRate = value
+		pokemon.catchRate = value
 		
 	}
 	
@@ -419,7 +438,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.baseHappiness = value
+		pokemon.baseHappiness = value
 		
 	}
 	
@@ -428,7 +447,7 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
-		self.pokemon.baseExp = value
+		pokemon.baseExp = value
 		
 	}
 	
@@ -457,32 +476,32 @@ class GoDStatsViewController: GoDTableViewController {
 	@IBAction func save(_ sender: NSButton) {
 		
 		prepareForSave()
-		self.pokemon.save()
+		pokemon.save()
 		
-		let current = self.mons[self.pokemon.index]
-		self.mons[self.pokemon.index] = (self.pokemon.name.string, self.pokemon.type1, current.index)
+		let current = mons[pokemon.index]
+		mons[pokemon.index] = (pokemon.name.string, pokemon.type1, current.index)
 		
-		self.reloadViewWithActivity()
-		self.table.reload(index: current.index)
+		reloadViewWithActivity()
+		table.reloadData()
 		
-		printg("saved updated stats:",self.pokemon.name)
+		printg("saved updated stats:",pokemon.name)
 	}
 	
 	
 	//MARK: - TMs Delegate
-	class TMTableDelegate: NSObject, GoDTableViewDelegate, NSTableViewDataSource {
-		var delegate : GoDStatsViewController!
+	class TMTableDelegate: NSObject, GoDTableViewDelegate, GoDTableViewDataSource {
+		weak var delegate : GoDStatsViewController!
 		
 		var TMs = [XGTMs]()
 		var Tutors = [XGTMs]()
 		
-		var width : NSNumber = 0
+		var width: CGFloat = 0
 		
-		init(delegate: GoDStatsViewController, width: NSNumber) {
+		init(delegate: GoDStatsViewController, width: CGFloat) {
 			super.init()
-			self.TMs = XGTMs.allTMs()
-			for i in 1 ... kNumberOfTutorMoves {
-				Tutors.append(XGTMs.tm(i))
+			TMs = XGTMs.allTMs()
+			for i in 0 ..< kNumberOfTutorMoves {
+				Tutors.append(XGTMs.tm(i + 1))
 			}
 			
 			self.width = width
@@ -500,8 +519,8 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 			
-			let isTM = row < 58
-			let tm = isTM ? XGTMs.tm(row + 1) : XGTMs.tutor(row - 57)
+			let isTM = row < kNumberOfTMsAndHMs
+			let tm = isTM ? XGTMs.tm(row + 1) : XGTMs.tutor(row - kNumberOfTMsAndHMs + 1)
 			
 			let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: self.width)) as! GoDTableCellView
 			
@@ -518,19 +537,18 @@ class GoDStatsViewController: GoDTableViewController {
 			if isTM {
 				cell.alphaValue = delegate.pokemon.learnableTMs[row] ? 1 : 0.5
 			} else {
-				cell.alphaValue = delegate.pokemon.tutorMoves[row - 58] ? 1 : 0.5
+				cell.alphaValue = delegate.pokemon.tutorMoves[row - kNumberOfTMsAndHMs] ? 1 : 0.5
 			}
-			
-			
+
 			return cell
 		}
 		
 		func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
 			if row >= 0 {
-				if row < 58 {
+				if row < kNumberOfTMsAndHMs {
 					delegate.pokemon.learnableTMs[row]  = !delegate.pokemon.learnableTMs[row]
 				} else {
-					delegate.pokemon.tutorMoves[row - 58] = !delegate.pokemon.tutorMoves[row - 58]
+					delegate.pokemon.tutorMoves[row - kNumberOfTMsAndHMs] = !delegate.pokemon.tutorMoves[row - kNumberOfTMsAndHMs]
 				}
 			}
 			tableView.reloadData()
@@ -538,10 +556,10 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		func tableView(tableView: NSTableView, didSelectRow row: Int) {
 			if row >= 0 {
-				if row < 58 {
+				if row < kNumberOfTMsAndHMs {
 					delegate.pokemon.learnableTMs[row]  = !delegate.pokemon.learnableTMs[row]
 				} else {
-					delegate.pokemon.tutorMoves[row - 58] = !delegate.pokemon.tutorMoves[row - 58]
+					delegate.pokemon.tutorMoves[row - kNumberOfTMsAndHMs] = !delegate.pokemon.tutorMoves[row - kNumberOfTMsAndHMs]
 				}
 			}
 			tableView.reloadData()
@@ -551,21 +569,21 @@ class GoDStatsViewController: GoDTableViewController {
 			self.tableView(tableView: tableView, didSelectRow: row)
 			return false
 		}
+
+		func tableView(_ tableView: GoDTableView, didSearchForText text: String) {}
+		func searchBarBehaviourForTableView(_ tableView: GoDTableView) -> GoDSearchBarBehaviour {
+			return .none
+		}
 	}
 	
 	//MARK: - Level Up Moves Delegate
-	class LUMTableDelegate: NSObject, GoDTableViewDelegate, NSTableViewDataSource {
+	class LUMTableDelegate: NSObject, GoDTableViewDelegate, GoDTableViewDataSource {
 
-		var delegate : GoDStatsViewController!
+		weak var delegate: GoDStatsViewController!
 		
-		var width : NSNumber = 0
-		
-		init(delegate: GoDStatsViewController, width: NSNumber) {
+		init(delegate: GoDStatsViewController) {
 			super.init()
-			
-			self.width = width
 			self.delegate = delegate
-			
 		}
 		
 		func numberOfRows(in tableView: NSTableView) -> Int {
@@ -597,6 +615,11 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
 			return false
+		}
+
+		func tableView(_ tableView: GoDTableView, didSearchForText text: String) {}
+		func searchBarBehaviourForTableView(_ tableView: GoDTableView) -> GoDSearchBarBehaviour {
+			return .none
 		}
 	}
 	

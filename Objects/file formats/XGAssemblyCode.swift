@@ -11,7 +11,8 @@ import Foundation
 let kColosseumDolToRamOffsetDifference = 0x3000
 let kColosseumDolToISOOffsetDifference = 0x1EC00
 
-let kPBRDolToRamOffsetDifference = 0x43A0
+let kPBRDolToRAMOffsetDifference = 0x43A0
+let kPBRDolDataToRAMOffsetDifference = 0x3F00
 
 let kRELtoRAMOffsetDifference = 0xb18dc0 // add this value to a common_rel offset to get it's offset in RAM
 let kDOLtoRAMOffsetDifference = 0x30a0   // add this value to a start.dol offset to get its offset in RAM

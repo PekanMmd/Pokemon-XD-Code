@@ -17,13 +17,13 @@ class GoDGiftViewController: GoDTableViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		self.title = "Gift Pokemon Editor"
+		title = "Gift Pokemon Editor"
 		
 		loadGifts()
 		pokemonView.delegate = self
 		
-		self.table.reloadData()
-		self.table.tableView.intercellSpacing = NSSize(width: 0, height: 1)
+		table.reloadData()
+		table.setShouldUseIntercellSpacing(to: true)
 		
 	}
 	
@@ -51,7 +51,7 @@ class GoDGiftViewController: GoDTableViewController {
 		}
 	}
 	
-	override func widthForTable() -> NSNumber {
+	override func widthForTable() -> CGFloat {
 		return 200
 	}
 	
@@ -65,7 +65,7 @@ class GoDGiftViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: widthForTable())) as! GoDTableCellView
 		
 		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		

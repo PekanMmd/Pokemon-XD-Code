@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -161,7 +161,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="PBR Tool" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>
@@ -178,10 +178,10 @@
             </objects>
             <point key="canvasLocation" x="75" y="250"/>
         </scene>
-        <!--GoD Tool Home-->
+        <!--PBR Tool Home-->
         <scene sceneID="KRR-bE-HIG">
             <objects>
-                <viewController title="GoD Tool Home" showSeguePresentationStyle="single" id="m7H-cr-2us" customClass="GoDHomeViewController" customModule="PBR_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="PBR Tool Home" showSeguePresentationStyle="single" id="m7H-cr-2us" customClass="GoDHomeViewController" customModule="PBR_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" autoresizesSubviews="NO" id="EVf-VK-gOT">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -241,11 +241,20 @@
                         <segue destination="BwZ-V1-R5n" kind="show" identifier="toTypeVC" id="c1n-m2-cGy"/>
                         <segue destination="fXj-SM-0bR" kind="show" identifier="toMessageVC" id="HCv-BF-sY4"/>
                         <segue destination="30l-3B-1Wn" kind="show" identifier="toISOVC" id="OBl-zD-LtM"/>
+                        <segue destination="833-jc-7gZ" kind="modal" identifier="toPatchVC" id="WSO-2H-kdJ"/>
                     </connections>
                 </viewController>
                 <customObject id="Ql1-wz-kzW" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="785"/>
+        </scene>
+        <!--Patches-->
+        <scene sceneID="T2F-F8-6ia">
+            <objects>
+                <controllerPlaceholder storyboardName="Patches" id="833-jc-7gZ" sceneMemberID="viewController"/>
+                <customObject id="z8o-AP-tsq" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="553" y="1205"/>
         </scene>
         <!--Help-->
         <scene sceneID="aeD-pQ-RIr">

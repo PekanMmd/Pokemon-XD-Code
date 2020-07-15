@@ -6,7 +6,11 @@
 //  Copyright © 2015 StarsMmd. All rights reserved.
 //
 //
-XGUtility.saveMewTutorMovePairs()
+
+let itemslist = XGUtility.documentItemsByLocation()
+XGUtility.saveString(itemslist, toFile: .nameAndFolder("XG Items by location.txt", .Documents))
+
+//XGUtility.saveMewTutorMovePairs()
 //print((XGDemoStarterPokemon(index: 1).startOffset + kDOLtoRAMOffsetDifference + 0x92).hexString())
 
 //XGDecks.DeckDarkPokemon.allDeckPokemon.forEach { (mon) in

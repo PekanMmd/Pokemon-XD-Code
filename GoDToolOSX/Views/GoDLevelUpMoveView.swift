@@ -15,7 +15,7 @@ class GoDLevelUpMoveView: NSView {
 	var movePopUp = GoDMovePopUpButton()
 	var levelPopUp = GoDLevelPopUpButton()
 	
-	var delegate : GoDStatsViewController! {
+	weak var delegate : GoDStatsViewController! {
 		didSet {
 			self.reloadData()
 		}
@@ -78,6 +78,4 @@ class GoDLevelUpMoveView: NSView {
 		}
 		
 	}
-
-	
 }

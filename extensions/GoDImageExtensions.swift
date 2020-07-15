@@ -14,7 +14,7 @@ extension XGFiles {
 			if !self.exists {
 				printg("Image file doesn't exist:", self.path)
 			}
-			return NSImage(contentsOfFile: self.path)!
+			return NSImage(contentsOfFile: self.path) ?? NSImage()
 		}
 	}
 }

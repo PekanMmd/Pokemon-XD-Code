@@ -54,9 +54,9 @@ extension Sequence where Iterator.Element == Int {
 	}
 }
 
-extension Array where Element == Int {
+extension Array where Element: Equatable {
 	
-	mutating func addUnique(_ new: Int) {
+	mutating func addUnique(_ new: Element) {
 		if !self.contains(new) {
 			self.append(new)
 		}
@@ -90,12 +90,6 @@ extension Array where Element == Bool {
 }
 
 extension Array where Element == String {
-	
-	mutating func addUnique(_ new: String) {
-		if !self.contains(new) {
-			self.append(new)
-		}
-	}
 	
 	func println() {
 		for s in self {
@@ -333,15 +327,15 @@ extension String {
 	}
 	
 	func removeFileExtensions() -> String {
-		let extensionIndex = self.firstIndex(of: ".") ?? self.endIndex
+		let extensionIndex = firstIndex(of: ".") ?? endIndex
 		
-		return self.substring(to: extensionIndex)
+		return substring(from: startIndex, to: extensionIndex)
 	}
 	
 	var fileExtensions : String {
-		let extensionIndex = self.firstIndex(of: ".") ?? self.endIndex
+		let extensionIndex = firstIndex(of: ".") ?? endIndex
 		
-		return self.substring(from: extensionIndex)
+		return substring(from: extensionIndex, to: endIndex)
 	}
 	
 	var cppEnum : String {
@@ -512,9 +506,14 @@ extension String {
 	var length : Int {
 		return self.count
 	}
-	
+
+	/// exludes character at specified index
+	func substring(from: String.Index, to: String.Index) -> String {
+		return String(self[from..<to])
+	}
+
+	/// includes from, excludes to
 	func substring(from: Int, to: Int) -> String {
-		// includes from, excludes to
 		
 		if to <= from {
 			return ""

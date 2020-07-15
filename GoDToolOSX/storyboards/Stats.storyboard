@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="7OK-Av-0ny">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="7OK-Av-0ny">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
-        <plugIn identifier="com.apple.imagekit.ibplugin" version="15505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+        <plugIn identifier="com.apple.imagekit.ibplugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -453,7 +453,7 @@
                                     <constraint firstItem="o8U-vg-TsN" firstAttribute="top" secondItem="ceU-6t-9fq" secondAttribute="bottom" constant="10" id="pfq-5f-FPR"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="types" translatesAutoresizingMaskIntoConstraints="NO" id="SWi-SW-twQ" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
+                            <customView identifier="abilities" translatesAutoresizingMaskIntoConstraints="NO" id="SWi-SW-twQ" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="210" y="130" width="210" height="70"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LV1-6l-Pyu">
@@ -527,7 +527,7 @@
                                     <constraint firstItem="Zza-HJ-RPx" firstAttribute="leading" secondItem="wQr-pY-CfQ" secondAttribute="trailing" id="y8Q-xK-iuE"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="types" translatesAutoresizingMaskIntoConstraints="NO" id="g4P-a5-ceI" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
+                            <customView identifier="wilditems" translatesAutoresizingMaskIntoConstraints="NO" id="g4P-a5-ceI" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
                                 <rect key="frame" x="210" y="55" width="210" height="70"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FVG-RE-CQZ">

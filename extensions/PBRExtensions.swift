@@ -217,7 +217,7 @@ class XGUtility {
 		}
 
 		for filename in
-			["menu_btutorial",
+			["mes_common", "menu_btutorial",
 			(region == .JP ? "menu_fight_s" : "mes_fight_e"),
 			(region == .JP ? "menu_name2" : "mes_name_e")] {
 				if XGFiles.fsys(filename).exists {

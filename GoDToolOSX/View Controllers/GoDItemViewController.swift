@@ -35,6 +35,25 @@ class GoDItemViewController: GoDTableViewController {
 	
 	@IBOutlet var tmButton: GoDMovePopUpButton!
 	@IBOutlet var tmLabel: NSTextField!
+
+	var currentItem = XGItem(index: 0) {
+		didSet {
+			self.reloadViewWithActivity()
+		}
+	}
+
+	var filteredItems = [XGItems]()
+	var allItems = {
+		XGItems.allItems()
+	}()
+
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		title = "Item Editor"
+		filteredItems = allItems
+		table.setShouldUseIntercellSpacing(to: true)
+		table.reloadData()
+	}
 	
 	
 	@IBAction func setPocket(_ sender: Any) {
@@ -119,27 +138,14 @@ class GoDItemViewController: GoDTableViewController {
 				tm.replaceWithMove(tmButton.selectedValue)
 			}
 		}
-		self.reloadViewWithActivity()
+		reloadViewWithActivity()
 		if nameUpdate {
-			self.table.reloadData()
+			table.reloadData()
 		}
-	}
-	
-	var currentItem = XGItem(index: 0) {
-		didSet {
-			self.reloadViewWithActivity()
-		}
-	}
-	
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		// Do view setup here.
-		
-		self.title = "Item Editor"
 	}
 	
 	func reloadViewWithActivity() {
-		self.showActivityView {
+		showActivityView {
 			self.reloadView()
 			self.hideActivityView()
 		}
@@ -186,7 +192,7 @@ class GoDItemViewController: GoDTableViewController {
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
-		return kNumberOfItems
+		return filteredItems.count
 	}
 	
 	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -195,9 +201,9 @@ class GoDItemViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let item = XGItems.item(row)
+		let item = filteredItems[row]
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), image: nil, fontSize: 12, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), image: nil, fontSize: 12, width: widthForTable())) as! GoDTableCellView
 
 		var colour = GoDDesign.colourWhite()
 		switch item.data.bagSlot {
@@ -238,8 +244,28 @@ class GoDItemViewController: GoDTableViewController {
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
 		super.tableView(tableView, didSelectRow: row)
 		if row >= 0 {
-			self.currentItem = XGItem(index: row)
+			let item = filteredItems[row]
+			self.currentItem = XGItem(index: item.index)
 		}
 	}
-	
+
+	override func searchBarBehaviourForTableView(_ tableView: GoDTableView) -> GoDSearchBarBehaviour {
+		.onTextChange
+	}
+
+	override func tableView(_ tableView: GoDTableView, didSearchForText text: String) {
+
+		defer {
+			tableView.reloadData()
+		}
+
+		guard !text.isEmpty else {
+			filteredItems = allItems
+			return
+		}
+
+		filteredItems = allItems.filter({ (item) -> Bool in
+			item.name.string.simplified.contains(text.simplified)
+		})
+	}
 }

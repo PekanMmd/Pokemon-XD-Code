@@ -2064,6 +2064,48 @@ extension XGUtility {
 		
 		return locations
 	}
+
+	class func documentItemsByLocation() -> String {
+		var locations = [String: [XGItems]]()
+
+		for i in 0 ..< CommonIndexes.NumberTreasureBoxes.value {
+			let treasure = XGTreasure(index: i)
+			if treasure.item.index > 0 {
+				let map = treasure.room.map.name
+				var items = locations[map] ?? [XGItems]()
+				items.addUnique(treasure.item)
+				locations[map] = items
+			}
+		}
+
+		for s in XGFolders.Scripts.files where s.fileType == .scd {
+			let script = s.scriptData
+			let map = (XGMaps(rawValue: s.fileName.substring(from: 0, to: 2)) ?? .Unknown).name
+			var items = locations[map] ?? [XGItems]()
+
+			for item in script.getItems() where item.index > 0 {
+				items.addUnique(item)
+			}
+
+			locations[map] = items
+		}
+
+		var text = "XD items by location\n"
+
+		let keys = locations.keys.sorted()
+		for key in keys {
+			if let items = locations[key] {
+				text += "\n\n" + key + ":"
+				for item in items.sorted(by: { (i1, i2) -> Bool in
+					i1.index < i2.index
+				}) {
+					text += "\n  " + item.name.string
+				}
+			}
+		}
+
+		return text
+	}
 	
 	class func getTMLocations() -> [(tm:XGTMs, locations:[String])] {
 		let locations = getItemLocations()

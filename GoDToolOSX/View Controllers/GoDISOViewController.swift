@@ -166,10 +166,9 @@ class GoDISOViewController: GoDTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "ISO Explorer"
-		self.table.setBackgroundColour(GoDDesign.colourClear())
-		self.table.tableView.setBackgroundColour(GoDDesign.colourClear())
-		self.filesText.setBackgroundColour(GoDDesign.colourClear())
+        title = "ISO Explorer"
+		table.setBackgroundColour(GoDDesign.colourClear())
+		filesText.setBackgroundColour(GoDDesign.colourClear())
 		setMetaData()
     }
 	
@@ -216,7 +215,7 @@ class GoDISOViewController: GoDTableViewController {
 		
 		let file = allFileNames[row]
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourWhite(), fontSize: 16, width: self.table.width)) as! GoDTableCellView
+		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourWhite(), fontSize: 16, width: widthForTable())) as! GoDTableCellView
 		
 		cell.setTitle(file)
 		cell.setBackgroundColour(GoDDesign.colourWhite())

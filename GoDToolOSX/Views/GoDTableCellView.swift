@@ -25,10 +25,10 @@ class GoDTableCellView: NSImageView {
         super.draw(dirtyRect)
     }
 	
-	init(title: String, colour: NSColor, image: NSImage? = nil, background: NSImage? = nil, fontSize: CGFloat, width: NSNumber) {
+	init(title: String, colour: NSColor, image: NSImage? = nil, background: NSImage? = nil, fontSize: CGFloat, width: CGFloat) {
 		super.init(frame: .zero)
-		
-		addConstraintWidth(view: self, width: width)
+
+		pinWidth(as: width)
 		
 		identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 		

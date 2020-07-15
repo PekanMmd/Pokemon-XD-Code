@@ -61,6 +61,8 @@ class XGType: NSObject, XGIndexedValue, Codable {
 		}
 		
 		data.save()
+
+		PBRTypeManager.updateTypeMatchupDolData(allowSizeIncrease: false)
 	}
 }
 
