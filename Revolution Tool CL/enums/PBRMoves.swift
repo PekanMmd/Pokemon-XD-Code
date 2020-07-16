@@ -145,7 +145,7 @@ extension XGMoves: Codable {
 
 extension XGMoves: XGEnumerable {
 	var enumerableName: String {
-		return name.string.spaceToLength(20)
+		return name.unformattedString.spaceToLength(20)
 	}
 	
 	var enumerableValue: String? {

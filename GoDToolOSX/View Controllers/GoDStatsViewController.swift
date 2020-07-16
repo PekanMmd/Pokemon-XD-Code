@@ -56,16 +56,20 @@ class GoDStatsViewController: GoDTableViewController {
 	@IBOutlet var TMsContainer: GoDContainerView!
 	@IBOutlet var LUMContainer: GoDContainerView!
 
-	lazy var tmdelegate = TMTableDelegate(delegate: self, width: 100)
+	lazy var tmdelegate = TMTableDelegate(delegate: self, width: 150)
 	lazy var lumdelegate = LUMTableDelegate(delegate: self)
 	
 	var TMTable: GoDTableView!
 	var LUMTable: GoDTableView!
 	
+	@IBOutlet weak var heightLabel: NSTextField!
+	@IBOutlet weak var heightField: NSTextField!
+	@IBOutlet weak var weightLabel: NSTextField!
+	@IBOutlet weak var weightField: NSTextField!
 
 	var filteredMons = [(name: String, type1: XGMoveTypes, index: Int)]()
 	var mons = allPokemonArray().map { (mon) -> (name: String, type1 : XGMoveTypes, index : Int) in
-		return (mon.name.string, mon.type1, mon.index)
+		return (mon.name.unformattedString, mon.type1, mon.index)
 	}
 	
 	var pokemon = XGPokemonStats(index: 0) {
@@ -85,13 +89,13 @@ class GoDStatsViewController: GoDTableViewController {
 			evos[i]!.delegate = self
 		}
 
-		TMTable = GoDTableView(width: 100, delegate: tmdelegate, dataSource: tmdelegate)
+		TMTable = GoDTableView(width: 150, delegate: tmdelegate, dataSource: tmdelegate)
 		TMTable.setShouldUseIntercellSpacing(to: true)
 		TMsContainer.addSubview(TMTable)
 		TMTable.pinTop(to: TMsContainer, padding: 3)
 		TMTable.pinBottom(to: TMsContainer, padding: 3)
 		TMTable.pinCenterX(to: TMsContainer)
-		TMTable.pinWidth(as: 100)
+		TMTable.pinWidth(as: 150)
 
 		LUMTable = GoDTableView(width: 200, delegate: lumdelegate, dataSource: lumdelegate)
 		LUMTable.setShouldUseIntercellSpacing(to: true)
@@ -104,6 +108,11 @@ class GoDStatsViewController: GoDTableViewController {
 		for view in [HPField, attackField, defField, spatkField, spdefField, speedField] {
 			view?.backgroundColor = NSColor.controlBackgroundColor
 			view?.textColor = NSColor.controlTextColor
+		}
+
+		if game == .Colosseum {
+			heightLabel.stringValue = "Height (ft)"
+			weightLabel.stringValue = "Weight (lbs)"
 		}
 
 		filteredMons = mons
@@ -185,7 +194,10 @@ class GoDStatsViewController: GoDTableViewController {
 		spatkField.integerValue = pokemon.specialAttack
 		spdefField.integerValue = pokemon.specialDefense
 		speedField.integerValue = pokemon.speed
-		
+
+		heightField.doubleValue = pokemon.height
+		weightField.doubleValue = pokemon.weight
+
 		HPEVField.integerValue = pokemon.hpYield
 		attackEVField.integerValue = pokemon.attackYield
 		defEVField.integerValue = pokemon.defenseYield
@@ -197,7 +209,7 @@ class GoDStatsViewController: GoDTableViewController {
 		ExpYieldField.integerValue = pokemon.baseExp
 		happinessField.integerValue = pokemon.baseHappiness
 		
-		nameField.stringValue = pokemon.name.string
+		nameField.stringValue = pokemon.name.unformattedString
 		nameIDField.stringValue = pokemon.nameID.string
 		indexField.integerValue = pokemon.index
 		hexField.stringValue = pokemon.index.hexString()
@@ -220,16 +232,32 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		TMTable.reloadData()
 		LUMTable.reloadData()
-		
 	}
-	
+
+	@IBAction func setHeight(_ sender: NSTextField) {
+		let max = Double(0xFFFF) / 10
+		var value = sender.doubleValue
+		value = value < 0 ? 0 : value
+		value = value > max ? max : value
+
+		pokemon.height = value
+	}
+
+	@IBAction func setWeight(_ sender: NSTextField) {
+		let max = Double(0xFFFF) / 10
+		var value = sender.doubleValue
+		value = value < 0 ? 0 : value
+		value = value > max ? max : value
+
+		pokemon.weight = value
+	}
+
 	@IBAction func setHP(_ sender: NSTextField) {
 		var value = sender.integerValue
 		value = value < 0 ? 0 : value
 		value = value > 255 ? 255 : value
 		
 		pokemon.hp = value
-		
 	}
 	
 	@IBAction func setAtk(_ sender: NSTextField) {
@@ -238,8 +266,6 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value > 255 ? 255 : value
 		
 		pokemon.attack = value
-		
-		
 	}
 	
 	@IBAction func setDef(_ sender: NSTextField) {
@@ -248,8 +274,6 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value > 255 ? 255 : value
 		
 		pokemon.defense = value
-		
-		
 	}
 	
 	@IBAction func setSpAtk(_ sender: NSTextField) {
@@ -258,8 +282,6 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value > 255 ? 255 : value
 		
 		pokemon.specialAttack = value
-		
-		
 	}
 	
 	@IBAction func setSpDef(_ sender: NSTextField) {
@@ -268,8 +290,6 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value > 255 ? 255 : value
 		
 		pokemon.specialDefense = value
-		
-		
 	}
 	
 	@IBAction func setSpeed(_ sender: NSTextField) {
@@ -278,67 +298,60 @@ class GoDStatsViewController: GoDTableViewController {
 		value = value > 255 ? 255 : value
 		
 		pokemon.speed = value
-		
-		
 	}
 	
 	@IBAction func setHPEV(_ sender: NSTextField) {
+		let max = game == .PBR ? 3 : 0xFF
 		var value = sender.integerValue
 		value = value < 0 ? 0 : value
-		value = value > 255 ? 255 : value
+		value = value > max ? max : value
 		
 		pokemon.hpYield = value
-		
 	}
 	
 	@IBAction func setAtkEV(_ sender: NSTextField) {
+		let max = game == .PBR ? 3 : 0xFF
 		var value = sender.integerValue
 		value = value < 0 ? 0 : value
-		value = value > 255 ? 255 : value
+		value = value > max ? max : value
 		
 		pokemon.attackYield = value
-		
-		
 	}
 	
 	@IBAction func setDefEV(_ sender: NSTextField) {
+		let max = game == .PBR ? 3 : 0xFF
 		var value = sender.integerValue
 		value = value < 0 ? 0 : value
-		value = value > 255 ? 255 : value
+		value = value > max ? max : value
 		
 		pokemon.defenseYield = value
-		
-		
 	}
 	
 	@IBAction func setSpAtkEV(_ sender: NSTextField) {
+		let max = game == .PBR ? 3 : 0xFF
 		var value = sender.integerValue
 		value = value < 0 ? 0 : value
-		value = value > 255 ? 255 : value
+		value = value > max ? max : value
 		
 		pokemon.specialAttackYield = value
-		
-		
 	}
 	
 	@IBAction func setSpDefEV(_ sender: NSTextField) {
+		let max = game == .PBR ? 3 : 0xFF
 		var value = sender.integerValue
 		value = value < 0 ? 0 : value
-		value = value > 255 ? 255 : value
+		value = value > max ? max : value
 		
 		pokemon.specialDefenseYield = value
-		
-		
 	}
 	
 	@IBAction func setSpeedEV(_ sender: NSTextField) {
+		let max = game == .PBR ? 3 : 0xFF
 		var value = sender.integerValue
 		value = value < 0 ? 0 : value
-		value = value > 255 ? 255 : value
+		value = value > max ? max : value
 		
 		pokemon.speedYield = value
-		
-		
 	}
 	
 	@IBAction func setName(_ sender: NSTextField) {
@@ -352,13 +365,23 @@ class GoDStatsViewController: GoDTableViewController {
 			if pokemon.nameID == 0 {
 				return
 			}
+
 			if sender.stringValue.length == 0 {
-				sender.stringValue = pokemon.name.string
+				sender.stringValue = pokemon.name.unformattedString
 				return
 			}
-			
-			let string = XGString(string: sender.stringValue, file: XGFiles.common_rel, sid: pokemon.nameID)
-			if !XGFiles.common_rel.stringTable.addString(string, increaseSize: true, save: true) {
+
+			var nameText = ""
+			if game == .PBR {
+				for char in XGSpecialCharacters.generalFormattingChars {
+					nameText += char.string
+				}
+			}
+			nameText += sender.stringValue
+
+			let string = XGString(string: nameText, file: XGFiles.commonStringTableFile, sid: pokemon.nameID)
+			let increaseSize = game == .PBR
+			if !XGFiles.commonStringTableFile.stringTable.addString(string, increaseSize: increaseSize, save: true) {
 				printg("Failed to set pokemon name:", sender.stringValue)
 			}
 		}
@@ -379,49 +402,34 @@ class GoDStatsViewController: GoDTableViewController {
 	
 	@IBAction func setType1(_ sender: GoDTypePopUpButton) {
 		pokemon.type1 = sender.selectedValue
-		
-		
 	}
 	
 	@IBAction func setType2(_ sender: GoDTypePopUpButton) {
 		pokemon.type2 = sender.selectedValue
-		
-		
 	}
 	
 	@IBAction func setAbility1(_ sender: GoDAbilityPopUpButton) {
 		pokemon.ability1 = sender.selectedValue
-		
-		
 	}
 	
 	@IBAction func setAbility2(_ sender: GoDAbilityPopUpButton) {
 		pokemon.ability2 = sender.selectedValue
-		
-		
 	}
 	
 	@IBAction func setItem1(_ sender: GoDItemPopUpButton) {
 		pokemon.heldItem1 = sender.selectedValue
-		
-		
 	}
 	
 	@IBAction func setItem2(_ sender: GoDItemPopUpButton) {
 		pokemon.heldItem2 = sender.selectedValue
-		
-		
 	}
 	
 	@IBAction func setExpRate(_ sender: GoDExpRatePopUpButton) {
 		pokemon.levelUpRate = sender.selectedValue
-		
-		
 	}
 	
 	@IBAction func setGenderRatio(_ sender: GoDGenderRatioPopUpButton) {
 		pokemon.genderRatio = sender.selectedValue
-		
 	}
 	
 	@IBAction func setCatchRate(_ sender: NSTextField) {
@@ -469,7 +477,8 @@ class GoDStatsViewController: GoDTableViewController {
 		setSpAtkEV(spatkEVField)
 		setSpDefEV(spdefEVField)
 		setNameID(nameIDField)
-		
+		setHeight(heightField)
+		setWeight(weightField)
 	}
 	
 	
@@ -479,7 +488,7 @@ class GoDStatsViewController: GoDTableViewController {
 		pokemon.save()
 		
 		let current = mons[pokemon.index]
-		mons[pokemon.index] = (pokemon.name.string, pokemon.type1, current.index)
+		mons[pokemon.index] = (pokemon.name.unformattedString, pokemon.type1, current.index)
 		
 		reloadViewWithActivity()
 		table.reloadData()
@@ -490,20 +499,12 @@ class GoDStatsViewController: GoDTableViewController {
 	
 	//MARK: - TMs Delegate
 	class TMTableDelegate: NSObject, GoDTableViewDelegate, GoDTableViewDataSource {
+		
 		weak var delegate : GoDStatsViewController!
-		
-		var TMs = [XGTMs]()
-		var Tutors = [XGTMs]()
-		
 		var width: CGFloat = 0
 		
 		init(delegate: GoDStatsViewController, width: CGFloat) {
 			super.init()
-			TMs = XGTMs.allTMs()
-			for i in 0 ..< kNumberOfTutorMoves {
-				Tutors.append(XGTMs.tm(i + 1))
-			}
-			
 			self.width = width
 			self.delegate = delegate
 			
@@ -528,7 +529,7 @@ class GoDStatsViewController: GoDTableViewController {
 			if tm.move.isShadowMove {
 				cell.setBackgroundImage(XGMoveTypes.shadowImage)
 			}
-			cell.setTitle(tm.move.name.string)
+			cell.setTitle(tm.move.name.unformattedString)
 			cell.addBorder(colour: GoDDesign.colourBlack(), width: 1)
 			
 			cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")

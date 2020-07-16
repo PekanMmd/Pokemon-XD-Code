@@ -11,7 +11,7 @@ let itemslist = XGUtility.documentItemsByLocation()
 XGUtility.saveString(itemslist, toFile: .nameAndFolder("XG Items by location.txt", .Documents))
 
 //XGUtility.saveMewTutorMovePairs()
-//print((XGDemoStarterPokemon(index: 1).startOffset + kDOLtoRAMOffsetDifference + 0x92).hexString())
+//print((XGDemoStarterPokemon(index: 1).startOffset + kDolToRAMOffsetDifference + 0x92).hexString())
 
 //XGDecks.DeckDarkPokemon.allDeckPokemon.forEach { (mon) in
 //    if mon.data.species.catchRate != mon.data.shadowCatchRate {

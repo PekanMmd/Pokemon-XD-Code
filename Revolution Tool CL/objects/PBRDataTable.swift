@@ -283,7 +283,7 @@ class PBRDataTable : CustomStringConvertible {
 	}
 	
 	func save() {
-		self.data().save()
+		data().save()
 	}
 	
 	class func tableWithID(_ id: Int) -> PBRDataTable? {

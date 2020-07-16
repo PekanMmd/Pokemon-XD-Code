@@ -28,7 +28,7 @@ let kPokemonGenRandomOffset = 0x1F // If value is set to 1 then the pokemon is g
 let kPokemonshinynessOffset = 0x1C
 let kPokemonPriority2Offset	= 0x1F
 
-let isShinyAvailable = XGFiles.dol.data!.getWordAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference) == 0xa0db001c
+let isShinyAvailable = XGFiles.dol.data!.getWordAtOffset(0x28bb30 - kDolToRAMOffsetDifference) == 0xa0db001c
 
 let kSizeOfShadowData		= 0x18
 

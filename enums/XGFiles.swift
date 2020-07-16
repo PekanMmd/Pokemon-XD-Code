@@ -429,7 +429,10 @@ indirect enum XGFiles {
 		}
 		return .unknown
 	}
-	
+
+	static var commonStringTableFile: XGFiles {
+		.common_rel
+	}
 }
 
 

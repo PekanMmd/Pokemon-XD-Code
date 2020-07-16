@@ -7,10 +7,10 @@
 
 import Foundation
 
-let kPlusleOffset			= game == .Colosseum ? 0x12D9C8 : 0x1525b4 - kDOLtoRAMOffsetDifference
-let kHoohOffset				= game == .Colosseum ? 0x12D8E4 : 0x1524d0 - kDOLtoRAMOffsetDifference
-let kCelebiOffset			= game == .Colosseum ? 0x12D6B4 : 0x1522a0 - kDOLtoRAMOffsetDifference
-let kPikachuOffset			= game == .Colosseum ? 0x12D7C4 : 0x1523b0 - kDOLtoRAMOffsetDifference
+let kPlusleOffset			= game == .Colosseum ? 0x12D9C8 : 0x1525b4 - kDolToRAMOffsetDifference
+let kHoohOffset				= game == .Colosseum ? 0x12D8E4 : 0x1524d0 - kDolToRAMOffsetDifference
+let kCelebiOffset			= game == .Colosseum ? 0x12D6B4 : 0x1522a0 - kDolToRAMOffsetDifference
+let kPikachuOffset			= game == .Colosseum ? 0x12D7C4 : 0x1523b0 - kDolToRAMOffsetDifference
 
 let kDistroPokemonSpeciesOffset		=  0x02
 let kDistroPokemonLevelOffset		=  0x07

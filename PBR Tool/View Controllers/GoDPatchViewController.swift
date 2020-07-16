@@ -16,15 +16,21 @@ class GoDPatchViewController: GoDTableViewController {
     }
 	
 	let patches = [
-		"Move type matchup table to location with more space"
+		"Move type matchup table to location with more space",
+		"Disable rental pass checksums (prevents bad eggs)"
 	]
 
 	var funcs = [
-		#selector(moveTypeMatchupsTable)
+		#selector(moveTypeMatchupsTable),
+		#selector(disableRentalPassChecksums)
 	]
 	
 	@objc func moveTypeMatchupsTable() {
 		PBRDolPatcher.moveTypeMatchupsTableToPassValidationFunction()
+	}
+
+	@objc func disableRentalPassChecksums() {
+		PBRDolPatcher.disableRentalPassChecksums()
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {

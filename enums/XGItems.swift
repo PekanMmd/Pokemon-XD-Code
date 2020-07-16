@@ -211,6 +211,7 @@ extension XGItems: XGEnumerable, Equatable {
 	static var allValues: [XGItems] {
 		return XGItems.allItems()
 	}
+	
 	public static func != (lhs: Self, rhs: Self) -> Bool {
 		lhs.enumerableValue != rhs.enumerableValue
 	}

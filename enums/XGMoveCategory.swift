@@ -29,7 +29,6 @@ enum XGMoveCategories : Int, Codable, CaseIterable {
 		return XGMoveCategories(rawValue: self.rawValue + 1) ?? XGMoveCategories(rawValue: 0)!
 		
 	}
-	
 }
 
 extension XGMoveCategories: XGEnumerable {

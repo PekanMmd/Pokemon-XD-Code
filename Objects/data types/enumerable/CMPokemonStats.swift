@@ -16,6 +16,8 @@ let kCatchRateOffset		= 0x01
 let kGenderRatioOffset		= 0x02
 let kBaseEXPOffset			= 0x07
 let kBaseHappinessOffset	= 0x09
+let kHeightOffset			= 0x0A
+let kWeightOffset			= 0x0C
 let kNationalIndexOffset	= 0x0E
 
 let kType1Offset			= 0x30
@@ -58,6 +60,9 @@ final class XGPokemonStats: NSObject, Codable {
 	var cryIndex		= 0x0
 	var modelIndex		= 0x0
 	var faceIndex		= 0x0
+
+	var height			= 0.0 // feet
+	var weight 			= 0.0 // pounds
 	
 	var levelUpRate		= XGExpRate.standard
 	var genderRatio     = XGGenderRatios.maleOnly
@@ -153,6 +158,9 @@ final class XGPokemonStats: NSObject, Codable {
 		self.cryIndex		= rel.get2BytesAtOffset(startOffset + kPokemonCryIndexOffset)
 		self.modelIndex		= rel.get2BytesAtOffset(startOffset + kPokemonModelIndexOffset)
 		self.faceIndex		= rel.get2BytesAtOffset(startOffset + kPokemonFaceIndexOffset)
+
+		height = Double(rel.get2BytesAtOffset(startOffset + kHeightOffset)) / 10
+		weight = Double(rel.get2BytesAtOffset(startOffset + kWeightOffset)) / 10
 		
 		self.levelUpRate	= XGExpRate(rawValue: rel.getByteAtOffset(startOffset + kEXPRateOffset)) ?? .standard
 		self.genderRatio	= XGGenderRatios(rawValue: rel.getByteAtOffset(startOffset + kGenderRatioOffset)) ?? .maleOnly
@@ -227,6 +235,9 @@ final class XGPokemonStats: NSObject, Codable {
 		rel.replace2BytesAtOffset(startOffset + kPokemonCryIndexOffset, withBytes: cryIndex)
 		rel.replace2BytesAtOffset(startOffset + kPokemonModelIndexOffset, withBytes: modelIndex)
 		rel.replace2BytesAtOffset(startOffset + kPokemonFaceIndexOffset, withBytes: faceIndex)
+
+		rel.replace2BytesAtOffset(startOffset + kHeightOffset, withBytes: Int(height * 10))
+		rel.replace2BytesAtOffset(startOffset + kWeightOffset, withBytes: Int(weight * 10))
 		
 		rel.replaceByteAtOffset(startOffset + kEXPRateOffset, withByte: levelUpRate.rawValue)
 		rel.replaceByteAtOffset(startOffset + kGenderRatioOffset, withByte: genderRatio.rawValue)

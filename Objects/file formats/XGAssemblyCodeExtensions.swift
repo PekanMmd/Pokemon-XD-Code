@@ -107,7 +107,7 @@ extension XGAssembly {
 		if RAMOffset > kRELtoRAMOffsetDifference {
 			replaceRELASM(startOffset: RAMOffset - kRELtoRAMOffsetDifference, newASM: asm)
 		} else {
-			replaceASM(startOffset: RAMOffset - kDOLtoRAMOffsetDifference, newASM: asm)
+			replaceASM(startOffset: RAMOffset - kDolToRAMOffsetDifference, newASM: asm)
 		}
 	}
 
@@ -143,7 +143,7 @@ extension XGAssembly {
 				// shadow move check function branches to hm flag
 				XGAssembly.replaceASM(startOffset: 0x13d048, newASM: [.bl(checkShadowMove)])
 
-				replaceASM(startOffset: shadowPPCodeStart - kDOLtoRAMOffsetDifference, newASM: [
+				replaceASM(startOffset: shadowPPCodeStart - kDolToRAMOffsetDifference, newASM: [
 					.mr(.r29, .r3),
 					.bl(checkShadowMove),
 					.cmpwi(.r3, 1),
@@ -169,7 +169,7 @@ extension XGAssembly {
 
 	class func infiniteUseTMs() {
 		let dol = XGFiles.dol.data!
-		dol.replaceWordAtOffset(0x0a5158 - kDOLtoRAMOffsetDifference, withBytes: 0x38000000)
+		dol.replaceWordAtOffset(0x0a5158 - kDolToRAMOffsetDifference, withBytes: 0x38000000)
 		dol.save()
 	}
 
@@ -180,13 +180,13 @@ extension XGAssembly {
 		let abilityStart = 0x3FCC50
 
 		let newAbilityEntryMultiplier : UInt32 = 0x1c830008
-		let abilityMultiplierAddress = 0x1442b0 - kDOLtoRAMOffsetDifference
+		let abilityMultiplierAddress = 0x1442b0 - kDolToRAMOffsetDifference
 
 		let abilityGetName : UInt32 = 0x80630000
-		let abilityGetNameAddress = 0x144290 - kDOLtoRAMOffsetDifference
+		let abilityGetNameAddress = 0x144290 - kDolToRAMOffsetDifference
 
 		let abilityGetDescription : UInt32 = 0x80630004
-		let abilityGetDescriptionAddress = 0x144278 - kDOLtoRAMOffsetDifference
+		let abilityGetDescriptionAddress = 0x144278 - kDolToRAMOffsetDifference
 
 		let sizeOfAbilityTable = 0x3A8
 		let newNumberOfEntries = sizeOfAbilityTable / 8
@@ -237,21 +237,21 @@ extension XGAssembly {
 		let valsTo1 = [0x22a807,0x22a98b,0x229d87,0x229e93]
 
 		for offie in critMultsTo3 {
-			dol.replaceByteAtOffset(offie - kDOLtoRAMOffsetDifference, withByte: 0x03)
+			dol.replaceByteAtOffset(offie - kDolToRAMOffsetDifference, withByte: 0x03)
 		}
 
 		for offie in critMultsTo2 {
-			dol.replaceByteAtOffset(offie - kDOLtoRAMOffsetDifference, withByte: 0x02)
+			dol.replaceByteAtOffset(offie - kDolToRAMOffsetDifference, withByte: 0x02)
 		}
 
 		for offie in valsTo1 {
-			dol.replaceByteAtOffset(offie - kDOLtoRAMOffsetDifference, withByte: 0x01)
+			dol.replaceByteAtOffset(offie - kDolToRAMOffsetDifference, withByte: 0x01)
 		}
 
-		let off1 = 0x20dafc - kDOLtoRAMOffsetDifference
+		let off1 = 0x20dafc - kDolToRAMOffsetDifference
 		let instructions1 = [0x7F7F19D6,0x7f43d378,0x577BF87E]
 
-		let off2 = 0x216d1c - kDOLtoRAMOffsetDifference
+		let off2 = 0x216d1c - kDolToRAMOffsetDifference
 		let instructions2 = [0x7F3E19D6,0x7fe3fb78,0x5739F87E]
 
 		for i in 0 ... 2 {
@@ -279,13 +279,13 @@ extension XGAssembly {
 
 		for offset in [0x1D8F8C, 0x1D900C] {
 
-			let off = offset - kDOLtoRAMOffsetDifference
+			let off = offset - kDolToRAMOffsetDifference
 			dol.replaceWordAtOffset(off, withBytes: 0x54001838)
 		}
 
 		for offset in [0x1117F0,0x111840,0x1D8F88,0x1D9008] {
 
-			let off = offset - kDOLtoRAMOffsetDifference
+			let off = offset - kDolToRAMOffsetDifference
 			dol.replaceWordAtOffset(off, withBytes: UInt32(0x38000000 + forme.rawValue))
 		}
 
@@ -299,7 +299,7 @@ extension XGAssembly {
 
 		for offset in [0x212C48,0x212E04] {
 
-			let off = offset - kDOLtoRAMOffsetDifference
+			let off = offset - kDolToRAMOffsetDifference
 			dol.replaceWordAtOffset(off, withBytes: kNopInstruction)
 		}
 
@@ -311,33 +311,33 @@ extension XGAssembly {
 
 		let dol = XGFiles.dol.data!
 
-		if dol.getWordAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference) == 0xA0DB001C {
+		if dol.getWordAtOffset(0x28bb30 - kDolToRAMOffsetDifference) == 0xA0DB001C {
 			return
 		}
 
 		// make 1d load 2 bytes from 1c using values from r27 instead of r3 (given that r27 now points to deck data)
-		dol.replaceWordAtOffset(0x28bb30 - kDOLtoRAMOffsetDifference, withBytes: 0xA0DB001C)
-		dol.replaceWordAtOffset(0x28bb20 - kDOLtoRAMOffsetDifference, withBytes: 0x281B0000)
-		dol.replaceWordAtOffset(0x28bb28 - kDOLtoRAMOffsetDifference, withBytes: 0x38C00000)
+		dol.replaceWordAtOffset(0x28bb30 - kDolToRAMOffsetDifference, withBytes: 0xA0DB001C)
+		dol.replaceWordAtOffset(0x28bb20 - kDolToRAMOffsetDifference, withBytes: 0x281B0000)
+		dol.replaceWordAtOffset(0x28bb28 - kDolToRAMOffsetDifference, withBytes: 0x38C00000)
 
 		// remove use of r27 so we can steal it >=D
-		dol.replaceWordAtOffset(0x1fbee0 - kDOLtoRAMOffsetDifference, withBytes: kNopInstruction)
+		dol.replaceWordAtOffset(0x1fbee0 - kDolToRAMOffsetDifference, withBytes: kNopInstruction)
 
 		// store the deck data pointer in r27 so we can use it again later
-		dol.replaceWordAtOffset(0x1fbd00 - kDOLtoRAMOffsetDifference, withBytes: 0x7F5BD378)
+		dol.replaceWordAtOffset(0x1fbd00 - kDolToRAMOffsetDifference, withBytes: 0x7F5BD378)
 
 		// load 1d into r6 before pid gen
 		let offsets = [0x1fbef4,0x1fbfb8]
 
 		for offset in offsets {
-			dol.replaceWordAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: instructionToBranchToSameFunction(0x4808fdcd, originalOffset: 0x1fbd54, newOffset: UInt32(offset)))
+			dol.replaceWordAtOffset(offset - kDolToRAMOffsetDifference, withBytes: instructionToBranchToSameFunction(0x4808fdcd, originalOffset: 0x1fbd54, newOffset: UInt32(offset)))
 		}
 
 		// where the game read from 1d, now read from 1f
-		dol.replaceWordAtOffset(0x1fbd54 - kDOLtoRAMOffsetDifference, withBytes: instructionToBranchToSameFunction(0x4808fdc5, originalOffset: 0x1fbcec, newOffset: 0x1fbd54))
+		dol.replaceWordAtOffset(0x1fbd54 - kDolToRAMOffsetDifference, withBytes: instructionToBranchToSameFunction(0x4808fdc5, originalOffset: 0x1fbcec, newOffset: 0x1fbd54))
 
 		// where the game read from 1f just load 0 instead
-		dol.replaceWordAtOffset(0x1fbcec - kDOLtoRAMOffsetDifference, withBytes: 0x38600000)
+		dol.replaceWordAtOffset(0x1fbcec - kDolToRAMOffsetDifference, withBytes: 0x38600000)
 
 
 		dol.save()
@@ -362,7 +362,7 @@ extension XGAssembly {
 				}
 
 				if region == .US {
-					XGAssembly.replaceASM(startOffset: 0x28bac0 - kDOLtoRAMOffsetDifference, newASM: [0x8863001f, kNopInstruction])
+					XGAssembly.replaceASM(startOffset: 0x28bac0 - kDolToRAMOffsetDifference, newASM: [0x8863001f, kNopInstruction])
 				}
 			}
 		}
@@ -378,7 +378,7 @@ extension XGAssembly {
 				let shinyStart = 0x1fa930
 				let getTrainerData = 0x1cefb4
 				let trainerGetTID = 0x14e118
-				replaceASM(startOffset: shinyStart - kDOLtoRAMOffsetDifference, newASM: [
+				replaceASM(startOffset: shinyStart - kDolToRAMOffsetDifference, newASM: [
 					0x38600000, // li r3, 0
 					0x38800002, // li r4, 2
 					createBranchAndLinkFrom(offset: shinyStart + 0x8, toOffset: getTrainerData),
@@ -391,7 +391,7 @@ extension XGAssembly {
 				let shinyStart = 0x1fc650
 				let getTrainerData = 0x1d0a8c
 				let trainerGetTID = 0x14f9dc
-				replaceASM(startOffset: shinyStart - kDOLtoRAMOffsetDifference, newASM: [
+				replaceASM(startOffset: shinyStart - kDolToRAMOffsetDifference, newASM: [
 					0x38600000, // li r3, 0
 					0x38800002, // li r4, 2
 					createBranchAndLinkFrom(offset: shinyStart + 0x8, toOffset: getTrainerData),
@@ -422,7 +422,7 @@ extension XGAssembly {
 				startOffset = 0x1fdfe4
 			}
 
-			replaceASM(startOffset: startOffset - kDOLtoRAMOffsetDifference, newASM: [0x38c00000 + UInt32(value.rawValue)])
+			replaceASM(startOffset: startOffset - kDolToRAMOffsetDifference, newASM: [0x38c00000 + UInt32(value.rawValue)])
 
 			printg("shadow pokemon shininess set to", value.string)
 		}
@@ -539,7 +539,7 @@ extension XGAssembly {
 			]
 
 			XGAssembly.replaceRELASM(startOffset: switchlessStart - kRELtoRAMOffsetDifference, newASM: switchlessCode + switchless2Code)
-			XGAssembly.replaceASM(startOffset: switchlessBranch - kDOLtoRAMOffsetDifference, newASM: [createBranchAndLinkFrom(offset: switchlessBranch, toOffset: switchlessStart)])
+			XGAssembly.replaceASM(startOffset: switchlessBranch - kDolToRAMOffsetDifference, newASM: [createBranchAndLinkFrom(offset: switchlessBranch, toOffset: switchlessStart)])
 		}
 
 	}
@@ -729,7 +729,7 @@ extension XGAssembly {
 		} else {
 			// in dol
 			file = XGFiles.dol
-			start = start - kDOLtoRAMOffsetDifference + 0xa0
+			start = start - kDolToRAMOffsetDifference + 0xa0
 
 		}
 
@@ -798,7 +798,7 @@ extension XGAssembly {
 	class func setMoveEffectRoutine(effect: Int, fileOffset: Int, moveToREL rel: Bool, newRoutine routine: [Int]?) {
 		let effectOffset = effect * 4
 		let pointerOffset = moveEffectTableStartDOL + effectOffset
-		let RAMOffset = UInt32(fileOffset + (rel ? kRELtoRAMOffsetDifference : kDOLTableToRAMOffsetDifference)) + 0x80000000
+		let RAMOffset = UInt32(fileOffset + (rel ? kRELtoRAMOffsetDifference : kDolTableToRAMOffsetDifference)) + 0x80000000
 
 		let dol = XGFiles.dol.data!
 		dol.replaceWordAtOffset(pointerOffset, withBytes: RAMOffset)
@@ -842,7 +842,7 @@ extension XGAssembly {
 	}
 
 	class func startOffsetForMoveRoutineFunction(index: Int) -> UInt32 {
-		let firstPointer = 0x2f8af8 - kDOLTableToRAMOffsetDifference
+		let firstPointer = 0x2f8af8 - kDolTableToRAMOffsetDifference
 		return XGFiles.dol.data!.getWordAtOffset(firstPointer + (4 * index))
 	}
 
@@ -876,16 +876,16 @@ extension XGAssembly {
 //let dol = XGFiles.dol.data!
 //
 ////shiny
-//dol.replaceWordAtOffset(0x8012442c - kColosseumDolToRamOffsetDifference, withBytes: 0x3B60FFFF)
+//dol.replaceWordAtOffset(0x8012442c - kDolToRAMOffsetDifference, withBytes: 0x3B60FFFF)
 //
 //// female starter espeon
-//dol.replaceWordAtOffset(0x80130b1c - kColosseumDolToRamOffsetDifference, withBytes: 0x38800001)
+//dol.replaceWordAtOffset(0x80130b1c - kDolToRAMOffsetDifference, withBytes: 0x38800001)
 //
 //// shiny glitch
-//dol.replaceWordAtOffset(0x801248a8 - kColosseumDolToRamOffsetDifference, withBytes: 0x3B800000)
+//dol.replaceWordAtOffset(0x801248a8 - kDolToRAMOffsetDifference, withBytes: 0x3B800000)
 //
 // shiny chance
-////dol.replaceWordAtOffset(0x80124844 - kColosseumDolToRamOffsetDifference, withBytes: 0x38600008)
+////dol.replaceWordAtOffset(0x80124844 - kDolToRAMOffsetDifference, withBytes: 0x38600008)
 //
 //dol.save()
 

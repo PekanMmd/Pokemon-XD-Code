@@ -18,6 +18,9 @@ let kGenderRatioOffset		= 0x02
 let kBaseEXPOffset			= 0x05
 let kBaseHappinessOffset	= 0x07
 
+let kHeightOffset			= 0x08
+let kWeightOffset			= 0x0A
+
 let kNationalIndexOffset	= 0x0E
 
 let kType1Offset			= 0x30
@@ -35,8 +38,6 @@ let kFirstEggMoveOffset		= 0x7E
 
 let kFirstPokemonPKXIdentifierOffset = 0x40A0A8 // in start.dol
 let kModelDictionaryModelOffset = 0x4
-
-// weight 0xa, height 0x8
 
 /* Tutor moves order:
  *
@@ -77,30 +78,30 @@ let kPokemonFaceIndexOffset	 = 0x116
 
 final class XGPokemonStats: NSObject, Codable {
 	
-	@objc var index			= 0x0
-	@objc var startOffset	= 0x0
+	var index			= 0x0
+	var startOffset		= 0x0
 	
-	@objc var nameID		= 0x0
-	@objc var speciesNameID	= 0x0
-	@objc var cryIndex		= 0x0
-	@objc var modelIndex	= 0x0
-	@objc var faceIndex		= 0x0
+	var nameID			= 0x0
+	var speciesNameID	= 0x0
+	var cryIndex		= 0x0
+	var modelIndex		= 0x0
+	var faceIndex		= 0x0
 	
-	@objc var bodyID		: UInt32 = 0x0
-	@objc var bodyShinyID	: UInt32 = 0x0
+	var bodyID: UInt32 		= 0x0
+	var bodyShinyID: UInt32 = 0x0
 	
-	@objc var bodyName : String {
+	var bodyName: String {
 		let dance =  XGFiles.fsys("poke_dance").fsysData
 		let index = dance.indexForIdentifier(identifier: bodyID.int)
 		return dance.fileNames[index]
 	}
 	
-	var levelUpRate		= XGExpRate.standard
-	var genderRatio     = XGGenderRatios.maleOnly
+	var levelUpRate	= XGExpRate.standard
+	var genderRatio = XGGenderRatios.maleOnly
 	
-	@objc var catchRate		= 0x0
-	@objc var baseExp		= 0x0
-	@objc var baseHappiness	= 0x0
+	var catchRate		= 0x0
+	var baseExp		= 0x0
+	var baseHappiness	= 0x0
 	
 	var type1			= XGMoveTypes.normal
 	var type2			= XGMoveTypes.normal
@@ -111,37 +112,40 @@ final class XGPokemonStats: NSObject, Codable {
 	var heldItem1		= XGItems.item(0)
 	var heldItem2		= XGItems.item(0)
 	
-	@objc var hp				= 0x0
-	@objc var speed				= 0x0
-	@objc var attack			= 0x0
-	@objc var defense			= 0x0
-	@objc var specialAttack		= 0x0
-	@objc var specialDefense	= 0x0
+	var hp				= 0x0
+	var speed				= 0x0
+	var attack			= 0x0
+	var defense			= 0x0
+	var specialAttack		= 0x0
+	var specialDefense	= 0x0
 	
-	@objc var levelUpMoves	= [XGLevelUpMove]()
-	@objc var learnableTMs	= [Bool]()
-	@objc var tutorMoves	= [Bool]()
-	@objc var evolutions	= [XGEvolution]()
+	var levelUpMoves	= [XGLevelUpMove]()
+	var learnableTMs	= [Bool]()
+	var tutorMoves	= [Bool]()
+	var evolutions	= [XGEvolution]()
 	
-	@objc var nationalIndex	= 0
+	var nationalIndex	= 0
 	
-	@objc var hpYield				= 0x0
-	@objc var speedYield			= 0x0
-	@objc var attackYield			= 0x0
-	@objc var defenseYield			= 0x0
-	@objc var specialAttackYield	= 0x0
-	@objc var specialDefenseYield	= 0x0
+	var hpYield				= 0x0
+	var speedYield			= 0x0
+	var attackYield			= 0x0
+	var defenseYield			= 0x0
+	var specialAttackYield	= 0x0
+	var specialDefenseYield	= 0x0
+
+	var height = 0.0 // meters
+	var weight = 0.0 // kg
 	
-	@objc var pkxModelIdentifier : UInt32 {
+	var pkxModelIdentifier : UInt32 {
 		let dol = XGFiles.dol.data!
 		return dol.getWordAtOffset(kFirstPokemonPKXIdentifierOffset + (self.modelIndex * 8) + kModelDictionaryModelOffset)
 	}
 	
-	@objc var pkxFSYS : XGFsys? {
+	var pkxFSYS : XGFsys? {
 		return ISO.getPKXModelWithIdentifier(id: self.pkxModelIdentifier)
 	}
 	
-	@objc var pkxData : XGMutableData? {
+	var pkxData : XGMutableData? {
 		let fsys = self.pkxFSYS
 		
 		if fsys != nil {
@@ -151,94 +155,83 @@ final class XGPokemonStats: NSObject, Codable {
 		return nil
 	}
 	
-	@objc var name : XGString {
-		get {
-			return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
-		}
+	var name : XGString {
+		return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
 	}
 	
-	@objc var species : XGString {
-		get {
-			let file = XGFiles.msg("pda_menu")
-			return XGStringTable(file: file, startOffset: 0, fileSize: file.fileSize).stringSafelyWithID(self.speciesNameID)
-		}
+	var species : XGString {
+		let file = XGFiles.msg("pda_menu")
+		return XGStringTable(file: file, startOffset: 0, fileSize: file.fileSize).stringSafelyWithID(self.speciesNameID)
 	}
 	
-	@objc var numberOfTMs : Int {
-		get {
-			return learnableTMs.filter{ $0 }.count
-		}
+	var numberOfTMs : Int {
+		return learnableTMs.filter{ $0 }.count
 	}
 	
-	@objc var numberOfTutorMoves : Int {
-		get {
-			return tutorMoves.filter{ $0 }.count
-		}
+	var numberOfTutorMoves : Int {
+		return tutorMoves.filter{ $0 }.count
 	}
 	
-	@objc var numberOfLevelUpMoves : Int {
-		get {
-			return levelUpMoves.filter{ $0.isSet() }.count
-		}
+	var numberOfLevelUpMoves : Int {
+		return levelUpMoves.filter{ $0.isSet() }.count
 	}
 	
-	@objc var numberOfEvolutions : Int {
-		get {
-			return evolutions.filter{ $0.isSet() }.count
-		}
+	var numberOfEvolutions : Int {
+		return evolutions.filter{ $0.isSet() }.count
 	}
-	
-	
 	
 	init(index : Int!) {
 		super.init()
 		
 		let rel = XGFiles.common_rel.data!
 		
-		self.startOffset	= CommonIndexes.PokemonStats.startOffset + ( kSizeOfPokemonStats * index )
+		startOffset	= CommonIndexes.PokemonStats.startOffset + ( kSizeOfPokemonStats * index )
 		self.index			= index
 		
-		self.nameID			= rel.getWordAtOffset(startOffset + kNameIDOffset).int
-		self.speciesNameID  = rel.getWordAtOffset(startOffset + kSpeciesNameIDOffset).int
-		self.cryIndex		= rel.get2BytesAtOffset(startOffset + kPokemonCryIndexOffset)
-		self.modelIndex		= rel.get2BytesAtOffset(startOffset + kPokemonModelIndexOffset)
-		self.faceIndex		= game == .XD ? rel.get2BytesAtOffset(startOffset + kPokemonFaceIndexOffset) : rel.getWordAtOffset(CommonIndexes.PokefaceTextures.startOffset + (index * 8) + 4).int
-		self.bodyID		    = rel.getWordAtOffset(startOffset + kPokemonBodyOffset)
-		self.bodyShinyID	= rel.getWordAtOffset(startOffset + kPokemonBodyShinyOffset)
+		nameID			= rel.getWordAtOffset(startOffset + kNameIDOffset).int
+		speciesNameID   = rel.getWordAtOffset(startOffset + kSpeciesNameIDOffset).int
+		cryIndex		= rel.get2BytesAtOffset(startOffset + kPokemonCryIndexOffset)
+		modelIndex		= rel.get2BytesAtOffset(startOffset + kPokemonModelIndexOffset)
+		faceIndex		= game == .XD ? rel.get2BytesAtOffset(startOffset + kPokemonFaceIndexOffset) : rel.getWordAtOffset(CommonIndexes.PokefaceTextures.startOffset + (index * 8) + 4).int
+		bodyID		    = rel.getWordAtOffset(startOffset + kPokemonBodyOffset)
+		bodyShinyID		= rel.getWordAtOffset(startOffset + kPokemonBodyShinyOffset)
+
+		height = Double(rel.get2BytesAtOffset(startOffset + kHeightOffset)) / 10
+		weight = Double(rel.get2BytesAtOffset(startOffset + kWeightOffset)) / 10
 		
-		self.levelUpRate	= XGExpRate(rawValue: rel.getByteAtOffset(startOffset + kEXPRateOffset)) ?? .standard
-		self.genderRatio	= XGGenderRatios(rawValue: rel.getByteAtOffset(startOffset + kGenderRatioOffset)) ?? .maleOnly
+		levelUpRate	= XGExpRate(rawValue: rel.getByteAtOffset(startOffset + kEXPRateOffset)) ?? .standard
+		genderRatio	= XGGenderRatios(rawValue: rel.getByteAtOffset(startOffset + kGenderRatioOffset)) ?? .maleOnly
 		
-		self.catchRate		= rel.getByteAtOffset(startOffset + kCatchRateOffset)
-		self.baseExp		= rel.getByteAtOffset(startOffset + kBaseEXPOffset)
-		self.baseHappiness	= rel.getByteAtOffset(startOffset + kBaseHappinessOffset)
+		catchRate		= rel.getByteAtOffset(startOffset + kCatchRateOffset)
+		baseExp			= rel.getByteAtOffset(startOffset + kBaseEXPOffset)
+		baseHappiness	= rel.getByteAtOffset(startOffset + kBaseHappinessOffset)
 		
-		self.type1			= XGMoveTypes.type(rel.getByteAtOffset(startOffset + kType1Offset))
-		self.type2			= XGMoveTypes.type(rel.getByteAtOffset(startOffset + kType2Offset))
+		type1			= XGMoveTypes.type(rel.getByteAtOffset(startOffset + kType1Offset))
+		type2			= XGMoveTypes.type(rel.getByteAtOffset(startOffset + kType2Offset))
 		
-		let a1				= rel.getByteAtOffset(startOffset + kAbility1Offset)
-		let a2				= rel.getByteAtOffset(startOffset + kAbility2Offset)
-		self.ability1		= .ability(a1)
-		self.ability2		= .ability(a2)
+		let a1			= rel.getByteAtOffset(startOffset + kAbility1Offset)
+		let a2			= rel.getByteAtOffset(startOffset + kAbility2Offset)
+		ability1		= .ability(a1)
+		ability2		= .ability(a2)
 		
-		let i1				= rel.get2BytesAtOffset(startOffset + kHeldItem1Offset)
-		let i2				= rel.get2BytesAtOffset(startOffset + kHeldItem2Offset)
-		self.heldItem1		= .item(i1)
-		self.heldItem2		= .item(i2)
+		let i1			= rel.get2BytesAtOffset(startOffset + kHeldItem1Offset)
+		let i2			= rel.get2BytesAtOffset(startOffset + kHeldItem2Offset)
+		heldItem1		= .item(i1)
+		heldItem2		= .item(i2)
 		
-		self.hp				= rel.getByteAtOffset(startOffset + kHPOffset)
-		self.attack			= rel.getByteAtOffset(startOffset + kAttackOffset)
-		self.defense		= rel.getByteAtOffset(startOffset + kDefenseOffset)
-		self.specialAttack	= rel.getByteAtOffset(startOffset + kSpecialAttackOffset)
-		self.specialDefense	= rel.getByteAtOffset(startOffset + kSpecialDefenseOffset)
-		self.speed			= rel.getByteAtOffset(startOffset + kSpeedOffset)
+		hp				= rel.getByteAtOffset(startOffset + kHPOffset)
+		attack			= rel.getByteAtOffset(startOffset + kAttackOffset)
+		defense			= rel.getByteAtOffset(startOffset + kDefenseOffset)
+		specialAttack	= rel.getByteAtOffset(startOffset + kSpecialAttackOffset)
+		specialDefense	= rel.getByteAtOffset(startOffset + kSpecialDefenseOffset)
+		speed			= rel.getByteAtOffset(startOffset + kSpeedOffset)
 		
-		self.hpYield				= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x0)
-		self.attackYield			= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x2)
-		self.defenseYield			= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x4)
-		self.specialAttackYield		= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x6)
-		self.specialDefenseYield	= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x8)
-		self.speedYield				= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0xa)
+		hpYield				= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x0)
+		attackYield			= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x2)
+		defenseYield		= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x4)
+		specialAttackYield	= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x6)
+		specialDefenseYield	= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x8)
+		speedYield			= rel.get2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0xa)
 		
 		self.nationalIndex	= rel.get2BytesAtOffset(startOffset + kNationalIndexOffset)
 		
@@ -264,16 +257,15 @@ final class XGPokemonStats: NSObject, Codable {
 			
 			let currentOffset = startOffset + kFirstEvolutionOffset + (i * kSizeOfEvolutionData)
 			
-			let method		= rel.getByteAtOffset(currentOffset + kEvolutionMethodOffset)
-			let condition	= rel.get2BytesAtOffset(currentOffset + kEvolutionConditionOffset)
-			let evolution	= rel.get2BytesAtOffset(currentOffset + kEvolvedFormOffset)
+			let method	  = rel.getByteAtOffset(currentOffset + kEvolutionMethodOffset)
+			let condition = rel.get2BytesAtOffset(currentOffset + kEvolutionConditionOffset)
+			let evolution = rel.get2BytesAtOffset(currentOffset + kEvolvedFormOffset)
 			
-			self.evolutions.append(XGEvolution(evolutionMethod: method, condition: condition, evolvedForm: evolution))
+			evolutions.append(XGEvolution(evolutionMethod: method, condition: condition, evolvedForm: evolution))
 		}
-		
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		let rel	= XGFiles.common_rel.data!
 
@@ -284,6 +276,9 @@ final class XGPokemonStats: NSObject, Codable {
 		rel.replace2BytesAtOffset(startOffset + kPokemonFaceIndexOffset, withBytes: faceIndex)
 		rel.replaceWordAtOffset(startOffset + kPokemonBodyOffset, withBytes: bodyID)
 		rel.replaceWordAtOffset(startOffset + kPokemonBodyShinyOffset, withBytes: bodyShinyID)
+
+		rel.replace2BytesAtOffset(startOffset + kHeightOffset, withBytes: Int(height * 10))
+		rel.replace2BytesAtOffset(startOffset + kWeightOffset, withBytes: Int(weight * 10))
 		
 		rel.replaceByteAtOffset(startOffset + kEXPRateOffset, withByte: levelUpRate.rawValue)
 		rel.replaceByteAtOffset(startOffset + kGenderRatioOffset, withByte: genderRatio.rawValue)
@@ -308,28 +303,24 @@ final class XGPokemonStats: NSObject, Codable {
 		rel.replaceByteAtOffset(startOffset + kSpecialDefenseOffset, withByte: specialDefense)
 		rel.replaceByteAtOffset(startOffset + kSpeedOffset, withByte: speed)
 		
-		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x0, withBytes: self.hpYield)
-		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x2, withBytes: self.attackYield)
-		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x4, withBytes: self.defenseYield)
-		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x6, withBytes: self.specialAttackYield)
-		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x8, withBytes: self.specialDefenseYield)
-		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0xa, withBytes: self.speedYield)
+		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x0, withBytes: hpYield)
+		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x2, withBytes: attackYield)
+		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x4, withBytes: defenseYield)
+		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x6, withBytes: specialAttackYield)
+		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0x8, withBytes: specialDefenseYield)
+		rel.replace2BytesAtOffset(startOffset + kFirstEVYieldOffset + 0xa, withBytes: speedYield)
 		
 		
 		var currentOffset = startOffset + kFirstTMOffset
 		
 		for i in 0 ..< kNumberOfTMsAndHMs {
-			
 			rel.replaceByteAtOffset(currentOffset + i, withByte: learnableTMs[i] ? 1 : 0)
-			
 		}
 		
 		currentOffset = startOffset + kFirstTutorMoveOffset
 		
 		for i in 0 ..< kNumberOfTutorMoves {
-			
 			rel.replaceByteAtOffset(currentOffset + i, withByte: tutorMoves[i] ? 1 : 0)
-			
 		}
 		
 		for i in 0 ..< kNumberOfLevelUpMoves {
@@ -352,7 +343,6 @@ final class XGPokemonStats: NSObject, Codable {
 		}
 		
 		rel.save()
-		
 	}
 	
 }

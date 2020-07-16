@@ -10,6 +10,7 @@ import Cocoa
 class GoDISOViewController: GoDTableViewController {
 
 	let allFileNames = ISO.allFileNames.sorted()
+	var filteredFileNames = [String]()
 
 	var isExporting = false
 	func exportFiles(decode: Bool) {
@@ -170,6 +171,8 @@ class GoDISOViewController: GoDTableViewController {
 		table.setBackgroundColour(GoDDesign.colourClear())
 		filesText.setBackgroundColour(GoDDesign.colourClear())
 		setMetaData()
+		filteredFileNames = allFileNames
+		table.reloadData()
     }
 	
 	func setMetaData() {
@@ -204,7 +207,7 @@ class GoDISOViewController: GoDTableViewController {
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
-		return allFileNames.count
+		return filteredFileNames.count
 	}
 	
 	override func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -213,7 +216,7 @@ class GoDISOViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let file = allFileNames[row]
+		let file = filteredFileNames[row]
 		
 		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourWhite(), fontSize: 16, width: widthForTable())) as! GoDTableCellView
 		
@@ -238,10 +241,29 @@ class GoDISOViewController: GoDTableViewController {
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
 		super.tableView(tableView, didSelectRow: row)
 		if row >= 0 {
-			let name = allFileNames[row]
+			let name = filteredFileNames[row]
 			self.currentFile = .nameAndFolder(name, .ISOExport(name.removeFileExtensions()))
 			self.setMetaData()
 		}
+	}
+
+	override func searchBarBehaviourForTableView(_ tableView: GoDTableView) -> GoDSearchBarBehaviour {
+		.onTextChange
+	}
+
+	override func tableView(_ tableView: GoDTableView, didSearchForText text: String) {
+		defer {
+			tableView.reloadData()
+		}
+
+		guard !text.isEmpty else {
+			filteredFileNames = allFileNames
+			return
+		}
+
+		filteredFileNames = allFileNames.filter({ (file) -> Bool in
+			file.simplified.contains(text.simplified)
+		})
 	}
 }
 

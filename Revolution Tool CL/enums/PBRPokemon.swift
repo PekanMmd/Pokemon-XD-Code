@@ -208,7 +208,41 @@ func allPokemonArray() -> [XGPokemon] {
 	return pokes
 }
 
+extension XGPokemon: Codable {
+	enum CodingKeys: String, CodingKey {
+		case index, name
+	}
 
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let index = try container.decode(Int.self, forKey: .index)
+		self = .pokemon(index)
+	}
+
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(self.index, forKey: .index)
+		try container.encode(self.name.string, forKey: .name)
+	}
+}
+
+extension XGPokemon: XGEnumerable {
+	var enumerableName: String {
+		return name.unformattedString.spaceToLength(20)
+	}
+
+	var enumerableValue: String? {
+		return index.string
+	}
+
+	static var enumerableClassName: String {
+		return "Pokemon"
+	}
+
+	static var allValues: [XGPokemon] {
+		return XGPokemon.allPokemon()
+	}
+}
 
 
 

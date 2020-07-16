@@ -26,7 +26,7 @@ class PBRTypeManager {
 			return nil
 		}
 
-		let dataTableOffsetInstructionsStartOffset = 0x3be7c4 - kPBRDolToRAMOffsetDifference
+		let dataTableOffsetInstructionsStartOffset = 0x3be7c4 - kDolToRAMOffsetDifference
 		let instruction1 = dol.getWordAtOffset(dataTableOffsetInstructionsStartOffset)
 		let instruction2 = dol.getWordAtOffset(dataTableOffsetInstructionsStartOffset + 4)
 
@@ -34,7 +34,7 @@ class PBRTypeManager {
 		let dataTableRAMOffset = ((instruction1 & 0xFFF) << 16) + (instruction2 & 0xFFFF)
 
 		let isInDataSection = dataTableRAMOffset >= 0x3e1e60
-		let offsetDifference = isInDataSection ? kPBRDolDataToRAMOffsetDifference : kPBRDolToRAMOffsetDifference
+		let offsetDifference = isInDataSection ? kDolTableToRAMOffsetDifference : kDolToRAMOffsetDifference
 		return Int(dataTableRAMOffset) - offsetDifference
 	}
 
@@ -149,7 +149,7 @@ class PBRTypeManager {
 		}
 
 		let isInDataSection = offset >= 0x3ddf60
-		let offsetDifference = isInDataSection ? kPBRDolDataToRAMOffsetDifference : kPBRDolToRAMOffsetDifference
+		let offsetDifference = isInDataSection ? kDolTableToRAMOffsetDifference : kDolToRAMOffsetDifference
 		let RAMOffset = UInt32(offset + offsetDifference) + 0x80000000
 
 		let offsetUpperHalf = Int(RAMOffset >> 16)
@@ -157,7 +157,7 @@ class PBRTypeManager {
 
 		let r4Offsets: [UInt32] = [0x803be7c4, 0x803be804, 0x803be830, 0x803be870] // in RAM
 		for offset in r4Offsets {
-			let adjustedOffset = Int(offset - 0x80000000) - kPBRDolToRAMOffsetDifference
+			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference
 			XGAssembly.replaceASM(startOffset: adjustedOffset, newASM: [
 				.lis(.r4, offsetUpperHalf),
 				.addi(.r4, .r4, offsetLowerHalf)
@@ -166,7 +166,7 @@ class PBRTypeManager {
 
 		let r4OffsetsWithGap: [UInt32] = [0x803bf834] // in RAM
 		for offset in r4OffsetsWithGap {
-			let adjustedOffset = Int(offset - 0x80000000) - kPBRDolToRAMOffsetDifference
+			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference
 			XGAssembly.replaceASM(startOffset: adjustedOffset, newASM: [
 				.lis(.r4, offsetUpperHalf),
 			])
@@ -177,7 +177,7 @@ class PBRTypeManager {
 
 		let r7OffsetsWithGap: [UInt32] = [0x803bf874] // in RAM
 		for offset in r7OffsetsWithGap {
-			let adjustedOffset = Int(offset - 0x80000000) - kPBRDolToRAMOffsetDifference
+			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference
 			XGAssembly.replaceASM(startOffset: adjustedOffset, newASM: [
 				.lis(.r7, offsetUpperHalf),
 			])
@@ -188,7 +188,7 @@ class PBRTypeManager {
 
 		let r17OffsetsWithGap: [UInt32] = [0x803beaa4, 0x803bef28] // in RAM
 		for offset in r17OffsetsWithGap {
-			let adjustedOffset = Int(offset - 0x80000000) - kPBRDolToRAMOffsetDifference
+			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference
 			XGAssembly.replaceASM(startOffset: adjustedOffset, newASM: [
 				.lis(.r17, offsetUpperHalf),
 			])
@@ -199,7 +199,7 @@ class PBRTypeManager {
 
 //		let r30OffsetsWithJump: [UInt32] = [0x803c618c, 0x803c72f4] // in RAM
 //		for offset in r30OffsetsWithJump {
-//			let adjustedOffset = Int(offset - 0x80000000) - kPBRDolToRAMOffsetDifference
+//			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference
 //			XGAssembly.replaceASM(startOffset: adjustedOffset, newASM: [
 //				.lis(.r30, offsetUpperHalf),
 //			])

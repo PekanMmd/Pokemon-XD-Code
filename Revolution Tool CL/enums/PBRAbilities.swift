@@ -71,7 +71,7 @@ enum XGAbilities : XGIndexedValue {
 
 extension XGAbilities: XGEnumerable {
 	var enumerableName: String {
-		return name.string
+		return name.unformattedString
 	}
 	
 	var enumerableValue: String? {

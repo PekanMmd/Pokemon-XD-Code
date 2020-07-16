@@ -203,9 +203,9 @@ enum XGScriptClass {
 			}
 			
 			let dol = XGFiles.dol.data!
-			let branchCodeStart = dol.getWordAtOffset(0x40bc5c - kDOLTableToRAMOffsetDifference + ((c - 33) * 4)) - 0x80000000
+			let branchCodeStart = dol.getWordAtOffset(0x40bc5c - kDolTableToRAMOffsetDifference + ((c - 33) * 4)) - 0x80000000
 			let branchInstructionOffset = branchCodeStart + 0xc
-			let branchInstruction = dol.getWordAtOffset(branchInstructionOffset.int - kDOLtoRAMOffsetDifference)
+			let branchInstruction = dol.getWordAtOffset(branchInstructionOffset.int - kDolToRAMOffsetDifference)
 			var branchDifference = ((branchInstruction & 0x3FFFFFF) - 1)
 			// check if negative
 			if ((branchDifference >> 25) & 0x1.unsigned) == 1 {

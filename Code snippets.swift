@@ -330,7 +330,7 @@ import Foundation
 //}
 //
 //// shadow moves use HM flag
-//let shadowMovesCheckStartAddress = 0x8013d03c - kDOLtoRAMOffsetDifference
+//let shadowMovesCheckStartAddress = 0x8013d03c - kDolToRAMOffsetDifference
 //let shadowCheckInstructions : [UInt32] = [0x9421fff0,0x7c0802a6,0x90010014,0x480014cd,0x80010014,0x7c0803a6,0x38210010,0x4e800020]
 //let adol = XGFiles.dol.data!
 //for i in 0 ..< shadowCheckInstructions.count {
@@ -343,7 +343,7 @@ import Foundation
 //let li_r3_0 : UInt32 = 0x38600000
 //let dependentOffsets = [0x8021aafc,0x801bd9e0,0x80210628,0x802187b0]
 //for offset in dependentOffsets {
-//	adol.replaceWordAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: li_r3_0)
+//	adol.replaceWordAtOffset(offset - kDolToRAMOffsetDifference, withBytes: li_r3_0)
 //}
 //
 //adol.save()
@@ -351,16 +351,16 @@ import Foundation
 ////snow warning
 //let snowWarningIndex = kNumberOfAbilities + 8
 //let bdol = XGFiles.dol.data!
-//let nops = [0x80225d24 - kDOLtoRAMOffsetDifference, 0x80225d54 - kDOLtoRAMOffsetDifference]
+//let nops = [0x80225d24 - kDolToRAMOffsetDifference, 0x80225d54 - kDolToRAMOffsetDifference]
 //for offset in nops {
 //	bdol.replaceWordAtOffset(offset, withBytes: kNopInstruction)
 //}
-//bdol.replaceWordAtOffset(0x80225d4c - kDOLtoRAMOffsetDifference, withBytes: UInt32(0x2c000000 + snowWarningIndex))
+//bdol.replaceWordAtOffset(0x80225d4c - kDolToRAMOffsetDifference, withBytes: UInt32(0x2c000000 + snowWarningIndex))
 //
 //let rainToSnow : UInt32 = 0x80225e90 - 0x80225d7c
 //let weatherStarter : [UInt32] = [0x38600000, 0x38800053, 0x4BFCD1F9 - rainToSnow, 0x5460063E, 0x28000002, 0x40820188 - rainToSnow, 0x38600000, 0x38800053, 0x38A00000, 0x4BFCD189 - rainToSnow, 0x7FE4FB78, 0x38600000, 0x4BFD09D5 - rainToSnow, 0x3C608041, 0x3863783C, 0x4BFFD8F1 - rainToSnow, kNopInstruction]
 //
-//let snowstart = 0x80225e90 - kDOLtoRAMOffsetDifference
+//let snowstart = 0x80225e90 - kDolToRAMOffsetDifference
 //for i in 0 ..< weatherStarter.count {
 //	bdol.replaceWordAtOffset(snowstart + (i * 4), withBytes: weatherStarter[i])
 //}
@@ -376,7 +376,7 @@ import Foundation
 //rel.save()
 //
 //let snowRoutineBranch = 0x225ec4
-//XGAssembly.replaceASM(startOffset: snowRoutineBranch - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: snowRoutineBranch - kDolToRAMOffsetDifference, newASM: [
 //	.lis(.r3, 0x80ba),
 //	.subi(.r3, .r3, 0x10000 - 0xac60),
 //])
@@ -433,18 +433,18 @@ import Foundation
 //let critValues : [UInt32] = [0x38800003,0x38800002,0x38800002,0x38800002]
 //
 //for i in 0 ..< critOffsets.count {
-//	cdol.replaceWordAtOffset(critOffsets[i] - kDOLtoRAMOffsetDifference, withBytes: critValues[i])
+//	cdol.replaceWordAtOffset(critOffsets[i] - kDolToRAMOffsetDifference, withBytes: critValues[i])
 //}
 //
 //// reverse mode residual
-//cdol.replaceWordAtOffset(0x8022811c - kDOLtoRAMOffsetDifference, withBytes: 0x38800008)
+//cdol.replaceWordAtOffset(0x8022811c - kDolToRAMOffsetDifference, withBytes: 0x38800008)
 //
 //// paralysis to halve speed
-//cdol.replaceWordAtOffset(0x80203adc - kDOLtoRAMOffsetDifference, withBytes: 0x56f7f87e)
+//cdol.replaceWordAtOffset(0x80203adc - kDolToRAMOffsetDifference, withBytes: 0x56f7f87e)
 //
 //// choice scarf
 //let choicescarfindex : UInt32 = 52
-//let choiceStart = 0x80203ab4 - kDOLtoRAMOffsetDifference
+//let choiceStart = 0x80203ab4 - kDolToRAMOffsetDifference
 //let choiceInstructions : [UInt32] = [kNopInstruction,0x7f43d378,0x4bfffdb5,0x28030000 + choicescarfindex,0x4082000C,0x1EF70003,0x56f7f87e]
 //for i in 0 ..< choiceInstructions.count {
 //	cdol.replaceWordAtOffset(choiceStart + (i * 4), withBytes: choiceInstructions[i])
@@ -523,8 +523,8 @@ import Foundation
 //let magicBounceBranchInstruction : UInt32 = 0x4bf3033d
 //let magicBounceCompareInstruction : UInt32 = 0x28000000 + magicBounceIndex
 //
-//cdol.replaceWordAtOffset(magicBounceBranchAddress - kDOLtoRAMOffsetDifference, withBytes: magicBounceBranchInstruction)
-//cdol.replaceWordAtOffset(magicBounceCompareAddress - kDOLtoRAMOffsetDifference, withBytes: magicBounceCompareInstruction)
+//cdol.replaceWordAtOffset(magicBounceBranchAddress - kDolToRAMOffsetDifference, withBytes: magicBounceBranchInstruction)
+//cdol.replaceWordAtOffset(magicBounceCompareAddress - kDolToRAMOffsetDifference, withBytes: magicBounceCompareInstruction)
 //
 //cdol.save()
 
@@ -536,12 +536,12 @@ import Foundation
 //let sheerForceInstructions : [UInt32] = [0x7C7C1B78,0x7FA3EB78,0x4BFF1855,0x28030023,0x4082000C,0x3BA00000,0x48000024,0x7C7D1B78,0x7F83E378,0x4BF2A925,0x281D0020,0x7C7D1B78,0x4082000C,0x54600DFC,0x7C1D0378]
 //
 //for i in 0 ..< sheerForceInstructions.count {
-//	let offset = sheerForceStart + (i * 4) - kDOLtoRAMOffsetDifference
+//	let offset = sheerForceStart + (i * 4) - kDolToRAMOffsetDifference
 //	ddol.replaceWordAtOffset(offset, withBytes: sheerForceInstructions[i])
 //}
 //
 //// -ate abilities types
-//let ateStart = 0x802c8648 - kDOLtoRAMOffsetDifference
+//let ateStart = 0x802c8648 - kDolToRAMOffsetDifference
 //let ateInstructions = [0x7F83E378,0x4BE76225,0x28030000,0x408200E0,0x7FA3EB78,0x4BF3CF6D,0x28030056,0x4082000C,0x3860000F,0x480000DC,0x28030044,0x4082000C,0x38600009,0x480000CC,0x28030001,0x4082000C,0x38600002,0x480000BC,0x480000A4]
 //
 //for i in 0 ..< ateInstructions.count {
@@ -549,7 +549,7 @@ import Foundation
 //	ddol.replaceWordAtOffset(offset, withBytes: UInt32(ateInstructions[i]))
 //}
 //
-//let priorityAbilitiesStart = 0x8015224c - kDOLtoRAMOffsetDifference
+//let priorityAbilitiesStart = 0x8015224c - kDolToRAMOffsetDifference
 //let priorityAbilitiesInstructions : [UInt32] = [0x9421fff0,0x7C0802A6,0x90010014,0x93E1000C,0x93C10008,0x7C7F1B78,0x48000074,0x4BFEC551,0x28030000,0x40820050,0x7FE3FB78,0x480B3351,0x28030059,0x41820024,0x28030043,0x40820034,0x7FC3F378,0x4BFEC5e1,0x28030002,0x40820024,0x38600001,0x48000020,0x7FC3F378,0x4bfec549,0x28030000,0x4082000C,0x38600001,0x48000008,0x38600000,0x80010014,0x83E1000C,0x83C10008,0x7C0803A6,0x38210010,0x4E800020,0x480B22DD,0x7C7E1B78,0x4BFFFF88]
 //
 //for i in 0 ..< priorityAbilitiesInstructions.count {
@@ -561,29 +561,29 @@ import Foundation
 //let determineOrderInstructions : [UInt32] = [0x7f23cb78,0x4bf5de61,0x7f43d378,0x4bf5de55]
 //
 //for i in 0 ..< determineOrderOffsets.count {
-//	ddol.replaceWordAtOffset(determineOrderOffsets[i] - kDOLtoRAMOffsetDifference, withBytes: determineOrderInstructions[i])
+//	ddol.replaceWordAtOffset(determineOrderOffsets[i] - kDolToRAMOffsetDifference, withBytes: determineOrderInstructions[i])
 //}
 //
 //ddol.save()
 //let dol2 = XGFiles.dol.data!
 //// hard shell ability
 //let hardshellindex = 78
-//let hardoffset1 = 0x8022580c - kDOLtoRAMOffsetDifference
+//let hardoffset1 = 0x8022580c - kDolToRAMOffsetDifference
 //let hardcomparison : UInt32 = 0x2c00004e
-//let hardoffset2 = 0x8022582c - kDOLtoRAMOffsetDifference
+//let hardoffset2 = 0x8022582c - kDolToRAMOffsetDifference
 //let hardbranch : UInt32 = 0x4bf18db9
 //
 //dol2.replaceWordAtOffset(hardoffset1, withBytes: hardcomparison)
 //dol2.replaceWordAtOffset(hardoffset2, withBytes: hardbranch)
 //
 //// regenerator
-//let naturalcurechangestart = 0x8021c5cc - kDOLtoRAMOffsetDifference
+//let naturalcurechangestart = 0x8021c5cc - kDolToRAMOffsetDifference
 //let naturalcurechanges : [UInt32] = [0x7C7E1B78,0x48002559,0x7fe3fb78]
 //for i in 0 ... 2 {
 //	dol2.replaceWordAtOffset(naturalcurechangestart + (i * 4), withBytes: naturalcurechanges[i])
 //}
 //
-//let regenStart = 0x8021eb28 - kDOLtoRAMOffsetDifference
+//let regenStart = 0x8021eb28 - kDolToRAMOffsetDifference
 //let regenCode : [UInt32] = [0x7fe3fb78,0xa063080c,0x28030054,0x41820008,0x4e800020,0x7fe3fb78,0x80630000,0x38630004,0xA0830090,0xa0630004,0x38000003, 0x7C0403D6,0x7C630214,0x7C032040,0x40810014,0x7fe3fb78,0x80630000,0x38630004,0xA0630090,0x7C641B78,0x7fe3fb78,0x80630000,0x38630004,0xb0830004,0x4e800020]
 //for i in 0 ..< regenCode.count {
 //	dol2.replaceWordAtOffset(regenStart + (i * 4), withBytes: regenCode[i])
@@ -766,7 +766,7 @@ import Foundation
 //let ldol = XGFiles.dol.data!
 //
 //// old stat booster (r3 index of stat to boost, r4 battle pokemon)
-//let statBoosterStart = 0x8015258c - kDOLtoRAMOffsetDifference
+//let statBoosterStart = 0x8015258c - kDolToRAMOffsetDifference
 //let statBoosterCode : [UInt32] = [0x9421ffe0,0x7c0802a6,0x90010024,0x93e1001c,0x93c10018,0x93a10014,0x93810010,
 //0x7C9F2378,0x480cfed9,0x7c601b78,0x7fe3fb78,0x7c1d0378,0x38800000,0x7fa5eb78,0x38c00000,0x4bff08b5,
 //0x7c7c0774,0x2c1c000c,0x4080006c,//------
@@ -785,14 +785,14 @@ import Foundation
 //let safeguards = [0x80214040,0x8021bd6c,0x8022cd90,0x8022d538,0x8022d94c,0x8022e0fc,0x8022e244,0x8022ee48,0x80230154,0x802302f4,0x802306b8,0x80230bd0,0x802314e8,0x802ccf60,0x802de1b4]
 //let mists = [0x8022c910,0x802cc790,0x802ccab4,0x802cccf8,0x802ccf40,0x802220a4,0x80210990]
 //for offset in safeguards + mists {
-//	ldol.replaceWordAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: 0x38600000)
+//	ldol.replaceWordAtOffset(offset - kDolToRAMOffsetDifference, withBytes: 0x38600000)
 //}
 //
-//let tailBranchOffset = 0x801f4430 - kDOLtoRAMOffsetDifference
+//let tailBranchOffset = 0x801f4430 - kDolToRAMOffsetDifference
 //let tailBranchInstruction = 0x4bf5e04d
 //ldol.replaceWordAtOffset(tailBranchOffset, withBytes: UInt32(tailBranchInstruction))
 //
-//let tailStart = 0x8015247c - kDOLtoRAMOffsetDifference
+//let tailStart = 0x8015247c - kDolToRAMOffsetDifference
 //let tailCode : [UInt32] = [0x9421ffe0,0x7c0802a6,0x90010024,0x93e1001c,0x93c10018,0x93a10014,0x93810010,
 //0x7f23cb78,0x3880004b,0x480a6041,0x28030001,0x40820008,0x57BD083C,
 //0x7f43d378,0x3880004b,0x480a6029,0x28030001,0x40820008,0x57DE083C,
@@ -809,29 +809,29 @@ import Foundation
 // assault vest status moves
 
 //
-//let avBranchOffset = 0x802014ac - kDOLtoRAMOffsetDifference
+//let avBranchOffset = 0x802014ac - kDolToRAMOffsetDifference
 //let avBranchInstruction : UInt32 = 0x4bf16619
 //
 //ldol.replaceWordAtOffset(avBranchOffset, withBytes: avBranchInstruction)
 //
-//let assaultVestStart = 0x80117ac4 - kDOLtoRAMOffsetDifference
+//let assaultVestStart = 0x80117ac4 - kDolToRAMOffsetDifference
 //let assaultVestCode : [UInt32] = [0x28030001,0x40820008,0x4e800020,0x281f004c,0x4082000c,0x38600001,0x4e800020,0x38600000,0x4e800020]
 //
 //for i in 0 ..< assaultVestCode.count {
 //	ldol.replaceWordAtOffset(assaultVestStart + (i * 4), withBytes: assaultVestCode[i])
 //}
 
-//ldol.replaceWordAtOffset(0x802014b0 - kDOLtoRAMOffsetDifference, withBytes: 0x28030001)
+//ldol.replaceWordAtOffset(0x802014b0 - kDolToRAMOffsetDifference, withBytes: 0x28030001)
 
 //
 //
 //// allow shadow moves to use hm flag
 //let shadowBranchOffsetsR0 = [0x8001c60c,0x8001c7ec,0x8001e314,0x80036c60]
 //for offset in shadowBranchOffsetsR0 {
-//	ldol.replaceWordAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: createBranchAndLinkFrom(offset: offset - 0x80000000, toOffset: 0x21eb8c))
+//	ldol.replaceWordAtOffset(offset - kDolToRAMOffsetDifference, withBytes: createBranchAndLinkFrom(offset: offset - 0x80000000, toOffset: 0x21eb8c))
 //}
 //
-//let shadowStart = 0x8021eb8c - kDOLtoRAMOffsetDifference
+//let shadowStart = 0x8021eb8c - kDolToRAMOffsetDifference
 //let shadowCode : [UInt32] = [0x7C030378,0x9421fff0,0x7c0802a6,0x90010014,
 //0x4bf1e4a1,0x28030001,
 //0x80010014,0x7c0803a6,0x38210010,0x38000165,0x4e800020,
@@ -847,7 +847,7 @@ import Foundation
 //
 //let shadowR3Offsets = [0x8007e6dc,0x80034e98]
 //for offset in shadowR3Offsets {
-//	ldol.replaceWordAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: createBranchFrom(offset: offset - 0x80000000, toOffset: 0x21ebb8))
+//	ldol.replaceWordAtOffset(offset - kDolToRAMOffsetDifference, withBytes: createBranchFrom(offset: offset - 0x80000000, toOffset: 0x21ebb8))
 //}
 //
 //ldol.save()
@@ -885,11 +885,11 @@ import Foundation
 //// trick room tailwind part 2
 //let kdol = XGFiles.dol.data!
 //
-//let tr2BranchOffset = 0x80152498 - kDOLtoRAMOffsetDifference
+//let tr2BranchOffset = 0x80152498 - kDolToRAMOffsetDifference
 //let tr2BranchInstr  = createBranchFrom(offset: 0x152498, toOffset: 0x152520)
 //kdol.replaceWordAtOffset(tr2BranchOffset, withBytes: tr2BranchInstr)
 //
-//let tr2Start = 0x80152520 - kDOLtoRAMOffsetDifference
+//let tr2Start = 0x80152520 - kDolToRAMOffsetDifference
 //let tr2Instructions : [UInt32] = [
 //	0x7F24CB78,0x38600002,createBranchAndLinkFrom(offset: 0x152528, toOffset: 0x1efcac),0x7C7C1B78,
 //	0x7F44D378,0x38600002,createBranchAndLinkFrom(offset: 0x152538, toOffset: 0x1efcac),0x7c7f1b78,
@@ -901,14 +901,14 @@ import Foundation
 //	kdol.replaceWordAtOffset(tr2Start + (i * 4), withBytes: tr2Instructions[i])
 //}
 //
-//kdol.replaceWordAtOffset(0x801524c8 - kDOLtoRAMOffsetDifference, withBytes: 0x7F83E378)
+//kdol.replaceWordAtOffset(0x801524c8 - kDolToRAMOffsetDifference, withBytes: 0x7F83E378)
 //for offset in [0x801524b0,0x801524e0] {
-//	kdol.replaceWordAtOffset(offset - kDOLtoRAMOffsetDifference, withBytes: 0x7FE3FB78)
+//	kdol.replaceWordAtOffset(offset - kDolToRAMOffsetDifference, withBytes: 0x7FE3FB78)
 //}
 
 //// No guard
 //let noguardindex = 93
-//let noguardstart = 0x802178d4 - kDOLtoRAMOffsetDifference
+//let noguardstart = 0x802178d4 - kDolToRAMOffsetDifference
 //let noguardinstructions : [UInt32] = [kNopInstruction,0x2819005D,
 //                                      0x4182000C,
 //                                      0x281A005D,
@@ -962,12 +962,12 @@ import Foundation
 // skill link part 2
 //let dol = XGFiles.dol.data!
 //
-//dol.replaceWordAtOffset(0x80221d70 - kDOLtoRAMOffsetDifference, withBytes: createBranchAndLinkFrom(offset: 0x221d70, toOffset: 0x152548))
+//dol.replaceWordAtOffset(0x80221d70 - kDolToRAMOffsetDifference, withBytes: createBranchAndLinkFrom(offset: 0x221d70, toOffset: 0x152548))
 //
 //dol.save()
 
-//let skillLinkStart = 0x80152548 - kDOLtoRAMOffsetDifference
-//let skillLinkBranchOffset = 0x80221d98 - kDOLtoRAMOffsetDifference
+//let skillLinkStart = 0x80152548 - kDolToRAMOffsetDifference
+//let skillLinkBranchOffset = 0x80221d98 - kDolToRAMOffsetDifference
 //let skillLinkBranchInstruction = createBranchAndLinkFrom(offset: skillLinkBranchOffset, toOffset: skillLinkStart)
 //let skillLinkCode : [UInt32] = [
 //0x5404063e, // rlwinm	r4, r0, 0, 24, 31 (000000ff) like original code
@@ -987,7 +987,7 @@ import Foundation
 //}
 //
 //// foes can enter reverse mode
-//let reverseOffset = 0x80226754 - kDOLtoRAMOffsetDifference
+//let reverseOffset = 0x80226754 - kDolToRAMOffsetDifference
 //bdol.replaceWordAtOffset(reverseOffset, withBytes: kNopInstruction)
 //
 //
@@ -996,8 +996,8 @@ import Foundation
 //let infiniteReplacements : [UInt32] = [0x38800056,0x38800055,0x38800054]
 //for i in 0 ..< infiniteReplacements.count {
 //	let index = i * 2
-//	bdol.replaceWordAtOffset(infiniteOffsets[index] - kDOLtoRAMOffsetDifference, withBytes: infiniteReplacements[i])
-//	bdol.replaceWordAtOffset(infiniteOffsets[index + 1] - kDOLtoRAMOffsetDifference, withBytes: infiniteReplacements[i])
+//	bdol.replaceWordAtOffset(infiniteOffsets[index] - kDolToRAMOffsetDifference, withBytes: infiniteReplacements[i])
+//	bdol.replaceWordAtOffset(infiniteOffsets[index + 1] - kDolToRAMOffsetDifference, withBytes: infiniteReplacements[i])
 //}
 //bdol.save()
 //
@@ -1049,15 +1049,15 @@ import Foundation
 //let kdol = XGFiles.dol.data!
 //// trick room part 3
 //
-//let get_pointer_index_func = 0x801f3f3c - kDOLtoRAMOffsetDifference
-//let get_pointer_general_func = 0x801efcac - kDOLtoRAMOffsetDifference
-//let check_status_func = 0x801f848c - kDOLtoRAMOffsetDifference
-//let set_status_function = 0x801f8438 - kDOLtoRAMOffsetDifference
-//let end_status_function = 0x801f8534 - kDOLtoRAMOffsetDifference
+//let get_pointer_index_func = 0x801f3f3c - kDolToRAMOffsetDifference
+//let get_pointer_general_func = 0x801efcac - kDolToRAMOffsetDifference
+//let check_status_func = 0x801f848c - kDolToRAMOffsetDifference
+//let set_status_function = 0x801f8438 - kDolToRAMOffsetDifference
+//let end_status_function = 0x801f8534 - kDolToRAMOffsetDifference
 //
-//let mist_start = 0x80220f94 - kDOLtoRAMOffsetDifference
-//let mist_continue = 0x80220ff4 - kDOLtoRAMOffsetDifference
-//let tr_start = 0x8021c268 - kDOLtoRAMOffsetDifference
+//let mist_start = 0x80220f94 - kDolToRAMOffsetDifference
+//let mist_continue = 0x80220ff4 - kDolToRAMOffsetDifference
+//let tr_start = 0x8021c268 - kDolToRAMOffsetDifference
 //
 //let label_set_status = tr_start + 0x28
 //let label_end_status = tr_start + 0x5c
@@ -1128,8 +1128,8 @@ import Foundation
 //
 //// tailwind part 3
 //// removes some code to do with safeguard
-//let tw_start = 0x8021342c - kDOLtoRAMOffsetDifference
-//let tw_end = 0x80213450 - kDOLtoRAMOffsetDifference
+//let tw_start = 0x8021342c - kDolToRAMOffsetDifference
+//let tw_end = 0x80213450 - kDolToRAMOffsetDifference
 //let tw_code : [UInt32] = [
 //	0xa09f0002,
 //	0x2804004b,
@@ -1150,11 +1150,11 @@ import Foundation
 //
 //
 //// magic coat mirror match check
-//let magicBranch = 0x80218568 - kDOLtoRAMOffsetDifference
-//let magicCheckStart  = 0x80152568 - kDOLtoRAMOffsetDifference
-//let magicTrueOffset  = 0x8021856c - kDOLtoRAMOffsetDifference
-//let magicFalseOffset = 0x802185dc - kDOLtoRAMOffsetDifference
-//let get_ability_func = 0x80148898 - kDOLtoRAMOffsetDifference
+//let magicBranch = 0x80218568 - kDolToRAMOffsetDifference
+//let magicCheckStart  = 0x80152568 - kDolToRAMOffsetDifference
+//let magicTrueOffset  = 0x8021856c - kDolToRAMOffsetDifference
+//let magicFalseOffset = 0x802185dc - kDolToRAMOffsetDifference
+//let get_ability_func = 0x80148898 - kDolToRAMOffsetDifference
 //
 //replaceASM(startOffset: magicBranch, newASM: [createBranchFrom(offset: magicBranch, toOffset: magicCheckStart)])
 //
@@ -1170,9 +1170,9 @@ import Foundation
 //replaceASM(startOffset: magicCheckStart, newASM: magicCode)
 //
 //// old ability activate function
-//let abilityActivateStart = 0x80220708 - kDOLtoRAMOffsetDifference
-//let messageParams = 0x801f6780 - kDOLtoRAMOffsetDifference
-//let animSoundCallBack = 0x802236a8 - kDOLtoRAMOffsetDifference
+//let abilityActivateStart = 0x80220708 - kDolToRAMOffsetDifference
+//let messageParams = 0x801f6780 - kDolToRAMOffsetDifference
+//let animSoundCallBack = 0x802236a8 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: abilityActivateStart, newASM: [
 //	// code extract of animation from speed boost activation code
 //	0x9421fff0,
@@ -1202,14 +1202,14 @@ import Foundation
 //
 //
 //// rough skin residual
-//replaceASM(startOffset: 0x80225234 - kDOLtoRAMOffsetDifference, newASM: [0x38800008])
+//replaceASM(startOffset: 0x80225234 - kDolToRAMOffsetDifference, newASM: [0x38800008])
 //
 //
 //
 //// shadow max belly drum effect
-//let bellyBranch = 0x8021e724 - kDOLtoRAMOffsetDifference
-//let bellyStart = 0x802226f4 - kDOLtoRAMOffsetDifference
-//let checkShadowPokemon = 0x80149014 - kDOLtoRAMOffsetDifference
+//let bellyBranch = 0x8021e724 - kDolToRAMOffsetDifference
+//let bellyStart = 0x802226f4 - kDolToRAMOffsetDifference
+//let checkShadowPokemon = 0x80149014 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: bellyBranch, newASM: [createBranchFrom(offset: bellyBranch, toOffset: bellyStart)])
 //replaceASM(startOffset: bellyStart, newASM: [
 //	0x80630000, // lw r3, 0 (r3)
@@ -1226,10 +1226,10 @@ import Foundation
 //
 //// freeze dry
 //let freezeBranches = [0x80216828,0x80216858]
-//let freezeStart = 0x8022271c - kDOLtoRAMOffsetDifference
-//let effectCheck = 0x80117a2c - kDOLtoRAMOffsetDifference
+//let freezeStart = 0x8022271c - kDolToRAMOffsetDifference
+//let effectCheck = 0x80117a2c - kDolToRAMOffsetDifference
 //for i in 0 ..< freezeBranches.count {
-//	let branch = freezeBranches[i] - kDOLtoRAMOffsetDifference
+//	let branch = freezeBranches[i] - kDolToRAMOffsetDifference
 //	replaceASM(startOffset: branch, newASM: [createBranchAndLinkFrom(offset: branch, toOffset: freezeStart)])
 //}
 //replaceASM(startOffset: freezeStart, newASM: [
@@ -1251,8 +1251,8 @@ import Foundation
 //
 //
 //// shadow hunter shadow seeker
-//let hunterBranch = 0x80216da0 - kDOLtoRAMOffsetDifference
-//let hunterStart = 0x80222750 - kDOLtoRAMOffsetDifference
+//let hunterBranch = 0x80216da0 - kDolToRAMOffsetDifference
+//let hunterStart = 0x80222750 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: hunterBranch, newASM: [createBranchAndLinkFrom(offset: hunterBranch, toOffset: hunterStart)])
 //replaceASM(startOffset: hunterStart, newASM: [
 //	0x28030000, // cmpwi r3, 0
@@ -1274,10 +1274,10 @@ import Foundation
 //	])
 //
 //// feint
-//let feintBranch = 0x80216708 - kDOLtoRAMOffsetDifference
-//let feintStart = 0x8022075c - kDOLtoRAMOffsetDifference
-//let feintEnd = 0x80216728 - kDOLtoRAMOffsetDifference
-//let endStatus = 0x802026a0 - kDOLtoRAMOffsetDifference
+//let feintBranch = 0x80216708 - kDolToRAMOffsetDifference
+//let feintStart = 0x8022075c - kDolToRAMOffsetDifference
+//let feintEnd = 0x80216728 - kDolToRAMOffsetDifference
+//let endStatus = 0x802026a0 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: feintBranch, newASM: [createBranchFrom(offset: feintBranch, toOffset: feintStart)])
 //replaceASM(startOffset: feintStart, newASM: [
 //	0x7ea3ab78, // mr r3, r21
@@ -1296,8 +1296,8 @@ import Foundation
 //
 //
 //// foul play
-//let foulBranch = 0x8022a188 - kDOLtoRAMOffsetDifference
-//let foulStart = 0x8022278c - kDOLtoRAMOffsetDifference
+//let foulBranch = 0x8022a188 - kDolToRAMOffsetDifference
+//let foulStart = 0x8022278c - kDolToRAMOffsetDifference
 //let foulEnd = foulBranch + 0x8
 //replaceASM(startOffset: foulBranch, newASM: [createBranchFrom(offset: foulBranch, toOffset: foulStart), kNopInstruction])
 //replaceASM(startOffset: foulStart, newASM: [
@@ -1319,9 +1319,9 @@ import Foundation
 //	])
 //
 //// facade with burn
-//let facadeBranch = 0x8022a5c4 - kDOLtoRAMOffsetDifference
-//let facadeStart = 0x8021e998 - kDOLtoRAMOffsetDifference
-//let checkStatus = 0x802025f0 - kDOLtoRAMOffsetDifference
+//let facadeBranch = 0x8022a5c4 - kDolToRAMOffsetDifference
+//let facadeStart = 0x8021e998 - kDolToRAMOffsetDifference
+//let checkStatus = 0x802025f0 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: facadeBranch, newASM: [createBranchFrom(offset: facadeBranch, toOffset: facadeStart)])
 //replaceASM(startOffset: facadeStart, newASM: [
 //	0x7de37b78, // mr r3, r15
@@ -1335,8 +1335,8 @@ import Foundation
 //	])
 //
 //// acrobatics
-//let acroBranch = 0x8022a110 - kDOLtoRAMOffsetDifference
-//let acroStart = 0x8021e9b8 - kDOLtoRAMOffsetDifference
+//let acroBranch = 0x8022a110 - kDolToRAMOffsetDifference
+//let acroStart = 0x8021e9b8 - kDolToRAMOffsetDifference
 //let acroEnd = acroBranch + 0x4
 //replaceASM(startOffset: acroBranch, newASM: [createBranchFrom(offset: acroBranch, toOffset: acroStart)])
 //replaceASM(startOffset: acroStart, newASM: [
@@ -1356,21 +1356,21 @@ import Foundation
 //	])
 //
 //// thick club alolan marowak
-//replaceASM(startOffset: 0x8022a4c8 - kDOLtoRAMOffsetDifference, newASM: [0x28000109])
+//replaceASM(startOffset: 0x8022a4c8 - kDolToRAMOffsetDifference, newASM: [0x28000109])
 //
 //// shadow sky residual damage
-//replaceASM(startOffset:0x80221320 - kDOLtoRAMOffsetDifference, newASM: [0x38800008])
+//replaceASM(startOffset:0x80221320 - kDolToRAMOffsetDifference, newASM: [0x38800008])
 //
 //// remove explosion defense halving
-//replaceASM(startOffset: 0x8022a780 - kDOLtoRAMOffsetDifference, newASM: [kNopInstruction])
+//replaceASM(startOffset: 0x8022a780 - kDolToRAMOffsetDifference, newASM: [kNopInstruction])
 //
 //// psyshock psystrike
-//let psyBranch = 0x8022a97c - kDOLtoRAMOffsetDifference
-//let psyStart = 0x8021e9fc - kDOLtoRAMOffsetDifference
-//let psyTrue = 0x8022a7fc - kDOLtoRAMOffsetDifference
-//let psyfalse = 0x8022a980 - kDOLtoRAMOffsetDifference
-//let psy2Start = 0x8021ea2c - kDOLtoRAMOffsetDifference
-//let psy2Branch = 0x8022a85c - kDOLtoRAMOffsetDifference
+//let psyBranch = 0x8022a97c - kDolToRAMOffsetDifference
+//let psyStart = 0x8021e9fc - kDolToRAMOffsetDifference
+//let psyTrue = 0x8022a7fc - kDolToRAMOffsetDifference
+//let psyfalse = 0x8022a980 - kDolToRAMOffsetDifference
+//let psy2Start = 0x8021ea2c - kDolToRAMOffsetDifference
+//let psy2Branch = 0x8022a85c - kDolToRAMOffsetDifference
 //let psy2End = psy2Branch + 0x4
 //replaceASM(startOffset: psyBranch, newASM: [createBranchFrom(offset: psyBranch, toOffset: psyStart)])
 //replaceASM(startOffset: psyStart, newASM: [
@@ -1409,7 +1409,7 @@ import Foundation
 //	])
 //
 //// lightball attack boost
-//replaceASM(startOffset: 0x8022a48c - kDOLtoRAMOffsetDifference, newASM: [
+//replaceASM(startOffset: 0x8022a48c - kDolToRAMOffsetDifference, newASM: [
 //	0x281d0019, // cmpwi r29, pikachu
 //	0x4082000c, // bne 0xc
 //	0x56b50c3c, // r21 *= 2 (double attack)
@@ -1417,10 +1417,10 @@ import Foundation
 //
 //
 //// sand spdef boost for rock types
-//let sandBranch = 0x8022a1c4 - kDOLtoRAMOffsetDifference
+//let sandBranch = 0x8022a1c4 - kDolToRAMOffsetDifference
 //let sandEnd = sandBranch + 0x4
-//let sandStart = 0x8021db34 - kDOLtoRAMOffsetDifference
-//let checkHasType = 0x802054fc - kDOLtoRAMOffsetDifference
+//let sandStart = 0x8021db34 - kDolToRAMOffsetDifference
+//let checkHasType = 0x802054fc - kDolToRAMOffsetDifference
 ////replaceASM(startOffset: sandBranch, newASM: [createBranchFrom(offset: sandBranch, toOffset: sandStart)])
 //replaceASM(startOffset: sandStart, newASM: [
 //	// sandstorm spdef boost for rock types
@@ -1443,15 +1443,15 @@ import Foundation
 //	])
 //
 // sheer force sand force amplifier tough claws adaptability technician solar power mega launcher
-//let abilityBranch = 0x8022a66c - kDOLtoRAMOffsetDifference
-//let abilityStart = 0x80220cec - kDOLtoRAMOffsetDifference
+//let abilityBranch = 0x8022a66c - kDolToRAMOffsetDifference
+//let abilityStart = 0x80220cec - kDolToRAMOffsetDifference
 //let abilityEnd = abilityBranch + 0x4
-//let checkHasType = 0x802054fc - kDOLtoRAMOffsetDifference
+//let checkHasType = 0x802054fc - kDolToRAMOffsetDifference
 //let noBoost = 0xa8
 //let boost33 = 0x94
 //let noBoost50 = 0x120
 //let boost50 = 0x10c
-//let sandCheck = 0x80220ec0 - kDOLtoRAMOffsetDifference
+//let sandCheck = 0x80220ec0 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: abilityBranch, newASM: [createBranchFrom(offset: abilityBranch, toOffset: abilityStart)]
 //	+ ASM(repeating: kNopInstruction, count: 63))
 //replaceASM(startOffset: abilityStart, newASM: [
@@ -1545,8 +1545,8 @@ import Foundation
 //	])
 //
 //// aerilate, pixilate, refrigerate, reckless
-//let ability2Branch = 0x8022a670 - kDOLtoRAMOffsetDifference
-//let ability2Start = 0x8022190c - kDOLtoRAMOffsetDifference
+//let ability2Branch = 0x8022a670 - kDolToRAMOffsetDifference
+//let ability2Start = 0x8022190c - kDolToRAMOffsetDifference
 //let ability2End = ability2Branch + 0x4
 //let noBoost20 = 0x88
 //let boost20 = 0x74
@@ -1596,12 +1596,12 @@ import Foundation
 //	])
 //
 //// multiscale fur coat pure heart
-//let ability3Branch = 0x8022a674 - kDOLtoRAMOffsetDifference
-//let ability3Start = 0x802227f4 - kDOLtoRAMOffsetDifference
+//let ability3Branch = 0x8022a674 - kDolToRAMOffsetDifference
+//let ability3Start = 0x802227f4 - kDolToRAMOffsetDifference
 //let ability3End = ability3Branch + 0x4
 //let halfDamage = 0x7c
 //let noHalfDamage = 0x90
-//let checkFullHP = 0x80201d20 - kDOLtoRAMOffsetDifference
+//let checkFullHP = 0x80201d20 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: ability3Branch, newASM: [createBranchFrom(offset: ability3Branch, toOffset: ability3Start)])
 //replaceASM(startOffset: ability3Start, newASM: [
 //	0x7e238b78, // mr r3, r17
@@ -1647,14 +1647,14 @@ import Foundation
 //	])
 //
 //// storm drain
-//let stormBranch = 0x80218a70 - kDOLtoRAMOffsetDifference
-//let stormStart = 0x8022288c - kDOLtoRAMOffsetDifference
-//let rodFalseOffset = 0x80218b54 - kDOLtoRAMOffsetDifference
-//let rodCheckOffset = 0x80218a84 - kDOLtoRAMOffsetDifference
+//let stormBranch = 0x80218a70 - kDolToRAMOffsetDifference
+//let stormStart = 0x8022288c - kDolToRAMOffsetDifference
+//let rodFalseOffset = 0x80218b54 - kDolToRAMOffsetDifference
+//let rodCheckOffset = 0x80218a84 - kDolToRAMOffsetDifference
 //let rodFalse = 0x48
 //let rodCheck = 0x4c
-//let getFoeWithAbility = 0x801f38d8 - kDOLtoRAMOffsetDifference
-//let changeTarget = 0x80218aa4 - kDOLtoRAMOffsetDifference
+//let getFoeWithAbility = 0x801f38d8 - kDolToRAMOffsetDifference
+//let changeTarget = 0x80218aa4 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: stormBranch, newASM: [createBranchFrom(offset: stormBranch, toOffset: stormStart)])
 //replaceASM(startOffset: stormStart, newASM: [
 //	0x281b000d, // cmpwi r27, electric type
@@ -1684,7 +1684,7 @@ import Foundation
 //	])
 //
 //// remove old choice band
-//replaceASM(startOffset: 0x8022a3a0 - kDOLtoRAMOffsetDifference, newASM: ASM(repeating: kNopInstruction, count: 8))
+//replaceASM(startOffset: 0x8022a3a0 - kDolToRAMOffsetDifference, newASM: ASM(repeating: kNopInstruction, count: 8))
 //
 //
 //
@@ -1754,10 +1754,10 @@ import Foundation
 
 
 // allow shadow moves to use hm flag
-//let shadow355Start = 0x8021e380 - kDOLtoRAMOffsetDifference
-//let shadowBranchOffset355 = 0x80146eb4 - kDOLtoRAMOffsetDifference
-//let shadow355End = 0x80146ebc - kDOLtoRAMOffsetDifference
-//let shadowSkip = 0x80146ecc - kDOLtoRAMOffsetDifference
+//let shadow355Start = 0x8021e380 - kDolToRAMOffsetDifference
+//let shadowBranchOffset355 = 0x80146eb4 - kDolToRAMOffsetDifference
+//let shadow355End = 0x80146ebc - kDolToRAMOffsetDifference
+//let shadowSkip = 0x80146ecc - kDolToRAMOffsetDifference
 //
 //replaceASM(startOffset: shadowBranchOffset355, newASM: [createBranchFrom(offset: shadowBranchOffset355, toOffset: shadow355Start)])
 //
@@ -1775,10 +1775,10 @@ import Foundation
 //createBranchFrom(offset: shadow355Start + 0x24, toOffset: shadowSkip),
 //])
 //
-//let shadow355Start2 = 0x8021db70 - kDOLtoRAMOffsetDifference
-//let shadowBranchOffset3552 = 0x80146f28 - kDOLtoRAMOffsetDifference
-//let shadow355End2 = 0x80146f30 - kDOLtoRAMOffsetDifference
-//let shadowSkip2 = 0x80146f50 - kDOLtoRAMOffsetDifference
+//let shadow355Start2 = 0x8021db70 - kDolToRAMOffsetDifference
+//let shadowBranchOffset3552 = 0x80146f28 - kDolToRAMOffsetDifference
+//let shadow355End2 = 0x80146f30 - kDolToRAMOffsetDifference
+//let shadowSkip2 = 0x80146f50 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: shadowBranchOffset3552, newASM: [createBranchFrom(offset: shadowBranchOffset3552, toOffset: shadow355Start2)])
 //
 //replaceASM(startOffset: shadow355Start2, newASM: [
@@ -1797,7 +1797,7 @@ import Foundation
 //createBranchFrom(offset: shadow355Start2 + 0x2c, toOffset: shadowSkip2),
 //])
 //
-//replaceASM(startOffset: 0x80146f38 - kDOLtoRAMOffsetDifference, newASM: [
+//replaceASM(startOffset: 0x80146f38 - kDolToRAMOffsetDifference, newASM: [
 //0x7c601b78, // mr r0, r3
 //0x3c6080b9, // lis r3, 0x80b9
 //0x5404103a, // rlwinm r4, r0 (x4)
@@ -1805,18 +1805,18 @@ import Foundation
 //])
 
 // calc damage 2
-//let calc_boosts = 0x80229fe4 - kDOLtoRAMOffsetDifference
+//let calc_boosts = 0x80229fe4 - kDolToRAMOffsetDifference
 //let boostOffsets = [0x802dcc14,0x8020daec]
 //for offset in boostOffsets {
-//	replaceASM(startOffset: offset - kDOLtoRAMOffsetDifference, newASM: [createBranchAndLinkFrom(offset: offset - kDOLtoRAMOffsetDifference, toOffset: calc_boosts)])
+//	replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [createBranchAndLinkFrom(offset: offset - kDolToRAMOffsetDifference, toOffset: calc_boosts)])
 //}
 
 //// pixilate aerilate refrigerate
-//let ateBranch  = 0x802183dc - kDOLtoRAMOffsetDifference
-//let ateStart   = 0x8021dba0 - kDOLtoRAMOffsetDifference
-//let ateEnd     = 0x802183e0 - kDOLtoRAMOffsetDifference
-//let storeType  = 0x8013e064 - kDOLtoRAMOffsetDifference
-//let getRoutine = 0x80148da8 - kDOLtoRAMOffsetDifference
+//let ateBranch  = 0x802183dc - kDolToRAMOffsetDifference
+//let ateStart   = 0x8021dba0 - kDolToRAMOffsetDifference
+//let ateEnd     = 0x802183e0 - kDolToRAMOffsetDifference
+//let storeType  = 0x8013e064 - kDolToRAMOffsetDifference
+//let getRoutine = 0x80148da8 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: ateBranch, newASM: [createBranchFrom(offset: ateBranch, toOffset: ateStart),])
 //replaceASM(startOffset: ateStart, newASM: [
 //0x7c791b78, // mr r3, r25
@@ -1854,15 +1854,15 @@ import Foundation
 // type 9 dependencies
 //let type9Offsets : [(offset: Int, lenght: Int)] = [(0x802c6ecc,3),(0x802c6f7c,2),(0x802c8a9c,2),(0x802c8e28,2),(0x802cb90c,2),(0x802cb9f8,2),(0x802d9228,2),(0x802d9324,2),]
 //for (offset, length) in type9Offsets {
-//	removeASM(startOffset: offset - kDOLtoRAMOffsetDifference, length: length)
+//	removeASM(startOffset: offset - kDolToRAMOffsetDifference, length: length)
 //}
 
 
 
 //// calc damage boosts
 //let calcOffsets = [0x802dcc14,0x8020daec,0x8021e224,0x802db020,0x8022713c,0x80216d0c]
-//let calcDamageBoosts = 0x80229fe4 - kDOLtoRAMOffsetDifference
-//let calcStart = 0x80220e10 - kDOLtoRAMOffsetDifference
+//let calcDamageBoosts = 0x80229fe4 - kDolToRAMOffsetDifference
+//let calcStart = 0x80220e10 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: calcStart, newASM: [
 //0x9421fef0, // stwu	sp, -0x0110 (sp)
 //0x7c0802a6, // mflr	r0
@@ -1912,20 +1912,20 @@ import Foundation
 //
 //
 //for offset in calcOffsets {
-//	let o = offset - kDOLtoRAMOffsetDifference
+//	let o = offset - kDolToRAMOffsetDifference
 //	replaceASM(startOffset: o, newASM: [createBranchAndLinkFrom(offset: o, toOffset: calcStart)])
 //}
 ////sturdy and focus sash
-//let sashstart = 0x80216010 - kDOLtoRAMOffsetDifference
+//let sashstart = 0x80216010 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: sashstart, newASM: [0x28170027,0x41820014,0x7fa3eb78,0x4bf3287d,0x28030005,0x40820024,0x7fa3eb78,0x4bfebcf5,0x5460063f,0x41820014,0x7fa3eb78,0x38800001,kNopInstruction])
-//replaceASM(startOffset: 0x80216140 - kDOLtoRAMOffsetDifference, newASM: [0x388000c4]) // pretend pokemon is holding focus sash
+//replaceASM(startOffset: 0x80216140 - kDolToRAMOffsetDifference, newASM: [0x388000c4]) // pretend pokemon is holding focus sash
 //
 //// sash/sturdy shedinja check
 ////
-//let shedinjaBranch = 0x80216010 - kDOLtoRAMOffsetDifference
-//let shedinjaTrueBranch = 0x80216048 - kDOLtoRAMOffsetDifference
-//let shedinjaFalseBranch = 0x80216014 - kDOLtoRAMOffsetDifference
-//let shedinjaCheckStart = 0x80152660 - kDOLtoRAMOffsetDifference
+//let shedinjaBranch = 0x80216010 - kDolToRAMOffsetDifference
+//let shedinjaTrueBranch = 0x80216048 - kDolToRAMOffsetDifference
+//let shedinjaFalseBranch = 0x80216014 - kDolToRAMOffsetDifference
+//let shedinjaCheckStart = 0x80152660 - kDolToRAMOffsetDifference
 //
 //let shedinjaCode : ASM = [
 //	0x281f0001,	// cmpwi r31, 1
@@ -2063,15 +2063,15 @@ import Foundation
 
 
 //// aurora veil shadow veil
-//let veilStart = 0x8021c7e0 - kDOLtoRAMOffsetDifference
+//let veilStart = 0x8021c7e0 - kDolToRAMOffsetDifference
 //
-//let moveRoutineSetPosition = 0x802236d4 - kDOLtoRAMOffsetDifference
-//let moveRoutineUpdatePosition = 0x802236dc - kDOLtoRAMOffsetDifference
+//let moveRoutineSetPosition = 0x802236d4 - kDolToRAMOffsetDifference
+//let moveRoutineUpdatePosition = 0x802236dc - kDolToRAMOffsetDifference
 //
-//let getPokemonPointer = 0x801efcac - kDOLtoRAMOffsetDifference
-//let setFieldStatus = 0x801f8438 - kDOLtoRAMOffsetDifference
-//let getCurrentMove = 0x80148d64 - kDOLtoRAMOffsetDifference
-//let getWeather = 0x801f45d0 - kDOLtoRAMOffsetDifference
+//let getPokemonPointer = 0x801efcac - kDolToRAMOffsetDifference
+//let setFieldStatus = 0x801f8438 - kDolToRAMOffsetDifference
+//let getCurrentMove = 0x80148d64 - kDolToRAMOffsetDifference
+//let getWeather = 0x801f45d0 - kDolToRAMOffsetDifference
 //
 //replaceASM(startOffset: veilStart, newASM: [
 //	0x7C7E1B78, // mr r30, r3
@@ -2106,7 +2106,7 @@ import Foundation
 //])
 //
 //// new dpkm structure
-//replaceASM(startOffset: 0x8028bac0 - kDOLtoRAMOffsetDifference, newASM: [0x8863001f, kNopInstruction])
+//replaceASM(startOffset: 0x8028bac0 - kDolToRAMOffsetDifference, newASM: [0x8863001f, kNopInstruction])
 //
 //
 //let mtbattleprizes : [XGItems] = [
@@ -2138,11 +2138,11 @@ import Foundation
 //
 //// 100% accuracy in weather
 //
-//let weatherBranch = 0x802180e0 - kDOLtoRAMOffsetDifference
-//let weatherStart  = 0x802296E4 - kDOLtoRAMOffsetDifference
+//let weatherBranch = 0x802180e0 - kDolToRAMOffsetDifference
+//let weatherStart  = 0x802296E4 - kDolToRAMOffsetDifference
 //
-//let accurate   = 0x802180f8 - kDOLtoRAMOffsetDifference
-//let inaccurate = 0x80218100 - kDOLtoRAMOffsetDifference
+//let accurate   = 0x802180f8 - kDolToRAMOffsetDifference
+//let inaccurate = 0x80218100 - kDolToRAMOffsetDifference
 //
 //let rainCheck = 0x1c
 //let hailCheck = 0x30
@@ -2192,15 +2192,15 @@ import Foundation
 //switchNextPokemonAtEndOfTurn()
 //
 //// burn residual damage to 1/16
-//replaceASM(startOffset: 0x80227e64 - kDOLtoRAMOffsetDifference, newASM: [0x38800010])
+//replaceASM(startOffset: 0x80227e64 - kDolToRAMOffsetDifference, newASM: [0x38800010])
 //
 //
 //// filter tinted lens expert belt
 //
 //// tinted lens
-//let oldLensBranch = 0x80216ac4 - kDOLtoRAMOffsetDifference
+//let oldLensBranch = 0x80216ac4 - kDolToRAMOffsetDifference
 //
-//let lens2Start = 0x8021c2f0 - kDOLtoRAMOffsetDifference
+//let lens2Start = 0x8021c2f0 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: lens2Start, newASM: [
 //
 //	0x9421ffe0, // stwu	sp, -0x0020 (sp)
@@ -2211,7 +2211,7 @@ import Foundation
 //
 //	0x38600011, // li r3, 17 (attacking pokemon)
 //	0x38800000, // li r4, 0
-//	createBranchAndLinkFrom(offset: lens2Start + 0x1c, toOffset: 0x801efcac - kDOLtoRAMOffsetDifference), // get pokemon pointer
+//	createBranchAndLinkFrom(offset: lens2Start + 0x1c, toOffset: 0x801efcac - kDolToRAMOffsetDifference), // get pokemon pointer
 //	0xa063080c,	// lhz r3, 0x80c(r3)
 //	0x2803006a,	// cmpwi r3, tinted lens
 //	powerPCBranchNotEqualFromOffset(from: 0x28, to: 0x38), // bne lens end
@@ -2229,13 +2229,13 @@ import Foundation
 //])
 //
 //// old filter
-//let oldFilterBranch = 0x80216ad4 - kDOLtoRAMOffsetDifference
+//let oldFilterBranch = 0x80216ad4 - kDolToRAMOffsetDifference
 //revertDolInstructionAtOffsets(offsets: [oldFilterBranch, oldLensBranch])
 //
 //// filter + expert belt
-//let filter2Start = 0x802295F8 - kDOLtoRAMOffsetDifference
+//let filter2Start = 0x802295F8 - kDolToRAMOffsetDifference
 //
-//let getItem = 0x8020384c - kDOLtoRAMOffsetDifference
+//let getItem = 0x8020384c - kDolToRAMOffsetDifference
 //
 //replaceASM(startOffset: filter2Start, newASM: [
 //
@@ -2247,7 +2247,7 @@ import Foundation
 //
 //	0x38600012, // li r3, 18 (defending pokemon)
 //	0x38800000, // li r4, 0
-//	createBranchAndLinkFrom(offset: filter2Start + 0x1c, toOffset: 0x801efcac - kDOLtoRAMOffsetDifference), // get pokemon pointer
+//	createBranchAndLinkFrom(offset: filter2Start + 0x1c, toOffset: 0x801efcac - kDolToRAMOffsetDifference), // get pokemon pointer
 //	0xa063080c,	// lhz r3, 0x80c(r3) (get ability)
 //	0x28030065,	// cmpwi r3, filter
 //	powerPCBranchNotEqualFromOffset(from: 0x28, to: 0x38),
@@ -2258,7 +2258,7 @@ import Foundation
 //
 //	0x38600011, //li r3, 17 (attacking pokemon)
 //	0x38800000, // li r4, 0
-//	createBranchAndLinkFrom(offset: filter2Start + 0x40, toOffset: 0x801efcac - kDOLtoRAMOffsetDifference), // get pokemon pointer
+//	createBranchAndLinkFrom(offset: filter2Start + 0x40, toOffset: 0x801efcac - kDolToRAMOffsetDifference), // get pokemon pointer
 //	createBranchAndLinkFrom(offset: filter2Start + 0x44, toOffset: getItem), // get item's hold item id
 //	0x28030047, // cmpwi r3, 71 (compare with expert belt)
 //	powerPCBranchNotEqualFromOffset(from: 0x4c, to: 0x5c),
@@ -2274,7 +2274,7 @@ import Foundation
 //	0x38210020, // addi	sp, sp, 32
 //	0x4e800020, // blr
 //])
-//let getEffectiveness = 0x8022271c - kDOLtoRAMOffsetDifference
+//let getEffectiveness = 0x8022271c - kDolToRAMOffsetDifference
 //
 //let effectiveEnd = 0x78
 //let filterCheckStart = 0x58
@@ -2282,8 +2282,8 @@ import Foundation
 //let filterStart = 0x6c
 //let tintedStart = 0x74
 //
-//let effectiveStart = 0x80229578 - kDOLtoRAMOffsetDifference
-//let effectiveBranch = 0x80216840 - kDOLtoRAMOffsetDifference
+//let effectiveStart = 0x80229578 - kDolToRAMOffsetDifference
+//let effectiveBranch = 0x80216840 - kDolToRAMOffsetDifference
 //let effectiveReturn = effectiveBranch + 0x4
 //
 //replaceASM(startOffset: effectiveBranch, newASM: [createBranchFrom(offset: effectiveBranch, toOffset: effectiveStart)])
@@ -2334,8 +2334,8 @@ import Foundation
 //let shadowFilterBranch = 0x216e00
 //let shadowTintedStart = 0xB99FA8
 //let shadowFilterStart = 0xB99FC4
-//XGAssembly.replaceASM(startOffset: shadowTintedBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: shadowTintedBranch, toOffset: shadowTintedStart)])
-//XGAssembly.replaceASM(startOffset: shadowFilterBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: shadowFilterBranch, toOffset: shadowFilterStart)])
+//XGAssembly.replaceASM(startOffset: shadowTintedBranch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: shadowTintedBranch, toOffset: shadowTintedStart)])
+//XGAssembly.replaceASM(startOffset: shadowFilterBranch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: shadowFilterBranch, toOffset: shadowFilterStart)])
 //XGAssembly.replaceRELASM(startOffset: shadowTintedStart - kRELtoRAMOffsetDifference, newASM: [
 //	0x7f83e378, // mr	r3, r28 (attacking pokemon)
 //	0xa063080c,	// lhz r3, 0x80c(r3) (get ability)
@@ -2375,8 +2375,8 @@ import Foundation
 //])
 //
 //// expert belt fix
-//let filter2Start = 0x2295F8 - kDOLtoRAMOffsetDifference
-//let getItem = 0x20384c - kDOLtoRAMOffsetDifference
+//let filter2Start = 0x2295F8 - kDolToRAMOffsetDifference
+//let getItem = 0x20384c - kDolToRAMOffsetDifference
 //XGAssembly.replaceASM(startOffset: filter2Start, newASM: [
 //
 //	0x9421ffe0, // stwu	sp, -0x0020 (sp)
@@ -2387,7 +2387,7 @@ import Foundation
 //
 //	0x38600012, // li r3, 18 (defending pokemon)
 //	0x38800000, // li r4, 0
-//	XGAssembly.createBranchAndLinkFrom(offset: filter2Start + 0x1c, toOffset: 0x1efcac - kDOLtoRAMOffsetDifference), // get pokemon pointer
+//	XGAssembly.createBranchAndLinkFrom(offset: filter2Start + 0x1c, toOffset: 0x1efcac - kDolToRAMOffsetDifference), // get pokemon pointer
 //	0xa063080c,	// lhz r3, 0x80c(r3) (get ability)
 //	0x28030065,	// cmpwi r3, filter
 //	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x28, to: 0x38),
@@ -2398,7 +2398,7 @@ import Foundation
 //
 //	0x38600011, //li r3, 17 (attacking pokemon)
 //	0x38800000, // li r4, 0
-//	XGAssembly.createBranchAndLinkFrom(offset: filter2Start + 0x40, toOffset: 0x1efcac - kDOLtoRAMOffsetDifference), // get pokemon pointer
+//	XGAssembly.createBranchAndLinkFrom(offset: filter2Start + 0x40, toOffset: 0x1efcac - kDolToRAMOffsetDifference), // get pokemon pointer
 //	XGAssembly.createBranchAndLinkFrom(offset: filter2Start + 0x44, toOffset: getItem), // get item's hold item id
 //	0x28030047, // cmpwi r3, 71 (compare with expert belt)
 //	XGAssembly.powerPCBranchNotEqualFromOffset(from: 0x4c, to: 0x5c),
@@ -2417,7 +2417,7 @@ import Foundation
 //
 //
 //// timer ball update to closer to gen V+ mechanics (maxes in 15 turns)
-//XGAssembly.replaceASM(startOffset: 0x219444 - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: 0x219444 - kDolToRAMOffsetDifference, newASM: [
 //	0x54630C3C, // r3  = r3 * 2
 //	0x3B83000A, // r28  = r3 + 10
 //])
@@ -2425,11 +2425,11 @@ import Foundation
 //renameZaprong(newName: "BonBon")
 //
 //// shadow terrain
-//let terrainBranch = 0x8022a60c - kDOLtoRAMOffsetDifference
-//let terrainStart = 0x8021e9ec - kDOLtoRAMOffsetDifference
-//let terrainTrue = 0x8022a618 - kDOLtoRAMOffsetDifference
-//let terrainFalse = 0x8022a63c - kDOLtoRAMOffsetDifference
-//let checkShadowMove = 0x8013d03c - kDOLtoRAMOffsetDifference
+//let terrainBranch = 0x8022a60c - kDolToRAMOffsetDifference
+//let terrainStart = 0x8021e9ec - kDolToRAMOffsetDifference
+//let terrainTrue = 0x8022a618 - kDolToRAMOffsetDifference
+//let terrainFalse = 0x8022a63c - kDolToRAMOffsetDifference
+//let checkShadowMove = 0x8013d03c - kDolToRAMOffsetDifference
 //replaceASM(startOffset: terrainBranch, newASM: [
 //	0x7e238b78, // mr r3, r17
 //	createBranchAndLinkFrom(offset: terrainBranch + 0x4, toOffset: checkShadowMove),
@@ -2466,17 +2466,17 @@ import Foundation
 
 
 //// items
-//let checkShadowPokemon = 0x80149014 - kDOLtoRAMOffsetDifference
-//let itemBranch = 0x8022a678 - kDOLtoRAMOffsetDifference
-//let itemStart = 0x802219e0 - kDOLtoRAMOffsetDifference
+//let checkShadowPokemon = 0x80149014 - kDolToRAMOffsetDifference
+//let itemBranch = 0x8022a678 - kDolToRAMOffsetDifference
+//let itemStart = 0x802219e0 - kDolToRAMOffsetDifference
 //let itemEnd = itemBranch + 0x4
 //let itemBuff = 0x68
 //let itemNerf = 0x104
 //let defenderStart = 0x80
 //let defenderEnd = 0x118
-//let getStats = 0x80146078 - kDOLtoRAMOffsetDifference
-//let getEvolutionMethod = 0x80145c18 - kDOLtoRAMOffsetDifference
-//let getItemParameter = 0x80203828 - kDOLtoRAMOffsetDifference
+//let getStats = 0x80146078 - kDolToRAMOffsetDifference
+//let getEvolutionMethod = 0x80145c18 - kDolToRAMOffsetDifference
+//let getItemParameter = 0x80203828 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: itemBranch, newASM: [createBranchFrom(offset: itemBranch, toOffset: itemStart)])
 //replaceASM(startOffset: itemStart, newASM: [
 //	// attacker items
@@ -2560,14 +2560,14 @@ import Foundation
 //])
 
 //// aura animation
-//let auraAnimation = 0x80205c9c - kDOLtoRAMOffsetDifference
+//let auraAnimation = 0x80205c9c - kDolToRAMOffsetDifference
 //
-//let auraStart   = 0x80229734 - kDOLtoRAMOffsetDifference
+//let auraStart   = 0x80229734 - kDolToRAMOffsetDifference
 //
-//let auraBranch = 0x80215e08 - kDOLtoRAMOffsetDifference
+//let auraBranch = 0x80215e08 - kDolToRAMOffsetDifference
 //
-//let checkStatus = 0x802025f0 - kDOLtoRAMOffsetDifference
-//let getCurrentMove = 0x80148d64 - kDOLtoRAMOffsetDifference
+//let checkStatus = 0x802025f0 - kDolToRAMOffsetDifference
+//let getCurrentMove = 0x80148d64 - kDolToRAMOffsetDifference
 //
 //replaceASM(startOffset: auraBranch, newASM: [createBranchAndLinkFrom(offset: auraBranch, toOffset: auraStart)])
 //replaceASM(startOffset: auraStart, newASM: [
@@ -2579,7 +2579,7 @@ import Foundation
 //
 //	0x38600011, // li r3, 17 (attacking pokemon)
 //	0x38800000, // li r4, 0
-//	createBranchAndLinkFrom(offset: auraStart + 0x18, toOffset: 0x801efcac - kDOLtoRAMOffsetDifference), // get pokemon pointer
+//	createBranchAndLinkFrom(offset: auraStart + 0x18, toOffset: 0x801efcac - kDolToRAMOffsetDifference), // get pokemon pointer
 //	0x7C7D1B78,	// mr r29, r3
 //
 //	0x3880003e, // li r4, reverse mode
@@ -2881,12 +2881,12 @@ import Foundation
 
 
 //// shadow shake
-//let shakeBranch = 0x216d94 - kDOLtoRAMOffsetDifference
-//let shakeStart = 0x21fe38 - kDOLtoRAMOffsetDifference
-//let groundTrue = 0x216e10 - kDOLtoRAMOffsetDifference
+//let shakeBranch = 0x216d94 - kDolToRAMOffsetDifference
+//let shakeStart = 0x21fe38 - kDolToRAMOffsetDifference
+//let groundTrue = 0x216e10 - kDolToRAMOffsetDifference
 //let groundFalse = shakeBranch + 0x4
-//let setEffect = 0x1f057c - kDOLtoRAMOffsetDifference
-//let checkForType = 0x2054fc - kDOLtoRAMOffsetDifference
+//let setEffect = 0x1f057c - kDolToRAMOffsetDifference
+//let checkForType = 0x2054fc - kDolToRAMOffsetDifference
 //replaceASM(startOffset: shakeBranch, newASM: [XGUtility.createBranchFrom(offset: shakeBranch, toOffset: shakeStart)])
 //replaceASM(startOffset: shakeStart, newASM: [
 //	0x7f43d378, // mr	r3, r26 (move)
@@ -2912,13 +2912,13 @@ import Foundation
 //])
 
 //// sucker punch
-//let suckerBranch = 0x216e10 - kDOLtoRAMOffsetDifference
-//let suckerStart = 0x21fe88 - kDOLtoRAMOffsetDifference
+//let suckerBranch = 0x216e10 - kDolToRAMOffsetDifference
+//let suckerStart = 0x21fe88 - kDolToRAMOffsetDifference
 //let suckerEnd = suckerBranch + 0x4
-////let setEffect = 0x1f057c - kDOLtoRAMOffsetDifference
-//let getCurrentMove = 0x148d64 - kDOLtoRAMOffsetDifference
-//let getMovePower = 0x13e71c - kDOLtoRAMOffsetDifference
-//let getMoveOrder = 0x1f4300 - kDOLtoRAMOffsetDifference
+////let setEffect = 0x1f057c - kDolToRAMOffsetDifference
+//let getCurrentMove = 0x148d64 - kDolToRAMOffsetDifference
+//let getMovePower = 0x13e71c - kDolToRAMOffsetDifference
+//let getMoveOrder = 0x1f4300 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: suckerBranch, newASM: [XGUtility.createBranchFrom(offset: suckerBranch, toOffset: suckerStart)])
 //replaceASM(startOffset: suckerStart, newASM: [
 //	0x7f43d378, // mr	r3, r26 (move)
@@ -2949,9 +2949,9 @@ import Foundation
 //])
 
 //// skill link
-//let skillBranch1 = 0x221d70 - kDOLtoRAMOffsetDifference
-//let skillBranch2 = 0x221d98 - kDOLtoRAMOffsetDifference
-//let skillStart = 0x152548 - kDOLtoRAMOffsetDifference
+//let skillBranch1 = 0x221d70 - kDolToRAMOffsetDifference
+//let skillBranch2 = 0x221d98 - kDolToRAMOffsetDifference
+//let skillStart = 0x152548 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: skillBranch1, newASM: [XGUtility.createBranchAndLinkFrom(offset: skillBranch1, toOffset: skillStart)])
 //replaceASM(startOffset: skillBranch2, newASM: [XGUtility.createBranchAndLinkFrom(offset: skillBranch2, toOffset: skillStart)])
 //replaceASM(startOffset: skillStart, newASM: [
@@ -2967,8 +2967,8 @@ import Foundation
 
 
 //// shade ball
-//let shadeStart = 0x219380 - kDOLtoRAMOffsetDifference
-//let checkShadow = 0x13efec - kDOLtoRAMOffsetDifference
+//let shadeStart = 0x219380 - kDolToRAMOffsetDifference
+//let checkShadow = 0x13efec - kDolToRAMOffsetDifference
 //replaceASM(startOffset: shadeStart, newASM: [
 //	0x7f43d378, // mr r3, r26 defending pokemon stats
 //	XGUtility.createBranchAndLinkFrom(offset: shadeStart + 0x4, toOffset: checkShadow),
@@ -2980,14 +2980,14 @@ import Foundation
 //])
 //
 //// net ball buff
-//replaceASM(startOffset: 0x219370 - kDOLtoRAMOffsetDifference, newASM: [0x3b800023])
+//replaceASM(startOffset: 0x219370 - kDolToRAMOffsetDifference, newASM: [0x3b800023])
 //
 //// magic bounce 2
-//let setStatus = 0x2024a4 - kDOLtoRAMOffsetDifference
-//let getMove = 0x148d64 - kDOLtoRAMOffsetDifference
-//let coatBranch = 0x218590 - kDOLtoRAMOffsetDifference
+//let setStatus = 0x2024a4 - kDolToRAMOffsetDifference
+//let getMove = 0x148d64 - kDolToRAMOffsetDifference
+//let coatBranch = 0x218590 - kDolToRAMOffsetDifference
 //let coatReturn = coatBranch + 0x4
-//let coatStart = 0x21ea68 - kDOLtoRAMOffsetDifference
+//let coatStart = 0x21ea68 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: coatBranch, newASM: [XGUtility.createBranchFrom(offset: coatBranch, toOffset: coatStart)])
 //replaceASM(startOffset: coatStart, newASM: [
 //	0x38a00000, // li r5, 0
@@ -2999,12 +2999,12 @@ import Foundation
 //	0xb0830008, // sth	r4, 0x0008 (r3)
 //	XGUtility.createBranchFrom(offset: coatStart + 0x1c, toOffset: coatReturn)
 //])
-//let coatCheckBranch = 0x20e3c4 - kDOLtoRAMOffsetDifference
+//let coatCheckBranch = 0x20e3c4 - kDolToRAMOffsetDifference
 //let coatCheckReturn = coatCheckBranch + 0x4
-//let coatCheckStart = 0x21dc10 - kDOLtoRAMOffsetDifference
-//let checkStatus = 0x2025f0 - kDOLtoRAMOffsetDifference
-//let getPokemon = 0x1efcac - kDOLtoRAMOffsetDifference
-//let setMove = 0x14774c - kDOLtoRAMOffsetDifference
+//let coatCheckStart = 0x21dc10 - kDolToRAMOffsetDifference
+//let checkStatus = 0x2025f0 - kDolToRAMOffsetDifference
+//let getPokemon = 0x1efcac - kDolToRAMOffsetDifference
+//let setMove = 0x14774c - kDolToRAMOffsetDifference
 //replaceASM(startOffset: coatCheckBranch, newASM: [XGUtility.createBranchFrom(offset: coatCheckBranch, toOffset: coatCheckStart)])
 //replaceASM(startOffset: coatCheckStart, newASM: [
 //	0x38600011, // li r3, 17
@@ -3023,10 +3023,10 @@ import Foundation
 //	XGUtility.createBranchFrom(offset: coatCheckStart + 0x34, toOffset: coatCheckReturn),
 //
 //])
-//let coatChangeBranch = 0x209bac - kDOLtoRAMOffsetDifference
+//let coatChangeBranch = 0x209bac - kDolToRAMOffsetDifference
 //let coatChangeReturn = coatChangeBranch + 0x4
-//let coatNopOffset = 0x209bb4 - kDOLtoRAMOffsetDifference
-//let coatChangeStart = 0x21bc80 - kDOLtoRAMOffsetDifference
+//let coatNopOffset = 0x209bb4 - kDolToRAMOffsetDifference
+//let coatChangeStart = 0x21bc80 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: coatNopOffset, newASM: [kNopInstruction])
 //replaceASM(startOffset: coatChangeBranch, newASM: [XGUtility.createBranchFrom(offset: coatChangeBranch, toOffset: coatChangeStart)])
 //replaceASM(startOffset: coatChangeStart, newASM: [
@@ -3043,10 +3043,10 @@ import Foundation
 //])
 //
 //// sand rush/force immune to sandstorm
-//let sarfissBranch = 0x221238 - kDOLtoRAMOffsetDifference
-//let sarfissStart = 0x221998 - kDOLtoRAMOffsetDifference
+//let sarfissBranch = 0x221238 - kDolToRAMOffsetDifference
+//let sarfissStart = 0x221998 - kDolToRAMOffsetDifference
 //let sarfissReturn = sarfissBranch + 0x8
-//let sarfissNoDamage = 0x22127c - kDOLtoRAMOffsetDifference
+//let sarfissNoDamage = 0x22127c - kDolToRAMOffsetDifference
 //replaceASM(startOffset: sarfissBranch, newASM: [XGUtility.createBranchFrom(offset: sarfissBranch, toOffset: sarfissStart)])
 //replaceASM(startOffset: sarfissStart, newASM: [
 //	0x28000008, // cmpwi r0, sand veil
@@ -3077,7 +3077,7 @@ import Foundation
 //])
 //
 //// slush rush and snow cloak immune to hail
-//let slimStart = 0x22129c - kDOLtoRAMOffsetDifference
+//let slimStart = 0x22129c - kDolToRAMOffsetDifference
 //XGAssembly.replaceASM(startOffset: slimStart, newASM: [
 //	0x57e0043e, // rlwinm	r0, r31, 0, 16, 31 (0000ffff)
 //	0x28000069, // cmpwi r0, snow cloak
@@ -3087,10 +3087,10 @@ import Foundation
 //])
 //
 //// aura filter immune to shadow sky
-//let afissBranch = 0x2212e4 - kDOLtoRAMOffsetDifference
+//let afissBranch = 0x2212e4 - kDolToRAMOffsetDifference
 //let afissReturn = afissBranch + 0x4
-//let afissNoDamage = 0x221330 - kDOLtoRAMOffsetDifference
-//let afissStart = 0x2219b8 - kDOLtoRAMOffsetDifference
+//let afissNoDamage = 0x221330 - kDolToRAMOffsetDifference
+//let afissStart = 0x2219b8 - kDolToRAMOffsetDifference
 //replaceASM(startOffset: afissBranch, newASM: [XGUtility.createBranchFrom(offset: afissBranch, toOffset: afissStart)])
 //replaceASM(startOffset: afissStart, newASM: [
 //	0x7f43d378, // defending pokemon stats pointer
@@ -3104,8 +3104,8 @@ import Foundation
 //
 //
 //// rage mode boost
-////let checkStatus = 0x2025f0 - kDOLtoRAMOffsetDifference
-//let rageStart = 0x22a67c - kDOLtoRAMOffsetDifference
+////let checkStatus = 0x2025f0 - kDolToRAMOffsetDifference
+//let rageStart = 0x22a67c - kDolToRAMOffsetDifference
 //replaceASM(startOffset: rageStart, newASM: [
 //	0x7de37b78, // mr r3, r15
 //	0x3880003e, // li r4, reverse mode
@@ -3242,7 +3242,7 @@ import Foundation
 //}
 
 // binding moves residual damage to 1/8 (whirpool, firespin, etc.)
-//XGAssembly.replaceASM(startOffset: 0x22807c - kDOLtoRAMOffsetDifference, newASM: [0x38800008])
+//XGAssembly.replaceASM(startOffset: 0x22807c - kDolToRAMOffsetDifference, newASM: [0x38800008])
 
 
 //let dive = XGFiles.nameAndFolder("ball_dive.fdat", .TextureImporter).compress()
@@ -3253,7 +3253,7 @@ import Foundation
 //let sash2Branch   = 0x216038
 //let sash2Start    = 0xb99350
 //let getMoveEffect = 0x13e6e8
-//XGAssembly.replaceASM(startOffset: sash2Branch - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: sash2Branch - kDolToRAMOffsetDifference, newASM: [
 //	XGAssembly.createBranchFrom(offset: sash2Branch, toOffset: sash2Start),
 //	// overwritten code
 //	0x7fa3eb78, // mr	r3, r29
@@ -3278,8 +3278,8 @@ import Foundation
 //
 //
 //// shadow hunter/slayer
-//let hunterStart = 0x22a6a4 - kDOLtoRAMOffsetDifference
-//let checkShadowPokemon = 0x149014 - kDOLtoRAMOffsetDifference
+//let hunterStart = 0x22a6a4 - kDolToRAMOffsetDifference
+//let checkShadowPokemon = 0x149014 - kDolToRAMOffsetDifference
 //XGAssembly.replaceASM(startOffset: hunterStart, newASM: [
 //	0x7e038378, // mr r3, r16 (defending mon)
 //	0x80630000, // lw r3, 0 (r3)
@@ -3305,8 +3305,8 @@ import Foundation
 //
 //
 //// hex
-//let hexStart = 0x22a6ec - kDOLtoRAMOffsetDifference
-//let checkNoStatus = 0x203744 - kDOLtoRAMOffsetDifference
+//let hexStart = 0x22a6ec - kDolToRAMOffsetDifference
+//let checkNoStatus = 0x203744 - kDolToRAMOffsetDifference
 //XGAssembly.replaceASM(startOffset: hexStart, newASM: [
 //	0x7e038378, // mr r3, r16 (defending pokemon)
 //	XGAssembly.createBranchAndLinkFrom(offset: hexStart + 0x4, toOffset: checkNoStatus),
@@ -3357,7 +3357,7 @@ import Foundation
 //XGStatusEffects.encored.setDuration(turns: 4)
 //
 //// remove follow me redirection so can be used for wide guard
-//XGAssembly.replaceASM(startOffset: 0x218bb4 - kDOLtoRAMOffsetDifference, newASM: [0x4800003c])
+//XGAssembly.replaceASM(startOffset: 0x218bb4 - kDolToRAMOffsetDifference, newASM: [0x4800003c])
 
 
 ////Sand rush
@@ -3382,11 +3382,11 @@ import Foundation
 //XGAssembly.replaceASM(startOffset: sandstart, newASM: sinstructions)
 
 ////Sand rush
-//let sandstart = 0x2009c0 + kDOLtoRAMOffsetDifference
+//let sandstart = 0x2009c0 + kDolToRAMOffsetDifference
 //// slush rush speed
 //let slushBranch = sandstart + 0x14
 //let slushstart = 0xB99ED8
-//XGAssembly.replaceASM(startOffset: slushBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: slushBranch, toOffset: slushstart)])
+//XGAssembly.replaceASM(startOffset: slushBranch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: slushBranch, toOffset: slushstart)])
 //XGAssembly.replaceRELASM(startOffset: slushstart - kRELtoRAMOffsetDifference, newASM: [
 //	0x2817005b, // cmpwi r23, sand rush
 //	0x40820008, // bne 0x8
@@ -3401,7 +3401,7 @@ import Foundation
 //])
 //
 //// slush rush and snow cloak immune to hail
-//let slimStart = 0x22129c - kDOLtoRAMOffsetDifference
+//let slimStart = 0x22129c - kDolToRAMOffsetDifference
 //XGAssembly.replaceASM(startOffset: slimStart, newASM: [
 //	0x57e0043e, // rlwinm	r0, r31, 0, 16, 31 (0000ffff)
 //	0x28000069, // cmpwi r0, snow cloak
@@ -3446,30 +3446,30 @@ import Foundation
 //
 //]
 //
-//XGAssembly.replaceASM(startOffset: terrainBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: terrainBranch, toOffset: terrainStart),kNopInstruction])
+//XGAssembly.replaceASM(startOffset: terrainBranch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: terrainBranch, toOffset: terrainStart),kNopInstruction])
 //XGAssembly.replaceRELASM(startOffset: terrainStart - kRELtoRAMOffsetDifference, newASM: terrainCode)
 
 //// shadow terrain residual healing to 1/10
-//XGAssembly.replaceASM(startOffset: 0x227ae8 - kDOLtoRAMOffsetDifference, newASM: [0x3880000A])
+//XGAssembly.replaceASM(startOffset: 0x227ae8 - kDolToRAMOffsetDifference, newASM: [0x3880000A])
 //
 //// regular moves doe 75% damage in shadow terrain
-//XGAssembly.replaceASM(startOffset: 0x22a62c - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: 0x22a62c - kDolToRAMOffsetDifference, newASM: [
 //	0x1C160003, // mulli	r0, r22, 3
 //	0x7C001670, // srawi	r0, r0,2
 //])
 
 //// allow endured the hit message to be set elsewhere (effectiveness 70) (interferes with focus sash message)
 //for offset in [0x2160f8, 0x2160e0] {
-//	XGAssembly.replaceASM(startOffset: offset - kDOLtoRAMOffsetDifference, newASM: [0x38800047])
+//	XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [0x38800047])
 //}
 //
 //// spiky shield 1 (replaces endure effect)
-//XGAssembly.replaceASM(startOffset: 0x223514 - kDOLtoRAMOffsetDifference, newASM: [0x28000113])
-//XGAssembly.replaceASM(startOffset: 0x223570 - kDOLtoRAMOffsetDifference, newASM: [kNopInstruction])
-//XGAssembly.replaceASM(startOffset: 0x2235dc - kDOLtoRAMOffsetDifference, newASM: [kNopInstruction,kNopInstruction, kNopInstruction])
-//let endureRemove = 0x21607c - kDOLtoRAMOffsetDifference
+//XGAssembly.replaceASM(startOffset: 0x223514 - kDolToRAMOffsetDifference, newASM: [0x28000113])
+//XGAssembly.replaceASM(startOffset: 0x223570 - kDolToRAMOffsetDifference, newASM: [kNopInstruction])
+//XGAssembly.replaceASM(startOffset: 0x2235dc - kDolToRAMOffsetDifference, newASM: [kNopInstruction,kNopInstruction, kNopInstruction])
+//let endureRemove = 0x21607c - kDolToRAMOffsetDifference
 //XGAssembly.replaceASM(startOffset: endureRemove, newASM: [kNopInstruction,kNopInstruction,kNopInstruction,kNopInstruction,kNopInstruction])
-//XGAssembly.replaceASM(startOffset: 0x2160d8 - kDOLtoRAMOffsetDifference, newASM: [0x48000030])
+//XGAssembly.replaceASM(startOffset: 0x2160d8 - kDolToRAMOffsetDifference, newASM: [0x48000030])
 //
 ////rocky helmet & spiky shield 2
 //let rockyBranch = 0x2250bc
@@ -3535,7 +3535,7 @@ import Foundation
 //	0x7fc3f378, // mr	r3, r30 (overwritten code)
 //	XGAssembly.createBranchFrom(offset: rockyStart + 0x8c, toOffset: rockyBranch + 0x4),
 //]
-//XGAssembly.replaceASM(startOffset: rockyBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: rockyBranch, toOffset: rockyStart)])
+//XGAssembly.replaceASM(startOffset: rockyBranch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: rockyBranch, toOffset: rockyStart)])
 //XGAssembly.replaceRELASM(startOffset: rockyStart - kRELtoRAMOffsetDifference, newASM: rockyCode)
 
 
@@ -3555,12 +3555,12 @@ import Foundation
 //	0x7fa3eb78, // mr	r3, r29
 //	XGAssembly.createBranchFrom(offset: hpCheckStart + 0x18, toOffset: hpCheckBranch + 0x4)
 //]
-//XGAssembly.replaceASM(startOffset: hpCheckBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: hpCheckBranch, toOffset: hpCheckStart)])
-//XGAssembly.replaceASM(startOffset: hpCheckStart - kDOLtoRAMOffsetDifference, newASM: hpCode)
+//XGAssembly.replaceASM(startOffset: hpCheckBranch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: hpCheckBranch, toOffset: hpCheckStart)])
+//XGAssembly.replaceASM(startOffset: hpCheckStart - kDolToRAMOffsetDifference, newASM: hpCode)
 
 //// foul play 2, include stat boosts on foe
-//let fpBranch = 0x22a120 - kDOLtoRAMOffsetDifference
-//let fpStart = 0x2209cc - kDOLtoRAMOffsetDifference
+//let fpBranch = 0x22a120 - kDolToRAMOffsetDifference
+//let fpStart = 0x2209cc - kDolToRAMOffsetDifference
 //
 //XGAssembly.replaceASM(startOffset: fpBranch, newASM: [
 //	0x9001000c, // overwritten code
@@ -3582,7 +3582,7 @@ import Foundation
 //])
 
 //// roar move effect doesn't require higher level
-//let roarStart = 0x221c54 - kDOLtoRAMOffsetDifference
+//let roarStart = 0x221c54 - kDolToRAMOffsetDifference
 //XGAssembly.replaceASM(startOffset: roarStart, newASM: [0x7c7f1b78,kNopInstruction,kNopInstruction])
 //
 //// roar move routine doesn't show animation etc.
@@ -3653,7 +3653,7 @@ import Foundation
 //let statBranch = 0x222428
 //let statStart = 0x8069c + kRELtoRAMOffsetDifference
 //
-//XGAssembly.replaceASM(startOffset: statBranch - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: statBranch - kDolToRAMOffsetDifference, newASM: [
 //	0x9421ffe0, // stwu	sp, -0x0020 (sp)
 //	0x7c0802a6, // mflr	r0
 //	0x90010024, // stw	r0, 0x0024 (sp)
@@ -3731,8 +3731,8 @@ import Foundation
 //
 //])
 //// might help with some issues with animating custom stat boost stages which are > +2 or < -2
-//let nerfBranch = 0x210ce4 - kDOLtoRAMOffsetDifference
-//let buffBranch = 0x210cd4 - kDOLtoRAMOffsetDifference
+//let nerfBranch = 0x210ce4 - kDolToRAMOffsetDifference
+//let buffBranch = 0x210cd4 - kDolToRAMOffsetDifference
 //XGAssembly.replaceASM(startOffset: nerfBranch, newASM: [0x48000024])
 //XGAssembly.replaceASM(startOffset: buffBranch, newASM: [0x40800024])
 
@@ -3957,7 +3957,7 @@ import Foundation
 //}
 
 
-//let earthquakeStart = 0x4158fb - kDOLTableToRAMOffsetDifference
+//let earthquakeStart = 0x4158fb - kDolTableToRAMOffsetDifference
 //let earthquakeRoutine = [
 //
 //	// intro 0x4158fb
@@ -4113,9 +4113,9 @@ import Foundation
 
 //// make orre colosseum 6 vs. 6
 //for offset in [0x0a1d48, 0x0a1d94] {
-//	XGAssembly.replaceASM(startOffset: offset - kDOLtoRAMOffsetDifference, newASM: [0x28000000])
+//	XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [0x28000000])
 //}
-//XGAssembly.replaceASM(startOffset: 0x0a183c - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: 0x0a183c, toOffset: 0x0a1d24)])
+//XGAssembly.replaceASM(startOffset: 0x0a183c - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: 0x0a183c, toOffset: 0x0a1d24)])
 //for b in 87 ... 114 {
 //	let battle = XGBattle(index: b)
 //	battle.pokemonPerPlayer = 6
@@ -4124,13 +4124,13 @@ import Foundation
 
 //// shadow pokemon can't be battled after being captured 2
 //// remove old shadow generation code
-//XGAssembly.replaceASM(startOffset: 0x1fabf0 - kDOLtoRAMOffsetDifference, newASM: [0x7f03c378])
+//XGAssembly.replaceASM(startOffset: 0x1fabf0 - kDolToRAMOffsetDifference, newASM: [0x7f03c378])
 
-//let checkCaught = 0x14b024 - kDOLtoRAMOffsetDifference
-//let checkPurified = 0x14b058 - kDOLtoRAMOffsetDifference
+//let checkCaught = 0x14b024 - kDolToRAMOffsetDifference
+//let checkPurified = 0x14b058 - kDolToRAMOffsetDifference
 //
-//let shadowBattleBranch2 = 0x1faa90 - kDOLtoRAMOffsetDifference
-//let shadowBattleStart2  = 0x220f10 - kDOLtoRAMOffsetDifference
+//let shadowBattleBranch2 = 0x1faa90 - kDolToRAMOffsetDifference
+//let shadowBattleStart2  = 0x220f10 - kDolToRAMOffsetDifference
 //// r20 stored shadow data start
 ////
 //XGAssembly.replaceASM(startOffset: shadowBattleBranch2, newASM: [
@@ -4348,13 +4348,13 @@ import Foundation
 //getStringSafelyWithID(id: 34079).duplicateWithString("[Speaker]: I wonder if he really[New Line]saw a legendary pokémon.[Clear Window][Speaker]: They rarely stay still so[New Line]they're hard to catch[New Line]but maybe if you come back later...[Clear Window]Nah, forget it.[Clear Window]A little kid like you[New Line]can't catch a legendary pokémon![Dialogue End]").replace()
 
 
-//XGAssembly.replaceASM(startOffset: 0x1faf50 - kDOLtoRAMOffsetDifference, newASM: [0x280a0032]) // compare with 50 pokespot entries so that "cave" runs into "all" where the static encounters are stored
+//XGAssembly.replaceASM(startOffset: 0x1faf50 - kDolToRAMOffsetDifference, newASM: [0x280a0032]) // compare with 50 pokespot entries so that "cave" runs into "all" where the static encounters are stored
 //
 // hard code ow wild pokemon for each map
 //let owMonStart = 0x1fae4c
 //let owCodeStart = 0xB99D48
 //let owReturn = 0x1fae88
-//XGAssembly.replaceASM(startOffset: owMonStart - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: owMonStart - kDolToRAMOffsetDifference, newASM: [
 //	0x2c170039, // cmpwi r23, esaba A
 //	0x41820018, // beq
 //	0x2c17003b, // cmpwi r23, esaba C
@@ -4438,7 +4438,7 @@ import Foundation
 //	XGAssembly.createBranchFrom(offset: sitrusStart + 0x40, toOffset: sitrusBranch + 0x4)
 //]
 //
-//XGAssembly.replaceASM(startOffset: sitrusBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: sitrusBranch, toOffset: sitrusStart)])
+//XGAssembly.replaceASM(startOffset: sitrusBranch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: sitrusBranch, toOffset: sitrusStart)])
 //XGAssembly.replaceRELASM(startOffset: sitrusStart - kRELtoRAMOffsetDifference, newASM: sitrusCode)
 //
 //let sb = item("sitrus berry").data
@@ -4450,7 +4450,7 @@ import Foundation
 //let wideGuardStart = 0xb99de4
 //
 //for offset in wideGuardBranchLinks {
-//	XGAssembly.replaceASM(startOffset: offset - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchAndLinkFrom(offset: offset, toOffset: wideGuardStart), 0x28030001])
+//	XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchAndLinkFrom(offset: offset, toOffset: wideGuardStart), 0x28030001])
 //}
 //
 //let getPokemonPointer = 0x1efcac
@@ -4516,7 +4516,7 @@ import Foundation
 
 //let dol = XGFiles.dol.data!
 //
-//let spreadAbsorbedStart = 0x2209f8  - kDOLtoRAMOffsetDifference
+//let spreadAbsorbedStart = 0x2209f8  - kDolToRAMOffsetDifference
 //let spreadA : UInt32 = 0x8022
 //let spreadB : UInt32 = 0x09f8
 //let spreadC : UInt32 = 0x0000
@@ -4525,9 +4525,9 @@ import Foundation
 //dol.replaceBytesFromOffset(spreadAbsorbedStart, withByteStream: spreadMoveAbsorbedRoutine)
 //dol.save()
 //
-//let spreadCheckStart = 0x2209a4 - kDOLtoRAMOffsetDifference
-//let spreadCheckBranch = 0x22586c - kDOLtoRAMOffsetDifference
-//let getTargets = 0x13e784 - kDOLtoRAMOffsetDifference
+//let spreadCheckStart = 0x2209a4 - kDolToRAMOffsetDifference
+//let spreadCheckBranch = 0x22586c - kDolToRAMOffsetDifference
+//let getTargets = 0x13e784 - kDolToRAMOffsetDifference
 //
 //let spreadCode : ASM = [
 //	0x7fe3fb78, // mr r3, r31 (move)
@@ -4614,18 +4614,18 @@ import Foundation
 //
 //// increase number of tms by replacing hms
 //let dol = XGFiles.dol.data!
-//dol.replaceWordAtOffset(0x15e92c - kDOLtoRAMOffsetDifference, withBytes: 0x28030038)
-//dol.replaceWordAtOffset(0x15e948 - kDOLtoRAMOffsetDifference, withBytes: 0x3803ffc8)
+//dol.replaceWordAtOffset(0x15e92c - kDolToRAMOffsetDifference, withBytes: 0x28030038)
+//dol.replaceWordAtOffset(0x15e948 - kDolToRAMOffsetDifference, withBytes: 0x3803ffc8)
 //dol.save()
 //
 //// remove amplifier ability code
-//XGAssembly.replaceASM(startOffset: 0x220d20 - kDOLtoRAMOffsetDifference, newASM: [kNopInstruction, kNopInstruction, kNopInstruction, kNopInstruction, kNopInstruction, kNopInstruction, kNopInstruction])
+//XGAssembly.replaceASM(startOffset: 0x220d20 - kDolToRAMOffsetDifference, newASM: [kNopInstruction, kNopInstruction, kNopInstruction, kNopInstruction, kNopInstruction, kNopInstruction, kNopInstruction])
 
 // replace "but it already has a burn"
 //getStringSafelyWithID(id: 20041).duplicateWithString("But it failed!").replace()
 
 //// pokespot pokemon's pid is randomly generated at start of encounter rather than at spawn
-//XGAssembly.replaceASM(startOffset: 0x1fb054 - kDOLtoRAMOffsetDifference, newASM: [kNopInstruction])
+//XGAssembly.replaceASM(startOffset: 0x1fb054 - kDolToRAMOffsetDifference, newASM: [kNopInstruction])
 //
 //
 //
@@ -4640,7 +4640,7 @@ import Foundation
 //let checkStatus = 0x2025f0
 //let animSoundCallBack = 0x2236a8
 //
-//XGAssembly.replaceASM(startOffset: lifeBranch - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: lifeBranch - kDolToRAMOffsetDifference, newASM: [
 //	XGAssembly.createBranchFrom(offset: lifeBranch, toOffset: lifeStart),
 //])
 //
@@ -4698,8 +4698,8 @@ import Foundation
 //])
 //
 //// remove life orb activated flags
-//let lifeOrb2Branch = 0x2172b8 - kDOLtoRAMOffsetDifference
-//let lifeOrb2Start  = 0x220f58 - kDOLtoRAMOffsetDifference
+//let lifeOrb2Branch = 0x2172b8 - kDolToRAMOffsetDifference
+//let lifeOrb2Start  = 0x220f58 - kDolToRAMOffsetDifference
 //XGAssembly.replaceASM(startOffset: lifeOrb2Branch, newASM: [
 //0x7C7F1B78, // mr r31, r3
 //XGAssembly.createBranchAndLinkFrom(offset: lifeOrb2Branch + 0x4, toOffset: lifeOrb2Start),
@@ -4713,7 +4713,7 @@ import Foundation
 //// flinch status remains set for whole move routine
 //// may need to end flinch status at end of turn but seems to happen automatically in testing
 //// just look out for edge cases
-//XGAssembly.replaceASM(startOffset: 0x226ed0 - kDOLtoRAMOffsetDifference, newASM: [.nop])
+//XGAssembly.replaceASM(startOffset: 0x226ed0 - kDolToRAMOffsetDifference, newASM: [.nop])
 //
 //
 //// life orb on flinch
@@ -4737,9 +4737,9 @@ import Foundation
 
 //
 //// snow cloak
-//let snowBranch = 0x21793c - kDOLtoRAMOffsetDifference
-//let snowStart = 0x220f64 - kDOLtoRAMOffsetDifference
-//let evasion = 0x217954 - kDOLtoRAMOffsetDifference
+//let snowBranch = 0x21793c - kDolToRAMOffsetDifference
+//let snowStart = 0x220f64 - kDolToRAMOffsetDifference
+//let evasion = 0x217954 - kDolToRAMOffsetDifference
 //XGAssembly.replaceASM(startOffset: snowBranch, newASM: [
 //XGAssembly.createBranchFrom(offset: snowBranch, toOffset: snowStart),
 //0x281d0003, // cmplwi r29, sandstorm
@@ -4761,7 +4761,7 @@ import Foundation
 //let getAbility = 0x2055c8
 //for i in 0 ..< freezeBranches.count {
 //	let branch = freezeBranches[i]
-//	XGAssembly.replaceASM(startOffset: branch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchAndLinkFrom(offset: branch, toOffset: freezeStarts[i])])
+//	XGAssembly.replaceASM(startOffset: branch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchAndLinkFrom(offset: branch, toOffset: freezeStarts[i])])
 //}
 //let typeRegisters : ASM = [
 //0x7f24cb78, // mr r4, r25
@@ -4967,7 +4967,7 @@ import Foundation
 //
 //
 //// repeat ball catch rate to 3.5x
-//XGAssembly.replaceASM(startOffset: 0x21942c - kDOLtoRAMOffsetDifference, newASM: [0x3b800023])
+//XGAssembly.replaceASM(startOffset: 0x21942c - kDolToRAMOffsetDifference, newASM: [0x3b800023])
 //
 
 // multi battle with gonzap to enter key lair
@@ -5038,7 +5038,7 @@ import Foundation
 //
 //let sitrus2Branch = 0x15f2fc
 //let sitrus2Start = 0xB9A358
-//XGAssembly.replaceASM(startOffset: sitrus2Branch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: sitrus2Branch, toOffset: sitrus2Start)])
+//XGAssembly.replaceASM(startOffset: sitrus2Branch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: sitrus2Branch, toOffset: sitrus2Start)])
 //XGAssembly.replaceRELASM(startOffset: sitrus2Start, newASM: [
 //	0x2c0000fc, // cmpwi r0, 252
 //	XGAssembly.powerPCBranchEqualFromOffset(from: 0, to: 8), // beq 8
@@ -5072,7 +5072,7 @@ import Foundation
 //let paraBranch = 0x213dbc
 //let checkHasType = 0x2054fc
 //let getPointer = 0x1efcac
-//XGAssembly.replaceASM(startOffset: paraBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: paraBranch, toOffset: paraStart)])
+//XGAssembly.replaceASM(startOffset: paraBranch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: paraBranch, toOffset: paraStart)])
 //XGAssembly.replaceRELASM(startOffset: paraStart - kRELtoRAMOffsetDifference, newASM: [
 //	0x3bed87a0, // overwritten code
 //	0x881f0003, // lbz	r0, 0x0003 (r31) get move secondary effect index
@@ -5108,7 +5108,7 @@ import Foundation
 //let pranksterEnd = 0xf0
 //let pranksterBlocked = 0xe0
 //
-//XGAssembly.replaceASM(startOffset: sporeBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: sporeBranch, toOffset: sporeStart)])
+//XGAssembly.replaceASM(startOffset: sporeBranch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: sporeBranch, toOffset: sporeStart)])
 //XGAssembly.replaceRELASM(startOffset: sporeStart - kRELtoRAMOffsetDifference, newASM: [
 //
 //	0x38600012, // li r3, 18 (defending pokemon)
@@ -5194,10 +5194,10 @@ import Foundation
 //let spreadStart = 0xB9A658
 //let spreadMaths = [0x22aa60, 0x22a908]
 //for offset in spreadBranches {
-//	XGAssembly.replaceASM(startOffset: offset - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchAndLinkFrom(offset: offset, toOffset: spreadStart)])
+//	XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchAndLinkFrom(offset: offset, toOffset: spreadStart)])
 //}
 //for offset in spreadMaths {
-//	XGAssembly.replaceASM(startOffset: offset - kDOLtoRAMOffsetDifference, newASM: [
+//	XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [
 //		0x1dce0003, // mulli r14, r14, 3  (r14 * 3)
 //		0x7dce1670, // srawi r14, r14, 2  ( r14 >> 2 == r14 / 4)
 //	])
@@ -5225,7 +5225,7 @@ import Foundation
 //let setEffectiveness = 0x1f057c
 //let checkSetEffectiveness = 0x1f05d0
 //XGAssembly.setMoveEffectRoutineRAMOffset(effect: 203, RAMOffset: 0x80414b23)
-//XGAssembly.replaceASM(startOffset: neutralBranch - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: neutralBranch - kDolToRAMOffsetDifference, newASM: [
 //	.b(neutralStart),
 //	// overwritten code
 //	.mr(.r3, .r26),
@@ -5260,7 +5260,7 @@ import Foundation
 //let checkHasType = 0x2054fc
 //let ghostSkip = 0x20f980
 //
-//XGAssembly.replaceASM(startOffset: ghostBranch - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: ghostBranch - kDolToRAMOffsetDifference, newASM: [
 //	.b(ghostStart),
 //	.cmpwi(.r31, 50), // compare ability with runaway (overwritten code)
 //])
@@ -5280,7 +5280,7 @@ import Foundation
 //let toxicStart = 0xB9A894
 //let checkHasType = 0x2054fc
 //let toxicSkip = 0x2179b8
-//XGAssembly.replaceASM(startOffset: toxicBranch - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: toxicBranch - kDolToRAMOffsetDifference, newASM: [
 //	.b(toxicStart)
 //])
 //XGAssembly.replaceRELASM(startOffset: toxicStart - kRELtoRAMOffsetDifference, newASM: [
@@ -5299,7 +5299,7 @@ import Foundation
 //let ghost2Branch = 0x1f279c
 //let ghost2Start = 0xB9AA58
 //let checkType = 0x2054fc
-//XGAssembly.replaceASM(startOffset: ghost2Branch - kDOLtoRAMOffsetDifference, newASM: [.b(ghost2Start)])
+//XGAssembly.replaceASM(startOffset: ghost2Branch - kDolToRAMOffsetDifference, newASM: [.b(ghost2Start)])
 //XGAssembly.replaceRELASM(startOffset: ghost2Start - kRELtoRAMOffsetDifference, newASM: [
 //
 //	.stwu(.sp, .sp, -0x20),
@@ -5327,7 +5327,7 @@ import Foundation
 //XGAbilities.ability(50).adescription.duplicateWithString("Heals when poisoned.").replace()
 //
 //// remove runaway effect
-//XGAssembly.replaceASM(startOffset: 0x20f7b0 - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: 0x20f7b0 - kDolToRAMOffsetDifference, newASM: [
 //	.b(0x20f7c4),
 //	.nop,
 //	.nop
@@ -5360,7 +5360,7 @@ import Foundation
 //let poisonHealStart1 = 0xB9AA30
 //let poisonHealStart2 = 0xB9AA44
 //
-//XGAssembly.replaceASM(startOffset: poisonResidualBranch - kDOLtoRAMOffsetDifference, newASM: [.b(poisonHealStart1)])
+//XGAssembly.replaceASM(startOffset: poisonResidualBranch - kDolToRAMOffsetDifference, newASM: [.b(poisonHealStart1)])
 //XGAssembly.replaceRELASM(startOffset: poisonHealStart1, newASM: [
 //	.cmpwi(.r28, ability("poison heal").index),
 //	.bne_f(0, 8),
@@ -5368,7 +5368,7 @@ import Foundation
 //	.lwz(.r0, .r13, -0x44e8), // overwritten
 //	.b(poisonResidualBranch + 4)
 //])
-//XGAssembly.replaceASM(startOffset: badPoisonResidualBranch - kDOLtoRAMOffsetDifference, newASM: [.b(poisonHealStart2)])
+//XGAssembly.replaceASM(startOffset: badPoisonResidualBranch - kDolToRAMOffsetDifference, newASM: [.b(poisonHealStart2)])
 //XGAssembly.replaceRELASM(startOffset: poisonHealStart2, newASM: [
 //	.cmpwi(.r28, ability("poison heal").index),
 //	.bne_f(0, 8),
@@ -5395,7 +5395,7 @@ import Foundation
 //let flameOrbOffset = orbStart + 0x6c
 //let toxicOrbOffset = orbStart + 0xec
 //let returnOffset = orbStart + 0x174
-//XGAssembly.replaceASM(startOffset: orbBranch - kDOLtoRAMOffsetDifference, newASM: [ .b(orbStart) ])
+//XGAssembly.replaceASM(startOffset: orbBranch - kDolToRAMOffsetDifference, newASM: [ .b(orbStart) ])
 //XGAssembly.replaceRELASM(startOffset: orbStart - kRELtoRAMOffsetDifference, newASM: [
 //
 //	.lhz(.r3, .r31, 0x80c), // get ability
@@ -5678,30 +5678,30 @@ import Foundation
 //ac.save()
 
 //// remove white smoke ability
-//XGAssembly.replaceASM(startOffset: 0x222170 - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: 0x222170 - kDolToRAMOffsetDifference, newASM: [
 //	.b(0x2221f8),
 //	.nop
 //])
 //// remove shield dust ability
-//XGAssembly.replaceASM(startOffset: 0x214004 - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: 0x214004 - kDolToRAMOffsetDifference, newASM: [
 //	.b(0x214038),
 //	.nop
 //])
 //
 //// remove water veil ability
 //let wispRoutine = [0x00, 0x02, 0x04, 0x1e, 0x12, 0x00, 0x00, 0x00, 0x14, 0x80, 0x41, 0x5c, 0x93, 0x1d, 0x12, 0x00, 0x00, 0x00, 0x06, 0x80, 0x41, 0x5e, 0xb9, 0x23, 0x12, 0x0a, 0x80, 0x41, 0x5c, 0xc6, 0x3b, 0x3b, 0x3b, 0x3b, 0x3b, 0x3b, 0x3b, 0x1d, 0x12, 0x00, 0x00, 0x00, 0x01, 0x80, 0x41, 0x5c, 0x93, 0x01, 0x80, 0x41, 0x5c, 0x93, 0x00, 0x00, 0x20, 0x12, 0x00, 0x4b, 0x80, 0x41, 0x6d, 0xb2, 0x0a, 0x0b, 0x04, 0x2f, 0x80, 0x4e, 0x85, 0xc3, 0x03, 0x17, 0x0b, 0x04, 0x29, 0x80, 0x41, 0x41, 0x0f,]
-//XGAssembly.setMoveEffectRoutine(effect: move("will-o-wisp").data.effect, fileOffset: 0x415e32 - kDOLTableToRAMOffsetDifference, moveToREL: false, newRoutine: wispRoutine)
-//XGAssembly.replaceASM(startOffset: 0x214304 - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.setMoveEffectRoutine(effect: move("will-o-wisp").data.effect, fileOffset: 0x415e32 - kDolTableToRAMOffsetDifference, moveToREL: false, newRoutine: wispRoutine)
+//XGAssembly.replaceASM(startOffset: 0x214304 - kDolToRAMOffsetDifference, newASM: [
 //	.b(0x21436c),
 //	.nop
 //])
 //
 //// remove oblivious ability
-//XGAssembly.replaceASM(startOffset: 0x225518 - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: 0x225518 - kDolToRAMOffsetDifference, newASM: [
 //	.nop,
 //	.nop
 //])
-//XGAssembly.replaceASM(startOffset: 0x2210e8 - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: 0x2210e8 - kDolToRAMOffsetDifference, newASM: [
 //	.b(0x221100),
 //	.nop
 //])
@@ -5710,19 +5710,19 @@ import Foundation
 //let dol = XGFiles.dol.data!
 //dol.replaceBytesFromOffset(0x411B31 , withByteStream: [0x3b,0x3b,0x3b,0x3b,0x3b,0x3b,0x3b,])
 //dol.save()
-//XGAssembly.replaceASM(startOffset: 0x21479c - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: 0x21479c - kDolToRAMOffsetDifference, newASM: [
 //	.nop,
 //	.nop
 //])
 //
 //// remove magnet pull ability
-//XGAssembly.replaceASM(startOffset: 0x20f8a4 - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: 0x20f8a4 - kDolToRAMOffsetDifference, newASM: [
 //	.b(0x20f910),
 //	.nop
 //])
 //
 //// remove magnet pull ability
-//XGAssembly.replaceASM(startOffset: 0x1f2678 - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: 0x1f2678 - kDolToRAMOffsetDifference, newASM: [
 //	.li(.r31, 0),
 //	.b(0x1f2694),
 //	.nop
@@ -5736,7 +5736,7 @@ import Foundation
 //sniper.adescription.duplicateWithString("Stronger critical hits.")
 //
 //// unaware, sniper
-//XGAssembly.replaceASM(startOffset: 0x22a720 - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: 0x22a720 - kDolToRAMOffsetDifference, newASM: [
 //	.li(.r4, 6),
 //	.lwz(.r3, .sp, 0x30), // defending ability
 //	.cmpwi(.r3, ability("unaware").index),
@@ -5762,7 +5762,7 @@ import Foundation
 //let fastWeatherStart = 0xB9AC6C
 //let weatherAnimation = 0x210d4c
 //// compare r4 with weather indexes and only if not weather, branch link to animation
-//XGAssembly.replaceASM(startOffset: fasterWeatherAnimationsBranch - kDOLtoRAMOffsetDifference, newASM: [.b(fastWeatherStart)])
+//XGAssembly.replaceASM(startOffset: fasterWeatherAnimationsBranch - kDolToRAMOffsetDifference, newASM: [.b(fastWeatherStart)])
 //XGAssembly.replaceRELASM(startOffset: fastWeatherStart - kRELtoRAMOffsetDifference, newASM: [
 //	.cmpwi(.r4, 0xc), // sand storm
 //	.beq_f(0, 0x18),
@@ -5778,7 +5778,7 @@ import Foundation
 
 
 //// 50% berries figy, wiki, mago, aguav, iapapa
-//XGAssembly.replaceASM(startOffset: 0x22498c - kDOLtoRAMOffsetDifference, newASM: [.li(.r4, 4)])
+//XGAssembly.replaceASM(startOffset: 0x22498c - kDolToRAMOffsetDifference, newASM: [.li(.r4, 4)])
 //for i in 143 ... 147 {
 //	let berry = XGItem(index: i)
 //	berry.parameter = 2
@@ -5788,10 +5788,10 @@ import Foundation
 //// berries after move
 //let berryStart = 0x223734
 //let berryBranch = 0x2275d0
-//XGAssembly.replaceASM(startOffset: berryBranch - kDOLtoRAMOffsetDifference, newASM: [.bl(berryStart)])
+//XGAssembly.replaceASM(startOffset: berryBranch - kDolToRAMOffsetDifference, newASM: [.bl(berryStart)])
 //
 //// copied from end turn item activation but ammended to only factor in berries
-//XGAssembly.replaceASM(startOffset: berryStart - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: berryStart - kDolToRAMOffsetDifference, newASM: [
 //	.li(.r4, 0),
 //	.stwu(.sp, .sp, -0x60),
 //	.mflr(.r0),
@@ -5851,7 +5851,7 @@ import Foundation
 //let paraTrue = paraBranch + 0x8
 //let checkHasType = 0x2054fc
 //// compare ability in r22 to limber and compare type to electric battle pokemon in r19
-//XGAssembly.replaceASM(startOffset: paraBranch - kDOLtoRAMOffsetDifference, newASM: [.b(paraStart)])
+//XGAssembly.replaceASM(startOffset: paraBranch - kDolToRAMOffsetDifference, newASM: [.b(paraStart)])
 //XGAssembly.replaceRELASM(startOffset: paraStart - kRELtoRAMOffsetDifference, newASM: [
 //	.cmpwi(.r0, ability("limber").index),
 //	.bne_f(0, 8),
@@ -5874,8 +5874,8 @@ import Foundation
 //let foulStart = 0x22278c
 //let foulEnd = foulBranch + 0x8
 //let getAttackStat = 0x1493d0
-//XGAssembly.replaceASM(startOffset: foulBranch - kDOLtoRAMOffsetDifference, newASM: [.b(foulStart), .nop])
-//XGAssembly.replaceASM(startOffset: foulStart - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: foulBranch - kDolToRAMOffsetDifference, newASM: [.b(foulStart), .nop])
+//XGAssembly.replaceASM(startOffset: foulStart - kDolToRAMOffsetDifference, newASM: [
 //	.mr(.r20, .r0), // overwritten code
 //	.mr(.r3, .r17),
 //
@@ -5899,10 +5899,10 @@ import Foundation
 //])
 
 //// fix animation inconsistencies 2 for +3 and higher stat boosts
-//XGAssembly.replaceASM(startOffset: 0x2117e4 - kDOLtoRAMOffsetDifference, newASM: [0x40800028])
+//XGAssembly.replaceASM(startOffset: 0x2117e4 - kDolToRAMOffsetDifference, newASM: [0x40800028])
 //
 //// unaware, sniper
-//XGAssembly.replaceASM(startOffset: 0x22a720 - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: 0x22a720 - kDolToRAMOffsetDifference, newASM: [
 //
 //	.li(.r4, 6),
 //	.lwz(.r3, .sp, 0x30), // defending ability
@@ -6034,7 +6034,7 @@ import Foundation
 //// defiant competitive
 //let defiantBranch = 0x2223d0
 //let defiantStart = 0xB9A7D8
-//XGAssembly.replaceASM(startOffset: defiantBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: defiantBranch, toOffset: defiantStart)])
+//XGAssembly.replaceASM(startOffset: defiantBranch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: defiantBranch, toOffset: defiantStart)])
 //XGAssembly.replaceRELASM(startOffset: defiantStart - kRELtoRAMOffsetDifference, newASM: [
 //	0x7f800774, // extsb	r0, r28 (stat change stages)
 //	0x28000080, // cmplwi r0, 0x80 // treats negative as big number
@@ -6084,8 +6084,8 @@ import Foundation
 //let powerupNotImmune = 0x15c
 //let notImmune = 0x164
 //
-//XGAssembly.replaceASM(startOffset: originOffset - kDOLtoRAMOffsetDifference, newASM: [0x3bc00000,XGAssembly.createBranchAndLinkFrom(offset: originOffset + 0x4, toOffset: immunitiesStart),0x28030001])
-//XGAssembly.replaceASM(startOffset: originNopOffset - kDOLtoRAMOffsetDifference, newASM: [kNopInstruction])
+//XGAssembly.replaceASM(startOffset: originOffset - kDolToRAMOffsetDifference, newASM: [0x3bc00000,XGAssembly.createBranchAndLinkFrom(offset: originOffset + 0x4, toOffset: immunitiesStart),0x28030001])
+//XGAssembly.replaceASM(startOffset: originNopOffset - kDolToRAMOffsetDifference, newASM: [kNopInstruction])
 //XGAssembly.replaceRELASM(startOffset: immunitiesStart - kRELtoRAMOffsetDifference, newASM: [
 //0x9421ffdc, 0x7c0802a6, 0x90010028, 0x93e1001c, 0x93c10018, 0x93a10014, 0x93810010, 0x93610020,
 //
@@ -6165,7 +6165,7 @@ import Foundation
 //let getMoveTargets = 0x13e784
 //let selfReturn = 0x22580c
 //let notSelfReturn = 0x225800
-//XGAssembly.replaceASM(startOffset: immuneSelfBranch - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: immuneSelfBranch - kDolToRAMOffsetDifference, newASM: [
 //	0x7C7F1B78,	// mr r31, r3
 //	XGAssembly.createBranchAndLinkFrom(offset: immuneSelfBranch + 0x4, toOffset: getMoveTargets),
 //	XGAssembly.createBranchFrom(offset: immuneSelfBranch + 0x8, toOffset: immuneSelfStart),
@@ -6190,7 +6190,7 @@ import Foundation
 //let checkHP = 0x204a70
 ////let statBoost = 0xB9ACC0
 //
-//XGAssembly.replaceASM(startOffset: moxieBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: moxieBranch, toOffset: moxieStart)])
+//XGAssembly.replaceASM(startOffset: moxieBranch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: moxieBranch, toOffset: moxieStart)])
 //XGAssembly.replaceRELASM(startOffset: moxieStart - kRELtoRAMOffsetDifference, newASM: [
 //0x7fe3fb78, // mr r3, r31 (defending pokemon pointer)
 //XGAssembly.createBranchAndLinkFrom(offset: moxieStart + 0x4, toOffset: checkHP),
@@ -6280,8 +6280,8 @@ import Foundation
 //let naturalBranch = 0x21c5fc
 //let naturalStart = 0x2226e4
 //let naturalEnd = naturalBranch + 0x4
-//XGAssembly.replaceASM(startOffset: naturalBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: naturalBranch, toOffset: naturalStart)])
-//XGAssembly.replaceASM(startOffset: naturalStart - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: naturalBranch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: naturalBranch, toOffset: naturalStart)])
+//XGAssembly.replaceASM(startOffset: naturalStart - kDolToRAMOffsetDifference, newASM: [
 //	0x7fe3fb78, // mr r3, r31
 //	XGAssembly.createBranchAndLinkFrom(offset: naturalStart + 0x4, toOffset: abilityActivateStart),
 //	0x7fe3fb78, // mr r3, r31
@@ -6307,8 +6307,8 @@ import Foundation
 //let checkSetStatus = 0x20254c
 //let setStatus = 0x2024a4
 //let activate = abilityActivateStart
-//XGAssembly.replaceASM(startOffset: entryBranch - kDOLtoRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: entryBranch, toOffset: entryStart)])
-//XGAssembly.replaceASM(startOffset: entryStart - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: entryBranch - kDolToRAMOffsetDifference, newASM: [XGAssembly.createBranchFrom(offset: entryBranch, toOffset: entryStart)])
+//XGAssembly.replaceASM(startOffset: entryStart - kDolToRAMOffsetDifference, newASM: [
 //	0x5460043e,																	// rlwinm r0, r3
 //	0x28000000 + traceIndex,													// cmpwi r0, trace
 //	XGAssembly.powerPCBranchEqualFromOffset(from: entryStart + 0x8, to: traceStart),		// beq traceStart:
@@ -6374,7 +6374,7 @@ import Foundation
 //let trickExpireBranch = 0x228dc4
 //let trickExpireStart = 0xB9AEC4
 //let trickExpireSkip = 0x228dd0
-//XGAssembly.replaceASM(startOffset: trickExpireBranch - kDOLtoRAMOffsetDifference, newASM: [.b(trickExpireStart)])
+//XGAssembly.replaceASM(startOffset: trickExpireBranch - kDolToRAMOffsetDifference, newASM: [.b(trickExpireStart)])
 //XGAssembly.replaceRELASM(startOffset: trickExpireStart - kRELtoRAMOffsetDifference, newASM: [
 //	.cmplwi(.r28, 1),
 //	.bne_f(0, 8),
@@ -6388,7 +6388,7 @@ import Foundation
 //let thawStart = 0xB9AED8
 //let thawTrue = thawStart + 0x38
 //let thawFalse = thawStart + 0x3c
-//XGAssembly.replaceASM(startOffset: thawBranch - kDOLtoRAMOffsetDifference, newASM: [.b(thawStart), .nop, .nop])
+//XGAssembly.replaceASM(startOffset: thawBranch - kDolToRAMOffsetDifference, newASM: [.b(thawStart), .nop, .nop])
 //XGAssembly.replaceRELASM(startOffset: thawStart - kRELtoRAMOffsetDifference, newASM: [
 //	.cmpwi(.r30, move("flame wheel").index),
 //	.beq(thawTrue),
@@ -6431,7 +6431,7 @@ import Foundation
 
 //// set confusion chance to hurt user to 1 in 3
 //let confusionStart = 0x2270f0
-//XGAssembly.replaceASM(startOffset: confusionStart - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: confusionStart - kDolToRAMOffsetDifference, newASM: [
 //	.cmplwi(.r3, 0x5555), // 1 in 3
 //	.bgt(0x227110), // not confused
 //])
@@ -6584,7 +6584,7 @@ import Foundation
 //let toxicOrbOffset = orbStart + 0xec
 //let returnOffset = orbStart + 0x174
 //
-//XGAssembly.replaceASM(startOffset: orbBranch - kDOLtoRAMOffsetDifference, newASM: [ .b(orbStart) ])
+//XGAssembly.replaceASM(startOffset: orbBranch - kDolToRAMOffsetDifference, newASM: [ .b(orbStart) ])
 //XGAssembly.replaceRELASM(startOffset: orbStart - kRELtoRAMOffsetDifference, newASM: [
 //
 //	.lhz(.r3, .r31, 0x80c), // get ability
@@ -7121,7 +7121,7 @@ import Foundation
 //
 //let routine : (effect: Int, routine: [Int], offset: Int) = (162, shadowFreezeRoutine, 0xb99ce9)
 //XGAssembly.setMoveEffectRoutine(effect: routine.effect, fileOffset: routine.offset - kRELtoRAMOffsetDifference, moveToREL: true, newRoutine: routine.routine)
-//let magmaArmourOffset = 0x21443c - kDOLtoRAMOffsetDifference
+//let magmaArmourOffset = 0x21443c - kDolToRAMOffsetDifference
 //XGAssembly.replaceASM(startOffset: magmaArmourOffset, newASM: [.nop,.nop,.nop])
 //
 //let poisonTouchBranch = 0x225580
@@ -7130,7 +7130,7 @@ import Foundation
 ////let animSoundCallback = 0x2236a8
 //let checkHasHP = 0x204a70
 //let checkAttackSuccess = 0xB9B300
-//XGAssembly.replaceASM(startOffset: poisonTouchBranch - kDOLtoRAMOffsetDifference, newASM: [.b(poisonTouchStart)])
+//XGAssembly.replaceASM(startOffset: poisonTouchBranch - kDolToRAMOffsetDifference, newASM: [.b(poisonTouchStart)])
 //XGAssembly.replaceRamASM(RAMOffset: poisonTouchStart, newASM: [
 //
 //	.cmpwi(.r26, 1), // check move succeeded
@@ -7260,7 +7260,7 @@ import Foundation
 //
 //// set confusion chance to hurt user to 1 in 3
 //let confusionStart = 0x2270f0
-//XGAssembly.replaceASM(startOffset: confusionStart - kDOLtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceASM(startOffset: confusionStart - kDolToRAMOffsetDifference, newASM: [
 //	.cmplwi(.r3, 0xaaaa), // 1 in 3
 //	.blt(0x227110), // not confused
 //])
@@ -7377,7 +7377,7 @@ import Foundation
 //
 //// fix type damage reducing berries ending multi hit moves
 //let dol = XGFiles.dol.data!
-//dol.replaceWordAtOffset(0x414659 - kDOLTableToRAMOffsetDifference, withBytes: 0x80414659)
+//dol.replaceWordAtOffset(0x414659 - kDolTableToRAMOffsetDifference, withBytes: 0x80414659)
 //dol.save()
 //
 // fix berry glitch on moves like earthquake
@@ -7532,7 +7532,7 @@ import Foundation
 //let animSoundCallback = 0x2236a8
 ////let checkHasHP = 0x204a70
 ////let checkAttackSuccess = 0xB9B300
-//XGAssembly.replaceASM(startOffset: poisonTouchBranch - kDOLtoRAMOffsetDifference, newASM: [.b(poisonTouchStart)])
+//XGAssembly.replaceASM(startOffset: poisonTouchBranch - kDolToRAMOffsetDifference, newASM: [.b(poisonTouchStart)])
 //XGAssembly.replaceRamASM(RAMOffset: poisonTouchStart, newASM: [
 //
 //	.cmpwi(.r26, 1), // check move succeeded
@@ -7963,7 +7963,7 @@ import Foundation
 //let getTrainerData = 0x1cefb4
 //let trainerGetTID = 0x14e118
 //print("shiny glitch")
-//(shinyStart - kDOLtoRAMOffsetDifference + kDoltoISOOffsetDifference).hexString().println()
+//(shinyStart - kDolToRAMOffsetDifference + kDolToISOOffsetDifference).hexString().println()
 //print("shiny glitch branch links")
 ////	0x38600000, // li r3, 0
 ////	0x38800002, // li r4, 2
@@ -7973,27 +7973,27 @@ import Foundation
 //
 //// shadow pokemon shinyness is random
 //print("randomness")
-//(0x1fc2b0 - kDOLtoRAMOffsetDifference + kDoltoISOOffsetDifference).hexString().println()
+//(0x1fc2b0 - kDolToRAMOffsetDifference + kDolToISOOffsetDifference).hexString().println()
 //// replace with 0x38c0ffff
 //
 //// set shiny chance
 //// make sure chance is less than 50%
 //// replace values with newPercentage * 0xFFFF / 100
 //print("shiny chance")
-//(kShinyCalcChanceOffset1 + kDoltoISOOffsetDifference).hexString().println()
-//(kShinyCalcChanceOffset2 + kDoltoISOOffsetDifference).hexString().println()
+//(kShinyCalcChanceOffset1 + kDolToISOOffsetDifference).hexString().println()
+//(kShinyCalcChanceOffset2 + kDolToISOOffsetDifference).hexString().println()
 //
 //
 //print("colosseum allow shiny")
-//(0x12442c - kColosseumDolToRamOffsetDifference + kColosseumDolToISOOffsetDifference).hexString().println()
+//(0x12442c - kDolToRAMOffsetDifference + kDolToISOOffsetDifference).hexString().println()
 //// 0x3B60FFFF
 //
 //print("shiny glitch")
-//(0x1248a8 - kColosseumDolToRamOffsetDifference + kColosseumDolToISOOffsetDifference).hexString().println()
+//(0x1248a8 - kDolToRAMOffsetDifference + kDolToISOOffsetDifference).hexString().println()
 //// 0x3B800000
 //
 //print("shiny chance")
-//(0x124846 - kColosseumDolToRamOffsetDifference + kColosseumDolToISOOffsetDifference).hexString().println()
+//(0x124846 - kDolToRAMOffsetDifference + kDolToISOOffsetDifference).hexString().println()
 
 
 

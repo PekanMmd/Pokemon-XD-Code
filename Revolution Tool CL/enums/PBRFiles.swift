@@ -285,7 +285,10 @@ indirect enum XGFiles {
 		}
 		return .unknown
 	}
-	
+
+	static var commonStringTableFile: XGFiles {
+		region == .JP ? .msg("Mes_common_JP") : .msg("mes_common")
+	}
 }
 
 
@@ -519,7 +522,7 @@ indirect enum XGFolders {
 		}
 		
 		images = [XGFiles]()
-		for i in 0 ... 494 {
+		for i in 0 ... 500 {
 			images.append(.pokeBody(i))
 			images.append(.pokeFace(i))
 		}

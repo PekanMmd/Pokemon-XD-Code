@@ -242,6 +242,7 @@
                         <segue destination="fXj-SM-0bR" kind="show" identifier="toMessageVC" id="HCv-BF-sY4"/>
                         <segue destination="30l-3B-1Wn" kind="show" identifier="toISOVC" id="OBl-zD-LtM"/>
                         <segue destination="833-jc-7gZ" kind="modal" identifier="toPatchVC" id="WSO-2H-kdJ"/>
+                        <segue destination="4Sk-bu-n10" kind="modal" identifier="toStatsVC" id="7Pn-CJ-tAt"/>
                     </connections>
                 </viewController>
                 <customObject id="Ql1-wz-kzW" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -255,6 +256,14 @@
                 <customObject id="z8o-AP-tsq" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="553" y="1205"/>
+        </scene>
+        <!--Stats-->
+        <scene sceneID="dyM-y4-faD">
+            <objects>
+                <controllerPlaceholder storyboardName="Stats" id="4Sk-bu-n10" sceneMemberID="viewController"/>
+                <customObject id="Ujm-TN-IxE" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="689" y="1181"/>
         </scene>
         <!--Help-->
         <scene sceneID="aeD-pQ-RIr">

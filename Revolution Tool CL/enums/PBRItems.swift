@@ -83,7 +83,27 @@ func allItemsArray() -> [XGItems] {
 	return items
 }
 
+extension XGItems: XGEnumerable, Equatable {
+	var enumerableName: String {
+		return name.unformattedString.spaceToLength(20)
+	}
 
+	var enumerableValue: String? {
+		return index.string
+	}
+
+	static var enumerableClassName: String {
+		return "Items"
+	}
+
+	static var allValues: [XGItems] {
+		return XGItems.allItems()
+	}
+	
+	public static func != (lhs: Self, rhs: Self) -> Bool {
+		lhs.enumerableValue != rhs.enumerableValue
+	}
+}
 
 
 

@@ -312,6 +312,10 @@ enum XGSpecialCharacters : Int {
 		}
 	}
 
+	static var generalFormattingChars: [XGSpecialCharacters] {
+		[] // for PBR compatibility
+	}
+
 }
 
 

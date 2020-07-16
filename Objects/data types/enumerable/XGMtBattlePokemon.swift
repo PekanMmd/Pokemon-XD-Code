@@ -12,7 +12,7 @@ let kChikoritaOffset		= 0x1C5974
 let kCyndaquilOffset		= 0x1C59A0
 let kTotodileOffset			= 0x1C59CC
 
-let kMtBattlePokemonLevelOffset = 0x1c878b - kDOLtoRAMOffsetDifference
+let kMtBattlePokemonLevelOffset = 0x1c878b - kDolToRAMOffsetDifference
 
 let kMtBattlePokemonSpeciesOffset	=  0x02
 let kMtBattlePokemonMove1Offset		=  0x06

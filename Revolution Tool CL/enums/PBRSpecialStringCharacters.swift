@@ -69,6 +69,10 @@ enum XGSpecialCharacters {
 		return .id(0)
 	}
 
+	static var generalFormattingChars: [XGSpecialCharacters] {
+		[.id(0xF001), .id(0xF101)]
+	}
+
 }
 
 

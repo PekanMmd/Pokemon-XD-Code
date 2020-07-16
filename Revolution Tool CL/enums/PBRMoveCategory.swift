@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGMoveCategories: Int, Codable {
+enum XGMoveCategories: Int, Codable, CaseIterable {
 	
 	case physical  = 0x0
 	case special   = 0x1
@@ -25,13 +25,24 @@ enum XGMoveCategories: Int, Codable {
 	}
 	
 	func cycle() -> XGMoveCategories {
-		
 		return XGMoveCategories(rawValue: self.rawValue + 1) ?? XGMoveCategories(rawValue: 0)!
-		
 	}
-	
 }
 
+extension XGMoveCategories: XGEnumerable {
+	var enumerableName: String {
+		return string
+	}
 
+	var enumerableValue: String? {
+		return rawValue.string
+	}
 
+	static var enumerableClassName: String {
+		return "Move Categories"
+	}
 
+	static var allValues: [XGMoveCategories] {
+		return allCases
+	}
+}

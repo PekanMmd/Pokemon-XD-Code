@@ -8,28 +8,69 @@
 
 import Foundation
 
-let kColosseumDolToRamOffsetDifference = 0x3000
-let kColosseumDolToISOOffsetDifference = 0x1EC00
+let kDolToRAMOffsetDifference: Int = {
+	   // add this value to a start.dol offset to get its offset in RAM
+	switch game {
+	case .XD:
+		return 0x30a0
+	case .Colosseum:
+		return 0x3000
+	case .PBR:
+		return 0x43A0
+	}
+}()
 
-let kPBRDolToRAMOffsetDifference = 0x43A0
-let kPBRDolDataToRAMOffsetDifference = 0x3F00
+let kDolTableToRAMOffsetDifference: Int = {
+ // add this value to a start.dol data table offset to get its offset in RAM
+	switch game {
+	case .XD:
+		return 0x3000
+	case .Colosseum:
+		assertionFailure("Not implemented")
+		return -1
+	case .PBR:
+		return 0x3F00
+	}
+}()
 
-let kRELtoRAMOffsetDifference = 0xb18dc0 // add this value to a common_rel offset to get it's offset in RAM
-let kDOLtoRAMOffsetDifference = 0x30a0   // add this value to a start.dol offset to get its offset in RAM
-let kDOLTableToRAMOffsetDifference = 0x3000 // add this value to a start.dol data table offset to get its offset in RAM
-let kDOLDataToRAMOffsetDifference = 0xCDE80 // add this value to a start.dol data offset (the values towards the end) to get its offset in RAM
-let kDOLtoISOOffsetDifference = 0x20300 // add this value to a start.dol offset to get it's offset in the ISO
+let kDolDataToRAMOffsetDifference: Int = {
+	// add this value to a start.dol data offset (the values towards the end) to get its offset in RAM
+	switch game {
+	case .XD:
+		return 0xCDE80
+	case .Colosseum:
+		assertionFailure("Not implemented")
+		return -1
+	case .PBR:
+		assertionFailure("Not implemented")
+		return -1
+	}
+}()
 
-let kRELDataStartOffset = 0x1CB0
-let kRelFreeSpaceStart = 0x80590 + kRELtoRAMOffsetDifference
+let kDolToISOOffsetDifference: Int = {
+	// add this value to a start.dol offset to get it's offset in the ISO
+	switch game {
+	case .XD:
+		return 0x20300
+	case .Colosseum:
+		return 0x1EC00
+	case .PBR:
+		assertionFailure("Not implemented")
+		return -1
+	}
+}()
 
-let kPickupTableInDolStartOffset = 0x2F0758
+let kRELtoRAMOffsetDifference = 0xb18dc0 // add this value to a common_rel offset to get it's offset in RAM,  XD US
+let kRELDataStartOffset = 0x1CB0 // XD US
+let kRelFreeSpaceStart = 0x80590 + kRELtoRAMOffsetDifference // XD US
 
-let moveEffectTableStartDOL = 0x414edf
-let moveEffectTableStartRAM = 0x417edf
+let kPickupTableInDolStartOffset = 0x2F0758 // XD US
+
+let moveEffectTableStartRAM = 0x417edf // XD US
+let moveEffectTableStartDOL = moveEffectTableStartRAM - kDolTableToRAMOffsetDifference // XD US
 
 // function pointers in RAM
-let kRAMListOfFunctionPointers = 0x2f8af8
+let kRAMListOfFunctionPointers = 0x2f8af8 // XD US
 
 let zz_move_get_priority = 0x13e7b8
 let zz_before_battle_pokemon_get_ability = 0x2055c8
@@ -51,7 +92,7 @@ class XGAssembly {
 	class func replaceASM(startOffset: Int, newASM asm: ASM) {
 		
 		var labels = [String : Int]()
-		var currentOffset = startOffset + kDOLtoRAMOffsetDifference
+		var currentOffset = startOffset + kDolToRAMOffsetDifference
 		for inst in asm {
 			switch inst {
 			case .label(let name):
@@ -62,7 +103,7 @@ class XGAssembly {
 		}
 		
 		let dol = XGFiles.dol.data!
-		currentOffset = startOffset + kDOLtoRAMOffsetDifference
+		currentOffset = startOffset + kDolToRAMOffsetDifference
 		for inst in asm {
 			switch inst {
 			case .label:
@@ -76,11 +117,11 @@ class XGAssembly {
 			case .bgt_l: fallthrough
 			case .bge_l:
 				let code = inst.instructionForBranchToLabel(labels: labels).codeAtOffset(currentOffset)
-				dol.replaceWordAtOffset(currentOffset - kDOLtoRAMOffsetDifference, withBytes: code)
+				dol.replaceWordAtOffset(currentOffset - kDolToRAMOffsetDifference, withBytes: code)
 				currentOffset += 4
 			default:
 				let code = inst.codeAtOffset(currentOffset)
-				dol.replaceWordAtOffset(currentOffset - kDOLtoRAMOffsetDifference, withBytes: code)
+				dol.replaceWordAtOffset(currentOffset - kDolToRAMOffsetDifference, withBytes: code)
 				currentOffset += 4
 			}
 			
@@ -176,7 +217,7 @@ class XGAssembly {
 	
 	class func setProtectRepeatChanceQuotient(_ divisor: Int) {
 		var currentValue = 0xFFFF
-		var currentOffset = 0x4eeb90 - kDOLDataToRAMOffsetDifference
+		var currentOffset = 0x4eeb90 - kDolDataToRAMOffsetDifference
 		let dol = XGFiles.dol.data!
 		for _ in 0 ..< 4 {
 			dol.replace2BytesAtOffset(currentOffset, withBytes: currentValue)
@@ -188,13 +229,13 @@ class XGAssembly {
 	
 	class func paralysisHalvesSpeed() {
 		let dol = XGFiles.dol.data!
-		dol.replaceWordAtOffset(0x203af8 - kDOLtoRAMOffsetDifference, withBytes: 0x56f7f87e)
+		dol.replaceWordAtOffset(0x203af8 - kDolToRAMOffsetDifference, withBytes: 0x56f7f87e)
 		dol.save()
 	}
 	
 	class func setFirsHM(_ tm: XGTMs) {
-		let off1 = 0x15e92c - kDOLtoRAMOffsetDifference
-		let off2 = 0x15e948 - kDOLtoRAMOffsetDifference
+		let off1 = 0x15e92c - kDolToRAMOffsetDifference
+		let off2 = 0x15e948 - kDolToRAMOffsetDifference
 		// i.e. for tm51 to be first hm compare with 50
 		let compareIndex = tm.index - 1
 		let ins1 = [XGASM.cmpwi(.r3, compareIndex)]

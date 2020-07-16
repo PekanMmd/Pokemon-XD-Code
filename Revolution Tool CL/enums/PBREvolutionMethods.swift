@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGEvolutionMethods : Int, Codable {
+enum XGEvolutionMethods : Int, Codable, CaseIterable {
 	
 	case levelUpWithKeyItem		= -1
 	
@@ -74,10 +74,26 @@ enum XGEvolutionMethods : Int, Codable {
 				case .levelUpAtIceRock		:	return "Level up near ice rock"
 			}
 		}
-	}
-	
+	}	
 }
 
+extension XGEvolutionMethods: XGEnumerable {
+	var enumerableName: String {
+		return string
+	}
+
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+
+	static var enumerableClassName: String {
+		return "Evolution Methods"
+	}
+
+	static var allValues: [XGEvolutionMethods] {
+		return allCases
+	}
+}
 
 
 

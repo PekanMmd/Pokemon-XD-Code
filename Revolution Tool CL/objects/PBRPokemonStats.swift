@@ -10,6 +10,7 @@ import Foundation
 
 let kNumberOfPokemon = PBRDataTable.pokemonBaseStats.numberOfEntries // 501
 let kNumberOfTMsAndHMs = 100
+let kNumberOfTutorMoves = 0 // for XD compatibility
 let kSizeOfEvolution = 6
 let kSizeOfLevelUpMove = 4
 
@@ -29,11 +30,11 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 	var ability1		= XGAbilities.ability(0)
 	var ability2		= XGAbilities.ability(0)
 	
-	var wildItem1		= XGItems.item(0)
-	var wildItem2		= XGItems.item(0)
+	var heldItem1		= XGItems.item(0)
+	var heldItem2		= XGItems.item(0)
 	
-	var eggGroup1 = 0
-	var eggGroup2 = 0
+	var eggGroup1 		= 0
+	var eggGroup2		= 0
 	
 	var hp				= 0
 	var speed			= 0
@@ -42,19 +43,19 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 	var specialAttack	= 0
 	var specialDefense	= 0
 	
-	var hpEV 				= 0
-	var speedEV				= 0
-	var attackEV			= 0
-	var defenseEV			= 0
-	var specialAttackEV		= 0
-	var specialDefenseEV	= 0
+	var hpYield 			= 0
+	var speedYield			= 0
+	var attackYield			= 0
+	var defenseYield		= 0
+	var specialAttackYield	= 0
+	var specialDefenseYield	= 0
 	
 	var height = 0.0 // meters
 	var weight = 0.0 // kg
 	
 	var catchRate = 0
-	var expYield = 0
-	var expRate = XGExpRate.standard
+	var baseExp = 0
+	var levelUpRate = XGExpRate.standard
 	var genderRatio = XGGenderRatios.genderless
 	var eggCycles = 0
 	var baseHappiness = 0
@@ -62,7 +63,8 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 	
 	var unknown  = 0
 	
-	var TMFlags = [Bool]()
+	var learnableTMs = [Bool]()
+	var tutorMoves: [Bool]! // Just for XD compatibility
 	
 	var evolutions = [XGEvolution]()
 	var levelUpMoves = [XGLevelUpMove]()
@@ -129,20 +131,21 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 		super.init()
 		
 		self.index = index
-		let data = PBRDataTableEntry.baseStats(index: self.index)
+		let data = PBRDataTableEntry.baseStats(index: index)
+		startOffset = PBRDataTable.pokemonBaseStats.offsetForEntryWithIndex(index)
 		
 		// each bit of the first 12 bytes represents one tm
 		// stored in 32 bit chunks with the least significant bit
 		// being the firt tm in that chunk
-		// i.e. bit 31 is tm01, bit 0 is tm32 and bit 32 is tm 33
+		// i.e. bit 31 is tm01, bit 0 is tm32 and bit 31 of the next word is tm 33
 		let flags = data.getWordStream(0, count: 4)
-		TMFlags = [Bool]()
+		learnableTMs = [Bool]()
 		for mask in flags {
-			TMFlags += mask.bitArray()
+			learnableTMs += mask.bitArray()
 		}
 		
-		wildItem1 = .item(data.getShort(16))
-		wildItem2 = .item(data.getShort(18))
+		heldItem1 = .item(data.getShort(16))
+		heldItem2 = .item(data.getShort(18))
 		height = Double(data.getShort(20)) / 10
 		weight = Double(data.getShort(22)) / 10
 		nameID = data.getShort(24)
@@ -157,11 +160,11 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 		type1 = .type(data.getByte(36))
 		type2 = .type(data.getByte(37))
 		catchRate = data.getByte(38)
-		expYield = data.getByte(39)
+		baseExp = data.getByte(39)
 		genderRatio = XGGenderRatios(rawValue: data.getByte(42)) ?? .genderless
 		eggCycles = data.getByte(43)
 		baseHappiness = data.getByte(44)
-		expRate = XGExpRate(rawValue: data.getByte(45)) ?? .standard
+		levelUpRate = XGExpRate(rawValue: data.getByte(45)) ?? .standard
 		eggGroup1 = data.getByte(46)
 		eggGroup2 = data.getByte(47)
 		ability1 = .ability(data.getByte(48))
@@ -171,18 +174,18 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 		
 		let EVs = data.getShort(40).bitArray(count: 16)
 		// bit mask of EV yields. Each stat is 2 bits starting from the most significant bit being hp.
-		if EVs[15] { hpEV += 2 }
-		if EVs[14] { hpEV += 1 }
-		if EVs[13] { attackEV += 2 }
-		if EVs[12] { attackEV += 1 }
-		if EVs[11] { defenseEV += 2 }
-		if EVs[10] { defenseEV += 1 }
-		if EVs[9]  { speedEV += 2 }
-		if EVs[8]  { speedEV += 1 }
-		if EVs[7]  { specialAttackEV += 2 }
-		if EVs[6]  { specialAttackEV += 1 }
-		if EVs[5]  { specialDefense += 2 }
-		if EVs[4]  { specialDefenseEV += 1 }
+		if EVs[15] { hpYield += 2 }
+		if EVs[14] { hpYield += 1 }
+		if EVs[13] { attackYield += 2 }
+		if EVs[12] { attackYield += 1 }
+		if EVs[11] { defenseYield += 2 }
+		if EVs[10] { defenseYield += 1 }
+		if EVs[9]  { speedYield += 2 }
+		if EVs[8]  { speedYield += 1 }
+		if EVs[7]  { specialAttackYield += 2 }
+		if EVs[6]  { specialAttackYield += 1 }
+		if EVs[5]  { specialDefenseYield += 2 }
+		if EVs[4]  { specialDefenseYield += 1 }
 		
 		let evoData = PBRDataTableEntry.evolutions(index: self.index)
 		let moveData = PBRDataTableEntry.levelUpMoves(index: self.index)
@@ -205,7 +208,6 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 			let lum = XGLevelUpMove(level: level, move: move)
 			levelUpMoves.append(lum)
 		}
-		
 	}
 	
 	@objc func save() {
@@ -214,17 +216,18 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 		
 		for i in 0 ... 3 {
 			let start = i * 32
-			let offset = i * 4
 			var bits = [Bool]()
 			for b in 0 ..< 32 {
-				let bit = TMFlags[start + b]
+				let bit = learnableTMs[start + b]
 				bits.append(bit)
 			}
+
+			let offset = i * 4
 			data.setWord(offset, to: bits.binaryBitsToUInt32())
 		}
 		
-		data.setShort(16, to: wildItem1.index)
-		data.setShort(18, to: wildItem2.index)
+		data.setShort(16, to: heldItem1.index)
+		data.setShort(18, to: heldItem2.index)
 		data.setShort(20, to: Int(height * 10))
 		data.setShort(22, to: Int(weight * 10))
 		data.setShort(24, to: nameID)
@@ -239,17 +242,27 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 		data.setByte(36, to: type1.index)
 		data.setByte(37, to: type2.index)
 		data.setByte(38, to: catchRate)
-		data.setByte(39, to: expYield)
+		data.setByte(39, to: baseExp)
 		data.setByte(42, to: genderRatio.rawValue)
 		data.setByte(43, to: eggCycles)
 		data.setByte(44, to: baseHappiness)
-		data.setByte(45, to: expRate.rawValue)
+		data.setByte(45, to: levelUpRate.rawValue)
 		data.setByte(46, to: eggGroup1)
 		data.setByte(47, to: eggGroup2)
 		data.setByte(48, to: ability1.index)
 		data.setByte(49, to: ability2.index)
 		data.setByte(50, to: unknown)
 		data.setByte(51, to: colourID)
+
+		var EVs = 0
+		for evYield in [hpYield, attackYield, defenseYield, speedYield, specialAttackYield, specialDefenseYield] {
+			EVs = EVs << 1
+			EVs += evYield & 0x2
+			EVs = EVs << 1
+			EVs += evYield & 0x1
+		}
+		EVs = EVs << 4
+		data.setShort(40, to: EVs)
 		
 		data.save()
 		

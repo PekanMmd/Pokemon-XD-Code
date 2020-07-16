@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XGMoveTargets: Int {
+enum XGMoveTargets: Int, CaseIterable {
 	
 	case selectedTarget			= 0x00
 	case dependsOnMove			= 0x01
@@ -42,9 +42,25 @@ enum XGMoveTargets: Int {
 	}
 	
 	func cycle() -> XGMoveTargets {
-		
 		return XGMoveTargets(rawValue: self.rawValue + 1) ?? XGMoveTargets(rawValue: 0)!
-		
 	}
 	
+}
+
+extension XGMoveTargets: XGEnumerable {
+	var enumerableName: String {
+		return string
+	}
+
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+
+	static var enumerableClassName: String {
+		return "Move Targets"
+	}
+
+	static var allValues: [XGMoveTargets] {
+		return allCases
+	}
 }

@@ -2003,7 +2003,7 @@ extension XGUtility {
 		XGPokeSpots.all.relocatePokespotData(toOffset: spotStart)
 		
 		let dol = XGFiles.dol.data!
-		let offset = 0x1faf50 - kDOLtoRAMOffsetDifference
+		let offset = 0x1faf50 - kDolToRAMOffsetDifference
 		dol.replace4BytesAtOffset(offset, withBytes: 0x280A0000 + n)
 		dol.save()
 		

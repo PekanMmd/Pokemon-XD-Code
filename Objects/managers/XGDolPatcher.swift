@@ -113,12 +113,12 @@ class XGDolPatcher: NSObject {
 
 		if game == .XD, region == .US {
 
-			let offset = kClassPatchOffsets[0] 
+			let offset = kClassPatchOffsets[0]
 			let machineInstruction = dol.getWordAtOffset(offset)
 			return machineInstruction == kNopInstruction
 
 		} else if game == .Colosseum, region == .US {
-			return dol.getWordAtOffset(0x10c4ac - kColosseumDolToRamOffsetDifference) == 0x8863001F
+			return dol.getWordAtOffset(0x10c4ac - kDolToRAMOffsetDifference) == 0x8863001F
 		}
 
 		return false
@@ -148,7 +148,7 @@ class XGDolPatcher: NSObject {
 			let move30Offsets = [0x226c18]
 			let move31Offsets = [0x228b5c]
 			
-			XGAssembly.replaceASM(startOffset: typeGetCategory - kColosseumDolToRamOffsetDifference, newASM: [
+			XGAssembly.replaceASM(startOffset: typeGetCategory - kDolToRAMOffsetDifference, newASM: [
 				// get move data pointer
 				0x1c030038, // mulli r0, r3, 56
 				0x806d85dc, // lwz	r3, -0x7A24 (r13)
@@ -157,16 +157,16 @@ class XGDolPatcher: NSObject {
 				0x4e800020, // blr
 				])
 			for offset in move17Offsets {
-				XGAssembly.replaceASM(startOffset: offset - kColosseumDolToRamOffsetDifference, newASM: [0x7e238b78])
+				XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [0x7e238b78])
 			}
 			for offset in move23Offsets {
-				XGAssembly.replaceASM(startOffset: offset - kColosseumDolToRamOffsetDifference, newASM: [0x7ee3bb78])
+				XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [0x7ee3bb78])
 			}
 			for offset in move30Offsets {
-				XGAssembly.replaceASM(startOffset: offset - kColosseumDolToRamOffsetDifference, newASM: [0x7fc3f378])
+				XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [0x7fc3f378])
 			}
 			for offset in move31Offsets {
-				XGAssembly.replaceASM(startOffset: offset - kColosseumDolToRamOffsetDifference, newASM: [0x7fe3fb78])
+				XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [0x7fe3fb78])
 			}
 			
 			
@@ -424,7 +424,7 @@ class XGDolPatcher: NSObject {
 		if game == .XD {
 			if region == .US {
 				// can always see shadow pokemon nature
-				let shadowNatureStart = 0x0352d8 - kDOLtoRAMOffsetDifference
+				let shadowNatureStart = 0x0352d8 - kDolToRAMOffsetDifference
 				XGAssembly.replaceASM(startOffset: shadowNatureStart, newASM: [kNopInstruction, kNopInstruction])
 			} else {
 				printg("path \"always show shadow pokemon nature\" isn't available for this region.")

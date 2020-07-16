@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XGMoveEffectTypes: Int {
+enum XGMoveEffectTypes: Int, CaseIterable {
 	
 	case none				=  0
 	case regularAttack		=  1
@@ -49,4 +49,22 @@ enum XGMoveEffectTypes: Int {
 		}
 	}
 	
+}
+
+extension XGMoveEffectTypes: XGEnumerable, Equatable {
+	var enumerableName: String {
+		return string.spaceToLength(20)
+	}
+
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+
+	static var enumerableClassName: String {
+		return "Move Effect Types"
+	}
+
+	static var allValues: [XGMoveEffectTypes] {
+		return allCases
+	}
 }
