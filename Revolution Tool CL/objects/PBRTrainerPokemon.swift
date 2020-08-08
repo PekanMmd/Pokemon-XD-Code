@@ -121,8 +121,6 @@ class XGTrainerPokemon : NSObject {
 		let stats = self.species.stats
 		data.setByte(8, to: stats.type1.index)
 		data.setByte(9, to: stats.type2.index)
-		
-		
 	}
 	
 	@objc func purge() {
@@ -134,9 +132,7 @@ class XGTrainerPokemon : NSObject {
 		EVs				= [Int](repeating: 0, count: 6)
 		items			= [XGItems](repeating: .item(0), count: 4)
 		moves			= [XGMoves](repeating: .move(0), count: kNumberOfPokemonMoves)
-		
 	}
-
 }
 
 

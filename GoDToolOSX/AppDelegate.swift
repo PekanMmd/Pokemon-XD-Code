@@ -326,15 +326,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	
 	@IBAction func showHexCalculator(_ sender: Any) {
-		self.homeViewController.performSegue(withIdentifier: "toHexCalcVC", sender: self.homeViewController)
+		homeViewController.performSegue(withIdentifier: "toHexCalcVC", sender: self.homeViewController)
 	}
 	
 	@IBAction func showStringIDTool(_ sender: Any) {
-		self.performSegue("toStringVC")
+		performSegue("toStringVC")
 	}
 	
 	func present(_ controller: NSViewController) {
-		self.homeViewController.presentAsModalWindow(controller)
+		homeViewController.presentAsModalWindow(controller)
 	}
 	
 	

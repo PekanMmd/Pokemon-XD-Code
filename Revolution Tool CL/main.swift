@@ -7,9 +7,11 @@
 
 import Foundation
 
-PBRTypeManager.typeMatchupDataDolOffset?.hexString().println()
-
-XGUtility.extractMainFiles()
+for move in XGMove.allValues.sorted(by: { (m1, m2) -> Bool in
+	m1.effect < m2.effect
+}) {
+	print(move.name.unformattedString)
+}
 
 //let itemData = item("quick claw").data
 //for register: XGRegisters in [.r0, .r3, .r4, .r5, .r6] {

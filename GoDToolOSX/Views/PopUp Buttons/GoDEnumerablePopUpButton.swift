@@ -72,13 +72,6 @@ class GoDBattleStylePopUpButton: GoDPopUpButton, GoDEnumerableButton {
 		setUpEnumerableItems()
 	}
 }
-class GoDBattleTypePopUpButton: GoDPopUpButton, GoDEnumerableButton {
-    typealias Element = XGBattleTypes
-    lazy var allValues = Element.allValues
-	override func setUpItems() {
-		setUpEnumerableItems()
-	}
-}
 class GoDEffectivenessPopUpButton: GoDPopUpButton, GoDEnumerableButton {
     typealias Element = XGEffectivenessValues
     lazy var allValues = Element.allValues

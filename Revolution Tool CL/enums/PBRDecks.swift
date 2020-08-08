@@ -13,6 +13,15 @@ enum XGDeckTypes : UInt32 {
 	case DCKP = 0x44434B50
 	case DCKA = 0x44434B41
 	case none = 0x00000000
+
+	var name: String {
+		switch self {
+		case .DCKT: return "Trainer Deck"
+		case .DCKP: return "Pokemon Deck"
+		case .DCKA: return "AI Deck"
+		case .none: return "none"
+		}
+	}
 }
 
 enum XGDecks {
@@ -30,6 +39,15 @@ enum XGDecks {
 				case .dckt(let i): return .dckt(i)
 				case .dcka: return .dcka
 			}
+		}
+	}
+
+	var index: Int {
+		switch self {
+			case .null: return 0
+			case .dckp(let i): return i
+			case .dckt(let i): return i
+			case .dcka: return 0
 		}
 	}
 	
@@ -61,7 +79,31 @@ enum XGDecks {
 		case .dckp(let i): return PBRDataTable.pokemonDeckWithID(i)!
 		case .null: return PBRDataTable(file: self.file)
 		}
-		
+	}
+
+	var name: String {
+		guard case .dckp = self else {
+			return file.fileName
+		}
+		switch index {
+		case 0: return "Level 30 open double"
+		case 1: return "Level 30 open single"
+		case 2: return "Level 50 all double"
+		case 3: return "Level 50 all single"
+		case 4: return "Masters"
+		case 5: return "Rental double"
+		case 6: return "Rental single"
+		case 7: return "Rental passes"
+		case 8: return "Level 30 survival double"
+		case 9: return "Level 30 survival single"
+		case 10: return "Level 50 survival double"
+		case 11: return "Level 50 survival single"
+		case 12: return "Tutorial"
+		case 13: return "Sample"
+		case 14: return "Little cup double"
+		case 15: return "Little cup single"
+		default: return file.fileName
+		}
 	}
 	
 	static var level30opendouble : XGDecks { return .dckp(0) }
@@ -80,10 +122,25 @@ enum XGDecks {
 	static var sample : XGDecks { return .dckp(13) }
 	static var littledouble : XGDecks { return .dckp(14) }
 	static var littlesingle : XGDecks { return .dckp(15) }
-	
-	
 }
 
+extension XGDecks: XGEnumerable {
+	var enumerableName: String {
+		name
+	}
+
+	var enumerableValue: String? {
+		type.name + " " + index.string
+	}
+
+	static var enumerableClassName: String {
+		"Decks"
+	}
+
+	static var allValues: [XGDecks] {
+		(0...15).map{ XGDecks.dckp($0) }
+	}
+}
 
 
 

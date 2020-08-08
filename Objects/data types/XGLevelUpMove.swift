@@ -43,7 +43,7 @@ extension XGLevelUpMove: XGDocumentable {
 	}
 	
 	var documentableName: String {
-		return move.name.string
+		return move.name.unformattedString
 	}
 	
 	static var DocumentableKeys: [String] {
@@ -55,7 +55,7 @@ extension XGLevelUpMove: XGDocumentable {
 		case "level":
 			return level.string
 		case "move":
-			return move.name.string
+			return move.name.unformattedString
 		default:
 			return ""
 		}

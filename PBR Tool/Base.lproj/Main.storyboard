@@ -46,6 +46,13 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="3VT-6z-gEF"/>
+                                        <menuItem title="Save Reference Data" id="Eyc-ie-VOe">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="documentISO:" target="Voe-Tx-rLC" id="HDS-ar-TVI"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="tfJ-Lv-MH2"/>
                                         <menuItem title="Import Files" keyEquivalent="i" id="qIS-W8-SiK">
                                             <connections>
                                                 <action selector="compileFSYS:" target="Voe-Tx-rLC" id="fVc-Os-VeV"/>
@@ -128,6 +135,19 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="arrangeInFront:" target="Ady-hI-5gd" id="DRN-fu-gQh"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Tools" id="IGe-KO-2IR">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Tools" id="cLm-M8-bxX">
+                                    <items>
+                                        <menuItem title="Hex Calculator" id="Bq2-kU-Mvf">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="showHexCalculator:" target="Voe-Tx-rLC" id="M97-WT-9gQ"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -243,6 +263,7 @@
                         <segue destination="30l-3B-1Wn" kind="show" identifier="toISOVC" id="OBl-zD-LtM"/>
                         <segue destination="833-jc-7gZ" kind="modal" identifier="toPatchVC" id="WSO-2H-kdJ"/>
                         <segue destination="4Sk-bu-n10" kind="modal" identifier="toStatsVC" id="7Pn-CJ-tAt"/>
+                        <segue destination="Pqc-HY-Qb0" kind="modal" identifier="toHexCalcVC" id="2Sh-n0-kyO"/>
                     </connections>
                 </viewController>
                 <customObject id="Ql1-wz-kzW" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -272,6 +293,14 @@
                 <customObject id="FPi-72-Dv9" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="563" y="561"/>
+        </scene>
+        <!--HexCalculator-->
+        <scene sceneID="lt7-aW-C6t">
+            <objects>
+                <controllerPlaceholder storyboardName="HexCalculator" id="Pqc-HY-Qb0" sceneMemberID="viewController"/>
+                <customObject id="f5w-D8-MT2" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="735" y="749"/>
         </scene>
         <!--Type-->
         <scene sceneID="beB-gy-VDz">

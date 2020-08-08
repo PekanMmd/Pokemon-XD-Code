@@ -25,12 +25,12 @@ class GoDEvolutionView: NSView {
 	required init?(coder: NSCoder) {
 		super.init(coder: coder)
 		
-		self.pokemonPopUp.target = self
-		self.pokemonPopUp.action = #selector(setPokemon)
-		self.methodPopUp.target = self
-		self.methodPopUp.action = #selector(setMethod)
-		self.coniditionPopUp.target = self
-		self.coniditionPopUp.action = #selector(setCondition)
+		pokemonPopUp.target = self
+		pokemonPopUp.action = #selector(setPokemon)
+		methodPopUp.target = self
+		methodPopUp.action = #selector(setMethod)
+		coniditionPopUp.target = self
+		coniditionPopUp.action = #selector(setCondition)
 		
 		let viewsArray : [GoDPopUpButton] = [pokemonPopUp,methodPopUp,coniditionPopUp]
 		let viewsDict : [String : NSView] = ["p" : pokemonPopUp, "m" : methodPopUp, "c" : coniditionPopUp]
@@ -50,40 +50,37 @@ class GoDEvolutionView: NSView {
 	@objc func setPokemon() {
 		if delegate != nil {
 			delegate.pokemon.evolutions[self.index].evolvesInto = self.pokemonPopUp.selectedValue.index
-			self.reloadData()
+			reloadData()
 		}
 	}
 	
 	@objc func setMethod() {
 		if delegate != nil {
-			delegate.pokemon.evolutions[self.index].evolutionMethod = self.methodPopUp.selectedValue
-			self.coniditionPopUp.method = delegate.pokemon.evolutions[self.index].evolutionMethod
-			self.coniditionPopUp.selectCondition(condition: 0)
-			self.setCondition()
+			delegate.pokemon.evolutions[index].evolutionMethod = methodPopUp.selectedValue
+			coniditionPopUp.method = delegate.pokemon.evolutions[index].evolutionMethod
+			coniditionPopUp.selectCondition(condition: 0)
+			setCondition()
 		}
 	}
 	
 	@objc func setCondition() {
 		if delegate != nil {
-			delegate.pokemon.evolutions[self.index].condition = self.coniditionPopUp.selectedValue
-			self.reloadData()
+			delegate.pokemon.evolutions[index].condition = coniditionPopUp.selectedValue
+			reloadData()
 		}
 	}
 	
 	func reloadData() {
 		if delegate != nil {
-			let evolution = self.delegate.pokemon.evolutions[self.index]
+			let evolution = delegate.pokemon.evolutions[index]
 			let evolvesInto = XGPokemon.pokemon(evolution.evolvesInto)
 			let method = evolution.evolutionMethod
-			self.pokemonPopUp.select(evolvesInto)
-			self.methodPopUp.select(method)
-			self.coniditionPopUp.method = method
-			self.coniditionPopUp.selectCondition(condition: evolution.condition)
-			
+			pokemonPopUp.select(evolvesInto)
+			methodPopUp.select(method)
+			coniditionPopUp.method = method
+			coniditionPopUp.selectCondition(condition: evolution.condition)
 		}
-		
 	}
-    
 }
 
 

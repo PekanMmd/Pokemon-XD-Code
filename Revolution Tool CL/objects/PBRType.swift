@@ -11,7 +11,7 @@ import Foundation
 let kNumberOfTypes = PBRDataTable.typeMatchups.entrySize // 18
 let kFirstTypeNameID = 0xca6
 
-class XGType: NSObject, XGIndexedValue, Codable {
+final class XGType: NSObject, XGIndexedValue, Codable {
 	
 	var index			 	= 0
 	var effectivenessTable	= [XGEffectivenessValues]()
@@ -28,6 +28,7 @@ class XGType: NSObject, XGIndexedValue, Codable {
             // get only atm, set will be ignored
         }
 	}
+	
 	var name : XGString {
 		get {
 			return getStringSafelyWithID(id: self.nameID)
@@ -66,7 +67,23 @@ class XGType: NSObject, XGIndexedValue, Codable {
 	}
 }
 
+extension XGType: XGEnumerable {
+	var enumerableName: String {
+		return name.unformattedString
+	}
 
+	var enumerableValue: String? {
+		return index.string
+	}
+
+	static var enumerableClassName: String {
+		return "Types"
+	}
+
+	static var allValues: [XGType] {
+		return XGMoveTypes.allTypes.map { $0.data }
+	}
+}
 
 
 

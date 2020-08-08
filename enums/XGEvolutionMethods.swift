@@ -53,13 +53,38 @@ enum XGEvolutionMethods : Int, Codable, CaseIterable {
 			}
 		}
 	}
-	
-	func cycle() -> XGEvolutionMethods {
-		
-		return XGEvolutionMethods(rawValue: self.rawValue + 1) ?? XGEvolutionMethods(rawValue: 0)!
-		
+
+	var conditionType: XGEvolutionConditionType {
+		switch self {
+
+		case .levelUp:
+			fallthrough
+		case .moreAttack:
+			fallthrough
+		case .equalAttack:
+			fallthrough
+		case .moreDefense:
+			fallthrough
+		case .silcoon:
+			fallthrough
+		case .cascoon:
+			fallthrough
+		case .ninjask:
+			fallthrough
+		case .shedinja:
+			return .level
+
+		case .tradeWithItem:
+			fallthrough
+		case .evolutionStone:
+			fallthrough
+		case .levelUpWithKeyItem:
+			return .item
+
+		default:
+			return .none
+		}
 	}
-	
 }
 
 extension XGEvolutionMethods: XGEnumerable {

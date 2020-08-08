@@ -24,7 +24,7 @@ enum XGMoveTypes : XGIndexedValue {
 	
 	var name : String {
 		get {
-			return data.name.string
+			return data.name.unformattedString
 		}
 	}
 	

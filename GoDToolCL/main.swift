@@ -7,8 +7,6 @@
 //
 //
 
-let itemslist = XGUtility.documentItemsByLocation()
-XGUtility.saveString(itemslist, toFile: .nameAndFolder("XG Items by location.txt", .Documents))
 
 //XGUtility.saveMewTutorMovePairs()
 //print((XGDemoStarterPokemon(index: 1).startOffset + kDolToRAMOffsetDifference + 0x92).hexString())

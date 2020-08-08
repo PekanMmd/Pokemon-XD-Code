@@ -1395,6 +1395,7 @@ extension XGUtility {
 			if !shouldCancelDocumentation {
 				printg("Enumerating Abilities...")
 				XGAbilities.documentEnumerationData()
+				XGAbilities.documentData()
 			}
 			if !shouldCancelDocumentation {
 				printg("Enumerating Battles...")
@@ -1408,6 +1409,7 @@ extension XGUtility {
 				printg("Enumerating B-G Enumerations...")
 				XGBagSlots.documentEnumerationData()
 				XGBattleBingoCard.documentEnumerationData()
+				XGBattleBingoCard.documentData()
 				XGBattleField.documentEnumerationData()
 				XGBattleTypes.documentEnumerationData()
 				XGBattleStyles.documentEnumerationData()
@@ -1423,19 +1425,27 @@ extension XGUtility {
 			if !shouldCancelDocumentation {
 				printg("Enumerating Gift Pokemon...")
 				XGStarterPokemon.documentEnumerationData()
+				XGStarterPokemon.documentData()
 				XGDemoStarterPokemon.documentEnumerationData()
+				XGDemoStarterPokemon.documentData()
 				CMGiftPokemon.documentEnumerationData()
+				CMGiftPokemon.documentData()
 				XGTradeShadowPokemon.documentEnumerationData()
+				XGTradeShadowPokemon.documentData()
 				XGTradePokemon.documentEnumerationData()
+				XGTradePokemon.documentData()
 				XGMtBattlePrizePokemon.documentEnumerationData()
+				XGMtBattlePrizePokemon.documentData()
 			}
 			if !shouldCancelDocumentation {
 				printg("Enumerating Items...")
 				XGItems.documentEnumerationData()
+				XGItem.documentData()
 			}
 			if !shouldCancelDocumentation {
 				printg("Enumerating Moves...")
 				XGMoves.documentEnumerationData()
+				XGMove.documentData()
 			}
 			if !shouldCancelDocumentation {
 				printg("Enumerating M-N Enumerations...")
@@ -1449,10 +1459,12 @@ extension XGUtility {
 			if !shouldCancelDocumentation {
 				printg("Enumerating Pokemon...")
 				XGPokemon.documentEnumerationData()
+				XGPokemonStats.documentData()
 			}
 			if !shouldCancelDocumentation {
 				printg("Enumerating Pokespot Encounters...")
 				XGPokeSpotPokemon.documentEnumerationData()
+				XGPokeSpotPokemon.documentData()
 			}
 			if !shouldCancelDocumentation {
 				printg("Enumerating P-S Enumerations...")
@@ -1481,9 +1493,8 @@ extension XGUtility {
 				printg("Documenting data...")
 			}
 			if !shouldCancelDocumentation {
+				printg("Documenting obtainable pokemon...")
 				saveObtainablePokemonByLocation()
-				// if we're in here then it's too late to cancel anyway
-				shouldCancelDocumentation = false
 			}
 			
 			if !shouldCancelDocumentation {

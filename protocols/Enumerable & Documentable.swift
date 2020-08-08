@@ -49,13 +49,13 @@ extension XGDocumentable {
 	var documentableFields: String {
 		var text = ""
 		for key in type(of: self).DocumentableKeys {
-			text += "\n\(key): \(self.documentableValue(for: key))"
+			text += "\n\(key): \(documentableValue(for: key))"
 		}
 		return text
 	}
 	
 	var documentableData: String {
-		return "\(self.documentableName)\n" + documentableFields
+		return "\(documentableName)\n" + documentableFields
 	}
 	
 	func saveDocumentedData() {
@@ -68,16 +68,13 @@ extension XGDocumentable {
 	}
 }
 
-extension XGEnumerable {
+extension XGEnumerable where Self: XGDocumentable {
 	static var documentableValues: [XGDocumentable] {
-		let documentable = (allValues as? [XGDocumentable]) ?? []
-		return documentable.filter { $0.isDocumentable }
+		allValues.filter { $0.isDocumentable }
 	}
 	
 	static func documentData() {
-		documentableValues.forEach { (value) in
-			value.saveDocumentedData()
-		}
+		documentableValues.forEach { $0.saveDocumentedData() }
 	}
 }
 

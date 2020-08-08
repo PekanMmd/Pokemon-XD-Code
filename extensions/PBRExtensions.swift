@@ -522,8 +522,75 @@ extension XGUtility {
 	class func documentXDSClasses() { }
 	class func documentXDSAutoCompletions(toFile file: XGFiles) { }
 	
+	private static var isDocumentingISO = false
+	private static var shouldCancelDocumentation = false
+	static func cancelDocumentation() {
+		shouldCancelDocumentation = true
+	}
 	class func documentISO() {
-		
+
+		guard !isDocumentingISO else {
+			printg("Already Documenting ISO!")
+			return
+		}
+
+		isDocumentingISO = true
+		shouldCancelDocumentation = false
+		printg("Documenting ISO.\nThis may take a while...")
+		XGThreadManager.manager.runInBackgroundAsync {
+			printg("Documenting Enumerations...")
+			// Enumerations
+			if !shouldCancelDocumentation {
+				printg("Enumerating Abilities...")
+				XGAbilities.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating B-G Enumerations...")
+				XGContestAppeals.documentEnumerationData()
+				XGDecks.documentEnumerationData()
+				XGDeoxysFormes.documentEnumerationData()
+				XGEffectivenessValues.documentEnumerationData()
+				XGEvolutionMethods.documentEnumerationData()
+				XGExpRate.documentEnumerationData()
+				XGGenderRatios.documentEnumerationData()
+				XGGenders.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating Items...")
+				XGItems.documentEnumerationData()
+				XGItem.documentData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating Moves...")
+				XGMoves.documentEnumerationData()
+				XGMove.documentData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating M-N Enumerations...")
+				XGMoveCategories.documentEnumerationData()
+				XGMoveEffectTypes.documentEnumerationData()
+				XGMoveTargets.documentEnumerationData()
+				XGMoveTypes.documentEnumerationData()
+				XGNatures.documentEnumerationData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating Pokemon...")
+				XGPokemon.documentEnumerationData()
+				XGPokemonStats.documentData()
+			}
+			if !shouldCancelDocumentation {
+				printg("Enumerating TMs...")
+				XGTMs.documentEnumerationData()
+			}
+
+			if !shouldCancelDocumentation {
+				printg("Finished Documenting ISO.")
+			} else {
+				printg("Cancelled Documenting ISO.")
+			}
+			isDocumentingISO = false
+		}
+
 	}
 }
 

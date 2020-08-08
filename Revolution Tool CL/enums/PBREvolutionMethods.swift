@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGEvolutionMethods : Int, Codable, CaseIterable {
+enum XGEvolutionMethods : Int, Codable {
 	
 	case levelUpWithKeyItem		= -1
 	
@@ -74,7 +74,67 @@ enum XGEvolutionMethods : Int, Codable, CaseIterable {
 				case .levelUpAtIceRock		:	return "Level up near ice rock"
 			}
 		}
-	}	
+	}
+
+	var conditionType: XGEvolutionConditionType {
+		switch self {
+		case .levelUp:
+			fallthrough
+		case .equalAttack:
+			fallthrough
+		case .moreAttack:
+			fallthrough
+		case .moreDefense:
+			fallthrough
+		case .silcoon:
+			fallthrough
+		case .cascoon:
+			fallthrough
+		case .shedinja:
+			fallthrough
+		case .ninjask:
+			fallthrough
+		case .levelWithMove:
+			fallthrough
+		case .levelWithItemDay:
+			fallthrough
+		case .levelWithItemNight:
+			fallthrough
+		case .levelUpAtIceRock:
+			fallthrough
+		case .levelUpAtMossRock:
+			fallthrough
+		case .levelUpInMagneticField:
+			fallthrough
+		case .levelUpMale:
+			fallthrough
+		case .levelUpFemale:
+			return .level
+
+		case .evolutionStone:
+			fallthrough
+		case .evolutionStoneMale:
+			fallthrough
+		case .evolutionStoneFemale:
+			fallthrough
+		case .levelUpWithKeyItem:
+			fallthrough
+		case .tradeWithItem:
+			return .item
+
+		case .levelWithPartyPokemon:
+			return .pokemon
+
+		default:
+			return .none
+		}
+	}
+
+	static var allCases: [XGEvolutionMethods] {
+		(XGEvolutionMethods.none.rawValue ... XGEvolutionMethods.levelUpAtIceRock.rawValue).map {
+			XGEvolutionMethods(rawValue: $0) ?? .none
+		}
+	}
 }
 
 extension XGEvolutionMethods: XGEnumerable {

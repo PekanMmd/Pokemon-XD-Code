@@ -341,8 +341,7 @@ class XGDolPatcher: NSObject {
 		dol.replace2BytesAtOffset(kShinyCalcChanceOffset2, withBytes: val)
 		
 		dol.save()
-		
-//		XGAlertView(title: "Patch Complete", message: "The Patch has been applied", doneButtonTitle: "Swag", otherButtonTitles: nil, buttonAction: nil).show()
+
 	}
 	
 	@objc class func zeroForeignStringTables() {
@@ -350,8 +349,9 @@ class XGDolPatcher: NSObject {
 		if game == .XD {
 			let tableOffsetsAndSizes = [ (0x7AAFC,0xD484), (0x87F80,0xD3BC), (0x9533C,0xD334), (0x6D874,0xD288) ]
 			
-			for i in 0 ..< tableOffsetsAndSizes.count {
-				XGStringTable(file: .common_rel, startOffset: tableOffsetsAndSizes[i].0, fileSize: tableOffsetsAndSizes[i].1).purge()
+			for (offset, size) in tableOffsetsAndSizes {
+				XGStringTable(file: .common_rel, startOffset: offset, fileSize: size).purge()
+
 			}
 		} else {
 			// clears colosseum debug string table

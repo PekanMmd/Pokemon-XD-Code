@@ -10,7 +10,7 @@ import Foundation
 
 let kNumberOfItems = PBRDataTable.items.numberOfEntries // 465
 
-class XGItem: NSObject, XGIndexedValue, Codable {
+final class XGItem: NSObject, XGIndexedValue, Codable {
 	
 	var index				= 0
 	
@@ -97,12 +97,64 @@ class XGItem: NSObject, XGIndexedValue, Codable {
 	
 }
 
+extension XGItem: XGEnumerable {
+	var enumerableName: String {
+		return name.unformattedString.spaceToLength(20)
+	}
 
+	var enumerableValue: String? {
+		return index.string
+	}
 
+	static var enumerableClassName: String {
+		return "Items"
+	}
 
+	static var allValues: [XGItem] {
+		return XGItems.allItems().map { $0.data }
+	}
+}
 
+extension XGItem: XGDocumentable {
 
+	static var documentableClassName: String {
+		return "Items"
+	}
 
+	var documentableName: String {
+		return enumerableName + " - " + (enumerableValue ?? "")
+	}
+
+	static var DocumentableKeys: [String] {
+		return ["index", "hex index", "name", "description", "price", "parameter", "friendship"]
+	}
+
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return index.string
+		case "hex index":
+			return index.hexString()
+		case "name":
+			return name.unformattedString
+		case "description":
+			return descriptionString.unformattedString
+		case "price":
+			return price.string
+		case "parameter":
+			return parameter.string
+		case "friendship":
+			var text = ""
+			friendshipEffects.forEach {
+				text += $0.string + ", "
+			}
+			text.removeLast()
+			return text
+		default:
+			return ""
+		}
+	}
+}
 
 
 

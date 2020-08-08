@@ -53,7 +53,7 @@ extension XGMoveTargets: XGEnumerable {
 	}
 
 	var enumerableValue: String? {
-		return rawValue.string
+		return rawValue.hexString()
 	}
 
 	static var enumerableClassName: String {

@@ -42,41 +42,22 @@ class GoDEvolutionConditionPopUpButton: GoDPopUpButton {
 	override func setUpItems() {
 		
 		var values = [String]()
-		self.isEnabled = true
+		isEnabled = true
 		
-		switch method {
-		case .levelUp:
-			fallthrough
-		case .equalAttack:
-			fallthrough
-		case .moreAttack:
-			fallthrough
-		case .moreDefense:
-			fallthrough
-		case .silcoon:
-			fallthrough
-		case .cascoon:
-			fallthrough
-		case .shedinja:
-			fallthrough
-		case .ninjask:
+		switch method.conditionType {
+		case .level:
 			values = levelPopUp.itemTitles
-		case .evolutionStone:
-			fallthrough
-		case .levelUpWithKeyItem:
-			fallthrough
-		case .tradeWithItem:
-			values = allItemsList()
+		case .item:
+			values = XGItems.allItems().map({ $0.name.unformattedString })
+		case .pokemon:
+			values = XGPokemon.allPokemon().map({ $0.name.unformattedString })
 		default:
 			values = ["-"]
 			self.isEnabled = false
-			
 		}
 		
 		self.setTitles(values: values)
 	}
-	
-	
 }
 
 

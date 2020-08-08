@@ -384,7 +384,7 @@ extension XGPokemonStats: XGDocumentable {
 	}
 	
 	static var DocumentableKeys: [String] {
-		return ["index", "hex index", "national index", "name", "type 1", "type 2", "ability 1", "ability 2", "base HP", "base attack", "base defense", "base special attack", "base special defense", "base speed", "species", "level up rate", "gender ratio", "catch rate", "exp yield", "base happiness", "wild item 1", "wild item 2", "HP yield", "attack yield", "defense yield", "special attack yield", "special defense yield", "speed yield", "evolutions", "learnable tutor moves", "learnable TMs", "level up moves"]
+		return ["index", "hex index", "national index", "name", "type 1", "type 2", "ability 1", "ability 2", "base HP", "base attack", "base defense", "base special attack", "base special defense", "base speed", "species", "level up rate", "gender ratio", "catch rate", "exp yield", "base happiness", "wild item 1", "wild item 2", "HP yield", "attack yield", "defense yield", "special attack yield", "special defense yield", "speed yield", "height", "weight", "evolutions", "learnable tutor moves", "learnable TMs", "level up moves"]
 	}
 	
 	func documentableValue(for key: String) -> String {
@@ -445,6 +445,10 @@ extension XGPokemonStats: XGDocumentable {
 			return specialDefenseYield.string
 		case "speed yield":
 			return speedYield.string
+		case "height":
+			return String(format: "%2.1f m", height)
+		case "weight":
+			return String(format: "%2.1f kg", weight)
 		case "evolutions":
 			var evolutionString = ""
 			for evolution in evolutions where evolution.evolutionMethod != .none {
@@ -459,8 +463,8 @@ extension XGPokemonStats: XGDocumentable {
 			return tutorString
 		case "learnable TMs":
 			var tmString = ""
-			for i in 0 ..< learnableTMs.count {
-				tmString += "\n" + XGTMs.tm(i).move.name.string + ": " + learnableTMs[i].string
+			for i in 0 ..< kNumberOfTMsAndHMs {
+				tmString += "\n" + XGTMs.tm(i + 1).move.name.string + ": " + learnableTMs[i].string
 			}
 			return tmString
 		case "level up moves":

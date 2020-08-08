@@ -11,7 +11,7 @@ import Darwin
 class XGRandomiser : NSObject {
 	
 	class func randomisePokemon() {
-			printg("randomising pokemon species...")
+		printg("randomising pokemon species...")
 		
 		printg("done!")
 	}

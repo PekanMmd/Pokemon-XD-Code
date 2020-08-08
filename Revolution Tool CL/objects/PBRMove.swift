@@ -10,7 +10,7 @@ import Foundation
 
 let kNumberOfMoves = PBRDataTable.moves.numberOfEntries // 468
 
-class XGMove: NSObject, XGIndexedValue {
+final class XGMove: NSObject, XGIndexedValue {
 	
 	var startOffset			: Int {
 		return PBRDataTable.moves.offsetForEntryWithIndex(self.index)
@@ -127,9 +127,95 @@ class XGMove: NSObject, XGIndexedValue {
 	
 }
 
+extension XGMove: XGEnumerable {
+	var enumerableName: String {
+		return name.unformattedString.spaceToLength(20)
+	}
 
+	var enumerableValue: String? {
+		return index.string
+	}
 
+	static var enumerableClassName: String {
+		return "Moves"
+	}
 
+	static var allValues: [XGMove] {
+		return XGMoves.allMoves().map { $0.data }
+	}
+}
+
+extension XGMove: XGDocumentable {
+
+	static var documentableClassName: String {
+		return "Moves"
+	}
+
+	var isDocumentable: Bool {
+		return descriptionID != 0
+	}
+
+	var documentableName: String {
+		return enumerableName + " - " + (enumerableValue ?? "")
+	}
+
+	static var DocumentableKeys: [String] {
+		return ["index", "hex index", "name", "description", "type", "base pp", "base power", "category", "accuracy", "priority", "effect", "effect accuracy", "targets", "is HM", "makes contact", "can be protected", "reflected by magic coat", "stolen by snatch", "copyable by mirror move", "affected by king's rock", "is sound based", "flag 6", "flag 7"]
+	}
+
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return index.string
+		case "hex index":
+			return index.hexString()
+		case "name":
+			return name.unformattedString
+		case "description":
+			return mdescription.unformattedString
+		case "type":
+			return type.name
+		case "base pp":
+			return pp.string
+		case "base power":
+			return basePower.string
+		case "category":
+			return category.string
+		case "accuracy":
+			return accuracy.string
+		case "priority":
+			return priority.string
+		case "effect":
+			return effect.string
+		case "effect accuracy":
+			return effectAccuracy.string
+		case "targets":
+			return target.string
+		case "is HM":
+			return HMFlag.string
+		case "makes contact":
+			return contactFlag.string
+		case "can be protected":
+			return protectFlag.string
+		case "reflected by magic coat", "reflected by magic bounce":
+			return magicCoatFlag.string
+		case "stolen by snatch", "blocked by bulletproof":
+			return snatchFlag.string
+		case "copyable by mirror move", "boosted by mega launcher":
+			return mirrorMoveFlag.string
+		case "affected by king's rock":
+			return kingsRockFlag.string
+		case "is sound based":
+			return soundBasedFlag.string
+		case "flag 6":
+			return flag6.string
+		case "flag 7":
+			return flag7.string
+		default:
+			return ""
+		}
+	}
+}
 
 
 

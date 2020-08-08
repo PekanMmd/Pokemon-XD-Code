@@ -24,10 +24,38 @@ enum XGTMs: XGIndexedValue {
 		return .move(PBRDataTableEntry.TMs(index: index - 1).getShort(0))
 	}
 
+	var category: Int {
+		return PBRDataTableEntry.TMs(index: index - 1).getByte(2)
+	}
+
+	var isHM: Bool {
+		return index > 92
+	}
+
 	static var allTMs: [XGTMs] {
-		(0 ..< kNumberOfTMsAndHMs).map { (index) -> XGTMs in
+		(1 ... kNumberOfTMsAndHMs).map { (index) -> XGTMs in
 			.tm(index)
 		}
+	}
+}
+
+extension XGTMs: XGEnumerable {
+	var enumerableName: String {
+		let prefix = isHM ? "HM" : "TM"
+		let index = isHM ? self.index - 92 : self.index
+		return String(format: "\(prefix)%02d", index)
+	}
+
+	var enumerableValue: String? {
+		return move.name.unformattedString
+	}
+
+	static var enumerableClassName: String {
+		return "TMs"
+	}
+
+	static var allValues: [XGTMs] {
+		return allTMs
 	}
 }
 

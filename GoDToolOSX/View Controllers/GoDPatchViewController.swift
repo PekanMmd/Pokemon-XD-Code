@@ -9,7 +9,7 @@
 import Cocoa
 
 let xdpatches = [
-    "Remove foreign languages from common_rel (Highly recommended. Required for some patches.)",
+    "Remove foreign languages from common_rel. Required for some patches. Probably best to apply this first.",
 	"Apply Physical/Special move split",
 	"Remove Physical/Special move split",
 	"Assign default phys/spec categories to moves",
@@ -58,12 +58,12 @@ class GoDPatchViewController: GoDTableViewController {
 		#selector(decapitalise),
 		] :
 		[
+			#selector(removeLanguages),
 			#selector(gen4Categories),
 			#selector(removeGen4Categories),
 			#selector(defaultCategories),
 			#selector(endOfTurnSwitchIns),
 			#selector(shadowHMFlag),
-			#selector(removeLanguages),
 			#selector(deleteUnusedFiles),
 			#selector(fixShinyGlitch),
 			#selector(randomShinyShadows),
@@ -200,6 +200,7 @@ class GoDPatchViewController: GoDTableViewController {
 		
 		view.setBackgroundColour(colour)
 		view.setTitle(patches[row])
+		view.titleField.maximumNumberOfLines = 0
 		
 		return view
 	}

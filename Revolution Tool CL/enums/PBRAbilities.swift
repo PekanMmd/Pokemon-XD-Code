@@ -91,8 +91,6 @@ extension XGAbilities: XGEnumerable {
 		
 		return values
 	}
-	
-	
 }
 
 func allAbilities() -> [String : XGAbilities] {

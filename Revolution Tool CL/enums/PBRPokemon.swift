@@ -252,3 +252,4 @@ extension XGPokemon: XGEnumerable {
 
 
 
+

@@ -14,7 +14,7 @@ let kNumberOfTutorMoves = 0 // for XD compatibility
 let kSizeOfEvolution = 6
 let kSizeOfLevelUpMove = 4
 
-class XGPokemonStats: NSObject, XGIndexedValue {
+final class XGPokemonStats: NSObject, XGIndexedValue {
 	
 	var index			= 0
 	var startOffset		= 0
@@ -291,8 +291,125 @@ class XGPokemonStats: NSObject, XGIndexedValue {
 	
 }
 
+extension XGPokemonStats: XGEnumerable {
+	var enumerableName: String {
+		return name.unformattedString.spaceToLength(20)
+	}
 
+	var enumerableValue: String? {
+		return index.string
+	}
 
+	static var enumerableClassName: String {
+		return "Pokemon"
+	}
+
+	static var allValues: [XGPokemonStats] {
+		return XGPokemon.allPokemon().map { $0.stats }
+	}
+}
+
+extension XGPokemonStats: XGDocumentable {
+
+	static var documentableClassName: String {
+		return "Pokemon Stats"
+	}
+
+	var isDocumentable: Bool {
+		return nameID != 0
+	}
+
+	var documentableName: String {
+		return enumerableName + " - " + (enumerableValue ?? "")
+	}
+
+	static var DocumentableKeys: [String] {
+		return ["index", "name", "type 1", "type 2", "ability 1", "ability 2", "base HP", "base attack", "base defense", "base special attack", "base special defense", "base speed", "species", "level up rate", "gender ratio", "catch rate", "exp yield", "base happiness", "wild item 1", "wild item 2", "HP yield", "attack yield", "defense yield", "special attack yield", "special defense yield", "speed yield", "height", "weight", "evolutions", "learnable TMs", "level up moves"]
+	}
+
+	func documentableValue(for key: String) -> String {
+		switch key {
+		case "index":
+			return index.string
+		case "hex index":
+			return index.hexString()
+		case "name":
+			return name.unformattedString
+		case "type 1":
+			return type1.name
+		case "type 2":
+			return type2.name
+		case "ability 1":
+			return ability1.name.unformattedString
+		case "ability 2":
+			return ability2.name.unformattedString
+		case "base attack":
+			return attack.string
+		case "base HP":
+			return hp.string
+		case "base defense":
+			return defense.string
+		case "base special attack":
+			return specialAttack.string
+		case "base special defense":
+			return specialDefense.string
+		case "base speed":
+			return speed.string
+		case "species":
+			return species.string
+		case "level up rate":
+			return levelUpRate.string
+		case "gender ratio":
+			return genderRatio.string
+		case "catch rate":
+			return catchRate.string
+		case "exp yield":
+			return baseExp.string
+		case "base happiness":
+			return baseHappiness.string
+		case "wild item 1":
+			return heldItem1.name.string
+		case "wild item 2":
+			return heldItem2.name.string
+		case "attack yield":
+			return attackYield.string
+		case "defense yield":
+			return defenseYield.string
+		case "HP yield":
+			return hpYield.string
+		case "special attack yield":
+			return specialAttackYield.string
+		case "special defense yield":
+			return specialDefenseYield.string
+		case "speed yield":
+			return speedYield.string
+		case "height":
+			return String(format: "%2.1f m", height)
+		case "weight":
+			return String(format: "%2.1f kg", weight)
+		case "evolutions":
+			var evolutionString = ""
+			for evolution in evolutions where evolution.evolutionMethod != .none {
+				evolutionString += "\n" + evolution.documentableFields
+			}
+			return evolutionString
+		case "learnable TMs":
+			var tmString = ""
+			for i in 0 ..< kNumberOfTMsAndHMs {
+				tmString += "\n" + XGTMs.tm(i + 1).move.name.unformattedString + ": " + learnableTMs[i].string
+			}
+			return tmString
+		case "level up moves":
+			var movesString = ""
+			for lum in levelUpMoves where lum.move.index != 0 {
+				movesString += "\n" + lum.documentableFields
+			}
+			return movesString
+		default:
+			return ""
+		}
+	}
+}
 
 
 

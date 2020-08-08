@@ -147,13 +147,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			self.isBuilding = false
 		}
 	}
+
+	var isDocumenting = false
+	@IBAction func documentISO(_ sender: Any) {
+		guard !isDocumenting else {
+			return
+		}
+		isDocumenting = true
+		printg("Documenting ISO...")
+		XGThreadManager.manager.runInBackgroundAsync {
+			XGUtility.documentISO()
+			self.isDocumenting = false
+		}
+	}
 	
 	func createDirectories() {
 		XGFolders.setUpFolderFormat()
 	}
 
 	@IBAction func showHexCalculator(_ sender: Any) {
-		self.homeViewController.performSegue(withIdentifier: "toHexCalcVC", sender: self.homeViewController)
+		performSegue("toHexCalcVC")
 	}
 
 	@IBAction func showAbout(_ sender: AnyObject) {
@@ -175,11 +188,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			self.homeViewController.performSegue(withIdentifier: "toHelpVC", sender: self.homeViewController)
 			return
 		}
-		self.homeViewController.performSegue(withIdentifier: name, sender: self.homeViewController)
+		homeViewController.performSegue(withIdentifier: name, sender: self.homeViewController)
 	}
 	
 	func present(_ controller: NSViewController) {
-		self.homeViewController.presentAsModalWindow(controller)
+		homeViewController.presentAsModalWindow(controller)
 	}
 
 	func displayAlert(title: String, text: String) {
