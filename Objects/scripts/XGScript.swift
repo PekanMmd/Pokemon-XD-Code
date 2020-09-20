@@ -1294,22 +1294,12 @@ class XGScript: NSObject {
 					possible = false
 				} else if m2 == nil {
 					if p2.isLoadImmediate {
-						if var type = macTypeForVar(v: m1!) {
+						if let type = macTypeForVar(v: m1!) {
 							let c = p2.constants[0]
 							// only print as macro type for certain operator types
 							// prevents lines like #SHADOW_TEDDIURSA + #SHADOW_TEDDIURSA
 							// when incrementing shadow pokemon loop variables
 							if (48...53).contains(op) || ((op >= 32) && (op <= 34)) {
-								switch p1 {
-								// Narrow down type for getFlag(#FLAG_STORY)
-								case .callStandard(0, 133, let args) where args.count == 1:
-									if case .loadImmediate(.integer(XDSFlags.story.rawValue)) = args[0] {
-										type = .storyProgress
-									}
-								default:
-									break
-								}
-
 								if type.printsAsMacro {
 									p2 = .macroImmediate(c, type)
 								}
@@ -1326,22 +1316,12 @@ class XGScript: NSObject {
 					
 				} else if m1 == nil {
 					if p1.isLoadImmediate {
-						if var type = macTypeForVar(v: m2!) {
+						if let type = macTypeForVar(v: m2!) {
 							let c = p1.constants[0]
 							// only print as macro type for certain operator types
 							// prevents lines like #SHADOW_TEDDIURSA + #SHADOW_TEDDIURSA
 							// when incrementing shadow pokemon loop variables
 							if (48...53).contains(op) || ((op >= 32) && (op <= 34)) {
-								switch p2 {
-								// Narrow down type for getFlag(#FLAG_STORY)
-								case .callStandard(0, 133, let args) where args.count == 1:
-									if case .loadImmediate(.integer(XDSFlags.story.rawValue)) = args[0] {
-										type = .storyProgress
-									}
-								default:
-									break
-								}
-
 								if type.printsAsMacro {
 									p1 = .macroImmediate(c, type)
 								}
