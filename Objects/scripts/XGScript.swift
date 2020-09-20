@@ -949,8 +949,7 @@ class XGScript: NSObject {
 								let flagIDConstant = params[0].constants[0]
 								if flagIDConstant.type == XDSConstantTypes.integer,
 									flagIDConstant.asInt == XDSFlags.story.rawValue {
-									#warning("Update the return macro type to the new story flag type added by @breakfast")
-									globalMacroTypes[XGScriptClass.classes(c).classDotFunction(f)] = .integer
+									globalMacroTypes[XGScriptClass.classes(c).classDotFunction(f)] = .storyProgress
 									macroOverridden = true
 								}
 							}
@@ -1251,7 +1250,7 @@ class XGScript: NSObject {
 							// only print as macro type for certain operator types
 							// prevents lines like #SHADOW_TEDDIURSA + #SHADOW_TEDDIURSA
 							// when incrementing shadow pokemon loop variables
-							if op == 48 || op == 53 || ((op >= 32) && (op <= 34)) {
+							if (48...53).contains(op) || ((op >= 32) && (op <= 34)) {
 								if type.printsAsMacro {
 									p2 = .macroImmediate(c, type)
 								}
@@ -1273,7 +1272,7 @@ class XGScript: NSObject {
 							// only print as macro type for certain operator types
 							// prevents lines like #SHADOW_TEDDIURSA + #SHADOW_TEDDIURSA
 							// when incrementing shadow pokemon loop variables
-							if op == 48 || op == 53 || ((op >= 32) && (op <= 34)) {
+							if (48...53).contains(op) || ((op >= 32) && (op <= 34)) {
 								if type.printsAsMacro {
 									p1 = .macroImmediate(c, type)
 								}
@@ -1445,6 +1444,12 @@ class XGScript: NSObject {
 							}
 						}
 					}
+
+                    if sclass.name == "Standard" {
+                        if sclass[f].name == "setFlag", let knownFlag = XDSFlags(rawValue: es[0].constants[0].asInt), knownFlag == .story {
+                            macroTypes[1] = .storyProgress
+                        }
+                    }
 					
 					for j in 0 ..< es.count {
 						let p1 = es[j]

@@ -62,6 +62,7 @@ indirect enum XDSMacroTypes {
 	case yesNoIndex
 	case scriptFunction
 	case sfxID
+    case storyProgress
 	
 	case array(XDSMacroTypes)
 	
@@ -130,6 +131,7 @@ indirect enum XDSMacroTypes {
 		case .yesNoIndex: return 28
 		case .scriptFunction: return 29
 		case .sfxID: return 30
+        case .storyProgress: return 31
 			
 		case .array: return 99
 			
@@ -279,6 +281,8 @@ indirect enum XDSMacroTypes {
 			return "ScriptFunction"
 		case .sfxID:
 			return "SoundEffectID"
+        case .storyProgress:
+            return "StoryProgress"
 		case .vectorDimension:
 			return "VectorDimension"
 		case .giftPokemon:
