@@ -1038,6 +1038,28 @@ class XGScript: NSObject {
 			}
 			return macroType
 		}
+
+		// Used to add detailed context to the return type of very specific
+		// types of expressions such as Standard.getFlag(#FLAG_STORY)
+		// being handled differently from any other flag
+		func macroOverrideForExpr(_ expr: XDSExpr) -> XDSMacroTypes? {
+			let standard = XGScriptClass.classes(0)
+			let getFlag = standard.functionWithID(133)
+			switch expr {
+			case .bracket(let e):
+				return macroOverrideForExpr(e)
+			case .callStandard(standard.index, getFlag.index, let es):
+				guard es.count == 1, es[0].constants.count == 1 else { return nil }
+				if es[0].constants[0].value == XDSFlags.story.rawValue {
+					#warning("Replace with .storyProgression from @breakfast's PR")
+					return .integer
+				} else {
+					return nil
+				}
+			default:
+				return nil
+			}
+		}
 		
 		func setMacTypeForVar(v: XDSVariable, to: XDSMacroTypes) -> Bool {
 			// returns true if the type was not previously known
@@ -1182,10 +1204,14 @@ class XGScript: NSObject {
 				var p2 = e
 				let m1 = v
 				let m2 = p2.macroVariable
+				let o2 = macroOverrideForExpr(e)
 				var newInfo = false
 				var possible = true
-				
-				if m2 == nil {
+
+				if let overrideType = o2 {
+					newInfo = newInfo || setMacTypeForVar(v: m2!, to: overrideType)
+					possible = false
+				} else if m2 == nil {
 					
 					if p2.isLoadImmediate {
 						if let type = macTypeForVar(v: v) {
@@ -1221,10 +1247,50 @@ class XGScript: NSObject {
 				var p2 = e2
 				let m1 = p1.macroVariable
 				let m2 = p2.macroVariable
+				let o1 = macroOverrideForExpr(e1)
+				let o2 = macroOverrideForExpr(e2)
 				var newInfo = false
 				var possible = true
 				
-				if m1 == nil && m2 == nil {
+				if let overrideType = o1, o2 == nil {
+					if p2.isLoadImmediate {
+						let c = p2.constants[0]
+						// only print as macro type for certain operator types
+						// prevents lines like #SHADOW_TEDDIURSA + #SHADOW_TEDDIURSA
+						// when incrementing shadow pokemon loop variables
+						if op == 48 || op == 53 || ((op >= 32) && (op <= 34)) {
+							if overrideType.printsAsMacro {
+								p2 = .macroImmediate(c, overrideType)
+							}
+							if overrideType.needsDefine {
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: overrideType)
+								macros.append(.macro(name, c.rawValueString))
+							}
+						}
+					}
+
+					possible = false
+
+				} else if let overrideType = o2, o1 == nil {
+					if p1.isLoadImmediate {
+						let c = p1.constants[0]
+						// only print as macro type for certain operator types
+						// prevents lines like #SHADOW_TEDDIURSA + #SHADOW_TEDDIURSA
+						// when incrementing shadow pokemon loop variables
+						if op == 48 || op == 53 || ((op >= 32) && (op <= 34)) {
+							if overrideType.printsAsMacro {
+								p1 = .macroImmediate(c, overrideType)
+							}
+							if overrideType.needsDefine {
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: overrideType)
+								macros.append(.macro(name, c.rawValueString))
+							}
+						}
+					}
+
+					possible = false
+
+				} else if m1 == nil && m2 == nil {
 					newInfo = false
 					possible = false
 				} else if m2 == nil {
