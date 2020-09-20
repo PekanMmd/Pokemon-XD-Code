@@ -1208,7 +1208,7 @@ class XGScript: NSObject {
 				var possible = true
 
 				if let overrideType = o2 {
-					newInfo = newInfo || setMacTypeForVar(v: m2!, to: overrideType)
+					newInfo = newInfo || setMacTypeForVar(v: m1, to: overrideType)
 					possible = false
 				} else if m2 == nil {
 					
