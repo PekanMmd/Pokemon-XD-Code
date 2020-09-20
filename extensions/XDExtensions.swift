@@ -1078,9 +1078,9 @@ extension XGUtility {
 			}
 		}
 
-        for storyProgress in XGStoryProgress.allCases {
-            addMacro(value: storyProgress.rawValue, type: .storyProgress)
-        }
+		for storyProgress in XGStoryProgress.allCases {
+			addMacro(value: storyProgress.rawValue, type: .storyProgress)
+		}
 		
 		// get macros.xds
 		// file containing common macros to use as reference
