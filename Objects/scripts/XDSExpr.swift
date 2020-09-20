@@ -677,6 +677,9 @@ indirect enum XDSExpr {
 			}
 		case .sfxID:
 			return "SFX_" + XGMusicMetaData(index: c.asInt).name.uppercased()
+		case .storyProgress:
+			let storyProgress = XGStoryProgress(rawValue: c.asInt)!
+			return macroWithName(storyProgress.macroName)
 		case .vectorDimension:
 			switch c.asInt {
 			case 0: return macroWithName("V_X")

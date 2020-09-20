@@ -1051,8 +1051,7 @@ class XGScript: NSObject {
 			case .callStandard(standard.index, getFlag.index, let es):
 				guard es.count == 1, es[0].constants.count == 1 else { return nil }
 				if es[0].constants[0].value == XDSFlags.story.rawValue {
-					#warning("Replace with .storyProgression from @breakfast's PR")
-					return .integer
+					return .storyProgress
 				} else {
 					return nil
 				}
@@ -1209,7 +1208,7 @@ class XGScript: NSObject {
 				var possible = true
 
 				if let overrideType = o2 {
-					newInfo = newInfo || setMacTypeForVar(v: m2!, to: overrideType)
+					newInfo = newInfo || setMacTypeForVar(v: m1, to: overrideType)
 					possible = false
 				} else if m2 == nil {
 					
@@ -1258,7 +1257,7 @@ class XGScript: NSObject {
 						// only print as macro type for certain operator types
 						// prevents lines like #SHADOW_TEDDIURSA + #SHADOW_TEDDIURSA
 						// when incrementing shadow pokemon loop variables
-						if op == 48 || op == 53 || ((op >= 32) && (op <= 34)) {
+						if (48...53).contains(op) || ((op >= 32) && (op <= 34)) {
 							if overrideType.printsAsMacro {
 								p2 = .macroImmediate(c, overrideType)
 							}
@@ -1277,7 +1276,7 @@ class XGScript: NSObject {
 						// only print as macro type for certain operator types
 						// prevents lines like #SHADOW_TEDDIURSA + #SHADOW_TEDDIURSA
 						// when incrementing shadow pokemon loop variables
-						if op == 48 || op == 53 || ((op >= 32) && (op <= 34)) {
+						if (48...53).contains(op) || ((op >= 32) && (op <= 34)) {
 							if overrideType.printsAsMacro {
 								p1 = .macroImmediate(c, overrideType)
 							}
@@ -1300,7 +1299,7 @@ class XGScript: NSObject {
 							// only print as macro type for certain operator types
 							// prevents lines like #SHADOW_TEDDIURSA + #SHADOW_TEDDIURSA
 							// when incrementing shadow pokemon loop variables
-							if op == 48 || op == 53 || ((op >= 32) && (op <= 34)) {
+							if (48...53).contains(op) || ((op >= 32) && (op <= 34)) {
 								if type.printsAsMacro {
 									p2 = .macroImmediate(c, type)
 								}
@@ -1322,7 +1321,7 @@ class XGScript: NSObject {
 							// only print as macro type for certain operator types
 							// prevents lines like #SHADOW_TEDDIURSA + #SHADOW_TEDDIURSA
 							// when incrementing shadow pokemon loop variables
-							if op == 48 || op == 53 || ((op >= 32) && (op <= 34)) {
+							if (48...53).contains(op) || ((op >= 32) && (op <= 34)) {
 								if type.printsAsMacro {
 									p1 = .macroImmediate(c, type)
 								}
@@ -1498,8 +1497,7 @@ class XGScript: NSObject {
 					if sclass.name == "Standard", sclass[f].name == "setFlag" {
 						if es.count > 1, es[0].isImmediate, es[0].constants.count == 1,
 							es[0].constants[0].value == XDSFlags.story.rawValue {
-							#warning("Replace with .storyProgress from @breakfast's PR")
-							macroTypes[1] = .integer
+							macroTypes[1] = .storyProgress
 						}
 					}
 					
@@ -1586,8 +1584,7 @@ class XGScript: NSObject {
 					if sclass.name == "Standard", sclass[f].name == "setFlag" {
 						if es.count > 1, es[0].isImmediate, es[0].constants.count == 1,
 							es[0].constants[0].value == XDSFlags.story.rawValue {
-							#warning("Replace with .storyProgress from @breakfast's PR")
-							macroTypes[1] = .integer
+							macroTypes[1] = .storyProgress
 						}
 					}
 					
