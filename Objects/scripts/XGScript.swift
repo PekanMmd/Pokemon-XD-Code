@@ -912,6 +912,13 @@ class XGScript: NSObject {
 					}
 				}
 				
+				// get macro types if they have been documented
+				if let returnMacro = XGScriptClass.classes(c)[f].returnMacro {
+					if returnMacro != .array(.anyType) {
+						globalMacroTypes[XGScriptClass.classes(c).classDotFunction(f)] = returnMacro
+					}
+				}
+				
 				var broken = false
 				for _ in 0 ..< paramCount {
 					if broken {
@@ -935,30 +942,7 @@ class XGScript: NSObject {
 				} else {
 					stack.push(.callStandardVoid(c, f, params))
 				}
-
-				// get macro types if they have been documented
-				if let returnMacro = XGScriptClass.classes(c)[f].returnMacro {
-					if returnMacro != .array(.anyType) {
-
-						// We can override the return for specific usages of specific functions
-						// To add more detailed context
-						var macroOverridden = false
-						if XGScriptClass.classes(c).name == "Standard",
-						   XGScriptClass.classes(c)[f].name == "getFlag" {
-							if params.count == 1, params[0].constants.count == 1 {
-								let flagIDConstant = params[0].constants[0]
-								if flagIDConstant.type == XDSConstantTypes.integer,
-									flagIDConstant.asInt == XDSFlags.story.rawValue {
-									globalMacroTypes[XGScriptClass.classes(c).classDotFunction(f)] = .storyProgress
-									macroOverridden = true
-								}
-							}
-						}
-						if !macroOverridden {
-							globalMacroTypes[XGScriptClass.classes(c).classDotFunction(f)] = returnMacro
-						}
-					}
-				}
+				
 				
             case .reserve:
                 stack.push(.reserve(instruction.parameter))
@@ -1412,7 +1396,7 @@ class XGScript: NSObject {
 					let sclass = XGScriptClass.classes(c)
 					if sclass.name == "Character" {
 						if sclass[f].name == "talk" {
-							if es[1].isImmediate {
+							if es.count > 1, es[1].isImmediate {
 								if let talkType = XDSTalkTypes(rawValue: es[1].constants[0].asInt) {
 									
 									switch talkType {
@@ -1437,11 +1421,19 @@ class XGScript: NSObject {
 					
 					if sclass.name == "Dialogue" {
 						if sclass[f].name == "setMessageVariable" {
-							if es[1].isImmediate {
+							if es.count > 1, es[1].isImmediate {
 								if let varType = XDSMSGVarTypes.macroForVarType(es[1].constants[0].asInt) {
 									macroTypes[2] = varType
 								}
 							}
+						}
+					}
+
+					if sclass.name == "Standard", sclass[f].name == "setFlag" {
+						if es.count > 1, es[0].isImmediate, es[0].constants.count == 1,
+							es[0].constants[0].value == XDSFlags.story.rawValue {
+							#warning("Replace with .storyProgress from @breakfast's PR")
+							macroTypes[1] = .integer
 						}
 					}
 					
@@ -1522,6 +1514,14 @@ class XGScript: NSObject {
 									macroTypes[2] = varType
 								}
 							}
+						}
+					}
+
+					if sclass.name == "Standard", sclass[f].name == "setFlag" {
+						if es.count > 1, es[0].isImmediate, es[0].constants.count == 1,
+							es[0].constants[0].value == XDSFlags.story.rawValue {
+							#warning("Replace with .storyProgress from @breakfast's PR")
+							macroTypes[1] = .integer
 						}
 					}
 					
