@@ -24,7 +24,6 @@ func printg(_ args: Any...) {
 	}
 	newString += "\n"
 	logString += newString
-	XGUtility.saveString(logString, toFile: .log(date))
 	
 	XGThreadManager.manager.runInForegroundAsync {
 		let hvc = appDelegate.homeViewController
@@ -33,4 +32,6 @@ func printg(_ args: Any...) {
 			log.string = log.string + newString
 		}
 	}
+
+	XGUtility.saveString(logString, toFile: .log(date))
 }

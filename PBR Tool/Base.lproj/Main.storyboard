@@ -264,6 +264,7 @@
                         <segue destination="833-jc-7gZ" kind="modal" identifier="toPatchVC" id="WSO-2H-kdJ"/>
                         <segue destination="4Sk-bu-n10" kind="modal" identifier="toStatsVC" id="7Pn-CJ-tAt"/>
                         <segue destination="Pqc-HY-Qb0" kind="modal" identifier="toHexCalcVC" id="2Sh-n0-kyO"/>
+                        <segue destination="Z8t-S9-kcP" kind="modal" identifier="toMoveVC" id="8RU-r2-bTu"/>
                     </connections>
                 </viewController>
                 <customObject id="Ql1-wz-kzW" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -285,6 +286,14 @@
                 <customObject id="Ujm-TN-IxE" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="689" y="1181"/>
+        </scene>
+        <!--Move-->
+        <scene sceneID="DvD-7Z-q5J">
+            <objects>
+                <controllerPlaceholder storyboardName="Move" id="Z8t-S9-kcP" sceneMemberID="viewController"/>
+                <customObject id="hOH-e9-vdb" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="857" y="1154"/>
         </scene>
         <!--Help-->
         <scene sceneID="aeD-pQ-RIr">

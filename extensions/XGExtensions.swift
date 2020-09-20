@@ -337,6 +337,10 @@ extension String {
 		
 		return substring(from: extensionIndex, to: endIndex)
 	}
+
+	var escapedPath: String {
+		return self.replacingOccurrences(of: " ", with: "\\ ")
+	}
 	
 	var cppEnum : String {
 		// convention used in PkmGCTools by Tux

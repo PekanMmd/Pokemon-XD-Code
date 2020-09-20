@@ -16,10 +16,14 @@ final class XGMove: NSObject, XGIndexedValue {
 		return PBRDataTable.moves.offsetForEntryWithIndex(self.index)
 	}
 	var index				= 0x0
+	var moveIndex: Int {
+		return index
+	}
 	
 	var nameID				= 0x0
 	var descriptionID   	= 0x0
 	var animationID     	= 0x0 // wzx file id
+	var animation2ID		= 0x0 // Just for colo/xd compatibility
 	
 	var priority			= 0x0
 	var pp					= 0x0
@@ -43,6 +47,10 @@ final class XGMove: NSObject, XGIndexedValue {
 	var HMFlag			= false
 	var flag6			= false
 	var flag7			= false
+
+	var isShadowMove: Bool {
+		return false
+	}
 	
 	@objc var name : XGString {
 		get {
@@ -97,6 +105,10 @@ final class XGMove: NSObject, XGIndexedValue {
 		flag6 = flags[6]
 		flag7 = flags[7]
 		// unsure of the use of flags 6-7 but my best guess is that 7 is set on moves that some pokemon have a unique animation for such as blastoise using its cannons in the hydropump animation.
+
+		// animation2ID is only for colo/xd compatibility but we'll reuse the varibale
+		// to convert the move's animation identifier to the index of the move that animation
+		// corresponds to. This will make it easier to list on the GUI
 
 	}
 

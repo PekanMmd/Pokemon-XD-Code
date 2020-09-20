@@ -44,8 +44,8 @@ class GoDMovesViewController: GoDTableViewController {
 	
 	
 	var filteredMoves = [(name: String, type: XGMoveTypes, index: Int, isShadow: Bool)]()
-	var moves = allMovesArray().map { (move) -> (name: String, type : XGMoveTypes, index : Int, isShadow: Bool) in
-		return (move.name.string, move.type, move.index, move.isShadowMove)
+	var moves = allMovesArray().map { (move) -> (name: String, type: XGMoveTypes, index: Int, isShadow: Bool) in
+		return (move.name.unformattedString, move.type, move.index, move.isShadowMove)
 	}
 	
 	var currentMove = XGMove(index: 0) {
@@ -80,14 +80,14 @@ class GoDMovesViewController: GoDTableViewController {
 	
 	func reloadView() {
 		
-		self.name.stringValue = currentMove.name.string
+		self.name.stringValue = currentMove.name.unformattedString
 		self.nameID.integerValue = currentMove.nameID
 		self.index.integerValue = currentMove.moveIndex
 		self.hex.stringValue = currentMove.moveIndex.hexString()
 		self.offset.stringValue = currentMove.startOffset.hexString()
 		
 		self.descID.integerValue = currentMove.descriptionID
-		self.desc.stringValue = currentMove.mdescription.string
+		self.desc.stringValue = currentMove.mdescription.unformattedString
 		self.effect.selectItem(at: currentMove.effect)
 		
 		self.power.integerValue = currentMove.basePower
@@ -95,8 +95,19 @@ class GoDMovesViewController: GoDTableViewController {
 		self.pp.integerValue = currentMove.pp
 		self.accuracy.integerValue = currentMove.accuracy
 		self.effectAcc.integerValue = currentMove.effectAccuracy
-		
-		self.animation.selectItem(at: currentMove.animationID)
+
+		animation.isEnabled = true
+		if game != .PBR {
+			self.animation.selectItem(at: currentMove.animationID)
+		} else {
+			let idsJSON = XGFiles.json("WZX ids")
+			if idsJSON.exists, let ids = idsJSON.json as? [Int], let index = ids.firstIndex(of: currentMove.animationID) {
+				animation.selectItem(at: index)
+			} else {
+				animation.selectItem(at: 0)
+				animation.isEnabled = false
+			}
+		}
 		
 		self.type.select(currentMove.type)
 		self.targets.select(currentMove.target)
@@ -194,12 +205,20 @@ class GoDMovesViewController: GoDTableViewController {
 				sender.stringValue = self.currentMove.name.string
 				return
 			}
-			
-			let string = XGString(string: sender.stringValue, file: XGFiles.common_rel, sid: currentMove.nameID)
-			if !XGFiles.common_rel.stringTable.addString(string, increaseSize: false, save: true) {
-				printg("Failed to set move name:", sender.stringValue)
-				if XGFiles.common_rel.stringTable.extraCharacters < string.dataLength {
-					printg("Try shortening some strings in common.rel's string table.")
+
+			let table = currentMove.name.table
+			let prefix = game == .PBR ? "[0xF001][0xF101]" : ""
+			let string = XGString(string: prefix + sender.stringValue, file: table, sid: currentMove.nameID)
+			if game == .PBR {
+				if !table.stringTable.replaceString(string, save: true, increaseLength: true) {
+					printg("Failed to set move name:", sender.stringValue)
+				}
+			} else {
+				if !table.stringTable.addString(string, increaseSize: false, save: true) {
+					printg("Failed to set move name:", sender.stringValue)
+					if table.stringTable.extraCharacters < string.dataLength {
+						printg("Try shortening some strings in \(table.fileName)'s string table.")
+					}
 				}
 			}
 		}
@@ -248,15 +267,23 @@ class GoDMovesViewController: GoDTableViewController {
 				return
 			}
 			if sender.stringValue.length == 0 {
-				sender.stringValue = self.currentMove.mdescription.string
+				sender.stringValue = self.currentMove.mdescription.stringWithEscapedNewlines
 				return
 			}
-			
-			let string = XGString(string: sender.stringValue, file: XGFiles.common_rel, sid: currentMove.descriptionID)
-			if !XGFiles.dol.stringTable.addString(string, increaseSize: false, save: true) {
-				printg("Failed to set move description:", sender.stringValue)
-				if XGFiles.dol.stringTable.extraCharacters < string.dataLength {
-					printg("Try shortening some strings in Start.dol's string table.")
+
+			let table = currentMove.mdescription.table
+			let prefix = game == .PBR ? "[0xF001][0xF101]" : ""
+			let string = XGString(string: prefix + sender.stringValue, file: table, sid: currentMove.descriptionID)
+			if game == .PBR {
+				if !table.stringTable.replaceString(string, save: true, increaseLength: true) {
+					printg("Failed to set move name:", sender.stringValue)
+				}
+			} else {
+				if !table.stringTable.addString(string, increaseSize: false, save: true) {
+					printg("Failed to set move description:", sender.stringValue)
+					if table.stringTable.extraCharacters < string.dataLength {
+						printg("Try shortening some strings in \(table.fileName)'s string table.")
+					}
 				}
 			}
 		}
@@ -291,10 +318,21 @@ class GoDMovesViewController: GoDTableViewController {
 	
 	
 	@IBAction func newAnimation(_ sender: GoDOriginalMovesPopUpButton) {
-		let value = sender.indexOfSelectedItem
+		var value = sender.indexOfSelectedItem
+
+		if game == .PBR {
+			let idsJSON = XGFiles.json("WZX ids")
+			guard idsJSON.exists, let ids = idsJSON.json as? [Int], value < ids.count else {
+				return
+			}
+
+			value = ids[value]
+		}
 		
-		self.currentMove.animationID = value
-		self.currentMove.animation2ID = value - (value < 0x164 ? 0 : 1)
+		currentMove.animationID = value
+		if game != .PBR {
+			currentMove.animation2ID = value - (value < 0x164 ? 0 : 1)
+		}
 	}
 	
 	@IBAction func newEffect(_ sender: GoDEffectsPopUpButton) {
@@ -420,15 +458,15 @@ class GoDMovesViewController: GoDTableViewController {
 	}
 	
 	@IBAction func save(_ sender: Any) {
-		self.prepareForSave()
-		self.currentMove.save()
+		prepareForSave()
+		currentMove.save()
 		
-		self.moves[currentMove.moveIndex].name = self.currentMove.name.string
-		self.moves[currentMove.moveIndex].isShadow = self.currentMove.isShadowMove
-		self.moves[currentMove.moveIndex].type = self.currentMove.type
+		moves[currentMove.moveIndex].name = currentMove.name.string
+		moves[currentMove.moveIndex].isShadow = currentMove.isShadowMove
+		moves[currentMove.moveIndex].type = currentMove.type
 		
-		self.reloadViewWithActivity()
-		self.table.reloadData()
+		reloadViewWithActivity()
+		table.reloadData()
 	}
 	
 }

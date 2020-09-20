@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum GoDTextureFormats: Int {
+enum GoDTextureFormats: Int, CaseIterable {
 	
 	case I4 = 0x40
 	case I8 = 0x42
@@ -140,7 +140,15 @@ enum GoDTextureFormats: Int {
 		default: return nil
 		}
 	}
-    
+
+	static func fromStandardRawValue(_ value: Int) -> GoDTextureFormats? {
+		for format in allCases {
+			if format.standardRawValue == value {
+				return format
+			}
+		}
+		return nil
+	}
 }
 
 

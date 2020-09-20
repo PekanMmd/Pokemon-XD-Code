@@ -566,10 +566,6 @@ final class XGFsys : NSObject {
 	}
 	
 	func replaceFileWithIndex(_ index: Int, withFile newFile: XGFiles, saveWhenDone: Bool) {
-		if !self.file.exists {
-			printg("file doesn't exist: ", self.file.path)
-			return
-		}
 		if !newFile.exists {
 			printg("file doesn't exist: ", newFile.path)
 			return
@@ -1000,6 +996,13 @@ final class XGFsys : NSObject {
 			for i in 0 ..< data.count {
 				if settings.verbose {
 					printg("decoding file: \(data[i].file.fileName)")
+				}
+
+				if data[i].file.fileType == .pkx {
+					let file = data[i].file
+					let dat = XGUtility.exportDatFromPKX(pkx: data[i])
+					dat.file = .nameAndFolder(file.fileName.replacingOccurrences(of: ".pkx", with: ".dat"), file.folder)
+					dat.save()
 				}
 
 				if data[i].file.fileType == .msg {

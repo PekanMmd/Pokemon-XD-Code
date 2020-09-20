@@ -53,6 +53,16 @@ class GoDISOViewController: GoDTableViewController {
 					XGColour.colourThreshold = 0
 					for file in currentFile.folder.files {
 
+						if file.fileType == .pkx {
+							for dat in currentFile.folder.files where dat.fileType == .dat {
+								if dat.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
+									if let datData = dat.data, let pkxData = file.data {
+										XGUtility.importDatToPKX(dat: datData, pkx: pkxData).save()
+									}
+								}
+							}
+						}
+
 						// encode string tables before compiling scripts
 						if file.fileType == .msg {
 							for json in currentFile.folder.files where json.fileType == .json {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class PBRDolPatcher {
+class XGDolPatcher {
 
 	/// Removes the code for rental pass validation checks
 	/// allowing the space to be reused for the type matchups table
@@ -49,5 +49,9 @@ class PBRDolPatcher {
 		XGAssembly.replaceASM(startOffset: 0x3DA370 - kDolToRAMOffsetDifference, newASM: [
 			.li(.r3, 0)
 		])
+	}
+
+	static func isClassSplitImplemented() -> Bool {
+		return true
 	}
 }

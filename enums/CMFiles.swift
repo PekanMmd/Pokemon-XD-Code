@@ -54,6 +54,8 @@ indirect enum XGFiles {
 	case iso
 	case toc
 	case log(Date)
+	case wit
+	case wimgt
 	case nameAndFolder(String, XGFolders)
 	
 	var path : String {
@@ -94,6 +96,8 @@ indirect enum XGFiles {
 			case .rel(let s)			: return s + XGFileTypes.rel.fileExtension
 			case .ccd(let s)			: return s + XGFileTypes.ccd.fileExtension
 			case .json(let s)			: return s + XGFileTypes.json.fileExtension
+			case .wit					: return "wit"
+			case .wimgt					: return "wimgt"
 			case .nameAndFolder(let name, _) : return name
 			case .iso					: return (game == .Colosseum ? "Colosseum" : "XD") + XGFileTypes.iso.fileExtension
 			}
@@ -130,6 +134,7 @@ indirect enum XGFiles {
             case .fsys              : if XGFolders.FSYS.filenames.contains(self.fileName) { folder = .FSYS}
                                       else if XGFolders.MenuFSYS.filenames.contains(self.fileName) { folder = .MenuFSYS}
                                       else {folder = .AutoFSYS}
+			case .wit, .wimgt       : folder = .Resources
 			case .nameAndFolder( _, let aFolder) : folder = aFolder
 				
 			}
@@ -657,7 +662,11 @@ indirect enum XGFolders {
                 XGResources.JSON(j).copy(to: file)
 			}
 		}
-		
+
+		let wimgt = XGFiles.wimgt
+        if !wimgt.exists {
+            XGResources.tool("wimgt").copy(to: wimgt)
+        }
 	}
 }
 

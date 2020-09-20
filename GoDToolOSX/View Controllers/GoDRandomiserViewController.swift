@@ -64,6 +64,7 @@ class GoDRandomiserViewController: GoDViewController {
 		}
 		
 		XGUtility.compileMainFiles()
+		GoDAlertViewController.displayAlert(title: "Randomisation complete!", text: "done.")
 	}
 	
     

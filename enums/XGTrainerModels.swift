@@ -10,6 +10,8 @@ import Foundation
 
 let kNumberOfTrainerModels = 0x44
 
+// This table is pointed to by function 0x801d919c in RAM if you want to repoint to a larger
+// table at some point
 let kFirstTrainerPKXIdentifierOffset = 0x409e88 // in start.dol
 
 enum XGTrainerModels : Int, Codable, CaseIterable {

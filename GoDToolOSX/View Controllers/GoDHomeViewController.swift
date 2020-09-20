@@ -15,8 +15,8 @@ let colotools = ["Trainer Editor","Pokemon Stats Editor","Move Editor","Item Edi
 let colosegues = ["toTrainerVC","toStatsVC","toMoveVC","toItemVC","toGiftVC", "toTypeVC", "toTreasureVC", "toPatchVC", "toRandomiserVC", "toMessageVC", "toCollisionVC", "toInteractionVC", "toISOVC"]
 
 // The type editor doesn't seem to affect the game for some reason
-let pbrtools = ["Pokemon Stats Editor", "Type Editor", "Message Editor", "Patches", "ISO Explorer"]
-let pbrsegues = ["toStatsVC", "toTypeVC", "toMessageVC", "toPatchVC", "toISOVC"]
+let pbrtools = ["Pokemon Stats Editor", "Move Editor", "Type Editor", "Message Editor", "Patches", "ISO Explorer"]
+let pbrsegues = ["toStatsVC", "toMoveVC", "toTypeVC", "toMessageVC", "toPatchVC", "toISOVC"]
 
 class GoDHomeViewController: GoDTableViewController {
 	

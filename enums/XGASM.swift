@@ -120,15 +120,21 @@ enum XGASM {
 	case addi(XGRegisters, XGRegisters, Int)
 	case addis(XGRegisters, XGRegisters, Int)
 	case addze(XGRegisters, XGRegisters)
+
 	case sub(XGRegisters, XGRegisters, XGRegisters)
 	case subi(XGRegisters, XGRegisters, Int)
 	case neg(XGRegisters, XGRegisters)
+
 	case mulli(XGRegisters, XGRegisters, Int)
 	case mullw(XGRegisters, XGRegisters, XGRegisters)
 	case divw(XGRegisters, XGRegisters, XGRegisters)
 	case divwu(XGRegisters, XGRegisters, XGRegisters)
+
 	case or(XGRegisters, XGRegisters, XGRegisters)
 	case ori(XGRegisters, XGRegisters, UInt32)
+	case and(XGRegisters, XGRegisters, XGRegisters)
+	case and_(XGRegisters, XGRegisters, XGRegisters)
+	case andi_(XGRegisters, XGRegisters, UInt32)
 	
 	case b(Int)
 	case bl(Int)
@@ -306,6 +312,19 @@ enum XGASM {
 			return 0
 		}
 	}
+
+	private func codeForAnd() -> UInt32 {
+		switch self {
+		case .and(let rd, let ra, let rb):
+			return (UInt32(31) << 26) | (ra.value << 21) | (rd.value << 16) | (rb.value << 11) | (28 << 1)
+		case .and_(let rd, let ra, let rb):
+			return (UInt32(31) << 26) | (ra.value << 21) | (rd.value << 16) | (rb.value << 11) | (28 << 1) + 1
+		case .andi_(let rd, let ra, let uimm):
+			return (UInt32(28) << 26) | (ra.value << 21) | (rd.value << 16) | (uimm & 0xFFFF)
+		default:
+			return 0
+		}
+	}
 	
 	func instructionForBranchToLabel(labels: [String : Int]) -> XGASM {
 		switch self {
@@ -407,7 +426,15 @@ enum XGASM {
 			fallthrough
 		case .rlwinm_:
 			return codeForShift()
-			
+
+		// and
+		case .and:
+			fallthrough
+		case .and_:
+			fallthrough
+		case .andi_:
+			return codeForAnd()
+
 		// or
 		case .or:
 			fallthrough
@@ -522,11 +549,13 @@ enum XGASM {
 	}
 
 	static func loadImmediateShifted32bit(register: XGRegisters, value: UInt32) -> (XGASM, XGASM) {
-		
+		if register == .r0 {
+			printg("Warning: Using loadImmediateShifted32bit with register 0 leads to unexpected results")
+		}
+
 		let lowOrder = value & 0xFFFF
 		let addition = lowOrder < 0x8000
 		let highOrder = value >> 16 + (addition ? 0 : 1)
-		
 		
 		let shift = XGASM.lis(register, highOrder.int)
 		var add = XGASM.nop

@@ -19,8 +19,8 @@ let kPalettePointerOffset = 0x48
 
 // The textures in poke_dance.fsys start with this data so it can be used to identify them.
 // Those textures start at 0xA0 with some extra data added beforehand (probably used to animate it).
-let kDancerBytes = [0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x28, 0x00, 0x00, 0x32, 0x80, 0x00, 0x00, 0x00, 0xA0]
-let kDancerStartOffset = 0xA0
+let kDancerBytes = [0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00]
+let kDancerStartOffset = 0xC
 
 class GoDTexture: NSObject {
 
@@ -85,7 +85,7 @@ class GoDTexture: NSObject {
 		self.data = data
 		
 		self.isPokeDance = data.getByteStreamFromOffset(0, length: kDancerBytes.count) == kDancerBytes
-		startOffset = isPokeDance ? kDancerStartOffset : 0x0
+		startOffset = isPokeDance ? data.get4BytesAtOffset(kDancerStartOffset) : 0x0
 		self.setUp()
 		
 	}

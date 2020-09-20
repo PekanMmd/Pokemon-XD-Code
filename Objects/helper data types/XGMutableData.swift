@@ -54,9 +54,9 @@ class XGMutableData: NSObject {
 	
 	init(byteStream: [UInt8], file: XGFiles = XGFiles.nameAndFolder("", .Documents)) {
 		super.init()
-		
-		self.data = NSMutableData()
-		self.appendBytes(byteStream)
+
+		var rawBytes = byteStream
+		self.data = NSMutableData(bytes: &rawBytes, length: rawBytes.count)
 		self.file = file
 		
 	}
@@ -407,6 +407,16 @@ class XGMutableData: NSObject {
 		let newData = XGMutableData(byteStream: charStream, file: .nameAndFolder("", .Documents))
 		self.insertData(data: newData, atOffset: offset)
 	}
+
+	func insertBytes(bytes: [UInt8], atOffset offset: Int) {
+
+		if offset < 0 || offset > self.length {
+			printg("Attempting to insert \(bytes.count) bytes at offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+
+		let newData = XGMutableData(byteStream: bytes, file: .nameAndFolder("", .Documents))
+		self.insertData(data: newData, atOffset: offset)
+	}
 	
 	@objc func insertData(data: XGMutableData, atOffset offset: Int) {
 		
@@ -416,16 +426,15 @@ class XGMutableData: NSObject {
 		
 		self.data.replaceBytes(in: NSMakeRange(offset, 0), withBytes: data.rawBytes, length: data.length)
 	}
-	
-	@objc func insertRepeatedByte(byte: Int, count: Int, atOffset offset: Int) {
-		
+
+	func insertRepeatedByte(byte: UInt8, count: Int, atOffset offset: Int) {
+
 		if offset < 0 || offset > self.length {
 			printg("Attempting to insert \(count) bytes at offset: \(offset.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
 		}
-		
-		let bytes = [Int](repeating: byte, count: count)
+
+		let bytes = [UInt8](repeating: byte, count: count)
 		self.insertBytes(bytes: bytes, atOffset: offset)
-		
 	}
 	
 	// delete bytes
@@ -447,11 +456,11 @@ class XGMutableData: NSObject {
 	@objc func nullBytes(start: Int, length: Int) {
 		
 		if start < 0 || start + length > self.length {
-			printg("Attempting to null \(length) bytes at offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+			printg("Attempting to null \(length.hexString()) bytes at offset: \(start.hexString()), file: \(self.file.path), length: \(data.length.hexString())")
 		}
-		
-		let null = [Int](repeating: 0, count: length)
-		self.replaceBytesFromOffset(start, withByteStream: null)
+
+		deleteBytes(start: start, count: length)
+		insertRepeatedByte(byte: 0, count: length, atOffset: start)
 	}
 	
 	func setFolder(_ folder: XGFolders) {

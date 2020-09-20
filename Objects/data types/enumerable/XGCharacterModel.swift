@@ -47,7 +47,7 @@ final class XGCharacterModel : NSObject, Codable {
 		return archive!.decompressedDataForFileWithIndex(index: fsysIndex)!
 	}
 	
-	@objc init(index: Int) {
+	@objc init(index: Int, loadArchive: Bool = true) {
 		super.init()
 		
 		let rel = XGFiles.common_rel.data!
@@ -56,7 +56,7 @@ final class XGCharacterModel : NSObject, Codable {
 		self.startOffset = CommonIndexes.CharacterModels.startOffset + (self.index * kSizeOfCharacterModel)
 		self.identifier = rel.getWordAtOffset(self.startOffset + kCharacterModelFSYSIdentifier)
 		
-		if let arch = archive {
+		if loadArchive, let arch = archive {
 			let file = arch.file!
 			if file.exists {
 				let fsysIndex = arch.indexForIdentifier(identifier: self.identifier.int)
@@ -92,9 +92,9 @@ final class XGCharacterModel : NSObject, Codable {
 	
 	@objc class func modelWithIdentifier(id: Int) -> XGCharacterModel {
 		for i in 0 ..< CommonIndexes.NumberOfCharacterModels.value {
-			let model = XGCharacterModel(index: i)
+			let model = XGCharacterModel(index: i, loadArchive: false)
 			if model.identifier == id {
-				return model
+				return XGCharacterModel(index: i, loadArchive: true)
 			}
 		}
 		return XGCharacterModel(index: 0)

@@ -80,10 +80,10 @@ extension XDSScriptCompiler {
 				}
 			}
 			
-			// replace newlines with regular spaces if within brackets
+			// replace newlines and tabs with regular spaces if within brackets
 			// replace with semi colons if within curly braces
 			if bracketLevel > 0 {
-				if stack.peek() == "\n" {
+				if stack.peek() == "\n" || stack.peek() == "\t" {
 					stack.pop()
 					if bracketStack.peek() == "{" {
 						stack.push(";")
@@ -95,7 +95,7 @@ extension XDSScriptCompiler {
 			
 			var ignore = false
 			if scope == .space {
-				if stack.peek() == " " {
+				if stack.peek() == " " || stack.peek() == "\t" {
 					ignore = true
 				} else if stack.peek() == "\n" {
 					scope = .newLine
@@ -105,7 +105,7 @@ extension XDSScriptCompiler {
 					scope = .normal
 				}
 			} else if scope == .newLine {
-				if (stack.peek() == "\n") || (stack.peek() == " ") {
+				if (stack.peek() == "\n") || (stack.peek() == " ") || (stack.peek() == "\t") {
 					ignore = true
 				} else if stack.peek() == "\"" {
 					scope = .string
@@ -123,6 +123,10 @@ extension XDSScriptCompiler {
 					scope = .newLine
 				} else if stack.peek() == "\"" {
 					scope = .string
+				} else if stack.peek() == "\t" {
+					scope = .space
+					stack.pop()
+					stack.push(" ")
 				}
 			}
 			
@@ -1777,14 +1781,7 @@ extension XDSScriptCompiler {
 							
 							variable = tokens[0]
 							
-							// arrays and vectors are handled above and function arguments can't be modified
-							if args[currentFunction]!.contains(variable) {
-								error = "Cannot modify a function parameter.\nInvalid line: "
-								for t in tokens {
-									error += " " + t
-								}
-								return nil
-							}
+							// arrays and vectors are handled above
 							if vects.names.contains(variable) {
 								error = "No vector dimension specified.\nInvalid line: "
 								for t in tokens {
@@ -1806,7 +1803,7 @@ extension XDSScriptCompiler {
 								}
 								return nil
 							}
-							if !gvars.names.contains(variable) {
+							if !gvars.names.contains(variable) && !args[currentFunction]!.contains(variable) {
 								var locs = locals[currentFunction]!
 								locs.addUnique(variable)
 								locals[currentFunction] = locs
@@ -1820,7 +1817,6 @@ extension XDSScriptCompiler {
 			}
 			
 		}
-		
 		
 		
 		error = "Invalid line: "

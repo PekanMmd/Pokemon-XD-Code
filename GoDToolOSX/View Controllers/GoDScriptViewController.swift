@@ -69,8 +69,9 @@ class GoDScriptViewController: GoDTableViewController {
 		if filteredScripts.count == 0 {
 			
 			cell.setBackgroundColour(GoDDesign.colourWhite())
-			cell.setTitle("No scripts found in XDS folder.\nselect 'ISO > Decompile Scripts' and try again.")
-			
+			cell.setTitle("No scripts found in XDS folder.\nselect 'Script > Decompile Scripts' and try again.")
+			cell.titleField.maximumNumberOfLines = 0
+
 			return cell
 		}
 		

@@ -76,7 +76,7 @@ enum XGMoves: XGIndexedValue {
 	
 	static func allMoves() -> [XGMoves] {
 		var moves = [XGMoves]()
-		for i in -1 ..< kNumberOfMoves - 1 {
+		for i in -1 ..< kNumberOfMoves {
 			moves.append(.move(i))
 		}
 		return moves

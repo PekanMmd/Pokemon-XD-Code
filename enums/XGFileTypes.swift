@@ -19,7 +19,7 @@ enum XGFileTypes : Int, Codable {
 	case scd  = 0x0e // script data
 	case dats = 0x10 // multiple .dat models in one archive
 	case gtx  = 0x12 // texture
-	case gpt1 = 0x14 // @made_s should know what this is but I admittedly do not know. something to do with 3d models or effects :p
+	case gpt1 = 0x14 // particle data
 	case cam  = 0x18 // camera data
 	case rel  = 0x1c // relocation table
 	case pkx  = 0x1e // character battle model (same as dat with additional header information)

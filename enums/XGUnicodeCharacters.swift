@@ -49,7 +49,7 @@ enum XGUnicodeCharacters {
 				case .unicode( _)				: return 0
 				case .predefinedFontColour( _)	: return 1
 				case .specifiedFontColour( _)	: return 4
-				case .special( _, let e)			: return e.count
+				case .special( _, let e)		: return e.count
 			}
 		}
 	}

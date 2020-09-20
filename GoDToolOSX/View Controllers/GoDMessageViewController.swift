@@ -17,9 +17,9 @@ class GoDMessageViewController: GoDTableViewController {
 	@IBOutlet var messageScrollView: NSScrollView!
 
 	var singleTable: XGStringTable?
-	lazy var allStringTables = XGFolders.StringTables.files
-							  .filter { $0.fileType == .msg }
-							  .map { $0.stringTable }
+//	lazy var allStringTables = XGFolders.StringTables.files
+//							  .filter { $0.fileType == .msg }
+//							  .map { $0.stringTable }
 
 	var stringIDs = [Int]()
 
@@ -41,6 +41,7 @@ class GoDMessageViewController: GoDTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+		loadAllStrings()
 		if let table = singleTable {
 			self.filesPopup.setTitles(values: [table.file.fileName])
 			self.filesPopup.isEnabled = false
@@ -176,6 +177,8 @@ class GoDMessageViewController: GoDTableViewController {
 
 		stringIDs = currentTable?.allStrings().filter({ (s) -> Bool in
 			s.string.simplified.contains(text.simplified)
+			|| (text.integerValue != nil && text.integerValue == s.id)
+			|| (text.isHexInteger && text.hexStringToInt() == s.id)
 		}).map({ (s) -> Int in
 			s.id
 		}) ?? []

@@ -574,8 +574,12 @@ indirect enum XDSExpr {
 		case .msgVar:
 			if let sp = XGSpecialCharacters(rawValue: c.asInt) {
 				var text = sp.string
-				text.removeFirst() // [
-				text.removeLast() // ]
+				if text == "\n" {
+					text = "New Line"
+				} else {
+					text.removeFirst() // [
+					text.removeLast() // ]
+				}
 				if text.isHexInteger {
 					return macroWithName("MSG_VAR_" + text.hexValue.hexString())
 				}

@@ -7,11 +7,15 @@
 
 import Foundation
 
-for move in XGMove.allValues.sorted(by: { (m1, m2) -> Bool in
-	m1.effect < m2.effect
-}) {
-	print(move.name.unformattedString)
+for move in XGMove.allValues {
+	printg(move.name.unformattedString, move.animationID.string + ",")
 }
+
+//for move in XGMove.allValues.sorted(by: { (m1, m2) -> Bool in
+//	m1.effect < m2.effect
+//}) {
+//	print(move.name.unformattedString)
+//}
 
 //let itemData = item("quick claw").data
 //for register: XGRegisters in [.r0, .r3, .r4, .r5, .r6] {

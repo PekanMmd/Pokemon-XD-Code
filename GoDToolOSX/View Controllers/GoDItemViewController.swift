@@ -158,7 +158,7 @@ class GoDItemViewController: GoDTableViewController {
 		indexLabel.stringValue = currentItem.index.string
 		hexLabel.stringValue = currentItem.index.hexString()
 		startLabel.stringValue = currentItem.startOffset.hexString()
-		descriptionField.stringValue = currentItem.descriptionString.string
+		descriptionField.stringValue = currentItem.descriptionString.stringWithEscapedNewlines
 		descriptionIDField.stringValue = currentItem.descriptionID.string
 		
 		consumable.state = currentItem.canBeHeld ? .on : .off

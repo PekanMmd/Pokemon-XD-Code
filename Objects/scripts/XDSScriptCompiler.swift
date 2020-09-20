@@ -70,11 +70,13 @@ class XDSScriptCompiler: NSObject {
 	}
 	
 	// MARK: - specify file or text to compile
+	@discardableResult
 	class func compile(textFile file: XGFiles) -> Bool {
 		let scdFile = XGFiles.scd(file.fileName.removeFileExtensions())
 		return compile(textFile: file, toFile: scdFile)
 	}
-	
+
+	@discardableResult
 	class func compile(textFile file: XGFiles, toFile target: XGFiles) -> Bool {
 		if file.exists {
 			scriptFile = file
@@ -82,8 +84,10 @@ class XDSScriptCompiler: NSObject {
 		}
 		return false
 	}
-	
+
+	@discardableResult
 	class func compile(text: String, toFile file: XGFiles) -> Bool {
+		XGScript.loadCustomClasses()
 		
 		targetFileName = file.fileName.removeFileExtensions()
 		updatedText = text

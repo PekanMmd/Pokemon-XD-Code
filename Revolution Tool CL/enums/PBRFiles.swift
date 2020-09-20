@@ -47,6 +47,7 @@ indirect enum XGFiles {
 	case json(String)
 	case log(Date)
     case wit
+	case wimgt
 	case nameAndFolder(String, XGFolders)
 	case iso // mostly just for compatibility. ISO is handle by the wit tool because it's more complicated on wii.
 	
@@ -77,6 +78,7 @@ indirect enum XGFiles {
 			case .log(let d)			: return d.description + XGFileTypes.txt.fileExtension
 			case .json(let s)			: return s + XGFileTypes.json.fileExtension
             case .wit                   : return "wit"
+			case .wimgt                 : return "wimgt"
 			case .nameAndFolder(let name, _) : return name
             case .iso					: return "pbr" + XGFileTypes.iso.fileExtension
 			}
@@ -103,7 +105,7 @@ indirect enum XGFiles {
 			case .log				: folder = .Logs
 			case .json				: folder = .JSON
 			case .fsys				: folder = .FSYS
-            case .wit               : folder = .Resources
+			case .wit, .wimgt       : folder = .Resources
 			case .nameAndFolder( _, let aFolder) : folder = aFolder
 			case .iso				: folder = .ISO
 				
@@ -113,14 +115,14 @@ indirect enum XGFiles {
 		}
 	}
 	
-	var text : String {
+	var text: String {
 		if !self.exists {
 			printg("File doesn't exist:", self.path)
 		}
 		return self.exists ? data!.string : ""
 	}
 	
-	var data : XGMutableData? {
+	var data: XGMutableData? {
 		
 		switch self {
 		case .lzss("DeckData_Empty.bin"): return DeckDataEmptyLZSS
@@ -164,7 +166,7 @@ indirect enum XGFiles {
 		return FileManager.default.fileExists(atPath: self.path)
 	}
 	
-	var json : AnyObject {
+	var json: AnyObject {
 		get {
 			if self.exists {
 				return try! JSONSerialization.jsonObject(with: self.data!.data as Data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
@@ -534,7 +536,7 @@ indirect enum XGFolders {
 			}
 		}
 		
-		let jsons = ["Move Effects", "Original Pokemon", "Original Moves", "Original Items"]
+		let jsons = ["Move Effects", "Original Pokemon", "Original Moves", "Original Items", "WZX ids"]
 		
 		for j in jsons {
 			let file = XGFiles.json(j)
@@ -546,6 +548,11 @@ indirect enum XGFolders {
         let wit = XGFiles.wit
         if !wit.exists {
             XGResources.tool("wit").copy(to: wit)
+        }
+
+		let wimgt = XGFiles.wimgt
+        if !wimgt.exists {
+            XGResources.tool("wimgt").copy(to: wimgt)
         }
 		
 	}

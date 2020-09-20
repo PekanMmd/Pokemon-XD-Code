@@ -9,7 +9,7 @@
 import Foundation
 
 //MARK: - Class Names
-let ScriptClassNames : [Int : String] = [
+var ScriptClassNames : [Int : String] = [
 	// .xds script format requires classes to be named with first character capitalised
 	 0 : "Standard",
 	 4 : "Vector",
@@ -82,7 +82,7 @@ let ScriptOperators : [(name: String, index: Int, parameterCount: Int, hint: Str
 // having too many is okay and some functions can have varying numbers of parameters
 // depending on usage.
 // parameter or return types of nil means they are unknown, none is used if it is known to have no type (void)
-let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: Int, parameterTypes: [XDSMacroTypes?]?, returnType: XDSMacroTypes?, hint: String)]] = [
+var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: Int, parameterTypes: [XDSMacroTypes?]?, returnType: XDSMacroTypes?, hint: String)]] = [
 // Keep the hints short as they are used in the sublime text autocompletions
 //MARK: - Standard
 	0 : [
@@ -208,9 +208,15 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("followCharacter", 18, 2, [.objectName("Camera"), .objectName("Character")], .null, ""), // # (Character target)
 		
 		("setPosition", 21, 4, [.objectName("Camera"), .integerFloatOverload, .integerFloatOverload, .integerFloatOverload], .null, "(x, y, z)"), // x, y , z
+
+		("setPosition2", 23, 4, [.objectName("Camera"), .integerFloatOverload, .integerFloatOverload, .integerFloatOverload], .null, "(x, y, z)"), // x, y , z
+
+		("setRotationAboutAxesRadians", 25, 4, [.objectName("Camera"), .integerFloatOverload, .integerFloatOverload, .integerFloatOverload], .null, "(x, y, z) in radians"), // x, y , z
 		
 		("performPresetFromFile", 27, 2, [.objectName("Camera"), .integer, .camIdentifier, .integer, .integer], .null, "from .cam file in fsys with gid"), // performs a series of transformations and translations from a .cam file in fsys with specified group id
-		
+
+		("setFieldOfView", 44, 2, [.objectName("Camera"), .integerFloatOverload], .null, "angle"),
+
 		("reset", 47, 1, [.objectName("Camera")], .null, ""),
 		
 	],
@@ -261,6 +267,7 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//#	(16, msgID): informative dialog with no sound
 		
 		("getPosition", 75, 1, [.objectName("Character")], .vector, ""),
+		("getRotation", 76, 1, [.objectName("Character")], .float, ""),
 		
 		("useHealingMachine", 101, 3, [.objectName("Character"), .datsIdentifier, .array(.integer), .array(.integer)], .null, ""),
 	],
@@ -564,6 +571,26 @@ let ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 
 
 
+struct CustomScriptClassFunction: Codable {
+	let name: String
+	let index: Int
+	let parameters: Int
+	let hint: String
+
+	var asTuple: (name: String, index: Int, parameterCount: Int, parameterTypes: [XDSMacroTypes?]?, returnType: XDSMacroTypes?, hint: String) {
+		return (name, index, parameters, nil, nil, hint)
+	}
+}
+
+struct CustomScriptClass: Codable {
+	let name: String
+	let index: Int
+	let functions: [CustomScriptClassFunction]
+
+	static var dummy: CustomScriptClass {
+		return .init(name: "dummy", index: -1, functions: [.init(name: "dummy", index: -1, parameters: 0, hint: "dummy")])
+	}
+}
 
 
 

@@ -36,6 +36,8 @@ let kFirstEvolutionOffset	= 0xA6
 let kFirstLevelUpMoveOffset	= 0xC4
 let kFirstEggMoveOffset		= 0x7E
 
+// This table is pointed to by function 0x801d8e20 in RAM if you want to repoint to a larger
+// table at some point
 let kFirstPokemonPKXIdentifierOffset = 0x40A0A8 // in start.dol
 let kModelDictionaryModelOffset = 0x4
 

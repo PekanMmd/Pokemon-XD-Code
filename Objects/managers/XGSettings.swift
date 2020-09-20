@@ -54,6 +54,7 @@ class XGSettings {
 		}
 		
 		let settings = XGSettings()
+		settings.save()
 		return settings
 	}
 }

@@ -13,6 +13,8 @@ let xdpatches = [
 	"Apply Physical/Special move split",
 	"Remove Physical/Special move split",
 	"Assign default phys/spec categories to moves",
+	"Start with 2 starter pokemon from demo (use gift pokemon editor)",
+	"Go back to starting with 1 starter pokemon",
 	"When a pokémon is KO'd it isn't replaced until the end of the turn",
 	"The HM Flag on moves determines whether it is a shadow move or not (requires foreign languages to be removed.)",
 	"Delete unused files (creates much needed space in the ISO)",
@@ -29,7 +31,7 @@ let xdpatches = [
 	"Allow female demo starter pokemon",
 	"Gen VII critical hit ratios",
 	"All tutor moves are available from the start",
-	"Decapitalise text"
+	"Decapitalise text",
 ]
 let colopatches = [
 	"Apply Physical/Special move split",
@@ -62,6 +64,8 @@ class GoDPatchViewController: GoDTableViewController {
 			#selector(gen4Categories),
 			#selector(removeGen4Categories),
 			#selector(defaultCategories),
+			#selector(enableBetaStarters),
+			#selector(disableBetaStarters),
 			#selector(endOfTurnSwitchIns),
 			#selector(shadowHMFlag),
 			#selector(deleteUnusedFiles),
@@ -80,6 +84,14 @@ class GoDPatchViewController: GoDTableViewController {
 			#selector(immediateTutorMoves),
 			#selector(decapitalise),
 	]
+
+	@objc func enableBetaStarters() {
+		XGDolPatcher.enableBetaStarters()
+	}
+
+	@objc func disableBetaStarters() {
+		XGDolPatcher.disableBetaStarters()
+	}
 	
 	@objc func decapitalise() {
 		XGDolPatcher.decapitalise()
@@ -215,7 +227,7 @@ class GoDPatchViewController: GoDTableViewController {
 			return
 		}
 		if settings.verbose {
-			printg("Selected patch: ", self.patches[row])
+			printg("Selected patch:", self.patches[row])
 		}
 		self.showActivityView {
 			self.performSelector(onMainThread: self.funcs[row], with: nil, waitUntilDone: true)

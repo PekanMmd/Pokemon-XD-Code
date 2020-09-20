@@ -216,6 +216,39 @@ extension XGUtility {
 		XGFiles.fsys("colosseumbattle_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: nameentrymenu, save: true)
 		XGFiles.fsys("colosseumbattle_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool, save: true)
 	}
+
+	class func importDatToPKX(dat: XGMutableData, pkx: XGMutableData) -> XGMutableData {
+		//let gpt1Length = pkx.get4BytesAtOffset(4)
+		var start = 0x40
+		let pkxHeader = pkx.getCharStreamFromOffset(0, length: start)
+
+		var datData = dat.charStream
+		while datData.count % 16 != 0 {
+			datData.append(0)
+		}
+
+		let oldDatLength = pkx.get4BytesAtOffset(0)
+		var oldDatEnd = oldDatLength + 0x40
+		while oldDatEnd % 16 != 0 {
+			oldDatEnd += 1
+		}
+
+		let pkxFooter = pkx.getCharStreamFromOffset(oldDatEnd, length: pkx.length - oldDatEnd)
+
+		let newPKX = XGMutableData(byteStream: pkxHeader + datData + pkxFooter, file: pkx.file)
+		newPKX.replace4BytesAtOffset(0, withBytes: dat.length)
+		return newPKX
+	}
+
+	class func exportDatFromPKX(pkx: XGMutableData) -> XGMutableData {
+		//let gpt1Length = pkx.get4BytesAtOffset(4)
+		let length = pkx.get4BytesAtOffset(0)
+		var start = 0x40
+		let charStream = pkx.getCharStreamFromOffset(start, length: length)
+		let filename = pkx.file.fileName.removeFileExtensions() + ".dat"
+		return XGMutableData(byteStream: charStream, file: .nameAndFolder(filename, pkx.file.folder))
+
+	}
 	
 	//MARK: - Release configuration
 	

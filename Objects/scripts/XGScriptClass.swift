@@ -216,7 +216,137 @@ enum XGScriptClass {
 			
 		}
 	}
-	
+
+	@discardableResult
+	func repointToRAMOffset(_ offset: UInt32) -> Bool {
+		switch self {
+		case .operators:
+			printg("Repointing operators is not yet implemented")
+			return false
+		case .classes(let c):
+			printg("Attempting to repoint script class \(c) to RAM offset:", offset.hexString())
+			if c < 33 || c > 60 {
+				printg("Currently only allows repointing functions within the default range of 33 to 60")
+				return false
+			}
+
+			let dol = XGFiles.dol.data!
+			let branchCodeStartOffset = 0x40bc5c - kDolTableToRAMOffsetDifference + ((c - 33) * 4)
+			dol.replaceWordAtOffset(branchCodeStartOffset, withBytes: offset)
+			dol.save()
+			printg("Successfully repointed class", c)
+			return true
+		}
+	}
+
+	static func addCustomClassBoilerPlateCode(classOffsetInRAM: Int, numberOfFunctions: Int) {
+		// Writes the ASM needed to set up a custom script class
+		// Each function pointer in the jump table wil be a 4 byte word pointing
+		// to the offset in RAM where that index function will be
+		// implemented.
+		// This code will automatically dummy out enough space after the class' asm
+		// to store the number of function pointers specified and will
+		// check against this number before executing the function.
+		// Each individual function must handle parsing the arguments
+		// from the stack and storing its return value in last result (r4).
+		// Make sure the RAM Offset is either in Start.dol or common.rel
+		// and has enough space for the following asm and the function pointers.
+
+		// To return a value to the script engine you must store it in last result
+		// which is pointed to by r4.
+		// Store the return value's type as a half at the memory address of r4.
+		// Store the return value itself as a word at the memory address of r4 offset by 4 bytes.
+
+		// To read arguments from the script engine you must read them from the stack.
+		// The stack pointer is in r3.
+		// Each argument is 8 bytes long. The first half is the value type.
+		// The word 4 bytes after the argument's address is the value itself.
+
+		// When the function is complete it should branch back to the "return offset".
+		// It's easiest to use btctr for this after loading the offset using mtctr.
+		// The return offset is printed when this function completes so note it down somewhere.
+		// Also worth noting the start offset for the jump table which is also printed.
+		// It'll come in handy when adding new functions to class with the
+		// addASMFunctionToCustomClass(jumpTableRAMOffset: Int, functionIndex: Int, codeOffsetInRAM: Int, code: ASM)
+		// function below.
+
+		printg("Attempting to add custom class code at offset \(classOffsetInRAM.hexString()) with \(numberOfFunctions) functions.")
+
+		guard numberOfFunctions < 0xFFFF else {
+			printg("A script class can't have more than \(0xFFFF) functions")
+			return
+		}
+
+		var offset = classOffsetInRAM
+		if offset < 0x80000000 {
+			offset += 0x80000000
+		}
+
+		var jumpOffset = 0x0 // Gets set later
+
+		func asmStart() -> ASM {
+			return [
+				.cmplwi(.r5, UInt32(numberOfFunctions)),
+				.bge_l("return"),
+				// Load jump table offset in r3
+				XGASM.loadImmediateShifted32bit(register: .r3, value: UInt32(jumpOffset)).0,
+				XGASM.loadImmediateShifted32bit(register: .r3, value: UInt32(jumpOffset)).1,
+				.rlwinm(.r0, .r5, 2, 0, 29), // (0x3fffffff) multiply function index by 4
+				.lwzx(.r0, .r3, .r0),
+				.mr(.r3, .r6),
+				.mr(.r4, .r7),
+				.mtctr(.r0),
+				.bctr
+			]
+		}
+
+		let returnLabel: ASM = [.label("return")]
+
+		// Where to resume execution after detouring to this function
+		// end of asm function that jumps to each script class
+		let returntoScriptEngineOffset: UInt32 = 0x801be194
+		let asmEnd: ASM = [
+			.li(.r8, 0),
+			XGASM.loadImmediateShifted32bit(register: .r4, value: returntoScriptEngineOffset).0,
+			XGASM.loadImmediateShifted32bit(register: .r4, value: returntoScriptEngineOffset).1,
+			.mr(.r0, .r4),
+			.mtctr(.r0),
+			.bctr
+		]
+
+		jumpOffset = offset + ((asmStart().count + asmEnd.count) * 4)
+		let returnOffset = UInt32(offset + (asmStart().count * 4)) // point the dummy pointers here so they do nothing until they're implemented
+
+		XGAssembly.replaceRamASM(RAMOffset: offset, newASM: asmStart() + returnLabel + asmEnd)
+
+		let dummyPointers = [XGASM](repeating: .raw(returnOffset), count: numberOfFunctions)
+		XGAssembly.replaceRamASM(RAMOffset: jumpOffset, newASM: dummyPointers)
+
+		printg("Successfully added custom class code.")
+		printg("The new class' code is at RAM offset", offset.hexString())
+		printg("The jump table is at RAM offset", jumpOffset.hexString())
+		printg("The return offset for this class' functions is at RAM offset", returnOffset.hexString())
+	}
+
+	static func createCustomClass(withIndex index: Int, atRAMOffset offset: Int, numberOfFunctions: Int) {
+		let customClass = XGScriptClass.classes(index)
+		guard customClass.repointToRAMOffset(UInt32(offset)) else {
+			printg("Couldn't repoint custom class \(index) to offset:", offset.hexString())
+			return
+		}
+
+		addCustomClassBoilerPlateCode(classOffsetInRAM: offset, numberOfFunctions: numberOfFunctions)
+	}
+
+	static func addASMFunctionToCustomClass(jumpTableRAMOffset: Int, functionIndex: Int, codeOffsetInRAM: Int, code: ASM) {
+		XGAssembly.replaceRamASM(RAMOffset: codeOffsetInRAM, newASM: code)
+		let functionPointerOffset = jumpTableRAMOffset + (functionIndex * 4)
+		var codeOffset = codeOffsetInRAM
+		if codeOffset < 0x80000000 {
+			codeOffset += 0x80000000
+		}
+		XGAssembly.replaceRamASM(RAMOffset: functionPointerOffset, newASM: [.raw(UInt32(codeOffsetInRAM))])
+	}
 }
 
 

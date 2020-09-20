@@ -26,11 +26,11 @@ class GoDPatchViewController: GoDTableViewController {
 	]
 	
 	@objc func moveTypeMatchupsTable() {
-		PBRDolPatcher.moveTypeMatchupsTableToPassValidationFunction()
+		XGDolPatcher.moveTypeMatchupsTableToPassValidationFunction()
 	}
 
 	@objc func disableRentalPassChecksums() {
-		PBRDolPatcher.disableRentalPassChecksums()
+		XGDolPatcher.disableRentalPassChecksums()
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
@@ -59,7 +59,7 @@ class GoDPatchViewController: GoDTableViewController {
 			return
 		}
 		if settings.verbose {
-			printg("Selected patch: ", self.patches[row])
+			printg("Selected patch:", self.patches[row])
 		}
 		self.showActivityView {
 			self.performSelector(onMainThread: self.funcs[row], with: nil, waitUntilDone: true)

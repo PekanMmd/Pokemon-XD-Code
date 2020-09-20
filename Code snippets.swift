@@ -2647,7 +2647,7 @@ import Foundation
 //	let pkx = fsys.decompressedDataForFileWithIndex(index: 0)!
 //	pkx.save()
 //	let file = pkx.file.data
-//	let ow = XGUtility.convertFromPKXToOverWorldModel(pkx: file)
+//	let ow = XGUtility.exportDatFromPKX(pkx: file)
 //	ow.file = .nameAndFolder(pkx.file.fileName + " OW", .Documents)
 //	ow.save()
 //
@@ -4594,7 +4594,7 @@ import Foundation
 //		let mon = XGPokeSpotPokemon(index: j, pokespot: spot).pokemon.stats
 //		let data = mon.pkxData!
 //
-//		let ow = XGUtility.convertFromPKXToOverWorldModel(pkx: data)
+//		let ow = XGUtility.exportDatFromPKX(pkx: data)
 //		ow.file = .nameAndFolder(mon.name.string, .TOC)
 //		ow.save()
 //

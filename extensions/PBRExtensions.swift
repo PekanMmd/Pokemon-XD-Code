@@ -180,7 +180,7 @@ class XGUtility {
 			}
 		}
 		if fileMissing {
-            printg("At least one required file was missing, try decompiling the ISO first.")
+            printg("At least one required file was missing, try unpacking the ISO first.")
             return
         }
 		
@@ -463,7 +463,12 @@ func loadAllStrings() {
 				if file.exists {
 					allStringTables.append(file.stringTable)
 				} else {
-					printg("Error loading strings. File doesn't exist:", file.path)
+					XGUtility.extractMainFiles()
+					if !file.exists {
+						printg("Error loading strings. File doesn't exist:", file.path)
+					} else {
+						allStringTables.append(file.stringTable)
+					}
 
 				}
 

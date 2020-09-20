@@ -142,8 +142,7 @@ class XGCharacter : NSObject, Codable {
 	}
 	
 	@objc func save() {
-		if self.isValid {
-			let data = file.data!
+		if self.isValid, let data = file.data {
 			
 			data.replace2BytesAtOffset(startOffset + kModelOffset, withBytes: self.model.index)
 			data.replace2BytesAtOffset(startOffset + kCharacterIDOffset, withBytes: self.characterID)

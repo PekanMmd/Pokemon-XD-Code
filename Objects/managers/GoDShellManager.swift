@@ -11,6 +11,7 @@ class GoDShellManager {
     enum Commands: String {
         case ls
         case wit
+		case wimgt
         
         var file: XGFiles {
             return .nameAndFolder(rawValue, folder)
@@ -18,7 +19,7 @@ class GoDShellManager {
         
         var folder: XGFolders {
             switch self {
-            case .wit:
+			case .wit, .wimgt:
                 return .Resources
             default:
                 return .path("/usr/bin")
@@ -36,15 +37,26 @@ class GoDShellManager {
         let task = Process()
         task.launchPath = command.file.path
         if let args = args {
-            task.arguments = args.split(separator: " ").compactMap(String.init)
+			let escaped = args.replacingOccurrences(of: "\\ ", with: "<!SPACE>")
+			task.arguments = escaped.split(separator: " ").compactMap(String.init).map({ (arg) -> String in
+				return arg.replacingOccurrences(of: "<!SPACE>", with: " ")
+			})
         }
             
-        let pipe = Pipe()
-        task.standardOutput = pipe
+        let outPipe = Pipe()
+		let errorPipe = Pipe()
+        task.standardOutput = outPipe
+		task.standardError = errorPipe
         task.launch()
+		task.waitUntilExit()
 
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let output: String = NSString(data: data, encoding: String.Encoding.utf8.rawValue)! as String
+        let data = outPipe.fileHandleForReading.readDataToEndOfFile()
+        let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue)! as String
+
+		let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+		if let error = NSString(data: errorData, encoding: String.Encoding.utf8.rawValue) as String? {
+			printg(error)
+		}
 
         if printOutput { printg(output) }
         return output

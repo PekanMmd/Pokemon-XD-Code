@@ -31,6 +31,10 @@ enum XGMoveTypes : XGIndexedValue {
 	var data : XGType {
 		return XGType(index: index)
 	}
+
+	var category: XGMoveCategories {
+		return .none
+	}
 	
 	static var allTypes : [XGMoveTypes] {
 		get {

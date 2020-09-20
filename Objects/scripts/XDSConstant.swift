@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XDSConstantTypes {
+enum XDSConstantTypes: Equatable {
 
 	// same as classes in script class info
 	case none_t

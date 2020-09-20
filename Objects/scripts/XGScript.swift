@@ -210,7 +210,8 @@ class XGScript: NSObject {
 	}
 	
 	override var description: String {
-		
+		XGScript.loadCustomClasses()
+
 		let linebreak = "-----------------------------------\n"
 		
 		if self.file != .common_rel {
@@ -911,14 +912,6 @@ class XGScript: NSObject {
 					}
 				}
 				
-				// get macro types if they have been documented
-				if let returnMacro = XGScriptClass.classes(c)[f].returnMacro {
-					if returnMacro != .array(.anyType) {
-						globalMacroTypes[XGScriptClass.classes(c).classDotFunction(f)] = returnMacro
-					}
-					
-				}
-				
 				var broken = false
 				for _ in 0 ..< paramCount {
 					if broken {
@@ -942,7 +935,31 @@ class XGScript: NSObject {
 				} else {
 					stack.push(.callStandardVoid(c, f, params))
 				}
-				
+
+				// get macro types if they have been documented
+				if let returnMacro = XGScriptClass.classes(c)[f].returnMacro {
+					if returnMacro != .array(.anyType) {
+
+						// We can override the return for specific usages of specific functions
+						// To add more detailed context
+						var macroOverridden = false
+						if XGScriptClass.classes(c).name == "Standard",
+						   XGScriptClass.classes(c)[f].name == "getFlag" {
+							if params.count == 1, params[0].constants.count == 1 {
+								let flagIDConstant = params[0].constants[0]
+								if flagIDConstant.type == XDSConstantTypes.integer,
+									flagIDConstant.asInt == XDSFlags.story.rawValue {
+									#warning("Update the return macro type to the new story flag type added by @breakfast")
+									globalMacroTypes[XGScriptClass.classes(c).classDotFunction(f)] = .integer
+									macroOverridden = true
+								}
+							}
+						}
+						if !macroOverridden {
+							globalMacroTypes[XGScriptClass.classes(c).classDotFunction(f)] = returnMacro
+						}
+					}
+				}
 				
             case .reserve:
                 stack.push(.reserve(instruction.parameter))
@@ -2089,6 +2106,8 @@ class XGScript: NSObject {
 	}
 	
 	@objc func getXDSScript() -> String {
+		XGScript.loadCustomClasses()
+
 		// creates xds text from expressions
 		// can follow a similar process to decompile to other programming or scripting languages
 		
@@ -2342,18 +2361,37 @@ class XGScript: NSObject {
 		
 		return items
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	class func encodeDummyJSON() {
+		let jsonFile = XGFiles.json("Custom Script Classes")
+		if !jsonFile.exists {
+			let data = [CustomScriptClass.dummy]
+			data.writeJSON(to: jsonFile)
+		}
+	}
+
+	class func loadCustomClasses() {
+		let jsonFile = XGFiles.json("Custom Script Classes")
+		guard let customClasses = try? [CustomScriptClass].fromJSON(file: jsonFile) else {
+			printg("Failed to load custom script classes from:", jsonFile.path)
+			return
+		}
+
+		for custom in customClasses {
+			ScriptClassNames[custom.index] = custom.name
+			ScriptClassFunctions[custom.index] = custom.functions.map{ $0.asTuple }
+		}
+	}
+
+	class func printXDSInstancesOfFlag(_ flagID: Int) {
+		for file in XGFolders.XDS.files where file.fileType == .xds {
+			let text = file.text
+			if text.contains(XDSExpr.stringFromMacroImmediate(c: .integer(flagID), t: .flag)) {
+				printg(file.fileName)
+			}
+		}
+	}
 }
-
-
 
 
 

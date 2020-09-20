@@ -16,17 +16,17 @@ class XGString: NSObject, Codable {
 	var table = XGFiles.nameAndFolder("", .Documents)
 	@objc var id	  = 0
 	
-	@objc var dataLength : Int {
+	@objc var dataLength: Int {
 		get {
 			return self.byteStream.count
 		}
 	}
 	
-	@objc var stringLength : Int {
+	@objc var stringLength: Int {
 		return chars.count
 	}
 	
-	override var description : String {
+	override var description: String {
 		return self.unformattedString
 	}
 	
@@ -40,13 +40,17 @@ class XGString: NSObject, Codable {
 		}
 	}
 
+	var stringWithEscapedNewlines: String {
+		return string.replacingOccurrences(of: "\n", with: "[New Line]")
+	}
+
 	var unformattedString : String {
 		get {
 			var str = ""
 			for char in chars where !char.isFormattingChar {
 				str = str + char.string
 			}
-			return str
+			return str.replacingOccurrences(of: "\n", with: "[New Line]")
 		}
 	}
 	
@@ -188,10 +192,14 @@ class XGString: NSObject, Codable {
 		}
 		
 		loadAllStrings()
-		var success = true
+		var success = false
 		for table in allStringTables {
 			if table.containsStringWithId(self.id) {
-				success = success && table.replaceString(self, alert: false, save: save, increaseLength: increaseSize)
+				let tableSuccess = table.replaceString(self, alert: false, save: save, increaseLength: increaseSize)
+				if !tableSuccess {
+					printg("Could not replace string with id \(self.id) in table: \(table.file.fileName)")
+				}
+				success = success || tableSuccess
 			}
 		}
 		return success

@@ -46,7 +46,7 @@ final class XGBattle: NSObject, Codable {
 	var battleStyle : XGBattleStyles!
 	@objc var battleField : XGBattleField!
 	var trainersPerSide = 0
-	@objc var pokemonPerPlayer = 6
+	@objc var pokemonPerPlayer = 0
 	@objc var BGMusicID = 0
 	var round = XGColosseumRounds.none
 	var unknown = false

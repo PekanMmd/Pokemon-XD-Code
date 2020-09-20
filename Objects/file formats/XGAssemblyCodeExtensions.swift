@@ -14,10 +14,10 @@ extension XGAssembly {
 
 		var offset = kRelFreeSpaceStart
 		let rel = XGFiles.common_rel.data!
-		var value = (rel.getWordAtOffset(offset - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 4 - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 8 - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 12 - kRELtoRAMOffsetDifference))
-		while value != (0,0,0,0) {
+		var value = rel.getWordStreamFromOffset(offset - kRELtoRAMOffsetDifference, length: 16)
+		while value != [0,0,0,0] {
 			offset = offset + 4
-			value = (rel.getWordAtOffset(offset - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 4 - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 8 - kRELtoRAMOffsetDifference), rel.getWordAtOffset(offset + 12 - kRELtoRAMOffsetDifference))
+			value = rel.getWordStreamFromOffset(offset - kRELtoRAMOffsetDifference, length: 16)
 		}
 		return offset
 	}
@@ -104,10 +104,14 @@ extension XGAssembly {
 	}
 
 	class func replaceRamASM(RAMOffset: Int, newASM asm: [XGASM]) {
+		var offset = RAMOffset
+		if offset > 0x80000000 {
+			offset -= 0x80000000
+		}
 		if RAMOffset > kRELtoRAMOffsetDifference {
-			replaceRELASM(startOffset: RAMOffset - kRELtoRAMOffsetDifference, newASM: asm)
+			replaceRELASM(startOffset: offset - kRELtoRAMOffsetDifference, newASM: asm)
 		} else {
-			replaceASM(startOffset: RAMOffset - kDolToRAMOffsetDifference, newASM: asm)
+			replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: asm)
 		}
 	}
 
