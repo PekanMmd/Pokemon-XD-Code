@@ -1444,12 +1444,6 @@ class XGScript: NSObject {
 							}
 						}
 					}
-
-                    if sclass.name == "Standard" {
-                        if sclass[f].name == "setFlag", let knownFlag = XDSFlags(rawValue: es[0].constants[0].asInt), knownFlag == .story {
-                            macroTypes[1] = .storyProgress
-                        }
-                    }
 					
 					for j in 0 ..< es.count {
 						let p1 = es[j]
