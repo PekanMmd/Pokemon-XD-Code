@@ -308,8 +308,8 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 //MARK: - Map
 	38: [
 		("getGroupID", 17, 1, [.objectName("Map")], .integer, ""),
-		("newMapManager", 18, 1, [.anyType], .objectName("Map"), ""),
-		("getPreviousMapID", 19, 1, [.objectName("Map")], .room, ""),
+		("getPreviousMapID", 18, 1, [.anyType], .room, ""),
+		("getNextMapID", 19, 1, [.objectName("Map")], .room, ""),
 		
 		("warpToMap", 22, 2, [.objectName("Map"), .room, .integerIndex], .null, "room id and entry point index"), // # (int roomID, int entry warp index)
 		("showTitleScreen", 37, 1, [.anyType], .null, ""),
