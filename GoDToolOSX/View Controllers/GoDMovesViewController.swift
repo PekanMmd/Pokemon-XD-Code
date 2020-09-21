@@ -80,25 +80,25 @@ class GoDMovesViewController: GoDTableViewController {
 	
 	func reloadView() {
 		
-		self.name.stringValue = currentMove.name.unformattedString
-		self.nameID.integerValue = currentMove.nameID
-		self.index.integerValue = currentMove.moveIndex
-		self.hex.stringValue = currentMove.moveIndex.hexString()
-		self.offset.stringValue = currentMove.startOffset.hexString()
+		name.stringValue = currentMove.name.unformattedString
+		nameID.integerValue = currentMove.nameID
+		index.integerValue = currentMove.moveIndex
+		hex.stringValue = currentMove.moveIndex.hexString()
+		offset.stringValue = currentMove.startOffset.hexString()
 		
-		self.descID.integerValue = currentMove.descriptionID
-		self.desc.stringValue = currentMove.mdescription.unformattedString
-		self.effect.selectItem(at: currentMove.effect)
+		descID.integerValue = currentMove.descriptionID
+		desc.stringValue = currentMove.mdescription.unformattedString
+		effect.selectItem(at: currentMove.effect)
 		
-		self.power.integerValue = currentMove.basePower
-		self.priority.integerValue = currentMove.priority
-		self.pp.integerValue = currentMove.pp
-		self.accuracy.integerValue = currentMove.accuracy
-		self.effectAcc.integerValue = currentMove.effectAccuracy
+		power.integerValue = currentMove.basePower
+		priority.integerValue = currentMove.priority
+		pp.integerValue = currentMove.pp
+		accuracy.integerValue = currentMove.accuracy
+		effectAcc.integerValue = currentMove.effectAccuracy
 
 		animation.isEnabled = true
 		if game != .PBR {
-			self.animation.selectItem(at: currentMove.animationID)
+			animation.selectItem(at: currentMove.animationID)
 		} else {
 			let idsJSON = XGFiles.json("WZX ids")
 			if idsJSON.exists, let ids = idsJSON.json as? [Int], let index = ids.firstIndex(of: currentMove.animationID) {
@@ -109,24 +109,26 @@ class GoDMovesViewController: GoDTableViewController {
 			}
 		}
 		
-		self.type.select(currentMove.type)
-		self.targets.select(currentMove.target)
-		self.effectType.select(currentMove.effectType)
+		type.select(currentMove.type)
+		targets.select(currentMove.target)
+		effectType.select(currentMove.effectType)
 
-		if XGDolPatcher.isClassSplitImplemented() {
-			self.category.select(currentMove.category)
+		if XGDolPatcher.isClassSplitImplemented() || (game == .XD && currentMove.isShadowMove) {
+			category.select(currentMove.category)
+			category.isEnabled = true
 		} else {
-			self.category.select(currentMove.type.category)
+			category.select(currentMove.type.category)
+			category.isEnabled = false
 		}
 
-		self.contact.state = currentMove.contactFlag ? NSControl.StateValue.on : NSControl.StateValue.off
-		self.mirror.state = currentMove.mirrorMoveFlag ? NSControl.StateValue.on : NSControl.StateValue.off
-		self.protect.state = currentMove.protectFlag ? NSControl.StateValue.on : NSControl.StateValue.off
-		self.kings.state = currentMove.kingsRockFlag ? NSControl.StateValue.on : NSControl.StateValue.off
-		self.magic.state = currentMove.magicCoatFlag ? NSControl.StateValue.on : NSControl.StateValue.off
-		self.sound.state = currentMove.soundBasedFlag ? NSControl.StateValue.on : NSControl.StateValue.off
-		self.snatch.state = currentMove.snatchFlag ? NSControl.StateValue.on : NSControl.StateValue.off
-		self.hm.state = currentMove.HMFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		contact.state = currentMove.contactFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		mirror.state = currentMove.mirrorMoveFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		protect.state = currentMove.protectFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		kings.state = currentMove.kingsRockFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		magic.state = currentMove.magicCoatFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		sound.state = currentMove.soundBasedFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		snatch.state = currentMove.snatchFlag ? NSControl.StateValue.on : NSControl.StateValue.off
+		hm.state = currentMove.HMFlag ? NSControl.StateValue.on : NSControl.StateValue.off
 		
 		
 	}

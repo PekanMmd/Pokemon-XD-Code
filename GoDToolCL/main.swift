@@ -7,6 +7,8 @@
 //
 //
 
+XGFiles.common_rel.writeScriptData()
+
 ////Auto add pov code to all scripts in XDS folder
 //for file in  XGFolders.XDS.files where file.fileType == .xds {
 //	var text = file.text
@@ -150,7 +152,7 @@
 //	])
 //}
 
-XGUtility.compileMainFiles()
+//XGUtility.compileMainFiles()
 
 // Don't forget to update the custom script classes JSON to include the new class and functions before compiling scripts
 

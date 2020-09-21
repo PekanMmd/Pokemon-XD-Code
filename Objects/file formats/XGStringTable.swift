@@ -112,7 +112,7 @@ class XGStringTable: NSObject {
 	
 	@objc class func tableres2() -> XGStringTable? {
 		
-		if game == .XD {
+		if game == .XD && !isDemo {
 			return XGStringTable(file: .tableres2, startOffset: 0x048F88, fileSize: 0x16E84)
 		} else {
 			return nil

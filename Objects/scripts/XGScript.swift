@@ -1049,7 +1049,7 @@ class XGScript: NSObject {
 			case .bracket(let e):
 				return macroOverrideForExpr(e)
 			case .callStandard(standard.index, getFlag.index, let es):
-				guard es.count == 1, es[0].constants.count == 1 else { return nil }
+				guard !isDemo, es.count == 1, es[0].constants.count == 1 else { return nil }
 				if es[0].constants[0].value == XDSFlags.story.rawValue {
 					return .storyProgress
 				} else {
@@ -1494,7 +1494,7 @@ class XGScript: NSObject {
 						}
 					}
 
-					if sclass.name == "Standard", sclass[f].name == "setFlag" {
+					if !isDemo, sclass.name == "Standard", sclass[f].name == "setFlag" {
 						if es.count > 1, es[0].isImmediate, es[0].constants.count == 1,
 							es[0].constants[0].value == XDSFlags.story.rawValue {
 							macroTypes[1] = .storyProgress
@@ -1581,7 +1581,7 @@ class XGScript: NSObject {
 						}
 					}
 
-					if sclass.name == "Standard", sclass[f].name == "setFlag" {
+					if !isDemo, sclass.name == "Standard", sclass[f].name == "setFlag" {
 						if es.count > 1, es[0].isImmediate, es[0].constants.count == 1,
 							es[0].constants[0].value == XDSFlags.story.rawValue {
 							macroTypes[1] = .storyProgress

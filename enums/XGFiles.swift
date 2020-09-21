@@ -257,7 +257,8 @@ indirect enum XGFiles {
 					ISO.extractFSYS()
 					ISO.extractCommon()
 				}
-				let data = XGMutableData(byteStream: self.data!.getCharStreamFromOffset(0x5bee4, length: 0x3d20), file: .common_rel)
+				let start = isDemo ? 0x5BF5C : 0x5bee4
+				let data = XGMutableData(byteStream: self.data!.getCharStreamFromOffset(start, length: 0x3d20), file: .common_rel)
 				return XGScript(data: data)
 			default:
 				return XGScript(file: self)
@@ -267,14 +268,17 @@ indirect enum XGFiles {
 	
 	func writeScriptData() {
 		var rel : XGFiles?
-		for file in self.folder.files where file.fileType == .rel {
-			if file.fileName.removeFileExtensions() == self.fileName.removeFileExtensions() {
-				rel = file
+
+		if fileType != .rel {
+			for file in self.folder.files where file.fileType == .rel {
+				if file.fileName.removeFileExtensions() == self.fileName.removeFileExtensions() {
+					rel = file
+				}
 			}
-		}
-		if rel == nil {
-			if XGFiles.rel(self.fileName.removeFileExtensions()).exists {
-				rel = XGFiles.rel(self.fileName.removeFileExtensions())
+			if rel == nil {
+				if XGFiles.rel(self.fileName.removeFileExtensions()).exists {
+					rel = XGFiles.rel(self.fileName.removeFileExtensions())
+				}
 			}
 		}
 		

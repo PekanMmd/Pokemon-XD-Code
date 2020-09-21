@@ -979,7 +979,7 @@ class XGISO: NSObject {
 		if settings.verbose {
 			printg("extracting: \(XGFiles.tableres2.fileName)")
 		}
-		if game == .XD {
+		if game == .XD && !isDemo {
 			if !XGFiles.fsys("common_dvdeth").exists {
 				extractFSYS()
 			}

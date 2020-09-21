@@ -12,6 +12,10 @@ let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .use
 let region = XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .US
 let game = XGGame.XD
 
+var isDemo: Bool {
+	return XGFiles.iso.exists && ISO.allFileNames.count < 200 // 166 in vanilla demo
+}
+
 typealias TrainerInfo = (name:String,location:String,hasShadow: Bool,trainerModel:XGTrainerModels,index:Int,deck:XGDecks)
 extension XGTrainer {
 	var trainerInfo : TrainerInfo {

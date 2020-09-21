@@ -6286,7 +6286,6 @@
 		B2F5F0D71F49AF100075C6D2 /* Tool Cell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Tool Cell.png"; sourceTree = "<group>"; };
 		B2F5F8721F49B3BC0075C6D2 /* XGStringManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGStringManager.swift; sourceTree = "<group>"; };
 		B2F5F87F1F49C2EC0075C6D2 /* XGOSXExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGOSXExtensions.swift; sourceTree = "<group>"; };
-		B2F5F8811F49C2FE0075C6D2 /* XGiOSExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGiOSExtensions.swift; sourceTree = "<group>"; };
 		B2F5F8881F49CCD10075C6D2 /* NSViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSViewExtensions.swift; sourceTree = "<group>"; };
 		B2F5F88B1F49CD050075C6D2 /* GoDDesign.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDDesign.swift; sourceTree = "<group>"; };
 		B2F5F88C1F49CD050075C6D2 /* GoDTableViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDTableViewDelegate.swift; sourceTree = "<group>"; };
@@ -6465,7 +6464,6 @@
 				B2F5F8BA1F4C4E680075C6D2 /* XGViewLayoutManager.swift */,
 				B2F5F8BE1F4C4ED10075C6D2 /* GoDViewLayoutManager.swift */,
 				B2F5F8BB1F4C4E680075C6D2 /* UIViewExtensions.swift */,
-				B2F5F8811F49C2FE0075C6D2 /* XGiOSExtensions.swift */,
 				B2F5F87F1F49C2EC0075C6D2 /* XGOSXExtensions.swift */,
 				B2562F9F21349AAD004180F1 /* CMOSXExtensions.swift */,
 				B2FEC07C1F6D25BF00AC263D /* GoDToolExtensions.swift */,
@@ -9278,6 +9276,7 @@
 					};
 					B2F5EBA41F49A1980075C6D2 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = PL9D4W4S2M;
 						LastSwiftMigration = 1120;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -13840,11 +13839,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = GoDToolOSX/GoDToolOSX.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -13899,11 +13898,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = GoDToolOSX/GoDToolOSX.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = PL9D4W4S2M;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

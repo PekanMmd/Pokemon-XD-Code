@@ -23,10 +23,10 @@ func loadAllStrings() {
 		if game == .Colosseum || region == .US {
 			allStringTables += [XGStringTable.dol()]
 		}
-		if game == .XD && region == .US {
+		if game == .XD && region == .US && !isDemo {
 			allStringTables += [XGStringTable.dol2()]
 		}
-		if game == .XD {
+		if game == .XD && !isDemo {
 			allStringTables += [XGFiles.tableres2.stringTable]
 		}
 		

@@ -331,11 +331,12 @@ final class XGFsys : NSObject {
 		let start = self.startOffsetForFile(index)
 		let length = self.sizeForFile(index: index)
 		
-		var filename = self.usesFileExtensions ? self.fullFileNames[index] : self.fileNames[index].removeFileExtensions()
+		var filename = self.usesFileExtensions ? self.fullFileNames[index] : self.fileNames[index]
 		if filename == "common_rel" {
 			filename = "common"
 		}
-		if !self.usesFileExtensions {
+		if !self.usesFileExtensions || filename.removeFileExtensions() == filename {
+			filename = filename.removeFileExtensions()
 			filename += fileTypeForFile(index: index).fileExtension
 		}
 		if self.data.getWordAtOffset(start) == kLZSSbytes {
@@ -366,7 +367,8 @@ final class XGFsys : NSObject {
 		if filename == "common_rel" {
 			filename = "common"
 		}
-		if !self.usesFileExtensions {
+		if !self.usesFileExtensions || filename.removeFileExtensions() == filename {
+			filename = filename.removeFileExtensions()
 			filename += fileTypeForFile(index: index).fileExtension
 		}
 		

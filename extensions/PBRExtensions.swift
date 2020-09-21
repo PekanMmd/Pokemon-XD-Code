@@ -41,6 +41,7 @@ enum XGGame {
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/Revolution-Tool"
 let region = XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .EU
 let game = XGGame.PBR
+let isDemo = false
 
 let date = Date(timeIntervalSinceNow: 0)
 var logString = ""

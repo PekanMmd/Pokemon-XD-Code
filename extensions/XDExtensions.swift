@@ -118,7 +118,7 @@ extension XGISO {
 	
 	@objc var menuFsysList : [String] {
 		// also any file with "menu" in the name
-		return [
+		return isDemo ? [] : [
 			"battle_disk.fsys",
 			"evolution.fsys",
 			"mewwaza.fsys",
@@ -175,25 +175,25 @@ extension XGISO {
 			pm.save()
 		}
 		
-		if !nameentrymenu.exists {
+		if !nameentrymenu.exists && !isDemo {
 			let nem = XGFiles.fsys("pcbox_name_entry_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			nem.file = nameentrymenu
 			nem.save()
 		}
 		
-		if !system_tool.exists {
+		if !system_tool.exists && !isDemo {
 			let st = XGFiles.fsys("pcbox_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			st.file = system_tool
 			st.save()
 		}
 		
-		if !m3shrine1frl.exists {
+		if !m3shrine1frl.exists && !isDemo {
 			let m3rl = XGFiles.fsys("hologram_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			m3rl.file = m3shrine1frl
 			m3rl.save()
 		}
 		
-		if !relivehall_menu.exists {
+		if !relivehall_menu.exists && !isDemo {
 			let rh = XGFiles.fsys("relivehall_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			rh.file = relivehall_menu
 			rh.save()
@@ -211,7 +211,7 @@ extension XGISO {
 			pex.save()
 		}
 		
-		if !world_map.exists {
+		if !world_map.exists && !isDemo {
 			let wm = XGFiles.fsys("worldmap").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
 			wm.file = world_map
 			wm.save()
