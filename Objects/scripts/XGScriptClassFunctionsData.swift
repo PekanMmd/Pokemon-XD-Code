@@ -211,7 +211,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 
 		("setPosition2", 23, 4, [.objectName("Camera"), .integerFloatOverload, .integerFloatOverload, .integerFloatOverload], .null, "(x, y, z)"), // x, y , z
 
-		("setRotationAboutAxesRadians", 25, 4, [.objectName("Camera"), .integerFloatOverload, .integerFloatOverload, .integerFloatOverload], .null, "(x, y, z) in radians"), // x, y , z
+		("setRotationAboutAxesRadians", 25, 4, [.objectName("Camera"), .floatAngleRadians, .floatAngleRadians, .floatAngleRadians], .null, "(x, y, z) in radians"), // x, y , z
 		
 		("performPresetFromFile", 27, 2, [.objectName("Camera"), .integer, .camIdentifier, .integer, .integer], .null, "from .cam file in fsys with gid"), // performs a series of transformations and translations from a .cam file in fsys with specified group id
 
@@ -229,13 +229,15 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		//Category(name = "Known methods", start = 16, nb=-1),
 		
 		("setVisibility", 16, 2, [.objectName("Character"), .bool], .null, ""), //# (int visible)
+		("setAnimation", 17, 4, [.objectName("Character"), .integer, .integer, .bool], .null, "(animation id, unknown, loop animation)"), //# (int visible)
+
 		("displayMessage", 21, 3, [.objectName("Character"), .msg, .bool], .null, ""), //# (int msgID, int unk ?)
 		
 		("isWithinBounds", 25, 5, [.objectName("Character"), .float, .float, .float, .float], .bool, "(min x, min z, max x, max z) or v. versa"), // # (Float x1, Float z1, Float x2, Float z2) ordering of ranges is interchangeable i.e. x1 > x2 == x2 > x1
 		("isWithinBoundsWithOptions", 27, 7, [.objectName("Character"), .float, .float, .float, .float, .integer, .bool], .bool, "(min x, min z, max x, max z) or v. versa"), //# x1 z1 x2 z2 unk unk
 		("setPosition", 29, 4, [.objectName("Character"), .integerFloatOverload, .integerFloatOverload, .integerFloatOverload], .null, "(x, y, z)"), //# (int/float x, int/float y, int/float z) accepts either int or float for any of the values and can mix and match as desired
 		("fallToPosition", 30, 2, [.objectName("Character"), .float, .float, .float], .null, ""),
-		("setRotation", 31, 4, [.objectName("Character"), .integerFloatOverload, .integerFloatOverload, .integerFloatOverload], .null, "about each axis"), // int angle around x axis, int angle around y axis, int angle around z axis
+		("setRotation", 31, 4, [.objectName("Character"), .floatAngleDegrees, .floatAngleDegrees, .floatAngleDegrees], .null, "about each axis"), // int angle around x axis, int angle around y axis, int angle around z axis
 		
 		("moveToPosition", 36, 4, [.objectName("Character"), .integer, .integer, .integer, .integer], .null, "(speed, x, y, z)"), //# (int speed, int x, int y, int z)
 		
