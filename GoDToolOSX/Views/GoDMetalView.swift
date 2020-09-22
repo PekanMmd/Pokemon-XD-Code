@@ -204,7 +204,7 @@ class GoDMetalView: NSView {
 	var dictionaryOfKeys : [KeyCodeName : Bool] = KeyCodeName.dictionaryOfKeys
 	override var acceptsFirstResponder: Bool { return true }
 	
-	var timer: Timer!
+	var timer: Timer?
 	var previousTime : Float = 0
 	var cameraSpeed : Float = 1.0
 	
@@ -232,6 +232,21 @@ class GoDMetalView: NSView {
 		metalManager.cameraOrientation = defaultCameraOrientation
 		metalManager.lightPosition = defaultLightPosition
 	}
+
+	var isSetup: Bool = false
+
+	func startTimer() {
+		guard timer == nil else { return }
+		previousTime = Float(CACurrentMediaTime())
+		let fps : TimeInterval = 12.0
+		let frameTime = TimeInterval(1.0) / fps
+		timer = Timer.scheduledTimer(timeInterval: frameTime, target: self, selector: #selector(render), userInfo: nil, repeats: true)
+	}
+
+	func stopTimer() {
+		timer?.invalidate()
+		timer = nil
+	}
 	
 	func setup() {
 		self.wantsLayer = true
@@ -241,10 +256,7 @@ class GoDMetalView: NSView {
 		
 		setDefaultPositions()
 		
-		let fps : TimeInterval = 12.0
-		let frameTime = TimeInterval(1.0) / fps
-		self.timer = Timer.scheduledTimer(timeInterval: frameTime, target: self, selector: #selector(render), userInfo: nil, repeats: true)
-		previousTime = Float(CACurrentMediaTime())
+		startTimer()
 		
 		popup.setTitles(values: ["Interactable Region Picker"])
 		popup.action = #selector(setInteraction)
@@ -263,6 +275,8 @@ class GoDMetalView: NSView {
 		self.addConstraintAlignTopEdges(view1: self, view2: popup2)
 		self.addConstraintAlignRightEdges(view1: self, view2: popup2)
 		self.addConstraintSize(view: popup2, height: 20, width: 120)
+
+		isSetup = true
 	}
 	
 	override func viewDidEndLiveResize() {
@@ -277,25 +291,32 @@ class GoDMetalView: NSView {
 	@objc func setInteraction(sender: GoDPopUpButton) {
 		let index = sender.indexOfSelectedItem - 1
 		metalManager.interactionIndexToHighlight = index == -1 ? index : interactionIndexes[index]
+		metalManager.render()
 	}
 	
 	@objc func setSection(sender: GoDPopUpButton) {
 		let index = sender.indexOfSelectedItem - 1
 		metalManager.sectionIndexToHighlight = index == -1 ? index : sectionIndexes[index]
+		metalManager.render()
 	}
-	
+
 	@objc func render() {
 		
 		if file != nil {
 			let time = Float(CACurrentMediaTime())
 			updateViewMatrix(atTime: time)
 			previousTime = time
-			
-			metalManager.render()
 		}
 	}
+
+	var isRendering = false
 	
 	func updateViewMatrix(atTime time: Float) {
+		guard !isRendering else {
+			return
+		}
+		isRendering = true
+
 		//  The speed at which we desire to update
 		let timeDelta = time - previousTime
 		let amplitude = cameraSpeed * timeDelta
@@ -381,10 +402,20 @@ class GoDMetalView: NSView {
 				break;
 			}
 		}
+		if dictionaryOfKeys.values.contains(true) {
+			metalManager.render()
+		}
+		isRendering = false
 	}
 	
 	func mouseEvent(deltaX x: Float, deltaY y: Float) {
+		guard !isRendering else {
+			return
+		}
+		isRendering = true
 		circumnavigate(x: -x/100 * cameraSpeed, y: y/100 * cameraSpeed)
+		metalManager.render()
+		isRendering = false
 	}
 	
 	func circumnavigate(x: Float, y: Float) {

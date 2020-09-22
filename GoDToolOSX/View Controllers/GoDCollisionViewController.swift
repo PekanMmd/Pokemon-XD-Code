@@ -41,7 +41,19 @@ class GoDCollisionViewController: GoDTableViewController {
 		} else {
 			self.metalView.isHidden = true
 		}
-		
+	}
+
+	override func viewWillDisappear() {
+		super.viewWillDisappear()
+		if useMetal {
+			metalView.stopTimer()
+		}
+	}
+
+	override func viewWillAppear() {
+		if useMetal, metalView.isSetup {
+			metalView.startTimer()
+		}
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
@@ -57,14 +69,17 @@ class GoDCollisionViewController: GoDTableViewController {
 		if row == -1 {
 			return
 		}
+
 		if filteredCols.count > 0 {
 			if filteredCols[row].exists {
 				if useMetal {
-					self.metalView.file = self.filteredCols[row]
+					metalView.stopTimer()
+					metalView.file = self.filteredCols[row]
 					metalManager.render()
+					metalView.startTimer()
 				} else {
-					self.openglView.file = self.filteredCols[row]
-					self.openglView.render()
+					openglView.file = self.filteredCols[row]
+					openglView.render()
 				}
 			}
 		}
