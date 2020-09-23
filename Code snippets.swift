@@ -7857,6 +7857,9 @@ import Foundation
 //	text = text.replacingOccurrences(of:
 //		"\n    var_1.Player.processEvents()\n    yield(1)", with: cameraControlText.replacingOccurrences(of: "Player.processEvents()", with: "var_1.Player.processEvents()"))
 //
+//	text = text.replacingOccurrences(of:
+//		"\n    var_2.Player.processEvents()\n    yield(1)", with: cameraControlText.replacingOccurrences(of: "Player.processEvents()", with: "var_1.Player.processEvents()"))
+//
 //	XGUtility.saveString(text, toFile: file)
 //}
 

@@ -232,7 +232,11 @@ enum XGScriptClass {
 
 			let dol = XGFiles.dol.data!
 			let branchCodeStartOffset = 0x40bc5c - kDolTableToRAMOffsetDifference + ((c - 33) * 4)
-			dol.replaceWordAtOffset(branchCodeStartOffset, withBytes: offset)
+			var RAMOffset = offset
+			if RAMOffset < 0x80000000 {
+				RAMOffset += 0x80000000
+			}
+			dol.replaceWordAtOffset(branchCodeStartOffset, withBytes: RAMOffset)
 			dol.save()
 			printg("Successfully repointed class", c)
 			return true
@@ -345,7 +349,7 @@ enum XGScriptClass {
 		if codeOffset < 0x80000000 {
 			codeOffset += 0x80000000
 		}
-		XGAssembly.replaceRamASM(RAMOffset: functionPointerOffset, newASM: [.raw(UInt32(codeOffsetInRAM))])
+		XGAssembly.replaceRamASM(RAMOffset: functionPointerOffset, newASM: [.raw(UInt32(codeOffset))])
 	}
 }
 
