@@ -270,8 +270,12 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		("getPosition", 75, 1, [.objectName("Character")], .vector, ""),
 		("getRotation", 76, 1, [.objectName("Character")], .float, ""),
+
+		("loadAnimations", 88, 1, [.objectName("Character")], .null, "Need to use before setAnimation"),
 		
 		("useHealingMachine", 101, 3, [.objectName("Character"), .datsIdentifier, .array(.integer), .array(.integer)], .null, ""),
+
+		("applyTextureFilter", 112, 2, [.objectName("Character"), .integerIndex], .null, "Applies a preset filter to the textures on the model"),
 	],
 	
 //MARK: - Pokemon
@@ -567,6 +571,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 	60 : [
 		("getCurrentWildPokemon", 17, 2, [.objectName("Pokespot"), .pokespot], .pokemon, "(pokespot id)"), //# (int pokespotId)
 		("setSnacksTotal", 18, 3, [.objectName("Pokespot"), .pokespot, .integerQuantity], .null, "(pokespot id, total)"),
+		("getSnacksTotal", 19, 3, [.objectName("Pokespot"), .pokespot], .integerQuantity, "(pokespot id, total)"),
 	]
 	
 ]
