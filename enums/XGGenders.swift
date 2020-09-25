@@ -13,7 +13,7 @@ enum XGGenders : Int, Codable, CaseIterable {
 	case male		= 0x0
 	case female		= 0x1
 	case genderless = 0x2
-	case random 	= 0xFFFF
+	case random 	= 0xFF
 	
 	var string : String {
 		get {

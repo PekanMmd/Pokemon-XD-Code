@@ -83,6 +83,9 @@ enum XGMoveTypes : XGIndexedValue {
 	static var none: XGMoveTypes {
 		return .type(9)
 	}
+	static var fairy: XGMoveTypes {
+		return .type(9)
+	}
 	static var fire: XGMoveTypes {
 		return .type(10)
 	}

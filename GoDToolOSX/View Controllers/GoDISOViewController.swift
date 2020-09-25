@@ -132,6 +132,10 @@ class GoDISOViewController: GoDTableViewController {
 					} else {
 						filename = fsysData.fileNames[i].removeFileExtensions() + fsysData.fileTypeForFile(index: i).fileExtension
 					}
+					if !fsysData.usesFileExtensions || filename.removeFileExtensions() == filename {
+						filename = filename.removeFileExtensions()
+						filename += fsysData.fileTypeForFile(index: i).fileExtension
+					}
 					for file in currentFile.folder.files {
 						if file.fileName == filename {
 							if fsysData.isFileCompressed(index: i){

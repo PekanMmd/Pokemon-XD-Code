@@ -51,6 +51,7 @@ class XGRandomiser : NSObject {
 				pokemon.shadowCatchRate = pokemon.species.catchRate
 				pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
 				pokemon.happiness = 128
+				pokemon.nature = .random
 				pokemon.save()
 				
 			}

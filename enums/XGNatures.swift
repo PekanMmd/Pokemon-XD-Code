@@ -40,7 +40,7 @@ enum XGNatures : Int, Codable, CaseIterable {
 	case careful	= 0x17
 	case quirky		= 0x18
 	
-	case random     = 0xFFFF
+	case random     = 0xFF
 	
 	var string : String {
 		get {
