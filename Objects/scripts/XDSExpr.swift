@@ -59,7 +59,7 @@ indirect enum XDSExpr {
 	case locationIndex(Int)
 	case functionDefinition(XDSLocation, [XDSVariable])
 	case function(XDSExpr, [XDSExpr])
-	case ifStatement([(XDSExpr, [XDSExpr])])
+	case ifStatement(XDSExpr, [XDSExpr])
 	case whileLoop(XDSExpr, [XDSExpr])
 	case comment(String)
 	case macro(XDSMacro, String)
@@ -303,11 +303,10 @@ indirect enum XDSExpr {
 				constants += e.constants
 			}
 		case .ifStatement(let es):
-			for (c, subs) in es {
-				constants += c.constants
-				for sub in subs {
-					constants += sub.constants
-				}
+			let (c, subs) = es
+			constants += c.constants
+			for sub in subs {
+				constants += sub.constants
 			}
 		case .whileLoop(let c, let es):
 			constants += c.constants
@@ -419,16 +418,12 @@ indirect enum XDSExpr {
 				count += e.instructionCount
 			}
 			return count
-		case .ifStatement(let es):
+		case .ifStatement(let c, let subs):
 			var count = 0
-			
-			for (c, subs) in es {
-				count += c.instructionCount
-				for sub in subs {
-					count += sub.instructionCount
-				}
+			count += c.instructionCount
+			for sub in subs {
+				count += sub.instructionCount
 			}
-			
 			return count
 		case .whileLoop(let c, let es):
 			var count = 0
@@ -966,52 +961,51 @@ indirect enum XDSExpr {
 			s += ["\n}\n"]
 			return s
 			
-		case .ifStatement(let es):
-			let parts = es.count
+		case .ifStatement(let condition, let exprs):
 			var lines = [String]()
-			
-			for i in 0 ..< parts {
-				let (condition, exprs) = es[i]
-				var keyword = "else"
-				if i == 0 {
-					keyword = "if"
-				}
-				
-				var conditionText = ""
-				switch condition {
-				case .jumpFalse(.loadImmediate(let c), _):
-					conditionText = XDSExpr.macroImmediate(c, .bool).forcedBracketed.text[0]
-				case .jumpFalse(let c, _):
-					conditionText = c.forcedBracketed.text[0]
-				case .jumpTrue(let c, _):
-					conditionText = "!" + c.forcedBracketed.text[0]
-				default:
-					// TODO: get rid of this as it messes with instruction count
-					// should always add condition as a jump
-					conditionText = condition.text[0]
-				}
-				if i == 0 {
-					lines += [keyword + " " + conditionText + " {\n"]
-				} else {
-					let last = lines.count - 1
-					lines[last] = lines[last].replacingOccurrences(of: "\n", with: "") + " " + keyword + " {\n"
-				}
-				
-				for i in 0 ..< exprs.count {
-					let expr = exprs[i]
-					let subLines = expr.text
-					var newLine = subLines.count == 1 ? "\n" : ""
-					if expr.text.count == 0 {
-						newLine = ""
-					}
-					
-					for subLine in expr.text {
-						lines += ["    " + subLine + newLine]
-					}
-				}
-				lines += ["}\n\n"]
+
+			// Pulled out in converting from a loop to a single condition + block
+			// Can reuse the below code when more complex if/else blocks are supported
+			let i = 0
+			var keyword = "else"
+			if i == 0 {
+				keyword = "if"
 			}
-			
+
+			var conditionText = ""
+			switch condition {
+			case .jumpFalse(.loadImmediate(let c), _):
+				conditionText = XDSExpr.macroImmediate(c, .bool).forcedBracketed.text[0]
+			case .jumpFalse(let c, _):
+				conditionText = c.forcedBracketed.text[0]
+			case .jumpTrue(let c, _):
+				conditionText = "!" + c.forcedBracketed.text[0]
+			default:
+				// TODO: get rid of this as it messes with instruction count
+				// should always add condition as a jump
+				conditionText = condition.text[0]
+			}
+			if i == 0 {
+				lines += [keyword + " " + conditionText + " {\n"]
+			} else {
+				let last = lines.count - 1
+				lines[last] = lines[last].replacingOccurrences(of: "\n", with: "") + " " + keyword + " {\n"
+			}
+
+			for i in 0 ..< exprs.count {
+				let expr = exprs[i]
+				let subLines = expr.text
+				var newLine = subLines.count == 1 ? "\n" : ""
+				if expr.text.count == 0 {
+					newLine = ""
+				}
+
+				for subLine in expr.text {
+					lines += ["    " + subLine + newLine]
+				}
+			}
+
+			lines += ["}\n\n"]
 			return lines
 			
 		case .whileLoop(let condition, let exprs):
@@ -1034,7 +1028,7 @@ indirect enum XDSExpr {
 			for i in 0 ..< exprs.count {
 				let expr = exprs[i]
 				let subLines = expr.text
-				var newLine = subLines.count == 0 ? "\n" : ""
+				var newLine = subLines.count == 1 ? "\n" : ""
 				if expr.text.count == 0 {
 					newLine = ""
 				}
@@ -1043,7 +1037,7 @@ indirect enum XDSExpr {
 					lines += ["    " + subLine + newLine]
 				}
 			}
-			lines += ["    }\n\n"]
+			lines += ["}\n\n"]
 			return lines
 		}
 	}
@@ -1219,14 +1213,11 @@ indirect enum XDSExpr {
 				macs += e.macros
 			}
 			return macs
-		case .ifStatement(let parts):
+		case .ifStatement(let c, let es):
 			var macs = [XDSExpr]()
-			for (c, es) in parts {
-				macs += c.macros
-				for e in es {
-					macs += e.macros
-				}
-				return macs
+			macs += c.macros
+			for e in es {
+				macs += e.macros
 			}
 			return macs
 		default:
@@ -1302,14 +1293,11 @@ indirect enum XDSExpr {
 				macs += e.items
 			}
 			return macs
-		case .ifStatement(let parts):
+		case .ifStatement(let c, let es):
 			var macs = [XGItems]()
-			for (c, es) in parts {
-				macs += c.items
-				for e in es {
-					macs += e.items
-				}
-				return macs
+			macs += c.items
+			for e in es {
+				macs += e.items
 			}
 			return macs
 		default:
@@ -1568,17 +1556,14 @@ indirect enum XDSExpr {
 			}
 			return (list, nil)
 			
-		case .ifStatement(let parts):
+		case .ifStatement(let c, let es):
 			var list = [XGScriptInstruction]()
-			
-			for (c, es) in parts {
-				for expr in [c] + es {
-					let (subs, err) = expr.instructions(gvar: gvar, arry: arry, giri: giri, locals: locals, args: args, locations: locations)
-					if subs != nil {
-						list += subs!
-					} else {
-						return (nil, err)
-					}
+			for expr in [c] + es {
+				let (subs, err) = expr.instructions(gvar: gvar, arry: arry, giri: giri, locals: locals, args: args, locations: locations)
+				if subs != nil {
+					list += subs!
+				} else {
+					return (nil, err)
 				}
 			}
 			return (list, nil)

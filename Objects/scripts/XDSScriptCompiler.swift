@@ -461,11 +461,11 @@ class XDSScriptCompiler: NSObject {
 		if let file = XDSScriptCompiler.scriptFile {
 			let ext = file.fileExtension
 			switch ext {
-			case "xds": return evalTokensXDS(tokens: tokens, subExpr: false)
+			case "xds": return evalTokensXDS(tokens: tokens, subExpr: false)?.first
 			default:    break
 			}
 		}
-		return evalTokensXDS(tokens: tokens, subExpr: false)
+		return evalTokensXDS(tokens: tokens, subExpr: false)?.first
 	}
 
 	//MARK: - process the expressions
@@ -491,16 +491,14 @@ class XDSScriptCompiler: NSObject {
 				locations[name] = currentLocation
 			case .functionDefinition(let name, _):
 				locations[name] = currentLocation
-			case .ifStatement(let parts):
-				for (condition, block) in parts {
-					var SubCount = 0
-					for (loc, val) in getLocations(block) {
-						locations[loc] = val + currentLocation + condition.instructionCount + SubCount
-					}
-					SubCount += condition.instructionCount
-					for b in block {
-						SubCount += b.instructionCount
-					}
+			case .ifStatement(let condition, let block):
+				var SubCount = 0
+				for (loc, val) in getLocations(block) {
+					locations[loc] = val + currentLocation + condition.instructionCount + SubCount
+				}
+				SubCount += condition.instructionCount
+				for b in block {
+					SubCount += b.instructionCount
 				}
 			case .whileLoop(let condition, let block):
 				for (loc, val) in getLocations(block) {
