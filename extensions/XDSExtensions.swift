@@ -965,8 +965,8 @@ extension XDSScriptCompiler {
 		let lines = separateBySemiColons(text: body)
 		for line in lines {
 			if let subTokens = tokeniseXDS(text: line) {
-				if let expr = evalTokensXDS(tokens: subTokens, subExpr: false) {
-					statements.append(expr)
+				if let exprs = evalTokensXDS(tokens: subTokens, subExpr: false) {
+					statements.append(contentsOf: exprs)
 				} else {
 					// error in eval tokens
 					return nil
@@ -980,13 +980,13 @@ extension XDSScriptCompiler {
 		return statements
 	}
 	
-	class func evalTokensXDS(tokens: [String], subExpr: Bool) -> XDSExpr? {
+	class func evalTokensXDS(tokens: [String], subExpr: Bool) -> [XDSExpr]? {
 		// the tokens are considered a "sub expression" if they are a part of a larger expression, the result of recursively evaluating tokens.
 		// this doesn't include if they are part of a compound statement
-		var tokens = tokens.filter { (s) -> Bool in
+		let tokens = tokens.filter { (s) -> Bool in
 			return s.length > 0
 		}
-		if tokens.count == 0 { return .nop }
+		if tokens.count == 0 { return [.nop] }
 		
 		if tokens.count == 1 {
 			let token = tokens[0]
@@ -1002,36 +1002,36 @@ extension XDSScriptCompiler {
 				
 				// return statement
 				if token == "return" {
-					return XDSExpr.XDSReturn
+					return [XDSExpr.XDSReturn]
 				}
 				
 				if token == "Null" {
-					return XDSExpr.loadImmediate(XDSConstant.null)
+					return [XDSExpr.loadImmediate(XDSConstant.null)]
 				}
 				
 				if ["True", "Yes", "YES", "TRUE"].contains(token) {
-					return XDSExpr.loadImmediate(XDSConstant.integer(1))
+					return [XDSExpr.loadImmediate(XDSConstant.integer(1))]
 				}
 				
 				if ["False", "No", "NO", "FALSE"].contains(token) {
-					return XDSExpr.loadImmediate(XDSConstant.integer(0))
+					return [XDSExpr.loadImmediate(XDSConstant.integer(0))]
 				}
 				
 				// load variables
 				if token == kXDSLastResultVariable {
-					return XDSExpr.loadVariable(token)
+					return [XDSExpr.loadVariable(token)]
 				}
 				
 				if token == kXDSLastResultVariable + "*" {
-					return XDSExpr.loadPointer(token)
+					return [XDSExpr.loadPointer(token)]
 				}
 				
 				for name in locals[currentFunction]! + args[currentFunction]!  {
 					if token == name {
-						return .loadVariable(token)
+						return [.loadVariable(token)]
 					}
 					if token == name + "*" {
-						return .loadPointer(token)
+						return [.loadPointer(token)]
 					}
 				}
 				
@@ -1041,28 +1041,28 @@ extension XDSScriptCompiler {
 						let val = gvars.values[index]
 						let type = val.type.index
 						if type <= 4 {
-							return .loadVariable(token)
+							return [.loadVariable(token)]
 						} else {
-							return .loadPointer(token)
+							return [.loadPointer(token)]
 						}
 					}
 				}
 				
 				for name in arrys.names {
 					if token == name {
-						return .loadPointer(token)
+						return [.loadPointer(token)]
 					}
 				}
 				
 				for name in giris.names {
 					if token == name {
-						return .loadVariable(token)
+						return [.loadVariable(token)]
 					}
 				}
 				
 				for name in vects.names {
 					if token == name {
-						return .loadImmediate(XDSConstant(type: XDSConstantTypes.vector.index, rawValue: UInt32(vects.names.firstIndex(of: token)!)))
+						return [.loadImmediate(XDSConstant(type: XDSConstantTypes.vector.index, rawValue: UInt32(vects.names.firstIndex(of: token)!)))]
 					}
 				}
 				
@@ -1071,12 +1071,12 @@ extension XDSScriptCompiler {
 					let string = token.replacingOccurrences(of: "\"", with: "")
 					strgs.addUnique(string)
 					let offset = getStringStartIndex(str: string)
-					return .loadImmediate(XDSConstant(type: XDSConstantTypes.string.index, rawValue: offset))
+					return [.loadImmediate(XDSConstant(type: XDSConstantTypes.string.index, rawValue: offset))]
 				}
 				
 				if token.substring(from: 0, to: 1) == "$" {
 					var id : Int? = token.msgID
-					var text : String? = token.msgText
+					let text : String? = token.msgText
 					
 					if id != nil {
 						if id! < 0 {
@@ -1101,7 +1101,7 @@ extension XDSScriptCompiler {
 							// error in handlemsg
 							return nil
 						}
-						return XDSConstant.integer(id!).expression
+						return [XDSConstant.integer(id!).expression]
 					}
 					
 					// error in handlemsgstring
@@ -1137,8 +1137,9 @@ extension XDSScriptCompiler {
 							}
 							
 							if let subTokens = tokeniseXDS(text: index) {
-								if let indexpr = evalTokensXDS(tokens: subTokens, subExpr: true) {
-									return XDSExpr.callStandard(7, 16, [XDSExpr.loadPointer(variable), indexpr])
+								if let indexprs = evalTokensXDS(tokens: subTokens, subExpr: true), indexprs.count == 1 {
+									let indexpr = indexprs[0]
+									return [XDSExpr.callStandard(7, 16, [XDSExpr.loadPointer(variable), indexpr])]
 								}
 							}
 							
@@ -1169,8 +1170,8 @@ extension XDSScriptCompiler {
 								var paramList = [XDSExpr]()
 								if let tokens = tokeniseXDS(text: parameters) {
 									for t in tokens {
-										if let expr = evalTokensXDS(tokens: [t], subExpr: true) {
-											paramList.append(expr)
+										if let exprs = evalTokensXDS(tokens: [t], subExpr: true), exprs.count == 1 {
+											paramList.append(exprs[0])
 										} else {
 											error += "\nInvalid function parameters: \(token)"
 											return nil
@@ -1195,9 +1196,9 @@ extension XDSScriptCompiler {
 									}
 									
 									if subExpr {
-										return XDSExpr.call(functionName, functionParameters)
+										return [XDSExpr.call(functionName, functionParameters)]
 									} else {
-										return XDSExpr.callVoid(functionName, functionParameters)
+										return [XDSExpr.callVoid(functionName, functionParameters)]
 									}
 								}
 								
@@ -1205,8 +1206,8 @@ extension XDSScriptCompiler {
 								for (name,id,params,_) in ScriptOperators where params == 1 {
 									if name == functionName {
 										if let tokens = tokeniseXDS(text: parameters) {
-											if let expr =  evalTokensXDS(tokens: tokens, subExpr: true) {
-												return .unaryOperator(id, expr)
+											if let exprs = evalTokensXDS(tokens: tokens, subExpr: true), exprs.count == 1 {
+												return [.unaryOperator(id, exprs[0])]
 											} else {
 												error += "\nInvalid operator parameters: \(token)"
 												return nil
@@ -1223,9 +1224,9 @@ extension XDSScriptCompiler {
 								if "ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(functionName.substring(from: 0, to: 1)) {
 									if let type = XDSConstantTypes.typeWithName(functionName) {
 										if let val = parameters.integerValue {
-											return .loadImmediate(XDSConstant(type: type.index, rawValue: val.unsigned))
+											return [.loadImmediate(XDSConstant(type: type.index, rawValue: val.unsigned))]
 										} else if parameters == "" {
-											return .loadImmediate(XDSConstant(type: type.index, rawValue: 0))
+											return [.loadImmediate(XDSConstant(type: type.index, rawValue: 0))]
 										} else {
 											error = "Invalid raw integer: \(token)"
 											return nil
@@ -1392,21 +1393,21 @@ extension XDSScriptCompiler {
 							}
 							
 							if !subExpr {
-								return .callStandardVoid(classIndex, functionIndex, functionParameters)
+								return [.callStandardVoid(classIndex, functionIndex, functionParameters)]
 							}
 							
-							return .callStandard(classIndex, functionIndex, functionParameters)
+							return [.callStandard(classIndex, functionIndex, functionParameters)]
 							
 						}
 					}
 				}
 				
 				if let val = token.integerValue {
-					return XDSConstant.integer(val).expression
+					return [XDSConstant.integer(val).expression]
 				}
 				
 				if let val = Float(token) {
-					return XDSConstant.float(val).expression
+					return [XDSConstant.float(val).expression]
 				}
 				
 			}
@@ -1414,7 +1415,7 @@ extension XDSScriptCompiler {
 			if token.substring(from: 0, to: 1) == "@" {
 				if token.length > 1 {
 					if token.substring(from: 1, to: token.length).isValidXDSVariable() {
-						return .location(token)
+						return [.location(token)]
 					} else {
 						error = "Location name must be a valid variable: \(token)"
 						return nil
@@ -1428,6 +1429,27 @@ extension XDSScriptCompiler {
 			// any other case is invalid
 			error = "Invalid line: \(token)"
 			return nil
+		}
+
+		// while loop
+		if tokens[0] == "while" {
+			// cheat parsing by transforming to an `if` and inserting the additional location and jump
+			var tokens = tokens
+			tokens[0] = "if"
+			guard let exprs = evalTokensXDS(tokens: tokens, subExpr: subExpr),
+				exprs.count == 1,
+				case .ifStatement(let condition, var body) = exprs[0]
+			else {
+				error = "Failed to parse while loop by transforming to if statement: \(tokens)"
+				return nil
+			}
+
+			let loopStartLocation = XDSExpr.locationWithName(syntacticSugarVariableXDS())
+			// Drop the jump in before the if statement's branching location
+			body.insert(.jump(loopStartLocation), at: body.endIndex - 2)
+
+			// Include the loop start location in the result
+			return [.location(loopStartLocation), .ifStatement(condition, body)]
 		}
 		
 		// can be subExpr or not
@@ -1445,7 +1467,8 @@ extension XDSScriptCompiler {
 						return nil
 					}
 					
-					if let condition = evalTokensXDS(tokens: conditionTokens, subExpr: true) {
+					if let conditionStatements = evalTokensXDS(tokens: conditionTokens, subExpr: true), conditionStatements.count == 1 {
+						let condition = conditionStatements[0]
 						// TODO: check condition has valid format
 						
 						if tokens.count < 3 {
@@ -1464,7 +1487,7 @@ extension XDSScriptCompiler {
 							if let subStatements = evalStatementXDS(body: body) {
 								let sugar = XDSExpr.locationWithName(syntacticSugarVariableXDS())
 								let jumpCondition = XDSExpr.jumpFalse(condition, sugar)
-								return XDSExpr.ifStatement([(jumpCondition, subStatements + [XDSExpr.location(sugar)])])
+								return [XDSExpr.ifStatement(jumpCondition, subStatements + [XDSExpr.location(sugar)])]
 							} else {
 								// error in eval statement
 								return nil
@@ -1502,9 +1525,9 @@ extension XDSScriptCompiler {
 			if tokens.count == 3 {
 				for (name,id,params,_) in ScriptOperators where params == 2 {
 					if name == tokens[1] {
-						if let e1 = evalTokensXDS(tokens: [tokens[0]], subExpr: true){
-							if let e2 = evalTokensXDS(tokens: [tokens[2]], subExpr: true){
-								return .binaryOperator(id , e1, e2)
+						if let e1 = evalTokensXDS(tokens: [tokens[0]], subExpr: true), e1.count == 1 {
+							if let e2 = evalTokensXDS(tokens: [tokens[2]], subExpr: true), e2.count == 1 {
+								return [.binaryOperator(id , e1[0], e2[0])]
 							} else {
 								return nil
 							}
@@ -1571,7 +1594,7 @@ extension XDSScriptCompiler {
 									body.removeLast()
 									if let subStatements = evalStatementXDS(body: body) {
 										let header = XDSExpr.functionDefinition(functionName, params)
-										return XDSExpr.function(header, subStatements)
+										return [XDSExpr.function(header, subStatements)]
 									} else {
 										// error in eval statement
 										return nil
@@ -1605,7 +1628,7 @@ extension XDSScriptCompiler {
 				
 				if tokens.count == 2 {
 					if tokens[1].substring(from: 0, to: 1) == "@" {
-						return .jump(tokens[1])
+						return [.jump(tokens[1])]
 					} else {
 						error = "Goto must be followed by a location.\nInvalid line: "
 						for t in tokens {
@@ -1624,8 +1647,8 @@ extension XDSScriptCompiler {
 						}
 						
 						if tokens[2] == "if" {
-							if let expr = evalTokensXDS(tokens: subTokens, subExpr: true) {
-								return .jumpTrue(expr, tokens[1])
+							if let exprs = evalTokensXDS(tokens: subTokens, subExpr: true), exprs.count == 1 {
+								return [.jumpTrue(exprs[0], tokens[1])]
 							} else {
 								error += "\nInvalid goto condition.\nInvalid line: "
 								for t in tokens {
@@ -1634,8 +1657,8 @@ extension XDSScriptCompiler {
 								return nil
 							}
 						} else if tokens[2] == "ifnot" {
-							if let expr = evalTokensXDS(tokens: subTokens, subExpr: true) {
-								return .jumpFalse(expr, tokens[1])
+							if let exprs = evalTokensXDS(tokens: subTokens, subExpr: true), exprs.count == 1 {
+								return [.jumpFalse(exprs[0], tokens[1])]
 							} else {
 								error += "\nInvalid goto condition.\nInvalid line: "
 								for t in tokens {
@@ -1677,8 +1700,8 @@ extension XDSScriptCompiler {
 					}
 				}
 				
-				if let expr = evalTokensXDS(tokens: params, subExpr: true) {
-					return XDSExpr.XDSReturnResult(expr)
+				if let exprs = evalTokensXDS(tokens: params, subExpr: true), exprs.count == 1 {
+					return [XDSExpr.XDSReturnResult(exprs[0])]
 				} else {
 					error += "\nInvalid line: "
 					for t in tokens {
@@ -1698,7 +1721,8 @@ extension XDSScriptCompiler {
 						}
 					}
 					
-					if let expr = evalTokensXDS(tokens: params, subExpr: true) {
+					if let exprs = evalTokensXDS(tokens: params, subExpr: true), exprs.count == 1 {
+						let expr = exprs[0]
 						var variable = ""
 						var index : String? = nil
 						
@@ -1733,11 +1757,11 @@ extension XDSScriptCompiler {
 							
 							switch index! {
 							case "vx":
-								return XDSExpr.setVector(variable, .x, expr)
+								return [XDSExpr.setVector(variable, .x, expr)]
 							case "vy":
-								return XDSExpr.setVector(variable, .y, expr)
+								return [XDSExpr.setVector(variable, .y, expr)]
 							case "vz":
-								return XDSExpr.setVector(variable, .z, expr)
+								return [XDSExpr.setVector(variable, .z, expr)]
 							default:
 								error = "Invalid vector dimension '\(index!)'.\nInvalid line: "
 								for t in tokens {
@@ -1771,8 +1795,9 @@ extension XDSScriptCompiler {
 							}
 							
 							if let subTokens = tokeniseXDS(text: index!) {
-								if let indexpr = evalTokensXDS(tokens: subTokens, subExpr: true) {
-									return XDSExpr.callStandardVoid(7, 17, [XDSExpr.loadPointer(variable), indexpr, expr])
+								if let indexprs = evalTokensXDS(tokens: subTokens, subExpr: true), indexprs.count == 1 {
+									let indexpr = indexprs[0]
+									return [XDSExpr.callStandardVoid(7, 17, [XDSExpr.loadPointer(variable), indexpr, expr])]
 								}
 							}
 							
@@ -1808,7 +1833,7 @@ extension XDSScriptCompiler {
 								locs.addUnique(variable)
 								locals[currentFunction] = locs
 							}
-							return XDSExpr.setVariable(variable, expr)
+							return [XDSExpr.setVariable(variable, expr)]
 							
 						}
 						

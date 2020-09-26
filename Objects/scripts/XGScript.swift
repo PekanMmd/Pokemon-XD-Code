@@ -1822,7 +1822,7 @@ class XGScript: NSObject {
 											
 											let ifSubscomp = compoundList(exprs: [.locationSilent(previousLocation)] + ifSubs + [.locationSilent(loc)])
 											let jumpCondition = XDSExpr.jumpFalse(condition, location)
-											let ifstatement = XDSExpr.ifStatement([(jumpCondition, ifSubscomp)])
+											let ifstatement = XDSExpr.ifStatement(jumpCondition, ifSubscomp)
 											list.append(ifstatement)
 											
 										} else {
@@ -1840,7 +1840,7 @@ class XGScript: NSObject {
 											
 											let ifSubscomp = compoundList(exprs: [.locationSilent(previousLocation)] + ifSubs + [.locationSilent(loc)])
 											let jumpCondition = XDSExpr.jumpFalse(condition, location)
-											let ifstatement = XDSExpr.ifStatement([(jumpCondition, ifSubscomp)])
+											let ifstatement = XDSExpr.ifStatement(jumpCondition, ifSubscomp)
 											list.append(ifstatement)
 											
 										} else {
@@ -1893,6 +1893,8 @@ class XGScript: NSObject {
 				return true
 			}
 		}))
+
+		list = compoundWhileLoops(from: list)
 		
 		func getLocations(exprs: [XDSExpr]) -> [XDSLocation] {
 			var jumpLocations = [String]()
@@ -1905,11 +1907,9 @@ class XGScript: NSObject {
 					jumpLocations.addUnique(l)
 				case .jumpFalse(_, let l):
 					jumpLocations.addUnique(l)
-				case .ifStatement(let parts):
-					for (_, block) in parts {
-						for loc in getLocations(exprs: block) {
-							jumpLocations.addUnique(loc)
-						}
+				case .ifStatement(_, let block):
+					for loc in getLocations(exprs: block) {
+						jumpLocations.addUnique(loc)
 					}
 				case .whileLoop(_, let block):
 					for loc in getLocations(exprs: block) {
@@ -1941,17 +1941,12 @@ class XGScript: NSObject {
 					if jumpLocations.contains(loc) {
 						filtered.append(expr)
 					}
-				case .ifStatement(let parts):
-					var total = [(XDSExpr,[XDSExpr])]()
-					
-					for (condition, block) in parts {
-						var newBlock = [XDSExpr]()
-						for expr in filterLocations(exprs: block) {
-							newBlock.append(expr)
-						}
-						total.append((condition, newBlock))
+				case .ifStatement(let condition, let block):
+					var newBlock = [XDSExpr]()
+					for expr in filterLocations(exprs: block) {
+						newBlock.append(expr)
 					}
-					filtered.append(.ifStatement(total))
+					filtered.append(.ifStatement(condition, newBlock))
 				case .whileLoop(let condition, let block):
 					var newBlock = [XDSExpr]()
 					for expr in filterLocations(exprs: block) {
@@ -1989,6 +1984,95 @@ class XGScript: NSObject {
 		}
 		
 		return (compoundStack, macros)
+	}
+
+	func compoundWhileLoops(from exprs: [XDSExpr]) -> [XDSExpr] {
+		// `while` structure:
+		// @start
+		// ifStatement(
+		//	jumpFalse(cond, @end)
+		//	[..., jump(@start)]
+		// )
+		// @end
+		var result: [XDSExpr] = []
+		var index = exprs.startIndex
+		var maybeLoopStartLocation: XDSLocation? = nil
+		var maybeWhileCondition: XDSExpr? = nil
+		var maybeWhileBlock: [XDSExpr]? = nil
+
+		func reassemblePendingExpressionsIfNecessary() {
+			if let loopStartLocation = maybeLoopStartLocation {
+				result.append(.location(loopStartLocation))
+			}
+
+			if let ifCondition = maybeWhileCondition, let ifBlock = maybeWhileBlock {
+				result.append(.ifStatement(ifCondition, ifBlock))
+			}
+
+			maybeLoopStartLocation = nil
+			maybeWhileCondition = nil
+			maybeWhileBlock = nil
+		}
+
+		while index < exprs.endIndex {
+			let expr = exprs[index]
+			switch expr {
+			case .function(let definition, let body):
+				let newBody = compoundWhileLoops(from: body)
+				result.append(.function(definition, newBody))
+			case .location(let location):
+				if let loopStartLocation = maybeLoopStartLocation,
+					let whileCondition = maybeWhileCondition,
+					let whileBlock = maybeWhileBlock,
+					case .jumpFalse(_, let breakLocation) = whileCondition,
+					location == breakLocation
+				{
+					// Make the loop start location silent
+					result.append(.locationSilent(loopStartLocation))
+					// Drop the jump instruction in the penultimate position of the block
+					let whileBlockWithoutJump = Array(whileBlock.dropLast().dropLast()) + [whileBlock.last!]
+					result.append(.whileLoop(whileCondition, whileBlockWithoutJump))
+					result.append(expr)
+					maybeLoopStartLocation = nil
+					maybeWhileCondition = nil
+					maybeWhileBlock = nil
+				} else {
+					reassemblePendingExpressionsIfNecessary()
+					// Don't append: hold as pending to check if we have a `while` loop
+					maybeLoopStartLocation = location
+				}
+			case .ifStatement(let ifCondition, let ifBlock):
+				let newIfBlock = compoundWhileLoops(from: ifBlock)
+				guard let loopStartLocation = maybeLoopStartLocation, case .jumpFalse = ifCondition else {
+					reassemblePendingExpressionsIfNecessary()
+					result.append(.ifStatement(ifCondition, newIfBlock))
+					break
+				}
+
+				// Block ends with silent location, check one prior for the jump
+				switch newIfBlock.dropLast().last {
+				case .jump(let destination) where destination == loopStartLocation:
+					// Don't append: hold as pending to check if we have a `while` loop
+					maybeWhileCondition = ifCondition
+					maybeWhileBlock = newIfBlock
+				default:
+					reassemblePendingExpressionsIfNecessary()
+					result.append(expr)
+				}
+			default:
+				reassemblePendingExpressionsIfNecessary()
+				result.append(expr)
+			}
+
+			index += 1
+		}
+
+		while index < exprs.endIndex {
+			result.append(exprs[index])
+			index += 1
+		}
+
+		return result
 	}
 	
 	@objc private func generateXDSHeader() -> String {
