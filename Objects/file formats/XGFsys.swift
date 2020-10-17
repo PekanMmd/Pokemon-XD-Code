@@ -85,6 +85,10 @@ final class XGFsys : NSObject {
 	var groupID : Int {
 		return self.data.get4BytesAtOffset(kFSYSGroupIDOffset)
 	}
+
+	func setGroupID(_ id: Int) {
+		data.replace4BytesAtOffset(kFSYSGroupIDOffset, withBytes: id)
+	}
 	
 	// some fsys files have 2 filenames per entry with the second containing the file extension
 	@objc var usesFileExtensions : Bool {

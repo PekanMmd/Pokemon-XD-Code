@@ -58,6 +58,8 @@ enum XGFileTypes : Int {
 	case gpt1 = -12
 	case cam = -14
 	case f3d = -16
+	case pkx = -18
+	case dat = -20
 
 	
 	var index : Int {
@@ -101,6 +103,8 @@ enum XGFileTypes : Int {
 		case .rdat: return ".rdat"
 		case .gsw : return ".gsw"
 		case .atx : return ".atx"
+		case .pkx : return ".pkx"
+		case .dat : return ".dat"
 		case .unknown: return ".bin"
 		}
 	}

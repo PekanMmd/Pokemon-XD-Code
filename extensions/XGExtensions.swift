@@ -8,9 +8,28 @@
 
 import Foundation
 
-enum console : Int {
+enum Environment {
+	case OSX
+	case Windows
+}
+
+enum Console {
 	case ngc
 	case wii
+}
+
+enum XGGame {
+	case Colosseum
+	case XD
+	case PBR
+
+	var name: String {
+		switch self {
+		case .Colosseum: return "Pokemon Colosseum"
+		case .XD: return "Pokemon XD: Gale of Darkness"
+		case .PBR: return "Pokemon Battle Revolution"
+		}
+	}
 }
 
 protocol XGIndexedValue {

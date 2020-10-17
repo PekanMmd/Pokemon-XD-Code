@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B2F5EB821F49A11A0075C6D2"
-               BuildableName = "GoDToolCL"
-               BlueprintName = "GoDToolCL"
+               BlueprintIdentifier = "1C16CADF253B8A2200907D78"
+               BuildableName = "Colosseum-CLI"
+               BlueprintName = "Colosseum-CLI"
                ReferencedContainer = "container:GoD Tool.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,9 +44,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B2F5EB821F49A11A0075C6D2"
-            BuildableName = "GoDToolCL"
-            BlueprintName = "GoDToolCL"
+            BlueprintIdentifier = "1C16CADF253B8A2200907D78"
+            BuildableName = "Colosseum-CLI"
+            BlueprintName = "Colosseum-CLI"
             ReferencedContainer = "container:GoD Tool.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -61,9 +61,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B2F5EB821F49A11A0075C6D2"
-            BuildableName = "GoDToolCL"
-            BlueprintName = "GoDToolCL"
+            BlueprintIdentifier = "1C16CADF253B8A2200907D78"
+            BuildableName = "Colosseum-CLI"
+            BlueprintName = "Colosseum-CLI"
             ReferencedContainer = "container:GoD Tool.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

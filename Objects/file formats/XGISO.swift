@@ -19,20 +19,6 @@ let kTOCEntrySize			= 0xc
 let kISOFirstFileOffsetLocation = 0x434 // The "user data" start offset. Basically all the game specific files
 let kISOFilesTotalSizeLocation = 0x438 // The size of the game specific files, so everything after dol and toc
 
-enum XGGame {
-	case Colosseum
-	case XD
-	case PBR
-
-	var name: String {
-		switch self {
-		case .Colosseum: return "Pokemon Colosseum"
-		case .XD: return "Pokemon XD: Gale of Darkness"
-		case .PBR: return "Pokemon Battle Revolution"
-		}
-	}
-}
-
 var tocData = XGISO.extractTOC()
 var ISO = XGISO()
 class XGISO: NSObject {

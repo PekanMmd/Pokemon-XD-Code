@@ -5,9 +5,10 @@
 //  Created by The Steez on 27/08/2018.
 //
 
-for string in getStringsContaining(substring: "threw") {
-	print(string.stringPlusIDAndFile)
-}
+
+let scdFile = XGFiles.scd("M1_out")
+let script = XGScript(file: scdFile)
+XGUtility.saveString(script.description, toFile: .nameAndFolder(scdFile.fileName + ".txt", .Documents))
 
 //var seenIDs = [Int]()
 //for mon in XGDecks.DeckStory.allActivePokemon where mon.isShadow {

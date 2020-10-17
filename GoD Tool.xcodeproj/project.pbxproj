@@ -9,6 +9,23 @@
 /* Begin PBXBuildFile section */
 		1C075F47243119CB0082BE51 /* PBRCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C075F46243119CB0082BE51 /* PBRCLExtensions.swift */; };
 		1C075F4A24311A190082BE51 /* PBRGUIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C075F48243119E60082BE51 /* PBRGUIExtensions.swift */; };
+		1C11E338252BFD8A00026234 /* CMScriptOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C11E337252BFD8A00026234 /* CMScriptOps.swift */; };
+		1C11E339252BFD8A00026234 /* CMScriptOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C11E337252BFD8A00026234 /* CMScriptOps.swift */; };
+		1C16CA74253406E400907D78 /* CMScriptStandardFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA73253406E400907D78 /* CMScriptStandardFunctions.swift */; };
+		1C16CA75253406E400907D78 /* CMScriptStandardFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA73253406E400907D78 /* CMScriptStandardFunctions.swift */; };
+		1C16CA7D2534099A00907D78 /* CMScriptValueTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA7C2534099A00907D78 /* CMScriptValueTypes.swift */; };
+		1C16CA7E2534099A00907D78 /* CMScriptValueTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA7C2534099A00907D78 /* CMScriptValueTypes.swift */; };
+		1C16CA97253B837500907D78 /* OSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA96253B837500907D78 /* OSXExtensions.swift */; };
+		1C16CA98253B837500907D78 /* OSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA96253B837500907D78 /* OSXExtensions.swift */; };
+		1C16CA99253B837500907D78 /* OSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA96253B837500907D78 /* OSXExtensions.swift */; };
+		1C16CA9A253B837500907D78 /* OSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA96253B837500907D78 /* OSXExtensions.swift */; };
+		1C16CA9B253B837500907D78 /* OSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA96253B837500907D78 /* OSXExtensions.swift */; };
+		1C16CA9C253B837500907D78 /* OSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA96253B837500907D78 /* OSXExtensions.swift */; };
+		1C16CAC3253B86F100907D78 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CAC2253B86F100907D78 /* main.swift */; };
+		1C16CAE3253B8A2200907D78 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CAE2253B8A2200907D78 /* main.swift */; };
+		1C16CAEF253B92CF00907D78 /* XGFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBBE1F49A1FE0075C6D2 /* XGFiles.swift */; };
+		1C16CB18253B950A00907D78 /* XGISO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE41F49A1FE0075C6D2 /* XGISO.swift */; };
+		1C16CB21253B950C00907D78 /* XGISO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE41F49A1FE0075C6D2 /* XGISO.swift */; };
 		1C291C0525138A1500E3B124 /* Move.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C291C0425138A1400E3B124 /* Move.storyboard */; };
 		1C291C0625138ADC00E3B124 /* GoDMovesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0851F6DAD9B00AC263D /* GoDMovesViewController.swift */; };
 		1C291C082513997A00E3B124 /* WZX ids.json in Resources */ = {isa = PBXBuildFile; fileRef = 1C291C072513997A00E3B124 /* WZX ids.json */; };
@@ -2779,7 +2796,6 @@
 		B2ACFBCF2249D0A100CC2F20 /* XGTextureMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ACFBCD2249D0A100CC2F20 /* XGTextureMetaData.swift */; };
 		B2B0F5E9214EA79D00BA83DD /* CMRandomiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B0F5E7214EA79900BA83DD /* CMRandomiser.swift */; };
 		B2B0F5EA214EA79F00BA83DD /* CMRandomiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B0F5E7214EA79900BA83DD /* CMRandomiser.swift */; };
-		B2C1EE6820C8EFBA00D7C2F7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E39620C4CA3A00D298BF /* ViewController.swift */; };
 		B2C1EE6920C8F44C00D7C2F7 /* XGTrainerClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBFF1F49A1FE0075C6D2 /* XGTrainerClass.swift */; };
 		B2C1EE6A20C8F48500D7C2F7 /* XGRelocationTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B252D95A1F98AF0400794FCE /* XGRelocationTable.swift */; };
 		B2C1EE6B20C8F5AA00D7C2F7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2F5EBAD1F49A1980075C6D2 /* Main.storyboard */; };
@@ -3930,6 +3946,24 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		1C16CABE253B86F100907D78 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		1C16CADE253B8A2200907D78 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		B24A501A21D10D93009C707C /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3962,6 +3996,17 @@
 /* Begin PBXFileReference section */
 		1C075F46243119CB0082BE51 /* PBRCLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRCLExtensions.swift; sourceTree = "<group>"; };
 		1C075F48243119E60082BE51 /* PBRGUIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRGUIExtensions.swift; sourceTree = "<group>"; };
+		1C11E337252BFD8A00026234 /* CMScriptOps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMScriptOps.swift; sourceTree = "<group>"; };
+		1C16CA73253406E400907D78 /* CMScriptStandardFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMScriptStandardFunctions.swift; sourceTree = "<group>"; };
+		1C16CA7C2534099A00907D78 /* CMScriptValueTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMScriptValueTypes.swift; sourceTree = "<group>"; };
+		1C16CA87253B6ACE00907D78 /* GoD_Tool_OSX_Compiler.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = GoD_Tool_OSX_Compiler.sh; sourceTree = "<group>"; };
+		1C16CA88253B6ACE00907D78 /* GoD_Tool_Windows_Compiler.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = GoD_Tool_Windows_Compiler.bat; sourceTree = "<group>"; };
+		1C16CA96253B837500907D78 /* OSXExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSXExtensions.swift; sourceTree = "<group>"; };
+		1C16CAA3253B83D700907D78 /* WindowsExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowsExtensions.swift; sourceTree = "<group>"; };
+		1C16CAC0253B86F100907D78 /* GoD-CLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "GoD-CLI"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C16CAC2253B86F100907D78 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		1C16CAE0253B8A2200907D78 /* Colosseum-CLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Colosseum-CLI"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C16CAE2253B8A2200907D78 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		1C291C0425138A1400E3B124 /* Move.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Move.storyboard; sourceTree = "<group>"; };
 		1C291C072513997A00E3B124 /* WZX ids.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "WZX ids.json"; sourceTree = "<group>"; };
 		1C37440C24056F190089D3BA /* GoDShellManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDShellManager.swift; sourceTree = "<group>"; };
@@ -4046,7 +4091,6 @@
 		B208E37C20C4569900D298BF /* XDSMacroTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDSMacroTypes.swift; sourceTree = "<group>"; };
 		B208E39220C4CA3A00D298BF /* Colosseum Tool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Colosseum Tool.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B208E39420C4CA3A00D298BF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B208E39620C4CA3A00D298BF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B208E39820C4CA3A00D298BF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B208E39B20C4CA3A00D298BF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B208E39D20C4CA3A00D298BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -6298,8 +6342,6 @@
 		B2F5F8951F49CD050075C6D2 /* GoDTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDTableCellView.swift; sourceTree = "<group>"; };
 		B2F5F8961F49CD050075C6D2 /* GoDTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDTableView.swift; sourceTree = "<group>"; };
 		B2F5F8B91F4AC3BA0075C6D2 /* GoDToolOSX.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = GoDToolOSX.entitlements; sourceTree = "<group>"; };
-		B2F5F8BA1F4C4E680075C6D2 /* XGViewLayoutManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGViewLayoutManager.swift; sourceTree = "<group>"; };
-		B2F5F8BB1F4C4E680075C6D2 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		B2F5F8BE1F4C4ED10075C6D2 /* GoDViewLayoutManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDViewLayoutManager.swift; sourceTree = "<group>"; };
 		B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDImageExtensions.swift; sourceTree = "<group>"; };
 		B2F7C8E61F8FB4F300BB664D /* default move routines.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "default move routines.txt"; sourceTree = "<group>"; };
@@ -6324,6 +6366,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1C16CABD253B86F100907D78 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1C16CADD253B8A2200907D78 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B208E38F20C4CA3A00D298BF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -6369,6 +6425,67 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1C11E340252BFD8E00026234 /* Colosseum */ = {
+			isa = PBXGroup;
+			children = (
+				B20C402E218AEBE5006D7CD9 /* CMScriptCompiler.swift */,
+				1C11E337252BFD8A00026234 /* CMScriptOps.swift */,
+				B24E5FB92238E3E100C55758 /* CMScript.swift */,
+				1C16CA73253406E400907D78 /* CMScriptStandardFunctions.swift */,
+				1C16CA7C2534099A00907D78 /* CMScriptValueTypes.swift */,
+			);
+			path = Colosseum;
+			sourceTree = "<group>";
+		};
+		1C11E347252BFDA100026234 /* XD */ = {
+			isa = PBXGroup;
+			children = (
+				B2F5EBF51F49A1FE0075C6D2 /* XDSConstant.swift */,
+				B2EAFF0020BDA676009FC947 /* XDSExpr.swift */,
+				B208E37A20C4564B00D298BF /* XDSFlags.swift */,
+				B2F5EBF21F49A1FE0075C6D2 /* XGScript.swift */,
+				B2F5EBF31F49A1FE0075C6D2 /* XGScriptClass.swift */,
+				B27C5FDC1FA19FB000E0596F /* XGScriptInstruction.swift */,
+				B2F5EBF41F49A1FE0075C6D2 /* XGScriptClassFunctionsData.swift */,
+				B257242520CB52D80019A22E /* XDSScriptCompiler.swift */,
+				B2F5EBCE1F49A1FE0075C6D2 /* XGScriptOps.swift */,
+			);
+			path = XD;
+			sourceTree = "<group>";
+		};
+		1C16CA85253B6ACE00907D78 /* CLI Compilers */ = {
+			isa = PBXGroup;
+			children = (
+				1C16CA86253B6ACE00907D78 /* out */,
+				1C16CA87253B6ACE00907D78 /* GoD_Tool_OSX_Compiler.sh */,
+				1C16CA88253B6ACE00907D78 /* GoD_Tool_Windows_Compiler.bat */,
+			);
+			path = "CLI Compilers";
+			sourceTree = "<group>";
+		};
+		1C16CA86253B6ACE00907D78 /* out */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = out;
+			sourceTree = "<group>";
+		};
+		1C16CAC1253B86F100907D78 /* GoD-CLI */ = {
+			isa = PBXGroup;
+			children = (
+				1C16CAC2253B86F100907D78 /* main.swift */,
+			);
+			path = "GoD-CLI";
+			sourceTree = "<group>";
+		};
+		1C16CAE1253B8A2200907D78 /* Colosseum-CLI */ = {
+			isa = PBXGroup;
+			children = (
+				1C16CAE2253B8A2200907D78 /* main.swift */,
+			);
+			path = "Colosseum-CLI";
+			sourceTree = "<group>";
+		};
 		1C39D85A240EA014006FDFBD /* tools */ = {
 			isa = PBXGroup;
 			children = (
@@ -6458,12 +6575,12 @@
 		1CB33A4922B78F2500F81C29 /* extensions */ = {
 			isa = PBXGroup;
 			children = (
+				1C16CA96253B837500907D78 /* OSXExtensions.swift */,
+				1C16CAA3253B83D700907D78 /* WindowsExtensions.swift */,
 				B2F5EBE21F49A1FE0075C6D2 /* XGExtensions.swift */,
 				B2F5F8881F49CCD10075C6D2 /* NSViewExtensions.swift */,
 				B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */,
-				B2F5F8BA1F4C4E680075C6D2 /* XGViewLayoutManager.swift */,
 				B2F5F8BE1F4C4ED10075C6D2 /* GoDViewLayoutManager.swift */,
-				B2F5F8BB1F4C4E680075C6D2 /* UIViewExtensions.swift */,
 				B2F5F87F1F49C2EC0075C6D2 /* XGOSXExtensions.swift */,
 				B2562F9F21349AAD004180F1 /* CMOSXExtensions.swift */,
 				B2FEC07C1F6D25BF00AC263D /* GoDToolExtensions.swift */,
@@ -6606,17 +6723,8 @@
 		1CB33ABA22B8F98C00F81C29 /* scripts */ = {
 			isa = PBXGroup;
 			children = (
-				B2F5EBF51F49A1FE0075C6D2 /* XDSConstant.swift */,
-				B2EAFF0020BDA676009FC947 /* XDSExpr.swift */,
-				B208E37A20C4564B00D298BF /* XDSFlags.swift */,
-				B24E5FB92238E3E100C55758 /* CMScript.swift */,
-				B2F5EBF21F49A1FE0075C6D2 /* XGScript.swift */,
-				B2F5EBF31F49A1FE0075C6D2 /* XGScriptClass.swift */,
-				B27C5FDC1FA19FB000E0596F /* XGScriptInstruction.swift */,
-				B2F5EBF41F49A1FE0075C6D2 /* XGScriptClassFunctionsData.swift */,
-				B257242520CB52D80019A22E /* XDSScriptCompiler.swift */,
-				B20C402E218AEBE5006D7CD9 /* CMScriptCompiler.swift */,
-				B2F5EBCE1F49A1FE0075C6D2 /* XGScriptOps.swift */,
+				1C11E347252BFDA100026234 /* XD */,
+				1C11E340252BFD8E00026234 /* Colosseum */,
 			);
 			name = scripts;
 			path = Objects/scripts;
@@ -6680,7 +6788,6 @@
 				B2C1EE9A20C8FE3200D7C2F7 /* View Controllers */,
 				B2C1EE9220C8F6FD00D7C2F7 /* Views */,
 				B208E39420C4CA3A00D298BF /* AppDelegate.swift */,
-				B208E39620C4CA3A00D298BF /* ViewController.swift */,
 				B208E39820C4CA3A00D298BF /* Assets.xcassets */,
 				B208E39A20C4CA3A00D298BF /* Main.storyboard */,
 				B208E39D20C4CA3A00D298BF /* Info.plist */,
@@ -8875,6 +8982,7 @@
 		B2F5EB781F49A0CD0075C6D2 = {
 			isa = PBXGroup;
 			children = (
+				1C16CA85253B6ACE00907D78 /* CLI Compilers */,
 				B247ED3E217B9FF30034CAF5 /* Sublime */,
 				B2F5EB851F49A11A0075C6D2 /* GoDToolCL */,
 				B2562F4621349567004180F1 /* ColosseumToolCL */,
@@ -8893,6 +9001,8 @@
 				B208E39320C4CA3A00D298BF /* Colosseum Tool */,
 				B24A501D21D10D93009C707C /* Revolution Tool CL */,
 				B20EEA2621E9203600E87D01 /* PBR Tool */,
+				1C16CAC1253B86F100907D78 /* GoD-CLI */,
+				1C16CAE1253B8A2200907D78 /* Colosseum-CLI */,
 				B2F5EB841F49A11A0075C6D2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -8907,6 +9017,8 @@
 				B2562F4521349567004180F1 /* ColosseumToolCL */,
 				B24A501C21D10D93009C707C /* Revolution Tool CL */,
 				B20EEA2521E9203600E87D01 /* PBR Tool.app */,
+				1C16CAC0253B86F100907D78 /* GoD-CLI */,
+				1C16CAE0253B8A2200907D78 /* Colosseum-CLI */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -9131,6 +9243,40 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1C16CABF253B86F100907D78 /* GoD-CLI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1C16CAC4253B86F100907D78 /* Build configuration list for PBXNativeTarget "GoD-CLI" */;
+			buildPhases = (
+				1C16CABC253B86F100907D78 /* Sources */,
+				1C16CABD253B86F100907D78 /* Frameworks */,
+				1C16CABE253B86F100907D78 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "GoD-CLI";
+			productName = "GoD CLI";
+			productReference = 1C16CAC0253B86F100907D78 /* GoD-CLI */;
+			productType = "com.apple.product-type.tool";
+		};
+		1C16CADF253B8A2200907D78 /* Colosseum-CLI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1C16CAE4253B8A2200907D78 /* Build configuration list for PBXNativeTarget "Colosseum-CLI" */;
+			buildPhases = (
+				1C16CADC253B8A2200907D78 /* Sources */,
+				1C16CADD253B8A2200907D78 /* Frameworks */,
+				1C16CADE253B8A2200907D78 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Colosseum-CLI";
+			productName = "Colosseum-CLI";
+			productReference = 1C16CAE0253B8A2200907D78 /* Colosseum-CLI */;
+			productType = "com.apple.product-type.tool";
+		};
 		B208E39120C4CA3A00D298BF /* Colosseum Tool */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B208E39F20C4CA3A00D298BF /* Build configuration list for PBXNativeTarget "Colosseum Tool" */;
@@ -9239,9 +9385,19 @@
 		B2F5EB791F49A0CD0075C6D2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0940;
-				LastUpgradeCheck = 1120;
+				LastSwiftUpdateCheck = 1200;
+				LastUpgradeCheck = 1200;
 				TargetAttributes = {
+					1C16CABF253B86F100907D78 = {
+						CreatedOnToolsVersion = 12.0.1;
+						DevelopmentTeam = 2635A499L4;
+						ProvisioningStyle = Automatic;
+					};
+					1C16CADF253B8A2200907D78 = {
+						CreatedOnToolsVersion = 12.0.1;
+						DevelopmentTeam = 2635A499L4;
+						ProvisioningStyle = Automatic;
+					};
 					B208E39120C4CA3A00D298BF = {
 						CreatedOnToolsVersion = 9.2;
 						DevelopmentTeam = PL9D4W4S2M;
@@ -9267,6 +9423,7 @@
 					B2562F4421349567004180F1 = {
 						CreatedOnToolsVersion = 9.4.1;
 						DevelopmentTeam = PL9D4W4S2M;
+						LastSwiftMigration = 1200;
 						ProvisioningStyle = Automatic;
 					};
 					B2F5EB821F49A11A0075C6D2 = {
@@ -9301,8 +9458,10 @@
 			projectRoot = "";
 			targets = (
 				B2F5EB821F49A11A0075C6D2 /* GoDToolCL */,
+				1C16CABF253B86F100907D78 /* GoD-CLI */,
 				B2F5EBA41F49A1980075C6D2 /* GoD Tool */,
 				B2562F4421349567004180F1 /* ColosseumToolCL */,
+				1C16CADF253B8A2200907D78 /* Colosseum-CLI */,
 				B208E39120C4CA3A00D298BF /* Colosseum Tool */,
 				B24A501B21D10D93009C707C /* Revolution Tool CL */,
 				B20EEA2421E9203600E87D01 /* PBR Tool */,
@@ -12472,6 +12631,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1C16CABC253B86F100907D78 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C16CB18253B950A00907D78 /* XGISO.swift in Sources */,
+				1C16CAEF253B92CF00907D78 /* XGFiles.swift in Sources */,
+				1C16CAC3253B86F100907D78 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1C16CADC253B8A2200907D78 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C16CB21253B950C00907D78 /* XGISO.swift in Sources */,
+				1C16CAE3253B8A2200907D78 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B208E38E20C4CA3A00D298BF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -12499,7 +12677,6 @@
 				B2560A8F213D5A3D00137C37 /* GoDMatrix4.swift in Sources */,
 				B208E74920C4D72800D298BF /* XGGenderRatios.swift in Sources */,
 				B2C1EE6D20C8F5C000D7C2F7 /* GoDHomeViewController.swift in Sources */,
-				B2C1EE6820C8EFBA00D7C2F7 /* ViewController.swift in Sources */,
 				B2C1EE8420C8F6C800D7C2F7 /* GoDLevelPopUpButton.swift in Sources */,
 				1C64CF4624562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */,
 				1CED5D9A24004864008566B0 /* GoDGCEnumerablePopUpButtons.swift in Sources */,
@@ -12537,6 +12714,7 @@
 				1CB3B884250D8E1C0069402D /* GoDBattleViewController.swift in Sources */,
 				B2560A72213D4D4A00137C37 /* XGVertex.swift in Sources */,
 				B208E76620C4E01800D298BF /* GoDTextureFormats.swift in Sources */,
+				1C16CA9A253B837500907D78 /* OSXExtensions.swift in Sources */,
 				B208E78320C85C9600D298BF /* XGStack.swift in Sources */,
 				B2C1EE7820C8F6BF00D7C2F7 /* GoDTableCellView.swift in Sources */,
 				B2560A77213D4DAB00137C37 /* GoDKeyCodes.swift in Sources */,
@@ -12587,7 +12765,9 @@
 				B208E77820C8575000D298BF /* XGCharacter.swift in Sources */,
 				B208E75920C4DCE700D298BF /* CMTrainerClasses.swift in Sources */,
 				B208E75020C4D7E900D298BF /* XGMoveTargets.swift in Sources */,
+				1C16CA7E2534099A00907D78 /* CMScriptValueTypes.swift in Sources */,
 				B208E78C20C8A07D00D298BF /* CMFiles.swift in Sources */,
+				1C11E339252BFD8A00026234 /* CMScriptOps.swift in Sources */,
 				B208E78520C85D4F00D298BF /* XGStringTable.swift in Sources */,
 				B208E74620C4D66C00D298BF /* XGFileTypes.swift in Sources */,
 				B208E76720C4E0DF00D298BF /* XGByteCopier.swift in Sources */,
@@ -12616,6 +12796,7 @@
 				B2562F8421349876004180F1 /* XGGiftPokemon.swift in Sources */,
 				1CE1A77A2326AA0D005141D8 /* XGSettings.swift in Sources */,
 				B2C1EE6A20C8F48500D7C2F7 /* XGRelocationTable.swift in Sources */,
+				1C16CA75253406E400907D78 /* CMScriptStandardFunctions.swift in Sources */,
 				B208E74E20C4D79500D298BF /* XGMoveEffectTypes.swift in Sources */,
 				B208E77B20C8577900D298BF /* XGLevelUpMove.swift in Sources */,
 				B2C1EE9D20C95EE800D7C2F7 /* GoDTableViewDelegate.swift in Sources */,
@@ -12709,6 +12890,7 @@
 				B20EEA4621E920F400E87D01 /* PBRSpecialStringCharacters.swift in Sources */,
 				B20EEA3F21E920F400E87D01 /* PBRMoves.swift in Sources */,
 				1CED5DA32403EA38008566B0 /* GoDGTXViewController.swift in Sources */,
+				1C16CA9C253B837500907D78 /* OSXExtensions.swift in Sources */,
 				B20EEA6921E9214D00E87D01 /* PBRType.swift in Sources */,
 				1CC362BC24BFDAFB005D7B4A /* GoDEvolutionView.swift in Sources */,
 				B20EEA4321E920F400E87D01 /* PBRPokemon.swift in Sources */,
@@ -12807,6 +12989,7 @@
 				B24A503121D12154009C707C /* GoDTextureFormats.swift in Sources */,
 				B24A511521D401AC009C707C /* PBRScriptOps.swift in Sources */,
 				1C6295F824300F1B0085C22F /* PBRISO.swift in Sources */,
+				1C16CA9B253B837500907D78 /* OSXExtensions.swift in Sources */,
 				B20EE64021D6E2B000E87D01 /* PBRPokemonSprite.swift in Sources */,
 				B24A510D21D3F122009C707C /* XGContestCategories.swift in Sources */,
 				B24A50EA21D12CDA009C707C /* PBRTrainerPokemon.swift in Sources */,
@@ -12867,6 +13050,7 @@
 				B2562F74213497BB004180F1 /* CMTMs.swift in Sources */,
 				B24A505B21D1258E009C707C /* XGTextureBlock.swift in Sources */,
 				B2562F6221349781004180F1 /* CMFiles.swift in Sources */,
+				1C11E338252BFD8A00026234 /* CMScriptOps.swift in Sources */,
 				B2562F822134983C004180F1 /* XGEvolution.swift in Sources */,
 				B2562F862134987A004180F1 /* CMGiftPokemon.swift in Sources */,
 				B2562F6A2134979A004180F1 /* XGMoveCategory.swift in Sources */,
@@ -12896,6 +13080,7 @@
 				B2562F7A213497CF004180F1 /* GoDTextureFormats.swift in Sources */,
 				B2562F87213498C8004180F1 /* CMItem.swift in Sources */,
 				B2562F9321349908004180F1 /* XGTrainerClass.swift in Sources */,
+				1C16CA99253B837500907D78 /* OSXExtensions.swift in Sources */,
 				B2562F7D21349806004180F1 /* XGByteCopier.swift in Sources */,
 				B24A505421D1258E009C707C /* XGTexturePalette.swift in Sources */,
 				B2562F802134983C004180F1 /* XGDemoStarterPokemon.swift in Sources */,
@@ -12927,10 +13112,12 @@
 				1CE1A77B2326AA0D005141D8 /* XGSettings.swift in Sources */,
 				B2562F72213497A3004180F1 /* XGSpecialStringCharacters.swift in Sources */,
 				B2562F812134983C004180F1 /* XGDolPatcher.swift in Sources */,
+				1C16CA74253406E400907D78 /* CMScriptStandardFunctions.swift in Sources */,
 				B2562F522134960E004180F1 /* XGISO.swift in Sources */,
 				B2562F5D21349757004180F1 /* CMColosseumRounds.swift in Sources */,
 				B2560A85213D57C200137C37 /* GoDMetalShaders.metal in Sources */,
 				B2562F6721349789004180F1 /* XGGenders.swift in Sources */,
+				1C16CA7D2534099A00907D78 /* CMScriptValueTypes.swift in Sources */,
 				B2562F8F213498F8004180F1 /* XGStack.swift in Sources */,
 				B250AB872135F341008CF9DB /* GoDOSXExtensions.swift in Sources */,
 				B208683D21850CD200F88C3B /* XGBattleTypes.swift in Sources */,
@@ -13091,6 +13278,7 @@
 				B26380D420B9BAC100B6C0D4 /* XGBattleCD.swift in Sources */,
 				B2ACFBCE2249D0A100CC2F20 /* XGTextureMetaData.swift in Sources */,
 				B2F5EC1E1F49A1FE0075C6D2 /* XGExpRate.swift in Sources */,
+				1C16CA97253B837500907D78 /* OSXExtensions.swift in Sources */,
 				B2F5EC181F49A1FE0075C6D2 /* XGEffectivenessValues.swift in Sources */,
 				B24A504F21D1258E009C707C /* XGTexturePalette.swift in Sources */,
 				B2F5EC871F49A1FF0075C6D2 /* XGExtensions.swift in Sources */,
@@ -13244,6 +13432,7 @@
 				B2F5EC5F1F49A1FF0075C6D2 /* XGTMs.swift in Sources */,
 				B25E46D11FC0DECB0030FBF9 /* XGFileTypes.swift in Sources */,
 				B2560A73213D4D4B00137C37 /* XGVertex.swift in Sources */,
+				1C16CA98253B837500907D78 /* OSXExtensions.swift in Sources */,
 				B22A1C4F2182B1DC001C41D3 /* GoDContextViewController.swift in Sources */,
 				B24A507821D126BB009C707C /* XGPNGBlock.swift in Sources */,
 				B24CBAAC212F3DC900481C1D /* XGTrainerContoller.swift in Sources */,
@@ -13327,6 +13516,148 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1C16CAC5253B86F100907D78 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 2635A499L4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		1C16CAC6253B86F100907D78 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 2635A499L4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		1C16CAE5253B8A2200907D78 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 2635A499L4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		1C16CAE6253B8A2200907D78 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 2635A499L4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		B208E3A020C4CA3A00D298BF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -13608,7 +13939,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -13642,7 +13973,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -13662,6 +13993,7 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -13700,6 +14032,7 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -13844,6 +14177,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = PL9D4W4S2M;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -13903,6 +14237,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = PL9D4W4S2M;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -13929,6 +14264,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1C16CAC4253B86F100907D78 /* Build configuration list for PBXNativeTarget "GoD-CLI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1C16CAC5253B86F100907D78 /* Debug */,
+				1C16CAC6253B86F100907D78 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1C16CAE4253B8A2200907D78 /* Build configuration list for PBXNativeTarget "Colosseum-CLI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1C16CAE5253B8A2200907D78 /* Debug */,
+				1C16CAE6253B8A2200907D78 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B208E39F20C4CA3A00D298BF /* Build configuration list for PBXNativeTarget "Colosseum Tool" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

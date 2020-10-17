@@ -170,7 +170,7 @@ enum XGPokemon: XGIndexedValue {
 	
 	static func allPokemon() -> [XGPokemon] {
 		var mons = [XGPokemon]()
-		for i in 0 ..< kNumberOfPokemon {
+		for i in -1 ..< kNumberOfPokemon {
 			mons.append(.pokemon(i))
 		}
 		return mons
@@ -182,7 +182,7 @@ func allPokemon() -> [String : XGPokemon] {
 	
 	var dic = [String : XGPokemon]()
 	
-	for i in 0 ..< kNumberOfPokemon {
+	for i in -1 ..< kNumberOfPokemon {
 		
 		let a = XGPokemon.pokemon(i)
 		
@@ -202,7 +202,7 @@ func pokemon(_ name: String) -> XGPokemon {
 
 func allPokemonArray() -> [XGPokemon] {
 	var pokes: [XGPokemon] = []
-	for i in 0 ..< kNumberOfPokemon {
+	for i in -1 ..< kNumberOfPokemon {
 		pokes.append(XGPokemon.pokemon(i))
 	}
 	return pokes

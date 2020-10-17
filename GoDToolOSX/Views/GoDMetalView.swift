@@ -137,7 +137,7 @@ class GoDMetalManager : NSObject {
 		let depth = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .depth32Float, width: Int(metalLayer.frame.width), height: Int(metalLayer.frame.height), mipmapped: false)
 		depth.resourceOptions = .storageModePrivate
 		depth.usage = .renderTarget
-		renderPassDescriptor.depthAttachment.clearDepth = 1000
+		renderPassDescriptor.depthAttachment.clearDepth = 1
 		renderPassDescriptor.depthAttachment.loadAction = .clear
 		renderPassDescriptor.depthAttachment.storeAction = .store
 		renderPassDescriptor.depthAttachment.texture = self.device.makeTexture(descriptor: depth)

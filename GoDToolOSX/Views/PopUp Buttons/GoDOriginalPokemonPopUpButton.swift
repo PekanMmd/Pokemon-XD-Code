@@ -10,6 +10,10 @@ import Cocoa
 
 class GoDOriginalPokemonPopUpButton: GoDJSONPopUpButton {
 
+	override var startIndex: Int {
+		return game == .PBR ? -1 : 0
+	}
+
 	override var file : XGFiles {
 		return XGFiles.nameAndFolder("Original Pokemon.json", .JSON)
 	}

@@ -8,7 +8,43 @@
 //
 
 
+//ISO.allFileNames.count.hexString().println()
 
+
+////let m1_out = XGFiles.fsys("M1_out")
+//let m4_out = XGFiles.nameAndFolder("M4_out.fsys", .AutoFSYS)
+////let m4_outData = m1_out.data!
+////m4_outData.file = m4_out
+////m4_outData.save()
+////ISO.addFile(m4_out, save: true)
+//
+////let m4fsys = m4_out.fsysData
+////m4fsys.setGroupID(0xF001)
+////m4fsys.save()
+//
+//CommonIndexes.Rooms.startOffset.hexString().println()
+//ISO.getFSYSNameWithGroupID(0xf001)?.println()
+////ISO.getFSYSNameWithGroupID(0xa3)?.println()
+////XGRoom
+
+
+//CommonIndexes.BGM.startOffset.hexString().println()
+//ISO.getFSYSForIdentifier(id: 0x14EC2800)?.fileName.println()
+//ISO.getFSYSDataWithGroupID(0x7b0)?.fileName.println()
+//let start = CommonIndexes.BGM.startOffset
+//printg(start.hexString())
+//XGASM.loadImmediateShifted32bit(register: .r3, value: 0x80B65104).0.code.hexString().println()
+//XGASM.loadImmediateShifted32bit(register: .r3, value: 0x80B65104).1.code.hexString().println()
+
+//(0x4efe20 - 0x4e8844).hexString().println()
+//XGASM.lwz(.r3, .r13, -0x75dc).code.hexString().println()
+
+
+//for (functionIndex, codeOffset) in [(0,0xb99790),(1,0xb997c4),(2,0xb997f8)] {
+//
+//	XGScriptClass.addASMFunctionToCustomClass(jumpTableRAMOffset: 0xb99390, functionIndex: functionIndex, codeOffsetInRAM: codeOffset, code: [])
+//}
+//XGScriptClass.classes(34).repointToRAMOffset(0xb99350)
 //XGUtility.compileMainFiles()
 
 

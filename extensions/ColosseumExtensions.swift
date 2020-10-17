@@ -219,7 +219,7 @@ extension XGUtility {
 
 	class func importDatToPKX(dat: XGMutableData, pkx: XGMutableData) -> XGMutableData {
 		//let gpt1Length = pkx.get4BytesAtOffset(4)
-		var start = 0x40
+		let start = 0x40
 		let pkxHeader = pkx.getCharStreamFromOffset(0, length: start)
 
 		var datData = dat.charStream
@@ -243,7 +243,7 @@ extension XGUtility {
 	class func exportDatFromPKX(pkx: XGMutableData) -> XGMutableData {
 		//let gpt1Length = pkx.get4BytesAtOffset(4)
 		let length = pkx.get4BytesAtOffset(0)
-		var start = 0x40
+		let start = 0x40
 		let charStream = pkx.getCharStreamFromOffset(start, length: length)
 		let filename = pkx.file.fileName.removeFileExtensions() + ".dat"
 		return XGMutableData(byteStream: charStream, file: .nameAndFolder(filename, pkx.file.folder))

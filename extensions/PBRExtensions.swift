@@ -24,20 +24,6 @@ enum XGRegions : UInt32 {
 	
 }
 
-enum XGGame {
-	case Colosseum
-	case XD
-	case PBR
-    
-    var name: String {
-		switch self {
-		case .Colosseum: return "Pokemon Colosseum"
-		case .XD: return "Pokemon XD: Gale of Darkness"
-		case .PBR: return "Pokemon Battle Revolution"
-		}
-	}
-}
-
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/Revolution-Tool"
 let region = XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .EU
 let game = XGGame.PBR
@@ -437,6 +423,15 @@ class XGUtility {
 
         printg("Finished compiling msgs.")
     }
+
+	// for gc compatibility
+	class func exportDatFromPKX(pkx: XGMutableData) -> XGMutableData {
+		return XGMutableData()
+	}
+
+	class func importDatToPKX(dat: XGMutableData, pkx: XGMutableData) -> XGMutableData {
+		return XGMutableData()
+	}
 	
 }
 

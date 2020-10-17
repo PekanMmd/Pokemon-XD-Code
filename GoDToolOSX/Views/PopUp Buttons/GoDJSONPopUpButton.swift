@@ -9,7 +9,11 @@
 import Cocoa
 
 class GoDJSONPopUpButton: GoDPopUpButton {
-	
+
+	var startIndex: Int {
+		return 0
+	}
+
 	var file : XGFiles {
 		return XGFiles.nameAndFolder("", .JSON)
 	}
@@ -22,9 +26,12 @@ class GoDJSONPopUpButton: GoDPopUpButton {
 		var values = ["\(file.fileName) not found!"]
 		
 		if file.exists {
-			
-			values = file.json as! [String]
-			
+			if let jsonValues = file.json as? [String] {
+				values = []
+				for i in 0 ..< jsonValues.count {
+					values.append(jsonValues[i] + " \(startIndex + i)")
+				}
+			}
 		}
 		
 		self.setTitles(values: values)

@@ -128,7 +128,7 @@ class XGMutableData: NSObject {
 		
 		var byte : UInt8 = 0x0
 		self.data.getBytes(&byte, range: NSMakeRange(start, 1))
-		return Int(byte )
+		return Int(byte)
 		
 	}
 	
@@ -141,8 +141,21 @@ class XGMutableData: NSObject {
 		var bytes : UInt16 = 0x0
 		self.data.getBytes(&bytes, range: NSMakeRange(start, 2))
 		bytes = UInt16(bigEndian: bytes)
-		return Int(bytes )
+		return Int(bytes)
 		
+	}
+
+	@objc func getHalfAtOffset(_ start : Int) -> UInt16 {
+
+		if start < 0 || start + 2  > self.length {
+			printg("Attempting to read 2 bytes from offset: \(start.hexString()), file: \(self.file.path), length: \(self.data.length.hexString())")
+		}
+
+		var bytes : UInt16 = 0x0
+		self.data.getBytes(&bytes, range: NSMakeRange(start, 2))
+		bytes = UInt16(bigEndian: bytes)
+		return bytes
+
 	}
 	
 	@objc func get4BytesAtOffset(_ start : Int) -> Int {

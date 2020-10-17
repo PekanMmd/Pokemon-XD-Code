@@ -318,7 +318,9 @@ enum XGASM {
 		case .and(let rd, let ra, let rb):
 			return (UInt32(31) << 26) | (ra.value << 21) | (rd.value << 16) | (rb.value << 11) | (28 << 1)
 		case .and_(let rd, let ra, let rb):
-			return (UInt32(31) << 26) | (ra.value << 21) | (rd.value << 16) | (rb.value << 11) | (28 << 1) + 1
+			var result = (UInt32(31) << 26) | (ra.value << 21) | (rd.value << 16) | (rb.value << 11)
+			result |= (28 << 1) + 1
+			return result
 		case .andi_(let rd, let ra, let uimm):
 			return (UInt32(28) << 26) | (ra.value << 21) | (rd.value << 16) | (uimm & 0xFFFF)
 		default:

@@ -198,13 +198,20 @@ class GoDISOViewController: GoDTableViewController {
 				if data.length > 0 {
 					filesize.stringValue = "File size: \(data.length.hexString())"
 					let fsys = data.fsysData
+					if game != .PBR {
+						filename.stringValue += " GID: \(fsys.groupID)"
+					}
 					if fsys.numberOfEntries > 0 {
 						for i in  0 ..< fsys.numberOfEntries {
 							var filename = fsys.fullFileNameForFileWithIndex(index: i)
 							if filename.removeFileExtensions() == filename {
 								filename += fsys.fileTypeForFile(index: i).fileExtension
 							}
-							filesText.string += "\n\(i): \(filename)"
+							var identifier = fsys.identifierForFile(index: i).hex()
+							while identifier.count < 8 {
+								identifier = "0" + identifier
+							}
+							filesText.string += "\n\(i): \(filename) (\(identifier))"
 						}
 					} else {
 						filesText.string = "No files."

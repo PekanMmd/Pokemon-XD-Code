@@ -241,7 +241,7 @@ func move(_ name: String) -> XGMoves {
 
 func allMovesArray() -> [XGMoves] {
 	var moves: [XGMoves] = []
-	for i in -1 ..< kNumberOfMoves {
+	for i in 0 ..< kNumberOfMoves {
 		moves.append(XGMoves.move(i))
 	}
 	return moves
@@ -250,7 +250,7 @@ func allMovesArray() -> [XGMoves] {
 func allOriginalMovesArray() -> [XGOriginalMoves] {
 	
 	var moves: [XGOriginalMoves] = []
-	for i in -1 ..< kNumberOfMoves {
+	for i in 0 ..< kNumberOfMoves {
 		moves.append(XGOriginalMoves.move(i))
 	}
 	return moves

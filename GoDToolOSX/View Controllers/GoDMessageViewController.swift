@@ -178,7 +178,7 @@ class GoDMessageViewController: GoDTableViewController {
 		stringIDs = currentTable?.allStrings().filter({ (s) -> Bool in
 			s.string.simplified.contains(text.simplified)
 			|| (text.integerValue != nil && text.integerValue == s.id)
-			|| (text.isHexInteger && text.hexStringToInt() == s.id)
+			|| ((text.integerValue ?? -1) == s.id)
 		}).map({ (s) -> Int in
 			s.id
 		}) ?? []

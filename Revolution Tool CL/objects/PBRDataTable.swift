@@ -203,10 +203,6 @@ class PBRDataTable : CustomStringConvertible {
 	}
 	
 	func setEntrySize(_ size: Int) {
-		guard case .common = file else {
-			printg("Cannot set data table entry size for non common file \(file.path)")
-			return
-		}
 		guard size > 0 else {
 			printg("Cannot set data table entry size to 0.")
 			return

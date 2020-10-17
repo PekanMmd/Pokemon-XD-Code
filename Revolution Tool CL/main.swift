@@ -7,9 +7,46 @@
 
 import Foundation
 
-for move in XGMove.allValues {
-	printg(move.name.unformattedString, move.animationID.string + ",")
-}
+//let dataTable = XGFiles.nameAndFolder("common_27.bin", .Documents).data!
+//for i in 1 ... 7 {
+//	let entrySize = 0x54
+//	let dataStart = 0x30
+//	let offset = dataStart + (i * entrySize)
+//	let firstSectionOffset = offset + 0x14
+//	let secondSectionOffset = offset + 0x34
+//	let sectionSize = 0x20
+//	let firstSection = dataTable.getByteStreamFromOffset(firstSectionOffset, length: sectionSize)
+//	let secondSection = dataTable.getByteStreamFromOffset(secondSectionOffset, length: sectionSize)
+//	dataTable.replaceBytesFromOffset(firstSectionOffset, withByteStream: secondSection + firstSection)
+//}
+//dataTable.save()
+
+
+
+//for id in [3,5,7,9,11,13,15,17,23] {
+//	let deck = XGDecks.dckt(id)
+//	let tr = XGDeckTrainer.deck(0, deck)
+//	printg(id, tr.data.name.unformattedString)
+////	let trainer1 = deck.dataForEntryWithIndex(0)!
+////	let trainer2 = deck.dataForEntryWithIndex(1)!
+////	deck.replaceData(data: trainer2, forIndex: 0)
+////	deck.replaceData(data: trainer1, forIndex: 1)
+////	deck.save()
+//}
+
+//for i in 0 ..< 28 {
+//	printg("\nTrainer deck \(i)")
+//	let deck = XGDecks.dckt(i)
+//	for j in 0 ..< deck.numberOfEntries {
+//		let trainer = XGDeckTrainer.deck(j, deck)
+//		printg(trainer.data.name.unformattedString)
+//	}
+//}
+
+
+//for move in XGMove.allValues {
+//	printg(move.name.unformattedString, move.animationID.string + ",")
+//}
 
 //for move in XGMove.allValues.sorted(by: { (m1, m2) -> Bool in
 //	m1.effect < m2.effect
