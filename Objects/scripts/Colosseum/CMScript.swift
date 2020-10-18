@@ -179,11 +179,11 @@ class XGScript: CustomStringConvertible {
 		}
 		text += "\n\n"
 
-		for f in 0 ..< script.numberOfFunctions {
-			let instructions = script.getInstructionsForFunction(withIndex: f)
-			text += script.ftbl[f].name + "\n-----------------\n"
+		for f in 0 ..< numberOfFunctions {
+			let instructions = getInstructionsForFunction(withIndex: f)
+			text += ftbl[f].name + "\n-----------------\n"
 
-			var currentOffset = script.ftbl[f].codeOffset
+			var currentOffset = ftbl[f].codeOffset
 
 			for i in 0 ..< instructions.count {
 				text += currentOffset.unsigned.hex() + ": " + instructions[i].description + "\n"

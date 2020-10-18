@@ -286,13 +286,6 @@ class XGUtility {
 	}
 	
 	//MARK: - Saving to disk
-	class func saveObject(_ obj: AnyObject, toFile file: XGFiles) {
-		if !file.folder.exists {
-			file.folder.createDirectory()
-		}
-		NSKeyedArchiver.archiveRootObject(obj, toFile: file.path)
-	}
-	
 	@discardableResult class func saveData(_ data: Data, toFile file: XGFiles) -> Bool {
 		if !file.folder.exists {
 			file.folder.createDirectory()

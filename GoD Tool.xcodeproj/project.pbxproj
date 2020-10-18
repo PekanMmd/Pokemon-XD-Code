@@ -26,6 +26,232 @@
 		1C16CAEF253B92CF00907D78 /* XGFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBBE1F49A1FE0075C6D2 /* XGFiles.swift */; };
 		1C16CB18253B950A00907D78 /* XGISO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE41F49A1FE0075C6D2 /* XGISO.swift */; };
 		1C16CB21253B950C00907D78 /* XGISO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE41F49A1FE0075C6D2 /* XGISO.swift */; };
+		1C16CB8E253BC24A00907D78 /* XDRelIndexes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E75A20C4DD2D00D298BF /* XDRelIndexes.swift */; };
+		1C16CB97253BC24E00907D78 /* CMRelIndexes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E75F20C4DD3E00D298BF /* CMRelIndexes.swift */; };
+		1C16CBA0253BC25600907D78 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
+		1C16CBA9253BC25700907D78 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
+		1C16CBD4253BC3AC00907D78 /* XGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE21F49A1FE0075C6D2 /* XGExtensions.swift */; };
+		1C16CBDD253BC3AD00907D78 /* XGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE21F49A1FE0075C6D2 /* XGExtensions.swift */; };
+		1C16CBE6253BC3B700907D78 /* GoDImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */; };
+		1C16CBEF253BC3B700907D78 /* GoDImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */; };
+		1C16CBF8253BC3BF00907D78 /* XGOSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F87F1F49C2EC0075C6D2 /* XGOSXExtensions.swift */; };
+		1C16CC01253BC3C200907D78 /* CMOSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2562F9F21349AAD004180F1 /* CMOSXExtensions.swift */; };
+		1C16CC0A253BC3CA00907D78 /* GoDToolCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0801F6D260100AC263D /* GoDToolCLExtensions.swift */; };
+		1C16CC13253BC3CF00907D78 /* ColosseumToolCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2562F9D21349A44004180F1 /* ColosseumToolCLExtensions.swift */; };
+		1C16CC1C253BC3D300907D78 /* XDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E3E520C4CD3B00D298BF /* XDExtensions.swift */; };
+		1C16CC25253BC3D600907D78 /* ColosseumExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E3E720C4CD4B00D298BF /* ColosseumExtensions.swift */; };
+		1C16CC2E253BC3DE00907D78 /* GoDOSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B250AB822135F341008CF9DB /* GoDOSXExtensions.swift */; };
+		1C16CC37253BC3DE00907D78 /* GoDOSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B250AB822135F341008CF9DB /* GoDOSXExtensions.swift */; };
+		1C16CC40253BC3E600907D78 /* XDSExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B247ED40217E5D6B0034CAF5 /* XDSExtensions.swift */; };
+		1C16CC49253BC40C00907D78 /* XGAbilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBB61F49A1FE0075C6D2 /* XGAbilities.swift */; };
+		1C16CC52253BC40D00907D78 /* XGAbilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBB61F49A1FE0075C6D2 /* XGAbilities.swift */; };
+		1C16CC5B253BC41000907D78 /* XGASM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B249085221516D520044947B /* XGASM.swift */; };
+		1C16CC64253BC41100907D78 /* XGASM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B249085221516D520044947B /* XGASM.swift */; };
+		1C16CC6D253BC41300907D78 /* XGBagSlots.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBB71F49A1FE0075C6D2 /* XGBagSlots.swift */; };
+		1C16CC6E253BC41400907D78 /* XGBagSlots.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBB71F49A1FE0075C6D2 /* XGBagSlots.swift */; };
+		1C16CC88253BC41800907D78 /* XGBattleStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */; };
+		1C16CC91253BC41800907D78 /* XGBattleStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */; };
+		1C16CC92253BC41B00907D78 /* XGBattleTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24CBAAF212FF3C400481C1D /* XGBattleTypes.swift */; };
+		1C16CC93253BC41C00907D78 /* XGBattleTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24CBAAF212FF3C400481C1D /* XGBattleTypes.swift */; };
+		1C16CC9C253BC41F00907D78 /* XGBattleBingoPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBB81F49A1FE0075C6D2 /* XGBattleBingoPanel.swift */; };
+		1C16CC9D253BC42100907D78 /* XGColosseumRounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24CBAA0212F206300481C1D /* XGColosseumRounds.swift */; };
+		1C16CCA6253BC42400907D78 /* CMColosseumRounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24CBAA5212F2F2D00481C1D /* CMColosseumRounds.swift */; };
+		1C16CCA7253BC42600907D78 /* XGContestCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A510621D3F122009C707C /* XGContestCategories.swift */; };
+		1C16CCA8253BC42700907D78 /* XGContestCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A510621D3F122009C707C /* XGContestCategories.swift */; };
+		1C16CCB1253BC42900907D78 /* XGDeckPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBB91F49A1FE0075C6D2 /* XGDeckPokemon.swift */; };
+		1C16CCBA253BC42C00907D78 /* XGDecks.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBBA1F49A1FE0075C6D2 /* XGDecks.swift */; };
+		1C16CCC3253BC42E00907D78 /* XGDeoxysFormes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24507FF208A348E00FEC54E /* XGDeoxysFormes.swift */; };
+		1C16CCC4253BC42F00907D78 /* XGDeoxysFormes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24507FF208A348E00FEC54E /* XGDeoxysFormes.swift */; };
+		1C16CCCD253BC43200907D78 /* XGEffectivenessValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBBB1F49A1FE0075C6D2 /* XGEffectivenessValues.swift */; };
+		1C16CCCE253BC43300907D78 /* XGEffectivenessValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBBB1F49A1FE0075C6D2 /* XGEffectivenessValues.swift */; };
+		1C16CCCF253BC43600907D78 /* XGEvolutionMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBBC1F49A1FE0075C6D2 /* XGEvolutionMethods.swift */; };
+		1C16CCD8253BC43700907D78 /* XGEvolutionMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBBC1F49A1FE0075C6D2 /* XGEvolutionMethods.swift */; };
+		1C16CCE1253BC43A00907D78 /* XGEvolutionConditionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF4D02324DA2BF900EC2C65 /* XGEvolutionConditionType.swift */; };
+		1C16CCE2253BC43A00907D78 /* XGEvolutionConditionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF4D02324DA2BF900EC2C65 /* XGEvolutionConditionType.swift */; };
+		1C16CCE3253BC43E00907D78 /* XGExpRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBBD1F49A1FE0075C6D2 /* XGExpRate.swift */; };
+		1C16CCE4253BC43F00907D78 /* XGExpRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBBD1F49A1FE0075C6D2 /* XGExpRate.swift */; };
+		1C16CCED253BC44500907D78 /* CMFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E78B20C8A07D00D298BF /* CMFiles.swift */; };
+		1C16CCEE253BC44800907D78 /* XGFileTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FB748E1FC0522900B6B2AE /* XGFileTypes.swift */; };
+		1C16CCF7253BC44800907D78 /* XGFileTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FB748E1FC0522900B6B2AE /* XGFileTypes.swift */; };
+		1C16CD00253BC44D00907D78 /* XGFontColours.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBBF1F49A1FE0075C6D2 /* XGFontColours.swift */; };
+		1C16CD01253BC44E00907D78 /* XGFontColours.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBBF1F49A1FE0075C6D2 /* XGFontColours.swift */; };
+		1C16CD0A253BC45000907D78 /* XGGenderRatios.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC11F49A1FE0075C6D2 /* XGGenderRatios.swift */; };
+		1C16CD13253BC45100907D78 /* XGGenderRatios.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC11F49A1FE0075C6D2 /* XGGenderRatios.swift */; };
+		1C16CD1C253BC45700907D78 /* XGGenders.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC21F49A1FE0075C6D2 /* XGGenders.swift */; };
+		1C16CD1D253BC45800907D78 /* XGGenders.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC21F49A1FE0075C6D2 /* XGGenders.swift */; };
+		1C16CD26253BC45B00907D78 /* XGItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC31F49A1FE0075C6D2 /* XGItems.swift */; };
+		1C16CD2F253BC45D00907D78 /* CMItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E76C20C8517200D298BF /* CMItems.swift */; };
+		1C16CD30253BC46100907D78 /* XDSMacroTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E37C20C4569900D298BF /* XDSMacroTypes.swift */; };
+		1C16CD39253BC46300907D78 /* XGMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC41F49A1FE0075C6D2 /* XGMaps.swift */; };
+		1C16CD42253BC46400907D78 /* XGMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC41F49A1FE0075C6D2 /* XGMaps.swift */; };
+		1C16CD43253BC46600907D78 /* XGMoveCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC51F49A1FE0075C6D2 /* XGMoveCategory.swift */; };
+		1C16CD44253BC46700907D78 /* XGMoveCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC51F49A1FE0075C6D2 /* XGMoveCategory.swift */; };
+		1C16CD4D253BC46900907D78 /* XGMoveEffectTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2445AF6209F474E00B5404E /* XGMoveEffectTypes.swift */; };
+		1C16CD56253BC46A00907D78 /* XGMoveEffectTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2445AF6209F474E00B5404E /* XGMoveEffectTypes.swift */; };
+		1C16CD57253BC46C00907D78 /* XGMoves.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC61F49A1FE0075C6D2 /* XGMoves.swift */; };
+		1C16CD60253BC46D00907D78 /* XGMoves.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC61F49A1FE0075C6D2 /* XGMoves.swift */; };
+		1C16CD69253BC47000907D78 /* XGMoveTargets.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC71F49A1FE0075C6D2 /* XGMoveTargets.swift */; };
+		1C16CD72253BC47100907D78 /* XGMoveTargets.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC71F49A1FE0075C6D2 /* XGMoveTargets.swift */; };
+		1C16CD73253BC47300907D78 /* XGMoveTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC81F49A1FE0075C6D2 /* XGMoveTypes.swift */; };
+		1C16CD74253BC47400907D78 /* XGMoveTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC81F49A1FE0075C6D2 /* XGMoveTypes.swift */; };
+		1C16CD7D253BC47600907D78 /* XGNatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC91F49A1FE0075C6D2 /* XGNatures.swift */; };
+		1C16CD86253BC47700907D78 /* XGNatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC91F49A1FE0075C6D2 /* XGNatures.swift */; };
+		1C16CD87253BC47F00907D78 /* XGPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBCA1F49A1FE0075C6D2 /* XGPokemon.swift */; };
+		1C16CD90253BC47F00907D78 /* XGPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBCA1F49A1FE0075C6D2 /* XGPokemon.swift */; };
+		1C16CD99253BC48200907D78 /* XGPokeSpots.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBCB1F49A1FE0075C6D2 /* XGPokeSpots.swift */; };
+		1C16CD9A253BC48500907D78 /* XGResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A506521D12667009C707C /* XGResources.swift */; };
+		1C16CD9B253BC48600907D78 /* XGResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A506521D12667009C707C /* XGResources.swift */; };
+		1C16CDA4253BC48900907D78 /* XGShinyValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBCF1F49A1FE0075C6D2 /* XGShinyValues.swift */; };
+		1C16CDAD253BC48A00907D78 /* XGShinyValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBCF1F49A1FE0075C6D2 /* XGShinyValues.swift */; };
+		1C16CDB6253BC48C00907D78 /* XGSpecialStringCharacters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD01F49A1FE0075C6D2 /* XGSpecialStringCharacters.swift */; };
+		1C16CDBF253BC48D00907D78 /* XGSpecialStringCharacters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD01F49A1FE0075C6D2 /* XGSpecialStringCharacters.swift */; };
+		1C16CDC8253BC48F00907D78 /* XGStatBoosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27AA6311F8E85C4001D06CF /* XGStatBoosts.swift */; };
+		1C16CDC9253BC49000907D78 /* XGStatBoosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27AA6311F8E85C4001D06CF /* XGStatBoosts.swift */; };
+		1C16CDD2253BC49300907D78 /* XGStatusEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD11F49A1FE0075C6D2 /* XGStatusEffects.swift */; };
+		1C16CDDB253BC49600907D78 /* GoDTextureFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */; };
+		1C16CDDC253BC49700907D78 /* GoDTextureFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */; };
+		1C16CDE5253BC49900907D78 /* XGTMs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD21F49A1FE0075C6D2 /* XGTMs.swift */; };
+		1C16CDEE253BC49C00907D78 /* CMTMs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E77620C8555F00D298BF /* CMTMs.swift */; };
+		1C16CDF7253BC49F00907D78 /* XGTrainerClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD31F49A1FE0075C6D2 /* XGTrainerClasses.swift */; };
+		1C16CE00253BC4A200907D78 /* CMTrainerClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E75820C4DCE700D298BF /* CMTrainerClasses.swift */; };
+		1C16CE01253BC4A400907D78 /* XGTrainerContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24CBAA9212F3DC900481C1D /* XGTrainerContoller.swift */; };
+		1C16CE0A253BC4A500907D78 /* XGTrainerContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24CBAA9212F3DC900481C1D /* XGTrainerContoller.swift */; };
+		1C16CE13253BC4A800907D78 /* XGTrainerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD41F49A1FE0075C6D2 /* XGTrainerModels.swift */; };
+		1C16CE1C253BC4AA00907D78 /* CMTrainerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E76120C4DD8300D298BF /* CMTrainerModels.swift */; };
+		1C16CE1D253BC4AC00907D78 /* XGUnicodeCharacters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD61F49A1FE0075C6D2 /* XGUnicodeCharacters.swift */; };
+		1C16CE1E253BC4AD00907D78 /* XGUnicodeCharacters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD61F49A1FE0075C6D2 /* XGUnicodeCharacters.swift */; };
+		1C16CE27253BC4AF00907D78 /* XGWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD71F49A1FE0075C6D2 /* XGWeather.swift */; };
+		1C16CE30253BC4B000907D78 /* XGWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD71F49A1FE0075C6D2 /* XGWeather.swift */; };
+		1C16CE39253BC4C300907D78 /* XGBattleBingoPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBDB1F49A1FE0075C6D2 /* XGBattleBingoPokemon.swift */; };
+		1C16CE42253BC4C600907D78 /* XGCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E56061FA6E7F6006BE597 /* XGCharacter.swift */; };
+		1C16CE43253BC4C700907D78 /* XGCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E56061FA6E7F6006BE597 /* XGCharacter.swift */; };
+		1C16CE4C253BC4CA00907D78 /* XGEvolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE11F49A1FE0075C6D2 /* XGEvolution.swift */; };
+		1C16CE4D253BC4CC00907D78 /* XGEvolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE11F49A1FE0075C6D2 /* XGEvolution.swift */; };
+		1C16CE56253BC4CF00907D78 /* XGLevelUpMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE61F49A1FE0075C6D2 /* XGLevelUpMove.swift */; };
+		1C16CE5F253BC4D100907D78 /* XGLevelUpMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE61F49A1FE0075C6D2 /* XGLevelUpMove.swift */; };
+		1C16CE68253BC4D400907D78 /* XGString.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF71F49A1FE0075C6D2 /* XGString.swift */; };
+		1C16CE69253BC4D500907D78 /* XGString.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF71F49A1FE0075C6D2 /* XGString.swift */; };
+		1C16CE72253BC4DF00907D78 /* XGAssemblyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC031F49A1FE0075C6D2 /* XGAssemblyCode.swift */; };
+		1C16CE7B253BC4E000907D78 /* XGAssemblyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC031F49A1FE0075C6D2 /* XGAssemblyCode.swift */; };
+		1C16CE84253BC4E800907D78 /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
+		1C16CE8D253BC4E900907D78 /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
+		1C16CE96253BC4EE00907D78 /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
+		1C16CE97253BC4EF00907D78 /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
+		1C16CEA0253BC50900907D78 /* XGFsys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC01F49A1FE0075C6D2 /* XGFsys.swift */; };
+		1C16CEA9253BC51500907D78 /* XGFsys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC01F49A1FE0075C6D2 /* XGFsys.swift */; };
+		1C16CEB2253BC51E00907D78 /* XGGSWTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24547802229C2670043F991 /* XGGSWTextures.swift */; };
+		1C16CEBB253BC51F00907D78 /* XGGSWTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24547802229C2670043F991 /* XGGSWTextures.swift */; };
+		1C16CEC4253BC52500907D78 /* XGLZSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE71F49A1FE0075C6D2 /* XGLZSS.swift */; };
+		1C16CEC5253BC52600907D78 /* XGLZSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE71F49A1FE0075C6D2 /* XGLZSS.swift */; };
+		1C16CECE253BC53300907D78 /* XGRelocationTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B252D95A1F98AF0400794FCE /* XGRelocationTable.swift */; };
+		1C16CED7253BC53400907D78 /* XGRelocationTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B252D95A1F98AF0400794FCE /* XGRelocationTable.swift */; };
+		1C16CEE0253BC53600907D78 /* XGStringTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF81F49A1FE0075C6D2 /* XGStringTable.swift */; };
+		1C16CEE9253BC53800907D78 /* XGStringTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF81F49A1FE0075C6D2 /* XGStringTable.swift */; };
+		1C16CEEA253BC53D00907D78 /* XGMutableData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEC1F49A1FE0075C6D2 /* XGMutableData.swift */; };
+		1C16CEEB253BC53E00907D78 /* XGMutableData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEC1F49A1FE0075C6D2 /* XGMutableData.swift */; };
+		1C16CEEC253BC53F00907D78 /* XGMutableData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEC1F49A1FE0075C6D2 /* XGMutableData.swift */; };
+		1C16CEF5253BC54100907D78 /* XGStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EAFEFD20BDA43A009FC947 /* XGStack.swift */; };
+		1C16CEFE253BC54200907D78 /* XGStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EAFEFD20BDA43A009FC947 /* XGStack.swift */; };
+		1C16CF07253BC54B00907D78 /* XGByteCopier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBDC1F49A1FE0075C6D2 /* XGByteCopier.swift */; };
+		1C16CF10253BC54C00907D78 /* XGByteCopier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBDC1F49A1FE0075C6D2 /* XGByteCopier.swift */; };
+		1C16CF19253BC55000907D78 /* XGDolPatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE01F49A1FE0075C6D2 /* XGDolPatcher.swift */; };
+		1C16CF1A253BC55000907D78 /* XGDolPatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE01F49A1FE0075C6D2 /* XGDolPatcher.swift */; };
+		1C16CF23253BC55300907D78 /* XGGiftPokemonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C43218201CA001C41D3 /* XGGiftPokemonManager.swift */; };
+		1C16CF2C253BC55600907D78 /* CMGiftPokemonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C40218201AD001C41D3 /* CMGiftPokemonManager.swift */; };
+		1C16CF35253BC55800907D78 /* XGRandomiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A98214CA25200137C37 /* XGRandomiser.swift */; };
+		1C16CF3E253BC55C00907D78 /* CMRandomiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B0F5E7214EA79900BA83DD /* CMRandomiser.swift */; };
+		1C16CF47253BC55F00907D78 /* XGUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC021F49A1FE0075C6D2 /* XGUtility.swift */; };
+		1C16CF48253BC55F00907D78 /* XGUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC021F49A1FE0075C6D2 /* XGUtility.swift */; };
+		1C16CF51253BC56200907D78 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
+		1C16CF5A253BC56300907D78 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
+		1C16CF63253BC56500907D78 /* XGStringManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8721F49B3BC0075C6D2 /* XGStringManager.swift */; };
+		1C16CF64253BC56600907D78 /* XGStringManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8721F49B3BC0075C6D2 /* XGStringManager.swift */; };
+		1C16CF65253BC56800907D78 /* XGThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4721829D7A001C41D3 /* XGThreadManager.swift */; };
+		1C16CF76253BC56A00907D78 /* XGThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4721829D7A001C41D3 /* XGThreadManager.swift */; };
+		1C16CF77253BC56C00907D78 /* GoDShellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C37440C24056F190089D3BA /* GoDShellManager.swift */; };
+		1C16CF80253BC56D00907D78 /* GoDShellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C37440C24056F190089D3BA /* GoDShellManager.swift */; };
+		1C16CF91253BC57B00907D78 /* XGScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF21F49A1FE0075C6D2 /* XGScript.swift */; };
+		1C16CF92253BC57B00907D78 /* XDSExpr.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EAFF0020BDA676009FC947 /* XDSExpr.swift */; };
+		1C16CF93253BC57B00907D78 /* XDSFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E37A20C4564B00D298BF /* XDSFlags.swift */; };
+		1C16CF94253BC57B00907D78 /* XGScriptOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBCE1F49A1FE0075C6D2 /* XGScriptOps.swift */; };
+		1C16CF95253BC57B00907D78 /* XDSConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF51F49A1FE0075C6D2 /* XDSConstant.swift */; };
+		1C16CF96253BC57B00907D78 /* XGScriptClassFunctionsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF41F49A1FE0075C6D2 /* XGScriptClassFunctionsData.swift */; };
+		1C16CF97253BC57B00907D78 /* XGScriptClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF31F49A1FE0075C6D2 /* XGScriptClass.swift */; };
+		1C16CF98253BC57B00907D78 /* XGScriptInstruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27C5FDC1FA19FB000E0596F /* XGScriptInstruction.swift */; };
+		1C16CF99253BC57B00907D78 /* XDSScriptCompiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B257242520CB52D80019A22E /* XDSScriptCompiler.swift */; };
+		1C16CFA2253BC58200907D78 /* CMScriptStandardFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA73253406E400907D78 /* CMScriptStandardFunctions.swift */; };
+		1C16CFA3253BC58200907D78 /* CMScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24E5FB92238E3E100C55758 /* CMScript.swift */; };
+		1C16CFA4253BC58200907D78 /* CMScriptValueTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA7C2534099A00907D78 /* CMScriptValueTypes.swift */; };
+		1C16CFA5253BC58200907D78 /* CMScriptCompiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20C402E218AEBE5006D7CD9 /* CMScriptCompiler.swift */; };
+		1C16CFA6253BC58200907D78 /* CMScriptOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C11E337252BFD8A00026234 /* CMScriptOps.swift */; };
+		1C16CFA7253BC58B00907D78 /* XGColour.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A505D21D12654009C707C /* XGColour.swift */; };
+		1C16CFA8253BC58C00907D78 /* XGColour.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A505D21D12654009C707C /* XGColour.swift */; };
+		1C16CFB1253BC58F00907D78 /* XGTextureMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ACFBCD2249D0A100CC2F20 /* XGTextureMetaData.swift */; };
+		1C16CFBA253BC59200907D78 /* XGPNGBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A506E21D126BA009C707C /* XGPNGBlock.swift */; };
+		1C16CFC3253BC59300907D78 /* XGPNGBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A506E21D126BA009C707C /* XGPNGBlock.swift */; };
+		1C16CFCC253BC59600907D78 /* XGTextureBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A504E21D1258E009C707C /* XGTextureBlock.swift */; };
+		1C16CFCD253BC59600907D78 /* XGTextureBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A504E21D1258E009C707C /* XGTextureBlock.swift */; };
+		1C16CFD6253BC59900907D78 /* XGTexturePalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A504D21D1258E009C707C /* XGTexturePalette.swift */; };
+		1C16CFD7253BC59A00907D78 /* XGTexturePalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A504D21D1258E009C707C /* XGTexturePalette.swift */; };
+		1C16CFE0253BC5B600907D78 /* GoDTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF531F6872740023A876 /* GoDTexture.swift */; };
+		1C16CFE9253BC5B600907D78 /* GoDTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF531F6872740023A876 /* GoDTexture.swift */; };
+		1C16CFF2253BC5BD00907D78 /* GoDTextureImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */; };
+		1C16CFF3253BC5BE00907D78 /* GoDTextureImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */; };
+		1C16CFFC253BC5C800907D78 /* GoDOpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FF6D2E20BCB50F00A84637 /* GoDOpenGL.swift */; };
+		1C16CFFD253BC5C900907D78 /* GoDOpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FF6D2E20BCB50F00A84637 /* GoDOpenGL.swift */; };
+		1C16D006253BC5CD00907D78 /* XGVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A70213D4CF000137C37 /* XGVertex.swift */; };
+		1C16D00F253BC5CD00907D78 /* XGVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A70213D4CF000137C37 /* XGVertex.swift */; };
+		1C16D018253BC5D000907D78 /* GoDKeyCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A75213D4D9500137C37 /* GoDKeyCodes.swift */; };
+		1C16D019253BC5D100907D78 /* GoDKeyCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A75213D4D9500137C37 /* GoDKeyCodes.swift */; };
+		1C16D022253BC5D400907D78 /* GoDMatrix4.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A8C213D5A3D00137C37 /* GoDMatrix4.swift */; };
+		1C16D02B253BC5D400907D78 /* GoDMatrix4.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A8C213D5A3D00137C37 /* GoDMatrix4.swift */; };
+		1C16D044253BC85A00907D78 /* XGBattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2981FA4CDAD00E1489E /* XGBattle.swift */; };
+		1C16D04D253BC85D00907D78 /* CMBattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24CBA9E212E29FA00481C1D /* CMBattle.swift */; };
+		1C16D056253BC86600907D78 /* XGBattleBingoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBDA1F49A1FE0075C6D2 /* XGBattleBingoCard.swift */; };
+		1C16D05F253BC86800907D78 /* XGBattleCD.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26380D320B9BAC100B6C0D4 /* XGBattleCD.swift */; };
+		1C16D068253BC86A00907D78 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
+		1C16D069253BC86B00907D78 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
+		1C16D072253BC86E00907D78 /* XGCharacterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27C5FD81F9CD4B900E0596F /* XGCharacterModel.swift */; };
+		1C16D07B253BC86F00907D78 /* XGCharacterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27C5FD81F9CD4B900E0596F /* XGCharacterModel.swift */; };
+		1C16D084253BC87300907D78 /* XGDemoStarterPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBDF1F49A1FE0075C6D2 /* XGDemoStarterPokemon.swift */; };
+		1C16D08D253BC87300907D78 /* XGDemoStarterPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBDF1F49A1FE0075C6D2 /* XGDemoStarterPokemon.swift */; };
+		1C16D08E253BC87600907D78 /* XGDoor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2611F532247D284008A4B19 /* XGDoor.swift */; };
+		1C16D08F253BC87700907D78 /* XGDoor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2611F532247D284008A4B19 /* XGDoor.swift */; };
+		1C16D098253BC87900907D78 /* XGGiftPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE31F49A1FE0075C6D2 /* XGGiftPokemon.swift */; };
+		1C16D099253BC87A00907D78 /* XGGiftPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE31F49A1FE0075C6D2 /* XGGiftPokemon.swift */; };
+		1C16D09A253BC87C00907D78 /* CMGiftPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24CBA9B2124ECB700481C1D /* CMGiftPokemon.swift */; };
+		1C16D0A3253BC87D00907D78 /* CMGiftPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24CBA9B2124ECB700481C1D /* CMGiftPokemon.swift */; };
+		1C16D0AC253BC87F00907D78 /* XGInteractionPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FD1FA5C423006BE597 /* XGInteractionPoint.swift */; };
+		1C16D0AD253BC88000907D78 /* XGInteractionPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FD1FA5C423006BE597 /* XGInteractionPoint.swift */; };
+		1C16D0B6253BC88200907D78 /* XGItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE51F49A1FE0075C6D2 /* XGItem.swift */; };
+		1C16D0BF253BC88400907D78 /* CMItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E77120C8526F00D298BF /* CMItem.swift */; };
+		1C16D0C8253BC88600907D78 /* XGMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEA1F49A1FE0075C6D2 /* XGMove.swift */; };
+		1C16D0C9253BC88700907D78 /* XGMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEA1F49A1FE0075C6D2 /* XGMove.swift */; };
+		1C16D0CA253BC88900907D78 /* XGMtBattlePokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEB1F49A1FE0075C6D2 /* XGMtBattlePokemon.swift */; };
+		1C16D0D3253BC88C00907D78 /* XGMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ACFBCA224906CA00CC2F20 /* XGMusic.swift */; };
+		1C16D0D4253BC88E00907D78 /* XGNature.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBED1F49A1FE0075C6D2 /* XGNature.swift */; };
+		1C16D0DD253BC88F00907D78 /* XGNature.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBED1F49A1FE0075C6D2 /* XGNature.swift */; };
+		1C16D0DE253BC89100907D78 /* XGPokemart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */; };
+		1C16D0E7253BC89300907D78 /* XGPokemonStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF01F49A1FE0075C6D2 /* XGPokemonStats.swift */; };
+		1C16D0F0253BC89500907D78 /* CMPokemonStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E78020C85AF500D298BF /* CMPokemonStats.swift */; };
+		1C16D0F9253BC89700907D78 /* XGPokeSpotPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF11F49A1FE0075C6D2 /* XGPokeSpotPokemon.swift */; };
+		1C16D0FA253BC89A00907D78 /* XGRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2941FA4A04200E1489E /* XGRoom.swift */; };
+		1C16D0FB253BC89B00907D78 /* XGRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2941FA4A04200E1489E /* XGRoom.swift */; };
+		1C16D104253BC89E00907D78 /* XGStarterPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF61F49A1FE0075C6D2 /* XGStarterPokemon.swift */; };
+		1C16D10D253BC8A000907D78 /* XGStarterPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF61F49A1FE0075C6D2 /* XGStarterPokemon.swift */; };
+		1C16D116253BC8A200907D78 /* XGStoryProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8915D61F25170CD100C84884 /* XGStoryProgress.swift */; };
+		1C16D11F253BC8A400907D78 /* XGTradePokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBFC1F49A1FE0075C6D2 /* XGTradePokemon.swift */; };
+		1C16D128253BC8A700907D78 /* XGTradeShadowPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBFD1F49A1FE0075C6D2 /* XGTradeShadowPokemon.swift */; };
+		1C16D129253BC8A900907D78 /* XGTrainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBFE1F49A1FE0075C6D2 /* XGTrainer.swift */; };
+		1C16D132253BC8AB00907D78 /* CMTrainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E76820C4F7E700D298BF /* CMTrainer.swift */; };
+		1C16D133253BC8AE00907D78 /* XGTrainerClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBFF1F49A1FE0075C6D2 /* XGTrainerClass.swift */; };
+		1C16D134253BC8AE00907D78 /* XGTrainerClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBFF1F49A1FE0075C6D2 /* XGTrainerClass.swift */; };
+		1C16D13D253BC8B000907D78 /* XGTrainerPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC001F49A1FE0075C6D2 /* XGTrainerPokemon.swift */; };
+		1C16D146253BC8B300907D78 /* CMTrainerPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E78820C85F9E00D298BF /* CMTrainerPokemon.swift */; };
+		1C16D147253BC8B500907D78 /* XGTreasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E46D41FC0DFB20030FBF9 /* XGTreasure.swift */; };
+		1C16D150253BC8B600907D78 /* XGTreasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25E46D41FC0DFB20030FBF9 /* XGTreasure.swift */; };
+		1C16D151253BC8B800907D78 /* XGType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC011F49A1FE0075C6D2 /* XGType.swift */; };
+		1C16D15A253BC8BB00907D78 /* CMType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E78620C85EAE00D298BF /* CMType.swift */; };
 		1C291C0525138A1500E3B124 /* Move.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C291C0425138A1400E3B124 /* Move.storyboard */; };
 		1C291C0625138ADC00E3B124 /* GoDMovesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0851F6DAD9B00AC263D /* GoDMovesViewController.swift */; };
 		1C291C082513997A00E3B124 /* WZX ids.json in Resources */ = {isa = PBXBuildFile; fileRef = 1C291C072513997A00E3B124 /* WZX ids.json */; };
@@ -109,12 +335,12 @@
 		1CA238CD24118C17000E56AB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B20EEA2D21E9203A00E87D01 /* Main.storyboard */; };
 		1CA238CE24118CAC000E56AB /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238B92411765C000E56AB /* Messages.storyboard */; };
 		1CA238CF24118CAD000E56AB /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238B92411765C000E56AB /* Messages.storyboard */; };
-		1CB33AA522B7906600F81C29 /* Enumerable & Documentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* Enumerable & Documentable.swift */; };
-		1CB33AA722B7906600F81C29 /* Enumerable & Documentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* Enumerable & Documentable.swift */; };
-		1CB33AA822B7906600F81C29 /* Enumerable & Documentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* Enumerable & Documentable.swift */; };
-		1CB33AA922B7906600F81C29 /* Enumerable & Documentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* Enumerable & Documentable.swift */; };
-		1CB33AAA22B7906600F81C29 /* Enumerable & Documentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* Enumerable & Documentable.swift */; };
-		1CB33AAB22B7906600F81C29 /* Enumerable & Documentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* Enumerable & Documentable.swift */; };
+		1CB33AA522B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
+		1CB33AA722B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
+		1CB33AA822B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
+		1CB33AA922B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
+		1CB33AAA22B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
+		1CB33AAB22B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
 		1CB33AAC22B7BCF800F81C29 /* XDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E3E520C4CD3B00D298BF /* XDExtensions.swift */; };
 		1CB33AB422B8F82900F81C29 /* CMBattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24CBA9E212E29FA00481C1D /* CMBattle.swift */; };
 		1CB33AB522B8F82A00F81C29 /* CMBattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24CBA9E212E29FA00481C1D /* CMBattle.swift */; };
@@ -3857,7 +4083,6 @@
 		B2F5EC9F1F49A1FF0075C6D2 /* XGMtBattlePokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEB1F49A1FE0075C6D2 /* XGMtBattlePokemon.swift */; };
 		B2F5ECA11F49A1FF0075C6D2 /* XGMtBattlePokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEB1F49A1FE0075C6D2 /* XGMtBattlePokemon.swift */; };
 		B2F5ECA21F49A1FF0075C6D2 /* XGMutableData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEC1F49A1FE0075C6D2 /* XGMutableData.swift */; };
-		B2F5ECA41F49A1FF0075C6D2 /* XGMutableData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEC1F49A1FE0075C6D2 /* XGMutableData.swift */; };
 		B2F5ECA51F49A1FF0075C6D2 /* XGNature.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBED1F49A1FE0075C6D2 /* XGNature.swift */; };
 		B2F5ECA71F49A1FF0075C6D2 /* XGNature.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBED1F49A1FE0075C6D2 /* XGNature.swift */; };
 		B2F5ECAE1F49A1FF0075C6D2 /* XGPokemonStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF01F49A1FE0075C6D2 /* XGPokemonStats.swift */; };
@@ -4051,7 +4276,7 @@
 		1CA238C1241176BD000E56AB /* ValueContext.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ValueContext.storyboard; sourceTree = "<group>"; };
 		1CA238C2241176BD000E56AB /* ISO.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ISO.storyboard; sourceTree = "<group>"; };
 		1CA238C3241176BD000E56AB /* Help.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Help.storyboard; sourceTree = "<group>"; };
-		1CB33AA422B7906600F81C29 /* Enumerable & Documentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Enumerable & Documentable.swift"; sourceTree = "<group>"; };
+		1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumerableDocumentable.swift; sourceTree = "<group>"; };
 		1CB3B875250988710069402D /* wimgt */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = wimgt; sourceTree = "<group>"; };
 		1CB3B87C250D512A0069402D /* Battles.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Battles.storyboard; sourceTree = "<group>"; };
 		1CB3B87F250D519D0069402D /* GoDBattleTrainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDBattleTrainerView.swift; sourceTree = "<group>"; };
@@ -5142,7 +5367,6 @@
 		B24A501C21D10D93009C707C /* Revolution Tool CL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Revolution Tool CL"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B24A501E21D10D93009C707C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		B24A502521D11138009C707C /* PBRExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRExtensions.swift; sourceTree = "<group>"; };
-		B24A504B21D12563009C707C /* XGTexturePNGReimporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGTexturePNGReimporter.swift; sourceTree = "<group>"; };
 		B24A504D21D1258E009C707C /* XGTexturePalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGTexturePalette.swift; sourceTree = "<group>"; };
 		B24A504E21D1258E009C707C /* XGTextureBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGTextureBlock.swift; sourceTree = "<group>"; };
 		B24A505D21D12654009C707C /* XGColour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGColour.swift; sourceTree = "<group>"; };
@@ -6611,7 +6835,7 @@
 		1CB33AA322B7903900F81C29 /* protocols */ = {
 			isa = PBXGroup;
 			children = (
-				1CB33AA422B7906600F81C29 /* Enumerable & Documentable.swift */,
+				1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */,
 			);
 			path = protocols;
 			sourceTree = "<group>";
@@ -6738,7 +6962,6 @@
 				B24A506E21D126BA009C707C /* XGPNGBlock.swift */,
 				B24A504E21D1258E009C707C /* XGTextureBlock.swift */,
 				B24A504D21D1258E009C707C /* XGTexturePalette.swift */,
-				B24A504B21D12563009C707C /* XGTexturePNGReimporter.swift */,
 			);
 			name = textures;
 			path = Objects/textures;
@@ -12635,9 +12858,132 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C16CCCF253BC43600907D78 /* XGEvolutionMethods.swift in Sources */,
+				1C16CF47253BC55F00907D78 /* XGUtility.swift in Sources */,
+				1C16D133253BC8AE00907D78 /* XGTrainerClass.swift in Sources */,
+				1C16CF93253BC57B00907D78 /* XDSFlags.swift in Sources */,
+				1C16CFCC253BC59600907D78 /* XGTextureBlock.swift in Sources */,
+				1C16CD30253BC46100907D78 /* XDSMacroTypes.swift in Sources */,
+				1C16CFA7253BC58B00907D78 /* XGColour.swift in Sources */,
+				1C16D019253BC5D100907D78 /* GoDKeyCodes.swift in Sources */,
+				1C16CC0A253BC3CA00907D78 /* GoDToolCLExtensions.swift in Sources */,
+				1C16D02B253BC5D400907D78 /* GoDMatrix4.swift in Sources */,
+				1C16CE39253BC4C300907D78 /* XGBattleBingoPokemon.swift in Sources */,
+				1C16CD7D253BC47600907D78 /* XGNatures.swift in Sources */,
+				1C16CFBA253BC59200907D78 /* XGPNGBlock.swift in Sources */,
+				1C16CDD2253BC49300907D78 /* XGStatusEffects.swift in Sources */,
+				1C16CF77253BC56C00907D78 /* GoDShellManager.swift in Sources */,
+				1C16CCA7253BC42600907D78 /* XGContestCategories.swift in Sources */,
+				1C16CEF5253BC54100907D78 /* XGStack.swift in Sources */,
+				1C16CC9C253BC41F00907D78 /* XGBattleBingoPanel.swift in Sources */,
+				1C16CF94253BC57B00907D78 /* XGScriptOps.swift in Sources */,
+				1C16CD9A253BC48500907D78 /* XGResources.swift in Sources */,
+				1C16D0FA253BC89A00907D78 /* XGRoom.swift in Sources */,
+				1C16D05F253BC86800907D78 /* XGBattleCD.swift in Sources */,
+				1C16CFE9253BC5B600907D78 /* GoDTexture.swift in Sources */,
+				1C16D08E253BC87600907D78 /* XGDoor.swift in Sources */,
+				1C16CEC4253BC52500907D78 /* XGLZSS.swift in Sources */,
+				1C16CE13253BC4A800907D78 /* XGTrainerModels.swift in Sources */,
+				1C16CBDD253BC3AD00907D78 /* XGExtensions.swift in Sources */,
+				1C16CDDB253BC49600907D78 /* GoDTextureFormats.swift in Sources */,
+				1C16CCE3253BC43E00907D78 /* XGExpRate.swift in Sources */,
+				1C16D0F9253BC89700907D78 /* XGPokeSpotPokemon.swift in Sources */,
+				1C16CE72253BC4DF00907D78 /* XGAssemblyCode.swift in Sources */,
+				1C16CBF8253BC3BF00907D78 /* XGOSXExtensions.swift in Sources */,
+				1C16CCBA253BC42C00907D78 /* XGDecks.swift in Sources */,
+				1C16CC6D253BC41300907D78 /* XGBagSlots.swift in Sources */,
+				1C16CD26253BC45B00907D78 /* XGItems.swift in Sources */,
+				1C16D0AC253BC87F00907D78 /* XGInteractionPoint.swift in Sources */,
+				1C16CF92253BC57B00907D78 /* XDSExpr.swift in Sources */,
+				1C16CFD6253BC59900907D78 /* XGTexturePalette.swift in Sources */,
+				1C16CDB6253BC48C00907D78 /* XGSpecialStringCharacters.swift in Sources */,
+				1C16CF35253BC55800907D78 /* XGRandomiser.swift in Sources */,
+				1C16CF19253BC55000907D78 /* XGDolPatcher.swift in Sources */,
+				1C16CE84253BC4E800907D78 /* XGAssemblyCodeExtensions.swift in Sources */,
+				1C16CD1C253BC45700907D78 /* XGGenders.swift in Sources */,
+				1C16CC9D253BC42100907D78 /* XGColosseumRounds.swift in Sources */,
+				1C16D056253BC86600907D78 /* XGBattleBingoCard.swift in Sources */,
+				1C16CEE0253BC53600907D78 /* XGStringTable.swift in Sources */,
+				1C16CF23253BC55300907D78 /* XGGiftPokemonManager.swift in Sources */,
+				1C16CD39253BC46300907D78 /* XGMaps.swift in Sources */,
+				1C16CDA4253BC48900907D78 /* XGShinyValues.swift in Sources */,
+				1C16CD69253BC47000907D78 /* XGMoveTargets.swift in Sources */,
+				1C16CBA0253BC25600907D78 /* EnumerableDocumentable.swift in Sources */,
+				1C16CF63253BC56500907D78 /* XGStringManager.swift in Sources */,
+				1C16D084253BC87300907D78 /* XGDemoStarterPokemon.swift in Sources */,
+				1C16D147253BC8B500907D78 /* XGTreasure.swift in Sources */,
+				1C16CE42253BC4C600907D78 /* XGCharacter.swift in Sources */,
+				1C16D0CA253BC88900907D78 /* XGMtBattlePokemon.swift in Sources */,
+				1C16CE01253BC4A400907D78 /* XGTrainerContoller.swift in Sources */,
+				1C16CF95253BC57B00907D78 /* XDSConstant.swift in Sources */,
+				1C16CF91253BC57B00907D78 /* XGScript.swift in Sources */,
+				1C16CE68253BC4D400907D78 /* XGString.swift in Sources */,
+				1C16CF51253BC56200907D78 /* XGSettings.swift in Sources */,
+				1C16CD0A253BC45000907D78 /* XGGenderRatios.swift in Sources */,
+				1C16D116253BC8A200907D78 /* XGStoryProgress.swift in Sources */,
+				1C16CF65253BC56800907D78 /* XGThreadManager.swift in Sources */,
+				1C16D151253BC8B800907D78 /* XGType.swift in Sources */,
+				1C16CCB1253BC42900907D78 /* XGDeckPokemon.swift in Sources */,
+				1C16D11F253BC8A400907D78 /* XGTradePokemon.swift in Sources */,
+				1C16CB8E253BC24A00907D78 /* XDRelIndexes.swift in Sources */,
+				1C16CD4D253BC46900907D78 /* XGMoveEffectTypes.swift in Sources */,
+				1C16CD57253BC46C00907D78 /* XGMoves.swift in Sources */,
+				1C16CEBB253BC51F00907D78 /* XGGSWTextures.swift in Sources */,
+				1C16D128253BC8A700907D78 /* XGTradeShadowPokemon.swift in Sources */,
+				1C16D0C8253BC88600907D78 /* XGMove.swift in Sources */,
+				1C16CE56253BC4CF00907D78 /* XGLevelUpMove.swift in Sources */,
+				1C16CD00253BC44D00907D78 /* XGFontColours.swift in Sources */,
 				1C16CB18253B950A00907D78 /* XGISO.swift in Sources */,
+				1C16CCC3253BC42E00907D78 /* XGDeoxysFormes.swift in Sources */,
+				1C16D0D4253BC88E00907D78 /* XGNature.swift in Sources */,
+				1C16CF07253BC54B00907D78 /* XGByteCopier.swift in Sources */,
+				1C16CF96253BC57B00907D78 /* XGScriptClassFunctionsData.swift in Sources */,
+				1C16CFF2253BC5BD00907D78 /* GoDTextureImporter.swift in Sources */,
+				1C16D0DE253BC89100907D78 /* XGPokemart.swift in Sources */,
+				1C16D0D3253BC88C00907D78 /* XGMusic.swift in Sources */,
+				1C16CEEB253BC53E00907D78 /* XGMutableData.swift in Sources */,
+				1C16CC5B253BC41000907D78 /* XGASM.swift in Sources */,
+				1C16CFB1253BC58F00907D78 /* XGTextureMetaData.swift in Sources */,
+				1C16CCEE253BC44800907D78 /* XGFileTypes.swift in Sources */,
+				1C16CFFC253BC5C800907D78 /* GoDOpenGL.swift in Sources */,
 				1C16CAEF253B92CF00907D78 /* XGFiles.swift in Sources */,
+				1C16D072253BC86E00907D78 /* XGCharacterModel.swift in Sources */,
+				1C16CE27253BC4AF00907D78 /* XGWeather.swift in Sources */,
+				1C16D006253BC5CD00907D78 /* XGVertex.swift in Sources */,
+				1C16D068253BC86A00907D78 /* XGBattleField.swift in Sources */,
+				1C16CE1D253BC4AC00907D78 /* XGUnicodeCharacters.swift in Sources */,
+				1C16CCCD253BC43200907D78 /* XGEffectivenessValues.swift in Sources */,
+				1C16CC1C253BC3D300907D78 /* XDExtensions.swift in Sources */,
+				1C16CD87253BC47F00907D78 /* XGPokemon.swift in Sources */,
+				1C16CCE1253BC43A00907D78 /* XGEvolutionConditionType.swift in Sources */,
+				1C16CC92253BC41B00907D78 /* XGBattleTypes.swift in Sources */,
+				1C16CC2E253BC3DE00907D78 /* GoDOSXExtensions.swift in Sources */,
+				1C16D13D253BC8B000907D78 /* XGTrainerPokemon.swift in Sources */,
+				1C16D104253BC89E00907D78 /* XGStarterPokemon.swift in Sources */,
+				1C16D0E7253BC89300907D78 /* XGPokemonStats.swift in Sources */,
+				1C16CC40253BC3E600907D78 /* XDSExtensions.swift in Sources */,
+				1C16CC49253BC40C00907D78 /* XGAbilities.swift in Sources */,
+				1C16CED7253BC53400907D78 /* XGRelocationTable.swift in Sources */,
+				1C16CE96253BC4EE00907D78 /* XGCollisionData.swift in Sources */,
+				1C16D098253BC87900907D78 /* XGGiftPokemon.swift in Sources */,
 				1C16CAC3253B86F100907D78 /* main.swift in Sources */,
+				1C16CD73253BC47300907D78 /* XGMoveTypes.swift in Sources */,
+				1C16CE4C253BC4CA00907D78 /* XGEvolution.swift in Sources */,
+				1C16CF98253BC57B00907D78 /* XGScriptInstruction.swift in Sources */,
+				1C16D09A253BC87C00907D78 /* CMGiftPokemon.swift in Sources */,
+				1C16CEA0253BC50900907D78 /* XGFsys.swift in Sources */,
+				1C16CC91253BC41800907D78 /* XGBattleStyles.swift in Sources */,
+				1C16CF97253BC57B00907D78 /* XGScriptClass.swift in Sources */,
+				1C16D044253BC85A00907D78 /* XGBattle.swift in Sources */,
+				1C16CF99253BC57B00907D78 /* XDSScriptCompiler.swift in Sources */,
+				1C16D0B6253BC88200907D78 /* XGItem.swift in Sources */,
+				1C16CD99253BC48200907D78 /* XGPokeSpots.swift in Sources */,
+				1C16CDE5253BC49900907D78 /* XGTMs.swift in Sources */,
+				1C16CD43253BC46600907D78 /* XGMoveCategory.swift in Sources */,
+				1C16D129253BC8A900907D78 /* XGTrainer.swift in Sources */,
+				1C16CDC8253BC48F00907D78 /* XGStatBoosts.swift in Sources */,
+				1C16CBE6253BC3B700907D78 /* GoDImageExtensions.swift in Sources */,
+				1C16CDF7253BC49F00907D78 /* XGTrainerClasses.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12645,8 +12991,110 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C16CE4D253BC4CC00907D78 /* XGEvolution.swift in Sources */,
+				1C16CD72253BC47100907D78 /* XGMoveTargets.swift in Sources */,
+				1C16CCE2253BC43A00907D78 /* XGEvolutionConditionType.swift in Sources */,
+				1C16CCCE253BC43300907D78 /* XGEffectivenessValues.swift in Sources */,
+				1C16CC6E253BC41400907D78 /* XGBagSlots.swift in Sources */,
+				1C16CD44253BC46700907D78 /* XGMoveCategory.swift in Sources */,
+				1C16CFE0253BC5B600907D78 /* GoDTexture.swift in Sources */,
+				1C16CC52253BC40D00907D78 /* XGAbilities.swift in Sources */,
+				1C16CE5F253BC4D100907D78 /* XGLevelUpMove.swift in Sources */,
+				1C16CE1E253BC4AD00907D78 /* XGUnicodeCharacters.swift in Sources */,
+				1C16CFA2253BC58200907D78 /* CMScriptStandardFunctions.swift in Sources */,
+				1C16CCED253BC44500907D78 /* CMFiles.swift in Sources */,
+				1C16CE43253BC4C700907D78 /* XGCharacter.swift in Sources */,
+				1C16CD9B253BC48600907D78 /* XGResources.swift in Sources */,
+				1C16CCA8253BC42700907D78 /* XGContestCategories.swift in Sources */,
+				1C16CFA3253BC58200907D78 /* CMScript.swift in Sources */,
+				1C16CFD7253BC59A00907D78 /* XGTexturePalette.swift in Sources */,
+				1C16D0A3253BC87D00907D78 /* CMGiftPokemon.swift in Sources */,
+				1C16CEFE253BC54200907D78 /* XGStack.swift in Sources */,
+				1C16CC01253BC3C200907D78 /* CMOSXExtensions.swift in Sources */,
+				1C16D150253BC8B600907D78 /* XGTreasure.swift in Sources */,
+				1C16CDC9253BC49000907D78 /* XGStatBoosts.swift in Sources */,
+				1C16D146253BC8B300907D78 /* CMTrainerPokemon.swift in Sources */,
+				1C16CD74253BC47400907D78 /* XGMoveTypes.swift in Sources */,
+				1C16CF64253BC56600907D78 /* XGStringManager.swift in Sources */,
+				1C16D15A253BC8BB00907D78 /* CMType.swift in Sources */,
+				1C16D0F0253BC89500907D78 /* CMPokemonStats.swift in Sources */,
+				1C16CF48253BC55F00907D78 /* XGUtility.swift in Sources */,
+				1C16CD13253BC45100907D78 /* XGGenderRatios.swift in Sources */,
+				1C16CF10253BC54C00907D78 /* XGByteCopier.swift in Sources */,
+				1C16CC37253BC3DE00907D78 /* GoDOSXExtensions.swift in Sources */,
+				1C16D134253BC8AE00907D78 /* XGTrainerClass.swift in Sources */,
+				1C16CF1A253BC55000907D78 /* XGDolPatcher.swift in Sources */,
+				1C16CFFD253BC5C900907D78 /* GoDOpenGL.swift in Sources */,
+				1C16CD01253BC44E00907D78 /* XGFontColours.swift in Sources */,
+				1C16CC13253BC3CF00907D78 /* ColosseumToolCLExtensions.swift in Sources */,
+				1C16CC93253BC41C00907D78 /* XGBattleTypes.swift in Sources */,
+				1C16CECE253BC53300907D78 /* XGRelocationTable.swift in Sources */,
+				1C16CEE9253BC53800907D78 /* XGStringTable.swift in Sources */,
+				1C16CD56253BC46A00907D78 /* XGMoveEffectTypes.swift in Sources */,
+				1C16CFA4253BC58200907D78 /* CMScriptValueTypes.swift in Sources */,
+				1C16D0BF253BC88400907D78 /* CMItem.swift in Sources */,
+				1C16CC25253BC3D600907D78 /* ColosseumExtensions.swift in Sources */,
+				1C16D08F253BC87700907D78 /* XGDoor.swift in Sources */,
+				1C16CCA6253BC42400907D78 /* CMColosseumRounds.swift in Sources */,
+				1C16D10D253BC8A000907D78 /* XGStarterPokemon.swift in Sources */,
+				1C16CEC5253BC52600907D78 /* XGLZSS.swift in Sources */,
+				1C16CEA9253BC51500907D78 /* XGFsys.swift in Sources */,
+				1C16D04D253BC85D00907D78 /* CMBattle.swift in Sources */,
+				1C16CD86253BC47700907D78 /* XGNatures.swift in Sources */,
+				1C16CEEA253BC53D00907D78 /* XGMutableData.swift in Sources */,
+				1C16D018253BC5D000907D78 /* GoDKeyCodes.swift in Sources */,
+				1C16CFC3253BC59300907D78 /* XGPNGBlock.swift in Sources */,
+				1C16CE0A253BC4A500907D78 /* XGTrainerContoller.swift in Sources */,
+				1C16CE1C253BC4AA00907D78 /* CMTrainerModels.swift in Sources */,
+				1C16CF2C253BC55600907D78 /* CMGiftPokemonManager.swift in Sources */,
+				1C16CFCD253BC59600907D78 /* XGTextureBlock.swift in Sources */,
+				1C16CFF3253BC5BE00907D78 /* GoDTextureImporter.swift in Sources */,
+				1C16CE30253BC4B000907D78 /* XGWeather.swift in Sources */,
+				1C16CD2F253BC45D00907D78 /* CMItems.swift in Sources */,
+				1C16CD60253BC46D00907D78 /* XGMoves.swift in Sources */,
+				1C16D0DD253BC88F00907D78 /* XGNature.swift in Sources */,
+				1C16D0FB253BC89B00907D78 /* XGRoom.swift in Sources */,
+				1C16D132253BC8AB00907D78 /* CMTrainer.swift in Sources */,
+				1C16CF80253BC56D00907D78 /* GoDShellManager.swift in Sources */,
+				1C16CBEF253BC3B700907D78 /* GoDImageExtensions.swift in Sources */,
+				1C16CE97253BC4EF00907D78 /* XGCollisionData.swift in Sources */,
+				1C16CCE4253BC43F00907D78 /* XGExpRate.swift in Sources */,
 				1C16CB21253B950C00907D78 /* XGISO.swift in Sources */,
+				1C16CDEE253BC49C00907D78 /* CMTMs.swift in Sources */,
+				1C16CFA6253BC58200907D78 /* CMScriptOps.swift in Sources */,
+				1C16D00F253BC5CD00907D78 /* XGVertex.swift in Sources */,
+				1C16CD1D253BC45800907D78 /* XGGenders.swift in Sources */,
+				1C16CB97253BC24E00907D78 /* CMRelIndexes.swift in Sources */,
+				1C16CE69253BC4D500907D78 /* XGString.swift in Sources */,
+				1C16CFA5253BC58200907D78 /* CMScriptCompiler.swift in Sources */,
+				1C16CD90253BC47F00907D78 /* XGPokemon.swift in Sources */,
+				1C16D08D253BC87300907D78 /* XGDemoStarterPokemon.swift in Sources */,
+				1C16CE8D253BC4E900907D78 /* XGAssemblyCodeExtensions.swift in Sources */,
+				1C16CDAD253BC48A00907D78 /* XGShinyValues.swift in Sources */,
+				1C16CEB2253BC51E00907D78 /* XGGSWTextures.swift in Sources */,
+				1C16D0AD253BC88000907D78 /* XGInteractionPoint.swift in Sources */,
+				1C16CCF7253BC44800907D78 /* XGFileTypes.swift in Sources */,
+				1C16D069253BC86B00907D78 /* XGBattleField.swift in Sources */,
+				1C16CBD4253BC3AC00907D78 /* XGExtensions.swift in Sources */,
+				1C16CF3E253BC55C00907D78 /* CMRandomiser.swift in Sources */,
+				1C16CF5A253BC56300907D78 /* XGSettings.swift in Sources */,
+				1C16CC88253BC41800907D78 /* XGBattleStyles.swift in Sources */,
+				1C16CCD8253BC43700907D78 /* XGEvolutionMethods.swift in Sources */,
 				1C16CAE3253B8A2200907D78 /* main.swift in Sources */,
+				1C16CF76253BC56A00907D78 /* XGThreadManager.swift in Sources */,
+				1C16CDDC253BC49700907D78 /* GoDTextureFormats.swift in Sources */,
+				1C16D07B253BC86F00907D78 /* XGCharacterModel.swift in Sources */,
+				1C16CC64253BC41100907D78 /* XGASM.swift in Sources */,
+				1C16CCC4253BC42F00907D78 /* XGDeoxysFormes.swift in Sources */,
+				1C16CD42253BC46400907D78 /* XGMaps.swift in Sources */,
+				1C16CDBF253BC48D00907D78 /* XGSpecialStringCharacters.swift in Sources */,
+				1C16CFA8253BC58C00907D78 /* XGColour.swift in Sources */,
+				1C16CE7B253BC4E000907D78 /* XGAssemblyCode.swift in Sources */,
+				1C16D099253BC87A00907D78 /* XGGiftPokemon.swift in Sources */,
+				1C16D022253BC5D400907D78 /* GoDMatrix4.swift in Sources */,
+				1C16CE00253BC4A200907D78 /* CMTrainerClasses.swift in Sources */,
+				1C16D0C9253BC88700907D78 /* XGMove.swift in Sources */,
+				1C16CBA9253BC25700907D78 /* EnumerableDocumentable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12687,7 +13135,7 @@
 				B208E75420C4DA6E00D298BF /* XGPokemon.swift in Sources */,
 				B208E78120C85AF500D298BF /* CMPokemonStats.swift in Sources */,
 				B280AE9F20C9CA8D0057A782 /* XGDemoStarterPokemon.swift in Sources */,
-				1CB33AA822B7906600F81C29 /* Enumerable & Documentable.swift in Sources */,
+				1CB33AA822B7906600F81C29 /* EnumerableDocumentable.swift in Sources */,
 				B208E74D20C4D78700D298BF /* XGMoveCategory.swift in Sources */,
 				B208E3E820C4CD4B00D298BF /* ColosseumExtensions.swift in Sources */,
 				B208E78220C85C6C00D298BF /* XGRoom.swift in Sources */,
@@ -12914,7 +13362,7 @@
 				B20EEEB121EF79E300E87D01 /* GoDTableViewController.swift in Sources */,
 				B20EEA4121E920F400E87D01 /* PBRMoveEffectTypes.swift in Sources */,
 				1CE1A77D2326AA0D005141D8 /* XGSettings.swift in Sources */,
-				1CB33AAB22B7906600F81C29 /* Enumerable & Documentable.swift in Sources */,
+				1CB33AAB22B7906600F81C29 /* EnumerableDocumentable.swift in Sources */,
 				B20EEA4521E920F400E87D01 /* PBRScriptOps.swift in Sources */,
 				B20EEE8C21EF787D00E87D01 /* XGGenderRatios.swift in Sources */,
 				B20EEA4021E920F400E87D01 /* PBRMoveCategory.swift in Sources */,
@@ -12953,7 +13401,7 @@
 				B24A50DE21D12CDA009C707C /* PBRDeckTrainer.swift in Sources */,
 				B24A50F321D12CDA009C707C /* PBRItem.swift in Sources */,
 				B24A504621D12426009C707C /* GoDTextureImporter.swift in Sources */,
-				1CB33AAA22B7906600F81C29 /* Enumerable & Documentable.swift in Sources */,
+				1CB33AAA22B7906600F81C29 /* EnumerableDocumentable.swift in Sources */,
 				B24E5FB42238879C00C55758 /* PBRMoveTargets.swift in Sources */,
 				1C6295FB243022080085C22F /* PBRScriptCompiler.swift in Sources */,
 				B24A50D921D12CDA009C707C /* PBRDecks.swift in Sources */,
@@ -13107,7 +13555,7 @@
 				B24A506321D12654009C707C /* XGColour.swift in Sources */,
 				B2562F88213498C8004180F1 /* XGLevelUpMove.swift in Sources */,
 				B2562F79213497CF004180F1 /* XGWeather.swift in Sources */,
-				1CB33AA922B7906600F81C29 /* Enumerable & Documentable.swift in Sources */,
+				1CB33AA922B7906600F81C29 /* EnumerableDocumentable.swift in Sources */,
 				B2560A7D213D546100137C37 /* XGCollisionData.swift in Sources */,
 				1CE1A77B2326AA0D005141D8 /* XGSettings.swift in Sources */,
 				B2562F72213497A3004180F1 /* XGSpecialStringCharacters.swift in Sources */,
@@ -13173,7 +13621,7 @@
 				B2F5EC901F49A1FF0075C6D2 /* XGItem.swift in Sources */,
 				B2F5EC3C1F49A1FE0075C6D2 /* XGMoveTargets.swift in Sources */,
 				B2F5F8851F49C3430075C6D2 /* XGOSXExtensions.swift in Sources */,
-				1CB33AA522B7906600F81C29 /* Enumerable & Documentable.swift in Sources */,
+				1CB33AA522B7906600F81C29 /* EnumerableDocumentable.swift in Sources */,
 				B2F5EC481F49A1FE0075C6D2 /* XGPokeSpots.swift in Sources */,
 				B249085321516D520044947B /* XGASM.swift in Sources */,
 				B2F5ECC31F49A1FF0075C6D2 /* XGString.swift in Sources */,
@@ -13303,7 +13751,7 @@
 				B2F5EC561F49A1FE0075C6D2 /* XGShinyValues.swift in Sources */,
 				B2F5F8C01F4C4EDD0075C6D2 /* GoDViewLayoutManager.swift in Sources */,
 				B2F5EC3B1F49A1FE0075C6D2 /* XGMoves.swift in Sources */,
-				1CB33AA722B7906600F81C29 /* Enumerable & Documentable.swift in Sources */,
+				1CB33AA722B7906600F81C29 /* EnumerableDocumentable.swift in Sources */,
 				B2F5ECE31F49A1FF0075C6D2 /* XGType.swift in Sources */,
 				B24A9CBA20A3363900F0BBD0 /* GoDGiftViewController.swift in Sources */,
 				B2F5EC471F49A1FE0075C6D2 /* XGPokemon.swift in Sources */,
@@ -13327,7 +13775,6 @@
 				B2F5EC921F49A1FF0075C6D2 /* XGItem.swift in Sources */,
 				B2F5ECE01F49A1FF0075C6D2 /* XGTrainerPokemon.swift in Sources */,
 				B2450802208A365C00FEC54E /* XGDeoxysFormes.swift in Sources */,
-				B2F5ECA41F49A1FF0075C6D2 /* XGMutableData.swift in Sources */,
 				B2F5F8A91F49CD050075C6D2 /* ViewController.swift in Sources */,
 				B2F9B2971FA4B6C400E1489E /* XGRoom.swift in Sources */,
 				B2F5F8A71F49CD050075C6D2 /* GoDTableViewController.swift in Sources */,
@@ -13336,6 +13783,7 @@
 				1CED5DA02403E9EE008566B0 /* GoDGTXViewController.swift in Sources */,
 				B27AA6341F8E85C5001D06CF /* XGStatBoosts.swift in Sources */,
 				B2F5F8AC1F49CD050075C6D2 /* GoDTableView.swift in Sources */,
+				1C16CEEC253BC53F00907D78 /* XGMutableData.swift in Sources */,
 				B2F5ECB61F49A1FF0075C6D2 /* XGScript.swift in Sources */,
 				B2611F552247D284008A4B19 /* XGDoor.swift in Sources */,
 				B29E56091FA6E7F6006BE597 /* XGCharacter.swift in Sources */,

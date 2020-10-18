@@ -983,7 +983,7 @@ extension XDSScriptCompiler {
 	class func evalTokensXDS(tokens: [String], subExpr: Bool) -> XDSExpr? {
 		// the tokens are considered a "sub expression" if they are a part of a larger expression, the result of recursively evaluating tokens.
 		// this doesn't include if they are part of a compound statement
-		var tokens = tokens.filter { (s) -> Bool in
+		let tokens = tokens.filter { (s) -> Bool in
 			return s.length > 0
 		}
 		if tokens.count == 0 { return .nop }
@@ -1076,7 +1076,7 @@ extension XDSScriptCompiler {
 				
 				if token.substring(from: 0, to: 1) == "$" {
 					var id : Int? = token.msgID
-					var text : String? = token.msgText
+					let text : String? = token.msgText
 					
 					if id != nil {
 						if id! < 0 {
