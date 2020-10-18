@@ -8,8 +8,7 @@
 
 #import "XGLZSSWrapper.h"
 
-// by Luigi Auriemma
-// partially derived from the original code of Okumura
+
 
 
 int EI = 12;    /* typically 10..13 */

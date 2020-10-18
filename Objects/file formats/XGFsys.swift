@@ -355,17 +355,10 @@ final class XGFsys : NSObject {
 	@objc func decompressedDataForFileWithIndex(index: Int) -> XGMutableData? {
 		
 		let fileData = dataForFileWithIndex(index: index)!
-		let decompressedSize = Int32(fileData.getWordAtOffset(kLZSSUncompressedSizeOffset))
-		
-		
-		var stream = fileData.getCharStreamFromOffset(kSizeOfLZSSHeader, length: fileData.length - kSizeOfLZSSHeader)
-		let compressor = XGLZSSWrapper()
-		let bytes = compressor.decompressFile(&stream, ofSize: Int32(stream.count), decompressedSize: decompressedSize)!
-		var decompressedStream = [UInt8]()
-		for i : Int32 in 0 ..< decompressedSize {
-			decompressedStream.append((bytes[Int(i)]))
-		}
-		let decompressedData = XGMutableData(byteStream: decompressedStream, file: .nameAndFolder("", .Documents))
+//		let decompressedSize = fileData.getWordAtOffset(kLZSSUncompressedSizeOffset)
+		fileData.deleteBytes(start: 0, count: kSizeOfLZSSHeader)
+
+		let decompressedData = XGLZSS.decode(data: fileData)
 		
 		var filename = self.usesFileExtensions ? fullFileNameForFileWithIndex(index: index) : fileNameForFileWithIndex(index: index)
 		if filename == "common_rel" {
@@ -375,8 +368,7 @@ final class XGFsys : NSObject {
 			filename = filename.removeFileExtensions()
 			filename += fileTypeForFile(index: index).fileExtension
 		}
-		
-		
+
 		decompressedData.file = .nameAndFolder(filename, .Documents)
 		
 		return decompressedData
@@ -792,7 +784,7 @@ final class XGFsys : NSObject {
 			
 		}
 		
-		let data = compress ? XGLZSS.InputData(fileData).compressedData : fileData
+		let data = compress ? XGLZSS.encode(data: fileData) : fileData
 		
 		var newFileSize = data.length
 		while newFileSize % 16 != 0 {

@@ -388,6 +388,7 @@
 		1CC362E224C1DF25005D7B4A /* XGBattleStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */; };
 		1CC5DD3222C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
 		1CC5DD3322C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
+		1CC9AC09253CDA98008A8389 /* XGLZSSWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE91F49A1FE0075C6D2 /* XGLZSSWrapper.m */; };
 		1CE1A7782326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
 		1CE1A7792326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
 		1CE1A77A2326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
@@ -432,7 +433,6 @@
 		B208E3E020C4CC9800D298BF /* GoDViewLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8BE1F4C4ED10075C6D2 /* GoDViewLayoutManager.swift */; };
 		B208E3E820C4CD4B00D298BF /* ColosseumExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E3E720C4CD4B00D298BF /* ColosseumExtensions.swift */; };
 		B208E3E920C4CD9100D298BF /* XDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E3E520C4CD3B00D298BF /* XDExtensions.swift */; };
-		B208E3ED20C4D18B00D298BF /* XGLZSSWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE91F49A1FE0075C6D2 /* XGLZSSWrapper.m */; };
 		B208E3EE20C4D19100D298BF /* XGISO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE41F49A1FE0075C6D2 /* XGISO.swift */; };
 		B208E3EF20C4D38A00D298BF /* Null.fsys in Resources */ = {isa = PBXBuildFile; fileRef = B2FB65F31FB4B1CE00E056AB /* Null.fsys */; };
 		B208E3F020C4D38D00D298BF /* DeckData_Empty.bin in Resources */ = {isa = PBXBuildFile; fileRef = B2F911671F6606E900129DC2 /* DeckData_Empty.bin */; };
@@ -1392,7 +1392,6 @@
 		B20EEA8121E9226800E87D01 /* GoDOriginalPokemonPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27AA62D1F8648D1001D06CF /* GoDOriginalPokemonPopUpButton.swift */; };
 		B20EEA8221E9226800E87D01 /* GoDPokeballPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B280AEA320CAA8C60057A782 /* GoDPokeballPopUpButton.swift */; };
 		B20EEA8521E9227B00E87D01 /* GoDEffectsPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27AA6271F863FD7001D06CF /* GoDEffectsPopUpButton.swift */; };
-		B20EEA8621EF76F400E87D01 /* XGLZSSWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE91F49A1FE0075C6D2 /* XGLZSSWrapper.m */; };
 		B20EEA8721EF770300E87D01 /* XGThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4721829D7A001C41D3 /* XGThreadManager.swift */; };
 		B20EEA8821EF771000E87D01 /* XGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE21F49A1FE0075C6D2 /* XGExtensions.swift */; };
 		B20EEA8921EF771A00E87D01 /* NSViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8881F49CCD10075C6D2 /* NSViewExtensions.swift */; };
@@ -2516,7 +2515,6 @@
 		B249085521516D520044947B /* XGASM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B249085221516D520044947B /* XGASM.swift */; };
 		B249085621516D520044947B /* XGASM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B249085221516D520044947B /* XGASM.swift */; };
 		B24A501F21D10D93009C707C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A501E21D10D93009C707C /* main.swift */; };
-		B24A502421D10F44009C707C /* XGLZSSWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE91F49A1FE0075C6D2 /* XGLZSSWrapper.m */; };
 		B24A502721D11145009C707C /* PBRExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A502521D11138009C707C /* PBRExtensions.swift */; };
 		B24A502821D11DCF009C707C /* XGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE21F49A1FE0075C6D2 /* XGExtensions.swift */; };
 		B24A502921D11DE8009C707C /* GoDImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */; };
@@ -2660,7 +2658,6 @@
 		B2562F4F21349604004180F1 /* XGAssemblyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC031F49A1FE0075C6D2 /* XGAssemblyCode.swift */; };
 		B2562F5021349608004180F1 /* XGUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC021F49A1FE0075C6D2 /* XGUtility.swift */; };
 		B2562F522134960E004180F1 /* XGISO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE41F49A1FE0075C6D2 /* XGISO.swift */; };
-		B2562F5321349628004180F1 /* XGLZSSWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE91F49A1FE0075C6D2 /* XGLZSSWrapper.m */; };
 		B2562F5421349632004180F1 /* XGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE21F49A1FE0075C6D2 /* XGExtensions.swift */; };
 		B2562F5521349649004180F1 /* GoDImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */; };
 		B2562F592134973A004180F1 /* XGAbilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBB61F49A1FE0075C6D2 /* XGAbilities.swift */; };
@@ -4076,8 +4073,6 @@
 		B2F5EC951F49A1FF0075C6D2 /* XGLevelUpMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE61F49A1FE0075C6D2 /* XGLevelUpMove.swift */; };
 		B2F5EC961F49A1FF0075C6D2 /* XGLZSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE71F49A1FE0075C6D2 /* XGLZSS.swift */; };
 		B2F5EC981F49A1FF0075C6D2 /* XGLZSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE71F49A1FE0075C6D2 /* XGLZSS.swift */; };
-		B2F5EC991F49A1FF0075C6D2 /* XGLZSSWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE91F49A1FE0075C6D2 /* XGLZSSWrapper.m */; };
-		B2F5EC9B1F49A1FF0075C6D2 /* XGLZSSWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE91F49A1FE0075C6D2 /* XGLZSSWrapper.m */; };
 		B2F5EC9C1F49A1FF0075C6D2 /* XGMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEA1F49A1FE0075C6D2 /* XGMove.swift */; };
 		B2F5EC9E1F49A1FF0075C6D2 /* XGMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEA1F49A1FE0075C6D2 /* XGMove.swift */; };
 		B2F5EC9F1F49A1FF0075C6D2 /* XGMtBattlePokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEB1F49A1FE0075C6D2 /* XGMtBattlePokemon.swift */; };
@@ -6540,7 +6535,6 @@
 		B2F5EC011F49A1FE0075C6D2 /* XGType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGType.swift; sourceTree = "<group>"; };
 		B2F5EC021F49A1FE0075C6D2 /* XGUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGUtility.swift; sourceTree = "<group>"; };
 		B2F5EC031F49A1FE0075C6D2 /* XGAssemblyCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGAssemblyCode.swift; sourceTree = "<group>"; };
-		B2F5ED061F49AD700075C6D2 /* Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
 		B2F5ED0C1F49AE950075C6D2 /* Items.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Items.json; sourceTree = "<group>"; };
 		B2F5ED0D1F49AE950075C6D2 /* Move Effects.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Move Effects.json"; sourceTree = "<group>"; };
 		B2F5ED0E1F49AE950075C6D2 /* Original Moves.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Original Moves.json"; sourceTree = "<group>"; };
@@ -9209,7 +9203,6 @@
 				B247ED3E217B9FF30034CAF5 /* Sublime */,
 				B2F5EB851F49A11A0075C6D2 /* GoDToolCL */,
 				B2562F4621349567004180F1 /* ColosseumToolCL */,
-				B2F5ED061F49AD700075C6D2 /* Bridge.h */,
 				B208E75A20C4DD2D00D298BF /* XDRelIndexes.swift */,
 				B208E75F20C4DD3E00D298BF /* CMRelIndexes.swift */,
 				1CB33AA322B7903900F81C29 /* protocols */,
@@ -13105,6 +13098,7 @@
 				B208E76520C4E01400D298BF /* XGWeather.swift in Sources */,
 				B208E76420C4E01000D298BF /* XGUnicodeCharacters.swift in Sources */,
 				B2C1EE8D20C8F6C800D7C2F7 /* GoDEffectsPopUpButton.swift in Sources */,
+				1CC9AC09253CDA98008A8389 /* XGLZSSWrapper.m in Sources */,
 				B247ED492180A5510034CAF5 /* GoDRandomiserViewController.swift in Sources */,
 				1CC362B824BF5114005D7B4A /* GoDStatsViewController.swift in Sources */,
 				B208E3E020C4CC9800D298BF /* GoDViewLayoutManager.swift in Sources */,
@@ -13179,7 +13173,6 @@
 				B208E3DC20C4CC7100D298BF /* CMExtensions.swift in Sources */,
 				B2C1EE6C20C8F5B800D7C2F7 /* AppDelegate.swift in Sources */,
 				B2C1EE7B20C8F6BF00D7C2F7 /* GoDEvolutionView.swift in Sources */,
-				B208E3ED20C4D18B00D298BF /* XGLZSSWrapper.m in Sources */,
 				1CED5DA12403E9EE008566B0 /* GoDGTXViewController.swift in Sources */,
 				B2C1EE8920C8F6C800D7C2F7 /* GoDEvolutionConditionPopUpButton.swift in Sources */,
 				B208E75520C4DA7400D298BF /* XGShinyValues.swift in Sources */,
@@ -13312,7 +13305,6 @@
 				B20EEA3521E920F400E87D01 /* PBRAbilities.swift in Sources */,
 				1C6295F924300F1B0085C22F /* PBRISO.swift in Sources */,
 				B20EEE9421EF78BC00E87D01 /* XGByteCopier.swift in Sources */,
-				B20EEA8621EF76F400E87D01 /* XGLZSSWrapper.m in Sources */,
 				B20EEE9921EF78E300E87D01 /* XGMutableData.swift in Sources */,
 				B20EEA8B21EF772300E87D01 /* GoDViewLayoutManager.swift in Sources */,
 				B20EEE8921EF786900E87D01 /* XGDeoxysFormes.swift in Sources */,
@@ -13419,7 +13411,6 @@
 				B24A503E21D12302009C707C /* XGEvolution.swift in Sources */,
 				B24A50EB21D12CDA009C707C /* PBRStringTable.swift in Sources */,
 				B24A510F21D3FF4C009C707C /* PBRScript.swift in Sources */,
-				B24A502421D10F44009C707C /* XGLZSSWrapper.m in Sources */,
 				B24A504021D12329009C707C /* XGMutableData.swift in Sources */,
 				B24A50F421D12CDA009C707C /* PBRMove.swift in Sources */,
 				B24A502F21D1201D009C707C /* XGASM.swift in Sources */,
@@ -13591,7 +13582,6 @@
 				B2562FA221349BA7004180F1 /* ColosseumExtensions.swift in Sources */,
 				B2562F6321349781004180F1 /* XGFileTypes.swift in Sources */,
 				B2562F9C213499E6004180F1 /* GoDTextureImporter.swift in Sources */,
-				B2562F5321349628004180F1 /* XGLZSSWrapper.m in Sources */,
 				B2562F75213497C4004180F1 /* CMTrainerClasses.swift in Sources */,
 				B2562F5E2134976C004180F1 /* XGDeoxysFormes.swift in Sources */,
 				B2562F8E213498F2004180F1 /* XGRoom.swift in Sources */,
@@ -13693,7 +13683,6 @@
 				B2560A71213D4CF000137C37 /* XGVertex.swift in Sources */,
 				B2F5EC601F49A1FF0075C6D2 /* XGTrainerClasses.swift in Sources */,
 				B2F5EC391F49A1FE0075C6D2 /* XGMoves.swift in Sources */,
-				B2F5EC991F49A1FF0075C6D2 /* XGLZSSWrapper.m in Sources */,
 				B24CBAA1212F206300481C1D /* XGColosseumRounds.swift in Sources */,
 				B2445AF7209F474E00B5404E /* XGMoveEffectTypes.swift in Sources */,
 				B2F5EC5D1F49A1FE0075C6D2 /* XGTMs.swift in Sources */,
@@ -13815,7 +13804,6 @@
 				B2F5EC411F49A1FE0075C6D2 /* XGMoveTypes.swift in Sources */,
 				B2FEC07E1F6D25BF00AC263D /* GoDToolExtensions.swift in Sources */,
 				B211183D218DDF0400D3F2DF /* GoDTreasureViewController.swift in Sources */,
-				B2F5EC9B1F49A1FF0075C6D2 /* XGLZSSWrapper.m in Sources */,
 				B247ED432180A30A0034CAF5 /* XDSScriptCompiler.swift in Sources */,
 				B208E37E20C4569900D298BF /* XDSMacroTypes.swift in Sources */,
 				B2F5EC891F49A1FF0075C6D2 /* XGExtensions.swift in Sources */,
@@ -13998,6 +13986,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -14031,6 +14021,8 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -14069,6 +14061,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -14102,6 +14096,8 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -14145,8 +14141,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -14184,7 +14181,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Stars.Colosseum-Tool";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -14230,8 +14228,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -14270,7 +14269,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Stars.PBR-Tool";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -14310,8 +14310,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -14345,7 +14346,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
@@ -14385,8 +14387,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -14420,7 +14423,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -14547,8 +14551,9 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -14592,7 +14597,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
@@ -14651,8 +14657,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -14703,8 +14710,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Stars.GoDToolOSX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

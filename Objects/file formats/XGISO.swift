@@ -137,8 +137,9 @@ class XGISO: NSObject {
 	@discardableResult
 	func importToc(saveWhenDone save: Bool) -> Bool {
 		let success = shiftAndReplaceFileEfficiently(name: "Game.toc", withData: tocData, save: false)
+		let firstFileInUserSection = game == .XD ? "B1_1.fsys" : "D1_garage_1F.fsys"
 		if success {
-			if let firstFileOffset = locationForFile("B1_1.fsys") {
+			if let firstFileOffset = locationForFile(firstFileInUserSection) {
 				data.replace4BytesAtOffset(kISOFirstFileOffsetLocation, withBytes: firstFileOffset)
 				let userDataSize = data.length - firstFileOffset
 				data.replace4BytesAtOffset(kISOFilesTotalSizeLocation, withBytes: userDataSize)

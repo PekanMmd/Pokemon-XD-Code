@@ -297,10 +297,13 @@ indirect enum XGFiles {
 	}
 	
 	@discardableResult func compress() -> XGFiles {
-		if self.exists {
-			XGLZSS.Input(self).compress()
+		let outputFile = XGFiles.lzss(self.fileName)
+		if self.exists, let data = self.data {
+			let compressedData = XGLZSS.encode(data: data)
+			compressedData.file = outputFile
+			compressedData.save()
 		}
-		return .lzss(self.fileName)
+		return outputFile
 	}
 	
 	func compileMapFsys() {
