@@ -84,8 +84,8 @@ enum XGMoves: XGIndexedValue {
 	
 	static func random() -> XGMoves {
 		var rand = 0
-		while (XGMoves.move(rand).data.descriptionID == 0) {
-			rand = Int(arc4random_uniform(UInt32(kNumberOfMoves - 2))) + 1
+		while (rand == 0) || (XGMoves.move(rand).data.descriptionID == 0) {
+			rand = Int.random(in: 1 ..< kNumberOfMoves)
 		}
 		return XGMoves.move(rand)
 	}

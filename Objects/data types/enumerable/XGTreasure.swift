@@ -6,7 +6,7 @@
 //
 //
 
-import Cocoa
+import Foundation
 
 // all offsets are same for both games
 let kSizeOfTreasure = 0x1c

@@ -49,7 +49,7 @@ enum XGMoveTypes : XGIndexedValue {
 	}
 	
 	static func random() -> XGMoveTypes {
-		let rand = Int(arc4random_uniform(UInt32(kNumberOfTypes)))
+		let rand = Int.random(in: 0 ..< kNumberOfTypes)
 		return XGMoveTypes.type(rand)
 	}
 	

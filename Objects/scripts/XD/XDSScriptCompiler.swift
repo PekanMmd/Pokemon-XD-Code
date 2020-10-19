@@ -5,7 +5,7 @@
 //  Created by The Steez on 09/06/2018.
 //
 
-import Cocoa
+import Foundation
 
 // if a function or class needs to be renamed then set the old name as the key
 // and new name as value and compiler will give a warning if encountered
@@ -656,7 +656,7 @@ class XDSScriptCompiler: NSObject {
 		var code = XDSCode()
 		code += [0x4654424C] // unicode 'FTBL'
 		
-		var headSize : UInt32 = UInt32(data.count) * 8
+		let headSize : UInt32 = UInt32(data.count) * 8
 		var stringSize : UInt32 = 0x0
 		
 		var functionNames = [String]()

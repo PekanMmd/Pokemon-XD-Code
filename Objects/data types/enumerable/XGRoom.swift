@@ -6,7 +6,7 @@
 //
 //
 
-import Cocoa
+import Foundation
 
 let kSizeOfRoom = game == .XD ? 0x40 : 0x4C
 

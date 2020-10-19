@@ -24,7 +24,7 @@ enum XGResources {
 	
 	var path : String {
 		get{
-			return Bundle.main.path(forResource: name, ofType: fileType) ?? ""
+			return Bundle.main.path(forResource: name, ofType: fileType) ?? FileManager.default.currentDirectoryPath + "/Assets/" + game.name
 		}
 	}
 	
@@ -92,7 +92,9 @@ enum XGResources {
 	
     func copy(to file: XGFiles) {
         guard path != "" else {
-            printg("resource doesn't exist:", name)
+			if settings.verbose {
+				printg("resource doesn't exist:", name)
+			}
             return
         }
         guard file.path != "" else {

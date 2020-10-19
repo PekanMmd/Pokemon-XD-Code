@@ -6,7 +6,7 @@
 //
 //
 
-import Cocoa
+import Foundation
 
 let kSizeOfInteractionPoint = 0x1C
 

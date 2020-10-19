@@ -5,7 +5,7 @@
 //  Created by The Steez on 27/08/2018.
 //
 
-import Cocoa
+import Foundation
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/Colosseum-Tool"
 let game = XGGame.Colosseum

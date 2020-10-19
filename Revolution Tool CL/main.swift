@@ -7,6 +7,8 @@
 
 import Foundation
 
+
+
 //let dataTable = XGFiles.nameAndFolder("common_27.bin", .Documents).data!
 //for i in 1 ... 7 {
 //	let entrySize = 0x54

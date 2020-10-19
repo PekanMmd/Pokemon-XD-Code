@@ -92,7 +92,7 @@ enum XGAbilities {
 	static func random() -> XGAbilities {
 		var rand = 0
 		while (XGAbilities.ability(rand).nameID == 0) || (XGAbilities.ability(rand).name.string.length < 2) {
-			rand = Int(arc4random_uniform(UInt32(kNumberOfAbilities - 1))) + 1
+			rand = Int.random(in: 1 ..< kNumberOfAbilities)
 		}
 		return XGAbilities.ability(rand)
 	}

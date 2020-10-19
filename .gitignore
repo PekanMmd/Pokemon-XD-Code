@@ -67,3 +67,6 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 .DS_Store
+CLI Compilers/out/Assets
+CLI Compilers/out/Colosseum Tool CLI
+CLI Compilers/out/GoD Tool CLI

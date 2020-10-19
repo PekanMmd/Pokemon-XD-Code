@@ -6,7 +6,7 @@
 //
 //
 
-import Cocoa
+import Foundation
 
 let date = Date(timeIntervalSinceNow: 0)
 var logString = ""

@@ -6,7 +6,7 @@
 //
 //
 
-import Cocoa
+import Foundation
 
 let kSizeOfBattleData = 0x3c
 

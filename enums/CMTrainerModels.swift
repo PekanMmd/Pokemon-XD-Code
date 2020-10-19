@@ -5,7 +5,7 @@
 //  Created by The Steez on 04/06/2018.
 //
 
-import Cocoa
+import Foundation
 
 let kNumberOfTrainerModels = 0x4b
 

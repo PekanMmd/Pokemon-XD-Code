@@ -6,7 +6,7 @@
 //
 //
 
-import Cocoa
+import Foundation
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/GoD-Tool"
 let region = XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .US

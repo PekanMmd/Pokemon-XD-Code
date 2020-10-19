@@ -75,22 +75,6 @@ class XGString: NSObject, Codable {
 		}
 	}
 	
-	override func isEqual(_ object: Any?) -> Bool {
-		
-		if object == nil {
-			return false
-		}
-		
-		if !((object! as AnyObject).isKind(of: XGString.self)) {
-			return false
-		}
-		
-		let cmpstr = object! as! XGString
-		
-		return self.string == cmpstr.string
-		
-	}
-	
 	func append(_ char: XGUnicodeCharacters) {
 		self.chars.append(char)
 		initString += char.string

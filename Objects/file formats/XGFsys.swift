@@ -1017,12 +1017,16 @@ final class XGFsys : NSObject {
 						
 						let imageFilename = texture.file.fileName.removeFileExtensions() + ".png"
 						let imageFile = XGFiles.nameAndFolder(imageFilename, folder)
+						#if ENV_OSX
 						texture.file.texture.saveImage(file: imageFile)
+						#endif
 					}
 				}
 				
 				if data[i].file.fileType == .gtx || data[i].file.fileType == .atx {
+					#if ENV_OSX
 					data[i].file.texture.saveImage(file: .nameAndFolder(updatedNames[i] + ".png", folder))
+					#endif
 				}
 				
 				if data[i].file.fileType == .msg {

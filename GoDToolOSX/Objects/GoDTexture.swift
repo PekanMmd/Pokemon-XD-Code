@@ -6,7 +6,10 @@
 //
 //
 
+#if ENV_OSX
 import Cocoa
+#endif
+import Foundation
 
 let kTextureWidthOffset = 0x00
 let kTextureHeightOffset = 0x02
@@ -94,7 +97,8 @@ class GoDTexture: NSObject {
 		self.startOffset = offset
 		self.setUp()
 	}
-	
+
+	#if ENV_OSX
 	init(forImage image: NSImage, format: GoDTextureFormats, paletteFormat: GoDTextureFormats = .RGB565) {
 		super.init()
 		
@@ -124,6 +128,7 @@ class GoDTexture: NSObject {
 		
 		self.writeMetaData()
 	}
+	#endif
 	
 	@objc func setUp() {
 		

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Darwin
 
 infix operator ^^
 func ^^ (radix: Int, power: Int) -> Int {

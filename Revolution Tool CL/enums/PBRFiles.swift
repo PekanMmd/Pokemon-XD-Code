@@ -75,7 +75,8 @@ indirect enum XGFiles {
 			case .trainerFace(let id)	: return "trainer_" + String(id) + XGFileTypes.png.fileExtension
 			case .fsys(let s)			: return s + XGFileTypes.fsys.fileExtension
 			case .lzss(let s)			: return s + XGFileTypes.lzss.fileExtension
-			case .log(let d)			: return d.description + XGFileTypes.txt.fileExtension
+										  // windows doesn't support colons in file names
+			case .log(let d)			: return d.description.replacingOccurrences(of: ":", with: ".") + XGFileTypes.txt.fileExtension
 			case .json(let s)			: return s + XGFileTypes.json.fileExtension
             case .wit                   : return "wit"
 			case .wimgt                 : return "wimgt"
@@ -255,8 +256,13 @@ indirect enum XGFiles {
 	}
 	
 	func compress() -> XGFiles {
-		XGLZSS.Input(self).compress()
-		return .lzss(self.fileName)
+		let outputFile = XGFiles.lzss(self.fileName)
+		if self.exists, let data = self.data {
+			let compressedData = XGLZSS.encode(data: data)
+			compressedData.file = outputFile
+			compressedData.save()
+		}
+		return outputFile
 	}
 	
 	var fileExtension : String {

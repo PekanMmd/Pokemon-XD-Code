@@ -6,7 +6,7 @@
 //
 //
 
-import Cocoa
+import Foundation
 
 final class XGPokemart: NSObject, Codable {
 	

@@ -109,7 +109,7 @@ enum XGMoves : CustomStringConvertible {
 	static func random() -> XGMoves {
 		var rand = 0
 		while (XGMoves.move(rand).isShadowMove) || (XGMoves.move(rand).descriptionID == 0) || rand == 0 {
-			rand = Int(arc4random_uniform(UInt32(kNumberOfMoves - 1))) + 1
+			rand = Int.random(in: 1 ..< kNumberOfMoves)
 		}
 		return XGMoves.move(rand)
 	}
@@ -117,7 +117,7 @@ enum XGMoves : CustomStringConvertible {
 	static func randomShadow() -> XGMoves {
 		var rand = 0
 		while (!XGMoves.move(rand).isShadowMove) || (XGMoves.move(rand).descriptionID == 0)  {
-			rand = Int(arc4random_uniform(UInt32(kNumberOfMoves - 1))) + 1
+			rand = Int.random(in: 1 ..< kNumberOfMoves)
 		}
 		return XGMoves.move(rand)
 	}

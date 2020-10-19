@@ -5,7 +5,7 @@
 //  Created by The Steez on 29/05/2018.
 //
 
-import Cocoa
+import Foundation
 
 class XGStack<T>: NSObject {
 

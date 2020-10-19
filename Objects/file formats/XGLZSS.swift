@@ -83,6 +83,7 @@ class XGLZSS {
 		let THRESHOLD 	= 2    // encode string into position and length if match_length is greater than this
 		let N 			= EI >= 16 ? EI : 1 << EI // size of ring buffer
 		let F 			= (1 << EJ) + THRESHOLD   // upper limit for match_length
+		let NIL         = N // index for root of binary search trees 
 
 		let initChar: UInt8 = 0x0 // An arbitrary character that appears often
 
@@ -93,9 +94,16 @@ class XGLZSS {
 		var matchLength = 0
 
 		// left & right children & parents -- These constitute binary search trees.
-		var leftChildren = [Int?](repeating: nil, count: N + 1)
-		var rightChildren = [Int?](repeating: nil, count: N + 257)
-		var parents = [Int?](repeating: nil, count: N + 1)
+		var leftChildren = [Int](repeating: 0, count: N + 1)
+		var rightChildren = [Int](repeating: 0, count: N + 257)
+		var parents = [Int](repeating: 0, count: N + 1)
+
+		for i in (N + 1) ... (N + 256) {
+			rightChildren[i] = NIL
+		}
+		for i in 0 ..< N {
+			parents[i] = NIL
+		}
 
 		var inputPosition = 0
 		let inputBytes = data.charStream
@@ -113,36 +121,37 @@ class XGLZSS {
 
 		func insert(node: Int) {
 			/* Inserts string of length F, text_buf[r..r+F-1], into one of the
-			trees (text_buf[r]'th tree) and returns the longest-match position
+			trees (text_buf[node]'th tree) and returns the longest-match position
 			and length via the global variables match_position and match_length.
 			If match_length = F, then removes the old node in favor of the new
 			one, because the old one will be deleted sooner.
-			Note r plays double role, as tree node and position in buffer. */
+			Note 'node' plays double role, as tree node and position in buffer. */
 
 			var cmp = 1
-			var key = [UInt8]()
-			key = Array(textBuffer.suffix(from: node))
+			let key = Array(textBuffer.suffix(from: node))
 			var parent = N + 1 + Int(key[0])
 
-			rightChildren[node] = nil
-			leftChildren[node] = nil
+			rightChildren[node] = NIL
+			leftChildren[node] = NIL
 			matchLength = 0
 
 			while true {
 				if (cmp >= 0) {
-					guard let child = rightChildren[parent] else {
+					if rightChildren[parent] != NIL {
+						parent = rightChildren[parent]
+					} else {
 						rightChildren[parent] = node
 						parents[node] = parent
 						return
 					}
-					parent = child
 				} else {
-					guard let child = leftChildren[parent] else {
+					if leftChildren[parent] != NIL {
+						parent = leftChildren[parent]
+					} else {
 						leftChildren[parent] = node
 						parents[node] = parent
 						return
 					}
-					parent = child
 				}
 
 				var i = 1
@@ -165,58 +174,55 @@ class XGLZSS {
 			parents[node] = parents[parent]
 			leftChildren[node] = leftChildren[parent]
 			rightChildren[node] = rightChildren[parent]
-			if let leftChild = leftChildren[parent] {
-				parents[leftChild] = node
-			}
-			if let rightChild = rightChildren[parent] {
-				parents[rightChild] = node
-			}
 
-			if rightChildren[parents[parent]!] == parent {
-				rightChildren[parents[parent]!] = node
+			parents[leftChildren[parent]] = node
+			parents[rightChildren[parent]] = node
+
+			if rightChildren[parents[parent]] == parent {
+				rightChildren[parents[parent]] = node
 			} else {
-				leftChildren[parents[parent]!] = node
+				leftChildren[parents[parent]] = node
 			}
 
-			parents[parent] = nil
+			parents[parent] = NIL
 		}
 
 		func delete(node: Int) {
-			var newChild: Int?
+			var newChild = 0
 
-			guard let parent = parents[node] else {
+			guard parents[node] != NIL else {
 				// node isn't in tree
 				return
 			}
 
-			if rightChildren[node] == nil {
+			if rightChildren[node] == NIL {
 				newChild = leftChildren[node]
-			} else if leftChildren[node] == nil {
+			} else if leftChildren[node] == NIL {
 				newChild = rightChildren[node]
 			} else {
 				newChild = leftChildren[node]
-				if newChild != nil, rightChildren[newChild!] != nil {
+				if rightChildren[newChild] != NIL {
 					repeat {
-						newChild = rightChildren[newChild!]
-					} while (newChild != nil) && (rightChildren[newChild!] != nil)
+						newChild = rightChildren[newChild]
+					} while rightChildren[newChild] != NIL
 
-					rightChildren[parents[newChild!]!] = leftChildren[newChild!]
-					parents[leftChildren[newChild!]!] = parents[newChild!]
-					leftChildren[newChild!] = rightChildren[node]
-					parents[leftChildren[node]!] = newChild
+					rightChildren[parents[newChild]] = leftChildren[newChild]
+					parents[leftChildren[newChild]] = parents[newChild]
+					leftChildren[newChild] = leftChildren[node]
+					parents[leftChildren[node]] = newChild
 				}
-				rightChildren[newChild!] = rightChildren[node]
-				parents[rightChildren[node]!] = newChild
+				rightChildren[newChild] = rightChildren[node]
+				parents[rightChildren[node]] = newChild
 			}
-			parents[newChild!] = parent
+			parents[newChild] = parents[node]
 
-			if rightChildren[parent] == node {
-				rightChildren[parent] = newChild
+			if rightChildren[parents[node]] == node {
+				rightChildren[parents[node]] = newChild
 			} else {
-				leftChildren[parent] = newChild
+				leftChildren[parents[node]] = newChild
 			}
 
-			parents[node] = nil
+			parents[node] = NIL
 		}
 
 
@@ -225,9 +231,8 @@ class XGLZSS {
 		 * is an unencoded letter (1 byte), "0" a position-and-length pair
 		 * (2 bytes).  Thus, eight units require at most 16 bytes of code.
 		 */
-		var codeBuffer = [UInt8]()
+		var codeBuffer: [UInt8] = [0]
 		var mask: UInt8 = 1
-		var codeBufferPosition = 1
 
 		var length = min(F, inputBytes.count)
 		if length == 0 { return XGMutableData() }
@@ -235,8 +240,6 @@ class XGLZSS {
 		var r = N - F
 		var s = 0
 		var lastMatchLength = 0
-
-		codeBuffer.append(0)
 
 		// Read F bytes into the last F bytes of the buffer
 		for i in 0 ..< length {
@@ -265,29 +268,25 @@ class XGLZSS {
 				matchLength = 1
 				codeBuffer[0] |= mask  // 'send one byte' flag
 				codeBuffer.append(textBuffer[r])  // Send uncoded.
-				codeBufferPosition += 1
 			} else {
 				// Send position and length pair. Note match_length > THRESHOLD.
 				codeBuffer.append(UInt8(matchPosition & 0xFF))
 				codeBuffer.append(UInt8(((matchPosition >> 4) & 0xf0) | (matchLength - (THRESHOLD + 1))))
-				codeBufferPosition += 2
 			}
 
-			mask <<= 1
-			if mask == 0 {
-				for i in 0 ..< codeBufferPosition {
-					outputBytes.append(codeBuffer[i])
-				}
 
-				codeBuffer[0] = 0
+			if mask == 0x80 {
+				outputBytes += codeBuffer
+				codeBuffer = [0]
 				mask = 1
-				codeBufferPosition = 1
+			} else {
+				mask <<= 1
 			}
 			lastMatchLength = matchLength
 
 			var lastMatchCutOff = 0
-			for i in 0 ..< lastMatchLength {
-				guard inputPosition < inputBytes.count else { continue }
+			for _ in 0 ..< lastMatchLength {
+				guard inputPosition < inputBytes.count else { break }
 				let c = readChar()
 				delete(node: s) // delete old strings
 				textBuffer[s] = c // read new bytes
@@ -298,20 +297,20 @@ class XGLZSS {
 				}
 
 				// Since this is a ring buffer, increment the position modulo N.
-				s = (s + 1) & (N - 1)
-				r = (r + 1) & (N - 1)
+				s = (s + 1) % N
+				r = (r + 1) % N
 				insert(node: r) // Register the string in text_buf[r..r+F-1]
-				lastMatchCutOff = i
+				lastMatchCutOff += 1
 			}
 
 			// After the end of text no need to read, but buffer may not be empty.
 			while lastMatchCutOff < lastMatchLength {
 				delete(node: s)
-				s = (s + 1) & (N - 1)
-				r = (r + 1) & (N - 1)
+				s = (s + 1) % N
+				r = (r + 1) % N
 
 				length -= 1
-				if length > 0 {
+				if length != 0 {
 					insert(node: r)
 				}
 				lastMatchCutOff += 1
@@ -319,10 +318,8 @@ class XGLZSS {
 		} while length > 0	// until length of string to be processed is zero
 
 		// Send remaining code.
-		if (codeBufferPosition > 1) {
-			for i in 0 ..< codeBufferPosition {
-				outputBytes.append(codeBuffer[i])
-			}
+		if (codeBuffer.count > 1) {
+			outputBytes += codeBuffer
 		}
 
 		let header = kLZSSbytes.charArray + inputBytes.count.charArray + (outputBytes.count + 0x10).charArray + 0.charArray

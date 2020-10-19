@@ -6,7 +6,7 @@
 //
 //
 
-import Cocoa
+import Foundation
 
 let common = XGCommon()
 class XGCommon : XGRelocationTable {

@@ -155,7 +155,7 @@ enum XGPokemon: CustomStringConvertible {
 	static func random() -> XGPokemon {
 		var rand = 0
 		while (rand == 0) || (XGPokemon.pokemon(rand).catchRate == 0) {
-			rand = Int(arc4random_uniform(UInt32(kNumberOfPokemon - 1))) + 1
+			rand = Int.random(in: 1 ..< kNumberOfPokemon)
 		}
 		return XGPokemon.pokemon(rand)
 	}

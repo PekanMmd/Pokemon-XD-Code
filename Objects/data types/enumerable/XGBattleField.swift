@@ -6,7 +6,7 @@
 //
 //
 
-import Cocoa
+import Foundation
 
 let kSizeOfBattleFieldData = 0x18
 let kBattleFieldRoomIDOffset = 0x02

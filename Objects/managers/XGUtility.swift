@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 class XGUtility {
 	
 	//MARK: - ISO Building
@@ -75,6 +74,134 @@ class XGUtility {
 		importFsys()
 		ISO.importFiles(XGFolders.FSYS.files.filter({  $0.fileType == .fsys }) + [XGFiles.dol])
 		
+	}
+
+	class func exportFileFromISO(_ file: XGFiles, decode: Bool = true) -> Bool {
+		XGFolders.ISOExport("").createDirectory()
+
+		if let data = ISO.dataForFile(filename: file.fileName) {
+			if data.length > 0 {
+				data.file = file
+				if file.fileType == .fsys {
+					let fsysData = data.fsysData
+					fsysData.extractFilesToFolder(folder: file.folder, decode: decode)
+				}
+				data.save()
+				return true
+			}
+		}
+		return false
+	}
+
+	class func importFileToISO(_ fileToImport: XGFiles, encode: Bool = true) -> Bool {
+		if fileToImport.exists {
+			if fileToImport.fileType == .fsys {
+
+				if encode {
+					XGColour.colourThreshold = 0
+					for file in fileToImport.folder.files {
+
+						if file.fileType == .pkx {
+							for dat in fileToImport.folder.files where dat.fileType == .dat {
+								if dat.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
+									if let datData = dat.data, let pkxData = file.data {
+										XGUtility.importDatToPKX(dat: datData, pkx: pkxData).save()
+									}
+								}
+							}
+						}
+
+						// encode string tables before compiling scripts
+						if file.fileType == .msg {
+							for json in fileToImport.folder.files where json.fileType == .json {
+								if json.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
+									let table = try? XGStringTable.fromJSONFile(file: json)
+									if let table = table {
+										table.file = file
+										table.save()
+									} else {
+										printg("Failed to decode string table from: ", json.path)
+									}
+								}
+							}
+						}
+
+						#if ENV_OSX
+						if file.fileType == .gtx || file.fileType == .atx {
+							for image in fileToImport.folder.files where XGFileTypes.imageFormats.contains(image.fileType) {
+								if image.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
+									if file.fileName.contains(".gsw.") {
+										// preserves the image format so can easily be imported into gsw
+										file.texture.importImage(file: image)
+									} else {
+										// automatically chooses a good format for the new image
+										let imageData = image.image
+										let textureData = GoDTextureImporter.getTextureData(image: imageData)
+										textureData.file = file
+										textureData.save()
+									}
+								}
+							}
+						}
+						#endif
+					}
+
+					// encode gsws after all gtxs have been encoded
+					for file in fileToImport.folder.files {
+						if file.fileType == .gsw {
+							let gsw = XGGSWTextures(data: file.data!)
+
+							for subFile in fileToImport.folder.files where subFile.fileName.contains(gsw.subFilenamesPrefix) && subFile.fileType == .gtx {
+								if let id = subFile.fileName.removeFileExtensions().replacingOccurrences(of: gsw.subFilenamesPrefix, with: "").integerValue {
+									gsw.importTextureData(subFile.data!, withID: id)
+								}
+							}
+
+							gsw.save()
+						}
+
+						// strings in the xds scripts will override those particular strings in the msg's json
+						if file.fileType == .xds && game != .PBR {
+							XDSScriptCompiler.setFlags(disassemble: true, decompile: false, updateStrings: true, increaseMSG: true)
+							XDSScriptCompiler.baseStringID = 1000
+							if !XDSScriptCompiler.compile(textFile: file, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)) {
+								printg("XDS Compilation Error:\n" + XDSScriptCompiler.error)
+								return false
+							}
+						}
+					}
+				}
+
+				let fsysData = fileToImport.fsysData
+				for i in 0 ..< fsysData.numberOfEntries {
+					var filename = ""
+					if fsysData.usesFileExtensions {
+						filename = fsysData.fullFileNames[i]
+					} else {
+						filename = fsysData.fileNames[i].removeFileExtensions() + fsysData.fileTypeForFile(index: i).fileExtension
+					}
+					if !fsysData.usesFileExtensions || filename.removeFileExtensions() == filename {
+						filename = filename.removeFileExtensions()
+						filename += fsysData.fileTypeForFile(index: i).fileExtension
+					}
+					for file in fileToImport.folder.files {
+						if file.fileName == filename {
+							if fsysData.isFileCompressed(index: i){
+								fsysData.shiftAndReplaceFileWithIndexEfficiently(i, withFile: file.compress(), save: false)
+							} else {
+								fsysData.shiftAndReplaceFileWithIndexEfficiently(i, withFile: file, save: false)
+							}
+						}
+					}
+				}
+				fsysData.save()
+			}
+			ISO.importFiles([fileToImport])
+			return true
+		} else {
+			printg("The file: \(fileToImport.path) doesn't exit")
+			return false
+		}
 	}
 	
 	class func importRels() {
@@ -148,7 +275,8 @@ class XGUtility {
 			GoDShellManager.run(.wimgt, args: args)
 		}
 	}
-	
+
+	#if ENV_OSX
 	class func importTextures() {
 		// into the .gtx file, not into ISO
 		
@@ -159,7 +287,7 @@ class XGUtility {
 			
 			let tFile = XGFiles.nameAndFolder(textureFilename, .TextureImporter)
 			let aFile = XGFiles.nameAndFolder(animTextureFilename, .TextureImporter)
-			
+
 			if tFile.exists || aFile.exists {
 				if tFile.exists {
 					GoDTextureImporter.replaceTextureData(texture: tFile.texture, withImage: image, save: true)
@@ -194,6 +322,11 @@ class XGUtility {
 			file.fileName.contains(".tpl.png")
 		}))
 	}
+	#else
+	class func importTextures() {
+		printg("This tool cannot import textures on this platform")
+	}
+	#endif
 
 	class func exportTPLFiles(_ files: [XGFiles]) {
 		if files.isEmpty { return }
@@ -212,7 +345,8 @@ class XGUtility {
 			GoDShellManager.run(.wimgt, args: args)
 		}
 	}
-	
+
+	#if ENV_OSX
 	class func exportTextures() {
 		// from .gtx file, not from ISO
 		for file in XGFolders.Textures.files where [".gtx", ".atx"].contains(file.fileExtension)  {
@@ -223,6 +357,11 @@ class XGUtility {
 			file.fileExtension == "tpl"
 		}))
 	}
+	#else
+	class func exportTextures() {
+		printg("Exporting textures is not supported on this platform")
+	}
+	#endif
 	
 	class func searchForFsysForFile(file: XGFiles) {
 		let iso = ISO
@@ -257,6 +396,9 @@ class XGUtility {
 		}
 		return found
 	}
+
+	
+
 	
 	class func deleteSuperfluousFiles() {
 		// deletes files that the game doesn't use in order to create space in the ISO for larger fsys files

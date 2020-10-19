@@ -14,23 +14,13 @@ class GoDISOViewController: GoDTableViewController {
 
 	var isExporting = false
 	func exportFiles(decode: Bool) {
-		XGFolders.ISOExport("").createDirectory()
-		
 		if isExporting {
 			return
 		}
 		isExporting = true
 		
-		if let data = ISO.dataForFile(filename: self.currentFile.fileName) {
-			if data.length > 0 {
-				data.file = self.currentFile
-				if self.currentFile.fileType == .fsys {
-					let fsysData = data.fsysData
-					fsysData.extractFilesToFolder(folder: self.currentFile.folder, decode: decode)
-				}
-				data.save()
-				GoDAlertViewController.displayAlert(title: "Export Complete", text: "Exported \(currentFile.fileName) to \(self.currentFile.folder.path)")
-			}
+		if XGUtility.exportFileFromISO(currentFile, decode: decode) {
+			GoDAlertViewController.displayAlert(title: "Export Complete", text: "Exported \(currentFile.fileName) to \(self.currentFile.folder.path)")
 		} else {
 			GoDAlertViewController.displayAlert(title: "File export failed", text: "Couldn't export data for file \(self.currentFile.fileName) from the ISO.")
 		}
@@ -46,113 +36,17 @@ class GoDISOViewController: GoDTableViewController {
 	}
 	
 	func importFsysFiles(encode: Bool) {
-		if currentFile.exists {
-			if currentFile.fileType == .fsys {
-				
-				if encode {
-					XGColour.colourThreshold = 0
-					for file in currentFile.folder.files {
-
-						if file.fileType == .pkx {
-							for dat in currentFile.folder.files where dat.fileType == .dat {
-								if dat.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-									if let datData = dat.data, let pkxData = file.data {
-										XGUtility.importDatToPKX(dat: datData, pkx: pkxData).save()
-									}
-								}
-							}
-						}
-
-						// encode string tables before compiling scripts
-						if file.fileType == .msg {
-							for json in currentFile.folder.files where json.fileType == .json {
-								if json.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-									let table = try? XGStringTable.fromJSONFile(file: json)
-									if let table = table {
-										table.file = file
-										table.save()
-									} else {
-										printg("Failed to decode string table from: ", json.path)
-									}
-								}
-							}
-						}
-
-
-						if file.fileType == .gtx || file.fileType == .atx {
-							for image in currentFile.folder.files where XGFileTypes.imageFormats.contains(image.fileType) {
-								if image.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-									if file.fileName.contains(".gsw.") {
-										// preserves the image format so can easily be imported into gsw
-										file.texture.importImage(file: image)
-									} else {
-										// automatically chooses a good format for the new image
-										let imageData = image.image
-										let textureData = GoDTextureImporter.getTextureData(image: imageData)
-										textureData.file = file
-										textureData.save()
-									}
-								}
-							}
-						}
-					}
-
-
-					// encode gsws after all gtxs have been encoded
-					for file in currentFile.folder.files {
-						if file.fileType == .gsw {
-							let gsw = XGGSWTextures(data: file.data!)
-
-							for subFile in currentFile.folder.files where subFile.fileName.contains(gsw.subFilenamesPrefix) && subFile.fileType == .gtx {
-								if let id = subFile.fileName.removeFileExtensions().replacingOccurrences(of: gsw.subFilenamesPrefix, with: "").integerValue {
-									gsw.importTextureData(subFile.data!, withID: id)
-								}
-							}
-
-							gsw.save()
-						}
-
-						// strings in the xds scripts will override those particular strings in the msg's json
-						if file.fileType == .xds && game != .PBR {
-							XDSScriptCompiler.setFlags(disassemble: true, decompile: false, updateStrings: true, increaseMSG: true)
-							XDSScriptCompiler.baseStringID = 1000
-							if !XDSScriptCompiler.compile(textFile: file, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)) {
-								GoDAlertViewController.displayAlert(title: "Compilation Error", text: XDSScriptCompiler.error)
-								return
-							}
-						}
-					}
-				}
-				
-				let fsysData = currentFile.fsysData
-				for i in 0 ..< fsysData.numberOfEntries {
-					var filename = ""
-					if fsysData.usesFileExtensions {
-						filename = fsysData.fullFileNames[i]
-					} else {
-						filename = fsysData.fileNames[i].removeFileExtensions() + fsysData.fileTypeForFile(index: i).fileExtension
-					}
-					if !fsysData.usesFileExtensions || filename.removeFileExtensions() == filename {
-						filename = filename.removeFileExtensions()
-						filename += fsysData.fileTypeForFile(index: i).fileExtension
-					}
-					for file in currentFile.folder.files {
-						if file.fileName == filename {
-							if fsysData.isFileCompressed(index: i){
-								fsysData.shiftAndReplaceFileWithIndexEfficiently(i, withFile: file.compress(), save: false)
-							} else {
-								fsysData.shiftAndReplaceFileWithIndexEfficiently(i, withFile: file, save: false)
-							}
-						}
-					}
-				}
-				fsysData.save()
-			}
-			ISO.importFiles([currentFile])
-		} else {
-			printg("The file: \(currentFile.path) doesn't exit")
+		if isExporting {
+			return
 		}
-		GoDAlertViewController.displayAlert(title: "Import Complete", text: "Finished importing \(currentFile.fileName) to ISO.")
+		isExporting = true
+
+		if XGUtility.importFileToISO(currentFile, encode: encode) {
+			GoDAlertViewController.displayAlert(title: "Import Complete", text: "Imported \(currentFile.path) to ISO")
+		} else {
+			GoDAlertViewController.displayAlert(title: "File import failed", text: "Couldn't import data for file \(self.currentFile.path) to the ISO.")
+		}
+		self.isExporting = false
 	}
 	
 	@IBAction func importFiles(_ sender: Any) {

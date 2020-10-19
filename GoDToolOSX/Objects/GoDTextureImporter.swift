@@ -7,8 +7,8 @@
 //
 
 
+#if ENV_OSX
 import Cocoa
-
 
 class GoDTextureImporter: NSObject {
 	
@@ -536,7 +536,7 @@ class GoDTextureImporter: NSObject {
 	}
 	
 }
-
+#endif
 
 
 

@@ -5,6 +5,7 @@
 //  Created by The Steez on 03/09/2018.
 //
 
+#if ENV_OSX
 import Cocoa
 import OpenGL.GL3
 import GLKit
@@ -62,3 +63,4 @@ class XGVertex : NSObject {
 		self.z *= magnification
 	}
 }
+#endif

@@ -6,7 +6,7 @@
 //
 //
 
-import Cocoa
+import Foundation
 
 let kCharacterFlagsOffset = 0x0
 let kMovementOffset = 0x1

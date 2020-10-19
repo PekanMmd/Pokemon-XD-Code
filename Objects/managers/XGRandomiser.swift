@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Darwin
 
 class XGRandomiser : NSObject {
 	
@@ -301,7 +300,7 @@ class XGRandomiser : NSObject {
 			statsTotal -= 240
 			
 			func randomStat() -> Int {
-				return Int(arc4random_uniform(6))
+				return Int.random(in: 0 ... 5)
 			}
 			
 			func addToRandomStat(_ v: Int) {

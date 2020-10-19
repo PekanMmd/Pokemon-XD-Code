@@ -32,16 +32,12 @@
 		1C16CBA9253BC25700907D78 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
 		1C16CBD4253BC3AC00907D78 /* XGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE21F49A1FE0075C6D2 /* XGExtensions.swift */; };
 		1C16CBDD253BC3AD00907D78 /* XGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE21F49A1FE0075C6D2 /* XGExtensions.swift */; };
-		1C16CBE6253BC3B700907D78 /* GoDImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */; };
-		1C16CBEF253BC3B700907D78 /* GoDImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */; };
 		1C16CBF8253BC3BF00907D78 /* XGOSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F87F1F49C2EC0075C6D2 /* XGOSXExtensions.swift */; };
 		1C16CC01253BC3C200907D78 /* CMOSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2562F9F21349AAD004180F1 /* CMOSXExtensions.swift */; };
 		1C16CC0A253BC3CA00907D78 /* GoDToolCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0801F6D260100AC263D /* GoDToolCLExtensions.swift */; };
 		1C16CC13253BC3CF00907D78 /* ColosseumToolCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2562F9D21349A44004180F1 /* ColosseumToolCLExtensions.swift */; };
 		1C16CC1C253BC3D300907D78 /* XDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E3E520C4CD3B00D298BF /* XDExtensions.swift */; };
 		1C16CC25253BC3D600907D78 /* ColosseumExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E3E720C4CD4B00D298BF /* ColosseumExtensions.swift */; };
-		1C16CC2E253BC3DE00907D78 /* GoDOSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B250AB822135F341008CF9DB /* GoDOSXExtensions.swift */; };
-		1C16CC37253BC3DE00907D78 /* GoDOSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B250AB822135F341008CF9DB /* GoDOSXExtensions.swift */; };
 		1C16CC40253BC3E600907D78 /* XDSExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B247ED40217E5D6B0034CAF5 /* XDSExtensions.swift */; };
 		1C16CC49253BC40C00907D78 /* XGAbilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBB61F49A1FE0075C6D2 /* XGAbilities.swift */; };
 		1C16CC52253BC40D00907D78 /* XGAbilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBB61F49A1FE0075C6D2 /* XGAbilities.swift */; };
@@ -135,8 +131,6 @@
 		1C16CE7B253BC4E000907D78 /* XGAssemblyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC031F49A1FE0075C6D2 /* XGAssemblyCode.swift */; };
 		1C16CE84253BC4E800907D78 /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
 		1C16CE8D253BC4E900907D78 /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
-		1C16CE96253BC4EE00907D78 /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
-		1C16CE97253BC4EF00907D78 /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
 		1C16CEA0253BC50900907D78 /* XGFsys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC01F49A1FE0075C6D2 /* XGFsys.swift */; };
 		1C16CEA9253BC51500907D78 /* XGFsys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC01F49A1FE0075C6D2 /* XGFsys.swift */; };
 		1C16CEB2253BC51E00907D78 /* XGGSWTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24547802229C2670043F991 /* XGGSWTextures.swift */; };
@@ -160,8 +154,6 @@
 		1C16CF2C253BC55600907D78 /* CMGiftPokemonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C40218201AD001C41D3 /* CMGiftPokemonManager.swift */; };
 		1C16CF35253BC55800907D78 /* XGRandomiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A98214CA25200137C37 /* XGRandomiser.swift */; };
 		1C16CF3E253BC55C00907D78 /* CMRandomiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B0F5E7214EA79900BA83DD /* CMRandomiser.swift */; };
-		1C16CF47253BC55F00907D78 /* XGUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC021F49A1FE0075C6D2 /* XGUtility.swift */; };
-		1C16CF48253BC55F00907D78 /* XGUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC021F49A1FE0075C6D2 /* XGUtility.swift */; };
 		1C16CF51253BC56200907D78 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
 		1C16CF5A253BC56300907D78 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
 		1C16CF63253BC56500907D78 /* XGStringManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8721F49B3BC0075C6D2 /* XGStringManager.swift */; };
@@ -195,16 +187,8 @@
 		1C16CFD7253BC59A00907D78 /* XGTexturePalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A504D21D1258E009C707C /* XGTexturePalette.swift */; };
 		1C16CFE0253BC5B600907D78 /* GoDTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF531F6872740023A876 /* GoDTexture.swift */; };
 		1C16CFE9253BC5B600907D78 /* GoDTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF531F6872740023A876 /* GoDTexture.swift */; };
-		1C16CFF2253BC5BD00907D78 /* GoDTextureImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */; };
-		1C16CFF3253BC5BE00907D78 /* GoDTextureImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */; };
-		1C16CFFC253BC5C800907D78 /* GoDOpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FF6D2E20BCB50F00A84637 /* GoDOpenGL.swift */; };
-		1C16CFFD253BC5C900907D78 /* GoDOpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FF6D2E20BCB50F00A84637 /* GoDOpenGL.swift */; };
-		1C16D006253BC5CD00907D78 /* XGVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A70213D4CF000137C37 /* XGVertex.swift */; };
-		1C16D00F253BC5CD00907D78 /* XGVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A70213D4CF000137C37 /* XGVertex.swift */; };
 		1C16D018253BC5D000907D78 /* GoDKeyCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A75213D4D9500137C37 /* GoDKeyCodes.swift */; };
 		1C16D019253BC5D100907D78 /* GoDKeyCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A75213D4D9500137C37 /* GoDKeyCodes.swift */; };
-		1C16D022253BC5D400907D78 /* GoDMatrix4.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A8C213D5A3D00137C37 /* GoDMatrix4.swift */; };
-		1C16D02B253BC5D400907D78 /* GoDMatrix4.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A8C213D5A3D00137C37 /* GoDMatrix4.swift */; };
 		1C16D044253BC85A00907D78 /* XGBattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2981FA4CDAD00E1489E /* XGBattle.swift */; };
 		1C16D04D253BC85D00907D78 /* CMBattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24CBA9E212E29FA00481C1D /* CMBattle.swift */; };
 		1C16D056253BC86600907D78 /* XGBattleBingoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBDA1F49A1FE0075C6D2 /* XGBattleBingoCard.swift */; };
@@ -262,6 +246,17 @@
 		1C37441124056F190089D3BA /* GoDShellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C37440C24056F190089D3BA /* GoDShellManager.swift */; };
 		1C37441224056F190089D3BA /* GoDShellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C37440C24056F190089D3BA /* GoDShellManager.swift */; };
 		1C39D85C240EA03D006FDFBD /* wit in Resources */ = {isa = PBXBuildFile; fileRef = 1C39D85B240EA03D006FDFBD /* wit */; };
+		1C4E14BC253DCEC200EA318B /* WindowsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CAA3253B83D700907D78 /* WindowsExtensions.swift */; };
+		1C4E14ED253DD05700EA318B /* XGUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC021F49A1FE0075C6D2 /* XGUtility.swift */; };
+		1C4E14F6253DD05800EA318B /* XGUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EC021F49A1FE0075C6D2 /* XGUtility.swift */; };
+		1C4E14FF253DD13000EA318B /* GoDImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */; };
+		1C4E1508253DD13100EA318B /* GoDImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */; };
+		1C4E1511253DD1D400EA318B /* GoDOSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B250AB822135F341008CF9DB /* GoDOSXExtensions.swift */; };
+		1C4E151A253DD1D500EA318B /* GoDOSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B250AB822135F341008CF9DB /* GoDOSXExtensions.swift */; };
+		1C4E1523253DE2DD00EA318B /* GoDTextureImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */; };
+		1C4E1524253DE2DD00EA318B /* GoDTextureImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */; };
+		1C4E154D253DE46300EA318B /* XGVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A70213D4CF000137C37 /* XGVertex.swift */; };
+		1C4E1556253DE46300EA318B /* XGVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A70213D4CF000137C37 /* XGVertex.swift */; };
 		1C524D01234B7F0800A9659A /* GoDEnumerablePopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C524D00234B7F0800A9659A /* GoDEnumerablePopUpButton.swift */; };
 		1C524D02234B7F0800A9659A /* GoDEnumerablePopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C524D00234B7F0800A9659A /* GoDEnumerablePopUpButton.swift */; };
 		1C524D03234B7F0800A9659A /* GoDEnumerablePopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C524D00234B7F0800A9659A /* GoDEnumerablePopUpButton.swift */; };
@@ -388,7 +383,8 @@
 		1CC362E224C1DF25005D7B4A /* XGBattleStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */; };
 		1CC5DD3222C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
 		1CC5DD3322C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
-		1CC9AC09253CDA98008A8389 /* XGLZSSWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE91F49A1FE0075C6D2 /* XGLZSSWrapper.m */; };
+		1CC9AC43253D3E7B008A8389 /* XGDummyCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC9AC42253D3E7B008A8389 /* XGDummyCollisionData.swift */; };
+		1CC9AC44253D3E7B008A8389 /* XGDummyCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC9AC42253D3E7B008A8389 /* XGDummyCollisionData.swift */; };
 		1CE1A7782326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
 		1CE1A7792326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
 		1CE1A77A2326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
@@ -434,8 +430,6 @@
 		B208E3E820C4CD4B00D298BF /* ColosseumExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E3E720C4CD4B00D298BF /* ColosseumExtensions.swift */; };
 		B208E3E920C4CD9100D298BF /* XDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E3E520C4CD3B00D298BF /* XDExtensions.swift */; };
 		B208E3EE20C4D19100D298BF /* XGISO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE41F49A1FE0075C6D2 /* XGISO.swift */; };
-		B208E3EF20C4D38A00D298BF /* Null.fsys in Resources */ = {isa = PBXBuildFile; fileRef = B2FB65F31FB4B1CE00E056AB /* Null.fsys */; };
-		B208E3F020C4D38D00D298BF /* DeckData_Empty.bin in Resources */ = {isa = PBXBuildFile; fileRef = B2F911671F6606E900129DC2 /* DeckData_Empty.bin */; };
 		B208E3F120C4D3BC00D298BF /* body_000.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F5038A1F4C5FA80075C6D2 /* body_000.png */; };
 		B208E3F220C4D3BC00D298BF /* body_001.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F5038B1F4C5FA80075C6D2 /* body_001.png */; };
 		B208E3F320C4D3BC00D298BF /* body_002.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F5038C1F4C5FA80075C6D2 /* body_002.png */; };
@@ -1333,7 +1327,6 @@
 		B20C401D2188B9D2006D7CD9 /* SCD.sublime-color-scheme in Resources */ = {isa = PBXBuildFile; fileRef = B20C40172188B9D1006D7CD9 /* SCD.sublime-color-scheme */; };
 		B20C401E2188B9D2006D7CD9 /* XDScript.sublime-settings in Resources */ = {isa = PBXBuildFile; fileRef = B20C40182188B9D1006D7CD9 /* XDScript.sublime-settings */; };
 		B20C401F2188B9D2006D7CD9 /* XDScript.sublime-syntax in Resources */ = {isa = PBXBuildFile; fileRef = B20C40192188B9D1006D7CD9 /* XDScript.sublime-syntax */; };
-		B20C40212189D5E7006D7CD9 /* Dol2.msg in Resources */ = {isa = PBXBuildFile; fileRef = B20C40202189D5E6006D7CD9 /* Dol2.msg */; };
 		B20C4029218AE3BD006D7CD9 /* Original Moves.json in Resources */ = {isa = PBXBuildFile; fileRef = B20C4025218AE3BC006D7CD9 /* Original Moves.json */; };
 		B20C402A218AE3BD006D7CD9 /* Colosseum Song IDs in Resources */ = {isa = PBXBuildFile; fileRef = B20C4026218AE3BD006D7CD9 /* Colosseum Song IDs */; };
 		B20C402B218AE3BD006D7CD9 /* Move Effects.json in Resources */ = {isa = PBXBuildFile; fileRef = B20C4027218AE3BD006D7CD9 /* Move Effects.json */; };
@@ -1399,8 +1392,6 @@
 		B20EEA8B21EF772300E87D01 /* GoDViewLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8BE1F4C4ED10075C6D2 /* GoDViewLayoutManager.swift */; };
 		B20EEA8C21EF773D00E87D01 /* GoDOSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B250AB822135F341008CF9DB /* GoDOSXExtensions.swift */; };
 		B20EEA8D21EF77A100E87D01 /* PBRExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A502521D11138009C707C /* PBRExtensions.swift */; };
-		B20EEA8E21EF77BC00E87D01 /* Null.fsys in Resources */ = {isa = PBXBuildFile; fileRef = B2FB65F31FB4B1CE00E056AB /* Null.fsys */; };
-		B20EEA8F21EF77C000E87D01 /* DeckData_Empty.bin in Resources */ = {isa = PBXBuildFile; fileRef = B2F911671F6606E900129DC2 /* DeckData_Empty.bin */; };
 		B20EEA9021EF77E100E87D01 /* PBR_body_489.png in Resources */ = {isa = PBXBuildFile; fileRef = B20EE83321DC45E000E87D01 /* PBR_body_489.png */; };
 		B20EEA9121EF77E100E87D01 /* PBR_body_338.png in Resources */ = {isa = PBXBuildFile; fileRef = B20EE83421DC45E000E87D01 /* PBR_body_338.png */; };
 		B20EEA9221EF77E100E87D01 /* PBR_body_462.png in Resources */ = {isa = PBXBuildFile; fileRef = B20EE83521DC45E000E87D01 /* PBR_body_462.png */; };
@@ -2443,7 +2434,6 @@
 		B20EEEA321EF796800E87D01 /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = B21A7CF920BC396300BDD04C /* vertex.glsl */; };
 		B20EEEA421EF796800E87D01 /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = B21A7CFB20BC42CA00BDD04C /* fragment.glsl */; };
 		B20EEEA521EF796800E87D01 /* GoDMetalShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = B2560A81213D57C200137C37 /* GoDMetalShaders.metal */; };
-		B20EEEA621EF797F00E87D01 /* GoDMetalShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = B2560A81213D57C200137C37 /* GoDMetalShaders.metal */; };
 		B20EEEA721EF799400E87D01 /* GoDDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F88B1F49CD050075C6D2 /* GoDDesign.swift */; };
 		B20EEEA821EF799C00E87D01 /* GoDTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F88C1F49CD050075C6D2 /* GoDTableViewDelegate.swift */; };
 		B20EEEA921EF79A300E87D01 /* GoDTextureImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */; };
@@ -2533,12 +2523,10 @@
 		B24A504021D12329009C707C /* XGMutableData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBEC1F49A1FE0075C6D2 /* XGMutableData.swift */; };
 		B24A504121D12381009C707C /* XGStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EAFEFD20BDA43A009FC947 /* XGStack.swift */; };
 		B24A504221D1238C009C707C /* XGString.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF71F49A1FE0075C6D2 /* XGString.swift */; };
-		B24A504521D1241E009C707C /* GoDOpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FF6D2E20BCB50F00A84637 /* GoDOpenGL.swift */; };
 		B24A504621D12426009C707C /* GoDTextureImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */; };
 		B24A504721D1242A009C707C /* GoDTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF531F6872740023A876 /* GoDTexture.swift */; };
 		B24A504821D12432009C707C /* XGVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A70213D4CF000137C37 /* XGVertex.swift */; };
 		B24A504921D12435009C707C /* GoDKeyCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A75213D4D9500137C37 /* GoDKeyCodes.swift */; };
-		B24A504A21D12437009C707C /* GoDMatrix4.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A8C213D5A3D00137C37 /* GoDMatrix4.swift */; };
 		B24A504F21D1258E009C707C /* XGTexturePalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A504D21D1258E009C707C /* XGTexturePalette.swift */; };
 		B24A505121D1258E009C707C /* XGTexturePalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A504D21D1258E009C707C /* XGTexturePalette.swift */; };
 		B24A505321D1258E009C707C /* XGTexturePalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A504D21D1258E009C707C /* XGTexturePalette.swift */; };
@@ -2634,18 +2622,12 @@
 		B2560A77213D4DAB00137C37 /* GoDKeyCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A75213D4D9500137C37 /* GoDKeyCodes.swift */; };
 		B2560A78213D4DAB00137C37 /* GoDKeyCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A75213D4D9500137C37 /* GoDKeyCodes.swift */; };
 		B2560A79213D4DAC00137C37 /* GoDKeyCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A75213D4D9500137C37 /* GoDKeyCodes.swift */; };
-		B2560A7C213D546000137C37 /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
-		B2560A7D213D546100137C37 /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
 		B2560A7E213D569C00137C37 /* GoDMetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A7A213D4F4600137C37 /* GoDMetalView.swift */; };
 		B2560A7F213D569F00137C37 /* GoDMetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A7A213D4F4600137C37 /* GoDMetalView.swift */; };
-		B2560A82213D57C200137C37 /* GoDMetalShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = B2560A81213D57C200137C37 /* GoDMetalShaders.metal */; };
 		B2560A83213D57C200137C37 /* GoDMetalShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = B2560A81213D57C200137C37 /* GoDMetalShaders.metal */; };
 		B2560A84213D57C200137C37 /* GoDMetalShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = B2560A81213D57C200137C37 /* GoDMetalShaders.metal */; };
-		B2560A85213D57C200137C37 /* GoDMetalShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = B2560A81213D57C200137C37 /* GoDMetalShaders.metal */; };
-		B2560A8D213D5A3D00137C37 /* GoDMatrix4.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A8C213D5A3D00137C37 /* GoDMatrix4.swift */; };
 		B2560A8E213D5A3D00137C37 /* GoDMatrix4.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A8C213D5A3D00137C37 /* GoDMatrix4.swift */; };
 		B2560A8F213D5A3D00137C37 /* GoDMatrix4.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A8C213D5A3D00137C37 /* GoDMatrix4.swift */; };
-		B2560A90213D5A3D00137C37 /* GoDMatrix4.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A8C213D5A3D00137C37 /* GoDMatrix4.swift */; };
 		B2560A91214C7E7C00137C37 /* XGStarterPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF61F49A1FE0075C6D2 /* XGStarterPokemon.swift */; };
 		B2560A92214C7E7D00137C37 /* XGStarterPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF61F49A1FE0075C6D2 /* XGStarterPokemon.swift */; };
 		B2560A95214CA1FF00137C37 /* GoDRandomiserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A93214CA1FF00137C37 /* GoDRandomiserViewController.swift */; };
@@ -2719,7 +2701,6 @@
 		B2562F952134991F004180F1 /* CMType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E78620C85EAE00D298BF /* CMType.swift */; };
 		B2562F962134991F004180F1 /* XGInteractionPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FD1FA5C423006BE597 /* XGInteractionPoint.swift */; };
 		B2562F9A213499DC004180F1 /* GoDTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF531F6872740023A876 /* GoDTexture.swift */; };
-		B2562F9B213499E2004180F1 /* GoDOpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FF6D2E20BCB50F00A84637 /* GoDOpenGL.swift */; };
 		B2562F9C213499E6004180F1 /* GoDTextureImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */; };
 		B2562F9E21349A44004180F1 /* ColosseumToolCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2562F9D21349A44004180F1 /* ColosseumToolCLExtensions.swift */; };
 		B2562FA021349AAD004180F1 /* CMOSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2562F9F21349AAD004180F1 /* CMOSXExtensions.swift */; };
@@ -2853,155 +2834,80 @@
 		B280AEA220CA8E270057A782 /* XDRelIndexes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E75A20C4DD2D00D298BF /* XDRelIndexes.swift */; };
 		B280AEA520CAAA440057A782 /* GoDPokeballPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B280AEA320CAA8C60057A782 /* GoDPokeballPopUpButton.swift */; };
 		B280AEA620CAAA450057A782 /* GoDPokeballPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B280AEA320CAA8C60057A782 /* GoDPokeballPopUpButton.swift */; };
-		B280AEF320CABD660057A782 /* colo_trainer_68.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEA820CABD660057A782 /* colo_trainer_68.png */; };
 		B280AEF420CABD660057A782 /* colo_trainer_68.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEA820CABD660057A782 /* colo_trainer_68.png */; };
-		B280AEF520CABD660057A782 /* colo_trainer_54.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEA920CABD660057A782 /* colo_trainer_54.png */; };
 		B280AEF620CABD660057A782 /* colo_trainer_54.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEA920CABD660057A782 /* colo_trainer_54.png */; };
-		B280AEF720CABD660057A782 /* colo_trainer_40.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEAA20CABD660057A782 /* colo_trainer_40.png */; };
 		B280AEF820CABD660057A782 /* colo_trainer_40.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEAA20CABD660057A782 /* colo_trainer_40.png */; };
-		B280AEF920CABD660057A782 /* colo_trainer_41.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEAB20CABD660057A782 /* colo_trainer_41.png */; };
 		B280AEFA20CABD660057A782 /* colo_trainer_41.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEAB20CABD660057A782 /* colo_trainer_41.png */; };
-		B280AEFB20CABD660057A782 /* colo_trainer_55.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEAC20CABD660057A782 /* colo_trainer_55.png */; };
 		B280AEFC20CABD660057A782 /* colo_trainer_55.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEAC20CABD660057A782 /* colo_trainer_55.png */; };
-		B280AEFD20CABD660057A782 /* colo_trainer_69.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEAD20CABD660057A782 /* colo_trainer_69.png */; };
 		B280AEFE20CABD660057A782 /* colo_trainer_69.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEAD20CABD660057A782 /* colo_trainer_69.png */; };
-		B280AEFF20CABD660057A782 /* colo_trainer_43.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEAE20CABD660057A782 /* colo_trainer_43.png */; };
 		B280AF0020CABD660057A782 /* colo_trainer_43.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEAE20CABD660057A782 /* colo_trainer_43.png */; };
-		B280AF0120CABD660057A782 /* colo_trainer_57.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEAF20CABD660057A782 /* colo_trainer_57.png */; };
 		B280AF0220CABD660057A782 /* colo_trainer_57.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEAF20CABD660057A782 /* colo_trainer_57.png */; };
-		B280AF0320CABD660057A782 /* colo_trainer_56.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB020CABD660057A782 /* colo_trainer_56.png */; };
 		B280AF0420CABD660057A782 /* colo_trainer_56.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB020CABD660057A782 /* colo_trainer_56.png */; };
-		B280AF0520CABD660057A782 /* colo_trainer_42.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB120CABD660057A782 /* colo_trainer_42.png */; };
 		B280AF0620CABD660057A782 /* colo_trainer_42.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB120CABD660057A782 /* colo_trainer_42.png */; };
-		B280AF0720CABD660057A782 /* colo_trainer_46.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB220CABD660057A782 /* colo_trainer_46.png */; };
 		B280AF0820CABD660057A782 /* colo_trainer_46.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB220CABD660057A782 /* colo_trainer_46.png */; };
-		B280AF0920CABD660057A782 /* colo_trainer_52.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB320CABD660057A782 /* colo_trainer_52.png */; };
 		B280AF0A20CABD660057A782 /* colo_trainer_52.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB320CABD660057A782 /* colo_trainer_52.png */; };
-		B280AF0B20CABD660057A782 /* colo_trainer_53.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB420CABD660057A782 /* colo_trainer_53.png */; };
 		B280AF0C20CABD660057A782 /* colo_trainer_53.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB420CABD660057A782 /* colo_trainer_53.png */; };
-		B280AF0D20CABD660057A782 /* colo_trainer_47.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB520CABD660057A782 /* colo_trainer_47.png */; };
 		B280AF0E20CABD660057A782 /* colo_trainer_47.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB520CABD660057A782 /* colo_trainer_47.png */; };
-		B280AF0F20CABD660057A782 /* colo_trainer_51.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB620CABD660057A782 /* colo_trainer_51.png */; };
 		B280AF1020CABD660057A782 /* colo_trainer_51.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB620CABD660057A782 /* colo_trainer_51.png */; };
-		B280AF1120CABD660057A782 /* colo_trainer_45.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB720CABD660057A782 /* colo_trainer_45.png */; };
 		B280AF1220CABD660057A782 /* colo_trainer_45.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB720CABD660057A782 /* colo_trainer_45.png */; };
-		B280AF1320CABD660057A782 /* colo_trainer_44.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB820CABD660057A782 /* colo_trainer_44.png */; };
 		B280AF1420CABD660057A782 /* colo_trainer_44.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB820CABD660057A782 /* colo_trainer_44.png */; };
-		B280AF1520CABD660057A782 /* colo_trainer_50.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB920CABD660057A782 /* colo_trainer_50.png */; };
 		B280AF1620CABD660057A782 /* colo_trainer_50.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEB920CABD660057A782 /* colo_trainer_50.png */; };
-		B280AF1720CABD660057A782 /* colo_trainer_37.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEBA20CABD660057A782 /* colo_trainer_37.png */; };
 		B280AF1820CABD660057A782 /* colo_trainer_37.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEBA20CABD660057A782 /* colo_trainer_37.png */; };
-		B280AF1920CABD660057A782 /* colo_trainer_23.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEBB20CABD660057A782 /* colo_trainer_23.png */; };
 		B280AF1A20CABD660057A782 /* colo_trainer_23.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEBB20CABD660057A782 /* colo_trainer_23.png */; };
-		B280AF1B20CABD660057A782 /* colo_trainer_22.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEBC20CABD660057A782 /* colo_trainer_22.png */; };
 		B280AF1C20CABD660057A782 /* colo_trainer_22.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEBC20CABD660057A782 /* colo_trainer_22.png */; };
-		B280AF1D20CABD660057A782 /* colo_trainer_36.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEBD20CABD660057A782 /* colo_trainer_36.png */; };
 		B280AF1E20CABD660057A782 /* colo_trainer_36.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEBD20CABD660057A782 /* colo_trainer_36.png */; };
-		B280AF1F20CABD660057A782 /* colo_trainer_20.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEBE20CABD660057A782 /* colo_trainer_20.png */; };
 		B280AF2020CABD660057A782 /* colo_trainer_20.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEBE20CABD660057A782 /* colo_trainer_20.png */; };
-		B280AF2120CABD660057A782 /* colo_trainer_34.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEBF20CABD660057A782 /* colo_trainer_34.png */; };
 		B280AF2220CABD660057A782 /* colo_trainer_34.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEBF20CABD660057A782 /* colo_trainer_34.png */; };
-		B280AF2320CABD660057A782 /* colo_trainer_35.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC020CABD660057A782 /* colo_trainer_35.png */; };
 		B280AF2420CABD660057A782 /* colo_trainer_35.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC020CABD660057A782 /* colo_trainer_35.png */; };
-		B280AF2520CABD660057A782 /* colo_trainer_21.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC120CABD660057A782 /* colo_trainer_21.png */; };
 		B280AF2620CABD660057A782 /* colo_trainer_21.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC120CABD660057A782 /* colo_trainer_21.png */; };
-		B280AF2720CABD660057A782 /* colo_trainer_25.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC220CABD660057A782 /* colo_trainer_25.png */; };
 		B280AF2820CABD660057A782 /* colo_trainer_25.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC220CABD660057A782 /* colo_trainer_25.png */; };
-		B280AF2920CABD660057A782 /* colo_trainer_31.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC320CABD660057A782 /* colo_trainer_31.png */; };
 		B280AF2A20CABD660057A782 /* colo_trainer_31.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC320CABD660057A782 /* colo_trainer_31.png */; };
-		B280AF2B20CABD660057A782 /* colo_trainer_19.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC420CABD660057A782 /* colo_trainer_19.png */; };
 		B280AF2C20CABD660057A782 /* colo_trainer_19.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC420CABD660057A782 /* colo_trainer_19.png */; };
-		B280AF2D20CABD660057A782 /* colo_trainer_9.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC520CABD660057A782 /* colo_trainer_9.png */; };
 		B280AF2E20CABD660057A782 /* colo_trainer_9.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC520CABD660057A782 /* colo_trainer_9.png */; };
-		B280AF2F20CABD660057A782 /* colo_trainer_8.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC620CABD660057A782 /* colo_trainer_8.png */; };
 		B280AF3020CABD660057A782 /* colo_trainer_8.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC620CABD660057A782 /* colo_trainer_8.png */; };
-		B280AF3120CABD660057A782 /* colo_trainer_18.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC720CABD660057A782 /* colo_trainer_18.png */; };
 		B280AF3220CABD660057A782 /* colo_trainer_18.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC720CABD660057A782 /* colo_trainer_18.png */; };
-		B280AF3320CABD660057A782 /* colo_trainer_30.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC820CABD660057A782 /* colo_trainer_30.png */; };
 		B280AF3420CABD660057A782 /* colo_trainer_30.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC820CABD660057A782 /* colo_trainer_30.png */; };
-		B280AF3520CABD660057A782 /* colo_trainer_24.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC920CABD660057A782 /* colo_trainer_24.png */; };
 		B280AF3620CABD660057A782 /* colo_trainer_24.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEC920CABD660057A782 /* colo_trainer_24.png */; };
-		B280AF3720CABD660057A782 /* colo_trainer_32.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AECA20CABD660057A782 /* colo_trainer_32.png */; };
 		B280AF3820CABD660057A782 /* colo_trainer_32.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AECA20CABD660057A782 /* colo_trainer_32.png */; };
-		B280AF3920CABD660057A782 /* colo_trainer_26.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AECB20CABD660057A782 /* colo_trainer_26.png */; };
 		B280AF3A20CABD660057A782 /* colo_trainer_26.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AECB20CABD660057A782 /* colo_trainer_26.png */; };
-		B280AF3B20CABD660057A782 /* colo_trainer_27.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AECC20CABD660057A782 /* colo_trainer_27.png */; };
 		B280AF3C20CABD660057A782 /* colo_trainer_27.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AECC20CABD660057A782 /* colo_trainer_27.png */; };
-		B280AF3D20CABD660057A782 /* colo_trainer_33.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AECD20CABD660057A782 /* colo_trainer_33.png */; };
 		B280AF3E20CABD660057A782 /* colo_trainer_33.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AECD20CABD660057A782 /* colo_trainer_33.png */; };
-		B280AF3F20CABD660057A782 /* colo_trainer_16.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AECE20CABD660057A782 /* colo_trainer_16.png */; };
 		B280AF4020CABD660057A782 /* colo_trainer_16.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AECE20CABD660057A782 /* colo_trainer_16.png */; };
-		B280AF4120CABD660057A782 /* colo_trainer_6.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AECF20CABD660057A782 /* colo_trainer_6.png */; };
 		B280AF4220CABD660057A782 /* colo_trainer_6.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AECF20CABD660057A782 /* colo_trainer_6.png */; };
-		B280AF4320CABD660057A782 /* colo_trainer_7.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED020CABD660057A782 /* colo_trainer_7.png */; };
 		B280AF4420CABD660057A782 /* colo_trainer_7.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED020CABD660057A782 /* colo_trainer_7.png */; };
-		B280AF4520CABD660057A782 /* colo_trainer_17.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED120CABD660057A782 /* colo_trainer_17.png */; };
 		B280AF4620CABD660057A782 /* colo_trainer_17.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED120CABD660057A782 /* colo_trainer_17.png */; };
-		B280AF4720CABD660057A782 /* colo_trainer_29.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED220CABD660057A782 /* colo_trainer_29.png */; };
 		B280AF4820CABD660057A782 /* colo_trainer_29.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED220CABD660057A782 /* colo_trainer_29.png */; };
-		B280AF4920CABD660057A782 /* colo_trainer_5.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED320CABD660057A782 /* colo_trainer_5.png */; };
 		B280AF4A20CABD660057A782 /* colo_trainer_5.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED320CABD660057A782 /* colo_trainer_5.png */; };
-		B280AF4B20CABD660057A782 /* colo_trainer_15.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED420CABD660057A782 /* colo_trainer_15.png */; };
 		B280AF4C20CABD660057A782 /* colo_trainer_15.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED420CABD660057A782 /* colo_trainer_15.png */; };
-		B280AF4D20CABD660057A782 /* colo_trainer_14.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED520CABD660057A782 /* colo_trainer_14.png */; };
 		B280AF4E20CABD660057A782 /* colo_trainer_14.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED520CABD660057A782 /* colo_trainer_14.png */; };
-		B280AF4F20CABD660057A782 /* colo_trainer_4.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED620CABD660057A782 /* colo_trainer_4.png */; };
 		B280AF5020CABD660057A782 /* colo_trainer_4.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED620CABD660057A782 /* colo_trainer_4.png */; };
-		B280AF5120CABD660057A782 /* colo_trainer_28.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED720CABD660057A782 /* colo_trainer_28.png */; };
 		B280AF5220CABD660057A782 /* colo_trainer_28.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED720CABD660057A782 /* colo_trainer_28.png */; };
-		B280AF5320CABD660057A782 /* colo_trainer_0.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED820CABD660057A782 /* colo_trainer_0.png */; };
 		B280AF5420CABD660057A782 /* colo_trainer_0.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED820CABD660057A782 /* colo_trainer_0.png */; };
-		B280AF5520CABD660057A782 /* colo_trainer_10.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED920CABD660057A782 /* colo_trainer_10.png */; };
 		B280AF5620CABD660057A782 /* colo_trainer_10.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AED920CABD660057A782 /* colo_trainer_10.png */; };
-		B280AF5720CABD660057A782 /* colo_trainer_38.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEDA20CABD660057A782 /* colo_trainer_38.png */; };
 		B280AF5820CABD660057A782 /* colo_trainer_38.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEDA20CABD660057A782 /* colo_trainer_38.png */; };
-		B280AF5920CABD660057A782 /* colo_trainer_39.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEDB20CABD660057A782 /* colo_trainer_39.png */; };
 		B280AF5A20CABD660057A782 /* colo_trainer_39.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEDB20CABD660057A782 /* colo_trainer_39.png */; };
-		B280AF5B20CABD660057A782 /* colo_trainer_11.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEDC20CABD660057A782 /* colo_trainer_11.png */; };
 		B280AF5C20CABD660057A782 /* colo_trainer_11.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEDC20CABD660057A782 /* colo_trainer_11.png */; };
-		B280AF5D20CABD660057A782 /* colo_trainer_1.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEDD20CABD660057A782 /* colo_trainer_1.png */; };
 		B280AF5E20CABD660057A782 /* colo_trainer_1.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEDD20CABD660057A782 /* colo_trainer_1.png */; };
-		B280AF5F20CABD660057A782 /* colo_trainer_13.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEDE20CABD660057A782 /* colo_trainer_13.png */; };
 		B280AF6020CABD660057A782 /* colo_trainer_13.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEDE20CABD660057A782 /* colo_trainer_13.png */; };
-		B280AF6120CABD660057A782 /* colo_trainer_3.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEDF20CABD660057A782 /* colo_trainer_3.png */; };
 		B280AF6220CABD660057A782 /* colo_trainer_3.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEDF20CABD660057A782 /* colo_trainer_3.png */; };
-		B280AF6320CABD660057A782 /* colo_trainer_2.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE020CABD660057A782 /* colo_trainer_2.png */; };
 		B280AF6420CABD660057A782 /* colo_trainer_2.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE020CABD660057A782 /* colo_trainer_2.png */; };
-		B280AF6520CABD660057A782 /* colo_trainer_12.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE120CABD660057A782 /* colo_trainer_12.png */; };
 		B280AF6620CABD660057A782 /* colo_trainer_12.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE120CABD660057A782 /* colo_trainer_12.png */; };
-		B280AF6720CABD660057A782 /* colo_trainer_49.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE220CABD660057A782 /* colo_trainer_49.png */; };
 		B280AF6820CABD660057A782 /* colo_trainer_49.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE220CABD660057A782 /* colo_trainer_49.png */; };
-		B280AF6920CABD660057A782 /* colo_trainer_75.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE320CABD660057A782 /* colo_trainer_75.png */; };
 		B280AF6A20CABD660057A782 /* colo_trainer_75.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE320CABD660057A782 /* colo_trainer_75.png */; };
-		B280AF6B20CABD660057A782 /* colo_trainer_61.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE420CABD660057A782 /* colo_trainer_61.png */; };
 		B280AF6C20CABD660057A782 /* colo_trainer_61.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE420CABD660057A782 /* colo_trainer_61.png */; };
-		B280AF6D20CABD660057A782 /* colo_trainer_60.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE520CABD660057A782 /* colo_trainer_60.png */; };
 		B280AF6E20CABD660057A782 /* colo_trainer_60.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE520CABD660057A782 /* colo_trainer_60.png */; };
-		B280AF6F20CABD660057A782 /* colo_trainer_74.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE620CABD660057A782 /* colo_trainer_74.png */; };
 		B280AF7020CABD660057A782 /* colo_trainer_74.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE620CABD660057A782 /* colo_trainer_74.png */; };
-		B280AF7120CABD660057A782 /* colo_trainer_48.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE720CABD660057A782 /* colo_trainer_48.png */; };
 		B280AF7220CABD660057A782 /* colo_trainer_48.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE720CABD660057A782 /* colo_trainer_48.png */; };
-		B280AF7320CABD660057A782 /* colo_trainer_62.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE820CABD660057A782 /* colo_trainer_62.png */; };
 		B280AF7420CABD660057A782 /* colo_trainer_62.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE820CABD660057A782 /* colo_trainer_62.png */; };
-		B280AF7520CABD660057A782 /* colo_trainer_63.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE920CABD660057A782 /* colo_trainer_63.png */; };
 		B280AF7620CABD660057A782 /* colo_trainer_63.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEE920CABD660057A782 /* colo_trainer_63.png */; };
-		B280AF7720CABD660057A782 /* colo_trainer_67.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEEA20CABD660057A782 /* colo_trainer_67.png */; };
 		B280AF7820CABD660057A782 /* colo_trainer_67.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEEA20CABD660057A782 /* colo_trainer_67.png */; };
-		B280AF7920CABD660057A782 /* colo_trainer_73.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEEB20CABD660057A782 /* colo_trainer_73.png */; };
 		B280AF7A20CABD660057A782 /* colo_trainer_73.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEEB20CABD660057A782 /* colo_trainer_73.png */; };
-		B280AF7B20CABD660057A782 /* colo_trainer_72.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEEC20CABD660057A782 /* colo_trainer_72.png */; };
 		B280AF7C20CABD660057A782 /* colo_trainer_72.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEEC20CABD660057A782 /* colo_trainer_72.png */; };
-		B280AF7D20CABD660057A782 /* colo_trainer_70.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEED20CABD660057A782 /* colo_trainer_70.png */; };
 		B280AF7E20CABD660057A782 /* colo_trainer_70.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEED20CABD660057A782 /* colo_trainer_70.png */; };
-		B280AF7F20CABD660057A782 /* colo_trainer_64.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEEE20CABD660057A782 /* colo_trainer_64.png */; };
 		B280AF8020CABD660057A782 /* colo_trainer_64.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEEE20CABD660057A782 /* colo_trainer_64.png */; };
-		B280AF8120CABD660057A782 /* colo_trainer_58.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEEF20CABD660057A782 /* colo_trainer_58.png */; };
 		B280AF8220CABD660057A782 /* colo_trainer_58.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEEF20CABD660057A782 /* colo_trainer_58.png */; };
-		B280AF8320CABD660057A782 /* colo_trainer_59.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEF020CABD660057A782 /* colo_trainer_59.png */; };
 		B280AF8420CABD660057A782 /* colo_trainer_59.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEF020CABD660057A782 /* colo_trainer_59.png */; };
-		B280AF8520CABD660057A782 /* colo_trainer_65.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEF120CABD660057A782 /* colo_trainer_65.png */; };
 		B280AF8620CABD660057A782 /* colo_trainer_65.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEF120CABD660057A782 /* colo_trainer_65.png */; };
-		B280AF8720CABD660057A782 /* colo_trainer_71.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEF220CABD660057A782 /* colo_trainer_71.png */; };
 		B280AF8820CABD660057A782 /* colo_trainer_71.png in Resources */ = {isa = PBXBuildFile; fileRef = B280AEF220CABD660057A782 /* colo_trainer_71.png */; };
 		B28C4DB01FA9E49200EED1C9 /* XGPokemart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */; };
 		B28C4DB21FA9E49200EED1C9 /* XGPokemart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */; };
@@ -4142,12 +4048,10 @@
 		B2F5F8AC1F49CD050075C6D2 /* GoDTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8961F49CD050075C6D2 /* GoDTableView.swift */; };
 		B2F5F8C01F4C4EDD0075C6D2 /* GoDViewLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8BE1F4C4ED10075C6D2 /* GoDViewLayoutManager.swift */; };
 		B2F5F8C21F4C58CF0075C6D2 /* GoDImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */; };
-		B2F911691F6606E900129DC2 /* DeckData_Empty.bin in Resources */ = {isa = PBXBuildFile; fileRef = B2F911671F6606E900129DC2 /* DeckData_Empty.bin */; };
 		B2F9B2951FA4A04200E1489E /* XGRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2941FA4A04200E1489E /* XGRoom.swift */; };
 		B2F9B2971FA4B6C400E1489E /* XGRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2941FA4A04200E1489E /* XGRoom.swift */; };
 		B2F9B2991FA4CDAD00E1489E /* XGBattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2981FA4CDAD00E1489E /* XGBattle.swift */; };
 		B2F9B29B1FA4CDAD00E1489E /* XGBattle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F9B2981FA4CDAD00E1489E /* XGBattle.swift */; };
-		B2FB65F51FB4B1CE00E056AB /* Null.fsys in Resources */ = {isa = PBXBuildFile; fileRef = B2FB65F31FB4B1CE00E056AB /* Null.fsys */; };
 		B2FB748F1FC0522900B6B2AE /* XGFileTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FB748E1FC0522900B6B2AE /* XGFileTypes.swift */; };
 		B2FEC07A1F6C602A00AC263D /* GoDAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0791F6C602A00AC263D /* GoDAlertViewController.swift */; };
 		B2FEC07E1F6D25BF00AC263D /* GoDToolExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC07C1F6D25BF00AC263D /* GoDToolExtensions.swift */; };
@@ -4161,7 +4065,6 @@
 		B2FEC09B1F7032F300AC263D /* GoDTrainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC09A1F7032F300AC263D /* GoDTrainerView.swift */; };
 		B2FEC09D1F727D8200AC263D /* GoDDPKMPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC09C1F727D8200AC263D /* GoDDPKMPopUpButton.swift */; };
 		B2FEC09F1F72955200AC263D /* GoDDDPKPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC09E1F72955200AC263D /* GoDDDPKPopUpButton.swift */; };
-		B2FF6D2F20BCB50F00A84637 /* GoDOpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FF6D2E20BCB50F00A84637 /* GoDOpenGL.swift */; };
 		B2FF6D3020BCB50F00A84637 /* GoDOpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FF6D2E20BCB50F00A84637 /* GoDOpenGL.swift */; };
 /* End PBXBuildFile section */
 
@@ -4231,6 +4134,7 @@
 		1C291C072513997A00E3B124 /* WZX ids.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "WZX ids.json"; sourceTree = "<group>"; };
 		1C37440C24056F190089D3BA /* GoDShellManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDShellManager.swift; sourceTree = "<group>"; };
 		1C39D85B240EA03D006FDFBD /* wit */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = wit; sourceTree = "<group>"; };
+		1C4E15D7253E065700EA318B /* READ_ME.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = READ_ME.txt; sourceTree = "<group>"; };
 		1C524D00234B7F0800A9659A /* GoDEnumerablePopUpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDEnumerablePopUpButton.swift; sourceTree = "<group>"; };
 		1C6295D7242A938B0085C22F /* PBR_body_000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_000.png; sourceTree = "<group>"; };
 		1C6295D9242A93BC0085C22F /* PBR_face_000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_face_000.png; sourceTree = "<group>"; };
@@ -4295,6 +4199,7 @@
 		1CC362D324C07E35005D7B4A /* PBR_body_500.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_500.png; sourceTree = "<group>"; };
 		1CC362D424C07E35005D7B4A /* PBR_body_497.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_497.png; sourceTree = "<group>"; };
 		1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleStyles.swift; sourceTree = "<group>"; };
+		1CC9AC42253D3E7B008A8389 /* XGDummyCollisionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGDummyCollisionData.swift; sourceTree = "<group>"; };
 		1CE1A7772326AA0D005141D8 /* XGSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGSettings.swift; sourceTree = "<group>"; };
 		1CED5D9724004864008566B0 /* GoDGCEnumerablePopUpButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDGCEnumerablePopUpButtons.swift; sourceTree = "<group>"; };
 		1CED5D9E2403E9EE008566B0 /* GoDGTXViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDGTXViewController.swift; sourceTree = "<group>"; };
@@ -4336,7 +4241,6 @@
 		B20C40172188B9D1006D7CD9 /* SCD.sublime-color-scheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SCD.sublime-color-scheme"; sourceTree = "<group>"; };
 		B20C40182188B9D1006D7CD9 /* XDScript.sublime-settings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "XDScript.sublime-settings"; sourceTree = "<group>"; };
 		B20C40192188B9D1006D7CD9 /* XDScript.sublime-syntax */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "XDScript.sublime-syntax"; sourceTree = "<group>"; };
-		B20C40202189D5E6006D7CD9 /* Dol2.msg */ = {isa = PBXFileReference; lastKnownFileType = file; path = Dol2.msg; sourceTree = "<group>"; };
 		B20C4025218AE3BC006D7CD9 /* Original Moves.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Original Moves.json"; sourceTree = "<group>"; };
 		B20C4026218AE3BD006D7CD9 /* Colosseum Song IDs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Colosseum Song IDs"; sourceTree = "<group>"; };
 		B20C4027218AE3BD006D7CD9 /* Move Effects.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Move Effects.json"; sourceTree = "<group>"; };
@@ -6512,8 +6416,6 @@
 		B2F5EBE51F49A1FE0075C6D2 /* XGItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGItem.swift; sourceTree = "<group>"; };
 		B2F5EBE61F49A1FE0075C6D2 /* XGLevelUpMove.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGLevelUpMove.swift; sourceTree = "<group>"; };
 		B2F5EBE71F49A1FE0075C6D2 /* XGLZSS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGLZSS.swift; sourceTree = "<group>"; };
-		B2F5EBE81F49A1FE0075C6D2 /* XGLZSSWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGLZSSWrapper.h; sourceTree = "<group>"; };
-		B2F5EBE91F49A1FE0075C6D2 /* XGLZSSWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XGLZSSWrapper.m; sourceTree = "<group>"; };
 		B2F5EBEA1F49A1FE0075C6D2 /* XGMove.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGMove.swift; sourceTree = "<group>"; };
 		B2F5EBEB1F49A1FE0075C6D2 /* XGMtBattlePokemon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGMtBattlePokemon.swift; sourceTree = "<group>"; };
 		B2F5EBEC1F49A1FE0075C6D2 /* XGMutableData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGMutableData.swift; sourceTree = "<group>"; };
@@ -6563,10 +6465,8 @@
 		B2F5F8BE1F4C4ED10075C6D2 /* GoDViewLayoutManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDViewLayoutManager.swift; sourceTree = "<group>"; };
 		B2F5F8C11F4C58CF0075C6D2 /* GoDImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDImageExtensions.swift; sourceTree = "<group>"; };
 		B2F7C8E61F8FB4F300BB664D /* default move routines.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "default move routines.txt"; sourceTree = "<group>"; };
-		B2F911671F6606E900129DC2 /* DeckData_Empty.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = DeckData_Empty.bin; sourceTree = "<group>"; };
 		B2F9B2941FA4A04200E1489E /* XGRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGRoom.swift; sourceTree = "<group>"; };
 		B2F9B2981FA4CDAD00E1489E /* XGBattle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGBattle.swift; sourceTree = "<group>"; };
-		B2FB65F31FB4B1CE00E056AB /* Null.fsys */ = {isa = PBXFileReference; lastKnownFileType = file; path = Null.fsys; sourceTree = "<group>"; };
 		B2FB748E1FC0522900B6B2AE /* XGFileTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGFileTypes.swift; sourceTree = "<group>"; };
 		B2FEC0791F6C602A00AC263D /* GoDAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDAlertViewController.swift; sourceTree = "<group>"; };
 		B2FEC07C1F6D25BF00AC263D /* GoDToolExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDToolExtensions.swift; sourceTree = "<group>"; };
@@ -6684,6 +6584,7 @@
 		1C16CA86253B6ACE00907D78 /* out */ = {
 			isa = PBXGroup;
 			children = (
+				1C4E15D7253E065700EA318B /* READ_ME.txt */,
 			);
 			path = out;
 			sourceTree = "<group>";
@@ -6816,16 +6717,6 @@
 			path = extensions;
 			sourceTree = "<group>";
 		};
-		1CB33AA222B78F8800F81C29 /* game files */ = {
-			isa = PBXGroup;
-			children = (
-				B20C40202189D5E6006D7CD9 /* Dol2.msg */,
-				B2FB65F31FB4B1CE00E056AB /* Null.fsys */,
-				B2F911671F6606E900129DC2 /* DeckData_Empty.bin */,
-			);
-			path = "game files";
-			sourceTree = "<group>";
-		};
 		1CB33AA322B7903900F81C29 /* protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -6929,10 +6820,9 @@
 				B24547802229C2670043F991 /* XGGSWTextures.swift */,
 				B2F5EBE41F49A1FE0075C6D2 /* XGISO.swift */,
 				B2F5EBE71F49A1FE0075C6D2 /* XGLZSS.swift */,
-				B2F5EBE81F49A1FE0075C6D2 /* XGLZSSWrapper.h */,
-				B2F5EBE91F49A1FE0075C6D2 /* XGLZSSWrapper.m */,
 				B252D95A1F98AF0400794FCE /* XGRelocationTable.swift */,
 				B2F5EBF81F49A1FE0075C6D2 /* XGStringTable.swift */,
+				1CC9AC42253D3E7B008A8389 /* XGDummyCollisionData.swift */,
 			);
 			name = "file formats";
 			path = "Objects/file formats";
@@ -9206,7 +9096,6 @@
 				B208E75A20C4DD2D00D298BF /* XDRelIndexes.swift */,
 				B208E75F20C4DD3E00D298BF /* CMRelIndexes.swift */,
 				1CB33AA322B7903900F81C29 /* protocols */,
-				1CB33AA222B78F8800F81C29 /* game files */,
 				1CB33A4922B78F2500F81C29 /* extensions */,
 				B2F5ED8A1F49AF0E0075C6D2 /* images */,
 				B2F5ED0B1F49AE950075C6D2 /* JSON */,
@@ -9645,6 +9534,7 @@
 					B2F5EB821F49A11A0075C6D2 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = PL9D4W4S2M;
+						LastSwiftMigration = 1200;
 						ProvisioningStyle = Automatic;
 					};
 					B2F5EBA41F49A1980075C6D2 = {
@@ -9945,7 +9835,6 @@
 				B208E53420C4D3BD00D298BF /* body_323.png in Resources */,
 				B208E6A220C4D3D700D298BF /* face_274.png in Resources */,
 				B208E5E420C4D3D700D298BF /* face_084.png in Resources */,
-				B208E3F020C4D38D00D298BF /* DeckData_Empty.bin in Resources */,
 				B208E5FE20C4D3D700D298BF /* face_110.png in Resources */,
 				B208E5DD20C4D3D700D298BF /* face_077.png in Resources */,
 				B208E4E520C4D3BD00D298BF /* body_244.png in Resources */,
@@ -10354,7 +10243,6 @@
 				B208E5B320C4D3D700D298BF /* face_035.png in Resources */,
 				B208E51220C4D3BD00D298BF /* body_289.png in Resources */,
 				B208E47F20C4D3BD00D298BF /* body_142.png in Resources */,
-				B208E3EF20C4D38A00D298BF /* Null.fsys in Resources */,
 				B208E4F120C4D3BD00D298BF /* body_256.png in Resources */,
 				B280AE4020C9B4560057A782 /* type_14.png in Resources */,
 				B208E5CC20C4D3D700D298BF /* face_060.png in Resources */,
@@ -11364,7 +11252,6 @@
 				B20EEE1821EF77FD00E87D01 /* PBR_face_041.png in Resources */,
 				B20EEAD221EF77E100E87D01 /* PBR_body_048.png in Resources */,
 				B20EEB4B21EF77E100E87D01 /* PBR_body_406.png in Resources */,
-				B20EEA8F21EF77C000E87D01 /* DeckData_Empty.bin in Resources */,
 				B20EECF021EF77FD00E87D01 /* PBR_face_363.png in Resources */,
 				B20EEABD21EF77E100E87D01 /* PBR_body_070.png in Resources */,
 				B20EED8621EF77FD00E87D01 /* PBR_face_209.png in Resources */,
@@ -11761,7 +11648,6 @@
 				B20EEDD821EF77FD00E87D01 /* PBR_face_420.png in Resources */,
 				B20EECA421EF77FC00E87D01 /* PBR_face_263.png in Resources */,
 				B20EEC5121EF77E200E87D01 /* PBR_body_120.png in Resources */,
-				B20EEA8E21EF77BC00E87D01 /* Null.fsys in Resources */,
 				B20EEAEF21EF77E100E87D01 /* PBR_body_261.png in Resources */,
 				B20EED0321EF77FD00E87D01 /* PBR_face_362.png in Resources */,
 				B20EECD221EF77FD00E87D01 /* PBR_face_463.png in Resources */,
@@ -11795,7 +11681,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B280AF4520CABD660057A782 /* colo_trainer_17.png in Resources */,
 				B2F50B471F4C5FAC0075C6D2 /* face_115.png in Resources */,
 				B2F508E71F4C5FAB0075C6D2 /* body_226.png in Resources */,
 				B2F50BDB1F4C5FAC0075C6D2 /* face_189.png in Resources */,
@@ -11837,7 +11722,6 @@
 				B2F5090B1F4C5FAB0075C6D2 /* body_244.png in Resources */,
 				B2F5076F1F4C5FAB0075C6D2 /* body_038.png in Resources */,
 				B2F5087D1F4C5FAB0075C6D2 /* body_173.png in Resources */,
-				B280AEFF20CABD660057A782 /* colo_trainer_43.png in Resources */,
 				B2F50E071F4C5FAD0075C6D2 /* trainer_56.png in Resources */,
 				B2F50B951F4C5FAC0075C6D2 /* face_154.png in Resources */,
 				B2F507E31F4C5FAB0075C6D2 /* body_096.png in Resources */,
@@ -11847,12 +11731,10 @@
 				B2F508CF1F4C5FAB0075C6D2 /* body_214.png in Resources */,
 				B2F507B91F4C5FAB0075C6D2 /* body_075.png in Resources */,
 				B2F509E11F4C5FAB0075C6D2 /* body_351.png in Resources */,
-				B280AF7920CABD660057A782 /* colo_trainer_73.png in Resources */,
 				1CA2388C24114297000E56AB /* Gift.storyboard in Resources */,
 				B2F50B191F4C5FAC0075C6D2 /* face_092.png in Resources */,
 				B2F50C7F1F4C5FAC0075C6D2 /* face_271.png in Resources */,
 				B2F50C751F4C5FAC0075C6D2 /* face_266.png in Resources */,
-				B280AF5B20CABD660057A782 /* colo_trainer_11.png in Resources */,
 				B2F509671F4C5FAB0075C6D2 /* body_290.png in Resources */,
 				B2F50AAF1F4C5FAC0075C6D2 /* face_039.png in Resources */,
 				B2F50DE31F4C5FAC0075C6D2 /* trainer_4.png in Resources */,
@@ -11865,7 +11747,6 @@
 				B2F50CC91F4C5FAC0075C6D2 /* face_308.png in Resources */,
 				B2F50E3B1F4C5FAD0075C6D2 /* type_2.png in Resources */,
 				B2F50AA11F4C5FAC0075C6D2 /* face_032.png in Resources */,
-				B280AF6B20CABD660057A782 /* colo_trainer_61.png in Resources */,
 				B2F50AED1F4C5FAC0075C6D2 /* face_070.png in Resources */,
 				B2F50BFB1F4C5FAC0075C6D2 /* face_205.png in Resources */,
 				B2F509A31F4C5FAB0075C6D2 /* body_320.png in Resources */,
@@ -11882,7 +11763,6 @@
 				B2F507371F4C5FAA0075C6D2 /* body_010.png in Resources */,
 				B2F509271F4C5FAB0075C6D2 /* body_258.png in Resources */,
 				B2F50BA11F4C5FAC0075C6D2 /* face_160.png in Resources */,
-				B280AF4920CABD660057A782 /* colo_trainer_5.png in Resources */,
 				B2F50A8B1F4C5FAB0075C6D2 /* face_021.png in Resources */,
 				B2F508391F4C5FAB0075C6D2 /* body_139.png in Resources */,
 				B2F507EF1F4C5FAB0075C6D2 /* body_102.png in Resources */,
@@ -11907,7 +11787,6 @@
 				B2F50AB31F4C5FAC0075C6D2 /* face_041.png in Resources */,
 				B2F509691F4C5FAB0075C6D2 /* body_291.png in Resources */,
 				B2F50C031F4C5FAC0075C6D2 /* face_209.png in Resources */,
-				B2FB65F51FB4B1CE00E056AB /* Null.fsys in Resources */,
 				B2F50DA51F4C5FAC0075C6D2 /* trainer_11.png in Resources */,
 				B2F508F31F4C5FAB0075C6D2 /* body_232.png in Resources */,
 				B2F50ACF1F4C5FAC0075C6D2 /* face_055.png in Resources */,
@@ -11937,19 +11816,14 @@
 				B2F50C851F4C5FAC0075C6D2 /* face_274.png in Resources */,
 				B2F50BDD1F4C5FAC0075C6D2 /* face_190.png in Resources */,
 				B2F50A831F4C5FAB0075C6D2 /* face_017.png in Resources */,
-				B280AF1F20CABD660057A782 /* colo_trainer_20.png in Resources */,
 				B2F50E3F1F4C5FAD0075C6D2 /* type_4.png in Resources */,
 				B2F50DDB1F4C5FAC0075C6D2 /* trainer_36.png in Resources */,
-				B280AF6D20CABD660057A782 /* colo_trainer_60.png in Resources */,
 				B2F50D891F4C5FAC0075C6D2 /* face_404.png in Resources */,
 				B2F50ABB1F4C5FAC0075C6D2 /* face_045.png in Resources */,
 				B2F50DED1F4C5FAD0075C6D2 /* trainer_44.png in Resources */,
 				B2F50C631F4C5FAC0075C6D2 /* face_257.png in Resources */,
 				B2F50A0B1F4C5FAB0075C6D2 /* body_372.png in Resources */,
-				B280AF3120CABD660057A782 /* colo_trainer_18.png in Resources */,
 				B2F508991F4C5FAB0075C6D2 /* body_187.png in Resources */,
-				B280AF1120CABD660057A782 /* colo_trainer_45.png in Resources */,
-				B280AF3720CABD660057A782 /* colo_trainer_32.png in Resources */,
 				B2F50A231F4C5FAB0075C6D2 /* body_384.png in Resources */,
 				B2F5F13A1F49AF100075C6D2 /* ball grey.png in Resources */,
 				B2F509731F4C5FAB0075C6D2 /* body_296.png in Resources */,
@@ -11976,7 +11850,6 @@
 				B2F508F71F4C5FAB0075C6D2 /* body_234.png in Resources */,
 				B2F50D8F1F4C5FAC0075C6D2 /* face_407.png in Resources */,
 				B2F509FB1F4C5FAB0075C6D2 /* body_364.png in Resources */,
-				B280AF6120CABD660057A782 /* colo_trainer_3.png in Resources */,
 				B2F508BF1F4C5FAB0075C6D2 /* body_206.png in Resources */,
 				B2F508CB1F4C5FAB0075C6D2 /* body_212.png in Resources */,
 				B2F509011F4C5FAB0075C6D2 /* body_239.png in Resources */,
@@ -11988,7 +11861,6 @@
 				B2F50B571F4C5FAC0075C6D2 /* face_123.png in Resources */,
 				B2F50C651F4C5FAC0075C6D2 /* face_258.png in Resources */,
 				B2F50D931F4C5FAC0075C6D2 /* face_409.png in Resources */,
-				B280AEF920CABD660057A782 /* colo_trainer_41.png in Resources */,
 				B2F50E0D1F4C5FAD0075C6D2 /* trainer_59.png in Resources */,
 				B2F50DE91F4C5FAD0075C6D2 /* trainer_42.png in Resources */,
 				B2F50ABF1F4C5FAC0075C6D2 /* face_047.png in Resources */,
@@ -12000,8 +11872,6 @@
 				B2F50C811F4C5FAC0075C6D2 /* face_272.png in Resources */,
 				B2F509591F4C5FAB0075C6D2 /* body_283.png in Resources */,
 				B2F50C411F4C5FAC0075C6D2 /* face_240.png in Resources */,
-				B280AF3D20CABD660057A782 /* colo_trainer_33.png in Resources */,
-				B280AF2D20CABD660057A782 /* colo_trainer_9.png in Resources */,
 				B2F50E151F4C5FAD0075C6D2 /* trainer_62.png in Resources */,
 				B2F50CFF1F4C5FAC0075C6D2 /* face_335.png in Resources */,
 				B2F50DA11F4C5FAC0075C6D2 /* trainer_1.png in Resources */,
@@ -12033,10 +11903,8 @@
 				B2F50BCD1F4C5FAC0075C6D2 /* face_182.png in Resources */,
 				B2F5F7C21F49AF120075C6D2 /* Tool Cell.png in Resources */,
 				B2F507591F4C5FAB0075C6D2 /* body_027.png in Resources */,
-				B280AF1520CABD660057A782 /* colo_trainer_50.png in Resources */,
 				B2F50E1D1F4C5FAD0075C6D2 /* trainer_66.png in Resources */,
 				B2F50D3F1F4C5FAC0075C6D2 /* face_367.png in Resources */,
-				B280AF3B20CABD660057A782 /* colo_trainer_27.png in Resources */,
 				B2F50BF71F4C5FAC0075C6D2 /* face_203.png in Resources */,
 				B2F509631F4C5FAB0075C6D2 /* body_288.png in Resources */,
 				B20C401D2188B9D2006D7CD9 /* SCD.sublime-color-scheme in Resources */,
@@ -12072,8 +11940,6 @@
 				B2F50D531F4C5FAC0075C6D2 /* face_377.png in Resources */,
 				B2F5F13C1F49AF100075C6D2 /* ball purple.png in Resources */,
 				B2F509B31F4C5FAB0075C6D2 /* body_328.png in Resources */,
-				B280AF4720CABD660057A782 /* colo_trainer_29.png in Resources */,
-				B280AF3320CABD660057A782 /* colo_trainer_30.png in Resources */,
 				B2F5074D1F4C5FAA0075C6D2 /* body_021.png in Resources */,
 				B2F50C291F4C5FAC0075C6D2 /* face_228.png in Resources */,
 				B2F50A1F1F4C5FAB0075C6D2 /* body_382.png in Resources */,
@@ -12081,7 +11947,6 @@
 				B2F50E4B1F4C5FAD0075C6D2 /* type_shadow.png in Resources */,
 				B2F50D0B1F4C5FAC0075C6D2 /* face_341.png in Resources */,
 				B2F50A151F4C5FAB0075C6D2 /* body_377.png in Resources */,
-				B280AF8320CABD660057A782 /* colo_trainer_59.png in Resources */,
 				B2F50D3D1F4C5FAC0075C6D2 /* face_366.png in Resources */,
 				B2F5088B1F4C5FAB0075C6D2 /* body_180.png in Resources */,
 				B2F50BCF1F4C5FAC0075C6D2 /* face_183.png in Resources */,
@@ -12089,10 +11954,8 @@
 				B2F508011F4C5FAB0075C6D2 /* body_111.png in Resources */,
 				B2F507B71F4C5FAB0075C6D2 /* body_074.png in Resources */,
 				B2F50C171F4C5FAC0075C6D2 /* face_219.png in Resources */,
-				B280AF6F20CABD660057A782 /* colo_trainer_74.png in Resources */,
 				B2F5098B1F4C5FAB0075C6D2 /* body_308.png in Resources */,
 				B2F509A91F4C5FAB0075C6D2 /* body_323.png in Resources */,
-				B280AF5320CABD660057A782 /* colo_trainer_0.png in Resources */,
 				B2F50DA31F4C5FAC0075C6D2 /* trainer_10.png in Resources */,
 				B2F50DCF1F4C5FAC0075C6D2 /* trainer_30.png in Resources */,
 				1CA23886241140B6000E56AB /* Type.storyboard in Resources */,
@@ -12137,9 +12000,7 @@
 				B2F50BA91F4C5FAC0075C6D2 /* face_164.png in Resources */,
 				B2F507A71F4C5FAB0075C6D2 /* body_066.png in Resources */,
 				B2F50D511F4C5FAC0075C6D2 /* face_376.png in Resources */,
-				B280AF2720CABD660057A782 /* colo_trainer_25.png in Resources */,
 				B2F50A211F4C5FAB0075C6D2 /* body_383.png in Resources */,
-				B280AF1920CABD660057A782 /* colo_trainer_23.png in Resources */,
 				1CA2387124113823000E56AB /* Help.storyboard in Resources */,
 				B2F50BB11F4C5FAC0075C6D2 /* face_168.png in Resources */,
 				B2F50B131F4C5FAC0075C6D2 /* face_089.png in Resources */,
@@ -12149,8 +12010,6 @@
 				B2F50A991F4C5FAB0075C6D2 /* face_028.png in Resources */,
 				B2F50A171F4C5FAB0075C6D2 /* body_378.png in Resources */,
 				B2F50D371F4C5FAC0075C6D2 /* face_363.png in Resources */,
-				B280AEF520CABD660057A782 /* colo_trainer_54.png in Resources */,
-				B280AF0320CABD660057A782 /* colo_trainer_56.png in Resources */,
 				B2F50ADB1F4C5FAC0075C6D2 /* face_061.png in Resources */,
 				B2F50BA71F4C5FAC0075C6D2 /* face_163.png in Resources */,
 				B2F50DC51F4C5FAC0075C6D2 /* trainer_26.png in Resources */,
@@ -12160,11 +12019,9 @@
 				B2F508771F4C5FAB0075C6D2 /* body_170.png in Resources */,
 				B2F507CB1F4C5FAB0075C6D2 /* body_084.png in Resources */,
 				B2F50AFF1F4C5FAC0075C6D2 /* face_079.png in Resources */,
-				B280AF3920CABD660057A782 /* colo_trainer_26.png in Resources */,
 				B2FEC0841F6D620F00AC263D /* Move Categories.json in Resources */,
 				B2F509B91F4C5FAB0075C6D2 /* body_331.png in Resources */,
 				B2F50C8B1F4C5FAC0075C6D2 /* face_277.png in Resources */,
-				B280AF6920CABD660057A782 /* colo_trainer_75.png in Resources */,
 				B2F50E471F4C5FAD0075C6D2 /* type_8.png in Resources */,
 				B2F508CD1F4C5FAB0075C6D2 /* body_213.png in Resources */,
 				B2F508C11F4C5FAB0075C6D2 /* body_207.png in Resources */,
@@ -12196,11 +12053,8 @@
 				1CA2388F241142B2000E56AB /* Shadow.storyboard in Resources */,
 				B2F5086F1F4C5FAB0075C6D2 /* body_166.png in Resources */,
 				B2F50AA31F4C5FAC0075C6D2 /* face_033.png in Resources */,
-				B2F911691F6606E900129DC2 /* DeckData_Empty.bin in Resources */,
 				B2F50C571F4C5FAC0075C6D2 /* face_251.png in Resources */,
 				B2F50E0F1F4C5FAD0075C6D2 /* trainer_6.png in Resources */,
-				B280AF1B20CABD660057A782 /* colo_trainer_22.png in Resources */,
-				B280AF7B20CABD660057A782 /* colo_trainer_72.png in Resources */,
 				B2F507F71F4C5FAB0075C6D2 /* body_106.png in Resources */,
 				B2F50DCB1F4C5FAC0075C6D2 /* trainer_29.png in Resources */,
 				B2F508671F4C5FAB0075C6D2 /* body_162.png in Resources */,
@@ -12210,7 +12064,6 @@
 				B2F50D711F4C5FAC0075C6D2 /* face_392.png in Resources */,
 				B2F50A291F4C5FAB0075C6D2 /* body_387.png in Resources */,
 				B2F5ED171F49AE950075C6D2 /* Original Pokemon.json in Resources */,
-				B280AF5920CABD660057A782 /* colo_trainer_39.png in Resources */,
 				B2F50A651F4C5FAB0075C6D2 /* face_002.png in Resources */,
 				B2F50CDD1F4C5FAC0075C6D2 /* face_318.png in Resources */,
 				B2F508851F4C5FAB0075C6D2 /* body_177.png in Resources */,
@@ -12222,7 +12075,6 @@
 				B2F508251F4C5FAB0075C6D2 /* body_129.png in Resources */,
 				B2F50CD11F4C5FAC0075C6D2 /* face_312.png in Resources */,
 				B2F50B391F4C5FAC0075C6D2 /* face_108.png in Resources */,
-				B280AF2120CABD660057A782 /* colo_trainer_34.png in Resources */,
 				B2F50E2D1F4C5FAD0075C6D2 /* type_11.png in Resources */,
 				B2F50A2B1F4C5FAB0075C6D2 /* body_388.png in Resources */,
 				B2F50C1D1F4C5FAC0075C6D2 /* face_222.png in Resources */,
@@ -12252,15 +12104,12 @@
 				B2F50DAF1F4C5FAC0075C6D2 /* trainer_16.png in Resources */,
 				B2F50D4F1F4C5FAC0075C6D2 /* face_375.png in Resources */,
 				B2F50A531F4C5FAB0075C6D2 /* body_408.png in Resources */,
-				B280AF1D20CABD660057A782 /* colo_trainer_36.png in Resources */,
-				B280AF7D20CABD660057A782 /* colo_trainer_70.png in Resources */,
 				B2F50A6D1F4C5FAB0075C6D2 /* face_006.png in Resources */,
 				B2F50BD51F4C5FAC0075C6D2 /* face_186.png in Resources */,
 				B2F50B5F1F4C5FAC0075C6D2 /* face_127.png in Resources */,
 				B2F50C151F4C5FAC0075C6D2 /* face_218.png in Resources */,
 				B2F50E251F4C5FAD0075C6D2 /* trainer_9.png in Resources */,
 				B2F508A11F4C5FAB0075C6D2 /* body_191.png in Resources */,
-				B280AEFD20CABD660057A782 /* colo_trainer_69.png in Resources */,
 				B2F508271F4C5FAB0075C6D2 /* body_130.png in Resources */,
 				B2F509431F4C5FAB0075C6D2 /* body_272.png in Resources */,
 				B2F50CC51F4C5FAC0075C6D2 /* face_306.png in Resources */,
@@ -12281,7 +12130,6 @@
 				B2F50B091F4C5FAC0075C6D2 /* face_084.png in Resources */,
 				B2F50B231F4C5FAC0075C6D2 /* face_097.png in Resources */,
 				B2F50DE11F4C5FAC0075C6D2 /* trainer_39.png in Resources */,
-				B280AF5120CABD660057A782 /* colo_trainer_28.png in Resources */,
 				B2F50B891F4C5FAC0075C6D2 /* face_148.png in Resources */,
 				B2F50D251F4C5FAC0075C6D2 /* face_354.png in Resources */,
 				B2F50AE31F4C5FAC0075C6D2 /* face_065.png in Resources */,
@@ -12303,9 +12151,7 @@
 				B2F5096F1F4C5FAB0075C6D2 /* body_294.png in Resources */,
 				B2F507271F4C5FAA0075C6D2 /* body_002.png in Resources */,
 				B2F507A51F4C5FAB0075C6D2 /* body_065.png in Resources */,
-				B280AF0B20CABD660057A782 /* colo_trainer_53.png in Resources */,
 				B2F50C591F4C5FAC0075C6D2 /* face_252.png in Resources */,
-				B280AF5F20CABD660057A782 /* colo_trainer_13.png in Resources */,
 				B2F50DDD1F4C5FAC0075C6D2 /* trainer_37.png in Resources */,
 				B2F50C771F4C5FAC0075C6D2 /* face_267.png in Resources */,
 				B2F50B0F1F4C5FAC0075C6D2 /* face_087.png in Resources */,
@@ -12330,12 +12176,10 @@
 				B2F509DD1F4C5FAB0075C6D2 /* body_349.png in Resources */,
 				B2F509811F4C5FAB0075C6D2 /* body_303.png in Resources */,
 				B2F5083B1F4C5FAB0075C6D2 /* body_140.png in Resources */,
-				B280AF0720CABD660057A782 /* colo_trainer_46.png in Resources */,
 				B2F507571F4C5FAB0075C6D2 /* body_026.png in Resources */,
 				B2F50C111F4C5FAC0075C6D2 /* face_216.png in Resources */,
 				B2F50A691F4C5FAB0075C6D2 /* face_004.png in Resources */,
 				B2F5075F1F4C5FAB0075C6D2 /* body_030.png in Resources */,
-				B280AF2920CABD660057A782 /* colo_trainer_31.png in Resources */,
 				B2F508231F4C5FAB0075C6D2 /* body_128.png in Resources */,
 				B2F50E351F4C5FAD0075C6D2 /* type_15.png in Resources */,
 				B2F508931F4C5FAB0075C6D2 /* body_184.png in Resources */,
@@ -12365,7 +12209,6 @@
 				B2F50C511F4C5FAC0075C6D2 /* face_248.png in Resources */,
 				B2F508811F4C5FAB0075C6D2 /* body_175.png in Resources */,
 				B2F50B2F1F4C5FAC0075C6D2 /* face_103.png in Resources */,
-				B280AF8520CABD660057A782 /* colo_trainer_65.png in Resources */,
 				B2F508EB1F4C5FAB0075C6D2 /* body_228.png in Resources */,
 				B2F508351F4C5FAB0075C6D2 /* body_137.png in Resources */,
 				B2F5073D1F4C5FAA0075C6D2 /* body_013.png in Resources */,
@@ -12381,7 +12224,6 @@
 				B2F50E271F4C5FAD0075C6D2 /* type_0.png in Resources */,
 				B2F508AD1F4C5FAB0075C6D2 /* body_197.png in Resources */,
 				B2F50BF31F4C5FAC0075C6D2 /* face_201.png in Resources */,
-				B280AF4320CABD660057A782 /* colo_trainer_7.png in Resources */,
 				B2F507671F4C5FAB0075C6D2 /* body_034.png in Resources */,
 				B2F508F11F4C5FAB0075C6D2 /* body_231.png in Resources */,
 				B2F50B4F1F4C5FAC0075C6D2 /* face_119.png in Resources */,
@@ -12435,7 +12277,6 @@
 				B2F50D5F1F4C5FAC0075C6D2 /* face_383.png in Resources */,
 				B2F50CEF1F4C5FAC0075C6D2 /* face_327.png in Resources */,
 				B2F5098F1F4C5FAB0075C6D2 /* body_310.png in Resources */,
-				B280AF8720CABD660057A782 /* colo_trainer_71.png in Resources */,
 				B2F50BF91F4C5FAC0075C6D2 /* face_204.png in Resources */,
 				1CA238CE24118CAC000E56AB /* Messages.storyboard in Resources */,
 				B2F509991F4C5FAB0075C6D2 /* body_315.png in Resources */,
@@ -12448,7 +12289,6 @@
 				B2F50B771F4C5FAC0075C6D2 /* face_139.png in Resources */,
 				B2F509931F4C5FAB0075C6D2 /* body_312.png in Resources */,
 				B2F509D71F4C5FAB0075C6D2 /* body_346.png in Resources */,
-				B280AF2320CABD660057A782 /* colo_trainer_35.png in Resources */,
 				B2F50A751F4C5FAB0075C6D2 /* face_010.png in Resources */,
 				B2F509FF1F4C5FAB0075C6D2 /* body_366.png in Resources */,
 				B2F509531F4C5FAB0075C6D2 /* body_280.png in Resources */,
@@ -12476,7 +12316,6 @@
 				B2F50B3B1F4C5FAC0075C6D2 /* face_109.png in Resources */,
 				B2F50C531F4C5FAC0075C6D2 /* face_249.png in Resources */,
 				B2F50BE51F4C5FAC0075C6D2 /* face_194.png in Resources */,
-				B280AF7520CABD660057A782 /* colo_trainer_63.png in Resources */,
 				B2F50B831F4C5FAC0075C6D2 /* face_145.png in Resources */,
 				B2F50AE91F4C5FAC0075C6D2 /* face_068.png in Resources */,
 				B2F50C451F4C5FAC0075C6D2 /* face_242.png in Resources */,
@@ -12509,17 +12348,14 @@
 				B2F50D831F4C5FAC0075C6D2 /* face_401.png in Resources */,
 				B2F50DC91F4C5FAC0075C6D2 /* trainer_28.png in Resources */,
 				B2F50B631F4C5FAC0075C6D2 /* face_129.png in Resources */,
-				B280AF3F20CABD660057A782 /* colo_trainer_16.png in Resources */,
 				B2F5089D1F4C5FAB0075C6D2 /* body_189.png in Resources */,
 				B2F50D1D1F4C5FAC0075C6D2 /* face_350.png in Resources */,
 				B2F508091F4C5FAB0075C6D2 /* body_115.png in Resources */,
 				B2F50A9F1F4C5FAC0075C6D2 /* face_031.png in Resources */,
-				B280AF1320CABD660057A782 /* colo_trainer_44.png in Resources */,
 				B2F508A31F4C5FAB0075C6D2 /* body_192.png in Resources */,
 				B2F50CDF1F4C5FAC0075C6D2 /* face_319.png in Resources */,
 				B2F50B9F1F4C5FAC0075C6D2 /* face_159.png in Resources */,
 				B2F50A4B1F4C5FAB0075C6D2 /* body_404.png in Resources */,
-				B280AEF720CABD660057A782 /* colo_trainer_40.png in Resources */,
 				B2F508FF1F4C5FAB0075C6D2 /* body_238.png in Resources */,
 				1CA238A2241146F5000E56AB /* Move.storyboard in Resources */,
 				B2F50D811F4C5FAC0075C6D2 /* face_400.png in Resources */,
@@ -12543,12 +12379,9 @@
 				B2F50B591F4C5FAC0075C6D2 /* face_124.png in Resources */,
 				B2F50A5D1F4C5FAB0075C6D2 /* body_413.png in Resources */,
 				B2F508051F4C5FAB0075C6D2 /* body_113.png in Resources */,
-				B280AF1720CABD660057A782 /* colo_trainer_37.png in Resources */,
 				B2F50BFF1F4C5FAC0075C6D2 /* face_207.png in Resources */,
 				B2F507DD1F4C5FAB0075C6D2 /* body_093.png in Resources */,
 				B2F50E1B1F4C5FAD0075C6D2 /* trainer_65.png in Resources */,
-				B280AF5520CABD660057A782 /* colo_trainer_10.png in Resources */,
-				B20C40212189D5E7006D7CD9 /* Dol2.msg in Resources */,
 				B2F50D271F4C5FAC0075C6D2 /* face_355.png in Resources */,
 				B2F50BC51F4C5FAC0075C6D2 /* face_178.png in Resources */,
 				B2F50D131F4C5FAC0075C6D2 /* face_345.png in Resources */,
@@ -12556,7 +12389,6 @@
 				B2F507491F4C5FAA0075C6D2 /* body_019.png in Resources */,
 				B2F50CA51F4C5FAC0075C6D2 /* face_290.png in Resources */,
 				B2F50AEB1F4C5FAC0075C6D2 /* face_069.png in Resources */,
-				B280AF3520CABD660057A782 /* colo_trainer_24.png in Resources */,
 				B2F509BD1F4C5FAB0075C6D2 /* body_333.png in Resources */,
 				B2F5072D1F4C5FAA0075C6D2 /* body_005.png in Resources */,
 				B2F50E391F4C5FAD0075C6D2 /* type_17.png in Resources */,
@@ -12581,7 +12413,6 @@
 				1CA238A52411470C000E56AB /* Item.storyboard in Resources */,
 				B2F507251F4C5FAA0075C6D2 /* body_001.png in Resources */,
 				B2F5095D1F4C5FAB0075C6D2 /* body_285.png in Resources */,
-				B280AEF320CABD660057A782 /* colo_trainer_68.png in Resources */,
 				B2F508E91F4C5FAB0075C6D2 /* body_227.png in Resources */,
 				B2F507ED1F4C5FAB0075C6D2 /* body_101.png in Resources */,
 				B2F50BBD1F4C5FAC0075C6D2 /* face_174.png in Resources */,
@@ -12609,7 +12440,6 @@
 				B2F507CD1F4C5FAB0075C6D2 /* body_085.png in Resources */,
 				B2F50A011F4C5FAB0075C6D2 /* body_367.png in Resources */,
 				1CA238A824114725000E56AB /* Pokespot.storyboard in Resources */,
-				B280AF6320CABD660057A782 /* colo_trainer_2.png in Resources */,
 				B2F50A7D1F4C5FAB0075C6D2 /* face_014.png in Resources */,
 				B2F507711F4C5FAB0075C6D2 /* body_039.png in Resources */,
 				B2F50DB91F4C5FAC0075C6D2 /* trainer_20.png in Resources */,
@@ -12620,8 +12450,6 @@
 				B2F50A191F4C5FAB0075C6D2 /* body_379.png in Resources */,
 				B2F5F7BE1F49AF120075C6D2 /* Item Cell.png in Resources */,
 				B2F50A031F4C5FAB0075C6D2 /* body_368.png in Resources */,
-				B280AF8120CABD660057A782 /* colo_trainer_58.png in Resources */,
-				B280AF6720CABD660057A782 /* colo_trainer_49.png in Resources */,
 				B2F50E0B1F4C5FAD0075C6D2 /* trainer_58.png in Resources */,
 				B2F50CC71F4C5FAC0075C6D2 /* face_307.png in Resources */,
 				B2F5082D1F4C5FAB0075C6D2 /* body_133.png in Resources */,
@@ -12633,9 +12461,7 @@
 				B2F507AF1F4C5FAB0075C6D2 /* body_070.png in Resources */,
 				B2F5099F1F4C5FAB0075C6D2 /* body_318.png in Resources */,
 				B2F50DC71F4C5FAC0075C6D2 /* trainer_27.png in Resources */,
-				B280AF4F20CABD660057A782 /* colo_trainer_4.png in Resources */,
 				B2F50A3F1F4C5FAB0075C6D2 /* body_398.png in Resources */,
-				B280AF0920CABD660057A782 /* colo_trainer_52.png in Resources */,
 				B2F509511F4C5FAB0075C6D2 /* body_279.png in Resources */,
 				1CB3B87D250D512A0069402D /* Battles.storyboard in Resources */,
 				B2F50C0D1F4C5FAC0075C6D2 /* face_214.png in Resources */,
@@ -12644,7 +12470,6 @@
 				B2F50AB71F4C5FAC0075C6D2 /* face_043.png in Resources */,
 				B2F50C2D1F4C5FAC0075C6D2 /* face_230.png in Resources */,
 				B2F50B691F4C5FAC0075C6D2 /* face_132.png in Resources */,
-				B280AF0120CABD660057A782 /* colo_trainer_57.png in Resources */,
 				B2F507B51F4C5FAB0075C6D2 /* body_073.png in Resources */,
 				B2F509951F4C5FAB0075C6D2 /* body_313.png in Resources */,
 				B2F507E11F4C5FAB0075C6D2 /* body_095.png in Resources */,
@@ -12679,18 +12504,13 @@
 				B2F50B711F4C5FAC0075C6D2 /* face_136.png in Resources */,
 				B2F50A251F4C5FAB0075C6D2 /* body_385.png in Resources */,
 				B2F50CB91F4C5FAC0075C6D2 /* face_300.png in Resources */,
-				B280AF6520CABD660057A782 /* colo_trainer_12.png in Resources */,
 				B2F50BED1F4C5FAC0075C6D2 /* face_198.png in Resources */,
 				B2F508411F4C5FAB0075C6D2 /* body_143.png in Resources */,
 				B2F507451F4C5FAA0075C6D2 /* body_017.png in Resources */,
-				B280AF4D20CABD660057A782 /* colo_trainer_14.png in Resources */,
-				B280AF7320CABD660057A782 /* colo_trainer_62.png in Resources */,
 				B2F5081B1F4C5FAB0075C6D2 /* body_124.png in Resources */,
 				B2F50D5D1F4C5FAC0075C6D2 /* face_382.png in Resources */,
-				B280AF4120CABD660057A782 /* colo_trainer_6.png in Resources */,
 				B2F50ADD1F4C5FAC0075C6D2 /* face_062.png in Resources */,
 				B2F50CB31F4C5FAC0075C6D2 /* face_297.png in Resources */,
-				B280AF7120CABD660057A782 /* colo_trainer_48.png in Resources */,
 				B2F50AC51F4C5FAC0075C6D2 /* face_050.png in Resources */,
 				B2F50D191F4C5FAC0075C6D2 /* face_348.png in Resources */,
 				B2F508BD1F4C5FAB0075C6D2 /* body_205.png in Resources */,
@@ -12731,7 +12551,6 @@
 				B21A7CFC20BC42CA00BDD04C /* fragment.glsl in Resources */,
 				B2F50BB91F4C5FAC0075C6D2 /* face_172.png in Resources */,
 				B2F50D031F4C5FAC0075C6D2 /* face_337.png in Resources */,
-				B280AF0D20CABD660057A782 /* colo_trainer_47.png in Resources */,
 				1CA23889241140D7000E56AB /* ValueContext.storyboard in Resources */,
 				1CA2386F24113823000E56AB /* HexCalculator.storyboard in Resources */,
 				B2F50B491F4C5FAC0075C6D2 /* face_116.png in Resources */,
@@ -12752,8 +12571,6 @@
 				B2F509851F4C5FAB0075C6D2 /* body_305.png in Resources */,
 				B2F508691F4C5FAB0075C6D2 /* body_163.png in Resources */,
 				B2F509651F4C5FAB0075C6D2 /* body_289.png in Resources */,
-				B280AF5720CABD660057A782 /* colo_trainer_38.png in Resources */,
-				B280AF7F20CABD660057A782 /* colo_trainer_64.png in Resources */,
 				B2F509191F4C5FAB0075C6D2 /* body_251.png in Resources */,
 				B2F5EBAF1F49A1980075C6D2 /* Main.storyboard in Resources */,
 				B2F50A471F4C5FAB0075C6D2 /* body_402.png in Resources */,
@@ -12761,7 +12578,6 @@
 				B2F507891F4C5FAB0075C6D2 /* body_051.png in Resources */,
 				B2F50DB11F4C5FAC0075C6D2 /* trainer_17.png in Resources */,
 				B2F50CE51F4C5FAC0075C6D2 /* face_322.png in Resources */,
-				B280AF2F20CABD660057A782 /* colo_trainer_8.png in Resources */,
 				B2F50C7B1F4C5FAC0075C6D2 /* face_269.png in Resources */,
 				B2F50DEF1F4C5FAD0075C6D2 /* trainer_45.png in Resources */,
 				B2F509CB1F4C5FAB0075C6D2 /* body_340.png in Resources */,
@@ -12770,17 +12586,14 @@
 				B2F5097D1F4C5FAB0075C6D2 /* body_301.png in Resources */,
 				B2F509C11F4C5FAB0075C6D2 /* body_335.png in Resources */,
 				B2F50AF71F4C5FAC0075C6D2 /* face_075.png in Resources */,
-				B280AF2B20CABD660057A782 /* colo_trainer_19.png in Resources */,
 				B2F50CD51F4C5FAC0075C6D2 /* face_314.png in Resources */,
 				B2F507E51F4C5FAB0075C6D2 /* body_097.png in Resources */,
 				B2F50A431F4C5FAB0075C6D2 /* body_400.png in Resources */,
 				B2F50BD91F4C5FAC0075C6D2 /* face_188.png in Resources */,
 				B2F508F91F4C5FAB0075C6D2 /* body_235.png in Resources */,
-				B280AF2520CABD660057A782 /* colo_trainer_21.png in Resources */,
 				B2F50B551F4C5FAC0075C6D2 /* face_122.png in Resources */,
 				B2F50E291F4C5FAD0075C6D2 /* type_1.png in Resources */,
 				B2F5ED151F49AE950075C6D2 /* Original Moves.json in Resources */,
-				B280AF5D20CABD660057A782 /* colo_trainer_1.png in Resources */,
 				B2F5072F1F4C5FAA0075C6D2 /* body_006.png in Resources */,
 				1CA2387A24113DC6000E56AB /* Collision.storyboard in Resources */,
 				B2F50C5F1F4C5FAC0075C6D2 /* face_255.png in Resources */,
@@ -12794,7 +12607,6 @@
 				B2F50D051F4C5FAC0075C6D2 /* face_338.png in Resources */,
 				B2F50B3F1F4C5FAC0075C6D2 /* face_111.png in Resources */,
 				B2F508C91F4C5FAB0075C6D2 /* body_211.png in Resources */,
-				B280AF0F20CABD660057A782 /* colo_trainer_51.png in Resources */,
 				B2F50C8F1F4C5FAC0075C6D2 /* face_279.png in Resources */,
 				B2F50BD71F4C5FAC0075C6D2 /* face_187.png in Resources */,
 				B2F50C8D1F4C5FAC0075C6D2 /* face_278.png in Resources */,
@@ -12802,16 +12614,13 @@
 				B2F50AD51F4C5FAC0075C6D2 /* face_058.png in Resources */,
 				B2F507431F4C5FAA0075C6D2 /* body_016.png in Resources */,
 				B2F509E91F4C5FAB0075C6D2 /* body_355.png in Resources */,
-				B280AF0520CABD660057A782 /* colo_trainer_42.png in Resources */,
 				B2F50A391F4C5FAB0075C6D2 /* body_395.png in Resources */,
 				B2F508371F4C5FAB0075C6D2 /* body_138.png in Resources */,
 				B2F50C431F4C5FAC0075C6D2 /* face_241.png in Resources */,
 				B2F507691F4C5FAB0075C6D2 /* body_035.png in Resources */,
 				B2F508911F4C5FAB0075C6D2 /* body_183.png in Resources */,
 				B2F50D8B1F4C5FAC0075C6D2 /* face_405.png in Resources */,
-				B280AF4B20CABD660057A782 /* colo_trainer_15.png in Resources */,
 				B2F50C491F4C5FAC0075C6D2 /* face_244.png in Resources */,
-				B280AEFB20CABD660057A782 /* colo_trainer_55.png in Resources */,
 				B20C401F2188B9D2006D7CD9 /* XDScript.sublime-syntax in Resources */,
 				B2F5073F1F4C5FAA0075C6D2 /* body_014.png in Resources */,
 				B2F50D731F4C5FAC0075C6D2 /* face_393.png in Resources */,
@@ -12824,7 +12633,6 @@
 				B2F50ABD1F4C5FAC0075C6D2 /* face_046.png in Resources */,
 				B2F50D171F4C5FAC0075C6D2 /* face_347.png in Resources */,
 				B2F50A951F4C5FAB0075C6D2 /* face_026.png in Resources */,
-				B280AF7720CABD660057A782 /* colo_trainer_67.png in Resources */,
 				B2F5090D1F4C5FAB0075C6D2 /* body_245.png in Resources */,
 				B2F5ED111F49AE950075C6D2 /* Items.json in Resources */,
 				B2F50C191F4C5FAC0075C6D2 /* face_220.png in Resources */,
@@ -12851,8 +12659,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C4E1523253DE2DD00EA318B /* GoDTextureImporter.swift in Sources */,
 				1C16CCCF253BC43600907D78 /* XGEvolutionMethods.swift in Sources */,
-				1C16CF47253BC55F00907D78 /* XGUtility.swift in Sources */,
 				1C16D133253BC8AE00907D78 /* XGTrainerClass.swift in Sources */,
 				1C16CF93253BC57B00907D78 /* XDSFlags.swift in Sources */,
 				1C16CFCC253BC59600907D78 /* XGTextureBlock.swift in Sources */,
@@ -12860,7 +12668,6 @@
 				1C16CFA7253BC58B00907D78 /* XGColour.swift in Sources */,
 				1C16D019253BC5D100907D78 /* GoDKeyCodes.swift in Sources */,
 				1C16CC0A253BC3CA00907D78 /* GoDToolCLExtensions.swift in Sources */,
-				1C16D02B253BC5D400907D78 /* GoDMatrix4.swift in Sources */,
 				1C16CE39253BC4C300907D78 /* XGBattleBingoPokemon.swift in Sources */,
 				1C16CD7D253BC47600907D78 /* XGNatures.swift in Sources */,
 				1C16CFBA253BC59200907D78 /* XGPNGBlock.swift in Sources */,
@@ -12903,6 +12710,7 @@
 				1C16CD69253BC47000907D78 /* XGMoveTargets.swift in Sources */,
 				1C16CBA0253BC25600907D78 /* EnumerableDocumentable.swift in Sources */,
 				1C16CF63253BC56500907D78 /* XGStringManager.swift in Sources */,
+				1CC9AC43253D3E7B008A8389 /* XGDummyCollisionData.swift in Sources */,
 				1C16D084253BC87300907D78 /* XGDemoStarterPokemon.swift in Sources */,
 				1C16D147253BC8B500907D78 /* XGTreasure.swift in Sources */,
 				1C16CE42253BC4C600907D78 /* XGCharacter.swift in Sources */,
@@ -12914,6 +12722,7 @@
 				1C16CF51253BC56200907D78 /* XGSettings.swift in Sources */,
 				1C16CD0A253BC45000907D78 /* XGGenderRatios.swift in Sources */,
 				1C16D116253BC8A200907D78 /* XGStoryProgress.swift in Sources */,
+				1C4E14BC253DCEC200EA318B /* WindowsExtensions.swift in Sources */,
 				1C16CF65253BC56800907D78 /* XGThreadManager.swift in Sources */,
 				1C16D151253BC8B800907D78 /* XGType.swift in Sources */,
 				1C16CCB1253BC42900907D78 /* XGDeckPokemon.swift in Sources */,
@@ -12921,6 +12730,7 @@
 				1C16CB8E253BC24A00907D78 /* XDRelIndexes.swift in Sources */,
 				1C16CD4D253BC46900907D78 /* XGMoveEffectTypes.swift in Sources */,
 				1C16CD57253BC46C00907D78 /* XGMoves.swift in Sources */,
+				1C4E14FF253DD13000EA318B /* GoDImageExtensions.swift in Sources */,
 				1C16CEBB253BC51F00907D78 /* XGGSWTextures.swift in Sources */,
 				1C16D128253BC8A700907D78 /* XGTradeShadowPokemon.swift in Sources */,
 				1C16D0C8253BC88600907D78 /* XGMove.swift in Sources */,
@@ -12931,33 +12741,29 @@
 				1C16D0D4253BC88E00907D78 /* XGNature.swift in Sources */,
 				1C16CF07253BC54B00907D78 /* XGByteCopier.swift in Sources */,
 				1C16CF96253BC57B00907D78 /* XGScriptClassFunctionsData.swift in Sources */,
-				1C16CFF2253BC5BD00907D78 /* GoDTextureImporter.swift in Sources */,
 				1C16D0DE253BC89100907D78 /* XGPokemart.swift in Sources */,
 				1C16D0D3253BC88C00907D78 /* XGMusic.swift in Sources */,
 				1C16CEEB253BC53E00907D78 /* XGMutableData.swift in Sources */,
 				1C16CC5B253BC41000907D78 /* XGASM.swift in Sources */,
 				1C16CFB1253BC58F00907D78 /* XGTextureMetaData.swift in Sources */,
 				1C16CCEE253BC44800907D78 /* XGFileTypes.swift in Sources */,
-				1C16CFFC253BC5C800907D78 /* GoDOpenGL.swift in Sources */,
 				1C16CAEF253B92CF00907D78 /* XGFiles.swift in Sources */,
 				1C16D072253BC86E00907D78 /* XGCharacterModel.swift in Sources */,
 				1C16CE27253BC4AF00907D78 /* XGWeather.swift in Sources */,
-				1C16D006253BC5CD00907D78 /* XGVertex.swift in Sources */,
 				1C16D068253BC86A00907D78 /* XGBattleField.swift in Sources */,
 				1C16CE1D253BC4AC00907D78 /* XGUnicodeCharacters.swift in Sources */,
 				1C16CCCD253BC43200907D78 /* XGEffectivenessValues.swift in Sources */,
 				1C16CC1C253BC3D300907D78 /* XDExtensions.swift in Sources */,
 				1C16CD87253BC47F00907D78 /* XGPokemon.swift in Sources */,
+				1C4E14ED253DD05700EA318B /* XGUtility.swift in Sources */,
 				1C16CCE1253BC43A00907D78 /* XGEvolutionConditionType.swift in Sources */,
 				1C16CC92253BC41B00907D78 /* XGBattleTypes.swift in Sources */,
-				1C16CC2E253BC3DE00907D78 /* GoDOSXExtensions.swift in Sources */,
 				1C16D13D253BC8B000907D78 /* XGTrainerPokemon.swift in Sources */,
 				1C16D104253BC89E00907D78 /* XGStarterPokemon.swift in Sources */,
 				1C16D0E7253BC89300907D78 /* XGPokemonStats.swift in Sources */,
 				1C16CC40253BC3E600907D78 /* XDSExtensions.swift in Sources */,
 				1C16CC49253BC40C00907D78 /* XGAbilities.swift in Sources */,
 				1C16CED7253BC53400907D78 /* XGRelocationTable.swift in Sources */,
-				1C16CE96253BC4EE00907D78 /* XGCollisionData.swift in Sources */,
 				1C16D098253BC87900907D78 /* XGGiftPokemon.swift in Sources */,
 				1C16CAC3253B86F100907D78 /* main.swift in Sources */,
 				1C16CD73253BC47300907D78 /* XGMoveTypes.swift in Sources */,
@@ -12967,6 +12773,8 @@
 				1C16CEA0253BC50900907D78 /* XGFsys.swift in Sources */,
 				1C16CC91253BC41800907D78 /* XGBattleStyles.swift in Sources */,
 				1C16CF97253BC57B00907D78 /* XGScriptClass.swift in Sources */,
+				1C4E151A253DD1D500EA318B /* GoDOSXExtensions.swift in Sources */,
+				1C4E154D253DE46300EA318B /* XGVertex.swift in Sources */,
 				1C16D044253BC85A00907D78 /* XGBattle.swift in Sources */,
 				1C16CF99253BC57B00907D78 /* XDSScriptCompiler.swift in Sources */,
 				1C16D0B6253BC88200907D78 /* XGItem.swift in Sources */,
@@ -12975,7 +12783,6 @@
 				1C16CD43253BC46600907D78 /* XGMoveCategory.swift in Sources */,
 				1C16D129253BC8A900907D78 /* XGTrainer.swift in Sources */,
 				1C16CDC8253BC48F00907D78 /* XGStatBoosts.swift in Sources */,
-				1C16CBE6253BC3B700907D78 /* GoDImageExtensions.swift in Sources */,
 				1C16CDF7253BC49F00907D78 /* XGTrainerClasses.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -13011,13 +12818,10 @@
 				1C16CF64253BC56600907D78 /* XGStringManager.swift in Sources */,
 				1C16D15A253BC8BB00907D78 /* CMType.swift in Sources */,
 				1C16D0F0253BC89500907D78 /* CMPokemonStats.swift in Sources */,
-				1C16CF48253BC55F00907D78 /* XGUtility.swift in Sources */,
 				1C16CD13253BC45100907D78 /* XGGenderRatios.swift in Sources */,
 				1C16CF10253BC54C00907D78 /* XGByteCopier.swift in Sources */,
-				1C16CC37253BC3DE00907D78 /* GoDOSXExtensions.swift in Sources */,
 				1C16D134253BC8AE00907D78 /* XGTrainerClass.swift in Sources */,
 				1C16CF1A253BC55000907D78 /* XGDolPatcher.swift in Sources */,
-				1C16CFFD253BC5C900907D78 /* GoDOpenGL.swift in Sources */,
 				1C16CD01253BC44E00907D78 /* XGFontColours.swift in Sources */,
 				1C16CC13253BC3CF00907D78 /* ColosseumToolCLExtensions.swift in Sources */,
 				1C16CC93253BC41C00907D78 /* XGBattleTypes.swift in Sources */,
@@ -13029,6 +12833,8 @@
 				1C16CC25253BC3D600907D78 /* ColosseumExtensions.swift in Sources */,
 				1C16D08F253BC87700907D78 /* XGDoor.swift in Sources */,
 				1C16CCA6253BC42400907D78 /* CMColosseumRounds.swift in Sources */,
+				1C4E1524253DE2DD00EA318B /* GoDTextureImporter.swift in Sources */,
+				1C4E1508253DD13100EA318B /* GoDImageExtensions.swift in Sources */,
 				1C16D10D253BC8A000907D78 /* XGStarterPokemon.swift in Sources */,
 				1C16CEC5253BC52600907D78 /* XGLZSS.swift in Sources */,
 				1C16CEA9253BC51500907D78 /* XGFsys.swift in Sources */,
@@ -13037,25 +12843,23 @@
 				1C16CEEA253BC53D00907D78 /* XGMutableData.swift in Sources */,
 				1C16D018253BC5D000907D78 /* GoDKeyCodes.swift in Sources */,
 				1C16CFC3253BC59300907D78 /* XGPNGBlock.swift in Sources */,
+				1C4E1556253DE46300EA318B /* XGVertex.swift in Sources */,
 				1C16CE0A253BC4A500907D78 /* XGTrainerContoller.swift in Sources */,
 				1C16CE1C253BC4AA00907D78 /* CMTrainerModels.swift in Sources */,
 				1C16CF2C253BC55600907D78 /* CMGiftPokemonManager.swift in Sources */,
 				1C16CFCD253BC59600907D78 /* XGTextureBlock.swift in Sources */,
-				1C16CFF3253BC5BE00907D78 /* GoDTextureImporter.swift in Sources */,
 				1C16CE30253BC4B000907D78 /* XGWeather.swift in Sources */,
 				1C16CD2F253BC45D00907D78 /* CMItems.swift in Sources */,
 				1C16CD60253BC46D00907D78 /* XGMoves.swift in Sources */,
 				1C16D0DD253BC88F00907D78 /* XGNature.swift in Sources */,
 				1C16D0FB253BC89B00907D78 /* XGRoom.swift in Sources */,
 				1C16D132253BC8AB00907D78 /* CMTrainer.swift in Sources */,
+				1C4E1511253DD1D400EA318B /* GoDOSXExtensions.swift in Sources */,
 				1C16CF80253BC56D00907D78 /* GoDShellManager.swift in Sources */,
-				1C16CBEF253BC3B700907D78 /* GoDImageExtensions.swift in Sources */,
-				1C16CE97253BC4EF00907D78 /* XGCollisionData.swift in Sources */,
 				1C16CCE4253BC43F00907D78 /* XGExpRate.swift in Sources */,
 				1C16CB21253B950C00907D78 /* XGISO.swift in Sources */,
 				1C16CDEE253BC49C00907D78 /* CMTMs.swift in Sources */,
 				1C16CFA6253BC58200907D78 /* CMScriptOps.swift in Sources */,
-				1C16D00F253BC5CD00907D78 /* XGVertex.swift in Sources */,
 				1C16CD1D253BC45800907D78 /* XGGenders.swift in Sources */,
 				1C16CB97253BC24E00907D78 /* CMRelIndexes.swift in Sources */,
 				1C16CE69253BC4D500907D78 /* XGString.swift in Sources */,
@@ -13076,7 +12880,9 @@
 				1C16CAE3253B8A2200907D78 /* main.swift in Sources */,
 				1C16CF76253BC56A00907D78 /* XGThreadManager.swift in Sources */,
 				1C16CDDC253BC49700907D78 /* GoDTextureFormats.swift in Sources */,
+				1C4E14F6253DD05800EA318B /* XGUtility.swift in Sources */,
 				1C16D07B253BC86F00907D78 /* XGCharacterModel.swift in Sources */,
+				1CC9AC44253D3E7B008A8389 /* XGDummyCollisionData.swift in Sources */,
 				1C16CC64253BC41100907D78 /* XGASM.swift in Sources */,
 				1C16CCC4253BC42F00907D78 /* XGDeoxysFormes.swift in Sources */,
 				1C16CD42253BC46400907D78 /* XGMaps.swift in Sources */,
@@ -13084,7 +12890,6 @@
 				1C16CFA8253BC58C00907D78 /* XGColour.swift in Sources */,
 				1C16CE7B253BC4E000907D78 /* XGAssemblyCode.swift in Sources */,
 				1C16D099253BC87A00907D78 /* XGGiftPokemon.swift in Sources */,
-				1C16D022253BC5D400907D78 /* GoDMatrix4.swift in Sources */,
 				1C16CE00253BC4A200907D78 /* CMTrainerClasses.swift in Sources */,
 				1C16D0C9253BC88700907D78 /* XGMove.swift in Sources */,
 				1C16CBA9253BC25700907D78 /* EnumerableDocumentable.swift in Sources */,
@@ -13098,7 +12903,6 @@
 				B208E76520C4E01400D298BF /* XGWeather.swift in Sources */,
 				B208E76420C4E01000D298BF /* XGUnicodeCharacters.swift in Sources */,
 				B2C1EE8D20C8F6C800D7C2F7 /* GoDEffectsPopUpButton.swift in Sources */,
-				1CC9AC09253CDA98008A8389 /* XGLZSSWrapper.m in Sources */,
 				B247ED492180A5510034CAF5 /* GoDRandomiserViewController.swift in Sources */,
 				1CC362B824BF5114005D7B4A /* GoDStatsViewController.swift in Sources */,
 				B208E3E020C4CC9800D298BF /* GoDViewLayoutManager.swift in Sources */,
@@ -13442,7 +13246,6 @@
 				B24A503321D121A1009C707C /* XGShinyValues.swift in Sources */,
 				1CC362DD24C1DF23005D7B4A /* XGBattleStyles.swift in Sources */,
 				B24A511321D4014B009C707C /* PBRScriptInstruction.swift in Sources */,
-				B20EEEA621EF797F00E87D01 /* GoDMetalShaders.metal in Sources */,
 				B24A50F821D2BE89009C707C /* PBREffectivenessValues.swift in Sources */,
 				B24A510321D3CC0F009C707C /* PBRMoveCategory.swift in Sources */,
 				B20EE64221D97F5A00E87D01 /* XGWormadamForms.swift in Sources */,
@@ -13450,7 +13253,6 @@
 				B24A502721D11145009C707C /* PBRExtensions.swift in Sources */,
 				1CC362B024BA5560005D7B4A /* PBRDolPatcher.swift in Sources */,
 				B24A50DA21D12CDA009C707C /* PBRFileTypes.swift in Sources */,
-				B24A504A21D12437009C707C /* GoDMatrix4.swift in Sources */,
 				B24A501F21D10D93009C707C /* main.swift in Sources */,
 				B24A50FF21D314D4009C707C /* PBRDataTableEntry.swift in Sources */,
 				B24A50F221D12CDA009C707C /* PBRType.swift in Sources */,
@@ -13468,7 +13270,6 @@
 				B24A504121D12381009C707C /* XGStack.swift in Sources */,
 				B24A50E221D12CDA009C707C /* PBRFiles.swift in Sources */,
 				B24A506421D12654009C707C /* XGColour.swift in Sources */,
-				B24A504521D1241E009C707C /* GoDOpenGL.swift in Sources */,
 				B24A50E121D12CDA009C707C /* PBREvolutionMethods.swift in Sources */,
 				B24A50E421D12CDA009C707C /* PBRMoves.swift in Sources */,
 				B24A503821D1224A009C707C /* XGGenders.swift in Sources */,
@@ -13523,7 +13324,6 @@
 				B2562F7D21349806004180F1 /* XGByteCopier.swift in Sources */,
 				B24A505421D1258E009C707C /* XGTexturePalette.swift in Sources */,
 				B2562F802134983C004180F1 /* XGDemoStarterPokemon.swift in Sources */,
-				B2562F9B213499E2004180F1 /* GoDOpenGL.swift in Sources */,
 				B2562F6B2134979A004180F1 /* XGMoveEffectTypes.swift in Sources */,
 				B2562F89213498C8004180F1 /* XGLZSS.swift in Sources */,
 				B22A1C42218201AD001C41D3 /* CMGiftPokemonManager.swift in Sources */,
@@ -13547,14 +13347,12 @@
 				B2562F88213498C8004180F1 /* XGLevelUpMove.swift in Sources */,
 				B2562F79213497CF004180F1 /* XGWeather.swift in Sources */,
 				1CB33AA922B7906600F81C29 /* EnumerableDocumentable.swift in Sources */,
-				B2560A7D213D546100137C37 /* XGCollisionData.swift in Sources */,
 				1CE1A77B2326AA0D005141D8 /* XGSettings.swift in Sources */,
 				B2562F72213497A3004180F1 /* XGSpecialStringCharacters.swift in Sources */,
 				B2562F812134983C004180F1 /* XGDolPatcher.swift in Sources */,
 				1C16CA74253406E400907D78 /* CMScriptStandardFunctions.swift in Sources */,
 				B2562F522134960E004180F1 /* XGISO.swift in Sources */,
 				B2562F5D21349757004180F1 /* CMColosseumRounds.swift in Sources */,
-				B2560A85213D57C200137C37 /* GoDMetalShaders.metal in Sources */,
 				B2562F6721349789004180F1 /* XGGenders.swift in Sources */,
 				1C16CA7D2534099A00907D78 /* CMScriptValueTypes.swift in Sources */,
 				B2562F8F213498F8004180F1 /* XGStack.swift in Sources */,
@@ -13569,7 +13367,6 @@
 				B2562F5421349632004180F1 /* XGExtensions.swift in Sources */,
 				B2562F7E21349814004180F1 /* XGCharacter.swift in Sources */,
 				B2562F602134976C004180F1 /* XGEvolutionMethods.swift in Sources */,
-				B2560A90213D5A3D00137C37 /* GoDMatrix4.swift in Sources */,
 				1C64CF4724562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */,
 				B2562F8B213498DE004180F1 /* XGMutableData.swift in Sources */,
 				B22A1C4B21829D7A001C41D3 /* XGThreadManager.swift in Sources */,
@@ -13597,7 +13394,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2F5EC271F49A1FE0075C6D2 /* XGFsys.swift in Sources */,
-				B2560A7C213D546000137C37 /* XGCollisionData.swift in Sources */,
 				1C64CF4324562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */,
 				B2F5EC2A1F49A1FE0075C6D2 /* XGGenderRatios.swift in Sources */,
 				B2F5EC781F49A1FF0075C6D2 /* XGByteCopier.swift in Sources */,
@@ -13671,7 +13467,6 @@
 				B29E55FC1FA4DA40006BE597 /* XGBattleField.swift in Sources */,
 				B27C5FD91F9CD4B900E0596F /* XGCharacterModel.swift in Sources */,
 				B2F5EC811F49A1FF0075C6D2 /* XGDolPatcher.swift in Sources */,
-				B2560A82213D57C200137C37 /* GoDMetalShaders.metal in Sources */,
 				B24CBAB0212FF3C400481C1D /* XGBattleTypes.swift in Sources */,
 				B2D1DF501F6871660023A876 /* GoDTextureImporter.swift in Sources */,
 				B208E37B20C4564B00D298BF /* XDSFlags.swift in Sources */,
@@ -13694,7 +13489,6 @@
 				1CC362E224C1DF25005D7B4A /* XGBattleStyles.swift in Sources */,
 				B24A505E21D12654009C707C /* XGColour.swift in Sources */,
 				B2F5ECA21F49A1FF0075C6D2 /* XGMutableData.swift in Sources */,
-				B2FF6D2F20BCB50F00A84637 /* GoDOpenGL.swift in Sources */,
 				B2D1DF5D1F68DBF60023A876 /* GoDTextureFormats.swift in Sources */,
 				B2F5ECE41F49A1FF0075C6D2 /* XGUtility.swift in Sources */,
 				B2F5ECBA1F49A1FF0075C6D2 /* XGScriptClassFunctionsData.swift in Sources */,
@@ -13706,7 +13500,6 @@
 				B280AEA220CA8E270057A782 /* XDRelIndexes.swift in Sources */,
 				B2EAFF0120BDA676009FC947 /* XDSExpr.swift in Sources */,
 				B2F5EC331F49A1FE0075C6D2 /* XGMaps.swift in Sources */,
-				B2560A8D213D5A3D00137C37 /* GoDMatrix4.swift in Sources */,
 				B2D1DF541F6872740023A876 /* GoDTexture.swift in Sources */,
 				B2F5EC541F49A1FE0075C6D2 /* XGShinyValues.swift in Sources */,
 				B2F5EC631F49A1FF0075C6D2 /* XGTrainerModels.swift in Sources */,
@@ -13983,6 +13776,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -14019,6 +13813,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
@@ -14058,6 +13853,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -14094,6 +13890,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
@@ -14135,8 +13932,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "Colosseum Tool/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_SWIFT_FLAGS = "-DENV_OSX";
 				PRODUCT_BUNDLE_IDENTIFIER = "Stars.Colosseum-Tool";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -14176,8 +13974,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "Colosseum Tool/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_SWIFT_FLAGS = "-DENV_OSX";
 				PRODUCT_BUNDLE_IDENTIFIER = "Stars.Colosseum-Tool";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -14224,6 +14023,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_SWIFT_FLAGS = "-DENV_OSX";
 				PRODUCT_BUNDLE_IDENTIFIER = "Stars.PBR-Tool";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -14266,6 +14066,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_SWIFT_FLAGS = "-DENV_OSX";
 				PRODUCT_BUNDLE_IDENTIFIER = "Stars.PBR-Tool";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -14305,8 +14106,9 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_SWIFT_FLAGS = "-DENV_OSX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -14342,8 +14144,9 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_SWIFT_FLAGS = "-DENV_OSX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
@@ -14382,8 +14185,9 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_SWIFT_FLAGS = "-DENV_OSX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -14419,8 +14223,9 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_SWIFT_FLAGS = "-DENV_OSX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
@@ -14546,15 +14351,16 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-DENV_OSX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -14593,13 +14399,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_SWIFT_FLAGS = "-DENV_OSX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -14650,9 +14457,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = GoDToolOSX/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-DENV_OSX";
 				PRODUCT_BUNDLE_IDENTIFIER = Stars.GoDToolOSX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -14705,8 +14513,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = GoDToolOSX/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_SWIFT_FLAGS = "-DENV_OSX";
 				PRODUCT_BUNDLE_IDENTIFIER = Stars.GoDToolOSX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;

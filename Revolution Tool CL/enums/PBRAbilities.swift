@@ -63,7 +63,7 @@ enum XGAbilities : XGIndexedValue {
 	}
 	
 	static func random() -> XGAbilities {
-		let rand = Int(arc4random_uniform(UInt32(kNumberOfAbilities))) + 1
+		let rand = Int.random(in: 1 ..< kNumberOfAbilities)
 		return XGAbilities.ability(rand)
 	}
 	

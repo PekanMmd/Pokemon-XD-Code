@@ -10,6 +10,7 @@ import Foundation
 class GoDShellManager {
     enum Commands: String {
         case ls
+		case pwd
         case wit
 		case wimgt
         
@@ -22,7 +23,8 @@ class GoDShellManager {
 			case .wit, .wimgt:
                 return .Resources
             default:
-                return .path("/usr/bin")
+				#warning("Make Windows compatible implementation")
+                return .path("/bin")
             }
         }
     }
@@ -35,7 +37,7 @@ class GoDShellManager {
         }
         
         let task = Process()
-        task.launchPath = command.file.path
+        task.executableURL = URL(fileURLWithPath: command.file.path)
         if let args = args {
 			let escaped = args.replacingOccurrences(of: "\\ ", with: "<!SPACE>")
 			task.arguments = escaped.split(separator: " ").compactMap(String.init).map({ (arg) -> String in
@@ -47,8 +49,13 @@ class GoDShellManager {
 		let errorPipe = Pipe()
         task.standardOutput = outPipe
 		task.standardError = errorPipe
-        task.launch()
-		task.waitUntilExit()
+		do {
+			try task.run()
+			task.waitUntilExit()
+		} catch let error {
+			printg("Shell error:", error)
+			return nil
+		}
 
         let data = outPipe.fileHandleForReading.readDataToEndOfFile()
         let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue)! as String

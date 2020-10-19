@@ -5,6 +5,7 @@
 //  Created by The Steez on 28/05/2018.
 //
 
+#if ENV_OSX
 import Cocoa
 import Metal
 
@@ -166,7 +167,7 @@ class XGCollisionData: NSObject {
 	}
 	
 }
-
+#endif
 
 
 
