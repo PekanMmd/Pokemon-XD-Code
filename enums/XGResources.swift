@@ -12,8 +12,6 @@ enum XGResources {
 	
 	case JSON(String)
 	case png(String)
-	case bin(String)
-	case msg(String)
 	case shader(String)
 	case sublimeColourScheme(String)
 	case sublimeSyntax(String)
@@ -24,7 +22,7 @@ enum XGResources {
 	
 	var path : String {
 		get{
-			return Bundle.main.path(forResource: name, ofType: fileType) ?? FileManager.default.currentDirectoryPath + "/Assets/" + game.name
+			return Bundle.main.path(forResource: name, ofType: fileType) ?? FileManager.default.currentDirectoryPath + "/Assets/\(game.shortName)/\(fileName.replacingOccurrences(of: " ", with: "\\ "))"
 		}
 	}
 	
@@ -33,8 +31,6 @@ enum XGResources {
 			switch self {
 				case .JSON(let name)							: return name
 				case .png(let name)								: return name
-				case .bin(let name)								: return name
-				case .msg(let name)								: return name
 				case .shader(let name)							: return name
 				case .sublimeColourScheme(let name)				: return name
 				case .sublimeSyntax(let name)					: return name
@@ -51,8 +47,6 @@ enum XGResources {
 			switch self {
 				case .JSON									: return ".json"
 				case .png									: return ".png"
-				case .bin									: return ".bin"
-				case .msg 									: return ".msg"
 				case .shader								: return ".glsl"
 				case .sublimeColourScheme					: return ".sublime-color-scheme"
 				case .sublimeSyntax							: return ".sublime-syntax"
@@ -92,9 +86,7 @@ enum XGResources {
 	
     func copy(to file: XGFiles) {
         guard path != "" else {
-			if settings.verbose {
-				printg("resource doesn't exist:", name)
-			}
+			printg("resource doesn't exist:", name)
             return
         }
         guard file.path != "" else {
@@ -103,6 +95,10 @@ enum XGResources {
         }
 
         do {
+			let path = self.path
+			if settings.verbose {
+				printg("Copying resource:", path, "to:", file.path)
+			}
             try FileManager.default.copyItem(atPath: path, toPath: file.path)
         } catch {
             let data = self.data

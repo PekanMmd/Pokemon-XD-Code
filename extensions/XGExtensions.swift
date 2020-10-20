@@ -30,6 +30,14 @@ enum XGGame {
 		case .PBR: return "Pokemon Battle Revolution"
 		}
 	}
+
+	var shortName: String {
+		switch self {
+		case .Colosseum: return "Colosseum"
+		case .XD: return "XD"
+		case .PBR: return "PBR"
+		}
+	}
 }
 
 protocol XGIndexedValue {

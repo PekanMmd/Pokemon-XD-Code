@@ -213,8 +213,8 @@ indirect enum XGFiles {
 	
 	var json : AnyObject {
 		get {
-			if self.exists {
-				return try! JSONSerialization.jsonObject(with: self.data!.data as Data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+			if self.exists,  let data = self.data?.data {
+				return try! JSONSerialization.jsonObject(with: data as Data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
 			} else {
 				printg("File doesn't exist: \(self.path)")
 				return [String : String]() as AnyObject
@@ -320,10 +320,12 @@ indirect enum XGFiles {
 			return table
 		}
 	}
-	
+
+	#if ENV_OSX
 	var collisionData : XGCollisionData {
 		return XGCollisionData(file: self)
 	}
+	#endif
 	
 	var fileSize : Int {
 		get {

@@ -257,6 +257,12 @@
 		1C4E1524253DE2DD00EA318B /* GoDTextureImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF4A1F6870EE0023A876 /* GoDTextureImporter.swift */; };
 		1C4E154D253DE46300EA318B /* XGVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A70213D4CF000137C37 /* XGVertex.swift */; };
 		1C4E1556253DE46300EA318B /* XGVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A70213D4CF000137C37 /* XGVertex.swift */; };
+		1C4E1600253E33D000EA318B /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
+		1C4E1609253E33D100EA318B /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
+		1C4E1612253E33D200EA318B /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
+		1C4E1613253E33D200EA318B /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
+		1C4E161C253E33D300EA318B /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
+		1C4E161D253E33D300EA318B /* XGCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */; };
 		1C524D01234B7F0800A9659A /* GoDEnumerablePopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C524D00234B7F0800A9659A /* GoDEnumerablePopUpButton.swift */; };
 		1C524D02234B7F0800A9659A /* GoDEnumerablePopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C524D00234B7F0800A9659A /* GoDEnumerablePopUpButton.swift */; };
 		1C524D03234B7F0800A9659A /* GoDEnumerablePopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C524D00234B7F0800A9659A /* GoDEnumerablePopUpButton.swift */; };
@@ -383,8 +389,6 @@
 		1CC362E224C1DF25005D7B4A /* XGBattleStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */; };
 		1CC5DD3222C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
 		1CC5DD3322C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
-		1CC9AC43253D3E7B008A8389 /* XGDummyCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC9AC42253D3E7B008A8389 /* XGDummyCollisionData.swift */; };
-		1CC9AC44253D3E7B008A8389 /* XGDummyCollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC9AC42253D3E7B008A8389 /* XGDummyCollisionData.swift */; };
 		1CE1A7782326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
 		1CE1A7792326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
 		1CE1A77A2326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
@@ -4199,7 +4203,6 @@
 		1CC362D324C07E35005D7B4A /* PBR_body_500.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_500.png; sourceTree = "<group>"; };
 		1CC362D424C07E35005D7B4A /* PBR_body_497.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_497.png; sourceTree = "<group>"; };
 		1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleStyles.swift; sourceTree = "<group>"; };
-		1CC9AC42253D3E7B008A8389 /* XGDummyCollisionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGDummyCollisionData.swift; sourceTree = "<group>"; };
 		1CE1A7772326AA0D005141D8 /* XGSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGSettings.swift; sourceTree = "<group>"; };
 		1CED5D9724004864008566B0 /* GoDGCEnumerablePopUpButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDGCEnumerablePopUpButtons.swift; sourceTree = "<group>"; };
 		1CED5D9E2403E9EE008566B0 /* GoDGTXViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDGTXViewController.swift; sourceTree = "<group>"; };
@@ -6822,7 +6825,6 @@
 				B2F5EBE71F49A1FE0075C6D2 /* XGLZSS.swift */,
 				B252D95A1F98AF0400794FCE /* XGRelocationTable.swift */,
 				B2F5EBF81F49A1FE0075C6D2 /* XGStringTable.swift */,
-				1CC9AC42253D3E7B008A8389 /* XGDummyCollisionData.swift */,
 			);
 			name = "file formats";
 			path = "Objects/file formats";
@@ -12708,9 +12710,9 @@
 				1C16CD39253BC46300907D78 /* XGMaps.swift in Sources */,
 				1C16CDA4253BC48900907D78 /* XGShinyValues.swift in Sources */,
 				1C16CD69253BC47000907D78 /* XGMoveTargets.swift in Sources */,
+				1C4E1609253E33D100EA318B /* XGCollisionData.swift in Sources */,
 				1C16CBA0253BC25600907D78 /* EnumerableDocumentable.swift in Sources */,
 				1C16CF63253BC56500907D78 /* XGStringManager.swift in Sources */,
-				1CC9AC43253D3E7B008A8389 /* XGDummyCollisionData.swift in Sources */,
 				1C16D084253BC87300907D78 /* XGDemoStarterPokemon.swift in Sources */,
 				1C16D147253BC8B500907D78 /* XGTreasure.swift in Sources */,
 				1C16CE42253BC4C600907D78 /* XGCharacter.swift in Sources */,
@@ -12815,6 +12817,7 @@
 				1C16CDC9253BC49000907D78 /* XGStatBoosts.swift in Sources */,
 				1C16D146253BC8B300907D78 /* CMTrainerPokemon.swift in Sources */,
 				1C16CD74253BC47400907D78 /* XGMoveTypes.swift in Sources */,
+				1C4E1613253E33D200EA318B /* XGCollisionData.swift in Sources */,
 				1C16CF64253BC56600907D78 /* XGStringManager.swift in Sources */,
 				1C16D15A253BC8BB00907D78 /* CMType.swift in Sources */,
 				1C16D0F0253BC89500907D78 /* CMPokemonStats.swift in Sources */,
@@ -12882,7 +12885,6 @@
 				1C16CDDC253BC49700907D78 /* GoDTextureFormats.swift in Sources */,
 				1C4E14F6253DD05800EA318B /* XGUtility.swift in Sources */,
 				1C16D07B253BC86F00907D78 /* XGCharacterModel.swift in Sources */,
-				1CC9AC44253D3E7B008A8389 /* XGDummyCollisionData.swift in Sources */,
 				1C16CC64253BC41100907D78 /* XGASM.swift in Sources */,
 				1C16CCC4253BC42F00907D78 /* XGDeoxysFormes.swift in Sources */,
 				1C16CD42253BC46400907D78 /* XGMaps.swift in Sources */,
@@ -13144,6 +13146,7 @@
 				B20EEEA521EF796800E87D01 /* GoDMetalShaders.metal in Sources */,
 				B20EEA6521E9214D00E87D01 /* PBRScriptInstruction.swift in Sources */,
 				B24E5FB52238879C00C55758 /* PBRMoveTargets.swift in Sources */,
+				1C4E161D253E33D300EA318B /* XGCollisionData.swift in Sources */,
 				1C6295F624300BE20085C22F /* GoDISOViewController.swift in Sources */,
 				1CC362C224BFDC53005D7B4A /* GoDEnumerablePopUpButtons.swift in Sources */,
 				1C6295FE24302F6D0085C22F /* AppDelegate.swift in Sources */,
@@ -13234,6 +13237,7 @@
 				1C6295F824300F1B0085C22F /* PBRISO.swift in Sources */,
 				1C16CA9B253B837500907D78 /* OSXExtensions.swift in Sources */,
 				B20EE64021D6E2B000E87D01 /* PBRPokemonSprite.swift in Sources */,
+				1C4E161C253E33D300EA318B /* XGCollisionData.swift in Sources */,
 				B24A510D21D3F122009C707C /* XGContestCategories.swift in Sources */,
 				B24A50EA21D12CDA009C707C /* PBRTrainerPokemon.swift in Sources */,
 				B24E5FB722388DD100C55758 /* PBRContestAppeals.swift in Sources */,
@@ -13308,6 +13312,7 @@
 				B2562F73213497A3004180F1 /* XGStatBoosts.swift in Sources */,
 				B24A506B21D12668009C707C /* XGResources.swift in Sources */,
 				B2562F5A2134973A004180F1 /* XGBagSlots.swift in Sources */,
+				1C4E1612253E33D200EA318B /* XGCollisionData.swift in Sources */,
 				B24A510C21D3F122009C707C /* XGContestCategories.swift in Sources */,
 				B2111843218DF26300D3F2DF /* XGTreasure.swift in Sources */,
 				B2562F4E21349600004180F1 /* XGStringManager.swift in Sources */,
@@ -13479,6 +13484,7 @@
 				B2F5EC601F49A1FF0075C6D2 /* XGTrainerClasses.swift in Sources */,
 				B2F5EC391F49A1FE0075C6D2 /* XGMoves.swift in Sources */,
 				B24CBAA1212F206300481C1D /* XGColosseumRounds.swift in Sources */,
+				1C4E1600253E33D000EA318B /* XGCollisionData.swift in Sources */,
 				B2445AF7209F474E00B5404E /* XGMoveEffectTypes.swift in Sources */,
 				B2F5EC5D1F49A1FE0075C6D2 /* XGTMs.swift in Sources */,
 				B2F5EC0F1F49A1FE0075C6D2 /* XGBattleBingoPanel.swift in Sources */,
