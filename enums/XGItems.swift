@@ -96,49 +96,6 @@ enum XGItems {
 	
 }
 
-enum XGOriginalItems {
-	
-	case item(Int)
-	
-	var index : Int {
-		get {
-			switch self {
-			case .item(let i): return i
-			}
-		}
-	}
-	
-	var startOffset : Int {
-		get{
-			return CommonIndexes.Items.startOffset + (index * kSizeOfItemData)
-		}
-	}
-	
-	var nameID : Int {
-		get {
-			let data  = XGFiles.original(.common_rel).data!
-			return Int(data.getWordAtOffset(startOffset + kItemNameIDOffset))
-		}
-	}
-	
-	var name : XGString {
-		get {
-			let table = XGFiles.original(.common_rel).stringTable
-			return table.stringSafelyWithID(nameID)
-		}
-	}
-	
-	static func allItems() -> [XGOriginalItems] {
-		var items = [XGOriginalItems]()
-		for i in 0 ..< CommonIndexes.NumberOfItems.value {
-			items.append(.item(i))
-		}
-		return items
-	}
-	
-}
-
-
 func allItems() -> [String : XGItems] {
 	
 	var dic = [String : XGItems]()
@@ -165,14 +122,6 @@ func allItemsArray() -> [XGItems] {
 	var items : [XGItems] = []
 	for i in 0 ..< CommonIndexes.NumberOfItems.value {
 		items.append(XGItems.item(i))
-	}
-	return items
-}
-
-func allOriginalItemsArray() -> [XGOriginalItems] {
-	var items : [XGOriginalItems] = []
-	for i in 0 ..< CommonIndexes.NumberOfItems.value {
-		items.append(XGOriginalItems.item(i))
 	}
 	return items
 }

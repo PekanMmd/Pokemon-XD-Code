@@ -18,11 +18,12 @@ enum XGResources {
 	case sublimeSettings(String)
 	case sublimeCompletions(String)
     case tool(String)
+	case folder(String)
 	case nameAndFileType(String, String)
 	
 	var path : String {
 		get{
-			return Bundle.main.path(forResource: name, ofType: fileType) ?? FileManager.default.currentDirectoryPath + "/Assets/\(game.shortName)/\(fileName.replacingOccurrences(of: " ", with: "\\ "))"
+			return Bundle.main.path(forResource: name, ofType: fileType) ?? Bundle.main.bundlePath + "/Assets/\(game.shortName)/\(fileName)"
 		}
 	}
 	
@@ -37,6 +38,7 @@ enum XGResources {
 				case .sublimeSettings(let name)					: return name
 				case .sublimeCompletions(let name)				: return name
                 case .tool(let name)                            : return name
+				case .folder(let name)                          : return name
 				case .nameAndFileType(let name, _)				: return name
 			}
 		}
@@ -52,7 +54,8 @@ enum XGResources {
 				case .sublimeSyntax							: return ".sublime-syntax"
 				case .sublimeSettings						: return ".sublime-settings"
 				case .sublimeCompletions					: return ".sublime-completions"
-                case .tool                                  : return ""
+				case .tool                                  : return ""
+				case .folder                                  : return ""
 				case .nameAndFileType( _, let filetype)		: return filetype
 			}
 		}
@@ -79,33 +82,73 @@ enum XGResources {
 	}
 	
 	var json : AnyObject {
-		get {
-			return try! JSONSerialization.jsonObject(with: self.data.data as Data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+		if let jsonObject =  try? JSONSerialization.jsonObject(with: self.data.data as Data, options: JSONSerialization.ReadingOptions.mutableContainers) {
+			return jsonObject as AnyObject
+		} else {
+			return [String: String]() as AnyObject
+		}
+	}
+
+	func copy(to file: XGFiles) {
+		switch self {
+		case .folder: assertionFailure("Cannot copy folder to file"); break
+		default: copy(to: file.path)
+		}
+	}
+
+	func copy(to folder: XGFolders) {
+		switch self {
+		case .folder: copy(to: folder.path)
+		default: copy(to: XGFiles.nameAndFolder(fileName, folder))
 		}
 	}
 	
-    func copy(to file: XGFiles) {
-        guard path != "" else {
+    func copy(to path: String) {
+		let srcPath = self.path
+		let dstPath = path
+
+		switch self {
+		case .folder(let name):
+			if name == "wiimm" {
+				let folder = XGFolders.path(srcPath)
+				if !folder.exists {
+					let wiimm = XGFolders.Wiimm
+					let wimgt = XGFiles.wimgt
+					let wit = XGFiles.wit
+					if !wiimm.exists {
+						wiimm.createDirectory()
+					}
+					if !wit.exists {
+						XGResources.tool(wit.fileName).copy(to: wit)
+					}
+					if !wimgt.exists {
+						XGResources.tool(wimgt.fileName).copy(to: wimgt)
+					}
+					return
+				}
+			}
+		default:
+			break
+		}
+
+		if settings.verbose {
+			printg("Copying resource:", srcPath, "to:", dstPath)
+		}
+
+		guard srcPath != "" else {
 			printg("resource doesn't exist:", name)
             return
         }
-        guard file.path != "" else {
-            assertionFailure("no path specified for file")
+        guard dstPath != "" else {
+            assertionFailure("cannot copy resource \(name) to unspecified path")
             return
         }
 
         do {
-			let path = self.path
-			if settings.verbose {
-				printg("Copying resource:", path, "to:", file.path)
-			}
-            try FileManager.default.copyItem(atPath: path, toPath: file.path)
-        } catch {
-            let data = self.data
-            data.file = file
-            data.save()
+            try FileManager.default.copyItem(atPath: srcPath, toPath: dstPath)
+        } catch let error {
+            printg("Error copying resource:", error)
         }
-        
     }
 }
 

@@ -9,6 +9,7 @@
 import Foundation
 
 enum Environment {
+	case Linux
 	case OSX
 	case Windows
 }
@@ -761,6 +762,29 @@ extension XGStringTable {
 	}
 }
 
+extension NumberFormatter {
 
+	class func byteFormatter() -> NumberFormatter {
+		let format = NumberFormatter()
+		format.minimum = 0x00
+		format.maximum = 0xFF
+		return format
+	}
+
+	class func shortFormatter() -> NumberFormatter {
+		let format = NumberFormatter()
+		format.minimum = 0x00
+		format.maximum = 0xFFFF
+		return format
+	}
+
+	class func signedByteFormatter() -> NumberFormatter {
+		let format = NumberFormatter()
+		format.minimum = -127
+		format.maximum = 128
+		return format
+	}
+
+}
 
 

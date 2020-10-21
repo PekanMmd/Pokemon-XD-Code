@@ -3,6 +3,7 @@ cd -- "$(dirname "$0")" #changes the terminal's directory to the directory where
 echo "Copying GoD Tool Assets. This may take a while..."
 mkdir ./out/Assets
 mkdir ./out/Assets/XD
+mkdir ./out/Assets/XD/wiimm
 cp ../images/PokeFace/face_115.png ./out/Assets/XD/face_115.png
 cp ../images/PokeBody/body_226.png ./out/Assets/XD/body_226.png
 cp ../images/PokeFace/face_189.png ./out/Assets/XD/face_189.png
@@ -942,13 +943,13 @@ cp ../images/PokeFace/face_134.png ./out/Assets/XD/face_134.png
 cp ../images/PokeBody/body_132.png ./out/Assets/XD/body_132.png
 cp ../images/PokeFace/face_143.png ./out/Assets/XD/face_143.png
 cp ../images/PokeBody/body_407.png ./out/Assets/XD/body_407.png
+cp ../tools/Linux/wiimm/* ./out/Assets/XD/wiimm
 echo "Compiling GoD Tool. This may take a while..."
-swiftc -emit-executable -DENV_LINUX -o ./out/GoD\ Tool\ CLI ../extensions/OSXExtensions.swift ../GoDToolOSX/Objects/GoDTextureImporter.swift ../enums/XGEvolutionMethods.swift ../Objects/data\ types/enumerable/XGTrainerClass.swift ../Objects/scripts/XD/XDSFlags.swift ../Objects/textures/XGTextureBlock.swift ../enums/XDSMacroTypes.swift ../Objects/textures/XGColour.swift ../GoDToolOSX/Objects/GoDKeyCodes.swift ../extensions/GoDToolCLExtensions.swift ../Objects/data\ types/XGBattleBingoPokemon.swift ../enums/XGNatures.swift ../Objects/textures/XGPNGBlock.swift ../enums/XGStatusEffects.swift ../Objects/managers/GoDShellManager.swift ../enums/XGContestCategories.swift ../Objects/helper\ data\ types/XGStack.swift ../enums/XGBattleBingoPanel.swift ../Objects/scripts/XD/XGScriptOps.swift ../enums/XGResources.swift ../Objects/data\ types/enumerable/XGRoom.swift ../Objects/data\ types/enumerable/XGBattleCD.swift ../GoDToolOSX/Objects/GoDTexture.swift ../Objects/data\ types/enumerable/XGDoor.swift ../Objects/file\ formats/XGLZSS.swift ../enums/XGTrainerModels.swift ../extensions/XGExtensions.swift ../enums/GoDTextureFormats.swift ../enums/XGExpRate.swift ../Objects/data\ types/enumerable/XGPokeSpotPokemon.swift ../Objects/file\ formats/XGAssemblyCode.swift ../extensions/XGOSXExtensions.swift ../enums/XGDecks.swift ../enums/XGBagSlots.swift ../enums/XGItems.swift ../Objects/data\ types/enumerable/XGInteractionPoint.swift ../Objects/scripts/XD/XDSExpr.swift ../Objects/textures/XGTexturePalette.swift ../enums/XGSpecialStringCharacters.swift ../Objects/managers/XGRandomiser.swift ../Objects/managers/XGDolPatcher.swift ../Objects/file\ formats/XGAssemblyCodeExtensions.swift ../enums/XGGenders.swift ../enums/XGColosseumRounds.swift ../Objects/data\ types/enumerable/XGBattleBingoCard.swift ../Objects/file\ formats/XGStringTable.swift ../Objects/managers/XGGiftPokemonManager.swift ../enums/XGMaps.swift ../enums/XGShinyValues.swift ../enums/XGMoveTargets.swift ../Objects/file\ formats/XGCollisionData.swift ../protocols/EnumerableDocumentable.swift ../Objects/managers/XGStringManager.swift ../Objects/data\ types/enumerable/XGDemoStarterPokemon.swift ../Objects/data\ types/enumerable/XGTreasure.swift ../Objects/data\ types/XGCharacter.swift ../Objects/data\ types/enumerable/XGMtBattlePokemon.swift ../enums/XGTrainerContoller.swift ../Objects/scripts/XD/XDSConstant.swift ../Objects/scripts/XD/XGScript.swift ../Objects/data\ types/XGString.swift ../Objects/managers/XGSettings.swift ../enums/XGGenderRatios.swift ../Objects/data\ types/enumerable/XGStoryProgress.swift ../Objects/managers/XGThreadManager.swift ../Objects/data\ types/enumerable/XGType.swift ../enums/XGDeckPokemon.swift ../Objects/data\ types/enumerable/XGTradePokemon.swift ../XDRelIndexes.swift ../enums/XGMoveEffectTypes.swift ../enums/XGMoves.swift ../extensions/GoDImageExtensions.swift ../Objects/file\ formats/XGGSWTextures.swift ../Objects/data\ types/enumerable/XGTradeShadowPokemon.swift ../Objects/data\ types/enumerable/XGMove.swift ../Objects/data\ types/XGLevelUpMove.swift ../enums/XGFontColours.swift ../Objects/file\ formats/XGISO.swift ../enums/XGDeoxysFormes.swift ../Objects/data\ types/enumerable/XGNature.swift ../Objects/managers/XGByteCopier.swift ../Objects/scripts/XD/XGScriptClassFunctionsData.swift ../Objects/data\ types/enumerable/XGPokemart.swift ../Objects/data\ types/enumerable/XGMusic.swift ../Objects/helper\ data\ types/XGMutableData.swift ../enums/XGASM.swift ../Objects/textures/XGTextureMetaData.swift ../enums/XGFileTypes.swift ../enums/XGFiles.swift ../Objects/data\ types/enumerable/XGCharacterModel.swift ../enums/XGWeather.swift ../Objects/data\ types/enumerable/XGBattleField.swift ../enums/XGUnicodeCharacters.swift ../enums/XGEffectivenessValues.swift ../extensions/XDExtensions.swift ../enums/XGPokemon.swift ../Objects/managers/XGUtility.swift ../enums/XGEvolutionConditionType.swift ../enums/XGBattleTypes.swift ../Objects/data\ types/enumerable/XGTrainerPokemon.swift ../Objects/data\ types/enumerable/XGStarterPokemon.swift ../Objects/data\ types/enumerable/XGPokemonStats.swift ../extensions/XDSExtensions.swift ../enums/XGAbilities.swift ../Objects/file\ formats/XGRelocationTable.swift ../Objects/data\ types/enumerable/XGGiftPokemon.swift ../GoD-CLI/main.swift ../enums/XGMoveTypes.swift ../Objects/data\ types/XGEvolution.swift ../Objects/scripts/XD/XGScriptInstruction.swift ../Objects/data\ types/enumerable/CMGiftPokemon.swift ../Objects/file\ formats/XGFsys.swift ../enums/XGBattleStyles.swift ../Objects/scripts/XD/XGScriptClass.swift ../extensions/GoDOSXExtensions.swift ../GoDToolOSX/Objects/XGVertex.swift ../Objects/data\ types/enumerable/XGBattle.swift ../Objects/scripts/XD/XDSScriptCompiler.swift ../Objects/data\ types/enumerable/XGItem.swift ../enums/XGPokeSpots.swift ../enums/XGTMs.swift ../enums/XGMoveCategory.swift ../Objects/data\ types/enumerable/XGTrainer.swift ../enums/XGStatBoosts.swift ../enums/XGTrainerClasses.swift
+swiftc -emit-executable -DENV_LINUX -o ./out/GoD\ Tool\ CLI ../extensions/LinuxExtensions.swift ../GoDToolOSX/Objects/GoDTextureImporter.swift ../enums/XGEvolutionMethods.swift ../Objects/data\ types/enumerable/XGTrainerClass.swift ../Objects/scripts/XD/XDSFlags.swift ../Objects/textures/XGTextureBlock.swift ../enums/XDSMacroTypes.swift ../Objects/textures/XGColour.swift ../GoDToolOSX/Objects/GoDKeyCodes.swift ../extensions/GoDToolCLExtensions.swift ../Objects/data\ types/XGBattleBingoPokemon.swift ../enums/XGNatures.swift ../Objects/textures/XGPNGBlock.swift ../enums/XGStatusEffects.swift ../Objects/managers/GoDShellManager.swift ../enums/XGContestCategories.swift ../Objects/helper\ data\ types/XGStack.swift ../enums/XGBattleBingoPanel.swift ../Objects/scripts/XD/XGScriptOps.swift ../enums/XGResources.swift ../Objects/data\ types/enumerable/XGRoom.swift ../Objects/data\ types/enumerable/XGBattleCD.swift ../GoDToolOSX/Objects/GoDTexture.swift ../Objects/data\ types/enumerable/XGDoor.swift ../Objects/file\ formats/XGLZSS.swift ../enums/XGTrainerModels.swift ../extensions/XGExtensions.swift ../enums/GoDTextureFormats.swift ../enums/XGExpRate.swift ../Objects/data\ types/enumerable/XGPokeSpotPokemon.swift ../Objects/file\ formats/XGAssemblyCode.swift ../extensions/XGOSXExtensions.swift ../enums/XGDecks.swift ../enums/XGBagSlots.swift ../enums/XGItems.swift ../Objects/data\ types/enumerable/XGInteractionPoint.swift ../Objects/scripts/XD/XDSExpr.swift ../Objects/textures/XGTexturePalette.swift ../enums/XGSpecialStringCharacters.swift ../Objects/managers/XGRandomiser.swift ../Objects/managers/XGDolPatcher.swift ../Objects/file\ formats/XGAssemblyCodeExtensions.swift ../enums/XGGenders.swift ../enums/XGColosseumRounds.swift ../Objects/data\ types/enumerable/XGBattleBingoCard.swift ../Objects/file\ formats/XGStringTable.swift ../Objects/managers/XGGiftPokemonManager.swift ../enums/XGMaps.swift ../enums/XGShinyValues.swift ../enums/XGMoveTargets.swift ../Objects/file\ formats/XGCollisionData.swift ../protocols/EnumerableDocumentable.swift ../Objects/managers/XGStringManager.swift ../Objects/data\ types/enumerable/XGDemoStarterPokemon.swift ../Objects/data\ types/enumerable/XGTreasure.swift ../Objects/data\ types/XGCharacter.swift ../Objects/data\ types/enumerable/XGMtBattlePokemon.swift ../enums/XGTrainerContoller.swift ../Objects/scripts/XD/XDSConstant.swift ../Objects/scripts/XD/XGScript.swift ../Objects/data\ types/XGString.swift ../Objects/managers/XGSettings.swift ../enums/XGGenderRatios.swift ../Objects/data\ types/enumerable/XGStoryProgress.swift ../Objects/managers/XGThreadManager.swift ../Objects/data\ types/enumerable/XGType.swift ../enums/XGDeckPokemon.swift ../Objects/data\ types/enumerable/XGTradePokemon.swift ../XDRelIndexes.swift ../enums/XGMoveEffectTypes.swift ../enums/XGMoves.swift ../extensions/GoDImageExtensions.swift ../Objects/file\ formats/XGGSWTextures.swift ../Objects/data\ types/enumerable/XGTradeShadowPokemon.swift ../Objects/data\ types/enumerable/XGMove.swift ../Objects/data\ types/XGLevelUpMove.swift ../enums/XGFontColours.swift ../Objects/file\ formats/XGISO.swift ../enums/XGDeoxysFormes.swift ../Objects/data\ types/enumerable/XGNature.swift ../Objects/managers/XGByteCopier.swift ../Objects/scripts/XD/XGScriptClassFunctionsData.swift ../Objects/data\ types/enumerable/XGPokemart.swift ../Objects/data\ types/enumerable/XGMusic.swift ../Objects/helper\ data\ types/XGMutableData.swift ../enums/XGASM.swift ../Objects/textures/XGTextureMetaData.swift ../enums/XGFileTypes.swift ../enums/XGFiles.swift ../Objects/data\ types/enumerable/XGCharacterModel.swift ../enums/XGWeather.swift ../Objects/data\ types/enumerable/XGBattleField.swift ../enums/XGUnicodeCharacters.swift ../enums/XGEffectivenessValues.swift ../extensions/XDExtensions.swift ../enums/XGPokemon.swift ../Objects/managers/XGUtility.swift ../enums/XGEvolutionConditionType.swift ../enums/XGBattleTypes.swift ../Objects/data\ types/enumerable/XGTrainerPokemon.swift ../Objects/data\ types/enumerable/XGStarterPokemon.swift ../Objects/data\ types/enumerable/XGPokemonStats.swift ../extensions/XDSExtensions.swift ../enums/XGAbilities.swift ../Objects/file\ formats/XGRelocationTable.swift ../Objects/data\ types/enumerable/XGGiftPokemon.swift ../GoD-CLI/main.swift ../enums/XGMoveTypes.swift ../Objects/data\ types/XGEvolution.swift ../Objects/scripts/XD/XGScriptInstruction.swift ../Objects/data\ types/enumerable/CMGiftPokemon.swift ../Objects/file\ formats/XGFsys.swift ../enums/XGBattleStyles.swift ../Objects/scripts/XD/XGScriptClass.swift ../extensions/GoDOSXExtensions.swift ../GoDToolOSX/Objects/XGVertex.swift ../Objects/data\ types/enumerable/XGBattle.swift ../Objects/scripts/XD/XDSScriptCompiler.swift ../Objects/data\ types/enumerable/XGItem.swift ../enums/XGPokeSpots.swift ../enums/XGTMs.swift ../enums/XGMoveCategory.swift ../Objects/data\ types/enumerable/XGTrainer.swift ../enums/XGStatBoosts.swift ../enums/XGTrainerClasses.swift
 echo "Copying Colosseum Tool Assets. This may take a while..."
 mkdir ./out/Assets
 mkdir ./out/Assets/Colosseum
 cp ../images/PokeBody/body_334.png ./out/Assets/Colosseum/body_334.png
-cp ../images/Trainers/trainer_64.png ./out/Assets/Colosseum/trainer_64.png
 cp ../images/PokeBody/body_211.png ./out/Assets/Colosseum/body_211.png
 cp ../images/PokeBody/body_202.png ./out/Assets/Colosseum/body_202.png
 cp ../images/PokeBody/body_330.png ./out/Assets/Colosseum/body_330.png
@@ -986,12 +987,9 @@ cp ../images/PokeFace/face_005.png ./out/Assets/Colosseum/face_005.png
 cp ../images/PokeFace/face_201.png ./out/Assets/Colosseum/face_201.png
 cp ../images/PokeBody/body_372.png ./out/Assets/Colosseum/body_372.png
 cp ../images/PokeFace/face_221.png ./out/Assets/Colosseum/face_221.png
-cp ../images/Trainers/trainer_56.png ./out/Assets/Colosseum/trainer_56.png
 cp ../images/Types/type_11.png ./out/Assets/Colosseum/type_11.png
-cp ../images/Trainers/trainer_43.png ./out/Assets/Colosseum/trainer_43.png
 cp ../images/PokeBody/body_028.png ./out/Assets/Colosseum/body_028.png
 cp ../images/PokeBody/body_134.png ./out/Assets/Colosseum/body_134.png
-cp ../images/Trainers/trainer_46.png ./out/Assets/Colosseum/trainer_46.png
 cp ../images/PokeBody/body_087.png ./out/Assets/Colosseum/body_087.png
 cp ../images/PokeBody/body_400.png ./out/Assets/Colosseum/body_400.png
 cp ../images/PokeFace/face_379.png ./out/Assets/Colosseum/face_379.png
@@ -1010,10 +1008,8 @@ cp ../images/PokeFace/face_024.png ./out/Assets/Colosseum/face_024.png
 cp ../images/PokeBody/body_153.png ./out/Assets/Colosseum/body_153.png
 cp ../images/PokeBody/body_241.png ./out/Assets/Colosseum/body_241.png
 cp ../images/PokeBody/body_411.png ./out/Assets/Colosseum/body_411.png
-cp ../images/Trainers/trainer_33.png ./out/Assets/Colosseum/trainer_33.png
 cp ../images/PokeBody/body_050.png ./out/Assets/Colosseum/body_050.png
 cp ../images/PokeFace/face_399.png ./out/Assets/Colosseum/face_399.png
-cp ../images/Trainers/trainer_25.png ./out/Assets/Colosseum/trainer_25.png
 cp ../images/PokeFace/face_121.png ./out/Assets/Colosseum/face_121.png
 cp ../images/PokeBody/body_412.png ./out/Assets/Colosseum/body_412.png
 cp ../images/PokeBody/body_022.png ./out/Assets/Colosseum/body_022.png
@@ -1044,11 +1040,8 @@ cp ../images/PokeBody/body_091.png ./out/Assets/Colosseum/body_091.png
 cp ../images/PokeFace/face_409.png ./out/Assets/Colosseum/face_409.png
 cp ../images/PokeBody/body_348.png ./out/Assets/Colosseum/body_348.png
 cp ../images/PokeBody/body_198.png ./out/Assets/Colosseum/body_198.png
-cp ../images/Trainers/trainer_38.png ./out/Assets/Colosseum/trainer_38.png
 cp ../images/PokeBody/body_401.png ./out/Assets/Colosseum/body_401.png
-cp ../images/Trainers/trainer_37.png ./out/Assets/Colosseum/trainer_37.png
 cp ../images/PokeFace/face_215.png ./out/Assets/Colosseum/face_215.png
-cp ../images/Trainers/trainer_28.png ./out/Assets/Colosseum/trainer_28.png
 cp ../images/PokeFace/face_123.png ./out/Assets/Colosseum/face_123.png
 cp ../images/PokeBody/body_265.png ./out/Assets/Colosseum/body_265.png
 cp ../images/PokeBody/body_043.png ./out/Assets/Colosseum/body_043.png
@@ -1062,7 +1055,6 @@ cp ../images/PokeBody/body_096.png ./out/Assets/Colosseum/body_096.png
 cp ../images/Types/type_2.png ./out/Assets/Colosseum/type_2.png
 cp ../images/ColoTrainers/colo_trainer_16.png ./out/Assets/Colosseum/colo_trainer_16.png
 cp ../images/PokeFace/face_392.png ./out/Assets/Colosseum/face_392.png
-cp ../images/Trainers/trainer_35.png ./out/Assets/Colosseum/trainer_35.png
 cp ../images/ColoTrainers/colo_trainer_73.png ./out/Assets/Colosseum/colo_trainer_73.png
 cp ../images/PokeFace/face_164.png ./out/Assets/Colosseum/face_164.png
 cp ../images/PokeFace/face_256.png ./out/Assets/Colosseum/face_256.png
@@ -1080,7 +1072,6 @@ cp ../images/PokeFace/face_305.png ./out/Assets/Colosseum/face_305.png
 cp ../images/PokeFace/face_356.png ./out/Assets/Colosseum/face_356.png
 cp ../JSON/XD/Pokemon\ Stats\ raw.json ./out/Assets/Colosseum/Pokemon\ Stats\ raw.json
 cp ../images/PokeBody/body_260.png ./out/Assets/Colosseum/body_260.png
-cp ../images/Trainers/trainer_30.png ./out/Assets/Colosseum/trainer_30.png
 cp ../images/PokeBody/body_389.png ./out/Assets/Colosseum/body_389.png
 cp ../images/PokeFace/face_151.png ./out/Assets/Colosseum/face_151.png
 cp ../images/PokeBody/body_297.png ./out/Assets/Colosseum/body_297.png
@@ -1091,7 +1082,6 @@ cp ../images/PokeBody/body_293.png ./out/Assets/Colosseum/body_293.png
 cp ../images/PokeBody/body_090.png ./out/Assets/Colosseum/body_090.png
 cp ../images/PokeBody/body_183.png ./out/Assets/Colosseum/body_183.png
 cp ../images/PokeBody/body_392.png ./out/Assets/Colosseum/body_392.png
-cp ../images/Trainers/trainer_61.png ./out/Assets/Colosseum/trainer_61.png
 cp ../images/ColoTrainers/colo_trainer_38.png ./out/Assets/Colosseum/colo_trainer_38.png
 cp ../images/PokeBody/body_013.png ./out/Assets/Colosseum/body_013.png
 cp ../images/PokeFace/face_289.png ./out/Assets/Colosseum/face_289.png
@@ -1141,8 +1131,6 @@ cp ../images/PokeFace/face_270.png ./out/Assets/Colosseum/face_270.png
 cp ../images/PokeBody/body_152.png ./out/Assets/Colosseum/body_152.png
 cp ../images/PokeBody/body_020.png ./out/Assets/Colosseum/body_020.png
 cp ../images/PokeFace/face_186.png ./out/Assets/Colosseum/face_186.png
-cp ../images/Trainers/trainer_12.png ./out/Assets/Colosseum/trainer_12.png
-cp ../images/Trainers/trainer_51.png ./out/Assets/Colosseum/trainer_51.png
 cp ../images/PokeFace/face_341.png ./out/Assets/Colosseum/face_341.png
 cp ../images/ColoTrainers/colo_trainer_61.png ./out/Assets/Colosseum/colo_trainer_61.png
 cp ../images/PokeBody/body_037.png ./out/Assets/Colosseum/body_037.png
@@ -1162,11 +1150,9 @@ cp ../images/PokeFace/face_068.png ./out/Assets/Colosseum/face_068.png
 cp ../images/PokeBody/body_130.png ./out/Assets/Colosseum/body_130.png
 cp ../images/PokeBody/body_027.png ./out/Assets/Colosseum/body_027.png
 cp ../images/Types/type_8.png ./out/Assets/Colosseum/type_8.png
-cp ../images/Trainers/trainer_65.png ./out/Assets/Colosseum/trainer_65.png
 cp ../images/PokeFace/face_291.png ./out/Assets/Colosseum/face_291.png
 cp ../images/PokeBody/body_038.png ./out/Assets/Colosseum/body_038.png
 cp ../images/PokeBody/body_340.png ./out/Assets/Colosseum/body_340.png
-cp ../images/Trainers/trainer_19.png ./out/Assets/Colosseum/trainer_19.png
 cp ../images/PokeBody/body_306.png ./out/Assets/Colosseum/body_306.png
 cp ../images/PokeBody/body_218.png ./out/Assets/Colosseum/body_218.png
 cp ../images/PokeBody/body_295.png ./out/Assets/Colosseum/body_295.png
@@ -1211,20 +1197,18 @@ cp ../images/PokeBody/body_406.png ./out/Assets/Colosseum/body_406.png
 cp ../images/ColoTrainers/colo_trainer_20.png ./out/Assets/Colosseum/colo_trainer_20.png
 cp ../images/PokeFace/face_394.png ./out/Assets/Colosseum/face_394.png
 cp ../images/PokeFace/face_398.png ./out/Assets/Colosseum/face_398.png
+cp ../images/ColoTrainers/colo_trainer_66.png ./out/Assets/Colosseum/colo_trainer_66.png
 cp ../JSON/Colosseum/Original\ Moves.json ./out/Assets/Colosseum/Original\ Moves.json
 cp ../images/PokeBody/body_221.png ./out/Assets/Colosseum/body_221.png
 cp ../images/ColoTrainers/colo_trainer_70.png ./out/Assets/Colosseum/colo_trainer_70.png
 cp ../images/PokeBody/body_391.png ./out/Assets/Colosseum/body_391.png
 cp ../images/PokeFace/face_362.png ./out/Assets/Colosseum/face_362.png
-cp ../images/Trainers/trainer_58.png ./out/Assets/Colosseum/trainer_58.png
 cp ../images/PokeBody/body_178.png ./out/Assets/Colosseum/body_178.png
-cp ../images/Trainers/trainer_3.png ./out/Assets/Colosseum/trainer_3.png
 cp ../images/PokeBody/body_108.png ./out/Assets/Colosseum/body_108.png
 cp ../images/PokeBody/body_376.png ./out/Assets/Colosseum/body_376.png
 cp ../JSON/XD/Original\ Pokemon.json ./out/Assets/Colosseum/Original\ Pokemon.json
 cp ../images/ColoTrainers/colo_trainer_48.png ./out/Assets/Colosseum/colo_trainer_48.png
 cp ../images/PokeBody/body_282.png ./out/Assets/Colosseum/body_282.png
-cp ../images/Trainers/trainer_23.png ./out/Assets/Colosseum/trainer_23.png
 cp ../images/PokeFace/face_208.png ./out/Assets/Colosseum/face_208.png
 cp ../images/PokeFace/face_393.png ./out/Assets/Colosseum/face_393.png
 cp ../images/PokeBody/body_249.png ./out/Assets/Colosseum/body_249.png
@@ -1237,14 +1221,12 @@ cp ../JSON/XD/Items.json ./out/Assets/Colosseum/Items.json
 cp ../images/PokeBody/body_171.png ./out/Assets/Colosseum/body_171.png
 cp ../images/PokeFace/face_165.png ./out/Assets/Colosseum/face_165.png
 cp ../images/PokeBody/body_065.png ./out/Assets/Colosseum/body_065.png
-cp ../images/Trainers/trainer_22.png ./out/Assets/Colosseum/trainer_22.png
 cp ../images/PokeBody/body_362.png ./out/Assets/Colosseum/body_362.png
 cp ../images/PokeFace/face_361.png ./out/Assets/Colosseum/face_361.png
 cp ../images/PokeFace/face_111.png ./out/Assets/Colosseum/face_111.png
 cp ../images/PokeBody/body_266.png ./out/Assets/Colosseum/body_266.png
 cp ../images/PokeBody/body_336.png ./out/Assets/Colosseum/body_336.png
 cp ../images/PokeFace/face_226.png ./out/Assets/Colosseum/face_226.png
-cp ../images/Trainers/trainer_24.png ./out/Assets/Colosseum/trainer_24.png
 cp ../images/PokeFace/face_026.png ./out/Assets/Colosseum/face_026.png
 cp ../images/PokeFace/face_187.png ./out/Assets/Colosseum/face_187.png
 cp ../images/Types/type_12.png ./out/Assets/Colosseum/type_12.png
@@ -1257,7 +1239,6 @@ cp ../images/PokeBody/body_264.png ./out/Assets/Colosseum/body_264.png
 cp ../images/PokeFace/face_241.png ./out/Assets/Colosseum/face_241.png
 cp ../images/PokeFace/face_277.png ./out/Assets/Colosseum/face_277.png
 cp ../images/PokeBody/body_132.png ./out/Assets/Colosseum/body_132.png
-cp ../images/Trainers/trainer_47.png ./out/Assets/Colosseum/trainer_47.png
 cp ../images/PokeBody/body_093.png ./out/Assets/Colosseum/body_093.png
 cp ../images/PokeFace/face_276.png ./out/Assets/Colosseum/face_276.png
 cp ../images/PokeBody/body_207.png ./out/Assets/Colosseum/body_207.png
@@ -1289,7 +1270,6 @@ cp ../images/PokeBody/body_217.png ./out/Assets/Colosseum/body_217.png
 cp ../images/ColoTrainers/colo_trainer_36.png ./out/Assets/Colosseum/colo_trainer_36.png
 cp ../images/PokeBody/body_085.png ./out/Assets/Colosseum/body_085.png
 cp ../images/PokeFace/face_048.png ./out/Assets/Colosseum/face_048.png
-cp ../images/Trainers/trainer_20.png ./out/Assets/Colosseum/trainer_20.png
 cp ../images/PokeFace/face_128.png ./out/Assets/Colosseum/face_128.png
 cp ../images/PokeFace/face_038.png ./out/Assets/Colosseum/face_038.png
 cp ../images/PokeBody/body_051.png ./out/Assets/Colosseum/body_051.png
@@ -1311,7 +1291,6 @@ cp ../images/PokeBody/body_061.png ./out/Assets/Colosseum/body_061.png
 cp ../images/PokeBody/body_007.png ./out/Assets/Colosseum/body_007.png
 cp ../images/ColoTrainers/colo_trainer_62.png ./out/Assets/Colosseum/colo_trainer_62.png
 cp ../images/PokeBody/body_084.png ./out/Assets/Colosseum/body_084.png
-cp ../images/Trainers/trainer_6.png ./out/Assets/Colosseum/trainer_6.png
 cp ../images/PokeFace/face_079.png ./out/Assets/Colosseum/face_079.png
 cp ../images/PokeBody/body_045.png ./out/Assets/Colosseum/body_045.png
 cp ../images/PokeBody/body_070.png ./out/Assets/Colosseum/body_070.png
@@ -1321,7 +1300,6 @@ cp ../images/PokeFace/face_126.png ./out/Assets/Colosseum/face_126.png
 cp ../images/PokeBody/body_368.png ./out/Assets/Colosseum/body_368.png
 cp ../images/PokeFace/face_322.png ./out/Assets/Colosseum/face_322.png
 cp ../images/ColoTrainers/colo_trainer_3.png ./out/Assets/Colosseum/colo_trainer_3.png
-cp ../images/Trainers/trainer_41.png ./out/Assets/Colosseum/trainer_41.png
 cp ../images/PokeBody/body_035.png ./out/Assets/Colosseum/body_035.png
 cp ../images/PokeBody/body_019.png ./out/Assets/Colosseum/body_019.png
 cp ../images/PokeFace/face_000.png ./out/Assets/Colosseum/face_000.png
@@ -1331,12 +1309,10 @@ cp ../images/PokeFace/face_209.png ./out/Assets/Colosseum/face_209.png
 cp ../images/PokeBody/body_386.png ./out/Assets/Colosseum/body_386.png
 cp ../images/PokeBody/body_408.png ./out/Assets/Colosseum/body_408.png
 cp ../images/ColoTrainers/colo_trainer_72.png ./out/Assets/Colosseum/colo_trainer_72.png
-cp ../images/Trainers/trainer_11.png ./out/Assets/Colosseum/trainer_11.png
 cp ../images/PokeFace/face_400.png ./out/Assets/Colosseum/face_400.png
 cp ../images/PokeBody/body_245.png ./out/Assets/Colosseum/body_245.png
 cp ../images/PokeBody/body_301.png ./out/Assets/Colosseum/body_301.png
 cp ../images/PokeFace/face_153.png ./out/Assets/Colosseum/face_153.png
-cp ../images/Trainers/trainer_9.png ./out/Assets/Colosseum/trainer_9.png
 cp ../images/PokeBody/body_147.png ./out/Assets/Colosseum/body_147.png
 cp ../images/PokeBody/body_101.png ./out/Assets/Colosseum/body_101.png
 cp ../images/PokeFace/face_104.png ./out/Assets/Colosseum/face_104.png
@@ -1359,7 +1335,6 @@ cp ../images/PokeBody/body_094.png ./out/Assets/Colosseum/body_094.png
 cp ../images/PokeBody/body_235.png ./out/Assets/Colosseum/body_235.png
 cp ../images/PokeFace/face_176.png ./out/Assets/Colosseum/face_176.png
 cp ../images/PokeFace/face_383.png ./out/Assets/Colosseum/face_383.png
-cp ../images/Trainers/trainer_16.png ./out/Assets/Colosseum/trainer_16.png
 cp ../images/PokeFace/face_197.png ./out/Assets/Colosseum/face_197.png
 cp ../images/PokeBody/body_201.png ./out/Assets/Colosseum/body_201.png
 cp ../images/ColoTrainers/colo_trainer_21.png ./out/Assets/Colosseum/colo_trainer_21.png
@@ -1396,15 +1371,12 @@ cp ../images/PokeFace/face_253.png ./out/Assets/Colosseum/face_253.png
 cp ../images/PokeFace/face_372.png ./out/Assets/Colosseum/face_372.png
 cp ../images/PokeBody/body_157.png ./out/Assets/Colosseum/body_157.png
 cp ../images/PokeFace/face_298.png ./out/Assets/Colosseum/face_298.png
-cp ../images/Trainers/trainer_21.png ./out/Assets/Colosseum/trainer_21.png
 cp ../images/PokeBody/body_248.png ./out/Assets/Colosseum/body_248.png
-cp ../images/Trainers/trainer_27.png ./out/Assets/Colosseum/trainer_27.png
 cp ../images/PokeBody/body_270.png ./out/Assets/Colosseum/body_270.png
 cp ../images/PokeBody/body_158.png ./out/Assets/Colosseum/body_158.png
 cp ../images/PokeBody/body_327.png ./out/Assets/Colosseum/body_327.png
 cp ../images/PokeBody/body_274.png ./out/Assets/Colosseum/body_274.png
 cp ../images/PokeFace/face_328.png ./out/Assets/Colosseum/face_328.png
-cp ../images/Trainers/trainer_31.png ./out/Assets/Colosseum/trainer_31.png
 cp ../images/PokeFace/face_041.png ./out/Assets/Colosseum/face_041.png
 cp ../images/PokeBody/body_046.png ./out/Assets/Colosseum/body_046.png
 cp ../images/PokeFace/face_377.png ./out/Assets/Colosseum/face_377.png
@@ -1425,12 +1397,10 @@ cp ../images/PokeBody/body_170.png ./out/Assets/Colosseum/body_170.png
 cp ../images/PokeFace/face_105.png ./out/Assets/Colosseum/face_105.png
 cp ../images/PokeBody/body_213.png ./out/Assets/Colosseum/body_213.png
 cp ../images/ColoTrainers/colo_trainer_59.png ./out/Assets/Colosseum/colo_trainer_59.png
-cp ../images/Trainers/trainer_62.png ./out/Assets/Colosseum/trainer_62.png
 cp ../images/PokeFace/face_130.png ./out/Assets/Colosseum/face_130.png
 cp ../images/Types/type_17.png ./out/Assets/Colosseum/type_17.png
 cp ../images/PokeBody/body_225.png ./out/Assets/Colosseum/body_225.png
 cp ../images/PokeFace/face_112.png ./out/Assets/Colosseum/face_112.png
-cp ../images/Trainers/trainer_18.png ./out/Assets/Colosseum/trainer_18.png
 cp ../images/PokeBody/body_343.png ./out/Assets/Colosseum/body_343.png
 cp ../images/PokeBody/body_100.png ./out/Assets/Colosseum/body_100.png
 cp ../images/PokeFace/face_034.png ./out/Assets/Colosseum/face_034.png
@@ -1452,7 +1422,6 @@ cp ../images/PokeBody/body_143.png ./out/Assets/Colosseum/body_143.png
 cp ../images/ColoTrainers/colo_trainer_35.png ./out/Assets/Colosseum/colo_trainer_35.png
 cp ../images/PokeFace/face_097.png ./out/Assets/Colosseum/face_097.png
 cp ../images/PokeFace/face_306.png ./out/Assets/Colosseum/face_306.png
-cp ../images/Trainers/trainer_5.png ./out/Assets/Colosseum/trainer_5.png
 cp ../images/PokeFace/face_172.png ./out/Assets/Colosseum/face_172.png
 cp ../images/PokeFace/face_367.png ./out/Assets/Colosseum/face_367.png
 cp ../images/PokeBody/body_042.png ./out/Assets/Colosseum/body_042.png
@@ -1474,7 +1443,6 @@ cp ../images/PokeFace/face_350.png ./out/Assets/Colosseum/face_350.png
 cp ../images/Types/type_9.png ./out/Assets/Colosseum/type_9.png
 cp ../images/ColoTrainers/colo_trainer_22.png ./out/Assets/Colosseum/colo_trainer_22.png
 cp ../images/PokeFace/face_410.png ./out/Assets/Colosseum/face_410.png
-cp ../images/Trainers/trainer_29.png ./out/Assets/Colosseum/trainer_29.png
 cp ../images/PokeFace/face_259.png ./out/Assets/Colosseum/face_259.png
 cp ../images/PokeFace/face_090.png ./out/Assets/Colosseum/face_090.png
 cp ../images/PokeFace/face_396.png ./out/Assets/Colosseum/face_396.png
@@ -1489,7 +1457,6 @@ cp ../images/PokeBody/body_313.png ./out/Assets/Colosseum/body_313.png
 cp ../images/PokeFace/face_376.png ./out/Assets/Colosseum/face_376.png
 cp ../images/PokeFace/face_149.png ./out/Assets/Colosseum/face_149.png
 cp ../images/PokeFace/face_004.png ./out/Assets/Colosseum/face_004.png
-cp ../images/Trainers/trainer_52.png ./out/Assets/Colosseum/trainer_52.png
 cp ../images/PokeFace/face_228.png ./out/Assets/Colosseum/face_228.png
 cp ../images/PokeBody/body_034.png ./out/Assets/Colosseum/body_034.png
 cp ../images/PokeFace/face_195.png ./out/Assets/Colosseum/face_195.png
@@ -1515,9 +1482,7 @@ cp ../images/ColoTrainers/colo_trainer_43.png ./out/Assets/Colosseum/colo_traine
 cp ../images/PokeBody/body_345.png ./out/Assets/Colosseum/body_345.png
 cp ../images/PokeBody/body_390.png ./out/Assets/Colosseum/body_390.png
 cp ../images/PokeFace/face_166.png ./out/Assets/Colosseum/face_166.png
-cp ../images/Trainers/trainer_0.png ./out/Assets/Colosseum/trainer_0.png
 cp ../images/PokeFace/face_020.png ./out/Assets/Colosseum/face_020.png
-cp ../images/Trainers/trainer_63.png ./out/Assets/Colosseum/trainer_63.png
 cp ../images/PokeBody/body_395.png ./out/Assets/Colosseum/body_395.png
 cp ../images/PokeFace/face_191.png ./out/Assets/Colosseum/face_191.png
 cp ../images/PokeBody/body_332.png ./out/Assets/Colosseum/body_332.png
@@ -1527,7 +1492,6 @@ cp ../images/PokeFace/face_355.png ./out/Assets/Colosseum/face_355.png
 cp ../images/PokeFace/face_354.png ./out/Assets/Colosseum/face_354.png
 cp ../images/PokeBody/body_272.png ./out/Assets/Colosseum/body_272.png
 cp ../images/PokeBody/body_388.png ./out/Assets/Colosseum/body_388.png
-cp ../images/Trainers/trainer_26.png ./out/Assets/Colosseum/trainer_26.png
 cp ../images/PokeBody/body_088.png ./out/Assets/Colosseum/body_088.png
 cp ../images/PokeFace/face_184.png ./out/Assets/Colosseum/face_184.png
 cp ../images/PokeFace/face_282.png ./out/Assets/Colosseum/face_282.png
@@ -1558,7 +1522,6 @@ cp ../images/ColoTrainers/colo_trainer_69.png ./out/Assets/Colosseum/colo_traine
 cp ../images/PokeFace/face_014.png ./out/Assets/Colosseum/face_014.png
 cp ../images/PokeBody/body_151.png ./out/Assets/Colosseum/body_151.png
 cp ../images/PokeFace/face_369.png ./out/Assets/Colosseum/face_369.png
-cp ../images/Trainers/trainer_15.png ./out/Assets/Colosseum/trainer_15.png
 cp ../images/PokeFace/face_329.png ./out/Assets/Colosseum/face_329.png
 cp ../images/PokeBody/body_350.png ./out/Assets/Colosseum/body_350.png
 cp ../images/PokeFace/face_012.png ./out/Assets/Colosseum/face_012.png
@@ -1576,7 +1539,6 @@ cp ../images/PokeBody/body_175.png ./out/Assets/Colosseum/body_175.png
 cp ../images/PokeBody/body_017.png ./out/Assets/Colosseum/body_017.png
 cp ../images/PokeBody/body_082.png ./out/Assets/Colosseum/body_082.png
 cp ../images/PokeBody/body_273.png ./out/Assets/Colosseum/body_273.png
-cp ../images/Trainers/trainer_44.png ./out/Assets/Colosseum/trainer_44.png
 cp ../images/PokeBody/body_076.png ./out/Assets/Colosseum/body_076.png
 cp ../images/PokeFace/face_363.png ./out/Assets/Colosseum/face_363.png
 cp ../images/PokeBody/body_068.png ./out/Assets/Colosseum/body_068.png
@@ -1594,13 +1556,10 @@ cp ../images/PokeBody/body_256.png ./out/Assets/Colosseum/body_256.png
 cp ../images/Types/type_14.png ./out/Assets/Colosseum/type_14.png
 cp ../images/PokeFace/face_060.png ./out/Assets/Colosseum/face_060.png
 cp ../images/Types/type_fairy.png ./out/Assets/Colosseum/type_fairy.png
-cp ../images/Trainers/trainer_42.png ./out/Assets/Colosseum/trainer_42.png
-cp ../images/Trainers/trainer_49.png ./out/Assets/Colosseum/trainer_49.png
 cp ../images/PokeBody/body_193.png ./out/Assets/Colosseum/body_193.png
 cp ../images/PokeBody/body_111.png ./out/Assets/Colosseum/body_111.png
 cp ../images/PokeFace/face_251.png ./out/Assets/Colosseum/face_251.png
 cp ../images/PokeFace/face_065.png ./out/Assets/Colosseum/face_065.png
-cp ../images/Trainers/trainer_14.png ./out/Assets/Colosseum/trainer_14.png
 cp ../images/PokeBody/body_055.png ./out/Assets/Colosseum/body_055.png
 cp ../images/Types/type_shadow.png ./out/Assets/Colosseum/type_shadow.png
 cp ../images/ColoTrainers/colo_trainer_64.png ./out/Assets/Colosseum/colo_trainer_64.png
@@ -1615,7 +1574,6 @@ cp ../images/ColoTrainers/colo_trainer_71.png ./out/Assets/Colosseum/colo_traine
 cp ../images/PokeFace/face_150.png ./out/Assets/Colosseum/face_150.png
 cp ../images/PokeBody/body_121.png ./out/Assets/Colosseum/body_121.png
 cp ../images/PokeFace/face_155.png ./out/Assets/Colosseum/face_155.png
-cp ../images/Trainers/trainer_17.png ./out/Assets/Colosseum/trainer_17.png
 cp ../images/PokeFace/face_344.png ./out/Assets/Colosseum/face_344.png
 cp ../images/PokeFace/face_141.png ./out/Assets/Colosseum/face_141.png
 cp ../images/PokeBody/body_312.png ./out/Assets/Colosseum/body_312.png
@@ -1623,20 +1581,17 @@ cp ../images/PokeFace/face_025.png ./out/Assets/Colosseum/face_025.png
 cp ../images/PokeFace/face_133.png ./out/Assets/Colosseum/face_133.png
 cp ../images/PokeBody/body_033.png ./out/Assets/Colosseum/body_033.png
 cp ../images/PokeBody/body_223.png ./out/Assets/Colosseum/body_223.png
-cp ../images/Trainers/trainer_60.png ./out/Assets/Colosseum/trainer_60.png
 cp ../images/PokeBody/body_205.png ./out/Assets/Colosseum/body_205.png
 cp ../images/PokeFace/face_168.png ./out/Assets/Colosseum/face_168.png
 cp ../images/PokeBody/body_291.png ./out/Assets/Colosseum/body_291.png
 cp ../images/PokeFace/face_042.png ./out/Assets/Colosseum/face_042.png
 cp ../images/PokeBody/body_060.png ./out/Assets/Colosseum/body_060.png
 cp ../images/PokeFace/face_265.png ./out/Assets/Colosseum/face_265.png
-cp ../images/Trainers/trainer_10.png ./out/Assets/Colosseum/trainer_10.png
 cp ../images/PokeBody/body_078.png ./out/Assets/Colosseum/body_078.png
 cp ../images/PokeFace/face_011.png ./out/Assets/Colosseum/face_011.png
 cp ../images/PokeBody/body_250.png ./out/Assets/Colosseum/body_250.png
 cp ../images/PokeFace/face_258.png ./out/Assets/Colosseum/face_258.png
 cp ../images/PokeBody/body_186.png ./out/Assets/Colosseum/body_186.png
-cp ../images/Trainers/trainer_67.png ./out/Assets/Colosseum/trainer_67.png
 cp ../images/PokeFace/face_348.png ./out/Assets/Colosseum/face_348.png
 cp ../images/PokeFace/face_036.png ./out/Assets/Colosseum/face_036.png
 cp ../images/PokeBody/body_208.png ./out/Assets/Colosseum/body_208.png
@@ -1644,7 +1599,6 @@ cp ../images/PokeBody/body_294.png ./out/Assets/Colosseum/body_294.png
 cp ../images/PokeBody/body_168.png ./out/Assets/Colosseum/body_168.png
 cp ../images/PokeBody/body_016.png ./out/Assets/Colosseum/body_016.png
 cp ../images/PokeBody/body_054.png ./out/Assets/Colosseum/body_054.png
-cp ../images/Trainers/trainer_34.png ./out/Assets/Colosseum/trainer_34.png
 cp ../images/PokeFace/face_088.png ./out/Assets/Colosseum/face_088.png
 cp ../images/PokeFace/face_082.png ./out/Assets/Colosseum/face_082.png
 cp ../images/ColoTrainers/colo_trainer_6.png ./out/Assets/Colosseum/colo_trainer_6.png
@@ -1697,7 +1651,6 @@ cp ../images/PokeFace/face_113.png ./out/Assets/Colosseum/face_113.png
 cp ../images/PokeBody/body_161.png ./out/Assets/Colosseum/body_161.png
 cp ../images/PokeBody/body_215.png ./out/Assets/Colosseum/body_215.png
 cp ../images/PokeBody/body_226.png ./out/Assets/Colosseum/body_226.png
-cp ../images/Trainers/trainer_36.png ./out/Assets/Colosseum/trainer_36.png
 cp ../images/PokeBody/body_359.png ./out/Assets/Colosseum/body_359.png
 cp ../images/PokeFace/face_178.png ./out/Assets/Colosseum/face_178.png
 cp ../images/PokeFace/face_353.png ./out/Assets/Colosseum/face_353.png
@@ -1707,7 +1660,6 @@ cp ../images/PokeBody/body_243.png ./out/Assets/Colosseum/body_243.png
 cp ../images/PokeBody/body_338.png ./out/Assets/Colosseum/body_338.png
 cp ../images/PokeFace/face_240.png ./out/Assets/Colosseum/face_240.png
 cp ../images/PokeBody/body_099.png ./out/Assets/Colosseum/body_099.png
-cp ../images/Trainers/trainer_40.png ./out/Assets/Colosseum/trainer_40.png
 cp ../images/PokeBody/body_259.png ./out/Assets/Colosseum/body_259.png
 cp ../images/PokeBody/body_164.png ./out/Assets/Colosseum/body_164.png
 cp ../images/PokeFace/face_262.png ./out/Assets/Colosseum/face_262.png
@@ -1738,13 +1690,11 @@ cp ../images/PokeBody/body_363.png ./out/Assets/Colosseum/body_363.png
 cp ../images/PokeBody/body_258.png ./out/Assets/Colosseum/body_258.png
 cp ../images/PokeBody/body_053.png ./out/Assets/Colosseum/body_053.png
 cp ../images/PokeFace/face_308.png ./out/Assets/Colosseum/face_308.png
-cp ../images/Trainers/trainer_1.png ./out/Assets/Colosseum/trainer_1.png
 cp ../images/PokeFace/face_220.png ./out/Assets/Colosseum/face_220.png
 cp ../images/PokeFace/face_324.png ./out/Assets/Colosseum/face_324.png
 cp ../images/ColoTrainers/colo_trainer_68.png ./out/Assets/Colosseum/colo_trainer_68.png
 cp ../images/PokeFace/face_089.png ./out/Assets/Colosseum/face_089.png
 cp ../images/PokeBody/body_148.png ./out/Assets/Colosseum/body_148.png
-cp ../images/Trainers/trainer_53.png ./out/Assets/Colosseum/trainer_53.png
 cp ../images/PokeBody/body_112.png ./out/Assets/Colosseum/body_112.png
 cp ../images/PokeFace/face_136.png ./out/Assets/Colosseum/face_136.png
 cp ../images/PokeFace/face_200.png ./out/Assets/Colosseum/face_200.png
@@ -1759,7 +1709,6 @@ cp ../images/PokeFace/face_085.png ./out/Assets/Colosseum/face_085.png
 cp ../images/PokeFace/face_142.png ./out/Assets/Colosseum/face_142.png
 cp ../images/ColoTrainers/colo_trainer_12.png ./out/Assets/Colosseum/colo_trainer_12.png
 cp ../images/PokeBody/body_344.png ./out/Assets/Colosseum/body_344.png
-cp ../images/Trainers/trainer_8.png ./out/Assets/Colosseum/trainer_8.png
 cp ../images/PokeFace/face_154.png ./out/Assets/Colosseum/face_154.png
 cp ../images/PokeFace/face_039.png ./out/Assets/Colosseum/face_039.png
 cp ../images/PokeFace/face_059.png ./out/Assets/Colosseum/face_059.png
@@ -1785,7 +1734,6 @@ cp ../images/PokeFace/face_250.png ./out/Assets/Colosseum/face_250.png
 cp ../images/ColoTrainers/colo_trainer_41.png ./out/Assets/Colosseum/colo_trainer_41.png
 cp ../images/PokeFace/face_054.png ./out/Assets/Colosseum/face_054.png
 cp ../images/Table\ View\ Cells/Tool\ Cell.png ./out/Assets/Colosseum/Tool\ Cell.png
-cp ../images/Trainers/trainer_39.png ./out/Assets/Colosseum/trainer_39.png
 cp ../images/Table\ View\ Cells/File\ Cell.png ./out/Assets/Colosseum/File\ Cell.png
 cp ../images/PokeFace/face_096.png ./out/Assets/Colosseum/face_096.png
 cp ../images/PokeFace/face_203.png ./out/Assets/Colosseum/face_203.png
@@ -1811,7 +1759,6 @@ cp ../images/PokeBody/body_398.png ./out/Assets/Colosseum/body_398.png
 cp ../images/PokeFace/face_193.png ./out/Assets/Colosseum/face_193.png
 cp ../images/PokeBody/body_189.png ./out/Assets/Colosseum/body_189.png
 cp ../images/PokeBody/body_236.png ./out/Assets/Colosseum/body_236.png
-cp ../images/Trainers/trainer_13.png ./out/Assets/Colosseum/trainer_13.png
 cp ../images/PokeFace/face_196.png ./out/Assets/Colosseum/face_196.png
 cp ../images/ColoTrainers/colo_trainer_4.png ./out/Assets/Colosseum/colo_trainer_4.png
 cp ../images/PokeFace/face_159.png ./out/Assets/Colosseum/face_159.png
@@ -1822,7 +1769,6 @@ cp ../images/ColoTrainers/colo_trainer_30.png ./out/Assets/Colosseum/colo_traine
 cp ../images/PokeFace/face_370.png ./out/Assets/Colosseum/face_370.png
 cp ../images/PokeFace/face_368.png ./out/Assets/Colosseum/face_368.png
 cp ../images/PokeBody/body_145.png ./out/Assets/Colosseum/body_145.png
-cp ../images/Trainers/trainer_32.png ./out/Assets/Colosseum/trainer_32.png
 cp ../images/PokeFace/face_330.png ./out/Assets/Colosseum/face_330.png
 cp ../images/PokeFace/face_387.png ./out/Assets/Colosseum/face_387.png
 cp ../images/PokeFace/face_302.png ./out/Assets/Colosseum/face_302.png
@@ -1846,7 +1792,6 @@ cp ../images/PokeBody/body_113.png ./out/Assets/Colosseum/body_113.png
 cp ../images/PokeFace/face_232.png ./out/Assets/Colosseum/face_232.png
 cp ../images/ColoTrainers/colo_trainer_60.png ./out/Assets/Colosseum/colo_trainer_60.png
 cp ../images/PokeFace/face_120.png ./out/Assets/Colosseum/face_120.png
-cp ../images/Trainers/trainer_48.png ./out/Assets/Colosseum/trainer_48.png
 cp ../images/PokeFace/face_182.png ./out/Assets/Colosseum/face_182.png
 cp ../images/PokeFace/face_061.png ./out/Assets/Colosseum/face_061.png
 cp ../images/PokeFace/face_204.png ./out/Assets/Colosseum/face_204.png
@@ -1868,13 +1813,9 @@ cp ../images/PokeFace/face_252.png ./out/Assets/Colosseum/face_252.png
 cp ../images/PokeBody/body_220.png ./out/Assets/Colosseum/body_220.png
 cp ../images/PokeFace/face_371.png ./out/Assets/Colosseum/face_371.png
 cp ../images/PokeFace/face_414.png ./out/Assets/Colosseum/face_414.png
-cp ../images/Trainers/trainer_2.png ./out/Assets/Colosseum/trainer_2.png
-cp ../images/Trainers/trainer_45.png ./out/Assets/Colosseum/trainer_45.png
-cp ../images/Trainers/trainer_50.png ./out/Assets/Colosseum/trainer_50.png
 cp ../images/ColoTrainers/colo_trainer_1.png ./out/Assets/Colosseum/colo_trainer_1.png
 cp ../images/PokeFace/face_029.png ./out/Assets/Colosseum/face_029.png
 cp ../images/PokeBody/body_319.png ./out/Assets/Colosseum/body_319.png
-cp ../images/Trainers/trainer_7.png ./out/Assets/Colosseum/trainer_7.png
 cp ../images/PokeBody/body_407.png ./out/Assets/Colosseum/body_407.png
 cp ../images/PokeBody/body_021.png ./out/Assets/Colosseum/body_021.png
 cp ../images/PokeBody/body_285.png ./out/Assets/Colosseum/body_285.png
@@ -1885,11 +1826,8 @@ cp ../images/PokeBody/body_378.png ./out/Assets/Colosseum/body_378.png
 cp ../images/PokeBody/body_232.png ./out/Assets/Colosseum/body_232.png
 cp ../images/PokeBody/body_056.png ./out/Assets/Colosseum/body_056.png
 cp ../images/PokeFace/face_216.png ./out/Assets/Colosseum/face_216.png
-cp ../images/Trainers/trainer_54.png ./out/Assets/Colosseum/trainer_54.png
 cp ../images/PokeBody/body_352.png ./out/Assets/Colosseum/body_352.png
-cp ../images/Trainers/trainer_57.png ./out/Assets/Colosseum/trainer_57.png
 cp ../images/PokeBody/body_018.png ./out/Assets/Colosseum/body_018.png
-cp ../images/Trainers/trainer_66.png ./out/Assets/Colosseum/trainer_66.png
 cp ../images/PokeBody/body_224.png ./out/Assets/Colosseum/body_224.png
 cp ../images/PokeFace/face_266.png ./out/Assets/Colosseum/face_266.png
 cp ../images/PokeBody/body_167.png ./out/Assets/Colosseum/body_167.png
@@ -1902,10 +1840,8 @@ cp ../images/PokeFace/face_218.png ./out/Assets/Colosseum/face_218.png
 cp ../images/PokeBody/body_380.png ./out/Assets/Colosseum/body_380.png
 cp ../images/PokeBody/body_307.png ./out/Assets/Colosseum/body_307.png
 cp ../images/PokeFace/face_124.png ./out/Assets/Colosseum/face_124.png
-cp ../images/Trainers/trainer_55.png ./out/Assets/Colosseum/trainer_55.png
 cp ../images/PokeFace/face_349.png ./out/Assets/Colosseum/face_349.png
 cp ../images/PokeBody/body_204.png ./out/Assets/Colosseum/body_204.png
-cp ../images/Trainers/trainer_4.png ./out/Assets/Colosseum/trainer_4.png
 cp ../images/PokeBody/body_321.png ./out/Assets/Colosseum/body_321.png
 cp ../images/PokeFace/face_198.png ./out/Assets/Colosseum/face_198.png
 cp ../images/PokeBody/body_066.png ./out/Assets/Colosseum/body_066.png
@@ -1949,11 +1885,11 @@ cp ../images/PokeFace/face_338.png ./out/Assets/Colosseum/face_338.png
 cp ../images/PokeFace/face_375.png ./out/Assets/Colosseum/face_375.png
 cp ../images/PokeFace/face_179.png ./out/Assets/Colosseum/face_179.png
 cp ../images/PokeBody/body_003.png ./out/Assets/Colosseum/body_003.png
-cp ../images/Trainers/trainer_59.png ./out/Assets/Colosseum/trainer_59.png
 cp ../images/PokeFace/face_101.png ./out/Assets/Colosseum/face_101.png
 cp ../images/PokeFace/face_268.png ./out/Assets/Colosseum/face_268.png
 cp ../images/PokeBody/body_041.png ./out/Assets/Colosseum/body_041.png
 cp ../images/PokeFace/face_117.png ./out/Assets/Colosseum/face_117.png
 cp ../images/ColoTrainers/colo_trainer_10.png ./out/Assets/Colosseum/colo_trainer_10.png
+cp ../tools/Linux/wiimm/* ./out/Assets/Colosseum/wiimm
 echo "Compiling Colosseum Tool. This may take a while..."
-swiftc -emit-executable -DENV_LINUX -o ./out/Colosseum\ Tool\ CLI ../extensions/OSXExtensions.swift ../Objects/data\ types/XGEvolution.swift ../enums/XGMoveTargets.swift ../enums/XGEvolutionConditionType.swift ../enums/XGEffectivenessValues.swift ../enums/XGBagSlots.swift ../enums/XGMoveCategory.swift ../GoDToolOSX/Objects/GoDTexture.swift ../enums/XGAbilities.swift ../Objects/data\ types/XGLevelUpMove.swift ../enums/XGUnicodeCharacters.swift ../Objects/scripts/Colosseum/CMScriptStandardFunctions.swift ../enums/CMFiles.swift ../Objects/data\ types/XGCharacter.swift ../enums/XGResources.swift ../enums/XGContestCategories.swift ../Objects/scripts/Colosseum/CMScript.swift ../Objects/textures/XGTexturePalette.swift ../Objects/data\ types/enumerable/CMGiftPokemon.swift ../Objects/helper\ data\ types/XGStack.swift ../extensions/CMOSXExtensions.swift ../Objects/data\ types/enumerable/XGTreasure.swift ../enums/XGStatBoosts.swift ../Objects/data\ types/enumerable/CMTrainerPokemon.swift ../enums/XGMoveTypes.swift ../Objects/file\ formats/XGCollisionData.swift ../Objects/managers/XGStringManager.swift ../Objects/data\ types/enumerable/CMType.swift ../Objects/data\ types/enumerable/CMPokemonStats.swift ../enums/XGGenderRatios.swift ../Objects/managers/XGByteCopier.swift ../Objects/data\ types/enumerable/XGTrainerClass.swift ../Objects/managers/XGDolPatcher.swift ../enums/XGFontColours.swift ../extensions/ColosseumToolCLExtensions.swift ../enums/XGBattleTypes.swift ../Objects/file\ formats/XGRelocationTable.swift ../Objects/file\ formats/XGStringTable.swift ../enums/XGMoveEffectTypes.swift ../Objects/scripts/Colosseum/CMScriptValueTypes.swift ../Objects/data\ types/enumerable/CMItem.swift ../extensions/ColosseumExtensions.swift ../Objects/data\ types/enumerable/XGDoor.swift ../enums/CMColosseumRounds.swift ../GoDToolOSX/Objects/GoDTextureImporter.swift ../extensions/GoDImageExtensions.swift ../Objects/data\ types/enumerable/XGStarterPokemon.swift ../Objects/file\ formats/XGLZSS.swift ../Objects/file\ formats/XGFsys.swift ../Objects/data\ types/enumerable/CMBattle.swift ../enums/XGNatures.swift ../Objects/helper\ data\ types/XGMutableData.swift ../GoDToolOSX/Objects/GoDKeyCodes.swift ../Objects/textures/XGPNGBlock.swift ../GoDToolOSX/Objects/XGVertex.swift ../enums/XGTrainerContoller.swift ../enums/CMTrainerModels.swift ../Objects/managers/CMGiftPokemonManager.swift ../Objects/textures/XGTextureBlock.swift ../enums/XGWeather.swift ../enums/CMItems.swift ../enums/XGMoves.swift ../Objects/data\ types/enumerable/XGNature.swift ../Objects/data\ types/enumerable/XGRoom.swift ../Objects/data\ types/enumerable/CMTrainer.swift ../extensions/GoDOSXExtensions.swift ../Objects/managers/GoDShellManager.swift ../enums/XGExpRate.swift ../Objects/file\ formats/XGISO.swift ../enums/CMTMs.swift ../Objects/scripts/Colosseum/CMScriptOps.swift ../enums/XGGenders.swift ../CMRelIndexes.swift ../Objects/data\ types/XGString.swift ../Objects/scripts/Colosseum/CMScriptCompiler.swift ../enums/XGPokemon.swift ../Objects/data\ types/enumerable/XGDemoStarterPokemon.swift ../Objects/file\ formats/XGAssemblyCodeExtensions.swift ../enums/XGShinyValues.swift ../Objects/file\ formats/XGGSWTextures.swift ../Objects/data\ types/enumerable/XGInteractionPoint.swift ../enums/XGFileTypes.swift ../Objects/data\ types/enumerable/XGBattleField.swift ../extensions/XGExtensions.swift ../Objects/managers/CMRandomiser.swift ../Objects/managers/XGSettings.swift ../enums/XGBattleStyles.swift ../enums/XGEvolutionMethods.swift ../Colosseum-CLI/main.swift ../Objects/managers/XGThreadManager.swift ../enums/GoDTextureFormats.swift ../Objects/managers/XGUtility.swift ../Objects/data\ types/enumerable/XGCharacterModel.swift ../enums/XGASM.swift ../enums/XGDeoxysFormes.swift ../enums/XGMaps.swift ../enums/XGSpecialStringCharacters.swift ../Objects/textures/XGColour.swift ../Objects/file\ formats/XGAssemblyCode.swift ../Objects/data\ types/enumerable/XGGiftPokemon.swift ../enums/CMTrainerClasses.swift ../Objects/data\ types/enumerable/XGMove.swift ../protocols/EnumerableDocumentable.swift
+swiftc -emit-executable -DENV_LINUX -o ./out/Colosseum\ Tool\ CLI ../extensions/LinuxExtensions.swift ../Objects/data\ types/XGEvolution.swift ../enums/XGMoveTargets.swift ../enums/XGEvolutionConditionType.swift ../enums/XGEffectivenessValues.swift ../enums/XGBagSlots.swift ../enums/XGMoveCategory.swift ../GoDToolOSX/Objects/GoDTexture.swift ../enums/XGAbilities.swift ../Objects/data\ types/XGLevelUpMove.swift ../enums/XGUnicodeCharacters.swift ../Objects/scripts/Colosseum/CMScriptStandardFunctions.swift ../enums/CMFiles.swift ../Objects/data\ types/XGCharacter.swift ../enums/XGResources.swift ../enums/XGContestCategories.swift ../Objects/scripts/Colosseum/CMScript.swift ../Objects/textures/XGTexturePalette.swift ../Objects/data\ types/enumerable/CMGiftPokemon.swift ../Objects/helper\ data\ types/XGStack.swift ../extensions/CMOSXExtensions.swift ../Objects/data\ types/enumerable/XGTreasure.swift ../enums/XGStatBoosts.swift ../Objects/data\ types/enumerable/CMTrainerPokemon.swift ../enums/XGMoveTypes.swift ../Objects/file\ formats/XGCollisionData.swift ../Objects/managers/XGStringManager.swift ../Objects/data\ types/enumerable/CMType.swift ../Objects/data\ types/enumerable/CMPokemonStats.swift ../enums/XGGenderRatios.swift ../Objects/managers/XGByteCopier.swift ../Objects/data\ types/enumerable/XGTrainerClass.swift ../Objects/managers/XGDolPatcher.swift ../enums/XGFontColours.swift ../extensions/ColosseumToolCLExtensions.swift ../enums/XGBattleTypes.swift ../Objects/file\ formats/XGRelocationTable.swift ../Objects/file\ formats/XGStringTable.swift ../enums/XGMoveEffectTypes.swift ../Objects/scripts/Colosseum/CMScriptValueTypes.swift ../Objects/data\ types/enumerable/CMItem.swift ../extensions/ColosseumExtensions.swift ../Objects/data\ types/enumerable/XGDoor.swift ../enums/CMColosseumRounds.swift ../GoDToolOSX/Objects/GoDTextureImporter.swift ../extensions/GoDImageExtensions.swift ../Objects/data\ types/enumerable/XGStarterPokemon.swift ../Objects/file\ formats/XGLZSS.swift ../Objects/file\ formats/XGFsys.swift ../Objects/data\ types/enumerable/CMBattle.swift ../enums/XGNatures.swift ../Objects/helper\ data\ types/XGMutableData.swift ../GoDToolOSX/Objects/GoDKeyCodes.swift ../Objects/textures/XGPNGBlock.swift ../GoDToolOSX/Objects/XGVertex.swift ../enums/XGTrainerContoller.swift ../enums/CMTrainerModels.swift ../Objects/managers/CMGiftPokemonManager.swift ../Objects/textures/XGTextureBlock.swift ../enums/XGWeather.swift ../enums/CMItems.swift ../enums/XGMoves.swift ../Objects/data\ types/enumerable/XGNature.swift ../Objects/data\ types/enumerable/XGRoom.swift ../Objects/data\ types/enumerable/CMTrainer.swift ../extensions/GoDOSXExtensions.swift ../Objects/managers/GoDShellManager.swift ../enums/XGExpRate.swift ../Objects/file\ formats/XGISO.swift ../enums/CMTMs.swift ../Objects/scripts/Colosseum/CMScriptOps.swift ../enums/XGGenders.swift ../CMRelIndexes.swift ../Objects/data\ types/XGString.swift ../Objects/scripts/Colosseum/CMScriptCompiler.swift ../enums/XGPokemon.swift ../Objects/data\ types/enumerable/XGDemoStarterPokemon.swift ../Objects/file\ formats/XGAssemblyCodeExtensions.swift ../enums/XGShinyValues.swift ../Objects/file\ formats/XGGSWTextures.swift ../Objects/data\ types/enumerable/XGInteractionPoint.swift ../enums/XGFileTypes.swift ../Objects/data\ types/enumerable/XGBattleField.swift ../extensions/XGExtensions.swift ../Objects/managers/CMRandomiser.swift ../Objects/managers/XGSettings.swift ../enums/XGBattleStyles.swift ../enums/XGEvolutionMethods.swift ../Colosseum-CLI/main.swift ../Objects/managers/XGThreadManager.swift ../enums/GoDTextureFormats.swift ../Objects/managers/XGUtility.swift ../Objects/data\ types/enumerable/XGCharacterModel.swift ../enums/XGASM.swift ../enums/XGDeoxysFormes.swift ../enums/XGMaps.swift ../enums/XGSpecialStringCharacters.swift ../Objects/textures/XGColour.swift ../Objects/file\ formats/XGAssemblyCode.swift ../Objects/data\ types/enumerable/XGGiftPokemon.swift ../enums/CMTrainerClasses.swift ../Objects/data\ types/enumerable/XGMove.swift ../protocols/EnumerableDocumentable.swift

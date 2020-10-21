@@ -48,7 +48,6 @@ indirect enum XGFiles {
 	case typeImage(Int)
 	case trainerFace(Int)
 	case msg(String)
-	case original(XGFiles)
 	case fsys(String)
 	case lzss(String)
 	case scd(String)
@@ -60,20 +59,12 @@ indirect enum XGFiles {
 	case iso
 	case toc
 	case log(Date)
+	case wit
 	case wimgt
 	case nameAndFolder(String, XGFolders)
 	
 	var path : String {
-		get{
-			switch self {
-				
-			case .original:
-				return folder.resourcePath + "/" + self.fileName
-				
-			default:
-				return folder.path + "/" + self.fileName
-			}
-		}
+		return folder.path + "/" + self.fileName
 	}
 	
 	var fileName : String {
@@ -90,7 +81,6 @@ indirect enum XGFiles {
 				case .typeImage(let id)		: return "type_" + String(id) + XGFileTypes.png.fileExtension
 				case .trainerFace(let id)	: return "trainer_" + String(id) + XGFileTypes.png.fileExtension
 				case .msg(let s)			: return s + XGFileTypes.msg.fileExtension
-				case .original(let o)		: return o.fileName
 				case .fsys(let s)			: return s + XGFileTypes.fsys.fileExtension
 				case .lzss(let s)			: return s + XGFileTypes.lzss.fileExtension
 				case .scd(let s)			: return s + XGFileTypes.scd.fileExtension
@@ -103,7 +93,8 @@ indirect enum XGFiles {
 				case .ccd(let s)			: return s + XGFileTypes.ccd.fileExtension
 				case .json(let s)			: return s + XGFileTypes.json.fileExtension
 				case .iso					: return (game == .Colosseum ? "Colosseum" : "XD") + XGFileTypes.iso.fileExtension
-				case .wimgt                 : return "wimgt"
+				case .wit                   : return environment == .Windows ? "wit.exe" :  "wit"
+				case .wimgt                 : return environment == .Windows ? "wimgt.exe" :  "wimgt"
 				case .nameAndFolder(let name, _) : return name
 			}
 		}
@@ -135,11 +126,11 @@ indirect enum XGFiles {
 				case .rel				: folder = .Rels
 				case .ccd				: folder = .Col
 				case .json				: folder = .JSON
-				case .original(let f)	: folder = f.folder
 				case .fsys				: 		 if XGFolders.FSYS.filenames.contains(self.fileName) { folder = .FSYS}
 											else if XGFolders.MenuFSYS.filenames.contains(self.fileName) { folder = .MenuFSYS}
 											else {folder = .AutoFSYS}
-				case .wimgt      		: folder = .Resources
+				case .wit      		    : folder = .Wiimm
+				case .wimgt      		: folder = .Wiimm
 				case .nameAndFolder( _, let aFolder) : folder = aFolder
 				
 			}
@@ -461,6 +452,10 @@ indirect enum XGFiles {
 	static var commonStringTableFile: XGFiles {
 		.common_rel
 	}
+
+	func decodeTextureImage() {
+		
+	}
 }
 
 
@@ -486,6 +481,7 @@ indirect enum XGFolders {
 	case Scripts
 	case Reference
 	case Resources
+	case Wiimm
 	case ISO
 	case AutoFSYS
 	case MenuFSYS
@@ -521,6 +517,7 @@ indirect enum XGFolders {
 			case .Scripts			: return "Scripts"
 			case .Reference			: return "Reference"
 			case .Resources			: return "Resources"
+			case .Wiimm				: return "Wiimm"
 			case .ISO				: return "ISO"
 			case .AutoFSYS			: return "AutoFSYS"
 			case .MenuFSYS			: return "MenuFSYS"
@@ -554,6 +551,7 @@ indirect enum XGFolders {
 				case .PokeBody	: path = XGFolders.Images.path
 				case .Trainers	: path = XGFolders.Images.path
 				case .Types		: path = XGFolders.Images.path
+				case .Wiimm		: path = XGFolders.Resources.path
 				case .nameAndFolder(_, let f): path = f.path
 				case .path(let s): return s
 				default: break
@@ -566,29 +564,6 @@ indirect enum XGFolders {
 	
 	var projectPath: String {
 		return path.replacingOccurrences(of: documentsPath, with: "")
-	}
-	
-	var resourcePath : String {
-		get {
-			var path = XGFolders.Documents.path + "/Original"
-			
-			switch self {
-				
-			case .nameAndPath(let name, let path): return path + "/\(name)"
-			case .Documents	: return path
-			case .Import	: path = XGFolders.TextureImporter.resourcePath
-			case .Export	: path = XGFolders.TextureImporter.resourcePath
-			case .Textures	: path = XGFolders.TextureImporter.resourcePath
-			case .PokeFace	: path = XGFolders.Images.resourcePath
-			case .PokeBody	: path = XGFolders.Images.resourcePath
-			case .Trainers	: path = XGFolders.Images.resourcePath
-			case .Types		: path = XGFolders.Images.resourcePath
-			default: break
-				
-			}
-			
-			return path + ("/" + self.name)
-		}
 	}
 	
 	var filenames: [String] {
@@ -724,9 +699,9 @@ indirect enum XGFolders {
 
 		XGScript.encodeDummyJSON()
 
-		let wimgt = XGFiles.wimgt
-        if !wimgt.exists {
-            XGResources.tool("wimgt").copy(to: wimgt)
+		let wiimm = XGFolders.Wiimm
+        if !wiimm.exists {
+			XGResources.folder("wiimm").copy(to: wiimm)
         }
 	}
 	

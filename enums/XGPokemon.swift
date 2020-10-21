@@ -169,66 +169,6 @@ enum XGPokemon: CustomStringConvertible {
 	}
 }
 
-
-enum XGOriginalPokemon {
-	
-	case pokemon(Int)
-	
-	var index : Int {
-		get {
-			switch self {
-				case .pokemon(let i): return i
-			}
-		}
-	}
-	
-	var startOffset : Int {
-		get{
-			return CommonIndexes.PokemonStats.startOffset + (index * kSizeOfPokemonStats)
-		}
-	}
-	
-	var nameID : Int {
-		get {
-			return Int(XGFiles.original(.common_rel).data!.getWordAtOffset(startOffset + kNameIDOffset))
-		}
-	}
-	
-	var name : String {
-		get {
-			let table = XGFiles.original(.common_rel).stringTable
-			return table.stringSafelyWithID(nameID).string
-		}
-	}
-	
-	var type1 : XGMoveTypes {
-		get {
-			let type = XGFiles.original(.common_rel).data!.getByteAtOffset(startOffset + kType1Offset)
-			return XGMoveTypes.type(type)
-		}
-	}
-	
-	var type2 : XGMoveTypes {
-		get {
-			let type = XGFiles.original(.common_rel).data!.getByteAtOffset(startOffset + kType2Offset)
-			return XGMoveTypes.type(type)
-		}
-	}
-	
-	func hasType(type: XGMoveTypes) -> Bool {
-		return (self.type1 == type) || (self.type2 == type)
-	}
-	
-	static func allPokemon() -> [XGOriginalPokemon] {
-		var mons = [XGOriginalPokemon]()
-		for i in 0 ..< kNumberOfPokemon {
-			mons.append(.pokemon(i))
-		}
-		return mons
-	}
-	
-}
-
 func allPokemon() -> [String : XGPokemon] {
 	
 	var dic = [String : XGPokemon]()
@@ -255,14 +195,6 @@ func allPokemonArray() -> [XGPokemon] {
 	var pokes: [XGPokemon] = []
 	for i in 0 ..< kNumberOfPokemon {
 		pokes.append(XGPokemon.pokemon(i))
-	}
-	return pokes
-}
-
-func allOriginalPokemonArray() -> [XGOriginalPokemon] {
-	var pokes: [XGOriginalPokemon] = []
-	for i in 0 ..< kNumberOfPokemon {
-		pokes.append(XGOriginalPokemon.pokemon(i))
 	}
 	return pokes
 }

@@ -26,6 +26,19 @@ extension XGColour {
 	}
 }
 
+extension XGFileTypes {
+	var NSFileType: NSBitmapImageRep.FileType {
+		switch self {
+		case .png: return .png
+		case .jpeg: return .jpeg
+		case .bmp: return .bmp
+		default: assertionFailure("Not an image format"); return .png
+		}
+	}
+
+}
+#endif
+
 extension GoDTexture {
 	func importImage(file: XGFiles) {
 		GoDTextureImporter.replaceTextureData(texture: self, withImage: file)
@@ -46,12 +59,12 @@ extension GoDTexture {
 		return self.data.getByteStreamFromOffset(textureStart, length: self.textureLength)
 	}
 
-	func imageData(fileType: NSBitmapImageRep.FileType) -> Data {
+	func imageData(fileType: XGFileTypes) -> Data {
 		return self.croppedImageData(fileType: fileType, width: self.width, height: self.height)
 	}
 
-	func croppedImageData(fileType: NSBitmapImageRep.FileType, width cWidth: Int, height cHeight: Int) -> Data {
-		let palette = self.palette().map { (raw) -> NSColor in
+	func croppedImageData(fileType: XGFileTypes, width cWidth: Int, height cHeight: Int) -> Data {
+		let palette = self.palette().map { (raw) -> XGColour in
 			var pFormat = GoDTextureFormats.RGB5A3
 			if self.paletteFormat == 0 {
 				pFormat = .IA8
@@ -59,12 +72,12 @@ extension GoDTexture {
 			if self.paletteFormat == 1 {
 				pFormat = .RGB565
 			}
-			return XGColour(raw: raw, format: pFormat).NSColour
+			return XGColour(raw: raw, format: pFormat)
 		}
 
-		var colourPixels = [NSColor]()
+		var colourPixels = [XGColour]()
 		if isIndexed {
-			colourPixels = self.pixels().map { (index) -> NSColor in
+			colourPixels = self.pixels().map { (index) -> XGColour in
 				return palette[index]
 			}
 		} else {
@@ -85,8 +98,8 @@ extension GoDTexture {
 					}
 				}
 
-				colourPixels = mergedPixels.map({ (raw) -> NSColor in
-					return XGColour(raw: raw, format: self.format).NSColour
+				colourPixels = mergedPixels.map({ (raw) -> XGColour in
+					return XGColour(raw: raw, format: self.format)
 				})
 
 			} else if self.format == .CMPR {
@@ -181,18 +194,14 @@ extension GoDTexture {
 				for block in blocks {
 					pixels += block
 				}
-				colourPixels = pixels.map({ (c) -> NSColor in
-					return c.NSColour
-				})
+				colourPixels = pixels
 
 			} else {
-				colourPixels = self.pixels().map({ (raw) -> NSColor in
-					return XGColour(raw: raw, format: self.format).NSColour
+				colourPixels = self.pixels().map({ (raw) -> XGColour in
+					return XGColour(raw: raw, format: self.format)
 				})
 			}
 		}
-
-
 
 		var pixelsPerRow = width
 		var pixelsPerCol = height
@@ -226,11 +235,15 @@ extension GoDTexture {
 			let x = (columnOfBlock * columnsPerBlock) + columnInBlock
 			let y = (rowOfBlock * rowsPerBlock) + rowInBlock
 
-			bitmap.setColor(colour, atX: x, y: y)
+			bitmap.setColor(colour.NSColour, atX: x, y: y)
 
 		}
 
-		let img = bitmap.representation(using: fileType, properties: [:])!
+		#if ENV_OSX
+		let img = bitmap.representation(using: fileType.NSFileType, properties: [:]) ?? Data()
+		#else
+		let img = bitmap.representation(using: fileType, properties: [:])
+		#endif
 
 		return img
 
@@ -255,75 +268,23 @@ extension GoDTexture {
 	}
 
 	func saveImage(file: XGFiles) {
-
-		var path = file.path
-
-		var fileType = NSBitmapImageRep.FileType.png
-		switch file.fileType {
-		case .png  : fileType = .png
-		case .jpeg : fileType = .jpeg
-		case .bmp  : fileType = .bmp
-		default:
-			printg("Cannot create file with image format \(file.fileType.fileExtension). Defaulting to .png")
-			path += ".png"
-		}
-
 		do {
-			try self.imageData(fileType: fileType).write(to: URL(fileURLWithPath: path))
+			try self.imageData(fileType: file.fileType).write(to: URL(fileURLWithPath: file.path))
 		} catch {
-			printg("Failed to save image data: \(path)")
+			printg("Failed to save image data: \(file.path)")
 		}
 	}
 
 	func saveCroppedImage(file: XGFiles, width: Int, height: Int) {
-
-		var path = file.path
-
-		var fileType = NSBitmapImageRep.FileType.png
-		switch file.fileType {
-		case .png  : fileType = .png
-		case .jpeg : fileType = .jpeg
-		case .bmp  : fileType = .bmp
-		default:
-			printg("Cannot create file with image format \(file.fileType.fileExtension). Defaulting to .png")
-			path += ".png"
-		}
-
 		do {
-			try self.croppedImageData(fileType: fileType, width: width, height: height).write(to: URL(fileURLWithPath: path))
+			try self.croppedImageData(fileType: file.fileType, width: width, height: height).write(to: URL(fileURLWithPath: file.path))
 		} catch {
-			printg("Failed to save image data: \(path)")
+			printg("Failed to save image data: \(file.path)")
 		}
 	}
 
 }
 
-extension NumberFormatter {
-
-	class func byteFormatter() -> NumberFormatter {
-		let format = NumberFormatter()
-		format.minimum = 0x00
-		format.maximum = 0xFF
-		return format
-	}
-
-	class func shortFormatter() -> NumberFormatter {
-		let format = NumberFormatter()
-		format.minimum = 0x00
-		format.maximum = 0xFFFF
-		return format
-	}
-
-	class func signedByteFormatter() -> NumberFormatter {
-		let format = NumberFormatter()
-		format.minimum = -127
-		format.maximum = 128
-		return format
-	}
-
-}
-
-#endif
 
 
 

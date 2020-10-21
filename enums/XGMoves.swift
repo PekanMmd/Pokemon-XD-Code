@@ -150,71 +150,6 @@ enum XGMoves : CustomStringConvertible {
 	
 }
 
-enum XGOriginalMoves {
-	
-	case move(Int)
-	
-	var index : Int {
-		get {
-			switch self {
-			case .move(let i): return i
-			}
-		}
-	}
-	
-	var startOffset : Int {
-		get {
-			return XGMoves.move(index).startOffset
-		}
-	}
-	
-	var nameID : Int {
-		get {
-			return XGFiles.original(.common_rel).data!.get2BytesAtOffset(startOffset + kMoveNameIDOffset)
-		}
-	}
-	
-	var descriptionID : Int {
-		get {
-			return XGFiles.original(.common_rel).data!.get2BytesAtOffset(startOffset + kMoveDescriptionIDOffset)
-		}
-	}
-	
-	var name : XGString {
-		get {
-			let table = XGFiles.original(.common_rel).stringTable
-			return table.stringSafelyWithID(nameID)
-		}
-	}
-	
-	var type : XGMoveTypes {
-		get {
-			let index = XGFiles.original(.common_rel).data!.getByteAtOffset(startOffset + kMoveTypeOffset)
-			return XGMoveTypes.type(index)
-		}
-	}
-	
-	var animation : Int {
-		get {
-			return XGFiles.original(.common_rel).data!.get2BytesAtOffset(startOffset + kAnimationIndexOffset)
-		}
-	}
-	
-	var isShadowMove : Bool {
-		get {
-			return (self.index >= kFirstShadowMoveIndex) && (self.index <= kLastShadowMoveIndex)
-		}
-	}
-	
-	static func allMoves() -> [XGOriginalMoves] {
-		var moves = [XGOriginalMoves]()
-		for i in 0 ..< kNumberOfMoves {
-			moves.append(.move(i))
-		}
-		return moves
-	}
-	
-}
 
 func allMoves() -> [String : XGMoves] {
 	
@@ -247,15 +182,6 @@ func allMovesArray() -> [XGMoves] {
 	return moves
 }
 
-func allOriginalMovesArray() -> [XGOriginalMoves] {
-	
-	var moves: [XGOriginalMoves] = []
-	for i in 0 ..< kNumberOfMoves {
-		moves.append(XGOriginalMoves.move(i))
-	}
-	return moves
-	
-}
 
 extension XGMoves: Codable {
 	enum CodingKeys: String, CodingKey {

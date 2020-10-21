@@ -15,16 +15,19 @@ class GoDShellManager {
 		case wimgt
         
         var file: XGFiles {
-            return .nameAndFolder(rawValue, folder)
+			switch self {
+			case .wit: return .wit
+			case .wimgt: return .wimgt
+			default: return .nameAndFolder(rawValue, folder)
+			}
         }
         
         var folder: XGFolders {
             switch self {
 			case .wit, .wimgt:
-                return .Resources
+                return .Wiimm
             default:
-				#warning("Make Windows compatible implementation")
-                return .path("/bin")
+				return environment == .Windows ? .Resources : .path("/bin")
             }
         }
     }

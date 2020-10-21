@@ -22,34 +22,6 @@ extension XGAssembly {
 		return offset
 	}
 
-	class func revertDolInstructionFromOffset(offset: Int, length: Int) {
-
-		let dol = XGFiles.dol.data!
-
-		for i in 0 ..< length {
-
-			let off = offset + (i * 4)
-
-			let original = XGFiles.original(.dol).data!.getWordAtOffset(off)
-			dol.replaceWordAtOffset(off, withBytes: original)
-
-		}
-		dol.save()
-	}
-
-	class func revertDolInstructionAtOffsets(offsets: [Int]) {
-
-		let dol = XGFiles.dol.data!
-
-		for offset in offsets {
-
-			let original = XGFiles.original(.dol).data!.getWordAtOffset(offset)
-			dol.replaceWordAtOffset(offset, withBytes: original)
-
-		}
-		dol.save()
-	}
-
 	class func replaceRELASM(startOffset: Int, newASM asm: ASM) {
 		let ramOffset = startOffset > kRELtoRAMOffsetDifference ? kRELtoRAMOffsetDifference : 0
 
@@ -112,13 +84,6 @@ extension XGAssembly {
 			replaceRELASM(startOffset: offset - kRELtoRAMOffsetDifference, newASM: asm)
 		} else {
 			replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: asm)
-		}
-	}
-
-	class func revertASM(startOffset: Int, newASM asm: [UInt32]) {
-		for i in 0 ..< asm.count {
-			let offset = startOffset + (i * 4)
-			revertDolInstructionFromOffset(offset: offset, length: 1)
 		}
 	}
 

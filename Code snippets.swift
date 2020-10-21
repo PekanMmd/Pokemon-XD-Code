@@ -11,22 +11,6 @@ import Foundation
 
 // infinite TMs
 //infiniteUseTMs()
-//
-//
-//loadAllStrings()
-//let list = [(20,"Blizzard-"),(32,"Scald-"),(51,"Thunder-"),(54,"Rock Slide-")]
-//var indices = [Int]()
-//let rel = XGFiles.common_rel.data!
-//for (index,next) in list {
-//	let move = XGMoves.move(index).data
-//	let oldNameId = XGOriginalMoves.move(index).nameID
-//	rel.replace2BytesAtOffset(move.startOffset + kMoveNameIDOffset, withBytes: oldNameId)
-//	indices.append(oldNameId)
-//}
-//rel.save()
-//for i in 0 ..< list.count {
-//	getStringWithID(id: indices[i])!.duplicateWithString(list[i].1).replace()
-//}
 
 
 //let pelipper = pokemon("pelipper").stats
@@ -473,40 +457,6 @@ import Foundation
 //}
 //
 //loadAllStrings()
-//let obsoleteMoves = [129,149,74,175,298,145,287,260,343,48,155,125,217,255,288,120,107,229,138,135,259,102,2,141,292,203,249,285,262,10,18,293,190,237,256,307,294,316,335,272,208,291,128,338,244,40,80,111,119,289]
-//
-//
-//for obs in obsoleteMoves {
-//	let oName = XGOriginalMoves.move(obs).nameID
-//	let oDesc = XGOriginalMoves.move(obs).descriptionID
-//	let m = XGMove(index: obs)
-//	m.moveName = oName
-//	m.moveDescription = oDesc
-//	m.type = .normal
-//	m.basePower = 0
-//	m.target = .selectedTarget
-//	m.category = .none
-//	m.effect = 0
-//	m.priority = 0
-//	m.pp = 1
-//	m.accuracy = 0
-//	m.effectAccuracy = 0
-//	m.contactFlag = false
-//	m.mirrorMoveFlag = false
-//	m.protectFlag = false
-//	m.kingsRockFlag = false
-//	m.magicCoatFlag = false
-//	m.soundBasedFlag = false
-//	m.snatchFlag = false
-//	m.HMFlag = false
-//	m.save()
-//	if !currentNames.contains(oName) {
-//		getStringWithID(id: oName)!.duplicateWithString("*").replace()
-//	}
-//	if !currentDescs.contains(oDesc) {
-//		getStringWithID(id: oDesc)!.duplicateWithString("*").replace()
-//	}
-//}
 
 //// hard shell flag
 //let hardshells = ["aura sphere", "seed bomb","focus blast","pin missile","rock throw","energy ball","ice shard","icicle crash","explosion","sludge","sludgebomb","gunk shot","rock slide","zap cannon","shadow ball","leech seed","bullet seed","icicle spear","mud shot","rock blast","shadow pulse"]

@@ -52,9 +52,7 @@ indirect enum XGFiles {
 	case iso // mostly just for compatibility. ISO is handle by the wit tool because it's more complicated on wii.
 	
 	var path : String {
-		get {
-			return folder.path + "/" + self.fileName
-		}
+		return folder.path + "/" + self.fileName
 	}
 	
 	var fileName : String {
@@ -78,8 +76,8 @@ indirect enum XGFiles {
 										  // windows doesn't support colons in file names
 			case .log(let d)			: return d.description.replacingOccurrences(of: ":", with: ".") + XGFileTypes.txt.fileExtension
 			case .json(let s)			: return s + XGFileTypes.json.fileExtension
-            case .wit                   : return "wit"
-			case .wimgt                 : return "wimgt"
+			case .wit                   : return environment == .Windows ? "wit.exe" : "wit"
+			case .wimgt                 : return environment == .Windows ? "wimgt.exe" : "wimgt"
 			case .nameAndFolder(let name, _) : return name
             case .iso					: return "pbr" + XGFileTypes.iso.fileExtension
 			}
@@ -106,7 +104,7 @@ indirect enum XGFiles {
 			case .log				: folder = .Logs
 			case .json				: folder = .JSON
 			case .fsys				: folder = .FSYS
-			case .wit, .wimgt       : folder = .Resources
+			case .wit, .wimgt       : folder = .Wiimm
 			case .nameAndFolder( _, let aFolder) : folder = aFolder
 			case .iso				: folder = .ISO
 				
@@ -395,29 +393,6 @@ indirect enum XGFolders {
 		}
 	}
 	
-	var resourcePath : String {
-		get {
-			var path = XGFolders.Documents.path + "/Original"
-			
-			switch self {
-				
-			case .nameAndPath(let name, let path): return path + "/\(name)"
-			case .Documents	: return path
-			case .Import	: path = XGFolders.TextureImporter.resourcePath
-			case .Export	: path = XGFolders.TextureImporter.resourcePath
-			case .Textures	: path = XGFolders.TextureImporter.resourcePath
-			case .PokeFace	: path = XGFolders.Images.resourcePath
-			case .PokeBody	: path = XGFolders.Images.resourcePath
-			case .Trainers	: path = XGFolders.Images.resourcePath
-			case .Types		: path = XGFolders.Images.resourcePath
-			default: break
-				
-			}
-			
-			return path + ("/" + self.name)
-		}
-	}
-	
 	var filenames : [String] {
 		if self.exists {
 			let names = (try? FileManager.default.contentsOfDirectory(atPath: self.path)) as [String]?
@@ -508,6 +483,7 @@ indirect enum XGFolders {
 			.LZSS,
 			.Reference,
 			.Resources,
+			.Wiimm,
             .ISO,
             .ISODump,
 			.Logs,
@@ -551,16 +527,10 @@ indirect enum XGFolders {
 			}
 		}
 		
-        let wit = XGFiles.wit
-        if !wit.exists {
-            XGResources.tool("wit").copy(to: wit)
-        }
-
-		let wimgt = XGFiles.wimgt
-        if !wimgt.exists {
-            XGResources.tool("wimgt").copy(to: wimgt)
-        }
-		
+		let wiimm = XGFolders.Wiimm
+		if !wiimm.exists {
+			XGResources.folder("wiimm").copy(to: XGFolders.Wiimm)
+		}
 	}
 	
 }

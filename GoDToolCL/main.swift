@@ -7,8 +7,6 @@
 //
 //
 
-XGResources.JSON("MoveCategories").copy(to: .nameAndFolder("m.json", .Documents))
-
 //ISO.allFileNames.count.hexString().println()
 
 
