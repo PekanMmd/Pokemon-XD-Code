@@ -55,7 +55,7 @@ enum XGResources {
 				case .sublimeSettings						: return ".sublime-settings"
 				case .sublimeCompletions					: return ".sublime-completions"
 				case .tool                                  : return ""
-				case .folder                                  : return ""
+				case .folder                                : return ""
 				case .nameAndFileType( _, let filetype)		: return filetype
 			}
 		}

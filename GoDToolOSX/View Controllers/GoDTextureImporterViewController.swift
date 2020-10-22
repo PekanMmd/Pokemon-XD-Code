@@ -51,9 +51,9 @@ class GoDTextureImporterViewController: GoDTableViewController {
 				if textureFile.exists {
 					if let data = textureFile.data {
 						let textureData = GoDTexture(data: data)
-						self.importer = GoDTextureImporter(oldTextureData: textureData, newImage: current.image)
+						self.importer = GoDTextureImporter(oldTextureData: textureData, newImage: XGImage(nsImage: current.image))
 						self.importer!.replaceTextureData()
-						self.imageView.image = self.importer?.texture.image
+						self.imageView.image = self.importer?.texture.image.nsImage
 					}
 				}
 			}

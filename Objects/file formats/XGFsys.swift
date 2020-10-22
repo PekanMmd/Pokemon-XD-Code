@@ -1012,21 +1012,19 @@ final class XGFsys : NSObject {
 				if data[i].file.fileType == .gsw {
 					let gsw = XGGSWTextures(data: data[i])
 					let textures = gsw.extractTextureData()
-					for texture in textures {
-						texture.save()
-						
-						let imageFilename = texture.file.fileName.removeFileExtensions() + ".png"
-						let imageFile = XGFiles.nameAndFolder(imageFilename, folder)
-						#if ENV_OSX
-						texture.file.texture.saveImage(file: imageFile)
-						#endif
+					for textureData in textures {
+						textureData.save()
+
+						let texture = GoDTexture(data: textureData)
+						let pngFile = XGFiles.nameAndFolder(texture.file.fileName + ".png", folder)
+						texture.image.writePNGData(toFile: pngFile)
 					}
 				}
 				
 				if data[i].file.fileType == .gtx || data[i].file.fileType == .atx {
-					#if ENV_OSX
-					data[i].file.texture.saveImage(file: .nameAndFolder(updatedNames[i] + ".png", folder))
-					#endif
+					let texture = GoDTexture(data: data[i])
+					let pngFile = XGFiles.nameAndFolder(texture.file.fileName + ".png", folder)
+					texture.image.writePNGData(toFile: pngFile)
 				}
 				
 				if data[i].file.fileType == .msg {

@@ -80,22 +80,93 @@ func importExportFiles() {
 	}
 }
 
+func applyPatches() {
+	guard region == .US else {
+		printg("Patches can currently only be applied to US versions of the ISO.")
+		return
+	}
+
+	let patches : [XGDolPatches] = game == .XD ? [
+		.physicalSpecialSplitApply,
+		.physicalSpecialSplitRemove,
+		.defaultMoveCategories,
+		.infiniteTMs,
+		.allowFemaleStarters,
+		.zeroForeignStringTables,
+		.betaStartersApply,
+		.betaStartersRemove,
+		.switchPokemonAtEndOfTurn,
+		.fixShinyGlitch,
+		.removeShadowShinyLock,
+		.shadowsAreNeverShiny,
+		.allShadowsAreShiny,
+		.tradeEvolutions
+	] : [
+		.physicalSpecialSplitApply,
+		.defaultMoveCategories,
+		.allowFemaleStarters,
+		.tradeEvolutions
+	]
+
+	var prompt = "Select a patch to apply:\n\n0: exit\n"
+	for i in 0 ..< patches.count {
+		let patch = patches[i]
+		prompt += "\(i + 1): \(patch.name)\n"
+	}
+
+	while true {
+		let input = readInput(prompt)
+		guard let index = input.integerValue, index >= 0, index - 1 < patches.count else {
+			printg("Invalid option:", input)
+			continue
+		}
+		if index == 0 {
+			return
+		}
+		let patch = patches[index - 1]
+		XGDolPatcher.applyPatch(patch)
+	}
+}
+
+func encodeDecode() {
+	
+}
+
+func documentISO() {
+
+}
+
 func mainMenu() {
 	while true {
-		let prompt = """
+		var prompt = """
 		Type the number of the function you want and press enter:
 
 		0: Exit the program
-		1: List files
-		2: Import/Export files
+		1: Rebuild ISO - Use to put files edited by this tool back in the ISO
+		2: List files - List all files in the ISO
+		3: Import/Export files - Use this to export files for manual editing and to reimport them
+		4: Patches - Pick some useful patches to apply to the game
 		"""
+		if game == .XD {
+			prompt += """
+
+			5: Encode data tables - Write all data to json files that can be edited
+			6: Decode data tables - Import the edited json files for the data tables
+			7: Document data - Dumps all information about the game into text files for reference only
+			"""
+		}
 
 		let input = readInput(prompt)
 		switch input {
 		case "": continue
 		case "0": return
-		case "1": listFiles()
-		case "2": importExportFiles()
+		case "1": XGUtility.compileMainFiles()
+		case "2": listFiles()
+		case "3": importExportFiles()
+		case "4": applyPatches()
+		case "5": if game == .XD { XGUtility.encodeISO() }
+		case "6": if game == .XD { XGUtility.decodeISO() }
+		case "7": if game == .XD { XGUtility.documentISO() }
 		default: invalidOption(input)
 		}
 	}

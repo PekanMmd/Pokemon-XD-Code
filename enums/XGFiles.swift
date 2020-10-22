@@ -157,7 +157,7 @@ indirect enum XGFiles {
 		let decks = TrainerDecksArray.map { (d) -> XGFiles in
 			return d.file
 		}
-		let requiredFiles : [XGFiles] = [.common_rel, .dol, .tableres2, .pocket_menu, XGDecks.DeckDarkPokemon.file, .fsys("people_archive")] + decks
+		let requiredFiles : [XGFiles] = [.common_rel, .dol, .tableres2, .pocket_menu, .msg("pocket_menu"), XGDecks.DeckDarkPokemon.file, .fsys("people_archive")] + decks
 		if requiredFiles.contains(where: { (f) -> Bool in
 			f == self
 		}) {
@@ -214,9 +214,7 @@ indirect enum XGFiles {
 	}
 	
 	var texture : GoDTexture {
-		get {
-			return GoDTexture(file: self)
-		}
+		return GoDTexture(file: self)
 	}
 	
 	var fsysData : XGFsys {

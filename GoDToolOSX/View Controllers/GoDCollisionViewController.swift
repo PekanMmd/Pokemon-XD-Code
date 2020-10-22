@@ -8,13 +8,11 @@
 import Cocoa
 
 class GoDCollisionViewController: GoDTableViewController {
-	
-	@IBOutlet var openglView: GoDOpenGLView!
+
 	@IBOutlet var metalView: GoDMetalView!
-	
-	var useMetal = true
+
 	var renderView : NSView {
-		return useMetal ? self.metalView : self.openglView
+		return metalView
 	}
 
 	var filteredCols = [XGFiles]()
@@ -31,27 +29,18 @@ class GoDCollisionViewController: GoDTableViewController {
 		super.viewDidLoad()
 		table.setShouldUseIntercellSpacing(to: true)
 		filteredCols = cols
-		self.table.reloadData()
-		
-		if useMetal {
-			self.openglView.isHidden = true
-			self.openglView.removeFromSuperview()
-			self.openglView = nil
-			self.metalView.setup()
-		} else {
-			self.metalView.isHidden = true
-		}
+		table.reloadData()
+		metalView.setup()
+
 	}
 
 	override func viewWillDisappear() {
 		super.viewWillDisappear()
-		if useMetal {
-			metalView.stopTimer()
-		}
+		metalView.stopTimer()
 	}
 
 	override func viewWillAppear() {
-		if useMetal, metalView.isSetup {
+		if metalView.isSetup {
 			metalView.startTimer()
 		}
 	}
@@ -72,15 +61,10 @@ class GoDCollisionViewController: GoDTableViewController {
 
 		if filteredCols.count > 0 {
 			if filteredCols[row].exists {
-				if useMetal {
-					metalView.stopTimer()
-					metalView.file = self.filteredCols[row]
-					metalManager.render()
-					metalView.startTimer()
-				} else {
-					openglView.file = self.filteredCols[row]
-					openglView.render()
-				}
+				metalView.stopTimer()
+				metalView.file = self.filteredCols[row]
+				metalManager.render()
+				metalView.startTimer()
 			}
 		}
 	}

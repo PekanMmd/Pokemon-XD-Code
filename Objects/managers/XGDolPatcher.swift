@@ -78,6 +78,14 @@ enum XGDolPatches : Int {
 	case zeroForeignStringTables
 	case decapitaliseNames
 	case tradeEvolutions
+	case defaultMoveCategories
+	case allowFemaleStarters
+	case switchPokemonAtEndOfTurn
+	case fixShinyGlitch
+	case removeShadowShinyLock
+	case allShadowsAreShiny
+	case shadowsAreNeverShiny
+	case infiniteTMs
 	
 	var name : String {
 		get {
@@ -94,6 +102,14 @@ enum XGDolPatches : Int {
 				case .zeroForeignStringTables : return "Foreign string tables will be zeroed out for smaller compressed sizes."
 				case .decapitaliseNames : return "Decapitalises a lot of text."
 				case .tradeEvolutions : return "Trade Evolutions become level 40"
+				case .defaultMoveCategories: return "Sets the physical/special category for all moves to their default values"
+				case .allowFemaleStarters: return "Allow starter pokemon to be female"
+				case .switchPokemonAtEndOfTurn: return "After a KO the next pokemon switches in at end of turn"
+				case .fixShinyGlitch: return "Fix shiny glitch"
+				case .removeShadowShinyLock: return "Remove shiny lock from shadow pokemon"
+				case .shadowsAreNeverShiny: return "Shiny lock shadow pokemon"
+				case .allShadowsAreShiny: return "Make all shadow pokemon always shiny"
+				case .infiniteTMs: return "TMs can be reused infinitely"
 			}
 		}
 	}
@@ -457,8 +473,8 @@ class XGDolPatcher: NSObject {
 	
 	class func applyPatch(_ patch: XGDolPatches) {
 		
-		if region == .EU {
-			printg("EU support not ready for patch:",patch.name)
+		if region != .US {
+			printg("PAL/JP not yet supported for patching")
 			return
 		}
 		
@@ -475,6 +491,14 @@ class XGDolPatcher: NSObject {
 			case .zeroForeignStringTables		: XGDolPatcher.zeroForeignStringTables()
 			case .decapitaliseNames				: XGDolPatcher.decapitalise()
 			case .tradeEvolutions				: XGDolPatcher.removeTradeEvolutions()
+			case .defaultMoveCategories			: XGUtility.defaultMoveCategories()
+			case .allowFemaleStarters			: XGDolPatcher.allowFemaleStarters()
+			case .switchPokemonAtEndOfTurn		: XGAssembly.switchNextPokemonAtEndOfTurn()
+			case .fixShinyGlitch				: XGAssembly.fixShinyGlitch()
+			case .removeShadowShinyLock			: XGAssembly.setShadowPokemonShininess(value: .random)
+			case .shadowsAreNeverShiny			: XGAssembly.setShadowPokemonShininess(value: .never)
+			case .allShadowsAreShiny			: XGAssembly.setShadowPokemonShininess(value: .always)
+			case .infiniteTMs					: XGAssembly.infiniteUseTMs()
 		}
 		
 		printg("patch applied: ", patch.name)

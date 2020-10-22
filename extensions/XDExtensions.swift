@@ -220,6 +220,10 @@ extension XGISO {
 }
 
 extension XGUtility {
+
+	class func extractMainFiles() {
+		XGISO.extractMainFiles()
+	}
 	
 	class func extractAllFiles() {
 		XGISO.extractAllFiles()
@@ -1390,9 +1394,12 @@ extension XGUtility {
 			printg("Already Documenting ISO!")
 			return
 		}
-		
+
 		isDocumentingISO = true
 		shouldCancelDocumentation = false
+
+		extractMainFiles()
+
 		printg("Documenting ISO.\nThis may take a while...")
 		XGThreadManager.manager.runInBackgroundAsync {
 			printg("Documenting Enumerations...")
@@ -1503,7 +1510,7 @@ extension XGUtility {
 			}
 			
 			if !shouldCancelDocumentation {
-				printg("Finished Documenting ISO.")
+				printg("Finished Documenting ISO. Output can be found in \(XGFolders.Reference.path)")
 			} else {
 				printg("Cancelled Documenting ISO.")
 			}
@@ -1526,6 +1533,9 @@ extension XGUtility {
 		
 		isEncodingISO = true
 		shouldCancelEncoding = false
+
+		extractMainFiles()
+
 		printg("Encoding ISO.\nThis may take a while...")
 		XGThreadManager.manager.runInBackgroundAsync {
 			if !shouldCancelEncoding {
@@ -1676,7 +1686,7 @@ extension XGUtility {
 			}
 			
 			if !shouldCancelEncoding {
-				printg("Finished Encoding ISO.")
+				printg("Finished Encoding ISO. Output can be found at \(XGFolders.nameAndFolder("Raw Data", .Reference).path)")
 			} else {
 				printg("Cancelled Encoding ISO.")
 			}
@@ -1699,6 +1709,9 @@ extension XGUtility {
 		
 		isDecodingISO = true
 		shouldCancelDecoding = false
+
+		extractMainFiles()
+
 		printg("Decoding ISO.\nThis may take a while...")
 		XGThreadManager.manager.runInBackgroundAsync {
 			if !shouldCancelDecoding {

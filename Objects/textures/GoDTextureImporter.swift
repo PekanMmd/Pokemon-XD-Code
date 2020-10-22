@@ -6,14 +6,12 @@
 //
 //
 
+import Foundation
 
-#if ENV_OSX
-import Cocoa
-
-class GoDTextureImporter: NSObject {
+class GoDTextureImporter {
 	
-	var texture  : GoDTexture!
-	var newImage = NSImage()
+	let texture: GoDTexture
+	let newImage: XGImage
 	
 	var Palette  = XGTexturePalette()
 	
@@ -21,18 +19,17 @@ class GoDTextureImporter: NSObject {
 	var requiredPixelsPerRow = 0
 	var requiredPixelsPerCol = 0
 	
-	init(oldTextureData: GoDTexture, newImage: NSImage) {
-		super.init()
-		
+	init(oldTextureData: GoDTexture, newImage: XGImage) {
 		self.texture  = oldTextureData
 		self.newImage = newImage
 		
 	}
 	
-	private func pixelsFromPNGImage() -> [XGPNGBlock] {
-		
-		let imageWidth  = texture.width
-		let imageHeight = texture.height
+	private func pixelsFromImage() -> [XGPNGBlock] {
+
+		let image = newImage
+		let imageWidth  = min(texture.width, image.width)
+		let imageHeight = min(texture.height, image.height)
 		
 		requiredPixelsPerRow = (imageWidth % texture.blockWidth) == 0 ? 0 : texture.blockWidth - (imageWidth % texture.blockWidth)
 		requiredPixelsPerCol = (imageHeight % texture.blockHeight) == 0 ? 0 : texture.blockHeight - (imageHeight % texture.blockHeight)
@@ -40,24 +37,6 @@ class GoDTextureImporter: NSObject {
 		let numberOfPixels = imageWidth * imageHeight
 		
 		let horizontalTiles = (imageWidth + requiredPixelsPerRow) / texture.blockWidth
-		
-		var pixels = [UInt32](repeating: 0, count: numberOfPixels)
-		
-		let bytesPerPixel = 4
-		let bytesPerRow = bytesPerPixel * imageWidth
-		let bitsPerComponent = 8
-		var rect = CGRect(x: 0, y: 0, width: imageWidth, height: imageHeight)
-		
-		let colourSpace = CGColorSpaceCreateDeviceRGB()
-		let info = CGBitmapInfo.byteOrder32Big.union(CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)).rawValue
-		
-		let context = CGContext(data: &pixels, width: imageWidth, height: imageHeight, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colourSpace, bitmapInfo: info)!
-		
-		let graphicsContext = NSGraphicsContext(cgContext: context, flipped: false)
-		
-		let imageAsCGRef = self.newImage.cgImage(forProposedRect: &rect, context: graphicsContext, hints: nil)!
-		
-		context.draw(imageAsCGRef, in: rect)
 		
 		var pngblock = [XGPNGBlock]()
 		
@@ -67,22 +46,19 @@ class GoDTextureImporter: NSObject {
 		for _ in 0 ..< ( totalPixelCount  / (texture.blockWidth * texture.blockHeight)) {
 			pngblock.append(XGPNGBlock())
 		}
-		
+
+		let pixels = image.pixels.map {
+			$0.RGBA32Representation
+		}
 		for i in 0 ..< numberOfPixels {
 			
-			var currentColour = pixels[i]
-			
-			let red		  = Int(currentColour % 0x100)
-			
-			currentColour =  currentColour >> 8
-			let green	  = Int(currentColour % 0x100)
-			
-			currentColour =  currentColour >> 8
-			let blue	  = Int(currentColour % 0x100)
-			
-			currentColour =  currentColour >> 8
-			let alpha	  = Int(currentColour)
-			
+			let currentColour = pixels[i]
+
+			let alpha	  = Int(currentColour[0])
+			let red		  = Int(currentColour[1])
+			let green	  = Int(currentColour[2])
+			let blue	  = Int(currentColour[3])
+
 			let pixelColour = XGColour(red: red, green: green, blue: blue, alpha: alpha)
 			
 			let pixelColumn = i % imageWidth
@@ -142,7 +118,7 @@ class GoDTextureImporter: NSObject {
 		return restructuredBlock
 	}
 	
-	private func convertPNGPixelsToIndexedPixels(pixels: [XGPNGBlock]) -> [XGTextureBlock] {
+	private func convertPixelsToIndexedPixels(pixels: [XGPNGBlock]) -> [XGTextureBlock] {
 		
 		var textureBlocks = [XGTextureBlock]()
 		
@@ -181,7 +157,7 @@ class GoDTextureImporter: NSObject {
 		return textureBlocks
 	}
 	
-	private func compressPNGPixels(pixels: [XGPNGBlock]) -> [XGTextureBlock] {
+	private func compressPixels(pixels: [XGPNGBlock]) -> [XGTextureBlock] {
 		
 		var textureBlocks = [XGTextureBlock]()
 		let subBlockSize = 16
@@ -363,7 +339,7 @@ class GoDTextureImporter: NSObject {
 		return bytes
 	}
 	
-	private func byteStreamFromPNGPixels(pixels: [XGPNGBlock]) -> [Int] {
+	private func byteStreamFromPixels(pixels: [XGPNGBlock]) -> [Int] {
 		
 		var bytes = [Int]()
 		
@@ -393,15 +369,15 @@ class GoDTextureImporter: NSObject {
 	
 	func replaceTextureData() {
 		
-		let pngPixels = self.pixelsFromPNGImage()
+		let pngPixels = self.pixelsFromImage()
 		var pixelBytes = [Int]()
 		
 		if texture.isIndexed {
-			let texPixels = self.convertPNGPixelsToIndexedPixels(pixels: pngPixels)
+			let texPixels = self.convertPixelsToIndexedPixels(pixels: pngPixels)
 			pixelBytes = byteStreamFromTexturePixels(pixels: texPixels)
 			self.updatePalette()
 		} else if texture.format == .RGBA32 {
-			let bytes = self.byteStreamFromPNGPixels(pixels: pngPixels)
+			let bytes = self.byteStreamFromPixels(pixels: pngPixels)
 			var splitBytes = [Int]()
 			// ar and gb values of rgba32 are separated within blocks so must restructure first
 			let blockCount = bytes.count / 64 // 64 bytes per block, 4 pixelsperrow x 4 pixelspercolumn x 4 bytesperpixel
@@ -424,12 +400,12 @@ class GoDTextureImporter: NSObject {
 			
 		} else if texture.format == .CMPR {
 			
-			let compressedBlocks = compressPNGPixels(pixels: pngPixels)
+			let compressedBlocks = compressPixels(pixels: pngPixels)
 			pixelBytes = byteStreamFromTexturePixels(pixels: compressedBlocks)
 			
 			
 		} else {
-			pixelBytes = self.byteStreamFromPNGPixels(pixels: pngPixels)
+			pixelBytes = self.byteStreamFromPixels(pixels: pngPixels)
 		}
 		
 		
@@ -468,16 +444,9 @@ class GoDTextureImporter: NSObject {
 		
 	}
 	
-	class func replaceTextureData(texture: GoDTexture, withImage newImageFile: XGFiles, save: Bool = true) {
+	class func replaceTextureData(texture: GoDTexture, withImage newImage: XGImage, save: Bool = true) {
 		
-		if !newImageFile.exists {
-			return
-		}
-		
-		let texture  = texture
-		let image = newImageFile.image
-		
-		let importer = GoDTextureImporter(oldTextureData: texture, newImage: image)
+		let importer = GoDTextureImporter(oldTextureData: texture, newImage: newImage)
 		importer.replaceTextureData()
 		
 		if save {
@@ -485,7 +454,7 @@ class GoDTextureImporter: NSObject {
 		}
 	}
 	
-	class func getTextureData(image: NSImage, format: GoDTextureFormats, paletteFormat: GoDTextureFormats = .RGB5A3) -> GoDTexture {
+	class func getTextureData(image: XGImage, format: GoDTextureFormats, paletteFormat: GoDTextureFormats = .RGB5A3) -> GoDTexture {
 		
 		let texture  = GoDTexture(forImage: image, format: format, paletteFormat: paletteFormat)
 		
@@ -495,7 +464,7 @@ class GoDTextureImporter: NSObject {
 		return importer.texture
 	}
 	
-	class func getTextureData(image: NSImage) -> GoDTexture {
+	class func getTextureData(image: XGImage) -> GoDTexture {
 		
 		let colourCount = image.colourCount
 		var format = GoDTextureFormats.C8
@@ -515,7 +484,7 @@ class GoDTextureImporter: NSObject {
 		return getTextureData(image: image, format: format)
 	}
 	
-	class func getMultiFormatTextureData(image: NSImage) -> [GoDTexture] {
+	class func getMultiFormatTextureData(image: XGImage) -> [GoDTexture] {
 		
 		var textures = [GoDTexture]()
 		
@@ -536,8 +505,6 @@ class GoDTextureImporter: NSObject {
 	}
 	
 }
-#endif
-
 
 
 
