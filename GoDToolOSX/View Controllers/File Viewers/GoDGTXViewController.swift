@@ -11,7 +11,7 @@ class GoDGTXViewController: NSViewController {
     let imageView = NSImageView()
     var texture: GoDTexture? {
         didSet {
-            imageView.image = texture?.image
+			imageView.image = texture?.image.nsImage
         }
     }
     
@@ -34,6 +34,6 @@ class GoDGTXViewController: NSViewController {
             view.widthAnchor.constraint(lessThanOrEqualToConstant: 800),
             view.heightAnchor.constraint(lessThanOrEqualToConstant: 800)
         ])
-//        imageView.image = texture?.image
+		imageView.image = texture?.image.nsImage
     }
 }

@@ -962,11 +962,11 @@ class XGISO: NSObject {
 			rel.file = .common_rel
 			rel.save()
 		}
-		
-		if settings.verbose {
-			printg("extracting: \(XGFiles.tableres2.fileName)")
-		}
+
 		if game == .XD && !isDemo {
+			if settings.verbose {
+				printg("extracting: \(XGFiles.tableres2.fileName)")
+			}
 			if !XGFiles.fsys("common_dvdeth").exists {
 				extractFSYS()
 			}
@@ -987,6 +987,23 @@ class XGISO: NSObject {
 			let pocket = XGFiles.fsys("pocket_menu").fsysData.decompressedDataForFileWithIndex(index: 0)!
 			pocket.file = .pocket_menu
 			pocket.save()
+		}
+
+		if !XGFiles.pocket_menu.exists {
+			let pocket = XGFiles.fsys("pocket_menu").fsysData.decompressedDataForFileWithIndex(index: 0)!
+			pocket.file = .pocket_menu
+			pocket.save()
+		}
+
+		for file in XGFolders.MenuFSYS.files where file.fileType == .fsys {
+			let fsys = file.fsysData
+			let msgs = fsys.decompressedDataForFilesWithFiletype(type: .msg)
+			for msg in msgs {
+				msg.file = .nameAndFolder(msg.file.fileName, .StringTables)
+				if !msg.file.exists {
+					msg.save()
+				}
+			}
 		}
 		
 	}
@@ -1105,9 +1122,11 @@ class XGISO: NSObject {
 		ISO.extractMenuFSYS()
 		printg("extracting: common")
 		ISO.extractCommon()
-		printg("extracting: decks")
-		ISO.extractDecks()
-		printg("extracted all files.")
+		if game == .XD {
+			printg("extracting: decks")
+			ISO.extractDecks()
+		}
+		printg("extracted main files.")
 	}
 	
 }

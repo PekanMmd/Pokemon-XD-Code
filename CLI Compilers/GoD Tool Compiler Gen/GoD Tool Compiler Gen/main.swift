@@ -151,10 +151,12 @@ for file in GoDSources {
 osxCompiler += "\necho \"Copying Colosseum Tool Assets. This may take a while...\"\n"
 + "mkdir " + ColoAssetsSubFolder + "\n"
 + "mkdir " + ColoAssetsFolder + "\n"
++ "mkdir " + ColoWiimmsAssetsFolder + "\n"
 
-windowsCompiler += "\necho \"Copying GoD Tool Assets. This may take a while...\"\n"
+windowsCompiler += "\necho \"Copying Colosseum Tool Assets. This may take a while...\"\n"
 + "mkdir " + ColoAssetsSubFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
 + "mkdir " + ColoAssetsFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
++ "mkdir " + ColoWiimmsAssetsFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
 
 for asset in ColoAssets {
 	osxCompiler += "cp ../\(asset.path.replacingOccurrences(of: " ", with: "\\ ")) \(ColoAssetsFolder)/\(asset.filename.replacingOccurrences(of: " ", with: "\\ "))\n"

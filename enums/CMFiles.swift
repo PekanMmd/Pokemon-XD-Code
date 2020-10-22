@@ -144,12 +144,12 @@ indirect enum XGFiles {
 		default: break
 		}
 		
-		let requiredFiles : [XGFiles] = [.common_rel, .dol, .pocket_menu, .fsys("people_archive")]
+		let requiredFiles : [XGFiles] = [.common_rel, .dol, .pocket_menu, .msg("pocket_menu"), .fsys("people_archive")]
 		if requiredFiles.contains(where: { (f) -> Bool in
 			f == self
 		}) {
 			if !self.exists {
-				XGISO.extractAllFiles()
+				XGISO.extractMainFiles()
 			}
 		}
 		

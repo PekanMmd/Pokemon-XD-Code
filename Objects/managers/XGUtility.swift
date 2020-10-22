@@ -126,24 +126,25 @@ class XGUtility {
 							}
 						}
 
-						#if ENV_OSX
 						if file.fileType == .gtx || file.fileType == .atx {
-							for image in fileToImport.folder.files where XGFileTypes.imageFormats.contains(image.fileType) {
-								if image.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-									if file.fileName.contains(".gsw.") {
-										// preserves the image format so can easily be imported into gsw
-										file.texture.importImage(file: image)
-									} else {
-										// automatically chooses a good format for the new image
-										let imageData = image.image
-										let textureData = GoDTextureImporter.getTextureData(image: imageData)
-										textureData.file = file
-										textureData.save()
+							for imageFile in fileToImport.folder.files where XGFileTypes.imageFormats.contains(imageFile.fileType) {
+								if imageFile.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
+									if let image = XGImage.loadImageData(fromFile: imageFile) {
+										let texture: GoDTexture
+										if file.fileName.contains(".gsw.") {
+											// preserves the image format so can easily be imported into gsw
+											texture = image.getTexture(format: file.texture.format)
+
+										} else {
+											// automatically chooses a good format for the new image
+											texture = image.texture
+										}
+										texture.file = file
+										texture.save()
 									}
 								}
 							}
 						}
-						#endif
 					}
 
 					// encode gsws after all gtxs have been encoded
@@ -253,7 +254,7 @@ class XGUtility {
 		printg("importing tpl files...")
 		for file in files {
 			let source = file.path.escapedPath
-			var dest = XGFolders.Textures.path.escapedPath + "/" + file.fileName
+			var dest = (XGFolders.Textures.path + "/" + file.fileName).escapedPath
 			dest = dest.removeFileExtensions() + ".tpl"
 
 			let imageFormatID: Int
@@ -276,17 +277,20 @@ class XGUtility {
 		}
 	}
 
-	#if ENV_OSX
 	class func importTextures() {
 		// into the .gtx file, not into ISO
-		
-		for image in XGFolders.Import.files where [XGFileTypes.png, .jpeg, .bmp].contains(image.fileType) && !image.fileName.contains(".tpl") {
+		printg("importing textures...")
+		for imageFile in XGFolders.Import.files where XGFileTypes.imageFormats.contains(imageFile.fileType) && !imageFile.fileName.contains(".tpl") {
 			
-			let textureFilename = image.fileName.removeFileExtensions() + XGFileTypes.gtx.fileExtension
-			let animTextureFilename = image.fileName.removeFileExtensions() + XGFileTypes.atx.fileExtension
+			let textureFilename = imageFile.fileName.removeFileExtensions() + XGFileTypes.gtx.fileExtension
+			let animTextureFilename = imageFile.fileName.removeFileExtensions() + XGFileTypes.atx.fileExtension
+
+			guard let image = XGImage.loadImageData(fromFile: imageFile) else {
+				continue
+			}
 			
-			let tFile = XGFiles.nameAndFolder(textureFilename, .TextureImporter)
-			let aFile = XGFiles.nameAndFolder(animTextureFilename, .TextureImporter)
+			let tFile = XGFiles.nameAndFolder(textureFilename, .Textures)
+			let aFile = XGFiles.nameAndFolder(animTextureFilename, .Textures)
 
 			if tFile.exists || aFile.exists {
 				if tFile.exists {
@@ -296,25 +300,10 @@ class XGUtility {
 					GoDTextureImporter.replaceTextureData(texture: aFile.texture, withImage: image, save: true)
 				}
 			} else {
-				let textures = image.image.textures
-				for texture in textures {
-					let filename = tFile.fileName.removeFileExtensions() + "_\(texture.format.name)" + XGFileTypes.gtx.fileExtension
-					texture.file = .nameAndFolder(filename, tFile.folder)
-					texture.save()
-				}
-			}
-		}
-		
-		XGColour.colourThreshold = 0
-		for file in XGFolders.Textures.files where file.fileExtension == ".png" && !file.fileName.contains(".tpl") {
-			var imageFile : XGFiles!
-			for image in XGFolders.Import.files {
-				if image.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-					imageFile = image
-				}
-			}
-			if imageFile != nil {
-				file.texture.importImage(file: imageFile!)
+				let texture = image.texture
+				let filename = tFile.fileName.removeFileExtensions() + XGFileTypes.gtx.fileExtension
+				texture.file = .nameAndFolder(filename, tFile.folder)
+				texture.save()
 			}
 		}
 
@@ -322,11 +311,6 @@ class XGUtility {
 			file.fileName.contains(".tpl.png")
 		}))
 	}
-	#else
-	class func importTextures() {
-		printg("This tool cannot import textures on this platform")
-	}
-	#endif
 
 	class func exportTPLFiles(_ files: [XGFiles]) {
 		if files.isEmpty { return }
@@ -334,7 +318,7 @@ class XGUtility {
 		printg("exporting tpl files...")
 		for file in files {
 			let source = file.path.escapedPath
-			let dest = XGFolders.Export.path.escapedPath + "/" + file.fileName + ".png"
+			let dest = (XGFolders.Export.path + "/" + file.fileName + ".png").escapedPath
 
 			let overwrite = "-o"
 
@@ -346,22 +330,17 @@ class XGUtility {
 		}
 	}
 
-	#if ENV_OSX
 	class func exportTextures() {
 		// from .gtx file, not from ISO
-		for file in XGFolders.Textures.files where [".gtx", ".atx"].contains(file.fileExtension)  {
+		printg("exporting textures...")
+		for file in XGFolders.Textures.files where [.gtx, .atx].contains(file.fileType)  {
 			let filename = file.fileName.removeFileExtensions() + ".png"
-			file.texture.saveImage(file: .nameAndFolder(filename, .Export))
+			file.texture.image.writePNGData(toFile: .nameAndFolder(filename, .Export))
 		}
 		exportTPLFiles(XGFolders.Textures.files.filter({ (file) -> Bool in
-			file.fileExtension == "tpl"
+			file.fileType == .tpl
 		}))
 	}
-	#else
-	class func exportTextures() {
-		printg("Exporting textures is not supported on this platform")
-	}
-	#endif
 	
 	class func searchForFsysForFile(file: XGFiles) {
 		let iso = ISO

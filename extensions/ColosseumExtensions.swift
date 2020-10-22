@@ -143,6 +143,10 @@ extension XGISO {
 }
 
 extension XGUtility {
+
+	class func extractMainFiles() {
+		XGISO.extractMainFiles()
+	}
 	
 	class func extractAllFiles() {
 		XGISO.extractAllFiles()
@@ -281,6 +285,10 @@ extension XGUtility {
 
 	class func encodeISO() {
 		
+	}
+
+	class func decodeISO() {
+
 	}
 	
 }

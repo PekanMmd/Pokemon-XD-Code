@@ -34,9 +34,10 @@ enum XGFileTypes : Int, Codable {
 	// all arbitrary values
 	case fsys = 0xf0 // don't know if it has it's own identifier
 	
-	case json = 0xf4
-	case txt  = 0xf5
-	case lzss = 0xf6
+	case json = 0xf3
+	case txt  = 0xf4
+	case lzss = 0xf5
+	case tpl  = 0xf6
 	case bmp  = 0xf7
 	case jpeg = 0xf8
 	case png  = 0xf9
@@ -83,14 +84,19 @@ enum XGFileTypes : Int, Codable {
 		case .bmp : return ".bmp"
 		case .jpeg: return ".jpg"
 		case .tex0: return ".tex0"
+		case .tpl : return ".tpl"
 		case .lzss: return ".lzss"
 		case .txt : return ".txt"
 		case .json: return ".json"
 		case .unknown: return ".bin"
 		}
 	}
-	
-	static let imageFormats : [XGFileTypes] = [.png, .jpeg, .bmp, .tex0]
+
+	#if ENV_OSX
+	static let imageFormats : [XGFileTypes] = [.png, .jpeg, .bmp]
+	#else
+	static let imageFormats : [XGFileTypes] = [.png]
+	#endif
 }
 
 

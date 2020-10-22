@@ -62,12 +62,20 @@ extension XGResources {
 }
 
 extension NSImage {
+	var width: Int {
+		return Int(size.width)
+	}
+
+	var height: Int {
+		return Int(size.height)
+	}
+	
 	var bitmap : [XGColour] {
 		let imageWidth  = Int(self.size.width)
 		let imageHeight = Int(self.size.height)
 
 		let numberOfPixels = imageWidth * imageHeight
-		var pixels = [UInt32](repeating: 0, count: numberOfPixels)
+		var pixelData = [UInt32](repeating: 0, count: numberOfPixels)
 
 		let bytesPerPixel = 4
 		let bytesPerRow = bytesPerPixel * imageWidth
@@ -77,7 +85,7 @@ extension NSImage {
 		let colourSpace = CGColorSpaceCreateDeviceRGB()
 		let info = CGBitmapInfo.byteOrder32Big.union(CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)).rawValue
 
-		let context = CGContext(data: &pixels, width: imageWidth, height: imageHeight, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colourSpace, bitmapInfo: info)!
+		let context = CGContext(data: &pixelData, width: imageWidth, height: imageHeight, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colourSpace, bitmapInfo: info)!
 
 		let graphicsContext = NSGraphicsContext(cgContext: context, flipped: false)
 
@@ -85,7 +93,7 @@ extension NSImage {
 
 		context.draw(imageAsCGRef, in: rect)
 
-		return pixels.map({ (raw) -> XGColour in
+		return pixelData.map({ (raw) -> XGColour in
 			var currentColour = raw
 
 			let red		  = Int(currentColour & 0xFF)
@@ -101,36 +109,6 @@ extension NSImage {
 
 			return XGColour(red: red, green: green, blue: blue, alpha: alpha)
 		})
-	}
-
-	var colourCount : Int {
-		return self.colourCount(threshold: 0)
-	}
-
-	func colourCount(threshold: Int, limit: Int = GoDTextureFormats.C8.paletteCount + 1) -> Int {
-		XGColour.colourThreshold = threshold
-		let palette = XGTexturePalette()
-		for colour in self.bitmap {
-			if palette.indexForColour(colour) == nil {
-				palette.append(colour)
-				if palette.length > limit {
-					break
-				}
-			}
-		}
-		return palette.length
-	}
-
-	var texture : GoDTexture {
-		return GoDTextureImporter.getTextureData(image: self)
-	}
-
-	func getTexture(format: GoDTextureFormats) -> GoDTexture {
-		return GoDTextureImporter.getTextureData(image: self, format: format)
-	}
-
-	var textures : [GoDTexture] {
-		return GoDTextureImporter.getMultiFormatTextureData(image: self)
 	}
 }
 

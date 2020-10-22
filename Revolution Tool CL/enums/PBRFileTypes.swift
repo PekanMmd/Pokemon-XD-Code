@@ -109,7 +109,11 @@ enum XGFileTypes : Int {
 		}
 	}
 
+	#if ENV_OSX
 	static let imageFormats : [XGFileTypes] = [.png, .jpeg, .bmp]
+	#else
+	static let imageFormats : [XGFileTypes] = [.png]
+	#endif
 }
 
 

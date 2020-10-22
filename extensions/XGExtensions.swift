@@ -657,7 +657,6 @@ extension String {
 		}
 		
 	}
-	
 }
 
 extension Encodable {
