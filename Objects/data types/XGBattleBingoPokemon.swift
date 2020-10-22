@@ -19,14 +19,14 @@ let kBattleBingoPokemonMoveOffset		= 0x06
 
 class XGBattleBingoPokemon: NSObject, Codable {
 	
-	@objc var typeOnCard	= 0x0
+	var typeOnCard	= 0x0
 	var species				= XGPokemon.pokemon(0)
-	@objc var ability		= 0x0
+	var ability		= 0x0
 	var nature		= XGNatures.hardy
 	var gender		= XGGenders.male
 	var move		= XGMoves.move(0)
 	
-	@objc var startOffset : Int = 0
+	var startOffset : Int = 0
 	
 	override var description : String {
 		get {
@@ -38,7 +38,7 @@ class XGBattleBingoPokemon: NSObject, Codable {
 		super.init()
 	}
 	
-	@objc init(startOffset: Int) {
+	init(startOffset: Int) {
 		super.init()
 		
 		self.startOffset = startOffset
@@ -62,7 +62,7 @@ class XGBattleBingoPokemon: NSObject, Codable {
 		
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		guard self.startOffset > 0 else {
 			return

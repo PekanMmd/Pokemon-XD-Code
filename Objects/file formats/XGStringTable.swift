@@ -42,24 +42,24 @@ enum XGLanguages : Int, Codable {
 class XGStringTable: NSObject {
 	
 	var file = XGFiles.nameAndFolder("", .Documents)
-	@objc var startOffset = 0x0 // where in the file the string table is located. used for files like common.rel which have more than just the table
-	@objc var stringTable = XGMutableData()
-	@objc var stringOffsets = [Int : Int]()
+	var startOffset = 0x0 // where in the file the string table is located. used for files like common.rel which have more than just the table
+	var stringTable = XGMutableData()
+	var stringOffsets = [Int : Int]()
 	var stringIDs = [Int]()
 	
-	@objc var numberOfEntries : Int {
+	var numberOfEntries : Int {
 		get {
 			return stringTable.get2BytesAtOffset(kNumberOfStringsOffset)
 		}
 	}
 	
-	@objc var fileSize : Int {
+	var fileSize : Int {
 		get {
 			return self.stringTable.length
 		}
 	}
 	
-	@objc var extraCharacters : Int {
+	var extraCharacters : Int {
 		
 		get {
 			var currentChar = 0x00
@@ -82,7 +82,7 @@ class XGStringTable: NSObject {
 		
 	}
 	
-	@objc class func common_rel() -> XGStringTable {
+	class func common_rel() -> XGStringTable {
 		if game == .XD {
 			return XGStringTable(file: .common_rel, startOffset: CommonIndexes.USStringTable.startOffset + 0x68, fileSize: 0x0DC70)
 		} else {
@@ -95,7 +95,7 @@ class XGStringTable: NSObject {
 		
 	}
 	
-	@objc class func common_rel2() -> XGStringTable { // second string table in common_rel in colosseum
+	class func common_rel2() -> XGStringTable { // second string table in common_rel in colosseum
 		if game == .XD {
 			// same as common_rel1
 			return XGStringTable(file: .common_rel, startOffset: CommonIndexes.USStringTable.startOffset + 0x68, fileSize: 0x0DC70)
@@ -110,7 +110,7 @@ class XGStringTable: NSObject {
 		
 	}
 	
-	@objc class func tableres2() -> XGStringTable? {
+	class func tableres2() -> XGStringTable? {
 		
 		if game == .XD && !isDemo {
 			return XGStringTable(file: .tableres2, startOffset: 0x048F88, fileSize: 0x16E84)
@@ -120,7 +120,7 @@ class XGStringTable: NSObject {
 		
 	}
 	
-	@objc class func dol() -> XGStringTable {
+	class func dol() -> XGStringTable {
 		
 		if game == .XD {
 			return  XGStringTable(file: .dol, startOffset: 0x374FC0, fileSize: 0x178BC)
@@ -137,7 +137,7 @@ class XGStringTable: NSObject {
 		
 	}
 	
-	@objc class func dol2() -> XGStringTable {
+	class func dol2() -> XGStringTable {
 		return  XGStringTable(file: .dol, startOffset: 0x38c87c, fileSize: 0x364)
 	}
 	
@@ -149,13 +149,13 @@ class XGStringTable: NSObject {
 		self.startOffset = startOffset
 		self.stringTable = XGMutableData(byteStream: file.data!.charStream, file: file)
 		
-		stringTable.deleteBytesInRange(NSMakeRange(0, startOffset))
-		stringTable.deleteBytesInRange(NSMakeRange(fileSize, stringTable.length - fileSize))
+		stringTable.deleteBytes(start: 0, count: startOffset)
+		stringTable.deleteBytes(start: fileSize, count: stringTable.length - fileSize)
 		
 		getOffsets()
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		if self.startOffset == 0 {
 			stringTable.save()
@@ -221,7 +221,7 @@ class XGStringTable: NSObject {
 		}
 	}
 	
-	@objc func getOffsets() {
+	func getOffsets() {
 		
 		var currentOffset = kEndOfHeader
 		
@@ -237,7 +237,7 @@ class XGStringTable: NSObject {
 		
 	}
 	
-	@objc func updateOffsets() {
+	func updateOffsets() {
 		
 		var currentOffset = kEndOfHeader
 		
@@ -257,7 +257,7 @@ class XGStringTable: NSObject {
 	
 	
 	
-	@objc func decreaseOffsetsAfter(_ offset: Int, by bytes: Int) {
+	func decreaseOffsetsAfter(_ offset: Int, by bytes: Int) {
 
 		for sid in self.stringIDs {
 			if let off = stringOffsets[sid] {
@@ -269,7 +269,7 @@ class XGStringTable: NSObject {
 
 	}
 
-	@objc func increaseOffsetsAfter(_ offset: Int, by bytes: Int) {
+	func increaseOffsetsAfter(_ offset: Int, by bytes: Int) {
 
 		for sid in self.stringIDs {
 			if let off = stringOffsets[sid] {
@@ -285,7 +285,7 @@ class XGStringTable: NSObject {
 		return self.stringOffsets[stringID]
 	}
 	
-	@objc func endOffsetForStringId(_ stringID : Int) -> Int {
+	func endOffsetForStringId(_ stringID : Int) -> Int {
 		
 		let startOff = offsetForStringID(stringID)!
 		let text = stringWithID(stringID)!
@@ -294,7 +294,7 @@ class XGStringTable: NSObject {
 		
 	}
 	
-	@objc func getStringAtOffset(_ offset: Int) -> XGString {
+	func getStringAtOffset(_ offset: Int) -> XGString {
 		
 		var currentOffset = offset
 		
@@ -342,7 +342,7 @@ class XGStringTable: NSObject {
 		
 	}
 	
-	@objc func stringWithID(_ stringID: Int) -> XGString? {
+	func stringWithID(_ stringID: Int) -> XGString? {
 		
 		let offset = offsetForStringID(stringID)
 		
@@ -361,18 +361,18 @@ class XGStringTable: NSObject {
 		return nil
 	}
 	
-	@objc func stringSafelyWithID(_ stringID: Int) -> XGString {
+	func stringSafelyWithID(_ stringID: Int) -> XGString {
 		
 		let string = stringWithID(stringID)
 		
 		return string ?? XGString(string: "-", file: nil, sid: 0)
 	}
 	
-	@objc func containsStringWithId(_ stringID: Int) -> Bool {
+	func containsStringWithId(_ stringID: Int) -> Bool {
 			return stringIDs.contains(stringID)
 	}
 	
-	@objc func numberOfFreeMSGIDsFrom(_ stringID: Int) -> Int {
+	func numberOfFreeMSGIDsFrom(_ stringID: Int) -> Int {
 		var free = 0
 		for i in 0 ..< 10 { // just 10 to make it quick
 			if self.containsStringWithId(stringID + i) {
@@ -383,7 +383,7 @@ class XGStringTable: NSObject {
 		return free
 	}
 	
-	@objc func allStrings() -> [XGString] {
+	func allStrings() -> [XGString] {
 		
 		var strings = [XGString]()
 		
@@ -396,7 +396,7 @@ class XGStringTable: NSObject {
 		return strings
 	}
 	
-	@objc func purge() {
+	func purge() {
 		
 		let strings = self.allStrings()
 		for str in strings {
@@ -410,7 +410,7 @@ class XGStringTable: NSObject {
 		
 	}
 	
-	@objc func printAllStrings() {
+	func printAllStrings() {
 		for string in self.allStrings() {
 			print(string.string,"\n")
 		}

@@ -92,6 +92,25 @@ extension Array where Element: Equatable {
 	
 }
 
+extension Data {
+	@discardableResult
+	func write(to file: XGFiles) -> Bool {
+		if !file.folder.exists {
+			file.folder.createDirectory()
+		}
+		do {
+			try self.write(to: URL(fileURLWithPath: file.path), options: [.atomic])
+		} catch {
+			return false
+		}
+		return true
+	}
+
+	var rawBytes: [UInt8] {
+		return self.map { $0 }
+	}
+}
+
 extension Array where Element == Bool {
 	// least significant bit first
 	
@@ -127,9 +146,47 @@ extension Array where Element == String {
 	
 }
 
+extension Array where Element == UInt8 {
+
+	var uint16: UInt16 {
+		guard count >= 2 else {
+			return 0
+		}
+		return (UInt16(self[count - 2]) << 8) + UInt16(self[count - 1])
+	}
+
+	var int16: Int {
+		guard count >= 2 else {
+			return 0
+		}
+		return ((UInt32(self[count - 2]) << 8) + UInt32(self[count - 1])).int16
+	}
+
+	var uint32: UInt32 {
+		guard count >= 4 else {
+			return 0
+		}
+		return (UInt32(self[count - 4]) << 24)
+			 + (UInt32(self[count - 3]) << 16)
+			 + (UInt32(self[count - 2]) << 8)
+			 + UInt32(self[count - 1])
+	}
+
+	var int32: Int {
+		guard count >= 4 else {
+			return 0
+		}
+		return ((UInt32(self[count - 4]) << 24)
+			 + (UInt32(self[count - 3]) << 16)
+			 + (UInt32(self[count - 2]) << 8)
+					+ UInt32(self[count - 1])).int32
+	}
+
+}
+
 
 extension NSObject {
-	@objc func println() {
+	func println() {
 		printg(self)
 	}
 }
@@ -671,7 +728,7 @@ extension Encodable {
 	func writeJSON(to file: XGFiles) {
 		do {
 			let data = try JSONRepresentation()
-			if XGUtility.saveData(data, toFile: file) {
+			if data.write(to: file) {
 				return
 			}
 		} catch { }

@@ -134,7 +134,7 @@ extension XGImage {
 
 	func writePNGData(toFile file: XGFiles) {
 		#if ENV_OSX
-		XGUtility.saveData(pngData, toFile: file)
+		pngData.write(to: file)
 		#else
 		let tex0File = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.tex0.fileExtension, file.folder)
 		let data = tex0Data
@@ -197,7 +197,7 @@ extension XGImage {
 	}
 
 	init(nsImage image: NSImage) {
-		self.init(width: image.width, height: image.height, pixelData: image.bitmap)
+		self.init(width: image.width, height: image.height, pixels: image.bitmap)
 	}
 
 	private func data(fileType: XGFileTypes) -> Data {
@@ -213,7 +213,7 @@ extension XGImage {
 			let x = index % width
 			let y = index / width
 
-			let colour = pixelData[index]
+			let colour = pixels[index]
 			bitmap.setColor(colour.NSColour, atX: x, y: y)
 		}
 

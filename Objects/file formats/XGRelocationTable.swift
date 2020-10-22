@@ -11,7 +11,7 @@ import Foundation
 let common = XGCommon()
 class XGCommon : XGRelocationTable {
 	
-	@objc init() {
+	init() {
 		super.init(file: XGFiles.common_rel)
 		self.dataStart = Int(self.data!.getWordAtOffset(kCommonRELDataStartOffsetLocation))
 	}
@@ -28,7 +28,7 @@ class XGCommon : XGRelocationTable {
 
 let pocket = XGPocket()
 class XGPocket : XGRelocationTable {
-	@objc init() {
+	init() {
 		super.init(file: XGFiles.pocket_menu)
 	}
 }
@@ -46,11 +46,11 @@ let kRELPointerDataPointer2Offset = 0xc
 class XGRelocationTable: NSObject {
 	
 	var file : XGFiles!
-	@objc var data : XGMutableData!
+	var data : XGMutableData!
 	
-	@objc var dataStart = 0
-	@objc var pointersStart = 0
-	@objc var firstPointer = 0
+	var dataStart = 0
+	var pointersStart = 0
+	var firstPointer = 0
 	var numberOfPointers = 0
 	
 	init(file: XGFiles) {
@@ -83,13 +83,13 @@ class XGRelocationTable: NSObject {
 		
 	}
 	
-	@objc private var pointers = [Int : Int]()
+	private var pointers = [Int : Int]()
 	
-	@objc func getPointerOffset(index: Int) -> Int {
+	func getPointerOffset(index: Int) -> Int {
 		return firstPointer + (index * kRELSizeOfPointer) + kRELPointerDataPointer1Offset
 	}
 	
-	@objc func getPointer(index: Int) -> Int {
+	func getPointer(index: Int) -> Int {
 		
 		if pointers[index] == nil {
 			let offset = firstPointer + (index * kRELSizeOfPointer) + kRELPointerDataPointer1Offset
@@ -99,18 +99,18 @@ class XGRelocationTable: NSObject {
 		return pointers[index] ?? 0
 	}
 	
-	@objc func getValueAtPointer(index: Int) -> Int {
+	func getValueAtPointer(index: Int) -> Int {
 		let startOffset = getPointer(index: index)
 		return Int(data.getWordAtOffset(startOffset))
 	}
 	
-	@objc func setValueAtPointer(index: Int, newValue value: Int) {
+	func setValueAtPointer(index: Int, newValue value: Int) {
 		let startOffset = getPointer(index: index)
 		data.replaceWordAtOffset(startOffset, withBytes: value.unsigned)
 		data.save()
 	}
 	
-	@objc func replacePointer(index: Int, newAbsoluteOffset newOffset: Int) {
+	func replacePointer(index: Int, newAbsoluteOffset newOffset: Int) {
 		let offset1 = firstPointer + (index * kRELSizeOfPointer) + kRELPointerDataPointer1Offset
 		let offset2 = firstPointer + (index * kRELSizeOfPointer) + kRELPointerDataPointer2Offset
 		

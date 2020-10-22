@@ -18,17 +18,17 @@ let kFirstBoundBoxVertexOffset = game == .XD ? 0x8 : 0x10
 
 final class XGCharacterModel : NSObject, Codable {
 
-	@objc var index = 0
-	@objc var identifier : UInt32 = 0
-	@objc var name = ""
-	@objc var fsysIndex = -1
-	@objc var fileSize = -1
+	var index = 0
+	var identifier : UInt32 = 0
+	var name = ""
+	var fsysIndex = -1
+	var fileSize = -1
 	
 	var boundBox = [Float]()
 	
-	@objc var startOffset = 0
+	var startOffset = 0
 	
-	@objc var archive : XGFsys? {
+	var archive : XGFsys? {
 		if game == .XD {
 			return XGFiles.fsys("people_archive").fsysData
 		}
@@ -39,15 +39,15 @@ final class XGCharacterModel : NSObject, Codable {
 		return nil
 	}
 	
-	@objc var rawData : [Int] {
+	var rawData : [Int] {
 		return XGFiles.common_rel.data!.getByteStreamFromOffset(self.startOffset, length: kSizeOfCharacterModel)
 	}
 	
-	@objc var modelData : XGMutableData {
+	var modelData : XGMutableData {
 		return archive!.decompressedDataForFileWithIndex(index: fsysIndex)!
 	}
 	
-	@objc init(index: Int, loadArchive: Bool = true) {
+	init(index: Int, loadArchive: Bool = true) {
 		super.init()
 		
 		let rel = XGFiles.common_rel.data!
@@ -90,7 +90,7 @@ final class XGCharacterModel : NSObject, Codable {
 		rel.save()
 	}
 	
-	@objc class func modelWithIdentifier(id: Int) -> XGCharacterModel {
+	class func modelWithIdentifier(id: Int) -> XGCharacterModel {
 		for i in 0 ..< CommonIndexes.NumberOfCharacterModels.value {
 			let model = XGCharacterModel(index: i, loadArchive: false)
 			if model.identifier == id {

@@ -29,17 +29,17 @@ class XGISO: NSObject {
 	
 	fileprivate var fileDataOffsets = [String : Int]() // in toc
 	
-	@objc var allFileNames = [String]()
-	@objc var filesOrdered = [String]()
+	var allFileNames = [String]()
+	var filesOrdered = [String]()
 	
-	@objc var data : XGMutableData {
+	var data : XGMutableData {
 		if let d = XGFiles.iso.data {
 			return d
 		}
 		return XGMutableData(byteStream: [Int](), file: .iso)
 	}
 	
-	@objc var TOCFirstStringOffset : Int {
+	var TOCFirstStringOffset : Int {
 		return tocData.get4BytesAtOffset(kTOCNumberEntriesOffset) * kTOCEntrySize
 	}
 	
@@ -115,7 +115,7 @@ class XGISO: NSObject {
 		printg("FST was read.")
 	}
 
-	@objc func importAllFiles() {
+	func importAllFiles() {
 		var files = XGFolders.FSYS.files
 		files += XGFolders.AutoFSYS.files
 		files += XGFolders.MenuFSYS.files
@@ -126,7 +126,7 @@ class XGISO: NSObject {
 		importFiles(files)
 	}
 	
-	@objc func importDol() {
+	func importDol() {
 		importFiles([.dol])
 	}
 
@@ -203,7 +203,7 @@ class XGISO: NSObject {
 		return fileLocations[fileName]
 	}
 	
-	@objc func printFileLocations() {
+	func printFileLocations() {
 		for k in fileLocations.keys.sorted() {
 			printg(k,"\t:\t\(fileLocations[k]!)")
 		}
@@ -213,7 +213,7 @@ class XGISO: NSObject {
 		return fileSizes[fileName]
 	}
 	
-	@objc func dataForFile(filename: String) -> XGMutableData? {
+	func dataForFile(filename: String) -> XGMutableData? {
 		
 		let start = self.locationForFile(filename)
 		let size  = self.sizeForFile(filename)
@@ -237,7 +237,7 @@ class XGISO: NSObject {
 		
 	}
 	
-	@objc func replaceDataForFile(filename: String, withData data: XGMutableData, saveWhenDone save: Bool) {
+	func replaceDataForFile(filename: String, withData data: XGMutableData, saveWhenDone save: Bool) {
 		
 		let start   = self.locationForFile(filename)
 		let oldsize = self.sizeForFile(filename)
@@ -391,7 +391,7 @@ class XGISO: NSObject {
 		}
 	}
 	
-	@objc func shiftAndReplaceFile(name: String, withData newData: XGMutableData) {
+	func shiftAndReplaceFile(name: String, withData newData: XGMutableData) {
 		
 		let oldSize = sizeForFile(name)!
 		let shift = newData.length > oldSize
@@ -439,7 +439,7 @@ class XGISO: NSObject {
 	}
 	
 	
-	@objc func eraseDataForFile(name: String) {
+	func eraseDataForFile(name: String) {
 		
 		let start = self.locationForFile(name)
 		let size = self.sizeForFile(name)
@@ -452,11 +452,11 @@ class XGISO: NSObject {
 		eraseData(start: start!, length: size!)
 	}
 	
-	@objc private func eraseData(start: Int, length: Int) {
+	private func eraseData(start: Int, length: Int) {
 		self.data.nullBytes(start: start, length: length)
 	}
 	
-	@objc func deleteFile(name: String, save: Bool) {
+	func deleteFile(name: String, save: Bool) {
 		if name == "Game.toc" || name == "Start.dol" {
 			printg("\(name) cannot be deleted")
 			return
@@ -469,7 +469,7 @@ class XGISO: NSObject {
 		printg("deleted iso file:", name)
 	}
 	
-	@objc func deleteFileAndPreserve(name: String, save: Bool) {
+	func deleteFileAndPreserve(name: String, save: Bool) {
 		// replaces file with a dummy fsys container
 		if name == XGFiles.toc.fileName || name == XGFiles.dol.fileName {
 			printg("\(name) cannot be deleted")
@@ -505,7 +505,7 @@ class XGISO: NSObject {
 		
 	}
 	
-	@objc private func setSize(size: Int, forFile name: String) {
+	private func setSize(size: Int, forFile name: String) {
 		guard name != "Game.toc" else {
 			data.replace4BytesAtOffset(kTOCFileSizeLocation, withBytes: size)
 			data.replace4BytesAtOffset(kTOCMaxFileSizeLocation, withBytes: size)
@@ -521,7 +521,7 @@ class XGISO: NSObject {
 		fileSizes[name] = size
 	}
 	
-	@objc private func setStartOffset(offset: Int, forFile name: String, saveToc: Bool = true) {
+	private func setStartOffset(offset: Int, forFile name: String, saveToc: Bool = true) {
 		guard name != "Game.toc" else {
 			data.replace4BytesAtOffset(kTOCStartOffsetLocation, withBytes: offset)
 			fileLocations[name] = offset
@@ -550,7 +550,7 @@ class XGISO: NSObject {
 		return orderedIndexForFile(name: "Game.toc") < index
 	}
 	
-	@objc private func orderedIndexForFile(name: String) -> Int {
+	private func orderedIndexForFile(name: String) -> Int {
 		for i in 0 ..< filesOrdered.count {
 			if filesOrdered[i] == name {
 				return i
@@ -559,7 +559,7 @@ class XGISO: NSObject {
 		return -1
 	}
 	
-	@objc private func shiftUpFile(name: String) {
+	private func shiftUpFile(name: String) {
 		// used to push a file closer to the file above it and create more space for other files
 		var previousEnd = 0x0
 		let index = orderedIndexForFile(name: name)
@@ -584,7 +584,7 @@ class XGISO: NSObject {
 		
 	}
 	
-	@objc private func shiftDownFile(name: String) {
+	private func shiftDownFile(name: String) {
 		// used to push a file closer to the file below it and create more space for other files
 		let size  = sizeForFile(name)!
 		let index = orderedIndexForFile(name: name)
@@ -607,7 +607,7 @@ class XGISO: NSObject {
 		
 	}
 	
-	@objc private func shiftDownFile(name: String, byOffset by: Int) -> Bool {
+	private func shiftDownFile(name: String, byOffset by: Int) -> Bool {
 		// used to push a file closer to the file below it and create more space for other files
 		let size  = sizeForFile(name)!
 		let index = orderedIndexForFile(name: name)
@@ -633,7 +633,7 @@ class XGISO: NSObject {
 		return true
 	}
 	
-	@objc func moveFile(name: String, toOffset startOffset: Int) {
+	func moveFile(name: String, toOffset startOffset: Int) {
 		
 		if startOffset == locationForFile(name)! {
 			return
@@ -651,7 +651,7 @@ class XGISO: NSObject {
 		self.data.replaceBytesFromOffset(startOffset, withByteStream: bytes)
 	}
 	
-	@objc func shiftFileByDeletion(name: String, byOffset offset: Int) {
+	func shiftFileByDeletion(name: String, byOffset offset: Int) {
 		// shifts file by deleting empty bytes before/after and inserting empty bytes after/before the file
 		
 		if offset == 0 {
@@ -778,7 +778,7 @@ class XGISO: NSObject {
 		shiftAndReplaceFileEfficiently(file, save: save)
 	}
 	
-	@objc func save() {
+	func save() {
 		if settings.verbose {
 			printg("saving iso...")
 		}
@@ -789,7 +789,7 @@ class XGISO: NSObject {
 		}
 	}
 	
-	@objc class func extractTOC() -> XGMutableData {
+	class func extractTOC() -> XGMutableData {
 		let iso = XGFiles.iso.data!
 		
 		let TOCStart = Int(iso.getWordAtOffset(kTOCStartOffsetLocation))
@@ -838,7 +838,7 @@ class XGISO: NSObject {
 		return nil
 	}
 	
-	@objc func getPKXModelWithIdentifier(id: UInt32) -> XGFsys? {
+	func getPKXModelWithIdentifier(id: UInt32) -> XGFsys? {
 		for file in self.allFileNames where file.contains("pkx") {
 			let start = self.locationForFile(file)!
 			
@@ -853,7 +853,7 @@ class XGISO: NSObject {
 		return nil
 	}
 	
-	@objc func getFSYSForIdentifier(id: UInt32) -> XGFsys? {
+	func getFSYSForIdentifier(id: UInt32) -> XGFsys? {
 		for file in self.allFileNames where file.contains(".fsys") {
 			let start = self.locationForFile(file)!
 			let entries = self.data.get4BytesAtOffset(start + kNumberOfEntriesOffset)
@@ -870,7 +870,7 @@ class XGISO: NSObject {
 		return nil
 	}
 	
-	@objc func extractAutoFSYS() {
+	func extractAutoFSYS() {
 		
 		if region != .EU { // errrr... why did I write this?! leaving in for now just in case.
 			for file in ISO.allFileNames where XGMaps(rawValue: file.substring(from: 0, to: 2)) != nil {
@@ -890,7 +890,7 @@ class XGISO: NSObject {
 		}
 	}
 	
-	@objc func extractMenuFSYS() {
+	func extractMenuFSYS() {
 		let menus = self.allFileNames.filter { (s) -> Bool in
 			return s.contains("menu") && s.contains(".fsys") && !["ex_","Script_t","test","TEST","carde", "debug", "DNA", "keydisc","_fr.","_ge.","_it.", "_sp."].contains(where: { (str) -> Bool in
 				return s.contains(str)
@@ -913,7 +913,7 @@ class XGISO: NSObject {
 		}
 	}
 	
-	@objc func extractFSYS() {
+	func extractFSYS() {
 		for file in self.fsysList {
 			let xgf = XGFiles.nameAndFolder(file, .FSYS)
 			if !xgf.exists {
@@ -930,7 +930,7 @@ class XGISO: NSObject {
 		}
 	}
 	
-	@objc func extractAllFSYS() {
+	func extractAllFSYS() {
 		if settings.verbose {
 			printg("extracting: AutoFSYS")
 		}
@@ -945,7 +945,7 @@ class XGISO: NSObject {
 		extractFSYS()
 	}
 	
-	@objc func extractCommon() {
+	func extractCommon() {
 		stringsLoaded = false
 		if settings.verbose {
 			printg("extracting: \(XGFiles.common_rel.fileName)")
@@ -1004,7 +1004,7 @@ class XGISO: NSObject {
 		
 	}
 	
-	@objc func extractAutoStringTables() {
+	func extractAutoStringTables() {
 		stringsLoaded = false
 		
 		if region != .EU { // umm... why did I write this? Will leave it for now just in case.
@@ -1026,12 +1026,12 @@ class XGISO: NSObject {
 		}
 	}
 	
-	@objc func extractStringTables() {
+	func extractStringTables() {
 		extractAutoStringTables()
 		extractSpecificStringTables()
 	}
 	
-	@objc func extractScripts() {
+	func extractScripts() {
 		for file in XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files where file.fileType == .fsys {
 			let scd = XGFiles.scd(file.fileName.removeFileExtensions())
 			if !scd.exists {
@@ -1048,7 +1048,7 @@ class XGISO: NSObject {
 		}
 	}
 	
-	@objc func extractRels() {
+	func extractRels() {
 		for file in XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files where file.fileType == .fsys {
 			let rel = XGFiles.rel(file.fileName.removeFileExtensions())
 			if !rel.exists {
@@ -1064,7 +1064,7 @@ class XGISO: NSObject {
 		}
 	}
 	
-	@objc func extractCols() {
+	func extractCols() {
 		for file in XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files where file.fileType == .fsys {
 			let col = XGFiles.ccd(file.fileName.removeFileExtensions())
 			if !col.exists {
@@ -1081,7 +1081,7 @@ class XGISO: NSObject {
 		}
 	}
 	
-	@objc func extractDOL() {
+	func extractDOL() {
 		stringsLoaded = false
 		if !XGFiles.dol.exists {
 			let dol = dataForFile(filename: XGFiles.dol.fileName)!
@@ -1090,7 +1090,7 @@ class XGISO: NSObject {
 		}
 	}
 	
-	 @objc class func extractAllFiles() {
+	 class func extractAllFiles() {
 		printg("extracting: Start.dol")
 		ISO.extractDOL()
 		printg("extracting: FSYS archives")

@@ -14,15 +14,15 @@ class XGString: NSObject, Codable {
 	private var initString = "" // just for debugging
 	
 	var table = XGFiles.nameAndFolder("", .Documents)
-	@objc var id	  = 0
+	var id	  = 0
 	
-	@objc var dataLength: Int {
+	var dataLength: Int {
 		get {
 			return self.byteStream.count
 		}
 	}
 	
-	@objc var stringLength: Int {
+	var stringLength: Int {
 		return chars.count
 	}
 	
@@ -30,7 +30,7 @@ class XGString: NSObject, Codable {
 		return self.unformattedString
 	}
 	
-	@objc var string : String {
+	var string : String {
 		get {
 			var str = ""
 			for char in chars {
@@ -54,13 +54,13 @@ class XGString: NSObject, Codable {
 		}
 	}
 	
-	@objc var stringPlusIDAndFile : String {
+	var stringPlusIDAndFile : String {
 		get {
 			return "ID : 0x" + String(format: "%x", id) + " " + "\(id)" + " \nFile: \(table.fileName)\n\(string)\n"
 		}
 	}
 	
-	@objc var byteStream : [UInt8] {
+	var byteStream : [UInt8] {
 		get {
 			var stream = [UInt8]()
 			for char in chars {
@@ -162,11 +162,11 @@ class XGString: NSObject, Codable {
 		self.chars = chars
 	}
 	
-	@objc @discardableResult func replace() -> Bool {
+	@discardableResult func replace() -> Bool {
 		return replace(increaseSize: true)
 	}
 	
-	@objc @discardableResult func replace(increaseSize: Bool) -> Bool {
+	@discardableResult func replace(increaseSize: Bool) -> Bool {
 		return replace(increaseSize: increaseSize, save: true)
 	}
 	
@@ -194,16 +194,16 @@ class XGString: NSObject, Codable {
 		return self.table.stringTable.replaceString(self, alert: false, save: save, increaseLength: increaseSize)
 	}
 	
-	@objc func containsSubstring(_ sub: String) -> Bool {
+	func containsSubstring(_ sub: String) -> Bool {
 		return self.string.contains(sub)
 	}
 	
-	@objc func replaceSubstring(_ sub: String, withString new: String) {
+	func replaceSubstring(_ sub: String, withString new: String) {
 		let str = self.string.replacingOccurrences(of: sub, with: new, options: [], range: nil)
 		_ = self.duplicateWithString(str).replace()
 	}
 	
-	@objc func duplicateWithString(_ str: String) -> XGString {
+	func duplicateWithString(_ str: String) -> XGString {
 		return XGString(string: str, file: self.table, sid: self.id)
 	}
 	

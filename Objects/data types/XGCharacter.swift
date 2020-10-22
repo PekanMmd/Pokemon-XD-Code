@@ -28,16 +28,16 @@ class XGCharacter : NSObject, Codable {
 	var gid = -1
 	var rid = -1
 	
-	@objc var model : XGCharacterModel!
+	var model : XGCharacterModel!
 	var movementType : XGCharacterMovements!
-	@objc var characterID = 0
+	var characterID = 0
 	
-	@objc var nameID : Int {
+	var nameID : Int {
 		let start = CommonIndexes.PeopleIDs.startOffset + (self.characterID * 8)
 		return XGFiles.common_rel.data!.getWordAtOffset(start + 4).int
 	}
 	
-	@objc var name : String {
+	var name : String {
 		return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID).string
 	}
 	
@@ -47,29 +47,29 @@ class XGCharacter : NSObject, Codable {
 		}
 	}
 	
-	@objc var flags = 0
+	var flags = 0
 	var isVisible = false
 	
-	@objc var xCoordinate : Float = 0
-	@objc var yCoordinate : Float = 0
-	@objc var zCoordinate : Float = 0
-	@objc var angle = 0
+	var xCoordinate : Float = 0
+	var yCoordinate : Float = 0
+	var zCoordinate : Float = 0
+	var angle = 0
 	
-	@objc var hasScript = false
-	@objc var scriptIndex = 0
-	@objc var hasPassiveScript = false
-	@objc var passiveScriptIndex = 0
-	@objc var scriptName = "-"
-	@objc var passiveScriptName = "-"
-	@objc var characterIndex = 0
-	@objc var startOffset = 0
+	var hasScript = false
+	var scriptIndex = 0
+	var hasPassiveScript = false
+	var passiveScriptIndex = 0
+	var scriptName = "-"
+	var passiveScriptName = "-"
+	var characterIndex = 0
+	var startOffset = 0
 	
 	// a few rel files have different formats and it's tough to tell in advance
 	// set this to false if anything looks suspicious so it won't be used and lead to crashes
 	var isValid = true
 	
 	var file : XGFiles!
-	@objc var rawData : [Int] {
+	var rawData : [Int] {
 		return file.data!.getByteStreamFromOffset(startOffset, length: kSizeOfCharacter)
 	}
 	
@@ -141,7 +141,7 @@ class XGCharacter : NSObject, Codable {
 		
 	}
 	
-	@objc func save() {
+	func save() {
 		if self.isValid, let data = file.data {
 			
 			data.replace2BytesAtOffset(startOffset + kModelOffset, withBytes: self.model.index)

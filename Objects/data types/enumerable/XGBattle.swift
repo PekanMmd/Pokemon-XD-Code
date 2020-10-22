@@ -39,23 +39,23 @@ let kBattlePlayer4ControlOffset = 0x3B
 
 final class XGBattle: NSObject, Codable {
 	
-	@objc var index = 0
-	@objc var startOffset = 0
+	var index = 0
+	var startOffset = 0
 	
 	var battleType : XGBattleTypes!
 	var battleStyle : XGBattleStyles!
-	@objc var battleField : XGBattleField!
+	var battleField : XGBattleField!
 	var trainersPerSide = 0
-	@objc var pokemonPerPlayer = 0
-	@objc var BGMusicID = 0
+	var pokemonPerPlayer = 0
+	var BGMusicID = 0
 	var round = XGColosseumRounds.none
 	var unknown = false
 	var unknown2 = 0
 	
 	var p1Deck : XGDecks!
-	@objc var p1TID = 0
+	var p1TID = 0
 	var p1Controller : XGTrainerController!
-	@objc var p1Trainer : XGTrainer? {
+	var p1Trainer : XGTrainer? {
 		if p1Deck == nil {
 			return nil
 		}
@@ -63,9 +63,9 @@ final class XGBattle: NSObject, Codable {
 	}
 	
 	var p2Deck : XGDecks!
-	@objc var p2TID = 0
+	var p2TID = 0
 	var p2Controller : XGTrainerController!
-	@objc var p2Trainer : XGTrainer? {
+	var p2Trainer : XGTrainer? {
 		if p2Deck == nil {
 			return nil
 		}
@@ -73,9 +73,9 @@ final class XGBattle: NSObject, Codable {
 	}
 	
 	var p3Deck : XGDecks!
-	@objc var p3TID = 0
+	var p3TID = 0
 	var p3Controller : XGTrainerController!
-	@objc var p3Trainer : XGTrainer? {
+	var p3Trainer : XGTrainer? {
 		if p3Deck == nil {
 			return nil
 		}
@@ -83,9 +83,9 @@ final class XGBattle: NSObject, Codable {
 	}
 	
 	var p4Deck : XGDecks!
-	@objc var p4TID = 0
+	var p4TID = 0
 	var p4Controller : XGTrainerController!
-	@objc var p4Trainer : XGTrainer? {
+	var p4Trainer : XGTrainer? {
 		if p4Deck == nil {
 			return nil
 		}
@@ -93,11 +93,11 @@ final class XGBattle: NSObject, Codable {
 	}
 	
 	
-	@objc var rawData : [Int] {
+	var rawData : [Int] {
 		return XGFiles.common_rel.data!.getByteStreamFromOffset(self.startOffset, length: kSizeOfBattleData)
 	}
 	
-	@objc var title : String {
+	var title : String {
 		
 		let p1t = p1Trainer
 		let p1 = p1t == nil ? (p1TID == 0x1388 ? "Player" : "Invalid") : p1t!.name.string
@@ -155,7 +155,7 @@ final class XGBattle: NSObject, Codable {
 		return desc
 	}
 	
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		self.index = index
@@ -208,7 +208,7 @@ final class XGBattle: NSObject, Codable {
 		
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		let data = XGFiles.common_rel.data!
 		
@@ -242,7 +242,7 @@ final class XGBattle: NSObject, Codable {
 		data.save()
 	}
 	
-	@objc func setToWildPokemon() {
+	func setToWildPokemon() {
 		
 		self.p2Deck = XGDecks.deckWithID(7)
 		self.p2TID = 7

@@ -42,7 +42,7 @@ let kJPbytes						= 0x4A50
 final class XGFsys : NSObject {
 	
 	var file : XGFiles!
-	@objc var data : XGMutableData!
+	var data : XGMutableData!
 	
 	init(file: XGFiles) {
 		super.init()
@@ -51,7 +51,7 @@ final class XGFsys : NSObject {
 		self.data = self.file.data
 	}
 	
-	@objc init(data: XGMutableData) {
+	init(data: XGMutableData) {
 		super.init()
 		
 		self.data = data
@@ -70,13 +70,13 @@ final class XGFsys : NSObject {
 		}
 	}
 	
-	@objc var fileName : String {
+	var fileName : String {
 		get {
 			return file.fileName
 		}
 	}
 	
-	@objc var path : String {
+	var path : String {
 		get {
 			return file.path
 		}
@@ -91,25 +91,25 @@ final class XGFsys : NSObject {
 	}
 	
 	// some fsys files have 2 filenames per entry with the second containing the file extension
-	@objc var usesFileExtensions : Bool {
+	var usesFileExtensions : Bool {
 		return self.data.getByteAtOffset(0x13) == 0x1
 	}
 	
-	@objc var numberOfEntries : Int {
+	var numberOfEntries : Int {
 		get {
 			return Int(data.getWordAtOffset(kNumberOfEntriesOffset))
 		}
 	}
 	
-	@objc func setNumberOfEntries(_ newEntries: Int) {
+	func setNumberOfEntries(_ newEntries: Int) {
 		self.data.replaceWordAtOffset(kNumberOfEntriesOffset, withBytes: UInt32(newEntries))
 	}
 	
-	@objc func setFilesize(_ newSize: Int) {
+	func setFilesize(_ newSize: Int) {
 		self.data.replaceWordAtOffset(kFSYSFileSizeOffset, withBytes: UInt32(newSize))
 	}
 	
-	@objc func getStringAtOffset(offset: Int) -> String {
+	func getStringAtOffset(offset: Int) -> String {
 		
 		var currentOffset = offset
 		
@@ -135,7 +135,7 @@ final class XGFsys : NSObject {
 		return string
 	}
 	
-	@objc func fileNameForFileWithIndex(index: Int) -> String {
+	func fileNameForFileWithIndex(index: Int) -> String {
 		let offset = Int(self.data.getWordAtOffset(startOffsetForFileDetails(index) + kFileDetailsFilenameOffset))
 		var name = getStringAtOffset(offset:offset)
 		if game == .PBR {
@@ -149,7 +149,7 @@ final class XGFsys : NSObject {
 		return name
 	}
 	
-	@objc func fullFileNameForFileWithIndex(index: Int) -> String {
+	func fullFileNameForFileWithIndex(index: Int) -> String {
 		if !self.usesFileExtensions {
 			return fileNameForFileWithIndex(index:index)
 		}
@@ -158,17 +158,17 @@ final class XGFsys : NSObject {
 		return getStringAtOffset(offset:offset)
 	}
 	
-	@objc var firstFileNameOffset : Int {
+	var firstFileNameOffset : Int {
 		get {
 			return Int(data.getWordAtOffset(kFirstFileNamePointerOffset))
 		}
 	}
 	
-	@objc func setFirstFilenameOffset(_ newOffset: Int) {
+	func setFirstFilenameOffset(_ newOffset: Int) {
 		self.data.replaceWordAtOffset(kFirstFileNamePointerOffset, withBytes: UInt32(newOffset))
 	}
 	
-	@objc var fileNames : [String] {
+	var fileNames : [String] {
 		get {
 			var names = [String]()
 			
@@ -180,7 +180,7 @@ final class XGFsys : NSObject {
 		}
 	}
 	
-	@objc var fullFileNames : [String] {
+	var fullFileNames : [String] {
 		get {
 			
 			var names = [String]()
@@ -195,7 +195,7 @@ final class XGFsys : NSObject {
 		}
 	}
 	
-	@objc var identifiers : [Int] {
+	var identifiers : [Int] {
 		var ids = [Int]()
 		for i in 0 ..< self.numberOfEntries {
 			ids.append(identifierForFile(index: i))
@@ -203,7 +203,7 @@ final class XGFsys : NSObject {
 		return ids
 	}
 	
-	@objc func indexForIdentifier(identifier: Int) -> Int {
+	func indexForIdentifier(identifier: Int) -> Int {
 		var index = -1
 		
 		let idents = identifiers
@@ -229,56 +229,56 @@ final class XGFsys : NSObject {
 		return nil
 	}
 	
-	@objc var firstEntryDetailOffset : Int {
+	var firstEntryDetailOffset : Int {
 		get {
 			return Int(data.getWordAtOffset(kFirstFileDetailsPointerOffset))
 		}
 	}
 	
-	@objc func setFirstEntryDetailOffset(_ newOffset: Int) {
+	func setFirstEntryDetailOffset(_ newOffset: Int) {
 		self.data.replaceWordAtOffset(kFirstFileDetailsPointerOffset, withBytes: UInt32(newOffset))
 	}
 	
-	@objc var dataEnd : Int {
+	var dataEnd : Int {
 		return self.data.length - 0x4
 	}
 	
-	@objc func startOffsetForFileDetails(_ index : Int) -> Int {
+	func startOffsetForFileDetails(_ index : Int) -> Int {
 		return Int(data.getWordAtOffset(kFirstFileDetailsPointerOffset + (index * 4)))
 		
 	}
 	
-	@objc func startOffsetForFile(_ index: Int) -> Int {
+	func startOffsetForFile(_ index: Int) -> Int {
 		let start = startOffsetForFileDetails(index) + kFileStartPointerOffset
 		return Int(data.getWordAtOffset(start))
 	}
 	
-	@objc func setStartOffsetForFile(index: Int, newStart: Int) {
+	func setStartOffsetForFile(index: Int, newStart: Int) {
 		let start = startOffsetForFileDetails(index) + kFileStartPointerOffset
 		data.replaceWordAtOffset(start, withBytes: UInt32(newStart))
 	}
 	
-	@objc func sizeForFile(index: Int) -> Int {
+	func sizeForFile(index: Int) -> Int {
 		let start = startOffsetForFileDetails(index) + kCompressedSizeOffset
 		return Int(data.getWordAtOffset(start))
 	}
 	
-	@objc func setSizeForFile(index: Int, newSize: Int) {
+	func setSizeForFile(index: Int, newSize: Int) {
 		let start = startOffsetForFileDetails(index) + kCompressedSizeOffset
 		data.replaceWordAtOffset(start, withBytes: UInt32(newSize))
 	}
 	
-	@objc func uncompressedSizeForFile(index: Int) -> Int {
+	func uncompressedSizeForFile(index: Int) -> Int {
 		let start = startOffsetForFileDetails(index) + kUncompressedSizeOffset
 		return Int(data.getWordAtOffset(start))
 	}
 	
-	@objc func setUncompressedSizeForFile(index: Int, newSize: Int) {
+	func setUncompressedSizeForFile(index: Int, newSize: Int) {
 		let start = startOffsetForFileDetails(index) + kUncompressedSizeOffset
 		data.replaceWordAtOffset(start, withBytes: UInt32(newSize))
 	}
 	
-	@objc func identifierForFile(index: Int) -> Int {
+	func identifierForFile(index: Int) -> Int {
 		let start = startOffsetForFileDetails(index) + kFileIdentifierOffset
 		return Int(data.getWordAtOffset(start))
 	}
@@ -287,7 +287,7 @@ final class XGFsys : NSObject {
 		return XGFileTypes(rawValue: (identifierForFile(index: index) & 0xFF00) >> 8) ?? .unknown
 	}
 	
-	@objc func dataForFileWithName(name: String) -> XGMutableData? {
+	func dataForFileWithName(name: String) -> XGMutableData? {
 		let index = self.indexForFile(filename: name)
 		if index == nil {
 			printg("file doesn't exist: ", name)
@@ -296,7 +296,7 @@ final class XGFsys : NSObject {
 		return dataForFileWithIndex(index: index!)
 	}
 	
-	@objc func decompressedDataForFileWithName(name: String) -> XGMutableData? {
+	func decompressedDataForFileWithName(name: String) -> XGMutableData? {
 		let index = self.indexForFile(filename: name)
 		if index == nil {
 			printg("file doesn't exist: ", name)
@@ -330,7 +330,7 @@ final class XGFsys : NSObject {
 		return filesData
 	}
 	
-	@objc func dataForFileWithIndex(index: Int) -> XGMutableData? {
+	func dataForFileWithIndex(index: Int) -> XGMutableData? {
 		
 		let start = self.startOffsetForFile(index)
 		let length = self.sizeForFile(index: index)
@@ -352,7 +352,7 @@ final class XGFsys : NSObject {
 		return XGMutableData(byteStream: fileData, file: .nameAndFolder(filename, .Documents))
 	}
 	
-	@objc func decompressedDataForFileWithIndex(index: Int) -> XGMutableData? {
+	func decompressedDataForFileWithIndex(index: Int) -> XGMutableData? {
 		
 		let fileData = dataForFileWithIndex(index: index)!
 //		let decompressedSize = fileData.getWordAtOffset(kLZSSUncompressedSizeOffset)
@@ -375,15 +375,15 @@ final class XGFsys : NSObject {
 		
 	}
 	
-	@objc func isFileCompressed(index: Int) -> Bool {
+	func isFileCompressed(index: Int) -> Bool {
 		return self.data.getWordAtOffset(startOffsetForFile(index)) == kLZSSbytes
 	}
 
-	@objc func getUnknownLZSSForFileWithIndex(_ index: Int) -> UInt32 {
+	func getUnknownLZSSForFileWithIndex(_ index: Int) -> UInt32 {
 		return self.data.getWordAtOffset(startOffsetForFile(index) + kLZSSUnkownOffset)
 	}
 	
-	@objc func extractDataForFileWithIndex(index: Int) -> XGMutableData? {
+	func extractDataForFileWithIndex(index: Int) -> XGMutableData? {
 		// checks if the file is compressed or not and returns the appropriate data
 		if !(index < self.numberOfEntries) {
 			return nil
@@ -619,7 +619,7 @@ final class XGFsys : NSObject {
 		}
 	}
 	
-	@objc func eraseDataForFile(index: Int) {
+	func eraseDataForFile(index: Int) {
 		
 		let start = startOffsetForFile(index)
 		let size = sizeForFile(index: index)
@@ -627,28 +627,28 @@ final class XGFsys : NSObject {
 		eraseData(start: start, length: size)
 	}
 	
-	@objc func eraseData(start: Int, length: Int) {
+	func eraseData(start: Int, length: Int) {
 		data.nullBytes(start: start, length: length)
 	}
 	
-	@objc func deleteFile(index: Int) {
+	func deleteFile(index: Int) {
 		eraseDataForFile(index: index)
 		setSizeForFile(index: index, newSize: 0)
 	}
 	
-	@objc func deleteFileAndPreserve(index: Int) {
+	func deleteFileAndPreserve(index: Int) {
 		eraseDataForFile(index: index)
 		setSizeForFile(index: index, newSize: 4)
 		data.replaceBytesFromOffset(startOffsetForFile(index), withByteStream: [0xDE, 0x1E, 0x7E, 0xD0])
 	}
 	
-	@objc func increaseDataLength(by bytes: Int) {
+	func increaseDataLength(by bytes: Int) {
 		var expansionRequired = bytes + 0x14
 		while (expansionRequired % 16) != 0 { // byte alignment is required by the iso
 			expansionRequired += 1
 		}
 		
-		self.data.increaseLength(by: expansionRequired)
+		self.data.appendBytes(.init(repeating: 0, count: expansionRequired))
 		self.setFilesize(self.data.length)
 		self.data.replaceWordAtOffset(dataEnd, withBytes: kFSYSbytes)
 	}
@@ -816,7 +816,7 @@ final class XGFsys : NSObject {
 		
 	}
 	
-	@objc func shiftUpFileWithIndex(index: Int) {
+	func shiftUpFileWithIndex(index: Int) {
 		// used to push a file closer to the file above it and create more space for other files
 		if !(index < self.numberOfEntries) { return }
 		
@@ -835,7 +835,7 @@ final class XGFsys : NSObject {
 		
 	}
 	
-	@objc func shiftDownFileWithIndex(index: Int) {
+	func shiftDownFileWithIndex(index: Int) {
 		// used to push a file closer to the file above it and create more space for other files
 		if !(index < self.numberOfEntries) { return }
 		
@@ -857,7 +857,7 @@ final class XGFsys : NSObject {
 		
 	}
 	
-	@objc func shiftDownFileWithIndex(index: Int, byOffset by: Int) {
+	func shiftDownFileWithIndex(index: Int, byOffset by: Int) {
 		// used to push a file closer to the file above it and create more space for other files
 		if !(index < self.numberOfEntries && index > 0) { return }
 		
@@ -878,7 +878,7 @@ final class XGFsys : NSObject {
 		
 	}
 	
-	@objc func moveFile(index: Int, toOffset startOffset: Int) {
+	func moveFile(index: Int, toOffset startOffset: Int) {
 		let bytes = self.dataForFileWithIndex(index: index)!.byteStream
 		
 		self.eraseData(start: startOffsetForFile(index), length: sizeForFile(index: index))
@@ -887,7 +887,7 @@ final class XGFsys : NSObject {
 		data.replaceBytesFromOffset(startOffset, withByteStream: bytes)
 	}
 	
-	@objc func save() {
+	func save() {
 		self.data.save()
 	}
 	

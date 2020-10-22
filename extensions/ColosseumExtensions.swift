@@ -17,10 +17,10 @@ enum XGRegions : UInt32 {
 
 class XGMapRel : XGRelocationTable {
 	
-	@objc var characters = [XGCharacter]()
-	@objc var interactionLocations = [XGMapEntryLocation]()
+	var characters = [XGCharacter]()
+	var interactionLocations = [XGMapEntryLocation]()
 	
-	@objc var roomID = 0
+	var roomID = 0
 	
 	override convenience init(file: XGFiles) {
 		self.init(file: file, checkScript: true)

@@ -441,22 +441,11 @@ class XGUtility {
 	}
 	
 	//MARK: - Saving to disk
-	@discardableResult class func saveData(_ data: Data, toFile file: XGFiles) -> Bool {
-		if !file.folder.exists {
-			file.folder.createDirectory()
-		}
-		do {
-			try data.write(to: URL(fileURLWithPath: file.path), options: [.atomic])
-		} catch {
-			return false
-		}
-		return true
-	}
 	
 	class func saveString(_ str: String, toFile file: XGFiles) {
 		
 		if let string = str.data(using: String.Encoding.utf8) {
-			if !saveData(string, toFile: file) {
+			if !string.write(to: file) {
 				// if printging to a log fails, don't keep printging :)
 				if file.folder.name != XGFolders.Logs.name {
 					printg("Couldn't save string to file: \(file.path)")
@@ -479,7 +468,10 @@ class XGUtility {
 			file.folder.createDirectory()
 		}
 		do {
-			try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted).write(to: URL(fileURLWithPath: file.path), options: [.atomic])
+			let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+			if !data.write(to: file) {
+				printg("couldn't save json to file: \(file.path)")
+			}
 		} catch {
 			printg("couldn't save json to file: \(file.path)")
 		}

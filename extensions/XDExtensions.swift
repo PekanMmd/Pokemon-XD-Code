@@ -26,14 +26,14 @@ enum XGRegions : UInt32 {
 
 class XGMapRel : XGRelocationTable {
 	
-	@objc var characters = [XGCharacter]()
-	@objc var entryLocations = [XGMapEntryLocation]()
-	@objc var treasure = [XGTreasure]()
+	var characters = [XGCharacter]()
+	var entryLocations = [XGMapEntryLocation]()
+	var treasure = [XGTreasure]()
 	
-	@objc var roomID = 0
+	var roomID = 0
 	var isValid = true
 	
-	@objc var script : XGScript? {
+	var script : XGScript? {
 		let scriptFile = XGFiles.scd(file.fileName.removeFileExtensions())
 		return scriptFile.exists ? scriptFile.scriptData : nil
 	}
@@ -105,7 +105,7 @@ class XGMapRel : XGRelocationTable {
 
 extension XGISO {
 	
-	@objc var fsysList : [String] {
+	var fsysList : [String] {
 		return [
 			"common.fsys",
 			"common_dvdeth.fsys",
@@ -116,7 +116,7 @@ extension XGISO {
 		]
 	}
 	
-	@objc var menuFsysList : [String] {
+	var menuFsysList : [String] {
 		// also any file with "menu" in the name
 		return isDemo ? [] : [
 			"battle_disk.fsys",
@@ -128,7 +128,7 @@ extension XGISO {
 	}
 	
 	
-	@objc func extractDecks() {
+	func extractDecks() {
 		let deckData = XGFiles.fsys("deck_archive").fsysData
 		let decksOrdered : [XGDecks] = [.DeckBingo, .DeckColosseum, .DeckDarkPokemon, .DeckHundred, .DeckImasugu, .DeckSample, .DeckStory, .DeckVirtual]
 		
@@ -150,7 +150,7 @@ extension XGISO {
 	}
 	
 	
-	@objc func extractSpecificStringTables() {
+	func extractSpecificStringTables() {
 		stringsLoaded = false
 		
 		let fightFile = XGFiles.msg("fight")

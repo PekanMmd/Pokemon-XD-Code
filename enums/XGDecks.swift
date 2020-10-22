@@ -90,9 +90,7 @@ enum XGDecks : String, Codable, CaseIterable {
 	}
 	
 	var data : XGMutableData {
-		get {
-			return XGFiles.deck(self).data!
-		}
+		return XGFiles.deck(self).data!
 	}
 	
 	var fileSize : Int {
