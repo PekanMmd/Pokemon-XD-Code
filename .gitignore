@@ -70,3 +70,10 @@ fastlane/test_output
 CLI Compilers/out/Assets
 CLI Compilers/out/Colosseum Tool CLI
 CLI Compilers/out/GoD Tool CLI
+CLI Compilers/out/Colosseum-Tool.exe
+CLI Compilers/out/Colosseum-Tool.lib
+CLI Compilers/out/Colosseum-Tool.exp
+CLI Compilers/out/GoD-Tool.exe
+CLI Compilers/out/GoD-Tool.exp
+CLI Compilers/out/GoD-Tool.lib
+*.rar
