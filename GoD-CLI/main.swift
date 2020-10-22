@@ -128,14 +128,6 @@ func applyPatches() {
 	}
 }
 
-func encodeDecode() {
-	
-}
-
-func documentISO() {
-
-}
-
 func mainMenu() {
 	while true {
 		var prompt = """

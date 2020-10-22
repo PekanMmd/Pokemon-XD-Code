@@ -103,10 +103,6 @@ class XGISO: NSObject {
 				fileSizes[fileName]     = fileSize
 				fileDataOffsets[fileName] = o
 
-				if settings.verbose {
-					printg("index \(i): found file \(fileName) @offset \(o.hexString())")
-				}
-
 			}
 
 			i += 1
