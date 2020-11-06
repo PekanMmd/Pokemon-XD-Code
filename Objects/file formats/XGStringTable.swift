@@ -165,20 +165,15 @@ class XGStringTable: NSObject {
 			data.save()
 		}
 	}
-
-	@discardableResult
-	func replaceString(_ string: XGString, save: Bool) -> Bool {
-		return self.replaceString(string, alert: false, save: save, increaseLength: false)
-	}
 	
 	@discardableResult func addString(_ string: XGString, increaseSize: Bool, save: Bool) -> Bool {
 		
-		if self.numberOfEntries == 0xFFFF {
+		if numberOfEntries == 0xFFFF {
 			printg("String table \(stringTable.file.fileName) has the maximum number of entries!")
 			return false
 		}
 		
-		if !self.containsStringWithId(string.id) {
+		if !containsStringWithId(string.id) {
 			
 			if string.id == 0 {
 				printg("Cannot add string with id 0")
@@ -186,29 +181,32 @@ class XGStringTable: NSObject {
 			}
 			
 			let bytesRequired = string.dataLength + 8
-			if self.extraCharacters > bytesRequired {
-				self.stringTable.deleteBytes(start: stringTable.length - bytesRequired, count: bytesRequired)
+			if extraCharacters > bytesRequired {
+				stringTable.deleteBytes(start: stringTable.length - bytesRequired, count: bytesRequired)
 			} else {
-				if self.startOffset != 0 || !increaseSize {
+				if startOffset != 0 || !increaseSize {
 					printg("Couldn't add string \(string.string) to \(stringTable.file.fileName) because it doesn't have enough space.")
 					printg("Requires: \(bytesRequired) bytes but only has \(self.extraCharacters) bytes available.")
 					printg("Try shortening some other strings.")
+					if startOffset == 0 {
+						printg("You can also enable file size increases in the settings to allow larger text. This shouldn't cause any issues.")
+					}
 					return false
 				}
 			}
 			
-			self.stringTable.insertRepeatedByte(byte: 0, count: bytesRequired, atOffset: (numberOfEntries * 8) + kEndOfHeader)
+			stringTable.insertRepeatedByte(byte: 0, count: bytesRequired, atOffset: (numberOfEntries * 8) + kEndOfHeader)
 			let bytes = string.byteStream.map { (i) -> Int in
 				return Int(i)
 			}
-			self.stringTable.replaceBytesFromOffset( ((numberOfEntries + 1) * 8) + kEndOfHeader, withByteStream: bytes)
+			stringTable.replaceBytesFromOffset( ((numberOfEntries + 1) * 8) + kEndOfHeader, withByteStream: bytes)
 			
-			self.increaseOffsetsAfter(0, by: bytesRequired)
-			self.stringOffsets[string.id] = ((numberOfEntries + 1) * 8) + kEndOfHeader
-			self.stringIDs.append(string.id)
+			increaseOffsetsAfter(0, by: bytesRequired)
+			stringOffsets[string.id] = ((numberOfEntries + 1) * 8) + kEndOfHeader
+			stringIDs.append(string.id)
 			
-			self.stringTable.replace2BytesAtOffset(kNumberOfStringsOffset, withBytes: numberOfEntries + 1)
-			self.updateOffsets()
+			stringTable.replace2BytesAtOffset(kNumberOfStringsOffset, withBytes: numberOfEntries + 1)
+			updateOffsets()
 			
 			if save {
 				self.save()
@@ -217,7 +215,7 @@ class XGStringTable: NSObject {
 			
 		} else {
 			
-			return self.replaceString(string, save: save)
+			return replaceString(string, save: save)
 		}
 	}
 	

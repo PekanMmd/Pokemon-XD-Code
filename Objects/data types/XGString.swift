@@ -162,15 +162,7 @@ class XGString: NSObject, Codable {
 		self.chars = chars
 	}
 	
-	@discardableResult func replace() -> Bool {
-		return replace(increaseSize: true)
-	}
-	
-	@discardableResult func replace(increaseSize: Bool) -> Bool {
-		return replace(increaseSize: increaseSize, save: true)
-	}
-	
-	@discardableResult func replace(increaseSize: Bool, save: Bool) -> Bool {
+	@discardableResult func replace(save: Bool = true) -> Bool {
 		if self.id == 0 {
 			return false
 		}
@@ -179,7 +171,7 @@ class XGString: NSObject, Codable {
 		var success = false
 		for table in allStringTables {
 			if table.containsStringWithId(self.id) {
-				let tableSuccess = table.replaceString(self, alert: false, save: save, increaseLength: increaseSize)
+				let tableSuccess = table.replaceString(self, save: save)
 				if !tableSuccess {
 					printg("Could not replace string with id \(self.id) in table: \(table.file.fileName)")
 				}
@@ -189,9 +181,9 @@ class XGString: NSObject, Codable {
 		return success
 	}
 	
-	func replaceDirectly(increaseSize: Bool, save: Bool) -> Bool {
+	func replaceDirectly(save: Bool) -> Bool {
 		stringsLoaded = false
-		return self.table.stringTable.replaceString(self, alert: false, save: save, increaseLength: increaseSize)
+		return self.table.stringTable.replaceString(self, save: save)
 	}
 	
 	func containsSubstring(_ sub: String) -> Bool {

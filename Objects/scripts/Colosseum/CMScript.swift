@@ -27,8 +27,8 @@ typealias FTBL = (codeOffset: Int, end: Int, name: String, index: Int)
 class XGScript: CustomStringConvertible {
 	
 	var file : XGFiles!
-	@objc var mapRel : XGMapRel?
-	@objc var data : XGMutableData!
+	 var mapRel : XGMapRel?
+	 var data : XGMutableData!
 
 	var magicBytes: UInt32 = 0
 	var numberOfFunctions = 0
@@ -38,7 +38,7 @@ class XGScript: CustomStringConvertible {
 
 	var ftbl = [FTBL]()
 	
-	@objc var codeLength : Int {
+	 var codeLength : Int {
 		return 0
 	}
 	

@@ -93,10 +93,14 @@ enum XGFileTypes : Int, Codable {
 	}
 
 	#if ENV_OSX
-	static let imageFormats : [XGFileTypes] = [.png, .jpeg, .bmp]
+	static let imageFormats: [XGFileTypes] = [.png, .jpeg, .bmp]
 	#else
-	static let imageFormats : [XGFileTypes] = [.png]
+	static let imageFormats: [XGFileTypes] = [.png]
 	#endif
+
+	static let textureFormats: [XGFileTypes] = [.gtx, .atx]
+	static let modelFormats: [XGFileTypes] = [.dat, .rdat, .dats]
+	static let textureContainingFormats: [XGFileTypes] = [] // gsw once implemented and models
 }
 
 

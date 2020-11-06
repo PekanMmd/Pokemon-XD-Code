@@ -8,7 +8,9 @@
 
 import Foundation
 
-let kNumberOfPokemon = PBRDataTable.pokemonBaseStats.numberOfEntries // 501
+var kNumberOfPokemon: Int {
+	return PBRDataTable.pokemonBaseStats.numberOfEntries // 501 in vanilla
+}
 let kNumberOfTMsAndHMs = 100
 let kNumberOfTutorMoves = 0 // for XD compatibility
 let kSizeOfEvolution = 6
@@ -17,6 +19,9 @@ let kSizeOfLevelUpMove = 4
 final class XGPokemonStats: NSObject, XGIndexedValue {
 	
 	var index			= 0
+	var baseIndex: Int {
+		return XGPokemon.pokemon(index).baseIndex
+	}
 	var startOffset		= 0
 	
 	var nameID			= 0
@@ -70,9 +75,8 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 	var levelUpMoves = [XGLevelUpMove]()
 	
 	var faces : [PBRPokemonImage] {
-		let baseIndex = XGPokemon.pokemon(self.index).baseIndex
 		let formesData = PBRDataTableEntry.pokemonFaces(index: baseIndex)
-		let numberOfFormes = formesData.getByte(7)
+		let numberOfFormes = formesData.getByte(7) / 2 // unevolved pokemon that can evolve seem to have 3 for this value for some reason. least significant bit is read separately but don't know what it's used for atm
 		var formes = [PBRPokemonImage]()
 		let firstAlternate = formesData.getShort(4)
 		for i in 0 ..< numberOfFormes {
@@ -82,7 +86,6 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 	}
 	
 	var bodies : [PBRPokemonImage] {
-		let baseIndex = XGPokemon.pokemon(self.index).baseIndex
 		let formesData = PBRDataTableEntry.pokemonBodies(index: baseIndex)
 		let numberOfFormes = formesData.getByte(7)
 		var formes = [PBRPokemonImage]()
@@ -93,16 +96,16 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 		return formes
 	}
 	
-	var models : [PBRPokemonModel] {
-		let baseIndex = XGPokemon.pokemon(self.index).baseIndex
-		if baseIndex != self.index {
+	var models: [PBRPokemonModel] {
+		if baseIndex != index {
 			return XGPokemonStats(index: baseIndex).models
 		}
-		
-		var currentIndex = self.firstModelIndex
+
+		let totalNumberOfModels = PBRDataTable.pokemonModels.numberOfEntries
+		var currentIndex = firstModelIndex
 		var done = false
 		var list = [PBRPokemonModel]()
-		while !done {
+		while !done && currentIndex < totalNumberOfModels {
 			let model = PBRPokemonModel.regular(currentIndex)
 			if model.speciesID == self {
 				list += [.regular(currentIndex), .shiny(currentIndex)]
@@ -127,7 +130,7 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 	}
 	
 	
-	init(index : Int!) {
+	init(index : Int) {
 		super.init()
 		
 		self.index = index
@@ -170,7 +173,8 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 		ability1 = .ability(data.getByte(48))
 		ability2 = .ability(data.getByte(49))
 		unknown = data.getByte(50)
-		colourID = data.getByte(51)
+		// let unknownValue = data.getByte(51) & 0x1
+		colourID = (data.getByte(51) & 0xfe) >> 1
 		
 		let EVs = data.getShort(40).bitArray(count: 16)
 		// bit mask of EV yields. Each stat is 2 bits starting from the most significant bit being hp.
@@ -252,7 +256,7 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 		data.setByte(48, to: ability1.index)
 		data.setByte(49, to: ability2.index)
 		data.setByte(50, to: unknown)
-		data.setByte(51, to: colourID)
+//		data.setByte(51, to: colourID)
 
 		var EVs = 0
 		for evYield in [hpYield, attackYield, defenseYield, speedYield, specialAttackYield, specialDefenseYield] {

@@ -135,11 +135,6 @@ class XGStringTable: NSObject {
 	}
 
 	@discardableResult
-	func replaceString(_ string: XGString, save: Bool) -> Bool {
-		return self.replaceString(string, alert: false, save: save, increaseLength: false)
-	}
-
-	@discardableResult
 	func addString(_ string: XGString, increaseSize: Bool, save: Bool) -> Bool {
 		
 		if self.numberOfEntries == 0xFFFF {

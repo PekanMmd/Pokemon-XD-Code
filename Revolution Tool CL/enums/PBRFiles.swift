@@ -16,7 +16,12 @@ func !=(lhs: XGFiles, rhs: XGFiles) -> Bool {
 var loadedFiles = [String : XGMutableData]()
 var loadedStringTables = [String : XGStringTable]()
 
-let loadableFiles = [XGFiles.dol.path, XGFiles.fsys("common").path, XGFiles.msg("mes_common").path, XGFiles.msg("menu_btutorial").path, XGFiles.msg("mes_fight_e").path, XGFiles.msg("mes_name_e").path, XGFiles.msg("mes_common_JP").path]
+var loadableFiles: [String] {
+	var paths = [XGFiles.dol.path, XGFiles.fsys("common").path, XGFiles.msg("mes_common").path, XGFiles.msg("menu_btutorial").path, XGFiles.msg("mes_fight_e").path, XGFiles.msg("mes_name_e").path, XGFiles.msg("mes_common_JP").path]
+	paths += XGFolders.Common.files.map { $0.path }
+	paths += XGFolders.Decks.files.map { $0.path }
+	return paths
+}
 let loadableStringTables = [XGFiles.msg("mes_common").path, XGFiles.msg("menu_btutorial").path, XGFiles.msg("mes_fight_e").path, XGFiles.msg("mes_name_e").path, XGFiles.msg("mes_common_JP").path]
 
 
@@ -216,6 +221,16 @@ indirect enum XGFiles {
 			return table
 		}
 	}
+
+	var textures: [GoDTexture] {
+		if XGFileTypes.textureFormats.contains(fileType) {
+			return [texture]
+		}
+		if XGFileTypes.textureContainingFormats.contains(fileType) {
+			return PBRTextureContaining.fromFile(self)?.textures ?? []
+		}
+		return []
+	}
 	
 	var fileSize : Int {
 		get {
@@ -319,6 +334,7 @@ indirect enum XGFolders {
 	case StringTables
 	case Reference
 	case Resources
+	case Wiimm
 	case Logs
     case DATA
     case ISO
@@ -350,6 +366,7 @@ indirect enum XGFolders {
 			case .StringTables		: return "String Tables"
 			case .Reference			: return "Reference"
 			case .Resources			: return "Resources"
+			case .Wiimm				: return "Wiimm"
 			case .Logs				: return "Logs"
             case .ISO               : return "ISO"
             case .ISODump           : return "Dump"
@@ -383,6 +400,7 @@ indirect enum XGFolders {
 			case .Types		: path = XGFolders.Images.path
             case .DATA      : path = XGFolders.ISODump.path
             case .DOL, .FSYS: path = XGFolders.DATA.path
+			case .Wiimm		: path = XGFolders.Resources.path
             case .nameAndFolder(_, let f): path = f.path
             case .path(let s): return s
 			default: break
@@ -483,7 +501,6 @@ indirect enum XGFolders {
 			.LZSS,
 			.Reference,
 			.Resources,
-			.Wiimm,
             .ISO,
             .ISODump,
 			.Logs,

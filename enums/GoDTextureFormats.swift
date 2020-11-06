@@ -50,12 +50,7 @@ enum GoDTextureFormats: Int, CaseIterable {
 	}
 	
 	var paletteCount : Int {
-		switch self {
-		case .C4: return 16
-		case .C8: return 256
-		case .C14X2: return 16_384
-		default: return 0
-		}
+		return Int(pow(2, Double(bitsPerPixel)))
 	}
 
 	var blockWidth : Int {
@@ -144,6 +139,15 @@ enum GoDTextureFormats: Int, CaseIterable {
 	static func fromStandardRawValue(_ value: Int) -> GoDTextureFormats? {
 		for format in allCases {
 			if format.standardRawValue == value {
+				return format
+			}
+		}
+		return nil
+	}
+
+	static func fromPaletteID(_ value: Int) -> GoDTextureFormats? {
+		for format in allCases {
+			if format.paletteID == value {
 				return format
 			}
 		}

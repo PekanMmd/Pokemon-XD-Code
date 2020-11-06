@@ -8,7 +8,9 @@
 
 import Foundation
 
-let kNumberOfItems = PBRDataTable.items.numberOfEntries // 465
+var kNumberOfItems: Int {
+	return PBRDataTable.items.numberOfEntries // 465 in vanilla
+}
 
 final class XGItem: NSObject, XGIndexedValue, Codable {
 	

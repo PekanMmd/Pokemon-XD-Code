@@ -7,81 +7,7 @@
 
 import Foundation
 
-private var tablesLoaded = false
-private var tables = [Int : PBRDataTable]()
-private var decksLoaded = false
-private var decks = [Int : PBRDataTable]()
-private let kNumberOfDataTables = region == .JP ? 32 : 33
-private let kNumberOfPokemonDecks = 19
-private let kNumberOfTrainerDecks = 26
-
-private var allTables : [Int: PBRDataTable] {
-	if !tablesLoaded {
-		let common : XGFsys? = XGFiles.fsys("common").exists ? XGFiles.fsys("common").fsysData : nil
-		for i in 0 ..< kNumberOfDataTables {
-			let file = XGFiles.common(i)
-			if !file.exists {
-				if let c = common {
-					if let f = c.decompressedDataForFileWithIndex(index: i) {
-						f.file = file
-						f.save()
-					}
-				}
-			}
-			if file.exists {
-				tables[i] = PBRDataTable(file: file)
-			}
-		}
-		tablesLoaded = true
-	}
-	return tables
-}
-private var allDecks : [Int : PBRDataTable] {
-	if !decksLoaded {
-		let deck : XGFsys? = XGFiles.fsys("deck").exists ? XGFiles.fsys("deck").fsysData : nil
-		for i in 0 ..< kNumberOfTrainerDecks {
-			let file = XGFiles.dckt(i)
-			if !file.exists {
-				if let d = deck {
-					if let f = d.decompressedDataForFileWithIndex(index: i) {
-						f.file = file
-						f.save()
-					}
-				}
-			}
-			if file.exists {
-				decks[i] = PBRDataTable(file: file)
-			}
-		}
-		for i in 0 ..< kNumberOfPokemonDecks {
-			let file = XGFiles.dckp(i)
-			if !file.exists {
-				if let d = deck {
-					if let f = d.decompressedDataForFileWithIndex(index: i + kNumberOfTrainerDecks) {
-						f.file = file
-						f.save()
-					}
-				}
-			}
-			if file.exists {
-				decks[i + kNumberOfTrainerDecks] = PBRDataTable(file: file)
-			}
-		}
-		if !XGFiles.dcka.exists {
-			if let d = deck {
-				if let f = d.decompressedDataForFileWithIndex(index: d.numberOfEntries - 1) {
-					f.file = .dcka
-					f.save()
-				}
-			}
-		}
-		if XGFiles.dcka.exists {
-			decks[kNumberOfTrainerDecks + kNumberOfPokemon] = PBRDataTable(file: XGFiles.dcka)
-		}
-		decksLoaded = true
-	}
-	return decks
-}
+private var dataTablesByFile = [String: PBRDataTable]()
 
 class PBRDataTable : CustomStringConvertible {
 	
@@ -109,7 +35,7 @@ class PBRDataTable : CustomStringConvertible {
 		return entries.count
 	}
 	
-	init(file: XGFiles) {
+	private init(file: XGFiles) {
 		self.file = file
 		
 		if self.file.exists {
@@ -167,12 +93,14 @@ class PBRDataTable : CustomStringConvertible {
 			} else {
 				printg("Error: invalid data table \(self.file.path)")
 			}
+
+			dataTablesByFile[file.path] = self
 		}
 		
 	}
 	
 	func dataForEntryWithIndex(_ index: Int) -> XGMutableData? {
-		if index >= 0, index < self.entries.count {
+		if index >= 0, index < entries.count {
 			return entries[index]
 		}
 		return nil
@@ -282,24 +210,8 @@ class PBRDataTable : CustomStringConvertible {
 		data().save()
 	}
 	
-	class func tableWithID(_ id: Int) -> PBRDataTable? {
-		return allTables[id]
-	}
-	
-	private class func deckWithID(_ id: Int) -> PBRDataTable? {
-		return allDecks[id]
-	}
-	
-	class func trainerDeckWithID(_ id: Int) -> PBRDataTable? {
-		return deckWithID(id)
-	}
-	
-	class func pokemonDeckWithID(_ id: Int) -> PBRDataTable? {
-		return deckWithID(id + kNumberOfTrainerDecks)
-	}
-	
-	class func AIDeck() -> PBRDataTable? {
-		return deckWithID(kNumberOfPokemonDecks + kNumberOfTrainerDecks)
+	class func tableForFile(_ file: XGFiles) -> PBRDataTable {
+		return dataTablesByFile[file.path] ?? PBRDataTable(file: file)
 	}
 
 	/* File names from JP ISO (different order)
@@ -337,39 +249,39 @@ class PBRDataTable : CustomStringConvertible {
 	31: WazaTableData.bin
 	*/
 	
-	static var pokemonIcons = tableWithID(region == .JP ? 6 : 0)!
-	static var countries = tableWithID(region == .JP ? 7 : 1)!
-	static var shopItems = tableWithID(region == .JP ? 8 : 2)!
-	static var colosseumsUnknown = region == .JP ? nil : tableWithID(3) //Doesn't exist in JP ISO
-	static var typeMatchups = tableWithID(region == .JP ? 10 : 4)!
-	static var expTables = tableWithID(region == .JP ? 11 : 5)!
-	static var pokemonModels = tableWithID(region == .JP ? 12 : 6)!
-	static var pokemonModelEffect = tableWithID(region == .JP ? 13 : 7)!
-	static var pokemonBaseStats = tableWithID(region == .JP ? 14 : 8)!
-	static var evolutions = tableWithID(region == .JP ? 15 : 9)!
-	static var ballModels = tableWithID(region == .JP ? 23 : 10)!
-	static var colosseumsRules = tableWithID(region == .JP ? 24 : 11)!
-	static var fightAIBattlePass = tableWithID(region == .JP ? 25 : 12)!
-	static var fightAIExpectData = tableWithID(region == .JP ? 26 : 13)!
-	static var fightAIPokemonPartData = tableWithID(region == .JP ? 27 : 14)!
-	static var fightAIValues = tableWithID(region == .JP ? 28 : 15)!
-	static var fightAIMoveData = tableWithID(region == .JP ? 29 : 16)!
-	static var flagIDs = tableWithID(region == .JP ? 0 : 17)!
-	static var floorEvent = tableWithID(region == .JP ? 1 : 18)!
-	static var items = tableWithID(region == .JP ? 2 : 19)!
-	static var menuBattleRules = tableWithID(region == .JP ? 3 : 20)!
-	static var pokemonBodies = tableWithID(region == .JP ? 4 : 21)!
-	static var pokemonFaces = tableWithID(region == .JP ? 5 : 22)!
-	static var abilities = tableWithID(region == .JP ? 17 : 23)!
-	static var trainerCustomParts = tableWithID(region == .JP ? 18 : 24)!
-	static var trainerCustomTable = tableWithID(region == .JP ? 19 : 25)!
-	static var trainerEvent = tableWithID(region == .JP ? 20 : 26)!
-	static var trainerModels = tableWithID(region == .JP ? 21 : 27)!
-	static var trainerTitles = tableWithID(region == .JP ? 22 : 28)!
-	static var TMs = tableWithID(region == .JP ? 30 : 29)!
-	static var moves = tableWithID(region == .JP ? 31 : 30)!
-	static var tutorialData = tableWithID(region == .JP ? 9 : 31)!
-	static var levelUpMoves = tableWithID(region == .JP ? 16 : 32)!
+	static var pokemonIcons = tableForFile(.common(region == .JP ? 6 : 0))
+	static var countries = tableForFile(.common(region == .JP ? 7 : 1))
+	static var shopItems = tableForFile(.common(region == .JP ? 8 : 2))
+	static var colosseumsUnknown = region == .JP ? nil : tableForFile(.common(3)) //Doesn't exist in JP ISO
+	static var typeMatchups = tableForFile(.common(region == .JP ? 10 : 4))
+	static var expTables = tableForFile(.common(region == .JP ? 11 : 5))
+	static var pokemonModels = tableForFile(.common(region == .JP ? 12 : 6))
+	static var pokemonModelEffect = tableForFile(.common(region == .JP ? 13 : 7))
+	static var pokemonBaseStats = tableForFile(.common(region == .JP ? 14 : 8))
+	static var evolutions = tableForFile(.common(region == .JP ? 15 : 9))
+	static var ballModels = tableForFile(.common(region == .JP ? 23 : 10))
+	static var colosseumsRules = tableForFile(.common(region == .JP ? 24 : 11))
+	static var fightAIBattlePass = tableForFile(.common(region == .JP ? 25 : 12))
+	static var fightAIExpectData = tableForFile(.common(region == .JP ? 26 : 13))
+	static var fightAIPokemonPartData = tableForFile(.common(region == .JP ? 27 : 14))
+	static var fightAIValues = tableForFile(.common(region == .JP ? 28 : 15))
+	static var fightAIMoveData = tableForFile(.common(region == .JP ? 29 : 16))
+	static var flagIDs = tableForFile(.common(region == .JP ? 0 : 17))
+	static var floorEvent = tableForFile(.common(region == .JP ? 1 : 18))
+	static var items = tableForFile(.common(region == .JP ? 2 : 19))
+	static var menuBattleRules = tableForFile(.common(region == .JP ? 3 : 20))
+	static var pokemonBodies = tableForFile(.common(region == .JP ? 4 : 21))
+	static var pokemonFaces = tableForFile(.common(region == .JP ? 5 : 22))
+	static var abilities = tableForFile(.common(region == .JP ? 17 : 23))
+	static var trainerCustomParts = tableForFile(.common(region == .JP ? 18 : 24))
+	static var trainerCustomTable = tableForFile(.common(region == .JP ? 19 : 25))
+	static var trainerEvent = tableForFile(.common(region == .JP ? 20 : 26))
+	static var trainerModels = tableForFile(.common(region == .JP ? 21 : 27))
+	static var trainerTitles = tableForFile(.common(region == .JP ? 22 : 28))
+	static var TMs = tableForFile(.common(region == .JP ? 30 : 29))
+	static var moves = tableForFile(.common(region == .JP ? 31 : 30))
+	static var tutorialData = tableForFile(.common(region == .JP ? 9 : 31))
+	static var levelUpMoves = tableForFile(.common(region == .JP ? 16 : 32))
 	
 }
 

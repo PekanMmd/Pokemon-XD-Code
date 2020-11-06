@@ -165,10 +165,16 @@ extension XGUtility {
 		} else {
 			common.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.common_rel.compress(), save: true)
 		}
-		
-		XGFiles.fsys("fight_common").fsysData.shiftAndReplaceFileWithType(.msg, withFile: XGFiles.msg("fight").compress(), save: true)
-		XGFiles.fsys("pocket_menu").fsysData.shiftAndReplaceFileWithType(.rel, withFile: XGFiles.pocket_menu.compress(), save: true)
 
+		let fightFile = XGFiles.msg("fight")
+		if fightFile.exists {
+			XGFiles.fsys("fight_common").fsysData.shiftAndReplaceFileWithType(.msg, withFile: fightFile.compress(), save: true)
+		}
+
+		let pocketFile = XGFiles.pocket_menu
+		if pocketFile.exists {
+			XGFiles.fsys("pocket_menu").fsysData.shiftAndReplaceFileWithType(.rel, withFile: pocketFile.compress(), save: true)
+		}
 	}
 	
 	class func prepareForQuickCompilation() {

@@ -376,16 +376,16 @@ final class XGFsys : NSObject {
 	}
 	
 	func isFileCompressed(index: Int) -> Bool {
-		return self.data.getWordAtOffset(startOffsetForFile(index)) == kLZSSbytes
+		return data.getWordAtOffset(startOffsetForFile(index)) == kLZSSbytes
 	}
 
 	func getUnknownLZSSForFileWithIndex(_ index: Int) -> UInt32 {
-		return self.data.getWordAtOffset(startOffsetForFile(index) + kLZSSUnkownOffset)
+		return data.getWordAtOffset(startOffsetForFile(index) + kLZSSUnkownOffset)
 	}
 	
 	func extractDataForFileWithIndex(index: Int) -> XGMutableData? {
 		// checks if the file is compressed or not and returns the appropriate data
-		if !(index < self.numberOfEntries) {
+		if !(index < numberOfEntries) {
 			return nil
 		}
 		
@@ -502,13 +502,18 @@ final class XGFsys : NSObject {
 	}
 	
 	func shiftAndReplaceFileWithIndexEfficiently(_ index: Int, withFile newFile: XGFiles, save: Bool) {
-		if !(index < self.numberOfEntries) {
+		guard index < self.numberOfEntries else {
 			printg("skipping fsys import: \(newFile.fileName) to \(self.fileName)\nindex doesn't exist:", index)
 			return
 		}
 		
 		var newFile = newFile
-		if self.isFileCompressed(index: index) && (newFile.data!.getWordAtOffset(0) != kLZSSbytes) {
+		guard let newFileData = newFile.data, newFileData.length > 3 else {
+			printg("skipping fsys import: \(newFile.fileName) to \(self.fileName)\nInsufficient data.")
+			return
+		}
+
+		if isFileCompressed(index: index) && (newFileData.getWordAtOffset(0) != kLZSSbytes) {
 			newFile = newFile.compress()
 		}
 		
@@ -541,6 +546,7 @@ final class XGFsys : NSObject {
 			let newNextStart = index < self.numberOfEntries - 1 ? startOffsetForFile(index + 1) : dataEnd
 			
 			if fileEnd > newNextStart {
+				// add a little extra free space so future size increases can be accounted for if they are small.
 				expansionRequired = fileEnd - newNextStart + 0x80
 				while expansionRequired % 16 != 0 {
 					expansionRequired += 1
@@ -548,19 +554,17 @@ final class XGFsys : NSObject {
 			}
 			
 			if expansionRequired > 0 {
-				// add a little extra free space so future size increases can be accounted for if they are small.
-				if index < self.numberOfEntries - 1 {
-					for i in index + 1 ..< self.numberOfEntries {
-						self.setStartOffsetForFile(index: i, newStart: startOffsetForFile(i) + expansionRequired)
+				if index < numberOfEntries - 1 {
+					for i in index + 1 ..< numberOfEntries {
+						setStartOffsetForFile(index: i, newStart: startOffsetForFile(i) + expansionRequired)
 					}
 				}
-				self.data.insertRepeatedByte(byte: 0, count: expansionRequired, atOffset: newNextStart)
-				self.setFilesize(self.data.length)
-				
+				data.insertRepeatedByte(byte: 0, count: expansionRequired, atOffset: newNextStart)
+				setFilesize(data.length)
 			}
 		}
 		
-		self.replaceFileWithIndex(index, withFile: newFile, saveWhenDone: save)
+		replaceFileWithIndex(index, withFile: newFile, saveWhenDone: save)
 	}
 	
 	func replaceFileWithIndex(_ index: Int, withFile newFile: XGFiles, saveWhenDone: Bool) {
@@ -1008,23 +1012,10 @@ final class XGFsys : NSObject {
 					let msg = XGStringTable(file: file, startOffset: 0, fileSize: file.fileSize)
 					msg.writeJSON(to: .nameAndFolder(file.fileName + ".json", file.folder))
 				}
-				
-				if data[i].file.fileType == .gsw {
-					let gsw = XGGSWTextures(data: data[i])
-					let textures = gsw.extractTextureData()
-					for textureData in textures {
-						textureData.save()
 
-						let texture = GoDTexture(data: textureData)
-						let pngFile = XGFiles.nameAndFolder(texture.file.fileName + ".png", folder)
-						texture.image.writePNGData(toFile: pngFile)
-					}
-				}
-				
-				if data[i].file.fileType == .gtx || data[i].file.fileType == .atx {
-					let texture = GoDTexture(data: data[i])
-					let pngFile = XGFiles.nameAndFolder(texture.file.fileName + ".png", folder)
-					texture.image.writePNGData(toFile: pngFile)
+				for texture in data[i].file.textures {
+					texture.save()
+					texture.writePNGData()
 				}
 				
 				if data[i].file.fileType == .msg {

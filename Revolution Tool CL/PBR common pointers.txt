@@ -1,0 +1,48 @@
+PBR common pointers
+
+(These offsets are from an edited version. Should replace with vanilla offsets at some point)
+
+Jump table in RAM: 8063ce34
+list of pointers to common data tables in RAM
+
+instructions to load jump table address
+lis	rX, 0x8064              [r31 3fe08064]
+subi	rX, rX, 12748       [r31, r31 3bffce34]
+
+followed by addi	r3, rX, (pointerIndex * 4) [r31 +16 387f0010] [r4 + 16 38640010]
+
+seen registers 5, 31 used
+
+91BF0200 0: pokemon models (common_06.bin)
+91C5CC00 1: pokemon faces (22)
+91C4E320 2: fight ai values (15)
+91C52440 3: items (19)
+91C16520 4: base stats (8)
+91C2FC00 5: evolutions (9)
+91C6E860 6: moves (30)
+91BEF480 7: exp tables (5)
+91C60AC0 8: abilities (23)
+91BEF1E0 9: type matchups (4)
+91C6CDE0 10: trainer models (27)
+91C619A0 11: trainer custom parts (24)
+91C6C860 12: trainer custom table (25)
+91BE3540 13: countries (1)
+91C6D280 14: trainer titles (28)
+91C164A0 15: pokemon model effects (7)
+91C45A00 16: fight ai battle pass (12)
+91C502A0 17: flag IDs (17)
+91C73240 18: level up moves (32)
+91C56E00 19: pokemon bodies (21)
+91C444C0 20: ball models (10)
+91C6CA20 21: trainer event (26)
+91C4F720 22: fight ai move data (16)
+91C56D40 23: menu battle rules (20)
+91C44740 24: colosseum rules (11)
+91BDB400 25: pokemon icons (0)
+91C6E680 26: trainer event(29)
+91BEA180 27: shop items (2)
+91BEA480 28: colosseums unknown (3)
+91C45E40 29: fight ai expect data (13)
+91C521A0 30: floor event (18)
+91C4E0A0 31: fight ai pokemon part data (14)
+91C714C0 32: tutorial data (31)

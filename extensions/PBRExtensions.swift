@@ -282,16 +282,6 @@ class XGUtility {
 					XGColour.colourThreshold = 0
 					for file in fileToImport.folder.files {
 
-						if file.fileType == .pkx {
-							for dat in fileToImport.folder.files where dat.fileType == .dat {
-								if dat.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-									if let datData = dat.data, let pkxData = file.data {
-										XGUtility.importDatToPKX(dat: datData, pkx: pkxData).save()
-									}
-								}
-							}
-						}
-
 						// encode string tables before compiling scripts
 						if file.fileType == .msg {
 							for json in fileToImport.folder.files where json.fileType == .json {
@@ -309,35 +299,50 @@ class XGUtility {
 
 
 						if file.fileType == .gtx || file.fileType == .atx {
-							for image in fileToImport.folder.files where XGFileTypes.imageFormats.contains(image.fileType) {
-								if image.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-									if file.fileName.contains(".gsw.") {
-										// preserves the image format so can easily be imported into gsw
-										file.texture.importImage(file: image)
-									} else {
-										// automatically chooses a good format for the new image
-										let imageData = image.image
-										let textureData = GoDTextureImporter.getTextureData(image: imageData)
-										textureData.file = file
-										textureData.save()
+							for imageFile in fileToImport.folder.files where XGFileTypes.imageFormats.contains(imageFile.fileType) {
+								if imageFile.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
+									if settings.verbose {
+										printg("importing \(imageFile.path) into \(file.path)")
+									}
+									if let image = XGImage.loadImageData(fromFile: imageFile) {
+										let texture: GoDTexture
+										if file.fileName.contains(".sdr.")
+										|| file.fileName.contains(".odr.")
+										|| file.fileName.contains(".mdr.")
+										{
+											// preserves the image format so can easily be imported into model
+											texture = image.getTexture(format: file.texture.format)
+
+										} else {
+											// automatically chooses a good format for the new image
+											texture = image.texture
+										}
+										texture.file = file
+										texture.save()
 									}
 								}
 							}
 						}
 					}
 
-					// encode gsws after all gtxs have been encoded
+					// import model textures after all gtxs have been encoded
 					for file in fileToImport.folder.files {
-						if file.fileType == .gsw {
-							let gsw = XGGSWTextures(data: file.data!)
-
-							for subFile in fileToImport.folder.files where subFile.fileName.contains(gsw.subFilenamesPrefix) && subFile.fileType == .gtx {
-								if let id = subFile.fileName.removeFileExtensions().replacingOccurrences(of: gsw.subFilenamesPrefix, with: "").integerValue {
-									gsw.importTextureData(subFile.data!, withID: id)
+						if XGFileTypes.textureContainingFormats.contains(file.fileType) {
+							if let dataFormat = PBRTextureContaining.fromFile(file) {
+								var expectedFiles = dataFormat.textures
+								var foundReplacement = false
+								for i in 0 ..< expectedFiles.count {
+									let textureFile = expectedFiles.map { $0.data.file }[i]
+									if textureFile.exists {
+										expectedFiles[i] = textureFile.texture
+										foundReplacement = true
+									}
+								}
+								if foundReplacement {
+									dataFormat.importTextures(expectedFiles)
+									dataFormat.data?.save()
 								}
 							}
-
-							gsw.save()
 						}
 
 						// strings in the xds scripts will override those particular strings in the msg's json

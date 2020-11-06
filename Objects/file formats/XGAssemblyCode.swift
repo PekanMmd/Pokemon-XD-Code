@@ -66,6 +66,23 @@ let kRelFreeSpaceStart = 0x80590 + kRELtoRAMOffsetDifference // XD US
 
 let kPickupTableInDolStartOffset = 0x2F0758 // XD US
 
+let kPBRDOLFreeSpaceStart: Int = {
+	switch region {
+	case .US: return 0x1D9474
+	case .EU: return 0x1D4838
+	case .JP: return 0x1CA57C
+	}
+}()
+
+let kPBRDOLFreeSpaceEnd: Int = {
+	switch region {
+	case .US: return 0x1DEEE0
+	case .EU: return 0x1D9F6C
+	case .JP: return 0x1D076C
+	}
+}()
+
+
 let moveEffectTableStartRAM = 0x417edf // XD US
 let moveEffectTableStartDOL = moveEffectTableStartRAM - kDolTableToRAMOffsetDifference // XD US
 

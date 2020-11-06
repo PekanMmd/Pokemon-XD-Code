@@ -73,12 +73,7 @@ enum XGDecks {
 	}
 	
 	var dataTable : PBRDataTable {
-		switch self {
-		case .dcka: return PBRDataTable.AIDeck()!
-		case .dckt(let i): return PBRDataTable.trainerDeckWithID(i)!
-		case .dckp(let i): return PBRDataTable.pokemonDeckWithID(i)!
-		case .null: return PBRDataTable(file: self.file)
-		}
+		return PBRDataTable.tableForFile(file)
 	}
 
 	var name: String {
@@ -105,7 +100,16 @@ enum XGDecks {
 		default: return file.fileName
 		}
 	}
-	
+
+	var pokemon: [XGDeckPokemon] {
+		switch self {
+		case .dckp:
+			return (0 ..< numberOfEntries).map { XGDeckPokemon.deck($0, self) }
+		default:
+			return []
+		}
+	}
+
 	static var level30opendouble : XGDecks { return .dckp(0) }
 	static var level30opensingle : XGDecks { return .dckp(1) }
 	static var level50alldouble : XGDecks { return .dckp(2) }

@@ -35,7 +35,7 @@ class XGMutableData {
 	}
 	
 	var charStream : [UInt8] {
-		return getCharStreamFromOffset(0, length: length)
+		return rawBytes
 	}
 	
 	var length : Int {
@@ -77,7 +77,11 @@ class XGMutableData {
 			}
 		}
 	}
-	
+
+	func duplicated() -> XGMutableData {
+		return XGMutableData(byteStream: rawBytes, file: file)
+	}
+
 	//MARK: - Get Bytes
 	
 	func getCharAtOffset(_ start : Int) -> UInt8 {

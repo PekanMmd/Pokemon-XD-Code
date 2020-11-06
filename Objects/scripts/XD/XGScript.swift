@@ -1158,7 +1158,7 @@ class XGScript: NSObject {
 								possible = false
 							}
 							if type.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
 								macros.append(.macro(name, c.rawValueString))
 							}
 							
@@ -1176,7 +1176,7 @@ class XGScript: NSObject {
 								p1 = .macroImmediate(c, type)
 							}
 							if type.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -1219,7 +1219,7 @@ class XGScript: NSObject {
 								p2 = .macroImmediate(c, type)
 							}
 							if type.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -1262,7 +1262,7 @@ class XGScript: NSObject {
 								p2 = .macroImmediate(c, overrideType)
 							}
 							if overrideType.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: overrideType)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: overrideType, ftbl: ftbl)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -1281,7 +1281,7 @@ class XGScript: NSObject {
 								p1 = .macroImmediate(c, overrideType)
 							}
 							if overrideType.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: overrideType)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: overrideType, ftbl: ftbl)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -1304,7 +1304,7 @@ class XGScript: NSObject {
 									p2 = .macroImmediate(c, type)
 								}
 								if type.needsDefine {
-									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
+									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
 									macros.append(.macro(name, c.rawValueString))
 								}
 							}
@@ -1326,7 +1326,7 @@ class XGScript: NSObject {
 									p1 = .macroImmediate(c, type)
 								}
 								if type.needsDefine {
-									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
+									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
 									macros.append(.macro(name, c.rawValueString))
 								}
 							}
@@ -1377,7 +1377,7 @@ class XGScript: NSObject {
 									params[j] = .macroImmediate(c, type)
 								}
 								if type.needsDefine {
-									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
+									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
 									macros.append(.macro(name, c.rawValueString))
 								}
 							} else {
@@ -1421,7 +1421,7 @@ class XGScript: NSObject {
 									params[j] = .macroImmediate(c, type)
 								}
 								if type.needsDefine {
-									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
+									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
 									macros.append(.macro(name, c.rawValueString))
 								}
 							} else {
@@ -1517,7 +1517,7 @@ class XGScript: NSObject {
 										params[j] = .macroImmediate(c, type)
 									}
 									if type.needsDefine {
-										let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
+										let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
 										macros.append(.macro(name, c.rawValueString))
 									}
 								}
@@ -1603,7 +1603,7 @@ class XGScript: NSObject {
 										params[j] = .macroImmediate(c, type)
 									}
 									if type.needsDefine {
-										let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
+										let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
 										macros.append(.macro(name, c.rawValueString))
 									}
 								}
@@ -1648,7 +1648,7 @@ class XGScript: NSObject {
 								p1 = .macroImmediate(c, type)
 							}
 							if type.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -2126,7 +2126,7 @@ class XGScript: NSObject {
 				let value = val.rawValueString
 				
 				if let t = type {
-					let macroString = t.printsAsMacro ? XDSExpr.stringFromMacroImmediate(c: val, t: t) : value
+					let macroString = t.printsAsMacro ? XDSExpr.stringFromMacroImmediate(c: val, t: t, ftbl: ftbl) : value
 					str += (t == .msg ? "\n" : " ") + macroString
 					if t.needsDefine {
 						mac.append(.macro(macroString, value))
@@ -2145,7 +2145,7 @@ class XGScript: NSObject {
 			var value = gvar[i].rawValueString
 			str += "global " + variable + " = "
 			if let type = globalMacroTypes[variable] {
-				let macroString = type.printsAsMacro ? XDSExpr.stringFromMacroImmediate(c: gvar[i], t: type) : gvar[i].rawValueString
+				let macroString = type.printsAsMacro ? XDSExpr.stringFromMacroImmediate(c: gvar[i], t: type, ftbl: ftbl) : gvar[i].rawValueString
 				str += macroString
 				if type.needsDefine {
 					mac.append(.macro(macroString, value))

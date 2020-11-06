@@ -25,43 +25,39 @@ enum XGPokemon: XGIndexedValue {
 	case burmy(XGWormadamCloaks)
 	case wormadam(XGWormadamCloaks)
 	
-	var description : String {
-		get {
-			return self.name.string
-		}
+	var description: String {
+		return self.name.string
 	}
 	
-	var index : Int {
-		get {
-			switch self {
-			case .pokemon(let i):
-				if (i > kNumberOfPokemon) || (i < 0) {
-					return 0
-				}
-				return i
-			case .deoxys(let f):
-				switch f {
-				case .normal:
-					return 386
-				default:
-					return 495 + f.rawValue
-				}
-			case .burmy: return 412
-			case .wormadam(let c):
-				switch c {
-				case .plant:
-					return 413
-				default:
-					return 498 + c.rawValue
-				}
+	var index: Int {
+		switch self {
+		case .pokemon(let i):
+			if (i > kNumberOfPokemon) || (i < 0) {
+				return 0
+			}
+			return i
+		case .deoxys(let f):
+			switch f {
+			case .normal:
+				return 386
+			default:
+				return 495 + f.rawValue
+			}
+		case .burmy: return 412
+		case .wormadam(let c):
+			switch c {
+			case .plant:
+				return 413
+			default:
+				return 498 + c.rawValue
 			}
 		}
 	}
 	
-	var baseIndex : Int {
+	var baseIndex: Int {
 		switch self {
 		case .pokemon:
-			switch self.index {
+			switch index {
 			case 496: fallthrough
 			case 497: fallthrough
 			case 498: return 386
@@ -69,7 +65,7 @@ enum XGPokemon: XGIndexedValue {
 			case 499: fallthrough
 			case 500: return 413
 				
-			default: return self.index
+			default: return index
 			}
 		case .deoxys: return 386
 		case .burmy: return 412
@@ -77,19 +73,38 @@ enum XGPokemon: XGIndexedValue {
 		}
 	}
 	
-	var nameID : Int {
-		get {
-			return stats.nameID
+	var nameID: Int {
+		return stats.nameID
+	}
+	
+	var name: XGString {
+		return getStringSafelyWithID(id: nameID)
+	}
+
+	var formeID: Int {
+		switch self {
+		case .deoxys(let f):
+			return f.rawValue
+		case .burmy(let c):
+			switch c {
+			case .plant:
+				return 0
+			default:
+				return c.rawValue
+			}
+		case .wormadam(let c):
+			switch c {
+			case .plant:
+				return 0
+			default:
+				return c.rawValue
+			}
+		default:
+			return 0
 		}
 	}
 	
-	var name : XGString {
-		get {
-			return getStringSafelyWithID(id: nameID)
-		}
-	}
-	
-	var formeName : String {
+	var formeName: String {
 		var forme = ""
 		switch self {
 		case .burmy(let c):
@@ -183,11 +198,11 @@ func allPokemon() -> [String : XGPokemon] {
 	var dic = [String : XGPokemon]()
 	
 	for i in -1 ..< kNumberOfPokemon {
-		
-		let a = XGPokemon.pokemon(i)
-		
-		dic[a.name.unformattedString.lowercased()] = a
-		
+		let mon = XGPokemon.pokemon(i)
+		let name = mon.name.unformattedString.lowercased()
+		if dic[name] == nil {
+			dic[name] = mon
+		}
 	}
 	
 	return dic

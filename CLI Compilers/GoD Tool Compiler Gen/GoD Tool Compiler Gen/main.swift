@@ -30,11 +30,15 @@ let GoDCLITargetName = "GoD-CLI"
 let GoDGUITargetName = "GoD Tool"
 let ColoCLITargetName = "Colosseum-CLI"
 let ColoGUITargetName = "Colosseum Tool"
+let PBRCLITargetName = "PBR-CLI"
+let PBRGUITargetName = "PBR Tool"
 
 let GoDTarget = pbxproj.targets(named: GoDCLITargetName)[0]
 let GoDAssetTarget = pbxproj.targets(named: GoDGUITargetName)[0]
 let ColoTarget = pbxproj.targets(named: ColoCLITargetName)[0]
 let ColoAssetTarget = pbxproj.targets(named: ColoGUITargetName)[0]
+let PBRTarget = pbxproj.targets(named: PBRCLITargetName)[0]
+let PBRAssetTarget = pbxproj.targets(named: PBRGUITargetName)[0]
 
 let ignoredFiles = ["OSXExtensions.swift", "WindowsExtensions.swift"]
 let resourceFileTypes = [".png", ".json", ".sublime"]
@@ -58,6 +62,21 @@ let GoDSources = GoDTarget.buildPhases.first { (phase) -> Bool in
 
 // Read Colosseum Source files
 let ColoSources = ColoTarget.buildPhases.first { (phase) -> Bool in
+	phase.name() == "Sources"
+}!.files!.map { (file) -> String? in
+	if let fileData = file.file, let path = try? fileData.fullPath(sourceRoot: .init("")) {
+		guard !ignoredFiles.contains(where: { (filename) -> Bool in
+			return path.string.contains("/" + filename)
+		}) else {
+			return nil
+		}
+		return path.string
+	}
+	return nil
+}.compactMap { return $0 }
+
+// Read PBR Source files
+let PBRSources = PBRTarget.buildPhases.first { (phase) -> Bool in
 	phase.name() == "Sources"
 }!.files!.map { (file) -> String? in
 	if let fileData = file.file, let path = try? fileData.fullPath(sourceRoot: .init("")) {
@@ -103,12 +122,30 @@ let ColoAssets = ColoAssetTarget.buildPhases.first { (phase) -> Bool in
 	return nil
 }.compactMap { return $0 }
 
+// Read PBR Assets
+let PBRAssets = PBRAssetTarget.buildPhases.first { (phase) -> Bool in
+	phase.name() == "Resources"
+}!.files!.map { (file) -> (filename: String, path: String)? in
+	if let fileData = file.file, let path = try? fileData.fullPath(sourceRoot: .init("")) {
+		guard resourceFileTypes.contains(where: { (filetype) -> Bool in
+			return path.string.contains(filetype)
+		}) else {
+			return nil
+		}
+		return (fileData.path ?? "", path.string)
+	}
+	return nil
+}.compactMap { return $0 }
+
 let GoDAssetsSubFolder = "./out/Assets"
 let ColoAssetsSubFolder = "./out/Assets"
+let PBRAssetsSubFolder = "./out/Assets"
 let GoDAssetsFolder = GoDAssetsSubFolder + "/XD"
 let ColoAssetsFolder = ColoAssetsSubFolder + "/Colosseum"
+let PBRAssetsFolder = PBRAssetsSubFolder + "/PBR"
 let GoDWiimmsAssetsFolder = GoDAssetsFolder + "/wiimm"
 let ColoWiimmsAssetsFolder = ColoAssetsFolder + "/wiimm"
+let PBRWiimmsAssetsFolder = PBRAssetsFolder + "/wiimm"
 
 // MARK: - Script set up
 
@@ -123,6 +160,7 @@ var windowsCompiler = "set SWIFTFLAGS=-sdk %SDKROOT% -resource-dir %SDKROOT%\\us
 + "mkdir " + GoDAssetsSubFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
 + "mkdir " + GoDAssetsFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
 + "mkdir " + GoDWiimmsAssetsFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
+
 
 // MARK: - Copy XD assets to scripts
 
@@ -176,6 +214,37 @@ for file in ColoSources {
 windowsCompiler += "\nPAUSE"
 windowsColoCompiler += "\nPAUSE"
 
+// MARK: - Copy PBR assets to scripts
+
+var osxPBRCompiler = "#!/bin/bash\ncd -- \"$(dirname \"$0\")\" #changes the terminal's directory to the directory where the script was launched\necho \"Copying PBR Tool Assets. This may take a while...\"\n"
++ "mkdir " + PBRAssetsSubFolder + "\n"
++ "mkdir " + PBRAssetsFolder + "\n"
++ "mkdir " + PBRWiimmsAssetsFolder + "\n"
+
+var windowsPBRCompiler = "set SWIFTFLAGS=-sdk %SDKROOT% -resource-dir %SDKROOT%\\usr\\lib\\swift -I %SDKROOT%\\usr\\lib\\swift -L %SDKROOT%\\usr\\lib\\swift\\windows\necho \"Copying PBR Tool Assets. This may take a while...\"\n"
++ "mkdir " + PBRAssetsSubFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
++ "mkdir " + PBRAssetsFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
++ "mkdir " + PBRWiimmsAssetsFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
+
+for asset in PBRAssets {
+	osxPBRCompiler += "cp ../\(asset.path.replacingOccurrences(of: " ", with: "\\ ")) \(PBRAssetsFolder)/\(asset.filename.replacingOccurrences(of: " ", with: "\\ "))\n"
+	windowsPBRCompiler += "copy \"..\\\(asset.path.replacingOccurrences(of: "/", with: "\\"))\" \"\((PBRAssetsFolder + "/" + asset.filename).replacingOccurrences(of: "/", with: "\\"))\"\n"
+}
+osxPBRCompiler += "cp ../tools/OSX/wiimm/* \(PBRWiimmsAssetsFolder)\n"
+windowsPBRCompiler += "copy ..\\tools\\Windows\\wiimm\\* \((PBRWiimmsAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
+
+// MARK: - Add PBR swiftc compiler to scripts
+osxPBRCompiler += "echo \"Compiling PBR Tool. This may take a while...\"\nswiftc -emit-executable -DENV_OSX -o ./out/PBR\\ Tool\\ CLI ../extensions/OSXExtensions.swift"
+windowsPBRCompiler += "\necho \"Compiling PBR Tool. This may take a while...\"\nswiftc %SWIFTFLAGS% -emit-executable -DENV_WINDOWS -o .\\out\\PBR-Tool.exe ..\\extensions\\WindowsExtensions.swift"
+
+for file in PBRSources {
+	osxPBRCompiler += " ../" + file.replacingOccurrences(of: " ", with: "\\ ")
+	windowsPBRCompiler += " \"..\\" + file.replacingOccurrences(of: "/", with: "\\") + "\""
+}
+windowsCompiler += "\nPAUSE"
+windowsColoCompiler += "\nPAUSE"
+windowsPBRCompiler += "\nPAUSE"
+
 // MARK: - Modify OSX script for Linux
 
 var linuxCompiler = osxCompiler.replacingOccurrences(of: "-DENV_OSX", with: "-DENV_LINUX")
@@ -184,6 +253,9 @@ linuxCompiler = linuxCompiler.replacingOccurrences(of: "/tools/OSX/wiimm", with:
 var linuxColoCompiler = osxColoCompiler.replacingOccurrences(of: "-DENV_OSX", with: "-DENV_LINUX")
 linuxColoCompiler = linuxColoCompiler.replacingOccurrences(of: "../extensions/OSXExtensions.swift", with: "../extensions/LinuxExtensions.swift")
 linuxColoCompiler = linuxColoCompiler.replacingOccurrences(of: "/tools/OSX/wiimm", with: "/tools/Linux/wiimm")
+var linuxPBRCompiler = osxPBRCompiler.replacingOccurrences(of: "-DENV_OSX", with: "-DENV_LINUX")
+linuxPBRCompiler = linuxPBRCompiler.replacingOccurrences(of: "../extensions/OSXExtensions.swift", with: "../extensions/LinuxExtensions.swift")
+linuxPBRCompiler = linuxPBRCompiler.replacingOccurrences(of: "/tools/OSX/wiimm", with: "/tools/Linux/wiimm")
 
 // MARK: - Write scripts to disk
 
@@ -193,6 +265,9 @@ let windowsCompilerPath = outputPath + "/" + "GoD_Tool_Windows_Compiler.bat"
 let osxColoCompilerPath = outputPath + "/" + "Colosseum_Tool_OSX_Compiler.sh"
 let linuxColoCompilerPath = outputPath + "/" + "Colosseum_Tool_Linux_Compiler.sh"
 let windowsColoCompilerPath = outputPath + "/" + "Colosseum_Tool_Windows_Compiler.bat"
+let osxPBRCompilerPath = outputPath + "/" + "PBR_Tool_OSX_Compiler.sh"
+let linuxPBRCompilerPath = outputPath + "/" + "PBR_Tool_Linux_Compiler.sh"
+let windowsPBRCompilerPath = outputPath + "/" + "PBR_Tool_Windows_Compiler.bat"
 
 let osxData = osxCompiler.data(using: .utf8)!
 let linuxData = linuxCompiler.data(using: .utf8)!
@@ -200,6 +275,9 @@ let windowsData = windowsCompiler.data(using: .utf8)!
 let osxColoData = osxColoCompiler.data(using: .utf8)!
 let linuxColoData = linuxColoCompiler.data(using: .utf8)!
 let windowsColoData = windowsColoCompiler.data(using: .utf8)!
+let osxPBRData = osxPBRCompiler.data(using: .utf8)!
+let linuxPBRData = linuxPBRCompiler.data(using: .utf8)!
+let windowsPBRData = windowsPBRCompiler.data(using: .utf8)!
 
 do {
 	try osxData.write(to: URL(fileURLWithPath: osxCompilerPath), options: [.atomic])
@@ -213,6 +291,13 @@ do {
 	print("Successfully wrote Colosseum OSX compiler script")
 } catch {
 	print("Failed to write Colosseum OSX compiler script")
+}
+
+do {
+	try osxPBRData.write(to: URL(fileURLWithPath: osxPBRCompilerPath), options: [.atomic])
+	print("Successfully wrote PBR OSX compiler script")
+} catch {
+	print("Failed to write PBR OSX compiler script")
 }
 
 do {
@@ -230,6 +315,13 @@ do {
 }
 
 do {
+	try linuxPBRData.write(to: URL(fileURLWithPath: linuxPBRCompilerPath), options: [.atomic])
+	print("Successfully wrote PBR LINUX compiler script")
+} catch {
+	print("Failed to write PBR LINUX compiler script")
+}
+
+do {
 	try windowsData.write(to: URL(fileURLWithPath: windowsCompilerPath), options: [.atomic])
 	print("Successfully wrote XD Windows compiler script")
 } catch {
@@ -241,4 +333,11 @@ do {
 	print("Successfully wrote Colosseum Windows compiler script")
 } catch {
 	print("Failed to write Colosseum Windows compiler script")
+}
+
+do {
+	try windowsPBRData.write(to: URL(fileURLWithPath: windowsPBRCompilerPath), options: [.atomic])
+	print("Successfully wrote PBR Windows compiler script")
+} catch {
+	print("Failed to write PBR Windows compiler script")
 }

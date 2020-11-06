@@ -8,7 +8,9 @@
 
 import Foundation
 
-let kNumberOfMoves = PBRDataTable.moves.numberOfEntries // 468
+var kNumberOfMoves: Int {
+	return PBRDataTable.moves.numberOfEntries // 468 in vanilla
+}
 
 final class XGMove: NSObject, XGIndexedValue {
 	

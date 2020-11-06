@@ -14,13 +14,13 @@ let kNumberOfPokemonMoves	= 0x04
 let kNumberOfEVs			= 0x06
 let kNumberOfIVs			= 0x06
 
-class XGTrainerPokemon : NSObject {
+class XGTrainerPokemon {
 	
 	var deckData		= XGDeckPokemon.deck(0, XGDecks.null)
 	
 	var id				= 0
 	var species			= XGPokemon.pokemon(0)
-//	var happiness		= 0x0 can't find it. I can only assume return and frustration are always max power?
+//	var happiness		= 0x0 can't find it. Not sure how this is determined
 	var nature			= XGNatures.hardy
 	var gender			= XGGenders.male
 	var IVs				= [Int]()
@@ -43,10 +43,9 @@ class XGTrainerPokemon : NSObject {
 	}
 	
 	init(deckData: XGDeckPokemon) {
-		super.init()
 		
 		self.deckData = deckData
-		let table = PBRDataTable(file: deckData.deck.file)
+		let table = PBRDataTable.tableForFile(deckData.deck.file)
 		guard let data =  table.entryWithIndex(deckData.index) else {
 			printg("Failed to load trainer pokemon:", deckData.deck.file.path, "\nindex:", deckData.index)
 			return
@@ -110,17 +109,21 @@ class XGTrainerPokemon : NSObject {
 	
 	@objc func save() {
 		
-		let table = PBRDataTable(file: deckData.deck.file)
+		let table = PBRDataTable.tableForFile(deckData.deck.file)
 		guard let data =  table.entryWithIndex(deckData.index) else {
 			printg("Failed to load trainer pokemon:", deckData.deck.file.path, "\nindex:", deckData.index)
 			return
 		}
 		
 		data.setShort(0, to: id)
+
+		data.setShort(6, to: species.index)
+		data.setByte(13, to: species.formeID)
 		
-		let stats = self.species.stats
+		let stats = species.stats
 		data.setByte(8, to: stats.type1.index)
 		data.setByte(9, to: stats.type2.index)
+		data.save()
 	}
 	
 	@objc func purge() {

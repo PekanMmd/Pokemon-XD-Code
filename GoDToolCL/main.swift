@@ -7,6 +7,19 @@
 //
 //
 
+var csv = "Spot,Index,Species,Percentage,Min Level,Max Level"
+for i in 0 ..< XGPokeSpots.allCases.count {
+	let spot = XGPokeSpots(rawValue: i)!
+	for j in 0 ..< spot.numberOfEntries {
+		let mon = XGPokeSpotPokemon(index: j, pokespot: spot)
+		csv += ",\n\(spot.enumerableName),\(j),\(mon.pokemon.name.unformattedString),\(mon.encounterPercentage),\(mon.minLevel),\(mon.maxLevel)"
+	}
+}
+XGUtility.saveString(csv, toFile: .nameAndFolder("XG Pokespots.csv", .Documents))
+
+//XGUtility.extractAllTextures()
+
+
 //ISO.allFileNames.count.hexString().println()
 
 

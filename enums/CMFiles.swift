@@ -254,6 +254,20 @@ indirect enum XGFiles {
 		return XGCollisionData(file: self)
 	}
 	#endif
+
+	var textures: [GoDTexture] {
+		if XGFileTypes.textureFormats.contains(fileType) {
+			return [texture]
+		}
+		if fileType == .gsw {
+			return XGGSWTextures(file: self).extractTextureData().map { GoDTexture(data: $0) }
+		}
+		if XGFileTypes.modelFormats.contains(fileType) {
+			#warning("extract textures from models colo/xd")
+			return []
+		}
+		return []
+	}
 	
 	var fileSize : Int {
 		get {

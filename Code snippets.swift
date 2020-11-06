@@ -7673,6 +7673,7 @@ import Foundation
 
 //// Add ASM for functions for custom class
 //// Make sure to add these after code above is run before adding the class functions
+//// The first chunk of code will print out the offsets. Write them down somewhere for future use.
 //let jumpTableRAMOffset = 0x80B99390
 //let customClassReturnOffset: UInt32 = 0x80B99378
 //

@@ -212,7 +212,7 @@ class GoDMovesViewController: GoDTableViewController {
 			let prefix = game == .PBR ? "[0xF001][0xF101]" : ""
 			let string = XGString(string: prefix + sender.stringValue, file: table, sid: currentMove.nameID)
 			if game == .PBR {
-				if !table.stringTable.replaceString(string, save: true, increaseLength: true) {
+				if !table.stringTable.replaceString(string, save: true) {
 					printg("Failed to set move name:", sender.stringValue)
 				}
 			} else {
@@ -277,7 +277,7 @@ class GoDMovesViewController: GoDTableViewController {
 			let prefix = game == .PBR ? "[0xF001][0xF101]" : ""
 			let string = XGString(string: prefix + sender.stringValue, file: table, sid: currentMove.descriptionID)
 			if game == .PBR {
-				if !table.stringTable.replaceString(string, save: true, increaseLength: true) {
+				if !table.stringTable.replaceString(string, save: true) {
 					printg("Failed to set move name:", sender.stringValue)
 				}
 			} else {

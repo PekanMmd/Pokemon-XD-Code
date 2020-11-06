@@ -80,7 +80,7 @@ final class XGDemoStarterPokemon: NSObject, XGGiftPokemon, Codable {
 		move4 = .move(moveIndex)
 		
 		let shiny = dol.get2BytesAtOffset(start + kDemoStarterShinyValueOffset)
-		self.shinyValue = XGShinyValues(rawValue: shiny)!
+		self.shinyValue = XGShinyValues(rawValue: shiny) ?? .random
 		
 		let nat = dol.get2BytesAtOffset(start + kDemoStarterNatureOffset)
 		self.nature = XGNatures(rawValue: nat) ?? .random

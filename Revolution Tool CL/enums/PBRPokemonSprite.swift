@@ -14,17 +14,14 @@ enum PBRPokemonImage : XGIndexedValue {
 	
 	var index : Int {
 		switch self {
-			// 0 is bulbasaur, alternate formes start after arceus.
+		// 0 is bulbasaur, alternate formes start after arceus.
 		case .face(let i): return i
 		case .body(let i): return i
 		}
 	}
 	
 	private var entry : PBRDataTableEntry {
-		switch self {
-		case .face: return PBRDataTableEntry.pokemonFaces(index: index)
-		case .body: return PBRDataTableEntry.pokemonBodies(index: index)
-		}
+		PBRDataTableEntry.pokemonIcons(index: index)
 	}
 	
 	var maleID : UInt32 {
@@ -41,7 +38,7 @@ enum PBRPokemonImage : XGIndexedValue {
 		}
 	}
 	
-	var maleTexture : NSImage {
+	var maleTexture : XGImage {
 		var fsys : XGFsys!
 		switch self {
 		case .face: fsys = XGFiles.fsys("menu_face").fsysData
@@ -51,7 +48,7 @@ enum PBRPokemonImage : XGIndexedValue {
 		return fsys.decompressedDataForFileWithIndex(index: id)!.texture.image
 	}
 	
-	var femaleTexture : NSImage {
+	var femaleTexture : XGImage {
 		var fsys : XGFsys!
 		switch self {
 		case .face: fsys = XGFiles.fsys("menu_face").fsysData
@@ -70,7 +67,7 @@ enum PBRPokemonModel : XGIndexedValue {
 	
 	var index : Int {
 		switch self {
-		// 1 is bulbasaur, alternate formes start after arceus.
+		// 1 is bulbasaur, alternate formes are directly after base form
 		case .regular(let i): return i
 		case .shiny(let i): return i
 		}

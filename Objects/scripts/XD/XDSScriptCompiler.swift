@@ -314,7 +314,7 @@ class XDSScriptCompiler: NSObject {
 					let string = XGString(string: uptext, file: table.file, sid: newID)
 					loadAllStrings()
 					if let stable = stringTable {
-						if !stable.replaceString(string, alert: false, save: false, increaseLength: true) {
+						if !stable.replaceString(string, save: false) {
 							error = "Failed to replace msg: $:\(id!):\"\(text)\"\n maybe because the string was too large.\nTry setting '++IncreaseMSGSize' to 'YES'."
 							return -1
 						}
@@ -324,7 +324,7 @@ class XDSScriptCompiler: NSObject {
 			
 			if !found {
 				if let msg = getStringWithID(id: id!) {
-					if !msg.duplicateWithString(uptext).replace(increaseSize: increaseMSGSize, save: false) {
+					if !msg.duplicateWithString(uptext).replace(save: false) {
 						error = "Failed to replace msg: $:\(id!):\"\(text)\"\n either the msg doesn't exist in any file or the string was too large.\nIn the event of the latter try setting 'Increase MSG  Size' to 'YES'."
 						return -1
 					}

@@ -27,23 +27,24 @@ class XGDolPatcher {
 	}
 
 	static func disableRentalPassChecksums() {
+		printg("Disabling rental pass checksums")
 		XGAssembly.replaceASM(startOffset: 0x3DAF40 - kDolToRAMOffsetDifference, newASM: [
-			.b(0x2c)
+			.b_f(0, 0x2c)
 		])
 		XGAssembly.replaceASM(startOffset: 0x3dda20 - kDolToRAMOffsetDifference, newASM: [
-			.b(0x2c)
+			.b_f(0, 0x2c)
 		])
 
 		XGAssembly.replaceASM(startOffset: 0x3de140 - kDolToRAMOffsetDifference, newASM: [
-			.b(0x24)
+			.b_f(0, 0x24)
 		])
 
 		XGAssembly.replaceASM(startOffset: 0x3db6bc - kDolToRAMOffsetDifference, newASM: [
-			.b(0x30)
+			.b_f(0, 0x30)
 		])
 
 		XGAssembly.replaceASM(startOffset: 0x3db568 - kDolToRAMOffsetDifference, newASM: [
-			.b(0x30)
+			.b_f(0, 0x30)
 		])
 
 		XGAssembly.replaceASM(startOffset: 0x3DA370 - kDolToRAMOffsetDifference, newASM: [
@@ -51,7 +52,16 @@ class XGDolPatcher {
 		])
 	}
 
+	static func overrideHardcodedPokemonCount(newCount count: Int) {
+		XGAssembly.replaceASM(startOffset: 0x56c0c - kDolToRAMOffsetDifference, newASM: [.cmpwi(.r0, count)])
+
+		for offset in [0x5b704 , 0x5b9b4 , 0x5c09c , 0x5c348] {
+			XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [.cmpwi(.r4, count)])
+		}
+	}
+
 	static func isClassSplitImplemented() -> Bool {
+		// for colo/xd compatibility
 		return true
 	}
 }

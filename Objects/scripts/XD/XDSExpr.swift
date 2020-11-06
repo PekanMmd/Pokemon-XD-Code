@@ -482,7 +482,7 @@ indirect enum XDSExpr {
 		return "$:\(xs.id):" + "\"\(updatedString)\""
 	}
 	
-	static func stringFromMacroImmediate(c: XDSConstant, t: XDSMacroTypes) -> String {
+	static func stringFromMacroImmediate(c: XDSConstant, t: XDSMacroTypes, ftbl: [FTBL] = []) -> String {
 		switch t {
 		case .bool:
 			return c.asInt != 0 ? "YES" : "NO"
@@ -665,15 +665,20 @@ indirect enum XDSExpr {
 					let functions = commonScript.ftbl
 					if functionIndex < functions.count {
 						let function = functions[functionIndex]
-						return "COMMON_SCRIPT_" + function.name.uppercased()
+						return macroWithName("COMMON_SCRIPT_" + function.name.uppercased())
 					}
 				}
 				
-				return "COMMON_SCRIPT_FUNCTION_\(functionIndex)"
+				return macroWithName("COMMON_SCRIPT_FUNCTION_\(functionIndex)")
 			} else if scriptIdentifier == 0x100 {
-				return "CURRENT_SCRIPT_FUNCTION_\(functionIndex)"
+				if functionIndex < ftbl.count {
+					let function = ftbl[functionIndex]
+					return macroWithName("CURRENT_SCRIPT_" + function.name.uppercased())
+				}
+				
+				return macroWithName("CURRENT_SCRIPT_FUNCTION_\(functionIndex)")
 			} else {
-				return "SCRIPT_\(scriptIdentifier.hexString())_" + "FUNCTION_\(functionIndex)"
+				return macroWithName("SCRIPT_\(scriptIdentifier.hexString())_" + "FUNCTION_\(functionIndex)")
 			}
 		case .sfxID:
 			return "SFX_" + XGMusicMetaData(index: c.asInt).name.uppercased()

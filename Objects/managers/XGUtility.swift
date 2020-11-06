@@ -101,18 +101,7 @@ class XGUtility {
 					XGColour.colourThreshold = 0
 					for file in fileToImport.folder.files {
 
-						if file.fileType == .pkx {
-							for dat in fileToImport.folder.files where dat.fileType == .dat {
-								if dat.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-									if let datData = dat.data, let pkxData = file.data {
-										if settings.verbose {
-											printg("importing \(dat.path) into \(file.path)")
-										}
-										XGUtility.importDatToPKX(dat: datData, pkx: pkxData).save()
-									}
-								}
-							}
-						}
+
 
 						// encode string tables before compiling scripts
 						if file.fileType == .msg {
@@ -156,8 +145,8 @@ class XGUtility {
 						}
 					}
 
-					// encode gsws after all gtxs have been encoded
 					for file in fileToImport.folder.files {
+						// encode gsws after all gtxs have been encoded
 						if file.fileType == .gsw {
 							let gsw = XGGSWTextures(data: file.data!)
 
@@ -173,6 +162,9 @@ class XGUtility {
 							gsw.save()
 						}
 
+						// import textures into models after textures have been encoded
+						#warning("import textures into models")
+
 						// strings in the xds scripts will override those particular strings in the msg's json
 						if file.fileType == .xds && game != .PBR {
 							if settings.verbose {
@@ -183,6 +175,22 @@ class XGUtility {
 							if !XDSScriptCompiler.compile(textFile: file, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)) {
 								printg("XDS Compilation Error:\n" + XDSScriptCompiler.error)
 								return false
+							}
+						}
+					}
+				}
+
+				for file in fileToImport.folder.files {
+					// import models into pkxs after textures have been imported into models
+					if file.fileType == .pkx {
+						for dat in fileToImport.folder.files where dat.fileType == .dat {
+							if dat.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
+								if let datData = dat.data, let pkxData = file.data {
+									if settings.verbose {
+										printg("importing \(dat.path) into \(file.path)")
+									}
+									XGUtility.importDatToPKX(dat: datData, pkx: pkxData).save()
+								}
 							}
 						}
 					}

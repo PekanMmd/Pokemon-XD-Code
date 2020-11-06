@@ -8,7 +8,9 @@
 
 import Foundation
 
-let kNumberOfTypes = PBRDataTable.typeMatchups.entrySize // 18
+var kNumberOfTypes: Int {
+	return PBRDataTable.typeMatchups.entrySize // 18 in vanilla
+}
 let kFirstTypeNameID = 0xca6
 
 final class XGType: NSObject, XGIndexedValue, Codable {

@@ -51,12 +51,12 @@ class GoDTexture {
 	
 	var textureLength : Int {
 		get {
-			return self.isIndexed ? paletteStart - textureStart : data.length - textureStart
+			return isIndexed ? paletteStart - textureStart : data.length - textureStart
 		}
 	}
 	
 	var paletteLength : Int {
-		return self.isIndexed ? (self.data.length - self.paletteStart) : 0
+		return isIndexed ? (data.length - paletteStart) : 0
 	}
 	
 	var paletteCount : Int {
@@ -65,10 +65,10 @@ class GoDTexture {
 	
 	var file : XGFiles {
 		get {
-			return self.data.file
+			return data.file
 		}
 		set {
-			self.data.file = newValue
+			data.file = newValue
 		}
 	}
 
@@ -104,13 +104,13 @@ class GoDTexture {
 		}
 		
 		let requiredTextureBytes = requiredPixelsPerRow * requiredPixelsPerCol * self.BPP / 8
-		let requiredPaletteBytes = format.paletteCount * paletteFormat.bitsPerPixel / 8
+		let requiredPaletteBytes = format.isIndexed ? format.paletteCount * paletteFormat.bitsPerPixel / 8 : 0
 		
 		if self.format.isIndexed {
 			self.paletteFormat = paletteFormat.paletteID ?? GoDTextureFormats.RGB5A3.paletteID!
 			self.paletteStart = 0x80 + requiredTextureBytes
 		}
-		
+
 		self.data = XGMutableData(byteStream: [Int](repeating: 0, count: 0x80 + requiredTextureBytes + requiredPaletteBytes))
 		
 		self.writeMetaData()
@@ -143,6 +143,14 @@ class GoDTexture {
 		self.writeMetaData()
 		self.data.save()
 	}
+
+	func writePNGData() {
+		writePNGData(toFile: .nameAndFolder(file.fileName + ".png", file.folder))
+	}
+
+	func writePNGData(toFile file: XGFiles) {
+		image.writePNGData(toFile: file)
+	}
 	
 	func replaceTextureData(newBytes: [Int]) {
 		self.data.replaceBytesFromOffset(self.textureStart, withByteStream: newBytes)
@@ -154,6 +162,10 @@ class GoDTexture {
 
 	func palette() -> [Int] {
 		return self.data.getShortStreamFromOffset(paletteStart, length: paletteLength)
+	}
+
+	func paletteData() -> [Int] {
+		return self.data.getByteStreamFromOffset(paletteStart, length: paletteLength)
 	}
 
 	func pixelData() -> [Int] {

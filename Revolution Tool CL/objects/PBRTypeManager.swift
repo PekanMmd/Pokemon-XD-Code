@@ -197,6 +197,8 @@ class PBRTypeManager {
 			])
 		}
 
+		// should have probably left a comment as to why this is commented out
+		// guessing it isn't needed
 //		let r30OffsetsWithJump: [UInt32] = [0x803c618c, 0x803c72f4] // in RAM
 //		for offset in r30OffsetsWithJump {
 //			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference

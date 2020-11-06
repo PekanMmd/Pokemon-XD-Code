@@ -311,12 +311,26 @@ indirect enum XGFiles {
 	}
 
 	#if ENV_OSX
-	var collisionData : XGCollisionData {
+	var collisionData: XGCollisionData {
 		return XGCollisionData(file: self)
 	}
 	#endif
+
+	var textures: [GoDTexture] {
+		if XGFileTypes.textureFormats.contains(fileType) {
+			return [texture]
+		}
+		if fileType == .gsw {
+			return XGGSWTextures(file: self).extractTextureData().map { GoDTexture(data: $0) }
+		}
+		if XGFileTypes.modelFormats.contains(fileType) {
+			#warning("extract textures from models colo/xd")
+			return []
+		}
+		return []
+	}
 	
-	var fileSize : Int {
+	var fileSize: Int {
 		get {
 			if self.exists {
 				return self.data!.length

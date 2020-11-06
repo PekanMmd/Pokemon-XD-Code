@@ -32,29 +32,29 @@ let currentXDSVersion : Float = 1.1
 class XGScript: NSObject {
 	
 	var file : XGFiles!
-	@objc var data : XGMutableData!
+	var data : XGMutableData!
 	
-	@objc var FTBLStart = 0
-	@objc var HEADStart = 0
-	@objc var CODEStart = 0
+	var FTBLStart = 0
+	var HEADStart = 0
+	var CODEStart = 0
 	
-	@objc var GVARStart = 0
-	@objc var STRGStart = 0
-	@objc var VECTStart = 0
-	@objc var GIRIStart = 0 // group id resource id
-	@objc var ARRYStart = 0
+	var GVARStart = 0
+	var STRGStart = 0
+	var VECTStart = 0
+	var GIRIStart = 0 // group id resource id
+	var ARRYStart = 0
 	
 	var ftbl = [FTBL]()
-	@objc var code = [XGScriptInstruction]()
+	var code = [XGScriptInstruction]()
 	
-	@objc var gvar = [XDSConstant]()
-	@objc var strg = [String]()
+	var gvar = [XDSConstant]()
+	var strg = [String]()
 	var vect = [VECT]()
-	@objc var arry = [[XDSConstant]]()
+	var arry = [[XDSConstant]]()
 	
 	var scriptID : UInt32 = 0x0
 	
-	@objc var codeLength : Int {
+	var codeLength : Int {
 		var count = 0
 		
 		for c in self.code {
@@ -68,7 +68,7 @@ class XGScript: NSObject {
 		self.init(data: file.data!)
 	}
 	
-	@objc init(data: XGMutableData) {
+	init(data: XGMutableData) {
 		super.init()
 		
 		self.file = data.file
@@ -170,7 +170,7 @@ class XGScript: NSObject {
 	}
 	
 	
-	@objc func getStringAtOffset(_ offset: Int) -> String {
+	func getStringAtOffset(_ offset: Int) -> String {
 		
 		var currentOffset = offset
 		
@@ -287,7 +287,7 @@ class XGScript: NSObject {
 	}
 	
 	
-	@objc private func scriptFunctionSetsLastResult(name: String) -> Bool {
+	private func scriptFunctionSetsLastResult(name: String) -> Bool {
 		for i in 0 ..< ftbl.count {
 			let f = ftbl[i]
 			if f.name == name {
@@ -326,7 +326,7 @@ class XGScript: NSObject {
 		return false
 	}
 	
-	@objc private func getLastInstructionIndexforFunction(named name: String) -> Int {
+	private func getLastInstructionIndexforFunction(named name: String) -> Int {
 		for i in 0 ..< ftbl.count {
 			let f = ftbl[i]
 			if f.name == name {
@@ -336,7 +336,7 @@ class XGScript: NSObject {
 		return -1
 	}
 	
-	@objc private func getParameterCountForFunction(named name: String) -> Int {
+	private func getParameterCountForFunction(named name: String) -> Int {
 		for i in 0 ..< ftbl.count {
 			let f = ftbl[i]
 			
@@ -375,7 +375,7 @@ class XGScript: NSObject {
 		return 0
 	}
 	
-	@objc private func getFunctionAtLocation(location: Int) -> String {
+	private func getFunctionAtLocation(location: Int) -> String {
 		for f in ftbl {
 			if f.codeOffset == location {
 				return f.name
@@ -1037,7 +1037,7 @@ class XGScript: NSObject {
 		return compoundStack
 	}
 	
-	@objc private func generateXDSHeader() -> String {
+	private func generateXDSHeader() -> String {
 		// just arbitrary comments at the top of the file
 		let longline = "Decompiled using Gale of Darkness Tool by @StarsMmd"
 		let date = Date(timeIntervalSinceNow: 0)
@@ -1056,7 +1056,7 @@ class XGScript: NSObject {
 		"""
 	}
 	
-	@objc private func generateFTBLHeader() -> String {
+	private func generateFTBLHeader() -> String {
 		var s = ""
 		for f in ftbl {
 			s += kXDSCommentIndicator + " function \(f.index): " + f.name + " " + XDSExpr.locationWithIndex(f.codeOffset) + "\n"
@@ -1114,7 +1114,7 @@ class XGScript: NSObject {
 		return str
 	}
 	
-	@objc func getXDSScript() -> String {
+	func getXDSScript() -> String {
 		// creates xds text from expressions
 		// can follow a similar process to decompile to other programming or scripting languages
 		

@@ -14,11 +14,15 @@ class PBRDataTableEntry : XGIndexedValue {
 		data.length
 	}
 
+	var data = XGMutableData()
+	var rawBytes: [Int] {
+		return data.byteStream
+	}
+
 	private weak var table: PBRDataTable?
-	private var data = XGMutableData()
 	
 	init(index: Int, table: PBRDataTable) {
-		self.data = table.dataForEntryWithIndex(index) ?? XGMutableData()
+		self.data = table.dataForEntryWithIndex(index) ?? XGMutableData(byteStream: [UInt8](repeating: 0, count: table.entrySize))
 		self.index = index
 		self.table = table
 	}
@@ -100,7 +104,6 @@ class PBRDataTableEntry : XGIndexedValue {
 			printg("Couldn't save table for entry with index:", index)
 			return
 		}
-		table.replaceData(data: data, forIndex: index)
 		table.save()
 	}
 	

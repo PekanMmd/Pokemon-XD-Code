@@ -35,7 +35,7 @@ let kSizeOfShadowData		= 0x18
 let kFleeAfterBattleOffset	= 0x00 // 0 = no flee. Other values probably chances of finding with mirorb. Higher value = more common encounter.
 let kShadowCatchRateOFfset	= 0x01 // this catch rate overrides the species' catch rate
 let kShadowLevelOffset		= 0x02 // the pokemon's level after it's caught. Regular level can be increased so AI shadows are stronger
-let kShadowInUseFlagOffset	= 0x03 // mask checked to see whether this entry is included in shadow pokemon count (default 0x80)
+let kShadowInUseFlagOffset	= 0x03 // flags for whether pokemon is seen/caught/purified etc. default 0x80 and updated in save file
 let kShadowStoryIndexOffset	= 0x06 // dpkm index of pokemon data in deck story
 let kShadowCounterOffset	= 0x08 // the starting value of the heart gauge
 let kFirstShadowMoveOFfset	= 0x0C

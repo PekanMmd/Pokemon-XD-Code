@@ -50,19 +50,9 @@ class XGTrainer: NSObject, XGIndexedValue {
 		self.index = deckData.index
 		self.deckData  = deckData
 
-		var deckTable: PBRDataTable?
-		switch deckData.deck {
-		case .null:
-			break
-		case .dckp(let id):
-			deckTable = PBRDataTable.pokemonDeckWithID(id)
-		case .dckt(let id):
-			deckTable = PBRDataTable.trainerDeckWithID(id)
-		case .dcka:
-			deckTable = PBRDataTable.AIDeck()
-		}
+		let deckTable = PBRDataTable.tableForFile(deckData.deck.file)
 
-		guard let entry = deckTable?.entryWithIndex(index) else {
+		guard let entry = deckTable.entryWithIndex(index) else {
 			printg("Failed to load deck data:", deckData.deck.file.path, "\nindex:", index)
 			return
 		}

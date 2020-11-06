@@ -36,12 +36,13 @@ enum XGFileTypes : Int {
 	// all arbitrary values
 	case fsys = 0xf0
 	
-	case json = 0xf5
-	case txt  = 0xf6
-	case lzss = 0xf7
-	case bmp  = 0xf8
-	case jpeg = 0xf9
-	case png  = 0xfa
+	case json = 0xf4
+	case txt  = 0xf5
+	case lzss = 0xf6
+	case bmp  = 0xf7
+	case jpeg = 0xf8
+	case png  = 0xf9
+	case tex0 = 0xfa
 	case xds  = 0xfb
 	case toc  = 0xfc
 	case dol  = 0xfd
@@ -97,7 +98,8 @@ enum XGFileTypes : Int {
 		case .png : return ".png"
 		case .bmp : return ".bmp"
 		case .jpeg: return ".jpeg"
-		case .lzss : return ".lzss"
+		case .tex0: return ".tex0"
+		case .lzss: return ".lzss"
 		case .txt : return ".txt"
 		case .json: return ".json"
 		case .rdat: return ".rdat"
@@ -110,10 +112,14 @@ enum XGFileTypes : Int {
 	}
 
 	#if ENV_OSX
-	static let imageFormats : [XGFileTypes] = [.png, .jpeg, .bmp]
+	static let imageFormats: [XGFileTypes] = [.png, .jpeg, .bmp]
 	#else
-	static let imageFormats : [XGFileTypes] = [.png]
+	static let imageFormats: [XGFileTypes] = [.png]
 	#endif
+
+	static let textureFormats: [XGFileTypes] = [.gtx]
+	static let modelFormats: [XGFileTypes] = [.sdr, .odr, .mdr]
+	static let textureContainingFormats: [XGFileTypes] = [.sdr, .odr, .mdr, .mnr]
 }
 
 

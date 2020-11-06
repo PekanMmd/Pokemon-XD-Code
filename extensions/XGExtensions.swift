@@ -182,8 +182,10 @@ extension Array where Element == UInt8 {
 					+ UInt32(self[count - 1])).int32
 	}
 
+	var hexStream: [String] {
+		return self.map {$0.hex()}
+	}
 }
-
 
 extension NSObject {
 	func println() {
@@ -279,6 +281,12 @@ extension Int {
 		return getStringSafelyWithID(id: self)
 	}
 	
+}
+
+extension UInt8 {
+	func hex() -> String {
+		return String(format: "%02x", self).uppercased()
+	}
 }
 
 extension UInt32 {
@@ -761,7 +769,7 @@ extension XGMutableData {
 extension XGStringTable {
 
 	@discardableResult
-	func replaceString(_ string: XGString, alert: Bool = false, save: Bool = false, increaseLength: Bool = false) -> Bool {
+	func replaceString(_ string: XGString, alert: Bool = false, save: Bool = false) -> Bool {
 
 		guard let oldText = self.stringWithID(string.id), let stringOffset = offsetForStringID(string.id)  else {
 			printg("String table '\(self.file.fileName)' doesn't contain string with id: \(string.id)")
@@ -798,14 +806,14 @@ extension XGStringTable {
 			return true
 
 		} else {
-			if increaseLength {
+			if settings.increaseFileSizes {
 				if self.startOffset == 0 {
 					if settings.verbose {
 						printg("string was too long, adding \(difference + 0x50 - extraCharacters) bytes to table \(self.file.fileName)")
 					}
 					// add a little extra so it doesn't keep hitting this case every time there's even a 1 character increase
 					self.stringTable.insertRepeatedByte(byte: 0, count: difference + 0x50 - extraCharacters, atOffset: stringTable.length)
-					return self.replaceString(string, alert: alert, save: true, increaseLength: true)
+					return self.replaceString(string, alert: alert, save: true)
 				}
 			}
 		}
@@ -843,4 +851,58 @@ extension NumberFormatter {
 
 }
 
+extension XGUtility {
+	class func extractAllTextures() {
+		printg("extracting all textures")
+		let dumpFolder = XGFolders.nameAndFolder("Dump", .Textures)
+		XGFolders.setUpFolderFormat()
+		dumpFolder.createDirectory()
+		printg("output folder: \(dumpFolder.path)")
+		for filename in ISO.allFileNames where filename.contains(".fsys") {
+			if settings.verbose {
+				printg("searching file:", filename)
+			}
+			guard let fsysData = ISO.dataForFile(filename: filename) else {
+				if settings.verbose {
+					printg("no iso data found for file:", filename)
+				}
+				continue
+			}
+			let fsys = XGFsys(data: fsysData)
+			for i in 0 ..< fsys.numberOfEntries {
+				let fileType = fsys.fileTypeForFile(index: i)
+				guard [XGFileTypes.gtx, .atx, .gsw].contains(fileType) else {
+					continue
+				}
+				guard let textureData = fsys.extractDataForFileWithIndex(index: i) else {
+					continue
+				}
 
+				if settings.verbose {
+					printg("outputting:", textureData.file.fileName)
+				}
+
+				let folder = XGFolders.nameAndFolder(filename.removeFileExtensions(), dumpFolder)
+				folder.createDirectory()
+
+
+				if fileType == .gsw {
+					let gsw = XGGSWTextures(data: textureData)
+					let textures = gsw.extractTextureData()
+					textures.forEach { (data) in
+						data.file = .nameAndFolder(data.file.fileName, folder)
+						let texture = GoDTexture(data: data).image
+						texture.writePNGData(toFile: .nameAndFolder(data.file.fileName + ".png", folder))
+
+					}
+				}
+				if fileType == .gtx || fileType == .atx {
+					textureData.file = .nameAndFolder(textureData.file.fileName, folder)
+					let texture = GoDTexture(data: textureData).image
+					texture.writePNGData(toFile: .nameAndFolder(textureData.file.fileName + ".png", folder))
+				}
+				
+			}
+		}
+	}
+}
