@@ -4175,29 +4175,6 @@
 		1C4E15D7253E065700EA318B /* READ_ME.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = READ_ME.txt; sourceTree = "<group>"; };
 		1C4E1637253F3A2100EA318B /* wimgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = wimgt; sourceTree = "<group>"; };
 		1C4E1643253F3A8900EA318B /* wit */ = {isa = PBXFileReference; lastKnownFileType = file; path = wit; sourceTree = "<group>"; };
-		1C4E1648253F3BCE00EA318B /* wit.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = wit.exe; sourceTree = "<group>"; };
-		1C4E1661253F3C0D00EA318B /* cyggcc_s-1.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cyggcc_s-1.dll"; sourceTree = "<group>"; };
-		1C4E1662253F3C0E00EA318B /* cygpsl-5.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygpsl-5.dll"; sourceTree = "<group>"; };
-		1C4E1663253F3C0E00EA318B /* cygintl-8.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygintl-8.dll"; sourceTree = "<group>"; };
-		1C4E1664253F3C0E00EA318B /* cyggnutls-30.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cyggnutls-30.dll"; sourceTree = "<group>"; };
-		1C4E1665253F3C0E00EA318B /* cygsigsegv-2.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygsigsegv-2.dll"; sourceTree = "<group>"; };
-		1C4E1666253F3C0F00EA318B /* cygidn2-0.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygidn2-0.dll"; sourceTree = "<group>"; };
-		1C4E1667253F3C0F00EA318B /* cygncursesw-10.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygncursesw-10.dll"; sourceTree = "<group>"; };
-		1C4E1668253F3C0F00EA318B /* cygtasn1-6.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygtasn1-6.dll"; sourceTree = "<group>"; };
-		1C4E1669253F3C0F00EA318B /* cygunistring-2.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygunistring-2.dll"; sourceTree = "<group>"; };
-		1C4E166A253F3C1000EA318B /* cyguuid-1.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cyguuid-1.dll"; sourceTree = "<group>"; };
-		1C4E166B253F3C1000EA318B /* cygattr-1.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygattr-1.dll"; sourceTree = "<group>"; };
-		1C4E166C253F3C1000EA318B /* cyghogweed-4.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cyghogweed-4.dll"; sourceTree = "<group>"; };
-		1C4E166D253F3C1100EA318B /* cygnettle-6.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygnettle-6.dll"; sourceTree = "<group>"; };
-		1C4E166E253F3C1100EA318B /* cygp11-kit-0.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygp11-kit-0.dll"; sourceTree = "<group>"; };
-		1C4E166F253F3C1100EA318B /* cygpcre-1.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygpcre-1.dll"; sourceTree = "<group>"; };
-		1C4E1670253F3C1100EA318B /* cygz.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = cygz.dll; sourceTree = "<group>"; };
-		1C4E1671253F3C1200EA318B /* cyggmp-10.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cyggmp-10.dll"; sourceTree = "<group>"; };
-		1C4E1672253F3C1200EA318B /* cygwin1.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = cygwin1.dll; sourceTree = "<group>"; };
-		1C4E1673253F3C1200EA318B /* cygffi-6.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygffi-6.dll"; sourceTree = "<group>"; };
-		1C4E1674253F3C1200EA318B /* cygiconv-2.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygiconv-2.dll"; sourceTree = "<group>"; };
-		1C4E1675253F3C1300EA318B /* cygreadline7.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = cygreadline7.dll; sourceTree = "<group>"; };
-		1C4E1676253F3CF300EA318B /* wimgt.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = wimgt.exe; sourceTree = "<group>"; };
 		1C4E167F253F438400EA318B /* LinuxExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinuxExtensions.swift; sourceTree = "<group>"; };
 		1C4E169A253F72AE00EA318B /* colo_trainer_66.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = colo_trainer_66.png; sourceTree = "<group>"; };
 		1C4E16BE25405CCD00EA318B /* XGImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGImage.swift; sourceTree = "<group>"; };
@@ -4277,6 +4254,30 @@
 		1CCFFFA8255509850082BFE2 /* PBR_Tool_Windows_Compiler.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = PBR_Tool_Windows_Compiler.bat; sourceTree = "<group>"; };
 		1CCFFFA9255509850082BFE2 /* Colosseum_Tool_Windows_Compiler.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = Colosseum_Tool_Windows_Compiler.bat; sourceTree = "<group>"; };
 		1CCFFFAA255509850082BFE2 /* GoD_Tool_Linux_Compiler.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = GoD_Tool_Linux_Compiler.sh; sourceTree = "<group>"; };
+		1CCFFFCC2555F5440082BFE2 /* cygtasn1-6.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygtasn1-6.dll"; sourceTree = "<group>"; };
+		1CCFFFCD2555F5440082BFE2 /* wit.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = wit.exe; sourceTree = "<group>"; };
+		1CCFFFCE2555F5440082BFE2 /* cygintl-8.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygintl-8.dll"; sourceTree = "<group>"; };
+		1CCFFFCF2555F5440082BFE2 /* cygpsl-5.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygpsl-5.dll"; sourceTree = "<group>"; };
+		1CCFFFD02555F5440082BFE2 /* cygpcre-1.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygpcre-1.dll"; sourceTree = "<group>"; };
+		1CCFFFD12555F5450082BFE2 /* cygreadline7.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = cygreadline7.dll; sourceTree = "<group>"; };
+		1CCFFFD22555F5450082BFE2 /* cygwin1.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = cygwin1.dll; sourceTree = "<group>"; };
+		1CCFFFD32555F5450082BFE2 /* wimgt.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = wimgt.exe; sourceTree = "<group>"; };
+		1CCFFFD42555F5450082BFE2 /* cygz.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = cygz.dll; sourceTree = "<group>"; };
+		1CCFFFD52555F5450082BFE2 /* cyggmp-10.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cyggmp-10.dll"; sourceTree = "<group>"; };
+		1CCFFFD62555F5450082BFE2 /* cygnettle-6.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygnettle-6.dll"; sourceTree = "<group>"; };
+		1CCFFFD72555F5450082BFE2 /* cyggnutls-30.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cyggnutls-30.dll"; sourceTree = "<group>"; };
+		1CCFFFD82555F5460082BFE2 /* cyghogweed-4.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cyghogweed-4.dll"; sourceTree = "<group>"; };
+		1CCFFFD92555F5460082BFE2 /* cygffi-6.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygffi-6.dll"; sourceTree = "<group>"; };
+		1CCFFFDA2555F5460082BFE2 /* cygidn2-0.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygidn2-0.dll"; sourceTree = "<group>"; };
+		1CCFFFDB2555F5460082BFE2 /* cygunistring-2.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygunistring-2.dll"; sourceTree = "<group>"; };
+		1CCFFFDC2555F5460082BFE2 /* cygncursesw-10.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygncursesw-10.dll"; sourceTree = "<group>"; };
+		1CCFFFDD2555F5460082BFE2 /* cygiconv-2.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygiconv-2.dll"; sourceTree = "<group>"; };
+		1CCFFFDE2555F5470082BFE2 /* cyguuid-1.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cyguuid-1.dll"; sourceTree = "<group>"; };
+		1CCFFFDF2555F5470082BFE2 /* cygattr-1.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygattr-1.dll"; sourceTree = "<group>"; };
+		1CCFFFE02555F5470082BFE2 /* cygpng16-16.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygpng16-16.dll"; sourceTree = "<group>"; };
+		1CCFFFE12555F5470082BFE2 /* cygp11-kit-0.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygp11-kit-0.dll"; sourceTree = "<group>"; };
+		1CCFFFE22555F5470082BFE2 /* cyggcc_s-1.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cyggcc_s-1.dll"; sourceTree = "<group>"; };
+		1CCFFFE32555F5470082BFE2 /* cygsigsegv-2.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygsigsegv-2.dll"; sourceTree = "<group>"; };
 		1CE1A7772326AA0D005141D8 /* XGSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGSettings.swift; sourceTree = "<group>"; };
 		1CED5D9724004864008566B0 /* GoDGCEnumerablePopUpButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDGCEnumerablePopUpButtons.swift; sourceTree = "<group>"; };
 		1CED5D9E2403E9EE008566B0 /* GoDGTXViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDGTXViewController.swift; sourceTree = "<group>"; };
@@ -6747,29 +6748,30 @@
 		1C4E1647253F3B2A00EA318B /* wiimm */ = {
 			isa = PBXGroup;
 			children = (
-				1C4E166B253F3C1000EA318B /* cygattr-1.dll */,
-				1C4E1673253F3C1200EA318B /* cygffi-6.dll */,
-				1C4E1661253F3C0D00EA318B /* cyggcc_s-1.dll */,
-				1C4E1671253F3C1200EA318B /* cyggmp-10.dll */,
-				1C4E1664253F3C0E00EA318B /* cyggnutls-30.dll */,
-				1C4E166C253F3C1000EA318B /* cyghogweed-4.dll */,
-				1C4E1674253F3C1200EA318B /* cygiconv-2.dll */,
-				1C4E1666253F3C0F00EA318B /* cygidn2-0.dll */,
-				1C4E1663253F3C0E00EA318B /* cygintl-8.dll */,
-				1C4E1667253F3C0F00EA318B /* cygncursesw-10.dll */,
-				1C4E166D253F3C1100EA318B /* cygnettle-6.dll */,
-				1C4E166E253F3C1100EA318B /* cygp11-kit-0.dll */,
-				1C4E166F253F3C1100EA318B /* cygpcre-1.dll */,
-				1C4E1662253F3C0E00EA318B /* cygpsl-5.dll */,
-				1C4E1675253F3C1300EA318B /* cygreadline7.dll */,
-				1C4E1665253F3C0E00EA318B /* cygsigsegv-2.dll */,
-				1C4E1668253F3C0F00EA318B /* cygtasn1-6.dll */,
-				1C4E1669253F3C0F00EA318B /* cygunistring-2.dll */,
-				1C4E166A253F3C1000EA318B /* cyguuid-1.dll */,
-				1C4E1672253F3C1200EA318B /* cygwin1.dll */,
-				1C4E1670253F3C1100EA318B /* cygz.dll */,
-				1C4E1648253F3BCE00EA318B /* wit.exe */,
-				1C4E1676253F3CF300EA318B /* wimgt.exe */,
+				1CCFFFDF2555F5470082BFE2 /* cygattr-1.dll */,
+				1CCFFFD92555F5460082BFE2 /* cygffi-6.dll */,
+				1CCFFFE22555F5470082BFE2 /* cyggcc_s-1.dll */,
+				1CCFFFD52555F5450082BFE2 /* cyggmp-10.dll */,
+				1CCFFFD72555F5450082BFE2 /* cyggnutls-30.dll */,
+				1CCFFFD82555F5460082BFE2 /* cyghogweed-4.dll */,
+				1CCFFFDD2555F5460082BFE2 /* cygiconv-2.dll */,
+				1CCFFFDA2555F5460082BFE2 /* cygidn2-0.dll */,
+				1CCFFFCE2555F5440082BFE2 /* cygintl-8.dll */,
+				1CCFFFDC2555F5460082BFE2 /* cygncursesw-10.dll */,
+				1CCFFFD62555F5450082BFE2 /* cygnettle-6.dll */,
+				1CCFFFE12555F5470082BFE2 /* cygp11-kit-0.dll */,
+				1CCFFFD02555F5440082BFE2 /* cygpcre-1.dll */,
+				1CCFFFE02555F5470082BFE2 /* cygpng16-16.dll */,
+				1CCFFFCF2555F5440082BFE2 /* cygpsl-5.dll */,
+				1CCFFFD12555F5450082BFE2 /* cygreadline7.dll */,
+				1CCFFFE32555F5470082BFE2 /* cygsigsegv-2.dll */,
+				1CCFFFCC2555F5440082BFE2 /* cygtasn1-6.dll */,
+				1CCFFFDB2555F5460082BFE2 /* cygunistring-2.dll */,
+				1CCFFFDE2555F5470082BFE2 /* cyguuid-1.dll */,
+				1CCFFFD22555F5450082BFE2 /* cygwin1.dll */,
+				1CCFFFD42555F5450082BFE2 /* cygz.dll */,
+				1CCFFFD32555F5450082BFE2 /* wimgt.exe */,
+				1CCFFFCD2555F5440082BFE2 /* wit.exe */,
 			);
 			path = wiimm;
 			sourceTree = "<group>";

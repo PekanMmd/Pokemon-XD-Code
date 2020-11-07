@@ -5,8 +5,6 @@
 //  Created by The Steez on 28/12/2018.
 //
 
-import Cocoa
-
 enum PBRPokemonImage : XGIndexedValue {
 	
 	case face(Int)

@@ -67,7 +67,7 @@ extension GoDTexturesContaining {
 		for i in 0 ..< min(textures.count, uniqueOffsets.count) {
 			let (_, textureDataOffset) = uniqueOffsets[i]
 			let texture = textures[i]
-			data?.replaceBytesFromOffset(textureDataOffset, withByteStream: texture.pixelData() + texture.paletteData())
+			data?.replaceBytesFromOffset(textureDataOffset, withByteStream: texture.pixelCharStream() + texture.paletteCharStream())
 		}
 		data?.save()
 	}
