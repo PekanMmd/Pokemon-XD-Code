@@ -16,6 +16,7 @@ let kTextureFormatOffset = 0xb
 let kPaletteFormatOffset = 0xf
 let kTexturePointerOffset = 0x28
 let kPalettePointerOffset = 0x48
+let kTextureDataLengthOffset = 0x4C // only used in some file types in PBR (mng, sdr, mdr, odr textures I believe)
 
 // The textures in poke_dance.fsys start with this data so it can be used to identify them.
 // Those textures start at 0xA0 with some extra data added beforehand (probably used to animate it).
@@ -166,6 +167,10 @@ class GoDTexture {
 
 	func paletteData() -> [Int] {
 		return self.data.getByteStreamFromOffset(paletteStart, length: paletteLength)
+	}
+
+	func paletteCharStream() -> [UInt8] {
+		return self.data.getCharStreamFromOffset(paletteStart, length: paletteLength)
 	}
 
 	func pixelData() -> [Int] {

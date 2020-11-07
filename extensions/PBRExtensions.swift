@@ -309,14 +309,19 @@ class XGUtility {
 										if file.fileName.contains(".sdr.")
 										|| file.fileName.contains(".odr.")
 										|| file.fileName.contains(".mdr.")
+										|| file.fileName.contains(".mnr.")
 										{
 											// preserves the image format so can easily be imported into model
-											texture = image.getTexture(format: file.texture.format)
+											let oldTexture = file.texture
+											let importer = GoDTextureImporter(oldTextureData: oldTexture, newImage: image)
+											importer.replaceTextureData()
+											texture = importer.texture
 
 										} else {
 											// automatically chooses a good format for the new image
 											texture = image.texture
 										}
+
 										texture.file = file
 										texture.save()
 									}
