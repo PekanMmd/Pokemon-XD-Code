@@ -135,10 +135,10 @@ final class XGFsys : NSObject {
 		return string
 	}
 	
-	func fileNameForFileWithIndex(index: Int) -> String {
+	func fileNameForFileWithIndex(index: Int, clean: Bool = true) -> String {
 		let offset = Int(self.data.getWordAtOffset(startOffsetForFileDetails(index) + kFileDetailsFilenameOffset))
 		var name = getStringAtOffset(offset:offset)
-		if game == .PBR {
+		if game == .PBR && region != .JP && clean {
 			var addendum = "\(index)"
 			while addendum.length < 4 {
 				addendum = "0" + addendum
@@ -168,31 +168,36 @@ final class XGFsys : NSObject {
 		self.data.replaceWordAtOffset(kFirstFileNamePointerOffset, withBytes: UInt32(newOffset))
 	}
 	
-	var fileNames : [String] {
-		get {
-			var names = [String]()
-			
-			for i in 0 ..< self.numberOfEntries {
-				names.append(fileNameForFileWithIndex(index: i))
-			}
-			
-			return names
+	var fileNames: [String] {
+		var names = [String]()
+
+		for i in 0 ..< self.numberOfEntries {
+			names.append(fileNameForFileWithIndex(index: i))
 		}
+
+		return names
+	}
+
+	var rawFileNames: [String] {
+		var names = [String]()
+
+		for i in 0 ..< self.numberOfEntries {
+			names.append(fileNameForFileWithIndex(index: i, clean: false))
+		}
+
+		return names
 	}
 	
 	var fullFileNames : [String] {
-		get {
-			
-			var names = [String]()
-			
-			if self.usesFileExtensions {
-				for i in 0 ..< self.numberOfEntries {
-					names.append(fullFileNameForFileWithIndex(index: i))
-				}
+		var names = [String]()
+
+		if self.usesFileExtensions {
+			for i in 0 ..< self.numberOfEntries {
+				names.append(fullFileNameForFileWithIndex(index: i))
 			}
-			
-			return names
 		}
+
+		return names
 	}
 	
 	var identifiers : [Int] {
@@ -657,7 +662,7 @@ final class XGFsys : NSObject {
 		self.data.replaceWordAtOffset(dataEnd, withBytes: kFSYSbytes)
 	}
 	
-	func addFile(file: XGFiles, fileType: XGFileTypes, compress: Bool, shortID: Int) {
+	func addFile(_ file: XGFiles, fileType: XGFileTypes, compress: Bool, shortID: Int) {
 		self.addFile(file.data!, fileType: fileType, compress: compress, shortID: shortID)
 	}
 	
@@ -666,23 +671,23 @@ final class XGFsys : NSObject {
 		
 		
 		let file = fileData.file
-		let name = file.fileName.removeFileExtensions()
+		let newName = game == .PBR && region != .JP ? "(null)" : file.fileName.removeFileExtensions()
 		
 		var bytesAdded = 0
-		let names = self.fileNames
-		let fullnames = self.fullFileNames
+		let names = rawFileNames
+		let fullnames = fullFileNames
 		
 		let fileDetailsPointerOffset = kFirstFileDetailsPointerOffset + (4 * self.numberOfEntries)
-		if self.numberOfEntries % 4 == 0 {
-			self.data.insertRepeatedByte(byte: 0, count: 16, atOffset: fileDetailsPointerOffset)
+		if numberOfEntries % 4 == 0 {
+			data.insertRepeatedByte(byte: 0, count: 16, atOffset: fileDetailsPointerOffset)
 			bytesAdded += 16
 		}
 		
 		let filenamesShift = bytesAdded
-		let fullfilenamesShift = filenamesShift + name.count + 1
-		setFirstFilenameOffset(self.firstFileNameOffset + bytesAdded)
+		let fullfilenamesShift = filenamesShift + newName.count + 1
+		setFirstFilenameOffset(firstFileNameOffset + bytesAdded)
 		
-		let allnames = self.usesFileExtensions ? names + fullnames : names
+		let allnames = usesFileExtensions ? names + fullnames : names
 		
 		var filenamesSize = 0
 		for file in allnames {
@@ -691,7 +696,7 @@ final class XGFsys : NSObject {
 		var padding = 16 - (filenamesSize % 16)
 		padding = padding == 16 ? 0 : padding
 		
-		var extraNameBytes = self.usesFileExtensions ? file.fileName.count + name.count + 2 : name.count + 1
+		var extraNameBytes = usesFileExtensions ? file.fileName.count + newName.count + 2 : newName.count + 1
 		if extraNameBytes <= padding {
 			extraNameBytes = 0
 		} else {
@@ -702,88 +707,68 @@ final class XGFsys : NSObject {
 		}
 		
 		bytesAdded += extraNameBytes
-		self.data.insertRepeatedByte(byte: 0, count: extraNameBytes, atOffset: firstFileNameOffset)
+		data.insertRepeatedByte(byte: 0, count: extraNameBytes, atOffset: firstFileNameOffset)
 		
-		var currentOffset = self.firstFileNameOffset
-		for n in names {
-			for i in 0 ..< n.count {
-				self.data.replaceByteAtOffset(currentOffset, withByte: Int(n.substring(from: i, to: i + 1).unicodeScalars.first!.value))
-				currentOffset += 1
-			}
-			self.data.replaceByteAtOffset(currentOffset, withByte: 0)
-			currentOffset += 1
+		var currentOffset = firstFileNameOffset
+		for name in names + [newName] {
+			data.replaceBytesFromOffset(currentOffset, withByteStream: name.unicodeScalars.map({ (unicode) -> Int in
+				return unicode.value.int
+			}) + [0])
+			currentOffset += name.count + 1
 		}
 		
-		let filenameStart = currentOffset
+		let filenameStart = currentOffset - newName.count - 1
 		
-		for i in 0 ..< name.count {
-			self.data.replaceByteAtOffset(currentOffset, withByte: Int(name.substring(from: i, to: i + 1).unicodeScalars.first!.value))
-			currentOffset += 1
-		}
-		self.data.replaceByteAtOffset(currentOffset, withByte: 0)
-		currentOffset += 1
-		
-		if self.usesFileExtensions {
-			for n in fullnames {
-				for i in 0 ..< n.count {
-					self.data.replaceByteAtOffset(currentOffset, withByte: Int(n.substring(from: i, to: i + 1).unicodeScalars.first!.value))
-					currentOffset += 1
-				}
-				self.data.replaceByteAtOffset(currentOffset, withByte: 0)
-				currentOffset += 1
+		if usesFileExtensions {
+			for name in fullnames + [file.fileName] {
+				data.replaceBytesFromOffset(currentOffset, withByteStream: name.unicodeScalars.map({ (unicode) -> Int in
+					return unicode.value.int
+				}) + [0])
+				currentOffset += name.count + 1
 			}
 		}
-		let fullFilenameStart = currentOffset
-		
-		if self.usesFileExtensions {
-			for i in 0 ..< file.fileName.count {
-				self.data.replaceByteAtOffset(currentOffset, withByte: Int(file.fileName.substring(from: i, to: i + 1).unicodeScalars.first!.value))
-				currentOffset += 1
-			}
-			self.data.replaceByteAtOffset(currentOffset, withByte: 0)
-			currentOffset += 1
-		}
+
+		let fullFilenameStart = usesFileExtensions ? currentOffset - file.fileName.count - 1 : 0
 		
 		while currentOffset % 16 != 0 {
-			self.data.replaceByteAtOffset(currentOffset, withByte: 0)
+			data.replaceByteAtOffset(currentOffset, withByte: 0)
 			currentOffset += 1
 		}
 		
 		let entryShift = bytesAdded
 		
-		for i in 0 ..< self.numberOfEntries {
+		for i in 0 ..< numberOfEntries {
 			let detailsPointer = kFirstFileDetailsPointerOffset + (4 * i)
-			let newPointer = self.data.getWordAtOffset(detailsPointer) + UInt32(entryShift)
-			self.data.replaceWordAtOffset(detailsPointer, withBytes: newPointer)
+			let newPointer = data.getWordAtOffset(detailsPointer) + UInt32(entryShift)
+			data.replaceWordAtOffset(detailsPointer, withBytes: newPointer)
 		}
 		
-		let entryStart = self.firstEntryDetailOffset + (0x70 * self.numberOfEntries)
-		self.data.insertRepeatedByte(byte: 0, count: 0x70, atOffset: entryStart)
+		let entryStart = firstEntryDetailOffset + (0x70 * numberOfEntries)
+		data.insertRepeatedByte(byte: 0, count: 0x70, atOffset: entryStart)
 		bytesAdded += 0x70
 		
 		let fileStartShift = bytesAdded
-		let newFirstFileOffset = self.data.getWordAtOffset(kFirstFileOffset) + UInt32(fileStartShift)
-		self.data.replaceWordAtOffset(kFirstFileOffset, withBytes: newFirstFileOffset)
+		let newFirstFileOffset = data.getWordAtOffset(kFirstFileOffset) + UInt32(fileStartShift)
+		data.replaceWordAtOffset(kFirstFileOffset, withBytes: newFirstFileOffset)
 		
-		
-		var fileStart = self.startOffsetForFile(self.numberOfEntries - 1) + sizeForFile(index: self.numberOfEntries - 1) + bytesAdded
+		var fileStart = startOffsetForFile(numberOfEntries - 1) + sizeForFile(index: self.numberOfEntries - 1) + bytesAdded
 		
 		while (fileStart % 16) != 0 {
 			fileStart += 1
 		}
 		
 		
-		for i in 0 ..< self.numberOfEntries {
+		for i in 0 ..< numberOfEntries {
 			
-			let dets = self.firstEntryDetailOffset + (i * 0x70)
-			let fileStart = self.data.getWordAtOffset(dets + kFileStartPointerOffset) + UInt32(fileStartShift)
-			let nameStart = self.data.getWordAtOffset(dets + kFileDetailsFilenameOffset) + UInt32(filenamesShift)
-			self.data.replaceWordAtOffset(dets + kFileStartPointerOffset, withBytes: fileStart)
-			self.data.replaceWordAtOffset(dets + kFileDetailsFilenameOffset, withBytes: nameStart)
+			let dets = firstEntryDetailOffset + (i * 0x70)
+			let fileStart = data.getWordAtOffset(dets + kFileStartPointerOffset) + UInt32(fileStartShift)
+			let nameStart = data.getWordAtOffset(dets + kFileDetailsFilenameOffset) + UInt32(filenamesShift)
+			data.replaceWordAtOffset(dets + kFileStartPointerOffset, withBytes: fileStart)
+			data.replaceWordAtOffset(dets + kFileDetailsFilenameOffset, withBytes: nameStart)
 			
 			if self.usesFileExtensions {
-				let fullnameStart = self.data.getWordAtOffset(dets + kFileDetailsFullFilenameOffset) + UInt32(fullfilenamesShift)
-				self.data.replaceWordAtOffset(dets + kFileDetailsFullFilenameOffset, withBytes: fullnameStart)
+				let fullnameStart = data.getWordAtOffset(dets + kFileDetailsFullFilenameOffset) + UInt32(fullfilenamesShift)
+				data.replaceWordAtOffset(dets + kFileDetailsFullFilenameOffset, withBytes: fullnameStart)
 			}
 			
 		}
@@ -800,7 +785,7 @@ final class XGFsys : NSObject {
 		
 		self.data.replaceWordAtOffset(fileDetailsPointerOffset, withBytes: UInt32(entryStart))
 		self.data.replaceWordAtOffset(kFSYSFileSizeOffset, withBytes: UInt32(self.data.length))
-		self.data.replaceWordAtOffset(kNumberOfEntriesOffset, withBytes: UInt32(self.numberOfEntries + 1))
+		self.data.replaceWordAtOffset(kNumberOfEntriesOffset, withBytes: UInt32(numberOfEntries + 1))
 		
 		let isCompressed = data.getWordAtOffset(0) == kLZSSbytes
 		let uncompressedSize = isCompressed ? data.getWordAtOffset(kLZSSUncompressedSizeOffset) : UInt32(data.length)

@@ -7,6 +7,10 @@
 
 import Foundation
 
+func displayAlert(title: String, description: String) {
+	printg("\nAlert: \(title)\n\(description)\n")
+}
+
 func printg(_ args: Any...) {
 	for arg in args {
 		print(arg, separator: " ", terminator: " ")

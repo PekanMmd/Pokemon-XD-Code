@@ -107,7 +107,7 @@ class XGTrainerPokemon {
 	}
 	
 	
-	@objc func save() {
+	func save() {
 		
 		let table = PBRDataTable.tableForFile(deckData.deck.file)
 		guard let data =  table.entryWithIndex(deckData.index) else {
@@ -124,17 +124,6 @@ class XGTrainerPokemon {
 		data.setByte(8, to: stats.type1.index)
 		data.setByte(9, to: stats.type2.index)
 		data.save()
-	}
-	
-	@objc func purge() {
-		species			= XGPokemon.pokemon(0)
-		abilityIndex	= 0
-		nature			= XGNatures.hardy
-		gender			= XGGenders.male
-		IVs				= [Int](repeating: 0, count: 6)
-		EVs				= [Int](repeating: 0, count: 6)
-		items			= [XGItems](repeating: .item(0), count: 4)
-		moves			= [XGMoves](repeating: .move(0), count: kNumberOfPokemonMoves)
 	}
 }
 

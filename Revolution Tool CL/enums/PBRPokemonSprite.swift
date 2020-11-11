@@ -18,7 +18,7 @@ enum PBRPokemonImage : XGIndexedValue {
 		}
 	}
 	
-	private var entry : PBRDataTableEntry {
+	var entry : PBRDataTableEntry {
 		PBRDataTableEntry.pokemonIcons(index: index)
 	}
 	

@@ -19,7 +19,6 @@ let faces = PBRDataTable.pokemonFaces
 let levelUpMoves = PBRDataTable.levelUpMoves
 let evolutions = PBRDataTable.evolutions
 
-let model = XGFiles.nameAndFolder("tr_dpgirl_10.sdr", .ISOExport("tr_dpgirl_10"))
 
 //for table in [icons, models, baseStats, bodies, faces, levelUpMoves, evolutions] {
 //	print(table.numberOfEntries.hexString())
@@ -77,10 +76,26 @@ let model = XGFiles.nameAndFolder("tr_dpgirl_10.sdr", .ISOExport("tr_dpgirl_10")
 //	data.save()
 //}
 
-//XGDolPatcher.overrideHardcodedPokemonCount(newCount: PBRDataTable.pokemonBaseStats.numberOfEntries)
+XGDolPatcher.overrideHardcodedPokemonCount(newCount: PBRDataTable.pokemonBaseStats.numberOfEntries)
 //XGDolPatcher.disableRentalPassChecksums()
 //XGUtility.compileMainFiles()
 //XGUtility.compileISO()
 
 
+let stats = XGPokemon.pokemon(1234).stats
+let face = stats.faces[0]
+let data = face.entry
+let newFid = stats.index * 2 + 0x3000
+let newMid = stats.index * 2 + 0x3001
+data.setShort(8, to: newFid)
+data.setShort(0, to: newMid)
+data.save()
 
+let menu_face = XGFiles.fsys("menu_face").fsysData
+let image = XGFiles.nameAndFolder("menu_face 0006.gtx", .Resources)
+menu_face.addFile(image, fileType: .gtx, compress: true, shortID: newMid)
+menu_face.addFile(image, fileType: .gtx, compress: true, shortID: newFid)
+menu_face.save()
+
+XGUtility.compileMainFiles()
+XGUtility.compileISO()

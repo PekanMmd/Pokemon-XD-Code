@@ -58,14 +58,16 @@ final class XGType: NSObject, XGIndexedValue, Codable {
 	}
 	
 	@objc func save() {
+		guard PBRTypeManager.updateTypeMatchupDolData(allowSizeIncrease: false) else {
+			displayAlert(title: "Failed to save type", description: "Couldn't save type match data. The number of non neutral matchups is too large for the data table. Try applying the patch to move the table.")
+			return
+		}
 		let data = PBRDataTableEntry.typeMatchups(index: self.index)
 		for i in 0 ..< self.effectivenessTable.count {
 			data.setByte(i, to: effectivenessTable[i].rawValue)
 		}
 		
 		data.save()
-
-		PBRTypeManager.updateTypeMatchupDolData(allowSizeIncrease: false)
 	}
 }
 

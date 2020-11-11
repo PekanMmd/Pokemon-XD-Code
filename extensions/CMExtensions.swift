@@ -11,6 +11,10 @@ import Foundation
 let date = Date(timeIntervalSinceNow: 0)
 var logString = ""
 
+func displayAlert(title: String, description: String) {
+	GoDAlertViewController.displayAlert(title: title, text: description)
+}
+
 func printg(_ args: Any...) {
 	
 	for arg in args {

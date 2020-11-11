@@ -7,6 +7,10 @@
 
 import Foundation
 
+func displayAlert(title: String, description: String) {
+	GoDAlertViewController.displayAlert(title: title, text: description)
+}
+
 func printg(_ args: Any...) {
 	for arg in args {
 		print(arg, separator: " ", terminator: " ")

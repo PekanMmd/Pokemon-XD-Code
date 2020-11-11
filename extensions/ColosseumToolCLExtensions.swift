@@ -10,6 +10,9 @@ import Foundation
 let date = Date(timeIntervalSinceNow: 0)
 var logString = ""
 
+func displayAlert(title: String, description: String) {
+	printg("\nAlert: \(title)\n\(description)\n")
+}
 
 func printg(_ args: Any...) {
 	for arg in args {

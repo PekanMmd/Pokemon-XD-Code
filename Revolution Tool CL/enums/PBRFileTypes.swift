@@ -119,7 +119,7 @@ enum XGFileTypes : Int {
 
 	static let textureFormats: [XGFileTypes] = [.gtx]
 	static let modelFormats: [XGFileTypes] = [.sdr, .odr, .mdr]
-	static let textureContainingFormats: [XGFileTypes] = [.sdr, .odr, .mdr, .mnr]
+	static let textureContainingFormats: [XGFileTypes] = [.sdr, .odr, .mdr, .mnr, .gpd, .gfl]
 }
 
 
