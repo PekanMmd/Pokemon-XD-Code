@@ -7,7 +7,7 @@
 
 import Foundation
 
-class PBRDataTableEntry : XGIndexedValue {
+class PBRDataTableEntry: XGIndexedValue {
 
 	var index = 0
 	var size: Int {

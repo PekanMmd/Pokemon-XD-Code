@@ -35,6 +35,8 @@ final class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
 	var shinyValue				= XGShinyValues.random
 	private(set) var gender 	= XGGenders.random
 	private(set) var nature 	= XGNatures.random
+
+	var usesLevelUpMoves = true
 	
 	var startOffset : Int {
 		get {

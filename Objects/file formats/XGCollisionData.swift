@@ -5,9 +5,7 @@
 //  Created by The Steez on 28/05/2018.
 //
 
-#if ENV_OSX
-import Cocoa
-import Metal
+import Foundation
 
 var types = [Int]()
 class XGCollisionData: NSObject {
@@ -24,8 +22,8 @@ class XGCollisionData: NSObject {
 	}
 	
 	var vertexes = [XGVertex]()
-	var rawVertexBuffer : [GLfloat] {
-		var buffer = [GLfloat]()
+	var rawVertexBuffer : [Float] {
+		var buffer = [Float]()
 		
 		for vertex in self.vertexes {
 			buffer += vertex.rawData
@@ -75,7 +73,7 @@ class XGCollisionData: NSObject {
 		let list_start  = data.getWordAtOffset(0x0).int
 		let entry_count = data.getWordAtOffset(0x4).int
 		
-		var maxD : GLfloat = 0
+		var maxD : Float = 0
 		var currentSectionIndex = -1
 		
 		for i in 0 ..< entry_count {
@@ -124,10 +122,10 @@ class XGCollisionData: NSObject {
 							let vz = data.getWordAtOffset( s_o + (c * 0xc) + 0x8).hexToSignedFloat()
 							let v = XGVertex()
 							// may need to some axes depending on rendering engine
-							v.x = vx.gl
-							v.y = vy.gl
-							v.z = vz.gl
-							v.index = GLfloat(self.vertexes.count + c)
+							v.x = vx
+							v.y = vy
+							v.z = vz
+							v.index = Float(self.vertexes.count + c)
 							triangle.append(v)
 							
 							maxD = max(maxD, abs(vx))
@@ -140,13 +138,13 @@ class XGCollisionData: NSObject {
 						let nz = data.getWordAtOffset( s_o + (3 * 0xc) + 0x8).hexToSignedFloat()
 						
 						for v in triangle {
-							v.nx = nx.gl
-							v.ny = ny.gl
-							v.nz = nz.gl
-							v.type = GLfloat(type)
+							v.nx = nx
+							v.ny = ny
+							v.nz = nz
+							v.type = Float(type)
 							v.isInteractable = isInteractable
-							v.interactionIndex = GLfloat(interactionIndex)
-							v.sectionIndex = GLfloat(currentSectionIndex)
+							v.interactionIndex = Float(interactionIndex)
+							v.sectionIndex = Float(currentSectionIndex)
 							v.sectionIndex2 = v.sectionIndex
 						}
 						if !types.contains(type) {
@@ -160,15 +158,13 @@ class XGCollisionData: NSObject {
 			}
 		}
 		
-		let mag : GLfloat = 1
+		let mag : Float = 1
 		for v in self.vertexes {
 			v.scale(maxD: maxD, magnification: mag)
 		}
 	}
 	
 }
-#endif
-
 
 
 

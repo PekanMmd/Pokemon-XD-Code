@@ -105,7 +105,6 @@ cp ../images/PBR\ body/PBR_body_044.png ./out/Assets/PBR/PBR_body_044.png
 cp ../images/PBR\ face/PBR_face_177.png ./out/Assets/PBR/PBR_face_177.png
 cp ../images/PBR\ face/PBR_face_282.png ./out/Assets/PBR/PBR_face_282.png
 cp ../images/PBR\ face/PBR_face_119.png ./out/Assets/PBR/PBR_face_119.png
-cp ../JSON/PBR/WZX\ ids.json ./out/Assets/PBR/WZX\ ids.json
 cp ../images/PBR\ face/PBR_face_183.png ./out/Assets/PBR/PBR_face_183.png
 cp ../images/PBR\ face/PBR_face_485.png ./out/Assets/PBR/PBR_face_485.png
 cp ../images/PBR\ body/PBR_body_387.png ./out/Assets/PBR/PBR_body_387.png

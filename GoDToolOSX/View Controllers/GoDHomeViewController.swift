@@ -90,6 +90,12 @@ class GoDHomeViewController: GoDTableViewController {
 		}
 		
 		if row < segues.count {
+			#if !canImport(Metal) || !canImport(GLKit)
+			guard segues[row] != "toCollisionVC" else {
+				GoDAlertViewController.displayAlert(title: "Not supported", text: "This tool isn't supported on this platform")
+				return
+			}
+			#endif
 			performSegue(withIdentifier: segues[row], sender: self)
 		}
 	}

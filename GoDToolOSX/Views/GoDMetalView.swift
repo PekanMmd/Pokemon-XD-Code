@@ -5,6 +5,7 @@
 //  Created by The Steez on 03/09/2018.
 //
 
+#if canImport(Cocoa) && canImport(Metal) && canImport(GLKit)
 import Cocoa
 import Metal
 
@@ -473,7 +474,7 @@ class GoDMetalView: NSView {
 	}
     
 }
-
+#endif
 
 
 

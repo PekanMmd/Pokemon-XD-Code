@@ -5,6 +5,7 @@
 //  Created by The Steez on 28/05/2018.
 //
 
+#if canImport(Cocoa) && canImport(Metal) && canImport(GLKit)
 import Cocoa
 
 class GoDCollisionViewController: GoDTableViewController {
@@ -193,7 +194,7 @@ class GoDCollisionViewController: GoDTableViewController {
 	
 }
 
-
+#endif
 
 
 

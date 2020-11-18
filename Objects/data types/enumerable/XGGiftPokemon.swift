@@ -22,12 +22,16 @@ protocol XGGiftPokemon {
 	var shinyValue		: XGShinyValues { get set }
 	
 	var giftType		: String { get set }
+
+	var usesLevelUpMoves: Bool { get }
 	
 	func save()
    
 }
 
-
+extension XGGiftPokemon {
+	var usesLevelUpMoves: Bool { false }
+}
 
 
 

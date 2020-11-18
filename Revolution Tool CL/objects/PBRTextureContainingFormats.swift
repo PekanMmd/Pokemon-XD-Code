@@ -24,6 +24,8 @@ class PBRTextureContaining: GoDTexturesContaining {
 
 	var data: XGMutableData?
 
+	fileprivate init() {}
+
 	fileprivate convenience init(file: XGFiles) {
 		self.init(data: file.data)
 	}
@@ -41,8 +43,14 @@ class PBRTextureContaining: GoDTexturesContaining {
 				if data.get2BytesAtOffset(pointerDataOffset + 2) == 0xc0d {
 					textureStart = textureStart + data.get4BytesAtOffset(textureStart + 4)
 				}
+				if data.get4BytesAtOffset(pointerDataOffset + 4) != 0 {
+					// not a texture
+					textureStart = -1
+				}
 			}
-			textureHeaderOffsets.append(textureStart)
+			if textureStart >= 0 {
+				textureHeaderOffsets.append(textureStart)
+			}
 		}
 		textureDataOffsets = textureHeaderOffsets.map { (headerOffset) -> Int in
 			let dataRelativeOffset = data.getWordAtOffset(headerOffset + 0x28).int32
@@ -101,11 +109,28 @@ class PBRGPDData: PBRTextureContaining {
 }
 
 class PBRGFLData: PBRTextureContaining {
-	override var sizeOfTexturePointerData: Int { return 0x8 }
-	override var offsetOfTexturePointerInData: Int { return 0x0 }
-	override var texturePointersFixedStartOffset: Int { return -1 }
-	override var textureHeadersPointerOffsetRelativeToOffset: Int { return 4 }
 
-	override var modelNumberOfTexturesOffset: Int { return 4 }
-	override var modelTextureHeadersPointersOffset: Int { return 0x14 }
+	fileprivate convenience init(file: XGFiles) {
+		self.init(data: file.data)
+	}
+
+	fileprivate override init(data: XGMutableData?) {
+		super.init()
+
+		guard let data = data else { return }
+		self.data = data
+
+		numberOfTextures = data.get2BytesAtOffset(4)
+		textureHeadersPointersOffset = data.get2BytesAtOffset(6) * 0x10 + 0x2c
+		for i in 0 ..< numberOfTextures {
+			let pointerDataOffset = textureHeadersPointersOffset + (i * 8)
+			let textureStart = data.getWordAtOffset(pointerDataOffset + 4).int
+			textureHeaderOffsets.append(textureStart)
+		}
+		textureDataOffsets = textureHeaderOffsets.map { (headerOffset) -> Int in
+			let dataRelativeOffset = data.getWordAtOffset(headerOffset + 0x28).int32
+			return dataRelativeOffset + headerOffset
+		}
+
+	}
 }

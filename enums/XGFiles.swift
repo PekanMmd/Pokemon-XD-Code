@@ -310,11 +310,9 @@ indirect enum XGFiles {
 		}
 	}
 
-	#if ENV_OSX
 	var collisionData: XGCollisionData {
 		return XGCollisionData(file: self)
 	}
-	#endif
 
 	var textures: [GoDTexture] {
 		if XGFileTypes.textureFormats.contains(fileType) {

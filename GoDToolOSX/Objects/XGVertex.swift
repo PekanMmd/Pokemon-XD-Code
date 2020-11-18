@@ -5,37 +5,33 @@
 //  Created by The Steez on 03/09/2018.
 //
 
-#if ENV_OSX
-import Cocoa
-import OpenGL.GL3
-import GLKit
-import Darwin
+import Foundation
 
 let kVBOBufferSize = 4096
-let kGLFloatSize   = 4
-let kXGVertexSize  = XGVertex().rawData.count * kGLFloatSize
+let kFloatSize     = 4
+let kXGVertexSize  = XGVertex().rawData.count * kFloatSize
 let kVertexesPerBuffer = kVBOBufferSize / kXGVertexSize
 
 class XGVertex : NSObject {
-	var x : GLfloat = 0.0
-	var y : GLfloat = 0.0
-	var z : GLfloat = 0.0
-	var type : GLfloat = 0.0
-	var index : GLfloat = 0.0
+	var x : Float = 0.0
+	var y : Float = 0.0
+	var z : Float = 0.0
+	var type : Float = 0.0
+	var index : Float = 0.0
 	var isInteractable = false
-	var interactionIndex : GLfloat = 0.0
-	var sectionIndex : GLfloat = 0.0
+	var interactionIndex : Float = 0.0
+	var sectionIndex : Float = 0.0
 	
 	// sometimes interactable vertices overlap with regular ones and only one can be displayed at a time
-	var sectionIndex2 : GLfloat = 0.0
+	var sectionIndex2 : Float = 0.0
 	
 	// normal
-	var nx : GLfloat = 0.0
-	var ny : GLfloat = 0.0
-	var nz : GLfloat = 0.0
+	var nx : Float = 0.0
+	var ny : Float = 0.0
+	var nz : Float = 0.0
 	
-	var rawData : [GLfloat] {
-		var data = [GLfloat]()
+	var rawData : [Float] {
+		var data = [Float]()
 		data.append(x)
 		data.append(y)
 		data.append(z)
@@ -52,7 +48,7 @@ class XGVertex : NSObject {
 		return data
 	}
 	
-	func scale(maxD : GLfloat, magnification: GLfloat) {
+	func scale(maxD : Float, magnification: Float) {
 		
 		self.x /= maxD
 		self.y /= maxD
@@ -63,4 +59,3 @@ class XGVertex : NSObject {
 		self.z *= magnification
 	}
 }
-#endif

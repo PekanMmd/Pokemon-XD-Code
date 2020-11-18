@@ -34,6 +34,9 @@ class GoDGiftViewController: GoDTableViewController {
 			self.table.reloadData()
 			self.table.selectedRow = row
 			self.tableView(self.table, didSelectRow: row)
+			for movePopup in self.pokemonView.moves {
+				movePopup.isEnabled = !self.currentGift.usesLevelUpMoves
+			}
 			self.hideActivityView()
 		}
 	}
@@ -129,6 +132,9 @@ class GoDGiftViewController: GoDTableViewController {
 			self.currentGift = self.gifts[row]
 			
 			self.pokemonView.setUp()
+			for movePopup in self.pokemonView.moves {
+				movePopup.isEnabled = !self.currentGift.usesLevelUpMoves
+			}
 			
 			self.hideActivityView()
 		}

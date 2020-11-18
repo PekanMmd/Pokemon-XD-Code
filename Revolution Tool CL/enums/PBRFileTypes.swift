@@ -111,7 +111,7 @@ enum XGFileTypes : Int {
 		}
 	}
 
-	#if ENV_OSX
+	#if canImport(Cocoa)
 	static let imageFormats: [XGFileTypes] = [.png, .jpeg, .bmp]
 	#else
 	static let imageFormats: [XGFileTypes] = [.png]

@@ -15,7 +15,7 @@ var kNumberOfMoves: Int {
 final class XGMove: NSObject, XGIndexedValue {
 	
 	var startOffset			: Int {
-		return PBRDataTable.moves.offsetForEntryWithIndex(self.index)
+		return PBRDataTable.moves.offsetForEntryWithIndex(index)
 	}
 	var index				= 0x0
 	var moveIndex: Int {
@@ -24,7 +24,8 @@ final class XGMove: NSObject, XGIndexedValue {
 	
 	var nameID				= 0x0
 	var descriptionID   	= 0x0
-	var animationID     	= 0x0 // wzx file id
+	var description2ID		= 0x0
+	var animationID     	= 0x0 // Just for colo/xd compatibility
 	var animation2ID		= 0x0 // Just for colo/xd compatibility
 	
 	var priority			= 0x0
@@ -79,13 +80,13 @@ final class XGMove: NSObject, XGIndexedValue {
 		
 		effect = data.getShort(0)
 		let targets = data.getShort(2)
-		self.target = XGMoveTargets(rawValue: targets) ?? .selectedTarget
+		target = XGMoveTargets(rawValue: targets) ?? .selectedTarget
 		let appeal = data.getByte(6)
-		self.contestAppeal = XGContestAppeals(rawValue: appeal) ?? .cool
+		contestAppeal = XGContestAppeals(rawValue: appeal) ?? .cool
 		
 		nameID = data.getShort(8)
 		descriptionID = data.getShort(10)
-		animationID = data.getShort(12)
+		description2ID = data.getShort(12)
 		
 		category = XGMoveCategories(rawValue: data.getByte(14)) ?? .none
 		basePower = data.getByte(15)
@@ -117,14 +118,14 @@ final class XGMove: NSObject, XGIndexedValue {
 	@objc func save() {
 		guard index >= 0 else { return }
 
-		let data  = PBRDataTableEntry.moves(index: self.index)
+		let data  = PBRDataTableEntry.moves(index: index)
 		
 		data.setShort(0, to: effect)
-		data.setShort(2, to: self.target.rawValue)
+		data.setShort(2, to: target.rawValue)
 		data.setByte(6, to: contestAppeal.rawValue)
 		data.setShort(8, to: nameID)
 		data.setShort(10, to: descriptionID)
-		data.setShort(12, to: animationID)
+		data.setShort(12, to: description2ID)
 		data.setByte(14, to: category.rawValue)
 		data.setByte(15, to: basePower)
 		data.setByte(16, to: type.rawValue)

@@ -245,7 +245,6 @@
 		1C1A0B502552315D00891C93 /* PBRTextureContainingFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1A0B4E2552315D00891C93 /* PBRTextureContainingFormats.swift */; };
 		1C291C0525138A1500E3B124 /* Move.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C291C0425138A1400E3B124 /* Move.storyboard */; };
 		1C291C0625138ADC00E3B124 /* GoDMovesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0851F6DAD9B00AC263D /* GoDMovesViewController.swift */; };
-		1C291C082513997A00E3B124 /* WZX ids.json in Resources */ = {isa = PBXBuildFile; fileRef = 1C291C072513997A00E3B124 /* WZX ids.json */; };
 		1C37440D24056F190089D3BA /* GoDShellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C37440C24056F190089D3BA /* GoDShellManager.swift */; };
 		1C37440E24056F190089D3BA /* GoDShellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C37440C24056F190089D3BA /* GoDShellManager.swift */; };
 		1C37440F24056F190089D3BA /* GoDShellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C37440C24056F190089D3BA /* GoDShellManager.swift */; };
@@ -408,6 +407,12 @@
 		1CC362E224C1DF25005D7B4A /* XGBattleStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */; };
 		1CC5DD3222C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
 		1CC5DD3322C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
+		1CCF00122562F1C20082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
+		1CCF00132562F1C20082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
+		1CCF00142562F1C20082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
+		1CCF00272562FA810082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
+		1CCF00312562FA820082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
+		1CCF00322562FA820082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
 		1CCFFDAA2554FEF60082BFE2 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCFFDA92554FEF60082BFE2 /* main.swift */; };
 		1CCFFDC92554FF580082BFE2 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
 		1CCFFDD32554FF660082BFE2 /* OSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA96253B837500907D78 /* OSXExtensions.swift */; };
@@ -4169,7 +4174,6 @@
 		1C1A0B3525522ED600891C93 /* GoDTexturesContaining.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDTexturesContaining.swift; sourceTree = "<group>"; };
 		1C1A0B4E2552315D00891C93 /* PBRTextureContainingFormats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRTextureContainingFormats.swift; sourceTree = "<group>"; };
 		1C291C0425138A1400E3B124 /* Move.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Move.storyboard; sourceTree = "<group>"; };
-		1C291C072513997A00E3B124 /* WZX ids.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "WZX ids.json"; sourceTree = "<group>"; };
 		1C37440C24056F190089D3BA /* GoDShellManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDShellManager.swift; sourceTree = "<group>"; };
 		1C39D85B240EA03D006FDFBD /* wit */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = wit; sourceTree = "<group>"; };
 		1C4E15D7253E065700EA318B /* READ_ME.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = READ_ME.txt; sourceTree = "<group>"; };
@@ -4243,6 +4247,7 @@
 		1CC362D324C07E35005D7B4A /* PBR_body_500.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_500.png; sourceTree = "<group>"; };
 		1CC362D424C07E35005D7B4A /* PBR_body_497.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_497.png; sourceTree = "<group>"; };
 		1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleStyles.swift; sourceTree = "<group>"; };
+		1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGSaveManager.swift; sourceTree = "<group>"; };
 		1CCFFDA72554FEF60082BFE2 /* PBR-CLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "PBR-CLI"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CCFFDA92554FEF60082BFE2 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		1CCFFFA2255509840082BFE2 /* Colosseum_Tool_OSX_Compiler.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Colosseum_Tool_OSX_Compiler.sh; sourceTree = "<group>"; };
@@ -6783,7 +6788,6 @@
 				1C6295DE242A948B0085C22F /* Original Moves.json */,
 				1C6295DD242A948B0085C22F /* Original Pokemon.json */,
 				1C8601D82478625900A5B267 /* Original Items.json */,
-				1C291C072513997A00E3B124 /* WZX ids.json */,
 			);
 			path = PBR;
 			sourceTree = "<group>";
@@ -6902,6 +6906,7 @@
 				B22A1C4721829D7A001C41D3 /* XGThreadManager.swift */,
 				1C9F22D8254104C0008D02EA /* DummyThreadManager.swift */,
 				1C37440C24056F190089D3BA /* GoDShellManager.swift */,
+				1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */,
 			);
 			name = managers;
 			path = Objects/managers;
@@ -9720,6 +9725,7 @@
 					B24A501B21D10D93009C707C = {
 						CreatedOnToolsVersion = 9.4.1;
 						DevelopmentTeam = PL9D4W4S2M;
+						LastSwiftMigration = 1200;
 						ProvisioningStyle = Automatic;
 					};
 					B2562F4421349567004180F1 = {
@@ -10857,7 +10863,6 @@
 				B20EED1A21EF77FD00E87D01 /* PBR_face_177.png in Resources */,
 				B20EEDEB21EF77FD00E87D01 /* PBR_face_282.png in Resources */,
 				B20EEE2D21EF77FD00E87D01 /* PBR_face_119.png in Resources */,
-				1C291C082513997A00E3B124 /* WZX ids.json in Resources */,
 				B20EED6221EF77FD00E87D01 /* PBR_face_183.png in Resources */,
 				B20EEDF821EF77FD00E87D01 /* PBR_face_485.png in Resources */,
 				B20EEBA921EF77E100E87D01 /* PBR_body_387.png in Resources */,
@@ -12791,6 +12796,7 @@
 				1C16D133253BC8AE00907D78 /* XGTrainerClass.swift in Sources */,
 				1C16CF93253BC57B00907D78 /* XDSFlags.swift in Sources */,
 				1C16CFCC253BC59600907D78 /* XGTextureBlock.swift in Sources */,
+				1CCF00132562F1C20082BFE2 /* XGSaveManager.swift in Sources */,
 				1C16CD30253BC46100907D78 /* XDSMacroTypes.swift in Sources */,
 				1C16CFA7253BC58B00907D78 /* XGColour.swift in Sources */,
 				1C16D019253BC5D100907D78 /* GoDKeyCodes.swift in Sources */,
@@ -12929,6 +12935,7 @@
 				1C16CC52253BC40D00907D78 /* XGAbilities.swift in Sources */,
 				1C16CE5F253BC4D100907D78 /* XGLevelUpMove.swift in Sources */,
 				1C16CE1E253BC4AD00907D78 /* XGUnicodeCharacters.swift in Sources */,
+				1CCF00312562FA820082BFE2 /* XGSaveManager.swift in Sources */,
 				1C16CFA2253BC58200907D78 /* CMScriptStandardFunctions.swift in Sources */,
 				1C16CCED253BC44500907D78 /* CMFiles.swift in Sources */,
 				1C16CE43253BC4C700907D78 /* XGCharacter.swift in Sources */,
@@ -13169,6 +13176,7 @@
 				B2C1EE7420C8F6AB00D7C2F7 /* GoDTrainerView.swift in Sources */,
 				B208E77D20C8578900D298BF /* XGMove.swift in Sources */,
 				B24A505A21D1258E009C707C /* XGTextureBlock.swift in Sources */,
+				1CCF00322562FA820082BFE2 /* XGSaveManager.swift in Sources */,
 				B24CBA9C2124ECB700481C1D /* CMGiftPokemon.swift in Sources */,
 				B2C1EE7720C8F6BF00D7C2F7 /* GoDButton.swift in Sources */,
 				1CB33AB522B8F82A00F81C29 /* CMBattle.swift in Sources */,
@@ -13521,6 +13529,7 @@
 				B2562F822134983C004180F1 /* XGEvolution.swift in Sources */,
 				B2562F862134987A004180F1 /* CMGiftPokemon.swift in Sources */,
 				B2562F6A2134979A004180F1 /* XGMoveCategory.swift in Sources */,
+				1CCF00272562FA810082BFE2 /* XGSaveManager.swift in Sources */,
 				B2562F6421349789004180F1 /* XGFontColours.swift in Sources */,
 				1CC362DE24C1DF23005D7B4A /* XGBattleStyles.swift in Sources */,
 				B2562F5521349649004180F1 /* GoDImageExtensions.swift in Sources */,
@@ -13723,6 +13732,7 @@
 				B2F5ECA21F49A1FF0075C6D2 /* XGMutableData.swift in Sources */,
 				B2D1DF5D1F68DBF60023A876 /* GoDTextureFormats.swift in Sources */,
 				B2F5ECE41F49A1FF0075C6D2 /* XGUtility.swift in Sources */,
+				1CCF00122562F1C20082BFE2 /* XGSaveManager.swift in Sources */,
 				B2F5ECBA1F49A1FF0075C6D2 /* XGScriptClassFunctionsData.swift in Sources */,
 				B24A506621D12668009C707C /* XGResources.swift in Sources */,
 				B2F5EC2D1F49A1FE0075C6D2 /* XGGenders.swift in Sources */,
@@ -13772,6 +13782,7 @@
 				B2FEC09D1F727D8200AC263D /* GoDDPKMPopUpButton.swift in Sources */,
 				B2D1DF5E1F68DBF60023A876 /* GoDTextureFormats.swift in Sources */,
 				B24A505121D1258E009C707C /* XGTexturePalette.swift in Sources */,
+				1CCF00142562F1C20082BFE2 /* XGSaveManager.swift in Sources */,
 				B2FEC07A1F6C602A00AC263D /* GoDAlertViewController.swift in Sources */,
 				B2F5F8861F49C3440075C6D2 /* XGOSXExtensions.swift in Sources */,
 				B205E0C21F60A9D300A5F075 /* GoDPopUpButton.swift in Sources */,
@@ -14418,7 +14429,7 @@
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -14454,7 +14465,7 @@
 				SDKROOT = macosx;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

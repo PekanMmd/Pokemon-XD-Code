@@ -6,7 +6,7 @@
 //
 
 import Foundation
-#if ENV_OSX
+#if canImport(Cocoa)
 import Cocoa
 #endif
 
@@ -133,7 +133,7 @@ extension XGImage {
 	}
 
 	func writePNGData(toFile file: XGFiles) {
-		#if ENV_OSX
+		#if canImport(Cocoa)
 		pngData.write(to: file)
 		#else
 		let tex0File = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.tex0.fileExtension, file.folder)
@@ -154,7 +154,7 @@ extension XGImage {
 		guard file.exists, XGFileTypes.imageFormats.contains(file.fileType) else {
 			return nil
 		}
-		#if ENV_OSX
+		#if canImport(Cocoa)
 		let image = file.image
 		return XGImage(nsImage: image)
 		#else
@@ -176,7 +176,7 @@ extension XGImage {
 	}
 }
 
-#if ENV_OSX
+#if canImport(Cocoa)
 extension XGImage {
 
 	var pngData: Data {

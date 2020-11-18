@@ -6,7 +6,7 @@
 //
 //
 
-#if ENV_OSX
+#if canImport(Cocoa)
 import Cocoa
 
 extension XGFiles {

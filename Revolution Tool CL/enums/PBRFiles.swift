@@ -17,10 +17,7 @@ var loadedFiles = [String : XGMutableData]()
 var loadedStringTables = [String : XGStringTable]()
 
 var loadableFiles: [String] {
-	var paths = [XGFiles.dol.path, XGFiles.fsys("common").path, XGFiles.msg("mes_common").path, XGFiles.msg("menu_btutorial").path, XGFiles.msg("mes_fight_e").path, XGFiles.msg("mes_name_e").path, XGFiles.msg("mes_common_JP").path]
-	paths += XGFolders.Common.files.map { $0.path }
-	paths += XGFolders.Decks.files.map { $0.path }
-	return paths
+	return [XGFiles.dol.path, XGFiles.fsys("common").path, XGFiles.msg("mes_common").path, XGFiles.msg("menu_btutorial").path, XGFiles.msg("mes_fight_e").path, XGFiles.msg("mes_name_e").path, XGFiles.msg("mes_common_JP").path]
 }
 let loadableStringTables = [XGFiles.msg("mes_common").path, XGFiles.msg("menu_btutorial").path, XGFiles.msg("mes_fight_e").path, XGFiles.msg("mes_name_e").path, XGFiles.msg("mes_common_JP").path]
 
@@ -399,7 +396,7 @@ indirect enum XGFolders {
 			case .Trainers	: path = XGFolders.Images.path
 			case .Types		: path = XGFolders.Images.path
             case .DATA      : path = XGFolders.ISODump.path
-            case .DOL, .FSYS: path = XGFolders.DATA.path
+			case .DOL, .FSYS: path = XGFolders.DATA.exists ? XGFolders.DATA.path : XGFolders.ISODump.path
 			case .Wiimm		: path = XGFolders.Resources.path
             case .nameAndFolder(_, let f): path = f.path
             case .path(let s): return s
@@ -484,7 +481,6 @@ indirect enum XGFolders {
 		let folders : [XGFolders] = [
 			.Documents,
 			.Common,
-			.DOL,
 			.StringTables,
 			.Decks,
 			.JSON,
@@ -497,7 +493,6 @@ indirect enum XGFolders {
 			.PokeBody,
 			.Trainers,
 			.Types,
-			.FSYS,
 			.LZSS,
 			.Reference,
 			.Resources,
@@ -535,7 +530,7 @@ indirect enum XGFolders {
 			}
 		}
 		
-		let jsons = ["Move Effects", "Original Pokemon", "Original Moves", "Original Items", "WZX ids"]
+		let jsons = ["Move Effects", "Original Pokemon", "Original Moves", "Original Items"]
 		
 		for j in jsons {
 			let file = XGFiles.json(j)

@@ -42,7 +42,7 @@ class GoDMovesViewController: GoDTableViewController {
 	@IBOutlet var magic: NSButton!
 	@IBOutlet var mirror: NSButton!
 	
-	
+	var lastSearchText: String?
 	var filteredMoves = [(name: String, type: XGMoveTypes, index: Int, isShadow: Bool)]()
 	var moves = allMovesArray().map { (move) -> (name: String, type: XGMoveTypes, index: Int, isShadow: Bool) in
 		return (move.name.unformattedString, move.type, move.index, move.isShadowMove)
@@ -56,6 +56,10 @@ class GoDMovesViewController: GoDTableViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
+
+		if game == .PBR {
+			animation.isHidden = true
+		}
 		
 		self.title = "Move Editor"
 		self.nameID.formatter = NumberFormatter.shortFormatter()
@@ -96,17 +100,8 @@ class GoDMovesViewController: GoDTableViewController {
 		accuracy.integerValue = currentMove.accuracy
 		effectAcc.integerValue = currentMove.effectAccuracy
 
-		animation.isEnabled = true
 		if game != .PBR {
 			animation.selectItem(at: currentMove.animationID)
-		} else {
-			let idsJSON = XGFiles.json("WZX ids")
-			if idsJSON.exists, let ids = idsJSON.json as? [Int], let index = ids.firstIndex(of: currentMove.animationID) {
-				animation.selectItem(at: index)
-			} else {
-				animation.selectItem(at: 0)
-				animation.isEnabled = false
-			}
 		}
 		
 		type.select(currentMove.type)
@@ -182,10 +177,12 @@ class GoDMovesViewController: GoDTableViewController {
 		}
 
 		guard !text.isEmpty else {
+			lastSearchText = nil
 			filteredMoves = moves
 			return
 		}
 
+		lastSearchText = text
 		filteredMoves = moves.filter({ (move) -> Bool in
 			move.name.simplified.contains(text.simplified)
 		})
@@ -320,16 +317,7 @@ class GoDMovesViewController: GoDTableViewController {
 	
 	
 	@IBAction func newAnimation(_ sender: GoDOriginalMovesPopUpButton) {
-		var value = sender.indexOfSelectedItem
-
-		if game == .PBR {
-			let idsJSON = XGFiles.json("WZX ids")
-			guard idsJSON.exists, let ids = idsJSON.json as? [Int], value < ids.count else {
-				return
-			}
-
-			value = ids[value]
-		}
+		let value = sender.indexOfSelectedItem
 		
 		currentMove.animationID = value
 		if game != .PBR {
@@ -462,13 +450,15 @@ class GoDMovesViewController: GoDTableViewController {
 	@IBAction func save(_ sender: Any) {
 		prepareForSave()
 		currentMove.save()
+
+		let movesArrayIndex = currentMove.moveIndex + (game == .PBR ? 1 : 0)
 		
-		moves[currentMove.moveIndex].name = currentMove.name.string
-		moves[currentMove.moveIndex].isShadow = currentMove.isShadowMove
-		moves[currentMove.moveIndex].type = currentMove.type
+		moves[movesArrayIndex].name = currentMove.name.unformattedString
+		moves[movesArrayIndex].isShadow = currentMove.isShadowMove
+		moves[movesArrayIndex].type = currentMove.type
 		
 		reloadViewWithActivity()
-		table.reloadData()
+		tableView(table, didSearchForText: lastSearchText ?? "")
 	}
 	
 }

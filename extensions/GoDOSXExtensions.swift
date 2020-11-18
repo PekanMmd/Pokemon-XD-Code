@@ -5,18 +5,12 @@
 //  Created by The Steez on 28/08/2018.
 //
 
-#if ENV_OSX
+#if canImport(Cocoa)
 import Cocoa
 
 extension NSColor {
-	var vec3 : [GLfloat] {
-		return [Float(self.redComponent).gl, Float(self.greenComponent).gl, Float(self.blueComponent).gl]
-	}
-}
-
-extension Float {
-	var gl : GLfloat {
-		return GLfloat(self)
+	var vec3: [Float] {
+		return [Float(self.redComponent), Float(self.greenComponent), Float(self.blueComponent)]
 	}
 }
 

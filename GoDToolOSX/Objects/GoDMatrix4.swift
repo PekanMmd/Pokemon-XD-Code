@@ -5,8 +5,9 @@
 //  Created by The Steez on 03/09/2018.
 //
 
-#if ENV_OSX
-import Cocoa
+import Foundation
+
+#if canImport(GLKit)
 import GLKit
 
 class GoDMatrix4: NSObject {

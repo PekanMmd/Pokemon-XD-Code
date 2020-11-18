@@ -21,7 +21,14 @@ enum XGRegions : UInt32 {
 		case .JP: return 2
 		}
 	}
-	
+
+	var name: String {
+		switch self {
+		case .EU: return "PAL"
+		case .JP: return "JP"
+		case .US: return "US"
+		}
+	}
 }
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/Revolution-Tool"
@@ -251,7 +258,7 @@ class XGUtility {
     
     class func compileMainFiles() {
         XGFolders.setUpFolderFormat()
-        printg("compiling all files...")
+        printg("compiling main files...")
         compileDecks()
         compileCommon()
         compileMSG()
@@ -402,7 +409,13 @@ class XGUtility {
 			return
 		}
 		// offset 0x8022965c in RAM (0x8021de60 JP)
-		let offset = region == .JP ? 0x219Ac0 : 0x2252bc
+		let offset: Int
+		switch region {
+		case .EU: offset = 0x2252bc
+		case .JP: offset = 0x219Ac0
+		case .US: offset = 0x229E44
+		}
+
 		dol.replace4BytesAtOffset(offset, withBytes: 0x48000100)
 		dol.save()
 	}
@@ -490,7 +503,7 @@ class XGUtility {
         printg("Compiling common...")
         let file = XGFiles.fsys("common")
         if file.exists {
-            let fsys = XGFiles.fsys("common").fsysData
+            let fsys = file.fsysData
 
 			let numberOfCommonBinaries = region == .JP ? 32 : 33
             for cid in 0 ..< numberOfCommonBinaries {

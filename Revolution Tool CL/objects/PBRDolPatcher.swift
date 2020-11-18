@@ -12,6 +12,10 @@ class XGDolPatcher {
 	/// Removes the code for rental pass validation checks
 	/// allowing the space to be reused for the type matchups table
 	static func moveTypeMatchupsTableToPassValidationFunction() {
+		guard region == .EU else {
+			printg("Couldn't move type match ups table. Not implemented for region: \(region.name)")
+			return
+		}
 		let startOffset = 0x1317cc - kDolToRAMOffsetDifference
 
 		// rental pass validation checks just pass immediately
@@ -28,6 +32,10 @@ class XGDolPatcher {
 
 	static func disableRentalPassChecksums() {
 		printg("Disabling rental pass checksums")
+		guard region == .EU else {
+			printg("Couldn't disable rental pass checksums. Not implemented for region: \(region.name)")
+			return
+		}
 		XGAssembly.replaceASM(startOffset: 0x3DAF40 - kDolToRAMOffsetDifference, newASM: [
 			.b_f(0, 0x2c)
 		])
@@ -53,6 +61,10 @@ class XGDolPatcher {
 	}
 
 	static func overrideHardcodedPokemonCount(newCount count: Int) {
+		guard region == .EU else {
+			printg("Couldn't override hard coded pokemon count for game region \(region.name)")
+			return
+		}
 		XGAssembly.replaceASM(startOffset: 0x56c0c - kDolToRAMOffsetDifference, newASM: [.cmpwi(.r0, count)])
 
 		for offset in [0x5b704 , 0x5b9b4 , 0x5c09c , 0x5c348] {

@@ -395,7 +395,19 @@ class XGMutableData {
 		
 		return offsets
 	}
-	
+
+	func readString(at offset: Int, length: Int) -> XGString {
+		let bytes = getShortStreamFromOffset(offset, length: length * 2)
+		let string = XGString(string: "", file: nil, sid: nil)
+		for value in bytes where value != 0 {
+			string.append(.unicode(value))
+		}
+		return string
+	}
+
+	func writeString(_ string: XGString, at offset: Int) {
+		replaceBytesFromOffset(offset, withByteStream: string.byteStream)
+	}
 }
 
 

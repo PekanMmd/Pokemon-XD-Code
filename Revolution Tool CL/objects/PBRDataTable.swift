@@ -37,6 +37,10 @@ class PBRDataTable : CustomStringConvertible {
 	
 	private init(file: XGFiles) {
 		self.file = file
+
+		if !self.file.exists {
+			XGUtility.extractMainFiles()
+		}
 		
 		if self.file.exists {
 			let data = self.file.data!
