@@ -12,7 +12,7 @@ class XGRandomiser : NSObject {
 	class func randomiseBattleBingo() {}
 	
 	class func randomisePokemon() {
-		printg("randomising pokemon species...")
+		printg("randomising pokemon species. This may take a while...")
 		var shadows = [Int : XGPokemon]()
 		for deck in TrainerDecksArray {
 			for pokemon in deck.allActivePokemon {
@@ -73,7 +73,7 @@ class XGRandomiser : NSObject {
 	}
 	
 	class func randomiseMoves() {
-		printg("randomising pokemon moves...")
+		printg("randomising pokemon moves. This may take a while...")
 		
 		var shadows = [Int : [XGMoves]]()
 		for deck in TrainerDecksArray {

@@ -20,9 +20,9 @@ let kSaveFilePokemonSize = game == .Colosseum ? 0x138 : 0x0
 let kSizeOfRegisteredPartData = game == .Colosseum ? 0xb18 : 0x0
 
 let kSaveFilePlayerNameOffset = game == .Colosseum ? 0x78 : -1
-let kSaveFilePartyPokemonStartOffset = game == .Colosseum ? 0xa4 : -1
-let kSaveFilePCPokemonStartOffset = game == .Colosseum ? 0xb90 : -1
-let kSaveFileRegisteredPokemonStartOffset = game == .Colosseum ? 0x19740 : -1
+let kSaveFilePartyPokemonStartOffset = game == .Colosseum ? 0xa8 : -1
+let kSaveFilePCPokemonStartOffset = game == .Colosseum ? 0xb94 : -1
+let kSaveFileRegisteredPokemonStartOffset = game == .Colosseum ? 0x19744 : -1
 
 class XGSaveManager {
 
@@ -105,18 +105,68 @@ class XGSave {
 	}
 }
 
-let kSavePokemonSpeciesOffset = 0x4
-let kSavePokemonOTNameOffset = game == .Colosseum ? 0x1c : 0x0
-let kSavePokemonNameOffset = game == .Colosseum ? 0x32 : 0x0
-let kSavePokemonNicknameOffset = game == .Colosseum ? 0x48 : 0x0
-let kSavePokemonMove1Offset = 0x7c
-let kSavePokemonMove1PPOffset = 0x7e
-let kSavePokemonMove2Offset = 0x80
-let kSavePokemonMove2PPOffset = 0x82
-let kSavePokemonMove3Offset = 0x84
-let kSavePokemonMove3PPOffset = 0x86
-let kSavePokemonMove4Offset = 0x88
-let kSavePokemonMove4PPOffset = 0x8a
+let kSavePokemonSpeciesOffset = 0x0
+let kSavePokemonIDOffset = 0x4
+let kSavePokemonCaughtLocationOffset = 0xc
+let kSavePokemonBallCaughtInOffset = 0xf
+let kSavePokemonGenderOffset = 0x10
+let kSavePokemonSIDOffset = 0x14
+let kSavePokemonTIDOffset = 0x16
+let kSavePokemonOTNameOffset = game == .Colosseum ? 0x18 : 0x0
+let kSavePokemonNameOffset = game == .Colosseum ? 0x2e : 0x0
+let kSavePokemonNicknameOffset = game == .Colosseum ? 0x44 : 0x0
+let kSavePokemonEXPOffset = 0x5c
+let kSavePokemonPartyDataLevelOffset = 0x60
+let kSavePokemonPartDataRemainingSleepTurnsOffset = 0x65
+let kSavePokemonPartDataBadPoisonTurnsOffset = 0x69
+let kSavePokemonPartDataStatusOffset = 0x6b
+let kSavePokemonPartDataStatusBitFieldOffset = 0x74
+let kSavePokemonMove1Offset = 0x78
+let kSavePokemonMove1PPOffset = 0x7a
+let kSavePokemonMove2Offset = 0x7c
+let kSavePokemonMove2PPOffset = 0x7e
+let kSavePokemonMove3Offset = 0x80
+let kSavePokemonMove3PPOffset = 0x82
+let kSavePokemonMove4Offset = 0x84
+let kSavePokemonMove4PPOffset = 0x86
+let kSavePokemonHeldItemOffset = 0x88
+let kSavePokemonCurrentHPOffset = 0x8a
+let kSavePokemonMaxHPOffset = 0x8c
+let kSavePokemonAttackOffset = 0x8e
+let kSavePokemonDefenseOffset = 0x90
+let kSavePokemonSpecialAttackOffset = 0x92
+let kSavePokemonSpecialDefenseOffset = 0x94
+let kSavePokemonSpeedOffset = 0x96
+let kSavePokemonHPEVOffset = 0x98
+let kSavePokemonAttackEVOffset = 0x9a
+let kSavePokemonDefenseEVOffset = 0x9c
+let kSavePokemonSpecialAttackEVOffset = 0x9e
+let kSavePokemonSpecialDefenseEVOffset = 0xa0
+let kSavePokemonSpeedEVOffset = 0xa2
+let kSavePokemonHPIVOffset = 0xa4
+let kSavePokemonAttackIVOffset = 0xa6
+let kSavePokemonDefenseIVOffset = 0xa8
+let kSavePokemonSpecialAttackIVOffset = 0xaa
+let kSavePokemonSpecialDefenseIVOffset = 0xac
+let kSavePokemonSpeedIVOffset = 0xae
+let kSavePokemonHappinessOffset = 0xb0
+let kSavePokemonContestStatsOffset = 0xb2
+let kSavePokemonContestRanksOffset = 0xb7
+let kSavePokemonContestLusterOffset = 0xbc
+let kSavePokemonSpecialRibbonsOffset = 0xbd
+let kSavePokemonUnusedRibbonsOffset = 0xc9
+let kSavePokemonPokerusOffset = 0xca
+let kSavePokemonFlagsOffset = 0xcb
+let kSavePokemonUnkownGCFlagOffset = 0xce
+let kSavePokemonMarksOffset = 0xcf
+let kSavePokemonPokerusDaysRemainingOffset = 0xd0
+let kSavePokemonUnkown1Offset = 0xd2
+let kSavePokemonUnkown2Offset = 0xd4
+let kSavePokemonShadowIDOffset = 0xd8
+let kSavePokemonObedienceOffset = 0xf8
+let kSavePokemonEncounterTypeOffset = 0xfb
+
+
 
 class XGSavePokemon {
 

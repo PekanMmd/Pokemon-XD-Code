@@ -148,6 +148,8 @@ func randomiser() {
 		prompt += option + "\n"
 	}
 
+	var isInitialRandomisation = true
+
 	while true {
 		let input = readInput(prompt)
 		guard let index = input.integerValue, index >= 0, index <= options.count else {
@@ -165,9 +167,16 @@ func randomiser() {
 		case 6: XGRandomiser.randomiseEvolutions()
 		case 7: XGRandomiser.randomiseMoveTypes()
 		case 8: XGRandomiser.randomiseTMs()
-		case 9: if game == .XD { XGRandomiser.randomiseBattleBingo() }
+		case 9: if game == .XD { XGRandomiser.randomiseBattleBingo() } else { printg("Invalid option:", input); continue }
 		default: printg("Invalid option:", input); continue
 		}
+
+		if isInitialRandomisation {
+			XGUtility.deleteSuperfluousFiles()
+			settings.increaseFileSizes = true
+			isInitialRandomisation = false
+		}
+
 		printg("Don't forget to rebuild the ISO in the main menu once you're done")
 	}
 }
