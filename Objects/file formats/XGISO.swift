@@ -1118,6 +1118,8 @@ class XGISO: NSObject {
 		ISO.extractMenuFSYS()
 		printg("extracting: common")
 		ISO.extractCommon()
+		printg("extracting: main string tables")
+		ISO.extractSpecificStringTables()
 		if game == .XD {
 			printg("extracting: decks")
 			ISO.extractDecks()

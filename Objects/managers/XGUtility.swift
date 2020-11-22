@@ -28,7 +28,6 @@ class XGUtility {
 	
 	class func compileMainFiles() {
 		prepareForQuickCompilation()
-		importFsys()
 		ISO.importFiles([.fsys("common"), XGFiles.fsys("pocket_menu"), XGFiles.fsys("fight_common"), XGFiles.fsys("common_dvdeth"), .dol])
 		if game == .XD {
 			ISO.importFiles([.fsys("deck_archive")])
@@ -71,7 +70,6 @@ class XGUtility {
 		prepareForCompilation()
 		compileAllMapFsys()
 		compileAllMenuFsys()
-		importFsys()
 		ISO.importFiles(XGFolders.FSYS.files.filter({  $0.fileType == .fsys }) + [XGFiles.dol])
 		
 	}

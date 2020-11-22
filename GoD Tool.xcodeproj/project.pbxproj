@@ -413,6 +413,8 @@
 		1CCF00272562FA810082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
 		1CCF00312562FA820082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
 		1CCF00322562FA820082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
+		1CCF005C2565C3B90082BFE2 /* gcitool in Resources */ = {isa = PBXBuildFile; fileRef = 1CCF005B2565C3B90082BFE2 /* gcitool */; };
+		1CCF005D2565C3B90082BFE2 /* gcitool in Resources */ = {isa = PBXBuildFile; fileRef = 1CCF005B2565C3B90082BFE2 /* gcitool */; };
 		1CCFFDAA2554FEF60082BFE2 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCFFDA92554FEF60082BFE2 /* main.swift */; };
 		1CCFFDC92554FF580082BFE2 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
 		1CCFFDD32554FF660082BFE2 /* OSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA96253B837500907D78 /* OSXExtensions.swift */; };
@@ -4248,6 +4250,9 @@
 		1CC362D424C07E35005D7B4A /* PBR_body_497.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_497.png; sourceTree = "<group>"; };
 		1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleStyles.swift; sourceTree = "<group>"; };
 		1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGSaveManager.swift; sourceTree = "<group>"; };
+		1CCF003C2565C3870082BFE2 /* gcitool */ = {isa = PBXFileReference; lastKnownFileType = file; path = gcitool; sourceTree = "<group>"; };
+		1CCF005A2565C3A50082BFE2 /* gcitool.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = gcitool.exe; sourceTree = "<group>"; };
+		1CCF005B2565C3B90082BFE2 /* gcitool */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = gcitool; sourceTree = "<group>"; };
 		1CCFFDA72554FEF60082BFE2 /* PBR-CLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "PBR-CLI"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CCFFDA92554FEF60082BFE2 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		1CCFFFA2255509840082BFE2 /* Colosseum_Tool_OSX_Compiler.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Colosseum_Tool_OSX_Compiler.sh; sourceTree = "<group>"; };
@@ -6711,6 +6716,7 @@
 		1C4E1635253F39D200EA318B /* OSX */ = {
 			isa = PBXGroup;
 			children = (
+				1CCF0067256606230082BFE2 /* other */,
 				1C4E1644253F3ADF00EA318B /* wiimm */,
 			);
 			path = OSX;
@@ -6719,6 +6725,7 @@
 		1C4E1636253F39FE00EA318B /* Linux */ = {
 			isa = PBXGroup;
 			children = (
+				1CCF0068256606340082BFE2 /* other */,
 				1C4E1645253F3AF800EA318B /* wiimm */,
 			);
 			path = Linux;
@@ -6745,6 +6752,7 @@
 		1C4E1646253F3B1600EA318B /* Windows */ = {
 			isa = PBXGroup;
 			children = (
+				1CCF00692566063C0082BFE2 /* other */,
 				1C4E1647253F3B2A00EA318B /* wiimm */,
 			);
 			path = Windows;
@@ -7028,6 +7036,30 @@
 				1CC362B524BA57EB005D7B4A /* GoDPatchViewController.swift */,
 			);
 			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		1CCF0067256606230082BFE2 /* other */ = {
+			isa = PBXGroup;
+			children = (
+				1CCF005B2565C3B90082BFE2 /* gcitool */,
+			);
+			path = other;
+			sourceTree = "<group>";
+		};
+		1CCF0068256606340082BFE2 /* other */ = {
+			isa = PBXGroup;
+			children = (
+				1CCF003C2565C3870082BFE2 /* gcitool */,
+			);
+			path = other;
+			sourceTree = "<group>";
+		};
+		1CCF00692566063C0082BFE2 /* other */ = {
+			isa = PBXGroup;
+			children = (
+				1CCF005A2565C3A50082BFE2 /* gcitool.exe */,
+			);
+			path = other;
 			sourceTree = "<group>";
 		};
 		1CCFFDA82554FEF60082BFE2 /* PBR-CLI */ = {
@@ -9864,6 +9896,7 @@
 				1CA2387824113823000E56AB /* Patches.storyboard in Resources */,
 				B208E5F320C4D3D700D298BF /* face_099.png in Resources */,
 				B208E63A20C4D3D700D298BF /* face_170.png in Resources */,
+				1CCF005D2565C3B90082BFE2 /* gcitool in Resources */,
 				B280AEF620CABD660057A782 /* colo_trainer_54.png in Resources */,
 				B208E4B620C4D3BD00D298BF /* body_197.png in Resources */,
 				B208E70520C4D3D700D298BF /* face_373.png in Resources */,
@@ -11894,6 +11927,7 @@
 				B2F508111F4C5FAB0075C6D2 /* body_119.png in Resources */,
 				B2F507371F4C5FAA0075C6D2 /* body_010.png in Resources */,
 				B2F509271F4C5FAB0075C6D2 /* body_258.png in Resources */,
+				1CCF005C2565C3B90082BFE2 /* gcitool in Resources */,
 				B2F50BA11F4C5FAC0075C6D2 /* face_160.png in Resources */,
 				B2F50A8B1F4C5FAB0075C6D2 /* face_021.png in Resources */,
 				B2F508391F4C5FAB0075C6D2 /* body_139.png in Resources */,

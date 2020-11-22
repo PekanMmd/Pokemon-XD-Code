@@ -169,7 +169,9 @@ for asset in GoDAssets {
 	windowsCompiler += "copy \"..\\\(asset.path.replacingOccurrences(of: "/", with: "\\"))\" \"\((GoDAssetsFolder + "/" + asset.filename).replacingOccurrences(of: "/", with: "\\"))\"\n"
 }
 osxCompiler += "cp ../tools/OSX/wiimm/* \(GoDWiimmsAssetsFolder)\n"
+osxCompiler += "cp ../tools/OSX/other/* \(GoDAssetsFolder)\n"
 windowsCompiler += "copy ..\\tools\\Windows\\wiimm\\* \((GoDWiimmsAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
+windowsCompiler += "copy ..\\tools\\Windows\\other\\* \((GoDAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
 
 
 // MARK: - Add XD swiftc compiler to scripts
@@ -201,7 +203,9 @@ for asset in ColoAssets {
 	windowsColoCompiler += "copy \"..\\\(asset.path.replacingOccurrences(of: "/", with: "\\"))\" \"\((ColoAssetsFolder + "/" + asset.filename).replacingOccurrences(of: "/", with: "\\"))\"\n"
 }
 osxColoCompiler += "cp ../tools/OSX/wiimm/* \(ColoWiimmsAssetsFolder)\n"
+osxColoCompiler += "cp ../tools/OSX/other/* \(ColoAssetsFolder)\n"
 windowsColoCompiler += "copy ..\\tools\\Windows\\wiimm\\* \((ColoWiimmsAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
+windowsColoCompiler += "copy ..\\tools\\Windows\\other\\* \((ColoAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
 
 // MARK: - Add Colosseum swiftc compiler to scripts
 osxColoCompiler += "echo \"Compiling Colosseum Tool. This may take a while...\"\nswiftc -emit-executable -DENV_OSX -o ./out/Colosseum\\ Tool\\ CLI ../extensions/OSXExtensions.swift"
@@ -231,7 +235,9 @@ for asset in PBRAssets {
 	windowsPBRCompiler += "copy \"..\\\(asset.path.replacingOccurrences(of: "/", with: "\\"))\" \"\((PBRAssetsFolder + "/" + asset.filename).replacingOccurrences(of: "/", with: "\\"))\"\n"
 }
 osxPBRCompiler += "cp ../tools/OSX/wiimm/* \(PBRWiimmsAssetsFolder)\n"
+osxPBRCompiler += "cp ../tools/OSX/other/* \(PBRAssetsFolder)\n"
 windowsPBRCompiler += "copy ..\\tools\\Windows\\wiimm\\* \((PBRWiimmsAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
+windowsPBRCompiler += "copy ..\\tools\\Windows\\other\\* \((PBRAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
 
 // MARK: - Add PBR swiftc compiler to scripts
 osxPBRCompiler += "echo \"Compiling PBR Tool. This may take a while...\"\nswiftc -emit-executable -DENV_OSX -o ./out/PBR\\ Tool\\ CLI ../extensions/OSXExtensions.swift"
@@ -250,12 +256,15 @@ windowsPBRCompiler += "\nPAUSE"
 var linuxCompiler = osxCompiler.replacingOccurrences(of: "-DENV_OSX", with: "-DENV_LINUX")
 linuxCompiler = linuxCompiler.replacingOccurrences(of: "../extensions/OSXExtensions.swift", with: "../extensions/LinuxExtensions.swift")
 linuxCompiler = linuxCompiler.replacingOccurrences(of: "/tools/OSX/wiimm", with: "/tools/Linux/wiimm")
+linuxCompiler = linuxCompiler.replacingOccurrences(of: "/tools/OSX/other", with: "/tools/Linux/other")
 var linuxColoCompiler = osxColoCompiler.replacingOccurrences(of: "-DENV_OSX", with: "-DENV_LINUX")
 linuxColoCompiler = linuxColoCompiler.replacingOccurrences(of: "../extensions/OSXExtensions.swift", with: "../extensions/LinuxExtensions.swift")
 linuxColoCompiler = linuxColoCompiler.replacingOccurrences(of: "/tools/OSX/wiimm", with: "/tools/Linux/wiimm")
+linuxColoCompiler = linuxColoCompiler.replacingOccurrences(of: "/tools/OSX/other", with: "/tools/Linux/other")
 var linuxPBRCompiler = osxPBRCompiler.replacingOccurrences(of: "-DENV_OSX", with: "-DENV_LINUX")
 linuxPBRCompiler = linuxPBRCompiler.replacingOccurrences(of: "../extensions/OSXExtensions.swift", with: "../extensions/LinuxExtensions.swift")
 linuxPBRCompiler = linuxPBRCompiler.replacingOccurrences(of: "/tools/OSX/wiimm", with: "/tools/Linux/wiimm")
+linuxPBRCompiler = linuxPBRCompiler.replacingOccurrences(of: "/tools/OSX/other", with: "/tools/Linux/other")
 
 // MARK: - Write scripts to disk
 

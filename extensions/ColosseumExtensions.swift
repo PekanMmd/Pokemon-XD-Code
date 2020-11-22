@@ -166,15 +166,12 @@ extension XGUtility {
 			common.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.common_rel.compress(), save: true)
 		}
 
-		let fightFile = XGFiles.msg("fight")
-		if fightFile.exists {
-			XGFiles.fsys("fight_common").fsysData.shiftAndReplaceFileWithType(.msg, withFile: fightFile.compress(), save: true)
-		}
-
 		let pocketFile = XGFiles.pocket_menu
 		if pocketFile.exists {
 			XGFiles.fsys("pocket_menu").fsysData.shiftAndReplaceFileWithType(.rel, withFile: pocketFile.compress(), save: true)
 		}
+
+		XGUtility.importSpecificStringTables()
 	}
 	
 	class func prepareForQuickCompilation() {
@@ -205,8 +202,6 @@ extension XGUtility {
 			}
 		}
 		
-		
-		XGFiles.fsys("carde_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool, save: true)
 		XGFiles.fsys("fight_common").fsysData.shiftAndReplaceFileWithType(.msg, withFile: fight, save: true)
 		XGFiles.fsys("name_entry_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: nameentrymenu, save: true)
 		XGFiles.fsys("pcbox_menu").fsysData.shiftAndReplaceFileWithType(.msg, withFile: system_tool, save: true)
