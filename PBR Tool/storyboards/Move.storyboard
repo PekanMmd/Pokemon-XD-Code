@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="vSz-Wi-uwy">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="vSz-Wi-uwy">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
-        <plugIn identifier="com.apple.imagekit.ibplugin" version="15705"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
+        <plugIn identifier="com.apple.imagekit.ibplugin" version="17156"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Move Editor-->
         <scene sceneID="njB-zs-XSr">
             <objects>
-                <viewController title="Move Editor" id="vSz-Wi-uwy" customClass="GoDMovesViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Move Editor" id="vSz-Wi-uwy" customClass="GoDMovesViewController" customModule="PBR_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="dUk-LJ-KYc">
                         <rect key="frame" x="0.0" y="0.0" width="874" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -21,7 +22,7 @@
                                 </constraints>
                                 <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
                             </ikImageView>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="wcZ-uf-Jp4" userLabel="Info" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="wcZ-uf-Jp4" userLabel="Info" customClass="GoDContainerView" customModule="PBR_Tool" customModuleProvider="target">
                                 <rect key="frame" x="210" y="325" width="210" height="145"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KyE-eJ-6P3">
@@ -179,7 +180,7 @@
                                     <constraint firstItem="fkA-85-Vhm" firstAttribute="width" secondItem="KyE-eJ-6P3" secondAttribute="width" id="xn8-5t-yDC"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="Numerical Values" translatesAutoresizingMaskIntoConstraints="NO" id="NWF-kq-oKk" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
+                            <customView identifier="Numerical Values" translatesAutoresizingMaskIntoConstraints="NO" id="NWF-kq-oKk" customClass="GoDContainerView" customModule="PBR_Tool" customModuleProvider="target">
                                 <rect key="frame" x="430" y="40" width="212" height="275"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SuM-s8-b2i">
@@ -328,7 +329,7 @@
                                     <constraint firstItem="N5V-zX-jjI" firstAttribute="height" secondItem="SuM-s8-b2i" secondAttribute="height" id="yg8-aJ-YBe"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="Flags" translatesAutoresizingMaskIntoConstraints="NO" id="Ft6-mg-LNz" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
+                            <customView identifier="Flags" translatesAutoresizingMaskIntoConstraints="NO" id="Ft6-mg-LNz" customClass="GoDContainerView" customModule="PBR_Tool" customModuleProvider="target">
                                 <rect key="frame" x="652" y="40" width="212" height="275"/>
                                 <subviews>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="bbU-nh-ajy">
@@ -446,7 +447,7 @@
                                     <constraint firstItem="lYf-Mu-5Do" firstAttribute="top" secondItem="Ft6-mg-LNz" secondAttribute="top" constant="35" id="zQi-TS-FUM"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="Description" translatesAutoresizingMaskIntoConstraints="NO" id="njQ-ZR-Ild" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
+                            <customView identifier="Description" translatesAutoresizingMaskIntoConstraints="NO" id="njQ-ZR-Ild" customClass="GoDContainerView" customModule="PBR_Tool" customModuleProvider="target">
                                 <rect key="frame" x="430" y="400" width="434" height="70"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MRi-Zv-4WC">
@@ -513,7 +514,7 @@
                                     <constraint firstItem="J7N-xC-8Qk" firstAttribute="top" secondItem="MRi-Zv-4WC" secondAttribute="bottom" constant="5" id="qbp-g8-ICE"/>
                                 </constraints>
                             </customView>
-                            <customView identifier="Effect" translatesAutoresizingMaskIntoConstraints="NO" id="FYg-R6-kff" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
+                            <customView identifier="Effect" translatesAutoresizingMaskIntoConstraints="NO" id="FYg-R6-kff" customClass="GoDContainerView" customModule="PBR_Tool" customModuleProvider="target">
                                 <rect key="frame" x="430" y="325" width="434" height="70"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZX6-Ay-7rC">
@@ -527,14 +528,14 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IrO-CI-fVg" customClass="GoDEffectsPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IrO-CI-fVg" customClass="GoDEffectsPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
                                         <rect key="frame" x="8" y="7" width="419" height="29"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="nFa-rF-I4E"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="YBk-O5-BLw" id="qMs-jB-B3D">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="10" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="10"/>
                                             <menu key="menu" id="LXp-SO-0dC">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="YBk-O5-BLw"/>
@@ -558,7 +559,7 @@
                                     <constraint firstItem="IrO-CI-fVg" firstAttribute="top" secondItem="ZX6-Ay-7rC" secondAttribute="bottom" constant="5" id="unI-Bj-Zka"/>
                                 </constraints>
                             </customView>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rHt-aa-MRc" customClass="GoDButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rHt-aa-MRc" customClass="GoDButton" customModule="PBR_Tool" customModuleProvider="target">
                                 <rect key="frame" x="481" y="3" width="112" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="Ts8-2w-olz"/>
@@ -574,10 +575,10 @@
                                     <action selector="save:" target="vSz-Wi-uwy" id="hBj-d7-EP1"/>
                                 </connections>
                             </button>
-                            <customView identifier="drop downs" translatesAutoresizingMaskIntoConstraints="NO" id="sgZ-vI-CoQ" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
+                            <customView identifier="drop downs" translatesAutoresizingMaskIntoConstraints="NO" id="sgZ-vI-CoQ" customClass="GoDContainerView" customModule="PBR_Tool" customModuleProvider="target">
                                 <rect key="frame" x="210" y="40" width="210" height="275"/>
                                 <subviews>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DtU-wV-TRq" customClass="GoDCategoryPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DtU-wV-TRq" customClass="GoDCategoryPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
                                         <rect key="frame" x="8" y="163" width="195" height="29"/>
                                         <popUpButtonCell key="cell" type="push" title="Category" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="n4M-6i-4cA" id="Xe7-7f-ujh">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -594,7 +595,7 @@
                                             <action selector="newCategory:" target="vSz-Wi-uwy" id="nN6-UH-EQw"/>
                                         </connections>
                                     </popUpButton>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cbn-C5-gLz" customClass="GoDTargetsPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cbn-C5-gLz" customClass="GoDTargetsPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
                                         <rect key="frame" x="8" y="111" width="195" height="29"/>
                                         <popUpButtonCell key="cell" type="push" title="Targets" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="DrE-rE-sSC" id="Nyb-q0-a24">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -611,7 +612,7 @@
                                             <action selector="newTargets:" target="vSz-Wi-uwy" id="2Vl-UQ-pW4"/>
                                         </connections>
                                     </popUpButton>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fCb-rM-EEP" customClass="GoDTypePopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fCb-rM-EEP" customClass="GoDTypePopUpButton" customModule="PBR_Tool" customModuleProvider="target">
                                         <rect key="frame" x="8" y="215" width="195" height="29"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="CA8-mu-nCX"/>
@@ -658,36 +659,11 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KtA-Zs-4qY" customClass="GoDOriginalMovesPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="59" width="195" height="29"/>
-                                        <popUpButtonCell key="cell" type="push" title="Animation" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="kcR-xy-ESW" id="EIu-8s-oeC">
-                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="11" name=".AppleSystemUIFont"/>
-                                            <menu key="menu" id="jbe-j1-1RU">
-                                                <items>
-                                                    <menuItem title="Animation" state="on" id="kcR-xy-ESW"/>
-                                                    <menuItem title="Item 2" id="gI3-ru-1tS"/>
-                                                    <menuItem title="Item 3" id="sch-94-elx"/>
-                                                </items>
-                                            </menu>
-                                        </popUpButtonCell>
-                                        <connections>
-                                            <action selector="newAnimation:" target="vSz-Wi-uwy" id="AHh-oi-Old"/>
-                                        </connections>
-                                    </popUpButton>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4zS-Qa-qA0">
-                                        <rect key="frame" x="8" y="89" width="194" height="20"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Animation" id="D5P-Xq-b0h">
-                                            <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                        </textFieldCell>
-                                    </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dST-Sl-Rbz" customClass="GoDMoveEffectTypesPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="15" width="195" height="25"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dST-Sl-Rbz" customClass="GoDMoveEffectTypesPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="8" y="67" width="195" height="25"/>
                                         <popUpButtonCell key="cell" type="push" title="Effect Type" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="XPn-P1-q1P" id="HAo-9o-BIb">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="11" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="11"/>
                                             <menu key="menu" id="JSM-lh-Ijl">
                                                 <items>
                                                     <menuItem title="Effect Type" state="on" id="XPn-P1-q1P"/>
@@ -701,8 +677,33 @@
                                         </connections>
                                     </popUpButton>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YeK-sb-JCt">
-                                        <rect key="frame" x="8" y="41" width="194" height="16"/>
+                                        <rect key="frame" x="8" y="93" width="194" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Effect Type" id="RPc-Fo-D0s">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KtA-Zs-4qY" customClass="GoDOriginalMovesPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="8" y="15" width="195" height="29"/>
+                                        <popUpButtonCell key="cell" type="push" title="Animation" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="kcR-xy-ESW" id="EIu-8s-oeC">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system" size="11"/>
+                                            <menu key="menu" id="jbe-j1-1RU">
+                                                <items>
+                                                    <menuItem title="Animation" state="on" id="kcR-xy-ESW"/>
+                                                    <menuItem title="Item 2" id="gI3-ru-1tS"/>
+                                                    <menuItem title="Item 3" id="sch-94-elx"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <action selector="newAnimation:" target="vSz-Wi-uwy" id="AHh-oi-Old"/>
+                                        </connections>
+                                    </popUpButton>
+                                    <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4zS-Qa-qA0">
+                                        <rect key="frame" x="8" y="45" width="194" height="20"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Animation" id="D5P-Xq-b0h">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -721,6 +722,7 @@
                                     <constraint firstItem="KtA-Zs-4qY" firstAttribute="height" secondItem="fCb-rM-EEP" secondAttribute="height" id="A2g-ri-54I"/>
                                     <constraint firstAttribute="trailing" secondItem="XtL-Kw-xrX" secondAttribute="trailing" constant="10" id="BHR-ne-UVO"/>
                                     <constraint firstItem="YeK-sb-JCt" firstAttribute="leading" secondItem="XtL-Kw-xrX" secondAttribute="leading" id="EAn-g7-5pZ"/>
+                                    <constraint firstItem="4zS-Qa-qA0" firstAttribute="top" secondItem="dST-Sl-Rbz" secondAttribute="bottom" constant="5" id="HB9-US-NbO"/>
                                     <constraint firstItem="LgZ-po-LOB" firstAttribute="leading" secondItem="XtL-Kw-xrX" secondAttribute="leading" id="MAI-fD-7wa"/>
                                     <constraint firstItem="LgZ-po-LOB" firstAttribute="height" secondItem="XtL-Kw-xrX" secondAttribute="height" id="Mar-q9-GWY"/>
                                     <constraint firstItem="DtU-wV-TRq" firstAttribute="height" secondItem="fCb-rM-EEP" secondAttribute="height" id="MzY-26-hoc"/>
@@ -735,10 +737,9 @@
                                     <constraint firstItem="4zS-Qa-qA0" firstAttribute="height" secondItem="nj5-on-hEZ" secondAttribute="height" id="T0a-fn-l1R"/>
                                     <constraint firstItem="dST-Sl-Rbz" firstAttribute="top" secondItem="YeK-sb-JCt" secondAttribute="bottom" constant="2" id="TFe-QZ-HlD"/>
                                     <constraint firstItem="fCb-rM-EEP" firstAttribute="top" secondItem="XtL-Kw-xrX" secondAttribute="bottom" constant="2" id="Tn2-Sh-47a"/>
+                                    <constraint firstItem="YeK-sb-JCt" firstAttribute="top" secondItem="Cbn-C5-gLz" secondAttribute="bottom" constant="5" id="U03-hq-3iX"/>
                                     <constraint firstItem="KtA-Zs-4qY" firstAttribute="trailing" secondItem="Cbn-C5-gLz" secondAttribute="trailing" id="X5S-oq-PAl"/>
                                     <constraint firstItem="dST-Sl-Rbz" firstAttribute="leading" secondItem="YeK-sb-JCt" secondAttribute="leading" id="a6H-dw-cbd"/>
-                                    <constraint firstItem="YeK-sb-JCt" firstAttribute="top" secondItem="KtA-Zs-4qY" secondAttribute="bottom" constant="5" id="ed5-sg-Ofw"/>
-                                    <constraint firstItem="4zS-Qa-qA0" firstAttribute="top" secondItem="Cbn-C5-gLz" secondAttribute="bottom" constant="5" id="ftU-v2-InD"/>
                                     <constraint firstItem="nj5-on-hEZ" firstAttribute="top" secondItem="DtU-wV-TRq" secondAttribute="bottom" constant="5" id="kcb-WA-r4a"/>
                                     <constraint firstItem="fCb-rM-EEP" firstAttribute="trailing" secondItem="XtL-Kw-xrX" secondAttribute="trailing" id="ktL-Pj-ObV"/>
                                     <constraint firstItem="LgZ-po-LOB" firstAttribute="top" secondItem="fCb-rM-EEP" secondAttribute="bottom" constant="5" id="l7R-KH-h0k"/>

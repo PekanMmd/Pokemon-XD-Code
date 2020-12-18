@@ -76,4 +76,17 @@ class XGDolPatcher {
 		// for colo/xd compatibility
 		return true
 	}
+
+	static func disableBlurEffect() {
+		let bloomStrengthOffset: Int
+		switch region {
+		case .EU: bloomStrengthOffset = 0x473ea8
+		case .US: bloomStrengthOffset = 0x449990
+		case .JP: bloomStrengthOffset = 0x434910
+		}
+		if let dol = XGFiles.dol.data {
+			dol.replace4BytesAtOffset(bloomStrengthOffset, withBytes: 0)
+			dol.save()
+		}
+	}
 }

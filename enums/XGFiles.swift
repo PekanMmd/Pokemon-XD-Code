@@ -61,6 +61,7 @@ indirect enum XGFiles {
 	case log(Date)
 	case wit
 	case wimgt
+	case tool(String)
 	case nameAndFolder(String, XGFolders)
 	
 	var path : String {
@@ -68,75 +69,73 @@ indirect enum XGFiles {
 	}
 	
 	var fileName : String {
-		get {
-			switch self {
-				
-				case .dol					: return "Start" + XGFileTypes.dol.fileExtension
-				case .common_rel			: return "common" + XGFileTypes.rel.fileExtension
-				case .tableres2				: return "tableres2" + XGFileTypes.rel.fileExtension
-				case .pocket_menu			: return "pocket_menu" + XGFileTypes.rel.fileExtension
-				case .deck(let deck)		: return deck.fileName
-				case .pokeFace(let id)		: return "face_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
-				case .pokeBody(let id)		: return "body_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
-				case .typeImage(let id)		: return "type_" + String(id) + XGFileTypes.png.fileExtension
-				case .trainerFace(let id)	: return "trainer_" + String(id) + XGFileTypes.png.fileExtension
-				case .msg(let s)			: return s + XGFileTypes.msg.fileExtension
-				case .fsys(let s)			: return s + XGFileTypes.fsys.fileExtension
-				case .lzss(let s)			: return s + XGFileTypes.lzss.fileExtension
-				case .scd(let s)			: return s + XGFileTypes.scd.fileExtension
-				case .xds(let s)			: return s + XGFileTypes.xds.fileExtension
-				case .texture(let s)		: return s
-				case .toc					: return "Game" + XGFileTypes.toc.fileExtension
-											  // windows doesn't support colons in file names
-				case .log(let d)			: return d.description.replacingOccurrences(of: ":", with: ".") + XGFileTypes.txt.fileExtension
-				case .rel(let s)			: return s + XGFileTypes.rel.fileExtension
-				case .ccd(let s)			: return s + XGFileTypes.ccd.fileExtension
-				case .json(let s)			: return s + XGFileTypes.json.fileExtension
-				case .iso					: return (game == .Colosseum ? "Colosseum" : "XD") + XGFileTypes.iso.fileExtension
-				case .wit                   : return environment == .Windows ? "wit.exe" :  "wit"
-				case .wimgt                 : return environment == .Windows ? "wimgt.exe" :  "wimgt"
-				case .nameAndFolder(let name, _) : return name
-			}
+		switch self {
+
+		case .dol					: return "Start" + XGFileTypes.dol.fileExtension
+		case .common_rel			: return "common" + XGFileTypes.rel.fileExtension
+		case .tableres2				: return "tableres2" + XGFileTypes.rel.fileExtension
+		case .pocket_menu			: return "pocket_menu" + XGFileTypes.rel.fileExtension
+		case .deck(let deck)		: return deck.fileName
+		case .pokeFace(let id)		: return "face_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
+		case .pokeBody(let id)		: return "body_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
+		case .typeImage(let id)		: return "type_" + String(id) + XGFileTypes.png.fileExtension
+		case .trainerFace(let id)	: return "trainer_" + String(id) + XGFileTypes.png.fileExtension
+		case .msg(let s)			: return s + XGFileTypes.msg.fileExtension
+		case .fsys(let s)			: return s + XGFileTypes.fsys.fileExtension
+		case .lzss(let s)			: return s + XGFileTypes.lzss.fileExtension
+		case .scd(let s)			: return s + XGFileTypes.scd.fileExtension
+		case .xds(let s)			: return s + XGFileTypes.xds.fileExtension
+		case .texture(let s)		: return s
+		case .toc					: return "Game" + XGFileTypes.toc.fileExtension
+		// windows doesn't support colons in file names
+		case .log(let d)			: return d.description.replacingOccurrences(of: ":", with: ".") + XGFileTypes.txt.fileExtension
+		case .rel(let s)			: return s + XGFileTypes.rel.fileExtension
+		case .ccd(let s)			: return s + XGFileTypes.ccd.fileExtension
+		case .json(let s)			: return s + XGFileTypes.json.fileExtension
+		case .iso					: return (game == .Colosseum ? "Colosseum" : "XD") + XGFileTypes.iso.fileExtension
+		case .wit                   : return environment == .Windows ? "wit.exe" :  "wit"
+		case .wimgt                 : return environment == .Windows ? "wimgt.exe" :  "wimgt"
+		case .tool(let s)			: return s + (environment == .Windows ? ".exe" : "")
+		case .nameAndFolder(let name, _) : return name
 		}
 	}
 	
 	var folder : XGFolders {
-		get {
-			var folder = XGFolders.Documents
-			
-			switch self {
-				
-				case .dol				: folder = .DOL
-				case .common_rel		: folder = .Common
-				case .tableres2			: folder = .Common
-				case .pocket_menu		: folder = .Common
-				case .deck				: folder = .Decks
-				case .pokeFace			: folder = .PokeFace
-				case .pokeBody			: folder = .PokeBody
-				case .typeImage			: folder = .Types
-				case .trainerFace		: folder = .Trainers
-				case .msg				: folder = .StringTables
-				case .lzss				: folder = .LZSS
-				case .scd				: folder = .Scripts
-				case .xds				: folder = .XDS
-				case .texture			: folder = .Textures
-				case .iso				: folder = .ISO
-				case .toc				: folder = .Documents
-				case .log				: folder = .Logs
-				case .rel				: folder = .Rels
-				case .ccd				: folder = .Col
-				case .json				: folder = .JSON
-				case .fsys				: 		 if XGFolders.FSYS.filenames.contains(self.fileName) { folder = .FSYS}
-											else if XGFolders.MenuFSYS.filenames.contains(self.fileName) { folder = .MenuFSYS}
-											else {folder = .AutoFSYS}
-				case .wit      		    : folder = .Wiimm
-				case .wimgt      		: folder = .Wiimm
-				case .nameAndFolder( _, let aFolder) : folder = aFolder
-				
-			}
-			
-			return folder
+		var folder = XGFolders.Documents
+
+		switch self {
+
+		case .dol				: folder = .DOL
+		case .common_rel		: folder = .Common
+		case .tableres2			: folder = .Common
+		case .pocket_menu		: folder = .Common
+		case .deck				: folder = .Decks
+		case .pokeFace			: folder = .PokeFace
+		case .pokeBody			: folder = .PokeBody
+		case .typeImage			: folder = .Types
+		case .trainerFace		: folder = .Trainers
+		case .msg				: folder = .StringTables
+		case .lzss				: folder = .LZSS
+		case .scd				: folder = .Scripts
+		case .xds				: folder = .XDS
+		case .texture			: folder = .Textures
+		case .iso				: folder = .ISO
+		case .toc				: folder = .Documents
+		case .log				: folder = .Logs
+		case .rel				: folder = .Rels
+		case .ccd				: folder = .Col
+		case .json				: folder = .JSON
+		case .fsys				: 		 if XGFolders.FSYS.filenames.contains(self.fileName) { folder = .FSYS}
+		else if XGFolders.MenuFSYS.filenames.contains(self.fileName) { folder = .MenuFSYS}
+		else {folder = .AutoFSYS}
+		case .wit      		    : folder = .Wiimm
+		case .wimgt      		: folder = .Wiimm
+		case .tool				: folder = .Resources
+		case .nameAndFolder( _, let aFolder) : folder = aFolder
+
 		}
+
+		return folder
 	}
 	
 	var text : String {
@@ -157,12 +156,15 @@ indirect enum XGFiles {
 		let decks = TrainerDecksArray.map { (d) -> XGFiles in
 			return d.file
 		}
-		let requiredFiles : [XGFiles] = [.common_rel, .dol, .tableres2, .pocket_menu, .msg("pocket_menu"), XGDecks.DeckDarkPokemon.file, .fsys("people_archive")] + decks
-		if requiredFiles.contains(where: { (f) -> Bool in
-			f == self
-		}) {
-			if !self.exists {
-				XGISO.extractMainFiles()
+
+		if self != XGFiles.iso {
+			let requiredFiles : [XGFiles] = [.common_rel, .dol, .tableres2, .pocket_menu, .msg("pocket_menu"), XGDecks.DeckDarkPokemon.file, .fsys("people_archive")] + decks
+			if requiredFiles.contains(where: { (f) -> Bool in
+				f == self
+			}) {
+				if !self.exists {
+					XGISO.extractMainFiles()
+				}
 			}
 		}
 		
@@ -389,16 +391,16 @@ indirect enum XGFiles {
 				printg("compiling \(baseName).fsys...")
 			}
 			if rel.exists {
-				fsys.shiftAndReplaceFileWithType(.rel, withFile: rel.compress(), save: false)
+				fsys.shiftAndReplaceFile(rel.compress(), save: false)
 			}
 			if scd.exists {
-				fsys.shiftAndReplaceFileWithType(.scd, withFile: scd.compress(), save: false)
+				fsys.shiftAndReplaceFile(scd.compress(), save: false)
 			}
 			if msg.exists {
-				fsys.shiftAndReplaceFileWithType(.msg, withFile: msg.compress(), save: false)
+				fsys.shiftAndReplaceFile(msg.compress(), save: false)
 			}
 			if col.exists {
-				fsys.shiftAndReplaceFileWithType(.ccd, withFile: col.compress(), save: true)
+				fsys.shiftAndReplaceFile(col.compress(), save: true)
 			}
 		}
 		
@@ -418,13 +420,13 @@ indirect enum XGFiles {
 				printg("compiling \(baseName).fsys...")
 			}
 			if rel.exists {
-				fsys.shiftAndReplaceFileWithType(.rel, withFile: rel.compress(), save: false)
+				fsys.shiftAndReplaceFile(rel.compress(), save: false)
 			}
 			if scd.exists {
-				fsys.shiftAndReplaceFileWithType(.scd, withFile: scd.compress(), save: false)
+				fsys.shiftAndReplaceFile(scd.compress(), save: false)
 			}
 			if col.exists {
-				fsys.shiftAndReplaceFileWithType(.ccd, withFile: col.compress(), save: true)
+				fsys.shiftAndReplaceFile(col.compress(), save: true)
 			}
 		}
 		
@@ -713,6 +715,11 @@ indirect enum XGFolders {
         if !wiimm.exists {
 			XGResources.folder("wiimm").copy(to: wiimm)
         }
+
+		let gcitool = XGFiles.tool("gcitool")
+		if !gcitool.exists {
+			XGResources.tool("gcitool").copy(to: gcitool)
+		}
 	}
 	
 }

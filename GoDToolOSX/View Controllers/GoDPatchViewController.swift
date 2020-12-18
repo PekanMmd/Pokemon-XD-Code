@@ -10,9 +10,9 @@ import Cocoa
 
 let xdpatches = [
     "Remove foreign languages from common_rel. Required for some patches. Probably best to apply this first.",
-	"Apply Physical/Special move split",
+	"Apply Physical/Special move split (You still need to set the category for each move)",
 	"Remove Physical/Special move split",
-	"Assign default phys/spec categories to moves",
+	"Set the physical/special category for all moves to their expected values",
 	"Start with 2 starter pokemon from demo (use gift pokemon editor)",
 	"Go back to starting with 1 starter pokemon",
 	"When a pokémon is KO'd it isn't replaced until the end of the turn",
@@ -34,8 +34,8 @@ let xdpatches = [
 	"Decapitalise text",
 ]
 let colopatches = [
-	"Apply Physical/Special move split",
-	"Assign default phys/spec categories to moves",
+	"Apply Physical/Special move split (You still need to set the category for each move)",
+	"Set the physical/special category for all moves to their expected values",
 	"Delete Battle Mode Data. (highly recommended)",
 	"Allow female starter pokemon",
 	"Gen VII critical hit ratios",

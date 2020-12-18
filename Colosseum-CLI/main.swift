@@ -105,7 +105,10 @@ func applyPatches() {
 		.physicalSpecialSplitApply,
 		.defaultMoveCategories,
 		.allowFemaleStarters,
-		.tradeEvolutions
+		.tradeEvolutions,
+		.allowShinyStarters,
+		.shinyLockStarters,
+		.alwaysShinyStarters
 	]
 
 	var prompt = "Select a patch to apply:\n\n0: exit\n"

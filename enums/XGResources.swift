@@ -54,7 +54,7 @@ enum XGResources {
 				case .sublimeSyntax							: return ".sublime-syntax"
 				case .sublimeSettings						: return ".sublime-settings"
 				case .sublimeCompletions					: return ".sublime-completions"
-				case .tool                                  : return ""
+				case .tool                                  : return environment == .Windows ? ".exe" : ""
 				case .folder                                : return ""
 				case .nameAndFileType( _, let filetype)		: return filetype
 			}

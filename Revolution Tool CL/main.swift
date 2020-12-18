@@ -11,13 +11,13 @@ import Foundation
 
 // Expand pokemon tables
 
-let icons = PBRDataTable.pokemonIcons
-let models = PBRDataTable.pokemonModels
-let baseStats = PBRDataTable.pokemonBaseStats
-let bodies = PBRDataTable.pokemonBodies
-let faces = PBRDataTable.pokemonFaces
-let levelUpMoves = PBRDataTable.levelUpMoves
-let evolutions = PBRDataTable.evolutions
+//let icons = PBRDataTable.pokemonIcons
+//let models = PBRDataTable.pokemonModels
+//let baseStats = PBRDataTable.pokemonBaseStats
+//let bodies = PBRDataTable.pokemonBodies
+//let faces = PBRDataTable.pokemonFaces
+//let levelUpMoves = PBRDataTable.levelUpMoves
+//let evolutions = PBRDataTable.evolutions
 
 
 //for table in [icons, models, baseStats, bodies, faces, levelUpMoves, evolutions] {

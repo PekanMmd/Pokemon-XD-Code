@@ -407,14 +407,14 @@
 		1CC362E224C1DF25005D7B4A /* XGBattleStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */; };
 		1CC5DD3222C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
 		1CC5DD3322C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
-		1CCF00122562F1C20082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
-		1CCF00132562F1C20082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
-		1CCF00142562F1C20082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
 		1CCF00272562FA810082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
 		1CCF00312562FA820082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
 		1CCF00322562FA820082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
 		1CCF005C2565C3B90082BFE2 /* gcitool in Resources */ = {isa = PBXBuildFile; fileRef = 1CCF005B2565C3B90082BFE2 /* gcitool */; };
 		1CCF005D2565C3B90082BFE2 /* gcitool in Resources */ = {isa = PBXBuildFile; fileRef = 1CCF005B2565C3B90082BFE2 /* gcitool */; };
+		1CCF0088258A3D9D0082BFE2 /* XGStatusEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD11F49A1FE0075C6D2 /* XGStatusEffects.swift */; };
+		1CCF0092258A3D9E0082BFE2 /* XGStatusEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD11F49A1FE0075C6D2 /* XGStatusEffects.swift */; };
+		1CCF0093258A3D9F0082BFE2 /* XGStatusEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD11F49A1FE0075C6D2 /* XGStatusEffects.swift */; };
 		1CCFFDAA2554FEF60082BFE2 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCFFDA92554FEF60082BFE2 /* main.swift */; };
 		1CCFFDC92554FF580082BFE2 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
 		1CCFFDD32554FF660082BFE2 /* OSXExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA96253B837500907D78 /* OSXExtensions.swift */; };
@@ -12830,7 +12830,6 @@
 				1C16D133253BC8AE00907D78 /* XGTrainerClass.swift in Sources */,
 				1C16CF93253BC57B00907D78 /* XDSFlags.swift in Sources */,
 				1C16CFCC253BC59600907D78 /* XGTextureBlock.swift in Sources */,
-				1CCF00132562F1C20082BFE2 /* XGSaveManager.swift in Sources */,
 				1C16CD30253BC46100907D78 /* XDSMacroTypes.swift in Sources */,
 				1C16CFA7253BC58B00907D78 /* XGColour.swift in Sources */,
 				1C16D019253BC5D100907D78 /* GoDKeyCodes.swift in Sources */,
@@ -12982,6 +12981,7 @@
 				1C16CEFE253BC54200907D78 /* XGStack.swift in Sources */,
 				1C16CC01253BC3C200907D78 /* CMOSXExtensions.swift in Sources */,
 				1C16D150253BC8B600907D78 /* XGTreasure.swift in Sources */,
+				1CCF0092258A3D9E0082BFE2 /* XGStatusEffects.swift in Sources */,
 				1C16CDC9253BC49000907D78 /* XGStatBoosts.swift in Sources */,
 				1C16D146253BC8B300907D78 /* CMTrainerPokemon.swift in Sources */,
 				1C16CD74253BC47400907D78 /* XGMoveTypes.swift in Sources */,
@@ -13183,6 +13183,7 @@
 				B24A505321D1258E009C707C /* XGTexturePalette.swift in Sources */,
 				B2C1EE7A20C8F6BF00D7C2F7 /* GoDContainerView.swift in Sources */,
 				B247ED4D2180C1150034CAF5 /* GoDHexCalculatorViewController.swift in Sources */,
+				1CCF0093258A3D9F0082BFE2 /* XGStatusEffects.swift in Sources */,
 				B2560A8F213D5A3D00137C37 /* GoDMatrix4.swift in Sources */,
 				B208E74920C4D72800D298BF /* XGGenderRatios.swift in Sources */,
 				B2C1EE6D20C8F5C000D7C2F7 /* GoDHomeViewController.swift in Sources */,
@@ -13576,6 +13577,7 @@
 				1CF4D02824DA2BF900EC2C65 /* XGEvolutionConditionType.swift in Sources */,
 				B2562F6621349789004180F1 /* XGGenderRatios.swift in Sources */,
 				B2562F73213497A3004180F1 /* XGStatBoosts.swift in Sources */,
+				1CCF0088258A3D9D0082BFE2 /* XGStatusEffects.swift in Sources */,
 				B24A506B21D12668009C707C /* XGResources.swift in Sources */,
 				B2562F5A2134973A004180F1 /* XGBagSlots.swift in Sources */,
 				1C4E1612253E33D200EA318B /* XGCollisionData.swift in Sources */,
@@ -13766,7 +13768,6 @@
 				B2F5ECA21F49A1FF0075C6D2 /* XGMutableData.swift in Sources */,
 				B2D1DF5D1F68DBF60023A876 /* GoDTextureFormats.swift in Sources */,
 				B2F5ECE41F49A1FF0075C6D2 /* XGUtility.swift in Sources */,
-				1CCF00122562F1C20082BFE2 /* XGSaveManager.swift in Sources */,
 				B2F5ECBA1F49A1FF0075C6D2 /* XGScriptClassFunctionsData.swift in Sources */,
 				B24A506621D12668009C707C /* XGResources.swift in Sources */,
 				B2F5EC2D1F49A1FE0075C6D2 /* XGGenders.swift in Sources */,
@@ -13816,7 +13817,6 @@
 				B2FEC09D1F727D8200AC263D /* GoDDPKMPopUpButton.swift in Sources */,
 				B2D1DF5E1F68DBF60023A876 /* GoDTextureFormats.swift in Sources */,
 				B24A505121D1258E009C707C /* XGTexturePalette.swift in Sources */,
-				1CCF00142562F1C20082BFE2 /* XGSaveManager.swift in Sources */,
 				B2FEC07A1F6C602A00AC263D /* GoDAlertViewController.swift in Sources */,
 				B2F5F8861F49C3440075C6D2 /* XGOSXExtensions.swift in Sources */,
 				B205E0C21F60A9D300A5F075 /* GoDPopUpButton.swift in Sources */,

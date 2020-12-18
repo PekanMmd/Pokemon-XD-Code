@@ -17,12 +17,14 @@ class GoDPatchViewController: GoDTableViewController {
 	
 	let patches = [
 		"Move type matchup table to location with more space",
-		"Disable rental pass checksums (prevents bad eggs)"
+		"Disable rental pass checksums (prevents bad eggs)",
+		"Disable visual blur effect"
 	]
 
 	var funcs = [
 		#selector(moveTypeMatchupsTable),
-		#selector(disableRentalPassChecksums)
+		#selector(disableRentalPassChecksums),
+		#selector(disableBlur)
 	]
 	
 	@objc func moveTypeMatchupsTable() {
@@ -31,6 +33,10 @@ class GoDPatchViewController: GoDTableViewController {
 
 	@objc func disableRentalPassChecksums() {
 		XGDolPatcher.disableRentalPassChecksums()
+	}
+
+	@objc func disableBlur() {
+		XGDolPatcher.disableBlurEffect()
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {

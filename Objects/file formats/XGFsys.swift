@@ -439,6 +439,12 @@ final class XGFsys : NSObject {
 			}
 		}
 	}
+
+	func shiftAndReplaceFile(_ file: XGFiles, save: Bool) {
+		if let index = indexForFile(filename: file.fileName), index > 0, file.exists {
+			shiftAndReplaceFileWithIndexEfficiently(index, withFile: file, save: save)
+		}
+	}
 	
 	func shiftAndReplaceFileWithIndex(_ index: Int, withFile newFile: XGFiles) {
 		if !(index < self.numberOfEntries) {

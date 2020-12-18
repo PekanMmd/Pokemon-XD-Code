@@ -5,17 +5,40 @@
 //  Created by The Steez on 27/08/2018.
 //
 
-//let saveFile = XGFiles.nameAndFolder("pokemon_colosseum_save.raw", .Documents)
-//let saveManager = XGSaveManager(saveType: .decryptedSaveSlot(data: saveFile.data!))
-//let save = saveManager.saveSlots[0]
-//var registeredParty = (0 ... 5).map { (index) -> XGSavePokemon in
-//	return save.readPokemon(slot: .battleMode(partyIndex: 0, index: index))
-//}
-//(10 ... 15).forEach { (boxSlot) in
-//	save.writePokemon(registeredParty[boxSlot - 10], to: .pc(box: 0, index: boxSlot))
+//let gciFile = XGFiles.nameAndFolder("GC6E_pokemon_colosseum.gci", .Documents)
+//let saveFile = XGFiles.nameAndFolder("GC6E_pokemon_colosseum.gci.raw", .Documents)
+//let saveManager = XGSaveManager(file: gciFile, saveType: .gciSaveData)
+//if let save = saveManager.latestSaveSlot {
+//	for i in 0 ... 5 {
+//		let mon = save.readPokemon(slot: .pc(box: 0, index: i))
+//		XGSave.XGSavePokemonSlot.pc(box: 0, index: i).offset.hexString().println()
+//		mon.name.println()
+//		let copyMon = save.readPokemon(slot: .pc(box: 0, index: i + 12))
+//		copyMon.name.println()
+//		save.writePokemon(copyMon, to: .pc(box: 0, index: i))
+//		save.readPokemon(slot: .pc(box: 0, index: i)).name.println()
+//	}
 //}
 //saveManager.save()
 
+//let gciFile = XGFiles.nameAndFolder("pokemon_colosseum_save.gci", .Documents)
+//let saveFile = XGFiles.nameAndFolder("pokemon_colosseum_save.raw", .Documents)
+//let saveManager = XGSaveManager(file: saveFile, saveType: .decryptedSaveSlot)
+//if let save = saveManager.latestSaveSlot {
+//	let registeredParty = (0 ... 5).map { (index) -> XGSavePokemon in
+//		return save.readPokemon(slot: .battleMode(partyIndex: 0, index: index))
+//	}
+//	(10 ... 15).forEach { (boxSlot) in
+//		let pcSlot = XGSave.XGSavePokemonSlot.pc(box: 0, index: boxSlot)
+//		let registeredSlot = registeredParty[boxSlot - 10]
+//		let mon = save.readPokemon(slot: pcSlot)
+//		printg(boxSlot)
+//		mon.copyFrom(registeredSlot)
+//		save.writePokemon(mon, to: pcSlot)
+//	}
+//}
+//saveManager.save()
+//GoDShellManager.run(.gcitool, args: "replace \(gciFile.path) \(saveFile.path)", printOutput: true)
 
 
 //let saveFile = XGFiles.nameAndFolder("pokemon_colosseum_save.raw", .Documents)

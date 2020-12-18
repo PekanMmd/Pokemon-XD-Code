@@ -54,42 +54,43 @@ let kMoveExclamationPointStringIDOffset = 0x2a
 
 final class XGMove: NSObject, Codable {
 	
-	@objc var startOffset	= 0x0
-	@objc var moveIndex		= 0x0
+	var startOffset	= 0x0
+	var moveIndex		= 0x0
 	
 	var unusedString 		= 0
 	var exclamationString 	= 0
 	
-	@objc var nameID		= 0x0
-	@objc var descriptionID = 0x0
-	@objc var animationID   = 0x0
-	@objc var animation2ID	= 0x0
+	var nameID		= 0x0
+	var descriptionID = 0x0
+	var animationID   = 0x0
+	var animation2ID	= 0x0
 	
-	@objc var priority			= 0x0
-	@objc var pp				= 0x0
-	@objc var effect			= 0x0
-	@objc var effectAccuracy	= 0x0
-	@objc var basePower			= 0x0
-	@objc var accuracy			= 0x0
+	var priority			= 0x0
+	var pp				= 0x0
+	var effect			= 0x0
+	var effectAccuracy	= 0x0
+	var basePower			= 0x0
+	var accuracy			= 0x0
 	var type			= XGMoveTypes.normal
 	var target			= XGMoveTargets.selectedTarget
 	var category		= XGMoveCategories.none
 	
 	var effectType		= XGMoveEffectTypes.none
 	
-	@objc var contactFlag		= false
-	@objc var protectFlag		= false
-	@objc var magicCoatFlag	= false
-	@objc var snatchFlag		= false
-	@objc var mirrorMoveFlag	= false
-	@objc var kingsRockFlag	= false
-	@objc var soundBasedFlag	= false
-	@objc var HMFlag			= false
+	var contactFlag		= false
+	var protectFlag		= false
+	var magicCoatFlag	= false
+	var snatchFlag		= false
+	var mirrorMoveFlag	= false
+	var kingsRockFlag	= false
+	var soundBasedFlag	= false
+	var HMFlag			= false
 	
-	@objc var displayTypeMatchupFlag = 0
+	var displayTypeMatchupFlag = 0
+
+	var animationStringIDs = [Int]() // for pbr compatibility
 	
-	
-	@objc var name : XGString {
+	var name : XGString {
 		get {
 			return XGFiles.common_rel.stringTable.stringSafelyWithID(nameID)
 		}

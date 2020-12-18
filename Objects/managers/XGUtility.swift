@@ -252,7 +252,7 @@ class XGUtility {
 			
 			let fsysFile = XGFiles.fsys(file.fileName.removeFileExtensions())
 			if fsysFile.exists {
-				fsysFile.fsysData.shiftAndReplaceFileWithType(.rel, withFile: file.compress(), save: true)
+				fsysFile.fsysData.shiftAndReplaceFile(file.compress(), save: true)
 			}
 		}
 	}
@@ -264,7 +264,7 @@ class XGUtility {
 			
 			let fsysFile = XGFiles.fsys(file.fileName.removeFileExtensions())
 			if fsysFile.exists {
-				fsysFile.fsysData.shiftAndReplaceFileWithType(.scd, withFile: file.compress(), save: true)
+				fsysFile.fsysData.shiftAndReplaceFile(file.compress(), save: true)
 			}
 		}
 	}
@@ -280,7 +280,7 @@ class XGUtility {
 			let msgFile = XGFiles.msg(file.fileName.removeFileExtensions())
 			
 			if msgFile.exists {
-				file.fsysData.shiftAndReplaceFileWithType(.msg, withFile: msgFile.compress(), save: true)
+				file.fsysData.shiftAndReplaceFile(msgFile.compress(), save: true)
 			}
 		}
 		

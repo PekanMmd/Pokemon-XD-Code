@@ -8,8 +8,36 @@
 
 import Foundation
 
-let kVaporeonStartOffset = game == .XD ? 0x14F614 : 0x12DAC8
-let kJolteonStartOffset	 = game == .XD ? 0x14F73C : 0x12DBF0
+let kVaporeonStartOffset: Int = {
+	if game == .XD {
+		switch region {
+		case .US: return 0x14F614
+		case .EU: return 0x150ED8
+		case .JP: printg("Starter offset not known for jp rom"); return -250
+		}
+	} else {
+		switch region {
+		case .US: return 0x12DAC8
+		case .EU: return 0x131CF4
+		case .JP: return 0x12B198
+		}
+	}
+}()
+let kJolteonStartOffset: Int = {
+	if game == .XD {
+		switch region {
+		case .US: return 0x14F73C
+		case .EU: return 0x151000
+		case .JP: printg("Starter offset not known for jp rom"); return -250
+		}
+	} else {
+		switch region {
+		case .US: return 0x12DBF0
+		case .EU: return 0x131E1C
+		case .JP: return 0x12B2C0
+		}
+	}
+}()
 
 let kDemoStarterSpeciesOffset		= 0x02
 let kDemoStarterLevelOffset			= 0x07
@@ -24,10 +52,10 @@ let kDemoStarterExpValueOffset		= 0x92
 
 final class XGDemoStarterPokemon: NSObject, XGGiftPokemon, Codable {
 	
-	@objc var index			= 0
+	var index		= 0
 	
-	@objc var exp			= 0
-	@objc var level			= 0 {
+	var exp			= 0
+	var level		= 0 {
 		didSet {
 			self.exp = self.species.expRate.expForLevel(level)
 		}
@@ -43,20 +71,18 @@ final class XGDemoStarterPokemon: NSObject, XGGiftPokemon, Codable {
 	var move2			= XGMoves.move(0)
 	var move3			= XGMoves.move(0)
 	var move4			= XGMoves.move(0)
-	var shinyValue	= XGShinyValues.random
+	var shinyValue		= XGShinyValues.random
 	
 	var nature			= XGNatures.random
 	var gender			= XGGenders.random
 	
-	@objc var giftType		= game == .XD ? "Demo Starter Pokemon" : "Starter Pokemon"
+	var giftType		= game == .XD ? "Demo Starter Pokemon" : "Starter Pokemon"
 	
-	@objc var startOffset : Int {
-		get {
-			return index == 1 ? kVaporeonStartOffset : kJolteonStartOffset
-		}
+	var startOffset : Int {
+		return index == 1 ? kVaporeonStartOffset : kJolteonStartOffset
 	}
 	
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		let dol			= XGFiles.dol.data!
@@ -89,24 +115,24 @@ final class XGDemoStarterPokemon: NSObject, XGGiftPokemon, Codable {
 		
 	}
 	
-	@objc func save() {
-		
-		let dol = XGFiles.dol.data!
-		let start = startOffset
-		
-		dol.replaceByteAtOffset(start + kDemoStarterLevelOffset, withByte: level)
-		dol.replace2BytesAtOffset(start + kDemoStarterExpValueOffset, withBytes: exp)
-		dol.replace2BytesAtOffset(start + kDemoStarterSpeciesOffset, withBytes: species.index)
-		dol.replace2BytesAtOffset(start + kDemoStarterShinyValueOffset, withBytes: shinyValue.rawValue)
-		dol.replace2BytesAtOffset(start + kDemoStarterMove1Offset, withBytes: move1.index)
-		dol.replace2BytesAtOffset(start + kDemoStarterMove2Offset, withBytes: move2.index)
-		dol.replace2BytesAtOffset(start + kDemoStarterMove3Offset, withBytes: move3.index)
-		dol.replace2BytesAtOffset(start + kDemoStarterMove4Offset, withBytes: move4.index)
-		
-		dol.replace2BytesAtOffset(start + kDemoStarterNatureOffset, withBytes: nature.rawValue)
-		dol.replace2BytesAtOffset(start + kDemoStarterGenderOffset, withBytes: gender.rawValue)
-		
-		dol.save()
+	func save() {
+		if let dol = XGFiles.dol.data {
+			let start = startOffset
+
+			dol.replaceByteAtOffset(start + kDemoStarterLevelOffset, withByte: level)
+			dol.replace2BytesAtOffset(start + kDemoStarterExpValueOffset, withBytes: exp)
+			dol.replace2BytesAtOffset(start + kDemoStarterSpeciesOffset, withBytes: species.index)
+			dol.replace2BytesAtOffset(start + kDemoStarterShinyValueOffset, withBytes: shinyValue.rawValue)
+			dol.replace2BytesAtOffset(start + kDemoStarterMove1Offset, withBytes: move1.index)
+			dol.replace2BytesAtOffset(start + kDemoStarterMove2Offset, withBytes: move2.index)
+			dol.replace2BytesAtOffset(start + kDemoStarterMove3Offset, withBytes: move3.index)
+			dol.replace2BytesAtOffset(start + kDemoStarterMove4Offset, withBytes: move4.index)
+
+			dol.replace2BytesAtOffset(start + kDemoStarterNatureOffset, withBytes: nature.rawValue)
+			dol.replace2BytesAtOffset(start + kDemoStarterGenderOffset, withBytes: gender.rawValue)
+
+			dol.save()
+		}
 	}
 	
 }
@@ -126,7 +152,7 @@ extension XGDemoStarterPokemon: XGEnumerable {
 	
 	static var allValues: [XGDemoStarterPokemon] {
 		var values = [XGDemoStarterPokemon]()
-		for i in 0 ... 1{
+		for i in 0 ... 1 {
 			values.append(XGDemoStarterPokemon(index: i))
 		}
 		return values

@@ -21,7 +21,14 @@ enum XGRegions : UInt32 {
 		case .JP: return 2
 		}
 	}
-	
+
+	var name: String {
+		switch self {
+		case .US: return "US"
+		case .EU: return "PAL"
+		case .JP: return "JP"
+		}
+	}
 }
 
 class XGMapRel : XGRelocationTable {
@@ -117,7 +124,7 @@ extension XGISO {
 	}
 	
 	var menuFsysList : [String] {
-		// also any file with "menu" in the name
+		// also any file with "menu" in the name1
 		return isDemo ? [] : [
 			"battle_disk.fsys",
 			"evolution.fsys",
@@ -155,9 +162,10 @@ extension XGISO {
 		
 		let fightFile = XGFiles.msg("fight")
 		if !fightFile.exists {
-			let fight = XGFiles.fsys("fight_common").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
-			fight.file = fightFile
-			fight.save()
+			if let fight = XGFiles.fsys("fight_common").fsysData.decompressedDataForFileWithFiletype(type: .msg) {
+				fight.file = fightFile
+				fight.save()
+			}
 		}
 		
 		let pocket_menu = XGFiles.msg("pocket_menu")
@@ -170,51 +178,59 @@ extension XGISO {
 		let world_map = XGFiles.msg("world_map")
 		
 		if !pocket_menu.exists {
-			let pm = XGFiles.fsys("pocket_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
-			pm.file = pocket_menu
-			pm.save()
+			if let pm = XGFiles.fsys("pocket_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg) {
+				pm.file = pocket_menu
+				pm.save()
+			}
 		}
 		
 		if !nameentrymenu.exists && !isDemo {
-			let nem = XGFiles.fsys("pcbox_name_entry_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
-			nem.file = nameentrymenu
-			nem.save()
+			if let nem = XGFiles.fsys("pcbox_name_entry_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg) {
+				nem.file = nameentrymenu
+				nem.save()
+			}
 		}
 		
 		if !system_tool.exists && !isDemo {
-			let st = XGFiles.fsys("pcbox_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
-			st.file = system_tool
-			st.save()
+			if let st = XGFiles.fsys("pcbox_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg) {
+				st.file = system_tool
+				st.save()
+			}
 		}
 		
 		if !m3shrine1frl.exists && !isDemo {
-			let m3rl = XGFiles.fsys("hologram_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
-			m3rl.file = m3shrine1frl
-			m3rl.save()
+			if let m3rl = XGFiles.fsys("hologram_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg) {
+				m3rl.file = m3shrine1frl
+				m3rl.save()
+			}
 		}
 		
 		if !relivehall_menu.exists && !isDemo {
-			let rh = XGFiles.fsys("relivehall_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
-			rh.file = relivehall_menu
-			rh.save()
+			if let rh = XGFiles.fsys("relivehall_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg) {
+				rh.file = relivehall_menu
+				rh.save()
+			}
 		}
 		
 		if !pda_menu.exists {
-			let pda = XGFiles.fsys("pda_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
-			pda.file = pda_menu
-			pda.save()
+			if let pda = XGFiles.fsys("pda_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg) {
+				pda.file = pda_menu
+				pda.save()
+			}
 		}
 		
 		if !p_exchange.exists {
-			let pex = XGFiles.fsys("pokemonchange_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
-			pex.file = p_exchange
-			pex.save()
+			if let pex = XGFiles.fsys("pokemonchange_menu").fsysData.decompressedDataForFileWithFiletype(type: .msg) {
+				pex.file = p_exchange
+				pex.save()
+			}
 		}
 		
 		if !world_map.exists && !isDemo {
-			let wm = XGFiles.fsys("worldmap").fsysData.decompressedDataForFileWithFiletype(type: .msg)!
-			wm.file = world_map
-			wm.save()
+			if let wm = XGFiles.fsys("worldmap").fsysData.decompressedDataForFileWithFiletype(type: .msg) {
+				wm.file = world_map
+				wm.save()
+			}
 		}
 	}
 }
@@ -271,14 +287,14 @@ extension XGUtility {
 		deckArchive.save()
 		
 		if XGFiles.msg("fight").exists {
-			XGFiles.fsys("fight_common").fsysData.shiftAndReplaceFileWithType(.msg, withFile: XGFiles.msg("fight").compress(), save: true)
+			XGFiles.fsys("fight_common").fsysData.shiftAndReplaceFile(XGFiles.msg("fight").compress(), save: true)
 		}
 		
 		if !XGFiles.fsys("pocket_menu").exists {
 			ISO.extractMenuFSYS()
 		}
 		if XGFiles.pocket_menu.exists {
-			XGFiles.fsys("pocket_menu").fsysData.shiftAndReplaceFileWithType(.rel, withFile: XGFiles.pocket_menu.compress(), save: true)
+			XGFiles.fsys("pocket_menu").fsysData.shiftAndReplaceFile(XGFiles.pocket_menu.compress(), save: true)
 		}
 
 	}

@@ -61,15 +61,15 @@ class GoDMovesViewController: GoDTableViewController {
 			animation.isHidden = true
 		}
 		
-		self.title = "Move Editor"
-		self.nameID.formatter = NumberFormatter.shortFormatter()
-		self.descID.formatter = NumberFormatter.shortFormatter()
-		self.priority.formatter = NumberFormatter.signedByteFormatter()
-		self.pp.formatter = NumberFormatter.byteFormatter()
-		self.power.formatter = NumberFormatter.byteFormatter()
-		self.accuracy.formatter = NumberFormatter.byteFormatter()
-		self.effectAcc.formatter = NumberFormatter.byteFormatter()
-		self.category.isEnabled = XGDolPatcher.isClassSplitImplemented()
+		title = "Move Editor"
+		nameID.formatter = NumberFormatter.shortFormatter()
+		descID.formatter = NumberFormatter.shortFormatter()
+		priority.formatter = NumberFormatter.signedByteFormatter()
+		pp.formatter = NumberFormatter.byteFormatter()
+		power.formatter = NumberFormatter.byteFormatter()
+		accuracy.formatter = NumberFormatter.byteFormatter()
+		effectAcc.formatter = NumberFormatter.byteFormatter()
+		category.isEnabled = XGDolPatcher.isClassSplitImplemented()
 
 		filteredMoves = moves
 		table.reloadData()
@@ -211,6 +211,22 @@ class GoDMovesViewController: GoDTableViewController {
 			if game == .PBR {
 				if !table.stringTable.replaceString(string, save: true) {
 					printg("Failed to set move name:", sender.stringValue)
+				} else if game == .PBR {
+					// Handle the "<Pokemon> used <Move>!" strings replacement if the format is unchanged
+					let animationStringIDs = currentMove.animationStringIDs
+					let animationStringsTable = XGFiles.msg(region == .JP ? "menu_fight_s" : "mes_fight_e").stringTable
+					animationStringIDs.forEach { (id) in
+						if let oldString = animationStringsTable.stringWithID(id), oldString.containsSubstring(XGSpecialCharacters.newLine.string) {
+							let newStringTextParts = oldString.string.replacingOccurrences(of: XGSpecialCharacters.newLine.string, with: "\n").split(separator: "\n")
+							if newStringTextParts.count == 2 && oldString.string.last == "!" {
+								let newStringText = newStringTextParts[0] + XGSpecialCharacters.newLine.string + sender.stringValue + "!"
+								let newString = XGString(string: newStringText, file: animationStringsTable.file, sid: id)
+								if !animationStringsTable.replaceString(newString, save: true) {
+									printg("Failed to update animation strings move name:", sender.stringValue)
+								}
+							}
+						}
+					}
 				}
 			} else {
 				if !table.stringTable.addString(string, increaseSize: false, save: true) {

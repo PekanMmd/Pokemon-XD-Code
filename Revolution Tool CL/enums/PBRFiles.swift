@@ -17,9 +17,9 @@ var loadedFiles = [String : XGMutableData]()
 var loadedStringTables = [String : XGStringTable]()
 
 var loadableFiles: [String] {
-	return [XGFiles.dol.path, XGFiles.fsys("common").path, XGFiles.msg("mes_common").path, XGFiles.msg("menu_btutorial").path, XGFiles.msg("mes_fight_e").path, XGFiles.msg("mes_name_e").path, XGFiles.msg("mes_common_JP").path]
+	return [XGFiles.dol.path, XGFiles.fsys("common").path, XGFiles.msg("mes_common").path, XGFiles.msg("common").path, XGFiles.msg("menu_btutorial").path, XGFiles.msg("mes_fight_e").path, XGFiles.msg("menu_fight_s.msg").path, XGFiles.msg("mes_name_e").path, XGFiles.msg("menu_name2").path, XGFiles.msg("mes_common_JP").path]
 }
-let loadableStringTables = [XGFiles.msg("mes_common").path, XGFiles.msg("menu_btutorial").path, XGFiles.msg("mes_fight_e").path, XGFiles.msg("mes_name_e").path, XGFiles.msg("mes_common_JP").path]
+let loadableStringTables = [XGFiles.msg("mes_common").path, XGFiles.msg("common").path, XGFiles.msg("menu_btutorial").path, XGFiles.msg("mes_fight_e").path, XGFiles.msg("menu_fight_s.msg").path, XGFiles.msg("mes_name_e").path, XGFiles.msg("menu_name2").path, XGFiles.msg("mes_common_JP").path]
 
 
 let DeckDataEmptyLZSS = XGMutableData(byteStream: [0x4C, 0x5A, 0x53, 0x53, 0x00, 0x00, 0x01, 0xF4, 0x00, 0x00, 0x00, 0x54, 0x00, 0x00, 0x00, 0x00, 0xAF, 0x44, 0x45, 0x43, 0x4B, 0xEB, 0xF0, 0xD0, 0xEB, 0xF0, 0x02, 0xAE, 0xEA, 0xF2, 0x54, 0x4E, 0x52, 0xEB, 0xF0, 0x48, 0xEB, 0xF0, 0x01, 0x70, 0xDC, 0xFF, 0x1B, 0x0F, 0x2D, 0x0F, 0xE8, 0xF4, 0x50, 0x4B, 0x4D, 0xEB, 0xF0, 0x31, 0x30, 0x06, 0x0F, 0x5F, 0x0F, 0xFA, 0xF3, 0x41, 0x49, 0x4A, 0x0F, 0x8B, 0x0F, 0xD6, 0xE6, 0xF6, 0x53, 0x54, 0x01, 0x01, 0x18, 0xE6, 0xF5, 0x4E, 0x55, 0x03, 0x4C, 0x4C, 0x94, 0x01], file: .lzss("DeckData_Empty.bin"))
@@ -50,6 +50,7 @@ indirect enum XGFiles {
 	case log(Date)
     case wit
 	case wimgt
+	case tool(String)
 	case nameAndFolder(String, XGFolders)
 	case iso // mostly just for compatibility. ISO is handle by the wit tool because it's more complicated on wii.
 	
@@ -58,62 +59,60 @@ indirect enum XGFiles {
 	}
 	
 	var fileName : String {
-		get {
-			switch self {
-				
-			case .dol					: return "main" + XGFileTypes.dol.fileExtension
-			case .common(let i)			: return "common_" + String(format: "%02d", i) + XGFileTypes.bin.fileExtension
-			case .msg(let s)			: return s + XGFileTypes.msg.fileExtension
-			case .dckp(let i)			: return "pokemon deck_" + String(format: "%02d", i) + XGFileTypes.dckp
-				.fileExtension
-			case .dckt(let i)			: return "trainer deck_" + String(format: "%02d", i) + XGFileTypes.dckt
-				.fileExtension
-			case .dcka					: return "AI deck" + XGFileTypes.dcka.fileExtension
-			case .pokeFace(let id)		: return "face_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
-			case .pokeBody(let id)		: return "body_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
-			case .typeImage(let id)		: return "type_" + String(id) + XGFileTypes.png.fileExtension
-			case .trainerFace(let id)	: return "trainer_" + String(id) + XGFileTypes.png.fileExtension
-			case .fsys(let s)			: return s + XGFileTypes.fsys.fileExtension
-			case .lzss(let s)			: return s + XGFileTypes.lzss.fileExtension
-										  // windows doesn't support colons in file names
-			case .log(let d)			: return d.description.replacingOccurrences(of: ":", with: ".") + XGFileTypes.txt.fileExtension
-			case .json(let s)			: return s + XGFileTypes.json.fileExtension
-			case .wit                   : return environment == .Windows ? "wit.exe" : "wit"
-			case .wimgt                 : return environment == .Windows ? "wimgt.exe" : "wimgt"
-			case .nameAndFolder(let name, _) : return name
-            case .iso					: return "pbr" + XGFileTypes.iso.fileExtension
-			}
+		switch self {
+
+		case .dol					: return "main" + XGFileTypes.dol.fileExtension
+		case .common(let i)			: return "common_" + String(format: "%02d", i) + XGFileTypes.bin.fileExtension
+		case .msg(let s)			: return s + XGFileTypes.msg.fileExtension
+		case .dckp(let i)			: return "pokemon deck_" + String(format: "%02d", i) + XGFileTypes.dckp
+			.fileExtension
+		case .dckt(let i)			: return "trainer deck_" + String(format: "%02d", i) + XGFileTypes.dckt
+			.fileExtension
+		case .dcka					: return "AI deck" + XGFileTypes.dcka.fileExtension
+		case .pokeFace(let id)		: return "face_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
+		case .pokeBody(let id)		: return "body_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
+		case .typeImage(let id)		: return "type_" + String(id) + XGFileTypes.png.fileExtension
+		case .trainerFace(let id)	: return "trainer_" + String(id) + XGFileTypes.png.fileExtension
+		case .fsys(let s)			: return s + XGFileTypes.fsys.fileExtension
+		case .lzss(let s)			: return s + XGFileTypes.lzss.fileExtension
+		// windows doesn't support colons in file names
+		case .log(let d)			: return d.description.replacingOccurrences(of: ":", with: ".") + XGFileTypes.txt.fileExtension
+		case .json(let s)			: return s + XGFileTypes.json.fileExtension
+		case .wit                   : return environment == .Windows ? "wit.exe" : "wit"
+		case .wimgt                 : return environment == .Windows ? "wimgt.exe" : "wimgt"
+		case .tool(let s)			: return s + (environment == .Windows ? ".exe" : "")
+		case .nameAndFolder(let name, _) : return name
+		case .iso					: return "pbr" + XGFileTypes.iso.fileExtension
 		}
 	}
 	
 	var folder : XGFolders {
-		get {
-			var folder = XGFolders.Documents
-			
-			switch self {
-				
-			case .dol				: folder = .DOL
-			case .common			: folder = .Common
-			case .msg				: folder = .StringTables
-			case .dckp				: folder = .Decks
-			case .dckt				: folder = .Decks
-			case .dcka				: folder = .Decks
-			case .pokeFace			: folder = .PokeFace
-			case .pokeBody			: folder = .PokeBody
-			case .typeImage			: folder = .Types
-			case .trainerFace		: folder = .Trainers
-			case .lzss				: folder = .LZSS
-			case .log				: folder = .Logs
-			case .json				: folder = .JSON
-			case .fsys				: folder = .FSYS
-			case .wit, .wimgt       : folder = .Wiimm
-			case .nameAndFolder( _, let aFolder) : folder = aFolder
-			case .iso				: folder = .ISO
-				
-			}
-			
-			return folder
+		var folder = XGFolders.Documents
+
+		switch self {
+
+		case .dol				: folder = .DOL
+		case .common			: folder = .Common
+		case .msg				: folder = .StringTables
+		case .dckp				: folder = .Decks
+		case .dckt				: folder = .Decks
+		case .dcka				: folder = .Decks
+		case .pokeFace			: folder = .PokeFace
+		case .pokeBody			: folder = .PokeBody
+		case .typeImage			: folder = .Types
+		case .trainerFace		: folder = .Trainers
+		case .lzss				: folder = .LZSS
+		case .log				: folder = .Logs
+		case .json				: folder = .JSON
+		case .fsys				: folder = .FSYS
+		case .wit, .wimgt       : folder = .Wiimm
+		case .tool				: folder = .Resources
+		case .nameAndFolder( _, let aFolder) : folder = aFolder
+		case .iso				: folder = .ISO
+
 		}
+
+		return folder
 	}
 	
 	var text: String {
@@ -130,15 +129,21 @@ indirect enum XGFiles {
 		case .fsys("Null"): return NullFSYS
 		default: break
 		}
-        
-        let requiredFiles : [XGFiles] = [.dol, .fsys("common"), .fsys("mes_common"), .fsys("deck"), XGFiles.msg("mes_common"), XGFiles.msg("mes_fight_e"), XGFiles.msg("mes_name_e")]
-        if requiredFiles.contains(where: { (f) -> Bool in
-            f == self
-        }) {
-            if !self.exists {
-                XGUtility.extractMainFiles()
-            }
-        }
+
+		if self != XGFiles.iso {
+			let requiredFiles : [XGFiles] = [.dol, .fsys("common"), .fsys("mes_common"), .fsys("deck"),] +
+				(region == .JP ?
+					[ XGFiles.msg("common"), XGFiles.msg("menu_fight_s"), XGFiles.msg("menu_name2")]
+					: [XGFiles.msg("mes_common"), XGFiles.msg("mes_fight_e"), XGFiles.msg("mes_name_e")])
+
+			if requiredFiles.contains(where: { (f) -> Bool in
+				f == self
+			}) {
+				if !self.exists {
+					XGUtility.extractMainFiles()
+				}
+			}
+		}
 		
 		if !self.exists {
 			printg("file doesn't exist:", self.path)

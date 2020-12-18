@@ -80,6 +80,9 @@ enum XGDolPatches : Int {
 	case tradeEvolutions
 	case defaultMoveCategories
 	case allowFemaleStarters
+	case allowShinyStarters
+	case shinyLockStarters
+	case alwaysShinyStarters
 	case switchPokemonAtEndOfTurn
 	case fixShinyGlitch
 	case removeShadowShinyLock
@@ -90,7 +93,7 @@ enum XGDolPatches : Int {
 	var name : String {
 		get {
 			switch self {
-				case .physicalSpecialSplitApply : return "Apply the gen IV physical/special split."
+				case .physicalSpecialSplitApply : return "Apply the gen IV physical/special split. (You still need to set the category for each move)"
 				case .physicalSpecialSplitRemove : return "Remove the physical/special split."
 				case .type9IndependentApply : return "Removes the dependecy on the ??? type allowing 1 additional type."
 				case .betaStartersApply : return "Allows the player to start with 2 pokemon."
@@ -102,7 +105,7 @@ enum XGDolPatches : Int {
 				case .zeroForeignStringTables : return "Foreign string tables will be zeroed out for smaller compressed sizes."
 				case .decapitaliseNames : return "Decapitalises a lot of text."
 				case .tradeEvolutions : return "Trade Evolutions become level 40"
-				case .defaultMoveCategories: return "Sets the physical/special category for all moves to their default values"
+				case .defaultMoveCategories: return "Sets the physical/special category for all moves to their expected values"
 				case .allowFemaleStarters: return "Allow starter pokemon to be female"
 				case .switchPokemonAtEndOfTurn: return "After a KO the next pokemon switches in at end of turn"
 				case .fixShinyGlitch: return "Fix shiny glitch"
@@ -110,6 +113,9 @@ enum XGDolPatches : Int {
 				case .shadowsAreNeverShiny: return "Shiny lock shadow pokemon"
 				case .allShadowsAreShiny: return "Make all shadow pokemon always shiny"
 				case .infiniteTMs: return "TMs can be reused infinitely"
+				case .allowShinyStarters: return "Starter pokemon can be shiny"
+				case .shinyLockStarters: return "Starter pokemon can never be shiny"
+				case .alwaysShinyStarters: return "Starter pokemon are always shiny"
 			}
 		}
 	}
@@ -455,6 +461,23 @@ class XGDolPatcher: NSObject {
 			mon.save()
 		}
 	}
+
+	class func setStarterShininess(to: XGShinyValues) {
+		for i in 0 ... 1 {
+			let mon = XGDemoStarterPokemon(index: i)
+			mon.shinyValue = to
+			mon.save()
+		}
+		if game == .XD {
+			if region == .US {
+				let mon = XGStarterPokemon()
+				mon.shinyValue = to
+				mon.save()
+			} else {
+				printg("Starter Eevee shiniess has not been implemented for this game region:", region.name)
+			}
+		}
+	}
 	
 	class func gen7CritRatios() {
 		if region == .EU {
@@ -499,6 +522,9 @@ class XGDolPatcher: NSObject {
 			case .shadowsAreNeverShiny			: XGAssembly.setShadowPokemonShininess(value: .never)
 			case .allShadowsAreShiny			: XGAssembly.setShadowPokemonShininess(value: .always)
 			case .infiniteTMs					: XGAssembly.infiniteUseTMs()
+			case .allowShinyStarters			: XGDolPatcher.setStarterShininess(to: .random)
+			case .shinyLockStarters				: XGDolPatcher.setStarterShininess(to: .never)
+			case .alwaysShinyStarters			: XGDolPatcher.setStarterShininess(to: .always)
 		}
 		
 		printg("patch applied: ", patch.name)

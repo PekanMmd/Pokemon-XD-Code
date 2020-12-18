@@ -31,11 +31,11 @@ final class XGStarterPokemon: NSObject, XGGiftPokemon, Codable {
 	@objc var giftType		= "Starter Pokemon"
 	
 	// unused
-	@objc var index				= 0
-	var shinyValue				= XGShinyValues.random
+	@objc var index			= 0
+	var shinyValue			= XGShinyValues.random
 	private(set) var gender	= XGGenders.random
 	private(set) var nature	= XGNatures.random
-	
+		
 	@objc var startOffset : Int {
 		get {
 			return kEeveeStartOffset
@@ -65,7 +65,6 @@ final class XGStarterPokemon: NSObject, XGGiftPokemon, Codable {
 			moveIndex = dol.get2BytesAtOffset(start + kStarterMove4Offset)
 			move4 = .move(moveIndex)
 		}
-		
 	}
 	
 	@objc func save() {

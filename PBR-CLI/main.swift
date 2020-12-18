@@ -81,14 +81,10 @@ func importExportFiles() {
 }
 
 func applyPatches() {
-	guard region == .EU else {
-		printg("Patches can currently only be applied to PAL versions of the ISO.")
-		return
-	}
-
 	let patches = [
 		"Disable rental pass validation",
-		"Move type matchup table to larger location"
+		"Move type matchup table to larger location",
+		"Disable visual blur effect"
 	]
 
 	var prompt = "Select a patch to apply:\n\n0: exit\n"
@@ -108,6 +104,7 @@ func applyPatches() {
 		switch index {
 		case 1: XGDolPatcher.disableRentalPassChecksums()
 		case 2: XGDolPatcher.moveTypeMatchupsTableToPassValidationFunction()
+		case 3: XGDolPatcher.disableBlurEffect()
 		default: continue
 		}
 	}

@@ -32,7 +32,10 @@ enum XGRegions : UInt32 {
 }
 
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/Revolution-Tool"
-let region = XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .EU
+let region: XGRegions = {
+	guard let isoData = XGFiles.iso.data else { return .EU }
+	return XGRegions(rawValue: isoData.getWordAtOffset(0)) ?? .EU
+}()
 let game = XGGame.PBR
 let isDemo = false
 
