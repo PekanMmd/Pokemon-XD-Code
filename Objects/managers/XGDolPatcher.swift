@@ -72,7 +72,6 @@ enum XGDolPatches : Int {
 	case betaStartersApply
 	case betaStartersRemove
 	case renameAllPokemonApply
-	case unlimitedTutorMovesApply
 	case shinyChanceEditingApply
 	case shinyChanceEditingRemove
 	case zeroForeignStringTables
@@ -99,7 +98,6 @@ enum XGDolPatches : Int {
 				case .betaStartersApply : return "Allows the player to start with 2 pokemon."
 				case .betaStartersRemove : return "Revert to starting with 1 pokemon."
 				case .renameAllPokemonApply	: return "Allows the name rater to rename all pokemon - Crashes parts of game"
-				case .unlimitedTutorMovesApply : return "Allows the move tutor moves to be relearned."
 				case .shinyChanceEditingApply : return "Removes shiny purification glitch by generating based on a fixed trainer ID."
 				case .shinyChanceEditingRemove : return "shininess will be determined by trainer ID as usual."
 				case .zeroForeignStringTables : return "Foreign string tables will be zeroed out for smaller compressed sizes."
@@ -147,8 +145,13 @@ class XGDolPatcher: NSObject {
 	}
 	
 	@objc class func applyPhysicalSpecialSplitPatch() {
+
+		guard region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
 		
-		if game == .XD && region == .US {
+		if game == .XD {
 			
 			let dol = XGFiles.dol.data!
 			for offset in kClassPatchOffsets {
@@ -161,7 +164,7 @@ class XGDolPatcher: NSObject {
 			dol.replaceWordAtOffset(kCounterOffset2, withBytes: kCounterBranch)
 			dol.save()
 			
-		} else if game == .Colosseum && region == .US {
+		} else if game == .Colosseum {
 			
 			let typeGetCategory = 0x10c4a0 // ram
 			
@@ -190,15 +193,22 @@ class XGDolPatcher: NSObject {
 			for offset in move31Offsets {
 				XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [0x7fe3fb78])
 			}
-			
-			
-		} else {
-			printg("Physical/Special split isn't implemented for this game region.")
+
 		}
 		
 	}
 	
-	@objc class func removePhysicalSpecialSplitPatch() {
+	class func removePhysicalSpecialSplitPatch() {
+
+		guard game == .XD else {
+			printg("This patch has not been implemented for Pokemon Colosseum.")
+			return
+		}
+
+		guard region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
 		
 		let dol = XGFiles.dol.data!
 		
@@ -223,12 +233,33 @@ class XGDolPatcher: NSObject {
 	
 	//Allows the safe changing of type 9 (?) to another type, e.g. fairy.
 	
-	@objc class func isType9Independent() -> Bool {
+	class func isType9Independent() -> Bool {
+
+		guard game == .XD else {
+			printg("This patch has not been implemented for Pokemon Colosseum.")
+			return false
+		}
+
+		guard region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return false
+		}
+
 		let dol = XGFiles.dol.data!
 		return dol.getWordAtOffset(0x2C55B0) == kBranchInstruction9
 	}
 	
-	@objc class func removeType9Dependencies() {
+	class func removeType9Dependencies() {
+
+		guard game == .XD else {
+			printg("This patch has not been implemented for Pokemon Colosseum.")
+			return
+		}
+
+		guard region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
 		
 		let dol = XGFiles.dol.data!
 		
@@ -248,12 +279,32 @@ class XGDolPatcher: NSObject {
 	
 	// Changes the starters from eevee to the beta jolteon and vaporeon which can be edited.
 	
-	@objc class func areBetaStartersEnabled() -> Bool {
+	class func areBetaStartersEnabled() -> Bool {
+		guard game == .XD else {
+			printg("This patch is for Pokemon XD: Gale of Darkness only.")
+			return true
+		}
+
+		guard region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return false
+		}
+
 		let dol = XGFiles.dol.data!
 		return dol.getWordAtOffset(kBetaStartersFirstOffset) == kBetaStartersInstruction1
 	}
 	
 	@objc class func enableBetaStarters() {
+
+		guard game == .XD else {
+			printg("This patch is for Pokemon XD: Gale of Darkness only.")
+			return
+		}
+
+		guard region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
 		
 		let dol = XGFiles.dol.data!
 		
@@ -268,6 +319,16 @@ class XGDolPatcher: NSObject {
 	}
 	
 	@objc class func disableBetaStarters() {
+
+		guard game == .XD else {
+			printg("This patch is for Pokemon XD: Gale of Darkness only.")
+			return
+		}
+
+		guard region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
 		
 		let dol = XGFiles.dol.data!
 		
@@ -300,19 +361,14 @@ class XGDolPatcher: NSObject {
 	}
 	
 	
-	@objc class func implementUnlimitedTutors() {
-		// probably don't use this anymore, edit xds script directly
-		let script = XGFiles.scd("M3_cave_1F_2.scd").data!
-		for i in [0,1] {
-			script.replace2BytesAtOffset(kUnlimitedTutorMovesJumpOffsets2[i], withBytes: kUnlimitedTutorMovesJumpInstructions[i])
-		}
-		
-		script.save()
-	}
-	
-	
 	@objc class func removeShinyGlitch() {
-		// upon further inspection it seems this isn't necessary. I believe the player's tid is always used when generating shadow pokemon
+
+		#warning("use proper implementation")
+
+		guard region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
 		
 		let dol = XGFiles.dol.data!
 		
@@ -323,6 +379,13 @@ class XGDolPatcher: NSObject {
 	}
 	
 	@objc class func replaceShinyGlitch() {
+		#warning("use proper implementation")
+
+		guard region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
+
 		let dol = XGFiles.dol.data!
 		
 		dol.replaceWordAtOffset(kShinyCalcPIDOffset1, withBytes: kShinyCalcOriginalPIDInstruction)
@@ -341,6 +404,11 @@ class XGDolPatcher: NSObject {
 	
 	@objc class func changeShinyChancePercentage(_ newValue: Float) {
 		// Input the shiny chance as a percentage
+
+		guard region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
 		
 		guard newValue < 50 else {
 			printg("Shiny value can't be more than 50 because the number will be treated as negative")
@@ -369,6 +437,11 @@ class XGDolPatcher: NSObject {
 	@objc class func zeroForeignStringTables() {
 		
 		if game == .XD {
+			guard region == .US else {
+				printg("This patch has not been implemented for this game region:", region.name)
+				return
+			}
+
 			let tableOffsetsAndSizes = [ (0x7AAFC,0xD484), (0x87F80,0xD3BC), (0x9533C,0xD334), (0x6D874,0xD288) ]
 			
 			for (offset, size) in tableOffsetsAndSizes {
@@ -496,11 +569,6 @@ class XGDolPatcher: NSObject {
 	
 	class func applyPatch(_ patch: XGDolPatches) {
 		
-		if region != .US {
-			printg("PAL/JP not yet supported for patching")
-			return
-		}
-		
 		switch patch {
 			case .betaStartersApply				: XGDolPatcher.enableBetaStarters()
 			case .betaStartersRemove			: XGDolPatcher.disableBetaStarters()
@@ -510,7 +578,6 @@ class XGDolPatcher: NSObject {
 			case .shinyChanceEditingApply		: XGDolPatcher.removeShinyGlitch()
 			case .shinyChanceEditingRemove		: XGDolPatcher.replaceShinyGlitch()
 			case .type9IndependentApply			: XGDolPatcher.removeType9Dependencies()
-			case .unlimitedTutorMovesApply		: XGDolPatcher.implementUnlimitedTutors()
 			case .zeroForeignStringTables		: XGDolPatcher.zeroForeignStringTables()
 			case .decapitaliseNames				: XGDolPatcher.decapitalise()
 			case .tradeEvolutions				: XGDolPatcher.removeTradeEvolutions()

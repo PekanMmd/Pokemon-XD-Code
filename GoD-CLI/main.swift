@@ -81,11 +81,6 @@ func importExportFiles() {
 }
 
 func applyPatches() {
-	guard region == .US else {
-		printg("Patches can currently only be applied to US versions of the ISO.")
-		return
-	}
-
 	let patches : [XGDolPatches] = game == .XD ? [
 		.physicalSpecialSplitApply,
 		.physicalSpecialSplitRemove,
