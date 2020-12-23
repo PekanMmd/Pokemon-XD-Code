@@ -6360,18 +6360,6 @@ import Foundation
 //	.b(0x226d78)
 //])
 
-//// female demo starters
-//let femaleOffsets = [0x152830, 0x152708]
-//for off in femaleOffsets {
-//	XGAssembly.replaceRamASM(RAMOffset: off, newASM: [.li(.r4, -1)])
-//}
-//
-//// allow shinies in various scenarios
-//let shinyOffsets = [0x295464, 0x29561c, 0x152bfc, 0x06b0f0, 0x1cebec]
-//for off in shinyOffsets {
-//	XGAssembly.replaceRamASM(RAMOffset: off, newASM: [.li(.r6, -1)])
-//}
-
 // lode stone evolution item
 //let linkItem = XGItems.item(99).data
 //linkItem.function1 = 0x800a54ac
@@ -8066,30 +8054,11 @@ import Foundation
 //XGAssembly.createBranchAndLinkFrom(offset: shinyStart + 0xc, toOffset: trainerGetTID).hexString().println()
 //
 //
-//// shadow pokemon shinyness is random
-//print("randomness")
-//(0x1fc2b0 - kDolToRAMOffsetDifference + kDolToISOOffsetDifference).hexString().println()
-//// replace with 0x38c0ffff
-//
-//// set shiny chance
-//// make sure chance is less than 50%
-//// replace values with newPercentage * 0xFFFF / 100
-//print("shiny chance")
-//(kShinyCalcChanceOffset1 + kDolToISOOffsetDifference).hexString().println()
-//(kShinyCalcChanceOffset2 + kDolToISOOffsetDifference).hexString().println()
-//
-//
-//print("colosseum allow shiny")
-//(0x12442c - kDolToRAMOffsetDifference + kDolToISOOffsetDifference).hexString().println()
-//// 0x3B60FFFF
 //
 //print("shiny glitch")
 //(0x1248a8 - kDolToRAMOffsetDifference + kDolToISOOffsetDifference).hexString().println()
 //// 0x3B800000
 //
-//print("shiny chance")
-//(0x124846 - kDolToRAMOffsetDifference + kDolToISOOffsetDifference).hexString().println()
-
 
 
 

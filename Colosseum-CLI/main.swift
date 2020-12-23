@@ -92,9 +92,10 @@ func applyPatches() {
 		.betaStartersRemove,
 		.switchPokemonAtEndOfTurn,
 		.fixShinyGlitch,
-		.removeShadowShinyLock,
-		.shadowsAreNeverShiny,
-		.allShadowsAreShiny,
+		.replaceShinyGlitch,
+		.allowShinyShadowPokemon,
+		.shinyLockShadowPokemon,
+		.alwaysShinyShadowPokemon,
 		.tradeEvolutions
 	] : [
 		.physicalSpecialSplitApply,

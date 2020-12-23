@@ -18,26 +18,38 @@ let kTradeShadowPokemonMove2Offset		=  0x12
 let kTradeShadowPokemonMove3Offset		=  0x16
 let kTradeShadowPokemonMove4Offset		=  0x1A
 
+var tradeShadowPokemonShininessRAMOffset: Int {
+	switch region {
+	case .US:
+		return 0x152bfe
+	case .EU:
+		return 0x1544c2
+	case .JP:
+		return -1
+	}
+}
+
 final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
 	
-	@objc var level			= 0x0
-//	var DDPKID			= 0x0
+	var level			= 0x0
 	var species			= XGPokemon.pokemon(0)
 	var move1			= XGMoves.move(0)
 	var move2			= XGMoves.move(0)
 	var move3			= XGMoves.move(0)
 	var move4			= XGMoves.move(0)
 	
-	@objc var giftType		= "Shadow Pokemon Gift"
+	var giftType		= "Shadow Pokemon Gift"
 	
 	// unused
-	@objc var index			= 0
-	@objc var exp				= -1
+	var index			= 0
+	var exp				= -1
 	var shinyValue		= XGShinyValues.random
 	private(set) var gender	= XGGenders.random
 	private(set) var nature	= XGNatures.random
+
+	var shadowID = 0
 	
-	@objc var startOffset : Int {
+	var startOffset : Int {
 		get {
 			return kTogepiOffset
 		}
@@ -54,7 +66,7 @@ final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
 		self.species = .pokemon(species)
 		
 		level = dol.getByteAtOffset(start + kTradeShadowPokemonLevelOffset)
-//		DDPKID = dol.get2BytesAtOffset(kTradeShadowDDPKIDOffset)
+		shadowID = dol.get2BytesAtOffset(kTradeShadowDDPKIDOffset)
 		
 		var moveIndex = dol.get2BytesAtOffset(start + kTradeShadowPokemonMove1Offset)
 		move1 = .move(moveIndex)
@@ -64,25 +76,33 @@ final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
 		move3 = .move(moveIndex)
 		moveIndex = dol.get2BytesAtOffset(start + kTradeShadowPokemonMove4Offset)
 		move4 = .move(moveIndex)
-		
+
+		if region == .US {
+			shinyValue = XGShinyValues(rawValue:  dol.get2BytesAtOffset(tradeShadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference)) ?? .random
+		}
 		
 	}
 	
-	@objc func save() {
+	func save() {
 		
-		let dol = XGFiles.dol.data!
-		let start = startOffset
-		
-//		dol.replace2BytesAtOffset(start + kTradeShadowDDPKIDOffset, withBytes: DDPKID)
-		dol.replaceByteAtOffset(  start + kTradeShadowPokemonLevelOffset, withByte: level)
-		dol.replace2BytesAtOffset(start + kTradeShadowPokemonSpeciesOffset, withBytes: species.index)
-		dol.replace2BytesAtOffset(start + kTradeShadowPokemonMove1Offset, withBytes: move1.index)
-		dol.replace2BytesAtOffset(start + kTradeShadowPokemonMove2Offset, withBytes: move2.index)
-		dol.replace2BytesAtOffset(start + kTradeShadowPokemonMove3Offset, withBytes: move3.index)
-		dol.replace2BytesAtOffset(start + kTradeShadowPokemonMove4Offset, withBytes: move4.index)
-		
-		
-		dol.save()
+		if let dol = XGFiles.dol.data {
+			let start = startOffset
+
+			dol.replace2BytesAtOffset(start + kTradeShadowDDPKIDOffset, withBytes: shadowID)
+			dol.replaceByteAtOffset(  start + kTradeShadowPokemonLevelOffset, withByte: level)
+			dol.replace2BytesAtOffset(start + kTradeShadowPokemonSpeciesOffset, withBytes: species.index)
+			dol.replace2BytesAtOffset(start + kTradeShadowPokemonMove1Offset, withBytes: move1.index)
+			dol.replace2BytesAtOffset(start + kTradeShadowPokemonMove2Offset, withBytes: move2.index)
+			dol.replace2BytesAtOffset(start + kTradeShadowPokemonMove3Offset, withBytes: move3.index)
+			dol.replace2BytesAtOffset(start + kTradeShadowPokemonMove4Offset, withBytes: move4.index)
+
+			if region == .US {
+				dol.replace2BytesAtOffset(tradeShadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference, withBytes: shinyValue.rawValue)
+			}
+
+			dol.save()
+
+		}
 	}
 	
 }

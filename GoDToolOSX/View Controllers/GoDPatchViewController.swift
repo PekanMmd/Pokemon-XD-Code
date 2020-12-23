@@ -19,6 +19,7 @@ let xdpatches = [
 	"The HM Flag on moves determines whether it is a shadow move or not (requires foreign languages to be removed.)",
 	"Delete unused files (creates much needed space in the ISO)",
 	"Fix shiny glitch for shadow pokemon",
+	"Return to default behaviour for shadow pokemon shiny glitch",
 	"Shadow pokemon can be shiny",
 	"Shadow pokemon are never shiny",
 	"Shadow pokemon are always shiny",
@@ -70,6 +71,7 @@ class GoDPatchViewController: GoDTableViewController {
 			#selector(shadowHMFlag),
 			#selector(deleteUnusedFiles),
 			#selector(fixShinyGlitch),
+			#selector(replaceShinyGlitch),
 			#selector(randomShinyShadows),
 			#selector(neverShinyShadows),
 			#selector(alwaysShinyShadows),
@@ -141,19 +143,23 @@ class GoDPatchViewController: GoDTableViewController {
 	}
 
 	@objc func fixShinyGlitch() {
-		XGAssembly.fixShinyGlitch()
+		XGDolPatcher.removeShinyGlitch()
+	}
+
+	@objc func replaceShinyGlitch() {
+		XGDolPatcher.replaceShinyGlitch()
 	}
 	
 	@objc func alwaysShinyShadows() {
-		XGAssembly.setShadowPokemonShininess(value: .always)
+		XGDolPatcher.setShadowPokemonShininess(to: .always)
 	}
 	
 	@objc func neverShinyShadows() {
-		XGAssembly.setShadowPokemonShininess(value: .never)
+		XGDolPatcher.setShadowPokemonShininess(to: .never)
 	}
 	
 	@objc func randomShinyShadows() {
-		XGAssembly.setShadowPokemonShininess(value: .random)
+		XGDolPatcher.setShadowPokemonShininess(to: .random)
 	}
 	
 	@objc func removeLanguages() {

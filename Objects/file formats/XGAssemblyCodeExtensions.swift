@@ -335,66 +335,6 @@ extension XGAssembly {
 				}
 			}
 		}
-
-	}
-
-	class func fixShinyGlitch() {
-		// generated deck pokemon are given the player's tid
-
-		if game == .XD {
-			if region == .US {
-
-				let shinyStart = 0x1fa930
-				let getTrainerData = 0x1cefb4
-				let trainerGetTID = 0x14e118
-				replaceASM(startOffset: shinyStart - kDolToRAMOffsetDifference, newASM: [
-					0x38600000, // li r3, 0
-					0x38800002, // li r4, 2
-					createBranchAndLinkFrom(offset: shinyStart + 0x8, toOffset: getTrainerData),
-					createBranchAndLinkFrom(offset: shinyStart + 0xc, toOffset: trainerGetTID),
-				])
-
-				printg("shiny glitch fixed")
-			} else if region == .EU {
-
-				let shinyStart = 0x1fc650
-				let getTrainerData = 0x1d0a8c
-				let trainerGetTID = 0x14f9dc
-				replaceASM(startOffset: shinyStart - kDolToRAMOffsetDifference, newASM: [
-					0x38600000, // li r3, 0
-					0x38800002, // li r4, 2
-					createBranchAndLinkFrom(offset: shinyStart + 0x8, toOffset: getTrainerData),
-					createBranchAndLinkFrom(offset: shinyStart + 0xc, toOffset: trainerGetTID),
-				])
-
-			} else {
-				printg("shiny glitch can't be fixed for JP region yet")
-			}
-		}
-	}
-
-	class func setShadowPokemonShininess(value: XGShinyValues) {
-		// gens deck pokemon with shiny always set to value
-
-		if game == .XD {
-			if region == .JP {
-				printg("shadow pokemon shininess can't be changed for JP region yet")
-				return
-			}
-
-			var startOffset = 0x0
-
-			if region == .US {
-				startOffset = 0x1fc2b0
-			}
-			if region == .EU {
-				startOffset = 0x1fdfe4
-			}
-
-			replaceASM(startOffset: startOffset - kDolToRAMOffsetDifference, newASM: [0x38c00000 + UInt32(value.rawValue)])
-
-			printg("shadow pokemon shininess set to", value.string)
-		}
 	}
 
 	class func switchNextPokemonAtEndOfTurn() {

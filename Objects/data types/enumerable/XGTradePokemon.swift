@@ -20,6 +20,17 @@ let kTradePokemonMove2Offset		=  0x2A
 let kTradePokemonMove3Offset		=  0x2E
 let kTradePokemonMove4Offset		=  0x32
 
+var giftPokemonShininessRAMOffset: Int {
+	switch region {
+	case .US:
+		return 0x152c1a
+	case .EU:
+		return -1
+	case .JP:
+		return -1
+	}
+}
+
 final class XGTradePokemon: NSObject, XGGiftPokemon, Codable {
 	
 	@objc var index			= 0

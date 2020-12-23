@@ -698,7 +698,7 @@ indirect enum XDSExpr {
 				let gift = XGGiftPokemonManager.allGiftPokemon()[c.asInt]
 				let type = gift.giftType.underscoreSimplified.uppercased()
 				let species = gift.species.name.string.underscoreSimplified.uppercased()
-				return macroWithName(type + species)
+				return macroWithName(type + "_" + species)
 			}
 			if c.asInt == 0 {
 				return macroWithName("GIFT_POKEMON_NONE")

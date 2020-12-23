@@ -64,6 +64,17 @@ let kShinyCalcNewPIDInstruction				: UInt32 = 0x38600000
 
 let kNumberOfDolPatches = 12
 
+var shadowPokemonShininessOffset: Int {
+	switch region {
+	case.US:
+		return 0x1fc2b2
+	case .EU:
+		return 0x1fdfe6
+	case .JP:
+		return -1
+	}
+}
+
 enum XGDolPatches : Int {
 	
 	case physicalSpecialSplitApply = 0
@@ -82,11 +93,12 @@ enum XGDolPatches : Int {
 	case allowShinyStarters
 	case shinyLockStarters
 	case alwaysShinyStarters
+	case allowShinyShadowPokemon
+	case shinyLockShadowPokemon
+	case alwaysShinyShadowPokemon
 	case switchPokemonAtEndOfTurn
 	case fixShinyGlitch
-	case removeShadowShinyLock
-	case allShadowsAreShiny
-	case shadowsAreNeverShiny
+	case replaceShinyGlitch
 	case infiniteTMs
 	
 	var name : String {
@@ -107,13 +119,14 @@ enum XGDolPatches : Int {
 				case .allowFemaleStarters: return "Allow starter pokemon to be female"
 				case .switchPokemonAtEndOfTurn: return "After a KO the next pokemon switches in at end of turn"
 				case .fixShinyGlitch: return "Fix shiny glitch"
-				case .removeShadowShinyLock: return "Remove shiny lock from shadow pokemon"
-				case .shadowsAreNeverShiny: return "Shiny lock shadow pokemon"
-				case .allShadowsAreShiny: return "Make all shadow pokemon always shiny"
+				case .replaceShinyGlitch: return "Return to the default shiny glitch behaviour"
 				case .infiniteTMs: return "TMs can be reused infinitely"
 				case .allowShinyStarters: return "Starter pokemon can be shiny"
 				case .shinyLockStarters: return "Starter pokemon can never be shiny"
 				case .alwaysShinyStarters: return "Starter pokemon are always shiny"
+				case .allowShinyShadowPokemon: return "Shadow pokemon can be shiny"
+				case .shinyLockShadowPokemon: return "Shadow pokemon can never be shiny"
+				case .alwaysShinyShadowPokemon: return "Shadow pokemon are always shiny"
 			}
 		}
 	}
@@ -125,7 +138,7 @@ class XGDolPatcher: NSObject {
 	
 	//Incorporates Physical/Special Split on all moves. The category is determined by byte 0x12 of the move's data.
 	
-	@objc class func isClassSplitImplemented() -> Bool {
+	class func isClassSplitImplemented() -> Bool {
 		
 		guard game != .PBR, let dol = XGFiles.dol.data else {
 			return game == .PBR
@@ -144,7 +157,7 @@ class XGDolPatcher: NSObject {
 		return false
 	}
 	
-	@objc class func applyPhysicalSpecialSplitPatch() {
+	class func applyPhysicalSpecialSplitPatch() {
 
 		guard region == .US else {
 			printg("This patch has not been implemented for this game region:", region.name)
@@ -294,7 +307,7 @@ class XGDolPatcher: NSObject {
 		return dol.getWordAtOffset(kBetaStartersFirstOffset) == kBetaStartersInstruction1
 	}
 	
-	@objc class func enableBetaStarters() {
+	class func enableBetaStarters() {
 
 		guard game == .XD else {
 			printg("This patch is for Pokemon XD: Gale of Darkness only.")
@@ -318,7 +331,7 @@ class XGDolPatcher: NSObject {
 		dol.save()
 	}
 	
-	@objc class func disableBetaStarters() {
+	class func disableBetaStarters() {
 
 		guard game == .XD else {
 			printg("This patch is for Pokemon XD: Gale of Darkness only.")
@@ -350,7 +363,7 @@ class XGDolPatcher: NSObject {
 //		return dol.getWordAtOffset(kNameRaterOffset1) == kNopInstruction
 //	}
 //	
-	@objc class func allowRenamingAnyPokemon() {
+	class func allowRenamingAnyPokemon() {
 //		let dol = XGFiles.dol.data!
 //		
 //		dol.replaceWordAtOffset(kNameRaterOffset1, withBytes: kNopInstruction)
@@ -361,40 +374,98 @@ class XGDolPatcher: NSObject {
 	}
 	
 	
-	@objc class func removeShinyGlitch() {
+	class func removeShinyGlitch() {
 
-		#warning("use proper implementation")
-
-		guard region == .US else {
+		guard region != .JP else {
 			printg("This patch has not been implemented for this game region:", region.name)
 			return
 		}
 		
-		let dol = XGFiles.dol.data!
-		
-		dol.replaceWordAtOffset(kShinyCalcPIDOffset1, withBytes: kShinyCalcNewPIDInstruction)
-		dol.replaceWordAtOffset(kShinyCalcPIDOffset2, withBytes: kShinyCalcNewPIDInstruction)
-		
-		dol.save()
+		if XGFiles.dol.exists {
+
+			let codeStartOffset: Int = {
+				switch region {
+				case .US:
+					return 0x1fa930
+				case .EU:
+					return 0x1fc664
+				case .JP:
+					return -1
+				}
+			}()
+
+			let getTrainerData: Int = {
+				switch region {
+				case .US:
+					return 0x1cefb4
+				case .EU:
+					return 0x1d0a8c
+				case .JP:
+					return -1
+				}
+			}()
+
+			let trainerGetTID: Int = {
+				switch region {
+				case .US:
+					return 0x14e118
+				case .EU:
+					return 0x14f9dc
+				case .JP:
+					return -1
+				}
+			}()
+
+			XGAssembly.replaceRamASM(RAMOffset: codeStartOffset, newASM: [
+				.li(.r3, 0),
+				.li(.r4, 2),
+				.bl(getTrainerData),
+				.bl(trainerGetTID)
+			])
+		}
 	}
 	
-	@objc class func replaceShinyGlitch() {
-		#warning("use proper implementation")
+	class func replaceShinyGlitch() {
 
-		guard region == .US else {
+		guard region != .JP else {
 			printg("This patch has not been implemented for this game region:", region.name)
 			return
 		}
 
-		let dol = XGFiles.dol.data!
-		
-		dol.replaceWordAtOffset(kShinyCalcPIDOffset1, withBytes: kShinyCalcOriginalPIDInstruction)
-		dol.replaceWordAtOffset(kShinyCalcPIDOffset2, withBytes: kShinyCalcOriginalPIDInstruction)
-		
-		dol.save()
+		if XGFiles.dol.exists {
+
+			let codeStartOffset: Int = {
+				switch region {
+				case .US:
+					return 0x1fa930
+				case .EU:
+					return 0x1fc664
+				case .JP:
+					return -1
+				}
+			}()
+
+			let trainerGetValue: Int = {
+				switch region {
+				case .US:
+					return 0x14d6e0
+				case .EU:
+					return 0x14efa4
+				case .JP:
+					return -1
+				}
+			}()
+
+			XGAssembly.replaceRamASM(RAMOffset: codeStartOffset, newASM: [
+				.mr(.r3, .r28),
+				.li(.r4, 2),
+				.li(.r5, 0),
+				.bl(trainerGetValue)
+			])
+		}
 	}
 	
-	@objc class func getShinyChance() -> Float {
+	class func getShinyChance() -> Float {
 		let dol = XGFiles.dol.data!
 		
 		let val = Float(dol.get2BytesAtOffset(kShinyCalcChanceOffset1))
@@ -402,7 +473,7 @@ class XGDolPatcher: NSObject {
 		
 	}
 	
-	@objc class func changeShinyChancePercentage(_ newValue: Float) {
+	class func changeShinyChancePercentage(_ newValue: Float) {
 		// Input the shiny chance as a percentage
 
 		guard region == .US else {
@@ -434,7 +505,7 @@ class XGDolPatcher: NSObject {
 
 	}
 	
-	@objc class func zeroForeignStringTables() {
+	class func zeroForeignStringTables() {
 		
 		if game == .XD {
 			guard region == .US else {
@@ -456,7 +527,7 @@ class XGDolPatcher: NSObject {
 		
 	}
 	
-	@objc class func decapitalise() {
+	class func decapitalise() {
 		
 		for i in 0 ..< CommonIndexes.NumberOfMoves.value {
 			let name = XGMoves.move(i).name
@@ -496,7 +567,7 @@ class XGDolPatcher: NSObject {
 		
 	}
 	
-	@objc class func removeTradeEvolutions() {
+	class func removeTradeEvolutions() {
 		printg("Setting pokemon that require a trade to evolve to evolve at level 36 instead")
 		
 		for i in 0 ..< kNumberOfPokemon {
@@ -516,15 +587,12 @@ class XGDolPatcher: NSObject {
 	}
 	
 	class func alwaysShowShadowPokemonNature() {
-		if game == .XD {
-			if region == .US {
-				// can always see shadow pokemon nature
-				let shadowNatureStart = 0x0352d8 - kDolToRAMOffsetDifference
-				XGAssembly.replaceASM(startOffset: shadowNatureStart, newASM: [kNopInstruction, kNopInstruction])
-			} else {
-				printg("path \"always show shadow pokemon nature\" isn't available for this region.")
-			}
+		guard game == .XD && region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
 		}
+		let shadowNatureStart = 0x0352d8 - kDolToRAMOffsetDifference
+		XGAssembly.replaceASM(startOffset: shadowNatureStart, newASM: [.nop, .nop])
 	}
 	
 	class func allowFemaleStarters() {
@@ -549,6 +617,25 @@ class XGDolPatcher: NSObject {
 			} else {
 				printg("Starter Eevee shiniess has not been implemented for this game region:", region.name)
 			}
+		}
+	}
+
+	class func setShadowPokemonShininess(to: XGShinyValues) {
+
+		guard game == .XD else {
+			printg("This patch is for Pokemon XD: Gale of Darkness only.")
+			return
+		}
+
+		guard region != .JP else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
+		
+		if let dol = XGFiles.dol.data {
+			dol.replace2BytesAtOffset(shadowPokemonShininessOffset - kDolToRAMOffsetDifference, withBytes: to.rawValue)
+			dol.replace2BytesAtOffset(tradeShadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference, withBytes: to.rawValue)
+			dol.save()
 		}
 	}
 	
@@ -584,14 +671,15 @@ class XGDolPatcher: NSObject {
 			case .defaultMoveCategories			: XGUtility.defaultMoveCategories()
 			case .allowFemaleStarters			: XGDolPatcher.allowFemaleStarters()
 			case .switchPokemonAtEndOfTurn		: XGAssembly.switchNextPokemonAtEndOfTurn()
-			case .fixShinyGlitch				: XGAssembly.fixShinyGlitch()
-			case .removeShadowShinyLock			: XGAssembly.setShadowPokemonShininess(value: .random)
-			case .shadowsAreNeverShiny			: XGAssembly.setShadowPokemonShininess(value: .never)
-			case .allShadowsAreShiny			: XGAssembly.setShadowPokemonShininess(value: .always)
+			case .fixShinyGlitch				: XGDolPatcher.removeShinyGlitch()
+			case .replaceShinyGlitch			: XGDolPatcher.replaceShinyGlitch()
 			case .infiniteTMs					: XGAssembly.infiniteUseTMs()
 			case .allowShinyStarters			: XGDolPatcher.setStarterShininess(to: .random)
 			case .shinyLockStarters				: XGDolPatcher.setStarterShininess(to: .never)
 			case .alwaysShinyStarters			: XGDolPatcher.setStarterShininess(to: .always)
+			case .allowShinyShadowPokemon		: XGDolPatcher.setShadowPokemonShininess(to: .random)
+			case .shinyLockShadowPokemon		: XGDolPatcher.setShadowPokemonShininess(to: .never)
+			case .alwaysShinyShadowPokemon		: XGDolPatcher.setShadowPokemonShininess(to: .always)
 		}
 		
 		printg("patch applied: ", patch.name)

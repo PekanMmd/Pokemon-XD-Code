@@ -12,7 +12,7 @@ func invalidOption(_ option: String) {
 }
 
 func listFiles() {
-	ISO.allFileNames.forEach {
+	ISO.allFileNames.sorted().forEach {
 		printg($0)
 	}
 }
@@ -22,9 +22,9 @@ func importExportFiles() {
 
 	func searchedFiles() -> [String] {
 		guard currentSearch.count > 0 else {
-			return ISO.allFileNames
+			return ISO.allFileNames.sorted()
 		}
-		return ISO.allFileNames.filter { (name) -> Bool in
+		return ISO.allFileNames.sorted().filter { (name) -> Bool in
 			return name.lowercased().contains(currentSearch.lowercased())
 		}
 	}

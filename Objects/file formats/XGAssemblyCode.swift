@@ -233,6 +233,11 @@ class XGAssembly {
 	}
 	
 	class func setProtectRepeatChanceQuotient(_ divisor: Int) {
+		guard game == .XD && region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
+		
 		var currentValue = 0xFFFF
 		var currentOffset = 0x4eeb90 - kDolDataToRAMOffsetDifference
 		let dol = XGFiles.dol.data!
@@ -245,12 +250,22 @@ class XGAssembly {
 	}
 	
 	class func paralysisHalvesSpeed() {
+		guard game == .XD && region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
+
 		let dol = XGFiles.dol.data!
 		dol.replaceWordAtOffset(0x203af8 - kDolToRAMOffsetDifference, withBytes: 0x56f7f87e)
 		dol.save()
 	}
 	
 	class func setFirsHM(_ tm: XGTMs) {
+		guard game == .XD && region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
+
 		let off1 = 0x15e92c - kDolToRAMOffsetDifference
 		let off2 = 0x15e948 - kDolToRAMOffsetDifference
 		// i.e. for tm51 to be first hm compare with 50

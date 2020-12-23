@@ -7,6 +7,8 @@
 
 import Foundation
 
+let tradeShadowPokemonShininessRAMOffset = -1 // just for xd compatibility
+
 enum XGRegions : UInt32 {
 	
 	case US = 0x47433645 // GC6E
@@ -186,10 +188,6 @@ extension XGUtility {
 		}
 
 		XGUtility.importSpecificStringTables()
-	}
-	
-	class func prepareForQuickCompilation() {
-		importFsys()
 	}
 	
 	class func prepareForCompilation() {

@@ -413,17 +413,7 @@ extension XGUtility {
 			}
 		}
 	}
-	
-	class func prepareForQuickCompilation() {
-		updateValidItems()
-		updateHealingItems()
-		updateFunctionalItems()
-		updateTutorMoves()
-		updatePokeSpots()
-		updateShadowMonitor()
-		importSpecificStringTables()
-	}
-	
+
 	class func prepareForCompilation() {
 		fixUpTrainerPokemon()
 		prepareShinyness()
@@ -435,6 +425,7 @@ extension XGUtility {
 		updatePokeSpots()
 		updateShadowMonitor()
 		importSpecificStringTables()
+		importFsys()
 	}
 	
 	class func importSpecificStringTables() {
@@ -1033,6 +1024,10 @@ extension XGUtility {
 			if i == 0 || XGAbilities.ability(i).nameID > 0 {
 				addMacro(value: i, type: .ability)
 			}
+		}
+
+		for i in 0 ..< kNumberOfGiftPokemon {
+			addMacro(value: i, type: .giftPokemon)
 		}
 		
 		let people = XGFiles.fsys("people_archive").fsysData
