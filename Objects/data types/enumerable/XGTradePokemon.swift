@@ -25,7 +25,7 @@ var giftPokemonShininessRAMOffset: Int {
 	case .US:
 		return 0x152c1a
 	case .EU:
-		return -1
+		return 0x1544de
 	case .JP:
 		return -1
 	}
@@ -33,24 +33,24 @@ var giftPokemonShininessRAMOffset: Int {
 
 final class XGTradePokemon: NSObject, XGGiftPokemon, Codable {
 	
-	@objc var index			= 0
+	var index			= 0
 	
-	@objc var level			= 0x0
+	var level			= 0x0
 	var species			= XGPokemon.pokemon(0)
 	var move1			= XGMoves.move(0)
 	var move2			= XGMoves.move(0)
 	var move3			= XGMoves.move(0)
 	var move4			= XGMoves.move(0)
 	
-	@objc var giftType		= "Duking Trade"
+	var giftType		= "Duking Trade"
 	private(set) var gender	= XGGenders.random
 	private(set) var nature	= XGNatures.random
 	
 	// unused
-	@objc var exp				= -1
+	var exp				= -1
 	var shinyValue		= XGShinyValues.random
 	
-	@objc var startOffset : Int {
+	var startOffset : Int {
 		get {
 			switch index {
 				case 0 : return kElekidOffset
@@ -61,7 +61,7 @@ final class XGTradePokemon: NSObject, XGGiftPokemon, Codable {
 		}
 	}
 	
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		let dol			= XGFiles.dol.data!
@@ -87,10 +87,12 @@ final class XGTradePokemon: NSObject, XGGiftPokemon, Codable {
 		
 		level = dol.getByteAtOffset(start + kTradePokemonLevelOffset)
 		
-		
+		if region != .JP {
+			shinyValue = XGShinyValues(rawValue:  dol.get2BytesAtOffset(giftPokemonShininessRAMOffset - kDolToRAMOffsetDifference)) ?? .random
+		}
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		let dol = XGFiles.dol.data!
 		let start = startOffset
@@ -101,7 +103,10 @@ final class XGTradePokemon: NSObject, XGGiftPokemon, Codable {
 		dol.replace2BytesAtOffset(start + kTradePokemonMove2Offset, withBytes: move2.index)
 		dol.replace2BytesAtOffset(start + kTradePokemonMove3Offset, withBytes: move3.index)
 		dol.replace2BytesAtOffset(start + kTradePokemonMove4Offset, withBytes: move4.index)
-		
+
+		if region == .US {
+			dol.replace2BytesAtOffset(giftPokemonShininessRAMOffset - kDolToRAMOffsetDifference, withBytes: shinyValue.rawValue)
+		}
 		
 		dol.save()
 	}

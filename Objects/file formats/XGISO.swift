@@ -954,7 +954,8 @@ class XGISO: NSObject {
 			extractFSYS()
 		}
 		if !XGFiles.common_rel.exists {
-			let rel = XGFiles.fsys("common").fsysData.decompressedDataForFileWithIndex(index: 0)!
+			let relIndex = game == .XD && region == .JP ? 1 : 0
+			let rel = XGFiles.fsys("common").fsysData.decompressedDataForFileWithIndex(index: relIndex)!
 			rel.file = .common_rel
 			rel.save()
 		}
@@ -966,7 +967,7 @@ class XGISO: NSObject {
 			if !XGFiles.fsys("common_dvdeth").exists {
 				extractFSYS()
 			}
-			if !XGFiles.tableres2.exists {
+			if !XGFiles.tableres2.exists && XGFiles.fsys("common_dvdeth").exists {
 				let tableres2 = XGFiles.fsys("common_dvdeth").fsysData.decompressedDataForFileWithIndex(index: 0)!
 				tableres2.file = .tableres2
 				tableres2.save()

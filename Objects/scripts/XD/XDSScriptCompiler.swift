@@ -170,7 +170,9 @@ class XDSScriptCompiler: NSObject {
 		
 		XGFiles.common_rel.stringTable.save()
 		XGFiles.dol.stringTable.save()
-		XGFiles.tableres2.stringTable.save()
+		if game == .XD && !isDemo && region != .JP {
+			XGFiles.tableres2.stringTable.save()
+		}
 		
 		if relFile != nil {
 			if relFile!.isValid {

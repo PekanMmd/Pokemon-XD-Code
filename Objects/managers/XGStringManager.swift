@@ -26,7 +26,7 @@ func loadAllStrings() {
 		if game == .XD && region == .US && !isDemo {
 			allStringTables += [XGStringTable.dol2()]
 		}
-		if game == .XD && !isDemo {
+		if game == .XD && !isDemo && region != .JP {
 			allStringTables += [XGFiles.tableres2.stringTable]
 		}
 		

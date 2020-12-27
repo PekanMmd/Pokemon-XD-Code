@@ -264,7 +264,7 @@ extension XGUtility {
 		}
 		common.save()
 		
-		if XGFiles.tableres2.exists {
+		if XGFiles.tableres2.exists && XGFiles.fsys("common_dvdeth").exists {
 			XGFiles.fsys("common_dvdeth").fsysData.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.tableres2.compress(), save: true)
 		}
 		

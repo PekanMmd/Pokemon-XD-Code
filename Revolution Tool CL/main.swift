@@ -7,6 +7,13 @@
 
 import Foundation
 
+for deck in [XGDecks.masters] {
+	deck.name.println()
+	for mon in deck.pokemon {
+		mon.pokemon.name.println()
+	}
+}
+
 //let moves = PBRDataTable.moves
 
 // Expand pokemon tables

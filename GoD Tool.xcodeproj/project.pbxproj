@@ -243,6 +243,7 @@
 		1C1A0B3D25522ED600891C93 /* GoDTexturesContaining.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1A0B3525522ED600891C93 /* GoDTexturesContaining.swift */; };
 		1C1A0B4F2552315D00891C93 /* PBRTextureContainingFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1A0B4E2552315D00891C93 /* PBRTextureContainingFormats.swift */; };
 		1C1A0B502552315D00891C93 /* PBRTextureContainingFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1A0B4E2552315D00891C93 /* PBRTextureContainingFormats.swift */; };
+		1C2000182596947400A7CF7D /* TrainerPokemon.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C2000172596947400A7CF7D /* TrainerPokemon.storyboard */; };
 		1C291C0525138A1500E3B124 /* Move.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C291C0425138A1400E3B124 /* Move.storyboard */; };
 		1C291C0625138ADC00E3B124 /* GoDMovesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0851F6DAD9B00AC263D /* GoDMovesViewController.swift */; };
 		1C37440D24056F190089D3BA /* GoDShellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C37440C24056F190089D3BA /* GoDShellManager.swift */; };
@@ -4175,6 +4176,7 @@
 		1C1A0B07254CA75100891C93 /* PBR common pointers.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "PBR common pointers.txt"; sourceTree = "<group>"; };
 		1C1A0B3525522ED600891C93 /* GoDTexturesContaining.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDTexturesContaining.swift; sourceTree = "<group>"; };
 		1C1A0B4E2552315D00891C93 /* PBRTextureContainingFormats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRTextureContainingFormats.swift; sourceTree = "<group>"; };
+		1C2000172596947400A7CF7D /* TrainerPokemon.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TrainerPokemon.storyboard; sourceTree = "<group>"; };
 		1C291C0425138A1400E3B124 /* Move.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Move.storyboard; sourceTree = "<group>"; };
 		1C37440C24056F190089D3BA /* GoDShellManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDShellManager.swift; sourceTree = "<group>"; };
 		1C39D85B240EA03D006FDFBD /* wit */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = wit; sourceTree = "<group>"; };
@@ -6849,6 +6851,7 @@
 		1CA238AA24116A47000E56AB /* storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				1C2000172596947400A7CF7D /* TrainerPokemon.storyboard */,
 				1CA238C3241176BD000E56AB /* Help.storyboard */,
 				1CA238BF241176BC000E56AB /* HexCalculator.storyboard */,
 				1CA238C2241176BD000E56AB /* ISO.storyboard */,
@@ -11529,6 +11532,7 @@
 				B20EEBD421EF77E100E87D01 /* PBR_body_141.png in Resources */,
 				B20EEC5921EF77E200E87D01 /* PBR_body_493.png in Resources */,
 				B20EEC7621EF77E200E87D01 /* PBR_body_123.png in Resources */,
+				1C2000182596947400A7CF7D /* TrainerPokemon.storyboard in Resources */,
 				B20EECA121EF77FC00E87D01 /* PBR_face_075.png in Resources */,
 				B20EEDF621EF77FD00E87D01 /* PBR_face_122.png in Resources */,
 				B20EECE721EF77FD00E87D01 /* PBR_face_338.png in Resources */,

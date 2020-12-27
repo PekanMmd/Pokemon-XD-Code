@@ -32,6 +32,7 @@ class GoDGiftPokemonView: NSImageView {
 	var shadowAggression = NSTextField(frame: .zero)
 	var shadowFlee = NSTextField(frame: .zero)
 	var shadowBoost = GoDLevelPopUpButton()
+	var shininess = GoDShinyValuesPopUpButton()
 	
 	var views = [String : NSView]()
 	var metrics = [String : NSNumber]()

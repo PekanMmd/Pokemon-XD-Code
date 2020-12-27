@@ -416,11 +416,26 @@ class XGDolPatcher: NSObject {
 				}
 			}()
 
+			let TIDRerollOffset: Int = {
+				switch region {
+				case .US:
+					return 0x1fa9c8
+				case .EU:
+					return 0x1fc6fc
+				case .JP:
+					return -1
+				}
+			}()
+
 			XGAssembly.replaceRamASM(RAMOffset: codeStartOffset, newASM: [
 				.li(.r3, 0),
 				.li(.r4, 2),
 				.bl(getTrainerData),
 				.bl(trainerGetTID)
+			])
+
+			XGAssembly.replaceRamASM(RAMOffset: TIDRerollOffset, newASM: [
+				.b_f(0, 0x2c)
 			])
 		}
 	}

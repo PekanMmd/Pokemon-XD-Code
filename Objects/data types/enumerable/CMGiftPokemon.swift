@@ -12,8 +12,9 @@ let kHoohOffset				= game == .Colosseum ? 0x12D8E4 : 0x1524d0 - kDolToRAMOffsetD
 let kCelebiOffset			= game == .Colosseum ? 0x12D6B4 : 0x1522a0 - kDolToRAMOffsetDifference
 let kPikachuOffset			= game == .Colosseum ? 0x12D7C4 : 0x1523b0 - kDolToRAMOffsetDifference
 
-let kDistroPokemonSpeciesOffset		=  0x02
-let kDistroPokemonLevelOffset		=  0x07
+let kDistroPokemonSpeciesOffset		= 0x02
+let kDistroPokemonLevelOffset		= 0x07
+let kDistroPokemonShininessOffset	= 0x5e
 
 let kNumberOfDistroPokemon = 4
 
@@ -62,6 +63,9 @@ final class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
 		
 		level = dol.getByteAtOffset(start + kDistroPokemonLevelOffset)
 		
+		let shiny = dol.get2BytesAtOffset(start + kDemoStarterShinyValueOffset)
+		self.shinyValue = XGShinyValues(rawValue: shiny) ?? .random
+		
 		let moves = self.species.movesForLevel(level)
 		self.move1 = moves[0]
 		self.move2 = moves[1]
@@ -84,7 +88,7 @@ final class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
 		
 		dol.replaceByteAtOffset(start + kDistroPokemonLevelOffset, withByte: level)
 		dol.replace2BytesAtOffset(start + kDistroPokemonSpeciesOffset, withBytes: species.index)
-		
+		dol.replace2BytesAtOffset(start + kDemoStarterShinyValueOffset, withBytes: shinyValue.rawValue)
 		
 		dol.save()
 	}

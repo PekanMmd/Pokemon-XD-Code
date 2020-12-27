@@ -107,10 +107,16 @@ class GoDMovePopUpButton: GoDPopUpButton, GoDEnumerableButton {
 		setUpEnumerableItems()
 	}
 }
-
 class GoDNaturePopUpButton: GoDPopUpButton, GoDEnumerableButton {
     typealias Element = XGNatures
     lazy var allValues = Element.allValues
+	override func setUpItems() {
+		setUpEnumerableItems()
+	}
+}
+class GoDShinyValuesPopUpButton: GoDPopUpButton, GoDEnumerableButton {
+	typealias Element = XGShinyValues
+	lazy var allValues = Element.allValues
 	override func setUpItems() {
 		setUpEnumerableItems()
 	}

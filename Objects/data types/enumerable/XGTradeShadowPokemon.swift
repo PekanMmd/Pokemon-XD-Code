@@ -43,7 +43,7 @@ final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
 	// unused
 	var index			= 0
 	var exp				= -1
-	var shinyValue		= XGShinyValues.random
+	var shinyValue		= XGShinyValues.never
 	private(set) var gender	= XGGenders.random
 	private(set) var nature	= XGNatures.random
 
@@ -77,8 +77,8 @@ final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
 		moveIndex = dol.get2BytesAtOffset(start + kTradeShadowPokemonMove4Offset)
 		move4 = .move(moveIndex)
 
-		if region == .US {
-			shinyValue = XGShinyValues(rawValue:  dol.get2BytesAtOffset(tradeShadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference)) ?? .random
+		if region != .JP {
+			shinyValue = XGShinyValues(rawValue:  dol.get2BytesAtOffset(tradeShadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference)) ?? .never
 		}
 		
 	}
