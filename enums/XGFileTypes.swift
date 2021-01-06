@@ -26,6 +26,8 @@ enum XGFileTypes : Int, Codable {
 	case wzx  = 0x20 // move animation
 	case isd  = 0x28 // audio file header
 	case ish  = 0x2a // audio file
+	case thh  = 0x2c // thp media header
+	case thd  = 0x2e // thp media data
 	case gsw  = 0x30 // multi texture
 	case atx  = 0x32 // animated texture (official file extension is currently unknown)
 	case bin  = 0x34 // binary data
@@ -72,6 +74,8 @@ enum XGFileTypes : Int, Codable {
 		case .wzx : return ".wzx"
 		case .isd : return ".isd"
 		case .ish : return ".ish"
+		case .thh : return ".thh"
+		case .thd : return ".thd"
 		case .gsw : return ".gsw"
 		case .atx : return ".atx"
 		case .bin : return ".bin"
