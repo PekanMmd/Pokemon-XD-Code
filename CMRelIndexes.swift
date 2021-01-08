@@ -19,7 +19,7 @@ let kNumberRelPointers = 0x6c
 enum CommonIndexes : Int {
 	
 	case NumberOfItems = -1 // items are in dol in colosseum
-	case USStringTable = -2 // offset 0x59890 but not indexed apparently
+	case stringTable1 = -2 // offset 0x59890 but not indexed apparently
 	// haven't looked for these in colosseum yet
 	case BGM = -3
 	case NumberOfBGMIDs = -4

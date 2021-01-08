@@ -13,15 +13,15 @@ let kBattleFieldRoomIDOffset = 0x02
 
 final class XGBattleField: NSObject, Codable {
 	
-	@objc var roomID = 0
-	@objc var room : XGRoom? {
+	var roomID = 0
+	var room : XGRoom? {
 		return XGRoom.roomWithID(roomID)
 	}
 	
-	@objc var index = 0
-	@objc var startOffset = 0
+	var index = 0
+	var startOffset = 0
 	
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		self.index = index

@@ -7,7 +7,13 @@
 
 import Foundation
 
-let kFirstTMListOffset = region == .JP ? 0x351758 : 0x365018
+let kFirstTMListOffset: Int = {
+	switch region {
+	case .US: return 0x365018
+	case .JP: return 0x351758
+	case .EU: return 0x3B20D0
+	}
+}()
 
 let kSizeOfTMEntry	   = 0x08
 let kFirstTMItemIndex  = 0x121

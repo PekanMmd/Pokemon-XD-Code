@@ -89,7 +89,7 @@ enum CommonIndexes : Int {
 	case BGM = 104
 	case NumberBGM = 105
 	
-	case USStringTable = 116
+	case stringTable1 = 116
 	case Moves = 124
 	case NumberOfMoves = 125
 	case TutorMoves = 126

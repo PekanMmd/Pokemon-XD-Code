@@ -7,7 +7,14 @@
 
 import Foundation
 
-let kFirstTypeOffset = region == .JP ? 0x344C40 : 0x358500
+let kFirstTypeOffset: Int = {
+	switch region {
+	case .US: return 0x358500
+	case .JP: return 0x344C40
+	case .EU: return 0x3A55C0
+	}
+}()
+
 let kCategoryOffset = 0x0
 let kTypeIconBigIDOffset = 0x02
 let kTypeIconSmallIDOffset = 0x04 // not available in colosseum

@@ -32,6 +32,7 @@ class XGScript: NSObject {
 	
 	var file : XGFiles!
 	var mapRel : XGMapRel?
+	var stringTable: XGStringTable?
 	var data : XGMutableData!
 	
 	var FTBLStart = 0
@@ -77,6 +78,40 @@ class XGScript: NSObject {
 		
 		self.file = data.file
 		self.data = data
+
+		if file != .common_rel {
+			// check for rel file in same folder
+			let relFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, file.folder)
+			if relFile.exists {
+				let rel = XGMapRel(file: relFile, checkScript: false)
+				if rel.isValid {
+					mapRel = rel
+				}
+			}
+
+			// if not found, check for rel file in rels folder
+			if mapRel == nil {
+				let relFile = XGFiles.rel(file.fileName.removeFileExtensions())
+				if relFile.exists {
+					let rel = XGMapRel(file: relFile, checkScript: false)
+					if rel.isValid {
+						mapRel = rel
+					}
+				}
+			}
+
+			// check for msg file in same folder
+			let msgFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.msg.fileExtension, file.folder)
+			if msgFile.exists {
+				stringTable = msgFile.stringTable
+			} else {
+			// if not found, check for msg file in string tables folder
+				let msgFile = XGFiles.msg(file.fileName.removeFileExtensions())
+				if msgFile.exists {
+					stringTable = msgFile.stringTable
+				}
+			}
+		}
 		
 		self.scriptID = data.getWordAtOffset(kScriptUnknownIDOffset)
 		
@@ -112,7 +147,11 @@ class XGScript: NSObject {
 		
 		for i in 0 ..< numberGVAREntries {
 			let start = GVARStart + kScriptSectionHeaderSize + (i * kScriptGVARSize)
-			self.gvar.append( XDSConstant(type: data.get2BytesAtOffset(start + 2), rawValue: data.getWordAtOffset(start + 4)) )
+			let constant = XDSConstant(type: data.get2BytesAtOffset(start + 2), rawValue: data.getWordAtOffset(start + 4))
+			if case .msg = constant.type {
+				constant.stringTable = self.stringTable
+			}
+			self.gvar.append(constant)
 		}
 		
 		var strgPos = STRGStart + kScriptSectionHeaderSize
@@ -147,7 +186,11 @@ class XGScript: NSObject {
 			var arr = [XDSConstant]()
 			for j in 0 ..< entries {
 				let varStart = start + startPointer + (j * kScriptGVARSize)
-				arr.append( XDSConstant(type: data.get2BytesAtOffset(varStart), rawValue: data.getWordAtOffset(varStart + 4)) )
+				let constant = XDSConstant(type: data.get2BytesAtOffset(varStart), rawValue: data.getWordAtOffset(varStart + 4))
+				if case .msg = constant.type {
+					constant.stringTable = self.stringTable
+				}
+				arr.append(constant)
 			}
 			self.arry.append(arr)
 		}
@@ -213,30 +256,6 @@ class XGScript: NSObject {
 		XGScript.loadCustomClasses()
 
 		let linebreak = "-----------------------------------\n"
-		
-		if self.file != .common_rel {
-			// check for rel file in same folder
-			if self.mapRel == nil {
-				let relFile = XGFiles.nameAndFolder(self.file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, self.file.folder)
-				if relFile.exists {
-					let rel = XGMapRel(file: relFile, checkScript: false)
-					if rel.isValid {
-						mapRel = rel
-					}
-				}
-			}
-			
-			// if still not found, check for rel file in rels folder
-			if self.mapRel == nil {
-				let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
-				if relFile.exists {
-					let rel = XGMapRel(file: relFile, checkScript: false)
-					if rel.isValid {
-						mapRel = rel
-					}
-				}
-			}
-		}
 		
 		// file name
 		var desc = linebreak + self.file.fileName + "\n"
@@ -343,7 +362,7 @@ class XGScript: NSObject {
 						let instr = self.code[i - 3]
 						if instr .opCode == .loadImmediate {
 							let sid = instr.parameter
-							desc += ">> \"" + getStringSafelyWithID(id: sid).string + "\"\n"
+							desc += ">> \"" + getStringWithID(sid).string + "\"\n"
 						}
 						let typeInstr = self.code[i - 2]
 						if typeInstr .opCode == .loadImmediate {
@@ -368,7 +387,7 @@ class XGScript: NSObject {
 						let instr = self.code[i - 2]
 						if instr .opCode == .loadImmediate {
 							let sid = instr.parameter
-							desc += ">> \"" + getStringSafelyWithID(id: sid).string + "\"\n"
+							desc += ">> \"" + getStringWithID(sid).string + "\"\n"
 						}
 						
 					}
@@ -408,7 +427,7 @@ class XGScript: NSObject {
 							if param < 0x300 && param >= 0x200 {
 								let arrayIndex = param - 0x200
 								for element in arry[arrayIndex] {
-									desc += ">>" + getStringSafelyWithID(id: element.asInt).string + "\n"
+									desc += ">>" + getStringWithID(element.asInt).string + "\n"
 								}
 							}
 						}
@@ -419,7 +438,7 @@ class XGScript: NSObject {
 						let instr = self.code[i - 2]
 						if instr.opCode == .loadImmediate {
 							let sid = instr.parameter
-							desc += ">> \"" + getStringSafelyWithID(id: sid).string + "\"\n"
+							desc += ">> \"" + getStringWithID(sid).string + "\"\n"
 						}
 					}
 				}
@@ -500,6 +519,10 @@ class XGScript: NSObject {
 		}
 		
 		return desc
+	}
+
+	private func getStringWithID(_ id: Int) -> XGString {
+		return stringTable?.stringWithID(id) ?? XGFiles.common_rel.stringTable.stringWithID(id) ?? XGString(string: "", file: nil, sid: id)
 	}
 	
 	private func scriptFunctionSetsLastResult(name: String) -> Bool {
@@ -988,7 +1011,7 @@ class XGScript: NSObject {
 		var instructionIndex = 0
 		for expr in stack.asArray {
 			
-			macros += expr.macros
+			macros += expr.macros(stringTable: stringTable)
 			
 			if let fname = functionLocations[instructionIndex] {
 				let paramCount = getParameterCountForFunction(named: fname)
@@ -1158,7 +1181,7 @@ class XGScript: NSObject {
 								possible = false
 							}
 							if type.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
 								macros.append(.macro(name, c.rawValueString))
 							}
 							
@@ -1176,7 +1199,7 @@ class XGScript: NSObject {
 								p1 = .macroImmediate(c, type)
 							}
 							if type.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -1219,7 +1242,7 @@ class XGScript: NSObject {
 								p2 = .macroImmediate(c, type)
 							}
 							if type.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -1262,7 +1285,7 @@ class XGScript: NSObject {
 								p2 = .macroImmediate(c, overrideType)
 							}
 							if overrideType.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: overrideType, ftbl: ftbl)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: overrideType, ftbl: ftbl, stringTable: stringTable)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -1281,7 +1304,7 @@ class XGScript: NSObject {
 								p1 = .macroImmediate(c, overrideType)
 							}
 							if overrideType.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: overrideType, ftbl: ftbl)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: overrideType, ftbl: ftbl, stringTable: stringTable)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -1304,7 +1327,7 @@ class XGScript: NSObject {
 									p2 = .macroImmediate(c, type)
 								}
 								if type.needsDefine {
-									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
+									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
 									macros.append(.macro(name, c.rawValueString))
 								}
 							}
@@ -1326,7 +1349,7 @@ class XGScript: NSObject {
 									p1 = .macroImmediate(c, type)
 								}
 								if type.needsDefine {
-									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
+									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
 									macros.append(.macro(name, c.rawValueString))
 								}
 							}
@@ -1377,7 +1400,7 @@ class XGScript: NSObject {
 									params[j] = .macroImmediate(c, type)
 								}
 								if type.needsDefine {
-									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
+									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
 									macros.append(.macro(name, c.rawValueString))
 								}
 							} else {
@@ -1421,7 +1444,7 @@ class XGScript: NSObject {
 									params[j] = .macroImmediate(c, type)
 								}
 								if type.needsDefine {
-									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
+									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
 									macros.append(.macro(name, c.rawValueString))
 								}
 							} else {
@@ -1517,7 +1540,7 @@ class XGScript: NSObject {
 										params[j] = .macroImmediate(c, type)
 									}
 									if type.needsDefine {
-										let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
+										let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
 										macros.append(.macro(name, c.rawValueString))
 									}
 								}
@@ -1603,7 +1626,7 @@ class XGScript: NSObject {
 										params[j] = .macroImmediate(c, type)
 									}
 									if type.needsDefine {
-										let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
+										let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
 										macros.append(.macro(name, c.rawValueString))
 									}
 								}
@@ -1648,7 +1671,7 @@ class XGScript: NSObject {
 								p1 = .macroImmediate(c, type)
 							}
 							if type.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -2126,7 +2149,7 @@ class XGScript: NSObject {
 				let value = val.rawValueString
 				
 				if let t = type {
-					let macroString = t.printsAsMacro ? XDSExpr.stringFromMacroImmediate(c: val, t: t, ftbl: ftbl) : value
+					let macroString = t.printsAsMacro ? XDSExpr.stringFromMacroImmediate(c: val, t: t, ftbl: ftbl, stringTable: stringTable) : value
 					str += (t == .msg ? "\n" : " ") + macroString
 					if t.needsDefine {
 						mac.append(.macro(macroString, value))
@@ -2145,7 +2168,7 @@ class XGScript: NSObject {
 			var value = gvar[i].rawValueString
 			str += "global " + variable + " = "
 			if let type = globalMacroTypes[variable] {
-				let macroString = type.printsAsMacro ? XDSExpr.stringFromMacroImmediate(c: gvar[i], t: type, ftbl: ftbl) : gvar[i].rawValueString
+				let macroString = type.printsAsMacro ? XDSExpr.stringFromMacroImmediate(c: gvar[i], t: type, ftbl: ftbl, stringTable: stringTable) : gvar[i].rawValueString
 				str += macroString
 				if type.needsDefine {
 					mac.append(.macro(macroString, value))
@@ -2277,12 +2300,12 @@ class XGScript: NSObject {
 		for macro in uniqueMacros.sorted(by: { (m1, m2) -> Bool in
 			return m1.macroName < m2.macroName
 		}) {
-			script += macro.text[0] + "\n"
+			script += macro.text(stringTable: stringTable)[0] + "\n"
 		}
 		for macro in uniqueCharacterMacros.sorted(by: { (m1, m2) -> Bool in
 			return m1.macroName < m2.macroName
 		}) {
-			script += macro.text[0] + "    \n"
+			script += macro.text(stringTable: stringTable)[0] + "    \n"
 		}
 		
 		script += "\n"
@@ -2314,7 +2337,7 @@ class XGScript: NSObject {
 			case .function:
 				newLines = 2
 			default:
-				newLines = expr.text[0].length == 0 ? 0 : 1
+				newLines = expr.text(stringTable: stringTable)[0].length == 0 ? 0 : 1
 			}
 			
 			for _ in 0 ..< newLines {
@@ -2322,7 +2345,7 @@ class XGScript: NSObject {
 			}
 			
 			// print expression
-			var text = expr.text
+			var text = expr.text(stringTable: stringTable)
 			
 			// override certain constants
 			var strgCount = 0

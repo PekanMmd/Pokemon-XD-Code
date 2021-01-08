@@ -24,34 +24,34 @@ let kTreasureZCoordOffset = 0x18
 
 final class XGTreasure: NSObject, Codable {
 	
-	@objc var index = 0
+	var index = 0
 	
-	@objc var quantity = 0
-	@objc var flag = 0
-	@objc var itemID = 0
+	var quantity = 0
+	var flag = 0
+	var itemID = 0
 	var item : XGItems {
 		return XGItems.item(itemID)
 	}
 	
-	@objc var modelID = 0
+	var modelID = 0
 
-	@objc var model : String {
+	var model : String {
 		return modelID == 0x24 ? "Chest" : "Sparkle"
 	}
 	
-	@objc var roomID = 0
-	@objc var room : XGRoom {
-		return XGRoom.roomWithID(roomID)!
+	var roomID = 0
+	var room : XGRoom? {
+		return XGRoom.roomWithID(roomID)
 	}
 	
-	@objc var xCoordinate : Float = 0.0
-	@objc var yCoordinate : Float = 0.0
-	@objc var zCoordinate : Float = 0.0
-	@objc var angle = 0
+	var xCoordinate : Float = 0.0
+	var yCoordinate : Float = 0.0
+	var zCoordinate : Float = 0.0
+	var angle = 0
 	
-	@objc var startOffset = 0
+	var startOffset = 0
 	
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		self.index = index
@@ -70,7 +70,7 @@ final class XGTreasure: NSObject, Codable {
 		self.angle = data.get2BytesAtOffset(self.startOffset + kTreasureAngleOffset)
 	}
 	
-	@objc func save() {
+	func save() {
 		let data = XGFiles.common_rel.data!
 		
 		data.replaceByteAtOffset(self.startOffset + kTreasureModelIDOffset, withByte: self.modelID)

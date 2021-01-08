@@ -249,7 +249,16 @@ indirect enum XGFiles {
 					ISO.extractFSYS()
 					ISO.extractCommon()
 				}
-				let start = isDemo ? 0x5BF5C : 0x5bee4
+				let start: Int
+				if isDemo {
+					start = 0x5BF5C
+				} else {
+					switch region {
+					case .US: start = 0x5BEE4
+					case .JP: start = 0x57CB4
+					case .EU: start = 0x5dea4
+					}
+				}
 				let data = XGMutableData(byteStream: self.data!.getCharStreamFromOffset(start, length: 0x3d20), file: .common_rel)
 				return XGScript(data: data)
 			default:

@@ -24,7 +24,7 @@ class XGISO: NSObject {
 	}
 
 	func dataForFile(filename: String) -> XGMutableData? {
-		XGFiles.nameAndFolder(filename, .FSYS).data
+		return XGFiles.nameAndFolder(filename, .FSYS).data
 	}
 
 	func deleteFileAndPreserve(name: String, save: Bool) {

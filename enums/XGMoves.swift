@@ -121,6 +121,14 @@ enum XGMoves : CustomStringConvertible {
 		}
 		return XGMoves.move(rand)
 	}
+
+	static func randomDamaging() -> XGMoves {
+		var rand = 0
+		while rand == 0 || (XGMoves.move(rand).descriptionID == 0) || (XGMoves.move(rand).data.basePower == 0) {
+			rand = Int.random(in: 1 ..< kNumberOfMoves)
+		}
+		return XGMoves.move(rand)
+	}
 	
 	static func randomMoveset(count: Int = 4) -> [XGMoves] {
 		var set = [Int]()

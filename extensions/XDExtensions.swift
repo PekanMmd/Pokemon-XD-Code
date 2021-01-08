@@ -113,14 +113,17 @@ class XGMapRel : XGRelocationTable {
 extension XGISO {
 	
 	var fsysList : [String] {
-		return [
+		var list = [
 			"common.fsys",
-			"common_dvdeth.fsys",
 			"deck_archive.fsys",
 			"field_common.fsys",
 			"fight_common.fsys",
 			"people_archive.fsys"
 		]
+		if !isDemo && region != .JP {
+			list += ["common_dvdeth.fsys"]
+		}
+		return list
 	}
 	
 	var menuFsysList : [String] {
@@ -145,7 +148,9 @@ extension XGISO {
 				if settings.verbose {
 					printg("Extracting deck: \(deck.file.fileName)")
 				}
-				if let data = deckData.decompressedDataForFileWithIndex(index: i * 2) {
+				let multiplier = region == .JP ? 1 : 2
+				let offset = region == .EU ? 1 : 0
+				if let data = deckData.decompressedDataForFileWithIndex(index: (i * multiplier) + offset) {
 					data.file = deck.file
 					data.save()
 				} else {
@@ -256,9 +261,12 @@ extension XGUtility {
 		
 		let common = XGFiles.fsys("common").fsysData
 		if XGFiles.common_rel.exists {
-			common.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.common_rel.compress(), save: false)
+			let index = region == .JP ? 1 : 0
+			common.shiftAndReplaceFileWithIndexEfficiently(index, withFile: XGFiles.common_rel.compress(), save: false)
 		}
-		common.shiftAndReplaceFileWithIndexEfficiently(2, withFile: DeckDataEmptyLZSS.file, save: false) //EU file
+		if region != .JP {
+			common.shiftAndReplaceFileWithIndexEfficiently(2, withFile: DeckDataEmptyLZSS.file, save: false) //EU file
+		}
 		if XGDecks.DeckDarkPokemon.file.exists {
 			common.shiftAndReplaceFileWithIndexEfficiently(4, withFile: XGFiles.deck(.DeckDarkPokemon).compress(), save: false)
 		}
@@ -269,11 +277,14 @@ extension XGUtility {
 		}
 		
 		let deckArchive = XGFiles.fsys("deck_archive").fsysData
-		
-		for i in 0 ..< deckArchive.numberOfEntries {
-			// remove eu files to make space for increased file sizes assuming they're all the odd ones
-			if i % 2 == 1 {
-				deckArchive.shiftAndReplaceFileWithIndexEfficiently(i, withFile: DeckDataEmptyLZSS.file, save: false)
+
+		if region != .JP {
+			for i in 0 ..< deckArchive.numberOfEntries {
+				// remove other region deck files to make space for increased file sizes
+				let canDelete = region == .EU ? i % 2 != 1 : i % 2 == 1
+				if canDelete {
+					deckArchive.shiftAndReplaceFileWithIndexEfficiently(i, withFile: DeckDataEmptyLZSS.file, save: false)
+				}
 			}
 		}
 		
@@ -281,7 +292,9 @@ extension XGUtility {
 		for i in 0 ..< decksOrdered.count {
 			let deck = decksOrdered[i]
 			if deck.file.exists {
-				deckArchive.shiftAndReplaceFileWithIndexEfficiently(i * 2, withFile: deck.file.compress(), save: false)
+				let multiplier = region == .JP ? 1 : 2
+				let offset = region == .EU ? 1 : 0
+				deckArchive.shiftAndReplaceFileWithIndexEfficiently((i * multiplier) + offset, withFile: deck.file.compress(), save: false)
 			}
 		}
 		deckArchive.save()
@@ -300,6 +313,10 @@ extension XGUtility {
 	}
 	
 	class func updateHealingItems() {
+		guard region == .US else {
+			#warning("TODO: implement for other regions")
+			return
+		}
 		let kBattleItemDataStartOffset = 0x402570
 		let kSizeOfBattleItemEntry = 0x10
 		let kBattleItemHPToRestoreOffset = 0xA
@@ -350,6 +367,10 @@ extension XGUtility {
 	}
 	
 	class func updateFunctionalItems() {
+		guard region == .US else {
+			#warning("Implement for other regions")
+			return
+		}
 		// Maybe I should stop being so pedantic and use shorter variable names...
 		let kFunctionalItemDataStartOffset = 0x402570
 		let kSizeOfFunctionalItemEntry = 0x10
@@ -370,6 +391,10 @@ extension XGUtility {
 	}
 	
 	class func updateValidItems() {
+		guard region == .US else {
+			#warning("Implement for other regions")
+			return
+		}
 		let itemListStart = CommonIndexes.ValidItems.startOffset
 		let rel = XGFiles.common_rel.data!
 		
@@ -389,6 +414,10 @@ extension XGUtility {
 	}
 	
 	class func updateShadowMoves() {
+		guard region == .US else {
+			#warning("Implement for other regions")
+			return
+		}
 		let rel = XGFiles.common_rel.data!
 		for i in 0 ..< kNumberOfMoves {
 			
@@ -787,6 +816,11 @@ extension XGUtility {
 	
 	
 	class func updateShadowMonitor() {
+
+		guard region == .US else {
+			#warning("Implement for other regions")
+			return
+		}
 		
 		printg("updating shadow monitor")
 		
@@ -822,6 +856,11 @@ extension XGUtility {
 		// Need to update class function which determines which pokemon stats move tutor move index
 		// Corresponds to each tutor move. This class function will set it so that it is in the same
 		// Order as the tutor moves indexes.
+
+		guard region == .US else {
+			#warning("Implement for other regions")
+			return
+		}
 		
 		printg("updating tutor moves")
 		
@@ -872,7 +911,6 @@ extension XGUtility {
 		// I'm using the file size as the benchmark as it's really unlikely to remain the same after an xds compilation
 		// since the compiler strips all debug data. If it happens to be the same length
 		// after editing then oh well, unlucky mate :-p
-		
 		printg("updating pokespots")
 		
 		let scriptFile = XGFiles.scd("M2_guild_1F_2.scd")
@@ -2117,7 +2155,9 @@ extension XGUtility {
 		
 		for i in 0 ..< CommonIndexes.NumberTreasureBoxes.value {
 			let treasure = XGTreasure(index: i)
-			locations[treasure.item.index].addUnique(treasure.room.map.name)
+			if let mapName = treasure.room?.map.name {
+				locations[treasure.item.index].addUnique(mapName)
+			}
 		}
 		
 		for s in XGFolders.Scripts.files where s.fileType == .scd {
@@ -2138,10 +2178,11 @@ extension XGUtility {
 		for i in 0 ..< CommonIndexes.NumberTreasureBoxes.value {
 			let treasure = XGTreasure(index: i)
 			if treasure.item.index > 0 {
-				let map = treasure.room.map.name
-				var items = locations[map] ?? [XGItems]()
-				items.addUnique(treasure.item)
-				locations[map] = items
+				if let map = treasure.room?.map.name {
+					var items = locations[map] ?? [XGItems]()
+					items.addUnique(treasure.item)
+					locations[map] = items
+				}
 			}
 		}
 

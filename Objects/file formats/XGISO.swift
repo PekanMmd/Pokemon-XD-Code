@@ -960,7 +960,7 @@ class XGISO: NSObject {
 			rel.save()
 		}
 
-		if game == .XD && !isDemo {
+		if game == .XD && !isDemo && region != .JP {
 			if settings.verbose {
 				printg("extracting: \(XGFiles.tableres2.fileName)")
 			}

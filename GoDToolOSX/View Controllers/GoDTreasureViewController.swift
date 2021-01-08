@@ -77,7 +77,7 @@ class GoDTreasureViewController: GoDTableViewController {
 	
 	func reloadView() {
 		
-		self.room.select(self.currentTreasure.room)
+		self.room.select(self.currentTreasure.room ?? XGRoom(index: 0))
 		self.model.selectItem(at: 0)
 		if currentTreasure.modelID == 0x24 {
 			self.model.selectItem(at: 1)
@@ -104,7 +104,7 @@ class GoDTreasureViewController: GoDTableViewController {
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let room = XGTreasure(index: row).room.name
+		let room = XGTreasure(index: row).room?.name ?? "-"
 		
 		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: widthForTable())) as! GoDTableCellView
 		

@@ -154,7 +154,7 @@ class XGTrainerPokemon : NSObject, Codable {
 	}
 	
 	
-	func save() {
+	func save(writeRelOnCompletion: Bool = true) {
 		
 		if self.isShadow {
 			
@@ -165,8 +165,10 @@ class XGTrainerPokemon : NSObject, Codable {
 			data.replaceByteAtOffset(start + kShadowCounterOffset, withByte: shadowCounter)
 			data.replace2BytesAtOffset(start + kShadowTIDOffset, withBytes: shadowFirstTID)
 			data.replace2BytesAtOffset(start + kShadowSpeciesOffset, withBytes: self.species.index)
-			
-			data.save()
+
+			if writeRelOnCompletion {
+				data.save()
+			}
 			
 		}
 		
@@ -210,8 +212,9 @@ class XGTrainerPokemon : NSObject, Codable {
 			self.purge()
 		}
 		
-		
-		data.save()
+		if writeRelOnCompletion {
+			data.save()
+		}
 	}
 	
 	func purge() {

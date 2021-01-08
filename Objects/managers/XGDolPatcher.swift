@@ -52,10 +52,10 @@ let kUnlimitedTutorMovesJumpOffsets		= [0x02DC, 0x0290]
 let kUnlimitedTutorMovesJumpInstructions = [0x006B,0x007D]
 let kUnlimitedTutorMovesJumpOffsets2	 = [0x02B6, 0x0302]
 
-let kShinyCalcPIDOffset1				= 0x147EE0
-let kShinyCalcChanceOffset1				= 0x147EE6
-let kShinyCalcPIDOffset2				= 0x1410CC
-let kShinyCalcChanceOffset2				= 0x1410D2
+let kShinyCalcPIDOffset1				= 0x1410CC
+let kShinyCalcChanceOffset1				= 0x1410D2
+let kShinyCalcPIDOffset2				= 0x147EE0
+let kShinyCalcChanceOffset2				= 0x147EE6
 
 let kShinyCalcOriginalPIDInstruction		: UInt32 = 0x7CA30278
 let kShinyCalcOriginalChanceInstruction		= 0x0008
@@ -100,6 +100,7 @@ enum XGDolPatches : Int {
 	case fixShinyGlitch
 	case replaceShinyGlitch
 	case infiniteTMs
+	case enableDebugLogs
 	
 	var name : String {
 		get {
@@ -127,6 +128,7 @@ enum XGDolPatches : Int {
 				case .allowShinyShadowPokemon: return "Shadow pokemon can be shiny"
 				case .shinyLockShadowPokemon: return "Shadow pokemon can never be shiny"
 				case .alwaysShinyShadowPokemon: return "Shadow pokemon are always shiny"
+				case .enableDebugLogs: return "Enable Debug Logs"
 			}
 		}
 	}
@@ -134,7 +136,7 @@ enum XGDolPatches : Int {
 }
 
 
-class XGDolPatcher: NSObject {
+class XGDolPatcher {
 	
 	//Incorporates Physical/Special Split on all moves. The category is determined by byte 0x12 of the move's data.
 	
@@ -668,6 +670,63 @@ class XGDolPatcher: NSObject {
 		dol.replaceBytesFromOffset(critRatiosStartOffset, withByteStream: [24,8,2,1,1])
 		dol.save()
 	}
+
+	class func enableDebugLogs() {
+		guard region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
+
+		let GSLogOffset: Int
+		let OSReportOffset: Int
+
+		if game == .XD {
+			switch region {
+			case .US:
+				GSLogOffset = 0x2a65cc
+				OSReportOffset = 0x0abc80
+			case .EU:
+				GSLogOffset = -1
+				OSReportOffset = -1
+			case .JP:
+				GSLogOffset = -1
+				OSReportOffset = -1
+			}
+		} else {
+			switch region {
+			case .US:
+				GSLogOffset = 0x0dd970
+				OSReportOffset = 0x09c2e0
+			case .EU:
+				GSLogOffset = -1
+				OSReportOffset = -1
+			case .JP:
+				GSLogOffset = -1
+				OSReportOffset = -1
+			}
+		}
+
+		XGAssembly.replaceRamASM(RAMOffset: GSLogOffset, newASM: [.b(OSReportOffset)])
+	}
+
+	class func enableScriptLogs() {
+		guard game == .XD else {
+			printg("This patch is for Pokemon XD: Gale of Darkness only.")
+			return
+		}
+
+		guard region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
+
+		let OSReportOffset = 0x0abc80
+		let scriptGSLogOffsets = [0x1bce88, 0x1bcf28, 0x1bcfa0, 0x1bd018, 0x1bd098, 0x1bd118, 0x1bd168, 0x1bd204]
+		for GSLogOffset in scriptGSLogOffsets {
+			XGAssembly.replaceRamASM(RAMOffset: GSLogOffset, newASM: [.bl(OSReportOffset)])
+		}
+
+	}
 	
 	class func applyPatch(_ patch: XGDolPatches) {
 		
@@ -695,6 +754,7 @@ class XGDolPatcher: NSObject {
 			case .allowShinyShadowPokemon		: XGDolPatcher.setShadowPokemonShininess(to: .random)
 			case .shinyLockShadowPokemon		: XGDolPatcher.setShadowPokemonShininess(to: .never)
 			case .alwaysShinyShadowPokemon		: XGDolPatcher.setShadowPokemonShininess(to: .always)
+			case .enableDebugLogs				: XGDolPatcher.enableDebugLogs()
 		}
 		
 		printg("patch applied: ", patch.name)

@@ -21,23 +21,23 @@ let kNumberOfTypes = CommonIndexes.NumberOfTypes.value
 
 final class XGType: NSObject, Codable {
 	
-	@objc var index			 = 0
-	@objc var nameID		 = 0
+	var index			 = 0
+	var nameID		 = 0
 	var category			 = XGMoveCategories.none
 	var effectivenessTable	 = [XGEffectivenessValues]()
 	
 	var iconBigID   = 0
 	var iconSmallID = 0
 	
-	@objc var name : XGString {
+	var name : XGString {
 		get {
 			return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
 		}
 	}
 	
-	@objc var startOffset = 0
+	var startOffset = 0
 	
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		let rel			= XGFiles.common_rel.data!
@@ -64,7 +64,7 @@ final class XGType: NSObject, Codable {
 		
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		let rel = XGFiles.common_rel.data!
 		

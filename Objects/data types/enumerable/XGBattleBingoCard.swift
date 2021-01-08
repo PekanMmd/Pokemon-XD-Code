@@ -33,18 +33,18 @@ let kBingoCardFirstMysteryPanelOffset	= 0xB0
 
 final class XGBattleBingoCard: NSObject, Codable {
 	
-	@objc var difficulty				= 0
-	@objc var subIndex			= 0
+	var difficulty				= 0
+	var subIndex			= 0
 	
-	@objc var index					= 0
+	var index					= 0
 	
-	@objc var nameID				= 0
-	@objc var detailsID			= 0
+	var nameID				= 0
+	var detailsID			= 0
 	
-	@objc var pokemonLevel		= 0
-	@objc var startingPokemon	: XGBattleBingoPokemon!
+	var pokemonLevel		= 0
+	var startingPokemon	: XGBattleBingoPokemon!
 	var panels						= [XGBattleBingoPanel]()
-	@objc var rewards			= [Int]()
+	var rewards			= [Int]()
 	
 	var name : XGString {
 		get {
@@ -52,7 +52,7 @@ final class XGBattleBingoCard: NSObject, Codable {
 		}
 	}
 	
-	@objc var startOffset : Int {
+	var startOffset : Int {
 		get {
 			return CommonIndexes.BattleBingo.startOffset + (index * kSizeOfBingoCardData)
 		}
@@ -82,7 +82,7 @@ final class XGBattleBingoCard: NSObject, Codable {
 	}
 	
 	
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		self.index = index
@@ -131,7 +131,7 @@ final class XGBattleBingoCard: NSObject, Codable {
 		
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		let start = self.startOffset
 		let rel = XGFiles.common_rel.data!

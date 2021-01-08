@@ -26,9 +26,10 @@ typealias FTBL = (codeOffset: Int, end: Int, name: String, index: Int)
 
 class XGScript: CustomStringConvertible {
 	
-	var file : XGFiles!
-	 var mapRel : XGMapRel?
-	 var data : XGMutableData!
+	var file: XGFiles!
+	var mapRel: XGMapRel?
+	var data: XGMutableData!
+	var stringTable: XGStringTable?
 
 	var magicBytes: UInt32 = 0
 	var numberOfFunctions = 0
@@ -57,6 +58,36 @@ class XGScript: CustomStringConvertible {
 		self.file = data.file
 		guard data.length > kCMScriptHeaderSize else {
 			return
+		}
+
+		if file != .common_rel {
+			// check for rel file in same folder
+			let relFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, file.folder)
+			if relFile.exists {
+				let rel = XGMapRel(file: relFile, checkScript: false)
+				mapRel = rel
+			}
+
+			// if not found, check for rel file in rels folder
+			if mapRel == nil {
+				let relFile = XGFiles.rel(file.fileName.removeFileExtensions())
+				if relFile.exists {
+					let rel = XGMapRel(file: relFile, checkScript: false)
+					mapRel = rel
+				}
+			}
+
+			// check for msg file in same folder
+			let msgFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.msg.fileExtension, file.folder)
+			if msgFile.exists {
+				stringTable = msgFile.stringTable
+			} else {
+			// if not found, check for msg file in string tables folder
+				let msgFile = XGFiles.msg(file.fileName.removeFileExtensions())
+				if msgFile.exists {
+					stringTable = msgFile.stringTable
+				}
+			}
 		}
 
 		magicBytes = data.getWordAtOffset(0)
@@ -202,7 +233,7 @@ class XGScript: CustomStringConvertible {
 								// display message
 								if functionID == 0x36 {
 									let msgID = value.int
-									let string = getStringSafelyWithID(id: msgID)
+									let string = stringTable?.stringWithID(msgID) ?? getStringSafelyWithID(id: msgID)
 									text += ">> $:\(msgID):\"\(string)\"\n\n"
 								}
 							default: continue

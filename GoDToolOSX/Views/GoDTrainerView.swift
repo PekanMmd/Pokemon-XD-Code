@@ -69,9 +69,9 @@ class GoDTrainerView: NSView {
 		battleID.isSelectable = true
 		
 		self.addConstraints(visualFormat: "V:|-(10)-[modeli(60)]-(10)-|", layoutFormat: [.alignAllLeft, .alignAllRight], metrics: nil, views: views)
-		self.addConstraints(visualFormat: "H:|-(20)-[modeli(60)]-(10)-[modelp(150)]-(10)-[class(150)]-(10)-[ai(100)]-(10)-[bs(150)]-(10)-[bi(100)]", layoutFormat: [.alignAllTop], metrics: nil, views: views)
-		self.addConstraints(visualFormat: "V:[modelp(25)]-(10)-[intro(25)]", layoutFormat: [.alignAllLeft, .alignAllRight], metrics: nil, views: views)
-		self.addConstraints(visualFormat: "V:[class(25)]-(10)-[name(25)]", layoutFormat: [.alignAllLeft, .alignAllRight], metrics: nil, views: views)
+		self.addConstraints(visualFormat: "H:|-(20)-[modeli(60)]-(10)-[class(150)]-(10)-[name(150)]-(10)-[ai(100)]-(10)-[bs(150)]-(10)-[bi(100)]", layoutFormat: [.alignAllTop], metrics: nil, views: views)
+		self.addConstraints(visualFormat: "V:[class(25)]-(10)-[modelp(25)]", layoutFormat: [.alignAllLeft, .alignAllRight], metrics: nil, views: views)
+		self.addConstraints(visualFormat: "V:[name(25)]-(10)-[intro(25)]", layoutFormat: [.alignAllLeft, .alignAllRight], metrics: nil, views: views)
 		self.addConstraints(visualFormat: "V:[ai(25)]-(10)-[bgm(25)]", layoutFormat: [.alignAllLeft, .alignAllRight], metrics: nil, views: views)
 		self.addConstraints(visualFormat: "V:[bs(25)]-(10)-[bt(25)]", layoutFormat: [.alignAllLeft, .alignAllRight], metrics: nil, views: views)
 		
@@ -81,6 +81,14 @@ class GoDTrainerView: NSView {
 		battleStyle.action = #selector(battleDataUpdate)
 		battleType.target = self
 		battleType.action = #selector(battleDataUpdate)
+
+		if game == .Colosseum {
+			battleStyle.isHidden = true
+			battleType.isHidden = true
+			bgm.isHidden = true
+			modelIntro.isHidden = true
+			battleID.isHidden = true
+		}
 		
 	}
 	
@@ -111,29 +119,24 @@ class GoDTrainerView: NSView {
 			
 			if loadBattleData {
 				if let battle = trainer.battleData {
-					self.battleType.select(battle.battleType!)
-					self.battleStyle.select(battle.battleStyle!)
-					self.battleStyle.isHidden = false
-					self.battleType.isHidden = false
-					self.bgm.isHidden = false
-					self.bgm.stringValue = battle.BGMusicID.hexString()
-					self.modelIntro.stringValue = trainer.cameraEffects.string
-					self.previousBGMID = battle.BGMusicID
-					self.battleID.stringValue = battle.index.string
+					battleType.select(battle.battleType!)
+					battleStyle.select(battle.battleStyle!)
+					battleStyle.isHidden = false
+					battleType.isHidden = false
+					bgm.isHidden = false
+					bgm.stringValue = battle.BGMusicID.hexString()
+					modelIntro.stringValue = trainer.cameraEffects.string
+					previousBGMID = battle.BGMusicID
+					battleID.stringValue = battle.index.string
 				} else {
-					self.battleStyle.isHidden = true
-					self.battleType.isHidden = true
-					self.bgm.isHidden = true
-					self.previousBGMID = 0
-					self.battleID.stringValue = "0"
+					battleStyle.isHidden = true
+					battleType.isHidden = true
+					bgm.isHidden = true
+					previousBGMID = 0
+					battleID.stringValue = "0"
 				}
 			}
 			
-		} else {
-			self.battleStyle.isHidden = true
-			self.battleType.isHidden = true
-			self.bgm.isHidden = true
-			self.modelIntro.isHidden = true
 		}
 		
 	}

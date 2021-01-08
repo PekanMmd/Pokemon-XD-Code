@@ -7,10 +7,66 @@
 
 import Foundation
 
-let kPlusleOffset			= game == .Colosseum ? 0x12D9C8 : 0x1525b4 - kDolToRAMOffsetDifference
-let kHoohOffset				= game == .Colosseum ? 0x12D8E4 : 0x1524d0 - kDolToRAMOffsetDifference
-let kCelebiOffset			= game == .Colosseum ? 0x12D6B4 : 0x1522a0 - kDolToRAMOffsetDifference
-let kPikachuOffset			= game == .Colosseum ? 0x12D7C4 : 0x1523b0 - kDolToRAMOffsetDifference
+let kPlusleOffset: Int = {
+	if game == .XD {
+		switch region {
+		case .US: return 0x14F514
+		case .JP: return 0x14A83C
+		case .EU: return 0x150DD8
+		}
+	} else {
+		switch region {
+		case .US: return 0x12D9C8
+		case .JP: return 0x12B098
+		case .EU: return 0x131BF4
+		}
+	}
+}()
+let kHoohOffset: Int = {
+	if game == .XD {
+		switch region {
+		case .US: return 0x14F430
+		case .JP: return 0x14A758
+		case .EU: return 0x150CF4
+		}
+	} else {
+		switch region {
+		case .US: return 0x12D8E4
+		case .JP: return 0x12AFB8
+		case .EU: return 0x131B10
+		}
+	}
+}()
+let kCelebiOffset: Int = {
+	if game == .XD {
+		switch region {
+		case .US: return 0x14F200
+		case .JP: return 0x14A528
+		case .EU: return 0x150AC4
+		}
+	} else {
+		switch region {
+		case .US: return 0x12D6B4
+		case .JP: return 0x12ADD0
+		case .EU: return 0x1318E0
+		}
+	}
+}()
+let kPikachuOffset: Int = {
+	if game == .XD {
+		switch region {
+		case .US: return 0x14F310
+		case .JP: return 0x14A638
+		case .EU: return 0x150BD4
+		}
+	} else {
+		switch region {
+		case .US: return 0x12D7C4
+		case .JP: return 0x12AEBC
+		case .EU: return 0x1319F0
+		}
+	}
+}()
 
 let kDistroPokemonSpeciesOffset		= 0x02
 let kDistroPokemonLevelOffset		= 0x07

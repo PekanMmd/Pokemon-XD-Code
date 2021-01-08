@@ -9,7 +9,13 @@ import Foundation
 
 
 let kNumberOfItems				= 0x18d
-let kFirstItemOffset			= region == .JP ? 0x34D428 : 0x360ce8 // in start.dol for colosseum
+let kFirstItemOffset: Int = {
+	switch region {
+	case .US: return 0x360ce8
+	case .JP: return 0x34D428
+	case .EU: return 0x3ADDA0
+	}
+}()	// in start.dol for colosseum
 let kSizeOfItemData				= 0x28
 let kNumberOfFriendshipEffects	= 0x03
 

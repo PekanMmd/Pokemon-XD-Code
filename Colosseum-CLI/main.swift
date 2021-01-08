@@ -96,7 +96,8 @@ func applyPatches() {
 		.allowShinyShadowPokemon,
 		.shinyLockShadowPokemon,
 		.alwaysShinyShadowPokemon,
-		.tradeEvolutions
+		.tradeEvolutions,
+		.enableDebugLogs
 	] : [
 		.physicalSpecialSplitApply,
 		.defaultMoveCategories,
@@ -104,7 +105,8 @@ func applyPatches() {
 		.tradeEvolutions,
 		.allowShinyStarters,
 		.shinyLockStarters,
-		.alwaysShinyStarters
+		.alwaysShinyStarters,
+		.enableDebugLogs
 	]
 
 	var prompt = "Select a patch to apply:\n\n0: exit\n"

@@ -176,11 +176,7 @@ extension XGUtility {
 		ISO.extractMenuFSYS()
 		
 		let common = XGFiles.fsys("common").fsysData
-		if game == .XD {
-			common.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.common_rel.compress(), save: true)
-		} else {
-			common.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.common_rel.compress(), save: true)
-		}
+		common.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.common_rel.compress(), save: true)
 
 		let pocketFile = XGFiles.pocket_menu
 		if pocketFile.exists {
@@ -222,18 +218,29 @@ extension XGUtility {
 		XGFiles.fsys("pcbox_pocket_menu").fsysData.shiftAndReplaceFile(pocket_menu, save: true)
 		XGFiles.fsys("pda_menu").fsysData.shiftAndReplaceFile(pda_menu, save: true)
 		XGFiles.fsys("pocket_menu").fsysData.shiftAndReplaceFile(pocket_menu, save: true)
-		if region != .EU {
-			XGFiles.fsys("pokemonchange_menu").fsysData.shiftAndReplaceFile(system_tool, save: true)
-			XGFiles.fsys("pokemonchange_menu").fsysData.shiftAndReplaceFile(pocket_menu, save: true)
-			XGFiles.fsys("pokemonchange_menu").fsysData.shiftAndReplaceFile(p_exchange, save: true)
-			XGFiles.fsys("pokemonchange_menu").fsysData.shiftAndReplaceFile(system_tool, save: true)
+		for fsysName in ["pokemonchange_menu", "pokechg_menu"] {
+			// Someone had a version of the ROM with the shortened name. I don't know the origin but will just accept either filename
+			let fsys = XGFiles.fsys(fsysName)
+			if fsys.exists {
+				fsys.fsysData.shiftAndReplaceFile(system_tool, save: true)
+				fsys.fsysData.shiftAndReplaceFile(pocket_menu, save: true)
+				fsys.fsysData.shiftAndReplaceFile(p_exchange, save: true)
+				fsys.fsysData.shiftAndReplaceFile(system_tool, save: true)
+			}
 		}
 		XGFiles.fsys("title").fsysData.shiftAndReplaceFile(system_tool, save: true)
 		XGFiles.fsys("topmenu").fsysData.shiftAndReplaceFile(system_tool, save: true)
 		XGFiles.fsys("waza_menu").fsysData.shiftAndReplaceFile(pocket_menu, save: true)
-		XGFiles.fsys("colosseumbattle_menu").fsysData.shiftAndReplaceFile(pocket_menu, save: true)
-		XGFiles.fsys("colosseumbattle_menu").fsysData.shiftAndReplaceFile(nameentrymenu, save: true)
-		XGFiles.fsys("colosseumbattle_menu").fsysData.shiftAndReplaceFile(system_tool, save: true)
+
+		for fsysName in ["colosseumbattle_menu", "cb_menu"] {
+			// Someone had a version of the ROM with the shortened name. I don't know the origin but will just accept either filename
+			let fsys = XGFiles.fsys(fsysName)
+			if fsys.exists {
+				fsys.fsysData.shiftAndReplaceFile(pocket_menu, save: true)
+				fsys.fsysData.shiftAndReplaceFile(nameentrymenu, save: true)
+				fsys.fsysData.shiftAndReplaceFile(system_tool, save: true)
+			}
+		}
 	}
 
 	class func importDatToPKX(dat: XGMutableData, pkx: XGMutableData) -> XGMutableData {
@@ -283,7 +290,7 @@ extension XGUtility {
 				
 				if (spec.ability2.index == 0) && (poke.ability == 1) { poke.ability = 0 }
 				
-				poke.save()
+				poke.save(writeRelOnCompletion: false)
 			}
 		}
 	}

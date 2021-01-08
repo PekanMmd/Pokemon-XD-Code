@@ -90,7 +90,9 @@ enum XDSConstantTypes: Equatable {
 class XDSConstant : NSObject {
 	
 	var type   : XDSConstantTypes = .none_t
-	@objc var value  : UInt32 = 0
+	var value  : UInt32 = 0
+
+	var stringTable: XGStringTable?
 	
 	override var description: String {
 		
@@ -106,15 +108,15 @@ class XDSConstant : NSObject {
 		return self.type.string + "(" + val + ")"
 	}
 	
-	@objc var asFloat : Float {
+	var asFloat : Float {
 		return value.hexToSignedFloat()
 	}
 	
-	@objc var asInt : Int {
+	var asInt : Int {
 		return value.int32
 	}
 	
-	@objc var rawValueString : String {
+	var rawValueString : String {
 		switch self.type {
 		case .float:
 			var text = String(format: "%.4f", self.asFloat)
@@ -142,18 +144,23 @@ class XDSConstant : NSObject {
 		case .array:
 			return "array_" + String(format: "%02d", self.asInt)
 		case .msg:
-			return XDSExpr.msgMacro(getStringSafelyWithID(id: self.asInt)).text[0]
+			if let table = self.stringTable {
+				if let string = table.stringWithID(self.asInt) {
+					return XDSExpr.msgMacro(string).text()[0]
+				}
+			}
+			return XDSExpr.msgMacro(getStringSafelyWithID(id: self.asInt)).text()[0]
 		case .character:
 			return XGScriptInstruction(bytes: 0x03030080 + UInt32(self.asInt), next: 0).XDSVariable
 		case .codePointer:
-			return XDSExpr.locationIndex(self.asInt).text[0]
+			return XDSExpr.locationIndex(self.asInt).text()[0]
 		case .unknown(let i):
 			let mid = self.asInt == 0 ? "" : "\(self.asInt)"
 			return XGScriptClass.classes(i).name + "(\(mid))"
 		}
 	}
 	
-	@objc init(type: Int, rawValue: UInt32) {
+	init(type: Int, rawValue: UInt32) {
 		super.init()
 		
 		self.type = XDSConstantTypes.typeWithIndex(type)
@@ -169,7 +176,7 @@ class XDSConstant : NSObject {
 		return .loadImmediate(self)
 	}
 	
-	@objc class var null : XDSConstant {
+	class var null : XDSConstant {
 		return XDSConstant(type: 0, rawValue: 0)
 	}
 	

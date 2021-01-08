@@ -26,25 +26,26 @@ let kTrainerAIOffset				= 0x28 // 2bytes
 
 final class XGTrainer: NSObject, Codable {
 
-	@objc var index				= 0x0
+	var index				= 0x0
 	var deck					= XGDecks.DeckStory
 	
-	@objc var nameID			= 0x0
-	@objc var trainerStringID	= 0x0
-	@objc var trainerString		= ""
-	@objc var preBattleTextID	= 0x0
-	@objc var victoryTextID		= 0x0
-	@objc var defeatTextID		= 0x0
-	@objc var shadowMask		= 0x0
+	var nameID			= 0x0
+	var trainerStringID	= 0x0
+	var trainerString		= ""
+	var preBattleTextID	= 0x0
+	var victoryTextID		= 0x0
+	var defeatTextID		= 0x0
+	var shadowMask		= 0x0
 	var pokemon				= [XGDeckPokemon]()
 	var trainerClass		= XGTrainerClasses.michael1
 	var trainerModel		= XGTrainerModels.michael1WithoutSnagMachine
-	@objc var AI					= 0
-	@objc var cameraEffects		= 0 // some models have unique animations at the start of battle which require special camera movements
+	var AI					= 0
+	var cameraEffects		= 0 // some models have unique animations at the start of battle which require special camera movements
 	
-	@objc var locationString : String {
+	var locationString : String {
 		get {
 			var str = self.trainerString
+			guard str.length > 1 else { return "Unknown" }
 			let index1 = str.index(str.startIndex, offsetBy: 1)
 			let sub1 = str.substring(from: 0, to: 1)
 			
@@ -112,7 +113,7 @@ final class XGTrainer: NSObject, Codable {
 		}
 	}
 	
-	@objc var fullDescription : String {
+	var fullDescription : String {
 		get {
 			
 			let trainerLength = 30
@@ -178,19 +179,19 @@ final class XGTrainer: NSObject, Codable {
 		}
 	}
 	
-	@objc var startOffset : Int {
+	var startOffset : Int {
 		get {
 			return deck.DTNRDataOffset + (index * kSizeOfTrainerData)
 		}
 	}
 	
-	@objc var name : XGString {
+	var name : XGString {
 		get {
 			return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
 		}
 	}
 	
-	@objc var prizeMoney : Int {
+	var prizeMoney : Int {
 		get {
 			var maxLevel = 0
 			
@@ -204,13 +205,13 @@ final class XGTrainer: NSObject, Codable {
 		}
 	}
 	
-	@objc var hasShadow : Bool {
+	var hasShadow : Bool {
 		get {
 			return self.shadowMask > 0
 		}
 	}
 	
-	@objc var battleData : XGBattle? {
+	var battleData : XGBattle? {
 		return XGBattle.battleForTrainer(index: self.index, deck: self.deck)
 	}
 	
@@ -269,11 +270,9 @@ final class XGTrainer: NSObject, Codable {
 		self.AI = deck.get2BytesAtOffset(start + kTrainerAIOffset)
 		
 		self.cameraEffects = deck.get2BytesAtOffset(start + kTrainerCameraEffectOffset)
-
-		
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		let start = startOffset
 		let deck = self.deck.data

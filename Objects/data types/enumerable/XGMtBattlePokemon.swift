@@ -8,11 +8,35 @@
 
 import Foundation
 
-let kChikoritaOffset		= 0x1C5974
-let kCyndaquilOffset		= 0x1C59A0
-let kTotodileOffset			= 0x1C59CC
+let kChikoritaOffset: Int = {
+	switch region {
+	case .US: return 0x1C5974
+	case .JP: return 0x1C0E08
+	case .EU: return 0x1C7270
+	}
+}()
+let kCyndaquilOffset: Int = {
+	switch region {
+	case .US: return 0x1C59A0
+	case .JP: return 0x1C0E34
+	case .EU: return 0x1C729C
+	}
+}()
+let kTotodileOffset: Int = {
+	switch region {
+	case .US: return 0x1C59CC
+	case .JP: return 0x1C0E60
+	case .EU: return 0x1C72C8
+	}
+}()
 
-let kMtBattlePokemonLevelOffset = 0x1c878b - kDolToRAMOffsetDifference
+let kMtBattlePokemonLevelOffset: Int = {
+	switch region {
+	case .US: return 0x1C56E8
+	case .JP: return 0x1C0BF8
+	case .EU: return 0x1C6FE4
+	}
+}()
 
 let kMtBattlePokemonSpeciesOffset	=  0x02
 let kMtBattlePokemonMove1Offset		=  0x06
@@ -22,7 +46,7 @@ let kMtBattlePokemonMove4Offset		=  0x12
 
 final class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon, Codable {
 	
-	@objc var index			= 0
+	var index			= 0
 	
 	var species			= XGPokemon.pokemon(0)
 	var move1			= XGMoves.move(0)
@@ -30,16 +54,16 @@ final class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon, Codable {
 	var move3			= XGMoves.move(0)
 	var move4			= XGMoves.move(0)
 	
-	@objc var giftType		= "Mt. Battle Prize"
+	var giftType		= "Mt. Battle Prize"
 	
 	// unused
 	var shinyValue				= XGShinyValues.random
-	@objc var exp				= -1
-	@objc var level				= 0
+	var exp				= -1
+	var level				= 0
 	private(set) var gender	= XGGenders.random
 	private(set) var nature	= XGNatures.random
 	
-	@objc var startOffset : Int {
+	var startOffset : Int {
 		get {
 			switch index {
 				case 0 : return kChikoritaOffset
@@ -49,7 +73,7 @@ final class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon, Codable {
 		}
 	}
 	
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		let dol			= XGFiles.dol.data!
@@ -59,7 +83,7 @@ final class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon, Codable {
 		
 		let species = dol.get2BytesAtOffset(start + kMtBattlePokemonSpeciesOffset)
 		self.species = .pokemon(species)
-		self.level = dol.getByteAtOffset(kMtBattlePokemonLevelOffset)
+		self.level = dol.getByteAtOffset(kMtBattlePokemonLevelOffset + 3)
 		
 		var moveIndex = dol.get2BytesAtOffset(start + kMtBattlePokemonMove1Offset)
 		move1 = .move(moveIndex)
@@ -70,16 +94,15 @@ final class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon, Codable {
 		moveIndex = dol.get2BytesAtOffset(start + kMtBattlePokemonMove4Offset)
 		move4 = .move(moveIndex)
 		
-		
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		let dol = XGFiles.dol.data!
 		let start = startOffset
 		
 		dol.replace2BytesAtOffset(start + kMtBattlePokemonSpeciesOffset, withBytes: species.index)
-		dol.replaceByteAtOffset(kMtBattlePokemonLevelOffset, withByte: self.level)
+		dol.replaceByteAtOffset(kMtBattlePokemonLevelOffset + 3, withByte: level)
 		dol.replace2BytesAtOffset(start + kMtBattlePokemonMove1Offset, withBytes: move1.index)
 		dol.replace2BytesAtOffset(start + kMtBattlePokemonMove2Offset, withBytes: move2.index)
 		dol.replace2BytesAtOffset(start + kMtBattlePokemonMove3Offset, withBytes: move3.index)

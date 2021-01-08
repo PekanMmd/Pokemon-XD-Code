@@ -96,19 +96,19 @@ final class XGMove: NSObject, Codable {
 		}
 	}
 	
-	@objc var mdescription : XGString {
+	var mdescription : XGString {
 		get {
 			return XGFiles.dol.stringTable.stringSafelyWithID(descriptionID)
 		}
 	}
 	
-	@objc var isShadowMove	: Bool {
+	var isShadowMove	: Bool {
 		get {
 			return XGMoves.move(self.moveIndex).isShadowMove
 		}
 	}
 	
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		let rel   = XGFiles.common_rel.data!
@@ -154,7 +154,7 @@ final class XGMove: NSObject, Codable {
 		
 	}
 
-	@objc func save() {
+	func save() {
 
 		guard moveIndex > 0, moveIndex < kNumberOfMoves else {
 			return

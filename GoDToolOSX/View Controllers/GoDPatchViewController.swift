@@ -33,6 +33,7 @@ let xdpatches = [
 	"Gen VII critical hit ratios",
 	"All tutor moves are available from the start",
 	"Decapitalise text",
+	"Enable debug logs"
 ]
 let colopatches = [
 	"Apply Physical/Special move split (You still need to set the category for each move)",
@@ -40,7 +41,8 @@ let colopatches = [
 	"Delete Battle Mode Data. (highly recommended)",
 	"Allow female starter pokemon",
 	"Gen VII critical hit ratios",
-	"Decapitalise text"
+	"Decapitalise text",
+	"Enable debug logs"
 ]
 
 
@@ -59,6 +61,7 @@ class GoDPatchViewController: GoDTableViewController {
 		#selector(allowFemaleStarters),
 		#selector(gen7CriticalRatios),
 		#selector(decapitalise),
+		#selector(enableDebugLogs)
 		] :
 		[
 			#selector(removeLanguages),
@@ -85,6 +88,7 @@ class GoDPatchViewController: GoDTableViewController {
 			#selector(gen7CriticalRatios),
 			#selector(immediateTutorMoves),
 			#selector(decapitalise),
+			#selector(enableDebugLogs)
 	]
 
 	@objc func enableBetaStarters() {
@@ -204,6 +208,10 @@ class GoDPatchViewController: GoDTableViewController {
 	
 	@objc func deleteBattleMode() {
 		XGDolPatcher.deleteBattleModeData()
+	}
+
+	@objc func enableDebugLogs() {
+		XGDolPatcher.enableDebugLogs()
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {

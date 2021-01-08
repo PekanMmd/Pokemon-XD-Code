@@ -8,7 +8,13 @@
 
 import Foundation
 
-let kTogepiOffset						= 0x1C5760
+let kTogepiOffset: Int = {
+	switch region {
+	case .US: return 0x1C5760
+	case .JP: return 0x1C0C70
+	case .EU: return 0x1C705C
+	}
+}()
 
 let kTradeShadowPokemonSpeciesOffset	=  0x02
 let kTradeShadowDDPKIDOffset			=  0x06

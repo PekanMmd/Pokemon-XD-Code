@@ -29,14 +29,14 @@ let kItemFunctionInRAMPointerOffset2 = 0x20 // value is only filled in RAM at ru
 
 final class XGItem: NSObject, Codable {
 
-	@objc var startOffset : Int {
+	var startOffset : Int {
 		get{
 			let safeIndex = index < kNumberOfItems ? index : 0
 			return CommonIndexes.Items.startOffset + (safeIndex * kSizeOfItemData)
 		}
 	}
 	
-	@objc var index				= 0x0
+	var index				= 0x0
 	
 	var scriptIndex : Int {
 		// index used in scripts and pokemarts is different for key items
@@ -44,36 +44,36 @@ final class XGItem: NSObject, Codable {
 	}
 	
 	var bagSlot					= XGBagSlots.items
-	@objc var inBattleUseID		= 0x0
-	@objc var price				= 0x0
-	@objc var couponPrice		= 0x0
-	@objc var holdItemID		= 0x0
-	@objc var nameID			= 0x0
-	@objc var descriptionID		= 0x0
-	@objc var parameter			= 0x0
-	@objc var friendshipEffects	= [Int](repeating: 0x0, count: kNumberOfFriendshipEffects)
-	@objc var canBeHeld 		= false // more appropriate name would be "consumable"
+	var inBattleUseID		= 0x0
+	var price				= 0x0
+	var couponPrice		= 0x0
+	var holdItemID		= 0x0
+	var nameID			= 0x0
+	var descriptionID		= 0x0
+	var parameter			= 0x0
+	var friendshipEffects	= [Int](repeating: 0x0, count: kNumberOfFriendshipEffects)
+	var canBeHeld 		= false // more appropriate name would be "consumable"
 	
 	var function1 : UInt32 		= 0x0
 	var function2 : UInt32		= 0x0
 	
-	@objc var name : XGString {
+	var name : XGString {
 		get {
 			return XGItems.item(index).name
 		}
 	}
 	
-	@objc var descriptionString : XGString {
+	var descriptionString : XGString {
 		get {
 			return XGItems.item(index).descriptionString
 		}
 	}
 	
-	@objc convenience init(scriptIndex: Int) {
+	convenience init(scriptIndex: Int) {
 		self.init(index: scriptIndex >= kNumberOfItems ? scriptIndex - 150 : scriptIndex)
 	}
 	
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		self.index = index
@@ -98,7 +98,7 @@ final class XGItem: NSObject, Codable {
 		
 	}
 	
-	@objc func save() {
+	func save() {
 
 		guard index > 0, index < kNumberOfItems else {
 			return

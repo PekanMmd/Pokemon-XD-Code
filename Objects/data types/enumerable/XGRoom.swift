@@ -8,20 +8,46 @@
 
 import Foundation
 
-let kSizeOfRoom = game == .XD ? 0x40 : 0x4C
+let kSizeOfRoom: Int = {
+	if game == .XD {
+		return region == .JP ? 0x30 : 0x40
+	} else {
+		return region == .EU ? 0x5C : 0x4C
+	}
+}()
 
-let kRoomIDOffset = game == .XD ? 0x2 : 0xe
-let kRoomNameIDOffset = game == .XD ? 0x18 : 0x24
-let kRoomGroupIDOffset = game == .XD ? 0x2e : 0x6 // groupid of fsys archive for room
+let kRoomIDOffset: Int = {
+	if game == .XD {
+		return 0x2
+	} else {
+		return region == .EU ? 0xA : 0xE
+	}
+}()
+
+let kRoomNameIDOffset: Int = {
+	if game == .XD {
+		return region == .JP ? 0x1C : 0x18
+	} else {
+		return region == .EU ? 0x20 : 0x24
+	}
+}()
+
+let kRoomGroupIDOffset: Int = {
+	if game == .XD {
+		return region == .JP ? 0x30 : 0x6
+	} else {
+		return region == .EU ? 0x4A : 0x6
+	}
+}() // groupid of fsys archive for room
 
 final class XGRoom: NSObject, Codable {
 	
-	@objc var nameID = 0
-	@objc var location : String {
+	var nameID = 0
+	var location : String {
 		return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID).string
 	}
 	
-	@objc var name : String {
+	var name : String {
 		if XGFiles.json("Room IDs").exists {
 			let ids = XGFiles.json("Room IDs").json
 			return (ids as! [String : String])[roomID.hexString()] ?? (ISO.getFSYSNameWithGroupID(self.groupID) ?? "-")
@@ -30,7 +56,7 @@ final class XGRoom: NSObject, Codable {
 		}
 	}
 	
-	@objc var mapName : String {
+	var mapName : String {
 		return getStringSafelyWithID(id: nameID).string
 	}
 	
@@ -39,17 +65,17 @@ final class XGRoom: NSObject, Codable {
 		return XGMaps(rawValue: id) ?? .Unknown
 	}
 	
-	@objc var roomID = 0
-	@objc var groupID = 0
+	var roomID = 0
+	var groupID = 0
 	
-	@objc var index = 0
-	@objc var startOffset = 0
+	var index = 0
+	var startOffset = 0
 	
-	@objc var rawData : [Int] {
+	var rawData : [Int] {
 		return XGFiles.common_rel.data!.getByteStreamFromOffset(startOffset, length: kSizeOfRoom)
 	}
 
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		self.index = index
@@ -63,7 +89,7 @@ final class XGRoom: NSObject, Codable {
 		
 	}
 	
-	@objc class func roomWithID(_ id: Int) -> XGRoom? {
+	class func roomWithID(_ id: Int) -> XGRoom? {
 		for i in 0 ..< CommonIndexes.NumberOfRooms.value {
 			let room = XGRoom(index: i)
 			if room.roomID == id {
@@ -73,7 +99,7 @@ final class XGRoom: NSObject, Codable {
 		return nil
 	}
 	
-	@objc class func roomWithName(_ name: String) -> XGRoom? {
+	class func roomWithName(_ name: String) -> XGRoom? {
 		if game == .XD {
 			let ids = XGFiles.json("Room IDs").json as! [String : String]
 			for (id, rname) in ids {

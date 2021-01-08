@@ -21,7 +21,7 @@ class XGRandomiser : NSObject {
 			for panel in card.panels {
 				if let pokemon = panel.pokemon {
 					pokemon.species = XGPokemon.random()
-					pokemon.move = XGMoves.random()
+					pokemon.move = XGMoves.randomDamaging()
 					pokemon.save()
 				}
 			}

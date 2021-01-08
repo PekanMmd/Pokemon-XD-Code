@@ -13,7 +13,7 @@ let kVaporeonStartOffset: Int = {
 		switch region {
 		case .US: return 0x14F614
 		case .EU: return 0x150ED8
-		case .JP: printg("Starter offset not known for jp rom"); return -250
+		case .JP: return 0x14A93C
 		}
 	} else {
 		switch region {
@@ -28,7 +28,7 @@ let kJolteonStartOffset: Int = {
 		switch region {
 		case .US: return 0x14F73C
 		case .EU: return 0x151000
-		case .JP: printg("Starter offset not known for jp rom"); return -250
+		case .JP: return 0x14AA64
 		}
 	} else {
 		switch region {

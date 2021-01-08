@@ -30,6 +30,19 @@ class XGDolPatcher {
 		PBRTypeManager.moveTypeMatchupTableToDolOffset(startOffset + 8, increaseEntryNumberBy: additionalEntryCount)
 	}
 
+	static func gen7CritRatios() {
+		let critRatiosStartOffset: Int
+		switch region {
+		case .US: critRatiosStartOffset = 0x44AAF0
+		case .JP: critRatiosStartOffset = 0x4359F0
+		case .EU: critRatiosStartOffset = 0x475010
+		}
+
+		let dol = XGFiles.dol.data!
+		dol.replaceBytesFromOffset(critRatiosStartOffset, withByteStream: [24,8,2,1,1])
+		dol.save()
+	}
+
 	static func disableRentalPassChecksums() {
 		printg("Disabling rental pass checksums")
 		guard region == .EU else {

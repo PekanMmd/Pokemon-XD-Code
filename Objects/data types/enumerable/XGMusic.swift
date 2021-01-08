@@ -21,6 +21,7 @@ final class XGMusic: Codable {
 	}
 	
 	var fsysName : String? {
+		guard fsysID > 0 else { return nil }
 		return ISO.getFSYSNameWithGroupID(fsysID)
 	}
 	

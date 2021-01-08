@@ -20,12 +20,16 @@ func loadAllStrings() {
 		previousFree = []
 		
 		allStringTables = [XGFiles.common_rel.stringTable]
-		if game == .Colosseum || region == .US {
-			allStringTables += [XGStringTable.dol()]
+		allStringTables += [XGStringTable.dol()]
+
+		if game == .Colosseum {
+			allStringTables += [XGStringTable.common_rel2(), XGStringTable.common_rel3()]
 		}
-		if game == .XD && region == .US && !isDemo {
+
+		if game == .XD && !isDemo {
 			allStringTables += [XGStringTable.dol2()]
 		}
+
 		if game == .XD && !isDemo && region != .JP {
 			allStringTables += [XGFiles.tableres2.stringTable]
 		}
@@ -82,7 +86,7 @@ func getStringSafelyWithID(id: Int) -> XGString {
 		}
 	}
 	
-	return XGString(string: "-", file: nil, sid: nil)
+	return XGString(string: "-", file: nil, sid: id)
 }
 
 func getStringsContaining(substring: String) -> [XGString] {

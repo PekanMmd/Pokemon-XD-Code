@@ -1444,7 +1444,7 @@
 		B20C401E2188B9D2006D7CD9 /* XDScript.sublime-settings in Resources */ = {isa = PBXBuildFile; fileRef = B20C40182188B9D1006D7CD9 /* XDScript.sublime-settings */; };
 		B20C401F2188B9D2006D7CD9 /* XDScript.sublime-syntax in Resources */ = {isa = PBXBuildFile; fileRef = B20C40192188B9D1006D7CD9 /* XDScript.sublime-syntax */; };
 		B20C4029218AE3BD006D7CD9 /* Original Moves.json in Resources */ = {isa = PBXBuildFile; fileRef = B20C4025218AE3BC006D7CD9 /* Original Moves.json */; };
-		B20C402A218AE3BD006D7CD9 /* Colosseum Song IDs in Resources */ = {isa = PBXBuildFile; fileRef = B20C4026218AE3BD006D7CD9 /* Colosseum Song IDs */; };
+		B20C402A218AE3BD006D7CD9 /* Colosseum Song IDs.txt in Resources */ = {isa = PBXBuildFile; fileRef = B20C4026218AE3BD006D7CD9 /* Colosseum Song IDs.txt */; };
 		B20C402B218AE3BD006D7CD9 /* Move Effects.json in Resources */ = {isa = PBXBuildFile; fileRef = B20C4027218AE3BD006D7CD9 /* Move Effects.json */; };
 		B20C402C218AE3BD006D7CD9 /* Move Categories.json in Resources */ = {isa = PBXBuildFile; fileRef = B20C4028218AE3BD006D7CD9 /* Move Categories.json */; };
 		B20C402F218AEBE5006D7CD9 /* CMScriptCompiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20C402E218AEBE5006D7CD9 /* CMScriptCompiler.swift */; };
@@ -4332,7 +4332,7 @@
 		B20C40182188B9D1006D7CD9 /* XDScript.sublime-settings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "XDScript.sublime-settings"; sourceTree = "<group>"; };
 		B20C40192188B9D1006D7CD9 /* XDScript.sublime-syntax */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "XDScript.sublime-syntax"; sourceTree = "<group>"; };
 		B20C4025218AE3BC006D7CD9 /* Original Moves.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Original Moves.json"; sourceTree = "<group>"; };
-		B20C4026218AE3BD006D7CD9 /* Colosseum Song IDs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Colosseum Song IDs"; sourceTree = "<group>"; };
+		B20C4026218AE3BD006D7CD9 /* Colosseum Song IDs.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Colosseum Song IDs.txt"; sourceTree = "<group>"; };
 		B20C4027218AE3BD006D7CD9 /* Move Effects.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Move Effects.json"; sourceTree = "<group>"; };
 		B20C4028218AE3BD006D7CD9 /* Move Categories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Move Categories.json"; sourceTree = "<group>"; };
 		B20C402E218AEBE5006D7CD9 /* CMScriptCompiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMScriptCompiler.swift; sourceTree = "<group>"; };
@@ -7120,7 +7120,7 @@
 		B20C4022218AE241006D7CD9 /* Colosseum */ = {
 			isa = PBXGroup;
 			children = (
-				B20C4026218AE3BD006D7CD9 /* Colosseum Song IDs */,
+				B20C4026218AE3BD006D7CD9 /* Colosseum Song IDs.txt */,
 				B20C4028218AE3BD006D7CD9 /* Move Categories.json */,
 				B20C4027218AE3BD006D7CD9 /* Move Effects.json */,
 				B20C4025218AE3BC006D7CD9 /* Original Moves.json */,
@@ -9947,7 +9947,7 @@
 				B208E6C120C4D3D700D298BF /* face_305.png in Resources */,
 				B208E6F420C4D3D700D298BF /* face_356.png in Resources */,
 				B208E73720C4D40A00D298BF /* Pokemon Stats raw.json in Resources */,
-				B20C402A218AE3BD006D7CD9 /* Colosseum Song IDs in Resources */,
+				B20C402A218AE3BD006D7CD9 /* Colosseum Song IDs.txt in Resources */,
 				B208E4F520C4D3BD00D298BF /* body_260.png in Resources */,
 				B208E57620C4D3BD00D298BF /* body_389.png in Resources */,
 				B208E62720C4D3D700D298BF /* face_151.png in Resources */,

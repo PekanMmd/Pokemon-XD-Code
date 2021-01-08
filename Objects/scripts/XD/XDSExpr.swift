@@ -482,7 +482,7 @@ indirect enum XDSExpr {
 		return "$:\(xs.id):" + "\"\(updatedString)\""
 	}
 	
-	static func stringFromMacroImmediate(c: XDSConstant, t: XDSMacroTypes, ftbl: [FTBL] = []) -> String {
+	static func stringFromMacroImmediate(c: XDSConstant, t: XDSMacroTypes, ftbl: [FTBL] = [], stringTable: XGStringTable? = nil) -> String {
 		switch t {
 		case .bool:
 			return c.asInt != 0 ? "YES" : "NO"
@@ -555,6 +555,10 @@ indirect enum XDSExpr {
 			}
 			return macroWithName("BATTLEFIELD_" + c.asInt.string)
 		case .msg:
+			if let table = stringTable, let string = table.stringWithID(c.asInt) {
+				return macroForString(xs: string)
+			}
+
 			return macroForString(xs: getStringSafelyWithID(id: c.asInt))
 		case .talk:
 			if let type = XDSTalkTypes(rawValue: c.asInt) {
@@ -824,7 +828,7 @@ indirect enum XDSExpr {
 		return l.replacingOccurrences(of: "@location_", with: "").integerValue ?? -1
 	}
 	
-	var text : [String] {
+	func text(stringTable: XGStringTable? = nil) -> [String] {
 		switch self {
 			
 		// ignore these instructions
@@ -840,7 +844,7 @@ indirect enum XDSExpr {
 		case .loadImmediate(let c):
 			return [c.rawValueString]
 		case .macroImmediate(let c, let t):
-			return [XDSExpr.stringFromMacroImmediate(c: c, t: t)]
+			return [XDSExpr.stringFromMacroImmediate(c: c, t: t, stringTable: stringTable)]
 		case .loadVariable(let v):
 			return [v]
 		case .loadPointer(let s):
@@ -848,17 +852,17 @@ indirect enum XDSExpr {
 		
 		// operations
 		case .bracket(let e):
-			return ["(" + e.text[0] + ")"]
+			return ["(" + e.text(stringTable: stringTable)[0] + ")"]
 		case .unaryOperator(let o,let e):
-			return [XGScriptClass.operators[o].name + e.forcedBracketed.text[0]]
+			return [XGScriptClass.operators[o].name + e.forcedBracketed.text(stringTable: stringTable)[0]]
 		case .binaryOperator(let o, let e1, let e2):
-			return [e1.text[0] + " \(XGScriptClass.operators[o].name) " + e2.text[0]]
+			return [e1.text(stringTable: stringTable)[0] + " \(XGScriptClass.operators[o].name) " + e2.text(stringTable: stringTable)[0]]
 			
 		// assignments
 		case .setVariable(let v, let e):
-			return [v + " = " + e.text[0]]
+			return [v + " = " + e.text(stringTable: stringTable)[0]]
 		case .setVector(let v, let d, let e):
-			return [v + "." + d.string + " = " + e.text[0]]
+			return [v + "." + d.string + " = " + e.text(stringTable: stringTable)[0]]
 			
 		// function calls
 		case .functionDefinition(let name, let params):
@@ -872,38 +876,38 @@ indirect enum XDSExpr {
 			s += ")"
 			return [s]
 		case .call(let l, let params):
-			return XDSExpr.callVoid(l, params).text
+			return XDSExpr.callVoid(l, params).text(stringTable: stringTable)
 		case .callVoid(let l, let params):
 			var s = l + "("
 			
 			var firstParam = true
 			for param in params {
-				s += (firstParam ? "" : " ") + param.text[0]
+				s += (firstParam ? "" : " ") + param.text(stringTable: stringTable)[0]
 				firstParam = false
 			}
 			s += ")"
 			return [s]
 		case .callStandard(let c, let f, let es):
-			return XDSExpr.callStandardVoid(c, f, es).text
+			return XDSExpr.callStandardVoid(c, f, es).text(stringTable: stringTable)
 		case .callStandardVoid(let c, let f, let es):
 			// array get
 			if c == 7 && f == 16 {
 				
-				return [es[0].text[0] + "[" + es[1].text[0] + "]"]
+				return [es[0].text(stringTable: stringTable)[0] + "[" + es[1].text(stringTable: stringTable)[0] + "]"]
 				
 			// array set
 			} else if c == 7 && f == 17 {
 				
-				return [es[0].text[0] + "[" + es[1].text[0] + "] = " + es[2].text[0]]
+				return [es[0].text(stringTable: stringTable)[0] + "[" + es[1].text(stringTable: stringTable)[0] + "] = " + es[2].text(stringTable: stringTable)[0]]
 				
 			} else {
 				let xdsclass = XGScriptClass.classes(c)
 				let xdsfunction = xdsclass[f]
 				// don't need * in function calls as the type is explicitly included
-				var s = c > 0 ? es[0].text[0].replacingOccurrences(of: "*", with: "") + "." : ""
+				var s = c > 0 ? es[0].text(stringTable: stringTable)[0].replacingOccurrences(of: "*", with: "") + "." : ""
 				// local variables and function parameters need additional class info
 				if c > 0 {
-					if es[0].text[0].contains("arg") || (es[0].text[0].contains("var") && !es[0].text[0].contains("gvar")) || es[0].text[0].contains(kXDSLastResultVariable) {
+					if es[0].text(stringTable: stringTable)[0].contains("arg") || (es[0].text(stringTable: stringTable)[0].contains("var") && !es[0].text(stringTable: stringTable)[0].contains("gvar")) || es[0].text(stringTable: stringTable)[0].contains(kXDSLastResultVariable) {
 						s += xdsclass.name + "."
 					}
 				}
@@ -911,7 +915,7 @@ indirect enum XDSExpr {
 				let firstIndex = c > 0 ? 1 : 0
 				for i in firstIndex ..< es.count {
 					let e = es[i]
-					s += (i == firstIndex ? "" : " ") + e.text[0]
+					s += (i == firstIndex ? "" : " ") + e.text(stringTable: stringTable)[0]
 				}
 				s += ")"
 				return [s]
@@ -925,15 +929,15 @@ indirect enum XDSExpr {
 		case .locationIndex(let i):
 			return [XDSExpr.locationWithIndex(i)]
 		case .jumpTrue(let e, let l):
-			return ["goto " + l + " if " + e.text[0]]
+			return ["goto " + l + " if " + e.text(stringTable: stringTable)[0]]
 		case .jumpFalse(let e, let l):
-			return ["goto " + l + " ifnot " + e.text[0]]
+			return ["goto " + l + " ifnot " + e.text(stringTable: stringTable)[0]]
 		case .jump(let l):
 			return ["goto " + l]
 		case .XDSReturn:
 			return ["return"]
 		case .XDSReturnResult(let e):
-			return ["return " + e.text[0]]
+			return ["return " + e.text(stringTable: stringTable)[0]]
 		case .exit:
 			return ["exit"]
 		
@@ -947,7 +951,7 @@ indirect enum XDSExpr {
 			
 		// compound statements
 		case .function(let def, let es):
-			var s = [def.text[0] + " {\n\n"]
+			var s = [def.text(stringTable: stringTable)[0] + " {\n\n"]
 			for e in es {
 				
 				switch e {
@@ -959,7 +963,7 @@ indirect enum XDSExpr {
 					break
 				}
 				
-				let lines = e.text
+				let lines = e.text(stringTable: stringTable)
 				var newLine = lines.count == 1 ? "\n" : ""
 				if lines.count == 0 {
 					newLine = ""
@@ -985,15 +989,15 @@ indirect enum XDSExpr {
 				var conditionText = ""
 				switch condition {
 				case .jumpFalse(.loadImmediate(let c), _):
-					conditionText = XDSExpr.macroImmediate(c, .bool).forcedBracketed.text[0]
+					conditionText = XDSExpr.macroImmediate(c, .bool).forcedBracketed.text(stringTable: stringTable)[0]
 				case .jumpFalse(let c, _):
-					conditionText = c.forcedBracketed.text[0]
+					conditionText = c.forcedBracketed.text(stringTable: stringTable)[0]
 				case .jumpTrue(let c, _):
-					conditionText = "!" + c.forcedBracketed.text[0]
+					conditionText = "!" + c.forcedBracketed.text(stringTable: stringTable)[0]
 				default:
 					// TODO: get rid of this as it messes with instruction count
 					// should always add condition as a jump
-					conditionText = condition.text[0]
+					conditionText = condition.text(stringTable: stringTable)[0]
 				}
 				if i == 0 {
 					lines += [keyword + " " + conditionText + " {\n"]
@@ -1004,13 +1008,13 @@ indirect enum XDSExpr {
 				
 				for i in 0 ..< exprs.count {
 					let expr = exprs[i]
-					let subLines = expr.text
+					let subLines = expr.text(stringTable: stringTable)
 					var newLine = subLines.count == 1 ? "\n" : ""
-					if expr.text.count == 0 {
+					if expr.text(stringTable: stringTable).count == 0 {
 						newLine = ""
 					}
 					
-					for subLine in expr.text {
+					for subLine in expr.text(stringTable: stringTable) {
 						lines += ["    " + subLine + newLine]
 					}
 				}
@@ -1024,27 +1028,27 @@ indirect enum XDSExpr {
 			var conditionText = ""
 			switch condition {
 			case .jumpFalse(.loadImmediate(let c), _):
-				conditionText = XDSExpr.macroImmediate(c, .bool).forcedBracketed.text[0]
+				conditionText = XDSExpr.macroImmediate(c, .bool).forcedBracketed.text(stringTable: stringTable)[0]
 			case .jumpFalse(let c, _):
-				conditionText = c.bracketed.text[0]
+				conditionText = c.bracketed.text(stringTable: stringTable)[0]
 			case .jumpTrue(let c, _):
-				conditionText = "!" + c.forcedBracketed.text[0]
+				conditionText = "!" + c.forcedBracketed.text(stringTable: stringTable)[0]
 			default:
 				// TODO: get rid of this as it messes with instruction count
 				// should always add condition as a jump
-				conditionText = condition.text[0]
+				conditionText = condition.text(stringTable: stringTable)[0]
 			}
 			var lines = ["while " + conditionText + " {\n"]
 			
 			for i in 0 ..< exprs.count {
 				let expr = exprs[i]
-				let subLines = expr.text
+				let subLines = expr.text(stringTable: stringTable)
 				var newLine = subLines.count == 0 ? "\n" : ""
-				if expr.text.count == 0 {
+				if expr.text(stringTable: stringTable).count == 0 {
 					newLine = ""
 				}
 				
-				for subLine in expr.text {
+				for subLine in expr.text(stringTable: stringTable) {
 					lines += ["    " + subLine + newLine]
 				}
 			}
@@ -1166,70 +1170,70 @@ indirect enum XDSExpr {
 		}
 	}
 	
-	var macros : [XDSExpr] {
+	func macros(stringTable: XGStringTable? = nil) -> [XDSExpr] {
 		switch self {
 			
 		case .bracket(let e):
-			return e.macros
+			return e.macros(stringTable: stringTable)
 		case .unaryOperator(_, let e):
-			return e.macros
+			return e.macros(stringTable: stringTable)
 		case .binaryOperator(_, let e1, let e2):
-			return e1.macros + e2.macros
+			return e1.macros(stringTable: stringTable) + e2.macros(stringTable: stringTable)
 		case .macroImmediate(let c, let t):
 			let hex = t.printsAsHexadecimal
-			return [.macro(self.text[0], hex ? c.asInt.hexString() : c.asInt.string)]
+			return [.macro(self.text(stringTable: stringTable)[0], hex ? c.asInt.hexString() : c.asInt.string)]
 		case .XDSReturnResult(let e):
-			return e.macros
+			return e.macros(stringTable: stringTable)
 		case .callStandard(_, _, let es):
 			var macs = [XDSExpr]()
 			for e in es {
-				macs += e.macros
+				macs += e.macros(stringTable: stringTable)
 			}
 			return macs
 		case .callStandardVoid(_, _, let es):
 			var macs = [XDSExpr]()
 			for e in es {
-				macs += e.macros
+				macs += e.macros(stringTable: stringTable)
 			}
 			return macs
 		case .setVariable(_, let e):
-			return e.macros
+			return e.macros(stringTable: stringTable)
 		case .setVector(_, _, let e):
-			return e.macros
+			return e.macros(stringTable: stringTable)
 		case .call(_, let es):
 			var macs = [XDSExpr]()
 			for e in es {
-				macs += e.macros
+				macs += e.macros(stringTable: stringTable)
 			}
 			return macs
 		case .callVoid(_, let es):
 			var macs = [XDSExpr]()
 			for e in es {
-				macs += e.macros
+				macs += e.macros(stringTable: stringTable)
 			}
 			return macs
 		case .jumpTrue(let e, _):
-			return e.macros
+			return e.macros(stringTable: stringTable)
 		case .jumpFalse(let e, _):
-			return e.macros
+			return e.macros(stringTable: stringTable)
 		case .function(let def, let es):
-			var macs = def.macros
+			var macs = def.macros(stringTable: stringTable)
 			for e in es {
-				macs += e.macros
+				macs += e.macros(stringTable: stringTable)
 			}
 			return macs
 		case .whileLoop(let c, let es):
-			var macs = c.macros
+			var macs = c.macros(stringTable: stringTable)
 			for e in es {
-				macs += e.macros
+				macs += e.macros(stringTable: stringTable)
 			}
 			return macs
 		case .ifStatement(let parts):
 			var macs = [XDSExpr]()
 			for (c, es) in parts {
-				macs += c.macros
+				macs += c.macros(stringTable: stringTable)
 				for e in es {
-					macs += e.macros
+					macs += e.macros(stringTable: stringTable)
 				}
 				return macs
 			}

@@ -94,49 +94,66 @@ extension XGAssembly {
 
 	class func setShadowMovesUseHMFlag() {
 
-		if game == .XD && region == .US {
-			if !shadowMovesUseHMFlag {
-				for move in allMovesArray() {
-					let data = move.data
-					data.HMFlag = move.isShadowMove
-					data.save()
-				}
+		guard game == .XD else {
+			printg("This has not been implemented for Colosseum yet.")
+			return
+		}
 
-				let shadowPPstart = ASMfreeSpacePointer()
-				let shadowPPCodeStart = 0x146f28
-				let checkShadowMove = 0x13e514 // get hm flag but could use any function you like
-				let notShadow = 0x146f50
-				let (lis, addi) = XGASM.loadImmediateShifted32bit(register: .r0, value: shadowPPstart.unsigned)
-				let endBranch = 0x146f78
+		guard region == .US else {
+			printg("This has not yet been implemented for this region:", region.name)
+			return
+		}
 
-				// shadow move check function branches to hm flag
-				XGAssembly.replaceASM(startOffset: 0x13d048, newASM: [.bl(checkShadowMove)])
-
-				replaceASM(startOffset: shadowPPCodeStart - kDolToRAMOffsetDifference, newASM: [
-					.mr(.r29, .r3),
-					.bl(checkShadowMove),
-					.cmpwi(.r3, 1),
-					.bne(notShadow),
-					.mr(.r4, .r29),
-					lis,
-					.rlwinm(.r4, .r4, 2, 0 , 29), // multiply by 4
-					addi,
-					.add(.r3, .r4, .r0),
-					.b(endBranch)
-				])
-
-				let rel = XGFiles.common_rel.data!
-				var currentOffset = shadowPPstart
-				for i in 0 ..< CommonIndexes.NumberOfMoves.value {
-					rel.replaceWordAtOffset(currentOffset, withBytes: (i.unsigned << 16) + (5 << 8))
-					currentOffset += 4
-				}
-				rel.save()
+		if !shadowMovesUseHMFlag {
+			for move in allMovesArray() {
+				let data = move.data
+				data.HMFlag = move.isShadowMove
+				data.save()
 			}
+
+			let shadowPPstart = ASMfreeSpacePointer()
+			let shadowPPCodeStart = 0x146f28
+			let checkShadowMove = 0x13e514 // get hm flag but could use any function you like
+			let notShadow = 0x146f50
+			let (lis, addi) = XGASM.loadImmediateShifted32bit(register: .r0, value: shadowPPstart.unsigned)
+			let endBranch = 0x146f78
+
+			// shadow move check function branches to hm flag
+			XGAssembly.replaceASM(startOffset: 0x13d048, newASM: [.bl(checkShadowMove)])
+
+			replaceASM(startOffset: shadowPPCodeStart - kDolToRAMOffsetDifference, newASM: [
+				.mr(.r29, .r3),
+				.bl(checkShadowMove),
+				.cmpwi(.r3, 1),
+				.bne(notShadow),
+				.mr(.r4, .r29),
+				lis,
+				.rlwinm(.r4, .r4, 2, 0 , 29), // multiply by 4
+				addi,
+				.add(.r3, .r4, .r0),
+				.b(endBranch)
+			])
+
+			let rel = XGFiles.common_rel.data!
+			var currentOffset = shadowPPstart
+			for i in 0 ..< CommonIndexes.NumberOfMoves.value {
+				rel.replaceWordAtOffset(currentOffset, withBytes: (i.unsigned << 16) + (5 << 8))
+				currentOffset += 4
+			}
+			rel.save()
 		}
 	}
 
 	class func infiniteUseTMs() {
+		guard game == .XD else {
+			printg("This has not been implemented for Colosseum yet.")
+			return
+		}
+
+		guard region == .US else {
+			printg("This has not yet been implemented for this region:", region.name)
+			return
+		}
 		let dol = XGFiles.dol.data!
 		dol.replaceWordAtOffset(0x0a5158 - kDolToRAMOffsetDifference, withBytes: 0x38000000)
 		dol.save()
@@ -145,8 +162,18 @@ extension XGAssembly {
 	class func increaseNumberOfAbilities() {
 		// only run this once!
 
+		guard game == .XD else {
+			printg("This has not been implemented for Colosseum yet.")
+			return
+		}
+
+		guard region == .US else {
+			printg("This has not yet been implemented for this region:", region.name)
+			return
+		}
+
 		let dol = XGFiles.dol.data!
-		let abilityStart = 0x3FCC50
+		let abilityStart = kAbilitiesStartOffset
 
 		let newAbilityEntryMultiplier : UInt32 = 0x1c830008
 		let abilityMultiplierAddress = 0x1442b0 - kDolToRAMOffsetDifference
@@ -199,6 +226,16 @@ extension XGAssembly {
 
 	class func gen6CriticalHitMultiplier() {
 
+		guard game == .XD else {
+			printg("This has not been implemented for Colosseum yet.")
+			return
+		}
+
+		guard region == .US else {
+			printg("This has not yet been implemented for this region:", region.name)
+			return
+		}
+
 		let dol = XGFiles.dol.data!
 
 		let critMultsTo3 = [0x22a7a3,0x22a803,0x22a927,0x22a987,0x229d23,0x229d83,0x229e2f,0x229e8f,0x2155fb,0x21701b]
@@ -238,6 +275,16 @@ extension XGAssembly {
 
 	class func setDeoxysForme(to forme: XGDeoxysFormes) {
 
+		guard game == .XD else {
+			printg("This has not been implemented for Colosseum yet.")
+			return
+		}
+
+		guard region == .US else {
+			printg("This has not yet been implemented for this region:", region.name)
+			return
+		}
+
 		// outdated. could simply return the required form id from the
 		// function that calculates deoxys form based on game.
 		// this function is found in ram at offset 0x80140128
@@ -264,6 +311,16 @@ extension XGAssembly {
 
 	class func shareEXPWithParty() {
 
+		guard game == .XD else {
+			printg("This has not been implemented for Colosseum yet.")
+			return
+		}
+
+		guard region == .US else {
+			printg("This has not yet been implemented for this region:", region.name)
+			return
+		}
+
 		let dol = XGFiles.dol.data!
 
 		for offset in [0x212C48,0x212E04] {
@@ -277,6 +334,16 @@ extension XGAssembly {
 	}
 
 	class func determineShininessFrom0x1CForDeckPokemon() {
+
+		guard game == .XD else {
+			printg("This has not been implemented for Colosseum yet.")
+			return
+		}
+
+		guard region == .US else {
+			printg("This has not yet been implemented for this region:", region.name)
+			return
+		}
 
 		let dol = XGFiles.dol.data!
 
@@ -316,140 +383,152 @@ extension XGAssembly {
 	class func switchDPKMStructureToShinyStyle() {
 		// only do this once!
 
-		if game == .XD {
-			if region == .US { // remove once other region offsets are found
-				let decks = TrainerDecksArray
+		guard game == .XD else {
+			printg("This has not been implemented for Colosseum yet.")
+			return
+		}
 
-				for deck in decks {
-					for p in deck.allPokemon {
+		guard region == .US else {
+			printg("This has not yet been implemented for this region:", region.name)
+			return
+		}
 
-						p.priority   = p.shinyness.rawValue
-						p.shinyness = .never
-						p.save()
+		let decks = TrainerDecksArray
 
-					}
-				}
+		for deck in decks {
+			for p in deck.allPokemon {
 
-				if region == .US {
-					XGAssembly.replaceASM(startOffset: 0x28bac0 - kDolToRAMOffsetDifference, newASM: [0x8863001f, kNopInstruction])
-				}
+				p.priority   = p.shinyness.rawValue
+				p.shinyness = .never
+				p.save()
+
 			}
 		}
+
+		XGAssembly.replaceASM(startOffset: 0x28bac0 - kDolToRAMOffsetDifference, newASM: [0x8863001f, kNopInstruction])
 	}
 
 	class func switchNextPokemonAtEndOfTurn() {
 		// you no longer send in a new pokemon as soon as one faints. Now waits until end of turn. Still experimental!
 		// pretty much a copy and paste of all the code that would be called at the end of the move routine with just a few lines of code where the switching happens being omitted. Not a very elegant solution but effective.
 
-		if game == .XD && region == .US {
-			let switchlessStart = ASMfreeSpacePointer()
-			let switchless2Start = switchlessStart + 0x74
-			let switchlessBranch = 0x20e36c
-			let executeCodeRoutine = 0x1f3bec
-			let intimidateRoutine = 0x225c04
-			let unkownRoutine = 0x225ac8
-			let battleEntryEffects = 0x226474
-			let animSoundCallback = 0x2236a8
-			let switchlessCode : [UInt32] = [
-				0x9421fff0,
-				0x7c0802a6,
-				0x3c808022,
-				0x38600000,
-				0x90010014,
-				0x388475f8,
-				0x38a00000,
-				0x38c00000,
-				createBranchAndLinkFrom(offset: switchlessStart + 0x20, toOffset: executeCodeRoutine),
-
-				createBranchAndLinkFrom(offset: switchlessStart + 0x24, toOffset: switchless2Start),
-
-				0x3c608041,
-				0x386369f0,
-				createBranchAndLinkFrom(offset: switchlessStart + 0x30, toOffset: animSoundCallback),
-				0x38600001,
-				createBranchAndLinkFrom(offset: switchlessStart + 0x38, toOffset: intimidateRoutine),
-				createBranchAndLinkFrom(offset: switchlessStart + 0x3c, toOffset: unkownRoutine),
-				0x3c808022,
-				0x38600000,
-				0x38847588,
-				0x38a00000,
-				0x38c00000,
-				createBranchAndLinkFrom(offset: switchlessStart + 0x54, toOffset: executeCodeRoutine),
-				createBranchAndLinkFrom(offset: switchlessStart + 0x58, toOffset: battleEntryEffects),
-				0x80010014,
-				0x7c0803a6,
-				0x38210010,
-				0x38000002,
-				0x980dbb14,
-				0x4e800020
-			]
-
-			let moveRoutineGetPosition = 0x2236f8
-			let getPokemonPointer = 0x1efcac
-			let getCurrentMove = 0x148d64
-			let getAllyTrainerNumber = 0x1f7688
-			let getFoeTrainerNumber = 0x1f7640
-			let unknown = 0x1f87ac
-			let setAppropriateBattleResult = 0x1f3dac
-			let moveRoutineUpdatePosition = 0x2236dc
-			let switchless2Code : [UInt32] = [
-				0x9421ffe0,
-				0x7c0802a6,
-				0x90010024,
-				0xbf61000c,
-				createBranchAndLinkFrom(offset: switchless2Start + 0x10, toOffset: moveRoutineGetPosition),
-				0x80a30001,
-				0x38600011,
-				0x38800000,
-				0x3005ffff,
-				0x7c002910,
-				0x541f063e,
-				createBranchAndLinkFrom(offset: switchless2Start + 0x2c, toOffset: getPokemonPointer),
-				0x7c7e1b78,
-				createBranchAndLinkFrom(offset: switchless2Start + 0x34, toOffset: getCurrentMove),
-				0x7c601b78,
-				0x38600000,
-				0x7c1b0378,
-				createBranchAndLinkFrom(offset: switchless2Start + 0x44, toOffset: getAllyTrainerNumber),
-				0x547d063e,
-				0x38600000,
-				createBranchAndLinkFrom(offset: switchless2Start + 0x50, toOffset: getFoeTrainerNumber),
-				0x547c063e,
-				0x38600005,
-				0x38800000,
-				createBranchAndLinkFrom(offset: switchless2Start + 0x60, toOffset: getPokemonPointer),
-				0x7fa4eb78,
-				0x7f85e378,
-				createBranchAndLinkFrom(offset: switchless2Start + 0x6c, toOffset: unknown),
-				0x28030000,
-				0x40820010,
-				0x38600000,
-				0x38800002,
-				createBranchAndLinkFrom(offset: switchless2Start + 0x80, toOffset: setAppropriateBattleResult),
-				0x38600004,
-				0x38800000,
-				createBranchAndLinkFrom(offset: switchless2Start + 0x8c, toOffset: getPokemonPointer),
-				0x7fa4eb78,
-				0x7f85e378,
-				createBranchAndLinkFrom(offset: switchless2Start + 0x98, toOffset: unknown),
-				0x28030000,
-				0x40820010,
-				0x38600000,
-				0x38800003,
-				createBranchAndLinkFrom(offset: switchless2Start + 0xac, toOffset: setAppropriateBattleResult),
-				0x38600005,
-				createBranchAndLinkFrom(offset: switchless2Start + 0xb4, toOffset: moveRoutineUpdatePosition),
-				0xbb61000c,
-				0x80010024,
-				0x7c0803a6,
-				0x38210020,
-				powerPCBranchLinkReturn()
-
-			]
-
-			XGAssembly.replaceRELASM(startOffset: switchlessStart - kRELtoRAMOffsetDifference, newASM: switchlessCode + switchless2Code)
-			XGAssembly.replaceASM(startOffset: switchlessBranch - kDolToRAMOffsetDifference, newASM: [createBranchAndLinkFrom(offset: switchlessBranch, toOffset: switchlessStart)])
+		guard game == .XD else {
+			printg("This has not been implemented for Colosseum yet.")
+			return
 		}
+
+		guard region == .US else {
+			printg("This has not yet been implemented for this region:", region.name)
+			return
+		}
+
+		let switchlessStart = ASMfreeSpacePointer()
+		let switchless2Start = switchlessStart + 0x74
+		let switchlessBranch = 0x20e36c
+		let executeCodeRoutine = 0x1f3bec
+		let intimidateRoutine = 0x225c04
+		let unkownRoutine = 0x225ac8
+		let battleEntryEffects = 0x226474
+		let animSoundCallback = 0x2236a8
+		let switchlessCode : [UInt32] = [
+			0x9421fff0,
+			0x7c0802a6,
+			0x3c808022,
+			0x38600000,
+			0x90010014,
+			0x388475f8,
+			0x38a00000,
+			0x38c00000,
+			createBranchAndLinkFrom(offset: switchlessStart + 0x20, toOffset: executeCodeRoutine),
+
+			createBranchAndLinkFrom(offset: switchlessStart + 0x24, toOffset: switchless2Start),
+
+			0x3c608041,
+			0x386369f0,
+			createBranchAndLinkFrom(offset: switchlessStart + 0x30, toOffset: animSoundCallback),
+			0x38600001,
+			createBranchAndLinkFrom(offset: switchlessStart + 0x38, toOffset: intimidateRoutine),
+			createBranchAndLinkFrom(offset: switchlessStart + 0x3c, toOffset: unkownRoutine),
+			0x3c808022,
+			0x38600000,
+			0x38847588,
+			0x38a00000,
+			0x38c00000,
+			createBranchAndLinkFrom(offset: switchlessStart + 0x54, toOffset: executeCodeRoutine),
+			createBranchAndLinkFrom(offset: switchlessStart + 0x58, toOffset: battleEntryEffects),
+			0x80010014,
+			0x7c0803a6,
+			0x38210010,
+			0x38000002,
+			0x980dbb14,
+			0x4e800020
+		]
+
+		let moveRoutineGetPosition = 0x2236f8
+		let getPokemonPointer = 0x1efcac
+		let getCurrentMove = 0x148d64
+		let getAllyTrainerNumber = 0x1f7688
+		let getFoeTrainerNumber = 0x1f7640
+		let unknown = 0x1f87ac
+		let setAppropriateBattleResult = 0x1f3dac
+		let moveRoutineUpdatePosition = 0x2236dc
+		let switchless2Code : [UInt32] = [
+			0x9421ffe0,
+			0x7c0802a6,
+			0x90010024,
+			0xbf61000c,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x10, toOffset: moveRoutineGetPosition),
+			0x80a30001,
+			0x38600011,
+			0x38800000,
+			0x3005ffff,
+			0x7c002910,
+			0x541f063e,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x2c, toOffset: getPokemonPointer),
+			0x7c7e1b78,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x34, toOffset: getCurrentMove),
+			0x7c601b78,
+			0x38600000,
+			0x7c1b0378,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x44, toOffset: getAllyTrainerNumber),
+			0x547d063e,
+			0x38600000,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x50, toOffset: getFoeTrainerNumber),
+			0x547c063e,
+			0x38600005,
+			0x38800000,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x60, toOffset: getPokemonPointer),
+			0x7fa4eb78,
+			0x7f85e378,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x6c, toOffset: unknown),
+			0x28030000,
+			0x40820010,
+			0x38600000,
+			0x38800002,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x80, toOffset: setAppropriateBattleResult),
+			0x38600004,
+			0x38800000,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x8c, toOffset: getPokemonPointer),
+			0x7fa4eb78,
+			0x7f85e378,
+			createBranchAndLinkFrom(offset: switchless2Start + 0x98, toOffset: unknown),
+			0x28030000,
+			0x40820010,
+			0x38600000,
+			0x38800003,
+			createBranchAndLinkFrom(offset: switchless2Start + 0xac, toOffset: setAppropriateBattleResult),
+			0x38600005,
+			createBranchAndLinkFrom(offset: switchless2Start + 0xb4, toOffset: moveRoutineUpdatePosition),
+			0xbb61000c,
+			0x80010024,
+			0x7c0803a6,
+			0x38210020,
+			powerPCBranchLinkReturn()
+
+		]
+
+		XGAssembly.replaceRELASM(startOffset: switchlessStart - kRELtoRAMOffsetDifference, newASM: switchlessCode + switchless2Code)
+		XGAssembly.replaceASM(startOffset: switchlessBranch - kDolToRAMOffsetDifference, newASM: [createBranchAndLinkFrom(offset: switchlessBranch, toOffset: switchlessStart)])
 
 	}
 
@@ -775,28 +854,6 @@ extension XGAssembly {
 		return array
 	}
 }
-
-
-
-
-
-
-// colosseum shiny stuff
-//let dol = XGFiles.dol.data!
-//
-////shiny
-//dol.replaceWordAtOffset(0x8012442c - kDolToRAMOffsetDifference, withBytes: 0x3B60FFFF)
-//
-//// female starter espeon
-//dol.replaceWordAtOffset(0x80130b1c - kDolToRAMOffsetDifference, withBytes: 0x38800001)
-//
-//// shiny glitch
-//dol.replaceWordAtOffset(0x801248a8 - kDolToRAMOffsetDifference, withBytes: 0x3B800000)
-//
-// shiny chance
-////dol.replaceWordAtOffset(0x80124844 - kDolToRAMOffsetDifference, withBytes: 0x38600008)
-//
-//dol.save()
 
 
 

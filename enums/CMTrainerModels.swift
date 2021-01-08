@@ -9,7 +9,13 @@ import Foundation
 
 let kNumberOfTrainerModels = 0x4b
 
-let kFirstTrainerPKXIdentifierOffset = region == .JP ? 0x359FA8 : 0x36d840 // in start.dol
+let kFirstTrainerPKXIdentifierOffset: Int = {
+	switch region {
+	case .JP: return 0x359FA8
+	case .US: return 0x36D840
+	case .EU: return 0x3BA938
+	}
+}() // in start.dol
 
 enum XGTrainerModels : Int, Codable, CaseIterable {
 	

@@ -8,10 +8,34 @@
 
 import Foundation
 
-let kElekidOffset			= 0x1C57A4
-let kMedititeOffset			= 0x1C5888
-let kShuckleOffset			= 0x1C58D8
-let kLarvitarOffset			= 0x1C5928
+let kElekidOffset: Int = {
+	switch region {
+	case .US: return 0x1C57A4
+	case .JP: return 0x1C0CB4
+	case .EU: return 0x1C70A0
+	}
+}()
+let kMedititeOffset: Int = {
+	switch region {
+	case .US: return 0x1C5888
+	case .JP: return 0x1C0D1C
+	case .EU: return 0x1C7184
+	}
+}()
+let kShuckleOffset: Int = {
+	switch region {
+	case .US: return 0x1C58D8
+	case .JP: return 0x1C0D6C
+	case .EU: return 0x1C71D4
+	}
+}()
+let kLarvitarOffset: Int = {
+	switch region {
+	case .US: return 0x1C5928
+	case .JP: return 0x1C0DBC
+	case .EU: return 0x1C7224
+	}
+}()
 
 let kTradePokemonSpeciesOffset		=  0x02
 let kTradePokemonLevelOffset		=  0x0B

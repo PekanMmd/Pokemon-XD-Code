@@ -8,7 +8,14 @@
 
 import Foundation
 
-let kEeveeStartOffset			= game == .XD ? 0x1CBC50 : 0x0
+let kEeveeStartOffset: Int = {
+	guard game == .XD else { return 0 }
+	switch region {
+	case .US: return 0x1CBC50
+	case .JP: return 0x1C6AF4
+	case .EU: return 0x1CD724
+	}
+}()
 
 let kStarterSpeciesOffset		= 0x02
 let kStarterLevelOffset			= 0x0B

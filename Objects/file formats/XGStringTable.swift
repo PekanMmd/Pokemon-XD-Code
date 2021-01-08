@@ -84,27 +84,53 @@ class XGStringTable: NSObject {
 	
 	class func common_rel() -> XGStringTable {
 		if game == .XD {
-			return XGStringTable(file: .common_rel, startOffset: CommonIndexes.USStringTable.startOffset + 0x68, fileSize: 0x0DC70)
+			let size: Int
+			switch region {
+			case .US, .EU: size = 0xDC70
+			case .JP: size = 0xAC8C
+			}
+			return XGStringTable(file: .common_rel, startOffset: CommonIndexes.stringTable1.startOffset + 0x68, fileSize: size)
 		} else {
 			if region == .JP {
 				return XGStringTable(file: .common_rel, startOffset: 0x4580, fileSize: 0x9cf8)
+			} else if region == .US {
+				return XGStringTable(file: .common_rel, startOffset: 0x59890, fileSize: 0xC770)
 			} else {
-				return XGStringTable(file: .common_rel, startOffset: 0x59890, fileSize: 0x1ec50)
+				return XGStringTable(file: .common_rel, startOffset: 0x5A448, fileSize: 0xC544)
 			}
 		}
 		
 	}
-	
+
 	class func common_rel2() -> XGStringTable { // second string table in common_rel in colosseum
 		if game == .XD {
 			// same as common_rel1
-			return XGStringTable(file: .common_rel, startOffset: CommonIndexes.USStringTable.startOffset + 0x68, fileSize: 0x0DC70)
+			return common_rel()
 		} else {
 			if region == .JP {
 				// same as common_rel1. couldn't find it in JP version
 				return XGStringTable(file: .common_rel, startOffset: 0x4580, fileSize: 0x9cf8)
+			} else if region == .US {
+				return XGStringTable(file: .common_rel, startOffset: 0x66000, fileSize: 0x124E0)
 			} else {
+				return XGStringTable(file: .common_rel, startOffset: 0x995EC, fileSize: 0x12480)
+			}
+		}
+
+	}
+	
+	class func common_rel3() -> XGStringTable { // third string table in common_rel in colosseum
+		if game == .XD {
+			// same as common_rel1
+			return common_rel()
+		} else {
+			if region == .JP {
+				// same as common_rel1. couldn't find it in JP version
+				return XGStringTable(file: .common_rel, startOffset: 0x4580, fileSize: 0x9cf8)
+			} else if region == .US {
 				return XGStringTable(file: .common_rel, startOffset: 0x784e0, fileSize: 0x13068)
+			} else {
+				return XGStringTable(file: .common_rel, startOffset: 0xF7FD4, fileSize: 0x13110)
 			}
 		}
 		
@@ -123,7 +149,20 @@ class XGStringTable: NSObject {
 	class func dol() -> XGStringTable {
 		
 		if game == .XD {
-			return  XGStringTable(file: .dol, startOffset: 0x374FC0, fileSize: 0x178BC)
+			let start: Int
+			let size: Int
+			switch region {
+			case .US:
+				start = 0x374FC0
+				size = 0x178BC
+			case .JP:
+				start = 0x38B0B0
+				size = 0x11D10
+			case .EU:
+				start = 0x372AD8
+				size = 0x17938
+			}
+			return  XGStringTable(file: .dol, startOffset: start, fileSize: size)
 		} else {
 			if region == .JP {
 				return XGStringTable(file: .dol, startOffset: 0x2bece0, fileSize: 0xd850)
@@ -138,7 +177,22 @@ class XGStringTable: NSObject {
 	}
 	
 	class func dol2() -> XGStringTable {
-		return  XGStringTable(file: .dol, startOffset: 0x38c87c, fileSize: 0x364)
+		guard game == .XD else { return dol() }
+
+		let start: Int
+		let size: Int
+		switch region {
+		case .US:
+			start = 0x38c87c
+			size = 0x364
+		case .JP:
+			start = 0x39CDC0
+			size = 0x2A0
+		case .EU:
+			start = 0x3EA5A4
+			size = 0x364
+		}
+		return  XGStringTable(file: .dol, startOffset: start, fileSize: size)
 	}
 	
 	
