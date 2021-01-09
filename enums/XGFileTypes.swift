@@ -35,7 +35,8 @@ enum XGFileTypes : Int, Codable {
 	
 	// all arbitrary values
 	case fsys = 0xf0 // don't know if it has it's own identifier
-	
+
+	case thp  = 0xf2
 	case json = 0xf3
 	case txt  = 0xf4
 	case lzss = 0xf5
@@ -92,6 +93,7 @@ enum XGFileTypes : Int, Codable {
 		case .lzss: return ".lzss"
 		case .txt : return ".txt"
 		case .json: return ".json"
+		case .thp : return ".thp"
 		case .unknown: return ".bin"
 		}
 	}

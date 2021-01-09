@@ -50,13 +50,17 @@ class XGISO: NSObject {
 	}
 
 	func loadFST() {
-		printg("Reading FST from ISO...")
+		if settings.verbose {
+			printg("Reading FST from ISO...")
+		}
 
 		if !XGFiles.iso.exists {
 			printg("ISO file doesn't exist. Please place your \(game == .XD ? "Pokemon XD" : "Pokemon Colosseum") file in the folder \(XGFolders.ISO.path) and name it \(XGFiles.iso.fileName)")
 		}
 
-		printg("ISO size: \(self.data.length.hexString())")
+		if settings.verbose {
+			printg("ISO size: \(self.data.length.hexString())")
+		}
 
 		let DOLStart  = self.data.get4BytesAtOffset(kDOLStartOffsetLocation)
 		let TOCStart  = self.data.get4BytesAtOffset(kTOCStartOffsetLocation)
@@ -81,7 +85,9 @@ class XGISO: NSObject {
 		}
 		fileSizes["Start.dol"] = size
 		allFileNames = ["Start.dol", "Game.toc"]
-		printg("DOL size: \(size.hexString())")
+		if settings.verbose {
+			printg("DOL size: \(size.hexString())")
+		}
 
 		var i = 0x0
 
@@ -112,7 +118,9 @@ class XGISO: NSObject {
 			return locationForFile(s1)! < locationForFile(s2)!
 		}
 
-		printg("FST was read.")
+		if settings.verbose {
+			printg("FST was read.")
+		}
 	}
 
 	func importAllFiles() {

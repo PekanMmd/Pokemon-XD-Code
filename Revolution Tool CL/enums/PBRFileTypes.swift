@@ -35,7 +35,8 @@ enum XGFileTypes : Int {
 	
 	// all arbitrary values
 	case fsys = 0xf0
-	
+
+	case thp  = 0xf3
 	case json = 0xf4
 	case txt  = 0xf5
 	case lzss = 0xf6
@@ -108,6 +109,7 @@ enum XGFileTypes : Int {
 		case .atx : return ".atx"
 		case .pkx : return ".pkx"
 		case .dat : return ".dat"
+		case .thp : return ".thp"
 		case .unknown: return ".bin"
 		}
 	}

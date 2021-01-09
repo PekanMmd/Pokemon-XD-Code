@@ -122,6 +122,12 @@ class XGUtility {
 							}
 						}
 
+						if file.fileType == .thp, let thpData = file.data {
+							let thp = XGTHP(thpData: thpData)
+							thp.headerData.save()
+							thp.bodyData.save()
+						}
+
 						if file.fileType == .gtx || file.fileType == .atx {
 							for imageFile in fileToImport.folder.files where XGFileTypes.imageFormats.contains(imageFile.fileType) {
 								if imageFile.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {

@@ -322,6 +322,19 @@ final class XGFsys : NSObject {
 		}
 		return nil
 	}
+
+	func dataForFileWithFiletype(type: XGFileTypes) -> XGMutableData? {
+		if let index = indexForFileType(type: type) {
+			if index < 0 || index > self.numberOfEntries {
+				if settings.verbose {
+					printg(self.fileName + " - file type: " + type.fileExtension + " doesn't exists.")
+				}
+				return nil
+			}
+			return dataForFileWithIndex(index: index)
+		}
+		return nil
+	}
 	
 	func decompressedDataForFilesWithFiletype(type: XGFileTypes) -> [XGMutableData] {
 		var filesData = [XGMutableData]()
@@ -1016,18 +1029,13 @@ final class XGFsys : NSObject {
 				if data[i].file.fileType == .scd && game != .Colosseum {
 					data[i].file.writeScriptData()
 				}
-			}
 
-			if data.filter({ $0.file.fileType == .thh }).count != 0 {
-				guard let thpHeader = data.first(where: { $0.file.fileType == .thh }) else { return }
-				guard let thpData = data.first(where: { $0.file.fileType == .thd }) else { return }
+				if data[i].file.fileType == .thh, let thpData = data.first(where: { $0.file.fileType == .thd && $0.file.fileName.removeFileExtensions() == data[i].file.fileName.removeFileExtensions() }) {
+					let thpHeader = data[i]
 
-				let thpFile = XGFiles.nameAndFolder(thpHeader.file.fileName.removeFileExtensions() + ".thp", folder)
-				let data = XGMutableData(byteStream: thpHeader.byteStream, file: thpFile)
-				data.replaceWordAtOffset(0x28, withBytes: data.getWordAtOffset(0x28) + UInt32(thpHeader.length))
-				data.replaceWordAtOffset(0x2C, withBytes: data.getWordAtOffset(0x2C) + UInt32(thpHeader.length))
-				data.appendBytes(thpData.rawBytes)
-				data.save()
+					let thp = XGTHP(header: thpHeader, body: thpData)
+					thp.thpData.save()
+				}
 			}
 		}
 	}
