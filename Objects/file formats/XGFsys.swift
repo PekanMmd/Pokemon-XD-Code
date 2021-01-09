@@ -1017,6 +1017,18 @@ final class XGFsys : NSObject {
 					data[i].file.writeScriptData()
 				}
 			}
+
+			if data.filter({ $0.file.fileType == .thh }).count != 0 {
+				guard let thpHeader = data.first(where: { $0.file.fileType == .thh }) else { return }
+				guard let thpData = data.first(where: { $0.file.fileType == .thd }) else { return }
+
+				let thpFile = XGFiles.nameAndFolder(thpHeader.file.fileName + ".thp", folder)
+				let data = XGMutableData(byteStream: thpHeader.byteStream, file: thpFile)
+				data.replaceWordAtOffset(0x28, withBytes: data.getWordAtOffset(0x28) + UInt32(thpHeader.length))
+				data.replaceWordAtOffset(0x2C, withBytes: data.getWordAtOffset(0x2C) + UInt32(thpHeader.length))
+				data.appendBytes(thpData.rawBytes)
+				data.save()
+			}
 		}
 	}
 	
