@@ -24,10 +24,10 @@ enum XGFileTypes : Int {
 
 	case fnt  = 0x16 // sometimes .fnt, sometimes .f3d (3d font)
 	case msg  = 0x18 // string table
-	case mnr = 0x1a // menu textures
-	case esq  = 0x20 // effect sequence. gfx format
-
-	case gfl = 0x24 // lighting effects?
+	case mnr  = 0x1a // menu textures
+	case thh  = 0x20 // thp header (.esq in pbr)
+	case thd  = 0x22
+	case gfl  = 0x24 // lighting effects?
 
 	case dckp = 0x28 // pokemon deck
 	case dckt = 0x2a // trainer deck
@@ -89,7 +89,8 @@ enum XGFileTypes : Int {
 		case .gpt1: return ".gpt1"
 		case .cam : return ".cam"
 		case .gpd : return ".gpd"
-		case .esq : return ".esq"
+		case .thh : return ".esq"
+		case .thd : return ".thd"
 		case .fsys: return ".fsys"
 		case .iso : return ".iso"
 		case .xds : return ".xds"
