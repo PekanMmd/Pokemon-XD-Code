@@ -34,6 +34,10 @@ class XGUtility {
 			if !isDemo && region != .JP {
 				ISO.importFiles([.fsys("common_dvdeth")])
 			}
+			let dukingTradeFsysFile = XGFiles.fsys("M2_guild_1F_2")
+			if dukingTradeFsysFile.exists {
+				ISO.importFiles([dukingTradeFsysFile])
+			}
 		}
 	}
 	

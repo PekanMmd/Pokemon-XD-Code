@@ -12,11 +12,16 @@ infix operator ==
 func == (m1: XGMoves, m2: XGMoves) -> Bool {
 	return m1.index == m2.index
 }
+func == (p1: XGPokemon, p2: XGPokemon) -> Bool {
+	return p1.index == p2.index
+}
 
 infix operator <
 func < (p1: XGPokemon, p2: XGPokemon) -> Bool {
 	return p1.index < p2.index
 }
+
+
 
 enum XGPokemon: CustomStringConvertible {
 	

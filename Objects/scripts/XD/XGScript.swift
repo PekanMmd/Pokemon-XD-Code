@@ -1011,7 +1011,7 @@ class XGScript: NSObject {
 		var instructionIndex = 0
 		for expr in stack.asArray {
 			
-			macros += expr.macros(stringTable: stringTable)
+			macros += expr.macros(ftbl: ftbl, stringTable: stringTable)
 			
 			if let fname = functionLocations[instructionIndex] {
 				let paramCount = getParameterCountForFunction(named: fname)
@@ -2300,12 +2300,12 @@ class XGScript: NSObject {
 		for macro in uniqueMacros.sorted(by: { (m1, m2) -> Bool in
 			return m1.macroName < m2.macroName
 		}) {
-			script += macro.text(stringTable: stringTable)[0] + "\n"
+			script += macro.text(ftbl: ftbl, stringTable: stringTable)[0] + "\n"
 		}
 		for macro in uniqueCharacterMacros.sorted(by: { (m1, m2) -> Bool in
 			return m1.macroName < m2.macroName
 		}) {
-			script += macro.text(stringTable: stringTable)[0] + "    \n"
+			script += macro.text(ftbl: ftbl, stringTable: stringTable)[0] + "    \n"
 		}
 		
 		script += "\n"
@@ -2337,7 +2337,7 @@ class XGScript: NSObject {
 			case .function:
 				newLines = 2
 			default:
-				newLines = expr.text(stringTable: stringTable)[0].length == 0 ? 0 : 1
+				newLines = expr.text(ftbl: ftbl, stringTable: stringTable)[0].length == 0 ? 0 : 1
 			}
 			
 			for _ in 0 ..< newLines {
@@ -2345,7 +2345,7 @@ class XGScript: NSObject {
 			}
 			
 			// print expression
-			var text = expr.text(stringTable: stringTable)
+			var text = expr.text(ftbl: ftbl, stringTable: stringTable)
 			
 			// override certain constants
 			var strgCount = 0

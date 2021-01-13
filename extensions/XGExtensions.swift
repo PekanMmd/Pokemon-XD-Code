@@ -553,7 +553,7 @@ extension String {
 		return self.hexStringToInt()
 	}
 	
-	var integerValue : Int? {
+	var integerValue: Int? {
 		if self.length == 0 {
 			return nil
 		}
@@ -564,7 +564,7 @@ extension String {
 		}
 	}
 	
-	var simplified : String {
+	var simplified: String {
 		get {
 			var result = ""
 			let chars = self.stack
@@ -573,7 +573,7 @@ extension String {
 				if char == "é" {
 					result += "e"
 				} else {
-					if "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_".contains(char) {
+					if !"!@£$%^&*()+-=|[]{}\\/?><,.;:'\"`~# 「」。".contains(char) {
 						result += char
 					}
 				}
@@ -582,7 +582,7 @@ extension String {
 		}
 	}
 	
-	var underscoreSimplified : String {
+	var underscoreSimplified: String {
 		get {
 			let s = self.replacingOccurrences(of: " ", with: "_")
 			return s.simplified

@@ -64,7 +64,7 @@ final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
 	override init() {
 		super.init()
 		
-		let dol			= XGFiles.dol.data!
+		let dol = XGFiles.dol.data!
 		
 		let start = startOffset
 		
@@ -95,14 +95,14 @@ final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
 			let start = startOffset
 
 			dol.replace2BytesAtOffset(start + kTradeShadowDDPKIDOffset, withBytes: shadowID)
-			dol.replaceByteAtOffset(  start + kTradeShadowPokemonLevelOffset, withByte: level)
+			dol.replaceByteAtOffset(start + kTradeShadowPokemonLevelOffset, withByte: level)
 			dol.replace2BytesAtOffset(start + kTradeShadowPokemonSpeciesOffset, withBytes: species.index)
 			dol.replace2BytesAtOffset(start + kTradeShadowPokemonMove1Offset, withBytes: move1.index)
 			dol.replace2BytesAtOffset(start + kTradeShadowPokemonMove2Offset, withBytes: move2.index)
 			dol.replace2BytesAtOffset(start + kTradeShadowPokemonMove3Offset, withBytes: move3.index)
 			dol.replace2BytesAtOffset(start + kTradeShadowPokemonMove4Offset, withBytes: move4.index)
 
-			if region == .US {
+			if region != .JP {
 				dol.replace2BytesAtOffset(tradeShadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference, withBytes: shinyValue.rawValue)
 			}
 

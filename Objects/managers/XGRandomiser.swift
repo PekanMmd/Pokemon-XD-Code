@@ -30,83 +30,95 @@ class XGRandomiser : NSObject {
 	}
 	
 	class func randomisePokemon() {
-			printg("randomising pokemon species...")
-			for deck in MainDecksArray {
-				for pokemon in deck.allActivePokemon {
-					
-					if pokemon.species.index == 0 {
-						continue
-					}
-					
-					pokemon.species = XGPokemon.random()
-					pokemon.shadowCatchRate = pokemon.species.catchRate
-					pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
-					pokemon.happiness = 128
-					pokemon.save()
-					
+		printg("randomising pokemon species...")
+		for deck in MainDecksArray {
+			for pokemon in deck.allActivePokemon {
+
+				if pokemon.species.index == 0 {
+					continue
 				}
-			}
-			
-			// change duplicate shadow pokemon
-			for i in 1 ..< XGDecks.DeckDarkPokemon.DDPKEntries {
-				let poke = XGDeckPokemon.ddpk(i)
-				if poke.DPKMIndex > 0 {
-					
-					var duplicate = false
-					
-					repeat {
-						duplicate = false
-						
-						for j in 1 ..< i {
-							let check = XGDeckPokemon.ddpk(j)
-							if check.data.species.index == poke.data.species.index {
-								duplicate = true
-								
-								let pokemon = poke.data
-								pokemon.species = XGPokemon.random()
-								pokemon.shadowCatchRate = pokemon.species.catchRate
-								pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
-								pokemon.happiness = 128
-								pokemon.save()
-							}
-						}
-						
-					} while duplicate
-					
-				}
-			}
-			
-			for gift in XGGiftPokemonManager.allGiftPokemon() {
-				
-				var pokemon = gift
+
 				pokemon.species = XGPokemon.random()
-				let moves = pokemon.species.movesForLevel(pokemon.level)
-				pokemon.move1 = moves[0]
-				pokemon.move2 = moves[1]
-				pokemon.move3 = moves[2]
-				pokemon.move4 = moves[3]
-				
+				pokemon.shadowCatchRate = pokemon.species.catchRate
+				pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
+				pokemon.happiness = 128
 				pokemon.save()
-				
+
 			}
-			
-			for p in 0 ... 2 {
-				let spot = XGPokeSpots(rawValue: p) ?? .rock
-				for i in 0 ..< spot.numberOfEntries {
-					let pokemon = XGPokeSpotPokemon(index: i, pokespot: spot)
-					pokemon.pokemon = XGPokemon.random()
-					pokemon.save()
+		}
+
+		// change duplicate shadow pokemon
+		for i in 1 ..< XGDecks.DeckDarkPokemon.DDPKEntries {
+			let poke = XGDeckPokemon.ddpk(i)
+			if poke.DPKMIndex > 0 {
+
+				var duplicate = false
+
+				repeat {
+					duplicate = false
+
+					for j in 1 ..< i {
+						let check = XGDeckPokemon.ddpk(j)
+						if check.data.species.index == poke.data.species.index {
+							duplicate = true
+
+							let pokemon = poke.data
+							pokemon.species = XGPokemon.random()
+							pokemon.shadowCatchRate = pokemon.species.catchRate
+							pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
+							pokemon.happiness = 128
+							pokemon.save()
+						}
+					}
+
+				} while duplicate
+
+			}
+		}
+
+		for gift in XGGiftPokemonManager.allGiftPokemon() {
+
+			var pokemon = gift
+			pokemon.species = XGPokemon.random()
+			let moves = pokemon.species.movesForLevel(pokemon.level)
+			pokemon.move1 = moves[0]
+			pokemon.move2 = moves[1]
+			pokemon.move3 = moves[2]
+			pokemon.move4 = moves[3]
+
+			pokemon.save()
+
+		}
+
+		var pokespotEntries = [Int]()
+		for p in 0 ... 2 {
+			let spot = XGPokeSpots(rawValue: p) ?? .rock
+			for i in 0 ..< spot.numberOfEntries {
+				let pokemon = XGPokeSpotPokemon(index: i, pokespot: spot)
+				var newMon = XGPokemon.random()
+				while pokespotEntries.contains(newMon.index) {
+					newMon = XGPokemon.random()
 				}
-				
+				pokespotEntries.append(newMon.index)
+				pokemon.pokemon = newMon
+				pokemon.save()
 			}
-			
-			if XGPokeSpots.all.numberOfEntries > 2 {
-				for i in 2 ..< XGPokeSpots.all.numberOfEntries {
-					let pokemon = XGPokeSpotPokemon(index: i, pokespot: .all)
-					pokemon.pokemon = XGPokemon.random()
-					pokemon.save()
+
+		}
+
+		if XGPokeSpots.all.numberOfEntries > 2 {
+			for i in 2 ..< XGPokeSpots.all.numberOfEntries {
+				let pokemon = XGPokeSpotPokemon(index: i, pokespot: .all)
+				var newMon = XGPokemon.random()
+				while pokespotEntries.contains(newMon.index) {
+					newMon = XGPokemon.random()
 				}
+				pokespotEntries.append(newMon.index)
+				pokemon.pokemon = newMon
+				pokemon.save()
 			}
+		}
+
 		printg("done!")
 	}
 	

@@ -310,6 +310,12 @@ extension XGUtility {
 			XGFiles.fsys("pocket_menu").fsysData.shiftAndReplaceFile(XGFiles.pocket_menu.compress(), save: true)
 		}
 
+		let dukingTradeScriptFile = XGFiles.scd("M2_guild_1F_2")
+		let dukingTradeFsysFile = XGFiles.fsys("M2_guild_1F_2")
+		if dukingTradeFsysFile.exists, dukingTradeScriptFile.exists {
+			dukingTradeFsysFile.fsysData.shiftAndReplaceFileWithType(.scd, withFile: dukingTradeScriptFile, save: true)
+		}
+
 	}
 	
 	class func updateHealingItems() {
@@ -911,13 +917,25 @@ extension XGUtility {
 		// I'm using the file size as the benchmark as it's really unlikely to remain the same after an xds compilation
 		// since the compiler strips all debug data. If it happens to be the same length
 		// after editing then oh well, unlucky mate :-p
-		printg("updating pokespots")
+		printg("updating duking trades script")
 		
-		let scriptFile = XGFiles.scd("M2_guild_1F_2.scd")
+		let scriptFile = XGFiles.scd("M2_guild_1F_2")
+		let scriptFsysFile = XGFiles.fsys("M2_guild_1F_2")
+		if !scriptFile.exists {
+			if !scriptFsysFile.exists, let fsysFile = ISO.dataForFile(filename: scriptFsysFile.fileName) {
+				fsysFile.file = .nameAndFolder("M2_guild_1F_2.fsys", .AutoFSYS)
+				fsysFile.save()
+			}
+			if scriptFsysFile.exists {
+				let fsysData = scriptFsysFile.fsysData
+				if let scriptData = fsysData.decompressedDataForFilesWithFiletype(type: .scd).first {
+					scriptData.file = scriptFile
+					scriptData.save()
+				}
+			}
+		}
 		if scriptFile.exists {
-			if scriptFile.fileSize == 0x1770 {
-				
-				let script = scriptFile.data!
+			if scriptFile.fileSize == 0x1770, let script = scriptFile.data {
 				
 				let trapinches = [0x0B4A,0x0D1E]
 				let surskits = [0x0B9A,0x0D62]

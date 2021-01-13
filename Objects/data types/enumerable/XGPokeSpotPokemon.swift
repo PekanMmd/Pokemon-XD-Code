@@ -20,22 +20,22 @@ let kStepsPerPokeSnackOffset	= 0x0A
 
 final class XGPokeSpotPokemon: NSObject, Codable {
 	
-	@objc var index				= 0
+	var index				= 0
 	var spot					= XGPokeSpots.rock
 	var pokemon					= XGPokemon.pokemon(0)
 	
-	@objc var minLevel				= 0
-	@objc var maxLevel				= 0
-	@objc var encounterPercentage	= 0
-	@objc var stepsPerSnack			= 0
+	var minLevel				= 0
+	var maxLevel				= 0
+	var encounterPercentage	= 0
+	var stepsPerSnack			= 0
 
-	@objc var location : String {
+	var location : String {
 		get {
 			return spot.string
 		}
 	}
 	
-	@objc var startOffset : Int {
+	var startOffset : Int {
 		get {
 			return spot.commonRelIndex.startOffset + (index * kSizeOfPokeSpotData)
 		}
@@ -60,7 +60,7 @@ final class XGPokeSpotPokemon: NSObject, Codable {
 		
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		let rel = XGFiles.common_rel.data!
 		let start = startOffset
@@ -107,7 +107,7 @@ extension XGPokeSpotPokemon: XGDocumentable {
 	}
 	
 	var documentableName: String {
-		return pokemon.name.string
+		return spot.documentableName + " \(index + 1) " + pokemon.name.string
 	}
 	
 	static var DocumentableKeys: [String] {

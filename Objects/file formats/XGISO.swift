@@ -170,12 +170,14 @@ class XGISO: NSObject {
 			let isodata = self.data
 			
 			for file in fileList {
-				
+
 				let filename = file.fileName
-				let data = file.data!
-				
-				
 				printg("importing file to ISO: " + filename)
+
+				guard file.exists, let data = file.data else {
+					printg("Couldn't import file into ISO: \(file.path)\nFile doesn't exist!")
+					continue
+				}
 				
 				let start = self.locationForFile(filename)
 				let oldsize  = self.sizeForFile(filename)
