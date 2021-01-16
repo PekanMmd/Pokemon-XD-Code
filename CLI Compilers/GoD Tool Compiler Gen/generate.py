@@ -71,8 +71,7 @@ ColoAssets = getFiles(ColoAssetTarget, "Resources")
 PBRAssets = getFiles(PBRAssetTarget, "Resources")
 
 # Generate symlink scripts Unix (Linux + Darwin)
-preamble = f"""set -x
-# Link Source
+unix_preamble = f"""
 rm -rf spm/virt/{GoDCLITargetName}/Sources
 mkdir -p spm/virt/{GoDCLITargetName}/Sources
 
@@ -95,27 +94,64 @@ case "$(uname -s)" in
      ln -s "$PWD/extensions/LinuxExtensions.swift" spm/virt/{PBRCLITargetName}/Sources/
      ;;
 esac
-
 """
-lines = [preamble]
+unix_lines = [unix_preamble]
 
+win_preamble = f"""
+setlocal enableextensions
+
+rmdir /s /q spm\\virt\\{GoDCLITargetName}\\Sources
+md spm\\virt\\{GoDCLITargetName}\\Sources
+
+rmdir /s /q spm\\virt\\{ColoCLITargetName}\\Sources
+md spm\\virt\\{ColoCLITargetName}\\Sources
+
+rmdir /s /q spm\\virt\\{PBRCLITargetName}\\Sources
+md spm\\virt\\{PBRCLITargetName}\\Sources
+
+endlocal
+
+mklink spm\\virt\\{GoDCLITargetName}\\Sources\\WindowsExtensions.swift "%cd%\\extensions\\WindowsExtensions.swift"
+mklink spm\\virt\\{ColoCLITargetName}\\Sources\\WindowsExtensions.swift "%cd%\\extensions\\WindowsExtensions.swift"
+mklink spm\\virt\\{PBRCLITargetName}\\Sources\\WindowsExtensions.swift "%cd%\\extensions\\WindowsExtensions.swift"
+"""
+win_lines = [win_preamble]
+
+unix_lines.append("\n# GoD Sources")
 for source in GoDSources:
-    line = f'ln -s "$PWD/{source}" spm/virt/{GoDCLITargetName}/Sources/'
-    lines.append(line)
+    unix_line = f'ln -s "$PWD/{source}" spm/virt/{GoDCLITargetName}/Sources/'
+    unix_lines.append(unix_line)
 
+    fixed = source.replace('/', '\\')
+    win_line = f'mklink "spm\\virt\\{GoDCLITargetName}\\Sources\\{os.path.basename(source)}" "%cd%\\{fixed}"'
+    win_lines.append(win_line)
+
+unix_lines.append("\n# Colo Sources")
 for source in ColoSources:
     line = f'ln -s "$PWD/{source}" spm/virt/{ColoCLITargetName}/Sources/'
-    lines.append(line)
+    unix_lines.append(line)
 
+    fixed = source.replace('/', '\\')
+    win_line = f'mklink "spm\\virt\\{ColoCLITargetName}\\Sources\\{os.path.basename(source)}" "%cd%\\{fixed}"'
+    win_lines.append(win_line)
+
+unix_lines.append("\n# PBR Sources")
 for source in PBRSources:
     line = f'ln -s "$PWD/{source}" spm/virt/{PBRCLITargetName}/Sources/'
-    lines.append(line)
+    unix_lines.append(line)
 
-script = open("CLI Compilers/link.sh", 'w')
-script.write("\n".join(lines))
-script.close()
+    fixed = source.replace('/', '\\')
+    win_line = f'mklink "spm\\virt\\{PBRCLITargetName}\\Sources\\{os.path.basename(source)}" "%cd%\\{fixed}"'
+    win_lines.append(win_line)
 
-# TODO: add Windows batch script
+unix_script = open("CLI Compilers/link.sh", 'w')
+unix_script.write("\n".join(unix_lines)[1:])
+unix_script.close()
+
+win_script = open("CLI Compilers/link.bat", 'w')
+win_script.write("\n".join(win_lines)[1:])
+win_script.close()
+
 # TODO: add asset copying
 
 # import code

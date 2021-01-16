@@ -1,5 +1,3 @@
-set -x
-# Link Source
 rm -rf spm/virt/GoD-CLI/Sources
 mkdir -p spm/virt/GoD-CLI/Sources
 
@@ -24,6 +22,7 @@ case "$(uname -s)" in
 esac
 
 
+# GoD Sources
 ln -s "$PWD/Objects/textures/GoDTextureImporter.swift" spm/virt/GoD-CLI/Sources/
 ln -s "$PWD/enums/XGEvolutionMethods.swift" spm/virt/GoD-CLI/Sources/
 ln -s "$PWD/Objects/data types/enumerable/XGTrainerClass.swift" spm/virt/GoD-CLI/Sources/
@@ -150,6 +149,8 @@ ln -s "$PWD/enums/XGMoveCategory.swift" spm/virt/GoD-CLI/Sources/
 ln -s "$PWD/Objects/data types/enumerable/XGTrainer.swift" spm/virt/GoD-CLI/Sources/
 ln -s "$PWD/enums/XGStatBoosts.swift" spm/virt/GoD-CLI/Sources/
 ln -s "$PWD/enums/XGTrainerClasses.swift" spm/virt/GoD-CLI/Sources/
+
+# Colo Sources
 ln -s "$PWD/Objects/data types/XGEvolution.swift" spm/virt/Colosseum-CLI/Sources/
 ln -s "$PWD/enums/XGMoveTargets.swift" spm/virt/Colosseum-CLI/Sources/
 ln -s "$PWD/enums/XGEvolutionConditionType.swift" spm/virt/Colosseum-CLI/Sources/
@@ -256,6 +257,8 @@ ln -s "$PWD/Objects/data types/enumerable/XGGiftPokemon.swift" spm/virt/Colosseu
 ln -s "$PWD/enums/CMTrainerClasses.swift" spm/virt/Colosseum-CLI/Sources/
 ln -s "$PWD/Objects/data types/enumerable/XGMove.swift" spm/virt/Colosseum-CLI/Sources/
 ln -s "$PWD/protocols/EnumerableDocumentable.swift" spm/virt/Colosseum-CLI/Sources/
+
+# PBR Sources
 ln -s "$PWD/enums/XGResources.swift" spm/virt/PBR-CLI/Sources/
 ln -s "$PWD/Objects/file formats/XGFsys.swift" spm/virt/PBR-CLI/Sources/
 ln -s "$PWD/GoDToolOSX/Objects/GoDKeyCodes.swift" spm/virt/PBR-CLI/Sources/
