@@ -118,6 +118,7 @@ mklink spm\\virt\\{PBRCLITargetName}\\Sources\\WindowsExtensions.swift "%cd%\\ex
 win_lines = [win_preamble]
 
 unix_lines.append("\n# GoD Sources")
+win_lines.append("\nREM GoD Sources")
 for source in GoDSources:
     unix_line = f'ln -s "$PWD/{source}" spm/virt/{GoDCLITargetName}/Sources/'
     unix_lines.append(unix_line)
@@ -127,6 +128,7 @@ for source in GoDSources:
     win_lines.append(win_line)
 
 unix_lines.append("\n# Colo Sources")
+win_lines.append("\nREM Colo Sources")
 for source in ColoSources:
     line = f'ln -s "$PWD/{source}" spm/virt/{ColoCLITargetName}/Sources/'
     unix_lines.append(line)
@@ -136,6 +138,7 @@ for source in ColoSources:
     win_lines.append(win_line)
 
 unix_lines.append("\n# PBR Sources")
+win_lines.append("\nREM PBR Sources")
 for source in PBRSources:
     line = f'ln -s "$PWD/{source}" spm/virt/{PBRCLITargetName}/Sources/'
     unix_lines.append(line)
@@ -145,11 +148,11 @@ for source in PBRSources:
     win_lines.append(win_line)
 
 unix_script = open("CLI Compilers/link.sh", 'w')
-unix_script.write("\n".join(unix_lines)[1:])
+unix_script.write("\n".join(unix_lines)[1:]+"\n")
 unix_script.close()
 
 win_script = open("CLI Compilers/link.bat", 'w')
-win_script.write("\n".join(win_lines)[1:])
+win_script.write("\n".join(win_lines)[1:]+"\n")
 win_script.close()
 
 # TODO: add asset copying

@@ -15,6 +15,8 @@ mklink spm\virt\GoD-CLI\Sources\WindowsExtensions.swift "%cd%\extensions\Windows
 mklink spm\virt\Colosseum-CLI\Sources\WindowsExtensions.swift "%cd%\extensions\WindowsExtensions.swift"
 mklink spm\virt\PBR-CLI\Sources\WindowsExtensions.swift "%cd%\extensions\WindowsExtensions.swift"
 
+
+REM GoD Sources
 mklink "spm\virt\GoD-CLI\Sources\GoDTextureImporter.swift" "%cd%\Objects\textures\GoDTextureImporter.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGEvolutionMethods.swift" "%cd%\enums\XGEvolutionMethods.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGTrainerClass.swift" "%cd%\Objects\data types\enumerable\XGTrainerClass.swift" > NUL
@@ -141,6 +143,8 @@ mklink "spm\virt\GoD-CLI\Sources\XGMoveCategory.swift" "%cd%\enums\XGMoveCategor
 mklink "spm\virt\GoD-CLI\Sources\XGTrainer.swift" "%cd%\Objects\data types\enumerable\XGTrainer.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGStatBoosts.swift" "%cd%\enums\XGStatBoosts.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGTrainerClasses.swift" "%cd%\enums\XGTrainerClasses.swift" > NUL
+
+REM Colo Sources
 mklink "spm\virt\Colosseum-CLI\Sources\XGEvolution.swift" "%cd%\Objects\data types\XGEvolution.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\XGMoveTargets.swift" "%cd%\enums\XGMoveTargets.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\XGEvolutionConditionType.swift" "%cd%\enums\XGEvolutionConditionType.swift" > NUL
@@ -247,6 +251,8 @@ mklink "spm\virt\Colosseum-CLI\Sources\XGGiftPokemon.swift" "%cd%\Objects\data t
 mklink "spm\virt\Colosseum-CLI\Sources\CMTrainerClasses.swift" "%cd%\enums\CMTrainerClasses.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\XGMove.swift" "%cd%\Objects\data types\enumerable\XGMove.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\EnumerableDocumentable.swift" "%cd%\protocols\EnumerableDocumentable.swift" > NUL
+
+REM PBR Sources
 mklink "spm\virt\PBR-CLI\Sources\XGResources.swift" "%cd%\enums\XGResources.swift" > NUL
 mklink "spm\virt\PBR-CLI\Sources\XGFsys.swift" "%cd%\Objects\file formats\XGFsys.swift" > NUL
 mklink "spm\virt\PBR-CLI\Sources\GoDKeyCodes.swift" "%cd%\GoDToolOSX\Objects\GoDKeyCodes.swift" > NUL

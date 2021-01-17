@@ -1,4 +1,4 @@
-.PHONY: setup build build-god build-colo build-pbr
+.PHONY: setup build build-god build-colo build-pbr clean
 
 all: build
 
@@ -16,3 +16,6 @@ build-colo:
 
 build-pbr:
 	swift build --product PBR-CLI
+
+clean:
+	rm -rf .build
