@@ -35,19 +35,19 @@ final class XGItem: NSObject, XGIndexedValue, Codable {
 	
 	var friendshipEffects	= [0, 0, 0]
 	
-	@objc var name : XGString {
+	var name : XGString {
 		get {
 			return getStringSafelyWithID(id: nameID)
 		}
 	}
 	
-	@objc var descriptionString : XGString {
+	var descriptionString : XGString {
 		get {
 			return getStringSafelyWithID(id: descriptionID)
 		}
 	}
 	
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		self.index = index
@@ -70,7 +70,7 @@ final class XGItem: NSObject, XGIndexedValue, Codable {
 		friendshipEffects = [data.getSignedByte(35), data.getSignedByte(36), data.getSignedByte(37)]
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		let data  = PBRDataTableEntry.items(index: self.index)
 		

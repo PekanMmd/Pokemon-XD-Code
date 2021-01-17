@@ -277,7 +277,7 @@ final class XGInteractionPointData: NSObject, Codable {
 		return desc
 	}
 	
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		self.index = index
@@ -426,15 +426,15 @@ let kILZOffset = 0xC
 
 class XGMapEntryLocation : NSObject {
 	
-	@objc var index = 0
-	@objc var startOffset = 0
+	var index = 0
+	var startOffset = 0
 	
-	@objc var xCoordinate : Float = 0
-	@objc var yCoordinate : Float = 0
-	@objc var zCoordinate : Float = 0
-	@objc var angle = 0
+	var xCoordinate : Float = 0
+	var yCoordinate : Float = 0
+	var zCoordinate : Float = 0
+	var angle = 0
 	
-	@objc var room : XGRoom {
+	var room : XGRoom {
 		return XGRoom.roomWithName(self.file.fileName.removeFileExtensions())!
 	}
 	
@@ -456,7 +456,7 @@ class XGMapEntryLocation : NSObject {
 		
 	}
 	
-	@objc func save() {
+	func save() {
 		let data = file.data!
 		
 		data.replace2BytesAtOffset(startOffset + kIPAngleOffset, withBytes: self.angle)

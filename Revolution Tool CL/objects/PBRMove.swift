@@ -63,20 +63,20 @@ final class XGMove: NSObject, XGIndexedValue {
 		return false
 	}
 	
-	@objc var name : XGString {
+	var name : XGString {
 		get {
 			return getStringSafelyWithID(id: nameID)
 		}
 	}
 	
-	@objc var mdescription : XGString {
+	var mdescription : XGString {
 		get {
 			return getStringSafelyWithID(id: descriptionID)
 		}
 	}
 	
 	
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		self.index = index
@@ -119,7 +119,7 @@ final class XGMove: NSObject, XGIndexedValue {
 
 	}
 
-	@objc func save() {
+	func save() {
 		guard index >= 0 else { return }
 
 		let data  = PBRDataTableEntry.moves(index: index)

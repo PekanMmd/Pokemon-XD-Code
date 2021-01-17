@@ -77,21 +77,21 @@ enum XDSConstantTypes {
 class XDSConstant : NSObject {
 	
 	var type   : XDSConstantTypes = .none_t
-	@objc var value  : UInt32 = 0
+	var value  : UInt32 = 0
 	
 	override var description: String {
 		return self.rawValueString
 	}
 	
-	@objc var asFloat : Float {
+	var asFloat : Float {
 		return value.hexToSignedFloat()
 	}
 	
-	@objc var asInt : Int {
+	var asInt : Int {
 		return value.int32
 	}
 	
-	@objc var rawValueString : String {
+	var rawValueString : String {
 		switch self.type {
 		case .float:
 			var text = String(format: "%.4f", self.asFloat)
@@ -122,7 +122,7 @@ class XDSConstant : NSObject {
 		}
 	}
 	
-	@objc init(type: Int, rawValue: UInt32) {
+	init(type: Int, rawValue: UInt32) {
 		super.init()
 		
 		self.type = XDSConstantTypes.typeWithIndex(type)
@@ -134,7 +134,7 @@ class XDSConstant : NSObject {
 		self.init(type: type.index, rawValue: rawValue.unsigned)
 	}
 	
-	@objc class var null : XDSConstant {
+	class var null : XDSConstant {
 		return XDSConstant(type: 0, rawValue: 0)
 	}
 	

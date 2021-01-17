@@ -11,26 +11,26 @@ let kXDSLastResultVariable = "LastResult"
 
 class XGScriptInstruction: NSObject {
 	
-	@objc var isScriptFunctionLastResult = false // set during decompilation to prevent being attributed to the wrong function
-	@objc var isUnusedPostpendedCall = false // set during decompilation to prevent parsing stray function calls at end of script
+	var isScriptFunctionLastResult = false // set during decompilation to prevent being attributed to the wrong function
+	var isUnusedPostpendedCall = false // set during decompilation to prevent parsing stray function calls at end of script
 	
 	var opCode = XGScriptOps.nop
-	@objc var subOpCode = 0
-	@objc var parameter = 0
+	var subOpCode = 0
+	var parameter = 0
 	
-	@objc var longParameter = 0 // used by 'call', 'jumptrue', 'jumpfalse', and 'jump'
+	var longParameter = 0 // used by 'call', 'jumptrue', 'jumpfalse', and 'jump'
 	var subSubOpCodes = (0,0)
 	
-	@objc var level = 0
+	var level = 0
 	
-	@objc var length = 1
+	var length = 1
 	
-	@objc var raw1 : UInt32 = 0
-	@objc var raw2 : UInt32 = 0
+	var raw1 : UInt32 = 0
+	var raw2 : UInt32 = 0
 	
-	@objc var constant : XDSConstant!
+	var constant : XDSConstant!
 	
-	@objc var SCDVariable : String {
+	var SCDVariable : String {
 		let param = self.parameter
 		let (_, level) = self.subSubOpCodes
 		switch level {
@@ -53,7 +53,7 @@ class XGScriptInstruction: NSObject {
 		}
 	}
 	
-	@objc var XDSVariable : String {
+	var XDSVariable : String {
 		// add an asterisk to last result, local variables and script function parameters if the type of the varible isn't copyable.
 		// it is incredibly difficult to infer the underlying type for these variables.
 		
@@ -106,7 +106,7 @@ class XGScriptInstruction: NSObject {
 		return XDSVectorDimension(rawValue: d) ?? .invalid
 	}
 	
-	@objc init(bytes: UInt32, next: UInt32) {
+	init(bytes: UInt32, next: UInt32) {
 		super.init()
 		
 		let op				= ((bytes >> 24) & 0xFF).int

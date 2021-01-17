@@ -18,10 +18,10 @@ let kEvolvedFormOffset			= 0x4 // 2 bytes
 class XGEvolution: NSObject, Codable {
 	
 	var evolutionMethod		= XGEvolutionMethods.none
-	@objc var condition		= 0
-	@objc var evolvesInto		= 0
+	var condition		= 0
+	var evolvesInto		= 0
 	
-	@objc init(evolutionMethod: Int, condition: Int, evolvedForm: Int) {
+	init(evolutionMethod: Int, condition: Int, evolvedForm: Int) {
 		super.init()
 		
 		self.evolutionMethod = XGEvolutionMethods(rawValue: evolutionMethod)!
@@ -29,7 +29,7 @@ class XGEvolution: NSObject, Codable {
 		self.evolvesInto	 = evolvedForm
 	}
 	
-	@objc func isSet() -> Bool {
+	func isSet() -> Bool {
 		return self.evolutionMethod != .none
 	}
 	
