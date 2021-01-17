@@ -6,6 +6,9 @@ import PackageDescription
 let package = Package(
     name: "Pokemon-XD-Code",
     defaultLocalization: "en",
+    platforms: [
+        .macOS(.v10_13),
+    ],
     dependencies: [],
     targets: [
         .target(
