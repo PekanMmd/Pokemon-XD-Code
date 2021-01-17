@@ -12,6 +12,13 @@ if /I "%1"=="build-colo" GOTO build-colo
 if /I "%1"=="build-pbr" GOTO build-pbr
 if /I "%1"=="clean" GOTO clean
 
+REM default command
+goto :build
+cmd /q /c "CLI Compilers\copy.bat"
+:copy
+
+goto :eof
+
 :build
 swift build
 goto :eof

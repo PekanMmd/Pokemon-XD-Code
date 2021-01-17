@@ -1,9 +1,12 @@
-.PHONY: setup build build-god build-colo build-pbr clean
+.PHONY: setup copy build build-god build-colo build-pbr clean
 
 all: build
 
 setup:
 	./CLI\ Compilers/link.sh
+
+copy:
+	./CLI\ Compilers/copy.sh
 
 build: setup
 	swift build

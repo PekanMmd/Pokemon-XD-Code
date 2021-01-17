@@ -11,7 +11,7 @@ PBRGUITargetName = "PBR Tool"
 
 # exclude files
 ignoredFiles = ["OSXExtensions.swift", "WindowsExtensions.swift"]
-resourceFileTypes = [".png", ".json", ".sublime"]
+resourceFileTypes = [".json", ".sublime"] # .png excluded until there is a use for it
 
 # Get path to project files
 scriptpath = os.path.dirname(os.path.realpath(__file__))
@@ -71,7 +71,7 @@ ColoAssets = getFiles(ColoAssetTarget, "Resources")
 PBRAssets = getFiles(PBRAssetTarget, "Resources")
 
 # Generate symlink scripts Unix (Linux + Darwin)
-unix_preamble = f"""
+unix_link_preamble = f"""
 rm -rf spm/virt/{GoDCLITargetName}/Sources
 mkdir -p spm/virt/{GoDCLITargetName}/Sources
 
@@ -95,9 +95,9 @@ case "$(uname -s)" in
      ;;
 esac
 """
-unix_lines = [unix_preamble]
+unix_link_lines = [unix_link_preamble]
 
-win_preamble = f"""
+win_link_preamble = f"""
 setlocal enableextensions
 
 rmdir /s /q spm\\virt\\{GoDCLITargetName}\\Sources
@@ -115,47 +115,127 @@ mklink spm\\virt\\{GoDCLITargetName}\\Sources\\WindowsExtensions.swift "%cd%\\ex
 mklink spm\\virt\\{ColoCLITargetName}\\Sources\\WindowsExtensions.swift "%cd%\\extensions\\WindowsExtensions.swift"
 mklink spm\\virt\\{PBRCLITargetName}\\Sources\\WindowsExtensions.swift "%cd%\\extensions\\WindowsExtensions.swift"
 """
-win_lines = [win_preamble]
+win_link_lines = [win_link_preamble]
 
-unix_lines.append("\n# GoD Sources")
-win_lines.append("\nREM GoD Sources")
+unix_link_lines.append("\n# GoD Sources")
+win_link_lines.append("\nREM GoD Sources")
 for source in GoDSources:
     unix_line = f'ln -s "$PWD/{source}" spm/virt/{GoDCLITargetName}/Sources/'
-    unix_lines.append(unix_line)
+    unix_link_lines.append(unix_line)
 
     fixed = source.replace('/', '\\')
     win_line = f'mklink "spm\\virt\\{GoDCLITargetName}\\Sources\\{os.path.basename(source)}" "%cd%\\{fixed}" > NUL'
-    win_lines.append(win_line)
+    win_link_lines.append(win_line)
 
-unix_lines.append("\n# Colo Sources")
-win_lines.append("\nREM Colo Sources")
+unix_link_lines.append("\n# Colo Sources")
+win_link_lines.append("\nREM Colo Sources")
 for source in ColoSources:
     line = f'ln -s "$PWD/{source}" spm/virt/{ColoCLITargetName}/Sources/'
-    unix_lines.append(line)
+    unix_link_lines.append(line)
 
     fixed = source.replace('/', '\\')
     win_line = f'mklink "spm\\virt\\{ColoCLITargetName}\\Sources\\{os.path.basename(source)}" "%cd%\\{fixed}" > NUL'
-    win_lines.append(win_line)
+    win_link_lines.append(win_line)
 
-unix_lines.append("\n# PBR Sources")
-win_lines.append("\nREM PBR Sources")
+unix_link_lines.append("\n# PBR Sources")
+win_link_lines.append("\nREM PBR Sources")
 for source in PBRSources:
-    line = f'ln -s "$PWD/{source}" spm/virt/{PBRCLITargetName}/Sources/'
-    unix_lines.append(line)
+    unix_line = f'ln -s "$PWD/{source}" spm/virt/{PBRCLITargetName}/Sources/'
+    unix_link_lines.append(unix_line)
 
     fixed = source.replace('/', '\\')
     win_line = f'mklink "spm\\virt\\{PBRCLITargetName}\\Sources\\{os.path.basename(source)}" "%cd%\\{fixed}" > NUL'
-    win_lines.append(win_line)
+    win_link_lines.append(win_line)
 
-unix_script = open("CLI Compilers/link.sh", 'w')
-unix_script.write("\n".join(unix_lines)[1:]+"\n")
-unix_script.close()
+unix_link_script = open("CLI Compilers/link.sh", 'w')
+unix_link_script.write("\n".join(unix_link_lines)[1:]+"\n")
+unix_link_script.close()
 
-win_script = open("CLI Compilers/link.bat", 'w')
-win_script.write("\n".join(win_lines)[1:]+"\n")
-win_script.close()
+win_link_script = open("CLI Compilers/link.bat", 'w')
+win_link_script.write("\n".join(win_link_lines)[1:]+"\n")
+win_link_script.close()
 
-# TODO: add asset copying
+# Asset copying
 
-# import code
-# code.interact(local=dict(globals(), **locals()))
+GoDAssetsSubFolder = "out/Assets"
+ColoAssetsSubFolder = "out/Assets"
+PBRAssetsSubFolder = "out/Assets"
+GoDAssetsFolder = GoDAssetsSubFolder + "/XD"
+ColoAssetsFolder = ColoAssetsSubFolder + "/Colosseum"
+PBRAssetsFolder = PBRAssetsSubFolder + "/PBR"
+GoDWiimmsAssetsFolder = GoDAssetsFolder + "/wiimm"
+ColoWiimmsAssetsFolder = ColoAssetsFolder + "/wiimm"
+PBRWiimmsAssetsFolder = PBRAssetsFolder + "/wiimm"
+
+
+unix_copy_preamble = f"""
+echo "Copying Assets..."
+mkdir -p {GoDWiimmsAssetsFolder}
+mkdir -p {ColoWiimmsAssetsFolder}
+mkdir -p {PBRWiimmsAssetsFolder}
+"""
+unix_copy_lines = [unix_copy_preamble]
+
+
+win_GoDWiimmsAssetsFolder = GoDWiimmsAssetsFolder.replace('\\', '/')
+win_ColoWiimmsAssetsFolder = ColoWiimmsAssetsFolder.replace('\\', '/')
+win_PBRWiimmsAssetsFolder = PBRWiimmsAssetsFolder.replace('\\', '/')
+win_copy_preamble = f"""
+echo "Copying Assets..."
+setlocal enableextensions
+
+md {win_GoDWiimmsAssetsFolder}
+md {win_ColoWiimmsAssetsFolder}
+md {win_PBRWiimmsAssetsFolder}
+
+endlocal
+"""
+win_copy_lines = [win_copy_preamble]
+
+unix_copy_lines.append("\n# GoD Assets")
+win_copy_lines.append("\nREM GoD Assets")
+win_copy_dest = GoDAssetsFolder.replace('/', '\\')
+for asset in GoDAssets:
+    unix_line = f'cp "$PWD/{asset}" {GoDAssetsFolder}/'
+    unix_copy_lines.append(unix_line)
+
+    fixed = asset.replace('/', '\\')
+    win_line = f'copy "%cd%\\{fixed}" "{win_copy_dest}\\{os.path.basename(asset)}"'
+    win_copy_lines.append(win_line)
+
+unix_copy_lines.append("\n# Colo Assets")
+win_copy_lines.append("\nREM Colo Assets")
+win_copy_dest = ColoAssetsFolder.replace('/', '\\')
+for asset in ColoAssets:
+    unix_line = f'cp "$PWD/{asset}" {ColoAssetsFolder}/'
+    unix_copy_lines.append(unix_line)
+
+    fixed = asset.replace('/', '\\')
+    win_line = f'copy "%cd%\\{fixed}" "{win_copy_dest}\\{os.path.basename(asset)}"'
+    win_copy_lines.append(win_line)
+
+
+unix_copy_lines.append("\n# PBR Assets")
+win_copy_lines.append("\nREM PBR Assets")
+win_copy_dest = PBRAssetsFolder.replace('/', '\\')
+for asset in PBRAssets:
+    unix_line = f'cp "$PWD/{asset}" {PBRAssetsFolder}/'
+    unix_copy_lines.append(unix_line)
+
+    fixed = asset.replace('/', '\\')
+    win_line = f'copy "%cd%\\{fixed}" "{win_copy_dest}\\{os.path.basename(asset)}"'
+    win_copy_lines.append(win_line)
+
+unix_copy_lines.append("cp tools/OSX/wiimm/* " + PBRWiimmsAssetsFolder)
+unix_copy_lines.append("cp tools/OSX/other/* " + PBRAssetsFolder)
+
+win_copy_lines.append("copy tools\\Windows\\wiimm\\* " + PBRWiimmsAssetsFolder.replace('/', '\\'))
+win_copy_lines.append("copy tools\\Windows\\other\\* " + PBRAssetsFolder.replace('/', '\\'))
+
+unix_copy_script = open("CLI Compilers/copy.sh", 'w')
+unix_copy_script.write("\n".join(unix_copy_lines)[1:]+"\n")
+unix_copy_script.close()
+
+win_copy_script = open("CLI Compilers/copy.bat", 'w')
+win_copy_script.write("\n".join(win_copy_lines)[1:]+"\n")
+win_copy_script.close()
