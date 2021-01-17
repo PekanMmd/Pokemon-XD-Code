@@ -24,52 +24,52 @@ let kBattleCDConditionDescriptionIDOffset = 0x18
 final class XGBattleCD: NSObject, Codable {
 	
 	var battleStyle : XGBattleStyles!
-	@objc var battleField : XGBattleField!
+	var battleField : XGBattleField!
 	
 	var deck : XGDecks!
-	@objc var trainerID = 0
+	var trainerID = 0
 	var p1Deck : XGDecks!
-	@objc var p1TID = 0
+	var p1TID = 0
 	
-	@objc var turnLimit = 0
+	var turnLimit = 0
 	
-	@objc var index = 0
-	@objc var startOffset = 0
+	var index = 0
+	var startOffset = 0
 	
-	@objc var descriptionID = 0
-	@objc var cdDescription : XGString {
+	var descriptionID = 0
+	var cdDescription : XGString {
 		return getStringSafelyWithID(id: descriptionID)
 	}
 	
-	@objc var conditionsID = 0
-	@objc var conditions : XGString {
+	var conditionsID = 0
+	var conditions : XGString {
 		return getStringSafelyWithID(id: conditionsID)
 	}
 	
-	@objc var conditionsBoldID = 0
-	@objc var conditionsBold : XGString {
+	var conditionsBoldID = 0
+	var conditionsBold : XGString {
 		return getStringSafelyWithID(id: conditionsBoldID)
 	}
 	
-	@objc var trainer : XGTrainer? {
+	var trainer : XGTrainer? {
 		if deck == nil {
 			return nil
 		}
 		return XGTrainer(index: trainerID, deck: deck)
 	}
 	
-	@objc var p1Trainer : XGTrainer? {
+	var p1Trainer : XGTrainer? {
 		if p1Deck == nil {
 			return nil
 		}
 		return XGTrainer(index: p1TID, deck: p1Deck)
 	}
 	
-	@objc var rawData : [Int] {
+	var rawData : [Int] {
 		return XGFiles.common_rel.data!.getByteStreamFromOffset(self.startOffset, length: kSizeOfBattleCDData)
 	}
 	
-	@objc var title : String {
+	var title : String {
 		let p1t = p1Trainer
 		let p1 = p1t == nil ? (p1TID == 0x1388 ? "Player" : "Invalid") : p1t!.name.string
 		
@@ -117,7 +117,7 @@ final class XGBattleCD: NSObject, Codable {
 		return desc
 	}
 	
-	@objc init(index: Int) {
+	init(index: Int) {
 		super.init()
 		
 		self.index = index
@@ -150,7 +150,7 @@ final class XGBattleCD: NSObject, Codable {
 		
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		let data = XGFiles.common_rel.data!
 		

@@ -117,13 +117,13 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 		return list
 	}
 	
-	@objc var name : XGString {
+	var name : XGString {
 		get {
 			return getStringSafelyWithID(id: nameID)
 		}
 	}
 	
-	@objc var species : XGString {
+	var species : XGString {
 		get {
 			return getStringSafelyWithID(id: speciesNameID)
 		}
@@ -214,7 +214,7 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 		}
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		let data = PBRDataTableEntry.baseStats(index: self.index)
 		

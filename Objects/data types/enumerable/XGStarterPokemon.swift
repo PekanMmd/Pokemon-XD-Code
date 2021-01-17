@@ -27,23 +27,23 @@ let kStarterExpValueOffset		= 0x66
 
 final class XGStarterPokemon: NSObject, XGGiftPokemon, Codable {
 	
-	@objc var level		= 0
-	@objc var exp		= 0
+	var level		= 0
+	var exp		= 0
 	var species			= XGPokemon.pokemon(0)
 	var move1			= XGMoves.move(0)
 	var move2			= XGMoves.move(0)
 	var move3			= XGMoves.move(0)
 	var move4			= XGMoves.move(0)
 	
-	@objc var giftType		= "Starter Pokemon"
+	var giftType		= "Starter Pokemon"
 	
 	// unused
-	@objc var index			= 0
+	var index			= 0
 	var shinyValue			= XGShinyValues.random
 	private(set) var gender	= XGGenders.random
 	private(set) var nature	= XGNatures.random
 		
-	@objc var startOffset : Int {
+	var startOffset : Int {
 		get {
 			return kEeveeStartOffset
 		}
@@ -74,7 +74,7 @@ final class XGStarterPokemon: NSObject, XGGiftPokemon, Codable {
 		}
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		if game == .XD {
 			let dol = XGFiles.dol.data!

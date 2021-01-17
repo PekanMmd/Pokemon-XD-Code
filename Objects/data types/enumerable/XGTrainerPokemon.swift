@@ -51,16 +51,16 @@ final class XGTrainerPokemon : NSObject, Codable {
 	var deckData			= XGDeckPokemon.dpkm(0, XGDecks.DeckStory)
 	
 	var species				= XGPokemon.pokemon(0)
-	@objc var level			= 0x0
-	@objc var happiness		= 0x0
+	var level			= 0x0
+	var happiness		= 0x0
 	var item				= XGItems.item(0)
 	var nature				= XGNatures.hardy
 	var gender				= XGGenders.male
-	@objc var IVs			= 0x0 // All IVs will be the same. Not much point in varying them.
-	@objc var EVs			= [0,0,0,0,0,0]
+	var IVs			= 0x0 // All IVs will be the same. Not much point in varying them.
+	var EVs			= [0,0,0,0,0,0]
 	var moves				= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
 	
-	@objc var ability		= 0x0 {
+	var ability		= 0x0 {
 		didSet {
 			if ![0,1].contains(ability) {
 				ability = 0xFF // set to random in colosseum
@@ -68,41 +68,41 @@ final class XGTrainerPokemon : NSObject, Codable {
 		}
 	}
 	
-	@objc var shadowCatchRate 	= 0x0
-	@objc var shadowCounter		= 0x0
-	@objc var ShadowDataInUse 	= false
+	var shadowCatchRate 	= 0x0
+	var shadowCounter		= 0x0
+	var ShadowDataInUse 	= false
 	var shadowMoves				= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
-	@objc var shadowFleeValue 	= 0x0
+	var shadowFleeValue 	= 0x0
 	
-	@objc var shadowAggression = 0x0
-	@objc var shadowAlwaysFlee = 0x0
-	@objc var shadowBoostLevel = 0x0 // level before snagged
+	var shadowAggression = 0x0
+	var shadowAlwaysFlee = 0x0
+	var shadowBoostLevel = 0x0 // level before snagged
 	
-	@objc var priority1 = 0x0
+	var priority1 = 0x0
 	
 	// function of these bytes modified by editing dol code
 	var shinyness = XGShinyValues.never
-	@objc var priority	  = 0
+	var priority	  = 0
 	
-	@objc var startOffset : Int {
+	var startOffset : Int {
 		get {
 			return deckData.deck.DPKMDataOffset + (deckData.DPKMIndex * kSizeOfPokemonData)
 		}
 	}
 	
-	@objc var shadowStartOffset : Int {
+	var shadowStartOffset : Int {
 		get {
 			return XGDecks.DeckDarkPokemon.DDPKDataOffset + (deckData.index * kSizeOfShadowData)
 		}
 	}
 	
-	@objc var isShadowPokemon : Bool {
+	var isShadowPokemon : Bool {
 		get {
 			return deckData.isShadow
 		}
 	}
 	
-	@objc var isSet : Bool {
+	var isSet : Bool {
 		get {
 			return deckData.isSet
 		}
@@ -175,7 +175,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 	}
 	
 	
-	@objc func save() {
+	func save() {
 		
 		if self.isShadowPokemon {
 			
@@ -233,7 +233,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 		
 	}
 	
-	@objc func purge() {
+	func purge() {
 		species		= XGPokemon.pokemon(0)
 		level		= 0
 		happiness	= 0

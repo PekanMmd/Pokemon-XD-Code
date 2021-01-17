@@ -18,24 +18,24 @@ let kTrainerClassNameIDOffset		= 0x04
 
 final class XGTrainerClass: NSObject, Codable {
 	
-	@objc var payout = 0
-	@objc var nameID = 0
+	var payout = 0
+	var nameID = 0
 	
 	var index = 0
 	
-	@objc var name : XGString {
+	var name : XGString {
 		get {
 			return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
 		}
 	}
 	
-	@objc var startOffset : Int {
+	var startOffset : Int {
 		get {
 			return kFirstTrainerClassDataOffset + (self.index * kSizeOfTrainerClassEntry)
 		}
 	}
 	
-	@objc var dictionaryRepresentation : [String : AnyObject] {
+	var dictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["name"] = self.name.string as AnyObject?
@@ -46,7 +46,7 @@ final class XGTrainerClass: NSObject, Codable {
 		}
 	}
 	
-	@objc var readableDictionaryRepresentation : [String : AnyObject] {
+	var readableDictionaryRepresentation : [String : AnyObject] {
 		get {
 			var dictRep = [String : AnyObject]()
 			dictRep["payout"] = self.payout as AnyObject?
@@ -70,7 +70,7 @@ final class XGTrainerClass: NSObject, Codable {
 		
 	}
 	
-	@objc func save() {
+	func save() {
 		
 		let rel = XGFiles.common_rel.data!
 		let start = self.startOffset
