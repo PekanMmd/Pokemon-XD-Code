@@ -12,13 +12,13 @@ class XGColour: NSObject, Codable {
 	
 	static var colourThreshold = 4
 	
-	@objc var red	= 0
-	@objc var green	= 0
-	@objc var blue	= 0
-	@objc var alpha	= 0
+	var red	= 0
+	var green	= 0
+	var blue	= 0
+	var alpha	= 0
 	
 	
-	@objc init(red: Int, green: Int, blue: Int, alpha: Int) {
+	init(red: Int, green: Int, blue: Int, alpha: Int) {
 		super.init()
 		
 		self.red   = red
@@ -66,23 +66,23 @@ class XGColour: NSObject, Codable {
 		}
 	}
 	
-	@objc var I4Representation : Int {
+	var I4Representation : Int {
 		return (red + green + blue) / (3 * 0x11)
 	}
 	
-	@objc var I8Representation : Int {
+	var I8Representation : Int {
 		return (red + green + blue) / 3
 	}
 	
-	@objc var IA4Representaion : Int {
+	var IA4Representaion : Int {
 		return ((alpha / 0x11) << 4) + (red + green + blue) / (3 * 0x11)
 	}
 	
-	@objc var IA8Representaion : Int {
+	var IA8Representaion : Int {
 		return (alpha << 8) + ((red + green + blue) / 3 )
 	}
 	
-	@objc var RGB565Representation : Int {
+	var RGB565Representation : Int {
 		get {
 			var value = 0
 			
@@ -94,7 +94,7 @@ class XGColour: NSObject, Codable {
 		}
 	}
 	
-	@objc var RGB5A3Representation : Int {
+	var RGB5A3Representation : Int {
 		get {
 			var value = 0
 			
@@ -114,7 +114,7 @@ class XGColour: NSObject, Codable {
 		}
 	}
 	
-	@objc var RGBA32Representation : [UInt8] {
+	var RGBA32Representation : [UInt8] {
 		return [alpha, red, green, blue].map({ (i) -> UInt8 in
 			return UInt8(i)
 		})
@@ -124,7 +124,7 @@ class XGColour: NSObject, Codable {
 		return (alpha << 24) + (red << 16) + (green << 8) + blue
 	}
 	
-	@objc class func none() -> XGColour {
+	class func none() -> XGColour {
 		return XGColour(red: 0, green: 0, blue: 0, alpha: 0)
 	}
 	
@@ -172,7 +172,7 @@ class XGColour: NSObject, Codable {
 		}
 	}
 	
-	@objc func setI4(raw: Int) {
+	func setI4(raw: Int) {
 		let value = raw * 0x11
 		self.red = value
 		self.green = value
@@ -180,14 +180,14 @@ class XGColour: NSObject, Codable {
 		self.alpha = 0xFF
 	}
 	
-	@objc func setI8(raw: Int) {
+	func setI8(raw: Int) {
 		self.red = raw
 		self.green = raw
 		self.blue = raw
 		self.alpha = 0xFF
 	}
 	
-	@objc func setIA4(raw: Int) {
+	func setIA4(raw: Int) {
 		let value = (raw % 16) * 0x11
 		self.red = value
 		self.green = value
@@ -195,7 +195,7 @@ class XGColour: NSObject, Codable {
 		self.alpha = (raw >> 4) * 0x11
 	}
 	
-	@objc func setIA8(raw: Int) {
+	func setIA8(raw: Int) {
 		let value = (raw % 256)
 		self.red = value
 		self.green = value
@@ -203,7 +203,7 @@ class XGColour: NSObject, Codable {
 		self.alpha = (raw >> 8)
 	}
 	
-	@objc func setRGB565(raw: Int) {
+	func setRGB565(raw: Int) {
 		var currentColour = raw
 		
 		self.blue = (currentColour % 0x20) * 8
@@ -217,7 +217,7 @@ class XGColour: NSObject, Codable {
 		self.alpha = 0xFF
 	}
 	
-	@objc func setRGB5A3(raw: Int) {
+	func setRGB5A3(raw: Int) {
 		
 		let top = raw >> 15
 		
@@ -250,7 +250,7 @@ class XGColour: NSObject, Codable {
 		
 	}
 	
-	@objc func setRGBA32(raw: UInt32) {
+	func setRGBA32(raw: UInt32) {
 		
 		self.alpha   = ((raw >> 24) & 0xFF).int32
 		self.red = ((raw >> 16) & 0xFF).int32

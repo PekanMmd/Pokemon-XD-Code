@@ -38,7 +38,7 @@ class XGTrainer: NSObject, XGIndexedValue {
 		}
 	}
 	
-	@objc var name : XGString {
+	var name : XGString {
 		get {
 			return getStringSafelyWithID(id: nameID)
 		}
@@ -61,7 +61,7 @@ class XGTrainer: NSObject, XGIndexedValue {
 
 	}
 	
-	@objc func save() {
+	func save() {
 		
 	}
    

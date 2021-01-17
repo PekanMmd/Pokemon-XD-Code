@@ -30,8 +30,8 @@ final class XGTrainer: NSObject, Codable {
 	
 	var index				= 0x0
 	
-	@objc var AI				= 0
-	@objc var cameraEffects		= 0 // xd only
+	var AI				= 0
+	var cameraEffects		= 0 // xd only
 	
 	var nameID				= 0x0
 	var preBattleTextID		= 0x0
@@ -42,7 +42,7 @@ final class XGTrainer: NSObject, Codable {
 	var trainerClass		= XGTrainerClasses.none
 	var trainerModel		= XGTrainerModels.wes
 	
-	@objc var battleData : XGBattle? {
+	var battleData : XGBattle? {
 		return nil
 	}
 	

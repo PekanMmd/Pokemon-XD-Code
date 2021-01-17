@@ -32,7 +32,7 @@ class XGStack<T>: NSObject {
 		return data.count
 	}
 	
-	@objc var isEmpty : Bool {
+	var isEmpty : Bool {
 		return data.count == 0
 	}
 }

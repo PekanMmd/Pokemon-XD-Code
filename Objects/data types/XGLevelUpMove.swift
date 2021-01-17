@@ -16,17 +16,17 @@ let kLevelUpMoveIndexOffset = 0x2 // 2 bytes
 
 class XGLevelUpMove: NSObject, Codable {
 	
-	@objc var level = 0x0
+	var level = 0x0
 	var move  = XGMoves.move(0)
 	
-	@objc init(level: Int, move: Int) {
+	init(level: Int, move: Int) {
 		super.init()
 		
 		self.level = level
 		self.move  = .move(move)
 	}
 	
-	@objc func isSet() -> Bool {
+	func isSet() -> Bool {
 		return self.level > 0
 	}
 	
