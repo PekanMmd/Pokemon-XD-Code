@@ -685,7 +685,7 @@ indirect enum XDSExpr {
 				return macroWithName("SCRIPT_\(scriptIdentifier.hexString())_" + "FUNCTION_\(functionIndex)")
 			}
 		case .sfxID:
-			return "SFX_" + XGMusicMetaData(index: c.asInt).name.uppercased()
+			return macroWithName("SFX_" + XGMusicMetaData(index: c.asInt).name.uppercased())
 		case .storyProgress:
 			let storyProgress = XGStoryProgress(rawValue: c.asInt)!
 			return macroWithName(storyProgress.macroName)
