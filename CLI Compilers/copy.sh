@@ -3,6 +3,10 @@ mkdir -p out/Assets/XD/wiimm
 mkdir -p out/Assets/Colosseum/wiimm
 mkdir -p out/Assets/PBR/wiimm
 
+cp .build/debug/Colosseum-CLI out/
+cp .build/debug/GoD-CLI out/
+cp .build/debug/PBR-CLI out/
+
 
 # GoD Assets
 cp "$PWD/JSON/XD/Move Categories.json" out/Assets/XD/

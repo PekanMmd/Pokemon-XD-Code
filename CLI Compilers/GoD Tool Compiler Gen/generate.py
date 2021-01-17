@@ -1,5 +1,6 @@
 from pbxproj import XcodeProject
 import sys, os
+import stat
 
 # Target names
 GoDCLITargetName = "GoD-CLI"
@@ -147,9 +148,11 @@ for source in PBRSources:
     win_line = f'mklink "spm\\virt\\{PBRCLITargetName}\\Sources\\{os.path.basename(source)}" "%cd%\\{fixed}" > NUL'
     win_link_lines.append(win_line)
 
-unix_link_script = open("CLI Compilers/link.sh", 'w')
+unix_link_file = "CLI Compilers/link.sh"
+unix_link_script = open(unix_link_file, 'w')
 unix_link_script.write("\n".join(unix_link_lines)[1:]+"\n")
 unix_link_script.close()
+os.chmod(unix_link_file, os.stat(unix_link_file).st_mode | stat.S_IEXEC)
 
 win_link_script = open("CLI Compilers/link.bat", 'w')
 win_link_script.write("\n".join(win_link_lines)[1:]+"\n")
@@ -173,6 +176,10 @@ echo "Copying Assets..."
 mkdir -p {GoDWiimmsAssetsFolder}
 mkdir -p {ColoWiimmsAssetsFolder}
 mkdir -p {PBRWiimmsAssetsFolder}
+
+cp .build/debug/Colosseum-CLI out/
+cp .build/debug/GoD-CLI out/
+cp .build/debug/PBR-CLI out/
 """
 unix_copy_lines = [unix_copy_preamble]
 
@@ -189,6 +196,11 @@ md {win_ColoWiimmsAssetsFolder}
 md {win_PBRWiimmsAssetsFolder}
 
 endlocal
+
+copy .build\debug\Colosseum-CLI.exe out
+copy .build\debug\GoD-CLI.exe out
+copy .build\debug\PBR-CLI.exe out
+
 """
 win_copy_lines = [win_copy_preamble]
 
@@ -214,7 +226,6 @@ for asset in ColoAssets:
     win_line = f'copy "%cd%\\{fixed}" "{win_copy_dest}\\{os.path.basename(asset)}"'
     win_copy_lines.append(win_line)
 
-
 unix_copy_lines.append("\n# PBR Assets")
 win_copy_lines.append("\nREM PBR Assets")
 win_copy_dest = PBRAssetsFolder.replace('/', '\\')
@@ -232,9 +243,11 @@ unix_copy_lines.append("cp tools/OSX/other/* " + PBRAssetsFolder)
 win_copy_lines.append("copy tools\\Windows\\wiimm\\* " + PBRWiimmsAssetsFolder.replace('/', '\\'))
 win_copy_lines.append("copy tools\\Windows\\other\\* " + PBRAssetsFolder.replace('/', '\\'))
 
-unix_copy_script = open("CLI Compilers/copy.sh", 'w')
+unix_copy_file = "CLI Compilers/copy.sh"
+unix_copy_script = open(unix_copy_file, 'w')
 unix_copy_script.write("\n".join(unix_copy_lines)[1:]+"\n")
 unix_copy_script.close()
+os.chmod(unix_copy_file, os.stat(unix_copy_file).st_mode | stat.S_IEXEC)
 
 win_copy_script = open("CLI Compilers/copy.bat", 'w')
 win_copy_script.write("\n".join(win_copy_lines)[1:]+"\n")

@@ -7,6 +7,11 @@ md out\Assets\PBR\wiimm
 
 endlocal
 
+copy .build\debug\Colosseum-CLI.exe out
+copy .build\debug\GoD-CLI.exe out
+copy .build\debug\PBR-CLI.exe out
+
+
 
 REM GoD Assets
 copy "%cd%\JSON\XD\Move Categories.json" "out\Assets\XD\Move Categories.json"
