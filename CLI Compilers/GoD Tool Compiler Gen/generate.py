@@ -177,9 +177,9 @@ mkdir -p {PBRWiimmsAssetsFolder}
 unix_copy_lines = [unix_copy_preamble]
 
 
-win_GoDWiimmsAssetsFolder = GoDWiimmsAssetsFolder.replace('\\', '/')
-win_ColoWiimmsAssetsFolder = ColoWiimmsAssetsFolder.replace('\\', '/')
-win_PBRWiimmsAssetsFolder = PBRWiimmsAssetsFolder.replace('\\', '/')
+win_GoDWiimmsAssetsFolder = GoDWiimmsAssetsFolder.replace('/', '\\')
+win_ColoWiimmsAssetsFolder = ColoWiimmsAssetsFolder.replace('/', '\\')
+win_PBRWiimmsAssetsFolder = PBRWiimmsAssetsFolder.replace('/', '\\')
 win_copy_preamble = f"""
 echo "Copying Assets..."
 setlocal enableextensions

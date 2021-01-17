@@ -1,9 +1,9 @@
 echo "Copying Assets..."
 setlocal enableextensions
 
-md out/Assets/XD/wiimm
-md out/Assets/Colosseum/wiimm
-md out/Assets/PBR/wiimm
+md out\Assets\XD\wiimm
+md out\Assets\Colosseum\wiimm
+md out\Assets\PBR\wiimm
 
 endlocal
 

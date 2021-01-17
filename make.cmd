@@ -15,7 +15,7 @@ if /I "%1"=="clean" GOTO clean
 
 REM default command
 goto :build
-cmd /q /c "CLI Compilers\copy.bat"
+cmd /c "CLI Compilers\copy.bat"
 :copy
 
 goto :eof
