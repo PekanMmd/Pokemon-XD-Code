@@ -123,7 +123,7 @@ for source in GoDSources:
     unix_lines.append(unix_line)
 
     fixed = source.replace('/', '\\')
-    win_line = f'mklink "spm\\virt\\{GoDCLITargetName}\\Sources\\{os.path.basename(source)}" "%cd%\\{fixed}"'
+    win_line = f'mklink "spm\\virt\\{GoDCLITargetName}\\Sources\\{os.path.basename(source)}" "%cd%\\{fixed}" > NUL'
     win_lines.append(win_line)
 
 unix_lines.append("\n# Colo Sources")
@@ -132,7 +132,7 @@ for source in ColoSources:
     unix_lines.append(line)
 
     fixed = source.replace('/', '\\')
-    win_line = f'mklink "spm\\virt\\{ColoCLITargetName}\\Sources\\{os.path.basename(source)}" "%cd%\\{fixed}"'
+    win_line = f'mklink "spm\\virt\\{ColoCLITargetName}\\Sources\\{os.path.basename(source)}" "%cd%\\{fixed}" > NUL'
     win_lines.append(win_line)
 
 unix_lines.append("\n# PBR Sources")
@@ -141,7 +141,7 @@ for source in PBRSources:
     unix_lines.append(line)
 
     fixed = source.replace('/', '\\')
-    win_line = f'mklink "spm\\virt\\{PBRCLITargetName}\\Sources\\{os.path.basename(source)}" "%cd%\\{fixed}"'
+    win_line = f'mklink "spm\\virt\\{PBRCLITargetName}\\Sources\\{os.path.basename(source)}" "%cd%\\{fixed}" > NUL'
     win_lines.append(win_line)
 
 unix_script = open("CLI Compilers/link.sh", 'w')
