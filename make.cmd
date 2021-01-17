@@ -6,6 +6,7 @@ call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary
 goto :commands
 
 :commands
+if /I "%1"=="copy" GOTO copy
 if /I "%1"=="build" GOTO build
 if /I "%1"=="build-god" GOTO build-god
 if /I "%1"=="build-colo" GOTO build-colo
