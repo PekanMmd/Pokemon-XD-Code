@@ -26,7 +26,8 @@ typealias FTBL = (codeOffset: Int, end: Int, name: String, index: Int)
 typealias GIRI = (groupID: Int, resourceID: Int)
 typealias VECT = (x: Float, y: Float, z: Float)
 
-let currentXDSVersion : Float = 1.1
+let currentXDSVersion: Float = 1.2
+let minXDSVersionCompatibilty: Float = 1.2
 
 class XGScript: NSObject {
 	
@@ -1105,7 +1106,7 @@ class XGScript: NSObject {
 				// if type was already known check for consistency
 				if !result {
 					if globalMacroTypes[v]! != to && globalMacroTypes[v]!.printsAsMacro {
-						printg("Warning: function '\(v)' has conflicting macro types \(globalMacroTypes[v]!.index) \(to.index).")
+						printg("Warning: function '\(v)' has conflicting macro types \(globalMacroTypes[v]!.index) \(to.index). (This may not be a problem though)")
 					}
 				} else {
 					globalMacroTypes[v] = to
@@ -1116,7 +1117,7 @@ class XGScript: NSObject {
 				// if type was already known check for consistency
 				if !result {
 					if globalMacroTypes[v]! != to && globalMacroTypes[v]!.printsAsMacro {
-						printg("Warning: global var '\(v)' has conflicting macro types \(globalMacroTypes[v]!.index) \(to.index).")
+						printg("Warning: global var '\(v)' has conflicting macro types \(globalMacroTypes[v]!.index) \(to.index). (This may not be a problem though)")
 					} else if !globalMacroTypes[v]!.printsAsMacro {
 						globalMacroTypes[v] = to
 						return true
@@ -1129,7 +1130,7 @@ class XGScript: NSObject {
 				let result = localMacroTypes[currentFuncName]![v] == nil
 				if !result {
 					if localMacroTypes[currentFuncName]![v]! != to {
-						printg("Warning: function \(currentFuncName) - local var '\(v)' has conflicting macro types. \(localMacroTypes[currentFuncName]![v]!.index) \(to.index)")
+						printg("Warning: function \(currentFuncName) - local var '\(v)' has conflicting macro types \(localMacroTypes[currentFuncName]![v]!.index) \(to.index). (This may not be a problem though)")
 					}
 				} else {
 					localMacroTypes[currentFuncName]![v] = to

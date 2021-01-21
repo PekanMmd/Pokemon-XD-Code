@@ -276,7 +276,7 @@ extension XDSScriptCompiler {
 		}
 		
 		if text == "Null" {
-			return (XDSConstantTypes.none_t, [XDSConstant.null])
+			return (XDSConstantTypes.void, [XDSConstant.null])
 		}
 		
 		if ["True", "Yes", "YES", "TRUE"].contains(text) {
@@ -288,15 +288,15 @@ extension XDSScriptCompiler {
 		}
 		
 		if let index = arrys.names.firstIndex(of: text) {
-			return (XDSConstantTypes.none_t, [XDSConstant(type: XDSConstantTypes.array.index, rawValue: UInt32(index))])
+			return (XDSConstantTypes.void, [XDSConstant(type: XDSConstantTypes.array.index, rawValue: UInt32(index))])
 		}
 		
 		if let index = vects.names.firstIndex(of: text) {
-			return (XDSConstantTypes.none_t, [XDSConstant(type: XDSConstantTypes.vector.index, rawValue: UInt32(index))])
+			return (XDSConstantTypes.void, [XDSConstant(type: XDSConstantTypes.vector.index, rawValue: UInt32(index))])
 		}
 		
 		if let index = giris.names.firstIndex(of: text) {
-			return (XDSConstantTypes.none_t, [XDSConstant(type: XDSConstantTypes.character.index, rawValue: UInt32(index))])
+			return (XDSConstantTypes.void, [XDSConstant(type: XDSConstantTypes.character.index, rawValue: UInt32(index))])
 		}
 		
 		if text.substring(from: 0, to: 1) == "<" {
@@ -373,7 +373,7 @@ extension XDSScriptCompiler {
 			}
 		}
 		
-		return (XDSConstantTypes.none_t, [XDSConstant.null])
+		return (XDSConstantTypes.void, [XDSConstant.null])
 	}
 	
 	
@@ -498,6 +498,9 @@ extension XDSScriptCompiler {
 				xdsversion = val
 				if xdsversion > currentXDSVersion {
 					error = "This compiler is too old. It was built for xds versions \(String(format: "%1.1f", currentXDSVersion)) and below.\n"
+					error += "\(tokens[0]) \(tokens[1]) \(tokens[2])"
+				} else if xdsversion < minXDSVersionCompatibilty {
+					error = "This script was compiled with an old version of the tool that is no longer compatible. Please decompile the script again using this version.\n"
 					error += "\(tokens[0]) \(tokens[1]) \(tokens[2])"
 				}
 				return true

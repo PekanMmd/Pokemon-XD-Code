@@ -31,7 +31,7 @@ class GoDPokemonView: NSImageView {
 	var shadowCatchrate = NSTextField(frame: .zero)
 	var shadowCounter = NSTextField(frame: .zero)
 	var shadowAggression = NSTextField(frame: .zero)
-	var shadowFlee = NSTextField(frame: .zero)
+	var shadowID = NSTextField(frame: .zero)
 	var pokeball = GoDPokeballPopUpButton()
 	
 	var views = [String : NSView]()
@@ -100,7 +100,7 @@ class GoDPokemonView: NSImageView {
 		
 		self.shadowCounter.integerValue = pokemon.shadowCounter
 		self.shadowAggression.isHidden = true
-		self.shadowFlee.isHidden = true
+		self.shadowID.isHidden = true
 		self.shadowCatchrate.integerValue = pokemon.shadowCatchRate
 		self.pokeball.select(pokemon.pokeball)
 		
@@ -183,7 +183,7 @@ class GoDPokemonView: NSImageView {
 		ivFormat.minimum = 0
 		ivFormat.maximum = 255
 		
-		for view in evs + [shadowCatchrate,shadowAggression,shadowFlee,happiness] {
+		for view in evs + [shadowCatchrate,shadowAggression,shadowID,happiness] {
 			view.formatter = byteFormat
 		}
 		shadowCounter.formatter = byteFormat
@@ -222,8 +222,8 @@ class GoDPokemonView: NSImageView {
 		self.views["shadowct"] = shadowCounter
 		self.addSubview(shadowAggression)
 		self.views["shadowag"] = shadowAggression
-		self.addSubview(shadowFlee)
-		self.views["shadowfl"] = shadowFlee
+		self.addSubview(shadowID)
+		self.views["shadowfl"] = shadowID
 		
 		
 		let titles = ["IVs","HP","Atk","Def","Sp.A","Sp.D","Speed","Happiness","Heart Guage","","","Catch rate"]
@@ -255,7 +255,7 @@ class GoDPokemonView: NSImageView {
 		
 		for i in 0 ... 5 {
 			let view1 = views[["IVs","happiness","shadowctT","shadowflT","shadowagT","shadowcrT"][i]]!
-			let view2 = [ivs,happiness,shadowCounter,shadowFlee,shadowAggression,shadowCatchrate][i]
+			let view2 = [ivs,happiness,shadowCounter,shadowID,shadowAggression,shadowCatchrate][i]
 			self.addConstraintAlignLeftAndRightEdges(view1: view1, view2: view2)
 			view2.alignment = .right
 			view2.font = GoDDesign.fontOfSize(8)
@@ -282,7 +282,7 @@ class GoDPokemonView: NSImageView {
 		
 		self.metrics["g"] = 5
 		
-		for view in [shadowCatchrate,shadowFlee,shadowAggression] {
+		for view in [shadowCatchrate,shadowID,shadowAggression] {
 			self.addConstraintEqualWidths(view1: view, view2: shadowCounter)
 		}
 		

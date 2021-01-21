@@ -11,28 +11,30 @@ import Foundation
 //MARK: - Class Names
 var ScriptClassNames : [Int : String] = [
 	// .xds script format requires classes to be named with first character capitalised
-	 0 : "Standard",
-	 4 : "Vector",
-	 7 : "Array",
+	 0: "Standard",
+	 4: "Vector",
+	 5: "Matrix",
+	 6: "Object",
+	 7: "Array",
 	 
 	// 33 is first object class, 60 is last
-	33 : "Camera",
-	35 : "Character",
-	37 : "Pokemon",
-	38 : "Map",
-	39 : "Tasks",
-	40 : "Dialogue",
-	41 : "Transition",
-	42 : "Battle",
-	43 : "Player",
-	45 : "Room",
-	47 : "Sound",
-	49 : "PDA",
-	52 : "Daycare",
-	54 : "TaskManager",
-	58 : "Effects",
-	59 : "ShadowPokemon",
-	60 : "Pokespot"
+	33: "Camera",
+	35: "Character",
+	37: "Pokemon",
+	38: "Map",
+	39: "Tasks",
+	40: "Dialogue",
+	41: "Transition",
+	42: "Battle",
+	43: "Player",
+	45: "Room",
+	47: "Sound",
+	49: "PDA",
+	52: "Daycare",
+	54: "TaskManager",
+	58: "Effects",
+	59: "ShadowPokemon",
+	60: "Pokespot"
 ]
 
 //MARK: - Operators

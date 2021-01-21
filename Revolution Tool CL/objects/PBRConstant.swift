@@ -10,7 +10,7 @@ import Foundation
 enum XDSConstantTypes {
 	
 	// same as classes in script class info
-	case none_t
+	case void
 	case integer
 	case float
 	case string
@@ -22,7 +22,7 @@ enum XDSConstantTypes {
 	var string : String {
 		get {
 			switch self {
-			case .none_t			: return "Type_null"
+			case .void				: return "Void"
 			case .integer			: return "Int"
 			case .float				: return "Float"
 			case .string			: return "String"
@@ -36,12 +36,12 @@ enum XDSConstantTypes {
 	
 	var index : Int {
 		switch self {
-		case .none_t			: return 0
-		case .integer			: return 1
-		case .float				: return 2
-		case .string			: return 3
-		case .vector			: return 4
-		case .array				: return 7
+		case .void			: return 0
+		case .integer		: return 1
+		case .float			: return 2
+		case .string		: return 3
+		case .vector		: return 4
+		case .array			: return 7
 		case .codePointer	: return 8
 		case .unknown(let val)	: return val
 		}
@@ -49,7 +49,7 @@ enum XDSConstantTypes {
 	
 	static func typeWithIndex(_ id: Int) -> XDSConstantTypes {
 		switch id {
-		case  0 : return .none_t
+		case  0 : return .void
 		case  1 : return .integer
 		case  2 : return .float
 		case  3 : return .string
@@ -74,24 +74,24 @@ enum XDSConstantTypes {
 	
 }
 
-class XDSConstant : NSObject {
+class XDSConstant: NSObject {
 	
-	var type   : XDSConstantTypes = .none_t
-	var value  : UInt32 = 0
+	var type: XDSConstantTypes = .void
+	var value: UInt32 = 0
 	
 	override var description: String {
 		return self.rawValueString
 	}
 	
-	var asFloat : Float {
+	var asFloat: Float {
 		return value.hexToSignedFloat()
 	}
 	
-	var asInt : Int {
+	var asInt: Int {
 		return value.int32
 	}
 	
-	var rawValueString : String {
+	var rawValueString: String {
 		switch self.type {
 		case .float:
 			var text = String(format: "%.4f", self.asFloat)
@@ -111,7 +111,7 @@ class XDSConstant : NSObject {
 			return "vector_" + String(format: "%02d", self.asInt)
 		case .integer:
 			return self.asInt >= 0x200 ? self.asInt.hexString() : "\(self.asInt)"
-		case .none_t:
+		case .void:
 			return "Null"
 		case .array:
 			return "array_" + String(format: "%02d", self.asInt)
@@ -134,7 +134,7 @@ class XDSConstant : NSObject {
 		self.init(type: type.index, rawValue: rawValue.unsigned)
 	}
 	
-	class var null : XDSConstant {
+	class var null: XDSConstant {
 		return XDSConstant(type: 0, rawValue: 0)
 	}
 	

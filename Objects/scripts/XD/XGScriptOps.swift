@@ -27,7 +27,11 @@ let instructionNames = [
 	"release",
 	"exit",
 	"setline",
-	"ldncpvar"
+	"ldncpvar",
+	#if GAME_PBR
+	"unknown18",
+	"loadShortImmediate"
+	#endif
 	
 ]
 
@@ -52,6 +56,10 @@ enum XGScriptOps : Int {
 	case exit = 15
 	case setLine = 16
 	case loadNonCopyableVariable = 17
+	#if GAME_PBR
+	case unknown18 = 18
+	case loadShortImmediate = 19
+	#endif
 	
 	
 	var name : String {
