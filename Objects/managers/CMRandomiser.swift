@@ -242,15 +242,26 @@ class XGRandomiser : NSObject {
 			
 			// no individual stat will be over this value
 			let maxStat = min(statsTotal / 4, 255)
-			
-			// each stat should be at least 20
-			pokemon.attack = 40
-			pokemon.defense = 40
-			pokemon.speed = 40
-			pokemon.hp = 40
-			pokemon.specialAttack = 40
-			pokemon.specialDefense = 40
-			statsTotal -= 240
+
+			if statsTotal <= 240 {
+				// each stat should be at least 10
+				pokemon.attack = 10
+				pokemon.defense = 10
+				pokemon.speed = 10
+				pokemon.hp = 10
+				pokemon.specialAttack = 10
+				pokemon.specialDefense = 10
+				statsTotal -= 60
+			} else {
+				// each stat should be at least 40
+				pokemon.attack = 40
+				pokemon.defense = 40
+				pokemon.speed = 40
+				pokemon.hp = 40
+				pokemon.specialAttack = 40
+				pokemon.specialDefense = 40
+				statsTotal -= 240
+			}
 			
 			func randomStat() -> Int {
 				return Int.random(in: 0 ... 5)

@@ -43,7 +43,7 @@ let kShadowCatchRateOffset		= 0x00 // overrides species' catch rate
 let kShadowSpeciesOffset		= 0x02
 let kShadowTIDOffset			= 0x04 // trainer index of the first time the shadow pokemon is encountered
 let kShadowTID2Offset			= 0x06 // trainer index of an alternate possibility for first encounter
-let kShadowCounterOffset		= 0x09
+let kShadowCounterOffset		= 0x08
 let kShadowIDOffset				= 0x0B
 let kShadowJapaneseMSGOffset	= 0x22
 
@@ -147,7 +147,7 @@ class XGTrainerPokemon : NSObject, Codable {
 		if isShadow {
 			let start = shadowStartOffset
 			shadowCatchRate 	= data.getByteAtOffset(start + kShadowCatchRateOffset)
-			shadowCounter		= data.getByteAtOffset(start + kShadowCounterOffset)
+			shadowCounter		= data.get2BytesAtOffset(start + kShadowCounterOffset)
 			shadowFirstTID		= data.get2BytesAtOffset(start + kShadowTIDOffset)
 		}
 		
@@ -162,7 +162,7 @@ class XGTrainerPokemon : NSObject, Codable {
 			let start = shadowStartOffset
 			
 			data.replaceByteAtOffset(start + kShadowCatchRateOffset, withByte: shadowCatchRate)
-			data.replaceByteAtOffset(start + kShadowCounterOffset, withByte: shadowCounter)
+			data.replace2BytesAtOffset(start + kShadowCounterOffset, withBytes: shadowCounter)
 			data.replace2BytesAtOffset(start + kShadowTIDOffset, withBytes: shadowFirstTID)
 			data.replace2BytesAtOffset(start + kShadowSpeciesOffset, withBytes: self.species.index)
 
@@ -236,5 +236,40 @@ class XGTrainerPokemon : NSObject, Codable {
 	
 }
 
+class CMShadowData {
 
+	var index = 0
+
+	var catchRate = 0
+	var purificationCounter = 0
+	var firstTID = 0
+	var alternateTID = 0
+	var shadowID = 0
+	var nameID = 0 // Japanese text of the pokemon's name
+
+	var species = XGPokemon.pokemon(0)
+	var name: XGString {
+		return getStringSafelyWithID(id: nameID)
+	}
+
+	var startOffset: Int {
+		return CommonIndexes.ShadowData.startOffset + (self.index * kSizeOfShadowData)
+	}
+
+	init(index: Int) {
+		self.index = index
+
+		let data = XGFiles.common_rel.data!
+		let start = self.startOffset
+
+		catchRate 	= data.getByteAtOffset(start + kShadowCatchRateOffset)
+		purificationCounter		= data.get2BytesAtOffset(start + kShadowCounterOffset)
+		firstTID		= data.get2BytesAtOffset(start + kShadowTIDOffset)
+		alternateTID = data.get2BytesAtOffset(start + kShadowTID2Offset)
+		shadowID = data.getByteAtOffset(start + kShadowIDOffset)
+		nameID = data.get2BytesAtOffset(start + kShadowJapaneseMSGOffset)
+		let speciesID = data.get2BytesAtOffset(start + kShadowSpeciesOffset)
+		species = .pokemon(speciesID)
+	}
+}
 
