@@ -104,7 +104,7 @@ enum XGFileTypes : Int {
 		case .lzss: return ".lzss"
 		case .txt : return ".txt"
 		case .json: return ".json"
-		case .rdat: return ".rdat"
+		case .rdat: return ".dat"
 		case .gsw : return ".gsw"
 		case .atx : return ".atx"
 		case .pkx : return ".pkx"

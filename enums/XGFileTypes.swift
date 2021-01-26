@@ -10,7 +10,7 @@ import Foundation
 
 enum XGFileTypes : Int, Codable {
 	case none = 0x00
-	case rdat = 0x02 // room model in hal dat format (unknown if it uses a different file extension)
+	case rdat = 0x02 // room model in hal dat format. Also .dat files but considered different by the fsys headers
 	case dat  = 0x04 // character model in hal dat format
 	case ccd  = 0x06 // collision file
 	case samp = 0x08 // shorter music files for fanfares etc.
@@ -59,7 +59,7 @@ enum XGFileTypes : Int, Codable {
 	var fileExtension : String {
 		switch self {
 		case .none: return ""
-		case .rdat: return ".rdat"
+		case .rdat: return ".dat"
 		case .dat : return ".dat"
 		case .ccd : return ".ccd"
 		case .samp: return ".samp"
