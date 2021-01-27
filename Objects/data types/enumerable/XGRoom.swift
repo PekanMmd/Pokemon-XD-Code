@@ -64,6 +64,17 @@ final class XGRoom: NSObject, Codable {
 		let id = self.name.substring(from: 0, to: 2)
 		return XGMaps(rawValue: id) ?? .Unknown
 	}
+
+	var script: XGScript? {
+		#if GAME_XD
+		for file in XGFolders.Scripts.files where file.fileType == .scd {
+			if file.fileName.removeFileExtensions() == self.name {
+				return file.scriptData
+			}
+		}
+		#endif
+		return nil
+	}
 	
 	var roomID = 0
 	var groupID = 0

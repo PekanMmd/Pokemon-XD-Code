@@ -725,7 +725,6 @@ class XGDolPatcher {
 		for GSLogOffset in scriptGSLogOffsets {
 			XGAssembly.replaceRamASM(RAMOffset: GSLogOffset, newASM: [.bl(OSReportOffset)])
 		}
-
 	}
 	
 	class func applyPatch(_ patch: XGDolPatches) {

@@ -8,39 +8,6 @@
 
 import Foundation
 
-enum Environment {
-	case Linux
-	case OSX
-	case Windows
-}
-
-enum Console {
-	case ngc
-	case wii
-}
-
-enum XGGame {
-	case Colosseum
-	case XD
-	case PBR
-
-	var name: String {
-		switch self {
-		case .Colosseum: return "Pokemon Colosseum"
-		case .XD: return "Pokemon XD: Gale of Darkness"
-		case .PBR: return "Pokemon Battle Revolution"
-		}
-	}
-
-	var shortName: String {
-		switch self {
-		case .Colosseum: return "Colosseum"
-		case .XD: return "XD"
-		case .PBR: return "PBR"
-		}
-	}
-}
-
 protocol XGIndexedValue {
 	var index : Int { get }
 }
@@ -194,18 +161,18 @@ extension NSObject {
 }
 
 extension Bool {
-	var string : String {
+	var string: String {
 		return self ? "Yes" : "No"
 	}
 }
 
 extension Int {
 	
-	var boolean : Bool {
+	var boolean: Bool {
 		return self != 0
 	}
 	
-	var string : String {
+	var string: String {
 		return String(self)
 	}
 	
@@ -240,7 +207,7 @@ extension Int {
 		return "0b" + binary()
 	}
 	
-	var byteArray : [Int] {
+	var byteArray: [Int] {
 		var val = self
 		var array = [0,0,0,0]
 		for j in [3,2,1,0] {
@@ -250,7 +217,7 @@ extension Int {
 		return array
 	}
 	
-	var byteArrayU16 : [Int] {
+	var byteArrayU16: [Int] {
 		var val = self
 		var array = [0,0]
 		for j in [1,0] {
@@ -260,7 +227,7 @@ extension Int {
 		return array
 	}
 	
-	var charArray : [UInt8] {
+	var charArray: [UInt8] {
 		return byteArray.map({ (i) -> UInt8 in
 			return UInt8(i)
 		})
@@ -302,7 +269,7 @@ extension UInt32 {
 		return float
 	}
 	
-	var byteArray : [Int] {
+	var byteArray: [Int] {
 		var val = self
 		var array = [0,0,0,0]
 		for j in [3,2,1,0] {
@@ -312,7 +279,7 @@ extension UInt32 {
 		return array
 	}
 	
-	var charArray : [UInt8] {
+	var charArray: [UInt8] {
 		return byteArray.map({ (i) -> UInt8 in
 			return UInt8(i)
 		})
@@ -329,17 +296,17 @@ extension UInt32 {
 		return bits
 	}
 	
-	var int : Int {
+	var int: Int {
 		return Int(self)
 	}
 	
-	var int16 : Int {
+	var int16: Int {
 		var value = (self & 0xFFFF).int
 		value = value > 0x8000 ? value - 0x10000 : value
 		return value
 	}
 	
-	var int32 : Int {
+	var int32: Int {
 		var value = (self & 0xFFFFFFFF).int
 		value = value > 0x80000000 ? value - 0x100000000 : value
 		return value
@@ -429,7 +396,7 @@ extension String {
 		return substring(from: startIndex, to: extensionIndex)
 	}
 	
-	var fileExtensions : String {
+	var fileExtensions: String {
 		let extensionIndex = firstIndex(of: ".") ?? endIndex
 		
 		return substring(from: extensionIndex, to: endIndex)
@@ -439,13 +406,7 @@ extension String {
 		return self.replacingOccurrences(of: " ", with: "\\ ")
 	}
 	
-	var cppEnum : String {
-		// convention used in PkmGCTools by Tux
-		return self.replacingOccurrences(of: "-", with: " ").capitalized.replacingOccurrences(of: " ", with: "")
-		
-	}
-	
-	var functionName : String? {
+	var functionName: String? {
 		if !self.contains("(") || !self.contains(")") {
 			return nil
 		}
@@ -457,7 +418,7 @@ extension String {
 		return string
 	}
 	
-	var parameterString : String? {
+	var parameterString: String? {
 		if !self.contains("(") || !self.contains(")") {
 			return nil
 		}
@@ -475,7 +436,7 @@ extension String {
 		return string
 	}
 	
-	var firstBracket : String? {
+	var firstBracket: String? {
 		if !self.contains("(") && !self.contains("[") {
 			return nil
 		}
@@ -516,7 +477,7 @@ extension String {
 		return Int(strtoul(self, nil, 16)) // converts hex string to uint and then cast as Int
 	}
 	
-	var isHexInteger : Bool {
+	var isHexInteger: Bool {
 		
 		if self.length < 3 {
 			return false
@@ -552,7 +513,7 @@ extension String {
 		return true
 	}
 	
-	var hexValue : Int {
+	var hexValue: Int {
 		// get the value of the integer, treating it as a hexadecimal value even if it isn't prefixed with 0x
 		return self.hexStringToInt()
 	}
@@ -604,7 +565,7 @@ extension String {
 		return result
 	}
 	
-	var length : Int {
+	var length: Int {
 		return self.count
 	}
 
@@ -635,7 +596,7 @@ extension String {
 		
 	}
 	
-	var stack : XGStack<String> {
+	var stack: XGStack<String> {
 		let s = XGStack<String>()
 		var string = self
 		for _ in 0 ..< self.count {
@@ -645,7 +606,7 @@ extension String {
 		return s
 	}
 	
-	var msgID : Int? {
+	var msgID: Int? {
 		// returns negative value if invalid msgmacro, nil if doesn't exist
 		if self.length < 3 {
 			return -1
@@ -682,7 +643,7 @@ extension String {
 		}
 	}
 	
-	var msgText : String? {
+	var msgText: String? {
 		// return empty string if error, nil if doesn't exist
 		
 		if self.length < 3 {
@@ -761,75 +722,6 @@ extension Decodable {
 	}
 }
 
-
-extension XGMutableData {
-	var texture : GoDTexture {
-		get {
-			return GoDTexture(data: self)
-		}
-	}
-}
-
-extension XGStringTable {
-
-	@discardableResult
-	func replaceString(_ string: XGString, alert: Bool = false, save: Bool = false) -> Bool {
-
-		guard let oldText = self.stringWithID(string.id), let stringOffset = offsetForStringID(string.id)  else {
-			printg("String table '\(self.file.fileName)' doesn't contain string with id: \(string.id)")
-			return false
-		}
-
-		let difference = string.dataLength - oldText.dataLength
-
-		if difference <= self.extraCharacters {
-
-			if difference < 0 {
-				stringTable.deleteBytes(start: stringOffset, count: abs(difference))
-				stringTable.appendBytes([UInt8](repeating: 0, count: abs(difference))) // preserve file size
-			} else if difference > 0 {
-				stringTable.insertRepeatedByte(byte: 0, count: difference, atOffset: stringOffset)
-				stringTable.deleteBytes(start: stringTable.length - difference, count: difference) // preserve file size
-			}
-
-			stringTable.replaceBytesFromOffset(stringOffset, withByteStream: string.byteStream)
-
-			if string.dataLength > oldText.dataLength {
-				self.increaseOffsetsAfter(stringOffset, by: difference)
-
-			} else if string.dataLength < oldText.dataLength {
-				let difference = oldText.dataLength - string.dataLength
-				self.decreaseOffsetsAfter(stringOffset, by: difference)
-			}
-
-			self.updateOffsets()
-			if save {
-				self.save()
-			}
-
-			return true
-
-		} else {
-			if settings.increaseFileSizes {
-				if self.startOffset == 0 {
-					if settings.verbose {
-						printg("string was too long, adding \(difference + 0x50 - extraCharacters) bytes to table \(self.file.fileName)")
-					}
-					// add a little extra so it doesn't keep hitting this case every time there's even a 1 character increase
-					self.stringTable.insertRepeatedByte(byte: 0, count: difference + 0x50 - extraCharacters, atOffset: stringTable.length)
-					return self.replaceString(string, alert: alert, save: true)
-				}
-			}
-		}
-
-		printg("Couldn't replace string, not enough free space in string table: \(self.file.fileName)")
-		if self.startOffset != 0 {
-			printg("The size of this string table cannot be increased.")
-		}
-		return false
-	}
-}
-
 extension NumberFormatter {
 
 	class func byteFormatter() -> NumberFormatter {
@@ -855,58 +747,4 @@ extension NumberFormatter {
 
 }
 
-extension XGUtility {
-	class func extractAllTextures() {
-		printg("extracting all textures")
-		let dumpFolder = XGFolders.nameAndFolder("Dump", .Textures)
-		XGFolders.setUpFolderFormat()
-		dumpFolder.createDirectory()
-		printg("output folder: \(dumpFolder.path)")
-		for filename in ISO.allFileNames where filename.contains(".fsys") {
-			if settings.verbose {
-				printg("searching file:", filename)
-			}
-			guard let fsysData = ISO.dataForFile(filename: filename) else {
-				if settings.verbose {
-					printg("no iso data found for file:", filename)
-				}
-				continue
-			}
-			let fsys = XGFsys(data: fsysData)
-			for i in 0 ..< fsys.numberOfEntries {
 
-				guard let fileType = fsys.fileTypeForFileWithIndex(index: i), [XGFileTypes.gtx, .atx, .gsw].contains(fileType) else {
-					continue
-				}
-				guard let textureData = fsys.extractDataForFileWithIndex(index: i) else {
-					continue
-				}
-
-				if settings.verbose {
-					printg("outputting:", textureData.file.fileName)
-				}
-
-				let folder = XGFolders.nameAndFolder(filename.removeFileExtensions(), dumpFolder)
-				folder.createDirectory()
-
-
-				if fileType == .gsw {
-					let gsw = XGGSWTextures(data: textureData)
-					let textures = gsw.extractTextureData()
-					textures.forEach { (data) in
-						data.file = .nameAndFolder(data.file.fileName, folder)
-						let texture = GoDTexture(data: data).image
-						texture.writePNGData(toFile: .nameAndFolder(data.file.fileName + ".png", folder))
-
-					}
-				}
-				if fileType == .gtx || fileType == .atx {
-					textureData.file = .nameAndFolder(textureData.file.fileName, folder)
-					let texture = GoDTexture(data: textureData).image
-					texture.writePNGData(toFile: .nameAndFolder(textureData.file.fileName + ".png", folder))
-				}
-				
-			}
-		}
-	}
-}

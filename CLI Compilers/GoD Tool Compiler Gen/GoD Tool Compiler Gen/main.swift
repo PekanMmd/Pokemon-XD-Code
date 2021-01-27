@@ -40,7 +40,7 @@ let ColoAssetTarget = pbxproj.targets(named: ColoGUITargetName)[0]
 let PBRTarget = pbxproj.targets(named: PBRCLITargetName)[0]
 let PBRAssetTarget = pbxproj.targets(named: PBRGUITargetName)[0]
 
-let ignoredFiles = ["OSXExtensions.swift", "WindowsExtensions.swift"]
+let ignoredFiles: [String] = []
 let resourceFileTypes = [".png", ".json", ".sublime"]
 
 // MARK: - Read Source files
@@ -176,10 +176,10 @@ windowsCompiler += "copy ..\\tools\\Windows\\other\\* \((GoDAssetsFolder).replac
 
 // MARK: - Add XD swiftc compiler to scripts
 osxCompiler += "echo \"Compiling GoD Tool. This may take a while...\"\n"
-+ "swiftc -emit-executable -DENV_OSX -o ./out/GoD\\ Tool\\ CLI ../extensions/OSXExtensions.swift"
++ "swiftc -emit-executable -DENV_OSX -DGAME_XD -o ./out/GoD\\ Tool\\ CLI"
 
 windowsCompiler += "echo \"Compiling GoD Tool. This may take a while...\"\n"
-+ "swiftc %SWIFTFLAGS% -emit-executable -DENV_WINDOWS -o .\\out\\GoD-Tool.exe  ..\\extensions\\WindowsExtensions.swift"
++ "swiftc %SWIFTFLAGS% -emit-executable -DENV_WINDOWS -DGAME_XD -o .\\out\\GoD-Tool.exe"
 
 for file in GoDSources {
 	osxCompiler += " ../" + file.replacingOccurrences(of: " ", with: "\\ ")
@@ -208,8 +208,8 @@ windowsColoCompiler += "copy ..\\tools\\Windows\\wiimm\\* \((ColoWiimmsAssetsFol
 windowsColoCompiler += "copy ..\\tools\\Windows\\other\\* \((ColoAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
 
 // MARK: - Add Colosseum swiftc compiler to scripts
-osxColoCompiler += "echo \"Compiling Colosseum Tool. This may take a while...\"\nswiftc -emit-executable -DENV_OSX -o ./out/Colosseum\\ Tool\\ CLI ../extensions/OSXExtensions.swift"
-windowsColoCompiler += "\necho \"Compiling Colosseum Tool. This may take a while...\"\nswiftc %SWIFTFLAGS% -emit-executable -DENV_WINDOWS -o .\\out\\Colosseum-Tool.exe ..\\extensions\\WindowsExtensions.swift"
+osxColoCompiler += "echo \"Compiling Colosseum Tool. This may take a while...\"\nswiftc -emit-executable -DENV_OSX -DGAME_COLO -o ./out/Colosseum\\ Tool\\ CLI "
+windowsColoCompiler += "\necho \"Compiling Colosseum Tool. This may take a while...\"\nswiftc %SWIFTFLAGS% -emit-executable -DENV_WINDOWS -DGAME_COLO -o .\\out\\Colosseum-Tool.exe"
 
 for file in ColoSources {
 	osxColoCompiler += " ../" + file.replacingOccurrences(of: " ", with: "\\ ")
@@ -240,8 +240,8 @@ windowsPBRCompiler += "copy ..\\tools\\Windows\\wiimm\\* \((PBRWiimmsAssetsFolde
 windowsPBRCompiler += "copy ..\\tools\\Windows\\other\\* \((PBRAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
 
 // MARK: - Add PBR swiftc compiler to scripts
-osxPBRCompiler += "echo \"Compiling PBR Tool. This may take a while...\"\nswiftc -emit-executable -DENV_OSX -o ./out/PBR\\ Tool\\ CLI ../extensions/OSXExtensions.swift"
-windowsPBRCompiler += "\necho \"Compiling PBR Tool. This may take a while...\"\nswiftc %SWIFTFLAGS% -emit-executable -DENV_WINDOWS -o .\\out\\PBR-Tool.exe ..\\extensions\\WindowsExtensions.swift"
+osxPBRCompiler += "echo \"Compiling PBR Tool. This may take a while...\"\nswiftc -emit-executable -DENV_OSX -DGAME_PBR -o ./out/PBR\\ Tool\\ CLI"
+windowsPBRCompiler += "\necho \"Compiling PBR Tool. This may take a while...\"\nswiftc %SWIFTFLAGS% -emit-executable -DENV_WINDOWS -DGAME_PBR -o .\\out\\PBR-Tool.exe"
 
 for file in PBRSources {
 	osxPBRCompiler += " ../" + file.replacingOccurrences(of: " ", with: "\\ ")
@@ -254,15 +254,12 @@ windowsPBRCompiler += "\nPAUSE"
 // MARK: - Modify OSX script for Linux
 
 var linuxCompiler = osxCompiler.replacingOccurrences(of: "-DENV_OSX", with: "-DENV_LINUX")
-linuxCompiler = linuxCompiler.replacingOccurrences(of: "../extensions/OSXExtensions.swift", with: "../extensions/LinuxExtensions.swift")
 linuxCompiler = linuxCompiler.replacingOccurrences(of: "/tools/OSX/wiimm", with: "/tools/Linux/wiimm")
 linuxCompiler = linuxCompiler.replacingOccurrences(of: "/tools/OSX/other", with: "/tools/Linux/other")
 var linuxColoCompiler = osxColoCompiler.replacingOccurrences(of: "-DENV_OSX", with: "-DENV_LINUX")
-linuxColoCompiler = linuxColoCompiler.replacingOccurrences(of: "../extensions/OSXExtensions.swift", with: "../extensions/LinuxExtensions.swift")
 linuxColoCompiler = linuxColoCompiler.replacingOccurrences(of: "/tools/OSX/wiimm", with: "/tools/Linux/wiimm")
 linuxColoCompiler = linuxColoCompiler.replacingOccurrences(of: "/tools/OSX/other", with: "/tools/Linux/other")
 var linuxPBRCompiler = osxPBRCompiler.replacingOccurrences(of: "-DENV_OSX", with: "-DENV_LINUX")
-linuxPBRCompiler = linuxPBRCompiler.replacingOccurrences(of: "../extensions/OSXExtensions.swift", with: "../extensions/LinuxExtensions.swift")
 linuxPBRCompiler = linuxPBRCompiler.replacingOccurrences(of: "/tools/OSX/wiimm", with: "/tools/Linux/wiimm")
 linuxPBRCompiler = linuxPBRCompiler.replacingOccurrences(of: "/tools/OSX/other", with: "/tools/Linux/other")
 

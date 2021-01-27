@@ -9,63 +9,6 @@ import Foundation
 
 let tradeShadowPokemonShininessRAMOffset = -1 // just for xd compatibility
 
-enum XGRegions : UInt32 {
-	
-	case US = 0x47433645 // GC6E
-	case EU = 0x47433650 // GC6P
-	case JP = 0x4743364A // GC6J
-
-	var name: String {
-		switch self {
-		case .US: return "US"
-		case .EU: return "PAL"
-		case .JP: return "JP"
-		}
-	}
-}
-
-class XGMapRel : XGRelocationTable {
-	
-	var characters = [XGCharacter]()
-	var interactionLocations = [XGMapEntryLocation]()
-	
-	var roomID = 0
-	
-	override convenience init(file: XGFiles) {
-		self.init(file: file, checkScript: true)
-	}
-	
-	init(file: XGFiles, checkScript: Bool) {
-		super.init(file: file)
-		
-		let firstIP = self.getPointer(index: MapRelIndexes.FirstInteractionLocation.rawValue)
-		let numberOfIPs = self.getValueAtPointer(index: MapRelIndexes.NumberOfInteractionLocations.rawValue)
-		
-		for i in 0 ..< numberOfIPs {
-			let ip = XGMapEntryLocation(file: file, index: i, startOffset: firstIP + (i * kSizeOfMapEntryLocation))
-			interactionLocations.append(ip)
-		}
-		
-		for i in 0 ..< CommonIndexes.NumberOfRooms.value {
-			if let room = XGRoom.roomWithID(i) {
-				if room.name == file.fileName.removeFileExtensions() {
-					self.roomID = room.roomID
-				}
-			}
-		}
-		
-		
-		let firstCharacter = self.getPointer(index: MapRelIndexes.FirstCharacter.rawValue)
-		let numberOfCharacters = self.getValueAtPointer(index: MapRelIndexes.NumberOfCharacters.rawValue)
-		
-		for i in 0 ..< numberOfCharacters {
-			let character = XGCharacter(file: file, index: i, startOffset: firstCharacter + (i * kSizeOfCharacter))
-			
-			characters.append(character)
-		}
-	}
-	
-}
 
 extension XGISO {
 	

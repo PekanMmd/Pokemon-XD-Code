@@ -10,42 +10,34 @@
 import Cocoa
 
 extension XGFiles {
-	var image : NSImage {
-		get {
-			if !self.exists {
-				printg("Image file doesn't exist:", self.path)
-			}
-			return NSImage(contentsOfFile: self.path) ?? NSImage()
+	var image: NSImage {
+		if !self.exists {
+			printg("Image file doesn't exist:", self.path)
 		}
+		return NSImage(contentsOfFile: self.path) ?? NSImage()
 	}
 }
 
 extension XGTrainerModels {
-	var image : NSImage {
+	var image: NSImage {
 		let val = self.rawValue >= XGFolders.Trainers.files.count ? 0 : self.rawValue
 		return XGFiles.trainerFace(val).image
 	}
 }
 
 extension XGPokemon {
-	var face : NSImage {
-		get {
-			return XGFiles.pokeFace(self.index).image
-		}
+	var face: NSImage {
+		return XGFiles.pokeFace(self.index).image
 	}
 
-	var body : NSImage {
-		get {
-			return XGFiles.pokeBody(self.index).image
-		}
+	var body: NSImage {
+		return XGFiles.pokeBody(self.index).image
 	}
 }
 
 extension XGMoveTypes {
-	var image : NSImage {
-		get {
-			return XGFiles.typeImage(self.rawValue).image
-		}
+	var image: NSImage {
+		return XGFiles.typeImage(self.rawValue).image
 	}
 
 	static var shadowImage : NSImage {
@@ -54,7 +46,7 @@ extension XGMoveTypes {
 }
 
 extension XGResources {
-	var image : NSImage {
+	var image: NSImage {
 		get {
 			return NSImage(contentsOfFile: self.path) ?? NSImage()
 		}

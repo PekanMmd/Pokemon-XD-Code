@@ -63,7 +63,7 @@ extension XGDocumentable {
 		let folder = XGFolders.nameAndFolder(type(of: self).documentableClassName, documentationFolder)
 		folder.createDirectory()
 		
-		let file = XGFiles.nameAndFolder(documentableName + ".txt", folder)
+		let file = XGFiles.nameAndFolder(documentableName + XGFileTypes.txt.fileExtension, folder)
 		XGUtility.saveString(documentableData, toFile: file)
 	}
 }
@@ -97,7 +97,7 @@ extension XGEnumerable {
 		folder.createDirectory()
 		
 		for value in encodableValues {
-			let file = XGFiles.nameAndFolder(filename(value) + ".json", folder)
+			let file = XGFiles.nameAndFolder(filename(value) + XGFileTypes.json.fileExtension, folder)
 			value.writeJSON(to: file)
 		}
 	}

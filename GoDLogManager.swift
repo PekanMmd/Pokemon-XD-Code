@@ -12,7 +12,11 @@ let date = Date(timeIntervalSinceNow: 0)
 var logString = ""
 
 func displayAlert(title: String, description: String) {
+	#if GUI
 	GoDAlertViewController.displayAlert(title: title, text: description)
+	#else
+	printg("\nAlert: \(title)\n\(description)\n")
+	#endif
 }
 
 func printg(_ args: Any...) {
@@ -28,7 +32,8 @@ func printg(_ args: Any...) {
 	}
 	newString += "\n"
 	logString += newString
-	
+
+	#if GUI
 	XGThreadManager.manager.runInForegroundAsync {
 		let hvc = appDelegate.homeViewController
 		if hvc != nil {
@@ -36,6 +41,7 @@ func printg(_ args: Any...) {
 			log.string = log.string + newString
 		}
 	}
+	#endif
 
 	XGUtility.saveString(logString, toFile: .log(date))
 }

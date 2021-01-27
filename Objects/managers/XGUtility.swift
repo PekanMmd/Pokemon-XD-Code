@@ -12,92 +12,64 @@ class XGUtility {
 	
 	//MARK: - ISO Building
 	
-	class func compressFiles() {
-		
-		for folder in compressionFolders where folder.exists {
-			for file in folder.files {
-				printg("compressing file: " + file.fileName)
-				let lzss = file.compress()
-				if settings.verbose {
-					printg("compressed to: \(lzss.fileName)")
-				}
-			}
-		}
-		
-	}
-	
 	class func compileMainFiles() {
 		prepareForCompilation()
-		ISO.importFiles([.fsys("common"), XGFiles.fsys("pocket_menu"), XGFiles.fsys("fight_common"), .dol])
+		var filesToImport = [.fsys("common"), XGFiles.fsys("pocket_menu"), XGFiles.fsys("fight_common"), .dol]
 		if game == .XD {
-			ISO.importFiles([.fsys("deck_archive")])
+			filesToImport += [.fsys("deck_archive")]
 			if !isDemo && region != .JP {
-				ISO.importFiles([.fsys("common_dvdeth")])
+				filesToImport += [.fsys("common_dvdeth")]
 			}
 			let dukingTradeFsysFile = XGFiles.fsys("M2_guild_1F_2")
 			if dukingTradeFsysFile.exists {
-				ISO.importFiles([dukingTradeFsysFile])
+				filesToImport += [dukingTradeFsysFile]
 			}
 		}
+
+		filesToImport.forEach { importFileToISO($0, encode: true) }
 	}
 	
 	class func compileCommonRel() {
-		XGFiles.fsys("common").fsysData.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.common_rel.compress(), save: true)
-		ISO.importFiles([.fsys("common")])
+		importFileToISO(.fsys("common"), encode: true)
 	}
 	
 	class func compileDol() {
 		ISO.importDol()
 	}
 	
-	class func compileAllMapFsys() {
-		printg("Compiling Map fsys...")
-		for file in XGFolders.AutoFSYS.files where file.fileType == .fsys {
-			if settings.verbose {
-				printg("compiling: \(file.fileName)")
-			}
-			file.compileMapFsys()
-		}
-		ISO.importFiles(XGFolders.AutoFSYS.files.filter({  $0.fileType == .fsys }))
-	}
-	
-	class func compileAllMenuFsys() {
-		printg("Compiling Menu fsys...")
-		for file in XGFolders.MenuFSYS.files where file.fileType == .fsys {
-			if settings.verbose {
-				printg("compiling: \(file.fileName)")
-			}
-			file.compileMenuFsys()
-		}
-		ISO.importFiles(XGFolders.MenuFSYS.files.filter({  $0.fileType == .fsys }))
-	}
-	
 	class func compileAllFiles() {
 		
 		prepareForCompilation()
-		compileAllMapFsys()
-		compileAllMenuFsys()
-		ISO.importFiles(XGFolders.FSYS.files.filter({  $0.fileType == .fsys }) + [XGFiles.dol])
+		for file in ISO.allFileNames {
+			if file.fileExtensions == XGFileTypes.fsys.fileExtension {
+				XGUtility.importFileToISO(.fsys(file.removeFileExtensions()), encode: true)
+			} else {
+				XGUtility.importFileToISO(.nameAndFolder(file, .ISOExport(file.removeFileExtensions())), encode: false)
+			}
+		}
 		
 	}
 
-	class func exportFileFromISO(_ file: XGFiles, decode: Bool = true) -> Bool {
+	class func exportFileFromISO(_ file: XGFiles, decode: Bool = true, overwrite: Bool = false) -> Bool {
 		XGFolders.ISOExport("").createDirectory()
 
 		if let data = ISO.dataForFile(filename: file.fileName) {
 			if data.length > 0 {
 				data.file = file
+				if !file.exists || overwrite {
+					data.save()
+				}
 				if file.fileType == .fsys {
 					let fsysData = data.fsysData
-					fsysData.extractFilesToFolder(folder: file.folder, decode: decode)
+					fsysData.extractFilesToFolder(folder: file.folder, decode: decode, overwrite: overwrite)
 				}
-				data.save()
 				return true
 			}
 		}
 		return false
 	}
 
+	@discardableResult
 	class func importFileToISO(_ fileToImport: XGFiles, encode: Bool = true) -> Bool {
 		if fileToImport.exists {
 			if fileToImport.fileType == .fsys {
@@ -257,49 +229,6 @@ class XGUtility {
 			return false
 		}
 	}
-	
-	class func importRels() {
-		for file in XGFolders.Rels.files where file.fileType == .rel {
-			
-			if settings.verbose { printg("importing relocation table: " + file.fileName) }
-			
-			let fsysFile = XGFiles.fsys(file.fileName.removeFileExtensions())
-			if fsysFile.exists {
-				fsysFile.fsysData.shiftAndReplaceFile(file.compress(), save: true)
-			}
-		}
-	}
-	
-	class func importScripts() {
-		for file in XGFolders.Scripts.files where file.fileType == .scd {
-			
-			if settings.verbose { printg("importing script: " + file.fileName) }
-			
-			let fsysFile = XGFiles.fsys(file.fileName.removeFileExtensions())
-			if fsysFile.exists {
-				fsysFile.fsysData.shiftAndReplaceFile(file.compress(), save: true)
-			}
-		}
-	}
-	
-	class func importStringTables() {
-		
-		for file in XGFolders.AutoFSYS.files where file.fileType == .fsys {
-			
-			if settings.verbose {
-				printg("importing string table: " + file.fileName.removeFileExtensions() + XGFileTypes.msg.fileExtension)
-			}
-			
-			let msgFile = XGFiles.msg(file.fileName.removeFileExtensions())
-			
-			if msgFile.exists {
-				file.fsysData.shiftAndReplaceFile(msgFile.compress(), save: true)
-			}
-		}
-		
-		importSpecificStringTables()
-		
-	}
 
 	class func importTPLFiles(_ files: [XGFiles]) {
 		if files.isEmpty { return }
@@ -429,9 +358,6 @@ class XGUtility {
 		return found
 	}
 
-	
-
-	
 	class func deleteSuperfluousFiles() {
 		// deletes files that the game doesn't use in order to create space in the ISO for larger fsys files
 		// TODO: check if can delete fsys files used for creating prerendered cutscenes
@@ -537,6 +463,15 @@ class XGUtility {
 		printg("all moves have now had their default phys/spec categories applied.")
 		
 	}
+
+	class func tutorMovesAvailableImmediately() {
+		#if GAME_XD
+		for i in 1 ... CommonIndexes.NumberOfTutorMoves.value {
+			let tm = XGTMs.tutor(i)
+			tm.replaceTutorFlag(10)
+		}
+		#endif
+	}
 	
 	//MARK: - Utilities 2
 	
@@ -608,6 +543,59 @@ class XGUtility {
 			printg("\(0x300 + (j*2)):\t",item.index,item.name.string,tmName,"\n")
 		}
 		
+	}
+
+	class func extractAllTextures() {
+		printg("extracting all textures")
+		let dumpFolder = XGFolders.nameAndFolder("Dump", .Textures)
+		XGFolders.setUpFolderFormat()
+		dumpFolder.createDirectory()
+		printg("output folder: \(dumpFolder.path)")
+		for filename in ISO.allFileNames where filename.contains(".fsys") {
+			if settings.verbose {
+				printg("searching file:", filename)
+			}
+			guard let fsysData = ISO.dataForFile(filename: filename) else {
+				if settings.verbose {
+					printg("no iso data found for file:", filename)
+				}
+				continue
+			}
+			let fsys = XGFsys(data: fsysData)
+			for i in 0 ..< fsys.numberOfEntries {
+				guard let fileType = fsys.fileTypeForFileWithIndex(index: i), [XGFileTypes.gtx, .atx, .gsw].contains(fileType) else {
+					continue
+				}
+				guard let textureData = fsys.extractDataForFileWithIndex(index: i) else {
+					continue
+				}
+
+				if settings.verbose {
+					printg("outputting:", textureData.file.fileName)
+				}
+
+				let folder = XGFolders.nameAndFolder(filename.removeFileExtensions(), dumpFolder)
+				folder.createDirectory()
+
+
+				if fileType == .gsw {
+					let gsw = XGGSWTextures(data: textureData)
+					let textures = gsw.extractTextureData()
+					textures.forEach { (data) in
+						data.file = .nameAndFolder(data.file.fileName, folder)
+						let texture = GoDTexture(data: data).image
+						texture.writePNGData(toFile: .nameAndFolder(data.file.fileName + ".png", folder))
+
+					}
+				}
+				if fileType == .gtx || fileType == .atx {
+					textureData.file = .nameAndFolder(textureData.file.fileName, folder)
+					let texture = GoDTexture(data: textureData).image
+					texture.writePNGData(toFile: .nameAndFolder(textureData.file.fileName + ".png", folder))
+				}
+
+			}
+		}
 	}
 	
 }

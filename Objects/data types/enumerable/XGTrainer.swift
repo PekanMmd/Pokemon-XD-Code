@@ -24,6 +24,8 @@ let kTrainerDefeatTextIDOffset		= 0x18
 let kFirstTrainerPokemonOffset		= 0x1C
 let kTrainerAIOffset				= 0x28 // 2bytes
 
+typealias TrainerInfo = (name:String,location:String,hasShadow: Bool,trainerModel:XGTrainerModels,index:Int,deck:XGDecks)
+
 final class XGTrainer: NSObject, Codable {
 
 	var index				= 0x0
@@ -213,6 +215,10 @@ final class XGTrainer: NSObject, Codable {
 	
 	var battleData : XGBattle? {
 		return XGBattle.battleForTrainer(index: self.index, deck: self.deck)
+	}
+
+	var trainerInfo: TrainerInfo {
+		return (self.trainerClass.name.unformattedString + " " + self.name.unformattedString, self.locationString,self.hasShadow,self.trainerModel,self.index,self.deck)
 	}
 	
 	init(index: Int, deck: XGDecks) {

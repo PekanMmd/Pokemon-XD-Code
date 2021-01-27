@@ -9,11 +9,11 @@
 import Cocoa
 
 protocol GoDViewLayoutManager {
-	var contentview : NSView { get }
+	var contentview: NSView { get }
 }
 
-extension NSView : GoDViewLayoutManager {
-	@objc var contentview : NSView {
+extension NSView: GoDViewLayoutManager {
+	var contentview: NSView {
 		return self
 	}
 }

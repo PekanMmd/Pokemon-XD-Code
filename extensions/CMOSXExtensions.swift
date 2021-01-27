@@ -7,14 +7,14 @@
 
 import Foundation
 
-let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/Colosseum-Tool"
+let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/Colosseum Tool"
 let game = XGGame.Colosseum
 let region = XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .US
 let isDemo = false
 
 typealias TrainerInfo = (fullname:String,name:String,location:String,hasShadow: Bool,trainerModel:XGTrainerModels,index:Int, deck: XGDecks)
 extension XGTrainer {
-	var trainerInfo : TrainerInfo {
+	var trainerInfo: TrainerInfo {
 		return (self.trainerClass.name.string + " " + self.name.unformattedString, self.name.unformattedString,"",self.hasShadow,self.trainerModel,self.index, .DeckStory)
 	}
 }
@@ -33,7 +33,10 @@ extension XGFsys: XGEnumerable {
 	}
 	
 	static var allValues: [XGFsys] {
-		let files = XGFolders.AutoFSYS.files + XGFolders.MenuFSYS.files + XGFolders.FSYS.files
-		return files.map { $0.fsysData }
+		return ISO.allFileNames
+			.filter{$0.fileExtensions == XGFileTypes.fsys.fileExtension}
+			.map{XGFiles.fsys($0.removeFileExtensions())}
+			.filter{$0.exists}
+			.map{$0.fsysData}
 	}
 }

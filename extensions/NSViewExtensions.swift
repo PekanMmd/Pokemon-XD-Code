@@ -6,22 +6,22 @@
 //  Copyright © 2016 StarsMmd. All rights reserved.
 //
 
-import AppKit
+import Cocoa
 
 extension NSView {
 	
-	@objc func setBackgroundColour(_ colour: NSColor) {
+	func setBackgroundColour(_ colour: NSColor) {
 		self.wantsLayer = true
 		self.layer?.backgroundColor = colour.cgColor
 	}
 	
-	@objc func addBorder(colour: NSColor, width: CGFloat) {
+	func addBorder(colour: NSColor, width: CGFloat) {
 		self.wantsLayer = true
 		self.layer?.borderWidth = width
 		self.layer?.borderColor = colour.cgColor
 	}
 	
-	@objc func removeBorder() {
+	func removeBorder() {
 		self.wantsLayer = true
 		self.layer?.borderWidth = 0
 	}

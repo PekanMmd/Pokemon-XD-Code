@@ -800,7 +800,7 @@ final class XGFsys : NSObject {
 		data.save()
 	}
 	
-	func extractFilesToFolder(folder: XGFolders, decode: Bool) {
+	func extractFilesToFolder(folder: XGFolders, decode: Bool, overwrite: Bool = false) {
 		
 		var data = [XGMutableData]()
 		for i in 0 ..< self.numberOfEntries {
@@ -842,7 +842,7 @@ final class XGFsys : NSObject {
 		for i in 0 ..< data.count {
 			data[i].file = .nameAndFolder(updatedNames[i], folder)
 			
-			if !data[i].file.exists {
+			if !data[i].file.exists || overwrite {
 				if settings.verbose {
 					printg("extracting file: \(data[i].file.fileName)")
 				}
@@ -859,35 +859,48 @@ final class XGFsys : NSObject {
 
 				if data[i].file.fileType == .pkx {
 					let file = data[i].file
-					let dat = XGUtility.exportDatFromPKX(pkx: data[i])
-					dat.file = .nameAndFolder(file.fileName.replacingOccurrences(of: ".pkx", with: ".dat"), file.folder)
-					dat.save()
+					let datFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.dat.fileExtension, file.folder)
+					if !datFile.exists || overwrite {
+						let dat = XGUtility.exportDatFromPKX(pkx: data[i])
+						dat.file = datFile
+						dat.save()
+					}
 				}
 
 				if data[i].file.fileType == .msg {
 					let file = data[i].file
-					let msg = XGStringTable(file: file, startOffset: 0, fileSize: file.fileSize)
-					msg.writeJSON(to: .nameAndFolder(file.fileName + ".json", file.folder))
+					let msgFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.json.fileExtension, file.folder)
+					if !msgFile.exists || overwrite {
+						let msg = XGStringTable(file: file, startOffset: 0, fileSize: file.fileSize)
+						msg.writeJSON(to: msgFile)
+					}
 				}
 
 				for texture in data[i].file.textures {
-					texture.save()
-					texture.writePNGData()
-				}
-				
-				if data[i].file.fileType == .msg {
-					data[i].file.stringTable.writeJSON(to: .nameAndFolder(updatedNames[i] + ".json", folder))
+					if !texture.file.exists || overwrite {
+						texture.save()
+					}
+					let pngFile = XGFiles.nameAndFolder(texture.file.fileName + XGFileTypes.png.fileExtension, file.folder)
+					if !pngFile.exists || overwrite {
+						texture.writePNGData(toFile: pngFile)
+					}
 				}
 				
 				if data[i].file.fileType == .scd && game != .Colosseum {
-					data[i].file.writeScriptData()
+					let xdsFile = XGFiles.nameAndFolder(data[i].file.fileName + XGFileTypes.xds.fileExtension, data[i].file.folder)
+					if !xdsFile.exists || overwrite {
+						data[i].file.writeScriptData()
+					}
 				}
 
-				if data[i].file.fileType == .thh, let thpData = data.first(where: { $0.file.fileType == .thd && $0.file.fileName.removeFileExtensions() == data[i].file.fileName.removeFileExtensions() }) {
-					let thpHeader = data[i]
+				if data[i].file.fileType == .thh {
+					let thpFile = XGFiles.nameAndFolder(data[i].file.fileName.removeFileExtensions() + XGFileTypes.thp.fileExtension, data[i].file.folder)
+					if (!thpFile.exists || overwrite), let thpData = data.first(where: { $0.file.fileType == .thd && $0.file.fileName.removeFileExtensions() == data[i].file.fileName.removeFileExtensions() }) {
+						let thpHeader = data[i]
 
-					let thp = XGTHP(header: thpHeader, body: thpData)
-					thp.thpData.save()
+						let thp = XGTHP(header: thpHeader, body: thpData)
+						thp.thpData.save()
+					}
 				}
 			}
 		}
@@ -895,7 +908,27 @@ final class XGFsys : NSObject {
 	
 }
 
+extension XGFsys: XGEnumerable {
+	var enumerableName: String {
+		return path
+	}
 
+	var enumerableValue: String? {
+		return nil
+	}
+
+	static var enumerableClassName: String {
+		return "Fsys"
+	}
+
+	static var allValues: [XGFsys] {
+		return ISO.allFileNames
+			.filter{$0.fileExtensions == XGFileTypes.fsys.fileExtension}
+			.map{XGFiles.fsys($0.removeFileExtensions())}
+			.filter{$0.exists}
+			.map{$0.fsysData}
+	}
+}
 
 
 

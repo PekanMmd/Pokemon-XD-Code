@@ -26,6 +26,8 @@ let kTrainerDefeatTextIDOffset		= 0x2C
 let kFirstTrainerLoseText2Offset	= 0x32
 let kTrainerFirstItemOffset			= 0x14
 
+typealias TrainerInfo = (fullname:String,name:String,location:String,hasShadow: Bool,trainerModel:XGTrainerModels,index:Int, deck: XGDecks)
+
 final class XGTrainer: NSObject, Codable {
 	
 	var index				= 0x0
@@ -83,6 +85,10 @@ final class XGTrainer: NSObject, Codable {
 			}
 			return false
 		}
+	}
+
+	var trainerInfo: TrainerInfo {
+		return (self.trainerClass.name.string + " " + self.name.unformattedString, self.name.unformattedString,"",self.hasShadow,self.trainerModel,self.index, .DeckStory)
 	}
 	
 	init(index: Int) {

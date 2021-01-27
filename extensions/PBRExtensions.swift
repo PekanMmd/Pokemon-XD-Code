@@ -7,42 +7,6 @@
 
 import Foundation
 
-enum XGRegions : UInt32 {
-	
-	case US = 0x52504245 // RPBE
-	case EU = 0x52504250 // RPBP
-	case JP = 0x5250424A // RPBJ
-	
-	var index : Int {
-		switch self {
-		// arbitrary values
-		case .US: return 0
-		case .EU: return 1
-		case .JP: return 2
-		}
-	}
-
-	var name: String {
-		switch self {
-		case .EU: return "PAL"
-		case .JP: return "JP"
-		case .US: return "US"
-		}
-	}
-}
-
-let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/Revolution-Tool"
-let region: XGRegions = {
-	guard let isoData = XGFiles.iso.data else { return .EU }
-	return XGRegions(rawValue: isoData.getWordAtOffset(0)) ?? .EU
-}()
-let game = XGGame.PBR
-let isDemo = false
-
-let date = Date(timeIntervalSinceNow: 0)
-var logString = ""
-
-
 extension XGString {
 	var hasFurigana: Bool {
 		return chars.contains(where: { (c) -> Bool in

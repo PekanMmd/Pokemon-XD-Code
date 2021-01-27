@@ -385,7 +385,11 @@ class GoDTexture {
 	}
 }
 
-
+extension XGMutableData {
+	var texture: GoDTexture {
+		return GoDTexture(data: self)
+	}
+}
 
 
 
