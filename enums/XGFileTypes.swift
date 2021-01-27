@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGFileTypes : Int, Codable {
+enum XGFileTypes : Int, Codable, CaseIterable {
 	case none = 0x00
 	case rdat = 0x02 // room model in hal dat format. Also .dat files but considered different by the fsys headers
 	case dat  = 0x04 // character model in hal dat format
@@ -34,7 +34,12 @@ enum XGFileTypes : Int, Codable {
 	
 	
 	// all arbitrary values
-	case fsys = 0xf0 // don't know if it has it's own identifier
+	case fsys = 0x80
+
+	// These have ids of 0 for some reason
+	case proj = 0xe0
+	case sdir = 0xe2
+	case pool = 0xe4
 
 	case thp  = 0xf2
 	case json = 0xf3
@@ -63,6 +68,9 @@ enum XGFileTypes : Int, Codable {
 		case .dat : return ".dat"
 		case .ccd : return ".ccd"
 		case .samp: return ".samp"
+		case .sdir: return ".sdir"
+		case .proj: return ".proj"
+		case .pool: return ".pool"
 		case .msg : return ".msg"
 		case .fnt : return ".fnt"
 		case .scd : return ".scd"
@@ -98,6 +106,10 @@ enum XGFileTypes : Int, Codable {
 		}
 	}
 
+	var identifier: Int {
+		return rawValue < XGFileTypes.fsys.rawValue ? rawValue : 0
+	}
+
 	#if canImport(Cocoa)
 	static let imageFormats: [XGFileTypes] = [.png, .jpeg, .bmp]
 	#else
@@ -107,6 +119,12 @@ enum XGFileTypes : Int, Codable {
 	static let textureFormats: [XGFileTypes] = [.gtx, .atx]
 	static let modelFormats: [XGFileTypes] = [.dat, .rdat, .dats]
 	static let textureContainingFormats: [XGFileTypes] = [] // gsw once implemented and models
+
+	static func fileTypeForExtension(_ ext: String) -> XGFileTypes? {
+		return XGFileTypes.allCases.first(where: {
+			$0.fileExtension.replacingOccurrences(of: ".", with: "") == ext.replacingOccurrences(of: ".", with: "")
+		})
+	}
 }
 
 

@@ -8,8 +8,8 @@
 
 import Foundation
 
+#if GAME_PBR
 let instructionNames = [
-	
 	"nop",
 	"operator",
 	"ldimm",
@@ -28,12 +28,32 @@ let instructionNames = [
 	"exit",
 	"setline",
 	"ldncpvar",
-	#if GAME_PBR
 	"unknown18",
 	"loadShortImmediate"
-	#endif
-	
 ]
+#else
+let instructionNames = [
+	"nop",
+	"operator",
+	"ldimm",
+	"ldvar",
+	"setvar",
+	"setvector",
+	"pop",
+	"call",
+	"return",
+	"callstd",
+	"jmptrue",
+	"jmpfalse",
+	"jmp",
+	"reserve",
+	"release",
+	"exit",
+	"setline",
+	"ldncpvar",
+]
+#endif
+
 
 let vectorCoordNames = ["x","y","z","4"]
 

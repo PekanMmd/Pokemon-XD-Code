@@ -441,7 +441,7 @@ indirect enum XGFiles {
 		
 	}
 	
-	var fileExtension : String {
+	var fileExtension: String {
 		var ext = self.fileName.fileExtensions
 		if ext.length > 0 {
 			ext = ext.substring(from: 1, to: ext.length)
@@ -459,7 +459,7 @@ indirect enum XGFiles {
 		return ext
 	}
 	
-	var fileType : XGFileTypes {
+	var fileType: XGFileTypes {
 		for i in 2 ..< 255 {
 			if let type = XGFileTypes(rawValue: i) {
 				if type.fileExtension == "." + self.fileExtension {

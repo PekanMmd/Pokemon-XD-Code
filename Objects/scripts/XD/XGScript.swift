@@ -31,10 +31,10 @@ let minXDSVersionCompatibilty: Float = 1.2
 
 class XGScript: NSObject {
 	
-	var file : XGFiles!
-	var mapRel : XGMapRel?
+	var file: XGFiles!
+	var mapRel: XGMapRel?
 	var stringTable: XGStringTable?
-	var data : XGMutableData!
+	var data: XGMutableData!
 	
 	var FTBLStart = 0
 	var HEADStart = 0

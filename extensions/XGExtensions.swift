@@ -396,6 +396,10 @@ extension URL {
 }
 
 extension String {
+
+	var unicodeRepresentation: [Int] {
+		self.unicodeScalars.map{ $0.value.int } + [0]
+	}
 	
 	func println() {
 		printg(self)
@@ -870,8 +874,8 @@ extension XGUtility {
 			}
 			let fsys = XGFsys(data: fsysData)
 			for i in 0 ..< fsys.numberOfEntries {
-				let fileType = fsys.fileTypeForFile(index: i)
-				guard [XGFileTypes.gtx, .atx, .gsw].contains(fileType) else {
+
+				guard let fileType = fsys.fileTypeForFileWithIndex(index: i), [XGFileTypes.gtx, .atx, .gsw].contains(fileType) else {
 					continue
 				}
 				guard let textureData = fsys.extractDataForFileWithIndex(index: i) else {

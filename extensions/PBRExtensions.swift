@@ -367,7 +367,7 @@ class XGUtility {
 
 						// strings in the xds scripts will override those particular strings in the msg's json
 						if file.fileType == .xds && game != .PBR {
-							XDSScriptCompiler.setFlags(disassemble: true, decompile: false, updateStrings: true, increaseMSG: true)
+							XDSScriptCompiler.setFlags(disassemble: false, decompile: false, updateStrings: true, increaseMSG: true)
 							XDSScriptCompiler.baseStringID = 1000
 							if !XDSScriptCompiler.compile(textFile: file, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)) {
 								printg("XDS Compilation Error:\n" + XDSScriptCompiler.error)

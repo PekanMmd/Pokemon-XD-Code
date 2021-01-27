@@ -29,6 +29,7 @@ var ScriptClassNames : [Int : String] = [
 	43: "Player",
 	45: "Room",
 	47: "Sound",
+	48: "Controller",
 	49: "PDA",
 	52: "Daycare",
 	54: "TaskManager",
@@ -496,6 +497,14 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("function18", 18, 3, [.objectName("Sound"), .sfxID, .integer], .null, "(id, unk, volume)"),
 		("setBGM", 25, 5, [.objectName("Sound"), .sfxID, .integer, .integer, .integer], .null, "(id, unk, unk, volume)"), //# (int bgm id, int unk1, int unk2, int volume)
 	
+	],
+
+//MARK: - Controller
+	48 : [
+
+		("isPressingAnyButton", 18, 4, [.objectName("Controller")], .bool, ""), // true iff any button is being pressed
+		("getPressedButtons", 20, 5, [.objectName("Controller")], .integerBitMask, ""), //# returns 2 byte value which is bit mask of currently pressed controller buttons
+
 	],
 	
 //MARK: - PDA
