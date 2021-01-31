@@ -358,14 +358,13 @@ class XGStringTable: NSObject {
 	}
 	
 	func writeJSON(to file: XGFiles) {
-		do {
-			let data = try JSONRepresentation()
-			if XGUtility.saveData(data, toFile: file) {
-				return
-			}
-		} catch { }
-		
-		printg("Failed to write JSON to:", file.path)
+		guard let data = try? JSONRepresentation(), data.write(to: file) else {
+			printg("Failed to write JSON to:", file.path)
+			return
+		}
+		if settings.verbose {
+			printg("Successfully wrote JSON to:", file.path)
+		}
 	}
 
 	func removeKanji() {

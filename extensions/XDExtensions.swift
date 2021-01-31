@@ -7,107 +7,36 @@
 
 import Foundation
 
-extension XGISO {
-	
-	var fsysList: [String] {
-		var list = [
-			"common.fsys",
-			"deck_archive.fsys",
-			"field_common.fsys",
-			"fight_common.fsys",
-			"people_archive.fsys"
-		]
-		if !isDemo && region != .JP {
-			list += ["common_dvdeth.fsys"]
-		}
-		return list
-	}
-}
 
 extension XGUtility {
 
 	class func extractMainFiles() {
-		XGISO.extractMainFiles()
-	}
-	
-	class func extractAllFiles() {
-		XGISO.extractAllFiles()
-	}
-	
-	class func importFsys() {
-		
-		printg("importing files to .fsys archives")
-		
-		if !DeckDataEmptyLZSS.file.exists {
-			DeckDataEmptyLZSS.save()
-		}
-		ISO.extractFSYS()
-		
-		let common = XGFiles.fsys("common").fsysData
-		if XGFiles.common_rel.exists {
-			let index = region == .JP ? 1 : 0
-			common.shiftAndReplaceFileWithIndexEfficiently(index, withFile: XGFiles.common_rel.compress(), save: false)
-		}
-		if region != .JP {
-			common.shiftAndReplaceFileWithIndexEfficiently(2, withFile: DeckDataEmptyLZSS.file, save: false) //EU file
-		}
-		if XGDecks.DeckDarkPokemon.file.exists {
-			common.shiftAndReplaceFileWithIndexEfficiently(4, withFile: XGFiles.deck(.DeckDarkPokemon).compress(), save: false)
-		}
-		common.save()
-		
-		if XGFiles.tableres2.exists && XGFiles.fsys("common_dvdeth").exists {
-			XGFiles.fsys("common_dvdeth").fsysData.shiftAndReplaceFileWithIndexEfficiently(0, withFile: XGFiles.tableres2.compress(), save: true)
-		}
-		
-		let deckArchive = XGFiles.fsys("deck_archive").fsysData
+		let mainFiles = [
+			"Start.dol",
+			"common.fsys",
+			"deck_archive.fsys",
+			"field_common.fsys",
+			"fight_common.fsys",
+			"pocket_menu.fsys",
+			"common_dvdeth.fsys"
+		]
 
-		if region != .JP {
-			for i in 0 ..< deckArchive.numberOfEntries {
-				// remove other region deck files to make space for increased file sizes
-				let canDelete = region == .EU ? i % 2 != 1 : i % 2 == 1
-				if canDelete {
-					deckArchive.shiftAndReplaceFileWithIndexEfficiently(i, withFile: DeckDataEmptyLZSS.file, save: false)
-				}
-			}
+		for filename in mainFiles {
+			exportFileFromISO(.nameAndFolder(filename, .ISOExport(filename.removeFileExtensions())), decode: false)
 		}
-		
-		let decksOrdered : [XGDecks] = [.DeckBingo, .DeckColosseum, .DeckDarkPokemon, .DeckHundred, .DeckImasugu, .DeckSample, .DeckStory, .DeckVirtual]
-		for i in 0 ..< decksOrdered.count {
-			let deck = decksOrdered[i]
-			if deck.file.exists {
-				let multiplier = region == .JP ? 1 : 2
-				let offset = region == .EU ? 1 : 0
-				deckArchive.shiftAndReplaceFileWithIndexEfficiently((i * multiplier) + offset, withFile: deck.file.compress(), save: false)
-			}
-		}
-		deckArchive.save()
-		
-		if XGFiles.msg("fight").exists {
-			XGFiles.fsys("fight_common").fsysData.shiftAndReplaceFile(XGFiles.msg("fight").compress(), save: true)
-		}
-		
-		if !XGFiles.fsys("pocket_menu").exists {
-			ISO.extractMenuFSYS()
-		}
-		if XGFiles.pocket_menu.exists {
-			XGFiles.fsys("pocket_menu").fsysData.shiftAndReplaceFile(XGFiles.pocket_menu.compress(), save: true)
-		}
-
-		let dukingTradeScriptFile = XGFiles.scd("M2_guild_1F_2")
-		let dukingTradeFsysFile = XGFiles.fsys("M2_guild_1F_2")
-		if dukingTradeFsysFile.exists, dukingTradeScriptFile.exists {
-			dukingTradeFsysFile.fsysData.shiftAndReplaceFileWithType(.scd, withFile: dukingTradeScriptFile, save: true)
-		}
-
 	}
 	
 	class func updateHealingItems() {
-		guard region == .US else {
-			#warning("TODO: implement for other regions")
+		guard region != .OtherGame else {
 			return
 		}
-		let kBattleItemDataStartOffset = 0x402570
+		let kBattleItemDataStartOffset: Int
+		switch region {
+		case .US: kBattleItemDataStartOffset = 0x402570
+		case .EU: kBattleItemDataStartOffset = 0x43CE50
+		case .JP: kBattleItemDataStartOffset = 0x3DFC30
+		case .OtherGame: kBattleItemDataStartOffset = 0
+		}
 		let kSizeOfBattleItemEntry = 0x10
 		let kBattleItemHPToRestoreOffset = 0xA
 		// N.B. A lot of these values are bit masks and so a single item can have many of these effects at once
@@ -157,12 +86,18 @@ extension XGUtility {
 	}
 	
 	class func updateFunctionalItems() {
-		guard region == .US else {
-			#warning("Implement for other regions")
+		guard region != .OtherGame else {
 			return
 		}
-		// Maybe I should stop being so pedantic and use shorter variable names...
-		let kFunctionalItemDataStartOffset = 0x402570
+
+		let kFunctionalItemDataStartOffset: Int
+		switch region {
+		case .US: kFunctionalItemDataStartOffset = 0x402570
+		case .EU: kFunctionalItemDataStartOffset = 0x43CE50
+		case .JP: kFunctionalItemDataStartOffset = 0x3DFC30
+		case .OtherGame: kFunctionalItemDataStartOffset = 0
+		}
+
 		let kSizeOfFunctionalItemEntry = 0x10
 		let kFunctionalItemFirstFriendshipOffset = 0x5
 		if let dol = XGFiles.dol.data {
@@ -181,43 +116,37 @@ extension XGUtility {
 	}
 	
 	class func updateValidItems() {
-		guard region == .US else {
-			#warning("Implement for other regions")
-			return
-		}
 		let itemListStart = CommonIndexes.ValidItems.startOffset
-		let rel = XGFiles.common_rel.data!
-		
-		printg("Updating items list...")
-		
-		for i in 1 ..< CommonIndexes.NumberOfItems.value {
-			let currentOffset = itemListStart + (i * 2)
-			
-			if XGItems.item(i).nameID != 0 {
-				rel.replace2BytesAtOffset(currentOffset, withBytes: i)
-			} else {
-				rel.replace2BytesAtOffset(currentOffset, withBytes: 0)
+		if let rel = XGFiles.common_rel.data {
+
+			printg("Updating items list...")
+
+			for i in 1 ..< CommonIndexes.NumberOfItems.value {
+				let currentOffset = itemListStart + (i * 2)
+
+				if XGItems.item(i).nameID != 0 {
+					rel.replace2BytesAtOffset(currentOffset, withBytes: i)
+				} else {
+					rel.replace2BytesAtOffset(currentOffset, withBytes: 0)
+				}
 			}
+
+			rel.save()
 		}
-		
-		rel.save()
 	}
 	
 	class func updateShadowMoves() {
-		guard region == .US else {
-			#warning("Implement for other regions")
-			return
-		}
-		let rel = XGFiles.common_rel.data!
-		for i in 0 ..< kNumberOfMoves {
-			
-			let m = XGMoves.move(i).data
-			if m.isShadowMove {
-				rel.replaceWordAtOffset(m.startOffset + 0x14, withBytes: 0x00023101)
+		if let rel = XGFiles.common_rel.data {
+			for i in 0 ..< kNumberOfMoves {
+
+				let m = XGMoves.move(i).data
+				if m.isShadowMove {
+					rel.replaceWordAtOffset(m.startOffset + 0x14, withBytes: 0x00023101)
+				}
+
 			}
-			
+			rel.save()
 		}
-		rel.save()
 	}
 	
 	class func prepareShinyness() {
@@ -233,6 +162,19 @@ extension XGUtility {
 		}
 	}
 
+	class func copyDDPKToCommon() {
+		let deckFolder = XGFiles.fsys("deck_archive").folder
+		let commonFolder = XGFiles.fsys("common").folder
+		if deckFolder.exists {
+			for file in deckFolder.files where file.fileName.contains("DeckData_DarkPokemon") {
+				if let data = file.data {
+					data.file = .nameAndFolder(file.fileName, commonFolder)
+					data.save()
+				}
+			}
+		}
+	}
+
 	class func prepareForCompilation() {
 		fixUpTrainerPokemon()
 		prepareShinyness()
@@ -243,68 +185,28 @@ extension XGUtility {
 		updateTutorMoves()
 		updatePokeSpots()
 		updateShadowMonitor()
-		importSpecificStringTables()
-		importFsys()
+		copyDDPKToCommon()
+
 	}
-	
-	class func importSpecificStringTables() {
-		printg("importing menu string tables")
-		
-		let pocket_menu = XGFiles.msg("pocket_menu")
-		let d4tower1f3 = XGFiles.msg("D4_tower_1F_3")
-		let m5labo2f = XGFiles.msg("M5_labo_2F")
-		let d4tower1f2 = XGFiles.msg("D4_tower_1F_2")
-		let nameentrymenu = XGFiles.msg("name_entry_menu")
-		let system_tool = XGFiles.msg("system_tool")
-		let m3shrine1frl = XGFiles.msg("M3_shrine_1F_rl")
-		let relivehall_menu = XGFiles.msg("relivehall_menu")
-		let pda_menu = XGFiles.msg("pda_menu")
-		let d2pc1f = XGFiles.msg("D2_pc_1F")
-		let d7out = XGFiles.msg("D7_out")
-		let p_exchange = XGFiles.msg("p_exchange")
-		let world_map = XGFiles.msg("world_map")
-		let fight = XGFiles.msg("fight")
-		
-		let msgs = [pocket_menu, d4tower1f2, d4tower1f3, m5labo2f, nameentrymenu, system_tool, m3shrine1frl, relivehall_menu, pda_menu, d2pc1f, d7out, p_exchange, world_map, fight]
-		for file in XGFolders.MenuFSYS.files + [.fsys("fight_common"), .fsys("field_common")] where file.fileType == .fsys {
-			let fsys = file.fsysData
-			
-			for msg in msgs {
-				if msg.exists {
-					for i in 0 ..< fsys.numberOfEntries {
-						if fsys.fileTypeForFile(index: i) == .msg && fsys.fileNameForFileWithIndex(index: i).removeFileExtensions() == msg.fileName.removeFileExtensions() {
-							fsys.shiftAndReplaceFileWithIndexEfficiently(i, withFile: msg.compress(), save: false)
-						}
-					}
-				}
-			}
-			fsys.save()
-		}
-	}
-	
-	
-	class func patchDol() {
-		
-		let patches = [0,2,3,6,7]
-		
-		for i in patches {
-			XGDolPatcher.applyPatch(XGDolPatches(rawValue: i)!)
-		}
-	}
-	
 	
 	class func renameZaprong(newName: String) {
-		let offset = 0x420904
-		let dol = XGFiles.dol.data!
-		dol.replaceBytesFromOffset(offset, withByteStream: newName.map({ (c) -> Int in
-			let charScalar = String(c).unicodeScalars
-			let charValue  = Int(charScalar[charScalar.startIndex].value)
-			return charValue
-		}) + [0])
-		dol.save()
+		guard region != .OtherGame else { return }
+		let offset: Int
+		switch region {
+		case .US: offset = 0x420904
+		case .JP: offset = 0x3FD738
+		case .EU: offset = 0x45B304
+		case .OtherGame: offset = 0
+		}
+		if let dol = XGFiles.dol.data {
+			dol.replaceBytesFromOffset(offset, withByteStream: newName.unicodeRepresentation)
+			dol.save()
+		}
 	}
 
 	class func getPotentialMewTutorMovePairs() -> [(move1: XGMoves, move2: XGMoves)] {
+		guard region == .US else { return [] }
+
 		let startOffset = 0x4198fc
 		let endOffset = startOffset + 0x1d4
 		guard let dol = XGFiles.dol.data else {
@@ -393,68 +295,6 @@ extension XGUtility {
 		}
 		
 		saveString(s, toFile: .nameAndFolder("obtainable pokemon.txt",.Reference))
-	}
-	
-	class func saveObtainableTypes() {
-		
-		var pokes = [XGPokemon]()
-		
-		for i in 0 ..< XGDecks.DeckDarkPokemon.DDPKEntries {
-			let p = XGDeckPokemon.ddpk(i).pokemon
-			pokes.append(p)
-		}
-		pokes.append(XGTradeShadowPokemon().species)
-		for i in 0 ..< 2 {
-			pokes.append(XGDemoStarterPokemon(index: i).species)
-		}
-		for i in 0 ..< 3 {
-			pokes.append(XGMtBattlePrizePokemon(index: i).species)
-		}
-		
-		for i in 0 ..< 4 {
-			pokes.append(XGTradePokemon(index: i).species)
-		}
-		
-		for s in 0 ... 2 {
-			
-			let spot = XGPokeSpots(rawValue: s)!
-			
-			for p in 0 ..< spot.numberOfEntries {
-				pokes.append(XGPokeSpotPokemon(index: p, pokespot: spot).pokemon)
-			}
-		}
-		
-		var typesCount = [Int]()
-		
-		for _ in 0...17 {
-			typesCount.append(0)
-		}
-		
-		for i in pokes {
-			
-			guard i.index != 0 else {
-				continue
-			}
-			
-			let poke = XGPokemonStats(index: i.index)
-			let t1 = poke.type1.rawValue
-			let t2 = poke.type2.rawValue
-			typesCount[t1] = typesCount[t1] + 1
-			if t2 != t1 {
-				typesCount[t2] = typesCount[t2] + 1
-			}
-		}
-		
-		var string = "XG Obtainable types count:\n"
-		for i in 0...17 {
-			let name = XGMoveTypes.type(i).name
-			
-			string += name
-			string += "\t:\t"
-			string += "\(typesCount[i])\n"
-		}
-		saveString(string, toFile: XGFiles.nameAndFolder("XG Obtainable Types Count.txt", XGFolders.Reference))
-		
 	}
 	
 	class func saveObtainablePokemonByLocation() {
@@ -606,15 +446,19 @@ extension XGUtility {
 	
 	
 	class func updateShadowMonitor() {
-
-		guard region == .US else {
-			#warning("Implement for other regions")
+		guard region != .OtherGame else {
 			return
 		}
 		
 		printg("updating shadow monitor")
 		
-		let start = 0x4014EA
+		let start: Int
+		switch region {
+		case .US: start = 0x4014EA
+		case .JP: start = 0x3DEBAA
+		case .EU: start = 0x4014EA
+		case .OtherGame: start = 0
+		}
 		
 		var indices = [Int]()
 		let deck = XGDecks.DeckDarkPokemon
@@ -647,14 +491,24 @@ extension XGUtility {
 		// Corresponds to each tutor move. This class function will set it so that it is in the same
 		// Order as the tutor moves indexes.
 
-		guard region == .US else {
-			#warning("Implement for other regions")
+		guard region != .OtherGame else {
 			return
 		}
 		
 		printg("updating tutor moves")
 		
 		let dol = XGFiles.dol.data!
+
+		let firstUSOffset = 0x1C2EA6
+		let firstOffset: Int
+		switch region {
+		case .US: firstOffset = firstUSOffset
+		case .JP: firstOffset = 0x1BE3B6
+		case .EU: firstOffset = 0x1C47A2
+		case .OtherGame: firstOffset = 0
+		}
+
+		let offsetDifference = firstOffset - firstUSOffset
 		
 		let offsets = [
 			0x1C2ECA, // 0
@@ -673,10 +527,9 @@ extension XGUtility {
 		
 		for i in 1...12 {
 			let tmove = XGTMs.tutor(i).move
-			let offset = offsets[i-1]
+			let offset = offsets[i-1] + offsetDifference
 			
 			dol.replaceWordAtOffset(offset + 6, withBytes: kNopInstruction)
-			
 			dol.replace2BytesAtOffset(offset, withBytes: tmove.index)
 		}
 		
@@ -702,68 +555,57 @@ extension XGUtility {
 		// since the compiler strips all debug data. If it happens to be the same length
 		// after editing then oh well, unlucky mate :-p
 		printg("updating duking trades script")
-		
-		let scriptFile = XGFiles.scd("M2_guild_1F_2")
-		let scriptFsysFile = XGFiles.fsys("M2_guild_1F_2")
+
+		let filename = "M2_guild_1F_2"
+		let scriptFile = XGFiles.typeAndFsysName(.scd, filename)
 		if !scriptFile.exists {
-			if !scriptFsysFile.exists, let fsysFile = ISO.dataForFile(filename: scriptFsysFile.fileName) {
-				fsysFile.file = .nameAndFolder("M2_guild_1F_2.fsys", .AutoFSYS)
-				fsysFile.save()
-			}
-			if scriptFsysFile.exists {
-				let fsysData = scriptFsysFile.fsysData
-				if let scriptData = fsysData.decompressedDataForFilesWithFiletype(type: .scd).first {
-					scriptData.file = scriptFile
-					scriptData.save()
-				}
-			}
+			let scriptFsysFile = XGFiles.fsys(filename)
+			XGUtility.exportFileFromISO(scriptFsysFile, decode: false)
 		}
-		if scriptFile.exists {
-			if scriptFile.fileSize == 0x1770, let script = scriptFile.data {
-				
-				let trapinches = [0x0B4A,0x0D1E]
-				let surskits = [0x0B9A,0x0D62]
-				let woopers = [0x0BEA,0x0DA6]
-				
-				let trapinch = XGPokeSpotPokemon(index: 2, pokespot: .rock).pokemon.nameID
-				let surskit = XGPokeSpotPokemon(index: 2, pokespot: .oasis).pokemon.nameID
-				let wooper = XGPokeSpotPokemon(index: 2, pokespot: .cave).pokemon.nameID
-				
-				for offset in trapinches {
-					script.replace2BytesAtOffset(offset, withBytes: trapinch)
-				}
-				
-				for offset in surskits {
-					script.replace2BytesAtOffset(offset, withBytes: surskit)
-				}
-				
-				for offset in woopers {
-					script.replace2BytesAtOffset(offset, withBytes: wooper)
-				}
-				
-				script.replace2BytesAtOffset(0x0D3A, withBytes: trapinch)
-				script.replace2BytesAtOffset(0x1756, withBytes: trapinch)
-				
-				
-				script.replace2BytesAtOffset(0x0D7E, withBytes: surskit)
-				script.replace2BytesAtOffset(0x175E, withBytes: surskit)
-				
-				
-				script.replace2BytesAtOffset(0x0DC2, withBytes: wooper)
-				script.replace2BytesAtOffset(0x1766, withBytes: wooper)
-				
-				
-				let meditite = XGTradePokemon(index: 1).species.nameID
-				let shuckle = XGTradePokemon(index: 2).species.nameID
-				let larvitar = XGTradePokemon(index: 3).species.nameID
-				
-				script.replace2BytesAtOffset(0x0D32, withBytes: meditite)
-				script.replace2BytesAtOffset(0x0D76, withBytes: shuckle)
-				script.replace2BytesAtOffset(0x0DBA, withBytes: larvitar)
-				
-				
-				script.save()
+		if scriptFile.exists, scriptFile.fileSize == 0x1770, let script = scriptFile.data {
+
+			let trapinches = [0x0B4A,0x0D1E]
+			let surskits = [0x0B9A,0x0D62]
+			let woopers = [0x0BEA,0x0DA6]
+
+			let trapinch = XGPokeSpotPokemon(index: 2, pokespot: .rock).pokemon.nameID
+			let surskit = XGPokeSpotPokemon(index: 2, pokespot: .oasis).pokemon.nameID
+			let wooper = XGPokeSpotPokemon(index: 2, pokespot: .cave).pokemon.nameID
+
+			for offset in trapinches {
+				script.replace2BytesAtOffset(offset, withBytes: trapinch)
 			}
+
+			for offset in surskits {
+				script.replace2BytesAtOffset(offset, withBytes: surskit)
+			}
+
+			for offset in woopers {
+				script.replace2BytesAtOffset(offset, withBytes: wooper)
+			}
+
+			script.replace2BytesAtOffset(0x0D3A, withBytes: trapinch)
+			script.replace2BytesAtOffset(0x1756, withBytes: trapinch)
+
+
+			script.replace2BytesAtOffset(0x0D7E, withBytes: surskit)
+			script.replace2BytesAtOffset(0x175E, withBytes: surskit)
+
+
+			script.replace2BytesAtOffset(0x0DC2, withBytes: wooper)
+			script.replace2BytesAtOffset(0x1766, withBytes: wooper)
+
+
+			let meditite = XGTradePokemon(index: 1).species.nameID
+			let shuckle = XGTradePokemon(index: 2).species.nameID
+			let larvitar = XGTradePokemon(index: 3).species.nameID
+
+			script.replace2BytesAtOffset(0x0D32, withBytes: meditite)
+			script.replace2BytesAtOffset(0x0D76, withBytes: shuckle)
+			script.replace2BytesAtOffset(0x0DBA, withBytes: larvitar)
+
+
+			script.save()
 		}
 	}
 	
@@ -940,8 +782,8 @@ extension XGUtility {
 		// get macros.xds
 		// file containing common macros to use as reference
 		if text.length > 0 {
-			let file = XGFiles.xds("Common Macros")
-			printg("documenting script: ", file.fileName)
+			let file = XGFiles.nameAndFolder("Common Macros.xds", .Reference)
+			printg("writing script ", file.fileName, "to:", file.path)
 			text.save(toFile: file)
 		}
 		
@@ -1024,38 +866,10 @@ extension XGUtility {
 			}
 		}
 		if text.length > 0 {
-			let file = XGFiles.xds("Classes")
-			printg("documenting script: ", file.fileName)
+			let file = XGFiles.nameAndFolder("Classes.xds", .Reference)
+			printg("writing script ", file.fileName, "to:", file.path)
 			text.save(toFile: file)
 		}
-		
-	}
-	
-	class func documentXDS() {
-		let files = XGFolders.Scripts.files.sorted { (s1, s2) -> Bool in
-			return s1.fileName < s2.fileName
-		}
-		_ = files.map({ (file) in
-			if file.fileType == .scd {
-				
-				let xds = XGFiles.xds(file.fileName.removeFileExtensions())
-				if !xds.exists {
-					printg("decompiling script: ", file.fileName)
-					let script = file.scriptData.getXDSScript()
-					XGUtility.saveString(script, toFile: xds)
-				} else {
-					if settings.verbose {
-						printg("script already exists: \(xds.path)")
-					}
-				}
-			}
-		})
-		let xds = XGFiles.xds("common")
-		if !xds.exists {
-			printg("documenting script: ", XGFiles.common_rel.fileName)
-			XGFiles.common_rel.scriptData.getXDSScript().save(toFile: xds)
-		}
-		printg("Finished decompiling scripts.")
 		
 	}
 	
@@ -1792,47 +1606,6 @@ extension XGUtility {
 		let filename = pkx.file.fileName.removeFileExtensions() + ".dat"
 		return XGMutableData(byteStream: charStream, file: .nameAndFolder(filename, pkx.file.folder))
 
-		// I think this code was removing the bounding box section but I don't think that's necessary
-//		//	let rawData = pkx.charStream
-//		let modelHeader = 0xE60
-//		let modelStart = 0xE80
-//		var modelEndPaddingCounter = 0
-//
-//		// get number of padding 0s at end
-//		var index = pkx.length - 4
-//		var current = pkx.getWordAtOffset(index)
-//
-//		while current == 0 {
-//			modelEndPaddingCounter += 4
-//			index -= 4
-//			current = pkx.getWordAtOffset(index)
-//		}
-//		modelEndPaddingCounter = pkx.length - (index + 4)
-//
-//		let skipStart = Int(pkx.getWordAtOffset(pkx.length - modelEndPaddingCounter - 0x1C)) + modelStart
-//		let skipEnd = Int(pkx.getWordAtOffset(modelHeader + 4)) + modelStart
-//
-//		let part2 = pkx.getCharStreamFromOffset(modelStart, length: skipStart - modelStart)
-//		let part3 = pkx.getCharStreamFromOffset(skipEnd, length: pkx.length - modelEndPaddingCounter - 0x1C - skipEnd)
-//		let part4: [UInt8] = [0x73, 0x63, 0x65, 0x6E, 0x65, 0x5F, 0x64, 0x61, 0x74, 0x61, 0x00] // "scene_data" unicode
-//		var rawBytes = part2 + part3 + part4
-//
-//		let newLength = rawBytes.count + 0x20
-//		let header4 = [newLength, skipStart - modelStart, Int(pkx.getWordAtOffset(modelHeader + 8)), 0x01]
-//		var header = [UInt8]()
-//		for h in header4 {
-//			header.append(UInt8(h >> 24))
-//			header.append(UInt8((h & 0xFF0000) >> 16))
-//			header.append(UInt8((h & 0xFF00) >> 8))
-//			header.append(UInt8(h % 0x100))
-//		}
-//		for _ in 0 ..< 0x10 {
-//			header.append(0)
-//		}
-//
-//		rawBytes = header + rawBytes
-//
-//		return XGMutableData(byteStream: rawBytes, file: .nameAndFolder("", .Documents))
 	}
 	
 	class func copyOWPokemonIdleAnimationFromIndex(index: Int, forModel file: XGFiles) {
@@ -1961,16 +1734,17 @@ extension XGUtility {
 				locations[treasure.item.index].addUnique(mapName)
 			}
 		}
-		
-		for s in XGFolders.Scripts.files where s.fileType == .scd {
-			let script = s.scriptData
-			let map = (XGMaps(rawValue: s.fileName.substring(from: 0, to: 2)) ?? .Unknown).name
-			
-			for item in script.getItems() {
-				locations[item.index].addUnique(map)
+
+		for folder in XGFolders.ISOExport("").subfolders {
+			for s in folder.files where s.fileType == .scd {
+				let script = s.scriptData
+				let map = (XGMaps(rawValue: s.fileName.substring(from: 0, to: 2)) ?? .Unknown).name
+
+				for item in script.getItems() {
+					locations[item.index].addUnique(map)
+				}
 			}
 		}
-		
 		return locations
 	}
 
@@ -1988,16 +1762,18 @@ extension XGUtility {
 			}
 		}
 
-		for s in XGFolders.Scripts.files where s.fileType == .scd {
-			let script = s.scriptData
-			let map = (XGMaps(rawValue: s.fileName.substring(from: 0, to: 2)) ?? .Unknown).name
-			var items = locations[map] ?? [XGItems]()
+		for folder in XGFolders.ISOExport("").subfolders {
+			for s in folder.files where s.fileType == .scd {
+				let script = s.scriptData
+				let map = (XGMaps(rawValue: s.fileName.substring(from: 0, to: 2)) ?? .Unknown).name
+				var items = locations[map] ?? [XGItems]()
 
-			for item in script.getItems() where item.index > 0 {
-				items.addUnique(item)
+				for item in script.getItems() where item.index > 0 {
+					items.addUnique(item)
+				}
+
+				locations[map] = items
 			}
-
-			locations[map] = items
 		}
 
 		var text = "XD items by location\n"

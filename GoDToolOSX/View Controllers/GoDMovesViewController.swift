@@ -214,7 +214,7 @@ class GoDMovesViewController: GoDTableViewController {
 				} else if game == .PBR {
 					// Handle the "<Pokemon> used <Move>!" strings replacement if the format is unchanged
 					let animationStringIDs = currentMove.animationStringIDs
-					let animationStringsTable = XGFiles.msg(region == .JP ? "menu_fight_s" : "mes_fight_e").stringTable
+					let animationStringsTable = XGFiles.typeAndFsysName(.msg, region == .JP ? "menu_fight_s" : "mes_fight_e").stringTable
 					animationStringIDs.forEach { (id) in
 						if let oldString = animationStringsTable.stringWithID(id), oldString.containsSubstring(XGSpecialCharacters.newLine.string) {
 							let newStringTextParts = oldString.string.replacingOccurrences(of: XGSpecialCharacters.newLine.string, with: "\n").split(separator: "\n")

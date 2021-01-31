@@ -19,7 +19,7 @@ class XGMapRel: XGRelocationTable {
 	var isValid = true
 
 	var script: XGScript? {
-		let scriptFile = XGFiles.scd(file.fileName.removeFileExtensions())
+		let scriptFile = XGFiles.typeAndFsysName(.scd, file.fileName.removeFileExtensions())
 		return scriptFile.exists ? scriptFile.scriptData : nil
 	}
 	#endif

@@ -8,12 +8,12 @@
 
 import Foundation
 
-enum XGDeckPokemon : CustomStringConvertible {
+enum XGDeckPokemon: CustomStringConvertible {
 	
 	case dpkm(Int, XGDecks)
 	case ddpk(Int)
 	
-	var index : Int {
+	var index: Int {
 		get {
 			switch self {
 				case .dpkm(let i, _) :
@@ -24,7 +24,7 @@ enum XGDeckPokemon : CustomStringConvertible {
 		}
 	}
 	
-	var startOffset : Int {
+	var startOffset: Int {
 		switch self {
 			case .dpkm:
 				return deck.DPKMDataOffset + (index * kSizeOfPokemonData)
@@ -33,7 +33,7 @@ enum XGDeckPokemon : CustomStringConvertible {
 		}
 	}
 	
-	var isSet : Bool {
+	var isSet: Bool {
 		get {
 			return pokemon.index > 0
 		}

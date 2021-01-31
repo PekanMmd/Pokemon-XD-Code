@@ -22,7 +22,7 @@ class XGCollisionData: NSObject {
 	}
 	
 	var vertexes = [XGVertex]()
-	var rawVertexBuffer : [Float] {
+	var rawVertexBuffer: [Float] {
 		var buffer = [Float]()
 		
 		for vertex in self.vertexes {
@@ -65,7 +65,7 @@ class XGCollisionData: NSObject {
 			return
 		}
 		
-		let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
+		let relFile = XGFiles.typeAndFsysName(.rel, self.file.fileName.removeFileExtensions())
 		if relFile.exists {
 			mapRel = XGMapRel(file: relFile, checkScript: false)
 		}

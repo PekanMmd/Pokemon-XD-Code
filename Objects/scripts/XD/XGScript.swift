@@ -92,7 +92,7 @@ class XGScript: NSObject {
 
 			// if not found, check for rel file in rels folder
 			if mapRel == nil {
-				let relFile = XGFiles.rel(file.fileName.removeFileExtensions())
+				let relFile = XGFiles.typeAndFsysName(.rel, file.fileName.removeFileExtensions())
 				if relFile.exists {
 					let rel = XGMapRel(file: relFile, checkScript: false)
 					if rel.isValid {
@@ -102,15 +102,9 @@ class XGScript: NSObject {
 			}
 
 			// check for msg file in same folder
-			let msgFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.msg.fileExtension, file.folder)
+			let msgFile = XGFiles.typeAndFsysName(.msg, file.fileName.removeFileExtensions())
 			if msgFile.exists {
 				stringTable = msgFile.stringTable
-			} else {
-			// if not found, check for msg file in string tables folder
-				let msgFile = XGFiles.msg(file.fileName.removeFileExtensions())
-				if msgFile.exists {
-					stringTable = msgFile.stringTable
-				}
 			}
 		}
 		
@@ -347,15 +341,15 @@ class XGScript: NSObject {
 							let fsys = XGFiles.fsys(self.file.fileName.removeFileExtensions())
 							if fsys.exists {
 								archive = fsys.fsysData
-								mindex = archive.indexForIdentifier(identifier: mid)
+								mindex = archive.indexForIdentifier(identifier: mid) ?? -1
 							}
 							
 							if mindex < 0 {
 								archive = XGFiles.fsys("people_archive").fsysData
-								mindex = archive.indexForIdentifier(identifier: mid)
+								mindex = archive.indexForIdentifier(identifier: mid) ?? -1
 							}
 							
-							desc += ">> " + archive.fileNames[mindex] + "\n"
+							desc += ">> " + (archive.fileNameForFileWithIndex(index: mindex) ?? "-") + "\n"
 						}
 					}
 					
@@ -2208,21 +2202,8 @@ class XGScript: NSObject {
 					}
 				}
 			}
-			
-			// if still not found, check for rel file in rels folder
-			if self.mapRel == nil {
-				let relFile = XGFiles.rel(self.file.fileName.removeFileExtensions())
-				if relFile.exists {
-					let rel = XGMapRel(file: relFile, checkScript: false)
-					if rel.isValid {
-						mapRel = rel
-					}
-				}
-			}
 		}
-		
-		
-		
+
 		let (exprStack, macs) = getInstructionStack()
 		
 		// write script headers
@@ -2470,7 +2451,7 @@ class XGScript: NSObject {
 	}
 
 	class func printXDSInstancesOfFlag(_ flagID: Int) {
-		for file in XGFolders.XDS.files where file.fileType == .xds {
+		for file in XGFiles.allFilesWithType(.xds) {
 			let text = file.text
 			if text.contains(XDSExpr.stringFromMacroImmediate(c: .integer(flagID), t: .flag)) {
 				printg(file.fileName)

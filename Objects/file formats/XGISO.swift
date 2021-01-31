@@ -126,10 +126,6 @@ class XGISO: NSObject {
 	func importAllFiles() {
 		#warning("TODO: reimplement")
 	}
-	
-	func importDol() {
-		importFiles([.dol])
-	}
 
 	@discardableResult
 	func importToc(saveWhenDone save: Bool) -> Bool {
@@ -150,10 +146,20 @@ class XGISO: NSObject {
 		return success
 	}
 	
-	func importFiles(_ fileList: [XGFiles]) {
+	func importFiles(_ fileList: [XGFiles], save: Bool = true) {
 		
 		if settings.increaseFileSizes {
 			for file in fileList {
+				guard file.exists else {
+					printg("Couldn't import file to ISO. File doesn't exist:", file.path)
+					continue
+				}
+
+				guard file != .toc else {
+					printg(".toc replacement not supported")
+					continue
+				}
+
 				printg("importing file to ISO: " + file.fileName)
 				self.shiftAndReplaceFileEfficiently(file)
 			}
@@ -163,6 +169,16 @@ class XGISO: NSObject {
 			let isodata = self.data
 			
 			for file in fileList {
+
+				guard file.exists else {
+					printg("Couldn't import file to ISO. File doesn't exist:", file.path)
+					continue
+				}
+
+				guard file != .toc else {
+					printg(".toc replacement not supported")
+					continue
+				}
 
 				let filename = file.fileName
 				printg("importing file to ISO: " + filename)
@@ -193,8 +209,10 @@ class XGISO: NSObject {
 				
 				self.replaceDataForFile(filename: file.fileName, withData: data, saveWhenDone: false)
 			}
-			
-			isodata.save()
+
+			if save {
+				isodata.save()
+			}
 		}
 	}
 	
@@ -871,27 +889,6 @@ class XGISO: NSObject {
 			
 		}
 		return nil
-	}
-
-	 class func extractAllFiles() {
-		#warning("TODO: reimplement")
-	}
-
-	class func extractMainFiles() {
-		printg("extracting: Start.dol")
-		ISO.extractDOL()
-		printg("extracting: FSYS archives")
-		ISO.extractFSYS()
-		ISO.extractMenuFSYS()
-		printg("extracting: common")
-		ISO.extractCommon()
-		printg("extracting: main string tables")
-		ISO.extractSpecificStringTables()
-		if game == .XD {
-			printg("extracting: decks")
-			ISO.extractDecks()
-		}
-		printg("extracted main files.")
 	}
 	
 }

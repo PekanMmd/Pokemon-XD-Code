@@ -16,7 +16,7 @@ class XGCommon : XGRelocationTable {
 		self.dataStart = Int(self.data!.getWordAtOffset(kCommonRELDataStartOffsetLocation))
 	}
 	
-	var dictionary : [Int : (Int, Int)] {
+	var dictionary : [Int : (pointer: Int, value: Int)] {
 		var dict = [Int : (Int, Int)]()
 		for i in 0 ..< kNumberRelPointers {
 			dict[i] = (self.getPointer(index: i), self.getValueAtPointer(index: i))

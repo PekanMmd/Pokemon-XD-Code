@@ -8,7 +8,7 @@
 
 import Foundation
 
-let abilityListUpdated = game == .Colosseum ? false : XGFiles.dol.data!.getWordAtOffset(kAbilitiesStartOffset + 8) != 0
+let abilityListUpdated = XGFiles.dol.data!.getWordAtOffset(kAbilitiesStartOffset + 8) != 0
 
 let kNumberOfAbilities		= abilityListUpdated ? (0x3A8 / 8) : 0x4E
 let kAbilityNameIDOffset		= abilityListUpdated ? 0 : 4
@@ -21,12 +21,14 @@ var kAbilitiesStartOffset: Int = {
 		case .US: return 0x3FCC50
 		case .EU: return 0x437530
 		case .JP: return 0x3DA310
+		case .OtherGame: return 0
 		}
 	} else {
 		switch region {
 		case .US: return 0x35C5E0
 		case .EU: return 0x3A9688
 		case .JP: return 0x348D20
+		case .OtherGame: return 0
 		}
 	}
 }()
@@ -35,68 +37,58 @@ enum XGAbilities {
 	
 	case ability(Int)
 	
-	var index : Int {
-		get {
-			switch self {
-				case .ability(let i):
-					if i > kNumberOfAbilities || i < 0 {
-						return 0
-					}
-					return i
+	var index: Int {
+		switch self {
+		case .ability(let i):
+			if i > kNumberOfAbilities || i < 0 {
+				return 0
 			}
+			return i
 		}
 	}
 	
-	var hex : String {
-		get {
-			return String(format: "0x%x",self.index)
-		}
+	var hex: String {
+		return String(format: "0x%x",self.index)
 	}
 	
-	var nameIDOffset : Int {
+	var nameIDOffset: Int {
 		return kAbilitiesStartOffset + (index * kSizeOfAbilityEntry) + kAbilityNameIDOffset
 	}
 	
-	var nameID : Int {
-		get {
-			let dol = XGFiles.dol.data!
-			return Int(dol.getWordAtOffset(nameIDOffset))
-		}
+	var nameID: Int {
+		let dol = XGFiles.dol.data!
+		return Int(dol.getWordAtOffset(nameIDOffset))
 	}
 	
-	var name : XGString {
-		get {
-			return XGFiles.common_rel.stringTable.stringSafelyWithID(nameID)
-		}
+	var name: XGString {
+		return XGFiles.common_rel.stringTable.stringSafelyWithID(nameID)
 	}
 	
-	var descriptionIDOffset : Int {
+	var descriptionIDOffset: Int {
 		return kAbilitiesStartOffset + (index * kSizeOfAbilityEntry) + kAbilityDescriptionIDOffset
 	}
 	
-	var descriptionID : Int {
-		get {
-			let dol = XGFiles.dol.data!
-			return Int(dol.getWordAtOffset(descriptionIDOffset))
-		}
+	var descriptionID: Int {
+		let dol = XGFiles.dol.data!
+		return Int(dol.getWordAtOffset(descriptionIDOffset))
 	}
 	
-	var adescription : XGString {
-		get {
-			return XGFiles.common_rel.stringTable.stringSafelyWithID(descriptionID)
-		}
+	var adescription: XGString {
+		return XGFiles.common_rel.stringTable.stringSafelyWithID(descriptionID)
 	}
 	
 	func replaceNameID(newID: Int) {
-		let dol = XGFiles.dol.data!
-		dol.replace4BytesAtOffset(nameIDOffset, withBytes: newID)
-		dol.save()
+		if let dol = XGFiles.dol.data {
+			dol.replace4BytesAtOffset(nameIDOffset, withBytes: newID)
+			dol.save()
+		}
 	}
 	
 	func replaceDescriptionID(newID: Int) {
-		let dol = XGFiles.dol.data!
-		dol.replace4BytesAtOffset(descriptionIDOffset, withBytes: newID)
-		dol.save()
+		if let dol = XGFiles.dol.data {
+			dol.replace4BytesAtOffset(descriptionIDOffset, withBytes: newID)
+			dol.save()
+		}
 	}
 	
 	static func random() -> XGAbilities {

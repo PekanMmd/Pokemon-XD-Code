@@ -14,6 +14,7 @@ let kEeveeStartOffset: Int = {
 	case .US: return 0x1CBC50
 	case .JP: return 0x1C6AF4
 	case .EU: return 0x1CD724
+	case .OtherGame: return 0
 	}
 }()
 

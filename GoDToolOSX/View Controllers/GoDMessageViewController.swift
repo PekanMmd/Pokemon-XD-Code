@@ -43,8 +43,11 @@ class GoDMessageViewController: GoDTableViewController {
 			self.filesPopup.isEnabled = false
 			currentTable = table
 		} else {
-			loadAllStrings()
-			self.filesPopup.setTitles(values: ["-"] + allStringTables.map { $0.file.fileName }.sorted())
+			loadAllStrings(refresh: true)
+			self.filesPopup.setTitles(values: ["-"] + allStringTables.map {
+				$0.file.folder.name + "/" + $0.file.fileName
+
+			}.sorted())
 		}
 		self.hideInterface()
     }

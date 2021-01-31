@@ -100,7 +100,7 @@ class GoDItemViewController: GoDTableViewController {
 				} else {
 					nameUpdate = true
 				}
-				let pocket = XGFiles.msg("pocket_menu")
+				let pocket = XGFiles.typeAndFsysName(.msg, "pocket_menu")
 				if pocket.exists {
 					if !pocket.stringTable.addString(string, increaseSize: true, save: true) {
 						printg("couldn't replace string in pocket_menu.msg:", string.string)
@@ -120,7 +120,7 @@ class GoDItemViewController: GoDTableViewController {
 			
 			if descriptionField.stringValue.length > 0 && val > 0 {
 				let string = XGString(string: descriptionField.stringValue, file: nil, sid: val)
-				let pocket = XGFiles.msg("pocket_menu")
+				let pocket = XGFiles.typeAndFsysName(.msg, "pocket_menu")
 				if pocket.exists {
 					if !pocket.stringTable.addString(string, increaseSize: true, save: true) {
 						printg("couldn't replace string in pocket_menu.msg:", string.string)

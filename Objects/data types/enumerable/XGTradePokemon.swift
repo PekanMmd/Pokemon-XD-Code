@@ -13,6 +13,7 @@ let kElekidOffset: Int = {
 	case .US: return 0x1C57A4
 	case .JP: return 0x1C0CB4
 	case .EU: return 0x1C70A0
+	case .OtherGame: return 0
 	}
 }()
 let kMedititeOffset: Int = {
@@ -20,6 +21,7 @@ let kMedititeOffset: Int = {
 	case .US: return 0x1C5888
 	case .JP: return 0x1C0D1C
 	case .EU: return 0x1C7184
+	case .OtherGame: return 0
 	}
 }()
 let kShuckleOffset: Int = {
@@ -27,6 +29,7 @@ let kShuckleOffset: Int = {
 	case .US: return 0x1C58D8
 	case .JP: return 0x1C0D6C
 	case .EU: return 0x1C71D4
+	case .OtherGame: return 0
 	}
 }()
 let kLarvitarOffset: Int = {
@@ -34,6 +37,7 @@ let kLarvitarOffset: Int = {
 	case .US: return 0x1C5928
 	case .JP: return 0x1C0DBC
 	case .EU: return 0x1C7224
+	case .OtherGame: return 0
 	}
 }()
 
@@ -46,12 +50,10 @@ let kTradePokemonMove4Offset		=  0x32
 
 var giftPokemonShininessRAMOffset: Int {
 	switch region {
-	case .US:
-		return 0x152c1a
-	case .EU:
-		return 0x1544de
-	case .JP:
-		return -1
+	case .US: return 0x152c1a
+	case .EU: return 0x1544de
+	case .JP: return -1
+	case .OtherGame: return 0
 	}
 }
 

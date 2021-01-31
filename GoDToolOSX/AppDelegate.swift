@@ -15,7 +15,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	var homeViewController : GoDHomeViewController!
 	
-	@IBOutlet weak var decompileXDSMenuItem: NSMenuItem!
 	@IBOutlet weak var scriptMenuItem: NSMenuItem!
 	
 	@IBOutlet weak var godtoolmenuitem: NSMenuItem!
@@ -44,7 +43,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let file = fileURL.file
             
             guard file.exists else {
-                printg("cannot open file:", file.path)
+                printg("cannot open file:", file.path, "\nIt doesn't exist.")
                 continue
             }
             printg("opening filepath:", file.path)
@@ -57,8 +56,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 present(vc)
 			case .msg:
 				let table = file.stringTable
-				let vc = GoDMessageViewController(singleTable: table)
-				present(vc)
+				let storyboard = NSStoryboard(name: "Messages", bundle: nil)
+				if let vc = storyboard.instantiateInitialController() as? GoDMessageViewController {
+					vc.singleTable = table
+					present(vc)
+				}
+			case .fsys:
+				let outputFolder = XGFolders.nameAndFolder(file.fileName.removeFileExtensions(), file.folder)
+				outputFolder.createDirectory()
+				printg("Unzipping contents of \(file.path) to \(outputFolder.path)")
+				let fsysData = file.fsysData
+				fsysData.extractFilesToFolder(folder: outputFolder, decode: true)
             default:
                 break
             }
@@ -75,7 +83,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func getFreeStringID(_ sender: Any) {
-		guard game != .PBR else { return }
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		
 		guard !isSearchingForFreeStringID else {
 			self.displayAlert(title: "Please wait", text: "Please wait for previous string id search to complete.")
@@ -102,10 +113,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func importTextures(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		XGUtility.importTextures()
 	}
 	
 	@IBAction func exportTextures(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		XGUtility.exportTextures()
 	}
 	
@@ -143,6 +162,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	
 	@IBAction func extractISO(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		printg("extracting iso")
 		guard XGFiles.iso.exists else {
 			let text = "ISO file doesn't exist. Please place your \(game == .XD ? "Pokemon XD" : "Pokemon Colosseum") file in the folder \(XGFolders.ISO.path) and name it \(XGFiles.iso.fileName)"
@@ -154,22 +177,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		XGFolders.setUpFolderFormat()
 		XGUtility.extractAllFiles()
 		
-		if game == .Colosseum && XGFiles.common_rel.exists {
-			let rel = XGFiles.common_rel.data!
-			var zero = false
-			if region == .JP {
-				zero = rel.getWordAtOffset(0x4580 + 0x9cf8 - 4) != 0
-			}
-			if region == .US {
-				zero = rel.getWordAtOffset(0x784e0 + 0x13068 - 4) != 0
-			}
-			
-			if zero {
-                printg("Clearing foreign language string tables.\nThis may take a while but only needs to be done once.")
-				XGDolPatcher.zeroForeignStringTables()
-			}
-		}
-		
 		printg("extraction complete")
 		self.displayAlert(title: "ISO Extraction Complete", text: "Done.")
 	}
@@ -177,6 +184,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	var isBuilding = false
 	
 	@IBAction func quickBuildISO(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		guard !isBuilding else {
 			self.displayAlert(title: "Please wait", text: "Please wait for previous build to complete.")
 			return
@@ -210,6 +221,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func rebuildISO(_ sender: AnyObject) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		guard !isBuilding else {
 			self.displayAlert(title: "Please wait", text: "Please wait for previous build to complete.")
 			return
@@ -242,17 +257,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	}
 	
-	@IBAction func decompileXDS(_ sender: Any) {
-		printg("Decompiling XDS scripts...")
-		XGThreadManager.manager.runInBackgroundAsync {
-			if game == .XD {
-				XGUtility.documentXDS()
-				printg("Finished decompiling XDS scripts.")
-			}
-		}
-	}
-	
 	@IBAction func getXDSMacros(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		XGThreadManager.manager.runInBackgroundAsync {
 			if game == .XD {
 				XGUtility.documentMacrosXDS()
@@ -262,6 +271,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func getXDSClasses(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		XGThreadManager.manager.runInBackgroundAsync {
 			if game == .XD {
 				XGUtility.documentXDSClasses()
@@ -271,6 +284,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func saveSublime(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		XGThreadManager.manager.runInBackgroundAsync {
 			let files : [XGResources] = [
 				XGResources.sublimeSyntax("XDScript"),
@@ -293,6 +310,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func installSublime(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		printg("Installing XDS Plugin files for Sublime Text 3...")
 		XGThreadManager.manager.runInBackgroundAsync {
 			let files : [XGResources] = [
@@ -330,6 +351,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func showStringIDTool(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		performSegue("toStringVC")
 	}
 	
@@ -362,6 +387,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	var isDocumenting = false
 	@IBAction func documentISO(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		guard !isDocumenting else {
 			return
 		}
@@ -375,6 +404,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     var isEncoding = false
     @IBAction func encodeISO(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
         guard !isEncoding else {
             return
         }
@@ -395,34 +428,66 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	
 	@IBAction func openTextureImporter(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		self.performSegue("toTextureVC")
 	}
 	
 	@IBAction func openScriptCompiler(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		self.performSegue("toScriptVC")
 	}
 	
 	@IBAction func openStatsEditor(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		self.performSegue("toStatsVC")
 	}
 	
 	@IBAction func openMoveEditor(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		self.performSegue("toMoveVC")
 	}
 	
 	@IBAction func openGiftEditor(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		self.performSegue("toGiftVC")
 	}
 	
 	@IBAction func openPatchEditor(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		self.performSegue("toPatchVC")
 	}
 	
 	@IBAction func openContextTool(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		self.performSegue("toContextVC")
 	}
 	
 	@IBAction func openRandomiser(_ sender: Any) {
+		guard region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return
+		}
 		self.performSegue("toRandomiserVC")
 	}
 	

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="bxX-wC-pW7">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="bxX-wC-pW7">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -10,19 +11,19 @@
             <objects>
                 <viewController title="ISO Explorer" id="bxX-wC-pW7" customClass="GoDISOViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="3Yw-8u-ra2">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="380"/>
+                        <rect key="frame" x="0.0" y="0.0" width="570" height="380"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="J4c-eK-bUW" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
-                                <rect key="frame" x="210" y="10" width="260" height="360"/>
+                                <rect key="frame" x="210" y="10" width="350" height="360"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="449-BS-yMe">
-                                        <rect key="frame" x="154" y="267" width="92" height="41"/>
+                                        <rect key="frame" x="194" y="267" width="142" height="41"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="2cw-Qv-yUN"/>
-                                            <constraint firstAttribute="width" constant="80" id="u24-27-fmr"/>
+                                            <constraint firstAttribute="width" constant="130" id="u24-27-fmr"/>
                                         </constraints>
-                                        <buttonCell key="cell" type="push" title="Import" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="L6d-sZ-Gkg">
+                                        <buttonCell key="cell" type="push" title="Encode and import" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="L6d-sZ-Gkg">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
@@ -31,17 +32,17 @@
                                         </connections>
                                     </button>
                                     <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZaN-Nt-34m">
-                                        <rect key="frame" x="10" y="10" width="240" height="154"/>
+                                        <rect key="frame" x="10" y="10" width="330" height="154"/>
                                         <clipView key="contentView" id="PzL-xZ-RXI">
-                                            <rect key="frame" x="0.0" y="0.0" width="240" height="154"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="330" height="154"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" smartInsertDelete="YES" id="zTF-RS-VU7">
-                                                    <rect key="frame" x="0.0" y="0.0" width="240" height="154"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="330" height="154"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                    <size key="minSize" width="240" height="154"/>
+                                                    <size key="minSize" width="330" height="154"/>
                                                     <size key="maxSize" width="463" height="10000000"/>
                                                     <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 </textView>
@@ -53,12 +54,12 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="uIH-f7-zGQ">
-                                            <rect key="frame" x="224" y="0.0" width="16" height="154"/>
+                                            <rect key="frame" x="314" y="0.0" width="16" height="154"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RPc-NA-bVM">
-                                        <rect key="frame" x="8" y="164" width="244" height="20"/>
+                                        <rect key="frame" x="8" y="164" width="334" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="bO8-oa-QWN"/>
                                         </constraints>
@@ -69,7 +70,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0MI-Yz-bZJ">
-                                        <rect key="frame" x="84" y="197" width="92" height="31"/>
+                                        <rect key="frame" x="129" y="197" width="92" height="31"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="80" id="8RB-Yx-3zR"/>
                                             <constraint firstAttribute="height" constant="20" id="Q1y-gY-OfF"/>
@@ -83,7 +84,7 @@
                                         </connections>
                                     </button>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ww0-GG-60h">
-                                        <rect key="frame" x="18" y="334" width="104" height="16"/>
+                                        <rect key="frame" x="18" y="334" width="149" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="File name: -" id="HzW-1r-BsW">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -91,7 +92,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tQn-Gq-XCD">
-                                        <rect key="frame" x="138" y="334" width="104" height="16"/>
+                                        <rect key="frame" x="183" y="334" width="149" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="File size: -" id="ggy-JV-Sjh">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -99,12 +100,12 @@
                                         </textFieldCell>
                                     </textField>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cd3-cr-x8P">
-                                        <rect key="frame" x="14" y="267" width="92" height="41"/>
+                                        <rect key="frame" x="14" y="267" width="142" height="41"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="8Q0-3K-g9P"/>
-                                            <constraint firstAttribute="width" constant="80" id="UKS-9n-QRX"/>
+                                            <constraint firstAttribute="width" constant="130" id="UKS-9n-QRX"/>
                                         </constraints>
-                                        <buttonCell key="cell" type="push" title="Export" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mlQ-r2-gWe">
+                                        <buttonCell key="cell" type="push" title="Export and decode" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mlQ-r2-gWe">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
@@ -113,26 +114,26 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="upR-aa-OyI">
-                                        <rect key="frame" x="154" y="237" width="92" height="31"/>
+                                        <rect key="frame" x="194" y="237" width="142" height="31"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="OI6-hs-UnV"/>
                                         </constraints>
-                                        <buttonCell key="cell" type="push" title="Quick Import" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vAf-BS-ifw">
+                                        <buttonCell key="cell" type="push" title="Import" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vAf-BS-ifw">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="miniSystem"/>
+                                            <font key="font" metaFont="system" size="15"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="quickImport:" target="bxX-wC-pW7" id="Gs1-55-r8X"/>
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9O9-JT-xa4">
-                                        <rect key="frame" x="14" y="237" width="92" height="31"/>
+                                        <rect key="frame" x="14" y="237" width="142" height="31"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="J6E-bu-K0E"/>
                                         </constraints>
-                                        <buttonCell key="cell" type="push" title="Quick Export" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="EUV-ft-EF5">
+                                        <buttonCell key="cell" type="push" title="Export" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="EUV-ft-EF5">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="miniSystem"/>
+                                            <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="quickExport:" target="bxX-wC-pW7" id="Dsw-aj-0qV"/>
@@ -186,7 +187,7 @@
                 </viewController>
                 <customObject id="FRf-Bt-c5t" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1183" y="18"/>
+            <point key="canvasLocation" x="1228" y="18"/>
         </scene>
     </scenes>
 </document>

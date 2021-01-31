@@ -19,9 +19,7 @@ class GoDCollisionViewController: GoDTableViewController {
 	var filteredCols = [XGFiles]()
 
 	var cols: [XGFiles] {
-		return XGFolders.Col.files.filter({ (file) -> Bool in
-			return file.fileType == .ccd
-		}).sorted(by: { (f1, f2) -> Bool in
+		return XGFiles.allFilesWithType(.col).sorted(by: { (f1, f2) -> Bool in
 			return f1.fileName < f2.fileName
 		})
 	}
@@ -79,7 +77,8 @@ class GoDCollisionViewController: GoDTableViewController {
 		if filteredCols.count == 0 {
 			
 			cell.setBackgroundColour(GoDDesign.colourWhite())
-			cell.setTitle("No \(XGFileTypes.ccd.fileExtension) files found in \(XGFolders.Col.path).\nExtract ISO and try again.")
+			cell.setTitle("No \(XGFileTypes.col.fileExtension) files found in \(XGFolders.ISOExport("").path).\nExtract ISO and try again.")
+			cell.titleField.maximumNumberOfLines = 0
 			
 			return cell
 		}

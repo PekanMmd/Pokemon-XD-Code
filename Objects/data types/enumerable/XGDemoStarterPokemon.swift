@@ -14,12 +14,14 @@ let kVaporeonStartOffset: Int = {
 		case .US: return 0x14F614
 		case .EU: return 0x150ED8
 		case .JP: return 0x14A93C
+		case .OtherGame: return 0
 		}
 	} else {
 		switch region {
 		case .US: return 0x12DAC8
 		case .EU: return 0x131CF4
 		case .JP: return 0x12B198
+		case .OtherGame: return 0
 		}
 	}
 }()
@@ -29,12 +31,14 @@ let kJolteonStartOffset: Int = {
 		case .US: return 0x14F73C
 		case .EU: return 0x151000
 		case .JP: return 0x14AA64
+		case .OtherGame: return 0
 		}
 	} else {
 		switch region {
 		case .US: return 0x12DBF0
 		case .EU: return 0x131E1C
 		case .JP: return 0x12B2C0
+		case .OtherGame: return 0
 		}
 	}
 }()

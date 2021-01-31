@@ -12,7 +12,7 @@ enum XGFileTypes : Int, Codable, CaseIterable {
 	case none = 0x00
 	case rdat = 0x02 // room model in hal dat format. Also .dat files but considered different by the fsys headers
 	case dat  = 0x04 // character model in hal dat format
-	case ccd  = 0x06 // collision file
+	case col  = 0x06 // collision file
 	case samp = 0x08 // shorter music files for fanfares etc.
 	case msg  = 0x0a // string table
 	case fnt  = 0x0c // font
@@ -66,7 +66,7 @@ enum XGFileTypes : Int, Codable, CaseIterable {
 		case .none: return ""
 		case .rdat: return ".dat"
 		case .dat : return ".dat"
-		case .ccd : return ".ccd"
+		case .col : return ".ccd"
 		case .samp: return ".samp"
 		case .sdir: return ".sdir"
 		case .proj: return ".proj"

@@ -12,15 +12,15 @@ let kFloatSize     = 4
 let kXGVertexSize  = XGVertex().rawData.count * kFloatSize
 let kVertexesPerBuffer = kVBOBufferSize / kXGVertexSize
 
-class XGVertex : NSObject {
-	var x : Float = 0.0
-	var y : Float = 0.0
-	var z : Float = 0.0
-	var type : Float = 0.0
-	var index : Float = 0.0
+class XGVertex {
+	var x: Float = 0.0
+	var y: Float = 0.0
+	var z: Float = 0.0
+	var type: Float = 0.0
+	var index: Float = 0.0
 	var isInteractable = false
-	var interactionIndex : Float = 0.0
-	var sectionIndex : Float = 0.0
+	var interactionIndex: Float = 0.0
+	var sectionIndex: Float = 0.0
 	
 	// sometimes interactable vertices overlap with regular ones and only one can be displayed at a time
 	var sectionIndex2 : Float = 0.0
@@ -29,8 +29,20 @@ class XGVertex : NSObject {
 	var nx : Float = 0.0
 	var ny : Float = 0.0
 	var nz : Float = 0.0
-	
-	var rawData : [Float] {
+
+	init() {}
+
+	init(x: Float, y: Float, z: Float, nx: Float, ny: Float, nz: Float) {
+		self.x = x
+		self.nx = nx
+		self.y = y
+		self.ny = ny
+		self.z = z
+		self.nz = nz
+
+	}
+
+	var rawData: [Float] {
 		var data = [Float]()
 		data.append(x)
 		data.append(y)

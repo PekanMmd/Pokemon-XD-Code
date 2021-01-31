@@ -92,10 +92,12 @@ final class XGPokemonStats: NSObject, Codable {
 	var bodyID: UInt32 		= 0x0
 	var bodyShinyID: UInt32 = 0x0
 	
-	var bodyName: String {
+	var bodyName: String? {
 		let dance =  XGFiles.fsys("poke_dance").fsysData
-		let index = dance.indexForIdentifier(identifier: bodyID.int)
-		return dance.fileNames[index]
+		if let index = dance.indexForIdentifier(identifier: bodyID.int) {
+			return dance.fileNameForFileWithIndex(index: index)
+		}
+		return nil
 	}
 	
 	var levelUpRate	= XGExpRate.standard
@@ -138,16 +140,16 @@ final class XGPokemonStats: NSObject, Codable {
 	var height = 0.0 // meters
 	var weight = 0.0 // kg
 	
-	var pkxModelIdentifier : UInt32 {
+	var pkxModelIdentifier: UInt32 {
 		let dol = XGFiles.dol.data!
 		return dol.getWordAtOffset(kFirstPokemonPKXIdentifierOffset + (self.modelIndex * 8) + kModelDictionaryModelOffset)
 	}
 	
-	var pkxFSYS : XGFsys? {
+	var pkxFSYS: XGFsys? {
 		return ISO.getPKXModelWithIdentifier(id: self.pkxModelIdentifier)
 	}
 	
-	var pkxData : XGMutableData? {
+	var pkxData: XGMutableData? {
 		let fsys = self.pkxFSYS
 		
 		if fsys != nil {
@@ -157,32 +159,32 @@ final class XGPokemonStats: NSObject, Codable {
 		return nil
 	}
 	
-	var name : XGString {
+	var name: XGString {
 		return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
 	}
 	
-	var species : XGString {
-		let file = XGFiles.msg("pda_menu")
+	var species: XGString {
+		let file = XGFiles.typeAndFsysName(.msg, "pda_menu")
 		return XGStringTable(file: file, startOffset: 0, fileSize: file.fileSize).stringSafelyWithID(self.speciesNameID)
 	}
 	
-	var numberOfTMs : Int {
+	var numberOfTMs: Int {
 		return learnableTMs.filter{ $0 }.count
 	}
 	
-	var numberOfTutorMoves : Int {
+	var numberOfTutorMoves: Int {
 		return tutorMoves.filter{ $0 }.count
 	}
 	
-	var numberOfLevelUpMoves : Int {
+	var numberOfLevelUpMoves: Int {
 		return levelUpMoves.filter{ $0.isSet() }.count
 	}
 	
-	var numberOfEvolutions : Int {
+	var numberOfEvolutions: Int {
 		return evolutions.filter{ $0.isSet() }.count
 	}
 	
-	init(index : Int!) {
+	init(index: Int) {
 		super.init()
 		
 		let rel = XGFiles.common_rel.data!

@@ -72,7 +72,7 @@ class XDSScriptCompiler: NSObject {
 	// MARK: - specify file or text to compile
 	@discardableResult
 	class func compile(textFile file: XGFiles) -> Bool {
-		let scdFile = XGFiles.scd(file.fileName.removeFileExtensions())
+		let scdFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)
 		return compile(textFile: file, toFile: scdFile)
 	}
 
@@ -107,12 +107,12 @@ class XDSScriptCompiler: NSObject {
 			
 		}
 		
-		if relFile == nil && XGFiles.rel(targetFileName).exists {
-			relFile = XGFiles.rel(targetFileName).mapData
+		if relFile == nil {
+			relFile = scriptFile?.folder.files.first(where: {$0.fileType == .rel})?.mapData
 		}
-		
-		if stringTable == nil && XGFiles.msg(targetFileName).exists {
-			stringTable = XGFiles.msg(targetFileName).stringTable
+
+		if stringTable == nil {
+			stringTable = scriptFile?.folder.files.first(where: {$0.fileType == .msg})?.stringTable
 		}
 		
 		if let data = compile(text) {

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -82,11 +83,6 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Script" id="s91-b4-sf4">
                                     <items>
-                                        <menuItem title="Decompile XDS Scripts" keyEquivalent="X" id="vkM-Ar-Haf">
-                                            <connections>
-                                                <action selector="decompileXDS:" target="Voe-Tx-rLC" id="OfD-PK-0J2"/>
-                                            </connections>
-                                        </menuItem>
                                         <menuItem title="Save XDS Classes File" id="Zsg-MN-BjL">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
@@ -285,7 +281,6 @@
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Colosseum_Tool" customModuleProvider="target">
                     <connections>
-                        <outlet property="decompileXDSMenuItem" destination="vkM-Ar-Haf" id="L7f-gV-off"/>
                         <outlet property="fileSizeMenuItem" destination="Saz-QX-HFK" id="LYe-f3-cGG"/>
                         <outlet property="godtoolaboutmenuitem" destination="5kV-Vb-QxS" id="RzJ-5K-bSN"/>
                         <outlet property="godtoolhelpmenuitem" destination="FKE-Sm-Kum" id="kyN-Ez-awb"/>

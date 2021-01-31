@@ -97,10 +97,7 @@ class GoDISOViewController: GoDTableViewController {
 					}
 					if fsys.numberOfEntries > 0 {
 						for i in  0 ..< fsys.numberOfEntries {
-							var filename = fsys.fullFileNameForFileWithIndex(index: i)
-							if filename.removeFileExtensions() == filename {
-								filename += fsys.fileTypeForFile(index: i).fileExtension
-							}
+							let filename = fsys.fileNameForFileWithIndex(index: i) ?? "-"
 							var identifier = fsys.identifierForFile(index: i).hex()
 							while identifier.count < 8 {
 								identifier = "0" + identifier

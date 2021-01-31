@@ -11,6 +11,7 @@ import Foundation
 let kFSYSGroupIDOffset				= 0x08
 let kNumberOfEntriesOffset			= 0x0C
 let kFSYSFileSizeOffset				= 0x20
+let kFSYSDetailsPointersListOffset  = 0x40
 let kFirstFileNamePointerOffset		= 0x44
 let kFirstFileOffset				= 0x48
 let kFirstFileDetailsPointerOffset	= 0x60
@@ -49,6 +50,14 @@ final class XGFsys : NSObject {
 	var files: [XGFiles] {
 		return filenames.map { XGFiles.nameAndFolder($0, file.folder) }
 	}
+
+	var fileDetailsOffsets: [Int] {
+		let firstPointerOffset = data.get4BytesAtOffset(kFSYSDetailsPointersListOffset)
+		return (0 ..< numberOfEntries).map { (index) -> Int in
+			let offset = firstPointerOffset + (index * 4)
+			return data.get4BytesAtOffset(offset)
+		}
+	}
 	
 	init(file: XGFiles) {
 		super.init()
@@ -67,7 +76,7 @@ final class XGFsys : NSObject {
 	}
 
 	private func setupFilenames() {
-		var names = usesFileExtensions ? rawFileNames : rawFullFileNames
+		var names = usesFileExtensions ? rawFullFileNames : rawFileNames
 
 		for i in 0 ..< names.count {
 			let name = names[i]
@@ -80,7 +89,7 @@ final class XGFsys : NSObject {
 				while addendum.length < 4 {
 					addendum = "0" + addendum
 				}
-				addendum = "_" + addendum
+				addendum = " " + addendum
 				names[i] = fileName.removeFileExtensions() + addendum
 			} else {
 				// some files are named things like "common_rel" instead of "common.rel"
@@ -104,12 +113,14 @@ final class XGFsys : NSObject {
 		}
 
 		// If any files have duplicate names, append an index number
-		for mainIndex in 0 ..< names.count - 1 {
-			let currentFilename = names[mainIndex]
-			for subIndex in (mainIndex + 1) ..< names.count {
-				let comparisonFilename = names[subIndex]
-				if comparisonFilename == currentFilename {
-					names[subIndex] = currentFilename.removeFileExtensions() + " (\(subIndex))" + currentFilename.fileExtensions
+		if names.count > 0 {
+			for mainIndex in 0 ..< names.count - 1 {
+				let currentFilename = names[mainIndex]
+				for subIndex in (mainIndex + 1) ..< names.count {
+					let comparisonFilename = names[subIndex]
+					if comparisonFilename == currentFilename {
+						names[subIndex] = currentFilename.removeFileExtensions() + " (\(subIndex))" + currentFilename.fileExtensions
+					}
 				}
 			}
 		}
@@ -145,7 +156,7 @@ final class XGFsys : NSObject {
 	}
 	
 	var numberOfEntries: Int {
-		return Int(data.getWordAtOffset(kNumberOfEntriesOffset))
+		return data.get4BytesAtOffset(kNumberOfEntriesOffset)
 	}
 
 	func setNumberOfEntries(_ newEntries: Int) {
@@ -427,9 +438,9 @@ final class XGFsys : NSObject {
 		}
 
 		if isFileCompressed(index: index) && (newFile.fileType != .lzss) {
-			shiftAndReplaceFileWithIndexEfficiently(index, withFile: newFile.compress(), save: save)
+			shiftAndReplaceFileWithIndex(index, withFile: newFile.compress(), save: save)
 		} else {
-			shiftAndReplaceFileWithIndexEfficiently(index, withFile: newFile, save: save)
+			shiftAndReplaceFileWithIndex(index, withFile: newFile, save: save)
 		}
 	}
 	
@@ -437,7 +448,7 @@ final class XGFsys : NSObject {
 		replaceFileWithName(name: file.fileName, withFile: file, save: save)
 	}
 	
-	func shiftAndReplaceFileWithIndexEfficiently(_ index: Int, withFile newFile: XGFiles, save: Bool) {
+	func shiftAndReplaceFileWithIndex(_ index: Int, withFile newFile: XGFiles, save: Bool) {
 		guard index < self.numberOfEntries else {
 			printg("skipping fsys import: \(newFile.fileName) to \(self.fileName)\nindex doesn't exist:", index)
 			return
@@ -804,71 +815,37 @@ final class XGFsys : NSObject {
 		
 		var data = [XGMutableData]()
 		for i in 0 ..< self.numberOfEntries {
-			data.append(extractDataForFileWithIndex(index: i)!)
-		}
-		
-		let filenames = data.map { $0.file.fileName }
-		
-		var repeats = [Int]()
-		for i in 0 ..< filenames.count {
-			let current = filenames[i]
-			var counter = 0
-			for j in 0 ..< i {
-				if filenames[j] == current {
-					counter += 1
-				}
+			if settings.verbose, let filename = fileNameForFileWithIndex(index: i) {
+				printg("extracting file: \(filename) from \(self.file.path)")
 			}
-			repeats.append(counter)
-		}
-		
-		var updatedNames = [String]()
-		for i in 0 ..< filenames.count {
-			var addendum = ""
-			if repeats[i] > 0 {
-				addendum = "\(repeats[i])"
-			}
-			
-			if addendum.length > 0 {
-				while addendum.length < 4 {
-					addendum = "0" + addendum
+			if let fileData = extractDataForFileWithIndex(index: i) {
+				fileData.file = .nameAndFolder(fileData.file.fileName, folder)
+				data.append(fileData)
+				if !fileData.file.exists || overwrite {
+					fileData.save()
 				}
-				addendum = " " + addendum
-			}
-			
-			updatedNames.append(filenames[i].removeFileExtensions() + addendum + filenames[i].fileExtensions)
-		}
-		
-		// save all files before decoding as some require each other
-		for i in 0 ..< data.count {
-			data[i].file = .nameAndFolder(updatedNames[i], folder)
-			
-			if !data[i].file.exists || overwrite {
-				if settings.verbose {
-					printg("extracting file: \(data[i].file.fileName)")
-				}
-				data[i].save()
 			}
 		}
 		
 		// decode certain file types
 		if decode {
-			for i in 0 ..< data.count {
+			for file in folder.files where data.contains(where: { (d) -> Bool in
+				d.file.path == file.path
+			}) {
 				if settings.verbose {
-					printg("decoding file: \(data[i].file.fileName)")
+					printg("decoding file: \(file.fileName)")
 				}
 
-				if data[i].file.fileType == .pkx {
-					let file = data[i].file
+				if file.fileType == .pkx {
 					let datFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.dat.fileExtension, file.folder)
-					if !datFile.exists || overwrite {
-						let dat = XGUtility.exportDatFromPKX(pkx: data[i])
+					if !datFile.exists || overwrite, let pkxData = file.data {
+						let dat = XGUtility.exportDatFromPKX(pkx: pkxData)
 						dat.file = datFile
 						dat.save()
 					}
 				}
 
-				if data[i].file.fileType == .msg {
-					let file = data[i].file
+				if file.fileType == .msg, !XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, folder).exists || game == .Colosseum {
 					let msgFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.json.fileExtension, file.folder)
 					if !msgFile.exists || overwrite {
 						let msg = XGStringTable(file: file, startOffset: 0, fileSize: file.fileSize)
@@ -876,7 +853,7 @@ final class XGFsys : NSObject {
 					}
 				}
 
-				for texture in data[i].file.textures {
+				for texture in file.textures {
 					if !texture.file.exists || overwrite {
 						texture.save()
 					}
@@ -886,20 +863,21 @@ final class XGFsys : NSObject {
 					}
 				}
 				
-				if data[i].file.fileType == .scd && game != .Colosseum {
-					let xdsFile = XGFiles.nameAndFolder(data[i].file.fileName + XGFileTypes.xds.fileExtension, data[i].file.folder)
+				if file.fileType == .scd && game != .Colosseum {
+					let xdsFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.xds.fileExtension, folder)
 					if !xdsFile.exists || overwrite {
-						data[i].file.writeScriptData()
+						let scriptText = file.scriptData.getXDSScript()
+						XGUtility.saveString(scriptText, toFile: xdsFile)
 					}
 				}
 
-				if data[i].file.fileType == .thh {
-					let thpFile = XGFiles.nameAndFolder(data[i].file.fileName.removeFileExtensions() + XGFileTypes.thp.fileExtension, data[i].file.folder)
-					if (!thpFile.exists || overwrite), let thpData = data.first(where: { $0.file.fileType == .thd && $0.file.fileName.removeFileExtensions() == data[i].file.fileName.removeFileExtensions() }) {
-						let thpHeader = data[i]
-
-						let thp = XGTHP(header: thpHeader, body: thpData)
-						thp.thpData.save()
+				if file.fileType == .thh {
+					let thpFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.thp.fileExtension, folder)
+					if (!thpFile.exists || overwrite), let thpData = folder.files.first(where: { $0.fileType == .thd && $0.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() })?.data {
+						if let thpHeader = file.data {
+							let thp = XGTHP(header: thpHeader, body: thpData)
+							thp.thpData.save()
+						}
 					}
 				}
 			}
@@ -910,7 +888,7 @@ final class XGFsys : NSObject {
 
 extension XGFsys: XGEnumerable {
 	var enumerableName: String {
-		return path
+		return file.path
 	}
 
 	var enumerableValue: String? {

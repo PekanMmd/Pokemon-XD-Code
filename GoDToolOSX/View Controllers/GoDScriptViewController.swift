@@ -18,10 +18,8 @@ class GoDScriptViewController: GoDTableViewController {
 	@IBOutlet var baseStringIDTextView: NSTextField!
 
 	var filteredScripts = [XGFiles]()
-	var scripts : [XGFiles] {
-		return XGFolders.XDS.files.filter({ (file) -> Bool in
-			return file.fileType == .xds
-		}).sorted(by: { (f1, f2) -> Bool in
+	var scripts: [XGFiles] {
+		return XGFiles.allFilesWithType(.xds).sorted(by: { (f1, f2) -> Bool in
 			return f1.fileName < f2.fileName
 		})
 	}
@@ -69,7 +67,7 @@ class GoDScriptViewController: GoDTableViewController {
 		if filteredScripts.count == 0 {
 			
 			cell.setBackgroundColour(GoDDesign.colourWhite())
-			cell.setTitle("No scripts found in XDS folder.\nselect 'Script > Decompile Scripts' and try again.")
+			cell.setTitle("No scripts found in Game Files folders.\nExport some files and try again.")
 			cell.titleField.maximumNumberOfLines = 0
 
 			return cell

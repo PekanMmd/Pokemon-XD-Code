@@ -78,11 +78,11 @@ indirect enum XGFiles {
 		case .trainerFace(let id)	: return "trainer_" + String(id) + XGFileTypes.png.fileExtension
 		case .fsys(let s)			: return s + XGFileTypes.fsys.fileExtension
 		case .lzss(let s)			: return s + XGFileTypes.lzss.fileExtension
-		case .toc					: return "Game" + XGFileTypes.toc.fileExtension
+		case .toc					: return "game" + XGFileTypes.toc.fileExtension
 		// windows doesn't support colons in file names
 		case .log(let d)			: return d.description.replacingOccurrences(of: ":", with: ".") + XGFileTypes.txt.fileExtension
 		case .json(let s)			: return s + XGFileTypes.json.fileExtension
-		case .iso					: return (game == .Colosseum ? "Colosseum" : "XD") + XGFileTypes.iso.fileExtension
+		case .iso					: return "game" + XGFileTypes.iso.fileExtension
 		case .wit                   : return environment == .Windows ? "wit.exe" :  "wit"
 		case .wimgt                 : return environment == .Windows ? "wimgt.exe" :  "wimgt"
 		case .tool(let s)			: return s + (environment == .Windows ? ".exe" : "")
@@ -108,7 +108,7 @@ indirect enum XGFiles {
 		case .typeImage			: return .Types
 		case .trainerFace		: return .Trainers
 		case .iso				: return .ISO
-		case .toc				: return .Documents
+		case .toc				: return .ISOExport("TOC")
 		case .log				: return .Logs
 		case .json				: return .JSON
 		case .wit      		    : return .Wiimm
@@ -122,9 +122,6 @@ indirect enum XGFiles {
 	}
 	
 	var text: String {
-		if !self.exists {
-			printg("File doesn't exist:", self.path)
-		}
 		return data?.string ?? ""
 	}
 
@@ -135,34 +132,29 @@ indirect enum XGFiles {
 		case .embedded("Null.fsys"): return NullFSYS
 		default: break
 		}
-
-		if self != XGFiles.iso {
-			var requiredFiles: [XGFiles] = [.common_rel, .dol, .pocket_menu, .typeAndFsysName(.msg, "pocket_menu"), .fsys("people_archive")]
-			if game == .XD {
-				let decks = TrainerDecksArray.map { (d) -> XGFiles in
-					return d.file
-				}
-				requiredFiles += decks + [.tableres2, XGDecks.DeckDarkPokemon.file]
-			}
-			if requiredFiles.contains(where: { (f) -> Bool in
-				f == self
-			}) {
-				if !self.exists {
-					XGISO.extractMainFiles()
-				}
-			}
-		}
 		
 		if !self.exists && self != .toc {
+			XGFolders.setUpFolderFormat()
+
 			if !XGUtility.exportFileFromISO(self, decode: true) {
 				switch self {
+				case .dol:
+					if !XGUtility.exportFileFromISO(.dol, decode: false) {
+						printg("file doesn't exist and couldn't be extracted:", self.path)
+						return nil
+					}
+				case .deck:
+					if !XGUtility.exportFileFromISO(.fsys("deck_archive"), decode: false) {
+						printg("file doesn't exist and couldn't be extracted:", self.path)
+						return nil
+					}
 				case .typeAndFsysName(_, let name), .nameAndFsysName(_, let name):
-					if !XGUtility.exportFileFromISO(.fsys(name), decode: true) {
+					if !XGUtility.exportFileFromISO(.fsys(name), decode: false) {
 						printg("file doesn't exist and couldn't be extracted:", self.path)
 						return nil
 					}
 				default:
-					if !XGUtility.exportFileFromISO(.fsys(self.fileName.removeFileExtensions()), decode: true) {
+					if !XGUtility.exportFileFromISO(.fsys(self.fileName.removeFileExtensions()), decode: false) {
 						printg("file doesn't exist and couldn't be extracted:", self.path)
 						return nil
 					}
@@ -175,7 +167,7 @@ indirect enum XGFiles {
 		
 		
 		var data: XGMutableData?
-		if loadableFiles.contains(self.path) {
+		if self == .iso || loadableFiles.contains(self.path) {
 			
 			if let data = loadedFiles[self.path] {
 				return data
@@ -189,7 +181,7 @@ indirect enum XGFiles {
 		}
 		
 		
-		if loadableFiles.contains(self.path) {
+		if self == .iso || loadableFiles.contains(self.path) {
 			if let d = data {
 				loadedFiles[self.path] = d
 			}
@@ -204,10 +196,9 @@ indirect enum XGFiles {
 	}
 	
 	var json: AnyObject {
-		if self.exists,  let data = self.data?.data {
+		if let data = self.data?.data {
 			return try! JSONSerialization.jsonObject(with: data as Data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
 		} else {
-			printg("File doesn't exist: \(self.path)")
 			return [String: String]() as AnyObject
 		}
 	}
@@ -239,7 +230,7 @@ indirect enum XGFiles {
 	var scriptData: XGScript {
 		switch self {
 		case .common_rel:
-			guard game == .XD else {
+			guard game == .XD, region != .OtherGame else {
 				printg("common.rel script not documented for colosseum")
 				fatalError()
 			}
@@ -251,6 +242,7 @@ indirect enum XGFiles {
 				case .US: start = 0x5BEE4
 				case .JP: start = 0x57CB4
 				case .EU: start = 0x5dea4
+				case .OtherGame: start = 0
 				}
 			}
 			let data = XGMutableData(byteStream: self.data!.getCharStreamFromOffset(start, length: 0x3d20), file: .common_rel)
@@ -303,12 +295,7 @@ indirect enum XGFiles {
 	}
 	
 	var fileSize: Int {
-		if self.exists {
-			return self.data!.length
-		} else {
-			printg("File doesn't exist:", self.path)
-			return 0
-		}
+		return self.data?.length ?? 0
 	}
 	
 	func rename(_ name: String) {
@@ -380,6 +367,16 @@ indirect enum XGFiles {
 	static var commonStringTableFile: XGFiles {
 		.common_rel
 	}
+
+	static func allFilesWithType(_ type: XGFileTypes) -> [XGFiles] {
+		var files = [XGFiles]()
+		XGFolders.ISOExport("").subfolders.forEach { (folder) in
+			folder.files.filter { $0.fileType == type }.forEach {
+				files.append($0)
+			}
+		}
+		return files
+	}
 }
 
 
@@ -444,6 +441,8 @@ indirect enum XGFolders {
 		case .nameAndPath(let name, let path): return path + "/\(name)"
 		case .ISOExport(let folder): return path + "/" + self.name +
 			(folder == "" ? "" : "/" + folder)
+		case .Images	: path = XGFolders.Resources.path
+		case .JSON		: path = XGFolders.Resources.path
 		case .Import	: path = XGFolders.TextureImporter.path
 		case .Export	: path = XGFolders.TextureImporter.path
 		case .Textures	: path = XGFolders.TextureImporter.path
@@ -490,7 +489,13 @@ indirect enum XGFolders {
 	var exists: Bool {
 		return FileManager.default.fileExists(atPath: self.path)
 	}
-	
+
+	func contains(_ file: XGFiles) -> Bool {
+		return files.contains { (f2) -> Bool in
+			f2.fileName == file.fileName
+		}
+	}
+
 	func createDirectory() {
 		
 		let fm = FileManager.default
@@ -513,13 +518,13 @@ indirect enum XGFolders {
 				printg(error)
 			}
 		}
-		
 	}
 	
 	static func setUpFolderFormat() {
 		
 		let folders : [XGFolders] = [
 			.Documents,
+			.Resources,
 			.JSON,
 			.TextureImporter,
 			.Import,
@@ -532,7 +537,6 @@ indirect enum XGFolders {
 			.Types,
 			.LZSS,
 			.Reference,
-			.Resources,
 			.ISO,
 			.Logs,
 			.ISOExport("")

@@ -243,7 +243,7 @@ final class XGInteractionPointData: NSObject, Codable {
 			desc += "Call script with id: \(scriptIndex)"
 			if game == .XD {
 				if let room = XGRoom.roomWithID(roomID) {
-					if let script = room.script {
+					if let script = room.script?.scriptData {
 						if scriptIndex < script.ftbl.count {
 							desc += " @\(script.ftbl[scriptIndex].name)"
 						}

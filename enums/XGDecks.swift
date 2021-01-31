@@ -77,21 +77,21 @@ enum XGDecks : String, Codable, CaseIterable {
 		return nil
 	}
 	
-	var file : XGFiles {
+	var file: XGFiles {
 		get {
 			return .deck(self)
 		}
 	}
 	
-	var fileName : String {
+	var fileName: String {
 		get {
 			return self.rawValue
-				+ (region == .EU ? "_eu" : "")
+				+ (region == .EU ? "_EU" : "")
 				+ XGFileTypes.bin.fileExtension
 		}
 	}
 	
-	var data : XGMutableData {
+	var data: XGMutableData {
 		return XGFiles.deck(self).data!
 	}
 	

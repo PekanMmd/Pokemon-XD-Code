@@ -32,7 +32,7 @@ let isDemo = false
 
 #endif
 
-let region = XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .US
+let region = XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .OtherGame
 
 enum Environment {
 	case Linux
@@ -40,15 +40,15 @@ enum Environment {
 	case Windows
 }
 
-#if DENV_OSX
+#if ENV_OSX
 
 let environment = Environment.OSX
 
-#elseif DENV_WINDOWS
+#elseif ENV_WINDOWS
 
 let environment = Environment.Windows
 
-#elseif DENV_LINUX
+#elseif ENV_LINUX
 
 let environment = Environment.Linux
 
@@ -82,20 +82,23 @@ enum XGGame {
 	}
 }
 
-enum XGRegions : UInt32 {
+enum XGRegions: UInt32 {
 
 	#if GAME_XD
 	case US = 0x47585845 // GXXE
 	case EU = 0x47585850 // GXXP
 	case JP = 0x4758584A // GXXJ
+	case OtherGame = 0
 	#elseif GAME_COLO
 	case US = 0x47433645 // GC6E
 	case EU = 0x47433650 // GC6P
 	case JP = 0x4743364A // GC6J
+	case OtherGame = 0
 	#elseif GAME_PBR
 	case US = 0x52504245 // RPBE
 	case EU = 0x52504250 // RPBP
 	case JP = 0x5250424A // RPBJ
+	case OtherGame = 0
 	#endif
 
 	var index : Int {
@@ -104,6 +107,7 @@ enum XGRegions : UInt32 {
 		case .US: return 0
 		case .EU: return 1
 		case .JP: return 2
+		case .OtherGame: return -1
 		}
 	}
 
@@ -112,6 +116,7 @@ enum XGRegions : UInt32 {
 		case .US: return "US"
 		case .EU: return "PAL"
 		case .JP: return "JP"
+		case .OtherGame: return "Other Game"
 		}
 	}
 }

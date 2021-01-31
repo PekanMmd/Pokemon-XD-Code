@@ -88,6 +88,7 @@ class XGStringTable: NSObject {
 			switch region {
 			case .US, .EU: size = 0xDC70
 			case .JP: size = 0xAC8C
+			case .OtherGame: size = 0
 			}
 			return XGStringTable(file: .common_rel, startOffset: CommonIndexes.stringTable1.startOffset + 0x68, fileSize: size)
 		} else {
@@ -161,6 +162,9 @@ class XGStringTable: NSObject {
 			case .EU:
 				start = 0x372AD8
 				size = 0x17938
+			case .OtherGame:
+				start = 0
+				size = 0
 			}
 			return  XGStringTable(file: .dol, startOffset: start, fileSize: size)
 		} else {
@@ -191,6 +195,9 @@ class XGStringTable: NSObject {
 		case .EU:
 			start = 0x3EA5A4
 			size = 0x364
+		case .OtherGame:
+			start = 0
+			size = 0
 		}
 		return  XGStringTable(file: .dol, startOffset: start, fileSize: size)
 	}

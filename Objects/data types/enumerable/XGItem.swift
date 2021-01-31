@@ -43,16 +43,16 @@ final class XGItem: NSObject, Codable {
 		return index >= 0x15e ? index + 150 : index
 	}
 	
-	var bagSlot					= XGBagSlots.items
+	var bagSlot				= XGBagSlots.items
 	var inBattleUseID		= 0x0
 	var price				= 0x0
-	var couponPrice		= 0x0
-	var holdItemID		= 0x0
-	var nameID			= 0x0
+	var couponPrice			= 0x0
+	var holdItemID			= 0x0
+	var nameID				= 0x0
 	var descriptionID		= 0x0
 	var parameter			= 0x0
 	var friendshipEffects	= [Int](repeating: 0x0, count: kNumberOfFriendshipEffects)
-	var canBeHeld 		= false // more appropriate name would be "consumable"
+	var canBeHeld 			= false // more appropriate name would be "consumable"
 	
 	var function1 : UInt32 		= 0x0
 	var function2 : UInt32		= 0x0

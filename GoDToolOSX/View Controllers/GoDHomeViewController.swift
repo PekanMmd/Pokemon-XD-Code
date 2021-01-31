@@ -14,15 +14,20 @@ let xdsegues = ["toTrainerVC","toShadowVC","toStatsVC","toMoveVC","toItemVC","to
 let colotools = ["Trainer Editor","Pokemon Stats Editor","Move Editor","Item Editor","Gift Pokemon Editor", "Type Editor", "Treasure Editor", "Patches", "Randomiser", "Message Editor", "Collision Viewer", "Interaction Editor", "ISO Explorer"]
 let colosegues = ["toTrainerVC","toStatsVC","toMoveVC","toItemVC","toGiftVC", "toTypeVC", "toTreasureVC", "toPatchVC", "toRandomiserVC", "toMessageVC", "toCollisionVC", "toInteractionVC", "toISOVC"]
 
-// The type editor doesn't seem to affect the game for some reason
 let pbrtools = ["Pokemon Stats Editor", "Move Editor", "Type Editor", "Message Editor", "Patches", "ISO Explorer"]
 let pbrsegues = ["toStatsVC", "toMoveVC", "toTypeVC", "toMessageVC", "toPatchVC", "toISOVC"]
+
+let generaltools = ["ISO Explorer"]
+let generalsegues = ["toISOVC"]
 
 class GoDHomeViewController: GoDTableViewController {
 	
 	@IBOutlet var logView: NSTextView!
 	
 	var tools: [String] {
+		if XGFiles.iso.exists && region == .OtherGame {
+			return generaltools
+		}
 		switch game {
 		case .Colosseum:
 			return colotools
@@ -33,6 +38,9 @@ class GoDHomeViewController: GoDTableViewController {
 		}
 	}
 	var segues: [String] {
+		guard region != .OtherGame else {
+			return generalsegues
+		}
 		switch game {
 		case .Colosseum:
 			return colosegues

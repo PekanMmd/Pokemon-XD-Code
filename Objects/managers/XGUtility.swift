@@ -11,6 +11,12 @@ import Foundation
 class XGUtility {
 	
 	//MARK: - ISO Building
+
+	class func extractAllFiles() {
+		for filename in ISO.allFileNames where filename != XGFiles.toc.fileName {
+			exportFileFromISO(.nameAndFolder(filename, .ISOExport(filename.removeFileExtensions())), decode: true, overwrite: false)
+		}
+	}
 	
 	class func compileMainFiles() {
 		prepareForCompilation()
@@ -29,14 +35,6 @@ class XGUtility {
 		filesToImport.forEach { importFileToISO($0, encode: true) }
 	}
 	
-	class func compileCommonRel() {
-		importFileToISO(.fsys("common"), encode: true)
-	}
-	
-	class func compileDol() {
-		ISO.importDol()
-	}
-	
 	class func compileAllFiles() {
 		
 		prepareForCompilation()
@@ -50,6 +48,7 @@ class XGUtility {
 		
 	}
 
+	@discardableResult
 	class func exportFileFromISO(_ file: XGFiles, decode: Bool = true, overwrite: Bool = false) -> Bool {
 		XGFolders.ISOExport("").createDirectory()
 
@@ -70,15 +69,13 @@ class XGUtility {
 	}
 
 	@discardableResult
-	class func importFileToISO(_ fileToImport: XGFiles, encode: Bool = true) -> Bool {
+	class func importFileToISO(_ fileToImport: XGFiles, encode: Bool = true, save: Bool = true) -> Bool {
 		if fileToImport.exists {
 			if fileToImport.fileType == .fsys {
 
 				if encode {
 					XGColour.colourThreshold = 0
 					for file in fileToImport.folder.files {
-
-
 
 						// encode string tables before compiling scripts
 						if file.fileType == .msg {
@@ -184,33 +181,22 @@ class XGUtility {
 				}
 				let fsysData = fileToImport.fsysData
 				for i in 0 ..< fsysData.numberOfEntries {
-					var filename = ""
-					if fsysData.usesFileExtensions {
-						filename = fsysData.fullFileNames[i]
-					} else {
-						filename = fsysData.fileNames[i].removeFileExtensions() + fsysData.fileTypeForFile(index: i).fileExtension
-					}
-					if !fsysData.usesFileExtensions || filename.removeFileExtensions() == filename {
-						filename = filename.removeFileExtensions()
-						filename += fsysData.fileTypeForFile(index: i).fileExtension
-					}
+					let filename = fsysData.fileNameForFileWithIndex(index: i)
 					for file in fileToImport.folder.files {
-						if file.fileName == filename {
-							if fsysData.isFileCompressed(index: i) {
-								if settings.verbose {
-									printg("compressing file", file.path)
-								}
-								let compressed = file.compress()
-								if settings.verbose {
-									printg("importing \(file.path) into \(fileToImport.path)")
-								}
-								fsysData.shiftAndReplaceFileWithIndexEfficiently(i, withFile: compressed, save: false)
-							} else {
-								if settings.verbose {
-									printg("importing \(file.path) into \(fileToImport.path)")
-								}
-								fsysData.shiftAndReplaceFileWithIndexEfficiently(i, withFile: file, save: false)
+						if file.fileName == filename, fsysData.isFileCompressed(index: i) {
+							if settings.verbose {
+								printg("compressing file", file.path)
 							}
+							let compressed = file.compress()
+							if settings.verbose {
+								printg("importing \(file.path) into \(fileToImport.path)")
+							}
+							fsysData.shiftAndReplaceFileWithIndex(i, withFile: compressed, save: false)
+						} else {
+							if settings.verbose {
+								printg("importing \(file.path) into \(fileToImport.path)")
+							}
+							fsysData.shiftAndReplaceFileWithIndex(i, withFile: file, save: false)
 						}
 					}
 				}
@@ -222,7 +208,7 @@ class XGUtility {
 			if settings.verbose {
 				printg("importing \(fileToImport.path) into \(XGFiles.iso.path)")
 			}
-			ISO.importFiles([fileToImport])
+			ISO.importFiles([fileToImport], save: save)
 			return true
 		} else {
 			printg("The file: \(fileToImport.path) doesn't exit")
@@ -329,8 +315,8 @@ class XGUtility {
 		for name in iso.allFileNames where name.fileExtensions == ".fsys" {
 			let fsys = iso.dataForFile(filename: name)!.fsysData
 			for index in 0 ..< fsys.numberOfEntries {
-				if fsys.fileNames[index].contains(file.fileName.removeFileExtensions()) {
-					printg("fsys: ", name, ", index: ", index, ", file type: ", fsys.fileTypeForFile(index: index).fileExtension, ", name: ", fsys.fileNameForFileWithIndex(index: index))
+				if fsys.fileNameForFileWithIndex(index: index) == file.fileName {
+					printg(file.fileName, " found in fsys: ", name, ", index: ", index)
 				}
 			}
 			
@@ -348,7 +334,7 @@ class XGUtility {
 			for index in 0 ..< fsys.identifiers.count {
 				if fsys.identifiers[index] == id {
 					if settings.verbose {
-						printg("found id: \(id), fsys: ",name,", index: ", index, ", name: ", fsys.fileNames[index])
+						printg("found id: \(id), fsys: ",name,", index: ", index, ", name: ", fsys.fileNameForFileWithIndex(index: index) ?? "-")
 					}
 					found += [fsys]
 				}
@@ -596,6 +582,17 @@ class XGUtility {
 
 			}
 		}
+	}
+
+	class func encodeJSONObject<T: Encodable>(_ object: T, toFile file: XGFiles) {
+		if !file.folder.exists {
+			file.folder.createDirectory()
+		}
+		object.writeJSON(to: file)
+	}
+
+	class func decodeJSONObject<T: Decodable>(from file: XGFiles) -> T? {
+		return try? T.fromJSON(file: file)
 	}
 	
 }

@@ -38,7 +38,6 @@ let xdpatches = [
 let colopatches = [
 	"Apply Physical/Special move split (You still need to set the category for each move)",
 	"Set the physical/special category for all moves to their expected values",
-	"Delete Battle Mode Data. (highly recommended)",
 	"Allow female starter pokemon",
 	"Gen VII critical hit ratios",
 	"Decapitalise text",
@@ -57,7 +56,6 @@ class GoDPatchViewController: GoDTableViewController {
 	var funcs = game == .Colosseum ? [
 		#selector(gen4Categories),
 		#selector(defaultCategories),
-		#selector(deleteBattleMode),
 		#selector(allowFemaleStarters),
 		#selector(gen7CriticalRatios),
 		#selector(decapitalise),
@@ -104,7 +102,7 @@ class GoDPatchViewController: GoDTableViewController {
 	}
 	
 	@objc func immediateTutorMoves() {
-		XGDolPatcher.tutorMovesAvailableImmediately()
+		XGUtility.tutorMovesAvailableImmediately()
 	}
 	
 	@objc func shadowHMFlag() {
@@ -204,10 +202,6 @@ class GoDPatchViewController: GoDTableViewController {
 	
 	@objc func deoxysS() {
 		XGAssembly.setDeoxysForme(to: .speed)
-	}
-	
-	@objc func deleteBattleMode() {
-		XGDolPatcher.deleteBattleModeData()
 	}
 
 	@objc func enableDebugLogs() {

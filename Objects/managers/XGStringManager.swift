@@ -11,7 +11,7 @@ import Foundation
 var allStringTables = [XGStringTable]()
 var stringsLoaded = false
 
-func loadAllStrings() {
+func loadAllStrings(refresh: Bool = false) {
 	
 	if !stringsLoaded {
 		
@@ -30,18 +30,11 @@ func loadAllStrings() {
 			allStringTables += [XGStringTable.dol2()]
 		}
 
-		if game == .XD && !isDemo && region != .JP {
+		if XGFiles.tableres2.exists {
 			allStringTables += [XGFiles.tableres2.stringTable]
 		}
-		
-		XGFolders.StringTables.map{ (file: XGFiles) -> Void in
-			if file.fileType == .msg {
-				let table = file.stringTable
-				if table.numberOfEntries > 0 {
-					allStringTables += [table]
-				}
-			}
-		}
+
+		XGFiles.allFilesWithType(.msg).forEach { allStringTables.append($0.stringTable) }
 		
 		stringsLoaded = true
 	}
@@ -152,9 +145,7 @@ func freeMSGID(from: Int) -> Int? {
 	}
 	isSearchingForFreeStringID = true
 	
-	ISO.extractMenuFSYS()
-	ISO.extractSpecificStringTables()
-	ISO.extractCommon()
+	XGUtility.extractMainFiles()
 	
 	var min = from < 1 ? 1 : from
 	if min <= previousFound && min >= previousFrom {

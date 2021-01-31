@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGEffectivenessValues : Int, Codable, CaseIterable {
+enum XGEffectivenessValues: Int, Codable, CaseIterable {
 
 	case ineffective		= 0x43
 	case notVeryEffective	= 0x42

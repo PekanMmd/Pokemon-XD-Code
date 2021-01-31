@@ -13,6 +13,7 @@ let kTogepiOffset: Int = {
 	case .US: return 0x1C5760
 	case .JP: return 0x1C0C70
 	case .EU: return 0x1C705C
+	case .OtherGame: return 0
 	}
 }()
 
@@ -26,12 +27,10 @@ let kTradeShadowPokemonMove4Offset		=  0x1A
 
 var tradeShadowPokemonShininessRAMOffset: Int {
 	switch region {
-	case .US:
-		return 0x152bfe
-	case .EU:
-		return 0x1544c2
-	case .JP:
-		return -1
+	case .US: return 0x152bfe
+	case .EU: return 0x1544c2
+	case .JP: return 0x14AE86
+	case .OtherGame: return 0
 	}
 }
 

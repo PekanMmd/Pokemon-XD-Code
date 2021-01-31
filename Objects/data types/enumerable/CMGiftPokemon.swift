@@ -13,12 +13,14 @@ let kPlusleOffset: Int = {
 		case .US: return 0x14F514
 		case .JP: return 0x14A83C
 		case .EU: return 0x150DD8
+		case .OtherGame: return 0
 		}
 	} else {
 		switch region {
 		case .US: return 0x12D9C8
 		case .JP: return 0x12B098
 		case .EU: return 0x131BF4
+		case .OtherGame: return 0
 		}
 	}
 }()
@@ -28,12 +30,14 @@ let kHoohOffset: Int = {
 		case .US: return 0x14F430
 		case .JP: return 0x14A758
 		case .EU: return 0x150CF4
+		case .OtherGame: return 0
 		}
 	} else {
 		switch region {
 		case .US: return 0x12D8E4
 		case .JP: return 0x12AFB8
 		case .EU: return 0x131B10
+		case .OtherGame: return 0
 		}
 	}
 }()
@@ -43,12 +47,14 @@ let kCelebiOffset: Int = {
 		case .US: return 0x14F200
 		case .JP: return 0x14A528
 		case .EU: return 0x150AC4
+		case .OtherGame: return 0
 		}
 	} else {
 		switch region {
 		case .US: return 0x12D6B4
 		case .JP: return 0x12ADD0
 		case .EU: return 0x1318E0
+		case .OtherGame: return 0
 		}
 	}
 }()
@@ -58,12 +64,14 @@ let kPikachuOffset: Int = {
 		case .US: return 0x14F310
 		case .JP: return 0x14A638
 		case .EU: return 0x150BD4
+		case .OtherGame: return 0
 		}
 	} else {
 		switch region {
 		case .US: return 0x12D7C4
 		case .JP: return 0x12AEBC
 		case .EU: return 0x1319F0
+		case .OtherGame: return 0
 		}
 	}
 }()

@@ -59,9 +59,9 @@ final class XGCharacterModel : NSObject, Codable {
 		if loadArchive, let arch = archive {
 			let file = arch.file!
 			if file.exists {
-				let fsysIndex = arch.indexForIdentifier(identifier: self.identifier.int)
-				if fsysIndex >= 0 {
-					self.name = arch.fileNames[fsysIndex]
+				if let fsysIndex = arch.indexForIdentifier(identifier: self.identifier.int),
+				   fsysIndex >= 0 {
+					self.name = arch.fileNameForFileWithIndex(index: fsysIndex) ?? "-"
 					self.fsysIndex = fsysIndex
 					self.fileSize = arch.sizeForFile(index: fsysIndex)
 				}

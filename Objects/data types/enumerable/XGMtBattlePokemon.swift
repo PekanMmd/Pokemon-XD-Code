@@ -13,6 +13,7 @@ let kChikoritaOffset: Int = {
 	case .US: return 0x1C5974
 	case .JP: return 0x1C0E08
 	case .EU: return 0x1C7270
+	case .OtherGame: return 0
 	}
 }()
 let kCyndaquilOffset: Int = {
@@ -20,6 +21,7 @@ let kCyndaquilOffset: Int = {
 	case .US: return 0x1C59A0
 	case .JP: return 0x1C0E34
 	case .EU: return 0x1C729C
+	case .OtherGame: return 0
 	}
 }()
 let kTotodileOffset: Int = {
@@ -27,6 +29,7 @@ let kTotodileOffset: Int = {
 	case .US: return 0x1C59CC
 	case .JP: return 0x1C0E60
 	case .EU: return 0x1C72C8
+	case .OtherGame: return 0
 	}
 }()
 
@@ -35,6 +38,7 @@ let kMtBattlePokemonLevelOffset: Int = {
 	case .US: return 0x1C56E8
 	case .JP: return 0x1C0BF8
 	case .EU: return 0x1C6FE4
+	case .OtherGame: return 0
 	}
 }()
 

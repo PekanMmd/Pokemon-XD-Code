@@ -40,14 +40,16 @@ let kRoomGroupIDOffset: Int = {
 	}
 }() // groupid of fsys archive for room
 
+let kRoomTypeOffset = 0x0
+
 final class XGRoom: NSObject, Codable {
 	
 	var nameID = 0
-	var location : String {
+	var location: String {
 		return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID).string
 	}
 	
-	var name : String {
+	var name: String {
 		if XGFiles.json("Room IDs").exists {
 			let ids = XGFiles.json("Room IDs").json
 			return (ids as! [String : String])[roomID.hexString()] ?? (ISO.getFSYSNameWithGroupID(self.groupID) ?? "-")
@@ -56,24 +58,21 @@ final class XGRoom: NSObject, Codable {
 		}
 	}
 	
-	var mapName : String {
+	var mapName: String {
 		return getStringSafelyWithID(id: nameID).string
 	}
+
+	var fsysFilename: String? {
+		ISO.getFSYSNameWithGroupID(groupID)
+	}
 	
-	var map : XGMaps {
+	var map: XGMaps {
 		let id = self.name.substring(from: 0, to: 2)
 		return XGMaps(rawValue: id) ?? .Unknown
 	}
 
-	var script: XGScript? {
-		#if GAME_XD
-		for file in XGFolders.Scripts.files where file.fileType == .scd {
-			if file.fileName.removeFileExtensions() == self.name {
-				return file.scriptData
-			}
-		}
-		#endif
-		return nil
+	var battleFieldType: Int {
+		return XGFiles.common_rel.data?.getByteAtOffset(startOffset) ?? -1
 	}
 	
 	var roomID = 0
@@ -124,6 +123,14 @@ final class XGRoom: NSObject, Codable {
 			if room.name == name {
 				return room
 			}
+		}
+		return nil
+	}
+
+	var script: XGFiles? {
+		guard game == .XD else { return nil }
+		if let fsys = fsysFilename {
+			return .typeAndFsysName(.scd, fsys.removeFileExtensions())
 		}
 		return nil
 	}

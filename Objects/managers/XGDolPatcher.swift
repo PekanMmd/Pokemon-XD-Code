@@ -66,12 +66,10 @@ let kNumberOfDolPatches = 12
 
 var shadowPokemonShininessOffset: Int {
 	switch region {
-	case.US:
-		return 0x1fc2b2
-	case .EU:
-		return 0x1fdfe6
-	case .JP:
-		return -1
+	case .US: return 0x1fc2b2
+	case .EU: return 0x1fdfe6
+	case .JP: return -1
+	case .OtherGame: return 0
 	}
 }
 
@@ -387,45 +385,37 @@ class XGDolPatcher {
 
 			let codeStartOffset: Int = {
 				switch region {
-				case .US:
-					return 0x1fa930
-				case .EU:
-					return 0x1fc664
-				case .JP:
-					return -1
+				case .US: return 0x1fa930
+				case .EU: return 0x1fc664
+				case .JP: return -1
+				case .OtherGame: return 0
 				}
 			}()
 
 			let getTrainerData: Int = {
 				switch region {
-				case .US:
-					return 0x1cefb4
-				case .EU:
-					return 0x1d0a8c
-				case .JP:
-					return -1
+				case .US: return 0x1cefb4
+				case .EU: return 0x1d0a8c
+				case .JP: return -1
+				case .OtherGame: return 0
 				}
 			}()
 
 			let trainerGetTID: Int = {
 				switch region {
-				case .US:
-					return 0x14e118
-				case .EU:
-					return 0x14f9dc
-				case .JP:
-					return -1
+				case .US: return 0x14e118
+				case .EU: return 0x14f9dc
+				case .JP: return -1
+				case .OtherGame: return 0
 				}
 			}()
 
 			let TIDRerollOffset: Int = {
 				switch region {
-				case .US:
-					return 0x1fa9c8
-				case .EU:
-					return 0x1fc6fc
-				case .JP:
-					return -1
+				case .US: return 0x1fa9c8
+				case .EU: return 0x1fc6fc
+				case .JP: return -1
+				case .OtherGame: return 0
 				}
 			}()
 
@@ -453,23 +443,19 @@ class XGDolPatcher {
 
 			let codeStartOffset: Int = {
 				switch region {
-				case .US:
-					return 0x1fa930
-				case .EU:
-					return 0x1fc664
-				case .JP:
-					return -1
+				case .US: return 0x1fa930
+				case .EU: return 0x1fc664
+				case .JP: return -1
+				case .OtherGame: return 0
 				}
 			}()
 
 			let trainerGetValue: Int = {
 				switch region {
-				case .US:
-					return 0x14d6e0
-				case .EU:
-					return 0x14efa4
-				case .JP:
-					return -1
+				case .US: return 0x14d6e0
+				case .EU: return 0x14efa4
+				case .JP: return -1
+				case .OtherGame: return 0
 				}
 			}()
 
@@ -651,7 +637,9 @@ class XGDolPatcher {
 		
 		if let dol = XGFiles.dol.data {
 			dol.replace2BytesAtOffset(shadowPokemonShininessOffset - kDolToRAMOffsetDifference, withBytes: to.rawValue)
+			#if GAME_XD
 			dol.replace2BytesAtOffset(tradeShadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference, withBytes: to.rawValue)
+			#endif
 			dol.save()
 		}
 	}
@@ -691,6 +679,9 @@ class XGDolPatcher {
 			case .JP:
 				GSLogOffset = -1
 				OSReportOffset = -1
+			case .OtherGame:
+				GSLogOffset = -1
+				OSReportOffset = -1
 			}
 		} else {
 			switch region {
@@ -701,6 +692,9 @@ class XGDolPatcher {
 				GSLogOffset = -1
 				OSReportOffset = -1
 			case .JP:
+				GSLogOffset = -1
+				OSReportOffset = -1
+			case .OtherGame:
 				GSLogOffset = -1
 				OSReportOffset = -1
 			}

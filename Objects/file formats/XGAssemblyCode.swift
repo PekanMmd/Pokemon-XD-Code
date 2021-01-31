@@ -71,6 +71,7 @@ let kPBRDOLFreeSpaceStart: Int = {
 	case .US: return 0x1D9474
 	case .EU: return 0x1D4838
 	case .JP: return 0x1CA57C
+	case .OtherGame: return 0
 	}
 }()
 
@@ -79,6 +80,7 @@ let kPBRDOLFreeSpaceEnd: Int = {
 	case .US: return 0x1DEEE0
 	case .EU: return 0x1D9F6C
 	case .JP: return 0x1D076C
+	case .OtherGame: return 0
 	}
 }()
 

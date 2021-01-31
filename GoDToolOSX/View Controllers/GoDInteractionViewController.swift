@@ -67,7 +67,7 @@ class GoDInteractionViewController: GoDTableViewController {
 	@IBAction func selectRoom(_ sender: GoDRoomPopUpButton) {
 		if self.script.state == .on {
 			if let scriptFile = sender.selectedValue.script {
-				let titles = scriptFile.ftbl.map { (f) -> String in
+				let titles = scriptFile.scriptData.ftbl.map { (f) -> String in
 					return "@" + f.name
 				}
 				self.scriptPopUp.setTitles(values: titles)
@@ -124,7 +124,7 @@ class GoDInteractionViewController: GoDTableViewController {
 		case .Script(let scriptIndex, let parameter1, let parameter2, let parameter3):
 			self.script.state = .on
 			if let scriptFile = roomPopup.selectedValue.script {
-				let titles = scriptFile.ftbl.map { (f) -> String in
+				let titles = scriptFile.scriptData.ftbl.map { (f) -> String in
 					return "@" + f.name
 				}
 				self.scriptPopUp.setTitles(values: titles)
@@ -354,7 +354,7 @@ class GoDInteractionViewController: GoDTableViewController {
 						_ = string.duplicateWithString(self.textView.string).replace()
 					} else {
 						let roomName = self.roomPopup.selectedValue.name
-						let msgFile = XGFiles.msg(roomName)
+						let msgFile = XGFiles.typeAndFsysName(.msg, roomName)
 						if msgFile.exists {
 							let msg = msgFile.stringTable
 							let string = XGString(string: self.textView.string, file: msgFile, sid: sid)

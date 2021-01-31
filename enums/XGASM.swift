@@ -10,43 +10,10 @@ import Foundation
 enum XGRegisters : UInt32 {
 	
 	case r0 = 0
-	case r1
-	case r2
-	case r3
-	case r4
-	case r5
-	case r6
-	case r7
-	case r8
-	case r9
-	case r10
-	case r11
-	case r12
-	case r13
-	case r14
-	case r15
-	case r16
-	case r17
-	case r18
-	case r19
-	case r20
-	case r21
-	case r22
-	case r23
-	case r24
-	case r25
-	case r26
-	case r27
-	case r28
-	case r29
-	case r30
-	case r31
-	case sp
+	case r1, r2,r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15
+	case r16, r17, r18, r19, r20, r21, r22, r23, r24, r25, r26, r27, r28, r29, r30, r31
 	// special purpose registers
-	case lr
-	case ctr
-	case srr0
-	case srr1
+	case sp, lr, ctr, srr0, srr1
 	
 	var value: UInt32 {
 		switch self {
@@ -348,13 +315,7 @@ enum XGASM {
 		switch self {
 			
 		// add / subtract
-		case .add:
-			fallthrough
-		case .addi:
-			fallthrough
-		case .addis:
-			fallthrough
-		case .addze:
+		case .add, .addi, .addis, .addze:
 			return codeForAdd()
 			
 		case .sub:
