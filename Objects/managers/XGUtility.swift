@@ -20,19 +20,22 @@ class XGUtility {
 	
 	class func compileMainFiles() {
 		prepareForCompilation()
-		var filesToImport = [.fsys("common"), XGFiles.fsys("pocket_menu"), XGFiles.fsys("fight_common"), .dol]
-		if game == .XD {
-			filesToImport += [.fsys("deck_archive")]
-			if !isDemo && region != .JP {
-				filesToImport += [.fsys("common_dvdeth")]
+		var filesToImport = [XGFiles.fsys("common"), .dol]
+		if game != .PBR {
+			filesToImport += [.fsys("pocket_menu"), XGFiles.fsys("fight_common")]
+			if game == .XD {
+				filesToImport += [.fsys("deck_archive"), .fsys("M2_guild_1F_2"), .fsys("common_dvdeth")]
 			}
-			let dukingTradeFsysFile = XGFiles.fsys("M2_guild_1F_2")
-			if dukingTradeFsysFile.exists {
-				filesToImport += [dukingTradeFsysFile]
-			}
+		} else {
+			filesToImport += [.fsys("deck")]
 		}
 
-		filesToImport.forEach { importFileToISO($0, encode: true) }
+
+		filesToImport.forEach {
+			if $0.exists {
+				importFileToISO($0, encode: true)
+			}
+		}
 	}
 	
 	class func compileAllFiles() {

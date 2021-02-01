@@ -9,10 +9,10 @@
 import Foundation
 
 let common = XGCommon()
-class XGCommon : XGRelocationTable {
+class XGCommon: XGRelocationTable {
 	
 	init() {
-		super.init(file: XGFiles.common_rel)
+		super.init(file: .common_rel)
 		self.dataStart = Int(self.data!.getWordAtOffset(kCommonRELDataStartOffsetLocation))
 	}
 	
@@ -29,7 +29,7 @@ class XGCommon : XGRelocationTable {
 let pocket = XGPocket()
 class XGPocket : XGRelocationTable {
 	init() {
-		super.init(file: XGFiles.pocket_menu)
+		super.init(file: .pocket_menu)
 	}
 }
 
@@ -45,8 +45,8 @@ let kRELPointerDataPointer2Offset = 0xc
 
 class XGRelocationTable: NSObject {
 	
-	var file : XGFiles!
-	var data : XGMutableData!
+	var file: XGFiles!
+	var data: XGMutableData!
 	
 	var dataStart = 0
 	var pointersStart = 0
@@ -132,6 +132,11 @@ class XGRelocationTable: NSObject {
 		return p
 	}
 
+	func printPointers() {
+		self.allPointers().forEachIndexed { (index, pointer) in
+			printg(index, pointer.hexString())
+		}
+	}
 }
 
 

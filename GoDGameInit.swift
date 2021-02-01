@@ -25,7 +25,7 @@ let isDemo = false
 
 #elseif GAME_PBR
 
-let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/Revolution-Tool"
+let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/PBR Tool"
 let game = XGGame.PBR
 let console = Console.wii
 let isDemo = false

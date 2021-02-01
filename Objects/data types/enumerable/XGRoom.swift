@@ -70,10 +70,6 @@ final class XGRoom: NSObject, Codable {
 		let id = self.name.substring(from: 0, to: 2)
 		return XGMaps(rawValue: id) ?? .Unknown
 	}
-
-	var battleFieldType: Int {
-		return XGFiles.common_rel.data?.getByteAtOffset(startOffset) ?? -1
-	}
 	
 	var roomID = 0
 	var groupID = 0

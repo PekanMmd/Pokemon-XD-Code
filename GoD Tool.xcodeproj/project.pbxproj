@@ -348,6 +348,12 @@
 		1C750FB425C3C3BE00EAB706 /* XGBattleModeRulesets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FB025C3C3BD00EAB706 /* XGBattleModeRulesets.swift */; };
 		1C750FB525C3C3BE00EAB706 /* XGBattleModeRulesets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FB025C3C3BD00EAB706 /* XGBattleModeRulesets.swift */; };
 		1C750FB625C3C3BE00EAB706 /* XGBattleModeRulesets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FB025C3C3BD00EAB706 /* XGBattleModeRulesets.swift */; };
+		1C750FDF25C88A3C00EAB706 /* XGRoomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FDE25C88A3C00EAB706 /* XGRoomType.swift */; };
+		1C750FE025C88A3C00EAB706 /* XGRoomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FDE25C88A3C00EAB706 /* XGRoomType.swift */; };
+		1C750FE125C88A3C00EAB706 /* XGRoomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FDE25C88A3C00EAB706 /* XGRoomType.swift */; };
+		1C750FE225C88A3C00EAB706 /* XGRoomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FDE25C88A3C00EAB706 /* XGRoomType.swift */; };
+		1C750FE325C88A3C00EAB706 /* XGRoomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FDE25C88A3C00EAB706 /* XGRoomType.swift */; };
+		1C750FE425C88A3C00EAB706 /* XGRoomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FDE25C88A3C00EAB706 /* XGRoomType.swift */; };
 		1C8601D92478625C00A5B267 /* Original Items.json in Resources */ = {isa = PBXBuildFile; fileRef = 1C8601D82478625900A5B267 /* Original Items.json */; };
 		1C9F22DA254104C0008D02EA /* DummyThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9F22D8254104C0008D02EA /* DummyThreadManager.swift */; };
 		1C9F22DD254104C0008D02EA /* DummyThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9F22D8254104C0008D02EA /* DummyThreadManager.swift */; };
@@ -4216,6 +4222,7 @@
 		1C6295FA243022080085C22F /* PBRScriptCompiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRScriptCompiler.swift; sourceTree = "<group>"; };
 		1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGAssemblyCodeExtensions.swift; sourceTree = "<group>"; };
 		1C750FB025C3C3BD00EAB706 /* XGBattleModeRulesets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleModeRulesets.swift; sourceTree = "<group>"; };
+		1C750FDE25C88A3C00EAB706 /* XGRoomType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGRoomType.swift; sourceTree = "<group>"; };
 		1C8601D82478625900A5B267 /* Original Items.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Original Items.json"; sourceTree = "<group>"; };
 		1C9F22D8254104C0008D02EA /* DummyThreadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyThreadManager.swift; sourceTree = "<group>"; };
 		1CA2386A24113822000E56AB /* HexCalculator.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = HexCalculator.storyboard; sourceTree = "<group>"; };
@@ -6959,6 +6966,7 @@
 				B208E78020C85AF500D298BF /* CMPokemonStats.swift */,
 				B2F5EBF11F49A1FE0075C6D2 /* XGPokeSpotPokemon.swift */,
 				B2F9B2941FA4A04200E1489E /* XGRoom.swift */,
+				1C750FDE25C88A3C00EAB706 /* XGRoomType.swift */,
 				B2F5EBF61F49A1FE0075C6D2 /* XGStarterPokemon.swift */,
 				8915D61F25170CD100C84884 /* XGStoryProgress.swift */,
 				B2F5EBFC1F49A1FE0075C6D2 /* XGTradePokemon.swift */,
@@ -12943,6 +12951,7 @@
 				1C16CE1D253BC4AC00907D78 /* XGUnicodeCharacters.swift in Sources */,
 				1C16CCCD253BC43200907D78 /* XGEffectivenessValues.swift in Sources */,
 				1C16CC1C253BC3D300907D78 /* XDExtensions.swift in Sources */,
+				1C750FE025C88A3C00EAB706 /* XGRoomType.swift in Sources */,
 				1C16CD87253BC47F00907D78 /* XGPokemon.swift in Sources */,
 				1C4E14ED253DD05700EA318B /* XGUtility.swift in Sources */,
 				1C16CCE1253BC43A00907D78 /* XGEvolutionConditionType.swift in Sources */,
@@ -13068,6 +13077,7 @@
 				1C16CCF7253BC44800907D78 /* XGFileTypes.swift in Sources */,
 				1C16D069253BC86B00907D78 /* XGBattleField.swift in Sources */,
 				1C16CBD4253BC3AC00907D78 /* XGFoundationExtensions.swift in Sources */,
+				1C750FE325C88A3C00EAB706 /* XGRoomType.swift in Sources */,
 				1C16CF3E253BC55C00907D78 /* CMRandomiser.swift in Sources */,
 				1C16CF5A253BC56300907D78 /* XGSettings.swift in Sources */,
 				1C16CC88253BC41800907D78 /* XGBattleStyles.swift in Sources */,
@@ -13199,6 +13209,7 @@
 				1CC362B824BF5114005D7B4A /* GoDStatsViewController.swift in Sources */,
 				B208E3E020C4CC9800D298BF /* GoDViewLayoutManager.swift in Sources */,
 				1CC362C124BFDC53005D7B4A /* GoDEnumerablePopUpButtons.swift in Sources */,
+				1C750FE425C88A3C00EAB706 /* XGRoomType.swift in Sources */,
 				B208E74320C4D5B500D298BF /* XGEvolutionMethods.swift in Sources */,
 				B23349FC22320AB600FC20A6 /* GoDTextureImporterViewController.swift in Sources */,
 				B208E78920C85F9E00D298BF /* CMTrainerPokemon.swift in Sources */,
@@ -13676,6 +13687,7 @@
 				B2562F5421349632004180F1 /* XGFoundationExtensions.swift in Sources */,
 				B2562F7E21349814004180F1 /* XGCharacter.swift in Sources */,
 				B2562F602134976C004180F1 /* XGEvolutionMethods.swift in Sources */,
+				1C750FE225C88A3C00EAB706 /* XGRoomType.swift in Sources */,
 				1C64CF4724562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */,
 				B2562F8B213498DE004180F1 /* XGMutableData.swift in Sources */,
 				B22A1C4B21829D7A001C41D3 /* XGThreadManager.swift in Sources */,
@@ -13832,6 +13844,7 @@
 				B27C5FDD1FA19FB000E0596F /* XGScriptInstruction.swift in Sources */,
 				B2F9B2951FA4A04200E1489E /* XGRoom.swift in Sources */,
 				B2F5EC7E1F49A1FF0075C6D2 /* XGDemoStarterPokemon.swift in Sources */,
+				1C750FDF25C88A3C00EAB706 /* XGRoomType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13890,6 +13903,7 @@
 				B2F5ECA11F49A1FF0075C6D2 /* XGMtBattlePokemon.swift in Sources */,
 				B2A677D61F7FECF700214526 /* GoDItemViewController.swift in Sources */,
 				B2F5EC741F49A1FF0075C6D2 /* XGBattleBingoCard.swift in Sources */,
+				1C750FE125C88A3C00EAB706 /* XGRoomType.swift in Sources */,
 				B2C65B17218375D9007349CA /* GoDTypeViewController.swift in Sources */,
 				B2C2172320BC2AC600D6C179 /* GoDCollisionViewController.swift in Sources */,
 				B2F5EC201F49A1FE0075C6D2 /* XGExpRate.swift in Sources */,

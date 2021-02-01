@@ -9,12 +9,14 @@
 import Foundation
 
 let kSizeOfBattleFieldData = 0x18
+let kBattleFieldRoomTypeOffset = 0x00
 let kBattleFieldRoomIDOffset = 0x02
 
 final class XGBattleField: NSObject, Codable {
-	
+
+	var roomTypeID = 0
 	var roomID = 0
-	var room : XGRoom? {
+	var room: XGRoom? {
 		return XGRoom.roomWithID(roomID)
 	}
 	
@@ -25,12 +27,12 @@ final class XGBattleField: NSObject, Codable {
 		super.init()
 		
 		self.index = index
-		self.startOffset = CommonIndexes.BattleFields.startOffset + (index * kSizeOfBattleFieldData)
+		startOffset = CommonIndexes.BattleFields.startOffset + (index * kSizeOfBattleFieldData)
 		
 		let data = XGFiles.common_rel.data!
 		
-		self.roomID = data.get2BytesAtOffset(startOffset + kBattleFieldRoomIDOffset)
-		
+		roomID = data.get2BytesAtOffset(startOffset + kBattleFieldRoomIDOffset)
+		roomTypeID = data.getByteAtOffset(startOffset + kBattleFieldRoomTypeOffset)
 	}
 	
 
