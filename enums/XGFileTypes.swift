@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGFileTypes : Int, Codable, CaseIterable {
+enum XGFileTypes: Int, Codable, CaseIterable {
 	case none = 0x00
 	case rdat = 0x02 // room model in hal dat format. Also .dat files but considered different by the fsys headers
 	case dat  = 0x04 // character model in hal dat format

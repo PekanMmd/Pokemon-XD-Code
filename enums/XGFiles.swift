@@ -19,8 +19,17 @@ var loadedFiles = [String : XGMutableData]()
 var loadedStringTables = [String : XGStringTable]()
 var loadedFsys = [String: XGFsys]()
 
+#if GAME_XD
 let loadableFiles = [XGFiles.common_rel.path,XGFiles.dol.path,XGDecks.DeckStory.file.path,XGDecks.DeckDarkPokemon.file.path, XGDecks.DeckColosseum.file.path,XGDecks.DeckHundred.file.path,XGDecks.DeckVirtual.file.path,XGFiles.iso.path, XGFiles.fsys("people_archive").path, XGFiles.pocket_menu.path, XGFiles.toc.path]
 let loadableStringTables = [XGFiles.tableres2.path,XGFiles.typeAndFsysName(.msg, "pocket_menu").path,XGFiles.common_rel.path,XGFiles.dol.path]
+#elseif  GAME_COLO
+let loadableFiles = [XGFiles.common_rel.path,XGFiles.dol.path, XGFiles.iso.path, XGFiles.fsys("people_archive").path, XGFiles.pocket_menu.path, XGFiles.toc.path]
+let loadableStringTables = [XGFiles.typeAndFsysName(.msg, "pocket_menu").path,XGFiles.common_rel.path,XGFiles.dol.path]
+#else
+let loadableFiles = [XGFiles.dol.path]
+let loadableStringTables = [XGFiles]()
+#endif
+
 let loadableFsys = [XGFiles.fsys("people_archive").path]
 
 
@@ -96,7 +105,11 @@ indirect enum XGFiles {
 	var folder : XGFolders {
 		switch self {
 
+		#if GAMe_PBR
+		case .dol				: return .Sys
+		#else
 		case .dol				: return .ISOExport("Start")
+		#endif
 		case .common_rel		: return XGFiles.fsys("common").folder
 		case .tableres2			: return XGFiles.fsys("common_dvdeth").folder
 		case .pocket_menu		: return XGFiles.fsys("pocket_menu").folder
@@ -138,6 +151,11 @@ indirect enum XGFiles {
 
 			if !XGUtility.exportFileFromISO(self, decode: true) {
 				switch self {
+				case .tableres2:
+					if !XGUtility.exportFileFromISO(.fsys("common_dvdeth"), decode: false) {
+						printg("file doesn't exist and couldn't be extracted:", self.path)
+						return nil
+					}
 				case .dol:
 					if !XGUtility.exportFileFromISO(.dol, decode: false) {
 						printg("file doesn't exist and couldn't be extracted:", self.path)
@@ -159,9 +177,6 @@ indirect enum XGFiles {
 						return nil
 					}
 				}
-
-			} else {
-
 			}
 		}
 		
@@ -276,14 +291,21 @@ indirect enum XGFiles {
 		return table
 	}
 
+	#if !GAME_PBR
 	var collisionData: XGCollisionData {
 		return XGCollisionData(file: self)
 	}
+	#endif
 
 	var textures: [GoDTexture] {
 		if XGFileTypes.textureFormats.contains(fileType) {
 			return [texture]
 		}
+		#if GAME_PBR
+		if XGFileTypes.textureContainingFormats.contains(fileType) {
+			return PBRTextureContaining.fromFile(self)?.textures ?? []
+		}
+		#endif
 		if fileType == .gsw {
 			return XGGSWTextures(file: self).extractTextureData().map { GoDTexture(data: $0) }
 		}
@@ -365,7 +387,11 @@ indirect enum XGFiles {
 	}
 
 	static var commonStringTableFile: XGFiles {
-		.common_rel
+		if game == .PBR {
+			return region == .JP ? .typeAndFsysName(.msg, "common") : .typeAndFsysName(.msg, "mes_common")
+		} else {
+			return .common_rel
+		}
 	}
 
 	static func allFilesWithType(_ type: XGFileTypes) -> [XGFiles] {
@@ -403,32 +429,42 @@ indirect enum XGFolders {
 	case path(String)
 	case nameAndPath(String, String)
 	case nameAndFolder(String, XGFolders)
+	#if GAME_PBR
+	case DATA
+	case Files
+	case Dump
+	case Sys
+	#endif
 	
 	var name: String {
-		get {
-			switch self {
-			case .Documents			: return "Documents"
-			case .JSON				: return "JSON"
-			case .TextureImporter	: return "Texture Importer"
-			case .Import			: return "Import"
-			case .Export			: return "Export"
-			case .Textures			: return "Textures"
-			case .Images			: return "Images"
-			case .PokeFace			: return "PokeFace"
-			case .PokeBody			: return "PokeBody"
-			case .Trainers			: return "Trainers"
-			case .Types				: return "Types"
-			case .LZSS				: return "LZSS"
-			case .Reference			: return "Reference"
-			case .Resources			: return "Resources"
-			case .Wiimm				: return "Wiimm"
-			case .ISO				: return "ISO"
-			case .Logs				: return "Logs"
-			case .ISOExport      	: return "Game Files"
-			case .path(let s) 		: return s
-			case .nameAndPath(let s, _): return s
-			case .nameAndFolder(let s, _): return s
-			}
+		switch self {
+		case .Documents			: return "Documents"
+		case .JSON				: return "JSON"
+		case .TextureImporter	: return "Texture Importer"
+		case .Import			: return "Import"
+		case .Export			: return "Export"
+		case .Textures			: return "Textures"
+		case .Images			: return "Images"
+		case .PokeFace			: return "PokeFace"
+		case .PokeBody			: return "PokeBody"
+		case .Trainers			: return "Trainers"
+		case .Types				: return "Types"
+		case .LZSS				: return "LZSS"
+		case .Reference			: return "Reference"
+		case .Resources			: return "Resources"
+		case .Wiimm				: return "Wiimm"
+		case .ISO				: return "ISO"
+		case .Logs				: return "Logs"
+		case .ISOExport      	: return "Game Files"
+		case .path(let s) 		: return s
+		case .nameAndPath(let s, _): return s
+		case .nameAndFolder(let s, _): return s
+		#if GAME_PBR
+		case .Sys				: return "sys"
+		case .Files				: return "files"
+		case .Dump         		: return "Dump"
+		case .DATA              : return "DATA"
+		#endif
 		}
 	}
 	
@@ -453,6 +489,11 @@ indirect enum XGFolders {
 		case .Wiimm		: path = XGFolders.Resources.path
 		case .nameAndFolder(_, let f): path = f.path
 		case .path(let s): return s
+		#if GAME_PBR
+		case .Dump  	: path = XGFolders.ISO.path
+		case .DATA      : path = XGFolders.Dump.path
+		case .Sys, .Files: path = XGFolders.DATA.exists ? XGFolders.DATA.path : XGFolders.Dump.path
+		#endif
 		default: break
 
 		}
@@ -550,17 +591,30 @@ indirect enum XGFolders {
 		for i in 0 ... 17 {
 			images.append(.typeImage(i))
 		}
-		for i in 0 ... 414 {
-			images.append(.pokeBody(i))
-			images.append(.pokeFace(i))
+		images.append(.nameAndFolder("type_fairy.png", .Types))
+		if game != .PBR {
+			images.append(.nameAndFolder("type_shadow.png", .Types))
 		}
 
-		let maxTrainerFaceIndex = game == .XD ? 67 : 75
-		for i in 0 ... maxTrainerFaceIndex {
-			images.append(.trainerFace(i))
+		if game == .PBR {
+			for i in 0 ... 500 {
+				images.append(.pokeBody(i))
+				images.append(.pokeFace(i))
+			}
+		} else {
+			for i in 0 ... 414 {
+				images.append(.pokeBody(i))
+				images.append(.pokeFace(i))
+			}
 		}
-		images.append(.nameAndFolder("type_fairy.png", .Types))
-		images.append(.nameAndFolder("type_shadow.png", .Types))
+
+		if game != .PBR {
+			let maxTrainerFaceIndex = game == .XD ? 67 : 75
+			for i in 0 ... maxTrainerFaceIndex {
+				images.append(.trainerFace(i))
+			}
+		}
+
 		
 		for image in images {
 			if !image.exists {
@@ -568,13 +622,26 @@ indirect enum XGFolders {
 				if case .trainerFace = image, game == .Colosseum {
 					filename = "colo_" + image.fileName
 				}
+				if game == .PBR {
+					if case .pokeBody = image {
+						filename = "PBR_" + image.fileName
+					}
+					if case .pokeFace = image {
+						filename = "PBR_" + image.fileName
+					}
+				}
 
 				let resource = XGResources.png(filename.replacingOccurrences(of: ".png", with: ""))
                 resource.copy(to: image)
 			}
 		}
 		
-		let jsons = ["Move Effects", "Original Pokemon", "Original Moves", "Move Categories", "Room IDs"]
+		var jsons = ["Move Effects", "Original Pokemon", "Original Moves"]
+		if game == .PBR {
+			jsons += ["Original Items"]
+		} else {
+			jsons += ["Move Categories", "Room IDs"]
+		}
 		
 		for j in jsons {
 			let file = XGFiles.json(j)
@@ -583,16 +650,20 @@ indirect enum XGFolders {
 			}
 		}
 
+		#if GAME_XD
 		XGScript.encodeDummyJSON()
+		#endif
 
 		let wiimm = XGFolders.Wiimm
         if !wiimm.exists {
 			XGResources.folder("wiimm").copy(to: wiimm)
         }
 
-		let gcitool = XGFiles.tool("gcitool")
-		if !gcitool.exists {
-			XGResources.tool("gcitool").copy(to: gcitool)
+		if game != .PBR {
+			let gcitool = XGFiles.tool("gcitool")
+			if !gcitool.exists {
+				XGResources.tool("gcitool").copy(to: gcitool)
+			}
 		}
 	}
 	

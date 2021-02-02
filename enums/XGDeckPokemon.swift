@@ -133,10 +133,8 @@ enum XGDeckPokemon: CustomStringConvertible {
 		}
 	}
 	
-	var data : XGTrainerPokemon {
-		get {
-			return XGTrainerPokemon(DeckData: self)
-		}
+	var data: XGTrainerPokemon {
+		return XGTrainerPokemon(DeckData: self)
 	}
 	
 }

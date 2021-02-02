@@ -53,7 +53,7 @@ indirect enum XDSMacroTypes {
 	case integerCoupons
 	case integerQuantity
 	case integerIndex
-	case vectorDimension // x,y,z
+	case vectorDimension // x,y or z
 	case giftPokemon
 	case region
 	case language

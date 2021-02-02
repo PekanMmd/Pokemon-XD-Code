@@ -66,7 +66,7 @@ enum XGItems {
 	
 	var descriptionString : XGString {
 		get {
-			let table = XGFiles.msg("pocket_menu").stringTable
+			let table = XGFiles.typeAndFsysName(.msg, "pocket_menu").stringTable
 			return table.stringSafelyWithID(descriptionID)
 		}
 	}

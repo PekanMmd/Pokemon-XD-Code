@@ -70,7 +70,7 @@ class XGScript: CustomStringConvertible {
 
 			// if not found, check for rel file in rels folder
 			if mapRel == nil {
-				let relFile = XGFiles.rel(file.fileName.removeFileExtensions())
+				let relFile = XGFiles.typeAndFsysName(.rel, file.fileName.removeFileExtensions())
 				if relFile.exists {
 					let rel = XGMapRel(file: relFile, checkScript: false)
 					mapRel = rel
@@ -83,7 +83,7 @@ class XGScript: CustomStringConvertible {
 				stringTable = msgFile.stringTable
 			} else {
 			// if not found, check for msg file in string tables folder
-				let msgFile = XGFiles.msg(file.fileName.removeFileExtensions())
+				let msgFile = XGFiles.typeAndFsysName(.msg, file.fileName.removeFileExtensions())
 				if msgFile.exists {
 					stringTable = msgFile.stringTable
 				}

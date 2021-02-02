@@ -7,12 +7,6 @@
 //
 //
 
-XGBattleField.allValues.sorted(by: { (r1, r2) -> Bool in
-	r1.roomTypeID < r2.roomTypeID
-}).forEach { (bf) in
-	printg(bf.roomTypeID, bf.room!.name)
-}
-
 
 //var csv = "Spot,Index,Species,Percentage,Min Level,Max Level"
 //for i in 0 ..< XGPokeSpots.allCases.count {

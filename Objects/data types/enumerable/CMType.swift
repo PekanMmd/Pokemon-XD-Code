@@ -12,6 +12,7 @@ let kFirstTypeOffset: Int = {
 	case .US: return 0x358500
 	case .JP: return 0x344C40
 	case .EU: return 0x3A55C0
+	case .OtherGame: return 0
 	}
 }()
 

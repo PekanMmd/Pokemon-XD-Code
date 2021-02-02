@@ -36,6 +36,7 @@ class XGDolPatcher {
 		case .US: critRatiosStartOffset = 0x44AAF0
 		case .JP: critRatiosStartOffset = 0x4359F0
 		case .EU: critRatiosStartOffset = 0x475010
+		case .OtherGame: critRatiosStartOffset = 0
 		}
 
 		let dol = XGFiles.dol.data!
@@ -96,6 +97,7 @@ class XGDolPatcher {
 		case .EU: bloomStrengthOffset = 0x473ea8
 		case .US: bloomStrengthOffset = 0x449990
 		case .JP: bloomStrengthOffset = 0x434910
+		case .OtherGame: bloomStrengthOffset = 0
 		}
 		if let dol = XGFiles.dol.data {
 			dol.replace4BytesAtOffset(bloomStrengthOffset, withBytes: 0)

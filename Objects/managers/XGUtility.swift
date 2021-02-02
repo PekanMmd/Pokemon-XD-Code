@@ -13,9 +13,27 @@ class XGUtility {
 	//MARK: - ISO Building
 
 	class func extractAllFiles() {
-		for filename in ISO.allFileNames where filename != XGFiles.toc.fileName {
+		#if GAME_PBR
+		let excludedFiles = [ "pkx_", "wzx_"]
+		for filename in ISO.allFileNames {
+			guard !excludedFiles.contains(where: { (str) -> Bool in
+				filename.contains(str)
+			}) else {
+				continue
+			}
 			exportFileFromISO(.nameAndFolder(filename, .ISOExport(filename.removeFileExtensions())), decode: true, overwrite: false)
 		}
+		#else
+		let excludedFiles = ["stm_", "pkx_", "wzx_"]
+		for filename in ISO.allFileNames where filename != XGFiles.toc.fileName {
+			guard !excludedFiles.contains(where: { (str) -> Bool in
+				filename.contains(str)
+			}) else {
+				continue
+			}
+			exportFileFromISO(.nameAndFolder(filename, .ISOExport(filename.removeFileExtensions())), decode: true, overwrite: false)
+		}
+		#endif
 	}
 	
 	class func compileMainFiles() {
@@ -33,9 +51,21 @@ class XGUtility {
 
 		filesToImport.forEach {
 			if $0.exists {
-				importFileToISO($0, encode: true)
+				printg("Compiling", $0.path)
+				var fsysSubfilesToImport: [XGFiles]? = nil
+				switch $0.fileName {
+				case "common.fsys": if game != .PBR { fsysSubfilesToImport = [.common_rel, .deck(.DeckDarkPokemon)] }
+				case "M2_guild_1F_2.fsys": if game == .XD { fsysSubfilesToImport = [.typeAndFsysName(.scd, "M2_guild_1F_2")] }
+				default: break
+				}
+				importFileToISO($0, encode: true, save: false, importFiles: fsysSubfilesToImport)
 			}
 		}
+		#if !GAME_PBR
+		ISO.save()
+		#endif
+
+		printg("Quick build complete")
 	}
 	
 	class func compileAllFiles() {
@@ -72,13 +102,21 @@ class XGUtility {
 	}
 
 	@discardableResult
-	class func importFileToISO(_ fileToImport: XGFiles, encode: Bool = true, save: Bool = true) -> Bool {
+	class func importFileToISO(_ fileToImport: XGFiles, encode: Bool = true, save: Bool = true, importFiles importFilesToFsysExclusively: [XGFiles]? = nil) -> Bool {
+
+		func shouldIncludeFile(_ file: XGFiles) -> Bool {
+			return importFilesToFsysExclusively?.contains(where: { (f1) -> Bool in
+				return f1.fileName == file.fileName
+					|| f1.fileName == (file.fileName + XGFileTypes.xds.fileExtension)
+			}) ?? true
+		}
+
 		if fileToImport.exists {
 			if fileToImport.fileType == .fsys {
 
 				if encode {
 					XGColour.colourThreshold = 0
-					for file in fileToImport.folder.files {
+					for file in fileToImport.folder.files where shouldIncludeFile(file) {
 
 						// encode string tables before compiling scripts
 						if file.fileType == .msg {
@@ -128,7 +166,7 @@ class XGUtility {
 						}
 					}
 
-					for file in fileToImport.folder.files {
+					for file in fileToImport.folder.files where shouldIncludeFile(file) {
 						// encode gsws after all gtxs have been encoded
 						if file.fileType == .gsw {
 							let gsw = XGGSWTextures(data: file.data!)
@@ -146,7 +184,27 @@ class XGUtility {
 						}
 
 						// import textures into models after textures have been encoded
-						#warning("import textures into models")
+						#warning("import textures into models for Colo/XD")
+						#if GAME_PBR
+						// import model textures after all gtxs have been encoded
+						if XGFileTypes.textureContainingFormats.contains(file.fileType) {
+							if let dataFormat = PBRTextureContaining.fromFile(file) {
+								var expectedFiles = dataFormat.textures
+								var foundReplacement = false
+								for i in 0 ..< expectedFiles.count {
+									let textureFile = expectedFiles.map { $0.data.file }[i]
+									if textureFile.exists {
+										expectedFiles[i] = textureFile.texture
+										foundReplacement = true
+									}
+								}
+								if foundReplacement {
+									dataFormat.importTextures(expectedFiles)
+									dataFormat.data?.save()
+								}
+							}
+						}
+						#endif
 
 						// strings in the xds scripts will override those particular strings in the msg's json
 						if file.fileType == .xds && game != .PBR {
@@ -161,18 +219,18 @@ class XGUtility {
 							}
 						}
 					}
-				}
 
-				for file in fileToImport.folder.files {
-					// import models into pkxs after textures have been imported into models
-					if file.fileType == .pkx {
-						for dat in fileToImport.folder.files where dat.fileType == .dat {
-							if dat.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-								if let datData = dat.data, let pkxData = file.data {
-									if settings.verbose {
-										printg("importing \(dat.path) into \(file.path)")
+					for file in fileToImport.folder.files where shouldIncludeFile(file) {
+						// import models into pkxs after textures have been imported into models
+						if file.fileType == .pkx {
+							for dat in fileToImport.folder.files where dat.fileType == .dat {
+								if dat.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
+									if let datData = dat.data, let pkxData = file.data {
+										if settings.verbose {
+											printg("importing \(dat.path) into \(file.path)")
+										}
+										XGUtility.importDatToPKX(dat: datData, pkx: pkxData).save()
 									}
-									XGUtility.importDatToPKX(dat: datData, pkx: pkxData).save()
 								}
 							}
 						}
@@ -185,21 +243,23 @@ class XGUtility {
 				let fsysData = fileToImport.fsysData
 				for i in 0 ..< fsysData.numberOfEntries {
 					let filename = fsysData.fileNameForFileWithIndex(index: i)
-					for file in fileToImport.folder.files {
-						if file.fileName == filename, fsysData.isFileCompressed(index: i) {
-							if settings.verbose {
-								printg("compressing file", file.path)
+					for file in fileToImport.folder.files where shouldIncludeFile(file) {
+						if file.fileName == filename {
+							if fsysData.isFileCompressed(index: i) {
+								if settings.verbose {
+									printg("compressing file", file.path)
+								}
+								let compressed = file.compress()
+								if settings.verbose {
+									printg("importing \(file.path) into \(fileToImport.path)")
+								}
+								fsysData.shiftAndReplaceFileWithIndex(i, withFile: compressed, save: false)
+							} else {
+								if settings.verbose {
+									printg("importing \(file.path) into \(fileToImport.path)")
+								}
+								fsysData.shiftAndReplaceFileWithIndex(i, withFile: file, save: false)
 							}
-							let compressed = file.compress()
-							if settings.verbose {
-								printg("importing \(file.path) into \(fileToImport.path)")
-							}
-							fsysData.shiftAndReplaceFileWithIndex(i, withFile: compressed, save: false)
-						} else {
-							if settings.verbose {
-								printg("importing \(file.path) into \(fileToImport.path)")
-							}
-							fsysData.shiftAndReplaceFileWithIndex(i, withFile: file, save: false)
 						}
 					}
 				}
@@ -211,7 +271,12 @@ class XGUtility {
 			if settings.verbose {
 				printg("importing \(fileToImport.path) into \(XGFiles.iso.path)")
 			}
+			#if GAME_PBR
+			ISO.importFiles([fileToImport])
+			#else
 			ISO.importFiles([fileToImport], save: save)
+			#endif
+
 			return true
 		} else {
 			printg("The file: \(fileToImport.path) doesn't exit")
@@ -308,9 +373,11 @@ class XGUtility {
 			let filename = file.fileName.removeFileExtensions() + ".png"
 			file.texture.image.writePNGData(toFile: .nameAndFolder(filename, .Export))
 		}
+		#if !GAME_PBR
 		exportTPLFiles(XGFolders.Textures.files.filter({ (file) -> Bool in
 			file.fileType == .tpl
 		}))
+		#endif
 	}
 	
 	class func searchForFsysForFile(file: XGFiles) {
@@ -471,10 +538,12 @@ class XGUtility {
 		}
 		if value <= kNumberOfPokemon {
 			printg("Pokemon: ",XGPokemon.pokemon(value).name.string,"\n")
-			
+
+			#if !GAME_PBR
 			if value > 251 {
 				printg("Pokemon national index: ", XGPokemon.nationalIndex(value).name.string,"\n")
 			}
+			#endif
 		}
 		
 		if value <= kNumberOfAbilities {
@@ -496,9 +565,11 @@ class XGUtility {
 			if item.holdItemID == value {
 				printg("Hold item id: ",item.name.string,"\n")
 			}
+			#if !GAME_PBR
 			if item.inBattleUseID == value {
 				printg("In battle item id: ",item.name.string,"\n")
 			}
+			#endif
 		}
 		
 		loadAllStrings()
@@ -509,6 +580,7 @@ class XGUtility {
 	
 	//MARK: - Pokemarts
 	class func printPokeMarts() {
+		#if !GAME_PBR
 		let dat = XGFiles.pocket_menu.data!
 		
 		let itemHexList = dat.getShortStreamFromOffset(0x300, length: 0x170)
@@ -531,6 +603,7 @@ class XGUtility {
 			
 			printg("\(0x300 + (j*2)):\t",item.index,item.name.string,tmName,"\n")
 		}
+		#endif
 		
 	}
 

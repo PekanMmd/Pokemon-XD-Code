@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGFileTypes : Int {
+enum XGFileTypes: Int, CaseIterable {
 	case none = 0x00
 	
 	case bin = 0x02 // binary data
@@ -114,6 +114,10 @@ enum XGFileTypes : Int {
 		}
 	}
 
+	var identifier: Int {
+		return rawValue < XGFileTypes.fsys.rawValue ? rawValue : 0
+	}
+
 	#if canImport(Cocoa)
 	static let imageFormats: [XGFileTypes] = [.png, .jpeg, .bmp]
 	#else
@@ -123,6 +127,12 @@ enum XGFileTypes : Int {
 	static let textureFormats: [XGFileTypes] = [.gtx]
 	static let modelFormats: [XGFileTypes] = [.sdr, .odr, .mdr]
 	static let textureContainingFormats: [XGFileTypes] = [.sdr, .odr, .mdr, .mnr, .gpd, .gfl]
+
+	static func fileTypeForExtension(_ ext: String) -> XGFileTypes? {
+		return XGFileTypes.allCases.first(where: {
+			$0.fileExtension.replacingOccurrences(of: ".", with: "") == ext.replacingOccurrences(of: ".", with: "")
+		})
+	}
 }
 
 

@@ -8,20 +8,6 @@
 import Foundation
 
 extension XGUtility {
-
-	class func extractMainFiles() {
-		let mainFiles = [
-			"Start.dol",
-			"common.fsys",
-			"field_common.fsys",
-			"fight_common.fsys",
-			"pocket_menu.fsys"
-		]
-
-		for filename in mainFiles {
-			exportFileFromISO(.nameAndFolder(filename, .Documents), decode: false)
-		}
-	}
 	
 	class func prepareForCompilation() {
 		fixUpTrainerPokemon()

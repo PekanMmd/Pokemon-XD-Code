@@ -138,34 +138,8 @@ extension XGUtility {
 		printg("extraction complete!")
 		
 	}
-	
-	class func extractAllFiles() {
-		XGFolders.setUpFolderFormat()
-        extractMainFiles()
-        printg("extracting fsys files...\nThis may take a while")
-        for file in XGFolders.FSYS.files where file.fileType == .fsys {
-            printg("extracting:", file.path)
-            let fsys = file.fsysData
-            if let msg = fsys.decompressedDataForFileWithFiletype(type: .msg) {
-                msg.file = .msg(msg.file.fileName.removeFileExtensions())
-                if !msg.file.exists {
-                    msg.save()
-                }
-            }
-            let folder = XGFolders.ISOExport(fsys.fileName.removeFileExtensions())
-            folder.createDirectory()
-            fsys.extractFilesToFolder(folder: folder, decode: true)
-        }
-        printg("extraction complete!")
-    }
-    
-    class func compileMainFiles() {
-        XGFolders.setUpFolderFormat()
-        printg("compiling main files...")
-        compileDecks()
-        compileCommon()
-        compileMSG()
-    }
+
+	class func prepareForCompilation() {}
 
 	class func exportFileFromISO(_ file: XGFiles, decode: Bool = true) -> Bool {
 		XGFolders.ISOExport("").createDirectory()
@@ -184,131 +158,6 @@ extension XGUtility {
 		return false
 	}
 
-	class func importFileToISO(_ fileToImport: XGFiles, encode: Bool = true) -> Bool {
-		if fileToImport.exists {
-			if fileToImport.fileType == .fsys {
-
-				if encode {
-					XGColour.colourThreshold = 0
-					for file in fileToImport.folder.files {
-
-						// encode string tables before compiling scripts
-						if file.fileType == .msg {
-							for json in fileToImport.folder.files where json.fileType == .json {
-								if json.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-									let table = try? XGStringTable.fromJSONFile(file: json)
-									if let table = table {
-										table.file = file
-										table.save()
-									} else {
-										printg("Failed to decode string table from: ", json.path)
-									}
-								}
-							}
-						}
-
-						if file.fileType == .thp, let thpData = file.data {
-							let thp = XGTHP(thpData: thpData)
-							thp.headerData.save()
-							thp.bodyData.save()
-						}
-
-						if file.fileType == .gtx || file.fileType == .atx {
-							for imageFile in fileToImport.folder.files where XGFileTypes.imageFormats.contains(imageFile.fileType) {
-								if imageFile.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-									if settings.verbose {
-										printg("importing \(imageFile.path) into \(file.path)")
-									}
-									if let image = XGImage.loadImageData(fromFile: imageFile) {
-										let texture: GoDTexture
-										if file.fileName.contains(".sdr.")
-										|| file.fileName.contains(".odr.")
-										|| file.fileName.contains(".mdr.")
-										|| file.fileName.contains(".mnr.")
-										{
-											// preserves the image format so can easily be imported into model
-											let oldTexture = file.texture
-											let importer = GoDTextureImporter(oldTextureData: oldTexture, newImage: image)
-											importer.replaceTextureData()
-											texture = importer.texture
-
-										} else {
-											// automatically chooses a good format for the new image
-											texture = image.texture
-										}
-
-										texture.file = file
-										texture.save()
-									}
-								}
-							}
-						}
-					}
-
-					// import model textures after all gtxs have been encoded
-					for file in fileToImport.folder.files {
-						if XGFileTypes.textureContainingFormats.contains(file.fileType) {
-							if let dataFormat = PBRTextureContaining.fromFile(file) {
-								var expectedFiles = dataFormat.textures
-								var foundReplacement = false
-								for i in 0 ..< expectedFiles.count {
-									let textureFile = expectedFiles.map { $0.data.file }[i]
-									if textureFile.exists {
-										expectedFiles[i] = textureFile.texture
-										foundReplacement = true
-									}
-								}
-								if foundReplacement {
-									dataFormat.importTextures(expectedFiles)
-									dataFormat.data?.save()
-								}
-							}
-						}
-
-						// strings in the xds scripts will override those particular strings in the msg's json
-						if file.fileType == .xds && game != .PBR {
-							XDSScriptCompiler.setFlags(disassemble: false, decompile: false, updateStrings: true, increaseMSG: true)
-							XDSScriptCompiler.baseStringID = 1000
-							if !XDSScriptCompiler.compile(textFile: file, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)) {
-								printg("XDS Compilation Error:\n" + XDSScriptCompiler.error)
-								return false
-							}
-						}
-					}
-				}
-
-				let fsysData = fileToImport.fsysData
-				for i in 0 ..< fsysData.numberOfEntries {
-					var filename = ""
-					if fsysData.usesFileExtensions {
-						filename = fsysData.fullFileNames[i]
-					} else {
-						filename = fsysData.fileNames[i].removeFileExtensions() + fsysData.fileTypeForFile(index: i).fileExtension
-					}
-					if !fsysData.usesFileExtensions || filename.removeFileExtensions() == filename {
-						filename = filename.removeFileExtensions()
-						filename += fsysData.fileTypeForFile(index: i).fileExtension
-					}
-					for file in fileToImport.folder.files {
-						if file.fileName == filename {
-							if fsysData.isFileCompressed(index: i){
-								fsysData.shiftAndReplaceFileWithIndexEfficiently(i, withFile: file.compress(), save: false)
-							} else {
-								fsysData.shiftAndReplaceFileWithIndexEfficiently(i, withFile: file, save: false)
-							}
-						}
-					}
-				}
-				fsysData.save()
-			}
-			ISO.importFiles([fileToImport])
-			return true
-		} else {
-			printg("The file: \(fileToImport.path) doesn't exit")
-			return false
-		}
-	}
-
 	class func disableAntiModChecks() {
 		// Modifies a function in main.dol to prevent the game from softlocking when the ISO has been modified.
 		printg("Disabling anti modification code.")
@@ -322,6 +171,7 @@ extension XGUtility {
 		case .EU: offset = 0x2252bc
 		case .JP: offset = 0x219Ac0
 		case .US: offset = 0x229E44
+		case .OtherGame: offset = 0
 		}
 
 		dol.replace4BytesAtOffset(offset, withBytes: 0x48000100)
@@ -366,86 +216,6 @@ extension XGUtility {
 		return XGMutableData()
 	}
 	
-}
-
-
-var allStringTables = [XGStringTable]()
-var stringsLoaded = false
-
-func loadAllStrings() {
-	
-	if !stringsLoaded {
-		
-		// very specific order based on the id at index 0xb in the .msg file
-		// files with the same id are identical but may be loaded at different times
-		// the first stringid in the next file is one greater than the last stringid of the previous file
-		allStringTables = [XGStringTable]()
-
-		for filename in
-			[region == .JP ? "common" : "mes_common",
-			(region == .JP ? "menu_fight_s" : "mes_fight_e"),
-			(region == .JP ? "menu_name2" : "mes_name_e")]
-			+ (region == .JP ? [] : ["menu_btutorial"])
-		{
-
-				let file = XGFiles.msg(filename)
-				if file.exists {
-					allStringTables.append(file.stringTable)
-				} else {
-					XGUtility.extractMainFiles()
-					if !file.exists {
-						printg("Error loading strings. File doesn't exist:", file.path)
-					} else {
-						allStringTables.append(file.stringTable)
-					}
-
-				}
-
-				stringsLoaded = true
-		}
-		allStringTables.sort { (s1, s2) -> Bool in
-			s1.tableID < s2.tableID
-		}
-	}
-}
-
-func getStringWithID(id: Int) -> XGString? {
-	loadAllStrings()
-	
-	if id == 0 {
-		return nil
-	}
-	
-	var currentID = id
-	for table in allStringTables {
-		if table.containsStringWithId(currentID) {
-			if let s = table.stringWithID(currentID) {
-				return s
-			}
-		} else {
-			currentID -= table.numberOfEntries
-		}
-	}
-	return nil
-}
-
-func getStringSafelyWithID(id: Int) -> XGString {
-	loadAllStrings()
-	
-	return getStringWithID(id: id) ?? XGString(string: "-", file: nil, sid: nil)
-}
-
-func getStringsContaining(substring: String) -> [XGString] {
-	loadAllStrings()
-	
-	var found = [XGString]()
-	for table in allStringTables {
-		for str in table.allStrings() where str.containsSubstring(substring) {
-			found.append(str)
-		}
-	}
-	
-	return found
 }
 
 

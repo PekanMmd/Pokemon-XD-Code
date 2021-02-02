@@ -11,11 +11,11 @@ var ISO = XGISO()
 class XGISO: NSObject {
 
 	var allFileNames: [String] {
-		XGFolders.FSYS.filenames.filter { $0.contains(".fsys") }
+		XGFolders.FSYS.filenames
 	}
 
 	func importFiles(_ files: [XGFiles]) {
-		for file in files where file.fileType == .fsys {
+		for file in files {
 			if let data = file.data {
 				data.file = .nameAndFolder(file.fileName, .FSYS)
 				data.save()

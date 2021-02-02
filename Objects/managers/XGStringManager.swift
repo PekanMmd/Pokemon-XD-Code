@@ -19,13 +19,15 @@ func loadAllStrings(refresh: Bool = false) {
 		previousFrom = 0
 		previousFree = []
 		
-		allStringTables = [XGFiles.common_rel.stringTable]
+		allStringTables = game == .PBR ? [] : [XGFiles.common_rel.stringTable]
+		#if GAME_COLO
 		allStringTables += [XGStringTable.dol()]
 
 		if game == .Colosseum {
 			allStringTables += [XGStringTable.common_rel2(), XGStringTable.common_rel3()]
 		}
 
+		#elseif GAME_XD
 		if game == .XD && !isDemo {
 			allStringTables += [XGStringTable.dol2()]
 		}
@@ -33,6 +35,18 @@ func loadAllStrings(refresh: Bool = false) {
 		if XGFiles.tableres2.exists {
 			allStringTables += [XGFiles.tableres2.stringTable]
 		}
+
+		#elseif GAME_PBR
+		if game == .PBR {
+			for filename in
+						[region == .JP ? "common" : "mes_common",
+						(region == .JP ? "menu_fight_s" : "mes_fight_e"),
+						(region == .JP ? "menu_name2" : "mes_name_e")]
+				+ (region == .JP ? [] : ["menu_btutorial"]) {
+				XGUtility.exportFileFromISO(.fsys(filename), decode: false, overwrite: false)
+			}
+		}
+		#endif
 
 		XGFiles.allFilesWithType(.msg).forEach { allStringTables.append($0.stringTable) }
 		
@@ -106,6 +120,7 @@ private func doesMSGIDExists(_ id: Int) -> Bool {
 	return false
 }
 
+#if !GAME_PBR
 private func numberOfFreeMSGIDsFrom(_ id: Int) -> Int {
 	loadAllStrings()
 	
@@ -145,8 +160,6 @@ func freeMSGID(from: Int) -> Int? {
 	}
 	isSearchingForFreeStringID = true
 	
-	XGUtility.extractMainFiles()
-	
 	var min = from < 1 ? 1 : from
 	if min <= previousFound && min >= previousFrom {
 		min = previousFound + 1
@@ -183,7 +196,7 @@ func freeMSGID(from: Int) -> Int? {
 	isSearchingForFreeStringID = false
 	return nil
 }
-
+#endif
 
 
 

@@ -14,6 +14,7 @@ let kFirstTrainerPKXIdentifierOffset: Int = {
 	case .JP: return 0x359FA8
 	case .US: return 0x36D840
 	case .EU: return 0x3BA938
+	case .OtherGame: return 0
 	}
 }() // in start.dol
 

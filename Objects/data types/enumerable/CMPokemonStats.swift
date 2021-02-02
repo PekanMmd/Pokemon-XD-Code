@@ -102,50 +102,38 @@ final class XGPokemonStats: NSObject, Codable {
 	var specialDefenseYield	= 0x0
 
 	
-	var name : XGString {
-		get {
-			return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
-		}
+	var name: XGString {
+		return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
 	}
 	
-	var species : XGString {
-		get {
-			let file = XGFiles.msg("pda_menu")
-			return XGStringTable(file: file, startOffset: 0, fileSize: file.fileSize).stringSafelyWithID(self.speciesNameID)
-		}
+	var species: XGString {
+		let file = XGFiles.typeAndFsysName(.msg, "pda_menu")
+		return XGStringTable(file: file, startOffset: 0, fileSize: file.fileSize).stringSafelyWithID(self.speciesNameID)
 	}
 	
-	var numberOfTMs : Int {
-		get {
-			return learnableTMs.filter{ $0 }.count
-		}
+	var numberOfTMs: Int {
+		return learnableTMs.filter{ $0 }.count
 	}
 	
-	var numberOfTutorMoves : Int {
-		get {
-			return tutorMoves.filter{ $0 }.count
-		}
+	var numberOfTutorMoves: Int {
+		return tutorMoves.filter{ $0 }.count
 	}
 	
-	var numberOfLevelUpMoves : Int {
-		get {
-			return levelUpMoves.filter{ $0.isSet() }.count
-		}
+	var numberOfLevelUpMoves: Int {
+		return levelUpMoves.filter{ $0.isSet() }.count
 	}
 	
 	var numberOfEvolutions : Int {
-		get {
-			return evolutions.filter{ $0.isSet() }.count
-		}
+		return evolutions.filter{ $0.isSet() }.count
 	}
 	
-	var face : Int {
+	var face: Int {
 		return XGFiles.common_rel.data!.getWordAtOffset(CommonIndexes.PokefaceTextures.startOffset + (faceIndex * 8) + 4).int
 	}
 	
 	
 	
-	init(index : Int!) {
+	init(index: Int!) {
 		super.init()
 		
 		let rel = XGFiles.common_rel.data!

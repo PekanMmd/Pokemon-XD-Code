@@ -29,21 +29,23 @@ enum PBRPokemonImage : XGIndexedValue {
 		}
 	}
 	
-	var femaleID : UInt32 {
+	var femaleID: UInt32 {
 		switch self {
 		case .face: return entry.getWord(8)
 		case .body: return entry.getWord(12)
 		}
 	}
 	
-	var maleTexture : XGImage {
+	var maleTexture: XGImage {
 		var fsys : XGFsys!
 		switch self {
 		case .face: fsys = XGFiles.fsys("menu_face").fsysData
 		case .body: fsys = XGFiles.fsys("menu_pokemon").fsysData
 		}
-		let id = fsys.indexForIdentifier(identifier: maleID.int32)
-		return fsys.decompressedDataForFileWithIndex(index: id)!.texture.image
+		guard let id = fsys.indexForIdentifier(identifier: maleID.int32) else {
+			return XGImage.dummy
+		}
+		return fsys.extractDataForFileWithIndex(index: id)?.texture.image ?? .dummy
 	}
 	
 	var femaleTexture : XGImage {
@@ -52,8 +54,10 @@ enum PBRPokemonImage : XGIndexedValue {
 		case .face: fsys = XGFiles.fsys("menu_face").fsysData
 		case .body: fsys = XGFiles.fsys("menu_pokemon").fsysData
 		}
-		let id = fsys.indexForIdentifier(identifier: femaleID.int32)
-		return fsys.decompressedDataForFileWithIndex(index: id)!.texture.image
+		guard let id = fsys.indexForIdentifier(identifier: femaleID.int32) else {
+			return XGImage.dummy
+		}
+		return fsys.extractDataForFileWithIndex(index: id)?.texture.image ?? .dummy
 	}
 	
 }

@@ -9,22 +9,6 @@ import Foundation
 
 
 extension XGUtility {
-
-	class func extractMainFiles() {
-		let mainFiles = [
-			"Start.dol",
-			"common.fsys",
-			"deck_archive.fsys",
-			"field_common.fsys",
-			"fight_common.fsys",
-			"pocket_menu.fsys",
-			"common_dvdeth.fsys"
-		]
-
-		for filename in mainFiles {
-			exportFileFromISO(.nameAndFolder(filename, .ISOExport(filename.removeFileExtensions())), decode: false)
-		}
-	}
 	
 	class func updateHealingItems() {
 		guard region != .OtherGame else {
@@ -186,7 +170,7 @@ extension XGUtility {
 		updatePokeSpots()
 		updateShadowMonitor()
 		copyDDPKToCommon()
-
+		filesTooLargeForReplacement = nil
 	}
 	
 	class func renameZaprong(newName: String) {
@@ -1063,8 +1047,6 @@ extension XGUtility {
 		isDocumentingISO = true
 		shouldCancelDocumentation = false
 
-		extractMainFiles()
-
 		printg("Documenting ISO.\nThis may take a while...")
 		XGThreadManager.manager.runInBackgroundAsync {
 			printg("Documenting Enumerations...")
@@ -1198,8 +1180,6 @@ extension XGUtility {
 		
 		isEncodingISO = true
 		shouldCancelEncoding = false
-
-		extractMainFiles()
 
 		printg("Encoding ISO.\nThis may take a while...")
 		XGThreadManager.manager.runInBackgroundAsync {
@@ -1374,8 +1354,6 @@ extension XGUtility {
 		
 		isDecodingISO = true
 		shouldCancelDecoding = false
-
-		extractMainFiles()
 
 		printg("Decoding ISO.\nThis may take a while...")
 		XGThreadManager.manager.runInBackgroundAsync {

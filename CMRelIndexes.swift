@@ -23,8 +23,6 @@ enum CommonIndexes : Int {
 	// haven't looked for these in colosseum yet
 	case BGM = -3
 	case NumberOfBGMIDs = -4
-	case BattleFields = -5
-	case NumberOfBattleFields = -6
 	
 	
 	case LegendaryPokemon = 2
@@ -37,7 +35,9 @@ enum CommonIndexes : Int {
 	
 	case TrainerClasses = 24
 	case NumberOfTrainerClasses = 25
-	
+
+	case BattleFields = 28
+	case NumberOfBattleFields = 29
 	case Doors = 30
 	case NumberOfDoors = 31
 	
@@ -74,9 +74,6 @@ enum CommonIndexes : Int {
 	
 	case Rooms = 14
 	case NumberOfRooms = 15
-	
-	case RoomData = 28
-	case NumberOfRoomData = 29
 	
 	
 	case TreasureBoxData = 60

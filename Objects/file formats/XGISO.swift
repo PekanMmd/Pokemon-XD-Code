@@ -32,7 +32,7 @@ class XGISO: NSObject {
 	var allFileNames = [String]()
 	var filesOrdered = [String]()
 	
-	var data : XGMutableData {
+	var data: XGMutableData {
 		if let d = XGFiles.iso.data {
 			return d
 		}
@@ -163,10 +163,7 @@ class XGISO: NSObject {
 				printg("importing file to ISO: " + file.fileName)
 				self.shiftAndReplaceFileEfficiently(file)
 			}
-			self.save()
 		} else {
-			
-			let isodata = self.data
 			
 			for file in fileList {
 
@@ -209,10 +206,9 @@ class XGISO: NSObject {
 				
 				self.replaceDataForFile(filename: file.fileName, withData: data, saveWhenDone: false)
 			}
-
-			if save {
-				isodata.save()
-			}
+		}
+		if save {
+			self.save()
 		}
 	}
 	

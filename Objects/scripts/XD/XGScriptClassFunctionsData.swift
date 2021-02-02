@@ -243,6 +243,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("setRotation", 31, 4, [.objectName("Character"), .floatAngleDegrees, .floatAngleDegrees, .floatAngleDegrees], .null, "about each axis"), // int angle around x axis, int angle around y axis, int angle around z axis
 		
 		("moveToPosition", 36, 4, [.objectName("Character"), .integer, .integer, .integer, .integer], .null, "(speed, x, y, z)"), //# (int speed, int x, int y, int z)
+		("moveToVectorPosition", 37, 4, [.objectName("Character"), .integer, .vector], .null, "(speed, vector<x, y, z>)"),
 		
 		("waitForAnimation", 39, 2, [.objectName("Character"), .bool], .null, "(wait for completion?)"), // bool wait for completion
 		
@@ -317,13 +318,21 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 //MARK: - Map
 	38: [
 		("getGroupID", 17, 1, [.objectName("Map")], .integer, ""),
-		("getPreviousMapID", 18, 1, [.anyType], .room, ""),
+		("getPreviousMapID", 18, 1, [.objectName("Map")], .room, ""),
 		("getNextMapID", 19, 1, [.objectName("Map")], .room, ""),
 		
 		("warpToMap", 22, 2, [.objectName("Map"), .room, .integerIndex], .null, "room id and entry point index"), // # (int roomID, int entry warp index)
-		("showTitleScreen", 37, 1, [.anyType], .null, ""),
+
+		("stopMovieAudio", 33, 1, [.objectName("Map")], .null, ""),
+
+		("showTitleScreen", 37, 1, [.objectName("Map")], .null, ""),
 		("enterMenuMap", 38, 2, [.objectName("Map"), .room], .null, ""),
 		("warpToMapWithOptions", 49, 2, [.objectName("Map"), .room, .bool, .scriptFunction, .scriptFunction], .null, ""), // # (int roomID, int unknown)
+
+		("showPurifyChamberMenu", 43, 1, [.objectName("Map")], .null, ""),
+		("showBingoMenu", 44, 1, [.objectName("Map")], .null, ""),
+
+		("showBattleCDMenu", 51, 1, [.objectName("Map")], .null, ""),
 	],
 	
 //MARK: - Tasks
@@ -392,6 +401,8 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		("startBattle", 72, 2, [.objectName("Dialogue"), .battleID], .null, ""), //# (int battleid)
 		("getBattleResult", 74, 1, [.objectName("Dialogue")], .battleResult, "1 = lose, 2 = win"),
+
+		("showMailMenu", 75, 1, [.objectName("Dialogue")], .integer, ""),
 
 		("beginMewMoveTutorQuestions", 77, 1, [.objectName("Dialogue")], .integer, ""),
 		("getGeneratedMewTutorMoveWithIndex", 78, 2, [.objectName("Dialogue"), .integer], .move, "After the questions have been asked this function is used to retrieve the moveset"),

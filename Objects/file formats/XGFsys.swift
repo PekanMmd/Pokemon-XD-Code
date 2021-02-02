@@ -110,6 +110,19 @@ final class XGFsys : NSObject {
 			if updatedName.fileExtensions == "" {
 				names[i] = updatedName + fileTypeForFile(index: i).fileExtension
 			}
+
+
+			if game == .PBR {
+				let updatedName = names[i]
+				if updatedName.contains("mes_common"), updatedName.fileExtensions == ".bin" {
+					if let data = extractDataForFileWithIndex(index: i), data.length > 4 {
+						if data.getWordAtOffset(0) == 0x4D455347 { // MESG magic bytes
+							names[i] = updatedName.replacingOccurrences(of: ".bin", with: XGFileTypes.msg.fileExtension)
+						}
+					}
+				}
+			}
+
 		}
 
 		// If any files have duplicate names, append an index number
@@ -862,7 +875,8 @@ final class XGFsys : NSObject {
 						texture.writePNGData(toFile: pngFile)
 					}
 				}
-				
+
+				#if !GAME_COLO
 				if file.fileType == .scd && game != .Colosseum {
 					let xdsFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.xds.fileExtension, folder)
 					if !xdsFile.exists || overwrite {
@@ -870,6 +884,7 @@ final class XGFsys : NSObject {
 						XGUtility.saveString(scriptText, toFile: xdsFile)
 					}
 				}
+				#endif
 
 				if file.fileType == .thh {
 					let thpFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.thp.fileExtension, folder)
