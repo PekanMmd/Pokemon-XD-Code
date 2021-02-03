@@ -471,9 +471,6 @@ extension XGUtility {
 	
 	
 	class func updateTutorMoves() {
-		// Need to update class function which determines which pokemon stats move tutor move index
-		// Corresponds to each tutor move. This class function will set it so that it is in the same
-		// Order as the tutor moves indexes.
 
 		guard region != .OtherGame else {
 			return
@@ -495,18 +492,18 @@ extension XGUtility {
 		let offsetDifference = firstOffset - firstUSOffset
 		
 		let offsets = [
-			0x1C2ECA, // 0
-			0x1C2EBE, // 1
-			0x1C2ED6, // 2
-			0x1C2EEE, // 3
 			0x1C2EA6, // 4
 			0x1C2EB2, // 5
-			0x1C2F06, // 6
-			0x1C2F2A, // 7
-			0x1C2F1E, // 8
-			0x1C2F12, // 9
+			0x1C2EBE, // 1
+			0x1C2ECA, // 0
+			0x1C2ED6, // 2
 			0x1C2EE2, // 10
+			0x1C2EEE, // 3
 			0x1C2EFA, // 11
+			0x1C2F06, // 6
+			0x1C2F12, // 9
+			0x1C2F1E, // 8
+			0x1C2F2A, // 7
 		]
 		
 		for i in 1...12 {

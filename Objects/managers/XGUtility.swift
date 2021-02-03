@@ -54,7 +54,12 @@ class XGUtility {
 				printg("Compiling", $0.path)
 				var fsysSubfilesToImport: [XGFiles]? = nil
 				switch $0.fileName {
-				case "common.fsys": if game != .PBR { fsysSubfilesToImport = [.common_rel, .deck(.DeckDarkPokemon)] }
+				case "common.fsys": if game != .PBR {
+					fsysSubfilesToImport = [.common_rel]
+					#if GAME_XD
+					fsysSubfilesToImport?.append(.deck(.DeckDarkPokemon))
+					#endif
+					}
 				case "M2_guild_1F_2.fsys": if game == .XD { fsysSubfilesToImport = [.typeAndFsysName(.scd, "M2_guild_1F_2")] }
 				default: break
 				}

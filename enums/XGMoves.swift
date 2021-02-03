@@ -8,8 +8,8 @@
 
 import Foundation
 
-let kFirstShadowMoveIndex	= game == .XD ? 0x164 : 0x163
-let kLastShadowMoveIndex	= game == .XD ? 0x176 : 0x163
+let kFirstShadowMoveIndex	= game == .XD ? 0x164 : 0x164
+let kLastShadowMoveIndex	= game == .XD ? 0x176 : 0x164
 
 let shadowMovesUseHMFlag	= XGMove(index: kFirstShadowMoveIndex).HMFlag
 

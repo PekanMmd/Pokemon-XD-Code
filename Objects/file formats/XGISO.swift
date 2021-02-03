@@ -129,7 +129,7 @@ class XGISO: NSObject {
 
 	@discardableResult
 	func importToc(saveWhenDone save: Bool) -> Bool {
-		let success = shiftAndReplaceFileEfficiently(name: "Game.toc", withData: tocData, save: false)
+		let success = shiftAndReplaceFile(name: "Game.toc", withData: tocData, save: false)
 		let firstFileInUserSection = game == .XD ? "B1_1.fsys" : "D1_garage_1F.fsys"
 		if success {
 			if let firstFileOffset = locationForFile(firstFileInUserSection) {
@@ -161,7 +161,7 @@ class XGISO: NSObject {
 				}
 
 				printg("importing file to ISO: " + file.fileName)
-				self.shiftAndReplaceFileEfficiently(file)
+				self.shiftAndReplaceFile(file)
 			}
 		} else {
 			
@@ -294,21 +294,21 @@ class XGISO: NSObject {
 		
 	}
 	
-	func shiftAndReplaceFileEfficiently(_ file: XGFiles, save: Bool = false) {
+	func shiftAndReplaceFile(_ file: XGFiles, save: Bool = false) {
 		if settings.verbose {
 			printg("shifting files and replacing file:", file.fileName)
 		}
 		if file.fileName == XGFiles.dol.fileName || file.fileName == XGFiles.toc.fileName {
 			self.replaceDataForFile(filename: file.fileName, withData: file.data!, saveWhenDone: save)
 		} else if self.allFileNames.contains(file.fileName) && file.exists {
-			self.shiftAndReplaceFileEfficiently(name: file.fileName, withData: file.data!, save: save)
+			self.shiftAndReplaceFile(name: file.fileName, withData: file.data!, save: save)
 		} else {
 			printg("file not found:", file.fileName)
 		}
 	}
 
 	@discardableResult
-	func shiftAndReplaceFileEfficiently(name: String, withData newData: XGMutableData, save: Bool = false) -> Bool {
+	func shiftAndReplaceFile(name: String, withData newData: XGMutableData, save: Bool = false) -> Bool {
 		guard let fileLocation = locationForFile(name) else {
 			printg("Couldn't find file with name '" + name + "' in the ISO.")
 			return false
@@ -399,63 +399,6 @@ class XGISO: NSObject {
 		
 	}
 	
-	func shiftAndReplaceFile(_ file: XGFiles) {
-		printg("shifting files and replacing file:", file.fileName)
-		if self.allFileNames.contains(file.fileName) {
-			self.shiftAndReplaceFile(name: file.fileName, withData: file.data!)
-		} else {
-			printg("file not found:", file.fileName)
-		}
-	}
-	
-	func shiftAndReplaceFile(name: String, withData newData: XGMutableData) {
-		
-		let oldSize = sizeForFile(name)!
-		let shift = newData.length > oldSize
-		let index = orderedIndexForFile(name: name)
-		
-		if shift {
-			for file in filesOrdered {
-				self.shiftUpFile(name: file)
-			}
-			
-			let rev = (index + 1) ..< allFileNames.count
-			for i in rev.reversed() {
-				let file = filesOrdered[i]
-				self.shiftDownFile(name: file)
-			}
-		}
-		
-		if index < allFileNames.count - 1 {
-			let nextFile = filesOrdered[index + 1]
-			if let availableEnd = self.locationForFile(nextFile) {
-				if availableEnd - self.locationForFile(name)! < 16 {
-					printg("ISO doesn't have enough space for file: \(name). Aborting replacement. Try deleting unnecessary files from the ISO.")
-					return
-				}
-			} else {
-				printg("Unable to calculate free space for file shift and replacement. Aborting replacement.")
-				return
-			}
-		} else {
-			printg("This file cannot be shift replaced as it is too risky. \(name) is the last file in the ISO.")
-			return
-		}
-		
-		self.replaceDataForFile(filename: name, withData: newData, saveWhenDone: false)
-		
-		if shift {
-			for i in 0 ..< self.allFileNames.count {
-				let file = filesOrdered[i]
-				self.shiftUpFile(name: file)
-			}
-			self.importToc(saveWhenDone: false)
-		}
-		
-		self.data.save()
-	}
-	
-	
 	func eraseDataForFile(name: String) {
 		
 		let start = self.locationForFile(name)
@@ -499,7 +442,7 @@ class XGISO: NSObject {
 				eraseDataForFile(name: name)
 				if name.fileExtensions == ".fsys" {
 					// prevents crashes when querying fsys data
-					self.shiftAndReplaceFileEfficiently(name: name, withData: NullFSYS)
+					self.shiftAndReplaceFile(name: name, withData: NullFSYS)
 					printg("deleted ISO file:", name)
 				} else {
 					if size >= 16 {
@@ -561,8 +504,6 @@ class XGISO: NSObject {
 	func fileIsShiftable(filename: String) -> Bool {
 		// There's a large chunk of unused data between TEST004.fsys and bg0thumbcode.bin
 		// This data isn't listed in game.toc so my code ignores it
-		// If this turns out to be necessary then only allow shifting of files
-		// after "bg0thumbcode.bin"
 		let index = orderedIndexForFile(name: filename)
 		return orderedIndexForFile(name: "Game.toc") < index
 	}
@@ -792,7 +733,7 @@ class XGISO: NSObject {
 
 		loadFST()
 
-		shiftAndReplaceFileEfficiently(file, save: save)
+		shiftAndReplaceFile(file, save: save)
 	}
 	
 	func save() {
