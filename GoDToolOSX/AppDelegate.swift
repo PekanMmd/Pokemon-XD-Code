@@ -27,7 +27,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		// Insert code here to initialize your application
 		
-		createDirectories()
 		if game == .Colosseum {
 			scriptMenuItem.isHidden = true
 			godtoolmenuitem.title = "Colosseum Tool"
@@ -36,24 +35,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			godtoolhelpmenuitem.title = "Colosseum Tool Help"
 		}
 	}
-    
-    func application(_ application: NSApplication, open urls: [URL]) {
-        printg("opening files")
-        for fileURL in urls {
-            let file = fileURL.file
-            
-            guard file.exists else {
-                printg("cannot open file:", file.path, "\nIt doesn't exist.")
-                continue
-            }
-            printg("opening filepath:", file.path)
-            
-            switch file.fileType {
-            case .gtx, .atx:
-                let texture = file.texture
-                let vc = GoDGTXViewController()
-                vc.texture = texture
-                present(vc)
+
+	func decodeInputFiles(_ files: [XGFiles]) {
+		fileDecodingMode = true
+		for file in files {
+			guard file.exists else {
+				printg("cannot open file:", file.path, "\nIt doesn't exist.")
+				continue
+			}
+			printg("opening filepath:", file.path)
+
+			switch file.fileType {
+			case .gtx, .atx:
+				let texture = file.texture
+				let vc = GoDGTXViewController()
+				vc.texture = texture
+				present(vc)
 			case .msg:
 				let table = file.stringTable
 				let storyboard = NSStoryboard(name: "Messages", bundle: nil)
@@ -67,10 +64,38 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				printg("Unzipping contents of \(file.path) to \(outputFolder.path)")
 				let fsysData = file.fsysData
 				fsysData.extractFilesToFolder(folder: outputFolder, decode: true)
-            default:
-                break
-            }
-        }
+			default:
+				break
+			}
+		}
+	}
+    
+    func application(_ application: NSApplication, open urls: [URL]) {
+        printg("opening files")
+
+		if urls.count > 0 {
+			let files = urls.map { (fileurl) -> XGFiles in
+				return fileurl.file
+			}.filter{$0.fileType != .unknown}
+
+			guard files.count > 0 else {
+				print("No input files given.")
+				return
+			}
+
+			if let isoFile = files.first(where: {$0.fileType == .iso && $0.exists}) {
+				inputISOFile = isoFile
+			} else {
+				decodeInputFiles(files)
+				return
+			}
+
+			let noDocumentsFolder = !XGFolders.Documents.exists
+			XGFolders.setUpFolderFormat()
+			if noDocumentsFolder {
+				printg("Created folder structure at:", XGFolders.Documents.path)
+			}
+		}
     }
 	
 	func applicationWillTerminate(_ aNotification: Notification) {

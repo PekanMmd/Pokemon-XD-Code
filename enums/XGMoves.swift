@@ -116,24 +116,28 @@ enum XGMoves : CustomStringConvertible {
 	
 	static func randomShadow() -> XGMoves {
 		var rand = 0
-		while (!XGMoves.index(rand).isShadowMove) || (XGMoves.index(rand).descriptionID == 0)  {
+		while (!XGMoves.index(rand).isShadowMove) || (XGMoves.index(rand).descriptionID == 0) || rand == 0 || rand == 355 {
 			rand = Int.random(in: 1 ..< kNumberOfMoves)
 		}
 		return XGMoves.index(rand)
 	}
 
 	static func randomDamaging() -> XGMoves {
-		var rand = 0
-		while rand == 0 || (XGMoves.index(rand).descriptionID == 0) || (XGMoves.index(rand).data.basePower == 0) {
-			rand = Int.random(in: 1 ..< kNumberOfMoves)
+		var rand = XGMoves.random()
+		while (rand.data.basePower == 0) || (rand.descriptionID == 0)  {
+			rand = XGMoves.random()
 		}
-		return XGMoves.index(rand)
+		return rand
 	}
 	
 	static func randomMoveset(count: Int = 4) -> [XGMoves] {
 		var set = [Int]()
 		while set.count < count {
-			set.addUnique(XGMoves.random().index)
+			if set.count == 0 {
+				set.addUnique(XGMoves.randomDamaging().index)
+			} else {
+				set.addUnique(XGMoves.random().index)
+			}
 		}
 		while set.count < 4 {
 			set.append(0)

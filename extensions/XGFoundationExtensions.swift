@@ -64,6 +64,7 @@ extension Data {
 	func write(to file: XGFiles) -> Bool {
 		if !file.folder.exists {
 			file.folder.createDirectory()
+			if !file.folder.exists { return false }
 		}
 		do {
 			try self.write(to: URL(fileURLWithPath: file.path), options: [.atomic])

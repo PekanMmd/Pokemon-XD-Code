@@ -8,6 +8,7 @@
 import Foundation
 
 let TrainerDecksArray : [XGDecks] = [.DeckStory]
+let MainDecksArray: [XGDecks] = [.DeckStory]
 enum XGDecks : String {
 
 	case DeckStory			= "Story"

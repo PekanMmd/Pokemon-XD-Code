@@ -92,7 +92,7 @@ indirect enum XGFiles {
 		// windows doesn't support colons in file names
 		case .log(let d)			: return d.description.replacingOccurrences(of: ":", with: ".") + XGFileTypes.txt.fileExtension
 		case .json(let s)			: return s + XGFileTypes.json.fileExtension
-		case .iso					: return "game" + XGFileTypes.iso.fileExtension
+		case .iso					: return inputISOFile?.fileName ?? "game" + XGFileTypes.iso.fileExtension
 		case .wit                   : return environment == .Windows ? "wit.exe" :  "wit"
 		case .wimgt                 : return environment == .Windows ? "wimgt.exe" :  "wimgt"
 		case .tool(let s)			: return s + (environment == .Windows ? ".exe" : "")
@@ -149,7 +149,7 @@ indirect enum XGFiles {
 		default: break
 		}
 		
-		if !self.exists && self != .toc {
+		if !self.exists && self != .toc && self != .iso {
 			XGFolders.setUpFolderFormat()
 
 			if !XGUtility.exportFileFromISO(self, decode: true) {
@@ -456,7 +456,7 @@ indirect enum XGFolders {
 		case .Reference			: return "Reference"
 		case .Resources			: return "Resources"
 		case .Wiimm				: return "Wiimm"
-		case .ISO				: return "ISO"
+		case .ISO				: return inputISOFile?.folder.name ?? "ISO"
 		case .Logs				: return "Logs"
 		case .ISOExport      	: return "Game Files"
 		case .path(let s) 		: return s
@@ -472,13 +472,18 @@ indirect enum XGFolders {
 	}
 	
 	var path: String {
-		var path = documentsPath
+
+		if case .path(let s) = self {
+			return s
+		}
+
+		var path = ""
 
 		switch self {
 
-		case .Documents	: return path
+		case .Documents	: return documentsPath
 		case .nameAndPath(let name, let path): return path + "/\(name)"
-		case .ISOExport(let folder): return path + "/" + self.name +
+		case .ISOExport(let folder): return documentsPath + "/" + self.name +
 			(folder == "" ? "" : "/" + folder)
 		case .Images	: path = XGFolders.Resources.path
 		case .JSON		: path = XGFolders.Resources.path
@@ -491,13 +496,14 @@ indirect enum XGFolders {
 		case .Types		: path = XGFolders.Images.path
 		case .Wiimm		: path = XGFolders.Resources.path
 		case .nameAndFolder(_, let f): path = f.path
+		case .ISO		: return inputISOFile?.folder.path ?? documentsPath + "/" + self.name
 		case .path(let s): return s
 		#if GAME_PBR
-		case .Dump  	: path = XGFolders.ISO.path
+		case .Dump  	: path = inputISOFile? == nil ? documentsPath : XGFolders.ISO.path
 		case .DATA      : path = XGFolders.Dump.path
 		case .Sys, .Files: path = XGFolders.DATA.exists ? XGFolders.DATA.path : XGFolders.Dump.path
 		#endif
-		default: break
+		default: path = documentsPath
 
 		}
 
@@ -552,21 +558,21 @@ indirect enum XGFolders {
 			do {
 				try fm.createDirectory(atPath: self.path, withIntermediateDirectories: true, attributes: nil)
 			} catch let error as NSError {
-				printg(error)
+				print(error)
 			}
 			
 			let fileURL = URL(fileURLWithPath: self.path)
 			do {
 				try (fileURL as NSURL).setResourceValue(false, forKey: URLResourceKey.isExcludedFromBackupKey)
 			} catch let error as NSError {
-				printg(error)
+				print(error)
 			}
 		}
 	}
 	
 	static func setUpFolderFormat() {
 		
-		let folders : [XGFolders] = [
+		let folders: [XGFolders] = [
 			.Documents,
 			.Resources,
 			.JSON,

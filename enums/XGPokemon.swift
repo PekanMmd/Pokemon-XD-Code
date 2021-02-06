@@ -72,54 +72,40 @@ enum XGPokemon: CustomStringConvertible {
 		}
 	}
 	
-	var ability1 : String {
-		get {
+	var ability1: String {
 			let a1 = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kAbility1Offset)
 			return XGAbilities.index(a1).name.string
-		}
 	}
-	var ability2 : String {
-		get {
+	var ability2: String {
 			let a2 = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kAbility2Offset)
 			return XGAbilities.index(a2).name.string
-		}
 	}
 	
-	var type1 : XGMoveTypes {
-		get {
+	var type1: XGMoveTypes {
 			let type = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kType1Offset)
 			return XGMoveTypes.index(type)
-		}
 	}
 	
-	var type2 : XGMoveTypes {
-		get {
+	var type2: XGMoveTypes {
 			let type = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kType2Offset)
 			return XGMoveTypes.index(type)
-		}
 	}
 	
 	func hasType(type: XGMoveTypes) -> Bool {
 		return (self.type1 == type) || (self.type2 == type)
 	}
 	
-	var catchRate : Int {
-		get {
-			return XGFiles.common_rel.data!.getByteAtOffset(startOffset + kCatchRateOffset)
-		}
+	var catchRate: Int {
+		return XGFiles.common_rel.data!.getByteAtOffset(startOffset + kCatchRateOffset)
 	}
 	
-	var expRate : XGExpRate {
-		get {
-			let rate = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kEXPRateOffset)
-			return XGExpRate(rawValue: rate) ?? .slow
-		}
+	var expRate: XGExpRate {
+		let rate = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kEXPRateOffset)
+		return XGExpRate(rawValue: rate) ?? .slow
 	}
 	
-	var stats : XGPokemonStats {
-		get {
-			return XGPokemonStats(index: self.index)
-		}
+	var stats: XGPokemonStats {
+		return XGPokemonStats(index: self.index)
 	}
 	
 	func movesForLevel(_ pokeLevel: Int) -> [XGMoves] {
@@ -163,6 +149,21 @@ enum XGPokemon: CustomStringConvertible {
 			rand = Int.random(in: 1 ..< kNumberOfPokemon)
 		}
 		return XGPokemon.index(rand)
+	}
+
+	static func randomWithSimilarBST(to bst: Int) -> XGPokemon {
+		var rand = XGPokemon.index(0)
+		while rand.index == 0 {
+			rand = .index(Int.random(in: 1 ..< kNumberOfPokemon))
+			let stats = rand.stats
+			let monBST = stats.baseStatTotal
+			let similarBST = (monBST > (bst - 50)) && (monBST < (bst + 50))
+			if (stats.catchRate == 0) || !similarBST {
+				rand = .index(0)
+				continue
+			}
+		}
+		return rand
 	}
 	
 	static func allPokemon() -> [XGPokemon] {

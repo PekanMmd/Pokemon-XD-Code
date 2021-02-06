@@ -101,7 +101,6 @@ final class XGPokemonStats: NSObject, Codable {
 	var specialAttackYield	= 0x0
 	var specialDefenseYield	= 0x0
 
-	
 	var name: XGString {
 		return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID)
 	}
@@ -131,7 +130,9 @@ final class XGPokemonStats: NSObject, Codable {
 		return XGFiles.common_rel.data!.getWordAtOffset(CommonIndexes.PokefaceTextures.startOffset + (faceIndex * 8) + 4).int
 	}
 	
-	
+	var baseStatTotal: Int {
+		return hp + attack + defense + specialAttack + specialDefense + speed
+	}
 	
 	init(index: Int!) {
 		super.init()

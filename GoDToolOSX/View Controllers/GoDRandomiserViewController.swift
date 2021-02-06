@@ -56,9 +56,11 @@ class GoDRandomiserViewController: GoDViewController {
 		if tmmoves.state == .on {
 			XGRandomiser.randomiseTMs()
 		}
+		#if GAME_XD
 		if bbingo.state == .on {
 			XGRandomiser.randomiseBattleBingo()
 		}
+		#endif
 		if removeTrades.state == .on {
 			XGDolPatcher.removeTradeEvolutions()
 		}

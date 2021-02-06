@@ -43,5 +43,7 @@ func printg(_ args: Any...) {
 	}
 	#endif
 
-	XGUtility.saveString(logString, toFile: .log(date))
+	if !fileDecodingMode {
+		XGUtility.saveString(logString, toFile: .log(date))
+	}
 }

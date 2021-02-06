@@ -144,7 +144,72 @@ func readInput(_ prompt: String) -> String {
 	return readLine() ?? ""
 }
 
+func decodeInputFiles(_ files: [XGFiles]) {
+	for file in files {
+		guard file.exists else {
+			printg("File doesn't exist:", file.path)
+			continue
+		}
+
+		printg("Decoding file:", file.path)
+		switch file.fileType {
+		case .msg:
+			let table = file.stringTable
+			let jsonFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.json.fileExtension, file.folder)
+			if !jsonFile.exists {
+				table.writeJSON(to: jsonFile)
+				printg("Decoded:", jsonFile.path)
+			} else {
+				printg("File already exists:", jsonFile.path)
+				if readInput("Overwrite? Y/N").lowercased() == "y" {
+					table.writeJSON(to: jsonFile)
+					printg("Decoded:", jsonFile.path)
+				}
+			}
+		case .gtx, .atx:
+			let gtxFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.png.fileExtension, file.folder)
+			if !gtxFile.exists {
+				file.texture.writePNGData()
+				printg("Decoded:", gtxFile.path)
+			} else {
+				printg("File already exists:", gtxFile.path)
+				if readInput("Overwrite? Y/N").lowercased() == "y" {
+					file.texture.writePNGData()
+					printg("Decoded:", gtxFile.path)
+				}
+			}
+		case .fsys:
+			let outputFolder = XGFolders.nameAndFolder(file.fileName.removeFileExtensions(), file.folder)
+			if !outputFolder.exists {
+				outputFolder.createDirectory()
+				file.fsysData.extractFilesToFolder(folder: outputFolder, decode: true, overwrite: false)
+			} else {
+				file.fsysData.extractFilesToFolder(folder: outputFolder, decode: true, overwrite: readInput("Overwrite? Y/N").lowercased() == "y")
+			}
+
+
+
+		default: printg("Can't decode file:", file.path)
+		}
+	}
+}
+
 func main() {
+	let args = CommandLine.arguments
+
+	if args.count > 0 {
+		let files = args.map { (filename) -> XGFiles in
+			let fileurl = URL(fileURLWithPath: filename)
+			return fileurl.file
+		}
+		if files.count == 1, files[0].fileType == .iso {
+			inputISOFile = files[0]
+		} else {
+			decodeInputFiles(files)
+			return
+		}
+	}
+	
 	let noDocumentsFolder = !XGFolders.Documents.exists
 	XGFolders.setUpFolderFormat()
 	if noDocumentsFolder {

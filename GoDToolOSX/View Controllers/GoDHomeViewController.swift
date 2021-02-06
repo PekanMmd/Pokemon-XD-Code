@@ -59,6 +59,7 @@ class GoDHomeViewController: GoDTableViewController {
 			self.title = "Colosseum Tool"
 		}
 		self.logView.setBackgroundColour(GoDDesign.colourLightBlue())
+		XGFolders.setUpFolderFormat()
 		
     }
 	

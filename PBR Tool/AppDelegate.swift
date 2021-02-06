@@ -27,32 +27,54 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		printg("Good bye :-)")
 	}
 
-	func application(_ application: NSApplication, open urls: [URL]) {
-        printg("opening files")
-        for fileURL in urls {
-            let file = fileURL.file
+	func decodeInputFiles(_ files: [XGFiles]) {
+		for file in files {
+			guard file.exists else {
+				printg("cannot open file:", file.path, "\nIt doesn't exist.")
+				continue
+			}
+			printg("opening filepath:", file.path)
 
-            guard file.exists else {
-                printg("cannot open file:", file.path)
-                continue
-            }
-            printg("opening filepath:", file.path)
-
-            switch file.fileType {
-            case .gtx, .atx:
-                let texture = file.texture
-                let vc = GoDGTXViewController()
-                vc.texture = texture
-                present(vc)
+			switch file.fileType {
+			case .gtx, .atx:
+				let texture = file.texture
+				let vc = GoDGTXViewController()
+				vc.texture = texture
+				present(vc)
 			case .msg:
 				let table = file.stringTable
-				let vc = GoDMessageViewController(singleTable: table)
-				present(vc)
-            default:
-                break
-            }
-        }
-    }
+				let storyboard = NSStoryboard(name: "Messages", bundle: nil)
+				if let vc = storyboard.instantiateInitialController() as? GoDMessageViewController {
+					vc.singleTable = table
+					present(vc)
+				}
+			case .fsys:
+				let outputFolder = XGFolders.nameAndFolder(file.fileName.removeFileExtensions(), file.folder)
+				outputFolder.createDirectory()
+				printg("Unzipping contents of \(file.path) to \(outputFolder.path)")
+				let fsysData = file.fsysData
+				fsysData.extractFilesToFolder(folder: outputFolder, decode: true)
+			default:
+				continue
+			}
+		}
+	}
+
+	func application(_ application: NSApplication, open urls: [URL]) {
+		printg("opening files")
+
+		if urls.count > 0 {
+			let files = urls.map { (fileurl) -> XGFiles in
+				return fileurl.file
+			}
+			if files.count == 1, files[0].fileType == .iso {
+				inputISOFile = files[0]
+			} else {
+				decodeInputFiles(files)
+				return
+			}
+		}
+	}
 
 	@IBAction func setVerboseLogs(_ sender: Any) {
 		printg("Set verbose logs")

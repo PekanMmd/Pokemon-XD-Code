@@ -37,12 +37,13 @@ class GoDGTXViewController: NSViewController {
 			view.widthAnchor.constraint(lessThanOrEqualToConstant: 800),
 			view.heightAnchor.constraint(lessThanOrEqualToConstant: 800),
             view.topAnchor.constraint(equalTo: imageView.topAnchor),
-            view.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
-            view.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
+            view.leadingAnchor.constraint(lessThanOrEqualTo: imageView.leadingAnchor),
+            view.trailingAnchor.constraint(greaterThanOrEqualTo: imageView.trailingAnchor),
 			imageView.bottomAnchor.constraint(equalTo: saveButton.topAnchor),
 			saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 			saveButton.widthAnchor.constraint(equalToConstant: 200),
-			saveButton.heightAnchor.constraint(equalToConstant: 80)
+			saveButton.heightAnchor.constraint(equalToConstant: 80),
+			saveButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
 		imageView.image = texture?.image.nsImage
     }

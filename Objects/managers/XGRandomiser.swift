@@ -8,7 +8,8 @@
 import Foundation
 
 class XGRandomiser : NSObject {
-	
+
+	#if GAME_XD
 	class func randomiseBattleBingo() {
 		printg("randomising battle bingo...")
 		for i in 0 ..< kNumberOfBingoCards {
@@ -28,17 +29,60 @@ class XGRandomiser : NSObject {
 		}
 		printg("done!")
 	}
+	#endif
 	
-	class func randomisePokemon() {
+	class func randomisePokemon(shadowsOnly: Bool = false, similarBST: Bool = false) {
 		printg("randomising pokemon species...")
+
 		for deck in MainDecksArray {
+			#if GAME_COLO
+			var shadows = [Int : XGPokemon]()
+			#endif
+
 			for pokemon in deck.allActivePokemon {
 
 				if pokemon.species.index == 0 {
 					continue
 				}
 
-				pokemon.species = XGPokemon.random()
+				if shadowsOnly && !pokemon.isShadow {
+					continue
+				}
+
+				let oldBST = pokemon.species.stats.baseStatTotal
+
+				#if GAME_XD
+				pokemon.species = similarBST ? XGPokemon.randomWithSimilarBST(to: oldBST) : XGPokemon.random()
+				#else
+				if pokemon.isShadow {
+					if let species = shadows[pokemon.shadowID] {
+						pokemon.species = species
+					} else {
+						var species = similarBST ? XGPokemon.randomWithSimilarBST(to: oldBST) : XGPokemon.random()
+						var dupe = true
+						var trials = 0
+
+						while dupe && trials < 20 {
+							dupe = false
+							for (id, spec) in shadows {
+								if id == pokemon.shadowID {
+									continue
+								}
+								if species.index == spec.index {
+									species = similarBST ? XGPokemon.randomWithSimilarBST(to: oldBST) : XGPokemon.random()
+									dupe = true
+									trials += 1
+								}
+							}
+						}
+
+						pokemon.species = species
+						shadows[pokemon.shadowID] = species
+					}
+				} else {
+					pokemon.species = similarBST ? XGPokemon.randomWithSimilarBST(to: oldBST) : XGPokemon.random()
+				}
+				#endif
 				pokemon.shadowCatchRate = pokemon.species.catchRate
 				pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
 				pokemon.happiness = 128
@@ -48,11 +92,13 @@ class XGRandomiser : NSObject {
 		}
 
 		// change duplicate shadow pokemon
+		#if GAME_XD
 		for i in 1 ..< XGDecks.DeckDarkPokemon.DDPKEntries {
 			let poke = XGDeckPokemon.ddpk(i)
 			if poke.DPKMIndex > 0 {
 
 				var duplicate = false
+				var trials = 0
 
 				repeat {
 					duplicate = false
@@ -63,7 +109,7 @@ class XGRandomiser : NSObject {
 							duplicate = true
 
 							let pokemon = poke.data
-							pokemon.species = XGPokemon.random()
+							pokemon.species = similarBST ? XGPokemon.randomWithSimilarBST(to: oldBST) : XGPokemon.random()
 							pokemon.shadowCatchRate = pokemon.species.catchRate
 							pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
 							pokemon.happiness = 128
@@ -71,52 +117,57 @@ class XGRandomiser : NSObject {
 						}
 					}
 
-				} while duplicate
+				} while duplicate && trials < 20
 
 			}
 		}
+		#endif
 
-		for gift in XGGiftPokemonManager.allGiftPokemon() {
+		if !shadowsOnly {
+			for gift in XGGiftPokemonManager.allGiftPokemon() {
 
-			var pokemon = gift
-			pokemon.species = XGPokemon.random()
-			let moves = pokemon.species.movesForLevel(pokemon.level)
-			pokemon.move1 = moves[0]
-			pokemon.move2 = moves[1]
-			pokemon.move3 = moves[2]
-			pokemon.move4 = moves[3]
+				var pokemon = gift
+				pokemon.species = XGPokemon.random()
+				let moves = pokemon.species.movesForLevel(pokemon.level)
+				pokemon.move1 = moves[0]
+				pokemon.move2 = moves[1]
+				pokemon.move3 = moves[2]
+				pokemon.move4 = moves[3]
 
-			pokemon.save()
-
-		}
-
-		var pokespotEntries = [Int]()
-		for p in 0 ... 2 {
-			let spot = XGPokeSpots(rawValue: p) ?? .rock
-			for i in 0 ..< spot.numberOfEntries {
-				let pokemon = XGPokeSpotPokemon(index: i, pokespot: spot)
-				var newMon = XGPokemon.random()
-				while pokespotEntries.contains(newMon.index) {
-					newMon = XGPokemon.random()
-				}
-				pokespotEntries.append(newMon.index)
-				pokemon.pokemon = newMon
 				pokemon.save()
+
 			}
 
-		}
-
-		if XGPokeSpots.all.numberOfEntries > 2 {
-			for i in 2 ..< XGPokeSpots.all.numberOfEntries {
-				let pokemon = XGPokeSpotPokemon(index: i, pokespot: .all)
-				var newMon = XGPokemon.random()
-				while pokespotEntries.contains(newMon.index) {
-					newMon = XGPokemon.random()
+			#if GAME_XD
+			var pokespotEntries = [Int]()
+			for p in 0 ... 2 {
+				let spot = XGPokeSpots(rawValue: p) ?? .rock
+				for i in 0 ..< spot.numberOfEntries {
+					let pokemon = XGPokeSpotPokemon(index: i, pokespot: spot)
+					var newMon = XGPokemon.random()
+					while pokespotEntries.contains(newMon.index) {
+						newMon = XGPokemon.random()
+					}
+					pokespotEntries.append(newMon.index)
+					pokemon.pokemon = newMon
+					pokemon.save()
 				}
-				pokespotEntries.append(newMon.index)
-				pokemon.pokemon = newMon
-				pokemon.save()
+
 			}
+
+			if XGPokeSpots.all.numberOfEntries > 2 {
+				for i in 2 ..< XGPokeSpots.all.numberOfEntries {
+					let pokemon = XGPokeSpotPokemon(index: i, pokespot: .all)
+					var newMon = XGPokemon.random()
+					while pokespotEntries.contains(newMon.index) {
+						newMon = XGPokemon.random()
+					}
+					pokespotEntries.append(newMon.index)
+					pokemon.pokemon = newMon
+					pokemon.save()
+				}
+			}
+			#endif
 		}
 
 		printg("done!")
@@ -133,19 +184,20 @@ class XGRandomiser : NSObject {
 				}
 				
 				pokemon.moves = XGMoves.randomMoveset()
-				
 				pokemon.save()
-				
 			}
 		}
-		
+
+
+		#if GAME_XD
 		for shadow in XGDecks.DeckDarkPokemon.allActivePokemon {
 			let count = shadow.shadowMoves.filter { (m) -> Bool in
 				return m.index != 0
 			}.count
 			shadow.shadowMoves = XGMoves.randomShadowMoveset(count: count)
+			shadow.save()
 		}
-		
+		#endif
 		
 		
 		for gift in XGGiftPokemonManager.allGiftPokemon() {

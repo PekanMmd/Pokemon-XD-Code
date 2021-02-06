@@ -99,35 +99,37 @@ enum XGDolPatches : Int {
 	case replaceShinyGlitch
 	case infiniteTMs
 	case enableDebugLogs
+	case pokemonCanLearnAnyTM
+	case pokemonHaveMaxCatchRate
 	
 	var name : String {
-		get {
-			switch self {
-				case .physicalSpecialSplitApply : return "Apply the gen IV physical/special split. (You still need to set the category for each move)"
-				case .physicalSpecialSplitRemove : return "Remove the physical/special split."
-				case .type9IndependentApply : return "Removes the dependecy on the ??? type allowing 1 additional type."
-				case .betaStartersApply : return "Allows the player to start with 2 pokemon."
-				case .betaStartersRemove : return "Revert to starting with 1 pokemon."
-				case .renameAllPokemonApply	: return "Allows the name rater to rename all pokemon - Crashes parts of game"
-				case .shinyChanceEditingApply : return "Removes shiny purification glitch by generating based on a fixed trainer ID."
-				case .shinyChanceEditingRemove : return "shininess will be determined by trainer ID as usual."
-				case .zeroForeignStringTables : return "Foreign string tables will be zeroed out for smaller compressed sizes."
-				case .decapitaliseNames : return "Decapitalises a lot of text."
-				case .tradeEvolutions : return "Trade Evolutions become level 40"
-				case .defaultMoveCategories: return "Sets the physical/special category for all moves to their expected values"
-				case .allowFemaleStarters: return "Allow starter pokemon to be female"
-				case .switchPokemonAtEndOfTurn: return "After a KO the next pokemon switches in at end of turn"
-				case .fixShinyGlitch: return "Fix shiny glitch"
-				case .replaceShinyGlitch: return "Return to the default shiny glitch behaviour"
-				case .infiniteTMs: return "TMs can be reused infinitely"
-				case .allowShinyStarters: return "Starter pokemon can be shiny"
-				case .shinyLockStarters: return "Starter pokemon can never be shiny"
-				case .alwaysShinyStarters: return "Starter pokemon are always shiny"
-				case .allowShinyShadowPokemon: return "Shadow pokemon can be shiny"
-				case .shinyLockShadowPokemon: return "Shadow pokemon can never be shiny"
-				case .alwaysShinyShadowPokemon: return "Shadow pokemon are always shiny"
-				case .enableDebugLogs: return "Enable Debug Logs"
-			}
+		switch self {
+		case .physicalSpecialSplitApply : return "Apply the gen IV physical/special split. (You still need to set the category for each move)"
+		case .physicalSpecialSplitRemove : return "Remove the physical/special split."
+		case .type9IndependentApply : return "Removes the dependecy on the ??? type allowing 1 additional type."
+		case .betaStartersApply : return "Allows the player to start with 2 pokemon."
+		case .betaStartersRemove : return "Revert to starting with 1 pokemon."
+		case .renameAllPokemonApply	: return "Allows the name rater to rename all pokemon - Crashes parts of game"
+		case .shinyChanceEditingApply : return "Removes shiny purification glitch by generating based on a fixed trainer ID."
+		case .shinyChanceEditingRemove : return "shininess will be determined by trainer ID as usual."
+		case .zeroForeignStringTables : return "Foreign string tables will be zeroed out for smaller compressed sizes."
+		case .decapitaliseNames : return "Decapitalises a lot of text."
+		case .tradeEvolutions : return "Trade Evolutions become level 40"
+		case .defaultMoveCategories: return "Sets the physical/special category for all moves to their expected values"
+		case .allowFemaleStarters: return "Allow starter pokemon to be female"
+		case .switchPokemonAtEndOfTurn: return "After a KO the next pokemon switches in at end of turn"
+		case .fixShinyGlitch: return "Fix shiny glitch"
+		case .replaceShinyGlitch: return "Return to the default shiny glitch behaviour"
+		case .infiniteTMs: return "TMs can be reused infinitely"
+		case .allowShinyStarters: return "Starter pokemon can be shiny"
+		case .shinyLockStarters: return "Starter pokemon can never be shiny"
+		case .alwaysShinyStarters: return "Starter pokemon are always shiny"
+		case .allowShinyShadowPokemon: return "Shadow pokemon can be shiny"
+		case .shinyLockShadowPokemon: return "Shadow pokemon can never be shiny"
+		case .alwaysShinyShadowPokemon: return "Shadow pokemon are always shiny"
+		case .enableDebugLogs: return "Enable Debug Logs"
+		case .pokemonCanLearnAnyTM: return "Any pokemon can learn any TM"
+		case .pokemonHaveMaxCatchRate: return "All pokemon have the maximum catch rate of 255"
 		}
 	}
 	
@@ -720,6 +722,22 @@ class XGDolPatcher {
 			XGAssembly.replaceRamASM(RAMOffset: GSLogOffset, newASM: [.bl(OSReportOffset)])
 		}
 	}
+
+	class func pokemonCanLearnAnyTM() {
+		#warning("TODO: change the check in the ASM instead of updating data tables")
+		for mon in allPokemonArray().map({ $0.stats }) {
+			mon.learnableTMs = mon.learnableTMs.map{ _ in return true }
+			mon.save()
+		}
+	}
+
+	class func pokemonHaveMaxCatchRate() {
+		#warning("TODO: set via the ASM instead of updating data tables")
+		for mon in allPokemonArray().map({ $0.stats }) {
+			mon.catchRate = 255
+			mon.save()
+		}
+	}
 	
 	class func applyPatch(_ patch: XGDolPatches) {
 		
@@ -748,6 +766,8 @@ class XGDolPatcher {
 			case .shinyLockShadowPokemon		: XGDolPatcher.setShadowPokemonShininess(to: .never)
 			case .alwaysShinyShadowPokemon		: XGDolPatcher.setShadowPokemonShininess(to: .always)
 			case .enableDebugLogs				: XGDolPatcher.enableDebugLogs()
+			case .pokemonCanLearnAnyTM			: XGDolPatcher.pokemonCanLearnAnyTM()
+			case .pokemonHaveMaxCatchRate		: XGDolPatcher.pokemonHaveMaxCatchRate()
 		}
 		
 		printg("patch applied: ", patch.name)

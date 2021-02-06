@@ -10,8 +10,11 @@ import Foundation
 
 let versionNumber = "V2.0.0"
 
+var inputISOFile: XGFiles?
+var fileDecodingMode = false
+
 #if GAME_XD
-let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/GoD Tool"
+let documentsFolderName = "GoD Tool"
 let game = XGGame.XD
 let console = Console.ngc
 var isDemo: Bool {
@@ -20,19 +23,25 @@ var isDemo: Bool {
 
 #elseif GAME_COLO
 
-let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/Colosseum Tool"
+let documentsFolderName = "Colosseum Tool"
 let game = XGGame.Colosseum
 let console = Console.ngc
 let isDemo = false
 
 #elseif GAME_PBR
 
-let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/PBR Tool"
+let documentsFolderName = "PBR Tool"
 let game = XGGame.PBR
 let console = Console.wii
 let isDemo = false
 
 #endif
+
+let documentsPath: String = {
+	return (inputISOFile?.folder.path ?? NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+		+ "/\(documentsFolderName)"
+		+ (inputISOFile == nil ? "" : " \(inputISOFile!.fileName.removeFileExtensions())")
+}()
 
 let region = XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .OtherGame
 

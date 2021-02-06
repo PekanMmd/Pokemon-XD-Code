@@ -97,7 +97,9 @@ func applyPatches() {
 		.shinyLockShadowPokemon,
 		.alwaysShinyShadowPokemon,
 		.tradeEvolutions,
-		.enableDebugLogs
+		.enableDebugLogs,
+		.pokemonCanLearnAnyTM,
+		.pokemonHaveMaxCatchRate
 	] : [
 		.physicalSpecialSplitApply,
 		.defaultMoveCategories,
@@ -106,7 +108,9 @@ func applyPatches() {
 		.allowShinyStarters,
 		.shinyLockStarters,
 		.alwaysShinyStarters,
-		.enableDebugLogs
+		.enableDebugLogs,
+		.pokemonCanLearnAnyTM,
+		.pokemonHaveMaxCatchRate
 	]
 
 	var prompt = "Select a patch to apply:\n\n0: exit\n"
@@ -131,17 +135,19 @@ func applyPatches() {
 
 func randomiser() {
 	var options = [
-		"1: Randomise Trainer/Wild Pokemon",
-		"2: Randomise Moves",
-		"3: Randomise Pokemon Types",
-		"4: Randomise Abilities",
-		"5: Randomise Pokemon Base Stats",
-		"6: Randomise Evolutions",
-		"7: Randomise Move Types",
-		"8: Randomise TM Moves",
+		" 1: Randomise Trainer/Wild Pokemon",
+		" 2: Randomise Moves",
+		" 3: Randomise Pokemon Types",
+		" 4: Randomise Abilities",
+		" 5: Randomise Pokemon Base Stats",
+		" 6: Randomise Evolutions",
+		" 7: Randomise Move Types",
+		" 8: Randomise TM Moves",
+		" 9: Randomise Shadow Pokemon Only",
+		"10: Randomise Pokemon Using Similar BST"
 	]
 	if game == .XD {
-		options += ["9: Randomise Battle Bingo"]
+		options += ["11: Randomise Battle Bingo"]
 	}
 
 	var prompt = "Select a patch to apply:\n\n0: exit\n"
@@ -168,7 +174,11 @@ func randomiser() {
 		case 6: XGRandomiser.randomiseEvolutions()
 		case 7: XGRandomiser.randomiseMoveTypes()
 		case 8: XGRandomiser.randomiseTMs()
-		case 9: if game == .XD { XGRandomiser.randomiseBattleBingo() } else { printg("Invalid option:", input); continue }
+		case 9: XGRandomiser.randomisePokemon(shadowsOnly: true)
+		case 10: XGRandomiser.randomisePokemon(similarBST: true)
+		#if GAME_XD
+		case 11: if game == .XD { XGRandomiser.randomiseBattleBingo() } else { printg("Invalid option:", input); continue }
+		#endif
 		default: printg("Invalid option:", input); continue
 		}
 
@@ -207,14 +217,16 @@ func mainMenu() {
 		switch input {
 		case "": continue
 		case "0": return
-		case "1": XGUtility.compileMainFiles()
+		case "1": if readInput("This will overwire the ISO at \(XGFiles.iso.path)\nAre you sure? Y/N").lowercased() == "y" {
+				XGUtility.compileMainFiles()
+			}
 		case "2": listFiles()
 		case "3": importExportFiles()
 		case "4": applyPatches()
 		case "5": randomiser()
-		case "6": if game == .XD { XGUtility.encodeISO() }
-		case "7": if game == .XD { XGUtility.decodeISO() }
-		case "8": if game == .XD { XGUtility.documentISO() }
+		case "6": if game == .XD { XGUtility.encodeISO() } else { fallthrough }
+		case "7": if game == .XD { XGUtility.decodeISO() } else { fallthrough }
+		case "8": if game == .XD { XGUtility.documentISO() } else { fallthrough }
 		default: invalidOption(input)
 		}
 	}
@@ -225,16 +237,78 @@ func readInput(_ prompt: String) -> String {
 	return readLine() ?? ""
 }
 
+func decodeInputFiles(_ files: [XGFiles]) {
+	fileDecodingMode = true
+	for file in files {
+		guard file.exists else {
+			printg("File doesn't exist:", file.path)
+			continue
+		}
+
+		printg("Decoding file:", file.path)
+		switch file.fileType {
+		case .msg:
+			let table = file.stringTable
+			let jsonFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.json.fileExtension, file.folder)
+			if !jsonFile.exists {
+				table.writeJSON(to: jsonFile)
+				printg("Decoded:", jsonFile.path)
+			} else {
+				printg("File already exists:", jsonFile.path)
+				if readInput("Overwrite? Y/N").lowercased() == "y" {
+					table.writeJSON(to: jsonFile)
+					printg("Decoded:", jsonFile.path)
+				}
+			}
+		case .gtx, .atx:
+			let gtxFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.png.fileExtension, file.folder)
+			if !gtxFile.exists {
+				file.texture.writePNGData()
+				printg("Decoded:", gtxFile.path)
+			} else {
+				printg("File already exists:", gtxFile.path)
+				if readInput("Overwrite? Y/N").lowercased() == "y" {
+					file.texture.writePNGData()
+					printg("Decoded:", gtxFile.path)
+				}
+			}
+		case .fsys:
+			let outputFolder = XGFolders.nameAndFolder(file.fileName.removeFileExtensions(), file.folder)
+			if !outputFolder.exists {
+				outputFolder.createDirectory()
+				file.fsysData.extractFilesToFolder(folder: outputFolder, decode: true, overwrite: false)
+			} else {
+				file.fsysData.extractFilesToFolder(folder: outputFolder, decode: true, overwrite: readInput("Overwrite? Y/N").lowercased() == "y")
+			}
+		default: printg("Can't decode file:", file.path)
+		}
+	}
+}
+
 func main() {
+	let args = CommandLine.arguments
+
+	let files = args.map { (filename) -> XGFiles in
+		let fileurl = URL(fileURLWithPath: filename)
+		return fileurl.file
+	}.filter{$0.fileType != .unknown}
+
+	guard files.count > 0 else {
+		print("No input files given.")
+		return
+	}
+
+	if let isoFile = files.first(where: {$0.fileType == .iso && $0.exists}) {
+		inputISOFile = isoFile
+	} else {
+		decodeInputFiles(files)
+		return
+	}
+
 	let noDocumentsFolder = !XGFolders.Documents.exists
 	XGFolders.setUpFolderFormat()
 	if noDocumentsFolder {
 		printg("Created folder structure at:", XGFolders.Documents.path)
-	}
-	guard XGFiles.iso.exists else {
-		printg("Please place your iso in the folder", XGFolders.ISO.path, "and name it \"\(XGFiles.iso.fileName)\"")
-		printg("Once you've done this you can run the tool again. :-)")
-		return
 	}
 
 	mainMenu()
