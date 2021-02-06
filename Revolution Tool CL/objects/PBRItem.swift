@@ -9,7 +9,7 @@
 import Foundation
 
 var kNumberOfItems: Int {
-	return PBRDataTable.items.numberOfEntries // 465 in vanilla
+	return GoDDataTable.items.numberOfEntries // 465 in vanilla
 }
 
 final class XGItem: NSObject, XGIndexedValue, Codable {
@@ -51,7 +51,7 @@ final class XGItem: NSObject, XGIndexedValue, Codable {
 		super.init()
 		
 		self.index = index
-		let data  = PBRDataTableEntry.items(index: self.index)
+		let data  = GoDDataTableEntry.items(index: self.index)
 		
 		price = data.getShort(0)
 		nameID = data.getShort(2)
@@ -72,7 +72,7 @@ final class XGItem: NSObject, XGIndexedValue, Codable {
 	
 	func save() {
 		
-		let data  = PBRDataTableEntry.items(index: self.index)
+		let data  = GoDDataTableEntry.items(index: self.index)
 		
 		data.setShort(0, to: price)
 		data.setShort(2, to: nameID)

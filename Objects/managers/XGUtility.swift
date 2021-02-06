@@ -443,7 +443,6 @@ class XGUtility {
 			}
 		}
 		ISO.save()
-		
 	}
 	
 	//MARK: - Saving to disk
@@ -539,10 +538,10 @@ class XGUtility {
 	class func valueContext(_ value: Int) {
 		printg("Value:", value, "can have the following meanings:\n")
 		if value <= kNumberOfMoves {
-			printg("Move: ",XGMoves.move(value).name.string,"\n")
+			printg("Move: ",XGMoves.index(value).name.string,"\n")
 		}
 		if value <= kNumberOfPokemon {
-			printg("Pokemon: ",XGPokemon.pokemon(value).name.string,"\n")
+			printg("Pokemon: ",XGPokemon.index(value).name.string,"\n")
 
 			#if !GAME_PBR
 			if value > 251 {
@@ -552,21 +551,21 @@ class XGUtility {
 		}
 		
 		if value <= kNumberOfAbilities {
-			printg("Ability: ",XGAbilities.ability(value).name.string,"\n")
+			printg("Ability: ",XGAbilities.index(value).name.string,"\n")
 		}
 		
 		if value <= kNumberOfItems {
-			printg("Item: ",XGItems.item(value).name.string,"\n")
+			printg("Item: ",XGItems.index(value).name.string,"\n")
 		} else if value > kNumberOfItems && value < 0x250 {
-			printg("Item scriptIndex: ",XGItems.item(value - 150).name.string,"\n")
+			printg("Item scriptIndex: ",XGItems.index(value - 150).name.string,"\n")
 		}
 		
 		if value < kNumberOfTypes {
-			printg("Type: ",XGMoveTypes.type(value),"\n")
+			printg("Type: ",XGMoveTypes.index(value),"\n")
 		}
 		
 		for i in 1 ..< kNumberOfItems {
-			let item = XGItems.item(i).data
+			let item = XGItems.index(i).data
 			if item.holdItemID == value {
 				printg("Hold item id: ",item.name.string,"\n")
 			}
@@ -597,7 +596,7 @@ class XGUtility {
 				printg("---------")
 				continue
 			}
-			let item = XGItems.item(i)
+			let item = XGItems.index(i)
 			
 			var tmName = ""
 			for i in 1 ... kNumberOfTMs {

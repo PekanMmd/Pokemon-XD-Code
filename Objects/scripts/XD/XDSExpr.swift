@@ -500,7 +500,7 @@ indirect enum XDSExpr {
 			if c.asInt < 0 {
 				return macroWithName("POKEMON_CANCEL")
 			}
-			let mon = XGPokemon.pokemon(c.asInt)
+			let mon = XGPokemon.index(c.asInt)
 			if mon.nameID == 0 {
 				return macroWithName("POKEMON_" + c.asInt.string)
 			}
@@ -512,7 +512,7 @@ indirect enum XDSExpr {
 			if c.asInt < 0 {
 				return macroWithName("ITEM_CANCEL")
 			}
-			let item = XGItems.item(c.asInt)
+			let item = XGItems.index(c.asInt)
 			if item.nameID == 0 {
 				return macroWithName("ITEM_" + c.asInt.string)
 			}
@@ -533,7 +533,7 @@ indirect enum XDSExpr {
 			if c.asInt < 0 {
 				return macroWithName("MOVE_CANCEL")
 			}
-			let move = XGMoves.move(c.asInt)
+			let move = XGMoves.index(c.asInt)
 			if move.nameID == 0 {
 				return macroWithName("MOVE_" + c.asInt.string)
 			}
@@ -570,7 +570,7 @@ indirect enum XDSExpr {
 			if c.asInt == 0 {
 				return macroWithName("ability_none".uppercased())
 			}
-			let ability = XGAbilities.ability(c.asInt)
+			let ability = XGAbilities.index(c.asInt)
 			if ability.nameID == 0 {
 				return macroWithName("ABILITY_" + c.asInt.string)
 			}
@@ -1255,7 +1255,7 @@ indirect enum XDSExpr {
 		case .macroImmediate(let c, let t):
 			switch t {
 			case .item:
-				return [XGItems.item(c.asInt)]
+				return [XGItems.index(c.asInt)]
 			default:
 				return []
 			}

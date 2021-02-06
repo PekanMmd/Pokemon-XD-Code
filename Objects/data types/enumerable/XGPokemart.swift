@@ -31,7 +31,7 @@ final class XGPokemart: NSObject, Codable {
 		var nextItemOffset = itemsStartOffset
 		var nextItem = data.get2BytesAtOffset(nextItemOffset)
 		while nextItem != 0 {
-			self.items.append(.item(nextItem))
+			self.items.append(.index(nextItem))
 			nextItemOffset += 2
 			nextItem = data.get2BytesAtOffset(nextItemOffset)
 		}

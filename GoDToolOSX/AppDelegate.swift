@@ -365,7 +365,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	@IBAction func showAbout(_ sender: AnyObject) {
 		let text = """
-		Gale of Darkness Tool
+		\(game == .XD ? "Gale of Darkness Tool" : "Colosseum Tool") \(versionNumber)
 		by @StarsMmd
 
 		source code: https://github.com/PekanMmd/Pokemon-XD-Code.git

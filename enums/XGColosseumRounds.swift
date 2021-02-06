@@ -8,7 +8,7 @@
 import Foundation
 
 // values are possibly image ids for colosseum intro images
-enum XGColosseumRounds : Int, Codable, CaseIterable {
+enum XGColosseumRounds: Int, Codable, CaseIterable {
 	#if GAME_XD
 	case none = 0
 	case first = 0x95

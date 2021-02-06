@@ -373,7 +373,7 @@ class XGScript: NSObject {
 								let instr = self.code[i - 4]
 								if instr .opCode == .loadImmediate {
 									let itemid = instr.parameter
-									desc += ">> receive item: " + XGItems.item(itemid).name.string + "\n"
+									desc += ">> receive item: " + XGItems.index(itemid).name.string + "\n"
 								}
 							}
 						}
@@ -443,7 +443,7 @@ class XGScript: NSObject {
 						let instr = self.code[i - 2]
 						if instr .opCode == .loadImmediate {
 							let iid = instr.parameter - (instr.parameter < CommonIndexes.NumberOfItems.value ? 0 : 150)
-							desc += ">> " + XGItems.item(iid).name.string + "\n"
+							desc += ">> " + XGItems.index(iid).name.string + "\n"
 						}
 					}
 				}
@@ -2408,7 +2408,7 @@ class XGScript: NSObject {
 				
 				if type == .item {
 					for val in array {
-						items.append(.item(val.asInt))
+						items.append(.index(val.asInt))
 					}
 				}
 			}
@@ -2421,7 +2421,7 @@ class XGScript: NSObject {
 			if let type = globalMacroTypes[variable] {
 				if type == .item {
 					let value = gvar[i].asInt
-					items.append(.item(value))
+					items.append(.index(value))
 				}
 			}
 		}

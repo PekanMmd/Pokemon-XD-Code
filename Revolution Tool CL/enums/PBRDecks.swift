@@ -72,8 +72,8 @@ enum XGDecks {
 		return 0x10
 	}
 	
-	var dataTable : PBRDataTable {
-		return PBRDataTable.tableForFile(file)
+	var dataTable : GoDDataTable {
+		return GoDDataTable.tableForFile(file)
 	}
 
 	var name: String {

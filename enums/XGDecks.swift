@@ -36,7 +36,7 @@ enum XGAI : Int {
 	case cycle 		= 4 // Copied from battle CDs. Uses each of the pokemon's moves in order.
 }
 
-enum XGDecks : String, Codable, CaseIterable {
+enum XGDecks: String, Codable, CaseIterable {
 	
 	case DeckDarkPokemon	= "DeckData_DarkPokemon"
 	case DeckStory			= "DeckData_Story"
@@ -47,7 +47,7 @@ enum XGDecks : String, Codable, CaseIterable {
 	case DeckSample			= "DeckData_Sample"
 	case DeckVirtual		= "DeckData_Virtual"
 	
-	var id : Int {
+	var id: Int {
 		switch self {
 		case .DeckStory:
 			return 1

@@ -50,15 +50,15 @@ final class XGTrainerPokemon : NSObject, Codable {
 	
 	var deckData			= XGDeckPokemon.dpkm(0, XGDecks.DeckStory)
 	
-	var species				= XGPokemon.pokemon(0)
+	var species				= XGPokemon.index(0)
 	var level			= 0x0
 	var happiness		= 0x0
-	var item				= XGItems.item(0)
+	var item				= XGItems.index(0)
 	var nature				= XGNatures.hardy
 	var gender				= XGGenders.male
 	var IVs			= 0x0 // All IVs will be the same. Not much point in varying them.
 	var EVs			= [0,0,0,0,0,0]
-	var moves				= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
+	var moves				= [XGMoves](repeating: XGMoves.index(0), count: kNumberOfPokemonMoves)
 	
 	var ability		= 0x0 {
 		didSet {
@@ -71,7 +71,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 	var shadowCatchRate 	= 0x0
 	var shadowCounter		= 0x0
 	var ShadowDataInUse 	= false
-	var shadowMoves				= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
+	var shadowMoves				= [XGMoves](repeating: XGMoves.index(0), count: kNumberOfPokemonMoves)
 	var shadowFleeValue 	= 0x0
 	
 	var shadowAggression = 0x0
@@ -86,7 +86,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 	
 	var startOffset : Int {
 		get {
-			return deckData.deck.DPKMDataOffset + (deckData.DPKMIndex * kSizeOfPokemonData)
+			return deckData.pokemonDeck.DPKMDataOffset + (deckData.DPKMIndex * kSizeOfPokemonData)
 		}
 	}
 	
@@ -114,7 +114,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 		self.deckData = DeckData
 		
 		
-		let data = deckData.deck.data
+		let data = deckData.pokemonDeck.data
 		let start = self.startOffset
 		
 		species			= deckData.pokemon
@@ -122,7 +122,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 		
 		happiness		= data.getByteAtOffset(start + kPokemonHappinessOffset)
 		let item		= data.get2BytesAtOffset(start + kPokemonItemOffset)
-		self.item		= .item(item)
+		self.item		= .index(item)
 		IVs				= data.getByteAtOffset(start + kFirstPokemonIVOffset)
 		
 		let pid = data.getByteAtOffset(start + kPokemonPIDOffset)
@@ -139,7 +139,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 		
 		for i in 0 ..< kNumberOfPokemonMoves {
 			let index = data.get2BytesAtOffset(start + kFirstPokemonMoveOffset + (i * 2))
-			self.moves[i] = .move(index)
+			self.moves[i] = .index(index)
 		}
 		
 		if isShadowPokemon {
@@ -160,7 +160,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 			
 			for i in 0 ..< kNumberOfPokemonMoves {
 				let index = data.get2BytesAtOffset(start + kFirstShadowMoveOFfset + (i * 2) )
-				self.shadowMoves[i] = .move(index)
+				self.shadowMoves[i] = .index(index)
 			}
 		}
 		
@@ -199,7 +199,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 			
 		}
 		
-		let data = self.deckData.deck.data
+		let data = self.deckData.pokemonDeck.data
 		let start = startOffset
 		
 		data.replace2BytesAtOffset(start + kPokemonIndexOffset, withBytes: species.index)
@@ -234,20 +234,20 @@ final class XGTrainerPokemon : NSObject, Codable {
 	}
 	
 	func purge() {
-		species		= XGPokemon.pokemon(0)
+		species		= XGPokemon.index(0)
 		level		= 0
 		happiness	= 0
 		ability		= 0
-		item		= XGItems.item(0)
+		item		= XGItems.index(0)
 		nature		= XGNatures.hardy
 		gender		= XGGenders.male
 		IVs			= 0
 		EVs			= [Int](repeating: 0, count: 6)
-		moves		= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
+		moves		= [XGMoves](repeating: XGMoves.index(0), count: kNumberOfPokemonMoves)
 		
 		shadowCatchRate = 0
 		shadowCounter	= 0
-		shadowMoves		= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
+		shadowMoves		= [XGMoves](repeating: XGMoves.index(0), count: kNumberOfPokemonMoves)
 	}
 
 

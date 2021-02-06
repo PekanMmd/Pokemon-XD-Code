@@ -30,7 +30,7 @@ final class XGTreasure: NSObject, Codable {
 	var flag = 0
 	var itemID = 0
 	var item : XGItems {
-		return XGItems.item(itemID)
+		return XGItems.index(itemID)
 	}
 	
 	var modelID = 0

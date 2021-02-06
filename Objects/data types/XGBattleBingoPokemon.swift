@@ -20,11 +20,11 @@ let kBattleBingoPokemonMoveOffset		= 0x06
 class XGBattleBingoPokemon: NSObject, Codable {
 	
 	var typeOnCard	= 0x0
-	var species				= XGPokemon.pokemon(0)
+	var species				= XGPokemon.index(0)
 	var ability		= 0x0
 	var nature		= XGNatures.hardy
 	var gender		= XGGenders.male
-	var move		= XGMoves.move(0)
+	var move		= XGMoves.index(0)
 	
 	var startOffset : Int = 0
 	
@@ -47,7 +47,7 @@ class XGBattleBingoPokemon: NSObject, Codable {
 		self.typeOnCard = rel.getByteAtOffset(startOffset + kBattleBingoPokemonPanelTypeOffset)
 		
 		let species  = rel.get2BytesAtOffset(startOffset + kBattleBingoPokemonSpeciesOffset)
-		self.species = XGPokemon.pokemon(species)
+		self.species = XGPokemon.index(species)
 		
 		self.ability = rel.getByteAtOffset(startOffset + kBattleBingoPokemonAbilityOffset)
 		
@@ -58,7 +58,7 @@ class XGBattleBingoPokemon: NSObject, Codable {
 		self.nature	= XGNatures(rawValue: nature) ?? .hardy
 		
 		let move = rel.get2BytesAtOffset(startOffset + kBattleBingoPokemonMoveOffset)
-	    self.move = .move(move)
+	    self.move = .index(move)
 		
 	}
 	

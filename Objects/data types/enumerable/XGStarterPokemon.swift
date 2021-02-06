@@ -30,11 +30,11 @@ final class XGStarterPokemon: NSObject, XGGiftPokemon, Codable {
 	
 	var level		= 0
 	var exp		= 0
-	var species			= XGPokemon.pokemon(0)
-	var move1			= XGMoves.move(0)
-	var move2			= XGMoves.move(0)
-	var move3			= XGMoves.move(0)
-	var move4			= XGMoves.move(0)
+	var species			= XGPokemon.index(0)
+	var move1			= XGMoves.index(0)
+	var move2			= XGMoves.index(0)
+	var move3			= XGMoves.index(0)
+	var move4			= XGMoves.index(0)
 	
 	var giftType		= "Starter Pokemon"
 	
@@ -62,16 +62,16 @@ final class XGStarterPokemon: NSObject, XGGiftPokemon, Codable {
 			exp	  = dol.get2BytesAtOffset(start + kStarterExpValueOffset)
 			
 			let species = dol.get2BytesAtOffset(start + kStarterSpeciesOffset)
-			self.species = .pokemon(species)
+			self.species = .index(species)
 			
 			var moveIndex = dol.get2BytesAtOffset(start + kStarterMove1Offset)
-			move1 = .move(moveIndex)
+			move1 = .index(moveIndex)
 			moveIndex = dol.get2BytesAtOffset(start + kStarterMove2Offset)
-			move2 = .move(moveIndex)
+			move2 = .index(moveIndex)
 			moveIndex = dol.get2BytesAtOffset(start + kStarterMove3Offset)
-			move3 = .move(moveIndex)
+			move3 = .index(moveIndex)
 			moveIndex = dol.get2BytesAtOffset(start + kStarterMove4Offset)
-			move4 = .move(moveIndex)
+			move4 = .index(moveIndex)
 		}
 	}
 	

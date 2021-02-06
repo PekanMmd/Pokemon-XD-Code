@@ -81,7 +81,7 @@ class PBRTypeManager {
 
 		var newTable = [PBRTypeMatchup]()
 		for offensiveType in XGMoveTypes.allValues {
-			let data = PBRDataTableEntry.typeMatchups(index: offensiveType.index)
+			let data = GoDDataTableEntry.typeMatchups(index: offensiveType.index)
 
 			for defensiveType in XGMoveTypes.allValues {
 				let effectiveness = data.getByte(defensiveType.index)

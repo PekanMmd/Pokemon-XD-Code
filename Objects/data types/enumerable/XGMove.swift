@@ -104,7 +104,7 @@ final class XGMove: NSObject, Codable {
 	
 	var isShadowMove	: Bool {
 		get {
-			return XGMoves.move(self.moveIndex).isShadowMove
+			return XGMoves.index(self.moveIndex).isShadowMove
 		}
 	}
 	
@@ -127,7 +127,7 @@ final class XGMove: NSObject, Codable {
 		self.soundBasedFlag	 = rel.getByteAtOffset(startOffset + kSoundBasedFlagOffset) == 1
 		self.HMFlag			 = rel.getByteAtOffset(startOffset + kHMFlagOffset)		    == 1
 		
-		self.type			 = XGMoveTypes.type(rel.getByteAtOffset(startOffset + kMoveTypeOffset))
+		self.type			 = XGMoveTypes.index(rel.getByteAtOffset(startOffset + kMoveTypeOffset))
 		self.target			 = XGMoveTargets(rawValue: rel.getByteAtOffset(startOffset + kTargetsOffset)) ?? .selectedTarget
 		self.category		 = XGMoveCategories(rawValue: rel.getByteAtOffset(startOffset + kMoveCategoryOffset)) ?? .none
 		

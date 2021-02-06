@@ -22,7 +22,7 @@ final class XGPokeSpotPokemon: NSObject, Codable {
 	
 	var index				= 0
 	var spot					= XGPokeSpots.rock
-	var pokemon					= XGPokemon.pokemon(0)
+	var pokemon					= XGPokemon.index(0)
 	
 	var minLevel				= 0
 	var maxLevel				= 0
@@ -55,7 +55,7 @@ final class XGPokeSpotPokemon: NSObject, Codable {
 		self.encounterPercentage = rel.getByteAtOffset(start + kEncounterPercentageOffset)
 		
 		let species = rel.get2BytesAtOffset(start + kPokeSpotSpeciesOffset)
-		self.pokemon = XGPokemon.pokemon(species)
+		self.pokemon = XGPokemon.index(species)
 		self.stepsPerSnack = rel.get2BytesAtOffset(start + kStepsPerPokeSnackOffset)
 		
 	}

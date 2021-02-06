@@ -50,7 +50,7 @@ class XGTrainer: NSObject, XGIndexedValue {
 		self.index = deckData.index
 		self.deckData  = deckData
 
-		let deckTable = PBRDataTable.tableForFile(deckData.deck.file)
+		let deckTable = GoDDataTable.tableForFile(deckData.deck.file)
 
 		guard let entry = deckTable.entryWithIndex(index) else {
 			printg("Failed to load deck data:", deckData.deck.file.path, "\nindex:", index)

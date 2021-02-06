@@ -27,7 +27,7 @@ enum XGDeckPokemon: CustomStringConvertible {
 	var startOffset: Int {
 		switch self {
 			case .dpkm:
-				return deck.DPKMDataOffset + (index * kSizeOfPokemonData)
+				return pokemonDeck.DPKMDataOffset + (index * kSizeOfPokemonData)
 			case .ddpk:
 				return XGDecks.DeckDarkPokemon.DDPKDataOffset + (index * kSizeOfShadowData)
 		}
@@ -39,7 +39,7 @@ enum XGDeckPokemon: CustomStringConvertible {
 		}
 	}
 	
-	var isShadow : Bool {
+	var isShadow: Bool {
 		get {
 			switch self {
 				case .dpkm:
@@ -50,25 +50,30 @@ enum XGDeckPokemon: CustomStringConvertible {
 		}
 	}
 	
-	var deck : XGDecks {
-		get {
-			switch self {
-				case .dpkm(_, let d) :
-					return d
-				case .ddpk:
-					return XGDecks.DeckStory
-			}
+	var pokemonDeck: XGDecks {
+		switch self {
+		case .dpkm(_, let d) :
+			return d
+		case .ddpk:
+			return XGDecks.DeckStory
+		}
+	}
+
+	private var rawDeck: XGDecks {
+		switch self {
+		case .dpkm(_, let d) :
+			return d
+		case .ddpk:
+			return XGDecks.DeckDarkPokemon
 		}
 	}
 	
-	var DPKMIndex : Int {
-		get {
-			switch self {
-				case .dpkm:
-					return index
-				case .ddpk:
-					return XGDecks.DeckDarkPokemon.data.get2BytesAtOffset(startOffset + kShadowStoryIndexOffset)
-			}
+	var DPKMIndex: Int {
+		switch self {
+		case .dpkm:
+			return index
+		case .ddpk:
+			return XGDecks.DeckDarkPokemon.data.get2BytesAtOffset(startOffset + kShadowStoryIndexOffset)
 		}
 	}
 	
@@ -85,10 +90,10 @@ enum XGDeckPokemon: CustomStringConvertible {
 	
 	var pokemon : XGPokemon {
 		get {
-			let start   = deck.DPKMDataOffset + (DPKMIndex * kSizeOfPokemonData)
-			let species = deck.data.get2BytesAtOffset(start + kPokemonIndexOffset)
+			let start   = pokemonDeck.DPKMDataOffset + (DPKMIndex * kSizeOfPokemonData)
+			let species = pokemonDeck.data.get2BytesAtOffset(start + kPokemonIndexOffset)
 			
-			return XGPokemon.pokemon(species)
+			return XGPokemon.index(species)
 		}
 	}
 	
@@ -96,7 +101,7 @@ enum XGDeckPokemon: CustomStringConvertible {
 		get {
 			switch self {
 				case .dpkm:
-					return deck.data.getByteAtOffset(startOffset + kPokemonLevelOffset)
+					return pokemonDeck.data.getByteAtOffset(startOffset + kPokemonLevelOffset)
 				case .ddpk:
 					return XGDecks.DeckDarkPokemon.data.getByteAtOffset(startOffset + kShadowLevelOffset)
 			}
@@ -157,13 +162,13 @@ extension XGDeckPokemon: Codable {
 	func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 		try container.encode(self.index, forKey: .index)
-		try container.encode(self.deck, forKey: .deck)
+		try container.encode(self.rawDeck, forKey: .deck)
 	}
 }
 
 extension XGDeckPokemon: XGEnumerable {
 	var enumerableName: String {
-		return deck.enumerableName + " " + DPKMIndex.string
+		return pokemonDeck.enumerableName + " " + DPKMIndex.string
 	}
 	
 	var enumerableValue: String? {

@@ -8,14 +8,14 @@
 
 import Foundation
 
-enum XGGenders : Int, Codable, CaseIterable {
+enum XGGenders: Int, Codable, CaseIterable {
 	
 	case male		= 0x0
 	case female		= 0x1
 	case genderless = 0x2
 	case random 	= 0xFF
 	
-	var string : String {
+	var string: String {
 		get {
 			switch self {
 				case .male:			return "Male"

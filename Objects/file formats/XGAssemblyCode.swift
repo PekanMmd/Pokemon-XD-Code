@@ -84,7 +84,6 @@ let kPBRDOLFreeSpaceEnd: Int = {
 	}
 }()
 
-
 let moveEffectTableStartRAM = 0x417edf // XD US
 let moveEffectTableStartDOL = moveEffectTableStartRAM - kDolTableToRAMOffsetDifference // XD US
 

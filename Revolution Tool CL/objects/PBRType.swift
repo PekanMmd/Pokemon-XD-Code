@@ -9,7 +9,7 @@
 import Foundation
 
 var kNumberOfTypes: Int {
-	return PBRDataTable.typeMatchups.entrySize // 18 in vanilla
+	return GoDDataTable.typeMatchups.entrySize // 18 in vanilla
 }
 let kFirstTypeNameID = 0xca6
 
@@ -49,7 +49,7 @@ final class XGType: NSObject, XGIndexedValue, Codable {
 		super.init()
 		
 		self.index = index
-		let data = PBRDataTableEntry.typeMatchups(index: self.index)
+		let data = GoDDataTableEntry.typeMatchups(index: self.index)
 		
 		for i in 0 ..< kNumberOfTypes {
 			effectivenessTable.append(XGEffectivenessValues(rawValue: data.getByte(i))!)
@@ -62,7 +62,7 @@ final class XGType: NSObject, XGIndexedValue, Codable {
 			displayAlert(title: "Failed to save type", description: "Couldn't save type match data. The number of non neutral matchups is too large for the data table. Try applying the patch to move the table.")
 			return
 		}
-		let data = PBRDataTableEntry.typeMatchups(index: self.index)
+		let data = GoDDataTableEntry.typeMatchups(index: self.index)
 		for i in 0 ..< self.effectivenessTable.count {
 			data.setByte(i, to: effectivenessTable[i].rawValue)
 		}

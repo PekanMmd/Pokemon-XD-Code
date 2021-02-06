@@ -37,11 +37,11 @@ var tradeShadowPokemonShininessRAMOffset: Int {
 final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
 	
 	var level			= 0x0
-	var species			= XGPokemon.pokemon(0)
-	var move1			= XGMoves.move(0)
-	var move2			= XGMoves.move(0)
-	var move3			= XGMoves.move(0)
-	var move4			= XGMoves.move(0)
+	var species			= XGPokemon.index(0)
+	var move1			= XGMoves.index(0)
+	var move2			= XGMoves.index(0)
+	var move3			= XGMoves.index(0)
+	var move4			= XGMoves.index(0)
 	
 	var giftType		= "Shadow Pokemon Gift"
 	
@@ -68,19 +68,19 @@ final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
 		let start = startOffset
 		
 		let species = dol.get2BytesAtOffset(start + kTradeShadowPokemonSpeciesOffset)
-		self.species = .pokemon(species)
+		self.species = .index(species)
 		
 		level = dol.getByteAtOffset(start + kTradeShadowPokemonLevelOffset)
 		shadowID = dol.get2BytesAtOffset(kTradeShadowDDPKIDOffset)
 		
 		var moveIndex = dol.get2BytesAtOffset(start + kTradeShadowPokemonMove1Offset)
-		move1 = .move(moveIndex)
+		move1 = .index(moveIndex)
 		moveIndex = dol.get2BytesAtOffset(start + kTradeShadowPokemonMove2Offset)
-		move2 = .move(moveIndex)
+		move2 = .index(moveIndex)
 		moveIndex = dol.get2BytesAtOffset(start + kTradeShadowPokemonMove3Offset)
-		move3 = .move(moveIndex)
+		move3 = .index(moveIndex)
 		moveIndex = dol.get2BytesAtOffset(start + kTradeShadowPokemonMove4Offset)
-		move4 = .move(moveIndex)
+		move4 = .index(moveIndex)
 
 		if region != .JP {
 			shinyValue = XGShinyValues(rawValue:  dol.get2BytesAtOffset(tradeShadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference)) ?? .never

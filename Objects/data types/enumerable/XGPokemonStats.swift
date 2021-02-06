@@ -8,7 +8,7 @@
 
 import Foundation
 
-let kNumberOfPokemon		= 0x19F
+let kNumberOfPokemon		= CommonIndexes.NumberOfPokemon.value //0x19F
 let kSizeOfPokemonStats		= 0x124
 //let kFirstPokemonOffset		= 0x29DA8
 
@@ -110,11 +110,11 @@ final class XGPokemonStats: NSObject, Codable {
 	var type1			= XGMoveTypes.normal
 	var type2			= XGMoveTypes.normal
 	
-	var ability1		= XGAbilities.ability(0)
-	var ability2		= XGAbilities.ability(0)
+	var ability1		= XGAbilities.index(0)
+	var ability2		= XGAbilities.index(0)
 	
-	var heldItem1		= XGItems.item(0)
-	var heldItem2		= XGItems.item(0)
+	var heldItem1		= XGItems.index(0)
+	var heldItem2		= XGItems.index(0)
 	
 	var hp				= 0x0
 	var speed				= 0x0
@@ -210,18 +210,18 @@ final class XGPokemonStats: NSObject, Codable {
 		baseExp			= rel.getByteAtOffset(startOffset + kBaseEXPOffset)
 		baseHappiness	= rel.getByteAtOffset(startOffset + kBaseHappinessOffset)
 		
-		type1			= XGMoveTypes.type(rel.getByteAtOffset(startOffset + kType1Offset))
-		type2			= XGMoveTypes.type(rel.getByteAtOffset(startOffset + kType2Offset))
+		type1			= XGMoveTypes.index(rel.getByteAtOffset(startOffset + kType1Offset))
+		type2			= XGMoveTypes.index(rel.getByteAtOffset(startOffset + kType2Offset))
 		
 		let a1			= rel.getByteAtOffset(startOffset + kAbility1Offset)
 		let a2			= rel.getByteAtOffset(startOffset + kAbility2Offset)
-		ability1		= .ability(a1)
-		ability2		= .ability(a2)
+		ability1		= .index(a1)
+		ability2		= .index(a2)
 		
 		let i1			= rel.get2BytesAtOffset(startOffset + kHeldItem1Offset)
 		let i2			= rel.get2BytesAtOffset(startOffset + kHeldItem2Offset)
-		heldItem1		= .item(i1)
-		heldItem2		= .item(i2)
+		heldItem1		= .index(i1)
+		heldItem2		= .index(i2)
 		
 		hp				= rel.getByteAtOffset(startOffset + kHPOffset)
 		attack			= rel.getByteAtOffset(startOffset + kAttackOffset)

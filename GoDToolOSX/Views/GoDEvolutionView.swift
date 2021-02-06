@@ -73,7 +73,7 @@ class GoDEvolutionView: NSView {
 	func reloadData() {
 		if delegate != nil {
 			let evolution = delegate.pokemon.evolutions[index]
-			let evolvesInto = XGPokemon.pokemon(evolution.evolvesInto)
+			let evolvesInto = XGPokemon.index(evolution.evolvesInto)
 			let method = evolution.evolutionMethod
 			pokemonPopUp.select(evolvesInto)
 			methodPopUp.select(method)

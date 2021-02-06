@@ -65,16 +65,16 @@ final class XGDemoStarterPokemon: NSObject, XGGiftPokemon, Codable {
 		}
 	}
 	
-	var species			= XGPokemon.pokemon(0) {
+	var species			= XGPokemon.index(0) {
 		didSet {
 			self.exp = self.species.expRate.expForLevel(level)
 		}
 	}
 	
-	var move1			= XGMoves.move(0)
-	var move2			= XGMoves.move(0)
-	var move3			= XGMoves.move(0)
-	var move4			= XGMoves.move(0)
+	var move1			= XGMoves.index(0)
+	var move2			= XGMoves.index(0)
+	var move3			= XGMoves.index(0)
+	var move4			= XGMoves.index(0)
 	var shinyValue		= XGShinyValues.random
 	
 	var nature			= XGNatures.random
@@ -98,16 +98,16 @@ final class XGDemoStarterPokemon: NSObject, XGGiftPokemon, Codable {
 		exp	  = dol.get2BytesAtOffset(start + kDemoStarterExpValueOffset)
 		
 		let species = dol.get2BytesAtOffset(start + kDemoStarterSpeciesOffset)
-		self.species = .pokemon(species)
+		self.species = .index(species)
 		
 		var moveIndex = dol.get2BytesAtOffset(start + kDemoStarterMove1Offset)
-		move1 = .move(moveIndex)
+		move1 = .index(moveIndex)
 		moveIndex = dol.get2BytesAtOffset(start + kDemoStarterMove2Offset)
-		move2 = .move(moveIndex)
+		move2 = .index(moveIndex)
 		moveIndex = dol.get2BytesAtOffset(start + kDemoStarterMove3Offset)
-		move3 = .move(moveIndex)
+		move3 = .index(moveIndex)
 		moveIndex = dol.get2BytesAtOffset(start + kDemoStarterMove4Offset)
-		move4 = .move(moveIndex)
+		move4 = .index(moveIndex)
 		
 		let shiny = dol.get2BytesAtOffset(start + kDemoStarterShinyValueOffset)
 		self.shinyValue = XGShinyValues(rawValue: shiny) ?? .random

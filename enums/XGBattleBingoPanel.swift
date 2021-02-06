@@ -8,12 +8,12 @@
 
 import Foundation
 
-enum XGBattleBingoPanel : CustomStringConvertible {
+enum XGBattleBingoPanel: CustomStringConvertible {
 	
 	case mysteryPanel(XGBattleBingoItem)
 	case pokemon(XGBattleBingoPokemon)
 	
-	var pokemon : XGBattleBingoPokemon? {
+	var pokemon: XGBattleBingoPokemon? {
 		get {
 			switch self {
 			case .pokemon(let p): return p
@@ -22,7 +22,7 @@ enum XGBattleBingoPanel : CustomStringConvertible {
 		}
 	}
 	
-	var description : String {
+	var description: String {
 		get {
 			switch self {
 				case .mysteryPanel(let b)	: return "\(b)"
@@ -36,7 +36,7 @@ enum XGBattleBingoPanel : CustomStringConvertible {
 enum XGBattleBingoItem : Int, CustomStringConvertible, Codable, CaseIterable {
 	
 	case none			= 0x0
-	case masterBall = 0x1
+	case masterBall     = 0x1
 	case ePx1			= 0x2
 	case ePx2			= 0x3
 	

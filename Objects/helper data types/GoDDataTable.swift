@@ -7,12 +7,20 @@
 
 import Foundation
 
+#if GAME_PBR
 private var dataTablesByFile = [String: GoDDataTable]()
+#else
+private var dataTablesByIndex = [Int: GoDDataTable]()
+#endif
 
 class GoDDataTable: CustomStringConvertible {
 	
 	var description: String {
+		#if GAME_PBR
 		var text = self.file.fileName + "\nEntries: " + self.entries.count.string + "\n"
+		#else
+		var text = "Table \(file.path)\nEntries: " + self.entries.count.string + "\n"
+		#endif
 		
 		for entry in self.entries {
 			text += "\n" + entry.byteStream.hexStream
@@ -22,19 +30,25 @@ class GoDDataTable: CustomStringConvertible {
 	}
 	
 	var startOffset 	= 0
+
+	#if GAME_PBR
+	var file = XGFiles.common(0)
 	var subStartOffset  = 0
-	
-	var entries  = [XGMutableData]()
-	var file     = XGFiles.common(0)
 	var unknown = 0
 	var postCount = 0
 	var predata  = [UInt8]()
 	var postdata = [UInt8]()
+	#else
+	var file: XGFiles
+	#endif
+	
+	var entries  = [XGMutableData]()
 	
 	var numberOfEntries : Int {
 		return entries.count
 	}
-	
+
+	#if GAME_PBR
 	private init(file: XGFiles) {
 		self.file = file
 		
@@ -96,8 +110,30 @@ class GoDDataTable: CustomStringConvertible {
 
 			dataTablesByFile[file.path] = self
 		}
-		
 	}
+	#else
+	private init(index: CommonIndexes, entrySize: Int) {
+		file = .common_rel
+
+		if let data = XGFiles.common_rel.data {
+			let entryCount = CommonIndexes(rawValue: index.rawValue + 1)!.value
+			startOffset = index.startOffset
+
+			if startOffset + (entryCount * entrySize) <= data.length {
+				for i in 0 ..< entryCount {
+					let offset = startOffset + (i * entrySize)
+					let bytes = data.getCharStreamFromOffset(offset, length: entrySize)
+					let entry = XGMutableData(byteStream: bytes)
+					self.entries.append(entry)
+				}
+			} else {
+				printg("Error: invalid data table: \(file.path) \(index) \(index.startOffset.hexString())")
+			}
+
+			dataTablesByIndex[index.rawValue] = self
+		}
+	}
+	#endif
 	
 	func dataForEntryWithIndex(_ index: Int) -> XGMutableData? {
 		if index >= 0, index < entries.count {
@@ -106,12 +142,12 @@ class GoDDataTable: CustomStringConvertible {
 		return nil
 	}
 
-	func entryWithIndex(_ index: Int) -> PBRDataTableEntry? {
-		return PBRDataTableEntry(index: index, table: self)
+	func entryWithIndex(_ index: Int) -> GoDDataTableEntry? {
+		return GoDDataTableEntry(index: index, table: self)
 	}
 	
 	func offsetForEntryWithIndex(_ index: Int) -> Int {
-		return self.startOffset + (index * self.entrySize)
+		return startOffset + (index * entrySize)
 	}
 	
 	func replaceData(data: XGMutableData, forIndex index: Int) {
@@ -146,7 +182,7 @@ class GoDDataTable: CustomStringConvertible {
 		}
 	}
 	
-	var entrySize : Int {
+	var entrySize: Int {
 		return numberOfEntries == 0 ? 0 : self.entries[0].length
 	}
 	
@@ -155,24 +191,36 @@ class GoDDataTable: CustomStringConvertible {
 		if self.entries.count > 0 {
 			self.setEntrySize(self.entries[0].length)
 		}
-		
+
+		#if GAME_PBR
 		var bytes = [UInt8](repeating: 0, count: subStartOffset) + predata
+		#else
+		var bytes = [UInt8]()
+		#endif
+
 		for entry in self.entries {
 			bytes += entry.charStream
 		}
+
+		#if GAME_PBR
 		while bytes.count % 16 != 0 {
 			bytes.append(0)
 		}
 		bytes += postdata
-		
+		#endif
+
+		#if GAME_PBR
 		let start = self.startOffset
 		let subStart = self.subStartOffset
+		let fileSize = bytes.count
+		let dataSize = entryCount * entrySize
 		let entryCount = self.entries.count
 		let entrySize = entryCount == 0 ? 0 : self.entries[0].length
-		let dataSize = entryCount * entrySize
-		let fileSize = bytes.count
-		
+		#endif
+
 		let d = XGMutableData(byteStream: bytes, file: self.file)
+
+		#if GAME_PBR
 		switch self.file {
 		case .common:
 			d.replace4BytesAtOffset(0, withBytes: entryCount)
@@ -202,18 +250,31 @@ class GoDDataTable: CustomStringConvertible {
 			
 		default: break
 		}
+		#endif
 		
 		return d
 	}
-	
+
 	func save() {
+		#if GAME_PBR
 		data().save()
+		#else
+		if let data = file.data {
+			data.replaceBytesFromOffset(startOffset, withByteStream: self.data().byteStream)
+			data.save()
+		}
+		#endif
 	}
-	
+
+	#if !GAME_PBR
+	class func tableForIndex(_ index: CommonIndexes, entrySize: Int) -> GoDDataTable? {
+		return dataTablesByIndex[index.rawValue] ?? GoDDataTable(index: index, entrySize: entrySize)
+	}
+	#else
 	class func tableForFile(_ file: XGFiles) -> GoDDataTable {
 		return dataTablesByFile[file.path] ?? GoDDataTable(file: file)
 	}
-	
+
 	static var pokemonIcons = tableForFile(.common(region == .JP ? 6 : 0))
 	static var countries = tableForFile(.common(region == .JP ? 7 : 1))
 	static var shopItems = tableForFile(.common(region == .JP ? 8 : 2))
@@ -247,6 +308,7 @@ class GoDDataTable: CustomStringConvertible {
 	static var moves = tableForFile(.common(region == .JP ? 31 : 30))
 	static var tutorialData = tableForFile(.common(region == .JP ? 9 : 31))
 	static var levelUpMoves = tableForFile(.common(region == .JP ? 16 : 32))
+	#endif
 	
 }
 

@@ -47,19 +47,15 @@ class XGStringTable: NSObject {
 	var stringOffsets = [Int : Int]()
 	var stringIDs = [Int]()
 	
-	var numberOfEntries : Int {
-		get {
-			return stringTable.get2BytesAtOffset(kNumberOfStringsOffset)
-		}
+	var numberOfEntries: Int {
+		return stringTable.get2BytesAtOffset(kNumberOfStringsOffset)
 	}
 	
 	var fileSize : Int {
-		get {
-			return self.stringTable.length
-		}
+		return self.stringTable.length
 	}
 	
-	var extraCharacters : Int {
+	var extraCharacters: Int {
 		
 		get {
 			var currentChar = 0x00
@@ -221,9 +217,15 @@ class XGStringTable: NSObject {
 		if self.startOffset == 0 {
 			stringTable.save()
 		} else {
-			let data = file.data!
-			data.replaceBytesFromOffset(self.startOffset, withByteStream: stringTable.byteStream)
-			data.save()
+			if let data = file.data {
+				data.replaceBytesFromOffset(self.startOffset, withByteStream: stringTable.byteStream)
+				if data.save() {
+					let msgFile = XGFiles.nameAndFolder(stringTable.file.fileName + XGFileTypes.json.fileExtension, stringTable.file.folder)
+					if msgFile.exists {
+						writeJSON(to: msgFile)
+					}
+				}
+			}
 		}
 	}
 	

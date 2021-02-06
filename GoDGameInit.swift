@@ -8,6 +8,8 @@
 
 import Foundation
 
+let versionNumber = "V2.0.0"
+
 #if GAME_XD
 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/GoD Tool"
 let game = XGGame.XD

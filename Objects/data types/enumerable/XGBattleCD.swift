@@ -83,10 +83,10 @@ final class XGBattleCD: NSObject, Codable {
 		
 		if index < 1 || index > 50 {
 			printg("Battle CD \(index) has no item.")
-			return .item(0)
+			return .index(0)
 		}
 		
-		return XGItems.item(index + 383)
+		return XGItems.index(index + 383)
 	}
 	
 	override var description: String {

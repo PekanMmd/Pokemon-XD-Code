@@ -163,11 +163,11 @@ class XGRandomiser : NSObject {
 		
 		for i in 1 ..< kNumberOfPokemon {
 			
-			if XGPokemon.pokemon(i).nameID == 0 {
+			if XGPokemon.index(i).nameID == 0 {
 				continue
 			}
 			
-			let pokemon = XGPokemon.pokemon(i)
+			let pokemon = XGPokemon.index(i)
 			if pokemon.nameID > 0 {
 				let p = XGPokemonStats(index: pokemon.index)
 				
@@ -198,11 +198,11 @@ class XGRandomiser : NSObject {
 		printg("randomising pokemon abilities...")
 		for i in 1 ..< kNumberOfPokemon {
 			
-			if XGPokemon.pokemon(i).nameID == 0 {
+			if XGPokemon.index(i).nameID == 0 {
 				continue
 			}
 			
-			let pokemon = XGPokemon.pokemon(i)
+			let pokemon = XGPokemon.index(i)
 			if pokemon.nameID > 0 {
 				let p = XGPokemonStats(index: pokemon.index)
 				
@@ -221,11 +221,11 @@ class XGRandomiser : NSObject {
 		printg("randomising pokemon types...")
 		for i in 1 ..< kNumberOfPokemon {
 			
-			if XGPokemon.pokemon(i).nameID == 0 {
+			if XGPokemon.index(i).nameID == 0 {
 				continue
 			}
 			
-			let pokemon = XGPokemon.pokemon(i)
+			let pokemon = XGPokemon.index(i)
 			if pokemon.nameID > 0 {
 				let p = XGPokemonStats(index: pokemon.index)
 				
@@ -242,7 +242,7 @@ class XGRandomiser : NSObject {
 		printg("randomising pokemon evolutions...")
 		for i in 1 ..< kNumberOfPokemon {
 			
-			let pokemon = XGPokemon.pokemon(i)
+			let pokemon = XGPokemon.index(i)
 			if pokemon.nameID > 0 {
 				let p = XGPokemonStats(index: pokemon.index)
 				let m = p.evolutions
@@ -269,12 +269,12 @@ class XGRandomiser : NSObject {
 		
 		for i in 1 ... kNumberOfTMsAndHMs {
 			let tm = XGTMs.tm(i)
-			tm.replaceWithMove(.move(tmIndexes[i - 1]))
+			tm.replaceWithMove(.index(tmIndexes[i - 1]))
 		}
 		for i in 1 ... kNumberOfTutorMoves {
 			let tm = XGTMs.tutor(i)
 			tm.replaceWithMove(XGMoves.random())
-			tm.replaceWithMove(.move(tmIndexes[i + kNumberOfTMsAndHMs - 1]))
+			tm.replaceWithMove(.index(tmIndexes[i + kNumberOfTMsAndHMs - 1]))
 		}
 		printg("done!")
 	}

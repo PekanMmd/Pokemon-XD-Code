@@ -35,11 +35,11 @@ var kAbilitiesStartOffset: Int = {
 
 enum XGAbilities {
 	
-	case ability(Int)
+	case index(Int)
 	
 	var index: Int {
 		switch self {
-		case .ability(let i):
+		case .index(let i):
 			if i > kNumberOfAbilities || i < 0 {
 				return 0
 			}
@@ -93,10 +93,10 @@ enum XGAbilities {
 	
 	static func random() -> XGAbilities {
 		var rand = 0
-		while (XGAbilities.ability(rand).nameID == 0) || (XGAbilities.ability(rand).name.string.length < 2) {
+		while (XGAbilities.index(rand).nameID == 0) || (XGAbilities.index(rand).name.string.length < 2) {
 			rand = Int.random(in: 1 ..< kNumberOfAbilities)
 		}
-		return XGAbilities.ability(rand)
+		return XGAbilities.index(rand)
 	}
 	
 }
@@ -109,7 +109,7 @@ extension XGAbilities: Codable {
 	init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		let index = try container.decode(Int.self, forKey: .index)
-		self = .ability(index)
+		self = .index(index)
 	}
 	
 	func encode(to encoder: Encoder) throws {
@@ -135,7 +135,7 @@ extension XGAbilities: XGEnumerable {
 	static var allValues: [XGAbilities] {
 		var values = [XGAbilities]()
 		for i in 0 ..< kNumberOfAbilities {
-			values.append(.ability(i))
+			values.append(.index(i))
 		}
 		return values
 	}
@@ -176,7 +176,7 @@ func allAbilities() -> [String : XGAbilities] {
 	
 	for i in 0 ..< kNumberOfAbilities {
 		
-		let a = XGAbilities.ability(i)
+		let a = XGAbilities.index(i)
 		dic[a.name.string.simplified] = a
 		
 	}
@@ -188,7 +188,7 @@ let abilities = allAbilities()
 
 func ability(_ name: String) -> XGAbilities {
 	if abilities[name.simplified] == nil { printg("couldn't find: " + name) }
-	return abilities[name.simplified] ?? .ability(0)
+	return abilities[name.simplified] ?? .index(0)
 }
 
 

@@ -87,11 +87,11 @@ final class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
 	var index			= 0
 	
 	var level			= 0x0
-	var species			= XGPokemon.pokemon(0)
-	var move1			= XGMoves.move(0)
-	var move2			= XGMoves.move(0)
-	var move3			= XGMoves.move(0)
-	var move4			= XGMoves.move(0)
+	var species			= XGPokemon.index(0)
+	var move1			= XGMoves.index(0)
+	var move2			= XGMoves.index(0)
+	var move3			= XGMoves.index(0)
+	var move4			= XGMoves.index(0)
 	
 	var giftType		= ""
 	
@@ -123,7 +123,7 @@ final class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
 		let start = startOffset
 		
 		let species = dol.get2BytesAtOffset(start + kDistroPokemonSpeciesOffset)
-		self.species = .pokemon(species)
+		self.species = .index(species)
 		
 		level = dol.getByteAtOffset(start + kDistroPokemonLevelOffset)
 		

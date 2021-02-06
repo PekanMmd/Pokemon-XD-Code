@@ -52,11 +52,11 @@ final class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon, Codable {
 	
 	var index			= 0
 	
-	var species			= XGPokemon.pokemon(0)
-	var move1			= XGMoves.move(0)
-	var move2			= XGMoves.move(0)
-	var move3			= XGMoves.move(0)
-	var move4			= XGMoves.move(0)
+	var species			= XGPokemon.index(0)
+	var move1			= XGMoves.index(0)
+	var move2			= XGMoves.index(0)
+	var move3			= XGMoves.index(0)
+	var move4			= XGMoves.index(0)
 	
 	var giftType		= "Mt. Battle Prize"
 	
@@ -86,17 +86,17 @@ final class XGMtBattlePrizePokemon: NSObject, XGGiftPokemon, Codable {
 		let start = startOffset
 		
 		let species = dol.get2BytesAtOffset(start + kMtBattlePokemonSpeciesOffset)
-		self.species = .pokemon(species)
+		self.species = .index(species)
 		self.level = dol.getByteAtOffset(kMtBattlePokemonLevelOffset + 3)
 		
 		var moveIndex = dol.get2BytesAtOffset(start + kMtBattlePokemonMove1Offset)
-		move1 = .move(moveIndex)
+		move1 = .index(moveIndex)
 		moveIndex = dol.get2BytesAtOffset(start + kMtBattlePokemonMove2Offset)
-		move2 = .move(moveIndex)
+		move2 = .index(moveIndex)
 		moveIndex = dol.get2BytesAtOffset(start + kMtBattlePokemonMove3Offset)
-		move3 = .move(moveIndex)
+		move3 = .index(moveIndex)
 		moveIndex = dol.get2BytesAtOffset(start + kMtBattlePokemonMove4Offset)
-		move4 = .move(moveIndex)
+		move4 = .index(moveIndex)
 		
 	}
 	

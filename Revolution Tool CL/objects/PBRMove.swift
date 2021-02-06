@@ -9,13 +9,13 @@
 import Foundation
 
 var kNumberOfMoves: Int {
-	return PBRDataTable.moves.numberOfEntries // 468 in vanilla
+	return GoDDataTable.moves.numberOfEntries // 468 in vanilla
 }
 
 final class XGMove: NSObject, XGIndexedValue {
 	
 	var startOffset			: Int {
-		return PBRDataTable.moves.offsetForEntryWithIndex(index)
+		return GoDDataTable.moves.offsetForEntryWithIndex(index)
 	}
 	var index				= 0x0
 	var moveIndex: Int {
@@ -84,7 +84,7 @@ final class XGMove: NSObject, XGIndexedValue {
 
 			return
 		}
-		let data  = PBRDataTableEntry.moves(index: self.index)
+		let data  = GoDDataTableEntry.moves(index: self.index)
 		
 		effect = data.getShort(0)
 		let targets = data.getShort(2)
@@ -122,7 +122,7 @@ final class XGMove: NSObject, XGIndexedValue {
 	func save() {
 		guard index >= 0 else { return }
 
-		let data  = PBRDataTableEntry.moves(index: index)
+		let data  = GoDDataTableEntry.moves(index: index)
 		
 		data.setShort(0, to: effect)
 		data.setShort(2, to: target.rawValue)

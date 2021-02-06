@@ -50,7 +50,7 @@ enum XDSConstantTypes: Equatable {
     */
 	#if GAME_XD
 	case character		
-	case pokemon
+	case index
 	#endif
 	case codePointer
 	case unknown(Int)
@@ -68,7 +68,7 @@ enum XDSConstantTypes: Equatable {
 		#if GAME_XD
 		case .msg				: return "MsgID"
 		case .character			: return "Character"
-		case .pokemon			: return "Pokemon"
+		case .index			: return "Pokemon"
 		#endif
 		case .codePointer		: return "Pointer"
 		case .unknown(let val)	: return XGScriptClass.classes(val).name
@@ -88,7 +88,7 @@ enum XDSConstantTypes: Equatable {
 		#if GAME_XD
 		case .msg				: return 8
 		case .character			: return 35
-		case .pokemon			: return 37
+		case .index			: return 37
 		#endif
 		case .codePointer		: return 53
 		case .unknown(let val)	: return val
@@ -108,7 +108,7 @@ enum XDSConstantTypes: Equatable {
 		#if GAME_XD
 		case  8: return .msg
 		case 35: return .character
-		case 37: return .pokemon
+		case 37: return .index
 		#endif
 		case 53: return .codePointer
 		default: return .unknown(id)
@@ -173,7 +173,7 @@ class XDSConstant : NSObject {
 			}
 			return text
 		#if GAME_XD
-		case .pokemon:
+		case .index:
 			let mid = self.asInt == 0 ? "" : "\(self.asInt)"
 			return "Pokemon(\(mid))"
 		#endif

@@ -45,7 +45,7 @@ class XGTrainerPokemon {
 	init(deckData: XGDeckPokemon) {
 		
 		self.deckData = deckData
-		let table = PBRDataTable.tableForFile(deckData.deck.file)
+		let table = GoDDataTable.tableForFile(deckData.deck.file)
 		guard let data =  table.entryWithIndex(deckData.index) else {
 			printg("Failed to load trainer pokemon:", deckData.deck.file.path, "\nindex:", deckData.index)
 			return
@@ -109,7 +109,7 @@ class XGTrainerPokemon {
 	
 	func save() {
 		
-		let table = PBRDataTable.tableForFile(deckData.deck.file)
+		let table = GoDDataTable.tableForFile(deckData.deck.file)
 		guard let data =  table.entryWithIndex(deckData.index) else {
 			printg("Failed to load trainer pokemon:", deckData.deck.file.path, "\nindex:", deckData.index)
 			return

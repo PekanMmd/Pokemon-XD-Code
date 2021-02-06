@@ -7,7 +7,7 @@
 
 import Foundation
 
-class PBRDataTableEntry: XGIndexedValue {
+class GoDDataTableEntry: XGIndexedValue {
 
 	var index = 0
 	var size: Int {
@@ -19,9 +19,9 @@ class PBRDataTableEntry: XGIndexedValue {
 		return data.byteStream
 	}
 
-	private weak var table: PBRDataTable?
+	private weak var table: GoDDataTable?
 	
-	init(index: Int, table: PBRDataTable) {
+	init(index: Int, table: GoDDataTable) {
 		self.data = table.dataForEntryWithIndex(index) ?? XGMutableData(byteStream: [UInt8](repeating: 0, count: table.entrySize))
 		self.index = index
 		self.table = table
@@ -106,19 +106,21 @@ class PBRDataTableEntry: XGIndexedValue {
 		}
 		table.save()
 	}
-	
-	static func pokemonIcons(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.pokemonIcons)}
-	static func shopItems(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.items) }
-	static func typeMatchups(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.typeMatchups) }
-	static func pokemonModels(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.pokemonModels) }
-	static func baseStats(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.pokemonBaseStats) }
-	static func evolutions(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.evolutions) }
-	static func items(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.items) }
-	static func pokemonFaces(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.pokemonFaces) }
-	static func pokemonBodies(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.pokemonBodies) }
-	static func TMs(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.TMs)}
-	static func moves(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.moves) }
-	static func levelUpMoves(index: Int) -> PBRDataTableEntry { return PBRDataTableEntry(index: index, table: PBRDataTable.levelUpMoves) }
+
+	#if GAME_PBR
+	static func pokemonIcons(index: Int) -> GoDDataTableEntry { return GoDDataTableEntry(index: index, table: GoDDataTable.pokemonIcons)}
+	static func shopItems(index: Int) -> GoDDataTableEntry { return GoDDataTableEntry(index: index, table: GoDDataTable.items) }
+	static func typeMatchups(index: Int) -> GoDDataTableEntry { return GoDDataTableEntry(index: index, table: GoDDataTable.typeMatchups) }
+	static func pokemonModels(index: Int) -> GoDDataTableEntry { return GoDDataTableEntry(index: index, table: GoDDataTable.pokemonModels) }
+	static func baseStats(index: Int) -> GoDDataTableEntry { return GoDDataTableEntry(index: index, table: GoDDataTable.pokemonBaseStats) }
+	static func evolutions(index: Int) -> GoDDataTableEntry { return GoDDataTableEntry(index: index, table: GoDDataTable.evolutions) }
+	static func items(index: Int) -> GoDDataTableEntry { return GoDDataTableEntry(index: index, table: GoDDataTable.items) }
+	static func pokemonFaces(index: Int) -> GoDDataTableEntry { return GoDDataTableEntry(index: index, table: GoDDataTable.pokemonFaces) }
+	static func pokemonBodies(index: Int) -> GoDDataTableEntry { return GoDDataTableEntry(index: index, table: GoDDataTable.pokemonBodies) }
+	static func TMs(index: Int) -> GoDDataTableEntry { return GoDDataTableEntry(index: index, table: GoDDataTable.TMs)}
+	static func moves(index: Int) -> GoDDataTableEntry { return GoDDataTableEntry(index: index, table: GoDDataTable.moves) }
+	static func levelUpMoves(index: Int) -> GoDDataTableEntry { return GoDDataTableEntry(index: index, table: GoDDataTable.levelUpMoves) }
+	#endif
 	
 }
 

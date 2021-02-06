@@ -19,7 +19,7 @@ class GoDContextViewController: GoDViewController {
 				
 				if value >= 0 {
 					if value < kNumberOfTypes {
-						let type = XGMoveTypes.type(value)
+						let type = XGMoveTypes.index(value)
 						text += "\n\("Type:".spaceToLength(20)) \(type.name)"
 					}
 				}
@@ -27,29 +27,29 @@ class GoDContextViewController: GoDViewController {
 				if value > 0 {
 					
 					if value < CommonIndexes.NumberOfMoves.value {
-						text += "\n\("Move:".spaceToLength(20)) \(XGMoves.move(value).name.string)"
+						text += "\n\("Move:".spaceToLength(20)) \(XGMoves.index(value).name.string)"
 					}
 					if value <= CommonIndexes.NumberOfPokemon.value {
-						text += "\n\("Pokemon:".spaceToLength(20)) \(XGPokemon.pokemon(value).name.string)"
+						text += "\n\("Pokemon:".spaceToLength(20)) \(XGPokemon.index(value).name.string)"
 						
 						if value >= 277 && value <= 386 {
-							text += "\n\("Pokemon national index:".spaceToLength(20)) \(XGPokemon.pokemon(value).name.string)"
+							text += "\n\("Pokemon national index:".spaceToLength(20)) \(XGPokemon.index(value).name.string)"
 						}
 					}
 					
 					if value <= kNumberOfAbilities {
-						text += "\n\("Ability:".spaceToLength(20)) \(XGAbilities.ability(value).name.string)"
+						text += "\n\("Ability:".spaceToLength(20)) \(XGAbilities.index(value).name.string)"
 					}
 					
 					if value <= kNumberOfItems {
-						text += "\n\("Item:".spaceToLength(20)) \(XGItems.item(value).name.string)"
+						text += "\n\("Item:".spaceToLength(20)) \(XGItems.index(value).name.string)"
 					}
 					if value > kNumberOfItems && value < 0x250 {
-						text += "\n\("Item script index:".spaceToLength(20)) \(XGItems.item(value).name.string)"
+						text += "\n\("Item script index:".spaceToLength(20)) \(XGItems.index(value).name.string)"
 					}
 					
 					for i in 1 ..< kNumberOfItems {
-						let item = XGItems.item(i).data
+						let item = XGItems.index(i).data
 						if item.holdItemID == value {
 							text += "\n\("Item hold id:".spaceToLength(20)) \(item.name.string)"
 						}

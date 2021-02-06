@@ -108,7 +108,7 @@ extension XGUtility {
 			for i in 1 ..< CommonIndexes.NumberOfItems.value {
 				let currentOffset = itemListStart + (i * 2)
 
-				if XGItems.item(i).nameID != 0 {
+				if XGItems.index(i).nameID != 0 {
 					rel.replace2BytesAtOffset(currentOffset, withBytes: i)
 				} else {
 					rel.replace2BytesAtOffset(currentOffset, withBytes: 0)
@@ -123,7 +123,7 @@ extension XGUtility {
 		if let rel = XGFiles.common_rel.data {
 			for i in 0 ..< kNumberOfMoves {
 
-				let m = XGMoves.move(i).data
+				let m = XGMoves.index(i).data
 				if m.isShadowMove {
 					rel.replaceWordAtOffset(m.startOffset + 0x14, withBytes: 0x00023101)
 				}
@@ -201,8 +201,8 @@ extension XGUtility {
 		var pairs = [(move1: XGMoves, move2: XGMoves)]()
 
 		while currentOffset < endOffset {
-			let move1 = XGMoves.move(dol.get2BytesAtOffset(currentOffset + 4))
-			let move2 = XGMoves.move(dol.get2BytesAtOffset(currentOffset + 6))
+			let move1 = XGMoves.index(dol.get2BytesAtOffset(currentOffset + 4))
+			let move2 = XGMoves.index(dol.get2BytesAtOffset(currentOffset + 6))
 			pairs.append((move1: move1, move2: move2))
 			currentOffset += 12
 		}
@@ -251,10 +251,10 @@ extension XGUtility {
 		
 		for p in pokes {
 			for e in XGPokemonStats(index: p.index).evolutions {
-				let evo = XGPokemon.pokemon(e.evolvesInto)
+				let evo = XGPokemon.index(e.evolvesInto)
 				pokes.append(evo)
 				for ev in XGPokemonStats(index: evo.index).evolutions {
-					let evol = XGPokemon.pokemon(ev.evolvesInto)
+					let evol = XGPokemon.index(ev.evolvesInto)
 					pokes.append(evol)
 				}
 			}
@@ -667,24 +667,24 @@ extension XGUtility {
 		}
 		
 		for i in 0 ..< CommonIndexes.NumberOfPokemon.value {
-			if i == 0 || XGPokemon.pokemon(i).nameID > 0 {
+			if i == 0 || XGPokemon.index(i).nameID > 0 {
 				addMacro(value: i, type: .pokemon)
 			}
 		}
 		for i in 0 ..< CommonIndexes.NumberOfMoves.value {
-			if i == 0 || XGMoves.move(i).nameID > 0 {
+			if i == 0 || XGMoves.index(i).nameID > 0 {
 				addMacro(value: i, type: .move)
 			}
 		}
 		
 		for i in 0 ..< CommonIndexes.TotalNumberOfItems.value {
-			if i == 0 || (XGItems.item(i).scriptIndex == i && XGItems.item(i).nameID > 0) {
+			if i == 0 || (XGItems.index(i).scriptIndex == i && XGItems.index(i).nameID > 0) {
 				addMacro(value: i, type: .item)
 			}
 		}
 		
 		for i in 0 ..< kNumberOfAbilities {
-			if i == 0 || XGAbilities.ability(i).nameID > 0 {
+			if i == 0 || XGAbilities.index(i).nameID > 0 {
 				addMacro(value: i, type: .ability)
 			}
 		}
@@ -913,7 +913,7 @@ extension XGUtility {
 			macros.append(.macroImmediate(constant, .move))
 		}
 		for i in -1 ..< CommonIndexes.NumberOfItems.value {
-			let item = XGItems.item(i)
+			let item = XGItems.index(i)
 			let constant = XDSConstant.integer(item.scriptIndex)
 			macros.append(.macroImmediate(constant, .item))
 		}

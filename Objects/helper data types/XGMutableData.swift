@@ -65,16 +65,19 @@ class XGMutableData {
 			self.data = data
 		}
 	}
-	
-	func save() {
+
+	@discardableResult
+	func save() -> Bool {
 		if data.write(to: file) {
 			if settings.verbose {
 				printg("data successfully written to file:", file.path)
 			}
+			return true
 		} else {
 			if settings.verbose {
 				printg("data failed to be written to file:", file.path)
 			}
+			return false
 		}
 	}
 
@@ -285,6 +288,17 @@ class XGMutableData {
 		
 		for i in 0 ..< bytes.count {
 			self.replace2BytesAtOffset(offset + (i*2), withBytes: bytes[i])
+		}
+	}
+
+	func replaceBytesFromOffset(_ offset: Int, withWordStream bytes: [UInt32]) {
+		if offset < 0 || offset + (bytes.count * 4) > self.length {
+			printg("Attempting to write \(bytes.count * 4) bytes from offset: \(offset.hexString()), file: \(file.path), length: \(self.length.hexString())")
+			return
+		}
+
+		for i in 0 ..< bytes.count {
+			self.replaceWordAtOffset(offset + (i*4), withBytes: bytes[i])
 		}
 	}
 	

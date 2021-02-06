@@ -28,8 +28,6 @@ enum XGRegisters : UInt32 {
 	}
 }
 
-typealias ASM = [XGASM]
-
 enum XGASM {
 
 	case mr(XGRegisters, XGRegisters)

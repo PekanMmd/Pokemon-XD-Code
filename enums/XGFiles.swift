@@ -65,6 +65,7 @@ indirect enum XGFiles {
 	case wimgt
 	case tool(String)
 	case embedded(String)
+	case gameFile(String)
 	case nameAndFsysName(String, String)
 	case typeAndFsysName(XGFileTypes, String)
 	case nameAndFolder(String, XGFolders)
@@ -85,7 +86,7 @@ indirect enum XGFiles {
 		case .pokeBody(let id)		: return "body_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
 		case .typeImage(let id)		: return "type_" + String(id) + XGFileTypes.png.fileExtension
 		case .trainerFace(let id)	: return "trainer_" + String(id) + XGFileTypes.png.fileExtension
-		case .fsys(let s)			: return s + XGFileTypes.fsys.fileExtension
+		case .fsys(let s)			: return XGFiles.gameFile(s + XGFileTypes.fsys.fileExtension).fileName
 		case .lzss(let s)			: return s + XGFileTypes.lzss.fileExtension
 		case .toc					: return "game" + XGFileTypes.toc.fileExtension
 		// windows doesn't support colons in file names
@@ -96,6 +97,7 @@ indirect enum XGFiles {
 		case .wimgt                 : return environment == .Windows ? "wimgt.exe" :  "wimgt"
 		case .tool(let s)			: return s + (environment == .Windows ? ".exe" : "")
 		case .embedded(let s)		: return s
+		case .gameFile(let s)			: return s
 		case .nameAndFolder(let name, _) : return name
 		case .nameAndFsysName(let name, _): return name
 		case .typeAndFsysName(let type, _): return folder.files.first(where: {$0.fileType == type})?.fileName ?? "-"
@@ -114,7 +116,7 @@ indirect enum XGFiles {
 		case .tableres2			: return XGFiles.fsys("common_dvdeth").folder
 		case .pocket_menu		: return XGFiles.fsys("pocket_menu").folder
 		case .deck				: return XGFiles.fsys("deck_archive").folder
-		case .fsys(let s)		: return XGFolders.ISOExport(s)
+		case .fsys(let s)		: return XGFiles.gameFile(s + XGFileTypes.fsys.fileExtension).folder
 		case .lzss				: return .LZSS
 		case .pokeFace			: return .PokeFace
 		case .pokeBody			: return .PokeBody
@@ -128,6 +130,7 @@ indirect enum XGFiles {
 		case .wimgt      		: return .Wiimm
 		case .tool				: return .Resources
 		case .embedded			: return .Documents
+		case .gameFile(let s)	: return .ISOExport(s.removeFileExtensions())
 		case .nameAndFolder( _, let aFolder) : return aFolder
 		case .nameAndFsysName(_, let fsysName): return XGFiles.fsys(fsysName).folder
 		case .typeAndFsysName(_, let fsysName): return XGFiles.fsys(fsysName).folder

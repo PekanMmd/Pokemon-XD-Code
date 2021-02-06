@@ -15,12 +15,12 @@ let shadowMovesUseHMFlag	= XGMove(index: kFirstShadowMoveIndex).HMFlag
 
 enum XGMoves : CustomStringConvertible {
 	
-	case move(Int)
+	case index(Int)
 	
 	var index : Int {
 		get {
 			switch self {
-				case .move(let i):
+				case .index(let i):
 					if i > CommonIndexes.NumberOfMoves.value || i < 0 {
 						return 0
 					}
@@ -75,7 +75,7 @@ enum XGMoves : CustomStringConvertible {
 	var type : XGMoveTypes {
 		get {
 			let index = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kMoveTypeOffset)
-			return XGMoveTypes.type(index)
+			return XGMoveTypes.index(index)
 		}
 	}
 	
@@ -101,33 +101,33 @@ enum XGMoves : CustomStringConvertible {
 	static func allMoves() -> [XGMoves] {
 		var moves = [XGMoves]()
 		for i in 0 ..< kNumberOfMoves {
-			moves.append(.move(i))
+			moves.append(.index(i))
 		}
 		return moves
 	}
 	
 	static func random() -> XGMoves {
 		var rand = 0
-		while (XGMoves.move(rand).isShadowMove) || (XGMoves.move(rand).descriptionID == 0) || rand == 0 || rand == 355 {
+		while (XGMoves.index(rand).isShadowMove) || (XGMoves.index(rand).descriptionID == 0) || rand == 0 || rand == 355 {
 			rand = Int.random(in: 1 ..< kNumberOfMoves)
 		}
-		return XGMoves.move(rand)
+		return XGMoves.index(rand)
 	}
 	
 	static func randomShadow() -> XGMoves {
 		var rand = 0
-		while (!XGMoves.move(rand).isShadowMove) || (XGMoves.move(rand).descriptionID == 0)  {
+		while (!XGMoves.index(rand).isShadowMove) || (XGMoves.index(rand).descriptionID == 0)  {
 			rand = Int.random(in: 1 ..< kNumberOfMoves)
 		}
-		return XGMoves.move(rand)
+		return XGMoves.index(rand)
 	}
 
 	static func randomDamaging() -> XGMoves {
 		var rand = 0
-		while rand == 0 || (XGMoves.move(rand).descriptionID == 0) || (XGMoves.move(rand).data.basePower == 0) {
+		while rand == 0 || (XGMoves.index(rand).descriptionID == 0) || (XGMoves.index(rand).data.basePower == 0) {
 			rand = Int.random(in: 1 ..< kNumberOfMoves)
 		}
-		return XGMoves.move(rand)
+		return XGMoves.index(rand)
 	}
 	
 	static func randomMoveset(count: Int = 4) -> [XGMoves] {
@@ -139,7 +139,7 @@ enum XGMoves : CustomStringConvertible {
 			set.append(0)
 		}
 		return set.map({ (i) -> XGMoves in
-			return .move(i)
+			return .index(i)
 		})
 	}
 	
@@ -152,7 +152,7 @@ enum XGMoves : CustomStringConvertible {
 			set.append(0)
 		}
 		return set.map({ (i) -> XGMoves in
-			return .move(i)
+			return .index(i)
 		})
 	}
 	
@@ -165,7 +165,7 @@ func allMoves() -> [String : XGMoves] {
 	
 	for i in 0 ..< kNumberOfMoves {
 		
-		let a = XGMoves.move(i)
+		let a = XGMoves.index(i)
 		
 		dic[a.name.string.simplified] = a
 		
@@ -178,14 +178,14 @@ let moves = allMoves()
 
 func move(_ name: String) -> XGMoves {
 	if moves[name.simplified] == nil { printg("couldn't find: " + name) }
-	return moves[name.simplified] ?? .move(0)
+	return moves[name.simplified] ?? .index(0)
 }
 
 
 func allMovesArray() -> [XGMoves] {
 	var moves: [XGMoves] = []
 	for i in 0 ..< kNumberOfMoves {
-		moves.append(XGMoves.move(i))
+		moves.append(XGMoves.index(i))
 	}
 	return moves
 }
@@ -199,7 +199,7 @@ extension XGMoves: Codable {
 	init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		let index = try container.decode(Int.self, forKey: .index)
-		self = .move(index)
+		self = .index(index)
 	}
 	
 	func encode(to encoder: Encoder) throws {

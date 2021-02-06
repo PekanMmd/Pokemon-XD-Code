@@ -58,15 +58,15 @@ enum XGTMs {
 	var item : XGItems {
 		get {
 			let i = kFirstTMItemIndex + (index - 1)
-			return .item(i)
+			return .index(i)
 		}
 	}
 	
 	var move : XGMoves {
 		get {
 			switch self {
-				case .tm : return .move( XGFiles.dol.data!.get2BytesAtOffset(startOffset) )
-				case .tutor : return .move( XGFiles.common_rel.data!.get2BytesAtOffset(startOffset + kTutorMoveMoveIndexOffset) )
+				case .tm : return .index( XGFiles.dol.data!.get2BytesAtOffset(startOffset) )
+				case .tutor : return .index( XGFiles.common_rel.data!.get2BytesAtOffset(startOffset + kTutorMoveMoveIndexOffset) )
 			}
 		}
 	}
@@ -145,7 +145,7 @@ enum XGTMs {
 	
 	func replaceWithMove(_ move: XGMoves) {
 		
-		if move == XGMoves.move(0) { return }
+		if move == XGMoves.index(0) { return }
 		
 		switch self {
 			case .tm    :

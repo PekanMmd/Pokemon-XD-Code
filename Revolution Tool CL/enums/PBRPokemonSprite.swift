@@ -18,8 +18,8 @@ enum PBRPokemonImage : XGIndexedValue {
 		}
 	}
 	
-	var entry : PBRDataTableEntry {
-		PBRDataTableEntry.pokemonIcons(index: index)
+	var entry : GoDDataTableEntry {
+		GoDDataTableEntry.pokemonIcons(index: index)
 	}
 	
 	var maleID : UInt32 {
@@ -75,8 +75,8 @@ enum PBRPokemonModel : XGIndexedValue {
 		}
 	}
 	
-	private var entry : PBRDataTableEntry {
-		return PBRDataTableEntry.pokemonModels(index: index)
+	private var entry : GoDDataTableEntry {
+		return GoDDataTableEntry.pokemonModels(index: index)
 	}
 	
 	var fsysFileIndex : Int {

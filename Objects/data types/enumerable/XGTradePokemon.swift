@@ -62,11 +62,11 @@ final class XGTradePokemon: NSObject, XGGiftPokemon, Codable {
 	var index			= 0
 	
 	var level			= 0x0
-	var species			= XGPokemon.pokemon(0)
-	var move1			= XGMoves.move(0)
-	var move2			= XGMoves.move(0)
-	var move3			= XGMoves.move(0)
-	var move4			= XGMoves.move(0)
+	var species			= XGPokemon.index(0)
+	var move1			= XGMoves.index(0)
+	var move2			= XGMoves.index(0)
+	var move3			= XGMoves.index(0)
+	var move4			= XGMoves.index(0)
 	
 	var giftType		= "Duking Trade"
 	private(set) var gender	= XGGenders.random
@@ -100,16 +100,16 @@ final class XGTradePokemon: NSObject, XGGiftPokemon, Codable {
 		let start = startOffset
 		
 		let species = dol.get2BytesAtOffset(start + kTradePokemonSpeciesOffset)
-		self.species = .pokemon(species)
+		self.species = .index(species)
 		
 		var moveIndex = dol.get2BytesAtOffset(start + kTradePokemonMove1Offset)
-		move1 = .move(moveIndex)
+		move1 = .index(moveIndex)
 		moveIndex = dol.get2BytesAtOffset(start + kTradePokemonMove2Offset)
-		move2 = .move(moveIndex)
+		move2 = .index(moveIndex)
 		moveIndex = dol.get2BytesAtOffset(start + kTradePokemonMove3Offset)
-		move3 = .move(moveIndex)
+		move3 = .index(moveIndex)
 		moveIndex = dol.get2BytesAtOffset(start + kTradePokemonMove4Offset)
-		move4 = .move(moveIndex)
+		move4 = .index(moveIndex)
 		
 		level = dol.getByteAtOffset(start + kTradePokemonLevelOffset)
 		

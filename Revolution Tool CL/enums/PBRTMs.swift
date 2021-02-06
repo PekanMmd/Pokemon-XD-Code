@@ -21,11 +21,11 @@ enum XGTMs: XGIndexedValue {
 	}
 	
 	var move : XGMoves {
-		return .move(PBRDataTableEntry.TMs(index: index - 1).getShort(0))
+		return .move(GoDDataTableEntry.TMs(index: index - 1).getShort(0))
 	}
 
 	var category: Int {
-		return PBRDataTableEntry.TMs(index: index - 1).getByte(2)
+		return GoDDataTableEntry.TMs(index: index - 1).getByte(2)
 	}
 
 	var isHM: Bool {

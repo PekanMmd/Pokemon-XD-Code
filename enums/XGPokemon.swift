@@ -25,7 +25,7 @@ func < (p1: XGPokemon, p2: XGPokemon) -> Bool {
 
 enum XGPokemon: CustomStringConvertible {
 	
-	case pokemon(Int)
+	case index(Int)
 	case nationalIndex(Int)
 	
 	var description : String {
@@ -37,14 +37,14 @@ enum XGPokemon: CustomStringConvertible {
 	var index : Int {
 		get {
 			switch self {
-			case .pokemon(let i):
+			case .index(let i):
 				if (i > CommonIndexes.NumberOfPokemon.value) || (i < 0) {
 					return 0
 				}
 				return i
 			case .nationalIndex(let ni):
 				for i in 0 ..< CommonIndexes.NumberOfPokemon.value {
-					if XGPokemon.pokemon(i).stats.nationalIndex == ni {
+					if XGPokemon.index(i).stats.nationalIndex == ni {
 						return i
 					}
 				}
@@ -75,27 +75,27 @@ enum XGPokemon: CustomStringConvertible {
 	var ability1 : String {
 		get {
 			let a1 = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kAbility1Offset)
-			return XGAbilities.ability(a1).name.string
+			return XGAbilities.index(a1).name.string
 		}
 	}
 	var ability2 : String {
 		get {
 			let a2 = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kAbility2Offset)
-			return XGAbilities.ability(a2).name.string
+			return XGAbilities.index(a2).name.string
 		}
 	}
 	
 	var type1 : XGMoveTypes {
 		get {
 			let type = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kType1Offset)
-			return XGMoveTypes.type(type)
+			return XGMoveTypes.index(type)
 		}
 	}
 	
 	var type2 : XGMoveTypes {
 		get {
 			let type = XGFiles.common_rel.data!.getByteAtOffset(startOffset + kType2Offset)
-			return XGMoveTypes.type(type)
+			return XGMoveTypes.index(type)
 		}
 	}
 	
@@ -125,7 +125,7 @@ enum XGPokemon: CustomStringConvertible {
 	func movesForLevel(_ pokeLevel: Int) -> [XGMoves] {
 		// Returns the last 4 moves a pokemon would have learned at a level. Gives default move sets like in the GBA games.
 		
-		var moves = [XGMoves](repeating: XGMoves.move(0), count: 4)
+		var moves = [XGMoves](repeating: XGMoves.index(0), count: 4)
 		
 		func hasMove(_ move: XGMoves) -> Bool {
 			for aMove in moves {
@@ -159,16 +159,16 @@ enum XGPokemon: CustomStringConvertible {
 	
 	static func random() -> XGPokemon {
 		var rand = 0
-		while (rand == 0) || (XGPokemon.pokemon(rand).catchRate == 0) {
+		while (rand == 0) || (XGPokemon.index(rand).catchRate == 0) {
 			rand = Int.random(in: 1 ..< kNumberOfPokemon)
 		}
-		return XGPokemon.pokemon(rand)
+		return XGPokemon.index(rand)
 	}
 	
 	static func allPokemon() -> [XGPokemon] {
 		var mons = [XGPokemon]()
 		for i in 0 ..< kNumberOfPokemon {
-			mons.append(.pokemon(i))
+			mons.append(.index(i))
 		}
 		return mons
 	}
@@ -180,7 +180,7 @@ func allPokemon() -> [String : XGPokemon] {
 	
 	for i in 0 ..< kNumberOfPokemon {
 		
-		let a = XGPokemon.pokemon(i)
+		let a = XGPokemon.index(i)
 		
 		dic[a.name.string.lowercased()] = a
 		
@@ -193,13 +193,13 @@ let pokemons = allPokemon()
 
 func pokemon(_ name: String) -> XGPokemon {
 	if pokemons[name.lowercased()] == nil { printg("couldn't find: " + name) }
-	return pokemons[name.lowercased()] ?? .pokemon(0)
+	return pokemons[name.lowercased()] ?? .index(0)
 }
 
 func allPokemonArray() -> [XGPokemon] {
 	var pokes: [XGPokemon] = []
 	for i in 0 ..< kNumberOfPokemon {
-		pokes.append(XGPokemon.pokemon(i))
+		pokes.append(XGPokemon.index(i))
 	}
 	return pokes
 }
@@ -212,7 +212,7 @@ extension XGPokemon: Codable {
 	init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		let index = try container.decode(Int.self, forKey: .index)
-		self = .pokemon(index)
+		self = .index(index)
 	}
 	
 	func encode(to encoder: Encoder) throws {

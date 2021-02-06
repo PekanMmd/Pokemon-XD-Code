@@ -46,7 +46,7 @@ extension XGEvolution: XGDocumentable {
 	}
 	
 	var documentableName: String {
-		return XGPokemon.pokemon(evolvesInto).name.string
+		return XGPokemon.index(evolvesInto).name.string
 	}
 	
 	static var DocumentableKeys: [String] {
@@ -64,11 +64,11 @@ extension XGEvolution: XGDocumentable {
 			case .trade:
 				return condition.string
 			case .tradeWithItem:
-				return XGItems.item(condition).name.string
+				return XGItems.index(condition).name.string
 			case .evolutionStone:
-				return XGItems.item(condition).name.string
+				return XGItems.index(condition).name.string
 			case .levelUpWithKeyItem:
-				return XGItems.item(condition).name.string
+				return XGItems.index(condition).name.string
 			default:
 				return condition == 0 ? "-" : condition.string
 			}

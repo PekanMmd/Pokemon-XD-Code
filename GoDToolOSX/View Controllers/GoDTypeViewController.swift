@@ -136,7 +136,7 @@ class GoDTypeViewController: GoDTableViewController {
 		popups = [normal, fight, fly, poison, ground, rock, bug, ghost, steel, fairy, fire, water, grass, electric, psychic, ice, dragon, dark]
 		
 		for i in 0 ..< kNumberOfTypes {
-			let type = XGMoveTypes.type(i)
+			let type = XGMoveTypes.index(i)
 			labels[i].stringValue = type.enumerableName
 			popups[i].select(.neutral)
 		}
@@ -150,7 +150,7 @@ class GoDTypeViewController: GoDTableViewController {
 		
 		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), background: XGFiles.typeImage(row).image, fontSize: 16, width: widthForTable())) as! GoDTableCellView
 		
-		let type = XGMoveTypes.type(row)
+		let type = XGMoveTypes.index(row)
 		cell.setTitle(type.data.name.unformattedString)
 		cell.setBackgroundImage(XGFiles.typeImage(row).image)
 		

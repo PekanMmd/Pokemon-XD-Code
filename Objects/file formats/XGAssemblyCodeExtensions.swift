@@ -7,6 +7,63 @@
 
 import Foundation
 
+typealias ASM = [XGASM]
+
+extension ASM {
+	func wordStreamAtRAMOffset(_ offset: Int) -> [UInt32] {
+		var startOffset = offset
+		if startOffset > 0x80000000 {
+			startOffset -= 0x80000000
+		}
+
+		var labels = [String : Int]()
+		var currentOffset = startOffset
+		for inst in self {
+			switch inst {
+			case .label(let name):
+				labels[name] = currentOffset
+			default:
+				currentOffset += 4
+			}
+		}
+
+		var instructions = [UInt32]()
+		currentOffset = startOffset
+		for inst in self {
+			switch inst {
+			case .label:
+				break
+			case .b_l: fallthrough
+			case .bl_l: fallthrough
+			case .beq_l: fallthrough
+			case .bne_l: fallthrough
+			case .blt_l: fallthrough
+			case .ble_l: fallthrough
+			case .bgt_l: fallthrough
+			case .bge_l:
+				let code = inst.instructionForBranchToLabel(labels: labels).codeAtOffset(currentOffset)
+				instructions.append(code)
+			default:
+				let code = inst.codeAtOffset(currentOffset)
+				instructions.append(code)
+			}
+			currentOffset += 4
+		}
+		return instructions
+	}
+
+	func asGeckoCode(RAMOffset: Int) -> String {
+		var codeText = ""
+
+		wordStreamAtRAMOffset(RAMOffset).forEachIndexed { (index, code) in
+			let offset = 0x04000000 + UInt32((index * 4) + (RAMOffset & 0xFFFFFF))
+			codeText += "\(offset.hex()) \(code.hex())\n"
+		}
+
+		return codeText
+	}
+}
+
 extension XGAssembly {
 
 	class func ASMfreeSpacePointer() -> Int {
@@ -23,56 +80,16 @@ extension XGAssembly {
 	}
 
 	class func replaceRELASM(startOffset: Int, newASM asm: ASM) {
-		let ramOffset = startOffset > kRELtoRAMOffsetDifference ? kRELtoRAMOffsetDifference : 0
-
-		var labels = [String : Int]()
-		var currentOffset = startOffset - ramOffset + kRELtoRAMOffsetDifference
-		for inst in asm {
-			switch inst {
-			case .label(let name):
-				labels[name] = currentOffset
-			default:
-				currentOffset += 4
-			}
-		}
-
-
-		let rel = XGFiles.common_rel.data!
-		currentOffset = startOffset - ramOffset + kRELtoRAMOffsetDifference
-		for inst in asm {
-			switch inst {
-			case .label:
-				break
-			case .b_l: fallthrough
-			case .bl_l: fallthrough
-			case .beq_l: fallthrough
-			case .bne_l: fallthrough
-			case .blt_l: fallthrough
-			case .ble_l: fallthrough
-			case .bgt_l: fallthrough
-			case .bge_l:
-				let code = inst.instructionForBranchToLabel(labels: labels).codeAtOffset(currentOffset)
-				rel.replaceWordAtOffset(currentOffset - kRELtoRAMOffsetDifference, withBytes: code)
-				currentOffset += 4
-			default:
-				let code = inst.codeAtOffset(currentOffset)
-				rel.replaceWordAtOffset(currentOffset - kRELtoRAMOffsetDifference, withBytes: code)
-				currentOffset += 4
-			}
-
-		}
-		rel.save()
+		let ramOffset = startOffset > kRELtoRAMOffsetDifference ? startOffset : startOffset + kRELtoRAMOffsetDifference
+		replaceRELASM(startOffset: startOffset, newASM: asm.wordStreamAtRAMOffset(ramOffset))
 	}
 
 	class func replaceRELASM(startOffset: Int, newASM asm: [UInt32]) {
-		let ramOffset = startOffset > kRELtoRAMOffsetDifference ? kRELtoRAMOffsetDifference : 0
-		let rel = XGFiles.common_rel.data!
-		for i in 0 ..< asm.count {
-			let offset = startOffset + (i * 4) - ramOffset
-			let instruction = asm[i]
-			rel.replaceWordAtOffset(offset, withBytes: instruction)
+		let ramOffset = startOffset > kRELtoRAMOffsetDifference ? startOffset : startOffset + kRELtoRAMOffsetDifference
+		if let rel = XGFiles.common_rel.data {
+			rel.replaceBytesFromOffset(ramOffset - kRELtoRAMOffsetDifference, withWordStream: asm)
+			rel.save()
 		}
-		rel.save()
 	}
 
 	class func replaceRamASM(RAMOffset: Int, newASM asm: [XGASM]) {

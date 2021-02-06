@@ -9,7 +9,7 @@
 import Foundation
 
 var kNumberOfPokemon: Int {
-	return PBRDataTable.pokemonBaseStats.numberOfEntries // 501 in vanilla
+	return GoDDataTable.pokemonBaseStats.numberOfEntries // 501 in vanilla
 }
 let kNumberOfTMsAndHMs = 100
 let kNumberOfTutorMoves = 0 // for XD compatibility
@@ -75,7 +75,7 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 	var levelUpMoves = [XGLevelUpMove]()
 	
 	var faces : [PBRPokemonImage] {
-		let formesData = PBRDataTableEntry.pokemonFaces(index: baseIndex)
+		let formesData = GoDDataTableEntry.pokemonFaces(index: baseIndex)
 		let numberOfFormes = formesData.getByte(7) / 2 // unevolved pokemon that can evolve seem to have 3 for this value for some reason. least significant bit is read separately but don't know what it's used for atm
 		var formes = [PBRPokemonImage]()
 		let firstAlternate = formesData.getShort(4)
@@ -86,7 +86,7 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 	}
 	
 	var bodies : [PBRPokemonImage] {
-		let formesData = PBRDataTableEntry.pokemonBodies(index: baseIndex)
+		let formesData = GoDDataTableEntry.pokemonBodies(index: baseIndex)
 		let numberOfFormes = formesData.getByte(7)
 		var formes = [PBRPokemonImage]()
 		let firstAlternate = formesData.getShort(4)
@@ -101,7 +101,7 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 			return XGPokemonStats(index: baseIndex).models
 		}
 
-		let totalNumberOfModels = PBRDataTable.pokemonModels.numberOfEntries
+		let totalNumberOfModels = GoDDataTable.pokemonModels.numberOfEntries
 		var currentIndex = firstModelIndex
 		var done = false
 		var list = [PBRPokemonModel]()
@@ -134,8 +134,8 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 		super.init()
 		
 		self.index = index
-		let data = PBRDataTableEntry.baseStats(index: index)
-		startOffset = PBRDataTable.pokemonBaseStats.offsetForEntryWithIndex(index)
+		let data = GoDDataTableEntry.baseStats(index: index)
+		startOffset = GoDDataTable.pokemonBaseStats.offsetForEntryWithIndex(index)
 		
 		// each bit of the first 12 bytes represents one tm
 		// stored in 32 bit chunks with the least significant bit
@@ -191,10 +191,10 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 		if EVs[5]  { specialDefenseYield += 2 }
 		if EVs[4]  { specialDefenseYield += 1 }
 		
-		let evoData = PBRDataTableEntry.evolutions(index: self.index)
-		let moveData = PBRDataTableEntry.levelUpMoves(index: self.index)
+		let evoData = GoDDataTableEntry.evolutions(index: self.index)
+		let moveData = GoDDataTableEntry.levelUpMoves(index: self.index)
 		
-		let numberOfEvolutions = PBRDataTable.evolutions.entrySize / kSizeOfEvolution
+		let numberOfEvolutions = GoDDataTable.evolutions.entrySize / kSizeOfEvolution
 		for i in 0 ..< numberOfEvolutions {
 			let offset = i * kSizeOfEvolution
 			let method = evoData.getShort(offset + 0)
@@ -204,7 +204,7 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 			evolutions.append(evo)
 		}
 		
-		let numberOfMoves = PBRDataTable.levelUpMoves.entrySize / kSizeOfLevelUpMove
+		let numberOfMoves = GoDDataTable.levelUpMoves.entrySize / kSizeOfLevelUpMove
 		for i in 0 ..< numberOfMoves {
 			let offset = i * kSizeOfLevelUpMove
 			let move = moveData.getShort(offset + 0)
@@ -216,7 +216,7 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 	
 	func save() {
 		
-		let data = PBRDataTableEntry.baseStats(index: self.index)
+		let data = GoDDataTableEntry.baseStats(index: self.index)
 		
 		for i in 0 ... 3 {
 			let start = i * 32
@@ -271,8 +271,8 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 		data.save()
 		
 		
-		let evoData = PBRDataTableEntry.evolutions(index: self.index)
-		let moveData = PBRDataTableEntry.levelUpMoves(index: self.index)
+		let evoData = GoDDataTableEntry.evolutions(index: self.index)
+		let moveData = GoDDataTableEntry.levelUpMoves(index: self.index)
 		
 		let numberOfEvolutions = evolutions.count
 		for i in 0 ..< numberOfEvolutions {

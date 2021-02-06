@@ -10,11 +10,11 @@ import Foundation
 
 enum XGItems {
 	
-	case item(Int)
+	case index(Int)
 	
 	var index : Int {
 		switch self {
-		case .item(let i): return (i > CommonIndexes.NumberOfItems.value && i < 0x250) ? i - 150 : i
+		case .index(let i): return (i > CommonIndexes.NumberOfItems.value && i < 0x250) ? i - 150 : i
 		}
 	}
 	
@@ -81,7 +81,7 @@ enum XGItems {
 	static func allItems() -> [XGItems] {
 		var items = [XGItems]()
 		for i in 0 ..< CommonIndexes.NumberOfItems.value {
-			items.append(.item(i))
+			items.append(.index(i))
 		}
 		return items
 	}
@@ -89,7 +89,7 @@ enum XGItems {
 	static func pokeballs() -> [XGItems] {
 		var items = [XGItems]()
 		for i in 0 ... 12 {
-			items.append(.item(i))
+			items.append(.index(i))
 		}
 		return items
 	}
@@ -102,7 +102,7 @@ func allItems() -> [String : XGItems] {
 	
 	for i in 0 ..< CommonIndexes.NumberOfItems.value {
 		
-		let a = XGItems.item(i)
+		let a = XGItems.index(i)
 		
 		dic[a.name.string.simplified] = a
 		
@@ -115,13 +115,13 @@ let items = allItems()
 
 func item(_ name: String) -> XGItems {
 	if items[name.simplified] == nil { printg("couldn't find: " + name) }
-	return items[name.simplified] ?? .item(0)
+	return items[name.simplified] ?? .index(0)
 }
 
 func allItemsArray() -> [XGItems] {
 	var items : [XGItems] = []
 	for i in 0 ..< CommonIndexes.NumberOfItems.value {
-		items.append(XGItems.item(i))
+		items.append(XGItems.index(i))
 	}
 	return items
 }
@@ -134,7 +134,7 @@ extension XGItems: Codable {
 	init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		let index = try container.decode(Int.self, forKey: .index)
-		self = .item(index)
+		self = .index(index)
 	}
 	
 	func encode(to encoder: Encoder) throws {

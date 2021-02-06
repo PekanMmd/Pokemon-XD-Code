@@ -533,21 +533,21 @@ class XGDolPatcher {
 	class func decapitalise() {
 		
 		for i in 0 ..< CommonIndexes.NumberOfMoves.value {
-			let name = XGMoves.move(i).name
+			let name = XGMoves.index(i).name
 			if !name.duplicateWithString(name.string.capitalized).replace() {
 				printg("Couldn't decapitalise name: \(name)")
 			}
 		}
 		
 		for i in 0 ..< kNumberOfItems {
-			let name = XGItems.item(i).name
+			let name = XGItems.index(i).name
 			if !name.duplicateWithString(name.string.capitalized).replace() {
 				printg("Couldn't decapitalise name: \(name)")
 			}
 		}
 		
 		for i in 0 ..< CommonIndexes.NumberOfPokemon.value {
-			let name = XGPokemon.pokemon(i).name
+			let name = XGPokemon.index(i).name
 			if !name.duplicateWithString(name.string.capitalized).replace() {
 				printg("Couldn't decapitalise name: \(name)")
 			}
@@ -561,7 +561,7 @@ class XGDolPatcher {
 		}
 		
 		for i in 0 ..< kNumberOfAbilities {
-			let name = XGAbilities.ability(i).name
+			let name = XGAbilities.index(i).name
 			if !name.duplicateWithString(name.string.capitalized).replace() {
 				printg("Couldn't decapitalise name: \(name)")
 			}
