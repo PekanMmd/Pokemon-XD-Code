@@ -210,7 +210,7 @@ class XGSavePokemon {
 
 	var species: XGPokemon {
 		get {
-			return .pokemon(data.get2BytesAtOffset(kSavePokemonSpeciesOffset))
+			return .index(data.get2BytesAtOffset(kSavePokemonSpeciesOffset))
 		}
 		set {
 			data.replace2BytesAtOffset(kSavePokemonSpeciesOffset, withBytes: newValue.index)
@@ -282,7 +282,7 @@ class XGSavePokemon {
 
 	var ballCaughtWith: XGItems {
 		get {
-			return .item(data.getByteAtOffset(kSavePokemonBallCaughtInOffset))
+			return .index(data.getByteAtOffset(kSavePokemonBallCaughtInOffset))
 		}
 		set {
 			data.replaceByteAtOffset(kSavePokemonBallCaughtInOffset, withByte: newValue.index)
@@ -400,7 +400,7 @@ class XGSavePokemon {
 
 	var move1: XGMoves {
 		get {
-			return .move(data.get2BytesAtOffset(kSavePokemonMove1Offset))
+			return .index(data.get2BytesAtOffset(kSavePokemonMove1Offset))
 		}
 		set {
 			data.replace2BytesAtOffset(kSavePokemonMove1Offset, withBytes: newValue.index)
@@ -418,7 +418,7 @@ class XGSavePokemon {
 
 	var move2: XGMoves {
 		get {
-			return .move(data.get2BytesAtOffset(kSavePokemonMove2Offset))
+			return .index(data.get2BytesAtOffset(kSavePokemonMove2Offset))
 		}
 		set {
 			data.replace2BytesAtOffset(kSavePokemonMove2Offset, withBytes: newValue.index)
@@ -436,7 +436,7 @@ class XGSavePokemon {
 
 	var move3: XGMoves {
 		get {
-			return .move(data.get2BytesAtOffset(kSavePokemonMove3Offset))
+			return .index(data.get2BytesAtOffset(kSavePokemonMove3Offset))
 		}
 		set {
 			data.replace2BytesAtOffset(kSavePokemonMove3Offset, withBytes: newValue.index)
@@ -454,7 +454,7 @@ class XGSavePokemon {
 
 	var move4: XGMoves {
 		get {
-			return .move(data.get2BytesAtOffset(kSavePokemonMove4Offset))
+			return .index(data.get2BytesAtOffset(kSavePokemonMove4Offset))
 		}
 		set {
 			data.replace2BytesAtOffset(kSavePokemonMove4Offset, withBytes: newValue.index)
@@ -472,7 +472,7 @@ class XGSavePokemon {
 
 	var heldItem: XGItems {
 		get {
-			return .item(data.get2BytesAtOffset(kSavePokemonHeldItemOffset))
+			return .index(data.get2BytesAtOffset(kSavePokemonHeldItemOffset))
 		}
 		set {
 			data.replace2BytesAtOffset(kSavePokemonHeldItemOffset, withBytes: newValue.index)

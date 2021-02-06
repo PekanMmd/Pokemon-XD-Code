@@ -52,7 +52,7 @@ class XGTrainerPokemon : NSObject, Codable {
 	var shadowID	= 0
 	var index		= 0
 	
-	var species		= XGPokemon.pokemon(0) {
+	var species		= XGPokemon.index(0) {
 		didSet {
 			self.nameID = self.species.nameID
 		}
@@ -60,13 +60,13 @@ class XGTrainerPokemon : NSObject, Codable {
 	var nameID		= 0
 	var level		= 0
 	var happiness	= 0
-	var pokeball	= XGItems.item(0)
-	var item		= XGItems.item(0)
+	var pokeball	= XGItems.index(0)
+	var item		= XGItems.index(0)
 	var nature		= XGNatures.hardy
 	var gender		= XGGenders.male
 	var IVs			= 0x0 // All IVs will be the same. Not much point in varying them.
 	var EVs			= [Int]()
-	var moves		= [XGMoves](repeating: XGMoves.move(0), count: kNumberOfPokemonMoves)
+	var moves		= [XGMoves](repeating: XGMoves.index(0), count: kNumberOfPokemonMoves)
 
 	var ability		= 0x0 {
 		didSet {
@@ -113,7 +113,7 @@ class XGTrainerPokemon : NSObject, Codable {
 		let start = self.startOffset
 		
 		let spec		= data.get2BytesAtOffset(start + kPokemonSpeciesOffset)
-		species			= XGPokemon.pokemon(spec)
+		species			= XGPokemon.index(spec)
 		level			= data.getByteAtOffset(start + kPokemonLevelOffset)
 		nameID			= data.getWordAtOffset(start + kPokemonNameIDOffset).int
 		
@@ -121,7 +121,7 @@ class XGTrainerPokemon : NSObject, Codable {
 		
 		happiness		= data.getByteAtOffset(start + kPokemonHappinessOffset)
 		let it			= data.get2BytesAtOffset(start + kPokemonItemOffset)
-		item			= XGItems.item(it)
+		item			= XGItems.index(it)
 		IVs				= data.getByteAtOffset(start + kFirstPokemonIVOffset)
 		
 		ability		= data.getByteAtOffset(start + kPokemonAbilityOffset)
@@ -133,16 +133,16 @@ class XGTrainerPokemon : NSObject, Codable {
 		self.nature	= XGNatures(rawValue: nature) ?? .hardy
 		
 		let ball = data.getByteAtOffset(start + kPokemonPokeballOffset)
-		self.pokeball = XGItems.item(ball)
+		self.pokeball = XGItems.index(ball)
 		
 		for i in 0 ..< kNumberOfEVs {
 			self.EVs.append(data.getByteAtOffset(start + kFirstPokemonEVOffset + (2 * i)))
 		}
 		
-		moves[0] = XGMoves.move(data.get2BytesAtOffset(start + kPokemonMove1Offset))
-		moves[1] = XGMoves.move(data.get2BytesAtOffset(start + kPokemonMove2Offset))
-		moves[2] = XGMoves.move(data.get2BytesAtOffset(start + kPokemonMove3Offset))
-		moves[3] = XGMoves.move(data.get2BytesAtOffset(start + kPokemonMove4Offset))
+		moves[0] = XGMoves.index(data.get2BytesAtOffset(start + kPokemonMove1Offset))
+		moves[1] = XGMoves.index(data.get2BytesAtOffset(start + kPokemonMove2Offset))
+		moves[2] = XGMoves.index(data.get2BytesAtOffset(start + kPokemonMove3Offset))
+		moves[3] = XGMoves.index(data.get2BytesAtOffset(start + kPokemonMove4Offset))
 		
 		if isShadow {
 			let start = shadowStartOffset
@@ -220,18 +220,18 @@ class XGTrainerPokemon : NSObject, Codable {
 	func purge() {
 		
 		shadowID 	= 0
-		species		= .pokemon(0)
+		species		= .index(0)
 		nameID		= 0
-		pokeball	= .item(0)
+		pokeball	= .index(0)
 		level		= 1
 		happiness	= 0
 		ability		= 0
-		item		= .item(0)
+		item		= .index(0)
 		nature		= .random
 		gender		= .random
 		IVs			= 0
 		EVs			= [Int](repeating: 0, count: 6)
-		moves		= [XGMoves](repeating: .move(0), count: kNumberOfPokemonMoves)
+		moves		= [XGMoves](repeating: .index(0), count: kNumberOfPokemonMoves)
 	}
 	
 }
@@ -247,7 +247,7 @@ class CMShadowData {
 	var shadowID = 0
 	var nameID = 0 // Japanese text of the pokemon's name
 
-	var species = XGPokemon.pokemon(0)
+	var species = XGPokemon.index(0)
 	var name: XGString {
 		return getStringSafelyWithID(id: nameID)
 	}
@@ -269,7 +269,7 @@ class CMShadowData {
 		shadowID = data.getByteAtOffset(start + kShadowIDOffset)
 		nameID = data.get2BytesAtOffset(start + kShadowJapaneseMSGOffset)
 		let speciesID = data.get2BytesAtOffset(start + kShadowSpeciesOffset)
-		species = .pokemon(speciesID)
+		species = .index(speciesID)
 	}
 }
 

@@ -9,11 +9,11 @@ import Foundation
 
 enum XGItems {
 	
-	case item(Int)
+	case index(Int)
 	
 	var index : Int {
 		switch self {
-		case .item(let i): return (i > kNumberOfItems && i < 0x250) ? i - 151 : i
+		case .index(let i): return (i > kNumberOfItems && i < 0x250) ? i - 151 : i
 		}
 	}
 	
@@ -79,13 +79,13 @@ enum XGItems {
 	
 	static func allItems() -> [XGItems] {
 		(0 ..< kNumberOfItems).map({ (index) -> XGItems in
-			.item(index)
+			.index(index)
 		})
 	}
 	
 	static func pokeballs() -> [XGItems] {
 		(0 ... 12).map({ (index) -> XGItems in
-			.item(index)
+			.index(index)
 		})
 	}
 	
@@ -97,7 +97,7 @@ func allItems() -> [String : XGItems] {
 	
 	for i in 0 ..< kNumberOfItems {
 		
-		let a = XGItems.item(i)
+		let a = XGItems.index(i)
 		
 		dic[a.name.string.simplified] = a
 		
@@ -110,13 +110,13 @@ let items = allItems()
 
 func item(_ name: String) -> XGItems {
 	if items[name.simplified] == nil { printg("couldn't find: " + name) }
-	return items[name.simplified] ?? .item(0)
+	return items[name.simplified] ?? .index(0)
 }
 
 func allItemsArray() -> [XGItems] {
 	var items : [XGItems] = []
 	for i in 0 ..< kNumberOfItems {
-		items.append(XGItems.item(i))
+		items.append(XGItems.index(i))
 	}
 	return items
 }
@@ -129,7 +129,7 @@ extension XGItems: Codable {
 	init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		let index = try container.decode(Int.self, forKey: .index)
-		self = .item(index)
+		self = .index(index)
 	}
 	
 	func encode(to encoder: Encoder) throws {

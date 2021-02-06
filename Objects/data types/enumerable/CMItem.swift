@@ -57,13 +57,13 @@ final class XGItem: NSObject, Codable {
 	
 	var name : XGString {
 		get {
-			return XGItems.item(index).name
+			return XGItems.index(index).name
 		}
 	}
 	
 	var descriptionString : XGString {
 		get {
-			return XGItems.item(index).descriptionString
+			return XGItems.index(index).descriptionString
 		}
 	}
 	

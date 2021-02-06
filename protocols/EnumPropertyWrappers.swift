@@ -99,6 +99,7 @@ struct BattleTypeID {
 	}
 }
 
+#if GAME_XD
 @propertyWrapper
 struct BattleBingoItemID {
 	var _value = 0
@@ -121,6 +122,7 @@ struct BattleBingoItemID {
 		return max(0, value)
 	}
 }
+#endif
 
 @propertyWrapper
 struct ColosseumRoundID {
@@ -168,6 +170,7 @@ struct ContestCategoryID {
 	}
 }
 
+#if GAME_XD
 @propertyWrapper
 struct DeckID {
 	var _value = 0
@@ -190,6 +193,7 @@ struct DeckID {
 		return max(0, value)
 	}
 }
+#endif
 
 @propertyWrapper
 struct EvolutionMethodsID {
@@ -498,6 +502,7 @@ struct PokemonID {
 	}
 }
 
+#if GAME_XD
 @propertyWrapper
 struct PokespotID {
 	var _value = 0
@@ -520,6 +525,7 @@ struct PokespotID {
 		return max(0, value)
 	}
 }
+#endif
 
 @propertyWrapper
 struct ShinyLockTypeID {

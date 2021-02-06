@@ -43,11 +43,11 @@ enum XGTMs {
 	
 	var item : XGItems {
 		let i = kFirstTMItemIndex + (index - 1)
-		return .item(i)
+		return .index(i)
 	}
 	
 	var move : XGMoves {
-		return .move( XGFiles.dol.data!.get2BytesAtOffset(startOffset) )
+		return .index( XGFiles.dol.data!.get2BytesAtOffset(startOffset) )
 	}
 	
 	var location : String {
@@ -55,7 +55,7 @@ enum XGTMs {
 	}
 	
 	func replaceWithMove(_ move: XGMoves) {
-		if move == XGMoves.move(0) { return }
+		if move == XGMoves.index(0) { return }
 		
 		let dol = XGFiles.dol.data!
 		dol.replace2BytesAtOffset(startOffset, withBytes: move.index)
