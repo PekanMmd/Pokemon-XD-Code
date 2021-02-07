@@ -21,10 +21,8 @@ enum XGResources {
 	case folder(String)
 	case nameAndFileType(String, String)
 	
-	var path : String {
-		get{
-			return Bundle.main.path(forResource: name, ofType: fileType) ?? Bundle.main.bundlePath + "/Assets/\(game.shortName)/\(fileName)"
-		}
+	var path: String {
+		return Bundle.main.path(forResource: name, ofType: fileType) ?? Bundle.main.bundlePath + "/Assets/\(game.shortName)/\(fileName)"
 	}
 	
 	var name : String {
@@ -44,36 +42,34 @@ enum XGResources {
 		}
 	}
 	
-	var fileType : String {
-		get {
-			switch self {
-				case .JSON									: return ".json"
-				case .png									: return ".png"
-				case .shader								: return ".glsl"
-				case .sublimeColourScheme					: return ".sublime-color-scheme"
-				case .sublimeSyntax							: return ".sublime-syntax"
-				case .sublimeSettings						: return ".sublime-settings"
-				case .sublimeCompletions					: return ".sublime-completions"
-				case .tool                                  : return environment == .Windows ? ".exe" : ""
-				case .folder                                : return ""
-				case .nameAndFileType( _, let filetype)		: return filetype
-			}
+	var fileType: String {
+		switch self {
+		case .JSON									: return ".json"
+		case .png									: return ".png"
+		case .shader								: return ".glsl"
+		case .sublimeColourScheme					: return ".sublime-color-scheme"
+		case .sublimeSyntax							: return ".sublime-syntax"
+		case .sublimeSettings						: return ".sublime-settings"
+		case .sublimeCompletions					: return ".sublime-completions"
+		case .tool                                  : return environment == .Windows ? ".exe" : ""
+		case .folder                                : return ""
+		case .nameAndFileType( _, let filetype)		: return filetype
 		}
 	}
 	
-	var fileName : String {
+	var fileName: String {
 		get {
 			return name + fileType
 		}
 	}
 	
-	var fileSize : Int {
+	var fileSize: Int {
 		get {
 			return self.data.length
 		}
 	}
 	
-	var data : XGMutableData {
+	var data: XGMutableData {
 		get {
 			let d = XGMutableData(contentsOfFile: self.path)
 			d.file = .nameAndFolder(self.fileName, .Documents)
@@ -81,7 +77,7 @@ enum XGResources {
 		}
 	}
 	
-	var json : AnyObject {
+	var json: AnyObject {
 		if let jsonObject =  try? JSONSerialization.jsonObject(with: self.data.data as Data, options: JSONSerialization.ReadingOptions.mutableContainers) {
 			return jsonObject as AnyObject
 		} else {

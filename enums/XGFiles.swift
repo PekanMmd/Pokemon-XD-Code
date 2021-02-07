@@ -68,13 +68,30 @@ indirect enum XGFiles {
 	case gameFile(String)
 	case nameAndFsysName(String, String)
 	case typeAndFsysName(XGFileTypes, String)
+	case typeAndFolder(XGFileTypes, XGFolders)
 	case nameAndFolder(String, XGFolders)
 	
-	var path : String {
-		return folder.path + "/" + self.fileName
+	var path: String {
+		switch self {
+		case .tool:
+			if fileDecodingMode {
+				if case .Wiimm = folder, environment == .Windows {
+					return XGResources.tool("wiimm/" + fileName).path
+				}
+				return XGResources.tool(fileName).path
+			}
+			return folder.path + "/" + self.fileName
+		case .json(let s):
+			if fileDecodingMode {
+				let p = XGResources.JSON(s).path
+				return p
+			}
+			return folder.path + "/" + self.fileName
+		default: return folder.path + "/" + self.fileName
+		}
 	}
 	
-	var fileName : String {
+	var fileName: String {
 		switch self {
 
 		case .dol					: return "Start" + XGFileTypes.dol.fileExtension
@@ -101,10 +118,11 @@ indirect enum XGFiles {
 		case .nameAndFolder(let name, _) : return name
 		case .nameAndFsysName(let name, _): return name
 		case .typeAndFsysName(let type, _): return folder.files.first(where: {$0.fileType == type})?.fileName ?? "-"
+		case .typeAndFolder(let type, _): return folder.files.first(where: {$0.fileType == type})?.fileName ?? "-"
 		}
 	}
 	
-	var folder : XGFolders {
+	var folder: XGFolders {
 		switch self {
 
 		#if GAMe_PBR
@@ -134,6 +152,7 @@ indirect enum XGFiles {
 		case .nameAndFolder( _, let aFolder) : return aFolder
 		case .nameAndFsysName(_, let fsysName): return XGFiles.fsys(fsysName).folder
 		case .typeAndFsysName(_, let fsysName): return XGFiles.fsys(fsysName).folder
+		case .typeAndFolder(_, let f): return f
 		}
 	}
 	
@@ -185,7 +204,7 @@ indirect enum XGFiles {
 		
 		
 		var data: XGMutableData?
-		if self == .iso || loadableFiles.contains(self.path) {
+		if !fileDecodingMode, self == .iso || loadableFiles.contains(self.path) {
 			
 			if let data = loadedFiles[self.path] {
 				return data
@@ -199,7 +218,7 @@ indirect enum XGFiles {
 		}
 		
 		
-		if self == .iso || loadableFiles.contains(self.path) {
+		if !fileDecodingMode, self == .iso || loadableFiles.contains(self.path) {
 			if let d = data {
 				loadedFiles[self.path] = d
 			}

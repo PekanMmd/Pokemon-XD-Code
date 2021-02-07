@@ -52,15 +52,17 @@ class XGMapRel: XGRelocationTable {
 			}
 		}
 
-		if let room = XGRoom.roomWithName(file.fileName.removeFileExtensions()) {
+		if !fileDecodingMode, let room = XGRoom.roomWithName(file.fileName.removeFileExtensions()) {
 			self.roomID = room.roomID
 		}
 
 		#if GAME_XD
-		for i in 0 ..< CommonIndexes.NumberTreasureBoxes.value {
-			let treasure = XGTreasure(index: i)
-			if treasure.roomID == self.roomID {
-				self.treasure.append(treasure)
+		if !fileDecodingMode {
+			for i in 0 ..< CommonIndexes.NumberTreasureBoxes.value {
+				let treasure = XGTreasure(index: i)
+				if treasure.roomID == self.roomID {
+					self.treasure.append(treasure)
+				}
 			}
 		}
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class XGRandomiser : NSObject {
+class XGRandomiser: NSObject {
 
 	#if GAME_XD
 	class func randomiseBattleBingo() {
