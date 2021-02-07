@@ -6,3 +6,6 @@ https://swift.org/builds/swift-5.3-release/windows10/swift-5.3-RELEASE/swift-5.3
 
 You may also need to run this .exe to install cygwin on your machine:
 https://cygwin.com/setup-x86_64.exe
+
+To use one of the tools simply drag and drop the file you want to open unto the .exe.
+The tool supports .iso, .fsys, .msg, .gtx and .atx files.
