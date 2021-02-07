@@ -80,7 +80,7 @@ class GoDTypeViewController: GoDTableViewController {
 				
 				if name.stringValue.length > 0 {
                     let string = currentType.name.duplicateWithString(name.stringValue)
-                    if !string.table.stringTable.addString(string, increaseSize: true, save: true) {
+                    if !string.table!.stringTable.addString(string, increaseSize: true, save: true) {
 						printg("Failed to set type name:", name.stringValue)
 					}
 				}

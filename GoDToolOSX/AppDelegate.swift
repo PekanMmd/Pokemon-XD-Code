@@ -40,10 +40,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		fileDecodingMode = true
 		for file in files {
 			guard file.exists else {
-				printg("cannot open file:", file.path, "\nIt doesn't exist.")
+				logToScreen("cannot open file:", file.path, "\nIt doesn't exist.")
 				continue
 			}
-			printg("opening filepath:", file.path)
+			logToScreen("opening filepath:", file.path)
 
 			switch file.fileType {
 			case .gtx, .atx:
@@ -61,7 +61,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			case .fsys:
 				let outputFolder = XGFolders.nameAndFolder(file.fileName.removeFileExtensions(), file.folder)
 				outputFolder.createDirectory()
-				printg("Unzipping contents of \(file.path) to \(outputFolder.path)")
+				logToScreen("Unzipping contents of \(file.path) to \(outputFolder.path)")
 				let fsysData = file.fsysData
 				fsysData.extractFilesToFolder(folder: outputFolder, decode: true)
 			default:
@@ -71,20 +71,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
     
     func application(_ application: NSApplication, open urls: [URL]) {
-        printg("opening files")
-
 		if urls.count > 0 {
 			let files = urls.map { (fileurl) -> XGFiles in
 				return fileurl.file
 			}.filter{$0.fileType != .unknown}
 
 			guard files.count > 0 else {
-				print("No input files given.")
+				logToScreen("No input files given.")
 				return
 			}
 
 			if let isoFile = files.first(where: {$0.fileType == .iso && $0.exists}) {
 				inputISOFile = isoFile
+				logToScreen("opening ISO:", inputISOFile!.path)
 			} else {
 				decodeInputFiles(files)
 				return

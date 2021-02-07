@@ -5,10 +5,7 @@
 //  Created by The Steez on 27/08/2018.
 //
 
-for i in 0 ..< CommonIndexes.NumberOfShadowPokemon.value {
-	let shadowData = CMShadowData(index: i)
-	printg(i, shadowData.species.name.string.spaceToLength(12), shadowData.nameID.hexString(), shadowData.firstTID, shadowData.alternateTID)
-}
+
 
 //let gciFile = XGFiles.nameAndFolder("GC6E_pokemon_colosseum.gci", .Documents)
 //let saveFile = XGFiles.nameAndFolder("GC6E_pokemon_colosseum.gci.raw", .Documents)

@@ -59,7 +59,6 @@ class GoDHomeViewController: GoDTableViewController {
 			self.title = "Colosseum Tool"
 		}
 		self.logView.setBackgroundColour(GoDDesign.colourLightBlue())
-		XGFolders.setUpFolderFormat()
 		
     }
 	
@@ -67,10 +66,6 @@ class GoDHomeViewController: GoDTableViewController {
 		super.viewDidAppear()
 		
 		(NSApp.delegate as! AppDelegate).homeViewController = self
-		
-		if !XGFiles.iso.exists {
-			self.performSegue(withIdentifier: "toHelpVC", sender: self)
-		}
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {

@@ -14,6 +14,7 @@ class GoDHelpViewController: GoDViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
+		XGFolders.setUpFolderFormat()
 
 		let extraction = game == .PBR ? "File -> Unpack ISO, then Extract Files"
 									  : "File -> Extract ISO"

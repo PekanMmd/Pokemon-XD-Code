@@ -37,11 +37,11 @@ let isDemo = false
 
 #endif
 
-let documentsPath: String = {
+var documentsPath: String {
 	return (inputISOFile?.folder.path ?? NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
 		+ "/\(documentsFolderName)"
 		+ (inputISOFile == nil ? "" : " \(inputISOFile!.fileName.removeFileExtensions())")
-}()
+}
 
 let region = XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .OtherGame
 
