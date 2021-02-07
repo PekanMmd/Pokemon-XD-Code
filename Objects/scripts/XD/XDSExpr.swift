@@ -476,6 +476,9 @@ indirect enum XDSExpr {
 		if xs.id == 0 {
 			return "$:0:"
 		}
+		if xs.table == nil {
+			return "$:\(xs.id):"
+		}
 		// must replace double quotes with special character since xds doesn't use escaped characters
 		var updatedString = xs.string.replacingOccurrences(of: "\"", with: "[Quote]")
 		updatedString = updatedString.replacingOccurrences(of: "\n", with: "[New Line]")
@@ -501,7 +504,7 @@ indirect enum XDSExpr {
 				return macroWithName("POKEMON_CANCEL")
 			}
 			let mon = XGPokemon.index(c.asInt)
-			if mon.nameID == 0 {
+			if fileDecodingMode || mon.nameID == 0 {
 				return macroWithName("POKEMON_" + c.asInt.string)
 			}
 			return macroWithName("POKEMON_" + mon.name.string.underscoreSimplified.uppercased())
@@ -513,13 +516,16 @@ indirect enum XDSExpr {
 				return macroWithName("ITEM_CANCEL")
 			}
 			let item = XGItems.index(c.asInt)
-			if item.nameID == 0 {
+			if fileDecodingMode || item.nameID == 0 {
 				return macroWithName("ITEM_" + c.asInt.string)
 			}
 			return macroWithName("ITEM_" + item.name.string.underscoreSimplified.uppercased())
 		case .model:
 			if c.asInt == 0 {
 				return macroWithName("model_none".uppercased())
+			}
+			if fileDecodingMode {
+				return macroWithName("MODEL_" + c.asInt.hex())
 			}
 			let fsys = XGFiles.fsys("people_archive").fsysData
 			if !fsys.identifiers.contains(c.asInt) {
@@ -534,13 +540,16 @@ indirect enum XDSExpr {
 				return macroWithName("MOVE_CANCEL")
 			}
 			let move = XGMoves.index(c.asInt)
-			if move.nameID == 0 {
+			if fileDecodingMode || move.nameID == 0 {
 				return macroWithName("MOVE_" + c.asInt.string)
 			}
 			return macroWithName("MOVE_" + move.name.string.underscoreSimplified.uppercased())
 		case .room:
 			if c.asInt == 0 {
 				return macroWithName("room_none".uppercased())
+			}
+			if fileDecodingMode {
+				return macroWithName("ROOM_" + c.asInt.string)
 			}
 			if let room = XGRoom.roomWithID(c.asInt) {
 				return macroWithName("ROOM_" + room.name.underscoreSimplified.uppercased())
@@ -550,13 +559,17 @@ indirect enum XDSExpr {
 			if c.asInt == 0 {
 				return macroWithName("battlefield_none".uppercased())
 			}
-			if let room = XGBattleField(index: c.asInt).room {
+			if !fileDecodingMode,  let room = XGBattleField(index: c.asInt).room {
 				return macroWithName("BATTLEFIELD_" + room.name.underscoreSimplified.uppercased())
 			}
 			return macroWithName("BATTLEFIELD_" + c.asInt.string)
 		case .msg:
 			if let table = stringTable, let string = table.stringWithID(c.asInt) {
 				return macroForString(xs: string)
+			}
+
+			if fileDecodingMode {
+				return macroForString(xs: XGString(string: "", file: nil, sid: c.asInt))
 			}
 
 			return macroForString(xs: getStringSafelyWithID(id: c.asInt))
@@ -571,7 +584,7 @@ indirect enum XDSExpr {
 				return macroWithName("ability_none".uppercased())
 			}
 			let ability = XGAbilities.index(c.asInt)
-			if ability.nameID == 0 {
+			if fileDecodingMode ||  ability.nameID == 0 {
 				return macroWithName("ABILITY_" + c.asInt.string)
 			}
 			return macroWithName("ABILITY_" + ability.name.string.underscoreSimplified.uppercased())
@@ -616,12 +629,14 @@ indirect enum XDSExpr {
 			if c.asInt == 0 {
 				return macroWithName("shadow_pokemon_none".uppercased())
 			}
-			return macroWithName("SHADOW_" + XGDeckPokemon.ddpk(c.asInt).pokemon.name.string.underscoreSimplified.uppercased()  + String(format: "_%02d", c.asInt))
+			let mid = fileDecodingMode ? "POKEMON" : XGDeckPokemon.ddpk(c.asInt).pokemon.name.string.underscoreSimplified.uppercased()
+			return macroWithName("SHADOW_" + mid + String(format: "_%02d", c.asInt))
 		case .treasureID:
 			if c.asInt == 0 {
 				return macroWithName("treasure_none".uppercased())
 			}
-			return macroWithName("TREASURE_" + XGTreasure(index: c.asInt).item.name.string.underscoreSimplified.uppercased() + String(format: "_%03d", c.asInt))
+			let mid = fileDecodingMode ? "ITEM" : XGTreasure(index: c.asInt).item.name.string.underscoreSimplified.uppercased()
+			return macroWithName("TREASURE_" + mid + String(format: "_%03d", c.asInt))
 		case .pokespot:
 			guard let spot = XGPokeSpots(rawValue: c.asInt) else {
 				printg("error unknown pokespot");return "error unknown pokespot"
@@ -664,7 +679,7 @@ indirect enum XDSExpr {
 			let functionIndex = c.asInt & 0xFFFF
 			
 			if scriptIdentifier == 0x596 {
-				if XGFiles.common_rel.exists {
+				if !fileDecodingMode,  XGFiles.common_rel.exists {
 					let commonScript = XGFiles.common_rel.scriptData
 					let functions = commonScript.ftbl
 					if functionIndex < functions.count {
@@ -685,6 +700,9 @@ indirect enum XDSExpr {
 				return macroWithName("SCRIPT_\(scriptIdentifier.hexString())_" + "FUNCTION_\(functionIndex)")
 			}
 		case .sfxID:
+			if fileDecodingMode {
+				return macroWithName("SFX_" + String(format: "%03d", c.asInt))
+			}
 			return macroWithName("SFX_" + XGMusicMetaData(index: c.asInt).name.uppercased())
 		case .storyProgress:
 			let storyProgress = XGStoryProgress(rawValue: c.asInt)!
@@ -698,7 +716,7 @@ indirect enum XDSExpr {
 			}
 			
 		case .giftPokemon:
-			if c.asInt <= kNumberOfGiftPokemon && c.asInt > 0 {
+			if !fileDecodingMode && c.asInt <= kNumberOfGiftPokemon && c.asInt > 0 {
 				let gift = XGGiftPokemonManager.allGiftPokemon()[c.asInt]
 				let type = gift.giftType.underscoreSimplified.uppercased()
 				let species = gift.species.name.string.underscoreSimplified.uppercased()
@@ -707,7 +725,7 @@ indirect enum XDSExpr {
 			if c.asInt == 0 {
 				return macroWithName("GIFT_POKEMON_NONE")
 			}
-			printg("error invalid gift pokemon"); return macroWithName("INVALID_GIFT_POKEMON")
+			return macroWithName("GIFT_POKEMON_" + String(format: "%03d", c.asInt))
 			
 		case .region:
 			switch c.asInt {
@@ -1058,6 +1076,7 @@ indirect enum XDSExpr {
 	}
 	
 	var comment : XDSExpr? {
+		guard !fileDecodingMode else { return nil }
 		switch self {
 		case .callStandardVoid(let c, let f, let params):
 			

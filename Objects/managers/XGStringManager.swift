@@ -12,6 +12,8 @@ var allStringTables = [XGStringTable]()
 var stringsLoaded = false
 
 func loadAllStrings(refresh: Bool = false) {
+
+	guard !fileDecodingMode else { return }
 	
 	if !stringsLoaded {
 		

@@ -167,11 +167,13 @@ class XDSScriptCompiler: NSObject {
 			printg("saving string table:", table.file.path)
 			table.save()
 		}
-		
-		XGFiles.common_rel.stringTable.save()
-		XGFiles.dol.stringTable.save()
-		if game == .XD && !isDemo && region != .JP {
-			XGFiles.tableres2.stringTable.save()
+
+		if !fileDecodingMode {
+			XGFiles.common_rel.stringTable.save()
+			XGFiles.dol.stringTable.save()
+			if game == .XD && !isDemo && region != .JP {
+				XGFiles.tableres2.stringTable.save()
+			}
 		}
 		
 		if relFile != nil {

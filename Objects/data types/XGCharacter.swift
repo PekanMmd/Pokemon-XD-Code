@@ -28,16 +28,18 @@ class XGCharacter : NSObject, Codable {
 	var gid = -1
 	var rid = -1
 	
-	var model : XGCharacterModel!
-	var movementType : XGCharacterMovements!
+	var model: XGCharacterModel!
+	var movementType: XGCharacterMovements!
 	var characterID = 0
 	
-	var nameID : Int {
+	var nameID: Int {
+		if fileDecodingMode { return 0 }
 		let start = CommonIndexes.PeopleIDs.startOffset + (self.characterID * 8)
 		return XGFiles.common_rel.data!.getWordAtOffset(start + 4).int
 	}
 	
-	var name : String {
+	var name: String {
+		if fileDecodingMode { return "character_\(characterID)" }
 		return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID).string
 	}
 	
@@ -50,9 +52,9 @@ class XGCharacter : NSObject, Codable {
 	var flags = 0
 	var isVisible = false
 	
-	var xCoordinate : Float = 0
-	var yCoordinate : Float = 0
-	var zCoordinate : Float = 0
+	var xCoordinate: Float = 0
+	var yCoordinate: Float = 0
+	var zCoordinate: Float = 0
 	var angle = 0
 	
 	var hasScript = false
@@ -86,14 +88,16 @@ class XGCharacter : NSObject, Codable {
 		
 		let data = file.data!
 		let m = data.get2BytesAtOffset(startOffset + kModelOffset)
-		
-		if m < CommonIndexes.NumberOfCharacterModels.value {
-			self.model = XGCharacterModel(index: m)
-		} else {
-			isValid = false
+
+		if !fileDecodingMode {
+			if m < CommonIndexes.NumberOfCharacterModels.value {
+				self.model = XGCharacterModel(index: m)
+			} else {
+				isValid = false
+			}
 		}
 		self.characterID = data.get2BytesAtOffset(startOffset + kCharacterIDOffset)
-		if self.characterID >= CommonIndexes.NumberOfPeopleIDs.value {
+		if !fileDecodingMode, self.characterID >= CommonIndexes.NumberOfPeopleIDs.value {
 			isValid = false
 		}
 		let scriptCheck = data.getByteAtOffset(startOffset + kHasScriptOffset)

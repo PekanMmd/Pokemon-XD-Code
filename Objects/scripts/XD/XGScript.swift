@@ -92,7 +92,7 @@ class XGScript: NSObject {
 
 			// if not found, check for rel file in rels folder
 			if mapRel == nil {
-				let relFile = XGFiles.typeAndFsysName(.rel, file.fileName.removeFileExtensions())
+				let relFile = XGFiles.typeAndFolder(.rel, file.folder)
 				if relFile.exists {
 					let rel = XGMapRel(file: relFile, checkScript: false)
 					if rel.isValid {
@@ -102,7 +102,7 @@ class XGScript: NSObject {
 			}
 
 			// check for msg file in same folder
-			let msgFile = XGFiles.typeAndFsysName(.msg, file.fileName.removeFileExtensions())
+			let msgFile = XGFiles.typeAndFolder(.msg, file.folder)
 			if msgFile.exists {
 				stringTable = msgFile.stringTable
 			}
@@ -517,6 +517,9 @@ class XGScript: NSObject {
 	}
 
 	private func getStringWithID(_ id: Int) -> XGString {
+		if fileDecodingMode {
+			return stringTable?.stringWithID(id) ?? XGString(string: "", file: nil, sid: id)
+		}
 		return stringTable?.stringWithID(id) ?? XGFiles.common_rel.stringTable.stringWithID(id) ?? XGString(string: "", file: nil, sid: id)
 	}
 	
@@ -2066,16 +2069,18 @@ class XGScript: NSObject {
 							str += "CharacterID: " + macroString + " "
 							mac.append(.macro(macroString, charID.string))
 						}
-						
-						let modelID = character.model.index
-						if modelID == 0 {
-							str += "ModelID: " + modelID.string + " "
-						} else {
-							let macroString = XDSExpr.macroWithName("MODELID_" + character.model.name.simplified.uppercased())
-							str += "ModelID: " + macroString + " "
-							mac.append(.macro(macroString, modelID.string))
+
+						if !fileDecodingMode {
+							let modelID = character.model.index
+							if modelID == 0 {
+								str += "ModelID: " + modelID.string + " "
+							} else {
+								let macroString = XDSExpr.macroWithName("MODELID_" + character.model.name.simplified.uppercased())
+								str += "ModelID: " + macroString + " "
+								mac.append(.macro(macroString, modelID.string))
+							}
 						}
-						
+
 						let movement = (character.movementType ?? .index(0)).index
 						if movement > 0 {
 							str += "MovementID: " + movement.string + " "

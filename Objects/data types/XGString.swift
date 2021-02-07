@@ -13,7 +13,7 @@ class XGString: NSObject, Codable {
 	var chars = [XGUnicodeCharacters]()
 	private var initString = "" // just for debugging
 	
-	var table = XGFiles.nameAndFolder("", .Documents)
+	var table: XGFiles?
 	var id	  = 0
 	
 	var dataLength: Int {
@@ -56,7 +56,7 @@ class XGString: NSObject, Codable {
 	
 	var stringPlusIDAndFile : String {
 		get {
-			return "ID : 0x" + String(format: "%x", id) + " " + "\(id)" + " \nFile: \(table.fileName)\n\(string)\n"
+			return "ID : 0x" + String(format: "%x", id) + " " + "\(id)" + " \nFile: \(table?.fileName ?? "-")\n\(string)\n"
 		}
 	}
 	
@@ -86,7 +86,7 @@ class XGString: NSObject, Codable {
 		// The function works. It used to be a lot worse... trust me :-)
 		super.init()
 		
-		self.table = file ?? XGFiles.nameAndFolder("", .Documents)
+		self.table = file
 		self.id = sid ?? 0
 		self.initString = string
 		let string = string.replacingOccurrences(of: "\n", with: "[New Line]")
@@ -181,11 +181,6 @@ class XGString: NSObject, Codable {
 		return success
 	}
 	
-	func replaceDirectly(save: Bool) -> Bool {
-		stringsLoaded = false
-		return self.table.stringTable.replaceString(self, save: save)
-	}
-	
 	func containsSubstring(_ sub: String) -> Bool {
 		return self.string.contains(sub)
 	}
@@ -227,7 +222,7 @@ extension XGString: XGDocumentable {
 	}
 	
 	var documentableName: String {
-		return table.fileName + " - " + id.hexString()
+		return (table?.fileName ?? "unknown") + " - " + id.hexString()
 	}
 	
 	static var DocumentableKeys: [String] {
