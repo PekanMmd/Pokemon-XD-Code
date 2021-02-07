@@ -82,12 +82,12 @@ func importExportFiles() {
 
 func applyPatches() {
 	let patches : [XGDolPatches] = game == .XD ? [
+		.purgeUnusedText,
 		.physicalSpecialSplitApply,
 		.physicalSpecialSplitRemove,
 		.defaultMoveCategories,
 		.infiniteTMs,
 		.allowFemaleStarters,
-		.zeroForeignStringTables,
 		.betaStartersApply,
 		.betaStartersRemove,
 		.switchPokemonAtEndOfTurn,

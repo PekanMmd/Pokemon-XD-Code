@@ -165,7 +165,7 @@ class GoDPatchViewController: GoDTableViewController {
 	}
 	
 	@objc func removeLanguages() {
-		XGDolPatcher.applyPatch(.zeroForeignStringTables)
+		XGDolPatcher.applyPatch(.purgeUnusedText)
 	}
 	
 	func oneStarter() {

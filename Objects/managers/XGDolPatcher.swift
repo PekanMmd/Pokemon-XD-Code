@@ -83,7 +83,7 @@ enum XGDolPatches : Int {
 	case renameAllPokemonApply
 	case shinyChanceEditingApply
 	case shinyChanceEditingRemove
-	case zeroForeignStringTables
+	case purgeUnusedText
 	case decapitaliseNames
 	case tradeEvolutions
 	case defaultMoveCategories
@@ -102,7 +102,7 @@ enum XGDolPatches : Int {
 	case pokemonCanLearnAnyTM
 	case pokemonHaveMaxCatchRate
 	
-	var name : String {
+	var name: String {
 		switch self {
 		case .physicalSpecialSplitApply : return "Apply the gen IV physical/special split. (You still need to set the category for each move)"
 		case .physicalSpecialSplitRemove : return "Remove the physical/special split."
@@ -112,7 +112,7 @@ enum XGDolPatches : Int {
 		case .renameAllPokemonApply	: return "Allows the name rater to rename all pokemon - Crashes parts of game"
 		case .shinyChanceEditingApply : return "Removes shiny purification glitch by generating based on a fixed trainer ID."
 		case .shinyChanceEditingRemove : return "shininess will be determined by trainer ID as usual."
-		case .zeroForeignStringTables : return "Foreign string tables will be zeroed out for smaller compressed sizes."
+		case .purgeUnusedText : return "Removes some unused text files. (Use this patch first)"
 		case .decapitaliseNames : return "Decapitalises a lot of text."
 		case .tradeEvolutions : return "Trade Evolutions become level 40"
 		case .defaultMoveCategories: return "Sets the physical/special category for all moves to their expected values"
@@ -510,7 +510,7 @@ class XGDolPatcher {
 
 	}
 	
-	class func zeroForeignStringTables() {
+	class func purgeUnusedText() {
 		
 		if game == .XD {
 			guard region == .US else {
@@ -750,7 +750,7 @@ class XGDolPatcher {
 			case .shinyChanceEditingApply		: XGDolPatcher.removeShinyGlitch()
 			case .shinyChanceEditingRemove		: XGDolPatcher.replaceShinyGlitch()
 			case .type9IndependentApply			: XGDolPatcher.removeType9Dependencies()
-			case .zeroForeignStringTables		: XGDolPatcher.zeroForeignStringTables()
+			case .purgeUnusedText		: XGDolPatcher.purgeUnusedText()
 			case .decapitaliseNames				: XGDolPatcher.decapitalise()
 			case .tradeEvolutions				: XGDolPatcher.removeTradeEvolutions()
 			case .defaultMoveCategories			: XGUtility.defaultMoveCategories()
