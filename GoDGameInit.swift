@@ -37,13 +37,28 @@ let isDemo = false
 
 #endif
 
-var documentsPath: String {
+func loadDocumentsPath() {
+	documentsPath = {
+		return (inputISOFile?.folder.path ?? NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+			+ "/\(documentsFolderName)"
+			+ (inputISOFile == nil ? "" : " \(inputISOFile!.fileName.removeFileExtensions())")
+	}()
+}
+var documentsPath = {
 	return (inputISOFile?.folder.path ?? NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
 		+ "/\(documentsFolderName)"
 		+ (inputISOFile == nil ? "" : " \(inputISOFile!.fileName.removeFileExtensions())")
-}
+}()
 
-let region = XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .OtherGame
+func loadRegion() {
+	region = { XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .OtherGame }()
+}
+var region = { XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .OtherGame }()
+
+func reloadSourceFile() {
+	loadDocumentsPath()
+	loadRegion()
+}
 
 enum Environment {
 	case Linux

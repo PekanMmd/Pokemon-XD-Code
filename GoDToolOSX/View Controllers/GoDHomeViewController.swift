@@ -121,6 +121,10 @@ class GoDHomeViewController: GoDTableViewController {
         }
         return true
     }
+
+	func reload() {
+		table.reloadData()
+	}
 }
 
 

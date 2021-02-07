@@ -447,6 +447,9 @@
 		1CADAEF925CF1FEB002B28F7 /* XGRandomiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A98214CA25200137C37 /* XGRandomiser.swift */; };
 		1CADAEFA25CF1FEB002B28F7 /* XGRandomiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A98214CA25200137C37 /* XGRandomiser.swift */; };
 		1CADAF0425CF1FEC002B28F7 /* XGRandomiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A98214CA25200137C37 /* XGRandomiser.swift */; };
+		1CADAF4425CFB7BE002B28F7 /* DummyThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9F22D8254104C0008D02EA /* DummyThreadManager.swift */; };
+		1CADAF4E25CFB7BF002B28F7 /* DummyThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9F22D8254104C0008D02EA /* DummyThreadManager.swift */; };
+		1CADAF4F25CFB7C0002B28F7 /* DummyThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9F22D8254104C0008D02EA /* DummyThreadManager.swift */; };
 		1CB33AA522B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
 		1CB33AA722B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
 		1CB33AA822B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
@@ -2654,10 +2657,8 @@
 		B22A1C44218201CA001C41D3 /* XGGiftPokemonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C43218201CA001C41D3 /* XGGiftPokemonManager.swift */; };
 		B22A1C45218201CA001C41D3 /* XGGiftPokemonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C43218201CA001C41D3 /* XGGiftPokemonManager.swift */; };
 		B22A1C46218202DD001C41D3 /* GoDGiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A9CB920A3363900F0BBD0 /* GoDGiftViewController.swift */; };
-		B22A1C4821829D7A001C41D3 /* XGThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4721829D7A001C41D3 /* XGThreadManager.swift */; };
 		B22A1C4921829D7A001C41D3 /* XGThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4721829D7A001C41D3 /* XGThreadManager.swift */; };
 		B22A1C4A21829D7A001C41D3 /* XGThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4721829D7A001C41D3 /* XGThreadManager.swift */; };
-		B22A1C4B21829D7A001C41D3 /* XGThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4721829D7A001C41D3 /* XGThreadManager.swift */; };
 		B22A1C4F2182B1DC001C41D3 /* GoDContextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4C2182B1DC001C41D3 /* GoDContextViewController.swift */; };
 		B22A1C502182B1DC001C41D3 /* GoDContextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4C2182B1DC001C41D3 /* GoDContextViewController.swift */; };
 		B22A1C5B218337FE001C41D3 /* GoDISOViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C5A218337FE001C41D3 /* GoDISOViewController.swift */; };
@@ -2697,7 +2698,6 @@
 		B24A501F21D10D93009C707C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A501E21D10D93009C707C /* main.swift */; };
 		B24A502721D11145009C707C /* PBRExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A502521D11138009C707C /* PBRExtensions.swift */; };
 		B24A502821D11DCF009C707C /* XGFoundationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBE21F49A1FE0075C6D2 /* XGFoundationExtensions.swift */; };
-		B24A502B21D11F4C009C707C /* XGThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4721829D7A001C41D3 /* XGThreadManager.swift */; };
 		B24A502F21D1201D009C707C /* XGASM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B249085221516D520044947B /* XGASM.swift */; };
 		B24A503121D12154009C707C /* GoDTextureFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1DF5C1F68DBF60023A876 /* GoDTextureFormats.swift */; };
 		B24A503221D12162009C707C /* XGWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD71F49A1FE0075C6D2 /* XGWeather.swift */; };
@@ -13587,7 +13587,6 @@
 				B24A503921D1224D009C707C /* XGGenderRatios.swift in Sources */,
 				B24A510521D3D07C009C707C /* PBRMoveEffectTypes.swift in Sources */,
 				1C20014025B3222900A7CF7D /* GoDGameInit.swift in Sources */,
-				B24A502B21D11F4C009C707C /* XGThreadManager.swift in Sources */,
 				B24A506C21D12668009C707C /* XGResources.swift in Sources */,
 				B24A504221D1238C009C707C /* XGString.swift in Sources */,
 				B24A505C21D1258E009C707C /* XGTextureBlock.swift in Sources */,
@@ -13620,6 +13619,7 @@
 				1CC362B024BA5560005D7B4A /* PBRDolPatcher.swift in Sources */,
 				1C54188225B9A75300CCE8E0 /* XDSConstant.swift in Sources */,
 				B24A50DA21D12CDA009C707C /* PBRFileTypes.swift in Sources */,
+				1CADAF4F25CFB7C0002B28F7 /* DummyThreadManager.swift in Sources */,
 				B24A501F21D10D93009C707C /* main.swift in Sources */,
 				B24A50FF21D314D4009C707C /* GoDDataTableEntry.swift in Sources */,
 				B24A50F221D12CDA009C707C /* PBRType.swift in Sources */,
@@ -13680,6 +13680,7 @@
 				1CCF0088258A3D9D0082BFE2 /* XGStatusEffects.swift in Sources */,
 				B24A506B21D12668009C707C /* XGResources.swift in Sources */,
 				B2562F5A2134973A004180F1 /* XGBagSlots.swift in Sources */,
+				1CADAF4E25CFB7BF002B28F7 /* DummyThreadManager.swift in Sources */,
 				1C4E1612253E33D200EA318B /* XGCollisionData.swift in Sources */,
 				B24A510C21D3F122009C707C /* XGContestCategories.swift in Sources */,
 				B2111843218DF26300D3F2DF /* XGTreasure.swift in Sources */,
@@ -13750,7 +13751,6 @@
 				1C7510BF25CCACA700EAB706 /* GoDDataTable.swift in Sources */,
 				1C64CF4724562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */,
 				B2562F8B213498DE004180F1 /* XGMutableData.swift in Sources */,
-				B22A1C4B21829D7A001C41D3 /* XGThreadManager.swift in Sources */,
 				B2562F942134990E004180F1 /* CMTrainerPokemon.swift in Sources */,
 				B2562F8D213498EE004180F1 /* CMPokemonStats.swift in Sources */,
 				B2611F572247D284008A4B19 /* XGDoor.swift in Sources */,
@@ -13809,6 +13809,7 @@
 				B2F5ECE11F49A1FF0075C6D2 /* XGType.swift in Sources */,
 				B22A1C44218201CA001C41D3 /* XGGiftPokemonManager.swift in Sources */,
 				B2F5EC931F49A1FF0075C6D2 /* XGLevelUpMove.swift in Sources */,
+				1CADAF4425CFB7BE002B28F7 /* DummyThreadManager.swift in Sources */,
 				B24CBAAA212F3DC900481C1D /* XGTrainerContoller.swift in Sources */,
 				B2450800208A348E00FEC54E /* XGDeoxysFormes.swift in Sources */,
 				1CE1A7782326AA0D005141D8 /* XGSettings.swift in Sources */,
@@ -13828,7 +13829,6 @@
 				1C20017C25B3231B00A7CF7D /* GoDLogManager.swift in Sources */,
 				B2F5EC421F49A1FE0075C6D2 /* XGNatures.swift in Sources */,
 				1C75106F25CCA3CA00EAB706 /* EnumPropertyWrappers.swift in Sources */,
-				B22A1C4821829D7A001C41D3 /* XGThreadManager.swift in Sources */,
 				B2EAFEFE20BDA43A009FC947 /* XGStack.swift in Sources */,
 				B2560A99214CA25200137C37 /* XGRandomiser.swift in Sources */,
 				B29E55FE1FA5C423006BE597 /* XGInteractionPoint.swift in Sources */,

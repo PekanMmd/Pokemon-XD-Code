@@ -8,7 +8,6 @@
 //
 
 
-
 //var csv = "Spot,Index,Species,Percentage,Min Level,Max Level"
 //for i in 0 ..< XGPokeSpots.allCases.count {
 //	let spot = XGPokeSpots(rawValue: i)!

@@ -49,7 +49,11 @@ enum XGMoveTypes : XGIndexedValue {
 	}
 	
 	static func random() -> XGMoveTypes {
-		let rand = Int.random(in: 0 ..< kNumberOfTypes)
+		let discludeType9 = XGMoveTypes.index(9).name.contains("?")
+		var rand = Int.random(in: 0 ..< kNumberOfTypes)
+		while discludeType9 && XGMoveTypes.index(rand) == 9 {
+			rand = Int.random(in: 0 ..< kNumberOfTypes)
+		}
 		return XGMoveTypes.index(rand)
 	}
 	
