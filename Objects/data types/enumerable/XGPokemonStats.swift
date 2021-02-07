@@ -139,6 +139,10 @@ final class XGPokemonStats: NSObject, Codable {
 
 	var height = 0.0 // meters
 	var weight = 0.0 // kg
+
+	var baseStatTotal: Int {
+		return hp + attack + defense + specialAttack + specialDefense + speed
+	}
 	
 	var pkxModelIdentifier: UInt32 {
 		let dol = XGFiles.dol.data!

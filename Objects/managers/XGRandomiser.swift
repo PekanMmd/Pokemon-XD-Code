@@ -45,9 +45,15 @@ class XGRandomiser : NSObject {
 					continue
 				}
 
+				#if GAME_COLO
 				if shadowsOnly && !pokemon.isShadow {
 					continue
 				}
+				#else
+				if shadowsOnly && !pokemon.isShadowPokemon {
+					continue
+				}
+				#endif
 
 				let oldBST = pokemon.species.stats.baseStatTotal
 
@@ -109,6 +115,7 @@ class XGRandomiser : NSObject {
 							duplicate = true
 
 							let pokemon = poke.data
+							let oldBST = pokemon.species.stats.baseStatTotal
 							pokemon.species = similarBST ? XGPokemon.randomWithSimilarBST(to: oldBST) : XGPokemon.random()
 							pokemon.shadowCatchRate = pokemon.species.catchRate
 							pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
