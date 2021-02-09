@@ -19,52 +19,14 @@ func displayAlert(title: String, description: String) {
 	#endif
 }
 
-#if GUI
-func logToScreen(_ args: Any...) {
-
-	for arg in args {
-		print(arg, separator: " ", terminator: " ")
-	}
-	print("") // automatically adds new line
-
-	var newString = ""
-	for arg in args {
-		newString = newString + String(describing: arg) + " "
-	}
-	newString += "\n"
-	logString += newString
-
-	#if GUI
-	XGThreadManager.manager.runInForegroundAsync {
-		let hvc = appDelegate.homeViewController
-		if hvc != nil {
-			let log = hvc!.logView!
-			log.string = log.string + newString
-		}
-	}
-	#endif
-}
-#endif
-
 func printg(_ args: Any...) {
 
-	logToScreen(args)
-
-	#if GUI
-	guard !fileDecodingMode && inputISOFile != nil else {
-		return
-	}
-	#endif
-	
-	for arg in args {
-		print(arg, separator: " ", terminator: " ")
-	}
-	print("") // automatically adds new line
-	
 	var newString = ""
 	for arg in args {
+		print(arg, separator: " ", terminator: " ")
 		newString = newString + String(describing: arg) + " "
 	}
+	print("") // automatically adds new line
 	newString += "\n"
 	logString += newString
 

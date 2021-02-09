@@ -353,7 +353,7 @@ class XGStringTable: NSObject {
 	
 	func printAllStrings() {
 		for string in self.allStrings() {
-			print(string.string,"\n")
+			printg(string.string,"\n")
 		}
 	}
 	

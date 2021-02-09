@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		// Insert code here to initialize your application
-		
+
 		if game == .Colosseum {
 			scriptMenuItem.isHidden = true
 			godtoolmenuitem.title = "Colosseum Tool"
@@ -38,10 +38,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		fileDecodingMode = true
 		for file in files {
 			guard file.exists else {
-				logToScreen("cannot open file:", file.path, "\nIt doesn't exist.")
+				printg("cannot open file:", file.path, "\nIt doesn't exist.")
 				continue
 			}
-			logToScreen("opening filepath:", file.path)
+			printg("opening filepath:", file.path)
 
 			switch file.fileType {
 			case .gtx, .atx:
@@ -59,7 +59,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			case .fsys:
 				let outputFolder = XGFolders.nameAndFolder(file.fileName.removeFileExtensions(), file.folder)
 				outputFolder.createDirectory()
-				logToScreen("Unzipping contents of \(file.path) to \(outputFolder.path)")
+				printg("Unzipping contents of \(file.path) to \(outputFolder.path)")
 				let fsysData = file.fsysData
 				fsysData.extractFilesToFolder(folder: outputFolder, decode: true)
 			default:
@@ -75,33 +75,37 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				return fileurl.file
 			}.filter{$0.fileType != .unknown}
 
-			guard files.count > 0 else {
-				logToScreen("No input files given.")
-				return
-			}
-
-			if let isoFile = files.first(where: {$0.fileType == .iso && $0.exists}) {
-				inputISOFile = isoFile
-				logToScreen("opening ISO:", inputISOFile!.path)
-				reloadSourceFile()
-				homeViewController.reload()
-			} else {
-				decodeInputFiles(files)
-				return
-			}
-
-			let noDocumentsFolder = !XGFolders.Documents.exists
-			XGFolders.setUpFolderFormat()
-			if noDocumentsFolder {
-				printg("Created folder structure at:", XGFolders.Documents.path)
-			}
+			openFiles(files)
 		}
     }
+
+	func openFiles(_ files: [XGFiles]) {
+		guard files.count > 0 else {
+			printg("No input files given.")
+			return
+		}
+
+		if let isoFile = files.first(where: {$0.fileType == .iso && $0.exists}) {
+			inputISOFile = isoFile
+			printg("opening ISO:", inputISOFile!.path)
+			reloadSourceFile()
+			homeViewController.reload()
+		} else {
+			decodeInputFiles(files)
+			return
+		}
+
+		let noDocumentsFolder = !XGFolders.Documents.exists
+		XGFolders.setUpFolderFormat()
+		if noDocumentsFolder {
+			printg("Created folder structure at:", XGFolders.Documents.path)
+		}
+	}
 	
 	func applicationWillTerminate(_ aNotification: Notification) {
-		logToScreen("The tool is now closing.")
+		printg("The tool is now closing.")
 		if XGFolders.LZSS.files.count > 0 {
-			logToScreen("deleting LZSS files...")
+			printg("deleting LZSS files...")
 		}
 		for file in XGFolders.LZSS.files where file.fileType == .lzss {
 			file.delete()

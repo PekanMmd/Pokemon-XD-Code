@@ -173,7 +173,7 @@ class XGAssembly {
 	}
 	
 	class func printCreateBranchAndLinkFrom(offset: Int, toOffset to: Int) {
-		print(String(format: "%x", createBranchAndLinkFrom(offset: offset, toOffset: to)))
+		printg(String(format: "%x", createBranchAndLinkFrom(offset: offset, toOffset: to)))
 	}
 	
 	class func createBranchFrom(offset: Int, toOffset to: Int) -> UInt32 {
@@ -181,7 +181,7 @@ class XGAssembly {
 	}
 	
 	class func printCreateBranchFrom(offset: Int, toOffset to: Int) {
-		print(String(format: "%x", createBranchFrom(offset: offset, toOffset: to)))
+		printg(String(format: "%x", createBranchFrom(offset: offset, toOffset: to)))
 	}
 	
 	class func powerPCBranchAndLinkToOffset(to: Int) -> UInt32 {

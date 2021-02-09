@@ -31,47 +31,70 @@ class GoDRandomiserViewController: GoDViewController {
     }
 	
 	@IBAction func randomise(_ sender: Any) {
-		
-		XGUtility.deleteSuperfluousFiles()
-		settings.increaseFileSizes = true
-		
-		if pspecies.state == .on {
-			let shadowsOnly = randomiseShadowsOnly.state == .on
-			let preserveBST = randomiseByBST.state == .on
-			XGRandomiser.randomisePokemon(shadowsOnly: shadowsOnly, similarBST: preserveBST)
-		}
-		if pmoves.state == .on {
-			XGRandomiser.randomiseMoves()
-		}
-		if ptypes.state == .on {
-			XGRandomiser.randomiseTypes()
-		}
-		if pabilities.state == .on {
-			XGRandomiser.randomiseAbilities()
-		}
-		if pstats.state == .on {
-			XGRandomiser.randomisePokemonStats()
-		}
-		if pevolutions.state == .on {
-			XGRandomiser.randomiseEvolutions()
-		}
-		if mtypes.state == .on {
-			XGRandomiser.randomiseMoveTypes()
-		}
-		if tmmoves.state == .on {
-			XGRandomiser.randomiseTMs()
-		}
+
+		let species = pspecies.state == .on
+		let moves = pmoves.state == .on
+		let types = ptypes.state == .on
+		let abilities = pabilities.state == .on
+		let stats = pstats.state == .on
+		let evolutions = pevolutions.state == .on
+		let moveTypes = mtypes.state == .on
+		let tms = tmmoves.state == .on
+		let tradeEvos = removeTrades.state == .on
+		let shadows = randomiseShadowsOnly.state == .on
+		let bst = randomiseByBST.state == .on
+
 		#if GAME_XD
-		if bbingo.state == .on {
-			XGRandomiser.randomiseBattleBingo()
-		}
+		let bingo = bbingo.state == .on
 		#endif
-		if removeTrades.state == .on {
-			XGDolPatcher.removeTradeEvolutions()
+
+		#if GUI
+		let randomiserMessage = "The randomisation might take a while. \nTry not to save any changes with the other tools while the randomisation is in progress. There will be an alert when it is done."
+		#else
+		let randomiserMessage = "The randomisation might take a while. Please wait."
+		#endif
+
+		GoDAlertViewController.displayAlert(title: "Randomisation starting", text: randomiserMessage)
+
+		XGThreadManager.manager.runInBackgroundAsync {
+			XGUtility.deleteSuperfluousFiles()
+
+			if species {
+				XGRandomiser.randomisePokemon(shadowsOnly: shadows, similarBST: bst)
+			}
+			if moves {
+				XGRandomiser.randomiseMoves()
+			}
+			if types {
+				XGRandomiser.randomiseTypes()
+			}
+			if abilities {
+				XGRandomiser.randomiseAbilities()
+			}
+			if stats {
+				XGRandomiser.randomisePokemonStats()
+			}
+			if evolutions {
+				XGRandomiser.randomiseEvolutions()
+			}
+			if moveTypes {
+				XGRandomiser.randomiseMoveTypes()
+			}
+			if tms {
+				XGRandomiser.randomiseTMs()
+			}
+			#if GAME_XD
+			if bingo {
+				XGRandomiser.randomiseBattleBingo()
+			}
+			#endif
+			if tradeEvos {
+				XGDolPatcher.removeTradeEvolutions()
+			}
+
+			XGUtility.compileMainFiles()
+			GoDAlertViewController.displayAlert(title: "Randomisation complete!", text: "done.")
 		}
-		
-		XGUtility.compileMainFiles()
-		GoDAlertViewController.displayAlert(title: "Randomisation complete!", text: "done.")
 	}
 	
     

@@ -36,9 +36,11 @@ class GoDAlertViewController: GoDViewController {
     }
 	
 	class func displayAlert(title: String, text: String) {
-		self.setText(title: title, text: text)
-		printg("\nAlert: \(title)\n\(text)\n")
-		appDelegate.performSegue("toAlertVC")
+		XGThreadManager.manager.runInForegroundAsync {
+			self.setText(title: title, text: text)
+			printg("\nAlert: \(title)\n\(text)\n")
+			appDelegate.performSegue("toAlertVC")
+		}
 	}
 	
 }

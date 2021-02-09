@@ -150,21 +150,6 @@ enum XGPokemon: CustomStringConvertible {
 		}
 		return XGPokemon.index(rand)
 	}
-
-	static func randomWithSimilarBST(to bst: Int) -> XGPokemon {
-		var rand = XGPokemon.index(0)
-		while rand.index == 0 {
-			rand = .index(Int.random(in: 1 ..< kNumberOfPokemon))
-			let stats = rand.stats
-			let monBST = stats.baseStatTotal
-			let similarBST = (monBST > (bst - 50)) && (monBST < (bst + 50))
-			if (stats.catchRate == 0) || !similarBST {
-				rand = .index(0)
-				continue
-			}
-		}
-		return rand
-	}
 	
 	static func allPokemon() -> [XGPokemon] {
 		var mons = [XGPokemon]()

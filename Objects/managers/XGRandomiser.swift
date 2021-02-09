@@ -34,6 +34,27 @@ class XGRandomiser: NSObject {
 	class func randomisePokemon(shadowsOnly: Bool = false, similarBST: Bool = false) {
 		printg("randomising pokemon species...")
 
+		var cachedPokemonStats = [XGPokemonStats]()
+		if similarBST {
+			XGPokemon.allPokemon().forEach { (pokemon) in
+				cachedPokemonStats.append(pokemon.stats)
+			}
+		}
+
+		func randomWithSimilarBST(to bst: Int) -> XGPokemon {
+			var bstRadius = 50
+			var options = cachedPokemonStats.filter { ($0.baseStatTotal >= bst - bstRadius) && ($0.baseStatTotal <= bst + bstRadius) && $0.catchRate > 0 }
+			while options.count < 2 && bstRadius < 600 {
+				bstRadius += 10
+				options = cachedPokemonStats.filter { ($0.baseStatTotal >= bst - bstRadius) && ($0.baseStatTotal <= bst + bstRadius) && $0.catchRate > 0 }
+			}
+
+			guard options.count > 0 else { return .index(0) }
+
+			let rand = Int.random(in: 0 ..< options.count)
+			return .index(options[rand].index)
+		}
+
 		for deck in MainDecksArray {
 			#if GAME_COLO
 			var shadows = [Int : XGPokemon]()
@@ -58,13 +79,13 @@ class XGRandomiser: NSObject {
 				let oldBST = pokemon.species.stats.baseStatTotal
 
 				#if GAME_XD
-				pokemon.species = similarBST ? XGPokemon.randomWithSimilarBST(to: oldBST) : XGPokemon.random()
+				pokemon.species = similarBST ? randomWithSimilarBST(to: oldBST) : XGPokemon.random()
 				#else
 				if pokemon.isShadow {
 					if let species = shadows[pokemon.shadowID] {
 						pokemon.species = species
 					} else {
-						var species = similarBST ? XGPokemon.randomWithSimilarBST(to: oldBST) : XGPokemon.random()
+						var species = similarBST ? randomWithSimilarBST(to: oldBST) : XGPokemon.random()
 						var dupe = true
 						var trials = 0
 
@@ -75,7 +96,7 @@ class XGRandomiser: NSObject {
 									continue
 								}
 								if species.index == spec.index {
-									species = similarBST ? XGPokemon.randomWithSimilarBST(to: oldBST) : XGPokemon.random()
+									species = similarBST ? randomWithSimilarBST(to: oldBST) : XGPokemon.random()
 									dupe = true
 									trials += 1
 								}
@@ -86,7 +107,7 @@ class XGRandomiser: NSObject {
 						shadows[pokemon.shadowID] = species
 					}
 				} else {
-					pokemon.species = similarBST ? XGPokemon.randomWithSimilarBST(to: oldBST) : XGPokemon.random()
+					pokemon.species = similarBST ? randomWithSimilarBST(to: oldBST) : XGPokemon.random()
 				}
 				#endif
 				pokemon.shadowCatchRate = pokemon.species.catchRate
@@ -117,7 +138,7 @@ class XGRandomiser: NSObject {
 
 								let pokemon = poke.data
 								let oldBST = pokemon.species.stats.baseStatTotal
-								pokemon.species = similarBST ? XGPokemon.randomWithSimilarBST(to: oldBST) : XGPokemon.random()
+								pokemon.species = similarBST ? randomWithSimilarBST(to: oldBST) : XGPokemon.random()
 								pokemon.shadowCatchRate = pokemon.species.catchRate
 								pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
 								pokemon.happiness = 128
