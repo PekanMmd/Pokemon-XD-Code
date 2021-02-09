@@ -21,9 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var godtoolaboutmenuitem: NSMenuItem!
 	@IBOutlet weak var quitgodtoolmenuitem: NSMenuItem!
 	@IBOutlet weak var godtoolhelpmenuitem: NSMenuItem!
-	
-	
-	
+
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		// Insert code here to initialize your application
 		
@@ -68,6 +66,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				break
 			}
 		}
+		fileDecodingMode = false
 	}
     
     func application(_ application: NSApplication, open urls: [URL]) {
@@ -100,12 +99,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 	
 	func applicationWillTerminate(_ aNotification: Notification) {
-		printg("The tool is now closing.")
-		printg("deleting LZSS files...")
+		logToScreen("The tool is now closing.")
+		if XGFolders.LZSS.files.count > 0 {
+			logToScreen("deleting LZSS files...")
+		}
 		for file in XGFolders.LZSS.files where file.fileType == .lzss {
 			file.delete()
 		}
-		printg("Good bye :-)")
+	}
+
+	@IBAction func openFilePicker(_ sender: Any) {
+		let panel = NSOpenPanel()
+		panel.allowsMultipleSelection = true
+		panel.canChooseDirectories = false
+		panel.canChooseFiles = true
+		panel.canDownloadUbiquitousContents = false
+		panel.canResolveUbiquitousConflicts = false
+		panel.isAccessoryViewDisclosed = false
+		panel.resolvesAliases = true
+		panel.allowedFileTypes = ["gtx", "atx", "msg", "fsys", "iso"]
+		panel.begin { (result) in
+			if result == .OK {
+				let urls = panel.urls
+				if urls.count > 0 {
+					self.application(NSApplication.shared, open: urls)
+				}
+			}
+		}
 	}
 	
 	@IBAction func getFreeStringID(_ sender: Any) {
@@ -167,8 +187,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		settings.save()
 	}
 	
-	@IBOutlet weak var fileSizeMenuItem: NSMenuItem!
-	
 	@IBAction func deleteLogs(_ sender: Any) {
 		printg("Deleting logs...")
 		for file in XGFolders.Logs.files where file.fileType == .txt {
@@ -176,16 +194,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 		printg("Logs deleted")
 	}
-	
-	@IBAction func toggleAllowIncreasedFileSizes(_ sender: Any) {
-		settings.increaseFileSizes = !settings.increaseFileSizes
-		settings.save()
-		if settings.increaseFileSizes {
-			printg("Enabled file size increases. This will stop the file importer from ignoring files that are larger than the original but importing might take a lot longer if the files are larger. Make sure your ISO has enough free space if using larger files.")
-		}
-		fileSizeMenuItem.title = settings.increaseFileSizes ? "Disable File Size Increases" : "Enable File Size Increases"
-	}
-	
 	
 	@IBAction func extractISO(_ sender: Any) {
 		guard region != .OtherGame else {

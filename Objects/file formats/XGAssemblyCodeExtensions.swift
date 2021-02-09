@@ -152,7 +152,7 @@ extension XGAssembly {
 			])
 
 			let rel = XGFiles.common_rel.data!
-			var currentOffset = shadowPPstart
+			var currentOffset = shadowPPstart - kRELtoRAMOffsetDifference
 			for i in 0 ..< CommonIndexes.NumberOfMoves.value {
 				rel.replaceWordAtOffset(currentOffset, withBytes: (i.unsigned << 16) + (5 << 8))
 				currentOffset += 4

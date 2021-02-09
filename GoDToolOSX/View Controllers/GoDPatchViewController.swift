@@ -17,7 +17,7 @@ let xdpatches = [
 	"Go back to starting with 1 starter pokemon",
 	"When a pokémon is KO'd it isn't replaced until the end of the turn",
 	"The HM Flag on moves determines whether it is a shadow move or not (requires foreign languages to be removed.)",
-	"Delete unused files (creates much needed space in the ISO)",
+	"Delete unused files (creates space in the ISO for larger files)",
 	"Fix shiny glitch for shadow pokemon",
 	"Return to default behaviour for shadow pokemon shiny glitch",
 	"Shadow pokemon can be shiny",

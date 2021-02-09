@@ -111,7 +111,7 @@ class GoDHomeViewController: GoDTableViewController {
 	
     @discardableResult
     private func checkRequiredFiles() -> Bool {
-        if game != .PBR && !XGFiles.iso.exists {
+        if game != .PBR && (inputISOFile == nil || !XGFiles.iso.exists) {
 			self.performSegue(withIdentifier: "toHelpVC", sender: self)
             return false
         }

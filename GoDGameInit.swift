@@ -56,8 +56,12 @@ func loadRegion() {
 var region = { XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .OtherGame }()
 
 func reloadSourceFile() {
+	loadedFiles.removeAll()
+	loadedStringTables.removeAll()
+	loadedFsys.removeAll()
 	loadDocumentsPath()
 	loadRegion()
+	reloadISO()
 }
 
 enum Environment {

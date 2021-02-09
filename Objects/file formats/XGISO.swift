@@ -21,6 +21,12 @@ let kISOFilesTotalSizeLocation = 0x438 // The size of the game specific files, s
 
 var tocData = XGISO.extractTOC()
 var ISO = XGISO()
+
+func reloadISO() {
+	tocData = XGISO.extractTOC()
+	ISO = XGISO()
+}
+
 class XGISO: NSObject {
 	
 	fileprivate var fileLocations = [String : Int]()
@@ -43,7 +49,7 @@ class XGISO: NSObject {
 		return tocData.get4BytesAtOffset(kTOCNumberEntriesOffset) * kTOCEntrySize
 	}
 	
-	override init() {
+	override fileprivate init() {
 		super.init()
 
 		loadFST()
@@ -121,10 +127,6 @@ class XGISO: NSObject {
 		if settings.verbose {
 			printg("FST was read.")
 		}
-	}
-
-	func importAllFiles() {
-		#warning("TODO: reimplement")
 	}
 
 	@discardableResult

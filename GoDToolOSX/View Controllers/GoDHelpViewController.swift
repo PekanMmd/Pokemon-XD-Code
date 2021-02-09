@@ -13,15 +13,8 @@ class GoDHelpViewController: GoDViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do view setup here.
-		XGFolders.setUpFolderFormat()
 
-		let extraction = game == .PBR ? "File -> Unpack ISO, then Extract Files"
-									  : "File -> Extract ISO"
-
-		let compilation = game == .PBR ? "File -> Import Files, then Build ISO"
-									   : "File -> Rebuild ISO"
-		
+		#if GAME_PBR
 		var textData =
 		"""
 		Hey there :-)
@@ -34,26 +27,29 @@ class GoDHelpViewController: GoDViewController {
 		Make sure you rename the ISO: "\(XGFiles.iso.fileName)".
 		
 		Once you've done this, come back to the app and click
-		\(extraction)
+		File -> Unpack ISO, then Extract Files
 		from the menu bar to extract the necessary files from the ISO .
 		
 		This will take a minute or two but afterwards you'll be able to use this tool to modify the game.
 		
 		When you're satisfied with the changes, click
-		\(compilation)
+		File -> Import Files, then Build ISO
 		to put all the files back in the ISO. You won't see any changes to the game itself until you do this.
+
 		"""
+		#else
+		var textData =
+		"""
+		Please select an ISO to use with this tool by selecting
+		File -> Open...
 
-		if game != .PBR {
-			textData += """
+		You can also use the open menu to unzip individual .fsys archives
+		or view individual .gtx, .atx and .msg files.
 
-			If you haven't changed anything like scripts, textures or game text you will probably be fine doing
-			ISO -> Quick Build
-			which just compiles the important files to save time.
+		"""
+		#endif
 
-			Twitter: @StarsMmd
-			"""
-		}
+		textData += "\n\nTwitter: @StarsMmd\nDiscord: @Stars#4434"
 
 		text.stringValue = textData
     }

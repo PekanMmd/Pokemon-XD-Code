@@ -48,9 +48,10 @@ func logToScreen(_ args: Any...) {
 
 func printg(_ args: Any...) {
 
+	logToScreen(args)
+
 	#if GUI
-	guard !fileDecodingMode else {
-		logToScreen(args)
+	guard !fileDecodingMode && inputISOFile != nil else {
 		return
 	}
 	#endif
@@ -77,7 +78,7 @@ func printg(_ args: Any...) {
 	}
 	#endif
 
-	if !fileDecodingMode {
+	if !fileDecodingMode && inputISOFile != nil {
 		XGUtility.saveString(logString, toFile: .log(date))
 	}
 }

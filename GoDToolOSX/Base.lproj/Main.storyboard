@@ -32,10 +32,16 @@
                             <menuItem title="Application" id="Qnm-FU-a3C">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
-                            <menuItem title="ISO" id="dMs-cI-mzQ">
+                            <menuItem title="File" id="dMs-cI-mzQ">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="ISO" id="bib-Uj-vzu">
+                                <menu key="submenu" title="File" id="bib-Uj-vzu">
                                     <items>
+                                        <menuItem title="Open..." keyEquivalent="o" id="Saz-QX-HFK">
+                                            <connections>
+                                                <action selector="openFilePicker:" target="Voe-Tx-rLC" id="iRQ-Pg-5vW"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="j5K-bA-3cW"/>
                                         <menuItem title="Quick Build" keyEquivalent="b" id="pVb-YK-IBf">
                                             <connections>
                                                 <action selector="quickBuildISO:" target="Voe-Tx-rLC" id="Yoo-np-y6B"/>
@@ -44,18 +50,6 @@
                                         <menuItem title="Rebuild ISO" keyEquivalent="r" id="Was-JA-tGl">
                                             <connections>
                                                 <action selector="rebuildISO:" target="Voe-Tx-rLC" id="mZ1-F3-OBU"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="j5K-bA-3cW"/>
-                                        <menuItem title="Save Reference Data" keyEquivalent="p" id="mBd-ad-5j8">
-                                            <connections>
-                                                <action selector="documentISO:" target="Voe-Tx-rLC" id="5pO-cX-2kf"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Disable File Size Increases" keyEquivalent="i" id="Saz-QX-HFK">
-                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
-                                            <connections>
-                                                <action selector="toggleAllowIncreasedFileSizes:" target="Voe-Tx-rLC" id="ntl-4O-o3O"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="mLq-Zu-sy3"/>
@@ -71,9 +65,68 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="UvH-TN-KJe"/>
+                                        <menuItem title="Save Reference Data" keyEquivalent="p" id="mBd-ad-5j8">
+                                            <connections>
+                                                <action selector="documentISO:" target="Voe-Tx-rLC" id="5pO-cX-2kf"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Encode ISO" keyEquivalent="n" id="myG-gM-D73">
                                             <connections>
                                                 <action selector="encodeISO:" target="Voe-Tx-rLC" id="8eN-7H-vAa"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Edit" id="5QF-Oa-p0T">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Edit" id="W48-6f-4Dl">
+                                    <items>
+                                        <menuItem title="Logs" id="6TM-j1-Ag0">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Logs" id="vqI-K9-XxD">
+                                                <items>
+                                                    <menuItem title="Verbose" keyEquivalent="v" id="4gy-Al-AUM">
+                                                        <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                                        <connections>
+                                                            <action selector="setVerboseLogs:" target="Voe-Tx-rLC" id="CXv-hg-dxa"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Fast" keyEquivalent="f" id="Hob-rn-WlJ">
+                                                        <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                                        <connections>
+                                                            <action selector="setFastLogs:" target="Voe-Tx-rLC" id="a1f-hU-KvW"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem isSeparatorItem="YES" id="ZyR-oR-LYs"/>
+                                                    <menuItem title="Delete Log Files" id="EeO-4O-DGz">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="deleteLogs:" target="Voe-Tx-rLC" id="Ya6-Nj-mW2"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="gcK-uI-4ME"/>
+                                        <menuItem title="Cut" keyEquivalent="x" id="uRl-iY-unG">
+                                            <connections>
+                                                <action selector="cut:" target="Ady-hI-5gd" id="YJe-68-I9s"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Copy" keyEquivalent="c" id="x3v-GG-iWU">
+                                            <connections>
+                                                <action selector="copy:" target="Ady-hI-5gd" id="G1f-GL-Joy"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Paste" keyEquivalent="v" id="gVA-U4-sdL">
+                                            <connections>
+                                                <action selector="paste:" target="Ady-hI-5gd" id="UvS-8e-Qdg"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Select All" keyEquivalent="a" id="Ruw-6m-B2m">
+                                            <connections>
+                                                <action selector="selectAll:" target="Ady-hI-5gd" id="VNm-Mi-diN"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -194,60 +247,6 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Edit" id="5QF-Oa-p0T">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Edit" id="W48-6f-4Dl">
-                                    <items>
-                                        <menuItem title="Logs" id="6TM-j1-Ag0">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Logs" id="vqI-K9-XxD">
-                                                <items>
-                                                    <menuItem title="Verbose" keyEquivalent="v" id="4gy-Al-AUM">
-                                                        <modifierMask key="keyEquivalentModifierMask" control="YES"/>
-                                                        <connections>
-                                                            <action selector="setVerboseLogs:" target="Voe-Tx-rLC" id="CXv-hg-dxa"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                    <menuItem title="Fast" keyEquivalent="f" id="Hob-rn-WlJ">
-                                                        <modifierMask key="keyEquivalentModifierMask" control="YES"/>
-                                                        <connections>
-                                                            <action selector="setFastLogs:" target="Voe-Tx-rLC" id="a1f-hU-KvW"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                    <menuItem isSeparatorItem="YES" id="ZyR-oR-LYs"/>
-                                                    <menuItem title="Delete Log Files" id="EeO-4O-DGz">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                        <connections>
-                                                            <action selector="deleteLogs:" target="Voe-Tx-rLC" id="Ya6-Nj-mW2"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                </items>
-                                            </menu>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="gcK-uI-4ME"/>
-                                        <menuItem title="Cut" keyEquivalent="x" id="uRl-iY-unG">
-                                            <connections>
-                                                <action selector="cut:" target="Ady-hI-5gd" id="YJe-68-I9s"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Copy" keyEquivalent="c" id="x3v-GG-iWU">
-                                            <connections>
-                                                <action selector="copy:" target="Ady-hI-5gd" id="G1f-GL-Joy"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Paste" keyEquivalent="v" id="gVA-U4-sdL">
-                                            <connections>
-                                                <action selector="paste:" target="Ady-hI-5gd" id="UvS-8e-Qdg"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Select All" keyEquivalent="a" id="Ruw-6m-B2m">
-                                            <connections>
-                                                <action selector="selectAll:" target="Ady-hI-5gd" id="VNm-Mi-diN"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </menuItem>
                             <menuItem title="Window" id="aUF-d1-5bR">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Window" systemMenu="window" id="Td7-aD-5lo">
@@ -281,7 +280,6 @@
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Colosseum_Tool" customModuleProvider="target">
                     <connections>
-                        <outlet property="fileSizeMenuItem" destination="Saz-QX-HFK" id="LYe-f3-cGG"/>
                         <outlet property="godtoolaboutmenuitem" destination="5kV-Vb-QxS" id="RzJ-5K-bSN"/>
                         <outlet property="godtoolhelpmenuitem" destination="FKE-Sm-Kum" id="kyN-Ez-awb"/>
                         <outlet property="godtoolmenuitem" destination="1Xt-HY-uBw" id="Ef4-Le-GYE"/>
@@ -583,6 +581,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="PCr-YY-Lid"/>
+        <segue reference="NaH-4i-fmB"/>
     </inferredMetricsTieBreakers>
 </document>

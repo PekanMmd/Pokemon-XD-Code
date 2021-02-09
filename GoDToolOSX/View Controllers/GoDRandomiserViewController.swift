@@ -19,7 +19,10 @@ class GoDRandomiserViewController: GoDViewController {
 	@IBOutlet var tmmoves: NSButton!
 	@IBOutlet var bbingo: NSButton!
 	@IBOutlet var removeTrades: NSButton!
-	
+	@IBOutlet weak var randomiseShadowsOnly: NSButton!
+	@IBOutlet weak var randomiseByBST: NSButton!
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
 		if game == .Colosseum {
@@ -33,7 +36,9 @@ class GoDRandomiserViewController: GoDViewController {
 		settings.increaseFileSizes = true
 		
 		if pspecies.state == .on {
-			XGRandomiser.randomisePokemon()
+			let shadowsOnly = randomiseShadowsOnly.state == .on
+			let preserveBST = randomiseByBST.state == .on
+			XGRandomiser.randomisePokemon(shadowsOnly: shadowsOnly, similarBST: preserveBST)
 		}
 		if pmoves.state == .on {
 			XGRandomiser.randomiseMoves()

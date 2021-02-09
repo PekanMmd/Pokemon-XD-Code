@@ -68,7 +68,7 @@ class XGRandomiser: NSObject {
 						var dupe = true
 						var trials = 0
 
-						while dupe && trials < 20 {
+						while dupe && trials < 30 {
 							dupe = false
 							for (id, spec) in shadows {
 								if id == pokemon.shadowID {
@@ -110,21 +110,24 @@ class XGRandomiser: NSObject {
 					duplicate = false
 
 					for j in 1 ..< i {
-						let check = XGDeckPokemon.ddpk(j)
-						if check.data.species.index == poke.data.species.index {
-							duplicate = true
+						if trials < 30 {
+							let check = XGDeckPokemon.ddpk(j)
+							if check.data.species.index == poke.data.species.index {
+								duplicate = true
 
-							let pokemon = poke.data
-							let oldBST = pokemon.species.stats.baseStatTotal
-							pokemon.species = similarBST ? XGPokemon.randomWithSimilarBST(to: oldBST) : XGPokemon.random()
-							pokemon.shadowCatchRate = pokemon.species.catchRate
-							pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
-							pokemon.happiness = 128
-							pokemon.save()
+								let pokemon = poke.data
+								let oldBST = pokemon.species.stats.baseStatTotal
+								pokemon.species = similarBST ? XGPokemon.randomWithSimilarBST(to: oldBST) : XGPokemon.random()
+								pokemon.shadowCatchRate = pokemon.species.catchRate
+								pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
+								pokemon.happiness = 128
+								pokemon.save()
+								trials += 1
+							}
 						}
 					}
 
-				} while duplicate && trials < 20
+				} while duplicate && trials < 30
 
 			}
 		}

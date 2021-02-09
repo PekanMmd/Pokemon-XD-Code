@@ -531,7 +531,7 @@ indirect enum XDSExpr {
 			if !fsys.identifiers.contains(c.asInt) {
 				return macroWithName("MODEL_" + c.asInt.hex())
 			}
-			return macroWithName("MODEL_" + XGCharacterModel.modelWithIdentifier(id: c.asInt).name.underscoreSimplified.uppercased())
+			return macroWithName("MODEL_" + XGCharacterModel.modelWithIdentifier(id: c.asInt).name.removeFileExtensions().underscoreSimplified.uppercased())
 		case .move:
 			if c.asInt == 0 {
 				return macroWithName("move_none".uppercased())
