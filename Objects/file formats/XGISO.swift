@@ -8,7 +8,7 @@
 
 import Foundation
 
-var filesTooLargeForReplacement : [XGFiles]?
+var filesTooLargeForReplacement: [XGFiles]?
 
 let kDOLStartOffsetLocation = 0x420
 let kTOCStartOffsetLocation = 0x424
@@ -19,21 +19,15 @@ let kTOCEntrySize			= 0xc
 let kISOFirstFileOffsetLocation = 0x434 // The "user data" start offset. Basically all the game specific files
 let kISOFilesTotalSizeLocation = 0x438 // The size of the game specific files, so everything after dol and toc
 
-var tocData = XGISO.extractTOC()
-var ISO = XGISO()
-
-func reloadISO() {
-	tocData = XGISO.extractTOC()
-	ISO = XGISO()
-}
-
 class XGISO: NSObject {
+
+	static var current = XGISO()
+	static var tocData = extractTOC()
+	static var inputISOFile: XGFiles?
 	
-	fileprivate var fileLocations = [String : Int]()
-	
-	fileprivate var fileSizes = [String : Int]()
-	
-	fileprivate var fileDataOffsets = [String : Int]() // in toc
+	fileprivate var fileLocations = [String: Int]()
+	fileprivate var fileSizes = [String: Int]()
+	fileprivate var fileDataOffsets = [String: Int]() // in toc
 	
 	var allFileNames = [String]()
 	var filesOrdered = [String]()
@@ -46,13 +40,40 @@ class XGISO: NSObject {
 	}
 	
 	var TOCFirstStringOffset : Int {
-		return tocData.get4BytesAtOffset(kTOCNumberEntriesOffset) * kTOCEntrySize
+		return XGISO.tocData.get4BytesAtOffset(kTOCNumberEntriesOffset) * kTOCEntrySize
 	}
 	
-	override fileprivate init() {
+	override private init() {
 		super.init()
 
 		loadFST()
+	}
+
+	@discardableResult
+	class func loadISO(file: XGFiles) -> Bool {
+		loadedFiles.removeAll()
+		loadedStringTables.removeAll()
+		loadedFsys.removeAll()
+
+		guard file.exists else {
+			inputISOFile = nil
+			printg("Couldn't load ISO. File doesn't exist:", file.path)
+			return false
+		}
+
+		guard !file.fileName.contains(".nkit.iso") else {
+			inputISOFile = nil
+			printg("nkit isos are currently unsupported:", file.path)
+			printg("Use this tool to convert it to a regular iso:\nhttps://vimm.net/vault/?p=nkit")
+			return false
+		}
+
+		inputISOFile = file
+		loadDocumentsPath()
+		loadRegion()
+		tocData = extractTOC()
+		current = XGISO()
+		return true
 	}
 
 	func loadFST() {
@@ -97,6 +118,7 @@ class XGISO: NSObject {
 
 		var i = 0x0
 
+		let tocData = XGISO.tocData
 		while (i * 12 < TOCFirstStringOffset) {
 
 			let o = i * 12
@@ -131,7 +153,7 @@ class XGISO: NSObject {
 
 	@discardableResult
 	func importToc(saveWhenDone save: Bool) -> Bool {
-		let success = shiftAndReplaceFile(name: "Game.toc", withData: tocData, save: false)
+		let success = shiftAndReplaceFile(name: "Game.toc", withData: XGISO.tocData, save: false)
 		let firstFileInUserSection = game == .XD ? "B1_1.fsys" : "D1_garage_1F.fsys"
 		if success {
 			if let firstFileOffset = locationForFile(firstFileInUserSection) {
@@ -215,7 +237,7 @@ class XGISO: NSObject {
 	}
 	
 	fileprivate func getStringAtOffset(_ offset: Int) -> String {
-		return tocData.getStringAtOffset(offset + TOCFirstStringOffset)
+		return XGISO.tocData.getStringAtOffset(offset + TOCFirstStringOffset)
 	}
 	
 	func locationForFile(_ fileName: String) -> Int? {
@@ -689,6 +711,7 @@ class XGISO: NSObject {
 			return
 		}
 
+		let tocData = XGISO.tocData
 		let tocBackup = XGMutableData(byteStream: tocData.byteStream, file: .toc)
 		let lastFile = filesOrdered.last!
 
@@ -728,7 +751,7 @@ class XGISO: NSObject {
 		tocData.replaceBytesFromOffset(lastStringOffset, withByteStream: bytes)
 
 		guard importToc(saveWhenDone: false) else {
-			tocData = tocBackup
+			XGISO.tocData = tocBackup
 			printg("Could not add file: " + file.path + "\nThere was no room for the extra TOCEntry")
 			return
 		}

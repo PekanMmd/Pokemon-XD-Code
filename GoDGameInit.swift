@@ -9,8 +9,6 @@
 import Foundation
 
 let versionNumber = "V2.0.0"
-
-var inputISOFile: XGFiles?
 var fileDecodingMode = false
 
 #if GAME_XD
@@ -18,7 +16,7 @@ let documentsFolderName = "GoD Tool"
 let game = XGGame.XD
 let console = Console.ngc
 var isDemo: Bool {
-	return XGFiles.iso.exists && ISO.allFileNames.count < 200 // 166 in vanilla demo
+	return XGFiles.iso.exists && XGISO.current.allFileNames.count < 200 // 166 in vanilla demo
 }
 
 #elseif GAME_COLO
@@ -39,15 +37,15 @@ let isDemo = false
 
 func loadDocumentsPath() {
 	documentsPath = {
-		return (inputISOFile?.folder.path ?? NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+		return (XGISO.inputISOFile?.folder.path ?? NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
 			+ "/\(documentsFolderName)"
-			+ (inputISOFile == nil ? "" : " \(inputISOFile!.fileName.removeFileExtensions())")
+			+ (XGISO.inputISOFile == nil ? "" : " \(XGISO.inputISOFile!.fileName.removeFileExtensions())")
 	}()
 }
 var documentsPath = {
-	return (inputISOFile?.folder.path ?? NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+	return (XGISO.inputISOFile?.folder.path ?? NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
 		+ "/\(documentsFolderName)"
-		+ (inputISOFile == nil ? "" : " \(inputISOFile!.fileName.removeFileExtensions())")
+		+ (XGISO.inputISOFile == nil ? "" : " \(XGISO.inputISOFile!.fileName.removeFileExtensions())")
 }()
 
 func loadRegion() {
@@ -55,14 +53,6 @@ func loadRegion() {
 }
 var region = { XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .OtherGame }()
 
-func reloadSourceFile() {
-	loadedFiles.removeAll()
-	loadedStringTables.removeAll()
-	loadedFsys.removeAll()
-	loadDocumentsPath()
-	loadRegion()
-	reloadISO()
-}
 
 enum Environment {
 	case Linux

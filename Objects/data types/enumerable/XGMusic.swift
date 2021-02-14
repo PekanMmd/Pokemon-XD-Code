@@ -17,12 +17,12 @@ final class XGMusic: Codable {
 	var isdID : UInt32 = 0
 	
 	var fsys : XGFsys? {
-		return ISO.getFSYSDataWithGroupID(fsysID)
+		return XGISO.current.getFSYSDataWithGroupID(fsysID)
 	}
 	
 	var fsysName : String? {
 		guard fsysID > 0 else { return nil }
-		return ISO.getFSYSNameWithGroupID(fsysID)
+		return XGISO.current.getFSYSNameWithGroupID(fsysID)
 	}
 	
 	var name : String {

@@ -101,7 +101,7 @@ enum XGTrainerModels : Int, Codable, CaseIterable {
 	}
 	
 	var pkxFSYS : XGFsys? {
-		return ISO.getPKXModelWithIdentifier(id: self.pkxModelIdentifier)
+		return XGISO.current.getPKXModelWithIdentifier(id: self.pkxModelIdentifier)
 	}
 	
 	var pkxData : XGMutableData? {

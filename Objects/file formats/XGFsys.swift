@@ -915,7 +915,7 @@ extension XGFsys: XGEnumerable {
 	}
 
 	static var allValues: [XGFsys] {
-		return ISO.allFileNames
+		return XGISO.current.allFileNames
 			.filter{$0.fileExtensions == XGFileTypes.fsys.fileExtension}
 			.map{XGFiles.fsys($0.removeFileExtensions())}
 			.filter{$0.exists}

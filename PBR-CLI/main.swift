@@ -22,9 +22,9 @@ func importExportFiles() {
 
 	func searchedFiles() -> [String] {
 		guard currentSearch.count > 0 else {
-			return ISO.allFileNames.sorted()
+			return XGISO.current.allFileNames.sorted()
 		}
-		return ISO.allFileNames.sorted().filter { (name) -> Bool in
+		return XGISO.current.allFileNames.sorted().filter { (name) -> Bool in
 			return name.lowercased().contains(currentSearch.lowercased())
 		}
 	}
@@ -202,8 +202,8 @@ func main() {
 			let fileurl = URL(fileURLWithPath: filename)
 			return fileurl.file
 		}
-		if files.count == 1, files[0].fileType == .iso {
-			inputISOFile = files[0]
+		if let isoFile = files.first(where: {$0.fileType == .iso && $0.exists}) {
+			XGISO.loadISO(file: isoFile)
 		} else {
 			decodeInputFiles(files)
 			return

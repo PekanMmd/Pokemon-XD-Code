@@ -68,7 +68,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				return fileurl.file
 			}
 			if files.count == 1, files[0].fileType == .iso {
-				inputISOFile = files[0]
+				XGISO.loadISO(files[0])
 			} else {
 				decodeInputFiles(files)
 				return

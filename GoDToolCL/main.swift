@@ -7,6 +7,10 @@
 //
 //
 
+XGBattle.allValues.forEachIndexed({ (index, battle) in
+	printg("\(index):")
+	printg(battle.description)
+})
 
 //var csv = "Spot,Index,Species,Percentage,Min Level,Max Level"
 //for i in 0 ..< XGPokeSpots.allCases.count {

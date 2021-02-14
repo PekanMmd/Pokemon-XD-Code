@@ -12,7 +12,7 @@ func invalidOption(_ option: String) {
 }
 
 func listFiles() {
-	ISO.allFileNames.forEach {
+	XGISO.current.allFileNames.forEach {
 		printg($0)
 	}
 }
@@ -22,9 +22,9 @@ func importExportFiles() {
 
 	func searchedFiles() -> [String] {
 		guard currentSearch.count > 0 else {
-			return ISO.allFileNames
+			return XGISO.current.allFileNames
 		}
-		return ISO.allFileNames.filter { (name) -> Bool in
+		return XGISO.current.allFileNames.filter { (name) -> Bool in
 			return name.lowercased().contains(currentSearch.lowercased())
 		}
 	}
@@ -299,7 +299,7 @@ func main() {
 	}
 
 	if let isoFile = files.first(where: {$0.fileType == .iso && $0.exists}) {
-		inputISOFile = isoFile
+		guard XGISO.loadISO(file: isoFile) else { return }
 	} else {
 		decodeInputFiles(files)
 		return

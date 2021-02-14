@@ -122,7 +122,7 @@ indirect enum XGFiles {
 		// windows doesn't support colons in file names
 		case .log(let d)			: return d.description.replacingOccurrences(of: ":", with: ".") + XGFileTypes.txt.fileExtension
 		case .json(let s)			: return s + XGFileTypes.json.fileExtension
-		case .iso					: return inputISOFile?.fileName ?? "game" + XGFileTypes.iso.fileExtension
+		case .iso					: return XGISO.inputISOFile?.fileName ?? "game" + XGFileTypes.iso.fileExtension
 		case .wit                   : return environment == .Windows ? "wit.exe" :  "wit"
 		case .wimgt                 : return environment == .Windows ? "wimgt.exe" :  "wimgt"
 		case .tool(let s)			: return s + (environment == .Windows ? ".exe" : "")
@@ -225,7 +225,7 @@ indirect enum XGFiles {
 		}
 		
 		if self == .toc {
-			data = tocData
+			data = XGISO.tocData
 		} else {
 			data = XGMutableData(contentsOfXGFile: self)
 		}
@@ -488,7 +488,7 @@ indirect enum XGFolders {
 		case .Reference			: return "Reference"
 		case .Resources			: return "Resources"
 		case .Wiimm				: return "Wiimm"
-		case .ISO				: return inputISOFile?.folder.name ?? "ISO"
+		case .ISO				: return XGISO.inputISOFile?.folder.name ?? "ISO"
 		case .Logs				: return "Logs"
 		case .ISOExport      	: return "Game Files"
 		case .path(let s) 		: return s
@@ -528,10 +528,10 @@ indirect enum XGFolders {
 		case .Types		: path = XGFolders.Images.path
 		case .Wiimm		: path = XGFolders.Resources.path
 		case .nameAndFolder(_, let f): path = f.path
-		case .ISO		: return inputISOFile?.folder.path ?? documentsPath + "/" + self.name
+		case .ISO		: return XGISO.inputISOFile?.folder.path ?? documentsPath + "/" + self.name
 		case .path(let s): return s
 		#if GAME_PBR
-		case .Dump  	: path = inputISOFile? == nil ? documentsPath : XGFolders.ISO.path
+		case .Dump  	: path = XGISO.inputISOFile? == nil ? documentsPath : XGFolders.ISO.path
 		case .DATA      : path = XGFolders.Dump.path
 		case .Sys, .Files: path = XGFolders.DATA.exists ? XGFolders.DATA.path : XGFolders.Dump.path
 		#endif
@@ -627,7 +627,8 @@ indirect enum XGFolders {
 		for folder in folders {
 			folder.createDirectory()
 		}
-		
+
+		#if GUI
 		var images = [XGFiles]()
 		for i in 0 ... 17 {
 			images.append(.typeImage(i))
@@ -676,6 +677,7 @@ indirect enum XGFolders {
                 resource.copy(to: image)
 			}
 		}
+		#endif
 		
 		var jsons = ["Move Effects", "Original Pokemon", "Original Moves"]
 		if game == .PBR {

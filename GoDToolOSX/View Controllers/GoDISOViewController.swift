@@ -9,7 +9,7 @@ import Cocoa
 
 class GoDISOViewController: GoDTableViewController {
 
-	let allFileNames = ISO.allFileNames.sorted()
+	let allFileNames = XGISO.current.allFileNames.sorted()
 	var filteredFileNames = [String]()
 
 	var isExporting = false
@@ -63,7 +63,7 @@ class GoDISOViewController: GoDTableViewController {
 			self.export(self)
 		}
 		printg("deleting file: \(currentFile.fileName)")
-		ISO.deleteFileAndPreserve(name: currentFile.fileName, save: true)
+		XGISO.current.deleteFileAndPreserve(name: currentFile.fileName, save: true)
 		GoDAlertViewController.displayAlert(title: "Deletion complete", text: "Deleted file \(currentFile.fileName) from the ISO.")
 	}
 	
@@ -88,7 +88,7 @@ class GoDISOViewController: GoDTableViewController {
 		
 		filesText.string = ""
 		if currentFile.fileType == .fsys {
-			if let data = ISO.dataForFile(filename: currentFile.fileName) {
+			if let data = XGISO.current.dataForFile(filename: currentFile.fileName) {
 				if data.length > 0 {
 					filesize.stringValue = "File size: \(data.length.hexString())"
 					let fsys = data.fsysData

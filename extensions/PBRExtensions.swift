@@ -144,7 +144,7 @@ extension XGUtility {
 	class func exportFileFromISO(_ file: XGFiles, decode: Bool = true) -> Bool {
 		XGFolders.ISOExport("").createDirectory()
 
-		if let data = ISO.dataForFile(filename: file.fileName) {
+		if let data = XGISO.current.dataForFile(filename: file.fileName) {
 			if data.length > 0 {
 				data.file = file
 				if file.fileType == .fsys {

@@ -40,7 +40,7 @@ func printg(_ args: Any...) {
 	}
 	#endif
 
-	if !fileDecodingMode && inputISOFile != nil {
+	if !fileDecodingMode && XGISO.inputISOFile != nil {
 		XGUtility.saveString(logString, toFile: .log(date))
 	}
 }

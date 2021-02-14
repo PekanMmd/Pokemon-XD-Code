@@ -586,9 +586,7 @@ class XGDolPatcher {
 					stats.save()
 				}
 			}
-			
 		}
-		
 	}
 	
 	class func alwaysShowShadowPokemonNature() {
@@ -733,7 +731,7 @@ class XGDolPatcher {
 
 	class func pokemonHaveMaxCatchRate() {
 		#warning("TODO: set via the ASM instead of updating data tables")
-		for mon in allPokemonArray().map({ $0.stats }) {
+		for mon in allPokemonArray().map({ $0.stats }).filter({ $0.catchRate > 0 }) {
 			mon.catchRate = 255
 			mon.save()
 		}
@@ -750,7 +748,7 @@ class XGDolPatcher {
 			case .shinyChanceEditingApply		: XGDolPatcher.removeShinyGlitch()
 			case .shinyChanceEditingRemove		: XGDolPatcher.replaceShinyGlitch()
 			case .type9IndependentApply			: XGDolPatcher.removeType9Dependencies()
-			case .purgeUnusedText		: XGDolPatcher.purgeUnusedText()
+			case .purgeUnusedText				: XGDolPatcher.purgeUnusedText()
 			case .decapitaliseNames				: XGDolPatcher.decapitalise()
 			case .tradeEvolutions				: XGDolPatcher.removeTradeEvolutions()
 			case .defaultMoveCategories			: XGUtility.defaultMoveCategories()

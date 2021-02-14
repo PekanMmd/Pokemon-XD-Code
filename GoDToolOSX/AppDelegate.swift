@@ -86,9 +86,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 
 		if let isoFile = files.first(where: {$0.fileType == .iso && $0.exists}) {
-			inputISOFile = isoFile
-			printg("opening ISO:", inputISOFile!.path)
-			reloadSourceFile()
+			printg("opening ISO:", isoFile.path)
+			guard XGISO.loadISO(file: isoFile) else {
+				return
+			}
 			homeViewController.reload()
 		} else {
 			decodeInputFiles(files)

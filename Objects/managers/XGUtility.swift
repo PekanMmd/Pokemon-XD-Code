@@ -15,7 +15,7 @@ class XGUtility {
 	class func extractAllFiles() {
 		#if GAME_PBR
 		let excludedFiles = [ "pkx_", "wzx_"]
-		for filename in ISO.allFileNames {
+		for filename in XGISO.current.allFileNames {
 			guard !excludedFiles.contains(where: { (str) -> Bool in
 				filename.contains(str)
 			}) else {
@@ -25,7 +25,7 @@ class XGUtility {
 		}
 		#else
 		let excludedFiles = ["stm_", "pkx_", "wzx_"]
-		for filename in ISO.allFileNames where filename != XGFiles.toc.fileName {
+		for filename in XGISO.current.allFileNames where filename != XGFiles.toc.fileName {
 			guard !excludedFiles.contains(where: { (str) -> Bool in
 				filename.contains(str)
 			}) else {
@@ -67,7 +67,7 @@ class XGUtility {
 			}
 		}
 		#if !GAME_PBR
-		ISO.save()
+		XGISO.current.save()
 		#endif
 
 		printg("Quick build complete")
@@ -76,7 +76,7 @@ class XGUtility {
 	class func compileAllFiles() {
 		
 		prepareForCompilation()
-		for file in ISO.allFileNames {
+		for file in XGISO.current.allFileNames {
 			if file.fileExtensions == XGFileTypes.fsys.fileExtension {
 				XGUtility.importFileToISO(.fsys(file.removeFileExtensions()), encode: true)
 			} else {
@@ -90,7 +90,7 @@ class XGUtility {
 	class func exportFileFromISO(_ file: XGFiles, decode: Bool = true, overwrite: Bool = false) -> Bool {
 		XGFolders.ISOExport("").createDirectory()
 
-		if let data = ISO.dataForFile(filename: file.fileName) {
+		if let data = XGISO.current.dataForFile(filename: file.fileName) {
 			if data.length > 0 {
 				data.file = file
 				if !file.exists || overwrite {
@@ -277,9 +277,9 @@ class XGUtility {
 				printg("importing \(fileToImport.path) into \(XGFiles.iso.path)")
 			}
 			#if GAME_PBR
-			ISO.importFiles([fileToImport])
+			XGISO.current.importFiles([fileToImport])
 			#else
-			ISO.importFiles([fileToImport], save: save)
+			XGISO.current.importFiles([fileToImport], save: save)
 			#endif
 
 			return true
@@ -386,7 +386,7 @@ class XGUtility {
 	}
 	
 	class func searchForFsysForFile(file: XGFiles) {
-		let iso = ISO
+		let iso = XGISO.current
 		for name in iso.allFileNames where name.fileExtensions == ".fsys" {
 			let fsys = iso.dataForFile(filename: name)!.fsysData
 			for index in 0 ..< fsys.numberOfEntries {
@@ -399,7 +399,7 @@ class XGUtility {
 	}
 	
 	class func searchForFsysForIdentifier(id: UInt32) -> [XGFsys] {
-		let iso = ISO
+		let iso = XGISO.current
 		var found = [XGFsys]()
 		if settings.verbose {
 			printg("Searching for fsys containing identifier: \(id.hexString())")
@@ -435,14 +435,14 @@ class XGUtility {
 			substrings = ["carde", "ex", "debug"]
 		}
 		
-		for file in ISO.allFileNames {
+		for file in XGISO.current.allFileNames {
 			for substring in substrings {
 				if file.contains(substring) && !file.contains("wzx") && !file.contains("pkx") {
-					ISO.deleteFileAndPreserve(name: file, save: false)
+					XGISO.current.deleteFileAndPreserve(name: file, save: false)
 				}
 			}
 		}
-		ISO.save()
+		XGISO.current.save()
 	}
 	
 	//MARK: - Saving to disk
@@ -617,11 +617,11 @@ class XGUtility {
 		XGFolders.setUpFolderFormat()
 		dumpFolder.createDirectory()
 		printg("output folder: \(dumpFolder.path)")
-		for filename in ISO.allFileNames where filename.contains(".fsys") {
+		for filename in XGISO.current.allFileNames where filename.contains(".fsys") {
 			if settings.verbose {
 				printg("searching file:", filename)
 			}
-			guard let fsysData = ISO.dataForFile(filename: filename) else {
+			guard let fsysData = XGISO.current.dataForFile(filename: filename) else {
 				if settings.verbose {
 					printg("no iso data found for file:", filename)
 				}

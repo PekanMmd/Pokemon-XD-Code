@@ -52,9 +52,9 @@ final class XGRoom: NSObject, Codable {
 	var name: String {
 		if XGFiles.json("Room IDs").exists {
 			let ids = XGFiles.json("Room IDs").json
-			return (ids as! [String : String])[roomID.hexString()] ?? (ISO.getFSYSNameWithGroupID(self.groupID) ?? "-")
+			return (ids as! [String : String])[roomID.hexString()] ?? (XGISO.current.getFSYSNameWithGroupID(self.groupID) ?? "-")
 		} else {
-			return ISO.getFSYSNameWithGroupID(self.groupID) ?? "-"
+			return XGISO.current.getFSYSNameWithGroupID(self.groupID) ?? "-"
 		}
 	}
 	
@@ -63,7 +63,7 @@ final class XGRoom: NSObject, Codable {
 	}
 
 	var fsysFilename: String? {
-		ISO.getFSYSNameWithGroupID(groupID)
+		XGISO.current.getFSYSNameWithGroupID(groupID)
 	}
 	
 	var map: XGMaps {
