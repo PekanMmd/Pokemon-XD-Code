@@ -1,7 +1,7 @@
 
 name: Pokemon Tools CI
 
-on: [push,pull_request,release]
+on: [push]
 
 jobs:
   Build:
@@ -10,7 +10,7 @@ jobs:
         matrix:
           target: ['GoD Tool']
     steps:
-      - name: Checkout to master
+      - name: Checkout
         uses: actions/checkout@master
       - name: Clean
         run: |
@@ -20,3 +20,9 @@ jobs:
           xcodebuild build -project "GoD Tool.xcodeproj" -target "${target}" -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
         env:
           target: ${{ matrix.target }}
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.target }}
+          path: |
+            build/Release/${{ matrix.target }}.app
