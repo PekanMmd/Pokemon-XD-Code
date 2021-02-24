@@ -99,7 +99,8 @@ func applyPatches() {
 		.tradeEvolutions,
 		.enableDebugLogs,
 		.pokemonCanLearnAnyTM,
-		.pokemonHaveMaxCatchRate
+		.pokemonHaveMaxCatchRate,
+		.removeEVCap
 	] : [
 		.physicalSpecialSplitApply,
 		.defaultMoveCategories,
@@ -198,18 +199,25 @@ func mainMenu() {
 		Type the number of the function you want and press enter:
 
 		0: Exit the program
+
 		1: Rebuild ISO - Use to put files edited by this tool back in the ISO
-		2: List files - List all files in the ISO
-		3: Import/Export files - Use this to export files for manual editing and to reimport them
-		4: Patches - Pick some useful patches to apply to the game
-		5: Randomiser - Select options for randomising the game (rebuild ISO after)
+		2: Delete unused files in the ISO. Use this if there is not enough space to rebuild the ISO.
+
+		3: List files - List all files in the ISO
+		4: Import/Export files - Use this to export files for manual editing and to reimport them
+
+		5: Patches - Pick some useful patches to apply to the game
+
+		6: Randomiser - Select options for randomising the game (rebuild ISO after)
+
 		"""
 		if game == .XD {
 			prompt += """
 
-			6: Encode data tables - Write all data to json files that can be edited
-			7: Decode data tables - Import the edited json files for the data tables
-			8: Document data - Dumps all information about the game into text files for reference only
+			7: Encode data tables - Write all data to json files that can be edited
+			8: Decode data tables - Import the edited json files for the data tables
+
+			9: Document data - Dumps all information about the game into text files for reference only
 			"""
 		}
 
@@ -220,13 +228,14 @@ func mainMenu() {
 		case "1": if readInput("This will overwire the ISO at \(XGFiles.iso.path)\nAre you sure? Y/N").lowercased() == "y" {
 				XGUtility.compileMainFiles()
 			}
-		case "2": listFiles()
-		case "3": importExportFiles()
-		case "4": applyPatches()
-		case "5": randomiser()
-		case "6": if game == .XD { XGUtility.encodeISO() } else { fallthrough }
-		case "7": if game == .XD { XGUtility.decodeISO() } else { fallthrough }
-		case "8": if game == .XD { XGUtility.documentISO() } else { fallthrough }
+		case "2": XGUtility.deleteSuperfluousFiles()
+		case "3": listFiles()
+		case "4": importExportFiles()
+		case "5": applyPatches()
+		case "6": randomiser()
+		case "7": if game == .XD { XGUtility.encodeISO() } else { fallthrough }
+		case "8": if game == .XD { XGUtility.decodeISO() } else { fallthrough }
+		case "9": if game == .XD { XGUtility.documentISO() } else { fallthrough }
 		default: invalidOption(input)
 		}
 	}
@@ -294,7 +303,10 @@ func main() {
 	}.filter{$0.fileType != .unknown}
 
 	guard files.count > 0 else {
-		print("No input files given.")
+		let message = environment == .Windows
+			? "To use this tool, drag and drop your ISO onto this .exe file."
+			: "Please run this tool with the path to your ISO specified as the command line argument."
+		print(message)
 		return
 	}
 

@@ -16,13 +16,21 @@ class XGRandomiser: NSObject {
 			let card = XGBattleBingoCard(index: i)
 			let starter = card.startingPokemon!
 			starter.species = XGPokemon.random()
-			starter.move = XGMoves.random()
+
+			let moves = starter.species.movesForLevel(card.pokemonLevel)
+			starter.move = moves.first(where: { $0.data.basePower > 0 })
+				?? starter.species.stats.levelUpMoves.first(where: { $0.move.data.basePower > 0 })?.move
+				?? (moves.count > 0 ? moves[0] : XGMoves.randomDamaging())
 			starter.save()
 			
 			for panel in card.panels {
 				if let pokemon = panel.pokemon {
 					pokemon.species = XGPokemon.random()
-					pokemon.move = XGMoves.randomDamaging()
+
+					let moves = pokemon.species.movesForLevel(card.pokemonLevel)
+					pokemon.move = moves.first(where: { $0.data.basePower > 0 })
+						?? pokemon.species.stats.levelUpMoves.first(where: { $0.move.data.basePower > 0 })?.move
+						?? (moves.count > 0 ? moves[0] : XGMoves.randomDamaging())
 					pokemon.save()
 				}
 			}
@@ -300,10 +308,12 @@ class XGRandomiser: NSObject {
 			let tm = XGTMs.tm(i)
 			tm.replaceWithMove(.index(tmIndexes[i - 1]))
 		}
-		for i in 1 ... kNumberOfTutorMoves {
-			let tm = XGTMs.tutor(i)
-			tm.replaceWithMove(XGMoves.random())
-			tm.replaceWithMove(.index(tmIndexes[i + kNumberOfTMsAndHMs - 1]))
+		if game == .XD {
+			for i in 1 ... kNumberOfTutorMoves {
+				let tm = XGTMs.tutor(i)
+				tm.replaceWithMove(XGMoves.random())
+				tm.replaceWithMove(.index(tmIndexes[i + kNumberOfTMsAndHMs - 1]))
+			}
 		}
 		printg("done!")
 	}

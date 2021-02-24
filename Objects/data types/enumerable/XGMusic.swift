@@ -30,8 +30,7 @@ final class XGMusic: Codable {
 			return "Null"
 		}
 		if ishID != 0 {
-			if let fsysData = self.fsys {
-				let ishIndex = fsysData.indexForIdentifier(identifier: ishID.int)
+			if let fsysData = self.fsys, let ishIndex = fsysData.indexForIdentifier(identifier: ishID.int) {
 				return fsysData.fileName.removeFileExtensions() + "_\(ishIndex)"
 			} else {
 				return "Unknown_\(fsysID)"

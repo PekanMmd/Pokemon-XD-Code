@@ -139,7 +139,7 @@ enum XGASM {
 	// labels for conviently specifying addresses
 	case label(String)
 	
-	var code : UInt32 {
+	var code: UInt32 {
 		return codeAtOffset(0)
 	}
 	

@@ -8,205 +8,12 @@
 
 import Cocoa
 
-let xdpatches = [
-    "Remove foreign languages from common_rel. Required for some patches. Probably best to apply this first.",
-	"Apply Physical/Special move split (You still need to set the category for each move)",
-	"Remove Physical/Special move split",
-	"Set the physical/special category for all moves to their expected values",
-	"Start with 2 starter pokemon from demo (use gift pokemon editor)",
-	"Go back to starting with 1 starter pokemon",
-	"When a pokémon is KO'd it isn't replaced until the end of the turn",
-	"The HM Flag on moves determines whether it is a shadow move or not (requires foreign languages to be removed.)",
-	"Delete unused files (creates space in the ISO for larger files)",
-	"Fix shiny glitch for shadow pokemon",
-	"Return to default behaviour for shadow pokemon shiny glitch",
-	"Shadow pokemon can be shiny",
-	"Shadow pokemon are never shiny",
-	"Shadow pokemon are always shiny",
-	"Infinite use TMs",
-	"Always show shadow pokemon natures",
-	"Set Deoxys model to: Normal",
-	"Set Deoxys model to: Attack",
-	"Set Deoxys model to: Defense",
-	"Set Deoxys model to: Speed",
-	"Allow female demo starter pokemon",
-	"Gen VII critical hit ratios",
-	"All tutor moves are available from the start",
-	"Decapitalise text",
-	"Enable debug logs"
-]
-let colopatches = [
-	"Apply Physical/Special move split (You still need to set the category for each move)",
-	"Set the physical/special category for all moves to their expected values",
-	"Allow female starter pokemon",
-	"Gen VII critical hit ratios",
-	"Decapitalise text",
-	"Enable debug logs"
-]
-
-
 class GoDPatchViewController: GoDTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 		self.title = "Patches"
     }
-	
-	let patches = game == .XD ? xdpatches : colopatches
-	var funcs = game == .Colosseum ? [
-		#selector(gen4Categories),
-		#selector(defaultCategories),
-		#selector(allowFemaleStarters),
-		#selector(gen7CriticalRatios),
-		#selector(decapitalise),
-		#selector(enableDebugLogs)
-		] :
-		[
-			#selector(removeLanguages),
-			#selector(gen4Categories),
-			#selector(removeGen4Categories),
-			#selector(defaultCategories),
-			#selector(enableBetaStarters),
-			#selector(disableBetaStarters),
-			#selector(endOfTurnSwitchIns),
-			#selector(shadowHMFlag),
-			#selector(deleteUnusedFiles),
-			#selector(fixShinyGlitch),
-			#selector(replaceShinyGlitch),
-			#selector(randomShinyShadows),
-			#selector(neverShinyShadows),
-			#selector(alwaysShinyShadows),
-			#selector(infiniteTMs),
-			#selector(shadowNature),
-			#selector(deoxysN),
-			#selector(deoxysA),
-			#selector(deoxysD),
-			#selector(deoxysS),
-			#selector(allowFemaleStarters),
-			#selector(gen7CriticalRatios),
-			#selector(immediateTutorMoves),
-			#selector(decapitalise),
-			#selector(enableDebugLogs)
-	]
-
-	@objc func enableBetaStarters() {
-		XGDolPatcher.enableBetaStarters()
-	}
-
-	@objc func disableBetaStarters() {
-		XGDolPatcher.disableBetaStarters()
-	}
-	
-	@objc func decapitalise() {
-		XGDolPatcher.decapitalise()
-	}
-	
-	@objc func immediateTutorMoves() {
-		XGUtility.tutorMovesAvailableImmediately()
-	}
-	
-	@objc func shadowHMFlag() {
-		XGAssembly.setShadowMovesUseHMFlag()
-	}
-	
-	var deletingSuper = false
-	@objc func deleteUnusedFiles() {
-		if deletingSuper { return }
-		deletingSuper = true
-		XGThreadManager.manager.runInBackgroundSync {
-			XGUtility.deleteSuperfluousFiles()
-			let text = "Successfully deleted unused files."
-			XGThreadManager.manager.runInForegroundAsync {
-				GoDAlertViewController.displayAlert(title: "Files deleted!", text: text)
-			}
-			self.deletingSuper = false
-		}
-		
-	}
-	
-	@objc func gen7CriticalRatios() {
-		XGDolPatcher.gen7CritRatios()
-	}
-	
-	@objc func allowFemaleStarters() {
-		XGDolPatcher.allowFemaleStarters()
-	}
-	
-	@objc func endOfTurnSwitchIns() {
-		XGAssembly.switchNextPokemonAtEndOfTurn()
-	}
-	
-	@objc func infiniteTMs() {
-		XGAssembly.infiniteUseTMs()
-	}
-	
-	@objc func shadowNature() {
-		XGDolPatcher.alwaysShowShadowPokemonNature()
-	}
-
-	@objc func fixShinyGlitch() {
-		XGDolPatcher.removeShinyGlitch()
-	}
-
-	@objc func replaceShinyGlitch() {
-		XGDolPatcher.replaceShinyGlitch()
-	}
-	
-	@objc func alwaysShinyShadows() {
-		XGDolPatcher.setShadowPokemonShininess(to: .always)
-	}
-	
-	@objc func neverShinyShadows() {
-		XGDolPatcher.setShadowPokemonShininess(to: .never)
-	}
-	
-	@objc func randomShinyShadows() {
-		XGDolPatcher.setShadowPokemonShininess(to: .random)
-	}
-	
-	@objc func removeLanguages() {
-		XGDolPatcher.applyPatch(.purgeUnusedText)
-	}
-	
-	func oneStarter() {
-		XGDolPatcher.applyPatch(.betaStartersRemove)
-	}
-	
-	func twoStarters() {
-		XGDolPatcher.applyPatch(.betaStartersApply)
-	}
-	
-	@objc func removeGen4Categories() {
-		XGDolPatcher.applyPatch(.physicalSpecialSplitRemove)
-	}
-	
-	@objc func gen4Categories() {
-		XGDolPatcher.applyPatch(.physicalSpecialSplitApply)
-	}
-	
-	@objc func defaultCategories() {
-		XGUtility.defaultMoveCategories()
-	}
-	
-	@objc func deoxysN() {
-		XGAssembly.setDeoxysForme(to: .normal)
-	}
-	
-	@objc func deoxysA() {
-		XGAssembly.setDeoxysForme(to: .attack)
-	}
-	
-	@objc func deoxysD() {
-		XGAssembly.setDeoxysForme(to: .defense)
-	}
-	
-	@objc func deoxysS() {
-		XGAssembly.setDeoxysForme(to: .speed)
-	}
-
-	@objc func enableDebugLogs() {
-		XGDolPatcher.enableDebugLogs()
-	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
 		return patches.count
@@ -216,10 +23,10 @@ class GoDPatchViewController: GoDTableViewController {
 		
 		let colour = row % 2 == 0 ? GoDDesign.colourWhite() : GoDDesign.colourLightGrey()
 		
-		let view = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: patches[row], colour: GoDDesign.colourBlack(), fontSize: 10, width: widthForTable())) as! GoDTableCellView
+		let view = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: patches[row].name, colour: GoDDesign.colourBlack(), fontSize: 10, width: widthForTable())) as! GoDTableCellView
 		
 		view.setBackgroundColour(colour)
-		view.setTitle(patches[row])
+		view.setTitle(patches[row].name)
 		view.titleField.maximumNumberOfLines = 0
 		
 		return view
@@ -235,10 +42,10 @@ class GoDPatchViewController: GoDTableViewController {
 			return
 		}
 		if settings.verbose {
-			printg("Selected patch:", self.patches[row])
+			printg("Selected patch:", patches[row].name)
 		}
 		self.showActivityView {
-			self.performSelector(onMainThread: self.funcs[row], with: nil, waitUntilDone: true)
+			XGDolPatcher.applyPatch(patches[row])
 			self.hideActivityView()
 			printg("Patch completed")
 		}

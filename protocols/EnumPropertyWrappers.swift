@@ -8,20 +8,20 @@
 import Foundation
 
 @propertyWrapper
-struct AbilityID {
-	var _value = 0
+struct AbilityID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGAbilities {
-		return .index(validate(_value))
+		return .index(validate(value))
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -31,20 +31,20 @@ struct AbilityID {
 }
 
 @propertyWrapper
-struct BagSlotID {
-	var _value = 0
+struct BagSlotID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGBagSlots {
-		return XGBagSlots(rawValue: validate(_value)) ?? .none
+		return XGBagSlots(rawValue: validate(value)) ?? .none
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -54,20 +54,20 @@ struct BagSlotID {
 }
 
 @propertyWrapper
-struct BattleStyleID {
-	var _value = 0
+struct BattleStyleID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGBattleStyles {
-		return XGBattleStyles(rawValue: validate(_value)) ?? .none
+		return XGBattleStyles(rawValue: validate(value)) ?? .none
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -77,20 +77,20 @@ struct BattleStyleID {
 }
 
 @propertyWrapper
-struct BattleTypeID {
-	var _value = 0
+struct BattleTypeID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGBattleTypes {
-		return XGBattleTypes(rawValue: validate(_value)) ?? .none
+		return XGBattleTypes(rawValue: validate(value)) ?? .none
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -101,20 +101,20 @@ struct BattleTypeID {
 
 #if GAME_XD
 @propertyWrapper
-struct BattleBingoItemID {
-	var _value = 0
+struct BattleBingoItemID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGBattleBingoItem {
-		return XGBattleBingoItem(rawValue: validate(_value)) ?? .none
+		return XGBattleBingoItem(rawValue: validate(value)) ?? .none
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -125,20 +125,20 @@ struct BattleBingoItemID {
 #endif
 
 @propertyWrapper
-struct ColosseumRoundID {
-	var _value = 0
+struct ColosseumRoundID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGColosseumRounds {
-		return XGColosseumRounds(rawValue: validate(_value)) ?? .none
+		return XGColosseumRounds(rawValue: validate(value)) ?? .none
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -148,20 +148,20 @@ struct ColosseumRoundID {
 }
 
 @propertyWrapper
-struct ContestCategoryID {
-	var _value = 0
+struct ContestCategoryID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGContestCategories {
-		return XGContestCategories(rawValue: validate(_value)) ?? .cool
+		return XGContestCategories(rawValue: validate(value)) ?? .cool
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -172,20 +172,20 @@ struct ContestCategoryID {
 
 #if GAME_XD
 @propertyWrapper
-struct DeckID {
-	var _value = 0
+struct DeckID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGDecks {
-		return XGDecks.deckWithID(validate(_value)) ?? .DeckStory
+		return XGDecks.deckWithID(validate(value)) ?? .DeckStory
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -196,20 +196,20 @@ struct DeckID {
 #endif
 
 @propertyWrapper
-struct EvolutionMethodsID {
-	var _value = 0
+struct EvolutionMethodsID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGEvolutionMethods {
-		return XGEvolutionMethods(rawValue: validate(_value)) ?? .none
+		return XGEvolutionMethods(rawValue: validate(value)) ?? .none
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -223,20 +223,20 @@ struct EvolutionMethodsID {
 }
 
 @propertyWrapper
-struct ExpRateID {
-	var _value = 0
+struct ExpRateID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGExpRate {
-		return XGExpRate(rawValue: validate(_value)) ?? .standard
+		return XGExpRate(rawValue: validate(value)) ?? .standard
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -246,20 +246,20 @@ struct ExpRateID {
 }
 
 @propertyWrapper
-struct FileTypeID {
-	var _value = 0
+struct FileTypeID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGFileTypes {
-		return XGFileTypes(rawValue: validate(_value)) ?? .none
+		return XGFileTypes(rawValue: validate(value)) ?? .none
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -269,20 +269,20 @@ struct FileTypeID {
 }
 
 @propertyWrapper
-struct GenderRatioID {
-	var _value = 0
+struct GenderRatioID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGGenderRatios {
-		return XGGenderRatios(rawValue: validate(_value)) ?? .maleOnly
+		return XGGenderRatios(rawValue: validate(value)) ?? .maleOnly
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -292,20 +292,20 @@ struct GenderRatioID {
 }
 
 @propertyWrapper
-struct GenderID {
-	var _value = 0
+struct GenderID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGGenders {
-		return XGGenders(rawValue: validate(_value)) ?? .male
+		return XGGenders(rawValue: validate(value)) ?? .male
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -315,20 +315,20 @@ struct GenderID {
 }
 
 @propertyWrapper
-struct ItemID {
-	var _value = 0
+struct ItemID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGItems {
-		return .index(validate(_value))
+		return .index(validate(value))
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -338,20 +338,20 @@ struct ItemID {
 }
 
 @propertyWrapper
-struct MoveID {
-	var _value = 0
+struct MoveID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGMoves {
-		return .index(validate(_value))
+		return .index(validate(value))
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -361,20 +361,20 @@ struct MoveID {
 }
 
 @propertyWrapper
-struct MoveCategoryID {
-	var _value = 0
+struct MoveCategoryID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGMoveCategories {
-		return XGMoveCategories(rawValue: validate(_value)) ?? .none
+		return XGMoveCategories(rawValue: validate(value)) ?? .none
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -384,20 +384,20 @@ struct MoveCategoryID {
 }
 
 @propertyWrapper
-struct MoveEffectivenessID {
-	var _value = 0
+struct MoveEffectivenessID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGEffectivenessValues {
-		return XGEffectivenessValues(rawValue: validate(_value)) ?? .ineffective
+		return XGEffectivenessValues(rawValue: validate(value)) ?? .ineffective
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -411,20 +411,20 @@ struct MoveEffectivenessID {
 }
 
 @propertyWrapper
-struct MoveEffectTypeID {
-	var _value = 0
+struct MoveEffectTypeID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGMoveEffectTypes {
-		return XGMoveEffectTypes(rawValue: validate(_value)) ?? .none
+		return XGMoveEffectTypes(rawValue: validate(value)) ?? .none
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -434,20 +434,20 @@ struct MoveEffectTypeID {
 }
 
 @propertyWrapper
-struct MoveTargetID {
-	var _value = 0
+struct MoveTargetID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGMoveTargets {
-		return XGMoveTargets(rawValue: validate(_value)) ?? .selectedTarget
+		return XGMoveTargets(rawValue: validate(value)) ?? .selectedTarget
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -457,20 +457,20 @@ struct MoveTargetID {
 }
 
 @propertyWrapper
-struct NatureID {
-	var _value = 0
+struct NatureID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGNatures {
-		return XGNatures(rawValue: validate(_value)) ?? .hardy
+		return XGNatures(rawValue: validate(value)) ?? .hardy
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -480,20 +480,20 @@ struct NatureID {
 }
 
 @propertyWrapper
-struct PokemonID {
-	var _value = 0
+struct PokemonID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGPokemon {
-		return .index(validate(_value))
+		return .index(validate(value))
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -504,20 +504,20 @@ struct PokemonID {
 
 #if GAME_XD
 @propertyWrapper
-struct PokespotID {
-	var _value = 0
+struct PokespotID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGPokeSpots {
-		return XGPokeSpots(rawValue: validate(_value)) ?? .rock
+		return XGPokeSpots(rawValue: validate(value)) ?? .rock
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -528,20 +528,20 @@ struct PokespotID {
 #endif
 
 @propertyWrapper
-struct ShinyLockTypeID {
-	var _value = 0
+struct ShinyLockTypeID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGMoveEffectTypes {
-		return XGMoveEffectTypes(rawValue: validate(_value)) ?? .none
+		return XGMoveEffectTypes(rawValue: validate(value)) ?? .none
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -551,20 +551,20 @@ struct ShinyLockTypeID {
 }
 
 @propertyWrapper
-struct TMID {
-	var _value = 0
+struct TMID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGTMs {
-		return .tm(validate(_value))
+		return .tm(validate(value))
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -574,20 +574,20 @@ struct TMID {
 }
 
 @propertyWrapper
-struct TrainerClassID {
-	var _value = 0
+struct TrainerClassID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGTrainerClasses {
-		return XGTrainerClasses(rawValue: validate(_value)) ?? .none
+		return XGTrainerClasses(rawValue: validate(value)) ?? .none
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -602,20 +602,20 @@ struct TrainerClassID {
 }
 
 @propertyWrapper
-struct TrainerModelID {
-	var _value = 0
+struct TrainerModelID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGTrainerModels {
-		return XGTrainerModels(rawValue: validate(_value)) ?? .none
+		return XGTrainerModels(rawValue: validate(value)) ?? .none
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -630,20 +630,20 @@ struct TrainerModelID {
 }
 
 @propertyWrapper
-struct TutorMoveID {
-	var _value = 0
+struct TutorMoveID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGTMs {
-		return .tutor(validate(_value))
+		return .tutor(validate(value))
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {
@@ -653,20 +653,20 @@ struct TutorMoveID {
 }
 
 @propertyWrapper
-struct TypeID {
-	var _value = 0
+struct TypeID: Codable {
+	var value = 0
 
 	var wrappedValue: Int {
-		get { return _value }
-		set { _value = newValue }
+		get { return value }
+		set { value = newValue }
 	}
 
 	var projectedValue: XGMoveTypes {
-		return .index(validate(_value))
+		return .index(validate(value))
 	}
 
 	init(wrappedValue value: Int) {
-		_value = value
+		self.value = value
 	}
 
 	private func validate(_ value: Int) -> Int {

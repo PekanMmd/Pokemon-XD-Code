@@ -340,6 +340,24 @@
 		1C64CF4524562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
 		1C64CF4624562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
 		1C64CF4724562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */; };
+		1C71684F25DF31A3000F1456 /* GoDCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71684E25DF31A3000F1456 /* GoDCodable.swift */; };
+		1C71685025DF31A3000F1456 /* GoDCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71684E25DF31A3000F1456 /* GoDCodable.swift */; };
+		1C71685125DF31A3000F1456 /* GoDCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71684E25DF31A3000F1456 /* GoDCodable.swift */; };
+		1C71685225DF31A3000F1456 /* GoDCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71684E25DF31A3000F1456 /* GoDCodable.swift */; };
+		1C71685325DF31A3000F1456 /* GoDCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71684E25DF31A3000F1456 /* GoDCodable.swift */; };
+		1C71685425DF31A3000F1456 /* GoDCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71684E25DF31A3000F1456 /* GoDCodable.swift */; };
+		1C71685525DF31A3000F1456 /* GoDCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71684E25DF31A3000F1456 /* GoDCodable.swift */; };
+		1C71685625DF31A3000F1456 /* GoDCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71684E25DF31A3000F1456 /* GoDCodable.swift */; };
+		1C71685725DF31A3000F1456 /* GoDCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71684E25DF31A3000F1456 /* GoDCodable.swift */; };
+		1C71686225E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71686125E0BCA7000F1456 /* StandardPropertyWrappers.swift */; };
+		1C71686325E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71686125E0BCA7000F1456 /* StandardPropertyWrappers.swift */; };
+		1C71686425E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71686125E0BCA7000F1456 /* StandardPropertyWrappers.swift */; };
+		1C71686525E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71686125E0BCA7000F1456 /* StandardPropertyWrappers.swift */; };
+		1C71686625E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71686125E0BCA7000F1456 /* StandardPropertyWrappers.swift */; };
+		1C71686725E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71686125E0BCA7000F1456 /* StandardPropertyWrappers.swift */; };
+		1C71686825E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71686125E0BCA7000F1456 /* StandardPropertyWrappers.swift */; };
+		1C71686925E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71686125E0BCA7000F1456 /* StandardPropertyWrappers.swift */; };
+		1C71686A25E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71686125E0BCA7000F1456 /* StandardPropertyWrappers.swift */; };
 		1C750FB125C3C3BE00EAB706 /* XGBattleModeRulesets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FB025C3C3BD00EAB706 /* XGBattleModeRulesets.swift */; };
 		1C750FB225C3C3BE00EAB706 /* XGBattleModeRulesets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FB025C3C3BD00EAB706 /* XGBattleModeRulesets.swift */; };
 		1C750FB325C3C3BE00EAB706 /* XGBattleModeRulesets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FB025C3C3BD00EAB706 /* XGBattleModeRulesets.swift */; };
@@ -4254,6 +4272,8 @@
 		1C6295F724300F1B0085C22F /* PBRISO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRISO.swift; sourceTree = "<group>"; };
 		1C6295FA243022080085C22F /* PBRScriptCompiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRScriptCompiler.swift; sourceTree = "<group>"; };
 		1C64CF4224562EDF004C0C8F /* XGAssemblyCodeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGAssemblyCodeExtensions.swift; sourceTree = "<group>"; };
+		1C71684E25DF31A3000F1456 /* GoDCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDCodable.swift; sourceTree = "<group>"; };
+		1C71686125E0BCA7000F1456 /* StandardPropertyWrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardPropertyWrappers.swift; sourceTree = "<group>"; };
 		1C750FB025C3C3BD00EAB706 /* XGBattleModeRulesets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleModeRulesets.swift; sourceTree = "<group>"; };
 		1C750FDE25C88A3C00EAB706 /* XGRoomType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGRoomType.swift; sourceTree = "<group>"; };
 		1C75105225CC9CE200EAB706 /* BytePropertyWrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BytePropertyWrappers.swift; sourceTree = "<group>"; };
@@ -6949,9 +6969,11 @@
 		1CB33AA322B7903900F81C29 /* protocols */ = {
 			isa = PBXGroup;
 			children = (
+				1C71684E25DF31A3000F1456 /* GoDCodable.swift */,
 				1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */,
 				1C75105225CC9CE200EAB706 /* BytePropertyWrappers.swift */,
 				1C75106E25CCA3CA00EAB706 /* EnumPropertyWrappers.swift */,
+				1C71686125E0BCA7000F1456 /* StandardPropertyWrappers.swift */,
 			);
 			path = protocols;
 			sourceTree = "<group>";
@@ -12892,6 +12914,7 @@
 				1C16CCCF253BC43600907D78 /* XGEvolutionMethods.swift in Sources */,
 				1C16D133253BC8AE00907D78 /* XGTrainerClass.swift in Sources */,
 				1C7510A925CCAC9300EAB706 /* GoDDataTableEntry.swift in Sources */,
+				1C71686325E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */,
 				1C16CF93253BC57B00907D78 /* XDSFlags.swift in Sources */,
 				1C16CFCC253BC59600907D78 /* XGTextureBlock.swift in Sources */,
 				1C16CD30253BC46100907D78 /* XDSMacroTypes.swift in Sources */,
@@ -12962,6 +12985,7 @@
 				1C16D11F253BC8A400907D78 /* XGTradePokemon.swift in Sources */,
 				1C16CB8E253BC24A00907D78 /* XDRelIndexes.swift in Sources */,
 				1C16CD4D253BC46900907D78 /* XGMoveEffectTypes.swift in Sources */,
+				1C71685025DF31A3000F1456 /* GoDCodable.swift in Sources */,
 				1C16CD57253BC46C00907D78 /* XGMoves.swift in Sources */,
 				1C4E14FF253DD13000EA318B /* GoDImageExtensions.swift in Sources */,
 				1C16CEBB253BC51F00907D78 /* XGGSWTextures.swift in Sources */,
@@ -13041,6 +13065,7 @@
 				1CCF00312562FA820082BFE2 /* XGSaveManager.swift in Sources */,
 				1C16CFA2253BC58200907D78 /* CMScriptStandardFunctions.swift in Sources */,
 				1C16CE43253BC4C700907D78 /* XGCharacter.swift in Sources */,
+				1C71685325DF31A3000F1456 /* GoDCodable.swift in Sources */,
 				1C16CD9B253BC48600907D78 /* XGResources.swift in Sources */,
 				1C9F22DD254104C0008D02EA /* DummyThreadManager.swift in Sources */,
 				1C12C3DF25C25AA30062FA65 /* XGColosseumRounds.swift in Sources */,
@@ -13129,6 +13154,7 @@
 				1C16CDDC253BC49700907D78 /* GoDTextureFormats.swift in Sources */,
 				1C4E14F6253DD05800EA318B /* XGUtility.swift in Sources */,
 				1C16D07B253BC86F00907D78 /* XGCharacterModel.swift in Sources */,
+				1C71686625E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */,
 				1C16CC64253BC41100907D78 /* XGASM.swift in Sources */,
 				1C16CCC4253BC42F00907D78 /* XGDeoxysFormes.swift in Sources */,
 				1C16CD42253BC46400907D78 /* XGMaps.swift in Sources */,
@@ -13159,6 +13185,7 @@
 				1CCFFF62255501BE0082BFE2 /* PBRMoveTypes.swift in Sources */,
 				1CCFFE9B255500CB0082BFE2 /* XGEvolution.swift in Sources */,
 				1CCFFF87255501E50082BFE2 /* GoDDataTableEntry.swift in Sources */,
+				1C71686925E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */,
 				1CCFFF7E255501E50082BFE2 /* PBRMove.swift in Sources */,
 				1CCFFE91255500110082BFE2 /* XGWormadamForms.swift in Sources */,
 				1C2001A225B3281400A7CF7D /* XGUtility.swift in Sources */,
@@ -13231,6 +13258,7 @@
 				1CCFFE2D2554FFCD0082BFE2 /* XGDeoxysFormes.swift in Sources */,
 				1CCFFEE1255501160082BFE2 /* GoDTexturesContaining.swift in Sources */,
 				1CCFFF1E255501580082BFE2 /* XGImage.swift in Sources */,
+				1C71685625DF31A3000F1456 /* GoDCodable.swift in Sources */,
 				1CCFFF282555015A0082BFE2 /* XGColour.swift in Sources */,
 				1CCFFEEC2555011E0082BFE2 /* XGStack.swift in Sources */,
 				1C54189E25BA30BE00CCE8E0 /* XGScriptOps.swift in Sources */,
@@ -13341,6 +13369,7 @@
 				B208E77F20C85A3A00D298BF /* XGNature.swift in Sources */,
 				B208E78720C85EAE00D298BF /* CMType.swift in Sources */,
 				1C4E16C425405CCD00EA318B /* XGImage.swift in Sources */,
+				1C71686725E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */,
 				B280AEA020C9CAC30057A782 /* GoDGiftPokemonView.swift in Sources */,
 				B22A1C5C218337FE001C41D3 /* GoDISOViewController.swift in Sources */,
 				B208683C21850CD100F88C3B /* XGBattleTypes.swift in Sources */,
@@ -13384,6 +13413,7 @@
 				B22A1C502182B1DC001C41D3 /* GoDContextViewController.swift in Sources */,
 				B208E3A620C4CB2B00D298BF /* GoDTextureImporter.swift in Sources */,
 				1C750FB625C3C3BE00EAB706 /* XGBattleModeRulesets.swift in Sources */,
+				1C71685425DF31A3000F1456 /* GoDCodable.swift in Sources */,
 				B2611F562247D284008A4B19 /* XGDoor.swift in Sources */,
 				B257242920CC2D290019A22E /* XGAssemblyCode.swift in Sources */,
 				B23E44EB2263BBD7009548A0 /* GoDFolderPopUpButton.swift in Sources */,
@@ -13433,8 +13463,10 @@
 				B20EEE9021EF789600E87D01 /* XGShinyValues.swift in Sources */,
 				B20EEA8721EF770300E87D01 /* XGThreadManager.swift in Sources */,
 				1CC362DC24C1DF0E005D7B4A /* XGBattleStyles.swift in Sources */,
+				1C71685725DF31A3000F1456 /* GoDCodable.swift in Sources */,
 				1CC362B924BFD274005D7B4A /* GoDStatsViewController.swift in Sources */,
 				B20EEA6D21E921EB00E87D01 /* GoDContainerView.swift in Sources */,
+				1C71686A25E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */,
 				B20EEA6121E9214D00E87D01 /* PBRPokemonStats.swift in Sources */,
 				B20EEA3621E920F400E87D01 /* PBRDeckPokemon.swift in Sources */,
 				B20EEA6A21E921EB00E87D01 /* GoDButton.swift in Sources */,
@@ -13567,6 +13599,7 @@
 				1C6295FB243022080085C22F /* PBRScriptCompiler.swift in Sources */,
 				B24A50D921D12CDA009C707C /* PBRDecks.swift in Sources */,
 				B24A50DF21D12CDA009C707C /* PBRDeckPokemon.swift in Sources */,
+				1C71686825E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */,
 				B24A50DD21D12CDA009C707C /* PBRSpecialStringCharacters.swift in Sources */,
 				B24A50FD21D2D724009C707C /* GoDDataTable.swift in Sources */,
 				B24A507D21D129A5009C707C /* XGNatures.swift in Sources */,
@@ -13639,6 +13672,7 @@
 				B20EE63C21D6620100E87D01 /* XGLevelUpMove.swift in Sources */,
 				B24A504121D12381009C707C /* XGStack.swift in Sources */,
 				B24A506421D12654009C707C /* XGColour.swift in Sources */,
+				1C71685525DF31A3000F1456 /* GoDCodable.swift in Sources */,
 				B24A50E121D12CDA009C707C /* PBREvolutionMethods.swift in Sources */,
 				1C5418A025BA30BF00CCE8E0 /* XGScriptOps.swift in Sources */,
 				B24A50E421D12CDA009C707C /* PBRMoves.swift in Sources */,
@@ -13668,6 +13702,7 @@
 				B2562F6421349789004180F1 /* XGFontColours.swift in Sources */,
 				1CC362DE24C1DF23005D7B4A /* XGBattleStyles.swift in Sources */,
 				B2562F962134991F004180F1 /* XGInteractionPoint.swift in Sources */,
+				1C71685225DF31A3000F1456 /* GoDCodable.swift in Sources */,
 				B2562F5B21349747004180F1 /* XGCharacterModel.swift in Sources */,
 				B2562F4821349567004180F1 /* main.swift in Sources */,
 				1C12C3D525C25AA30062FA65 /* XGColosseumRounds.swift in Sources */,
@@ -13756,6 +13791,7 @@
 				B2611F572247D284008A4B19 /* XGDoor.swift in Sources */,
 				1C4E16C225405CCD00EA318B /* XGImage.swift in Sources */,
 				B2562F6521349789004180F1 /* XGFsys.swift in Sources */,
+				1C71686525E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */,
 				B2562F77213497CA004180F1 /* CMTrainerModels.swift in Sources */,
 				B2562FA221349BA7004180F1 /* ColosseumExtensions.swift in Sources */,
 				B2562F6321349781004180F1 /* XGFileTypes.swift in Sources */,
@@ -13802,6 +13838,7 @@
 				B25E46D51FC0DFB20030FBF9 /* XGTreasure.swift in Sources */,
 				B2611F542247D284008A4B19 /* XGDoor.swift in Sources */,
 				B2F5ECBD1F49A1FF0075C6D2 /* XDSConstant.swift in Sources */,
+				1C71686225E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */,
 				B2F5EB871F49A11A0075C6D2 /* main.swift in Sources */,
 				B2F5ECC01F49A1FF0075C6D2 /* XGStarterPokemon.swift in Sources */,
 				B24A510721D3F122009C707C /* XGContestCategories.swift in Sources */,
@@ -13874,6 +13911,7 @@
 				B2F5EC0F1F49A1FE0075C6D2 /* XGBattleBingoPanel.swift in Sources */,
 				B257242620CB52D80019A22E /* XDSScriptCompiler.swift in Sources */,
 				B2D1DF571F687B520023A876 /* GoDImageExtensions.swift in Sources */,
+				1C71684F25DF31A3000F1456 /* GoDCodable.swift in Sources */,
 				B2F5EC211F49A1FE0075C6D2 /* XGFiles.swift in Sources */,
 				1CC362E224C1DF25005D7B4A /* XGBattleStyles.swift in Sources */,
 				B24A505E21D12654009C707C /* XGColour.swift in Sources */,
@@ -14075,9 +14113,11 @@
 				B2560A83213D57C200137C37 /* GoDMetalShaders.metal in Sources */,
 				B28C4DB21FA9E49200EED1C9 /* XGPokemart.swift in Sources */,
 				B2FEC0931F6EE81900AC263D /* GoDPatchViewController.swift in Sources */,
+				1C71685125DF31A3000F1456 /* GoDCodable.swift in Sources */,
 				B247ED42217E5D6B0034CAF5 /* XDSExtensions.swift in Sources */,
 				B2560A9A214CA25200137C37 /* XGRandomiser.swift in Sources */,
 				B2D1DF551F6872740023A876 /* GoDTexture.swift in Sources */,
+				1C71686425E0BCA7000F1456 /* StandardPropertyWrappers.swift in Sources */,
 				B2FEC0891F6DADAE00AC263D /* GoDSpotViewController.swift in Sources */,
 				1CE1A7792326AA0D005141D8 /* XGSettings.swift in Sources */,
 				B23E44EA2263BBD7009548A0 /* GoDFolderPopUpButton.swift in Sources */,

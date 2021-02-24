@@ -7,10 +7,38 @@
 //
 //
 
-XGBattle.allValues.forEachIndexed({ (index, battle) in
-	printg("\(index):")
-	printg(battle.description)
-})
+let pokemon = XGMutableData(byteStream: [0x00, 0x01, 0x00, 0x59])
+
+class pkxLookup: GoDCodableDataTable {
+	var index: Int?
+	@UnsignedWord var fsysID = 1
+	@UnsignedShort var fileID = 2
+	@UnsignedByte var fileTypeID = 3
+
+	static let properties: [GoDStructProperties] = {
+		return [
+			.word(name: "fsysID"),
+			.short(name: "fileID"),
+			.byte(name: "fileTypeID")
+		]
+	}()
+
+	static func propertyHasWrapper(name: String) -> Bool {
+		return true
+	}
+
+	static func tableStartOffset(file: XGFiles) -> Int {
+		return 0x40A0A8 // us xd
+	}
+}
+
+if let pkx = pkxLookup.loadEntry(index: 1, file: .dol) {
+	XGISO.current.getFSYSNameWithGroupID(pkx.fsysID)?.println()
+	print(pkx.dataForEntry()?.byteStream)
+	pkx.writeJSON(to: .nameAndFolder("test.json", .Documents))
+}
+
+
 
 //var csv = "Spot,Index,Species,Percentage,Min Level,Max Level"
 //for i in 0 ..< XGPokeSpots.allCases.count {

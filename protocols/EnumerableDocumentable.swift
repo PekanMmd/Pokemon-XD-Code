@@ -43,6 +43,7 @@ protocol XGDocumentable {
 
 extension XGDocumentable {
 	var isDocumentable: Bool {
+		// This is checked for each value to see if it should be included
 		return true
 	}
 	

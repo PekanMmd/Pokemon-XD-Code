@@ -194,7 +194,7 @@ final class XGPokemonStats: NSObject, Codable {
 		let rel = XGFiles.common_rel.data!
 		
 		startOffset	= CommonIndexes.PokemonStats.startOffset + ( kSizeOfPokemonStats * index )
-		self.index			= index
+		self.index		= index
 		
 		nameID			= rel.getWordAtOffset(startOffset + kNameIDOffset).int
 		speciesNameID   = rel.getWordAtOffset(startOffset + kSpeciesNameIDOffset).int

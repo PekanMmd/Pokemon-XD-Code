@@ -8,117 +8,130 @@
 import Foundation
 
 @propertyWrapper
-struct UnsignedByte {
-	var _value: UInt8
+struct UnsignedByte: Codable {
+	var value: Int
 
-	var wrappedValue: UInt8 {
-		get { return _value }
-		set { _value = newValue }
+	var wrappedValue: Int {
+		get { return value }
+		set { value = newValue }
 	}
 
-	var projectedValue: Int {
-		return Int(_value)
+	var projectedValue: UInt8 {
+		return UInt8(value & 0xFF)
 	}
 
-	init(wrappedValue value: UInt8) {
-		_value = value
+	init(wrappedValue value: Int) {
+		self.value = value
 	}
 }
 
 @propertyWrapper
-struct SignedByte {
-	var _value: UInt8
+struct SignedByte: Codable {
+	var value: Int
 
-	var wrappedValue: UInt8 {
-		get { return _value }
-		set { _value = newValue }
+	var wrappedValue: Int {
+		get { return value }
+		set { value = newValue }
 	}
 
-	var projectedValue: Int {
-		var signed = Int(_value)
-		if signed > 0x7F {
+	var projectedValue: Int8 {
+		var signed = value
+		while signed > 0x7F {
 			signed = signed - 0x100
 		}
-		return signed
+		if signed < -0x80 {
+			signed = -0x80
+		}
+		return Int8(signed)
 	}
 
-	init(wrappedValue value: UInt8) {
-		_value = value
-	}
-}
-
-@propertyWrapper
-struct UnsignedShort {
-	var _value: UInt16
-
-	var wrappedValue: UInt16 {
-		get { return _value }
-		set { _value = newValue }
-	}
-
-	var projectedValue: Int {
-		return Int(_value)
-	}
-
-	init(wrappedValue value: UInt16) {
-		_value = value
+	init(wrappedValue value: Int) {
+		self.value = value
 	}
 }
 
 @propertyWrapper
-struct SignedShort {
-	var _value: UInt16
+struct UnsignedShort: Codable {
+	var value: Int
 
-	var wrappedValue: UInt16 {
-		get { return _value }
-		set { _value = newValue }
+	var wrappedValue: Int {
+		get { return value }
+		set { value = newValue }
 	}
 
-	var projectedValue: Int {
-		var signed = Int(_value)
-		if signed > 0x7FFF {
+	var projectedValue: UInt16 {
+		return UInt16(value & 0xFFFF)
+	}
+
+	init(wrappedValue value: Int) {
+		self.value = value
+	}
+}
+
+@propertyWrapper
+struct SignedShort: Codable {
+	var value: Int
+
+	var wrappedValue: Int {
+		get { return value }
+		set { value = newValue }
+	}
+
+	var projectedValue: Int16 {
+		var signed = value
+		while signed > 0x7FFF {
 			signed = signed - 0x10000
 		}
-		return signed
+		if signed < -0x8000 {
+			signed = -0x8000
+		}
+		return Int16(signed)
 	}
 
-	init(wrappedValue value: UInt16) {
-		_value = value
-	}
-}
-
-@propertyWrapper
-struct UnsignedWord {
-	var _value: UInt32
-
-	var wrappedValue: UInt32 {
-		get { return _value }
-		set { _value = newValue }
-	}
-
-	var projectedValue: Int {
-		return Int(_value)
-	}
-
-	init(wrappedValue value: UInt32) {
-		_value = value
+	init(wrappedValue value: Int) {
+		self.value = value
 	}
 }
 
 @propertyWrapper
-struct SignedWord {
-	var _value: UInt32
+struct UnsignedWord: Codable {
+	var value: Int
 
-	var wrappedValue: UInt32 {
-		get { return _value }
-		set { _value = newValue }
+	var wrappedValue: Int {
+		get { return value }
+		set { value = newValue }
 	}
 
-	var projectedValue: Int {
-		return _value.int32
+	var projectedValue: UInt32 {
+		return UInt32(value & 0xFFFFFFFF)
 	}
 
-	init(wrappedValue value: UInt32) {
-		_value = value
+	init(wrappedValue value: Int) {
+		self.value = value
+	}
+}
+
+@propertyWrapper
+struct SignedWord: Codable {
+	var value: Int
+
+	var wrappedValue: Int {
+		get { return value }
+		set { value = newValue }
+	}
+
+	var projectedValue: Int32 {
+		var signed = value
+		while signed > 0x7FFFFFFF {
+			signed = signed - 0x100000000
+		}
+		if signed < -0x80000000 {
+			signed = -0x80000000
+		}
+		return Int32(signed)
+	}
+
+	init(wrappedValue value: Int) {
+		self.value = value
 	}
 }

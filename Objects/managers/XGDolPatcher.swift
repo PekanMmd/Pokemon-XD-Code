@@ -73,6 +73,41 @@ var shadowPokemonShininessOffset: Int {
 	}
 }
 
+let patches: [XGDolPatches] = game == .XD ? [
+	.purgeUnusedText,
+	.physicalSpecialSplitApply,
+	.physicalSpecialSplitRemove,
+	.defaultMoveCategories,
+	.infiniteTMs,
+	.allowFemaleStarters,
+	.betaStartersApply,
+	.betaStartersRemove,
+	.switchPokemonAtEndOfTurn,
+	.fixShinyGlitch,
+	.replaceShinyGlitch,
+	.allowShinyShadowPokemon,
+	.shinyLockShadowPokemon,
+	.alwaysShinyShadowPokemon,
+	.tradeEvolutions,
+	.enableDebugLogs,
+	.pokemonCanLearnAnyTM,
+	.pokemonHaveMaxCatchRate,
+	.removeEVCap,
+	.gen7CritRatios
+] : [
+	.physicalSpecialSplitApply,
+	.defaultMoveCategories,
+	.allowFemaleStarters,
+	.tradeEvolutions,
+	.allowShinyStarters,
+	.shinyLockStarters,
+	.alwaysShinyStarters,
+	.enableDebugLogs,
+	.pokemonCanLearnAnyTM,
+	.pokemonHaveMaxCatchRate,
+	.gen7CritRatios
+]
+
 enum XGDolPatches : Int {
 	
 	case physicalSpecialSplitApply = 0
@@ -101,6 +136,8 @@ enum XGDolPatches : Int {
 	case enableDebugLogs
 	case pokemonCanLearnAnyTM
 	case pokemonHaveMaxCatchRate
+	case removeEVCap
+	case gen7CritRatios
 	
 	var name: String {
 		switch self {
@@ -130,6 +167,8 @@ enum XGDolPatches : Int {
 		case .enableDebugLogs: return "Enable Debug Logs"
 		case .pokemonCanLearnAnyTM: return "Any pokemon can learn any TM"
 		case .pokemonHaveMaxCatchRate: return "All pokemon have the maximum catch rate of 255"
+		case .removeEVCap: return "Allow pokemon to have an EV total above 510"
+		case .gen7CritRatios: return "Gen 7+ critical hit probablities"
 		}
 	}
 	
@@ -645,12 +684,11 @@ class XGDolPatcher {
 	}
 	
 	class func gen7CritRatios() {
-		if region == .EU {
+		if region == .EU || (game == .XD && region != .US) {
+			printg("This patch has not been implemented for this game region:", region.name)
 			return
 		}
-		if game == .XD && region != .US {
-			return
-		}
+
 		let critRatiosStartOffset  = game == .XD ? 0x41dd20 : (region == .US ? 0x397c18 : 0x384388)
 		//let numberCritRatiosOffset = critRatiosStartOffset + 8
 		
@@ -736,6 +774,41 @@ class XGDolPatcher {
 			mon.save()
 		}
 	}
+
+	class func removeEVCap() {
+		guard game == .XD else {
+			printg("This patch is for Pokemon XD: Gale of Darkness only.")
+			return
+		}
+
+		guard region != .JP else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
+
+		let offsetsOf510: (plus: [Int], minus: [Int])
+		switch region {
+		case .US:
+			offsetsOf510 = (plus: [0x140528, 0x140578, 0x04c2f8, 0x1603c0, 0x160420, 0x160558, 0x1605b8, 0x1609e0, 0x160a40, 0x160b78, 0x160bd8, 0x160d10, 0x160d70, 0x160ea8, 0x160f08], minus: [0x140580, 0x160428, 0x1605c0, 0x160a48, 0x160be0, 0x160d78, 0x160f10])
+		case .EU:
+			offsetsOf510 = (plus: [0x141dec, 0x141e3c, 0x04c34c, 0x161c70, 0x161cd0, 0x161e08, 0x161e68, 0x162290, 0x1622f0, 0x162428, 0x162488, 0x1625c0, 0x162620, 0x162758, 0x1627b8], minus: [0x141e44, 0x161cd8, 0x161e70, 0x1622f8, 0x162490, 0x162628, 0x1627c0])
+		default:
+			offsetsOf510 = ([],[])
+			return
+		}
+
+		let newMaxEVs = 1530 // 255 x 6
+		if let dol = XGFiles.dol.data {
+			for offset in offsetsOf510.plus {
+				dol.replace2BytesAtOffset(offset + 2 - kDolToRAMOffsetDifference, withBytes: newMaxEVs)
+			}
+			let negativeValue = Int(XGASM.subi(.r3, .r3, newMaxEVs).code & 0xFFFF)
+			for offset in offsetsOf510.minus {
+				dol.replace2BytesAtOffset(offset + 2 - kDolToRAMOffsetDifference, withBytes: negativeValue)
+			}
+			dol.save()
+		}
+	}
 	
 	class func applyPatch(_ patch: XGDolPatches) {
 		
@@ -766,6 +839,8 @@ class XGDolPatcher {
 			case .enableDebugLogs				: XGDolPatcher.enableDebugLogs()
 			case .pokemonCanLearnAnyTM			: XGDolPatcher.pokemonCanLearnAnyTM()
 			case .pokemonHaveMaxCatchRate		: XGDolPatcher.pokemonHaveMaxCatchRate()
+			case .removeEVCap					: XGDolPatcher.removeEVCap()
+			case .gen7CritRatios				: XGDolPatcher.gen7CritRatios()
 		}
 		
 		printg("patch applied: ", patch.name)
