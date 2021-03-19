@@ -179,7 +179,7 @@ extension XGBattleCD: XGEnumerable {
 		return String(format: "%03d", index)
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Battle CDs"
 	}
 	
@@ -193,10 +193,6 @@ extension XGBattleCD: XGEnumerable {
 }
 
 extension XGBattleCD: XGDocumentable {
-	
-	static var documentableClassName: String {
-		return "Battle CDs"
-	}
 	
 	var documentableName: String {
 		return (enumerableValue ?? "") + " - " + enumerableName

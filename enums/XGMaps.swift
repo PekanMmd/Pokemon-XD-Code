@@ -76,7 +76,7 @@ extension XGMaps: XGEnumerable {
 		return name
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Maps"
 	}
 	

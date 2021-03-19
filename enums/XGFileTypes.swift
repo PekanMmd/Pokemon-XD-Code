@@ -64,7 +64,7 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 	var fileExtension : String {
 		switch self {
 		case .none: return ""
-		case .rdat: return ".dat"
+		case .rdat: return ".rdat"
 		case .dat : return ".dat"
 		case .col : return ".ccd"
 		case .samp: return ".samp"

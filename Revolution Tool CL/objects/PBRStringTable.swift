@@ -42,7 +42,7 @@ enum XGLanguages : Int {
 
 class XGStringTable: NSObject {
 
-	static var mes_common = XGFiles.msg(region == .JP ? "common" : "mes_common")
+	static var mes_common = XGFiles.typeAndFsysName(.msg, region == .JP ? "common" : "mes_common")
 	
 	var file = XGFiles.nameAndFolder("", .Documents) {
 		didSet {

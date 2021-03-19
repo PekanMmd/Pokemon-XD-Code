@@ -8,14 +8,14 @@
 
 import Cocoa
 
-let xdtools = ["Trainer Editor","Shadow Pokemon Editor","Pokemon Stats Editor","Move Editor","Item Editor","Pokespot Editor","Gift Pokemon Editor", "Type Editor", "Treasure Editor", "Patches", "Randomiser", "Message Editor", "Script Compiler", "Collision Viewer", "Interaction Editor", "ISO Explorer"]
-let xdsegues = ["toTrainerVC","toShadowVC","toStatsVC","toMoveVC","toItemVC","toSpotVC","toGiftVC", "toTypeVC", "toTreasureVC", "toPatchVC", "toRandomiserVC", "toMessageVC", "toScriptVC", "toCollisionVC", "toInteractionVC", "toISOVC"]
+let xdtools = ["Trainer Editor","Shadow Pokemon Editor","Pokemon Stats Editor","Move Editor","Item Editor","Pokespot Editor","Gift Pokemon Editor", "Type Editor", "Treasure Editor", "Patches", "Randomiser", "Message Editor", "Script Compiler", "Collision Viewer", "Interaction Editor", "Universal Editor", "ISO Explorer"]
+let xdsegues = ["toTrainerVC","toShadowVC","toStatsVC","toMoveVC","toItemVC","toSpotVC","toGiftVC", "toTypeVC", "toTreasureVC", "toPatchVC", "toRandomiserVC", "toMessageVC", "toScriptVC", "toCollisionVC", "toInteractionVC", "toUniversalVC", "toISOVC"]
 
-let colotools = ["Trainer Editor","Pokemon Stats Editor","Move Editor","Item Editor","Gift Pokemon Editor", "Type Editor", "Treasure Editor", "Patches", "Randomiser", "Message Editor", "Collision Viewer", "Interaction Editor", "ISO Explorer"]
-let colosegues = ["toTrainerVC","toStatsVC","toMoveVC","toItemVC","toGiftVC", "toTypeVC", "toTreasureVC", "toPatchVC", "toRandomiserVC", "toMessageVC", "toCollisionVC", "toInteractionVC", "toISOVC"]
+let colotools = ["Trainer Editor","Pokemon Stats Editor","Move Editor","Item Editor","Gift Pokemon Editor", "Type Editor", "Treasure Editor", "Patches", "Randomiser", "Message Editor", "Collision Viewer", "Interaction Editor", "Universal Editor", "ISO Explorer"]
+let colosegues = ["toTrainerVC","toStatsVC","toMoveVC","toItemVC","toGiftVC", "toTypeVC", "toTreasureVC", "toPatchVC", "toRandomiserVC", "toMessageVC", "toCollisionVC", "toInteractionVC", "toUniversalVC", "toISOVC"]
 
-let pbrtools = ["Pokemon Stats Editor", "Move Editor", "Type Editor", "Message Editor", "Patches", "ISO Explorer"]
-let pbrsegues = ["toStatsVC", "toMoveVC", "toTypeVC", "toMessageVC", "toPatchVC", "toISOVC"]
+let pbrtools = ["Pokemon Stats Editor", "Move Editor", "Type Editor", "Message Editor", "Patches", "Universal Editor", "ISO Explorer"]
+let pbrsegues = ["toStatsVC", "toMoveVC", "toTypeVC", "toMessageVC", "toPatchVC", "toUniversalVC", "toISOVC"]
 
 let generaltools = ["ISO Explorer"]
 let generalsegues = ["toISOVC"]
@@ -103,7 +103,7 @@ class GoDHomeViewController: GoDTableViewController {
 			performSegue(withIdentifier: segues[row], sender: self)
 		}
 	}
-	
+
 	override func viewDidDisappear() {
 		super.viewDidDisappear()
 		NSApplication.shared.terminate(self)
@@ -111,12 +111,15 @@ class GoDHomeViewController: GoDTableViewController {
 	
     @discardableResult
     private func checkRequiredFiles() -> Bool {
-		if game != .PBR && (XGISO.inputISOFile == nil || !XGFiles.iso.exists) {
-			self.performSegue(withIdentifier: "toHelpVC", sender: self)
-            return false
+		if XGISO.inputISOFile == nil || !XGFiles.iso.exists {
+			if let appDelegate = (NSApplication.shared.delegate as? AppDelegate) {
+				appDelegate.openFilePicker(self)
+			} else {
+				self.performSegue(withIdentifier: "toHelpVC", sender: self)
+			}
+			return false
         }
-        if game == .PBR && (!XGFiles.fsys("common").exists || !XGFiles.iso.exists) {
-			self.performSegue(withIdentifier: "toHelpVC", sender: self)
+        if !XGFiles.iso.exists {
             return false
         }
         return true

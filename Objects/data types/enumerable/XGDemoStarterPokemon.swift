@@ -54,7 +54,7 @@ let kDemoStarterNatureOffset		= 0x5a
 let kDemoStarterShinyValueOffset	= 0x5e
 let kDemoStarterExpValueOffset		= 0x92
 
-final class XGDemoStarterPokemon: NSObject, XGGiftPokemon, Codable {
+final class XGDemoStarterPokemon: NSObject, XGGiftPokemon, GoDCodable {
 	
 	var index		= 0
 	
@@ -138,7 +138,6 @@ final class XGDemoStarterPokemon: NSObject, XGGiftPokemon, Codable {
 			dol.save()
 		}
 	}
-	
 }
 
 extension XGDemoStarterPokemon: XGEnumerable {
@@ -150,7 +149,7 @@ extension XGDemoStarterPokemon: XGEnumerable {
 		return index.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return game == .XD ? "Demo Starter Pokemon" : "Starter Pokemon"
 	}
 	
@@ -164,10 +163,6 @@ extension XGDemoStarterPokemon: XGEnumerable {
 }
 
 extension XGDemoStarterPokemon: XGDocumentable {
-	
-	static var documentableClassName: String {
-		return game == .XD ? "Demo Starter Pokemon" : "Starter Pokemon"
-	}
 	
 	var documentableName: String {
 		return (enumerableValue ?? "") + " - " + enumerableName

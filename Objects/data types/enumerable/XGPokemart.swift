@@ -62,7 +62,7 @@ extension XGPokemart: XGEnumerable {
 		return nil
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Pokemarts"
 	}
 	
@@ -76,9 +76,6 @@ extension XGPokemart: XGEnumerable {
 }
 
 extension XGPokemart: XGDocumentable {
-	static var documentableClassName: String {
-		return "Pokemarts"
-	}
 	
 	var documentableName: String {
 		return "Mart \(self.index)"

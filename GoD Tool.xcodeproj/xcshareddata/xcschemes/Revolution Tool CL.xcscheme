@@ -50,6 +50,12 @@
             ReferencedContainer = "container:GoD Tool.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "/Users/starsmomodu/Documents/Revolution\ Tool/PBR.iso"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

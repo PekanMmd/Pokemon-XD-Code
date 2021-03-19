@@ -121,7 +121,7 @@ extension XGTradeShadowPokemon: XGEnumerable {
 		return nil
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Gift Shadow Pokemon"
 	}
 	
@@ -131,10 +131,6 @@ extension XGTradeShadowPokemon: XGEnumerable {
 }
 
 extension XGTradeShadowPokemon: XGDocumentable {
-	
-	static var documentableClassName: String {
-		return"Gift Shadow Pokemon"
-	}
 	
 	var documentableName: String {
 		return (enumerableValue ?? "") + " - " + enumerableName

@@ -42,7 +42,7 @@ final class XGMove: NSObject, XGIndexedValue {
 	var effectAccuracy		= 0x0
 	var basePower			= 0x0
 	var accuracy			= 0x0
-	var type				= XGMoveTypes.type(0)
+	var type				= XGMoveTypes.index(0)
 	var target				= XGMoveTargets.selectedTarget
 	var category			= XGMoveCategories.none
 	var effectType			= XGMoveEffectTypes.none
@@ -63,7 +63,7 @@ final class XGMove: NSObject, XGIndexedValue {
 		return false
 	}
 	
-	var name : XGString {
+	var name: XGString {
 		get {
 			return getStringSafelyWithID(id: nameID)
 		}
@@ -98,7 +98,7 @@ final class XGMove: NSObject, XGIndexedValue {
 		
 		category = XGMoveCategories(rawValue: data.getByte(14)) ?? .none
 		basePower = data.getByte(15)
-		type = XGMoveTypes.type(data.getByte(16))
+		type = XGMoveTypes.index(data.getByte(16))
 		accuracy = data.getByte(17)
 		pp = data.getByte(18)
 		effectAccuracy = data.getByte(19)
@@ -155,7 +155,7 @@ extension XGMove: XGEnumerable {
 		return index.string
 	}
 
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Moves"
 	}
 
@@ -165,10 +165,6 @@ extension XGMove: XGEnumerable {
 }
 
 extension XGMove: XGDocumentable {
-
-	static var documentableClassName: String {
-		return "Moves"
-	}
 
 	var isDocumentable: Bool {
 		return descriptionID != 0

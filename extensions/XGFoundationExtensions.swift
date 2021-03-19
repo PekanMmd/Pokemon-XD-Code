@@ -67,7 +67,11 @@ extension Data {
 			if !file.folder.exists { return false }
 		}
 		do {
-			try self.write(to: URL(fileURLWithPath: file.path), options: [.atomic])
+			var path = file.path
+			if environment == .Windows {
+				path = path.replacingOccurrences(of: ":", with: ".")
+			}
+			try self.write(to: URL(fileURLWithPath: path), options: [.atomic])
 		} catch {
 			return false
 		}
@@ -412,6 +416,36 @@ extension String {
 
 	var escapedPath: String {
 		return self.replacingOccurrences(of: " ", with: "\\ ")
+	}
+
+	var camelCaseBySpaces: String {
+		var parts = split(separator: " ").map{String($0)}
+		if parts.count > 0 {
+			parts[0] = parts[0].lowercased()
+			(1 ..< parts.count).forEach { (index) in
+				parts[index] = parts[index].capitalized
+			}
+		}
+		var joined = parts.joined(separator: "")
+		if let first = joined.first, "0123456789".contains(first) {
+			joined = "_" + joined
+		}
+		return joined
+	}
+
+	var camelCaseBySpacesCapitalised: String {
+		var parts = split(separator: " ").map{String($0)}
+		if parts.count > 0 {
+			parts[0] = parts[0].capitalized
+			(1 ..< parts.count).forEach { (index) in
+				parts[index] = parts[index].capitalized
+			}
+		}
+		var joined = parts.joined(separator: "")
+		if let first = joined.first, "0123456789".contains(first) {
+			joined = "_" + joined
+		}
+		return joined
 	}
 	
 	var functionName: String? {

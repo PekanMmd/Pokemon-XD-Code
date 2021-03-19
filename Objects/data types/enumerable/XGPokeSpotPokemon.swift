@@ -86,7 +86,7 @@ extension XGPokeSpotPokemon: XGEnumerable {
 		return spot.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Pokespot Encounters"
 	}
 	
@@ -102,9 +102,6 @@ extension XGPokeSpotPokemon: XGEnumerable {
 }
 
 extension XGPokeSpotPokemon: XGDocumentable {
-	static var documentableClassName: String {
-		return "Pokespot Pokemon"
-	}
 	
 	var documentableName: String {
 		return spot.documentableName + " \(index + 1) " + pokemon.name.string

@@ -92,7 +92,7 @@ extension XGMusicMetaData: XGEnumerable {
 		return nil
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "SFX"
 	}
 	
@@ -114,7 +114,7 @@ extension XGMusic: XGEnumerable {
 		return String(format: "%03d", index)
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "BGM"
 	}
 	

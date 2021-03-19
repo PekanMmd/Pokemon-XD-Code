@@ -93,7 +93,9 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.pokemonCanLearnAnyTM,
 	.pokemonHaveMaxCatchRate,
 	.removeEVCap,
-	.gen7CritRatios
+	.gen7CritRatios,
+	.allSingleBattles,
+	.allDoubleBattles
 ] : [
 	.physicalSpecialSplitApply,
 	.defaultMoveCategories,
@@ -108,7 +110,7 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.gen7CritRatios
 ]
 
-enum XGDolPatches : Int {
+enum XGDolPatches: Int {
 	
 	case physicalSpecialSplitApply = 0
 	case physicalSpecialSplitRemove
@@ -138,6 +140,8 @@ enum XGDolPatches : Int {
 	case pokemonHaveMaxCatchRate
 	case removeEVCap
 	case gen7CritRatios
+	case allSingleBattles
+	case allDoubleBattles
 	
 	var name: String {
 		switch self {
@@ -169,11 +173,12 @@ enum XGDolPatches : Int {
 		case .pokemonHaveMaxCatchRate: return "All pokemon have the maximum catch rate of 255"
 		case .removeEVCap: return "Allow pokemon to have an EV total above 510"
 		case .gen7CritRatios: return "Gen 7+ critical hit probablities"
-		}
-	}
-	
-}
+		case .allSingleBattles: return "Set all battles to single battles"
+		case .allDoubleBattles: return "Set all battles to double battles"
 
+		}
+	}	
+}
 
 class XGDolPatcher {
 	
@@ -416,6 +421,11 @@ class XGDolPatcher {
 	
 	
 	class func removeShinyGlitch() {
+
+		guard game != .Colosseum else {
+			printg("This patch has not been implemented for Colosseum yet.")
+			return
+		}
 
 		guard region != .JP else {
 			printg("This patch has not been implemented for this game region:", region.name)
@@ -737,8 +747,16 @@ class XGDolPatcher {
 				OSReportOffset = -1
 			}
 		}
-
 		XGAssembly.replaceRamASM(RAMOffset: GSLogOffset, newASM: [.b(OSReportOffset)])
+
+		// remove FIFO error logging since it spams the output
+		if game == .XD && region == .US {
+			for first in [0x2aae4c, 0x2a85c4, 0x2a89cc, 0x2a8be0, 0x2a9104, 0x2a9308, 0x2a964c, 0x2a9874, 0x2a9a58, 0x2aa908] {
+				for i in 0 ..< 4 {
+					XGAssembly.replaceRamASM(RAMOffset: first + (i * 20), newASM: [.nop])
+				}
+			}
+		}
 	}
 
 	class func enableScriptLogs() {
@@ -809,6 +827,19 @@ class XGDolPatcher {
 			dol.save()
 		}
 	}
+
+	class func setAllBattlesTo(_ style: XGBattleStyles) {
+		#if GAME_XD
+		let battleStyle: XGBattleStyles = style == .single ? .single : .double
+		XGBattle.allValues.forEach { (battle) in
+			if battle.p2Trainer?.deck != .DeckVirtual {
+				battle.battleStyle = battleStyle
+				battle.save()
+			}
+		}
+		#endif
+	}
+
 	
 	class func applyPatch(_ patch: XGDolPatches) {
 		
@@ -841,6 +872,8 @@ class XGDolPatcher {
 			case .pokemonHaveMaxCatchRate		: XGDolPatcher.pokemonHaveMaxCatchRate()
 			case .removeEVCap					: XGDolPatcher.removeEVCap()
 			case .gen7CritRatios				: XGDolPatcher.gen7CritRatios()
+			case .allDoubleBattles				: XGDolPatcher.setAllBattlesTo(.double)
+			case .allSingleBattles				: XGDolPatcher.setAllBattlesTo(.single)
 		}
 		
 		printg("patch applied: ", patch.name)

@@ -15,6 +15,13 @@ func !=(lhs: XGFiles, rhs: XGFiles) -> Bool {
 	return lhs.path != rhs.path
 }
 
+func ==(lhs: XGFolders, rhs: XGFolders) -> Bool {
+	return lhs.path == rhs.path
+}
+func !=(lhs: XGFolders, rhs: XGFolders) -> Bool {
+	return lhs.path != rhs.path
+}
+
 var loadedFiles = [String : XGMutableData]()
 var loadedStringTables = [String : XGStringTable]()
 var loadedFsys = [String: XGFsys]()
@@ -22,22 +29,13 @@ var loadedFsys = [String: XGFsys]()
 #if GAME_XD
 var loadableFiles: [String] { [XGFiles.common_rel.path,XGFiles.dol.path,XGDecks.DeckStory.file.path,XGDecks.DeckDarkPokemon.file.path, XGDecks.DeckColosseum.file.path,XGDecks.DeckHundred.file.path,XGDecks.DeckVirtual.file.path,XGFiles.iso.path, XGFiles.fsys("people_archive").path, XGFiles.pocket_menu.path, XGFiles.toc.path]
 }
-var loadableStringTables: [String] {
-	[XGFiles.tableres2.path,XGFiles.typeAndFsysName(.msg, "pocket_menu").path,XGFiles.common_rel.path,XGFiles.dol.path]
-}
 #elseif GAME_COLO
 var loadableFiles: [String] {
 	[XGFiles.common_rel.path,XGFiles.dol.path, XGFiles.iso.path, XGFiles.fsys("people_archive").path, XGFiles.pocket_menu.path, XGFiles.toc.path]
 }
-var loadableStringTables: [String] {
-	[XGFiles.typeAndFsysName(.msg, "pocket_menu").path,XGFiles.common_rel.path,XGFiles.dol.path]
-}
 #else
 var loadableFiles: [String] {
-	[XGFiles.dol.path]
-}
-var loadableStringTables: [String] {
-	[XGFiles]()
+		[XGFiles.dol.path, XGFiles.fsys("common").path]
 }
 #endif
 
@@ -60,10 +58,17 @@ let NullFSYS = XGMutableData(byteStream:
 indirect enum XGFiles {
 	
 	case dol
+	#if !GAME_PBR
 	case common_rel			
 	case tableres2
 	case pocket_menu
 	case deck(XGDecks)
+	#else
+	case dckp(Int)
+	case dckt(Int)
+	case dcka
+	case indexAndFsysName(Int, String)
+	#endif
 	case pokeFace(Int)
 	case pokeBody(Int)
 	case typeImage(Int)
@@ -107,11 +112,19 @@ indirect enum XGFiles {
 	var fileName: String {
 		switch self {
 
-		case .dol					: return "Start" + XGFileTypes.dol.fileExtension
+		case .dol					: return (game == .PBR ? "main" : "Start") + XGFileTypes.dol.fileExtension
+		#if !GAME_PBR
 		case .common_rel			: return "common" + XGFileTypes.rel.fileExtension
 		case .tableres2				: return "tableres2" + XGFileTypes.rel.fileExtension
 		case .pocket_menu			: return "pocket_menu" + XGFileTypes.rel.fileExtension
 		case .deck(let deck)		: return deck.fileName
+		#else
+		case .dckp(let i)			: return "pokemon deck_" + String(format: "%02d", i) + XGFileTypes.dckp
+			.fileExtension
+		case .dckt(let i)			: return "trainer deck_" + String(format: "%02d", i) + XGFileTypes.dckt
+			.fileExtension
+		case .dcka					: return "AI deck" + XGFileTypes.dcka.fileExtension
+		#endif
 		case .pokeFace(let id)		: return "face_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
 		case .pokeBody(let id)		: return "body_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
 		case .typeImage(let id)		: return "type_" + String(id) + XGFileTypes.png.fileExtension
@@ -119,8 +132,7 @@ indirect enum XGFiles {
 		case .fsys(let s)			: return XGFiles.gameFile(s + XGFileTypes.fsys.fileExtension).fileName
 		case .lzss(let s)			: return s + XGFileTypes.lzss.fileExtension
 		case .toc					: return "game" + XGFileTypes.toc.fileExtension
-		// windows doesn't support colons in file names
-		case .log(let d)			: return d.description.replacingOccurrences(of: ":", with: ".") + XGFileTypes.txt.fileExtension
+		case .log(let d)			: return d.description + XGFileTypes.txt.fileExtension
 		case .json(let s)			: return s + XGFileTypes.json.fileExtension
 		case .iso					: return XGISO.inputISOFile?.fileName ?? "game" + XGFileTypes.iso.fileExtension
 		case .wit                   : return environment == .Windows ? "wit.exe" :  "wit"
@@ -132,21 +144,26 @@ indirect enum XGFiles {
 		case .nameAndFsysName(let name, _): return name
 		case .typeAndFsysName(let type, _): return folder.files.first(where: {$0.fileType == type})?.fileName ?? "-"
 		case .typeAndFolder(let type, _): return folder.files.first(where: {$0.fileType == type})?.fileName ?? "-"
+		#if GAME_PBR
+		case .indexAndFsysName(let index, let name): return XGFiles.fsys(name).fsysData.fileNameForFileWithIndex(index: index) ?? "-"
+		#endif
 		}
 	}
 	
 	var folder: XGFolders {
 		switch self {
 
-		#if GAMe_PBR
+		#if GAME_PBR
 		case .dol				: return .Sys
+		case .dckp, .dckt, .dcka: return XGFiles.fsys("deck").folder
+		case .indexAndFsysName(_, let fsysName): return XGFiles.fsys(fsysName).folder
 		#else
 		case .dol				: return .ISOExport("Start")
-		#endif
 		case .common_rel		: return XGFiles.fsys("common").folder
 		case .tableres2			: return XGFiles.fsys("common_dvdeth").folder
 		case .pocket_menu		: return XGFiles.fsys("pocket_menu").folder
 		case .deck				: return XGFiles.fsys("deck_archive").folder
+		#endif
 		case .fsys(let s)		: return XGFiles.gameFile(s + XGFileTypes.fsys.fileExtension).folder
 		case .lzss				: return .LZSS
 		case .pokeFace			: return .PokeFace
@@ -184,37 +201,47 @@ indirect enum XGFiles {
 		if !self.exists && self != .toc && self != .iso {
 			XGFolders.setUpFolderFormat()
 
-			if !XGUtility.exportFileFromISO(self, decode: true) {
-				switch self {
-				case .tableres2:
-					if !XGUtility.exportFileFromISO(.fsys("common_dvdeth"), decode: false) {
-						printg("file doesn't exist and couldn't be extracted:", self.path)
-						return nil
-					}
-				case .dol:
-					if !XGUtility.exportFileFromISO(.dol, decode: false) {
-						printg("file doesn't exist and couldn't be extracted:", self.path)
-						return nil
-					}
-				case .deck:
-					if !XGUtility.exportFileFromISO(.fsys("deck_archive"), decode: false) {
-						printg("file doesn't exist and couldn't be extracted:", self.path)
-						return nil
-					}
-				case .typeAndFsysName(_, let name), .nameAndFsysName(_, let name):
-					if !XGUtility.exportFileFromISO(.fsys(name), decode: false) {
-						printg("file doesn't exist and couldn't be extracted:", self.path)
-						return nil
-					}
-				default:
-					if !XGUtility.exportFileFromISO(.fsys(self.fileName.removeFileExtensions()), decode: false) {
-						printg("file doesn't exist and couldn't be extracted:", self.path)
-						return nil
-					}
+			switch self {
+			#if GAME_XD
+			case .tableres2:
+				if !XGUtility.exportFileFromISO(.fsys("common_dvdeth"), decode: false) {
+					printg("file doesn't exist and couldn't be extracted:", self.path)
+					return nil
+				}
+			case .deck:
+				if !XGUtility.exportFileFromISO(.fsys("deck_archive"), decode: false) {
+					printg("file doesn't exist and couldn't be extracted:", self.path)
+					return nil
+				}
+			#elseif GAME_PBR
+			case .indexAndFsysName(_, let name):
+				if !XGUtility.exportFileFromISO(.fsys(name), decode: false) {
+					printg("file doesn't exist and couldn't be extracted:", self.path)
+					return nil
+				}
+			#endif
+			case .fsys("people_archive"):
+				if !XGUtility.exportFileFromISO(.fsys("people_archive"), extractFsysContents: false) {
+					printg("file doesn't exist and couldn't be extracted:", self.path)
+					return nil
+				}
+			case .dol:
+				if !XGUtility.exportFileFromISO(.dol, decode: false) {
+					printg("file doesn't exist and couldn't be extracted:", self.path)
+					return nil
+				}
+			case .typeAndFsysName(_, let name), .nameAndFsysName(_, let name):
+				if !XGUtility.exportFileFromISO(.fsys(name), decode: false) {
+					printg("file doesn't exist and couldn't be extracted:", self.path)
+					return nil
+				}
+			default:
+				if  !XGUtility.exportFileFromISO(self), !XGUtility.exportFileFromISO(.fsys(self.fileName.removeFileExtensions()), decode: false) {
+					printg("file doesn't exist and couldn't be extracted:", self.path)
+					return nil
 				}
 			}
 		}
-		
 		
 		var data: XGMutableData?
 		if !fileDecodingMode, self == .iso || loadableFiles.contains(self.path) {
@@ -223,12 +250,16 @@ indirect enum XGFiles {
 				return data
 			}
 		}
-		
+
+		#if !GAME_PBR
 		if self == .toc {
 			data = XGISO.tocData
 		} else {
 			data = XGMutableData(contentsOfXGFile: self)
 		}
+		#else
+		data = XGMutableData(contentsOfXGFile: self)
+		#endif
 		
 		
 		if !fileDecodingMode, self == .iso || loadableFiles.contains(self.path) {
@@ -245,9 +276,13 @@ indirect enum XGFiles {
 		return FileManager.default.fileExists(atPath: self.path)
 	}
 	
-	var json: AnyObject {
+	var json: AnyObject? {
 		if let data = self.data?.data {
-			return try! JSONSerialization.jsonObject(with: data as Data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+			let object = try? JSONSerialization.jsonObject(with: data as Data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+			if object == nil {
+				printg("Invalid JSON data:", self.path)
+			}
+			return object
 		} else {
 			return [String: String]() as AnyObject
 		}
@@ -272,45 +307,70 @@ indirect enum XGFiles {
 
 		return fsys
 	}
-	
+
+	#if !GAME_PBR
 	var mapData: XGMapRel {
 		return XGMapRel(file: self)
 	}
-	
+	#endif
+
+	var scriptDataStartOffset: Int {
+		guard game == .XD, region != .OtherGame else {
+			printg("common.rel script not documented for colosseum")
+			fatalError()
+		}
+		#if !GAME_PBR
+		if self != .common_rel {
+			return 0
+		}
+		#endif
+
+		if isDemo {
+			return 0x5BF5C
+		} else {
+			switch region {
+			case .US: return 0x5BEE4
+			case .JP: return 0x57CB4
+			case .EU: return 0x5dea4
+			case .OtherGame: return 0
+			}
+		}
+	}
+
+	var scriptDataLength: Int {
+		#if GAME_XD
+		return self == .common_rel ? 0x3d20 : fileSize
+		#else
+		return fileSize
+		#endif
+	}
+
 	var scriptData: XGScript {
 		switch self {
+		#if !GAME_PBR
 		case .common_rel:
 			guard game == .XD, region != .OtherGame else {
 				printg("common.rel script not documented for colosseum")
 				fatalError()
 			}
-			let start: Int
-			if isDemo {
-				start = 0x5BF5C
-			} else {
-				switch region {
-				case .US: start = 0x5BEE4
-				case .JP: start = 0x57CB4
-				case .EU: start = 0x5dea4
-				case .OtherGame: start = 0
-				}
-			}
-			let data = XGMutableData(byteStream: self.data!.getCharStreamFromOffset(start, length: 0x3d20), file: .common_rel)
+			let start = scriptDataStartOffset
+			let length = scriptDataLength
+
+			let data = XGMutableData(byteStream: self.data!.getCharStreamFromOffset(start, length: length), file: .common_rel)
 			return XGScript(data: data)
+		#endif
 		default:
 			return XGScript(file: self)
 		}
 	}
 	
 	var stringTable: XGStringTable {
-		if loadableStringTables.contains(self.path) {
-			if loadedStringTables[self.path] != nil {
-				return loadedStringTables[self.path]!
-			}
+		if loadedStringTables[self.path] != nil {
+			return loadedStringTables[self.path]!
 		}
-
 		var table: XGStringTable!
 
+		#if !GAME_PBR
 		switch self {
 		case .common_rel: table = XGStringTable.common_rel()
 		case .tableres2:  table = XGStringTable.tableres2()!
@@ -318,11 +378,11 @@ indirect enum XGFiles {
 
 		default: table = XGStringTable(file: self, startOffset: 0, fileSize: self.fileSize)
 		}
+		#else
+		table = XGStringTable(file: self, startOffset: 0, fileSize: self.fileSize)
+		#endif
 
-		if loadableStringTables.contains(self.path) {
-			loadedStringTables[self.path] = table
-		}
-
+		loadedStringTables[self.path] = table
 		return table
 	}
 
@@ -422,11 +482,11 @@ indirect enum XGFiles {
 	}
 
 	static var commonStringTableFile: XGFiles {
-		if game == .PBR {
-			return region == .JP ? .typeAndFsysName(.msg, "common") : .typeAndFsysName(.msg, "mes_common")
-		} else {
-			return .common_rel
-		}
+		#if GAME_PBR
+		return region == .JP ? .typeAndFsysName(.msg, "common") : .typeAndFsysName(.msg, "mes_common")
+		#else
+		return .common_rel
+		#endif
 	}
 
 	static func allFilesWithType(_ type: XGFileTypes) -> [XGFiles] {
@@ -466,8 +526,8 @@ indirect enum XGFolders {
 	case nameAndFolder(String, XGFolders)
 	#if GAME_PBR
 	case DATA
-	case Files
-	case Dump
+	case ISOFiles
+	case ISODump
 	case Sys
 	#endif
 	
@@ -496,8 +556,8 @@ indirect enum XGFolders {
 		case .nameAndFolder(let s, _): return s
 		#if GAME_PBR
 		case .Sys				: return "sys"
-		case .Files				: return "files"
-		case .Dump         		: return "Dump"
+		case .ISOFiles				: return "files"
+		case .ISODump         		: return "Dump"
 		case .DATA              : return "DATA"
 		#endif
 		}
@@ -531,9 +591,9 @@ indirect enum XGFolders {
 		case .ISO		: return XGISO.inputISOFile?.folder.path ?? documentsPath + "/" + self.name
 		case .path(let s): return s
 		#if GAME_PBR
-		case .Dump  	: path = XGISO.inputISOFile? == nil ? documentsPath : XGFolders.ISO.path
-		case .DATA      : path = XGFolders.Dump.path
-		case .Sys, .Files: path = XGFolders.DATA.exists ? XGFolders.DATA.path : XGFolders.Dump.path
+		case .ISODump  	: path = XGISO.inputISOFile == nil ? documentsPath : XGFolders.ISOExport("").path
+		case .DATA      : path = XGFolders.ISODump.path
+		case .Sys, .ISOFiles: path = XGFolders.DATA.exists ? XGFolders.DATA.path : XGFolders.ISODump.path
 		#endif
 		default: path = documentsPath
 

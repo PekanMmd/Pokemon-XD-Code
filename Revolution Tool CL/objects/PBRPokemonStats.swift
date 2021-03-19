@@ -20,7 +20,7 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 	
 	var index			= 0
 	var baseIndex: Int {
-		return XGPokemon.pokemon(index).baseIndex
+		return XGPokemon.index(index).baseIndex
 	}
 	var startOffset		= 0
 	
@@ -29,14 +29,14 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 	var cryFileIndex	= 0
 	var firstModelIndex = 0
 	
-	var type1			= XGMoveTypes.type(0)
-	var type2			= XGMoveTypes.type(0)
+	var type1			= XGMoveTypes.index(0)
+	var type2			= XGMoveTypes.index(0)
 	
-	var ability1		= XGAbilities.ability(0)
-	var ability2		= XGAbilities.ability(0)
+	var ability1		= XGAbilities.index(0)
+	var ability2		= XGAbilities.index(0)
 	
-	var heldItem1		= XGItems.item(0)
-	var heldItem2		= XGItems.item(0)
+	var heldItem1		= XGItems.index(0)
+	var heldItem2		= XGItems.index(0)
 	
 	var eggGroup1 		= 0
 	var eggGroup2		= 0
@@ -147,8 +147,8 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 			learnableTMs += mask.bitArray()
 		}
 		
-		heldItem1 = .item(data.getShort(16))
-		heldItem2 = .item(data.getShort(18))
+		heldItem1 = .index(data.getShort(16))
+		heldItem2 = .index(data.getShort(18))
 		height = Double(data.getShort(20)) / 10
 		weight = Double(data.getShort(22)) / 10
 		nameID = data.getShort(24)
@@ -160,8 +160,8 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 		speed = data.getByte(33)
 		specialAttack = data.getByte(34)
 		specialDefense = data.getByte(35)
-		type1 = .type(data.getByte(36))
-		type2 = .type(data.getByte(37))
+		type1 = .index(data.getByte(36))
+		type2 = .index(data.getByte(37))
 		catchRate = data.getByte(38)
 		baseExp = data.getByte(39)
 		genderRatio = XGGenderRatios(rawValue: data.getByte(42)) ?? .genderless
@@ -170,8 +170,8 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 		levelUpRate = XGExpRate(rawValue: data.getByte(45)) ?? .standard
 		eggGroup1 = data.getByte(46)
 		eggGroup2 = data.getByte(47)
-		ability1 = .ability(data.getByte(48))
-		ability2 = .ability(data.getByte(49))
+		ability1 = .index(data.getByte(48))
+		ability2 = .index(data.getByte(49))
 		unknown = data.getByte(50)
 		// let unknownValue = data.getByte(51) & 0x1
 		colourID = (data.getByte(51) & 0xfe) >> 1
@@ -304,7 +304,7 @@ extension XGPokemonStats: XGEnumerable {
 		return index.string
 	}
 
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Pokemon"
 	}
 
@@ -314,10 +314,6 @@ extension XGPokemonStats: XGEnumerable {
 }
 
 extension XGPokemonStats: XGDocumentable {
-
-	static var documentableClassName: String {
-		return "Pokemon Stats"
-	}
 
 	var isDocumentable: Bool {
 		return nameID != 0

@@ -20,7 +20,7 @@ func < (p1: XGPokemon, p2: XGPokemon) -> Bool {
 
 enum XGPokemon: XGIndexedValue {
 	
-	case pokemon(Int)
+	case index(Int)
 	case deoxys(XGDeoxysFormes)
 	case burmy(XGWormadamCloaks)
 	case wormadam(XGWormadamCloaks)
@@ -31,7 +31,7 @@ enum XGPokemon: XGIndexedValue {
 	
 	var index: Int {
 		switch self {
-		case .pokemon(let i):
+		case .index(let i):
 			if (i > kNumberOfPokemon) || (i < 0) {
 				return 0
 			}
@@ -56,7 +56,7 @@ enum XGPokemon: XGIndexedValue {
 	
 	var baseIndex: Int {
 		switch self {
-		case .pokemon:
+		case .index:
 			switch index {
 			case 496: fallthrough
 			case 497: fallthrough
@@ -143,7 +143,7 @@ enum XGPokemon: XGIndexedValue {
 	func movesForLevel(_ pokeLevel: Int) -> [XGMoves] {
 		// Returns the last 4 moves a pokemon would have learned at a level. Gives default move sets like in the GBA games.
 		
-		var moves = [XGMoves](repeating: XGMoves.move(0), count: 4)
+		var moves = [XGMoves](repeating: XGMoves.index(0), count: 4)
 		
 		func hasMove(_ move: XGMoves) -> Bool {
 			for aMove in moves {
@@ -177,16 +177,16 @@ enum XGPokemon: XGIndexedValue {
 	
 	static func random() -> XGPokemon {
 		var rand = 0
-		while (rand == 0) || (XGPokemon.pokemon(rand).nameID == 0) {
+		while (rand == 0) || (XGPokemon.index(rand).nameID == 0) {
 			rand = Int.random(in: 1 ..< kNumberOfPokemon)
 		}
-		return XGPokemon.pokemon(rand)
+		return XGPokemon.index(rand)
 	}
 	
 	static func allPokemon() -> [XGPokemon] {
 		var mons = [XGPokemon]()
 		for i in -1 ..< kNumberOfPokemon {
-			mons.append(.pokemon(i))
+			mons.append(.index(i))
 		}
 		return mons
 	}
@@ -198,7 +198,7 @@ func allPokemon() -> [String : XGPokemon] {
 	var dic = [String : XGPokemon]()
 	
 	for i in -1 ..< kNumberOfPokemon {
-		let mon = XGPokemon.pokemon(i)
+		let mon = XGPokemon.index(i)
 		let name = mon.name.unformattedString.lowercased()
 		if dic[name] == nil {
 			dic[name] = mon
@@ -212,13 +212,13 @@ let pokemons = allPokemon()
 
 func pokemon(_ name: String) -> XGPokemon {
 	if pokemons[name.lowercased()] == nil { printg("couldn't find: " + name) }
-	return pokemons[name.lowercased()] ?? .pokemon(0)
+	return pokemons[name.lowercased()] ?? .index(0)
 }
 
 func allPokemonArray() -> [XGPokemon] {
 	var pokes: [XGPokemon] = []
 	for i in -1 ..< kNumberOfPokemon {
-		pokes.append(XGPokemon.pokemon(i))
+		pokes.append(XGPokemon.index(i))
 	}
 	return pokes
 }
@@ -231,7 +231,7 @@ extension XGPokemon: Codable {
 	init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		let index = try container.decode(Int.self, forKey: .index)
-		self = .pokemon(index)
+		self = .index(index)
 	}
 
 	func encode(to encoder: Encoder) throws {
@@ -250,7 +250,7 @@ extension XGPokemon: XGEnumerable {
 		return index.string
 	}
 
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Pokemon"
 	}
 

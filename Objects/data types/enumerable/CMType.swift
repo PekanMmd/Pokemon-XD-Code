@@ -95,7 +95,7 @@ extension XGType: XGEnumerable {
 		return String(format: "%02d", index)
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Types"
 	}
 	

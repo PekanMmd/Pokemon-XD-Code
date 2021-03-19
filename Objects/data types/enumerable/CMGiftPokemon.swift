@@ -168,7 +168,7 @@ extension CMGiftPokemon: XGEnumerable {
 		return index.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return game == .XD ? "Colosseum Gift Pokemon" : "Gift Pokemon"
 	}
 	
@@ -182,10 +182,6 @@ extension CMGiftPokemon: XGEnumerable {
 }
 
 extension CMGiftPokemon: XGDocumentable {
-	
-	static var documentableClassName: String {
-		return game == .XD ? "Colosseum Gift Pokemon" : "Gift Pokemon"
-	}
 	
 	var documentableName: String {
 		return (enumerableValue ?? "") + " - " + enumerableName

@@ -64,6 +64,7 @@ extension ASM {
 	}
 }
 
+#if !GAME_PBR
 extension XGAssembly {
 
 	class func ASMfreeSpacePointer() -> Int {
@@ -871,7 +872,7 @@ extension XGAssembly {
 		return array
 	}
 }
-
+#endif
 
 
 

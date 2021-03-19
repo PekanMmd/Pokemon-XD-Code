@@ -19,7 +19,7 @@ class XGTrainerPokemon {
 	var deckData		= XGDeckPokemon.deck(0, XGDecks.null)
 	
 	var id				= 0
-	var species			= XGPokemon.pokemon(0)
+	var species			= XGPokemon.index(0)
 //	var happiness		= 0x0 can't find it. Not sure how this is determined
 	var nature			= XGNatures.hardy
 	var gender			= XGGenders.male
@@ -29,7 +29,7 @@ class XGTrainerPokemon {
 	var moves			= [XGMoves]()
 	var items			= [XGItems]() // pokemon can have up to 4 options for item
 	var abilityIndex	= 0x0
-	var pokeball		= XGItems.item(4)
+	var pokeball		= XGItems.index(4)
 	var rank 			= 0 // colosseum rank
 	var formeID			= 0
 	var minLevel		= 0
@@ -71,11 +71,11 @@ class XGTrainerPokemon {
 		case wormadamID:
 			species = .wormadam(XGWormadamCloaks(rawValue: formeID)!)
 		default:
-			species = .pokemon(speciesID)
+			species = .index(speciesID)
 		}
 		
 		
-		pokeball 		= .item(data.getByte(10))
+		pokeball 		= .index(data.getByte(10))
 		gender		  	= XGGenders(rawValue: data.getByte(11))!
 		nature			= XGNatures(rawValue: data.getByte(12))!
 		rank 		 	= data.getByte(14)
@@ -92,11 +92,11 @@ class XGTrainerPokemon {
 				let style = PBRRandomMoveStyle(rawValue: (moveIndex >> 4) & 0xf)!
 				moves.append(.randomMove(style, type))
 			} else {
-				moves.append(.move(moveIndex))
+				moves.append(.index(moveIndex))
 			}
 		}
 		for i in 0 ..< 4 {
-			items.append(.item(data.getShort(40 + (i * 2))))
+			items.append(.index(data.getShort(40 + (i * 2))))
 		}
 		for i in 0 ..< kNumberOfEVs {
 			IVs.append(data.getByte(16 + i))

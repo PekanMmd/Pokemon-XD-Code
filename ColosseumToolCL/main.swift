@@ -4,6 +4,43 @@
 //
 //  Created by The Steez on 27/08/2018.
 //
+//
+
+//XGAssembly.replaceRamASM(RAMOffset: 0x1f9f78, newASM: [
+//	.stwu(.sp, .sp, -0x84),
+//	.mflr(.r0),
+//	.lis(.r7, 0x8028),
+//	.lis(.r6, 0x8028),
+//	.stw(.r0, .sp, 0x88),
+//	.stmw(.r18, .sp, 0x4c)
+//])
+//
+//XGAssembly.replaceRamASM(RAMOffset: 0x1fa4a0, newASM: [
+//	.lmw(.r18, .sp, 0x4c),
+//	.lwz(.r0, .sp, 0x88),
+//	.mtlr(.r0),
+//	.addi(.sp, .sp, 132)
+//])
+//
+//XGAssembly.replaceRamASM(RAMOffset: 0x1fa15c, newASM: [
+//	.b(0x2446a0)
+//])
+//
+//XGAssembly.replaceRamASM(RAMOffset: 0x1fc928, newASM: [
+//	.lha(.r3, .r3, 0x12)
+//])
+//
+//XGAssembly.replaceRamASM(RAMOffset: 0x2446a0, newASM: [
+//	.mr(.r29, .r3),
+//	.mr(.r3, .r28),
+//	.bl(0x1fca2c),
+//	.lha(.r18, .r3, 0x10),
+//	.b(0x801fa160)
+//])
+//
+//XGAssembly.replaceRamASM(RAMOffset: 0x1fa3e8, newASM: [
+//	.mr(.r6, .r18)
+//])
 
 
 

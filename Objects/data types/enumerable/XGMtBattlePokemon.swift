@@ -127,7 +127,7 @@ extension XGMtBattlePrizePokemon: XGEnumerable {
 		return String(format: "%03d", index)
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Mt. Battle Prize Pokemon"
 	}
 	
@@ -142,10 +142,6 @@ extension XGMtBattlePrizePokemon: XGEnumerable {
 
 
 extension XGMtBattlePrizePokemon: XGDocumentable {
-	
-	static var documentableClassName: String {
-		return "Mt. Battle Prize Pokemon"
-	}
 	
 	var documentableName: String {
 		return (enumerableValue ?? "") + " - " + enumerableName

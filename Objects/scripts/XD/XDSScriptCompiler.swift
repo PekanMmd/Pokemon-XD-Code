@@ -72,7 +72,12 @@ class XDSScriptCompiler: NSObject {
 	// MARK: - specify file or text to compile
 	@discardableResult
 	class func compile(textFile file: XGFiles) -> Bool {
-		let scdFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)
+		var scdFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)
+		if file.fileName.removeFileExtensions() == XGFiles.common_rel.fileName.removeFileExtensions() {
+			if file.folder == XGFiles.common_rel.folder {
+				scdFile = XGFiles.common_rel
+			}
+		}
 		return compile(textFile: file, toFile: scdFile)
 	}
 
@@ -94,7 +99,7 @@ class XDSScriptCompiler: NSObject {
 		if let file = XDSScriptCompiler.scriptFile {
 			
 			if file.folder.files.contains(where: { (rel) -> Bool in
-				return (targetFileName == file.fileName.removeFileExtensions()) && rel.fileType == .rel
+				return (targetFileName == file.fileName.removeFileExtensions()) && rel.fileType == .rel && rel != XGFiles.common_rel
 			}) {
 				relFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, file.folder).mapData
 			}
@@ -108,7 +113,7 @@ class XDSScriptCompiler: NSObject {
 		}
 		
 		if relFile == nil {
-			relFile = scriptFile?.folder.files.first(where: {$0.fileType == .rel})?.mapData
+			relFile = scriptFile?.folder.files.first(where: {$0.fileType == .rel && $0 != XGFiles.common_rel})?.mapData
 		}
 
 		if stringTable == nil {
@@ -123,9 +128,24 @@ class XDSScriptCompiler: NSObject {
 					olddata.save()
 				}
 			}
-			
-			data.file = file
-			data.save()
+
+			if file == XGFiles.common_rel {
+				let maxLength = file.scriptDataLength
+				let start = file.scriptDataStartOffset
+				if data.length <= maxLength {
+					let commonData = file.data
+					commonData?.replaceBytesFromOffset(start, withByteStream: data.byteStream)
+					commonData?.save()
+				} else {
+					let errorString = "XDS compilation error, File: \(file.fileName) \nError- failed to import new script because it is larger than the maximum allowed size. Size: \(data.length), max: \(maxLength)"
+					printg(errorString)
+					return false
+				}
+			} else {
+				data.file = file
+				data.save()
+			}
+
 			saveFiles()
 			
 			if file.exists {

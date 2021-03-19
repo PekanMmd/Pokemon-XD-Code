@@ -142,7 +142,7 @@ extension XGTrainerModels: XGEnumerable {
 		return rawValue.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Trainer Models"
 	}
 	
@@ -153,7 +153,7 @@ extension XGTrainerModels: XGEnumerable {
 
 extension XGTrainerModels: XGDocumentable {
 	
-	static var documentableClassName: String {
+	static var className: String {
 		return "Trainer Models"
 	}
 	

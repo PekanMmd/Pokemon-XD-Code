@@ -137,7 +137,7 @@ extension XGDecks: XGEnumerable {
 		type.name + " " + index.string
 	}
 
-	static var enumerableClassName: String {
+	static var className: String {
 		"Decks"
 	}
 

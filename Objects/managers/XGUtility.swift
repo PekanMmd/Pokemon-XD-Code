@@ -55,7 +55,13 @@ class XGUtility {
 				var fsysSubfilesToImport: [XGFiles]? = nil
 				switch $0.fileName {
 				case "common.fsys": if game != .PBR {
+					#if !GAME_PBR
 					fsysSubfilesToImport = [.common_rel]
+					#else
+					fsysSubfilesToImport = XGFolders.ISOExport("common").files.filter({ (file) -> Bool in
+						return file.fileType == .bin
+					})
+					#endif
 					#if GAME_XD
 					fsysSubfilesToImport?.append(.deck(.DeckDarkPokemon))
 					#endif
@@ -66,9 +72,8 @@ class XGUtility {
 				importFileToISO($0, encode: true, save: false, importFiles: fsysSubfilesToImport)
 			}
 		}
-		#if !GAME_PBR
+
 		XGISO.current.save()
-		#endif
 
 		printg("Quick build complete")
 	}
@@ -78,16 +83,16 @@ class XGUtility {
 		prepareForCompilation()
 		for file in XGISO.current.allFileNames {
 			if file.fileExtensions == XGFileTypes.fsys.fileExtension {
-				XGUtility.importFileToISO(.fsys(file.removeFileExtensions()), encode: true)
+				XGUtility.importFileToISO(.fsys(file.removeFileExtensions()), encode: true, save: false)
 			} else {
-				XGUtility.importFileToISO(.nameAndFolder(file, .ISOExport(file.removeFileExtensions())), encode: false)
+				XGUtility.importFileToISO(.nameAndFolder(file, .ISOExport(file.removeFileExtensions())), encode: false, save: false)
 			}
 		}
-		
+		XGISO.current.save()
 	}
 
 	@discardableResult
-	class func exportFileFromISO(_ file: XGFiles, decode: Bool = true, overwrite: Bool = false) -> Bool {
+	class func exportFileFromISO(_ file: XGFiles, extractFsysContents: Bool = true, decode: Bool = true, overwrite: Bool = false) -> Bool {
 		XGFolders.ISOExport("").createDirectory()
 
 		if let data = XGISO.current.dataForFile(filename: file.fileName) {
@@ -96,7 +101,7 @@ class XGUtility {
 				if !file.exists || overwrite {
 					data.save()
 				}
-				if file.fileType == .fsys {
+				if extractFsysContents, file.fileType == .fsys {
 					let fsysData = data.fsysData
 					fsysData.extractFilesToFolder(folder: file.folder, decode: decode, overwrite: overwrite)
 				}
@@ -278,6 +283,9 @@ class XGUtility {
 			}
 			#if GAME_PBR
 			XGISO.current.importFiles([fileToImport])
+			if save {
+				XGISO.current.save()
+			}
 			#else
 			XGISO.current.importFiles([fileToImport], save: save)
 			#endif
@@ -422,6 +430,10 @@ class XGUtility {
 	class func deleteSuperfluousFiles() {
 		// deletes files that the game doesn't use in order to create space in the ISO for larger fsys files
 		// TODO: check if can delete fsys files used for creating prerendered cutscenes
+
+		guard game != .PBR else {
+			return
+		}
 		
 		var substrings = [String]()
 		if game == .XD {
@@ -431,7 +443,7 @@ class XGUtility {
 				substrings += ["l_fr","l_ge","l_it", "l_sp"]
 				substrings += ["g_fr","g_ge","g_it", "g_sp"]
 			}
-		} else {
+		} else if game == .Colosseum {
 			substrings = ["carde", "ex", "debug"]
 		}
 		

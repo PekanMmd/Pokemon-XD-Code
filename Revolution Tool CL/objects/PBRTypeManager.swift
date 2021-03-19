@@ -63,8 +63,8 @@ class PBRTypeManager {
 				break
 			}
 
-			let offsensiveType = XGMoveTypes.type(byte0)
-			let defensiveType  = XGMoveTypes.type(byte1)
+			let offsensiveType = XGMoveTypes.index(byte0)
+			let defensiveType  = XGMoveTypes.index(byte1)
 			let multiplier = byte2
 			let matchup = PBRTypeMatchup(offensiveType: offsensiveType, defensiveType: defensiveType, multiplier: multiplier, ignoredByForesight: foresightFound)
 			matchups.append(matchup)
@@ -122,7 +122,7 @@ class PBRTypeManager {
 			for _ in 0 ..< sizeDifference {
 				// add extra dummy matchups so the size of the table doesn't decrease
 				// prevents the size too large error if the table size decreases then increases again later
-				let matchup = PBRTypeMatchup(offensiveType: .type(0xfd), defensiveType: .type(0xfd), multiplier: 0, ignoredByForesight: true)
+				let matchup = PBRTypeMatchup(offensiveType: .index(0xfd), defensiveType: .index(0xfd), multiplier: 0, ignoredByForesight: true)
 				dol.replaceBytesFromOffset(currentOffset, withByteStream: matchup.data)
 				currentOffset += 3
 			}
@@ -232,7 +232,7 @@ class PBRTypeManager {
 
 		for _ in 0 ..< (increaseEntryNumberBy ?? 0) {
 			// add extra dummy matchups to increase the size of the table
-			let matchup = PBRTypeMatchup(offensiveType: .type(0xfd), defensiveType: .type(0xfd), multiplier: 0, ignoredByForesight: true)
+			let matchup = PBRTypeMatchup(offensiveType: .index(0xfd), defensiveType: .index(0xfd), multiplier: 0, ignoredByForesight: true)
 			dol.replaceBytesFromOffset(currentOffset, withByteStream: matchup.data)
 			currentOffset += 3
 		}

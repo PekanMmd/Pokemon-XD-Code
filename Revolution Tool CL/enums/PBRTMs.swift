@@ -21,7 +21,7 @@ enum XGTMs: XGIndexedValue {
 	}
 	
 	var move : XGMoves {
-		return .move(GoDDataTableEntry.TMs(index: index - 1).getShort(0))
+		return .index(GoDDataTableEntry.TMs(index: index - 1).getShort(0))
 	}
 
 	var category: Int {
@@ -50,7 +50,7 @@ extension XGTMs: XGEnumerable {
 		return move.name.unformattedString
 	}
 
-	static var enumerableClassName: String {
+	static var className: String {
 		return "TMs"
 	}
 

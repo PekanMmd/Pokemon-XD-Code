@@ -80,7 +80,7 @@ extension XGBattleTypes: XGEnumerable {
 		return rawValue.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Battle Types"
 	}
 	

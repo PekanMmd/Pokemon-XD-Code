@@ -222,7 +222,7 @@ extension XGMove: XGEnumerable {
 		return String(format: "%03d", moveIndex)
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Moves"
 	}
 	
@@ -236,10 +236,6 @@ extension XGMove: XGEnumerable {
 }
 
 extension XGMove: XGDocumentable {
-	
-	static var documentableClassName: String {
-		return "Moves"
-	}
 	
 	var isDocumentable: Bool {
 		return descriptionID != 0

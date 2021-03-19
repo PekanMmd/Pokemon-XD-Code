@@ -7,6 +7,8 @@
 
 import Foundation
 
+loadISO(exitOnFailure: true)
+
 
 //let moves = PBRDataTable.moves
 

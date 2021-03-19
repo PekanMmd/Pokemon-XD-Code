@@ -7,10 +7,35 @@
 
 import Foundation
 
+protocol GoDCodable: Codable {
+	static func encodeData()
+	static func decodeData()
+	static func documentData()
+	static func documentEnumerationData()
+	func save()
+
+	static var className: String {get}
+}
+
+extension GoDCodable {
+	func encodeData() {
+		printg("Encoding has not been implemented for this class")
+	}
+	func decodeData() {
+		printg("Decoding has not been implemented for this class")
+	}
+	func saveDocumentedData() {
+		printg("Documentation has not been implemented for this class")
+	}
+	func save() {
+		
+	}
+}
+
 protocol XGEnumerable {
 	var enumerableName: String {get}
 	var enumerableValue: String? {get}
-	static var enumerableClassName: String {get}
+	static var className: String {get}
 	static var allValues: [Self] {get}
 }
 
@@ -19,11 +44,11 @@ extension XGEnumerable {
 	static func documentEnumerationData() {
 		let folder = XGFolders.nameAndFolder("Enumerations", .Reference)
 		folder.createDirectory()
-		let file = XGFiles.nameAndFolder(enumerableClassName + ".txt", folder)
+		let file = XGFiles.nameAndFolder(className + ".txt", folder)
 		
-		var text = "\(enumerableClassName) - count: \(allValues.count)\n"
+		var text = "\(className) - count: \(allValues.count)\n"
 		allValues.forEach { (value) in
-			text += "\n\(value.enumerableName)"
+			text += "\n\(value.enumerableName.spaceToLength(20))"
 			if let rawValue = value.enumerableValue {
 				text += " - \(rawValue)"
 			}
@@ -34,7 +59,7 @@ extension XGEnumerable {
 }
 
 protocol XGDocumentable {
-	static var documentableClassName: String {get}
+	static var className: String {get}
 	var documentableName: String {get}
 	var isDocumentable: Bool {get}
 	static var DocumentableKeys: [String] {get}
@@ -49,7 +74,7 @@ extension XGDocumentable {
 	
 	var documentableFields: String {
 		var text = ""
-		for key in type(of: self).DocumentableKeys {
+		for key in Self.DocumentableKeys {
 			text += "\n\(key): \(documentableValue(for: key))"
 		}
 		return text
@@ -60,8 +85,8 @@ extension XGDocumentable {
 	}
 	
 	func saveDocumentedData() {
-		let documentationFolder = XGFolders.nameAndFolder("Documentation", .Reference)
-		let folder = XGFolders.nameAndFolder(type(of: self).documentableClassName, documentationFolder)
+		let documentationFolder = XGFolders.nameAndFolder("Documented Data", .Reference)
+		let folder = XGFolders.nameAndFolder(Self.className, documentationFolder)
 		folder.createDirectory()
 		
 		let file = XGFiles.nameAndFolder(documentableName + XGFileTypes.txt.fileExtension, folder)
@@ -81,8 +106,8 @@ extension XGEnumerable where Self: XGDocumentable {
 
 extension XGEnumerable {
 	static func encodedDataFolder() -> XGFolders {
-		let encodingFolder = XGFolders.nameAndFolder("Raw Data", .Reference)
-		return XGFolders.nameAndFolder(enumerableClassName, encodingFolder)
+		let encodingFolder = XGFolders.nameAndFolder("Decoded Data", .Reference)
+		return XGFolders.nameAndFolder(className, encodingFolder)
 	}
 	
 	static func encodedJSONFiles() -> [XGFiles] {
@@ -93,12 +118,12 @@ extension XGEnumerable {
 		return (allValues as? [Encodable]) ?? []
 	}
 	
-	static func encodeData(filename: (Encodable) -> String) {
+	static func encodeData() {
 		let folder = encodedDataFolder()
 		folder.createDirectory()
 		
-		for value in encodableValues {
-			let file = XGFiles.nameAndFolder(filename(value) + XGFileTypes.json.fileExtension, folder)
+		encodableValues.forEachIndexed() { (index, value) in
+			let file = XGFiles.nameAndFolder(String(format: "%03d", index) + XGFileTypes.json.fileExtension, folder)
 			value.writeJSON(to: file)
 		}
 	}
@@ -110,6 +135,19 @@ extension XGEnumerable {
 			return file.fileType == .json
 		})
 	}
+}
+
+extension GoDCodable where Self: XGEnumerable  {
+	static func decodeData() {
+		for file in encodedJSONFiles() {
+			do {
+				try Self.fromJSON(file: file).save()
+			} catch {
+				printg("Failed to decode file:", file.path)
+			}
+		}
+	}
+	
 }
 
 

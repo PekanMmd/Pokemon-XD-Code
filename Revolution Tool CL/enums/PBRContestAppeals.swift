@@ -39,7 +39,7 @@ extension XGContestAppeals: XGEnumerable {
 		rawValue.string
 	}
 
-	static var enumerableClassName: String {
+	static var className: String {
 		"Contest Appeals"
 	}
 

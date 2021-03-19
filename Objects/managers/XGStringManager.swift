@@ -16,12 +16,15 @@ func loadAllStrings(refresh: Bool = false) {
 	guard !fileDecodingMode else { return }
 	
 	if !stringsLoaded {
-		
+
+		#if !GAME_PBR
 		previousFound = 0
 		previousFrom = 0
 		previousFree = []
 		
-		allStringTables = game == .PBR ? [] : [XGFiles.common_rel.stringTable]
+		allStringTables = [XGFiles.common_rel.stringTable]
+		#endif
+		
 		#if GAME_COLO
 		allStringTables += [XGStringTable.dol()]
 
@@ -45,13 +48,20 @@ func loadAllStrings(refresh: Bool = false) {
 						(region == .JP ? "menu_fight_s" : "mes_fight_e"),
 						(region == .JP ? "menu_name2" : "mes_name_e")]
 				+ (region == .JP ? [] : ["menu_btutorial"]) {
-				XGUtility.exportFileFromISO(.fsys(filename), decode: false, overwrite: false)
+				let fsysFile = XGFiles.fsys(filename)
+				XGUtility.exportFileFromISO(fsysFile, decode: false, overwrite: false)
+				if fsysFile.exists {
+					let stringTables = fsysFile.folder.files.filter { $0.fileType == .msg }
+					allStringTables += stringTables.map { $0.stringTable }
+				}
 			}
 		}
 		#endif
 
+		#if !GAME_PBR
 		XGFiles.allFilesWithType(.msg).forEach { allStringTables.append($0.stringTable) }
-		
+		#endif
+
 		stringsLoaded = true
 	}
 	

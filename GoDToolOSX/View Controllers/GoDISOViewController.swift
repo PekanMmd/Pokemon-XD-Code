@@ -174,7 +174,10 @@ class GoDISOViewController: GoDTableViewController {
 		}
 
 		filteredFileNames = allFileNames.filter({ (file) -> Bool in
-			file.simplified.contains(text.simplified)
+			let searchTerms = text.split(separator: ",")
+			return searchTerms.contains(where: { searchTerm in
+				file.simplified.contains(String(searchTerm).simplified)
+			})
 		})
 	}
 }

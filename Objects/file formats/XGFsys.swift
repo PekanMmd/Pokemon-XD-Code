@@ -106,9 +106,15 @@ final class XGFsys : NSObject {
 
 			// Each file has an identifier which has a byte indicating the file type.
 			// If the name doesn't already have a file extension then add the extension for its type.
-			let updatedName = names[i]
+			var updatedName = names[i]
 			if updatedName.fileExtensions == "" {
-				names[i] = updatedName + fileTypeForFile(index: i).fileExtension
+				updatedName = updatedName + fileTypeForFile(index: i).fileExtension
+				names[i] = updatedName
+			}
+
+			if updatedName.fileExtensions.lowercased() != updatedName.fileExtensions {
+				updatedName = updatedName.replacingOccurrences(of: updatedName.fileExtensions, with: updatedName.fileExtensions.lowercased())
+				names[i] = updatedName
 			}
 
 
@@ -876,15 +882,20 @@ final class XGFsys : NSObject {
 					}
 				}
 
-				#if !GAME_COLO
-				if file.fileType == .scd && game != .Colosseum {
+				#if GAME_XD
+				let fileContainsScript = (file.fileType == .scd || file == .common_rel)
+				#elseif GAME_PBR
+				let fileContainsScript = file.fileType == .scd
+				#else
+				let fileContainsScript = false
+				#endif
+				if (fileContainsScript) {
 					let xdsFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.xds.fileExtension, folder)
 					if !xdsFile.exists || overwrite {
 						let scriptText = file.scriptData.getXDSScript()
 						XGUtility.saveString(scriptText, toFile: xdsFile)
 					}
 				}
-				#endif
 
 				if file.fileType == .thh {
 					let thpFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.thp.fileExtension, folder)
@@ -910,7 +921,7 @@ extension XGFsys: XGEnumerable {
 		return nil
 	}
 
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Fsys"
 	}
 

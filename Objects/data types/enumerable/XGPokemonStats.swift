@@ -364,7 +364,7 @@ extension XGPokemonStats: XGEnumerable {
 		return String(format: "%03d", index)
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Pokemon"
 	}
 	
@@ -378,10 +378,6 @@ extension XGPokemonStats: XGEnumerable {
 }
 
 extension XGPokemonStats: XGDocumentable {
-	
-	static var documentableClassName: String {
-		return "Pokemon Stats"
-	}
 	
 	var isDocumentable: Bool {
 		return catchRate != 0

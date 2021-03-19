@@ -8,6 +8,12 @@
 
 import Foundation
 
+enum ByteLengths: Int {
+	case char = 1
+	case short = 2
+	case word = 4
+}
+
 class XGMutableData {
 	
 	var fsysData : XGFsys {
@@ -98,7 +104,17 @@ class XGMutableData {
 	
 	func getByteAtOffset(_ start : Int) -> Int {
 		return Int(getCharAtOffset(start))
-		
+	}
+
+	func getValueAtOffset(_ start: Int, length: ByteLengths) -> Int {
+		switch length {
+		case .char:
+			return getByteAtOffset(start)
+		case .short:
+			return get2BytesAtOffset(start)
+		case .word:
+			return get4BytesAtOffset(start)
+		}
 	}
 	
 	func get2BytesAtOffset(_ start : Int) -> Int {
@@ -212,6 +228,12 @@ class XGMutableData {
 			byteStream.append((getWordAtOffset(offset + i), getWordAtOffset(offset + i + 4)))
 		}
 		return byteStream
+	}
+
+	func getSubDataFromOffset(_ offset: Int, length: Int) -> XGMutableData {
+		let data = XGMutableData(byteStream: getByteStreamFromOffset(offset, length: length))
+		data.file = file
+		return data
 	}
 	
 	//MARK: - Replace Bytes
@@ -362,8 +384,8 @@ class XGMutableData {
 		replaceBytesFromOffset(start, withByteStream: [UInt8](repeating: 0, count: length))
 	}
 	
-	func getStringAtOffset(_ offset: Int) -> String {
-		if offset < 0 || offset + 2 > length {
+	func getStringAtOffset(_ offset: Int, charLength: ByteLengths = .char, maxCharacters: Int? = nil) -> String {
+		if offset < 0 || offset + (2 * charLength.rawValue) > length {
 			printg("Attempting to read string at offset: \(offset.hexString()), file: \(file.path), length: \(length.hexString())")
 			return ""
 		}
@@ -372,15 +394,17 @@ class XGMutableData {
 		
 		var currChar = 0x0
 		var nextChar = 0x1
+		var characterCounter = 0
 		
 		let string = XGString(string: "", file: nil, sid: nil)
 		
-		while (nextChar != 0x00) {
-			currChar = self.getByteAtOffset(currentOffset)
-			currentOffset += 1
+		while nextChar != 0x00 && (maxCharacters == nil || characterCounter < maxCharacters!) {
+			currChar = self.getValueAtOffset(currentOffset, length: charLength)
+			currentOffset += charLength.rawValue
+			characterCounter += 1
 			
 			string.append(.unicode(currChar))
-			nextChar = self.getByteAtOffset(currentOffset)
+			nextChar = self.getValueAtOffset(currentOffset, length: charLength)
 		}
 		
 		return string.string

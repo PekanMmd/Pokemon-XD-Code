@@ -7,6 +7,28 @@
 
 import Foundation
 
+let patches: [XGDolPatches] = [
+	.gen7CritRatios,
+	.disableRentalPassChecksums,
+	.disableBlurEffect
+]
+
+enum XGDolPatches: Int {
+
+	case gen7CritRatios
+	case disableRentalPassChecksums
+	case disableBlurEffect
+
+	var name: String {
+		switch self {
+		case .gen7CritRatios : return "Update the critical hit ratios to gen 7 odds"
+		case .disableRentalPassChecksums : return "Disable legality checks on battle passes"
+		case .disableBlurEffect : return "Remove the blur effect from the games rendering"
+		}
+	}
+
+}
+
 class XGDolPatcher {
 
 	/// Removes the code for rental pass validation checks
@@ -102,6 +124,14 @@ class XGDolPatcher {
 		if let dol = XGFiles.dol.data {
 			dol.replace4BytesAtOffset(bloomStrengthOffset, withBytes: 0)
 			dol.save()
+		}
+	}
+
+	class func applyPatch(_ patch: XGDolPatches) {
+		switch patch {
+		case .gen7CritRatios: XGDolPatcher.gen7CritRatios()
+		case .disableRentalPassChecksums: XGDolPatcher.disableRentalPassChecksums()
+		case .disableBlurEffect: XGDolPatcher.disableBlurEffect()
 		}
 	}
 }

@@ -7,37 +7,21 @@
 //
 //
 
-let pokemon = XGMutableData(byteStream: [0x00, 0x01, 0x00, 0x59])
+import Foundation
 
-class pkxLookup: GoDCodableDataTable {
-	var index: Int?
-	@UnsignedWord var fsysID = 1
-	@UnsignedShort var fileID = 2
-	@UnsignedByte var fileTypeID = 3
+loadISO(exitOnFailure: true)
 
-	static let properties: [GoDStructProperties] = {
-		return [
-			.word(name: "fsysID"),
-			.short(name: "fileID"),
-			.byte(name: "fileTypeID")
-		]
-	}()
+//XGUtility.exportFileFromISO(.fsys("D4_tower_1F_2"))
+//battleBingoTable.decodeData()
+//battleBingoTable.documentData()
+battleBingoTable.documentCStruct()
+//battleBingoTable.encodeData()
+//battleBingoTable.documentData()
+//battleBingoTable.decodeCSVData()
 
-	static func propertyHasWrapper(name: String) -> Bool {
-		return true
-	}
-
-	static func tableStartOffset(file: XGFiles) -> Int {
-		return 0x40A0A8 // us xd
-	}
-}
-
-if let pkx = pkxLookup.loadEntry(index: 1, file: .dol) {
-	XGISO.current.getFSYSNameWithGroupID(pkx.fsysID)?.println()
-	print(pkx.dataForEntry()?.byteStream)
-	pkx.writeJSON(to: .nameAndFolder("test.json", .Documents))
-}
-
+//common.allPointers().forEachIndexed { (index, pointer) in
+//	printg(index, pointer.hexString())
+//}
 
 
 //var csv = "Spot,Index,Species,Percentage,Min Level,Max Level"

@@ -41,7 +41,7 @@ class XGEvolution: NSObject, Codable {
 
 extension XGEvolution: XGDocumentable {
 	
-	static var documentableClassName: String {
+	static var className: String {
 		return "Evolution"
 	}
 	

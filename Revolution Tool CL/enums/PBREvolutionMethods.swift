@@ -146,7 +146,7 @@ extension XGEvolutionMethods: XGEnumerable {
 		return rawValue.string
 	}
 
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Evolution Methods"
 	}
 

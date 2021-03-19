@@ -549,32 +549,32 @@ extension XGUtility {
 			let surskits = [0x0B9A,0x0D62]
 			let woopers = [0x0BEA,0x0DA6]
 
-			let trapinch = XGPokeSpotPokemon(index: 2, pokespot: .rock).pokemon.nameID
-			let surskit = XGPokeSpotPokemon(index: 2, pokespot: .oasis).pokemon.nameID
-			let wooper = XGPokeSpotPokemon(index: 2, pokespot: .cave).pokemon.nameID
+			let trapinch = XGPokeSpotPokemon(index: 2, pokespot: .rock).pokemon
+			let surskit = XGPokeSpotPokemon(index: 2, pokespot: .oasis).pokemon
+			let wooper = XGPokeSpotPokemon(index: 2, pokespot: .cave).pokemon
 
 			for offset in trapinches {
-				script.replace2BytesAtOffset(offset, withBytes: trapinch)
+				script.replace2BytesAtOffset(offset, withBytes: trapinch.index)
 			}
 
 			for offset in surskits {
-				script.replace2BytesAtOffset(offset, withBytes: surskit)
+				script.replace2BytesAtOffset(offset, withBytes: surskit.index)
 			}
 
 			for offset in woopers {
-				script.replace2BytesAtOffset(offset, withBytes: wooper)
+				script.replace2BytesAtOffset(offset, withBytes: wooper.index)
 			}
 
-			script.replace2BytesAtOffset(0x0D3A, withBytes: trapinch)
-			script.replace2BytesAtOffset(0x1756, withBytes: trapinch)
+			script.replace2BytesAtOffset(0x0D3A, withBytes: trapinch.nameID)
+			script.replace2BytesAtOffset(0x1756, withBytes: trapinch.nameID)
 
 
-			script.replace2BytesAtOffset(0x0D7E, withBytes: surskit)
-			script.replace2BytesAtOffset(0x175E, withBytes: surskit)
+			script.replace2BytesAtOffset(0x0D7E, withBytes: surskit.nameID)
+			script.replace2BytesAtOffset(0x175E, withBytes: surskit.nameID)
 
 
-			script.replace2BytesAtOffset(0x0DC2, withBytes: wooper)
-			script.replace2BytesAtOffset(0x1766, withBytes: wooper)
+			script.replace2BytesAtOffset(0x0DC2, withBytes: wooper.nameID)
+			script.replace2BytesAtOffset(0x1766, withBytes: wooper.nameID)
 
 
 			let meditite = XGTradePokemon(index: 1).species.nameID
@@ -870,7 +870,9 @@ extension XGUtility {
 				completions.append(plainTextCompletion)
 			}
 			
-			let functions = ScriptClassFunctions[id]!
+			guard let functions = ScriptClassFunctions[id] else {
+				continue
+			}
 			let prefix = id == 0 ? "" : "\(name)."
 			for function in functions {
 				var completion = [String : String]()
@@ -901,7 +903,7 @@ extension XGUtility {
 				completions.append(completion)
 			}
 		}
-		
+
 		var macros = [XDSExpr]()
 		
 		for i in -1 ..< CommonIndexes.NumberOfPokemon.value {
@@ -1168,6 +1170,7 @@ extension XGUtility {
 	static func cancelEncoding() {
 		shouldCancelEncoding = true
 	}
+	/*
 	class func encodeISO() {
 		
 		guard !isEncodingISO else {
@@ -1336,12 +1339,14 @@ extension XGUtility {
 		}
 		
 	}
+	*/
 	
 	private static var isDecodingISO = false
 	private static var shouldCancelDecoding = false
 	static func cancelDecoding() {
 		shouldCancelDecoding = true
 	}
+	/*
 	class func decodeISO() {
 		
 		guard !isDecodingISO else {
@@ -1551,10 +1556,15 @@ extension XGUtility {
 		}
 		
 	}
+	*/
 	
 	//MARK: - Model Utilities
 	class func importDatToPKX(dat: XGMutableData, pkx: XGMutableData) -> XGMutableData {
-		let gpt1Length = pkx.get4BytesAtOffset(8)
+		var gpt1Length = pkx.get4BytesAtOffset(8)
+		while gpt1Length % 0x20 != 0 {
+			gpt1Length += 1
+		}
+
 		var start = 0xE60
 		if gpt1Length > 0 && pkx.getWordAtOffset(0xe60) == 0x47505431 /*GPT1 magic*/ {
 			start += gpt1Length + 4
@@ -1572,7 +1582,10 @@ extension XGUtility {
 	class func exportDatFromPKX(pkx: XGMutableData) -> XGMutableData {
 
 		let length = pkx.get4BytesAtOffset(0)
-		let gpt1Length = pkx.get4BytesAtOffset(8)
+		var gpt1Length = pkx.get4BytesAtOffset(8)
+		while gpt1Length % 0x20 != 0 {
+			gpt1Length += 1
+		}
 		var start = 0xE60
 		if gpt1Length > 0 && pkx.getWordAtOffset(0xe60) == 0x47505431 /*GPT1 magic*/ {
 			start += gpt1Length + 4

@@ -217,7 +217,7 @@ class XGString: NSObject, Codable {
 
 extension XGString: XGDocumentable {
 	
-	static var documentableClassName: String {
+	static var className: String {
 		return "String"
 	}
 	

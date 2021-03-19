@@ -120,7 +120,7 @@ extension XGExpRate: XGEnumerable {
 		return rawValue.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Experience Growth Rates"
 	}
 	

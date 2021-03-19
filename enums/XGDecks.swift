@@ -437,7 +437,7 @@ extension XGDecks: XGEnumerable {
 		return nil
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Decks"
 	}
 	

@@ -33,20 +33,20 @@ let kBingoCardFirstMysteryPanelOffset	= 0xB0
 
 final class XGBattleBingoCard: NSObject, Codable {
 	
-	var difficulty				= 0
-	var subIndex			= 0
+	var difficulty		= 0
+	var subIndex		= 0
 	
-	var index					= 0
+	var index			= 0
 	
-	var nameID				= 0
-	var detailsID			= 0
+	var nameID			= 0
+	var detailsID		= 0
 	
-	var pokemonLevel		= 0
+	var pokemonLevel	= 0
 	var startingPokemon	: XGBattleBingoPokemon!
-	var panels						= [XGBattleBingoPanel]()
+	var panels			= [XGBattleBingoPanel]()
 	var rewards			= [Int]()
 	
-	var name : XGString {
+	var name: XGString {
 		get {
 			return getStringSafelyWithID(id: nameID)
 		}
@@ -171,7 +171,7 @@ extension XGBattleBingoCard: XGEnumerable {
 		return String(format: "%02d", index)
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Battle Bingo Cards"
 	}
 	
@@ -185,10 +185,6 @@ extension XGBattleBingoCard: XGEnumerable {
 }
 
 extension XGBattleBingoCard: XGDocumentable {
-	
-	static var documentableClassName: String {
-		return "Battle Bingo Card"
-	}
 	
 	var documentableName: String {
 		return (enumerableValue ?? "") + " - " + enumerableName

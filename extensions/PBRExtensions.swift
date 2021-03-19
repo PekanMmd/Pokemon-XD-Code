@@ -50,96 +50,22 @@ extension XGUtility {
 	
 	// extraction
 	@discardableResult
-	class func decompileISO(printOutput: Bool = true) -> String? {
-        printg("decompiling ISO using wit. This will overwrite any existing files...")
+	class func decompileISO(printOutput: Bool = true, overwrite: Bool = false) -> String? {
+		let not = overwrite ? "" : "NOT "
+        printg("decompiling ISO using wit. This will \(not)overwrite any existing files...")
         if !XGFiles.iso.exists {
             printg("ISO doesn't exist:", XGFiles.iso.path)
             return nil
         }
-        let verbose = settings.verbose ? "-v " : ""
-        let overwrite = "-o"
-        let args = "extract --raw \(verbose) \(overwrite) \(XGFiles.iso.path) \(XGFolders.ISODump.path)"
+        let verbose = settings.verbose ? " -v " : ""
+		let overwriteFlag = overwrite ? " -o" : ""
+		let args = "extract --raw\(verbose)\(overwriteFlag) \(XGFiles.iso.path.escapedPath) \(XGFolders.ISODump.path.escapedPath)"
         return GoDShellManager.run(.wit, args: args, printOutput: printOutput)
     }
-    
-	class func extractMainFiles() {
-		XGFolders.setUpFolderFormat()
-		
-		printg("extracting required files...")
-		let requiredFiles : [XGFiles] = region == .JP ?
-			[.fsys("common"), .fsys("deck")] :
-			[.fsys("common"), .fsys("mes_common"), .fsys("deck")]
-		var fileMissing = false
-		for file in requiredFiles {
-			if !file.exists {
-				printg("Error: required file '\(file.path)' doesn't exist")
-				fileMissing = true
-			}
-		}
-		if fileMissing {
-            printg("At least one required file was missing, try unpacking the ISO first.")
-            return
-        }
-		
-		let fsys = XGFiles.fsys("deck").fsysData
-		
-		var tid = 0
-		var pid = 0
-		for i in 0 ..< fsys.numberOfEntries {
-			if !XGFiles.dckt(i).exists {
-				let data = fsys.decompressedDataForFileWithIndex(index: i)!
-				
-				if let type = XGDeckTypes(rawValue: data.getWordAtOffset(0)) {
-					switch type {
-						case .DCKA: data.file = .dcka
-						case .DCKP: data.file = .dckp(pid); pid += 1
-						case .DCKT: data.file = .dckt(tid); tid += 1
-						case .none: data.file = .nameAndFolder("deck_\(i)", .Decks)
-					}
-					
-				} else {
-					data.file = .nameAndFolder("deck_\(i)", .Decks)
-				}
-				data.save()
-			}
-		}
-		
-		let common = XGFiles.fsys("common").fsysData
-		let numberOfCommonBinaries = region == .JP ? 32 : 33
-		for i in 0 ..< numberOfCommonBinaries {
-			if !XGFiles.common(i).exists, let data = common.decompressedDataForFileWithIndex(index: i) {
-				data.file = .common(i)
-				data.save()
-			}
-		}
 
-		for filename in
-			["mes_common", "menu_btutorial",
-			(region == .JP ? "menu_fight_s" : "mes_fight_e"),
-			(region == .JP ? "menu_name2" : "mes_name_e")] {
-				if XGFiles.fsys(filename).exists {
-					if let msg = XGFiles.fsys(filename).fsysData.decompressedDataForFileWithIndex(index: 1) {
-						msg.file = .msg(filename)
-						msg.save()
-					}
-				}
-		}
-
-		if region == .JP {
-			let filename = "common"
-			if XGFiles.fsys(filename).exists {
-				if let msg = XGFiles.fsys(filename).fsysData.decompressedDataForFileWithIndex(index: 35) {
-					msg.file = .msg(filename)
-					msg.save()
-				}
-			}
-		}
-
-		printg("extraction complete!")
-		
+	class func prepareForCompilation() {
+		disableAntiModChecks()
 	}
-
-	class func prepareForCompilation() {}
 
 	class func exportFileFromISO(_ file: XGFiles, decode: Bool = true) -> Bool {
 		XGFolders.ISOExport("").createDirectory()
@@ -185,27 +111,9 @@ extension XGUtility {
         printg("compiling ISO...\nThis will overwrite the existing ISO")
         let verbose = settings.verbose ? "-v " : ""
         let overwrite = "-o"
-        let args = "copy \(overwrite) \(verbose) \(XGFolders.ISODump.path) \(XGFiles.iso.path)"
+		let args = "copy \(overwrite) \(verbose) \(XGFolders.ISODump.path.escapedPath) \(XGFiles.iso.path.escapedPath)"
         return GoDShellManager.run(.wit, args: args, printOutput: printOutput)
     }
-	
-	class func getFSYSForIdentifier(id: UInt32) -> XGFsys? {
-		for file in XGFolders.FSYS.files where file.fileName.contains(".fsys") {
-			let fsys = file.data!
-			let entries = fsys.get4BytesAtOffset(kNumberOfEntriesOffset)
-			
-			for i in 0 ..< entries {
-				let details = fsys.get4BytesAtOffset(0x60)
-				let identifier = fsys.getWordAtOffset(details + (i * kSizeOfArchiveEntry))
-				if identifier == id {
-					return file.fsysData
-				}
-			}
-			
-		}
-		return nil
-	}
-
 
 	// for gc compatibility
 	class func exportDatFromPKX(pkx: XGMutableData) -> XGMutableData {

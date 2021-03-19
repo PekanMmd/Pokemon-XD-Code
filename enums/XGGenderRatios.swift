@@ -46,7 +46,7 @@ extension XGGenderRatios: XGEnumerable {
 		return rawValue.hexString()
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Gender Ratios"
 	}
 	

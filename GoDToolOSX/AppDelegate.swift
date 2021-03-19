@@ -134,8 +134,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func getFreeStringID(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+		#if !GAME_PBR
+		guard checkRequiredFiles() else {
 			return
 		}
 		
@@ -143,12 +143,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			self.displayAlert(title: "Please wait", text: "Please wait for previous string id search to complete.")
 			return
 		}
-		guard XGFiles.iso.exists else {
-			let text = "ISO file doesn't exist. Please place your \(game == .XD ? "Pokemon XD" : "Pokemon Colosseum") file in the folder \(XGFolders.ISO.path) and name it \(XGFiles.iso.fileName)"
-			
-			self.displayAlert(title: "Error", text: text)
-			return
-		}
+
 		printg("Searching for free string id...")
 		XGThreadManager.manager.runInBackgroundAsync {
 			if let id = freeMSGID() {
@@ -161,19 +156,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				}
 			}
 		}
+		#endif
 	}
 	
 	@IBAction func importTextures(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+		guard checkRequiredFiles() else {
 			return
 		}
 		XGUtility.importTextures()
 	}
 	
 	@IBAction func exportTextures(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+		guard checkRequiredFiles() else {
 			return
 		}
 		XGUtility.exportTextures()
@@ -182,8 +176,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	@IBAction func setVerboseLogs(_ sender: Any) {
 		printg("Set verbose logs")
-		settings.verbose = true
-		settings.save()
+//		settings.verbose = true
+//		settings.save()
+		XGUtility.deleteSuperfluousFiles()
 	}
 	
 	@IBAction func setFastLogs(_ sender: Any) {
@@ -201,18 +196,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func extractISO(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+		guard checkRequiredFiles() else {
 			return
 		}
 		printg("extracting iso")
-		guard XGFiles.iso.exists else {
-			let text = "ISO file doesn't exist. Please place your \(game == .XD ? "Pokemon XD" : "Pokemon Colosseum") file in the folder \(XGFolders.ISO.path) and name it \(XGFiles.iso.fileName)"
-			printg("file \"\(XGFiles.iso.fileName)\" not in ISO folder")
-			
-			self.displayAlert(title: "Error", text: text)
-			return
-		}
+
 		XGFolders.setUpFolderFormat()
 		XGUtility.extractAllFiles()
 		
@@ -223,8 +211,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	var isBuilding = false
 	
 	@IBAction func quickBuildISO(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+		guard checkRequiredFiles() else {
 			return
 		}
 		guard !isBuilding else {
@@ -260,8 +247,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func rebuildISO(_ sender: AnyObject) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+		guard checkRequiredFiles(allowAnyISO: true) else {
 			return
 		}
 		guard !isBuilding else {
@@ -297,8 +283,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func getXDSMacros(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+		guard checkRequiredFiles() else {
 			return
 		}
 		XGThreadManager.manager.runInBackgroundAsync {
@@ -310,8 +295,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func getXDSClasses(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+		guard checkRequiredFiles() else {
 			return
 		}
 		XGThreadManager.manager.runInBackgroundAsync {
@@ -323,8 +307,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func saveSublime(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+		guard checkRequiredFiles() else {
 			return
 		}
 		XGThreadManager.manager.runInBackgroundAsync {
@@ -349,8 +332,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func installSublime(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+		guard checkRequiredFiles() else {
 			return
 		}
 		printg("Installing XDS Plugin files for Sublime Text 3...")
@@ -390,8 +372,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func showStringIDTool(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+		guard checkRequiredFiles() else {
 			return
 		}
 		performSegue("toStringVC")
@@ -424,117 +405,73 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		GoDAlertViewController.displayAlert(title: title, text: text)
 	}
 	
-	var isDocumenting = false
-	@IBAction func documentISO(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
-			return
-		}
-		guard !isDocumenting else {
-			return
-		}
-		isDocumenting = true
-		printg("Documenting ISO...")
-		XGThreadManager.manager.runInBackgroundAsync {
-			XGUtility.documentISO()
-			self.isDocumenting = false
-		}
-	}
-    
-    var isEncoding = false
-    @IBAction func encodeISO(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
-			return
-		}
-        guard !isEncoding else {
-            return
-        }
-        isEncoding = true
-        XGThreadManager.manager.runInBackgroundAsync {
-            XGUtility.encodeISO()
-            self.isDocumenting = false
-        }
-    }
-	
 	func performSegue(_ name: String) {
-		guard XGFiles.iso.exists else {
-			self.homeViewController.performSegue(withIdentifier: "toHelpVC", sender: self.homeViewController)
+		guard checkRequiredFiles(allowAnyISO: name == "toISOVC") else {
 			return
 		}
-		self.homeViewController.performSegue(withIdentifier: name, sender: self.homeViewController)
+		homeViewController.performSegue(withIdentifier: name, sender: self)
 	}
 	
 	
 	@IBAction func openTextureImporter(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
-			return
-		}
-		self.performSegue("toTextureVC")
+		performSegue("toTextureVC")
 	}
 	
 	@IBAction func openScriptCompiler(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
-			return
-		}
-		self.performSegue("toScriptVC")
+		performSegue("toScriptVC")
 	}
 	
 	@IBAction func openStatsEditor(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
-			return
-		}
-		self.performSegue("toStatsVC")
+		performSegue("toStatsVC")
 	}
 	
 	@IBAction func openMoveEditor(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
-			return
-		}
-		self.performSegue("toMoveVC")
+		performSegue("toMoveVC")
 	}
 	
 	@IBAction func openGiftEditor(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
-			return
-		}
-		self.performSegue("toGiftVC")
+		performSegue("toGiftVC")
 	}
 	
 	@IBAction func openPatchEditor(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
-			return
-		}
-		self.performSegue("toPatchVC")
+		performSegue("toPatchVC")
 	}
 	
 	@IBAction func openContextTool(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
-			return
-		}
-		self.performSegue("toContextVC")
+		performSegue("toContextVC")
 	}
 	
 	@IBAction func openRandomiser(_ sender: Any) {
-		guard region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
-			return
-		}
-		self.performSegue("toRandomiserVC")
+		performSegue("toRandomiserVC")
 	}
 	
 	@IBAction func exporeISO(_ sender: Any) {
-		self.performSegue("toISOVC")
+		performSegue("toISOVC")
+	}
+
+	@discardableResult
+	private func checkRequiredFiles(allowAnyISO: Bool = false) -> Bool {
+		if game != .PBR && (XGISO.inputISOFile == nil || !XGFiles.iso.exists) {
+			if let appDelegate = (NSApplication.shared.delegate as? AppDelegate) {
+				appDelegate.openFilePicker(self)
+			} else {
+				homeViewController.performSegue(withIdentifier: "toHelpVC", sender: self)
+			}
+			return false
+		}
+		if game == .PBR && (!XGFiles.fsys("common").exists || !XGFiles.iso.exists) {
+			homeViewController.performSegue(withIdentifier: "toHelpVC", sender: self)
+			return false
+		}
+		guard allowAnyISO || region != .OtherGame else {
+			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
+			return false
+		}
+		return true
 	}
 	
 }
+
 
 
 

@@ -104,7 +104,7 @@ enum XGFileTypes: Int, CaseIterable {
 		case .lzss: return ".lzss"
 		case .txt : return ".txt"
 		case .json: return ".json"
-		case .rdat: return ".dat"
+		case .rdat: return ".rdat"
 		case .gsw : return ".gsw"
 		case .atx : return ".atx"
 		case .pkx : return ".pkx"

@@ -77,6 +77,10 @@ class XGStringTable: NSObject {
 		}
 		
 	}
+
+	subscript(id: Int) -> XGString {
+		return getStringSafelyWithID(id: id)
+	}
 	
 	class func common_rel() -> XGStringTable {
 		if game == .XD {

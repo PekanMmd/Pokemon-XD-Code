@@ -262,8 +262,8 @@ extension XGTrainerPokemon: XGEnumerable {
 		return deckData.enumerableValue
 	}
 	
-	static var enumerableClassName: String {
-		return XGDeckPokemon.enumerableClassName
+	static var className: String {
+		return XGDeckPokemon.className
 	}
 	
 	static var allValues: [XGTrainerPokemon] {
@@ -276,10 +276,6 @@ extension XGTrainerPokemon: XGEnumerable {
 }
 
 extension XGTrainerPokemon: XGDocumentable {
-	
-	static var documentableClassName: String {
-		return "Trainer Pokemon"
-	}
 	
 	var documentableName: String {
 		return (enumerableValue ?? "") + " - " + enumerableName

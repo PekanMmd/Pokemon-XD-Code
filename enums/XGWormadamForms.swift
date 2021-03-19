@@ -30,7 +30,7 @@ extension XGWormadamCloaks: XGEnumerable {
 		return rawValue.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Wormadam Cloaks"
 	}
 	

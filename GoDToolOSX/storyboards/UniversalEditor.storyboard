@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="gqM-qd-c8b">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Data Tables-->
+        <scene sceneID="baN-BS-Ddn">
+            <objects>
+                <viewController title="Data Tables" id="gqM-qd-c8b" customClass="UniversalEditorViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="pFT-MH-JwL">
+                        <rect key="frame" x="0.0" y="0.0" width="497" height="406"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="DIW-0j-Vzm" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
+                                <rect key="frame" x="210" y="10" width="277" height="386"/>
+                                <subviews>
+                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1Lx-EX-D7z">
+                                        <rect key="frame" x="89" y="266" width="100" height="100"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="1Lx-EX-D7z" secondAttribute="height" multiplier="1:1" id="5Lo-7W-932"/>
+                                            <constraint firstAttribute="width" constant="100" id="PI1-So-Qmu"/>
+                                        </constraints>
+                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ball red" id="H9W-Pr-yzh"/>
+                                    </imageView>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b00-SA-Ahp" customClass="GoDButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="23" y="156" width="232" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="g0b-sV-ksH"/>
+                                            <constraint firstAttribute="width" constant="220" id="jrz-qC-646"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="push" title="Decode for editing via text files" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KdV-N0-btY">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                            <string key="keyEquivalent">s</string>
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="didClickDecodeButton:" target="gqM-qd-c8b" id="BQH-UB-p4I"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DBX-HB-ch6" customClass="GoDButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="23" y="115" width="232" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="220" id="KEO-ml-tJV"/>
+                                            <constraint firstAttribute="height" constant="21" id="cml-47-CYi"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="push" title="Encode edited files back into the game" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Jmv-K7-2pK">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system" size="11"/>
+                                            <string key="keyEquivalent">s</string>
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="didClickEncodeButton:" target="gqM-qd-c8b" id="Ly5-CJ-TZP"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Et9-Qg-cP5" customClass="GoDButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="23" y="74" width="232" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="220" id="a4k-gI-Qfu"/>
+                                            <constraint firstAttribute="height" constant="21" id="a8m-Gi-7Ov"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="push" title="Document as text files for reference" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tPC-pt-csu">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                            <string key="keyEquivalent">s</string>
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="didClickDocumentButton:" target="gqM-qd-c8b" id="bPD-bk-OAB"/>
+                                        </connections>
+                                    </button>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u42-i0-KpK">
+                                        <rect key="frame" x="18" y="214" width="241" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="32" id="Tcc-f2-rn2"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" enabled="NO" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="Data Table" id="Bhy-1Z-1x6">
+                                            <font key="font" metaFont="system" size="18"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6iM-gz-P14" customClass="GoDButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="23" y="33" width="232" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="J6o-MR-HzV"/>
+                                            <constraint firstAttribute="width" constant="220" id="PjP-iI-kfx"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="push" title="Edit (coming soon)" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nUZ-z1-Ox1">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                            <string key="keyEquivalent">s</string>
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="didClickEditButton:" target="gqM-qd-c8b" id="EAB-vD-J77"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="DBX-HB-ch6" firstAttribute="centerX" secondItem="1Lx-EX-D7z" secondAttribute="centerX" id="9M0-PA-bjr"/>
+                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="6iM-gz-P14" secondAttribute="bottom" constant="40" id="MhV-pP-1JP"/>
+                                    <constraint firstItem="Et9-Qg-cP5" firstAttribute="centerX" secondItem="1Lx-EX-D7z" secondAttribute="centerX" id="OiU-v2-9oi"/>
+                                    <constraint firstItem="1Lx-EX-D7z" firstAttribute="centerX" secondItem="DIW-0j-Vzm" secondAttribute="centerX" id="aAh-qT-aGf"/>
+                                    <constraint firstAttribute="trailing" secondItem="u42-i0-KpK" secondAttribute="trailing" constant="20" id="bUa-tP-DrW"/>
+                                    <constraint firstItem="DBX-HB-ch6" firstAttribute="top" secondItem="b00-SA-Ahp" secondAttribute="bottom" constant="20" id="eTI-Bg-9eY"/>
+                                    <constraint firstItem="1Lx-EX-D7z" firstAttribute="top" secondItem="DIW-0j-Vzm" secondAttribute="top" constant="20" id="gsk-Li-CX4"/>
+                                    <constraint firstItem="u42-i0-KpK" firstAttribute="top" secondItem="1Lx-EX-D7z" secondAttribute="bottom" constant="20" id="hIh-It-mIv"/>
+                                    <constraint firstItem="b00-SA-Ahp" firstAttribute="top" secondItem="u42-i0-KpK" secondAttribute="bottom" constant="30" id="hZn-Tm-fJl"/>
+                                    <constraint firstItem="u42-i0-KpK" firstAttribute="leading" secondItem="DIW-0j-Vzm" secondAttribute="leading" constant="20" id="mav-Zv-lG1"/>
+                                    <constraint firstItem="Et9-Qg-cP5" firstAttribute="top" secondItem="DBX-HB-ch6" secondAttribute="bottom" constant="20" id="nBO-7X-1px"/>
+                                    <constraint firstItem="6iM-gz-P14" firstAttribute="centerX" secondItem="1Lx-EX-D7z" secondAttribute="centerX" id="prB-H1-Fty"/>
+                                    <constraint firstItem="b00-SA-Ahp" firstAttribute="centerX" secondItem="1Lx-EX-D7z" secondAttribute="centerX" id="uAA-Io-ONq"/>
+                                    <constraint firstItem="6iM-gz-P14" firstAttribute="top" secondItem="Et9-Qg-cP5" secondAttribute="bottom" constant="20" id="zjH-a2-oiX"/>
+                                </constraints>
+                            </customView>
+                            <customView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k4G-9O-P4v">
+                                <rect key="frame" x="0.0" y="0.0" width="200" height="406"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="JRG-QK-D80"/>
+                                </constraints>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="k4G-9O-P4v" firstAttribute="top" secondItem="pFT-MH-JwL" secondAttribute="top" id="71S-NQ-hRF"/>
+                            <constraint firstItem="DIW-0j-Vzm" firstAttribute="leading" secondItem="k4G-9O-P4v" secondAttribute="trailing" constant="10" id="Az2-k3-mgz"/>
+                            <constraint firstAttribute="bottom" secondItem="k4G-9O-P4v" secondAttribute="bottom" id="SyB-4m-5I5"/>
+                            <constraint firstAttribute="trailing" secondItem="DIW-0j-Vzm" secondAttribute="trailing" constant="10" id="ZZi-b6-aXg"/>
+                            <constraint firstAttribute="bottom" secondItem="DIW-0j-Vzm" secondAttribute="bottom" constant="10" id="fJE-yf-g22"/>
+                            <constraint firstItem="DIW-0j-Vzm" firstAttribute="top" secondItem="pFT-MH-JwL" secondAttribute="top" constant="10" id="nQ1-Fg-UNH"/>
+                            <constraint firstItem="k4G-9O-P4v" firstAttribute="leading" secondItem="pFT-MH-JwL" secondAttribute="leading" id="tLg-Iu-EcW"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="decodeButton" destination="b00-SA-Ahp" id="0ht-Ra-4oD"/>
+                        <outlet property="documentButton" destination="Et9-Qg-cP5" id="pwN-Xr-b1Q"/>
+                        <outlet property="editButton" destination="6iM-gz-P14" id="dEF-FP-RJV"/>
+                        <outlet property="encodeButton" destination="DBX-HB-ch6" id="LLx-5W-DjP"/>
+                        <outlet property="tableNameLabel" destination="u42-i0-KpK" id="Pwv-zY-rwG"/>
+                    </connections>
+                </viewController>
+                <customObject id="XkW-UN-d54" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2.5" y="-87.5"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ball red" width="500" height="500"/>
+    </resources>
+</document>

@@ -56,7 +56,7 @@ extension XGMoveTargets: XGEnumerable {
 		return rawValue.hexString()
 	}
 
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Move Targets"
 	}
 

@@ -85,7 +85,7 @@ class XGBattleBingoPokemon: NSObject, Codable {
 
 extension XGBattleBingoPokemon: XGDocumentable {
 	
-	static var documentableClassName: String {
+	static var className: String {
 		return "Battle Bingo Pokemon"
 	}
 	

@@ -126,7 +126,7 @@ extension XGItem: XGEnumerable {
 		return String(format: "%03d", index)
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Items"
 	}
 	
@@ -141,7 +141,7 @@ extension XGItem: XGEnumerable {
 
 extension XGItem: XGDocumentable {
 	
-	static var documentableClassName: String {
+	static var className: String {
 		return "Items"
 	}
 	

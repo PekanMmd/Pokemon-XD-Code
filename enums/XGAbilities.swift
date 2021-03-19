@@ -128,7 +128,7 @@ extension XGAbilities: XGEnumerable {
 		return index.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Abilities"
 	}
 	
@@ -142,10 +142,6 @@ extension XGAbilities: XGEnumerable {
 }
 
 extension XGAbilities: XGDocumentable {
-	
-	static var documentableClassName: String {
-		return "Abilities"
-	}
 	
 	var documentableName: String {
 		return name.string + "(\(index))"

@@ -76,7 +76,7 @@ extension XGDoor: XGEnumerable {
 		return nil
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Doors"
 	}
 	

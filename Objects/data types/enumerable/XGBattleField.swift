@@ -47,7 +47,7 @@ extension XGBattleField: XGEnumerable {
 		return String(format: "%03d", index)
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Battlefields"
 	}
 	

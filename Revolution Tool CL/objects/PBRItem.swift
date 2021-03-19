@@ -108,7 +108,7 @@ extension XGItem: XGEnumerable {
 		return index.string
 	}
 
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Items"
 	}
 
@@ -118,10 +118,6 @@ extension XGItem: XGEnumerable {
 }
 
 extension XGItem: XGDocumentable {
-
-	static var documentableClassName: String {
-		return "Items"
-	}
 
 	var documentableName: String {
 		return enumerableName + " - " + (enumerableValue ?? "")

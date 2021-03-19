@@ -148,7 +148,7 @@ extension XGTradePokemon: XGEnumerable {
 		return String(format: "%03d", index)
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Trades"
 	}
 	
@@ -162,10 +162,6 @@ extension XGTradePokemon: XGEnumerable {
 }
 
 extension XGTradePokemon: XGDocumentable {
-	
-	static var documentableClassName: String {
-		return "Trade Pokemon"
-	}
 	
 	var documentableName: String {
 		return (enumerableValue ?? "") + " - " + enumerableName

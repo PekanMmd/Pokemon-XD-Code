@@ -349,7 +349,7 @@ extension XGTrainer: XGEnumerable {
 		return deck.enumerableName + " " + String(format: "%03d", index)
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Trainers"
 	}
 	
@@ -364,7 +364,7 @@ extension XGTrainer: XGEnumerable {
 
 //extension XGTrainer: XGDocumentable {
 //	
-//	static var documentableClassName: String {
+//	static var className: String {
 //		return"Trainers"
 //	}
 //	

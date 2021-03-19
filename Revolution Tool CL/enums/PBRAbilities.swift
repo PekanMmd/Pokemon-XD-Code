@@ -15,12 +15,12 @@ let kNumberOfAbilities	= 124
 
 enum XGAbilities : XGIndexedValue {
 	
-	case ability(Int)
+	case index(Int)
 	
 	var index : Int {
 		get {
 			switch self {
-				case .ability(let i):
+				case .index(let i):
 					if i >= kNumberOfAbilities || i < 0 {
 						return 0
 					}
@@ -57,14 +57,14 @@ enum XGAbilities : XGIndexedValue {
 	static func allAbilities() -> [XGAbilities] {
 		var abs = [XGAbilities]()
 		for i in 0 ..< kNumberOfAbilities {
-			abs.append(.ability(i))
+			abs.append(.index(i))
 		}
 		return abs
 	}
 	
 	static func random() -> XGAbilities {
 		let rand = Int.random(in: 1 ..< kNumberOfAbilities)
-		return XGAbilities.ability(rand)
+		return XGAbilities.index(rand)
 	}
 	
 }
@@ -78,7 +78,7 @@ extension XGAbilities: XGEnumerable {
 		return index.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Abilities"
 	}
 	
@@ -86,7 +86,7 @@ extension XGAbilities: XGEnumerable {
 		var values = [XGAbilities]()
 		
 		for i in 0 ..< kNumberOfAbilities {
-			values.append(.ability(i))
+			values.append(.index(i))
 		}
 		
 		return values
@@ -99,7 +99,7 @@ func allAbilities() -> [String : XGAbilities] {
 	
 	for i in 0 ..< kNumberOfAbilities {
 		
-		let a = XGAbilities.ability(i)
+		let a = XGAbilities.index(i)
 		
 		dic[a.name.unformattedString.simplified] = a
 		
@@ -112,7 +112,7 @@ let abilities = allAbilities()
 
 func ability(_ name: String) -> XGAbilities {
 	if abilities[name.simplified] == nil { printg("couldn't find: " + name) }
-	return abilities[name.simplified] ?? .ability(0)
+	return abilities[name.simplified] ?? .index(0)
 }
 
 

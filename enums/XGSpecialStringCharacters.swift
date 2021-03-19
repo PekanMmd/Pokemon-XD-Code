@@ -53,9 +53,10 @@ let kvarAbility1B		= "Ability 0x1B"
 let kvarAbility1C		= "Ability 0x1C"
 let kvarAbility1D		= "Ability 0x1D"
 let kvarPokemon1E		= "Pokemon 0x1E"
+let kvarString32		= "String 0x32"
 
 
-enum XGSpecialCharacters : Int {
+enum XGSpecialCharacters: Int {
 	
 	case newLine				= 0x00
 	case special01				= 0x01
@@ -105,9 +106,9 @@ enum XGSpecialCharacters : Int {
 	case varItem2D				= 0x2D
 	case varItem2E				= 0x2E
 	case varQuantity			= 0x2F
-	case var30					= 0x30
+	case var30					= 0x30 // integer
 	case var31					= 0x31
-	case var32					= 0x32
+	case varString32			= 0x32 // string pointer
 	case var33					= 0x33
 	case var34					= 0x34
 	case var35					= 0x35
@@ -170,13 +171,13 @@ enum XGSpecialCharacters : Int {
 	case special6E				= 0x6E
 	
 	
-	var byteStream : [UInt8] {
+	var byteStream: [UInt8] {
 		get {
 			return [UInt8(0xFF), UInt8(0xFF), UInt8(self.rawValue)]
 		}
 	}
 	
-	var extraBytes : Int {
+	var extraBytes: Int {
 		get {
 			let val = self.rawValue
 			
@@ -196,7 +197,7 @@ enum XGSpecialCharacters : Int {
 		}
 	}
 	
-	var unicode : XGUnicodeCharacters {
+	var unicode: XGUnicodeCharacters {
 		get {
 			return .special(self, [Int](repeating: 0, count: self.extraBytes))
 		}
@@ -216,29 +217,29 @@ enum XGSpecialCharacters : Int {
 			var mid = ""
 			switch self {
 				case .changeColourPredefined	: mid = kChangeColourP
-				case .changeColourSpecified	: mid = kChangeColourS
-				case .clearWindow					: mid = kClearWindow
-				case .dialogueEnd					: mid = kDialogueEnd
-				case .newLine						: mid = kNewLine
-				case .pause							: mid = kPause
-				case .kanjiStart						: mid = kKanjiStart
-				case .furiganaStart					: mid = kFuriganaStart
-				case .furiganaEnd					: mid = kFuriganaEnd
-				case .player13						: mid = kBattlePlayer
-				case .playerInField					: mid = kFieldPlayer
-				case .speaker							: mid = kSpeaker
-				case .setSpeaker					: mid = kSetSpeaker
-				case .foeTrainerClass				: mid = kFoeTrainerClass
-				case .foeTrainerName				: mid = kFoeTrainerName
-				case .WaitKeyPress					: mid = kWaitKeyPress
-				case .pokemonSpeciesCry		: mid = kSpeciesCry
-				case .specialMSG					: mid = kspecialMSG
+				case .changeColourSpecified		: mid = kChangeColourS
+				case .clearWindow				: mid = kClearWindow
+				case .dialogueEnd				: mid = kDialogueEnd
+				case .newLine					: mid = kNewLine
+				case .pause						: mid = kPause
+				case .kanjiStart				: mid = kKanjiStart
+				case .furiganaStart				: mid = kFuriganaStart
+				case .furiganaEnd				: mid = kFuriganaEnd
+				case .player13					: mid = kBattlePlayer
+				case .playerInField				: mid = kFieldPlayer
+				case .speaker					: mid = kSpeaker
+				case .setSpeaker				: mid = kSetSpeaker
+				case .foeTrainerClass			: mid = kFoeTrainerClass
+				case .foeTrainerName			: mid = kFoeTrainerName
+				case .WaitKeyPress				: mid = kWaitKeyPress
+				case .pokemonSpeciesCry			: mid = kSpeciesCry
+				case .specialMSG				: mid = kspecialMSG
 				case .varPokemon4E				: mid = kvarPokemon4E
-				case .varItem2D						: mid = kvarItem2D
-				case .varItem2E						: mid = kvarItem2E
-				case .varQuantity					: mid = kvarQuantity
+				case .varItem2D					: mid = kvarItem2D
+				case .varItem2E					: mid = kvarItem2E
+				case .varQuantity				: mid = kvarQuantity
 				case .varMove28					: mid = kvarMove28
-				case .varItem29						: mid = kvarItem29
+				case .varItem29					: mid = kvarItem29
 				case .varPokemon20				: mid = kvarPokemon20
 				case .varPokemon21				: mid = kvarPokemon21
 				case .varPokemon0F				: mid = kvarPokemon0F
@@ -251,12 +252,13 @@ enum XGSpecialCharacters : Int {
 				case .varPokemon17				: mid = kvarPokemon17
 				case .varPokemon18				: mid = kvarPokemon18
 				case .varPokemon19				: mid = kvarPokemon19
-				case .varAbility1A					: mid = kvarAbility1A
-				case .varAbility1B					: mid = kvarAbility1B
-				case .varAbility1C					: mid = kvarAbility1C
-				case .varAbility1D					: mid = kvarAbility1D
+				case .varAbility1A				: mid = kvarAbility1A
+				case .varAbility1B				: mid = kvarAbility1B
+				case .varAbility1C				: mid = kvarAbility1C
+				case .varAbility1D				: mid = kvarAbility1D
 				case .varPokemon1E				: mid = kvarPokemon1E
-				default									: mid = String(format: "%02x", self.rawValue)
+				case .varString32				: mid = kvarString32
+				default							: mid = String(format: "%02x", self.rawValue)
 			}
 			str = str + mid
 			str = str + "]"
@@ -307,7 +309,8 @@ enum XGSpecialCharacters : Int {
 		    case kvarAbility1C		: return .varAbility1C
 		    case kvarAbility1D		: return .varAbility1D
 			case kvarPokemon1E		: return .varPokemon1E
-			case kBold						: return .changeFont
+			case kvarString32		: return .varString32
+			case kBold				: return .changeFont
 			default					: return XGSpecialCharacters(rawValue: str.hexStringToInt() ) ?? .unused0A
 		}
 	}

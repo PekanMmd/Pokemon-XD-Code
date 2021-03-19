@@ -478,7 +478,7 @@ extension XGInteractionPointData: XGEnumerable {
 		return nil
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Interaction Points"
 	}
 	
@@ -500,7 +500,7 @@ extension XGElevatorDirections: XGEnumerable {
 		return rawValue.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Elevator Directions"
 	}
 	

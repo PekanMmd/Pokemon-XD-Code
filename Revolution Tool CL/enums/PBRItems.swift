@@ -10,11 +10,11 @@ import Foundation
 
 enum XGItems : XGIndexedValue {
 	
-	case item(Int)
+	case index(Int)
 	
 	var index : Int {
 		switch self {
-		case .item(let i): return  i
+		case .index(let i): return  i
 		}
 	}
 	
@@ -38,7 +38,7 @@ enum XGItems : XGIndexedValue {
 	static func allItems() -> [XGItems] {
 		var items = [XGItems]()
 		for i in 0 ..< kNumberOfItems {
-			items.append(.item(i))
+			items.append(.index(i))
 		}
 		return items
 	}
@@ -46,7 +46,7 @@ enum XGItems : XGIndexedValue {
 	static func pokeballs() -> [XGItems] {
 		var items = [XGItems]()
 		for i in 0 ... 16 {
-			items.append(.item(i))
+			items.append(.index(i))
 		}
 		return items
 	}
@@ -59,7 +59,7 @@ func allItems() -> [String : XGItems] {
 	
 	for i in 0 ..< kNumberOfItems {
 		
-		let a = XGItems.item(i)
+		let a = XGItems.index(i)
 		
 		dic[a.name.unformattedString.simplified] = a
 		
@@ -72,13 +72,13 @@ let items = allItems()
 
 func item(_ name: String) -> XGItems {
 	if items[name.simplified] == nil { printg("couldn't find: " + name) }
-	return items[name.simplified] ?? .item(0)
+	return items[name.simplified] ?? .index(0)
 }
 
 func allItemsArray() -> [XGItems] {
 	var items : [XGItems] = []
 	for i in 0 ..< kNumberOfItems {
-		items.append(XGItems.item(i))
+		items.append(XGItems.index(i))
 	}
 	return items
 }
@@ -92,7 +92,7 @@ extension XGItems: XGEnumerable, Equatable {
 		return index.string
 	}
 
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Items"
 	}
 

@@ -26,7 +26,7 @@ let kStarterMove3Offset			= 0x1A
 let kStarterMove4Offset			= 0x1E
 let kStarterExpValueOffset		= 0x66
 
-final class XGStarterPokemon: NSObject, XGGiftPokemon, Codable {
+final class XGStarterPokemon: NSObject, XGGiftPokemon, GoDCodable {
 	
 	var level		= 0
 	var exp		= 0
@@ -101,10 +101,10 @@ extension XGStarterPokemon: XGEnumerable {
 	}
 	
 	var enumerableValue: String? {
-		return nil
+		return "0"
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Starter Pokemon"
 	}
 	
@@ -115,10 +115,6 @@ extension XGStarterPokemon: XGEnumerable {
 
 
 extension XGStarterPokemon: XGDocumentable {
-	
-	static var documentableClassName: String {
-		return "Starter Pokemon"
-	}
 	
 	var documentableName: String {
 		return (enumerableValue ?? "") + " - " + enumerableName

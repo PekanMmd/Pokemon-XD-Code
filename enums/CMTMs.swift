@@ -210,7 +210,7 @@ extension XGTMs: XGEnumerable {
 		return move.name.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "TMs"
 	}
 	
@@ -221,7 +221,7 @@ extension XGTMs: XGEnumerable {
 
 extension XGTMs: XGDocumentable {
 	
-	static var documentableClassName: String {
+	static var className: String {
 		return "TMs"
 	}
 	

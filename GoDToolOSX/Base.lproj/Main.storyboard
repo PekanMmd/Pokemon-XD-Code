@@ -64,17 +64,6 @@
                                                 <action selector="exporeISO:" target="Voe-Tx-rLC" id="WxL-gD-ywi"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="UvH-TN-KJe"/>
-                                        <menuItem title="Save Reference Data" keyEquivalent="p" id="mBd-ad-5j8">
-                                            <connections>
-                                                <action selector="documentISO:" target="Voe-Tx-rLC" id="5pO-cX-2kf"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Encode ISO" keyEquivalent="n" id="myG-gM-D73">
-                                            <connections>
-                                                <action selector="encodeISO:" target="Voe-Tx-rLC" id="8eN-7H-vAa"/>
-                                            </connections>
-                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
@@ -307,7 +296,7 @@
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
             <objects>
-                <windowController showSeguePresentationStyle="single" id="B8D-0N-5wS" sceneMemberID="viewController">
+                <windowController showSeguePresentationStyle="single" id="B8D-0N-5wS" customClass="GoDWindowController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" title="GoD Tool" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
                         <rect key="contentRect" x="50" y="59" width="111" height="41"/>
@@ -405,11 +394,20 @@
                         <segue destination="TYc-ZW-Pdt" kind="show" identifier="toTextureVC" id="S9y-F1-yH7"/>
                         <segue destination="tmF-fI-3qI" kind="show" identifier="toInteractionVC" id="9Ou-YI-6K0"/>
                         <segue destination="3Hc-6b-5SS" kind="show" identifier="toMessageVC" id="bbh-lY-5bm"/>
+                        <segue destination="WWu-VH-ZU8" kind="show" identifier="toUniversalVC" id="T2U-ra-GPf"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-612" y="711"/>
+        </scene>
+        <!--UniversalEditor-->
+        <scene sceneID="ZIb-cc-Gif">
+            <objects>
+                <controllerPlaceholder storyboardName="UniversalEditor" id="WWu-VH-ZU8" sceneMemberID="viewController"/>
+                <customObject id="yYn-WA-bX0" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1313" y="1060"/>
         </scene>
         <!--Patches-->
         <scene sceneID="S5m-Mv-CIz">
@@ -481,7 +479,7 @@
                 <controllerPlaceholder storyboardName="Randomiser" id="ql5-PA-Sy2" sceneMemberID="viewController"/>
                 <customObject id="2vV-sf-KOU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1313" y="1253"/>
+            <point key="canvasLocation" x="-1325" y="1243"/>
         </scene>
         <!--Type-->
         <scene sceneID="LmX-hJ-mcN">

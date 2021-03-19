@@ -97,7 +97,7 @@ extension XGTreasure: XGEnumerable {
 		return item.name.string + " x" + quantity.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Treasure"
 	}
 	

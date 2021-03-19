@@ -32,12 +32,12 @@ enum PBRRandomMoveType : Int {
 
 enum XGMoves: XGIndexedValue {
 	
-	case move(Int)
+	case index(Int)
 	case randomMove(PBRRandomMoveStyle, PBRRandomMoveType)
 	
 	var index : Int {
 		switch self {
-		case .move(let i): return i
+		case .index(let i): return i
 		case .randomMove(let s, let t): return 0x8000 + (s.rawValue << 4) + t.rawValue
 			
 		}
@@ -45,7 +45,7 @@ enum XGMoves: XGIndexedValue {
 	
 	var nameID : Int {
 		switch self {
-		case .move:
+		case .index:
 			return data.nameID
 		default:
 			return 0
@@ -54,7 +54,7 @@ enum XGMoves: XGIndexedValue {
 	
 	var name : XGString {
 		switch self {
-		case .move:
+		case .index:
 			return getStringSafelyWithID(id: nameID)
 		case .randomMove(let s, let t):
 			let text = "Random " + s.string + " " + t.string
@@ -77,17 +77,17 @@ enum XGMoves: XGIndexedValue {
 	static func allMoves() -> [XGMoves] {
 		var moves = [XGMoves]()
 		for i in -1 ..< kNumberOfMoves {
-			moves.append(.move(i))
+			moves.append(.index(i))
 		}
 		return moves
 	}
 	
 	static func random() -> XGMoves {
 		var rand = 0
-		while (rand == 0) || (XGMoves.move(rand).data.descriptionID == 0) {
+		while (rand == 0) || (XGMoves.index(rand).data.descriptionID == 0) {
 			rand = Int.random(in: 1 ..< kNumberOfMoves)
 		}
-		return XGMoves.move(rand)
+		return XGMoves.index(rand)
 	}
 	
 	static func randomMoveset() -> [XGMoves] {
@@ -101,7 +101,7 @@ func allMoves() -> [String : XGMoves] {
 	var dic = [String : XGMoves]()
 	
 	for i in -1 ..< kNumberOfMoves {
-		let a = XGMoves.move(i)
+		let a = XGMoves.index(i)
 		dic[a.name.unformattedString.simplified] = a
 	}
 	
@@ -112,14 +112,14 @@ let moves = allMoves()
 
 func move(_ name: String) -> XGMoves {
 	if moves[name.simplified] == nil { printg("couldn't find: " + name) }
-	return moves[name.simplified] ?? .move(0)
+	return moves[name.simplified] ?? .index(0)
 }
 
 
 func allMovesArray() -> [XGMoves] {
 	var moves: [XGMoves] = []
 	for i in -1 ..< kNumberOfMoves {
-		moves.append(XGMoves.move(i))
+		moves.append(XGMoves.index(i))
 	}
 	return moves
 }
@@ -133,7 +133,7 @@ extension XGMoves: Codable {
 	init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		let index = try container.decode(Int.self, forKey: .index)
-		self = .move(index)
+		self = .index(index)
 	}
 	
 	func encode(to encoder: Encoder) throws {
@@ -152,7 +152,7 @@ extension XGMoves: XGEnumerable {
 		return index.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Moves"
 	}
 	

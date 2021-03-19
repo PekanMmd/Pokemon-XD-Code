@@ -75,13 +75,17 @@ class XGRandomiser: NSObject {
 			}
 
 			guard options.count > 0 else {
-				speciesAlreadyUsed.addUnique(oldSpecies.index)
+				if checkDuplicates {
+					speciesAlreadyUsed.addUnique(oldSpecies.index)
+				}
 				return oldSpecies
 			}
 
 			let rand = Int.random(in: 0 ..< options.count)
 			let newSpecies = XGPokemon.index(options[rand].index)
-			speciesAlreadyUsed.addUnique(newSpecies.index)
+			if checkDuplicates {
+				speciesAlreadyUsed.addUnique(newSpecies.index)
+			}
 			return newSpecies
 		}
 
@@ -92,7 +96,7 @@ class XGRandomiser: NSObject {
 
 			for pokemon in deck.allActivePokemon {
 				#if GAME_COLO
-				if shadowsOnly && !pokemon.isShadow {
+				if shadowsOnly && !index.isShadow {
 					continue
 				}
 				#else

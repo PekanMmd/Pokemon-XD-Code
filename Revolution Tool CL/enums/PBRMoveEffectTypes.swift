@@ -60,7 +60,7 @@ extension XGMoveEffectTypes: XGEnumerable, Equatable {
 		return rawValue.string
 	}
 
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Move Effect Types"
 	}
 

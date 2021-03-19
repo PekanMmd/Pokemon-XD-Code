@@ -194,7 +194,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		("get", 16, 2, [.array(.anyType), .arrayIndex], .anyType, ""), // array get
 		("set", 17, 3, [.array(.anyType), .arrayIndex, .anyType], .null, ""), // array set
-		("size", 18, 1, [.array(.anyType)], .integer, ""),
+		("length", 18, 1, [.array(.anyType)], .integer, ""),
 		("resize", 19, 2, [.array(.anyType), .integer], .invalid, "removed"), //#REMOVED
 		("extend", 20, 2, [.array(.anyType), .integer], .invalid, "removed"), //#REMOVED
 		//#------------------------------------------------------------------------------------
@@ -388,7 +388,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("showWorldMapLocation", 60, 2, [.objectName("Dialogue"), .integer], .null, ""),
 		("showMirorRadarIcon", 61, 1, [.objectName("Dialogue")], .null, ""),
 		("hideMirorRadarIcon", 62, 1, [.objectName("Dialogue")], .null, ""),
-		
+		("showBonslyPhoto", 63, 1, [.objectName("Dialogue")], .null, ""),
 		("displayMoveRelearnerMenuForPartyMember", 64, 2, [.objectName("Dialogue"), .integerIndex], .move, ""), //# (int partyIndex)
 		("displayTutorMovesMenu", 65, 1, [.objectName("Dialogue")], .move, ""),
 		("setTutorMoveLearned", 66, 2, [.objectName("Dialogue"), .move], .null, ""),
@@ -512,9 +512,11 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 
 //MARK: - Controller
 	48 : [
+		("isPressingAnyButtonOrStickInput", 16, 1, [.objectName("Controller")], .bool, ""), // true iff any button is being pressed
+		("isPressingAnyStickInput", 17, 1, [.objectName("Controller")], .bool, ""), // true iff any button is being pressed
+		("isPressingAnyButton", 18, 1, [.objectName("Controller")], .bool, ""), // true iff any button is being pressed
 
-		("isPressingAnyButton", 18, 4, [.objectName("Controller")], .bool, ""), // true iff any button is being pressed
-		("getPressedButtons", 20, 5, [.objectName("Controller")], .integerBitMask, ""), //# returns 2 byte value which is bit mask of currently pressed controller buttons
+		("getPressedButtons", 20, 1, [.objectName("Controller")], .integerBitMask, ""), //# returns 2 byte value which is bit mask of currently pressed controller buttons
 
 	],
 	

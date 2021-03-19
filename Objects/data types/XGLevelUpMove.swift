@@ -38,7 +38,7 @@ class XGLevelUpMove: NSObject, Codable {
 
 extension XGLevelUpMove: XGDocumentable {
 	
-	static var documentableClassName: String {
+	static var className: String {
 		return "Level Up Move"
 	}
 	

@@ -43,7 +43,7 @@ extension XGGenders: XGEnumerable {
 		return self == .random ? rawValue.hexString() : rawValue.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Genders"
 	}
 	

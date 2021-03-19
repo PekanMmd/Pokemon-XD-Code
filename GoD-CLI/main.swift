@@ -81,39 +81,6 @@ func importExportFiles() {
 }
 
 func applyPatches() {
-	let patches : [XGDolPatches] = game == .XD ? [
-		.purgeUnusedText,
-		.physicalSpecialSplitApply,
-		.physicalSpecialSplitRemove,
-		.defaultMoveCategories,
-		.infiniteTMs,
-		.allowFemaleStarters,
-		.betaStartersApply,
-		.betaStartersRemove,
-		.switchPokemonAtEndOfTurn,
-		.fixShinyGlitch,
-		.replaceShinyGlitch,
-		.allowShinyShadowPokemon,
-		.shinyLockShadowPokemon,
-		.alwaysShinyShadowPokemon,
-		.tradeEvolutions,
-		.enableDebugLogs,
-		.pokemonCanLearnAnyTM,
-		.pokemonHaveMaxCatchRate,
-		.removeEVCap
-	] : [
-		.physicalSpecialSplitApply,
-		.defaultMoveCategories,
-		.allowFemaleStarters,
-		.tradeEvolutions,
-		.allowShinyStarters,
-		.shinyLockStarters,
-		.alwaysShinyStarters,
-		.enableDebugLogs,
-		.pokemonCanLearnAnyTM,
-		.pokemonHaveMaxCatchRate
-	]
-
 	var prompt = "Select a patch to apply:\n\n0: exit\n"
 	for i in 0 ..< patches.count {
 		let patch = patches[i]
@@ -135,18 +102,21 @@ func applyPatches() {
 }
 
 func randomiser() {
-	var options = [
-		" 1: Randomise Trainer/Wild Pokemon",
-		" 2: Randomise Moves",
-		" 3: Randomise Pokemon Types",
-		" 4: Randomise Abilities",
-		" 5: Randomise Pokemon Base Stats",
-		" 6: Randomise Evolutions",
-		" 7: Randomise Move Types",
-		" 8: Randomise TM Moves",
-		" 9: Randomise Shadow Pokemon Only",
-		"10: Randomise Pokemon Using Similar BST"
-	]
+	var options = [String]()
+	if game != .PBR {
+		options += [
+			" 1: Randomise All Trainer/Wild Pokemon",
+			" 2: Randomise Moves",
+			" 3: Randomise Pokemon Types",
+			" 4: Randomise Abilities",
+			" 5: Randomise Pokemon Base Stats",
+			" 6: Randomise Evolutions",
+			" 7: Randomise Move Types",
+			" 8: Randomise TM Moves",
+			" 9: Randomise Shadow Pokemon Only",
+			"10: Randomise Pokemon Using Similar BST"
+		]
+	}
 	if game == .XD {
 		options += ["11: Randomise Battle Bingo"]
 	}
@@ -167,6 +137,7 @@ func randomiser() {
 
 		switch index {
 		case 0: return
+		#if !GAME_PBR
 		case 1: XGRandomiser.randomisePokemon()
 		case 2: XGRandomiser.randomiseMoves()
 		case 3: XGRandomiser.randomiseTypes()
@@ -177,12 +148,14 @@ func randomiser() {
 		case 8: XGRandomiser.randomiseTMs()
 		case 9: XGRandomiser.randomisePokemon(shadowsOnly: true)
 		case 10: XGRandomiser.randomisePokemon(similarBST: true)
+		#endif
 		#if GAME_XD
 		case 11: if game == .XD { XGRandomiser.randomiseBattleBingo() } else { printg("Invalid option:", input); continue }
 		#endif
 		default: printg("Invalid option:", input); continue
 		}
 
+		#if !GAME_PBR
 		if isInitialRandomisation {
 			XGUtility.deleteSuperfluousFiles()
 			settings.increaseFileSizes = true
@@ -190,18 +163,97 @@ func randomiser() {
 		}
 
 		printg("Don't forget to rebuild the ISO in the main menu once you're done")
+		#endif
+	}
+}
+
+func singleDataTableMenu(forTable table: GoDStructTableFormattable) {
+	while true {
+		printg("\nCurrent Table: \(table.properties.name)")
+		printg("File: \(table.file)")
+		printg("Start Offset: \(table.firstEntryStartOffset.hexString()) (\(table.firstEntryStartOffset))")
+		printg("Number of Entries: \(table.numberOfEntries.hexString()) (\(table.numberOfEntries))")
+		printg("Entry Length: \(table.entryLength.hexString()) (\(table.entryLength))")
+
+		let prompt = """
+		Enter 'decode' to decode the table as an editable .json text file
+		Enter 'encode' to reencode the table from the .json files after editing
+		Enter 'document' to create .yaml and .csv documentation files for reference
+		Enter 'exit' to go back
+		"""
+
+		let input = readInput(prompt)
+		switch input {
+		case "decode": table.decodeData()
+		case "encode": table.encodeData()
+		case "document": table.decodeCSVData(); table.documentData(); table.documentEnumerationData(); table.documentCStruct()
+		case "exit": return
+		default: continue
+		}
+	}
+}
+
+func singleMiscDocumentationMenu(tableClass: GoDCodable.Type) {
+	while true {
+		printg("Other Data Table format \(tableClass.className)")
+
+		let prompt = """
+		Enter 'decode' to decode as an editable .json text file
+		Enter 'encode' to reencode from the .json files after editing
+		Enter 'document' to document as .txt files
+		Enter 'exit' to go back
+		"""
+
+		let input = readInput(prompt)
+		switch input {
+		case "decode": tableClass.encodeData()
+		case "encode": tableClass.decodeData()
+		case "document": tableClass.documentData(); tableClass.documentEnumerationData()
+		case "exit": return
+		default: continue
+		}
+	}
+}
+
+func dataTablesMenu() {
+	var prompt = "Select a data table\n\n0: exit\n"
+	for i in 0 ..< structTablesList.count {
+		let table = structTablesList[i]
+		prompt += "\(i + 1): \(table.properties.name)\n"
+	}
+	for i in 0 ..< otherTableFormatsList.count {
+		let tableName = otherTableFormatsList[i]
+		prompt += "\(i + structTablesList.count + 1): \(tableName)\n"
+	}
+
+	while true {
+		let input = readInput(prompt)
+		guard let index = input.integerValue, index >= 0, index <= structTablesList.count + otherTableFormatsList.count else {
+			printg("Invalid option:", input)
+			continue
+		}
+		if index == 0 {
+			return
+		} else if index <= structTablesList.count {
+			let table = structTablesList[index - 1]
+			singleDataTableMenu(forTable: table)
+		} else {
+			let tableClass = otherTableFormatsList[index - 1 - structTablesList.count]
+			singleMiscDocumentationMenu(tableClass: tableClass)
+		}
 	}
 }
 
 func mainMenu() {
 	while true {
-		var prompt = """
+		let option2 = game == .PBR ? "2: - (unavailable for PBR)" : "2: Delete unused files in the ISO. Use this if there is not enough space to rebuild the ISO."
+		let prompt = """
 		Type the number of the function you want and press enter:
 
 		0: Exit the program
 
 		1: Rebuild ISO - Use to put files edited by this tool back in the ISO
-		2: Delete unused files in the ISO. Use this if there is not enough space to rebuild the ISO.
+		\(option2)
 
 		3: List files - List all files in the ISO
 		4: Import/Export files - Use this to export files for manual editing and to reimport them
@@ -210,22 +262,15 @@ func mainMenu() {
 
 		6: Randomiser - Select options for randomising the game (rebuild ISO after)
 
+		7: Data Tables - Export, Import or Document game data like pokemon stats
+
 		"""
-		if game == .XD {
-			prompt += """
-
-			7: Encode data tables - Write all data to json files that can be edited
-			8: Decode data tables - Import the edited json files for the data tables
-
-			9: Document data - Dumps all information about the game into text files for reference only
-			"""
-		}
 
 		let input = readInput(prompt)
 		switch input {
 		case "": continue
 		case "0": return
-		case "1": if readInput("This will overwire the ISO at \(XGFiles.iso.path)\nAre you sure? Y/N").lowercased() == "y" {
+		case "1": if readInput("This will overwritee the ISO at \(XGFiles.iso.path)\nAre you sure? Y/N").lowercased() == "y" {
 				XGUtility.compileMainFiles()
 			}
 		case "2": XGUtility.deleteSuperfluousFiles()
@@ -233,9 +278,7 @@ func mainMenu() {
 		case "4": importExportFiles()
 		case "5": applyPatches()
 		case "6": randomiser()
-		case "7": if game == .XD { XGUtility.encodeISO() } else { fallthrough }
-		case "8": if game == .XD { XGUtility.decodeISO() } else { fallthrough }
-		case "9": if game == .XD { XGUtility.documentISO() } else { fallthrough }
+		case "7": dataTablesMenu()
 		default: invalidOption(input)
 		}
 	}
@@ -295,26 +338,20 @@ func decodeInputFiles(_ files: [XGFiles]) {
 }
 
 func main() {
-	let args = CommandLine.arguments
 
-	let files = args.map { (filename) -> XGFiles in
-		let fileurl = URL(fileURLWithPath: filename)
-		return fileurl.file
-	}.filter{$0.fileType != .unknown}
+	if !loadISO() {
+		let args = CommandLine.arguments
 
-	guard files.count > 0 else {
-		let message = environment == .Windows
-			? "To use this tool, drag and drop your ISO onto this .exe file."
-			: "Please run this tool with the path to your ISO specified as the command line argument."
-		print(message)
-		return
-	}
+		let files = args.map { (filename) -> XGFiles in
+			let fileurl = URL(fileURLWithPath: filename)
+			return fileurl.file
+		}.filter{$0.fileType != .unknown}
 
-	if let isoFile = files.first(where: {$0.fileType == .iso && $0.exists}) {
-		guard XGISO.loadISO(file: isoFile) else { return }
-	} else {
+		guard files.count > 0 else {
+			return
+		}
+
 		decodeInputFiles(files)
-		return
 	}
 
 	let noDocumentsFolder = !XGFolders.Documents.exists

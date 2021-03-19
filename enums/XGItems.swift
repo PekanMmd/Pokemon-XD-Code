@@ -153,7 +153,7 @@ extension XGItems: XGEnumerable, Equatable {
 		return index.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Items"
 	}
 	

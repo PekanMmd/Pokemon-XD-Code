@@ -84,6 +84,42 @@ let kPBRDOLFreeSpaceEnd: Int = {
 	}
 }()
 
+let kXDDOLFreeSpaceStart: Int = {
+	switch region {
+	case .US: return 0xd39d0 - kDolToRAMOffsetDifference
+	case .EU: return 0xd4fec - kDolToRAMOffsetDifference
+	case .JP: return 0xcfef4 - kDolToRAMOffsetDifference
+	case .OtherGame: return 0
+	}
+}()
+
+let kXDDOLFreeSpaceEnd: Int = {
+	switch region {
+	case .US: return 0xd9c30 - kDolToRAMOffsetDifference
+	case .EU: return 0xdb240 - kDolToRAMOffsetDifference
+	case .JP: return 0xd6150 - kDolToRAMOffsetDifference
+	case .OtherGame: return 0
+	}
+}()
+
+let kCOLDOLFreeSpaceStart: Int = {
+	switch region {
+	case .US: return 0xbe348 - kDolToRAMOffsetDifference
+	case .EU: return 0xc1948 - kDolToRAMOffsetDifference
+	case .JP: return 0xbb4a8 - kDolToRAMOffsetDifference
+	case .OtherGame: return 0
+	}
+}()
+
+let kCOLDOLFreeSpaceEnd: Int = {
+	switch region {
+	case .US: return 0xc45a0 - kDolToRAMOffsetDifference
+	case .EU: return 0xc7ba0 - kDolToRAMOffsetDifference
+	case .JP: return 0xc16fc - kDolToRAMOffsetDifference
+	case .OtherGame: return 0
+	}
+}()
+
 let moveEffectTableStartRAM = 0x417edf // XD US
 let moveEffectTableStartDOL = moveEffectTableStartRAM - kDolTableToRAMOffsetDifference // XD US
 

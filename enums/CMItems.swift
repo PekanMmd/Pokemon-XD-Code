@@ -148,7 +148,7 @@ extension XGItems: XGEnumerable {
 		return index.string
 	}
 	
-	static var enumerableClassName: String {
+	static var className: String {
 		return "Items"
 	}
 	
