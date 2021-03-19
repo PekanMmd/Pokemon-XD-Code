@@ -13,4 +13,6 @@ let trainerClassesStruct = GoDStruct(name: "TrainerClasses", format: [
 	.word(name: "Unknown", description: "Usually 5 but occasionally 8", type: .uint)
 ])
 
-let trainerClassesTable = CommonStructTable(index: CommonIndexes.TrainerClasses.rawValue, properties: trainerClassesStruct)
+var trainerClassesTable = {
+	CommonStructTable(index: CommonIndexes.TrainerClasses.rawValue, properties: trainerClassesStruct)
+}

@@ -65,6 +65,9 @@ class XGISO: NSObject {
 		loadedFiles.removeAll()
 		loadedStringTables.removeAll()
 		loadedFsys.removeAll()
+		allStringTables.removeAll()
+		stringsLoaded = false
+		GoDDataTable.clearCache()
 
 		guard file.exists else {
 			inputISOFile = nil

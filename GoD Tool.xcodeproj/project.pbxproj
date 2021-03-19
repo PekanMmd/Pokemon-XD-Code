@@ -5452,7 +5452,6 @@
 		B20EEA1F21DC45E100E87D01 /* PBR_body_490.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_490.png; sourceTree = "<group>"; };
 		B20EEA2021DC45E100E87D01 /* PBR_body_484.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_484.png; sourceTree = "<group>"; };
 		B20EEA2521E9203600E87D01 /* PBR Tool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PBR Tool.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B20EEA2721E9203600E87D01 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B20EEA2B21E9203A00E87D01 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B20EEA2E21E9203A00E87D01 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B20EEA3021E9203A00E87D01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -8299,7 +8298,6 @@
 			children = (
 				1CC362B424BA57CE005D7B4A /* View Controllers */,
 				1CA238AA24116A47000E56AB /* storyboards */,
-				B20EEA2721E9203600E87D01 /* AppDelegate.swift */,
 				B20EEA2B21E9203A00E87D01 /* Assets.xcassets */,
 				B20EEA2D21E9203A00E87D01 /* Main.storyboard */,
 				B20EEA3021E9203A00E87D01 /* Info.plist */,

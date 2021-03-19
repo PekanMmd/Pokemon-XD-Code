@@ -132,7 +132,8 @@ final class XGFsys : NSObject {
 		}
 
 		// If any files have duplicate names, append an index number
-		if names.count > 0 {
+		let hasDuplicates = Array(Set(names)).count != names.count
+		if names.count > 0, hasDuplicates {
 			for mainIndex in 0 ..< names.count - 1 {
 				let currentFilename = names[mainIndex]
 				for subIndex in (mainIndex + 1) ..< names.count {
@@ -209,6 +210,7 @@ final class XGFsys : NSObject {
 	}
 	
 	func fileNameForFileWithIndex(index: Int) -> String? {
+		guard filenames != nil else { return nil }
 		return index < filenames.count ? filenames[index] : nil
 	}
 
@@ -378,7 +380,7 @@ final class XGFsys : NSObject {
 		let start = startOffsetForFile(index)
 		let length = sizeForFile(index: index)
 		
-		var filename = fileNameForFileWithIndex(index: index)!
+		var filename = fileNameForFileWithIndex(index: index) ?? "none.bin" // Used when file is required while loading fsys
 		if isFileCompressed(index: index) {
 			filename = filename + XGFileTypes.lzss.fileExtension
 		}
@@ -398,7 +400,7 @@ final class XGFsys : NSObject {
 
 		let decompressedData = XGLZSS.decode(data: fileData)
 		
-		let filename = fileNameForFileWithIndex(index: index)!
+		let filename = fileNameForFileWithIndex(index: index) ?? "none.bin"
 		decompressedData.file = .nameAndFolder(filename, .Documents)
 		
 		return decompressedData

@@ -275,39 +275,46 @@ class GoDDataTable: CustomStringConvertible {
 		return dataTablesByFile[file.path] ?? GoDDataTable(file: file)
 	}
 
-	static var pokemonIcons = tableForFile(.indexAndFsysName(region == .JP ? 6 : 0, "common"))
-	static var countries = tableForFile(.indexAndFsysName(region == .JP ? 7 : 1, "common"))
-	static var shopItems = tableForFile(.indexAndFsysName(region == .JP ? 8 : 2, "common"))
-	static var colosseumsUnknown = region == .JP ? nil : tableForFile(.indexAndFsysName(3, "common")) //Doesn't exist in JP I,) "common")O
-	static var typeMatchups = tableForFile(.indexAndFsysName(region == .JP ? 10 : 4, "common"))
-	static var expTables = tableForFile(.indexAndFsysName(region == .JP ? 11 : 5, "common"))
-	static var pokemonModels = tableForFile(.indexAndFsysName(region == .JP ? 12 : 6, "common"))
-	static var pokemonModelEffect = tableForFile(.indexAndFsysName(region == .JP ? 13 : 7, "common"))
-	static var pokemonBaseStats = tableForFile(.indexAndFsysName(region == .JP ? 14 : 8, "common"))
-	static var evolutions = tableForFile(.indexAndFsysName(region == .JP ? 15 : 9, "common"))
-	static var ballModels = tableForFile(.indexAndFsysName(region == .JP ? 23 : 10, "common"))
-	static var colosseumsRules = tableForFile(.indexAndFsysName(region == .JP ? 24 : 11, "common"))
-	static var fightAIBattlePass = tableForFile(.indexAndFsysName(region == .JP ? 25 : 12, "common"))
-	static var fightAIExpectData = tableForFile(.indexAndFsysName(region == .JP ? 26 : 13, "common"))
-	static var fightAIPokemonPartData = tableForFile(.indexAndFsysName(region == .JP ? 27 : 14, "common"))
-	static var fightAIValues = tableForFile(.indexAndFsysName(region == .JP ? 28 : 15, "common"))
-	static var fightAIMoveData = tableForFile(.indexAndFsysName(region == .JP ? 29 : 16, "common"))
-	static var flagIDs = tableForFile(.indexAndFsysName(region == .JP ? 0 : 17, "common"))
-	static var floorEvent = tableForFile(.indexAndFsysName(region == .JP ? 1 : 18, "common"))
-	static var items = tableForFile(.indexAndFsysName(region == .JP ? 2 : 19, "common"))
-	static var menuBattleRules = tableForFile(.indexAndFsysName(region == .JP ? 3 : 20, "common"))
-	static var pokemonBodies = tableForFile(.indexAndFsysName(region == .JP ? 4 : 21, "common"))
-	static var pokemonFaces = tableForFile(.indexAndFsysName(region == .JP ? 5 : 22, "common"))
-	static var abilities = tableForFile(.indexAndFsysName(region == .JP ? 17 : 23, "common"))
-	static var trainerCustomParts = tableForFile(.indexAndFsysName(region == .JP ? 18 : 24, "common"))
-	static var trainerCustomTable = tableForFile(.indexAndFsysName(region == .JP ? 19 : 25, "common"))
-	static var trainerEvent = tableForFile(.indexAndFsysName(region == .JP ? 20 : 26, "common"))
-	static var trainerModels = tableForFile(.indexAndFsysName(region == .JP ? 21 : 27, "common"))
-	static var trainerTitles = tableForFile(.indexAndFsysName(region == .JP ? 22 : 28, "common"))
-	static var TMs = tableForFile(.indexAndFsysName(region == .JP ? 30 : 29, "common"))
-	static var moves = tableForFile(.indexAndFsysName(region == .JP ? 31 : 30, "common"))
-	static var tutorialData = tableForFile(.indexAndFsysName(region == .JP ? 9 : 31, "common"))
-	static var levelUpMoves = tableForFile(.indexAndFsysName(region == .JP ? 16 : 32, "common"))
+	class func clearCache() {
+		dataTablesByFile.removeAll()
+		#if !GAME_PBR
+		dataTablesByIndex.removeAll()
+		#endif
+	}
+
+	static var pokemonIcons: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 6 : 0, "common")) }
+	static var countries: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 7 : 1, "common")) }
+	static var shopItems: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 8 : 2, "common")) }
+	static var colosseumsUnknown: GoDDataTable? { region == .JP ? nil : tableForFile(.indexAndFsysName(3, "common")) } //Doesn't exist in JP I,) "common")O
+	static var typeMatchups: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 10 : 4, "common")) }
+	static var expTables: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 11 : 5, "common")) }
+	static var pokemonModels: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 12 : 6, "common")) }
+	static var pokemonModelEffect: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 13 : 7, "common")) }
+	static var pokemonBaseStats: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 14 : 8, "common")) }
+	static var evolutions: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 15 : 9, "common")) }
+	static var ballModels: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 23 : 10, "common")) }
+	static var colosseumsRules: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 24 : 11, "common")) }
+	static var fightAIBattlePass: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 25 : 12, "common")) }
+	static var fightAIExpectData: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 26 : 13, "common")) }
+	static var fightAIPokemonPartData: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 27 : 14, "common")) }
+	static var fightAIValues: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 28 : 15, "common")) }
+	static var fightAIMoveData: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 29 : 16, "common")) }
+	static var flagIDs: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 0 : 17, "common")) }
+	static var floorEvent: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 1 : 18, "common")) }
+	static var items: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 2 : 19, "common")) }
+	static var menuBattleRules: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 3 : 20, "common")) }
+	static var pokemonBodies: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 4 : 21, "common")) }
+	static var pokemonFaces: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 5 : 22, "common")) }
+	static var abilities: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 17 : 23, "common")) }
+	static var trainerCustomParts: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 18 : 24, "common")) }
+	static var trainerCustomTable: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 19 : 25, "common")) }
+	static var trainerEvent: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 20 : 26, "common")) }
+	static var trainerModels: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 21 : 27, "common")) }
+	static var trainerTitles: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 22 : 28, "common")) }
+	static var TMs: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 30 : 29, "common")) }
+	static var moves: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 31 : 30, "common")) }
+	static var tutorialData: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 9 : 31, "common")) }
+	static var levelUpMoves: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 16 : 32, "common")) }
 	#endif
 	
 }

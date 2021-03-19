@@ -40,7 +40,7 @@ var loadableFiles: [String] {
 #endif
 
 var loadableFsys: [String] {
-	[XGFiles.fsys("people_archive").path]
+	[XGFiles.fsys("people_archive").path, XGFiles.fsys("common").path, XGFiles.fsys("deck").path]
 }
 
 
@@ -262,7 +262,7 @@ indirect enum XGFiles {
 		#endif
 		
 		
-		if !fileDecodingMode, self == .iso || loadableFiles.contains(self.path) {
+		if !fileDecodingMode, (self == .iso && console == .ngc) || loadableFiles.contains(self.path) {
 			if let d = data {
 				loadedFiles[self.path] = d
 			}

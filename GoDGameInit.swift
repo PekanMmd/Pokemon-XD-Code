@@ -51,7 +51,7 @@ var documentsPath = {
 func loadRegion() {
 	region = { XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .OtherGame }()
 }
-var region = { XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .OtherGame }()
+var region = XGRegions.OtherGame
 
 
 enum Environment {

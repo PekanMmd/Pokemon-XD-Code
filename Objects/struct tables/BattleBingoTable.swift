@@ -40,5 +40,5 @@ let battleBingoCardStruct = GoDStruct(name: "BattleBingoCard", format: [
 	.short(name: "Padding", description: "Unused padding bytes", type: .null)
 ])
 
-let battleBingoTable = CommonStructTable(index: 0, properties: battleBingoCardStruct)
+var battleBingoTable = CommonStructTable(index: 0, properties: battleBingoCardStruct)
 
