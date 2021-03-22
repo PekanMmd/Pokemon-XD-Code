@@ -323,6 +323,29 @@
 		1C54189E25BA30BE00CCE8E0 /* XGScriptOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBCE1F49A1FE0075C6D2 /* XGScriptOps.swift */; };
 		1C54189F25BA30BE00CCE8E0 /* XGScriptOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBCE1F49A1FE0075C6D2 /* XGScriptOps.swift */; };
 		1C5418A025BA30BF00CCE8E0 /* XGScriptOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBCE1F49A1FE0075C6D2 /* XGScriptOps.swift */; };
+		1C56F51D2604D86B00CF1DEE /* CommonStructTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F51C2604D86B00CF1DEE /* CommonStructTables.swift */; };
+		1C56F51E2604D86B00CF1DEE /* CommonStructTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F51C2604D86B00CF1DEE /* CommonStructTables.swift */; };
+		1C56F51F2604D86C00CF1DEE /* CommonStructTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F51C2604D86B00CF1DEE /* CommonStructTables.swift */; };
+		1C56F52A2604DB3800CF1DEE /* DeckStructTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F5292604DB3800CF1DEE /* DeckStructTable.swift */; };
+		1C56F52B2604DB3800CF1DEE /* DeckStructTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F5292604DB3800CF1DEE /* DeckStructTable.swift */; };
+		1C56F52C2604DB3800CF1DEE /* DeckStructTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F5292604DB3800CF1DEE /* DeckStructTable.swift */; };
+		1C56F57F2605DE2C00CF1DEE /* PokemonStatsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F57E2605DE2C00CF1DEE /* PokemonStatsTable.swift */; };
+		1C56F5802605DE2C00CF1DEE /* PokemonStatsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F57E2605DE2C00CF1DEE /* PokemonStatsTable.swift */; };
+		1C56F5812605DE2C00CF1DEE /* PokemonStatsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F57E2605DE2C00CF1DEE /* PokemonStatsTable.swift */; };
+		1C56F58B26067C6C00CF1DEE /* ISO.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238982411459B000E56AB /* ISO.storyboard */; };
+		1C56F5A726067C8900CF1DEE /* HexCalculator.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA2386A24113822000E56AB /* HexCalculator.storyboard */; };
+		1C56F5C326067CA300CF1DEE /* ValueContext.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA23888241140D7000E56AB /* ValueContext.storyboard */; };
+		1C56F5CD26067CAD00CF1DEE /* Patches.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA2386E24113823000E56AB /* Patches.storyboard */; };
+		1C56F5D726067CCE00CF1DEE /* Help.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA2386B24113822000E56AB /* Help.storyboard */; };
+		1C56F5EA26067CE700CF1DEE /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238B92411765C000E56AB /* Messages.storyboard */; };
+		1C56F61826067D4800CF1DEE /* Strings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA2389524114583000E56AB /* Strings.storyboard */; };
+		1C56F62226067D4F00CF1DEE /* TextureImporter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA2386D24113823000E56AB /* TextureImporter.storyboard */; };
+		1C56F62D2606994800CF1DEE /* MoveStatsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F62C2606994800CF1DEE /* MoveStatsTable.swift */; };
+		1C56F62E2606994800CF1DEE /* MoveStatsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F62C2606994800CF1DEE /* MoveStatsTable.swift */; };
+		1C56F62F2606994800CF1DEE /* MoveStatsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F62C2606994800CF1DEE /* MoveStatsTable.swift */; };
+		1C56F64C2606A96300CF1DEE /* ItemStatsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F64B2606A96300CF1DEE /* ItemStatsTable.swift */; };
+		1C56F64D2606A96300CF1DEE /* ItemStatsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F64B2606A96300CF1DEE /* ItemStatsTable.swift */; };
+		1C56F64E2606A96300CF1DEE /* ItemStatsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C56F64B2606A96300CF1DEE /* ItemStatsTable.swift */; };
 		1C6295D8242A938C0085C22F /* PBR_body_000.png in Resources */ = {isa = PBXBuildFile; fileRef = 1C6295D7242A938B0085C22F /* PBR_body_000.png */; };
 		1C6295DA242A93BC0085C22F /* PBR_face_000.png in Resources */ = {isa = PBXBuildFile; fileRef = 1C6295D9242A93BC0085C22F /* PBR_face_000.png */; };
 		1C6295E0242A948C0085C22F /* Original Pokemon.json in Resources */ = {isa = PBXBuildFile; fileRef = 1C6295DD242A948B0085C22F /* Original Pokemon.json */; };
@@ -489,15 +512,7 @@
 		1CA238A62411470C000E56AB /* Item.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238A42411470C000E56AB /* Item.storyboard */; };
 		1CA238A824114725000E56AB /* Pokespot.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238A724114725000E56AB /* Pokespot.storyboard */; };
 		1CA238A924114725000E56AB /* Pokespot.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238A724114725000E56AB /* Pokespot.storyboard */; };
-		1CA238C4241176BD000E56AB /* Strings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238BB241176BB000E56AB /* Strings.storyboard */; };
-		1CA238C5241176BD000E56AB /* Script.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238BC241176BC000E56AB /* Script.storyboard */; };
 		1CA238C6241176BD000E56AB /* Type.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238BD241176BC000E56AB /* Type.storyboard */; };
-		1CA238C7241176BD000E56AB /* TextureImporter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238BE241176BC000E56AB /* TextureImporter.storyboard */; };
-		1CA238C8241176BD000E56AB /* HexCalculator.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238BF241176BC000E56AB /* HexCalculator.storyboard */; };
-		1CA238C9241176BD000E56AB /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238C0241176BC000E56AB /* Messages.storyboard */; };
-		1CA238CA241176BD000E56AB /* ValueContext.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238C1241176BD000E56AB /* ValueContext.storyboard */; };
-		1CA238CB241176BD000E56AB /* ISO.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238C2241176BD000E56AB /* ISO.storyboard */; };
-		1CA238CC241176BD000E56AB /* Help.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238C3241176BD000E56AB /* Help.storyboard */; };
 		1CA238CD24118C17000E56AB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B20EEA2D21E9203A00E87D01 /* Main.storyboard */; };
 		1CA238CE24118CAC000E56AB /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238B92411765C000E56AB /* Messages.storyboard */; };
 		1CA238CF24118CAD000E56AB /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238B92411765C000E56AB /* Messages.storyboard */; };
@@ -528,7 +543,6 @@
 		1CC362AE24BA1E58005D7B4A /* PBRTypeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AD24BA1E58005D7B4A /* PBRTypeManager.swift */; };
 		1CC362B024BA5560005D7B4A /* PBRDolPatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AF24BA5560005D7B4A /* PBRDolPatcher.swift */; };
 		1CC362B124BA5560005D7B4A /* PBRDolPatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AF24BA5560005D7B4A /* PBRDolPatcher.swift */; };
-		1CC362B324BA56AA005D7B4A /* Patches.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CC362B224BA56AA005D7B4A /* Patches.storyboard */; };
 		1CC362B624BA57EB005D7B4A /* GoDPatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362B524BA57EB005D7B4A /* GoDPatchViewController.swift */; };
 		1CC362B724BA60B9005D7B4A /* PBRTypeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AD24BA1E58005D7B4A /* PBRTypeManager.swift */; };
 		1CC362B824BF5114005D7B4A /* GoDStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F88F1F49CD050075C6D2 /* GoDStatsViewController.swift */; };
@@ -609,16 +623,12 @@
 		1CCFFF4A255501890082BFE2 /* GoDKeyCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A75213D4D9500137C37 /* GoDKeyCodes.swift */; };
 		1CCFFF5D255501BE0082BFE2 /* PBRTrainerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C521D12CDA009C707C /* PBRTrainerModels.swift */; };
 		1CCFFF5E255501BE0082BFE2 /* PBRUnicodeCharacters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C821D12CDA009C707C /* PBRUnicodeCharacters.swift */; };
-		1CCFFF5F255501BE0082BFE2 /* PBRDecks.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50BB21D12CDA009C707C /* PBRDecks.swift */; };
 		1CCFFF60255501BE0082BFE2 /* PBRMoveCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A510221D3CC0F009C707C /* PBRMoveCategory.swift */; };
 		1CCFFF62255501BE0082BFE2 /* PBRMoveTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50F921D2C6D7009C707C /* PBRMoveTypes.swift */; };
 		1CCFFF63255501BE0082BFE2 /* PBRSpecialStringCharacters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50BF21D12CDA009C707C /* PBRSpecialStringCharacters.swift */; };
 		1CCFFF64255501BE0082BFE2 /* PBRExpr.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A511A21D410C2009C707C /* PBRExpr.swift */; };
 		1CCFFF65255501BE0082BFE2 /* PBRPokemonSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20EE63F21D6E2B000E87D01 /* PBRPokemonSprite.swift */; };
 		1CCFFF66255501BE0082BFE2 /* PBRAbilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C721D12CDA009C707C /* PBRAbilities.swift */; };
-		1CCFFF67255501BE0082BFE2 /* PBRDeckPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C121D12CDA009C707C /* PBRDeckPokemon.swift */; };
-		1CCFFF68255501BE0082BFE2 /* PBRDeckTrainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C021D12CDA009C707C /* PBRDeckTrainer.swift */; };
-		1CCFFF69255501BE0082BFE2 /* PBRContestAppeals.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24E5FB622388DD100C55758 /* PBRContestAppeals.swift */; };
 		1CCFFF6A255501BE0082BFE2 /* PBRPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C221D12CDA009C707C /* PBRPokemon.swift */; };
 		1CCFFF6B255501BE0082BFE2 /* PBRItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50BE21D12CDA009C707C /* PBRItems.swift */; };
 		1CCFFF6D255501BE0082BFE2 /* PBRTMs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20EE63D21D6DB1E00E87D01 /* PBRTMs.swift */; };
@@ -1597,9 +1607,6 @@
 		B20EE64221D97F5A00E87D01 /* XGWormadamForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20EE64121D97F5A00E87D01 /* XGWormadamForms.swift */; };
 		B20EEA2C21E9203A00E87D01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B20EEA2B21E9203A00E87D01 /* Assets.xcassets */; };
 		B20EEA3521E920F400E87D01 /* PBRAbilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C721D12CDA009C707C /* PBRAbilities.swift */; };
-		B20EEA3621E920F400E87D01 /* PBRDeckPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C121D12CDA009C707C /* PBRDeckPokemon.swift */; };
-		B20EEA3721E920F400E87D01 /* PBRDecks.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50BB21D12CDA009C707C /* PBRDecks.swift */; };
-		B20EEA3821E920F400E87D01 /* PBRDeckTrainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C021D12CDA009C707C /* PBRDeckTrainer.swift */; };
 		B20EEA3921E920F400E87D01 /* PBREffectivenessValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50F721D2BE89009C707C /* PBREffectivenessValues.swift */; };
 		B20EEA3A21E920F400E87D01 /* PBREvolutionMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C321D12CDA009C707C /* PBREvolutionMethods.swift */; };
 		B20EEA3B21E920F400E87D01 /* PBRExpr.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A511A21D410C2009C707C /* PBRExpr.swift */; };
@@ -2796,12 +2803,9 @@
 		B24A507B21D126BB009C707C /* XGPNGBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A506E21D126BA009C707C /* XGPNGBlock.swift */; };
 		B24A507C21D126BB009C707C /* XGPNGBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A506E21D126BA009C707C /* XGPNGBlock.swift */; };
 		B24A507D21D129A5009C707C /* XGNatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBC91F49A1FE0075C6D2 /* XGNatures.swift */; };
-		B24A50D921D12CDA009C707C /* PBRDecks.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50BB21D12CDA009C707C /* PBRDecks.swift */; };
 		B24A50DA21D12CDA009C707C /* PBRFileTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50BC21D12CDA009C707C /* PBRFileTypes.swift */; };
 		B24A50DC21D12CDA009C707C /* PBRItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50BE21D12CDA009C707C /* PBRItems.swift */; };
 		B24A50DD21D12CDA009C707C /* PBRSpecialStringCharacters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50BF21D12CDA009C707C /* PBRSpecialStringCharacters.swift */; };
-		B24A50DE21D12CDA009C707C /* PBRDeckTrainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C021D12CDA009C707C /* PBRDeckTrainer.swift */; };
-		B24A50DF21D12CDA009C707C /* PBRDeckPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C121D12CDA009C707C /* PBRDeckPokemon.swift */; };
 		B24A50E021D12CDA009C707C /* PBRPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C221D12CDA009C707C /* PBRPokemon.swift */; };
 		B24A50E121D12CDA009C707C /* PBREvolutionMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C321D12CDA009C707C /* PBREvolutionMethods.swift */; };
 		B24A50E321D12CDA009C707C /* PBRTrainerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50C521D12CDA009C707C /* PBRTrainerModels.swift */; };
@@ -2846,8 +2850,6 @@
 		B24CBAB2212FF3C400481C1D /* XGBattleTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24CBAAF212FF3C400481C1D /* XGBattleTypes.swift */; };
 		B24E5FB42238879C00C55758 /* PBRMoveTargets.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24E5FB32238879C00C55758 /* PBRMoveTargets.swift */; };
 		B24E5FB52238879C00C55758 /* PBRMoveTargets.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24E5FB32238879C00C55758 /* PBRMoveTargets.swift */; };
-		B24E5FB722388DD100C55758 /* PBRContestAppeals.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24E5FB622388DD100C55758 /* PBRContestAppeals.swift */; };
-		B24E5FB822388DD100C55758 /* PBRContestAppeals.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24E5FB622388DD100C55758 /* PBRContestAppeals.swift */; };
 		B252D95B1F98AF0400794FCE /* XGRelocationTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B252D95A1F98AF0400794FCE /* XGRelocationTable.swift */; };
 		B2560A71213D4CF000137C37 /* XGVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A70213D4CF000137C37 /* XGVertex.swift */; };
 		B2560A72213D4D4A00137C37 /* XGVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A70213D4CF000137C37 /* XGVertex.swift */; };
@@ -4300,6 +4302,11 @@
 		1C4E16BE25405CCD00EA318B /* XGImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGImage.swift; sourceTree = "<group>"; };
 		1C524D00234B7F0800A9659A /* GoDEnumerablePopUpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDEnumerablePopUpButton.swift; sourceTree = "<group>"; };
 		1C54184C25B49C9500CCE8E0 /* XGMapRel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGMapRel.swift; sourceTree = "<group>"; };
+		1C56F51C2604D86B00CF1DEE /* CommonStructTables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonStructTables.swift; sourceTree = "<group>"; };
+		1C56F5292604DB3800CF1DEE /* DeckStructTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckStructTable.swift; sourceTree = "<group>"; };
+		1C56F57E2605DE2C00CF1DEE /* PokemonStatsTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonStatsTable.swift; sourceTree = "<group>"; };
+		1C56F62C2606994800CF1DEE /* MoveStatsTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveStatsTable.swift; sourceTree = "<group>"; };
+		1C56F64B2606A96300CF1DEE /* ItemStatsTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStatsTable.swift; sourceTree = "<group>"; };
 		1C6295D7242A938B0085C22F /* PBR_body_000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_000.png; sourceTree = "<group>"; };
 		1C6295D9242A93BC0085C22F /* PBR_face_000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_face_000.png; sourceTree = "<group>"; };
 		1C6295DD242A948B0085C22F /* Original Pokemon.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Original Pokemon.json"; sourceTree = "<group>"; };
@@ -4344,15 +4351,7 @@
 		1CA238A42411470C000E56AB /* Item.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Item.storyboard; sourceTree = "<group>"; };
 		1CA238A724114725000E56AB /* Pokespot.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Pokespot.storyboard; sourceTree = "<group>"; };
 		1CA238B92411765C000E56AB /* Messages.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Messages.storyboard; sourceTree = "<group>"; };
-		1CA238BB241176BB000E56AB /* Strings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Strings.storyboard; sourceTree = "<group>"; };
-		1CA238BC241176BC000E56AB /* Script.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Script.storyboard; sourceTree = "<group>"; };
 		1CA238BD241176BC000E56AB /* Type.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Type.storyboard; sourceTree = "<group>"; };
-		1CA238BE241176BC000E56AB /* TextureImporter.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TextureImporter.storyboard; sourceTree = "<group>"; };
-		1CA238BF241176BC000E56AB /* HexCalculator.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = HexCalculator.storyboard; sourceTree = "<group>"; };
-		1CA238C0241176BC000E56AB /* Messages.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Messages.storyboard; sourceTree = "<group>"; };
-		1CA238C1241176BD000E56AB /* ValueContext.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ValueContext.storyboard; sourceTree = "<group>"; };
-		1CA238C2241176BD000E56AB /* ISO.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ISO.storyboard; sourceTree = "<group>"; };
-		1CA238C3241176BD000E56AB /* Help.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Help.storyboard; sourceTree = "<group>"; };
 		1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumerableDocumentable.swift; sourceTree = "<group>"; };
 		1CB3B875250988710069402D /* wimgt */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = wimgt; sourceTree = "<group>"; };
 		1CB3B87C250D512A0069402D /* Battles.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Battles.storyboard; sourceTree = "<group>"; };
@@ -4360,7 +4359,6 @@
 		1CB3B882250D8E1C0069402D /* GoDBattleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDBattleViewController.swift; sourceTree = "<group>"; };
 		1CC362AD24BA1E58005D7B4A /* PBRTypeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRTypeManager.swift; sourceTree = "<group>"; };
 		1CC362AF24BA5560005D7B4A /* PBRDolPatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRDolPatcher.swift; sourceTree = "<group>"; };
-		1CC362B224BA56AA005D7B4A /* Patches.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Patches.storyboard; sourceTree = "<group>"; };
 		1CC362B524BA57EB005D7B4A /* GoDPatchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDPatchViewController.swift; sourceTree = "<group>"; };
 		1CC362BA24BFDA5E005D7B4A /* Stats.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Stats.storyboard; sourceTree = "<group>"; };
 		1CC362BF24BFDC53005D7B4A /* GoDEnumerablePopUpButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDEnumerablePopUpButtons.swift; sourceTree = "<group>"; };
@@ -5482,15 +5480,11 @@
 		B24A505D21D12654009C707C /* XGColour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGColour.swift; sourceTree = "<group>"; };
 		B24A506521D12667009C707C /* XGResources.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGResources.swift; sourceTree = "<group>"; };
 		B24A506E21D126BA009C707C /* XGPNGBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGPNGBlock.swift; sourceTree = "<group>"; };
-		B24A50BB21D12CDA009C707C /* PBRDecks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRDecks.swift; sourceTree = "<group>"; };
 		B24A50BC21D12CDA009C707C /* PBRFileTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRFileTypes.swift; sourceTree = "<group>"; };
 		B24A50BE21D12CDA009C707C /* PBRItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRItems.swift; sourceTree = "<group>"; };
 		B24A50BF21D12CDA009C707C /* PBRSpecialStringCharacters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRSpecialStringCharacters.swift; sourceTree = "<group>"; };
-		B24A50C021D12CDA009C707C /* PBRDeckTrainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRDeckTrainer.swift; sourceTree = "<group>"; };
-		B24A50C121D12CDA009C707C /* PBRDeckPokemon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRDeckPokemon.swift; sourceTree = "<group>"; };
 		B24A50C221D12CDA009C707C /* PBRPokemon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRPokemon.swift; sourceTree = "<group>"; };
 		B24A50C321D12CDA009C707C /* PBREvolutionMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBREvolutionMethods.swift; sourceTree = "<group>"; };
-		B24A50C421D12CDA009C707C /* PBRFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRFiles.swift; sourceTree = "<group>"; };
 		B24A50C521D12CDA009C707C /* PBRTrainerModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRTrainerModels.swift; sourceTree = "<group>"; };
 		B24A50C621D12CDA009C707C /* PBRMoves.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRMoves.swift; sourceTree = "<group>"; };
 		B24A50C721D12CDA009C707C /* PBRAbilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRAbilities.swift; sourceTree = "<group>"; };
@@ -5529,7 +5523,6 @@
 		B24CBAA9212F3DC900481C1D /* XGTrainerContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGTrainerContoller.swift; sourceTree = "<group>"; };
 		B24CBAAF212FF3C400481C1D /* XGBattleTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleTypes.swift; sourceTree = "<group>"; };
 		B24E5FB32238879C00C55758 /* PBRMoveTargets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRMoveTargets.swift; sourceTree = "<group>"; };
-		B24E5FB622388DD100C55758 /* PBRContestAppeals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRContestAppeals.swift; sourceTree = "<group>"; };
 		B24E5FB92238E3E100C55758 /* CMScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMScript.swift; sourceTree = "<group>"; };
 		B252D95A1F98AF0400794FCE /* XGRelocationTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGRelocationTable.swift; sourceTree = "<group>"; };
 		B2560A70213D4CF000137C37 /* XGVertex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGVertex.swift; sourceTree = "<group>"; };
@@ -6947,6 +6940,7 @@
 		1C7169602602A111000F1456 /* struct parsing */ = {
 			isa = PBXGroup;
 			children = (
+				1C56F51C2604D86B00CF1DEE /* CommonStructTables.swift */,
 				1C7169B42602CB5F000F1456 /* GoDCommonStructTable.swift */,
 				1C71697C2602AF3A000F1456 /* GoDStruct.swift */,
 				1C7169982602AF57000F1456 /* GoDStructData.swift */,
@@ -6969,6 +6963,10 @@
 			isa = PBXGroup;
 			children = (
 				1C716AA42603EBF8000F1456 /* StructTablesList.swift */,
+				1C56F5292604DB3800CF1DEE /* DeckStructTable.swift */,
+				1C56F57E2605DE2C00CF1DEE /* PokemonStatsTable.swift */,
+				1C56F62C2606994800CF1DEE /* MoveStatsTable.swift */,
+				1C56F64B2606A96300CF1DEE /* ItemStatsTable.swift */,
 			);
 			path = structs;
 			sourceTree = "<group>";
@@ -7007,18 +7005,9 @@
 			isa = PBXGroup;
 			children = (
 				1C2000172596947400A7CF7D /* TrainerPokemon.storyboard */,
-				1CA238C3241176BD000E56AB /* Help.storyboard */,
-				1CA238BF241176BC000E56AB /* HexCalculator.storyboard */,
-				1CA238C2241176BD000E56AB /* ISO.storyboard */,
-				1CA238C0241176BC000E56AB /* Messages.storyboard */,
 				1C291C0425138A1400E3B124 /* Move.storyboard */,
-				1CC362B224BA56AA005D7B4A /* Patches.storyboard */,
-				1CA238BC241176BC000E56AB /* Script.storyboard */,
 				1CC362BA24BFDA5E005D7B4A /* Stats.storyboard */,
-				1CA238BB241176BB000E56AB /* Strings.storyboard */,
-				1CA238BE241176BC000E56AB /* TextureImporter.storyboard */,
 				1CA238BD241176BC000E56AB /* Type.storyboard */,
-				1CA238C1241176BD000E56AB /* ValueContext.storyboard */,
 			);
 			path = storyboards;
 			sourceTree = "<group>";
@@ -8344,14 +8333,9 @@
 			isa = PBXGroup;
 			children = (
 				B24A50C721D12CDA009C707C /* PBRAbilities.swift */,
-				B24E5FB622388DD100C55758 /* PBRContestAppeals.swift */,
-				B24A50C121D12CDA009C707C /* PBRDeckPokemon.swift */,
-				B24A50BB21D12CDA009C707C /* PBRDecks.swift */,
-				B24A50C021D12CDA009C707C /* PBRDeckTrainer.swift */,
 				B24A50F721D2BE89009C707C /* PBREffectivenessValues.swift */,
 				B24A50C321D12CDA009C707C /* PBREvolutionMethods.swift */,
 				B24A511A21D410C2009C707C /* PBRExpr.swift */,
-				B24A50C421D12CDA009C707C /* PBRFiles.swift */,
 				B24A50BC21D12CDA009C707C /* PBRFileTypes.swift */,
 				B24A50BE21D12CDA009C707C /* PBRItems.swift */,
 				B24A50C621D12CDA009C707C /* PBRMoves.swift */,
@@ -10953,7 +10937,6 @@
 				B20EEC2021EF77E100E87D01 /* PBR_body_246.png in Resources */,
 				B20EEE5B21EF77FD00E87D01 /* PBR_face_286.png in Resources */,
 				B20EED0621EF77FD00E87D01 /* PBR_face_438.png in Resources */,
-				1CA238C5241176BD000E56AB /* Script.storyboard in Resources */,
 				B20EEA9221EF77E100E87D01 /* PBR_body_462.png in Resources */,
 				B20EEBC521EF77E100E87D01 /* PBR_body_341.png in Resources */,
 				B20EEB6521EF77E100E87D01 /* PBR_body_411.png in Resources */,
@@ -11029,13 +11012,13 @@
 				B20EEAA921EF77E100E87D01 /* PBR_body_305.png in Resources */,
 				B20EEC9D21EF77FC00E87D01 /* PBR_face_129.png in Resources */,
 				B20EEC4521EF77E100E87D01 /* PBR_body_243.png in Resources */,
+				1C56F5EA26067CE700CF1DEE /* Messages.storyboard in Resources */,
 				B20EED5421EF77FD00E87D01 /* PBR_face_401.png in Resources */,
 				1CC362BB24BFDA5E005D7B4A /* Stats.storyboard in Resources */,
 				B20EEE6521EF77FD00E87D01 /* PBR_face_480.png in Resources */,
 				B20EEAA621EF77E100E87D01 /* PBR_body_311.png in Resources */,
 				B20EED6321EF77FD00E87D01 /* PBR_face_008.png in Resources */,
 				B20EEE6121EF77FD00E87D01 /* PBR_face_053.png in Resources */,
-				1CA238CB241176BD000E56AB /* ISO.storyboard in Resources */,
 				B20EEE0B21EF77FD00E87D01 /* PBR_face_040.png in Resources */,
 				B20EEBB421EF77E100E87D01 /* PBR_body_156.png in Resources */,
 				B20EED7B21EF77FD00E87D01 /* PBR_face_427.png in Resources */,
@@ -11104,7 +11087,6 @@
 				B20EECB121EF77FC00E87D01 /* PBR_face_464.png in Resources */,
 				B20EEE3321EF77FD00E87D01 /* PBR_face_253.png in Resources */,
 				B20EEC5721EF77E200E87D01 /* PBR_body_450.png in Resources */,
-				1CC362B324BA56AA005D7B4A /* Patches.storyboard in Resources */,
 				B20EEE5E21EF77FD00E87D01 /* PBR_face_245.png in Resources */,
 				B20EEE6B21EF77FD00E87D01 /* PBR_face_457.png in Resources */,
 				B20EEAEB21EF77E100E87D01 /* PBR_body_088.png in Resources */,
@@ -11152,6 +11134,7 @@
 				B20EEB9421EF77E100E87D01 /* PBR_body_153.png in Resources */,
 				B20EEC7421EF77E200E87D01 /* PBR_body_094.png in Resources */,
 				B20EEBBD21EF77E100E87D01 /* PBR_body_221.png in Resources */,
+				1C56F61826067D4800CF1DEE /* Strings.storyboard in Resources */,
 				B20EEE5021EF77FD00E87D01 /* PBR_face_126.png in Resources */,
 				B20EEC3521EF77E100E87D01 /* PBR_body_486.png in Resources */,
 				B20EEC9C21EF77FC00E87D01 /* PBR_face_471.png in Resources */,
@@ -11327,7 +11310,6 @@
 				B20EECA321EF77FC00E87D01 /* PBR_face_277.png in Resources */,
 				B20EEC1D21EF77E100E87D01 /* PBR_body_050.png in Resources */,
 				B20EEB3A21EF77E100E87D01 /* PBR_body_177.png in Resources */,
-				1CA238CC241176BD000E56AB /* Help.storyboard in Resources */,
 				B20EEB9721EF77E100E87D01 /* PBR_body_033.png in Resources */,
 				B20EEADC21EF77E100E87D01 /* PBR_body_129.png in Resources */,
 				B20EED1F21EF77FD00E87D01 /* PBR_face_407.png in Resources */,
@@ -11431,8 +11413,8 @@
 				B20EEE2021EF77FD00E87D01 /* PBR_face_337.png in Resources */,
 				B20EED1821EF77FD00E87D01 /* PBR_face_017.png in Resources */,
 				B20EECEC21EF77FD00E87D01 /* PBR_face_439.png in Resources */,
-				1CA238CA241176BD000E56AB /* ValueContext.storyboard in Resources */,
 				B20EEDA821EF77FD00E87D01 /* PBR_face_218.png in Resources */,
+				1C56F5CD26067CAD00CF1DEE /* Patches.storyboard in Resources */,
 				B20EEC4921EF77E100E87D01 /* PBR_body_295.png in Resources */,
 				B20EEDF021EF77FD00E87D01 /* PBR_face_240.png in Resources */,
 				B20EEB1A21EF77E100E87D01 /* PBR_body_358.png in Resources */,
@@ -11456,7 +11438,6 @@
 				B20EEE3021EF77FD00E87D01 /* PBR_face_079.png in Resources */,
 				B20EEDCD21EF77FD00E87D01 /* PBR_face_030.png in Resources */,
 				B20EED4221EF77FD00E87D01 /* PBR_face_164.png in Resources */,
-				1CA238C7241176BD000E56AB /* TextureImporter.storyboard in Resources */,
 				B20EEE3821EF77FD00E87D01 /* PBR_face_291.png in Resources */,
 				B20EEBA021EF77E100E87D01 /* PBR_body_146.png in Resources */,
 				B20EEC9621EF77FC00E87D01 /* PBR_face_315.png in Resources */,
@@ -11712,6 +11693,7 @@
 				B20EEB8F21EF77E100E87D01 /* PBR_body_437.png in Resources */,
 				B20EEE7D21EF782100E87D01 /* type_9.png in Resources */,
 				B20EEC9921EF77FC00E87D01 /* PBR_face_465.png in Resources */,
+				1C56F5D726067CCE00CF1DEE /* Help.storyboard in Resources */,
 				B20EED8D21EF77FD00E87D01 /* PBR_face_036.png in Resources */,
 				B20EED1121EF77FD00E87D01 /* PBR_face_228.png in Resources */,
 				B20EEA9021EF77E100E87D01 /* PBR_body_489.png in Resources */,
@@ -11791,6 +11773,7 @@
 				B20EED5F21EF77FD00E87D01 /* PBR_face_154.png in Resources */,
 				B20EEA2C21E9203A00E87D01 /* Assets.xcassets in Resources */,
 				B20EEC3421EF77E100E87D01 /* PBR_body_492.png in Resources */,
+				1C56F62226067D4F00CF1DEE /* TextureImporter.storyboard in Resources */,
 				B20EEB1121EF77E100E87D01 /* PBR_body_170.png in Resources */,
 				B20EED2821EF77FD00E87D01 /* PBR_face_198.png in Resources */,
 				B20EED8921EF77FD00E87D01 /* PBR_face_220.png in Resources */,
@@ -11851,7 +11834,6 @@
 				B20EED2321EF77FD00E87D01 /* PBR_face_371.png in Resources */,
 				B20EEE8421EF783C00E87D01 /* Item Cell.png in Resources */,
 				B20EEBB721EF77E100E87D01 /* PBR_body_036.png in Resources */,
-				1CA238C4241176BD000E56AB /* Strings.storyboard in Resources */,
 				B20EEB9F21EF77E100E87D01 /* PBR_body_026.png in Resources */,
 				B20EEC2B21EF77E100E87D01 /* PBR_body_125.png in Resources */,
 				B20EEC6621EF77E200E87D01 /* PBR_body_042.png in Resources */,
@@ -11879,6 +11861,7 @@
 				B20EED3121EF77FD00E87D01 /* PBR_face_006.png in Resources */,
 				B20EED5C21EF77FD00E87D01 /* PBR_face_395.png in Resources */,
 				B20EECE221EF77FD00E87D01 /* PBR_face_072.png in Resources */,
+				1C56F58B26067C6C00CF1DEE /* ISO.storyboard in Resources */,
 				B20EED7D21EF77FD00E87D01 /* PBR_face_355.png in Resources */,
 				B20EED0F21EF77FD00E87D01 /* PBR_face_016.png in Resources */,
 				B20EEC4C21EF77E100E87D01 /* PBR_body_054.png in Resources */,
@@ -11889,7 +11872,6 @@
 				B20EECAF21EF77FC00E87D01 /* PBR_face_316.png in Resources */,
 				B20EEE2E21EF77FD00E87D01 /* PBR_face_051.png in Resources */,
 				B20EECD921EF77FD00E87D01 /* PBR_face_073.png in Resources */,
-				1CA238C8241176BD000E56AB /* HexCalculator.storyboard in Resources */,
 				B20EED8021EF77FD00E87D01 /* PBR_face_143.png in Resources */,
 				B20EEAAD21EF77E100E87D01 /* PBR_body_475.png in Resources */,
 				B20EEDAB21EF77FD00E87D01 /* PBR_face_231.png in Resources */,
@@ -11908,6 +11890,8 @@
 				B20EED6621EF77FD00E87D01 /* PBR_face_222.png in Resources */,
 				B20EEBCA21EF77E100E87D01 /* PBR_body_396.png in Resources */,
 				B20EEB0A21EF77E100E87D01 /* PBR_body_213.png in Resources */,
+				1C56F5C326067CA300CF1DEE /* ValueContext.storyboard in Resources */,
+				1C56F5A726067C8900CF1DEE /* HexCalculator.storyboard in Resources */,
 				B20EEB7F21EF77E100E87D01 /* PBR_body_151.png in Resources */,
 				B20EED8221EF77FD00E87D01 /* PBR_face_180.png in Resources */,
 				B20EEDBE21EF77FD00E87D01 /* PBR_face_390.png in Resources */,
@@ -11932,7 +11916,6 @@
 				B20EEBE121EF77E100E87D01 /* PBR_body_168.png in Resources */,
 				B20EED4F21EF77FD00E87D01 /* PBR_face_165.png in Resources */,
 				B20EED0B21EF77FD00E87D01 /* PBR_face_374.png in Resources */,
-				1CA238C9241176BD000E56AB /* Messages.storyboard in Resources */,
 				B20EEB4A21EF77E100E87D01 /* PBR_body_360.png in Resources */,
 				B20EEC7821EF77E200E87D01 /* PBR_body_453.png in Resources */,
 				B20EEB6B21EF77E100E87D01 /* PBR_body_408.png in Resources */,
@@ -13272,21 +13255,21 @@
 				1CCFFE91255500110082BFE2 /* XGWormadamForms.swift in Sources */,
 				1C2001A225B3281400A7CF7D /* XGUtility.swift in Sources */,
 				1CCFFF60255501BE0082BFE2 /* PBRMoveCategory.swift in Sources */,
-				1CCFFF5F255501BE0082BFE2 /* PBRDecks.swift in Sources */,
 				1CCFFE5F2554FFF20082BFE2 /* XGNatures.swift in Sources */,
 				1C75103E25C8F66D00EAB706 /* XGFiles.swift in Sources */,
 				1CCFFF82255501E50082BFE2 /* PBRPokemonStats.swift in Sources */,
 				1CCFFF5E255501BE0082BFE2 /* PBRUnicodeCharacters.swift in Sources */,
 				1CCFFF5D255501BE0082BFE2 /* PBRTrainerModels.swift in Sources */,
+				1C56F64D2606A96300CF1DEE /* ItemStatsTable.swift in Sources */,
 				1C20003325A9585400A7CF7D /* XGTHP.swift in Sources */,
 				1CCFFF89255501E50082BFE2 /* PBRTypeManager.swift in Sources */,
 				1CCFFF8D255501E50082BFE2 /* PBRScriptInstruction.swift in Sources */,
 				1C75102A25C8EFB900EAB706 /* XGStringManager.swift in Sources */,
 				1CCFFE552554FFE40082BFE2 /* XGGenders.swift in Sources */,
 				1CCFFF65255501BE0082BFE2 /* PBRPokemonSprite.swift in Sources */,
+				1C56F51E2604D86B00CF1DEE /* CommonStructTables.swift in Sources */,
 				1CCFFF8F255501E50082BFE2 /* PBRTrainer.swift in Sources */,
 				1C20013F25B3222900A7CF7D /* GoDGameInit.swift in Sources */,
-				1CCFFF69255501BE0082BFE2 /* PBRContestAppeals.swift in Sources */,
 				1CCFFDDD2554FF6A0082BFE2 /* XGFoundationExtensions.swift in Sources */,
 				1CCFFDFB2554FF870082BFE2 /* PBRExtensions.swift in Sources */,
 				1C7169A02602AF57000F1456 /* GoDStructData.swift in Sources */,
@@ -13307,7 +13290,6 @@
 				1C716ADC2603FFD8000F1456 /* XGAssemblyCodeExtensions.swift in Sources */,
 				1C12C3A225C242AC0062FA65 /* XGGeneralExtensions.swift in Sources */,
 				1CCFFF0A255501380082BFE2 /* DummyThreadManager.swift in Sources */,
-				1CCFFF68255501BE0082BFE2 /* PBRDeckTrainer.swift in Sources */,
 				1CCFFECD2555010C0082BFE2 /* XGGSWTextures.swift in Sources */,
 				1CCFFF63255501BE0082BFE2 /* PBRSpecialStringCharacters.swift in Sources */,
 				1CCFFF71255501BE0082BFE2 /* PBRMoves.swift in Sources */,
@@ -13315,11 +13297,14 @@
 				1CCFFE872555000E0082BFE2 /* XGWeather.swift in Sources */,
 				1CCFFF7F255501E50082BFE2 /* PBRScriptCompiler.swift in Sources */,
 				1CCFFE372554FFD40082BFE2 /* XGEvolutionConditionType.swift in Sources */,
+				1C56F52B2604DB3800CF1DEE /* DeckStructTable.swift in Sources */,
 				1CCFFED7255501110082BFE2 /* XGLZSS.swift in Sources */,
 				1CCFFF70255501BE0082BFE2 /* PBREvolutionMethods.swift in Sources */,
+				1C56F62E2606994800CF1DEE /* MoveStatsTable.swift in Sources */,
 				1CCFFE192554FFC10082BFE2 /* XGBattleStyles.swift in Sources */,
 				1CCFFEA5255500CF0082BFE2 /* XGLevelUpMove.swift in Sources */,
 				1CCFFF3E255501790082BFE2 /* GoDTextureImporter.swift in Sources */,
+				1C56F5802605DE2C00CF1DEE /* PokemonStatsTable.swift in Sources */,
 				1CCFFF3C255501790082BFE2 /* XGTexturePalette.swift in Sources */,
 				1C54188025B9A75200CCE8E0 /* XDSConstant.swift in Sources */,
 				1CCFFE232554FFC80082BFE2 /* XGContestCategories.swift in Sources */,
@@ -13328,7 +13313,6 @@
 				1C716A3D2603BA8F000F1456 /* XGISO.swift in Sources */,
 				1C12C3CB25C245610062FA65 /* GoDImageExtensions.swift in Sources */,
 				1CCFFF73255501BE0082BFE2 /* PBRMoveTargets.swift in Sources */,
-				1CCFFF67255501BE0082BFE2 /* PBRDeckPokemon.swift in Sources */,
 				1CCFFF84255501E50082BFE2 /* PBRItem.swift in Sources */,
 				1CCFFE4B2554FFDF0082BFE2 /* XGGenderRatios.swift in Sources */,
 				1CCFFF80255501E50082BFE2 /* PBRStringTable.swift in Sources */,
@@ -13543,7 +13527,7 @@
 				B20EEA8A21EF771D00E87D01 /* GoDImageExtensions.swift in Sources */,
 				1C54188125B9A75200CCE8E0 /* XDSConstant.swift in Sources */,
 				B20EEEB021EF79D500E87D01 /* GoDViewController.swift in Sources */,
-				B24E5FB822388DD100C55758 /* PBRContestAppeals.swift in Sources */,
+				1C56F64E2606A96300CF1DEE /* ItemStatsTable.swift in Sources */,
 				B20EEA8221E9226800E87D01 /* GoDPokeballPopUpButton.swift in Sources */,
 				B20EEE9521EF78C600E87D01 /* XGColour.swift in Sources */,
 				B20EEA6C21E921EB00E87D01 /* GoDTableView.swift in Sources */,
@@ -13558,7 +13542,6 @@
 				B20EEA6D21E921EB00E87D01 /* GoDContainerView.swift in Sources */,
 				B20EEA6121E9214D00E87D01 /* PBRPokemonStats.swift in Sources */,
 				1C7169852602AF3A000F1456 /* GoDStruct.swift in Sources */,
-				B20EEA3621E920F400E87D01 /* PBRDeckPokemon.swift in Sources */,
 				B20EEA6A21E921EB00E87D01 /* GoDButton.swift in Sources */,
 				B20EEE8B21EF787D00E87D01 /* XGFsys.swift in Sources */,
 				B20EEA6721E9214D00E87D01 /* PBRTrainer.swift in Sources */,
@@ -13579,7 +13562,6 @@
 				B20EEA6621E9214D00E87D01 /* PBRStringTable.swift in Sources */,
 				1CC362BE24BFDBE8005D7B4A /* GoDEvolutionConditionPopUpButton.swift in Sources */,
 				B20EEA3B21E920F400E87D01 /* PBRExpr.swift in Sources */,
-				B20EEA3821E920F400E87D01 /* PBRDeckTrainer.swift in Sources */,
 				1C54189F25BA30BE00CCE8E0 /* XGScriptOps.swift in Sources */,
 				B20EEEB321EF7A1C00E87D01 /* GoDHelpViewController.swift in Sources */,
 				B24547862229FEAE0043F991 /* XGGSWTextures.swift in Sources */,
@@ -13588,6 +13570,7 @@
 				B20EEE9921EF78E300E87D01 /* XGMutableData.swift in Sources */,
 				B20EEA8B21EF772300E87D01 /* GoDViewLayoutManager.swift in Sources */,
 				1C716A3E2603BA90000F1456 /* XGISO.swift in Sources */,
+				1C56F62F2606994800CF1DEE /* MoveStatsTable.swift in Sources */,
 				B20EEE8921EF786900E87D01 /* XGDeoxysFormes.swift in Sources */,
 				1CC362B724BA60B9005D7B4A /* PBRTypeManager.swift in Sources */,
 				B20EEE9C21EF791400E87D01 /* XGStack.swift in Sources */,
@@ -13616,6 +13599,7 @@
 				B20EEA3F21E920F400E87D01 /* PBRMoves.swift in Sources */,
 				1CED5DA32403EA38008566B0 /* GoDGTXViewController.swift in Sources */,
 				1C2001A325B3281500A7CF7D /* XGUtility.swift in Sources */,
+				1C56F52C2604DB3800CF1DEE /* DeckStructTable.swift in Sources */,
 				B20EEA6921E9214D00E87D01 /* PBRType.swift in Sources */,
 				1CC362BC24BFDAFB005D7B4A /* GoDEvolutionView.swift in Sources */,
 				1C716AAD2603EBFA000F1456 /* StructTablesList.swift in Sources */,
@@ -13656,7 +13640,6 @@
 				B20EEE9121EF789F00E87D01 /* GoDTextureFormats.swift in Sources */,
 				B20EEE9F21EF792500E87D01 /* XGTexturePalette.swift in Sources */,
 				B23E44EC2263BBD7009548A0 /* GoDFolderPopUpButton.swift in Sources */,
-				B20EEA3721E920F400E87D01 /* PBRDecks.swift in Sources */,
 				1C75102025C8EFB900EAB706 /* XGStringManager.swift in Sources */,
 				B20EEA4721E920F400E87D01 /* PBRTMs.swift in Sources */,
 				B20EEA4421E920F400E87D01 /* PBRPokemonSprite.swift in Sources */,
@@ -13672,7 +13655,9 @@
 				B20EEA4821E920F400E87D01 /* PBRTrainerModels.swift in Sources */,
 				1C71694225FF0DF8000F1456 /* GoDWindowController.swift in Sources */,
 				B20EEA6221E9214D00E87D01 /* PBRScript.swift in Sources */,
+				1C56F5812605DE2C00CF1DEE /* PokemonStatsTable.swift in Sources */,
 				B20EEA7221E9226800E87D01 /* GoDPopUpButton.swift in Sources */,
+				1C56F51F2604D86C00CF1DEE /* CommonStructTables.swift in Sources */,
 				B20EEEAB21EF79A700E87D01 /* GoDOpenGL.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -13682,16 +13667,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				B24A50ED21D12CDA009C707C /* PBRTrainer.swift in Sources */,
-				B24A50DE21D12CDA009C707C /* PBRDeckTrainer.swift in Sources */,
 				B24A50F321D12CDA009C707C /* PBRItem.swift in Sources */,
 				B24A504621D12426009C707C /* GoDTextureImporter.swift in Sources */,
 				1C20016F25B3231900A7CF7D /* GoDLogManager.swift in Sources */,
 				1CB33AAA22B7906600F81C29 /* EnumerableDocumentable.swift in Sources */,
 				B24E5FB42238879C00C55758 /* PBRMoveTargets.swift in Sources */,
 				1C6295FB243022080085C22F /* PBRScriptCompiler.swift in Sources */,
-				B24A50D921D12CDA009C707C /* PBRDecks.swift in Sources */,
 				1C716A2726039D33000F1456 /* CommandLineArgs.swift in Sources */,
-				B24A50DF21D12CDA009C707C /* PBRDeckPokemon.swift in Sources */,
 				B24A50DD21D12CDA009C707C /* PBRSpecialStringCharacters.swift in Sources */,
 				B24A50FD21D2D724009C707C /* GoDDataTable.swift in Sources */,
 				B24A507D21D129A5009C707C /* XGNatures.swift in Sources */,
@@ -13705,10 +13687,12 @@
 				B24A50EB21D12CDA009C707C /* PBRStringTable.swift in Sources */,
 				1C20003225A9585400A7CF7D /* XGTHP.swift in Sources */,
 				B24A510F21D3FF4C009C707C /* PBRScript.swift in Sources */,
+				1C56F64C2606A96300CF1DEE /* ItemStatsTable.swift in Sources */,
 				B24A504021D12329009C707C /* XGMutableData.swift in Sources */,
 				B24A50F421D12CDA009C707C /* PBRMove.swift in Sources */,
 				1C75101525C8EFB800EAB706 /* XGStringManager.swift in Sources */,
 				B24A502F21D1201D009C707C /* XGASM.swift in Sources */,
+				1C56F51D2604D86B00CF1DEE /* CommonStructTables.swift in Sources */,
 				B24A503921D1224D009C707C /* XGGenderRatios.swift in Sources */,
 				B24A510521D3D07C009C707C /* PBRMoveEffectTypes.swift in Sources */,
 				1C20014025B3222900A7CF7D /* GoDGameInit.swift in Sources */,
@@ -13724,7 +13708,6 @@
 				B20EE64021D6E2B000E87D01 /* PBRPokemonSprite.swift in Sources */,
 				B24A510D21D3F122009C707C /* XGContestCategories.swift in Sources */,
 				B24A50EA21D12CDA009C707C /* PBRTrainerPokemon.swift in Sources */,
-				B24E5FB722388DD100C55758 /* PBRContestAppeals.swift in Sources */,
 				B24A50E321D12CDA009C707C /* PBRTrainerModels.swift in Sources */,
 				1C12C3A125C242AC0062FA65 /* XGGeneralExtensions.swift in Sources */,
 				1C7169832602AF3A000F1456 /* GoDStruct.swift in Sources */,
@@ -13740,12 +13723,15 @@
 				B24A511321D4014B009C707C /* PBRScriptInstruction.swift in Sources */,
 				B24A50F821D2BE89009C707C /* PBREffectivenessValues.swift in Sources */,
 				B24A510321D3CC0F009C707C /* PBRMoveCategory.swift in Sources */,
+				1C56F52A2604DB3800CF1DEE /* DeckStructTable.swift in Sources */,
 				B20EE64221D97F5A00E87D01 /* XGWormadamForms.swift in Sources */,
 				B24A505521D1258E009C707C /* XGTexturePalette.swift in Sources */,
 				B24A502721D11145009C707C /* PBRExtensions.swift in Sources */,
+				1C56F62D2606994800CF1DEE /* MoveStatsTable.swift in Sources */,
 				1CC362B024BA5560005D7B4A /* PBRDolPatcher.swift in Sources */,
 				1C54188225B9A75300CCE8E0 /* XDSConstant.swift in Sources */,
 				B24A50DA21D12CDA009C707C /* PBRFileTypes.swift in Sources */,
+				1C56F57F2605DE2C00CF1DEE /* PokemonStatsTable.swift in Sources */,
 				1CADAF4F25CFB7C0002B28F7 /* DummyThreadManager.swift in Sources */,
 				B24A501F21D10D93009C707C /* main.swift in Sources */,
 				B24A50FF21D314D4009C707C /* GoDDataTableEntry.swift in Sources */,

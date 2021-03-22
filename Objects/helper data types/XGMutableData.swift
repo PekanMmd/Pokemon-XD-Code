@@ -53,7 +53,10 @@ class XGMutableData {
 	init(byteStream: [UInt8], file: XGFiles = XGFiles.nameAndFolder("", .Documents)) {
 		data = Data(byteStream)
 		self.file = file
-		
+	}
+
+	convenience init(length: Int) {
+		self.init(byteStream: [UInt8](repeating: 0, count: length))
 	}
 	
 	convenience init(byteStream: [Int], file: XGFiles = XGFiles.nameAndFolder("", .Documents)) {

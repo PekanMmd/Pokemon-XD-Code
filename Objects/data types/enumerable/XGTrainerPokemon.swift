@@ -83,6 +83,15 @@ final class XGTrainerPokemon : NSObject, Codable {
 	// function of these bytes modified by editing dol code
 	var shinyness = XGShinyValues.never
 	var priority	  = 0
+
+	var shadowID: Int {
+		switch self.deckData {
+		case .dpkm:
+			return 0
+		case .ddpk(let id):
+			return id
+		}
+	}
 	
 	var startOffset : Int {
 		get {
@@ -112,7 +121,6 @@ final class XGTrainerPokemon : NSObject, Codable {
 		super.init()
 		
 		self.deckData = DeckData
-		
 		
 		let data = deckData.pokemonDeck.data
 		let start = self.startOffset

@@ -8,6 +8,7 @@
 import Foundation
 
 let patches: [XGDolPatches] = [
+	.freeSpaceInDol,
 	.gen7CritRatios,
 	.disableRentalPassChecksums,
 	.disableBlurEffect
@@ -15,12 +16,14 @@ let patches: [XGDolPatches] = [
 
 enum XGDolPatches: Int {
 
+	case freeSpaceInDol
 	case gen7CritRatios
 	case disableRentalPassChecksums
 	case disableBlurEffect
 
 	var name: String {
 		switch self {
+		case .freeSpaceInDol: return "Create some space in \(XGFiles.dol.fileName) which is needed for other assembly patches. Recommended to use this first."
 		case .gen7CritRatios : return "Update the critical hit ratios to gen 7 odds"
 		case .disableRentalPassChecksums : return "Disable legality checks on battle passes"
 		case .disableBlurEffect : return "Remove the blur effect from the games rendering"
@@ -30,6 +33,33 @@ enum XGDolPatches: Int {
 }
 
 class XGDolPatcher {
+
+	/// Clears some unused function data from the assembly so those addresses can be used for our own ASM
+	static func clearUnusedFunctionsInDol() {
+		guard !checkIfUnusedFunctionsInDolWereCleared() else {
+			printg("ASM space already created in \(XGFiles.dol.fileName)")
+			return
+		}
+		if let data = XGFiles.dol.data,
+		let start = kDolFreeSpaceStart,
+		let end = kDolFreeSpaceEnd {
+			let length = end - start
+			data.nullBytes(start: start, length: length)
+			// Reserve 16 bytes for tool's usage
+			data.replaceWordAtOffset(start, withBytes: 0x0DE1E7ED)
+			(1 ... 3).forEach {
+				data.replaceWordAtOffset(start + ($0 * 4), withBytes: 0xFFFFFFFF)
+			}
+			data.save()
+		}
+	}
+
+	static func checkIfUnusedFunctionsInDolWereCleared() -> Bool {
+		if let data = XGFiles.dol.data, let start = kDolFreeSpaceStart {
+			return data.getWordAtOffset(start) == 0x0DE1E7ED
+		}
+		return false
+	}
 
 	/// Removes the code for rental pass validation checks
 	/// allowing the space to be reused for the type matchups table
@@ -129,6 +159,7 @@ class XGDolPatcher {
 
 	class func applyPatch(_ patch: XGDolPatches) {
 		switch patch {
+		case .freeSpaceInDol: XGDolPatcher.clearUnusedFunctionsInDol()
 		case .gen7CritRatios: XGDolPatcher.gen7CritRatios()
 		case .disableRentalPassChecksums: XGDolPatcher.disableRentalPassChecksums()
 		case .disableBlurEffect: XGDolPatcher.disableBlurEffect()

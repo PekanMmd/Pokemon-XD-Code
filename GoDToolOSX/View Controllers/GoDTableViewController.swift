@@ -41,21 +41,18 @@ class GoDTableViewController: GoDViewController, GoDTableViewDelegate, GoDTableV
 	}
 	
 	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-		let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? NSImageView(frame: NSMakeRect(0,0,widthForTable(),0))
+		let view = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 10, width: widthForTable())) as! GoDTableCellView
 		
-		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
-		cell.translatesAutoresizingMaskIntoConstraints = false
+		view.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
+		view.translatesAutoresizingMaskIntoConstraints = false
 		
-		if cell.isKind(of: NSImageView.self) {
-			
-			let imageView = (cell as! NSImageView)
-			
-			imageView.imageAlignment = .alignCenter
-			imageView.imageScaling = .scaleAxesIndependently
-			imageView.image = row % 2 == 0 ? NSImage(named: "cell") : NSImage(named: "Tool Cell")
+		if table.selectedRow == row {
+			view.addBorder(colour: GoDDesign.colourBlack(), width: 1)
+		} else {
+			view.removeBorder()
 		}
 		
-		return cell
+		return view
 	}
 	
 	func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {}

@@ -3013,7 +3013,7 @@ import Foundation
 //// slush rush speed
 //let slushBranch = sandstart + 0x10
 //let slushstart = XGAssembly.ASMfreeSpacePointer()
-//XGAssembly.replaceRELASM(startOffset: slushstart - kRELtoRAMOffsetDifference, newASM: [
+//XGAssembly.replaceDOLASM(startOffset: slushstart - kDOLtoRAMOffsetDifference, newASM: [
 //	0x2817005b, // cmpwi r23, sand rush
 //	0x40820008, // bne 0x8
 //	XGAssembly.createBranchFrom(offset: slushstart + 0x8, toOffset: sandstart + 0x1c),
@@ -4056,7 +4056,7 @@ import Foundation
 ////	currentOffset += routine.routine.count
 //
 //	// fill in offsets then run this to actually add them
-//	XGAssembly.setMoveEffectRoutine(effect: routine.effect, fileOffset: routine.offset - kRELtoRAMOffsetDifference, moveToREL: true, newRoutine: routine.routine)
+//	XGAssembly.setMoveEffectRoutine(effect: routine.effect, fileOffset: routine.offset - kDOLtoRAMOffsetDifference, moveToREL: false, newRoutine: routine.routine)
 //
 //}
 
@@ -4530,7 +4530,7 @@ import Foundation
 //
 //var currentOffset = XGAssembly.ASMfreeSpacePointer()
 //print(currentOffset.hex())
-//XGAssembly.setMoveEffectRoutine(effect: 47, fileOffset: currentOffset - kRELtoRAMOffsetDifference, moveToREL: true, newRoutine: firstImpression)
+//XGAssembly.setMoveEffectRoutine(effect: 47, fileOffset: currentOffset - kDOLtoRAMOffsetDifference, moveToREL: false, newRoutine: firstImpression)
 
 
 //// create over world models for pokespot pokemon
@@ -5015,7 +5015,7 @@ import Foundation
 ////	currentOffset += routine.routine.count
 //
 //	// fill in offsets then run this to actually add them
-//	XGAssembly.setMoveEffectRoutine(effect: routine.effect, fileOffset: routine.offset - kRELtoRAMOffsetDifference, moveToREL: true, newRoutine: routine.routine)
+//	XGAssembly.setMoveEffectRoutine(effect: routine.effect, fileOffset: routine.offset - kDOLtoRAMOffsetDifference, moveToREL: false, newRoutine: routine.routine)
 //}
 //// secondary move effects can't paralyse electric types
 //let paraStart = 0xB9A520

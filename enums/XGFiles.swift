@@ -64,9 +64,7 @@ indirect enum XGFiles {
 	case pocket_menu
 	case deck(XGDecks)
 	#else
-	case dckp(Int)
-	case dckt(Int)
-	case dcka
+	case boot
 	case indexAndFsysName(Int, String)
 	#endif
 	case pokeFace(Int)
@@ -118,12 +116,6 @@ indirect enum XGFiles {
 		case .tableres2				: return "tableres2" + XGFileTypes.rel.fileExtension
 		case .pocket_menu			: return "pocket_menu" + XGFileTypes.rel.fileExtension
 		case .deck(let deck)		: return deck.fileName
-		#else
-		case .dckp(let i)			: return "pokemon deck_" + String(format: "%02d", i) + XGFileTypes.dckp
-			.fileExtension
-		case .dckt(let i)			: return "trainer deck_" + String(format: "%02d", i) + XGFileTypes.dckt
-			.fileExtension
-		case .dcka					: return "AI deck" + XGFileTypes.dcka.fileExtension
 		#endif
 		case .pokeFace(let id)		: return "face_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
 		case .pokeBody(let id)		: return "body_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
@@ -145,6 +137,7 @@ indirect enum XGFiles {
 		case .typeAndFsysName(let type, _): return folder.files.first(where: {$0.fileType == type})?.fileName ?? "-"
 		case .typeAndFolder(let type, _): return folder.files.first(where: {$0.fileType == type})?.fileName ?? "-"
 		#if GAME_PBR
+		case .boot:	return "boot.bin"
 		case .indexAndFsysName(let index, let name): return XGFiles.fsys(name).fsysData.fileNameForFileWithIndex(index: index) ?? "-"
 		#endif
 		}
@@ -154,8 +147,8 @@ indirect enum XGFiles {
 		switch self {
 
 		#if GAME_PBR
-		case .dol				: return .Sys
-		case .dckp, .dckt, .dcka: return XGFiles.fsys("deck").folder
+		case .dol				: return .ISOExport("main")
+		case .boot				: return .Sys
 		case .indexAndFsysName(_, let fsysName): return XGFiles.fsys(fsysName).folder
 		#else
 		case .dol				: return .ISOExport("Start")
@@ -197,6 +190,10 @@ indirect enum XGFiles {
 		case .embedded("Null.fsys"): return NullFSYS
 		default: break
 		}
+
+		if let data = loadedFiles[path] {
+			return data
+		}
 		
 		if !self.exists && self != .toc && self != .iso {
 			XGFolders.setUpFolderFormat()
@@ -219,6 +216,8 @@ indirect enum XGFiles {
 					printg("file doesn't exist and couldn't be extracted:", self.path)
 					return nil
 				}
+			case .boot:
+				XGUtility.decompileISO()
 			#endif
 			case .fsys("people_archive"):
 				if !XGUtility.exportFileFromISO(.fsys("people_archive"), extractFsysContents: false) {
@@ -245,11 +244,19 @@ indirect enum XGFiles {
 		
 		var data: XGMutableData?
 		if !fileDecodingMode, self == .iso || loadableFiles.contains(self.path) {
-			
 			if let data = loadedFiles[self.path] {
 				return data
 			}
 		}
+
+		#if GAME_PBR
+		let loadableFileFormats: [XGFileTypes] = [.bin, .dckp, .dckt, .dcka, .msg]
+		if loadableFileFormats.contains(self.fileType) {
+			if let data = loadedFiles[self.path] {
+				return data
+			}
+		}
+		#endif
 
 		#if !GAME_PBR
 		if self == .toc {
@@ -391,6 +398,16 @@ indirect enum XGFiles {
 		return XGCollisionData(file: self)
 	}
 	#endif
+
+	var structTable: GoDStructTableFormattable {
+		switch fileType {
+		#if GAME_PBR
+		case .dckt, .dckp, .dcka: return DeckStructTable(file: self)
+		#endif
+		default:
+			return GoDStructTable.dummy
+		}
+	}
 
 	var textures: [GoDTexture] {
 		if XGFileTypes.textureFormats.contains(fileType) {

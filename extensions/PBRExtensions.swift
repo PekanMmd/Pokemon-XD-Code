@@ -51,6 +51,9 @@ extension XGUtility {
 	// extraction
 	@discardableResult
 	class func decompileISO(printOutput: Bool = true, overwrite: Bool = false) -> String? {
+		guard overwrite || !XGFolders.ISODump.exists else {
+			return nil
+		}
 		let not = overwrite ? "" : "NOT "
         printg("decompiling ISO using wit. This will \(not)overwrite any existing files...")
         if !XGFiles.iso.exists {
@@ -60,7 +63,9 @@ extension XGUtility {
         let verbose = settings.verbose ? " -v " : ""
 		let overwriteFlag = overwrite ? " -o" : ""
 		let args = "extract --raw\(verbose)\(overwriteFlag) \(XGFiles.iso.path.escapedPath) \(XGFolders.ISODump.path.escapedPath)"
-        return GoDShellManager.run(.wit, args: args, printOutput: printOutput)
+        let output = GoDShellManager.run(.wit, args: args, printOutput: printOutput)
+		printg("Decompilation finished.")
+		return output
     }
 
 	class func prepareForCompilation() {
@@ -138,71 +143,6 @@ extension XGUtility {
 	private static var shouldCancelDocumentation = false
 	static func cancelDocumentation() {
 		shouldCancelDocumentation = true
-	}
-	class func documentISO() {
-
-		guard !isDocumentingISO else {
-			printg("Already Documenting ISO!")
-			return
-		}
-
-		isDocumentingISO = true
-		shouldCancelDocumentation = false
-		printg("Documenting ISO.\nThis may take a while...")
-		XGThreadManager.manager.runInBackgroundAsync {
-			printg("Documenting Enumerations...")
-			// Enumerations
-			if !shouldCancelDocumentation {
-				printg("Enumerating Abilities...")
-				XGAbilities.documentEnumerationData()
-			}
-			if !shouldCancelDocumentation {
-				printg("Enumerating B-G Enumerations...")
-				XGContestAppeals.documentEnumerationData()
-				XGDecks.documentEnumerationData()
-				XGDeoxysFormes.documentEnumerationData()
-				XGEffectivenessValues.documentEnumerationData()
-				XGEvolutionMethods.documentEnumerationData()
-				XGExpRate.documentEnumerationData()
-				XGGenderRatios.documentEnumerationData()
-				XGGenders.documentEnumerationData()
-			}
-			if !shouldCancelDocumentation {
-				printg("Enumerating Items...")
-				XGItems.documentEnumerationData()
-				XGItem.documentData()
-			}
-			if !shouldCancelDocumentation {
-				printg("Enumerating Moves...")
-				XGMoves.documentEnumerationData()
-				XGMove.documentData()
-			}
-			if !shouldCancelDocumentation {
-				printg("Enumerating M-N Enumerations...")
-				XGMoveCategories.documentEnumerationData()
-				XGMoveEffectTypes.documentEnumerationData()
-				XGMoveTargets.documentEnumerationData()
-				XGMoveTypes.documentEnumerationData()
-				XGNatures.documentEnumerationData()
-			}
-			if !shouldCancelDocumentation {
-				printg("Enumerating Pokemon...")
-				XGPokemon.documentEnumerationData()
-				XGPokemonStats.documentData()
-			}
-			if !shouldCancelDocumentation {
-				printg("Enumerating TMs...")
-				XGTMs.documentEnumerationData()
-			}
-
-			if !shouldCancelDocumentation {
-				printg("Finished Documenting ISO.")
-			} else {
-				printg("Cancelled Documenting ISO.")
-			}
-			isDocumentingISO = false
-		}
-
 	}
 }
 

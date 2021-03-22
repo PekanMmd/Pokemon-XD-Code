@@ -184,9 +184,9 @@ func singleDataTableMenu(forTable table: GoDStructTableFormattable) {
 
 		let input = readInput(prompt)
 		switch input {
-		case "decode": table.decodeData()
-		case "encode": table.encodeData()
-		case "document": table.decodeCSVData(); table.documentData(); table.documentEnumerationData(); table.documentCStruct()
+		case "decode": table.decodeCSVData()
+		case "encode": table.encodeCSVData()
+		case "document": table.documentCStruct(); table.documentEnumerationData(); table.documentData()
 		case "exit": return
 		default: continue
 		}

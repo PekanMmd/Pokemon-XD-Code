@@ -41,4 +41,16 @@ class XGGiftPokemonManager {
 		
 		return gifts
 	}
+
+	class func allNonShadowGiftPokemon() -> [XGGiftPokemon] {
+		var gifts = [XGGiftPokemon]()
+
+		for i in 1 ... kNumberOfGiftPokemon {
+			if i != 7 {
+				gifts.append(XGGiftPokemonManager.giftWithID(i))
+			}
+		}
+
+		return gifts
+	}
 }

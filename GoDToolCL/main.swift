@@ -11,10 +11,12 @@ import Foundation
 
 loadISO(exitOnFailure: true)
 
+XGTradeShadowPokemon().shadowID.println()
+
 //XGUtility.exportFileFromISO(.fsys("D4_tower_1F_2"))
 //battleBingoTable.decodeData()
 //battleBingoTable.documentData()
-battleBingoTable.documentCStruct()
+//battleBingoTable.documentCStruct()
 //battleBingoTable.encodeData()
 //battleBingoTable.documentData()
 //battleBingoTable.decodeCSVData()

@@ -44,14 +44,12 @@ class XGString: NSObject, Codable {
 		return string.replacingOccurrences(of: "\n", with: "[New Line]")
 	}
 
-	var unformattedString : String {
-		get {
-			var str = ""
-			for char in chars where !char.isFormattingChar {
-				str = str + char.string
-			}
-			return str.replacingOccurrences(of: "\n", with: "[New Line]")
+	var unformattedString: String {
+		var str = ""
+		for char in chars where !char.isFormattingChar {
+			str = str + char.string
 		}
+		return str.replacingOccurrences(of: "\n", with: "[New Line]")
 	}
 	
 	var stringPlusIDAndFile : String {

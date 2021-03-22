@@ -88,20 +88,16 @@ class XGTrainerPokemon : NSObject, Codable {
 		return CommonIndexes.TrainerPokemonData.startOffset + (index * kSizeOfPokemonData)
 	}
 	
-	var shadowStartOffset : Int {
+	var shadowStartOffset: Int {
 		return CommonIndexes.ShadowData.startOffset + (self.shadowID * kSizeOfShadowData)
 	}
 	
-	var isShadow : Bool {
-		get {
-			return self.shadowID > 0
-		}
+	var isShadowPokemon: Bool {
+		return self.shadowID > 0
 	}
 	
-	var isSet : Bool {
-		get {
-			return self.species.index > 0
-		}
+	var isSet: Bool {
+		return self.species.index > 0
 	}
 	
 	init(index: Int) {
@@ -144,7 +140,7 @@ class XGTrainerPokemon : NSObject, Codable {
 		moves[2] = XGMoves.index(data.get2BytesAtOffset(start + kPokemonMove3Offset))
 		moves[3] = XGMoves.index(data.get2BytesAtOffset(start + kPokemonMove4Offset))
 		
-		if isShadow {
+		if isShadowPokemon {
 			let start = shadowStartOffset
 			shadowCatchRate 	= data.getByteAtOffset(start + kShadowCatchRateOffset)
 			shadowCounter		= data.get2BytesAtOffset(start + kShadowCounterOffset)
@@ -156,7 +152,7 @@ class XGTrainerPokemon : NSObject, Codable {
 	
 	func save(writeRelOnCompletion: Bool = true) {
 		
-		if self.isShadow {
+		if self.isShadowPokemon {
 			
 			let data = XGFiles.common_rel.data!
 			let start = shadowStartOffset

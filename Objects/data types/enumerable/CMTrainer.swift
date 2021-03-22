@@ -79,7 +79,7 @@ final class XGTrainer: NSObject, Codable {
 	var hasShadow : Bool {
 		get {
 			for poke in self.pokemon {
-				if poke.isShadow {
+				if poke.isShadowPokemon {
 					return true
 				}
 			}

@@ -18,7 +18,7 @@ func loadISO(exitOnFailure: Bool = false) -> Bool {
 
 	guard files.count > 0 else {
 		let message = environment == .Windows
-			? "To use this tool, drag and drop your ISO onto this .exe file."
+			? "To use this tool, close this window and then drag and drop your ISO onto the .exe file."
 			: "Please run this tool with the path to your ISO specified as the command line argument."
 		print(message)
 		if exitOnFailure {

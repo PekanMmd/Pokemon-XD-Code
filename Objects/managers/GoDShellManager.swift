@@ -39,7 +39,7 @@ class GoDShellManager {
     @discardableResult
     static func run(_ command: Commands, args: String? = nil, printOutput: Bool = true) -> String? {
         guard command.file.exists else {
-			printg("command, \(command.rawValue), doesn't exist\n\(command.file.path)")
+			printg("command, \(command.rawValue), doesn't exist\n\(command.file.path) not found")
             return nil
         }
         

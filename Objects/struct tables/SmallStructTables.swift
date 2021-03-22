@@ -7,9 +7,9 @@
 
 import Foundation
 
-let trainerClassesStruct = GoDStruct(name: "TrainerClasses", format: [
+let trainerClassesStruct = GoDStruct(name: "Trainer Classes", format: [
 	.short(name: "Payout", description: "The multiplier for the prize money", type: .uint),
-	.word(name: "Name", description: "The msg ID for the trainer class name", type: .msgID(file: .common_rel)),
+	.word(name: "Name ID", description: "The msg ID for the trainer class name", type: .msgID(file: .common_rel)),
 	.word(name: "Unknown", description: "Usually 5 but occasionally 8", type: .uint)
 ])
 

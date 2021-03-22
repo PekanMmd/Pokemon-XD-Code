@@ -11,6 +11,7 @@ import Foundation
 var kNumberOfPokemon: Int {
 	return GoDDataTable.pokemonBaseStats.numberOfEntries // 501 in vanilla
 }
+let kNumberOfTMs = 92
 let kNumberOfTMsAndHMs = 100
 let kNumberOfTutorMoves = 0 // for XD compatibility
 let kSizeOfEvolution = 6
@@ -149,8 +150,8 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 		
 		heldItem1 = .index(data.getShort(16))
 		heldItem2 = .index(data.getShort(18))
-		height = Double(data.getShort(20)) / 10
-		weight = Double(data.getShort(22)) / 10
+		height = Double(data.getShort(20)) / 10 // m
+		weight = Double(data.getShort(22)) / 10 // kg
 		nameID = data.getShort(24)
 		cryFileIndex = data.getShort(26)
 		firstModelIndex = data.getShort(28)

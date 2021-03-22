@@ -12,13 +12,6 @@ let structTablesList: [GoDStructTableFormattable] = {
 
 	]
 
-	#if GAME_XD
-	tables += [
-		battleBingoTable,
-		trainerClassesTable
-	]
-	#endif
-
 	return tables.sorted { (t1, t2) -> Bool in
 		t1.properties.name < t2.properties.name
 	}
@@ -37,5 +30,23 @@ let otherTableFormatsList: [GoDCodable.Type] = {
 
 	return tables.sorted { (t1, t2) -> Bool in
 		t1.className < t2.className
+	}
+}()
+
+let commonStructTablesList: [GoDStructTableFormattable] = {
+	var tables: [GoDStructTableFormattable] = [
+
+	]
+
+	#if GAME_XD
+	let xdTables = [
+		battleBingoTable,
+		trainerClassesTable
+	] as? [GoDStructTableFormattable]
+	tables += xdTables ?? []
+	#endif
+
+	return tables.sorted { (t1, t2) -> Bool in
+		t1.properties.name < t2.properties.name
 	}
 }()

@@ -669,10 +669,10 @@ indirect enum XDSExpr {
 			}
 			return macroWithName("INDEX_\(c.asInt)")
 		case .yesNoIndex:
-			return c.asInt == 0 ? "INDEX_YES" : "INDEX_NO"
+			return macroWithName(c.asInt == 0 ? "INDEX_YES" : "INDEX_NO")
 		case .scriptFunction:
 			if c.asInt == 0 {
-				return "NULL_SCRIPT_FUNCTION"
+				return macroWithName("NULL_SCRIPT_FUNCTION")
 			}
 			
 			let scriptIdentifier = (c.asInt & 0xFFFF0000) >> 16
@@ -745,7 +745,7 @@ indirect enum XDSExpr {
 			return macroWithName("LANGUAGE_\(c.asInt)")
 			
 		case .PCBox:
-			return "PCBOX_\(c.asInt)"
+			return macroWithName("PCBOX_\(c.asInt)")
 			
 		case .transitionID:
 			var name = ""
@@ -792,7 +792,7 @@ indirect enum XDSExpr {
 		case .floatFraction:
 			if c.asFloat < 0.0 || c.asFloat > 1.0 {
 				printg("Invalid fraction \(c.asFloat)")
-				return "INVALID FRACTION"
+				return macroWithName("INVALID FRACTION_\(c.asFloat)")
 			}
 			return macroWithName("ANGLE_RADIANS_\(c.asFloat)")
 		case .integerByte:
@@ -800,7 +800,7 @@ indirect enum XDSExpr {
 				return macroWithName("BYTE_\(c.asInt)")
 			}
 			printg("invalid byte:", c.asInt)
-			return "INVALID BYTE"
+			return macroWithName("INVALID_BYTE_\(c.asInt)")
 		case .integerUnsigned:
 			return macroWithName("UNSIGNED_INT_\(c.asInt.hexString())")
 			
@@ -823,7 +823,7 @@ indirect enum XDSExpr {
 		case .objectName(let s):
 			return macroWithName(s.uppercased() + "_OBJECT")
 		case .invalid:
-			return "INVALID_FUNCTION_CALL_RESULT"
+			return macroWithName("INVALID_FUNCTION_CALL_RESULT")
 		
 		case .list(let t):
 			return stringFromMacroImmediate(c: c, t: t)

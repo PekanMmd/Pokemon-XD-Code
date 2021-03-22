@@ -74,6 +74,7 @@ var shadowPokemonShininessOffset: Int {
 }
 
 let patches: [XGDolPatches] = game == .XD ? [
+	.freeSpaceInDol,
 	.purgeUnusedText,
 	.physicalSpecialSplitApply,
 	.physicalSpecialSplitRemove,
@@ -97,6 +98,7 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.allSingleBattles,
 	.allDoubleBattles
 ] : [
+	.freeSpaceInDol,
 	.physicalSpecialSplitApply,
 	.defaultMoveCategories,
 	.allowFemaleStarters,
@@ -112,7 +114,7 @@ let patches: [XGDolPatches] = game == .XD ? [
 
 enum XGDolPatches: Int {
 	
-	case physicalSpecialSplitApply = 0
+	case physicalSpecialSplitApply
 	case physicalSpecialSplitRemove
 	case type9IndependentApply
 	case betaStartersApply
@@ -142,9 +144,11 @@ enum XGDolPatches: Int {
 	case gen7CritRatios
 	case allSingleBattles
 	case allDoubleBattles
+	case freeSpaceInDol
 	
 	var name: String {
 		switch self {
+		case .freeSpaceInDol: return "Create some space in \(XGFiles.dol.fileName) which is needed for other assembly patches. Recommended to use this first."
 		case .physicalSpecialSplitApply : return "Apply the gen IV physical/special split. (You still need to set the category for each move)"
 		case .physicalSpecialSplitRemove : return "Remove the physical/special split."
 		case .type9IndependentApply : return "Removes the dependecy on the ??? type allowing 1 additional type."
@@ -181,6 +185,32 @@ enum XGDolPatches: Int {
 }
 
 class XGDolPatcher {
+
+	/// Clears some unused function data from the assembly so those addresses can be used for our own ASM
+	static func clearUnusedFunctionsInDol() {
+		guard !checkIfUnusedFunctionsInDolWereCleared() else {
+			printg("ASM space already created in \(XGFiles.dol.fileName)")
+			return
+		}
+		if let data = XGFiles.dol.data,
+		let start = kDolFreeSpaceStart,
+		let end = kDolFreeSpaceEnd {
+			let length = end - start
+			data.nullBytes(start: start, length: length)
+			data.replaceWordAtOffset(start, withBytes: 0x0DE1E7ED)
+			(1 ... 3).forEach {
+				data.replaceWordAtOffset(start + ($0 * 4), withBytes: 0xFFFFFFFF)
+			}
+			data.save()
+		}
+	}
+
+	static func checkIfUnusedFunctionsInDolWereCleared() -> Bool {
+		if let data = XGFiles.dol.data, let start = kDolFreeSpaceStart {
+			return data.getWordAtOffset(start) == 0x0DE1E7ED
+		}
+		return false
+	}
 	
 	//Incorporates Physical/Special Split on all moves. The category is determined by byte 0x12 of the move's data.
 	
@@ -844,6 +874,7 @@ class XGDolPatcher {
 	class func applyPatch(_ patch: XGDolPatches) {
 		
 		switch patch {
+			case .freeSpaceInDol				: XGDolPatcher.clearUnusedFunctionsInDol()
 			case .betaStartersApply				: XGDolPatcher.enableBetaStarters()
 			case .betaStartersRemove			: XGDolPatcher.disableBetaStarters()
 			case .physicalSpecialSplitApply		: XGDolPatcher.applyPhysicalSpecialSplitPatch()

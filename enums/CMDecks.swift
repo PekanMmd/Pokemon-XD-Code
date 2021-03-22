@@ -125,14 +125,14 @@ enum XGDecks : String {
 			string += (trainer.index.string + ": " + name.string + " " + trainer.name.string).spaceToLength(trainerLength)
 			for p in trainer.pokemon {
 				if p.isSet {
-					string += ((p.isShadow ? "Shadow " : "") + p.species.name.string).spaceToLength(pokemonLength)
+					string += ((p.isShadowPokemon ? "Shadow " : "") + p.species.name.string).spaceToLength(pokemonLength)
 				}
 			}
 			string += "\n" + "".spaceToLength(trainerLength)
 
 			for p in trainer.pokemon {
 				if p.isSet {
-					string += ("Level " + p.level.string + (p.isShadow ? "+" : "")).spaceToLength(pokemonLength)
+					string += ("Level " + p.level.string + (p.isShadowPokemon ? "+" : "")).spaceToLength(pokemonLength)
 				}
 			}
 			string += "\n" + trainerTab

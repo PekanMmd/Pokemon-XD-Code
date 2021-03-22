@@ -45,7 +45,7 @@ class XGUtility {
 				filesToImport += [.fsys("deck_archive"), .fsys("M2_guild_1F_2"), .fsys("common_dvdeth")]
 			}
 		} else {
-			filesToImport += [.fsys("deck")]
+			filesToImport += [.fsys("deck"), .fsys("mes_common")]
 		}
 
 

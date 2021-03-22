@@ -96,7 +96,7 @@ final class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
 	var giftType		= ""
 	
 	// unused
-	var exp							= -1
+	var exp						= -1
 	var shinyValue				= XGShinyValues.random
 	private(set) var gender 	= XGGenders.random
 	private(set) var nature 	= XGNatures.random
@@ -127,7 +127,7 @@ final class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
 		
 		level = dol.getByteAtOffset(start + kDistroPokemonLevelOffset)
 		
-		let shiny = dol.get2BytesAtOffset(start + kDemoStarterShinyValueOffset)
+		let shiny = dol.get2BytesAtOffset(start + kDistroPokemonShininessOffset)
 		self.shinyValue = XGShinyValues(rawValue: shiny) ?? .random
 		
 		let moves = self.species.movesForLevel(level)
@@ -152,7 +152,7 @@ final class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
 		
 		dol.replaceByteAtOffset(start + kDistroPokemonLevelOffset, withByte: level)
 		dol.replace2BytesAtOffset(start + kDistroPokemonSpeciesOffset, withBytes: species.index)
-		dol.replace2BytesAtOffset(start + kDemoStarterShinyValueOffset, withBytes: shinyValue.rawValue)
+		dol.replace2BytesAtOffset(start + kDistroPokemonShininessOffset, withBytes: shinyValue.rawValue)
 		
 		dol.save()
 	}

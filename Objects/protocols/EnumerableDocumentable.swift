@@ -106,7 +106,7 @@ extension XGEnumerable where Self: XGDocumentable {
 
 extension XGEnumerable {
 	static func encodedDataFolder() -> XGFolders {
-		let encodingFolder = XGFolders.nameAndFolder("Decoded Data", .Reference)
+		let encodingFolder = XGFolders.nameAndFolder("JSON Data", .Reference)
 		return XGFolders.nameAndFolder(className, encodingFolder)
 	}
 	

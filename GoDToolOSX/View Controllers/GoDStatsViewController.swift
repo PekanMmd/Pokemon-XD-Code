@@ -554,6 +554,7 @@ class GoDStatsViewController: GoDTableViewController {
 			cell.translatesAutoresizingMaskIntoConstraints = false
 			
 			if isTM {
+				#warning("TODO: TM Ordering for PBR")
 				cell.alphaValue = delegate.pokemon.learnableTMs[row] ? 1 : 0.5
 			} else {
 				cell.alphaValue = delegate.pokemon.tutorMoves[row - kNumberOfTMsAndHMs] ? 1 : 0.5

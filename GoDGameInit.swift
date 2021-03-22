@@ -48,10 +48,29 @@ var documentsPath = {
 		+ (XGISO.inputISOFile == nil ? "" : " \(XGISO.inputISOFile!.fileName.removeFileExtensions())")
 }()
 
-func loadRegion() {
-	region = { XGRegions(rawValue: XGFiles.iso.data!.getWordAtOffset(0)) ?? .OtherGame }()
+fileprivate func loadRegion() {
+	#if !GAME_PBR
+	let fileForRegion = XGFiles.iso
+	#else
+	let fileForRegion = XGFiles.boot
+	#endif
+	if let magicBytes = fileForRegion.data?.getWordAtOffset(0),
+	   let region = XGRegions(rawValue: magicBytes) {
+		cachedRegion = region
+	} else {
+		cachedRegion = .OtherGame
+	}
 }
-var region = XGRegions.OtherGame
+func resetRegion() {
+	cachedRegion = nil
+}
+fileprivate var cachedRegion: XGRegions?
+var region: XGRegions {
+	if cachedRegion == nil {
+		loadRegion()
+	}
+	return cachedRegion!
+}
 
 
 enum Environment {

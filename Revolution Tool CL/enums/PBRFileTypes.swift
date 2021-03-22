@@ -29,6 +29,7 @@ enum XGFileTypes: Int, CaseIterable {
 	case thd  = 0x22
 	case gfl  = 0x24 // lighting effects?
 
+	// decks officially use .bin extension
 	case dckp = 0x28 // pokemon deck
 	case dckt = 0x2a // trainer deck
 	case dcka = 0x2e // ai deck

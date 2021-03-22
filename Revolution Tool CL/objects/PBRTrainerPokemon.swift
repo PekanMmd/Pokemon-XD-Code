@@ -16,7 +16,8 @@ let kNumberOfIVs			= 0x06
 
 class XGTrainerPokemon {
 	
-	var deckData		= XGDeckPokemon.deck(0, XGDecks.null)
+	var index			= 0
+	var file: XGFiles!
 	
 	var id				= 0
 	var species			= XGPokemon.index(0)
@@ -42,12 +43,13 @@ class XGTrainerPokemon {
 		return abilityIndex == 0 ? self.species.stats.ability1 : self.species.stats.ability2
 	}
 	
-	init(deckData: XGDeckPokemon) {
+	init(index: Int, file: XGFiles) {
 		
-		self.deckData = deckData
-		let table = GoDDataTable.tableForFile(deckData.deck.file)
-		guard let data =  table.entryWithIndex(deckData.index) else {
-			printg("Failed to load trainer pokemon:", deckData.deck.file.path, "\nindex:", deckData.index)
+		self.index = index
+		self.file = file
+		let table = GoDDataTable.tableForFile(file)
+		guard let data =  table.entryWithIndex(index) else {
+			printg("Failed to load trainer pokemon:", file.path, "\nindex:", index)
 			return
 		}
 		
@@ -109,9 +111,9 @@ class XGTrainerPokemon {
 	
 	func save() {
 		
-		let table = GoDDataTable.tableForFile(deckData.deck.file)
-		guard let data =  table.entryWithIndex(deckData.index) else {
-			printg("Failed to load trainer pokemon:", deckData.deck.file.path, "\nindex:", deckData.index)
+		let table = GoDDataTable.tableForFile(file)
+		guard let data = table.entryWithIndex(index) else {
+			printg("Failed to load trainer pokemon:", file.path, "\nindex:", index)
 			return
 		}
 		

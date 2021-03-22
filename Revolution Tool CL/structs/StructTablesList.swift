@@ -26,3 +26,40 @@ let otherTableFormatsList: [GoDCodable.Type] = {
 		t1.className < t2.className
 	}
 }()
+
+var deckTrainerStructList: [GoDStructTableFormattable] {
+	let deckFsys = XGFiles.fsys("deck")
+	if !deckFsys.exists {
+		XGUtility.exportFileFromISO(deckFsys, extractFsysContents: true, decode: false, overwrite: false)
+	}
+	return deckFsys.folder.files.filter { $0.fileType == .dckt }.sorted(by: {$0.fileName < $1.fileName}).map { $0.structTable }
+}
+
+var deckPokemonStructList: [GoDStructTableFormattable] {
+	let deckFsys = XGFiles.fsys("deck")
+	if !deckFsys.exists {
+		XGUtility.exportFileFromISO(deckFsys, extractFsysContents: true, decode: false, overwrite: false)
+	}
+	return deckFsys.folder.files.filter { $0.fileType == .dckp }.sorted(by: {$0.fileName < $1.fileName}).map { $0.structTable }
+}
+
+var deckAIStructList: [GoDStructTableFormattable] {
+	return []
+//	let deckFsys = XGFiles.fsys("deck")
+//	if !deckFsys.exists {
+//		XGUtility.exportFileFromISO(deckFsys, extractFsysContents: true, decode: false, overwrite: false)
+//	}
+//	return deckFsys.folder.files.filter { $0.fileType == .dcka }.sorted(by: {$0.fileName < $1.fileName}).map { $0.structTable }
+}
+
+var commonStructTablesList: [GoDStructTableFormattable] = {
+	return [
+		pokemonStatsTable,
+		levelUpMovesTable,
+		evolutionsTable,
+		moveStatsTable,
+		itemStatsTable
+	].sorted { (t1, t2) -> Bool in
+		return t1.properties.name < t2.properties.name
+	}
+}()

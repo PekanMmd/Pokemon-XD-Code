@@ -84,7 +84,8 @@ class XGISO: NSObject {
 
 		inputISOFile = file
 		loadDocumentsPath()
-		loadRegion()
+		resetRegion()
+		XGFolders.setUpFolderFormat()
 		#if !GAME_PBR
 		tocData = extractTOC()
 		#endif
@@ -299,11 +300,12 @@ class XGISO: NSObject {
 
 	func importFiles(_ files: [XGFiles]) {
 		for file in files {
-			guard file != .dol else {
-				continue
-			}
 			if let data = file.data {
-				data.file = .nameAndFolder(file.fileName, .ISOFiles)
+				if file == .dol {
+					data.file = .nameAndFolder(file.fileName, .Sys)
+				} else {
+					data.file = .nameAndFolder(file.fileName, .ISOFiles)
+				}
 				data.save()
 			}
 		}

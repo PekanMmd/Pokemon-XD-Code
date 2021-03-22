@@ -44,11 +44,71 @@ class XGRandomiser: NSObject {
 
 		let cachedPokemonStats = XGPokemon.allPokemon().map{$0.stats}.filter{$0.catchRate > 0}
 		var speciesAlreadyUsed = [Int]()
+		var shadowPokemonByID = [Int: XGPokemon]()
 
-		func randomise(oldSpecies: XGPokemon, checkDuplicates: Bool = false) -> XGPokemon {
+		func strikeEvolutionLineForPokemon(index: Int) {
+			// strikes all preevolutions and all evolution
+			// but doesn't strike alternate evolution branches from preevo
+			// so those mons are still obtainable
+			// e.g. striking wurmple strikes both branches
+			// but striking silcoon, keeps the cascoon branch possible
+			// only checks for 2 layers of preevos and 2 layers of evos
+			// to prevent endless loops on edited versions with evolution loops.
+			// If multiple pokemon evolve into this pokemon in an edited version
+			// then only the first one found will be stricken
+
+			speciesAlreadyUsed.addUnique(index)
+
+			if let preEvo = cachedPokemonStats.first(where: { pokemon in
+				pokemon.evolutions.contains(where: { evolution in
+					return evolution.evolvesInto == index
+				})
+			}) {
+				speciesAlreadyUsed.addUnique(preEvo.index)
+				if let secondPreEvo = cachedPokemonStats.first(where: { pokemon in
+					pokemon.evolutions.contains(where: { evolution in
+						return evolution.evolvesInto == preEvo.index
+					})
+				}) {
+					speciesAlreadyUsed.addUnique(secondPreEvo.index)
+				}
+			}
+
+			if let stats = cachedPokemonStats.first(where: { pokemon in
+				pokemon.index == index
+			}) {
+				stats.evolutions.forEach { evoData in
+					let evo = evoData.evolvesInto
+					if evo > 0 {
+						speciesAlreadyUsed.addUnique(evo)
+						if let evoStats = cachedPokemonStats.first(where: { pokemon in
+							pokemon.index == evo
+						}) {
+							evoStats.evolutions.forEach { evoData in
+								let evo2 = evoData.evolvesInto
+								if evo2 > 0 {
+									speciesAlreadyUsed.addUnique(evo2)
+								}
+							}
+						}
+					}
+				}
+			}
+
+		}
+
+		func randomise(oldSpecies: XGPokemon, checkDuplicates: Bool = false, shadowID: Int = 0) -> XGPokemon {
+			if shadowID > 0, let mon = shadowPokemonByID[shadowID] {
+				return mon
+			}
+
 			let oldStats = oldSpecies.stats
-			guard oldStats.index > 0 else { return oldSpecies }
-			guard oldStats.catchRate > 0 else { return oldSpecies }
+			guard oldStats.index > 0, oldStats.catchRate > 0 else {
+				if shadowID > 0 {
+					shadowPokemonByID[shadowID] = oldSpecies
+				}
+				return oldSpecies
+			}
 
 			var options = cachedPokemonStats
 			if speciesAlreadyUsed.count >= cachedPokemonStats.count {
@@ -76,7 +136,10 @@ class XGRandomiser: NSObject {
 
 			guard options.count > 0 else {
 				if checkDuplicates {
-					speciesAlreadyUsed.addUnique(oldSpecies.index)
+					strikeEvolutionLineForPokemon(index: oldSpecies.index)
+				}
+				if shadowID > 0 {
+					shadowPokemonByID[shadowID] = oldSpecies
 				}
 				return oldSpecies
 			}
@@ -84,52 +147,30 @@ class XGRandomiser: NSObject {
 			let rand = Int.random(in: 0 ..< options.count)
 			let newSpecies = XGPokemon.index(options[rand].index)
 			if checkDuplicates {
-				speciesAlreadyUsed.addUnique(newSpecies.index)
+				strikeEvolutionLineForPokemon(index: newSpecies.index)
+			}
+			if shadowID > 0 {
+				shadowPokemonByID[shadowID] = newSpecies
 			}
 			return newSpecies
 		}
 
 		for deck in MainDecksArray {
-			#if GAME_COLO
-			var shadows = [Int: XGPokemon]()
-			#endif
-
 			for pokemon in deck.allActivePokemon {
-				#if GAME_COLO
-				if shadowsOnly && !index.isShadow {
-					continue
-				}
-				#else
 				if shadowsOnly && !pokemon.isShadowPokemon {
 					continue
 				}
-				#endif
 
-				#if GAME_XD
-				pokemon.species = randomise(oldSpecies: pokemon.species, checkDuplicates: pokemon.isShadowPokemon)
-				#else
-				if pokemon.isShadow {
-					if let species = shadows[pokemon.shadowID] {
-						pokemon.species = species
-					} else {
-						let newSpecies = randomise(oldSpecies: pokemon.species, checkDuplicates: true)
-						pokemon.species = newSpecies
-						shadows[pokemon.shadowID] = newSpecies
-					}
-				} else {
-					pokemon.species = randomise(oldSpecies: pokemon.species)
-				}
-				#endif
+				pokemon.species = randomise(oldSpecies: pokemon.species, checkDuplicates: pokemon.isShadowPokemon, shadowID: pokemon.shadowID)
 				pokemon.shadowCatchRate = pokemon.species.catchRate
 				pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
 				pokemon.happiness = 128
 				pokemon.save()
-
 			}
 		}
 
 		if !shadowsOnly {
-			for gift in XGGiftPokemonManager.allGiftPokemon() {
+			for gift in XGGiftPokemonManager.allNonShadowGiftPokemon() {
 
 				var pokemon = gift
 				pokemon.species = randomise(oldSpecies: pokemon.species, checkDuplicates: true)
@@ -154,10 +195,20 @@ class XGRandomiser: NSObject {
 					pokemon.pokemon = randomise(oldSpecies: pokemon.pokemon, checkDuplicates: true)
 					pokemon.save()
 				}
-
 			}
 			#endif
 		}
+
+		#if GAME_XD
+		let tradeShadowPokemon = XGTradeShadowPokemon()
+		tradeShadowPokemon.species = randomise(oldSpecies: tradeShadowPokemon.species, checkDuplicates: true, shadowID: tradeShadowPokemon.shadowID)
+		let moves = tradeShadowPokemon.species.movesForLevel(tradeShadowPokemon.level)
+		tradeShadowPokemon.move1 = moves[0]
+		tradeShadowPokemon.move2 = moves[1]
+		tradeShadowPokemon.move3 = moves[2]
+		tradeShadowPokemon.move4 = moves[3]
+		tradeShadowPokemon.save()
+		#endif
 
 		printg("done!")
 	}

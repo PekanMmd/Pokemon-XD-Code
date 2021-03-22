@@ -27,9 +27,9 @@ let kTradeShadowPokemonMove4Offset		=  0x1A
 
 var tradeShadowPokemonShininessRAMOffset: Int {
 	switch region {
-	case .US: return 0x152bfe
-	case .EU: return 0x1544c2
-	case .JP: return 0x14AE86
+	case .US: return 0x152bfe - kDolToRAMOffsetDifference
+	case .EU: return 0x1544c2 - kDolToRAMOffsetDifference
+	case .JP: return 0x14AE86 - kDolToRAMOffsetDifference
 	case .OtherGame: return 0
 	}
 }
@@ -55,9 +55,7 @@ final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
 	var shadowID = 0
 	
 	var startOffset : Int {
-		get {
-			return kTogepiOffset
-		}
+		return kTogepiOffset
 	}
 	
 	override init() {
@@ -71,7 +69,7 @@ final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
 		self.species = .index(species)
 		
 		level = dol.getByteAtOffset(start + kTradeShadowPokemonLevelOffset)
-		shadowID = dol.get2BytesAtOffset(kTradeShadowDDPKIDOffset)
+		shadowID = dol.get2BytesAtOffset(start + kTradeShadowDDPKIDOffset)
 		
 		var moveIndex = dol.get2BytesAtOffset(start + kTradeShadowPokemonMove1Offset)
 		move1 = .index(moveIndex)
@@ -82,9 +80,7 @@ final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
 		moveIndex = dol.get2BytesAtOffset(start + kTradeShadowPokemonMove4Offset)
 		move4 = .index(moveIndex)
 
-		if region != .JP {
-			shinyValue = XGShinyValues(rawValue:  dol.get2BytesAtOffset(tradeShadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference)) ?? .never
-		}
+		shinyValue = XGShinyValues(rawValue:  dol.get2BytesAtOffset(tradeShadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference)) ?? .never
 		
 	}
 	
@@ -101,9 +97,7 @@ final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
 			dol.replace2BytesAtOffset(start + kTradeShadowPokemonMove3Offset, withBytes: move3.index)
 			dol.replace2BytesAtOffset(start + kTradeShadowPokemonMove4Offset, withBytes: move4.index)
 
-			if region != .JP {
-				dol.replace2BytesAtOffset(tradeShadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference, withBytes: shinyValue.rawValue)
-			}
+			dol.replace2BytesAtOffset(tradeShadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference, withBytes: shinyValue.rawValue)
 
 			dol.save()
 

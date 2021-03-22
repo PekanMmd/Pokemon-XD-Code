@@ -31,4 +31,8 @@ class XGGiftPokemonManager {
 		
 		return gifts
 	}
+
+	class func allNonShadowGiftPokemon() -> [XGGiftPokemon] {
+		return allGiftPokemon()
+	}
 }

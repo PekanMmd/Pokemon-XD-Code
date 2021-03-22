@@ -13,6 +13,22 @@ private var dataTablesByFile = [String: GoDDataTable]()
 private var dataTablesByIndex = [Int: GoDDataTable]()
 #endif
 
+enum XGDeckTypes : UInt32 {
+	case DCKT = 0x44434B54
+	case DCKP = 0x44434B50
+	case DCKA = 0x44434B41
+	case none = 0x00000000
+
+	var name: String {
+		switch self {
+		case .DCKT: return "Trainer Deck"
+		case .DCKP: return "Pokemon Deck"
+		case .DCKA: return "AI Deck"
+		case .none: return "none"
+		}
+	}
+}
+
 class GoDDataTable: CustomStringConvertible {
 	
 	var description: String {
@@ -58,8 +74,8 @@ class GoDDataTable: CustomStringConvertible {
 			var entryCount = 0
 			var entrySize = 0
 			
-			switch self.file {
-			case .indexAndFsysName(_, "common"):
+			switch self.file.fileType {
+			case .bin:
 				entryCount = data.get4BytesAtOffset(0)
 				entrySize  = data.get4BytesAtOffset(4)
 				self.subStartOffset = data.get4BytesAtOffset(8)
@@ -69,19 +85,19 @@ class GoDDataTable: CustomStringConvertible {
 			case .dckt:
 				entryCount = data.get4BytesAtOffset(8)
 				entrySize  = kSizeOfTrainerData
-				self.startOffset = XGDecks.headerSize
+				self.startOffset = 0x10
 				self.subStartOffset = startOffset
 				
 			case .dckp:
 				entryCount = data.get4BytesAtOffset(8)
 				entrySize  = kSizeOfPokemonData
-				self.startOffset = XGDecks.headerSize
+				self.startOffset = 0x10
 				self.subStartOffset = startOffset
 				
 			case .dcka:
 				entryCount = data.get4BytesAtOffset(8)
 				entrySize  = 0x24
-				self.startOffset = XGDecks.headerSize
+				self.startOffset = 0x10
 				self.subStartOffset = startOffset
 				
 			default: break
@@ -221,8 +237,8 @@ class GoDDataTable: CustomStringConvertible {
 		let d = XGMutableData(byteStream: bytes, file: self.file)
 
 		#if GAME_PBR
-		switch self.file {
-		case .indexAndFsysName(_, "common"):
+		switch self.file.fileType {
+		case .bin:
 			d.replace4BytesAtOffset(0, withBytes: entryCount)
 			d.replace4BytesAtOffset(4, withBytes: entrySize)
 			d.replace4BytesAtOffset(8, withBytes: subStart)
@@ -266,6 +282,14 @@ class GoDDataTable: CustomStringConvertible {
 		#endif
 	}
 
+	class func clearCache() {
+		#if GAME_PBR
+		dataTablesByFile.removeAll()
+		#else
+		dataTablesByIndex.removeAll()
+		#endif
+	}
+
 	#if !GAME_PBR
 	class func tableForIndex(_ index: CommonIndexes, entrySize: Int) -> GoDDataTable? {
 		return dataTablesByIndex[index.rawValue] ?? GoDDataTable(index: index, entrySize: entrySize)
@@ -273,13 +297,6 @@ class GoDDataTable: CustomStringConvertible {
 	#else
 	class func tableForFile(_ file: XGFiles) -> GoDDataTable {
 		return dataTablesByFile[file.path] ?? GoDDataTable(file: file)
-	}
-
-	class func clearCache() {
-		dataTablesByFile.removeAll()
-		#if !GAME_PBR
-		dataTablesByIndex.removeAll()
-		#endif
 	}
 
 	static var pokemonIcons: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 6 : 0, "common")) }

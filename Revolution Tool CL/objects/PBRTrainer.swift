@@ -14,10 +14,10 @@ let kNumberOfTrainerPokemon			= 0x06
 class XGTrainer: NSObject, XGIndexedValue {
 
 	var index				= 0x0
-	var deckData			= XGDeckTrainer.deck(0, .null)
+	var file: XGFiles!
 	
 	var nameID				= 0x0
-	var pokemon				= [XGDeckPokemon]()
+	var pokemon				= [XGTrainerPokemon]()
 	var trainerModel		= XGTrainerModels.none
 	
 	override var description : String {
@@ -28,7 +28,7 @@ class XGTrainer: NSObject, XGIndexedValue {
 			s += "\(self.index): \(self.name)\n"
 			s += "--------------------------\n"
 			for p in self.pokemon {
-				s += "\(p.pokemon.name)"
+				s += "\(p.species.name)"
 				s += "\n"
 			}
 			
@@ -38,22 +38,20 @@ class XGTrainer: NSObject, XGIndexedValue {
 		}
 	}
 	
-	var name : XGString {
-		get {
-			return getStringSafelyWithID(id: nameID)
-		}
+	var name: XGString {
+		return getStringSafelyWithID(id: nameID)
 	}
 	
-	init(deckData: XGDeckTrainer) {
+	init(index: Int, file: XGFiles) {
 		super.init()
 		
-		self.index = deckData.index
-		self.deckData  = deckData
+		self.index = index
+		self.file  = file
 
-		let deckTable = GoDDataTable.tableForFile(deckData.deck.file)
+		let deckTable = GoDDataTable.tableForFile(file)
 
 		guard let entry = deckTable.entryWithIndex(index) else {
-			printg("Failed to load deck data:", deckData.deck.file.path, "\nindex:", index)
+			printg("Failed to load deck data:", file.path, "\nindex:", index)
 			return
 		}
 

@@ -64,22 +64,53 @@ extension ASM {
 	}
 }
 
-#if !GAME_PBR
 extension XGAssembly {
 
-	class func ASMfreeSpacePointer() -> Int {
-		// returns the next free instruction address (from common_rel) as a pointer to ram
-
-		var offset = kRelFreeSpaceStart
-		let rel = XGFiles.common_rel.data!
-		var value = rel.getWordStreamFromOffset(offset - kRELtoRAMOffsetDifference, length: 16)
-		while value != [0,0,0,0] {
-			offset = offset + 4
-			value = rel.getWordStreamFromOffset(offset - kRELtoRAMOffsetDifference, length: 16)
+	class func ASMfreeSpaceRAMPointer(numberOfBytes: Int? = nil) -> Int? {
+		// returns the next free instruction address (from dol file) as a pointer to ram
+		guard let start = kDolFreeSpaceStart, let end = kDolFreeSpaceEnd else {
+			printg("Couldn't find free space in dol, current iso isn't \(game.name).")
+			return nil
 		}
-		return offset
+
+		guard XGDolPatcher.checkIfUnusedFunctionsInDolWereCleared() else {
+			printg("Couldn't find free space in dol, the patch has not been applied.")
+			return nil
+		}
+
+		guard let dol = XGFiles.dol.data else {
+			printg("Couldn't find free space in dol, file doesn't exist: \(XGFiles.dol.path)")
+			return nil
+		}
+
+		var offset = dol.get4BytesAtOffset(start + 4)
+		if offset != 0xFFFFFFFF, offset >= 0x80000000 {
+			offset -= 0x80000000
+		}
+		if offset == 0xFFFFFFFF || offset < start + 16 || offset > end /* In case offset was mistakenly/incorrectly written to */ {
+			offset = start + 16
+		}
+		while offset % 4 != 0 {
+			offset += 1
+		}
+		let checkSize = (numberOfBytes ?? 8) / 4
+		var values = dol.getWordStreamFromOffset(offset, length: checkSize * 4)
+		while values.contains(where: { $0 != 0 }) && (offset + checkSize < end)  {
+			offset += 4
+			values = dol.getWordStreamFromOffset(offset, length: checkSize * 4)
+		}
+		return offset >= end ? nil : offset
 	}
 
+	/// Keeps track of last used free space pointer to make future searches faster
+	class func setLastRAMOffsetUsed(_ to: Int) {
+		if let dol = XGFiles.dol.data, let start = kDolFreeSpaceStart {
+			dol.replace4BytesAtOffset(start + 4, withBytes: to)
+			dol.save()
+		}
+	}
+
+	#if !GAME_PBR
 	class func replaceRELASM(startOffset: Int, newASM asm: ASM) {
 		let ramOffset = startOffset > kRELtoRAMOffsetDifference ? startOffset : startOffset + kRELtoRAMOffsetDifference
 		replaceRELASM(startOffset: startOffset, newASM: asm.wordStreamAtRAMOffset(ramOffset))
@@ -92,24 +123,30 @@ extension XGAssembly {
 			rel.save()
 		}
 	}
+	#endif
 
 	class func replaceRamASM(RAMOffset: Int, newASM asm: [XGASM]) {
 		var offset = RAMOffset
 		if offset > 0x80000000 {
 			offset -= 0x80000000
 		}
+		#if GAME_PBR
+		replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: asm)
+		#else
 		if RAMOffset > kRELtoRAMOffsetDifference {
 			replaceRELASM(startOffset: offset - kRELtoRAMOffsetDifference, newASM: asm)
 		} else {
 			replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: asm)
 		}
+		#endif
 	}
 
 	class func removeASM(startOffset: Int, length: Int) {
-		let asm = [UInt32](repeating: kNopInstruction, count: length)
+		let asm = [UInt32](repeating: XGASM.nop.code, count: length)
 		replaceASM(startOffset: startOffset, newASM: asm)
 	}
 
+	#if !GAME_PBR
 	class func setShadowMovesUseHMFlag() {
 
 		guard game == .XD else {
@@ -129,12 +166,26 @@ extension XGAssembly {
 				data.save()
 			}
 
-			let shadowPPstart = ASMfreeSpacePointer()
+			guard let shadowPPstart = ASMfreeSpaceRAMPointer() else {
+				printg("Couldn't apply patch.")
+				return
+			}
 			let shadowPPCodeStart = 0x146f28
 			let checkShadowMove = 0x13e514 // get hm flag but could use any function you like
 			let notShadow = 0x146f50
 			let (lis, addi) = XGASM.loadImmediateShifted32bit(register: .r0, value: shadowPPstart.unsigned)
 			let endBranch = 0x146f78
+
+			guard let dol = XGFiles.dol.data else {
+				printg("Couldn't apply patch.")
+				return
+			}
+			var currentOffset = shadowPPstart - kDolToRAMOffsetDifference
+			for i in 0 ..< CommonIndexes.NumberOfMoves.value {
+				dol.replaceWordAtOffset(currentOffset, withBytes: (i.unsigned << 16) + (5 << 8))
+				currentOffset += 4
+			}
+			dol.save()
 
 			// shadow move check function branches to hm flag
 			XGAssembly.replaceASM(startOffset: 0x13d048, newASM: [.bl(checkShadowMove)])
@@ -151,14 +202,6 @@ extension XGAssembly {
 				.add(.r3, .r4, .r0),
 				.b(endBranch)
 			])
-
-			let rel = XGFiles.common_rel.data!
-			var currentOffset = shadowPPstart - kRELtoRAMOffsetDifference
-			for i in 0 ..< CommonIndexes.NumberOfMoves.value {
-				rel.replaceWordAtOffset(currentOffset, withBytes: (i.unsigned << 16) + (5 << 8))
-				currentOffset += 4
-			}
-			rel.save()
 		}
 	}
 
@@ -440,7 +483,10 @@ extension XGAssembly {
 			return
 		}
 
-		let switchlessStart = ASMfreeSpacePointer()
+		guard let switchlessStart = ASMfreeSpaceRAMPointer() else {
+			printg("Couldn't apply patch.")
+			return
+		}
 		let switchless2Start = switchlessStart + 0x74
 		let switchlessBranch = 0x20e36c
 		let executeCodeRoutine = 0x1f3bec
@@ -545,7 +591,7 @@ extension XGAssembly {
 
 		]
 
-		XGAssembly.replaceRELASM(startOffset: switchlessStart - kRELtoRAMOffsetDifference, newASM: switchlessCode + switchless2Code)
+		XGAssembly.replaceASM(startOffset: switchlessStart - kDolToRAMOffsetDifference, newASM: switchlessCode + switchless2Code)
 		XGAssembly.replaceASM(startOffset: switchlessBranch - kDolToRAMOffsetDifference, newASM: [createBranchAndLinkFrom(offset: switchlessBranch, toOffset: switchlessStart)])
 
 	}
@@ -714,7 +760,6 @@ extension XGAssembly {
 		]
 	}
 
-
 	class func getRoutineStartForMoveEffect(index: Int) -> Int {
 		let effectOffset = index * 4
 		let pointerOffset = moveEffectTableStartDOL + effectOffset
@@ -792,9 +837,7 @@ extension XGAssembly {
 			i += 1
 		}
 
-
 		return routine
-
 	}
 
 	class func routineDataForMove(move: XGMoves) -> [Int] {
@@ -828,10 +871,12 @@ extension XGAssembly {
 	}
 
 
-	class func newStatBoostRoutine(effect: Int, boosts: [(stat: XGStats, stages: XGStatStages)], RAMOffset: Int?, affectsUser: Bool) -> [Int] {
+	class func newStatBoostRoutine(effect: Int, boosts: [(stat: XGStats, stages: XGStatStages)], RAMOffset: Int?, affectsUser: Bool) -> [Int]? {
 
 		var routine = [Int]()
-		let offset = RAMOffset ?? ASMfreeSpacePointer()
+		guard let offset = RAMOffset ?? ASMfreeSpaceRAMPointer() else {
+			return nil
+		}
 
 		if boosts.count == 1 {
 			if affectsUser {
@@ -851,6 +896,7 @@ extension XGAssembly {
 		let firstPointer = 0x2f8af8 - kDolTableToRAMOffsetDifference
 		return XGFiles.dol.data!.getWordAtOffset(firstPointer + (4 * index))
 	}
+	#endif
 
 	class func intAsByteArray(_ i: Int) -> [Int] {
 		var val = i
@@ -872,7 +918,6 @@ extension XGAssembly {
 		return array
 	}
 }
-#endif
 
 
 

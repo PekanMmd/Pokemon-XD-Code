@@ -113,6 +113,14 @@ extension Array {
 			closure(i, self[i])
 		}
 	}
+
+	var stack: XGStack<Element> {
+		let s = XGStack<Element>()
+		self.reversed().forEach {
+			s.push($0)
+		}
+		return s
+	}
 }
 
 extension Array where Element == String {
@@ -245,15 +253,19 @@ extension Int {
 		})
 	}
 	
-	func bitArray(count: Int) -> [Bool] {
-		// least significant bit first
+	func bitArray(count: Int, startWithLeastSignificantBit: Bool = true) -> [Bool] {
 		var value = self
 		var bits = [Bool]()
 		for _ in 0 ..< count {
 			bits.append((value & 0x1) == 1)
 			value = value >> 1
 		}
-		return bits
+
+		if startWithLeastSignificantBit {
+			return bits
+		} else {
+			return bits.reversed()
+		}
 	}
 	
 	func stringIDToString() -> XGString {

@@ -46,7 +46,7 @@ final class XGMove: NSObject, XGIndexedValue {
 	var target				= XGMoveTargets.selectedTarget
 	var category			= XGMoveCategories.none
 	var effectType			= XGMoveEffectTypes.none
-	var contestAppeal		= XGContestAppeals.cool
+	var contestAppeal		= XGContestCategories.cool
 	
 	var contactFlag		= false
 	var protectFlag		= false
@@ -90,7 +90,7 @@ final class XGMove: NSObject, XGIndexedValue {
 		let targets = data.getShort(2)
 		target = XGMoveTargets(rawValue: targets) ?? .selectedTarget
 		let appeal = data.getByte(6)
-		contestAppeal = XGContestAppeals(rawValue: appeal) ?? .cool
+		contestAppeal = XGContestCategories(rawValue: appeal) ?? .cool
 		
 		nameID = data.getShort(8)
 		descriptionID = data.getShort(10)
