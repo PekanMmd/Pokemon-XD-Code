@@ -891,6 +891,8 @@ final class XGFsys : NSObject {
 				#else
 				let fileContainsScript = false
 				#endif
+
+				#if !GAME_COLO
 				if (fileContainsScript) {
 					let xdsFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.xds.fileExtension, folder)
 					if !xdsFile.exists || overwrite {
@@ -898,6 +900,7 @@ final class XGFsys : NSObject {
 						XGUtility.saveString(scriptText, toFile: xdsFile)
 					}
 				}
+				#endif
 
 				if file.fileType == .thh {
 					let thpFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.thp.fileExtension, folder)

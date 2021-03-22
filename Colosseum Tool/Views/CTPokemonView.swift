@@ -49,7 +49,7 @@ class GoDPokemonView: NSImageView {
 		if !pokemon.isSet {
 			self.setBackgroundColour(GoDDesign.colourGrey())
 			self.alphaValue = 0.5
-		} else if pokemon.isShadow {
+		} else if pokemon.isShadowPokemon {
 			self.setBackgroundColour(GoDDesign.colourPurple())
 			self.alphaValue = 1.0
 		} else {
@@ -60,7 +60,7 @@ class GoDPokemonView: NSImageView {
 		for key in views.keys {
 			let view = views[key]!
 			if key.contains("shadow") {
-				view.isHidden = !pokemon.isShadow
+				view.isHidden = !pokemon.isShadowPokemon
 			} else if (key != "dpkm") && (key != "ddpk") {
 				view.isHidden = pokemon.index == 0
 			} else {
@@ -386,7 +386,7 @@ class GoDPokemonView: NSImageView {
 		else if gr == .femaleOnly { self.delegate.pokemon[self.index].gender = .female }
 		else if gr == .genderless { self.delegate.pokemon[self.index].gender = .genderless }
 		
-		if self.delegate.pokemon[self.index].isShadow {
+		if self.delegate.pokemon[self.index].isShadowPokemon {
 			self.delegate.pokemon[self.index].shadowCatchRate = sender.selectedValue.catchRate
 		}
 		

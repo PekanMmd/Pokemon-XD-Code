@@ -220,11 +220,6 @@ extension XGTMs: XGEnumerable {
 }
 
 extension XGTMs: XGDocumentable {
-	
-	static var className: String {
-		return "TMs"
-	}
-	
 	var documentableName: String {
 		return enumerableName
 	}

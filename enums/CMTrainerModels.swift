@@ -153,10 +153,6 @@ extension XGTrainerModels: XGEnumerable {
 
 extension XGTrainerModels: XGDocumentable {
 	
-	static var className: String {
-		return "Trainer Models"
-	}
-	
 	var documentableName: String {
 		return enumerableName
 	}

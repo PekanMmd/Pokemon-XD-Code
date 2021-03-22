@@ -141,10 +141,6 @@ extension XGItem: XGEnumerable {
 
 extension XGItem: XGDocumentable {
 	
-	static var className: String {
-		return "Items"
-	}
-	
 	var documentableName: String {
 		return enumerableName + " - " + (enumerableValue ?? "")
 	}

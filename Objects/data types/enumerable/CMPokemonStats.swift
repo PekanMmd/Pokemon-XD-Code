@@ -315,11 +315,6 @@ extension XGPokemonStats: XGEnumerable {
 }
 
 extension XGPokemonStats: XGDocumentable {
-	
-	static var className: String {
-		return "Pokemon Stats"
-	}
-	
 	var isDocumentable: Bool {
 		return catchRate != 0
 	}
