@@ -249,7 +249,8 @@ class GoDStructData: CustomStringConvertible {
 		func integerRawValue(_ string: String) -> Int? {
 			if let part = string.split(separator: " ").map({String($0)}).last {
 				let unbracketed = part.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
-				return unbracketed.integerValue
+				let stripped = unbracketed.simplified // Removes % from percentage values, maybe other things added in future as well
+				return stripped.integerValue
 			}
 			return nil
 		}

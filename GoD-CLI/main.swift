@@ -121,7 +121,7 @@ func randomiser() {
 		options += ["11: Randomise Battle Bingo"]
 	}
 
-	var prompt = "Select a patch to apply:\n\n0: exit\n"
+	var prompt = "Select a randomisation option:\n\n0: exit\n"
 	options.forEach { (option) in
 		prompt += option + "\n"
 	}
@@ -244,6 +244,11 @@ func dataTablesMenu() {
 	}
 }
 
+func showAbout() {
+	printg(aboutMessage())
+	_ = readInput("Press enter to continue...")
+}
+
 func mainMenu() {
 	while true {
 		let option2 = game == .PBR ? "2: - (unavailable for PBR)" : "2: Delete unused files in the ISO. Use this if there is not enough space to rebuild the ISO."
@@ -264,7 +269,9 @@ func mainMenu() {
 
 		7: Data Tables - Export, Import or Document game data like pokemon stats
 
+		8: About - View version number and contact information
 		"""
+
 
 		let input = readInput(prompt)
 		switch input {
@@ -279,6 +286,7 @@ func mainMenu() {
 		case "5": applyPatches()
 		case "6": randomiser()
 		case "7": dataTablesMenu()
+		case "8": showAbout()
 		default: invalidOption(input)
 		}
 	}

@@ -384,13 +384,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	
 	@IBAction func showAbout(_ sender: AnyObject) {
-		let text = """
-		\(game == .XD ? "Gale of Darkness Tool" : "Colosseum Tool") \(versionNumber)
-		by @StarsMmd
-
-		source code: https://github.com/PekanMmd/Pokemon-XD-Code.git
-		"""
-		GoDAlertViewController.displayAlert(title: "About GoD Tool", text: text)
+		GoDAlertViewController.displayAlert(title: "About GoD Tool", text: aboutMessage())
 	}
 	
 	@IBAction func showHelp(_ sender: Any) {

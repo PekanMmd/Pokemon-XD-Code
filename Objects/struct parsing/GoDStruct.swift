@@ -143,7 +143,7 @@ struct GoDStruct {
 indirect enum GoDStructPropertyTypes {
 	case uint // unsigned int (only positive values)
 	case int // signed int (positive or negative values)
-	case float, bool, bitMask, null
+	case float, percentage, bool, bitMask, null
 	case pokemonID, moveID, itemID, abilityID, natureID, genderID, typeID
 	case moveCategory, typeEffectiveness, moveEffectID
 	case genderRatio, expRate, evolutionMethod, moveTarget
@@ -327,6 +327,8 @@ indirect enum GoDStructValues: CustomStringConvertible {
 			switch property.type {
 			case .null:
 				return "None (0)"
+			case .percentage:
+				return "\(rawValue)%"
 			case .float:
 				valueString = String(UInt32(rawValue & 0xFFFFFFFF).hexToSignedFloat())
 			case .bool:

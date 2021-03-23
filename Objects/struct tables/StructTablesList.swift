@@ -41,7 +41,11 @@ let commonStructTablesList: [GoDStructTableFormattable] = {
 	#if GAME_XD
 	let xdTables = [
 		battleBingoTable,
-		trainerClassesTable
+		trainerClassesTable,
+		oasisPokespotTable,
+		rockPokespotTable,
+		cavePokespotTable,
+		allPokespotsTable
 	] as? [GoDStructTableFormattable]
 	tables += xdTables ?? []
 	#endif

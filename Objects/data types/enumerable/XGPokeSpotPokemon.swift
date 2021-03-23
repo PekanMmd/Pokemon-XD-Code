@@ -20,22 +20,22 @@ let kStepsPerPokeSnackOffset	= 0x0A
 
 final class XGPokeSpotPokemon: NSObject, Codable {
 	
-	var index				= 0
+	var index					= 0
 	var spot					= XGPokeSpots.rock
 	var pokemon					= XGPokemon.index(0)
 	
 	var minLevel				= 0
 	var maxLevel				= 0
-	var encounterPercentage	= 0
+	var encounterPercentage		= 0
 	var stepsPerSnack			= 0
 
-	var location : String {
+	var location: String {
 		get {
 			return spot.string
 		}
 	}
 	
-	var startOffset : Int {
+	var startOffset: Int {
 		get {
 			return spot.commonRelIndex.startOffset + (index * kSizeOfPokeSpotData)
 		}

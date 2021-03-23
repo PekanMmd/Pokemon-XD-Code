@@ -155,20 +155,6 @@ class XGRandomiser: NSObject {
 			return newSpecies
 		}
 
-		for deck in MainDecksArray {
-			for pokemon in deck.allActivePokemon {
-				if shadowsOnly && !pokemon.isShadowPokemon {
-					continue
-				}
-
-				pokemon.species = randomise(oldSpecies: pokemon.species, checkDuplicates: pokemon.isShadowPokemon, shadowID: pokemon.shadowID)
-				pokemon.shadowCatchRate = pokemon.species.catchRate
-				pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
-				pokemon.happiness = 128
-				pokemon.save()
-			}
-		}
-
 		if !shadowsOnly {
 			for gift in XGGiftPokemonManager.allNonShadowGiftPokemon() {
 
@@ -209,6 +195,24 @@ class XGRandomiser: NSObject {
 		tradeShadowPokemon.move4 = moves[3]
 		tradeShadowPokemon.save()
 		#endif
+
+		var decks = MainDecksArray
+		#if GAME_XD
+		decks += [XGDecks.DeckDarkPokemon]
+		#endif
+		for deck in MainDecksArray + [XGDecks.DeckDarkPokemon] {
+			for pokemon in deck.allActivePokemon {
+				if shadowsOnly && !pokemon.isShadowPokemon {
+					continue
+				}
+
+				pokemon.species = randomise(oldSpecies: pokemon.species, checkDuplicates: pokemon.isShadowPokemon, shadowID: pokemon.shadowID)
+				pokemon.shadowCatchRate = pokemon.species.catchRate
+				pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
+				pokemon.happiness = 128
+				pokemon.save()
+			}
+		}
 
 		printg("done!")
 	}

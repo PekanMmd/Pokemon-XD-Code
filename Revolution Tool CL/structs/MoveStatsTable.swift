@@ -18,9 +18,9 @@ let moveStatsTable = CommonStructTable(index: region == .JP ? 31 : 30, propertie
 	.byte(name: "Category", description: "Physical, Special or Status", type: .moveCategory),
 	.byte(name: "Base Power", description: "", type: .uint),
 	.byte(name: "Type", description: "", type: .typeID),
-	.byte(name: "Base Accuracy", description: "", type: .uint),
+	.byte(name: "Base Accuracy", description: "", type: .percentage),
 	.byte(name: "Base PP", description: "How much PP the move has by default", type: .uint),
-	.byte(name: "Effect Accuracy", description: "The probability of the secondary effect activating", type: .uint),
+	.byte(name: "Effect Accuracy", description: "The probability of the secondary effect activating", type: .percentage),
 	.byte(name: "Priority", description: "", type: .int),
 	.bitArray(name: "Flags", description: "", bitFieldNames: [
 		"Unknown Flag 8",

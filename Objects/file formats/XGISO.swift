@@ -503,29 +503,31 @@ class XGISO: NSObject {
 			printg("\(name) cannot be deleted")
 			return
 		}
-		printg("deleting ISO file: \(name)...")
 		
-		if let start = locationForFile(name) {
-			if let size = sizeForFile(name) {
-				eraseDataForFile(name: name)
-				if name.fileExtensions == ".fsys" {
+		if let start = locationForFile(name),
+		   let size = sizeForFile(name) {
+
+			if name.fileExtensions == ".fsys" {
+				if size > NullFSYS.length {
+					printg("deleting ISO file: \(name)...")
+					eraseDataForFile(name: name)
 					// prevents crashes when querying fsys data
 					self.shiftAndReplaceFile(name: name, withData: NullFSYS)
-					printg("deleted ISO file:", name)
-				} else {
-					if size >= 16 {
-						// hex for string "DELETED DELETED "
-						let deleted = [0x44, 0x45, 0x4C, 0x45, 0x54, 0x45, 0x44, 0x20, 0x44, 0x45, 0x4C, 0x45, 0x54, 0x45, 0x44, 0x00]
-						self.data.replaceBytesFromOffset(start, withByteStream: deleted)
-						setSize(size: deleted.count, forFile: name)
-						printg("deleted ISO file:", name)
+					if save {
+						self.data.save()
 					}
+					printg("deleted ISO file:", name)
 				}
+			} else if size > 16 {
+				// hex for string "DELETED DELETED "
+				let deleted = [0x44, 0x45, 0x4C, 0x45, 0x54, 0x45, 0x44, 0x20, 0x44, 0x45, 0x4C, 0x45, 0x54, 0x45, 0x44, 0x00]
+				printg("deleting ISO file: \(name)...")
+				self.data.replaceBytesFromOffset(start, withByteStream: deleted)
+				setSize(size: deleted.count, forFile: name)
 				if save {
 					self.data.save()
 				}
-			} else {
-				printg("Couldn't delete ISO file:", name, ". It doesn't exist!")
+				printg("deleted ISO file:", name)
 			}
 		} else {
 			printg("Couldn't delete ISO file:", name, ". It doesn't exist!")

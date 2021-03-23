@@ -8,8 +8,27 @@
 
 import Foundation
 
-let versionNumber = "V2.0.0"
+let versionNumber = "V2.1.0"
 var fileDecodingMode = false
+
+func aboutMessage() -> String {
+	let gameName: String
+	switch game {
+	case .XD:
+		gameName = "GoD Tool"
+	case .Colosseum:
+		gameName = "Colosseum Tool"
+	case .PBR:
+		gameName = "Pokemon Battle Revolution Tool"
+	}
+	return """
+	\(gameName) \(versionNumber)
+	by Stars Momodu
+	Twitter: @StarsMmd | Discord: Stars#4434
+
+	source code: https://github.com/PekanMmd/Pokemon-XD-Code.git
+	"""
+}
 
 #if GAME_XD
 let documentsFolderName = "GoD Tool"
@@ -21,7 +40,7 @@ var isDemo: Bool {
 
 #elseif GAME_COLO
 
-let documentsFolderName = "Colosseum Tool"
+let documentsFolderName = "CM Tool"
 let game = XGGame.Colosseum
 let console = Console.ngc
 let isDemo = false
@@ -38,8 +57,8 @@ let isDemo = false
 func loadDocumentsPath() {
 	documentsPath = {
 		return (XGISO.inputISOFile?.folder.path ?? NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+			+ (XGISO.inputISOFile == nil ? "" : "\(XGISO.inputISOFile!.fileName.removeFileExtensions()) ")
 			+ "/\(documentsFolderName)"
-			+ (XGISO.inputISOFile == nil ? "" : " \(XGISO.inputISOFile!.fileName.removeFileExtensions())")
 	}()
 }
 var documentsPath = {
