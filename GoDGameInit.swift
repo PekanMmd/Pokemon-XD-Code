@@ -57,8 +57,8 @@ let isDemo = false
 func loadDocumentsPath() {
 	documentsPath = {
 		return (XGISO.inputISOFile?.folder.path ?? NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
-			+ (XGISO.inputISOFile == nil ? "" : "\(XGISO.inputISOFile!.fileName.removeFileExtensions()) ")
-			+ "/\(documentsFolderName)"
+			+ (XGISO.inputISOFile == nil ? "" : "/\(XGISO.inputISOFile!.fileName.removeFileExtensions()) ")
+			+ "\(documentsFolderName)"
 	}()
 }
 var documentsPath = {

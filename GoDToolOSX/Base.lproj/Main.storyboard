@@ -42,9 +42,9 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="j5K-bA-3cW"/>
-                                        <menuItem title="Quick Build" keyEquivalent="b" id="pVb-YK-IBf">
+                                        <menuItem title="Quick Build" keyEquivalent="b" id="BWv-xb-o9R">
                                             <connections>
-                                                <action selector="quickBuildISO:" target="Voe-Tx-rLC" id="Yoo-np-y6B"/>
+                                                <action selector="quickBuildISO:" target="Voe-Tx-rLC" id="W4R-eF-viG"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Rebuild ISO" keyEquivalent="r" id="Was-JA-tGl">
@@ -53,6 +53,12 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="mLq-Zu-sy3"/>
+                                        <menuItem title="Add File To ISO" id="pVb-YK-IBf">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="addFileToISO:" target="Voe-Tx-rLC" id="1cc-ft-5JM"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Extract ISO" keyEquivalent="e" id="sFy-YC-dJ9">
                                             <connections>
                                                 <action selector="extractISO:" target="Voe-Tx-rLC" id="ZWr-I0-cbr"/>

@@ -29,7 +29,7 @@ enum CommonIndexes : Int {
 	case NumberOfLegendaryPokemon = 3
 	
 	case PokefaceTextures = 4
-	
+	case NumberOfPokefaceTextures = 5
 	case PeopleIDs = 6 // 2 bytes at offset 0 person id 4 bytes at offset 4 string id for character name
 	case NumberOfPeopleIDs = 7
 	
@@ -78,7 +78,9 @@ enum CommonIndexes : Int {
 	
 	case TreasureBoxData = 60
 	case NumberTreasureBoxes = 61
-	
+
+	case Multipliers = 70
+	case NumberOfMultipliers = 71
 	case CharacterModels = 72
 	case NumberOfCharacterModels = 73
 	
@@ -88,7 +90,7 @@ enum CommonIndexes : Int {
 	case PokemonMetLocations = 82
 	case NumberOfMetLocations = 83
 	
-	case InteractionPoints = 86 // warps and inanimate objects
+	case InteractionPoints = 86 // warps and interactable objects
 	case NumberOfInteractionPoints = 87
 	
 	case StringTableB = 101

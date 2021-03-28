@@ -32,7 +32,7 @@ enum XGBattleTypes : Int, Codable, CaseIterable {
 		switch self {
 			
 		case .none:
-			return "Invalid Battle Type"
+			return "None"
 		case .story_admin_colo:
 			return "Admin Battle (colosseum)"
 		case .story:

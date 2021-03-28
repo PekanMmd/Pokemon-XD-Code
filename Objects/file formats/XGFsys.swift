@@ -214,6 +214,11 @@ final class XGFsys : NSObject {
 		return index < filenames.count ? filenames[index] : nil
 	}
 
+	func fileNameForFileWithIdentifier(_ identifier: Int) -> String? {
+		guard let index = indexForIdentifier(identifier: identifier) else { return nil }
+		return fileNameForFileWithIndex(index: index)
+	}
+
 	func fileTypeForFileWithIndex(index: Int) -> XGFileTypes? {
 		return index < files.count ? files[index].fileType : nil
 	}
@@ -246,7 +251,9 @@ final class XGFsys : NSObject {
 	}
 	
 	func indexForIdentifier(identifier: Int) -> Int? {
-		return identifiers.firstIndex(where: {$0 == identifier})
+		// .rdat models use the last byte as the animation index so we ignore it here
+		// just to compare the file identifier itself
+		return identifiers.firstIndex(where: {$0 == (identifier % 0xFFFFFF00)})
 	}
 	
 	func indexForFileType(type: XGFileTypes) -> Int? {

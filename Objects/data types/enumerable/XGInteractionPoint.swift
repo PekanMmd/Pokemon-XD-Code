@@ -50,6 +50,21 @@ enum XGInteractionMethods : Int, Codable {
 	case WalkInFront = 2
 	case PressAButton = 3
 	case PressAButton2 = 4 // colosseum only
+
+	var name: String {
+		switch self {
+		case .None:
+			return "None"
+		case .WalkThrough:
+			return "Walk Through"
+		case .WalkInFront:
+			return "Walk In Front Of"
+		case .PressAButton:
+			return "Press A"
+		case .PressAButton2:
+			return "Press A 2"
+		}
+	}
 }
 enum XGElevatorDirections : Int, Codable {
 	case up = 0

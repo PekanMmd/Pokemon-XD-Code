@@ -17,13 +17,13 @@ enum XGBattleStyles : Int, Codable, CaseIterable {
 	var name: String {
 		switch self {
 		case .none:
-			return "none"
+			return "None"
 		case .single:
-			return "single"
+			return "Single"
 		case .double:
-			return "double"
+			return "Double"
 		case .other:
-			return "other"
+			return "Other"
 		}
 	}
 }

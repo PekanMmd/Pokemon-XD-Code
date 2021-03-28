@@ -25,7 +25,6 @@ enum CommonIndexes : Int {
 	// then calls common.scd's "@flagshop" function (0x5960017) to set other necessary flags
 	
 	// colosseum only
-	case PokefaceTextures = -1
 	case RoomData = -2
 	case NumberOfRoomData = -3
 	case Trainers = -4
@@ -78,18 +77,24 @@ enum CommonIndexes : Int {
 	case TotalNumberOfItems = 69
 	case Items = 70
 	case NumberOfItems = 71
+
+	case PokefaceTextures = 76
+	case NumberOfPokefaceTextures = 77
+
 	case CharacterModels = 84
 	case NumberOfCharacterModels = 85
 	case PokemonStats = 88
 	case NumberOfPokemon = 89
 	case Natures = 94
 	case NumberOfNatures = 95
+	case Multipliers = 96 //1 byte numerator, 1 byte denominator
+	case NumberOfMultipliers = 97
+	
 	case SoundsMetaData = 102
 	case NumberOfSounds = 103
 	case BGM = 104
 	case NumberBGM = 105
 	
-	case stringTable1 = 116
 	case Moves = 124
 	case NumberOfMoves = 125
 	case TutorMoves = 126

@@ -278,6 +278,28 @@ extension UInt8 {
 	func hex() -> String {
 		return String(format: "%02x", self).uppercased()
 	}
+
+	func signed() -> Int {
+		var integerValue = Int(self)
+		if integerValue > 0x7F {
+			integerValue -= 0x100
+		}
+		return integerValue
+	}
+}
+
+extension UInt16 {
+	func hex() -> String {
+		return String(format: "%02x", self).uppercased()
+	}
+
+	func signed() -> Int {
+		var integerValue = Int(self)
+		if integerValue > 0x7FFF {
+			integerValue -= 0x10000
+		}
+		return integerValue
+	}
 }
 
 extension UInt32 {
@@ -313,7 +335,7 @@ extension UInt32 {
 		// least significant bit first
 		var value = self
 		var bits = [Bool]()
-		for _ in 0 ... 32 {
+		for _ in 0 ..< 32 {
 			bits.append((value & 0x1) == 1)
 			value = value >> 1
 		}
@@ -326,13 +348,13 @@ extension UInt32 {
 	
 	var int16: Int {
 		var value = (self & 0xFFFF).int
-		value = value > 0x8000 ? value - 0x10000 : value
+		value = value >= 0x8000 ? value - 0x10000 : value
 		return value
 	}
 	
 	var int32: Int {
 		var value = (self & 0xFFFFFFFF).int
-		value = value > 0x80000000 ? value - 0x100000000 : value
+		value = value >= 0x80000000 ? value - 0x100000000 : value
 		return value
 	}
 	
@@ -433,7 +455,7 @@ extension String {
 	var camelCaseBySpaces: String {
 		var parts = split(separator: " ").map{String($0)}
 		if parts.count > 0 {
-			parts[0] = parts[0].lowercased()
+			parts[0] = parts[0].simplified.lowercased()
 			(1 ..< parts.count).forEach { (index) in
 				parts[index] = parts[index].capitalized
 			}
@@ -592,7 +614,7 @@ extension String {
 				if char == "é" {
 					result += "e"
 				} else {
-					if !"!@£$%^&*()+-=|[]{}\\/?><,.;:'\"`~# 「」。".contains(char) {
+					if !"!@£$%^&*()+-=|[]{}\\/?><,.;:'\"`~# 「」。°".contains(char) {
 						result += char
 					}
 				}

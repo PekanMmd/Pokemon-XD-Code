@@ -16,9 +16,9 @@ enum XGColosseumRounds: Int, Codable, CaseIterable {
 	case semifinal = 0x9b
 	case final = 0x9c
 	
-	var name : String {
+	var name: String {
 		switch self {
-			case .none: return "none"
+			case .none: return "None"
 			case .first: return "Colosseum Round 1"
 			case .second: return "Colosseum Round 2"
 			case .semifinal: return "Colosseum Semifinal"
@@ -35,7 +35,7 @@ enum XGColosseumRounds: Int, Codable, CaseIterable {
 
 	var name : String {
 		switch self {
-		case .none: return "none"
+		case .none: return "None"
 		case .first: return "Colosseum Round 1"
 		case .second: return "Colosseum Round 2"
 		case .semifinal: return "Colosseum Semifinal"

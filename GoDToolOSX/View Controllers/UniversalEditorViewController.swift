@@ -7,50 +7,6 @@
 
 import Cocoa
 
-fileprivate enum TableTypes {
-	fileprivate enum StructTableTypes {
-		case deckTrainer, deckPokemon, deckAI, common, other
-
-		var colour: NSColor {
-			switch self {
-			case .deckTrainer:
-				return GoDDesign.colourLightBlue()
-			case .deckPokemon:
-				return GoDDesign.colourLightGreen()
-			case .deckAI:
-				return GoDDesign.colourRed()
-			case .common:
-				return GoDDesign.colourYellow()
-			case .other:
-				return GoDDesign.colourLightOrange()
-			}
-		}
-	}
-	case structTable(table: GoDStructTableFormattable, type: StructTableTypes)
-	case codableData(data: GoDCodable.Type)
-
-	var name: String {
-		switch self {
-		case .structTable(let table, _): return table.properties.name + (table.fileVaries ? "\n" + table.file.fileName : "")
-		case .codableData(let type): return type.className
-		}
-	}
-
-	var isStructTable: Bool {
-		switch self {
-		case .structTable: return true
-		case .codableData: return false
-		}
-	}
-
-	var colour: NSColor {
-		switch self {
-		case .structTable(_, let type): return type.colour
-		case .codableData: return GoDDesign.colourLightGrey()
-		}
-	}
-}
-
 class UniversalEditorViewController: GoDTableViewController {
 
 	@IBOutlet weak var tableNameLabel: NSTextField!
@@ -58,37 +14,9 @@ class UniversalEditorViewController: GoDTableViewController {
 	@IBOutlet weak var encodeButton: GoDButton!
 	@IBOutlet weak var documentButton: GoDButton!
 	@IBOutlet weak var editButton: GoDButton!
+	@IBOutlet weak var detailsLabel: NSTextField!
 
 	private var lastSearchText: String?
-	private var allValues: [TableTypes] {
-		var list = [TableTypes]()
-
-		list += commonStructTablesList.map { (table) -> TableTypes in
-			.structTable(table: table, type: .common)
-		}
-
-		#if GAME_PBR
-		list += deckPokemonStructList.map { (table) -> TableTypes in
-			.structTable(table: table, type: .deckPokemon)
-		}
-		list += deckTrainerStructList.map { (table) -> TableTypes in
-			.structTable(table: table, type: .deckTrainer)
-		}
-		list += deckAIStructList.map { (table) -> TableTypes in
-			.structTable(table: table, type: .deckAI)
-		}
-		#endif
-
-		list += structTablesList.map { (table) -> TableTypes in
-			.structTable(table: table, type: .other)
-		}
-
-		list += otherTableFormatsList.map({ (type) -> TableTypes in
-			 .codableData(data: type)
-		})
-
-		return list
-	}
 	private var filteredValues = [TableTypes]()
 
 	private var currentTable: TableTypes? {
@@ -97,24 +25,33 @@ class UniversalEditorViewController: GoDTableViewController {
 				button?.isEnabled = currentTable != nil
 			}
 			tableNameLabel.stringValue = currentTable?.name ?? "Data Table"
+			detailsLabel.stringValue = "Details: -"
+			if case .structTable(let table, _) = currentTable {
+				detailsLabel.stringValue =
+				"""
+				Details:
+				File: \(table.file.path)
+				Start Offset: \(table.firstEntryStartOffset.hexString()) (\(table.firstEntryStartOffset))
+				Number of Entries: \(table.numberOfEntries.hexString()) (\(table.numberOfEntries))
+				Entry Length: \(table.entryLength.hexString()) (\(table.entryLength))
+				"""
+			}
+			if case .codableData(let type) = currentTable {
+				detailsLabel.stringValue =
+				"""
+				Details:
+				Number of Entries: \(type.numberOfValues.hexString()) (\(type.numberOfValues))
+				"""
+			}
 		}
 	}
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		filteredValues = allValues
+		filteredValues = TableTypes.allTables
 		table.reloadData()
 	}
     
-	@IBAction func didClickDecodeButton(_ sender: Any) {
-		guard let tableInfo = currentTable else { return }
-		switch tableInfo {
-		case .structTable(let table, _): table.decodeCSVData()
-		case .codableData(let type): type.decodeData()
-		}
-		displayAlert(title: "Done", description: "Finished Decoding")
-	}
-
 	@IBAction func didClickEncodeButton(_ sender: Any) {
 		guard let tableInfo = currentTable else { return }
 		switch tableInfo {
@@ -122,6 +59,15 @@ class UniversalEditorViewController: GoDTableViewController {
 		case .codableData(let type): type.encodeData()
 		}
 		displayAlert(title: "Done", description: "Finished Encoding")
+	}
+
+	@IBAction func didClickDecodeButton(_ sender: Any) {
+		guard let tableInfo = currentTable else { return }
+		switch tableInfo {
+		case .structTable(let table, _): table.decodeCSVData()
+		case .codableData(let type): type.decodeData()
+		}
+		displayAlert(title: "Done", description: "Finished Decoding")
 	}
 
 	@IBAction func didClickDocumentButton(_ sender: Any) {
@@ -162,12 +108,12 @@ class UniversalEditorViewController: GoDTableViewController {
 
 		guard !text.isEmpty else {
 			lastSearchText = nil
-			filteredValues = allValues
+			filteredValues = TableTypes.allTables
 			return
 		}
 
 		lastSearchText = text
-		filteredValues = allValues.filter({ (tableInfo) -> Bool in
+		filteredValues = TableTypes.allTables.filter({ (tableInfo) -> Bool in
 			return tableInfo.name.simplified.contains(text.simplified)
 		})
 	}

@@ -8,7 +8,7 @@
 
 import Foundation
 
-let kEeveeStartOffset: Int = {
+var kEeveeStartOffset: Int {
 	guard game == .XD else { return 0 }
 	switch region {
 	case .US: return 0x1CBC50
@@ -16,7 +16,7 @@ let kEeveeStartOffset: Int = {
 	case .EU: return 0x1CD724
 	case .OtherGame: return 0
 	}
-}()
+}
 
 let kStarterSpeciesOffset		= 0x02
 let kStarterLevelOffset			= 0x0B
@@ -28,8 +28,8 @@ let kStarterExpValueOffset		= 0x66
 
 final class XGStarterPokemon: NSObject, XGGiftPokemon, GoDCodable {
 	
-	var level		= 0
-	var exp		= 0
+	var level			= 0
+	var exp				= 0
 	var species			= XGPokemon.index(0)
 	var move1			= XGMoves.index(0)
 	var move2			= XGMoves.index(0)

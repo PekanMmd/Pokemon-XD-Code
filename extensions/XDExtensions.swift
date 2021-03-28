@@ -1361,7 +1361,7 @@ extension XGUtility {
 		XGThreadManager.manager.runInBackgroundAsync {
 			if !shouldCancelDecoding {
 				printg("Decoding Trainers...")
-				for file in XGTrainer.encodedJSONFiles() {
+				for file in XGTrainer.decodedJSONFiles() {
 					do {
 						try XGTrainer.fromJSON(file: file).save()
 					} catch {
@@ -1371,7 +1371,7 @@ extension XGUtility {
 			}
 			if !shouldCancelDecoding {
 				printg("Decoding Battle Bingo Cards...")
-				for file in XGBattleBingoCard.encodedJSONFiles() {
+				for file in XGBattleBingoCard.decodedJSONFiles() {
 					do {
 						try XGBattleBingoCard.fromJSON(file: file).save()
 					} catch {
@@ -1381,7 +1381,7 @@ extension XGUtility {
 			}
 			if !shouldCancelDecoding {
 				printg("Decoding Battles...")
-				for file in XGBattle.encodedJSONFiles() {
+				for file in XGBattle.decodedJSONFiles() {
 					do {
 						try XGBattle.fromJSON(file: file).save()
 					} catch {
@@ -1391,7 +1391,7 @@ extension XGUtility {
 			}
 			if !shouldCancelDecoding {
 				printg("Decoding Character Models...")
-				for file in XGCharacterModel.encodedJSONFiles() {
+				for file in XGCharacterModel.decodedJSONFiles() {
 					do {
 						try XGCharacterModel.fromJSON(file: file).save()
 					} catch {
@@ -1401,42 +1401,42 @@ extension XGUtility {
 			}
 			if !shouldCancelDecoding {
 				printg("Decoding Gift Pokemon...")
-				for file in XGDemoStarterPokemon.encodedJSONFiles() {
+				for file in XGDemoStarterPokemon.decodedJSONFiles() {
 					do {
 						try XGDemoStarterPokemon.fromJSON(file: file).save()
 					} catch {
 						printg("Failed to decode file:", file.path)
 					}
 				}
-				for file in XGStarterPokemon.encodedJSONFiles() {
+				for file in XGStarterPokemon.decodedJSONFiles() {
 					do {
 						try XGStarterPokemon.fromJSON(file: file).save()
 					} catch {
 						printg("Failed to decode file:", file.path)
 					}
 				}
-				for file in CMGiftPokemon.encodedJSONFiles() {
+				for file in CMGiftPokemon.decodedJSONFiles() {
 					do {
 						try CMGiftPokemon.fromJSON(file: file).save()
 					} catch {
 						printg("Failed to decode file:", file.path)
 					}
 				}
-				for file in XGTradePokemon.encodedJSONFiles() {
+				for file in XGTradePokemon.decodedJSONFiles() {
 					do {
 						try XGTradePokemon.fromJSON(file: file).save()
 					} catch {
 						printg("Failed to decode file:", file.path)
 					}
 				}
-				for file in XGTradeShadowPokemon.encodedJSONFiles() {
+				for file in XGTradeShadowPokemon.decodedJSONFiles() {
 					do {
 						try XGTradeShadowPokemon.fromJSON(file: file).save()
 					} catch {
 						printg("Failed to decode file:", file.path)
 					}
 				}
-				for file in XGMtBattlePrizePokemon.encodedJSONFiles() {
+				for file in XGMtBattlePrizePokemon.decodedJSONFiles() {
 					do {
 						try XGMtBattlePrizePokemon.fromJSON(file: file).save()
 					} catch {
@@ -1446,7 +1446,7 @@ extension XGUtility {
 			}
 			if !shouldCancelDecoding {
 				printg("Decoding Doors...")
-				for file in XGDoor.encodedJSONFiles() {
+				for file in XGDoor.decodedJSONFiles() {
 					do {
 						try XGDoor.fromJSON(file: file).save()
 					} catch {
@@ -1456,7 +1456,7 @@ extension XGUtility {
 			}
 			if !shouldCancelDecoding {
 				printg("Decoding Interaction Points...")
-				for file in XGInteractionPointData.encodedJSONFiles() {
+				for file in XGInteractionPointData.decodedJSONFiles() {
 					do {
 						try XGInteractionPointData.fromJSON(file: file).save()
 					} catch {
@@ -1466,7 +1466,7 @@ extension XGUtility {
 			}
 			if !shouldCancelDecoding {
 				printg("Decoding Items...")
-				for file in XGItem.encodedJSONFiles() {
+				for file in XGItem.decodedJSONFiles() {
 					do {
 						try XGItem.fromJSON(file: file).save()
 					} catch {
@@ -1476,7 +1476,7 @@ extension XGUtility {
 			}
 			if !shouldCancelDecoding {
 				printg("Decoding Moves...")
-				for file in XGMove.encodedJSONFiles() {
+				for file in XGMove.decodedJSONFiles() {
 					do {
 						try XGMove.fromJSON(file: file).save()
 					} catch {
@@ -1486,7 +1486,7 @@ extension XGUtility {
 			}
 			if !shouldCancelDecoding {
 				printg("Decoding Pokemarts...")
-				for file in XGPokemart.encodedJSONFiles() {
+				for file in XGPokemart.decodedJSONFiles() {
 					do {
 						try XGPokemart.fromJSON(file: file).save()
 					} catch {
@@ -1496,7 +1496,7 @@ extension XGUtility {
 			}
 			if !shouldCancelDecoding {
 				printg("Decoding Pokemon Stats...")
-				for file in XGPokemonStats.encodedJSONFiles() {
+				for file in XGPokemonStats.decodedJSONFiles() {
 					do {
 						try XGPokemonStats.fromJSON(file: file).save()
 					} catch {
@@ -1506,7 +1506,7 @@ extension XGUtility {
 			}
 			if !shouldCancelDecoding {
 				printg("Decoding Pokespot Encounters...")
-				for file in XGPokeSpotPokemon.encodedJSONFiles() {
+				for file in XGPokeSpotPokemon.decodedJSONFiles() {
 					do {
 						try XGPokeSpotPokemon.fromJSON(file: file).save()
 					} catch {
@@ -1516,7 +1516,7 @@ extension XGUtility {
 			}
 			if !shouldCancelDecoding {
 				printg("Decoding Trainer Classes...")
-				for file in XGTrainerClass.encodedJSONFiles() {
+				for file in XGTrainerClass.decodedJSONFiles() {
 					do {
 						try XGTrainerClass.fromJSON(file: file).save()
 					} catch {
@@ -1526,7 +1526,7 @@ extension XGUtility {
 			}
 			if !shouldCancelDecoding {
 				printg("Decoding Treasure...")
-				for file in XGTreasure.encodedJSONFiles() {
+				for file in XGTreasure.decodedJSONFiles() {
 					do {
 						try XGTreasure.fromJSON(file: file).save()
 					} catch {
@@ -1536,7 +1536,7 @@ extension XGUtility {
 			}
 			if !shouldCancelDecoding {
 				printg("Decoding Types...")
-				for file in XGType.encodedJSONFiles() {
+				for file in XGType.decodedJSONFiles() {
 					do {
 						try XGType.fromJSON(file: file).save()
 					} catch {

@@ -11,9 +11,6 @@ import Foundation
 
 loadISO(exitOnFailure: true)
 
-common.allPointers().forEachIndexed { (index, pointer) in
-	print(index, pointer.hexString())
-}
 
 //XGUtility.exportFileFromISO(.fsys("D4_tower_1F_2"))
 //battleBingoTable.decodeData()

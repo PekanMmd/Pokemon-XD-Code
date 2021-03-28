@@ -13,10 +13,6 @@ class GoDStructData: CustomStringConvertible {
 	private let properties: GoDStruct
 	private(set) var values: [GoDStructValues]
 
-	subscript(_ name: String) -> GoDStructValues? {
-		return valueForPropertyWithName(name)
-	}
-
 	init(properties: GoDStruct, fileData: XGMutableData, startOffset: Int) {
 		self.fileData = fileData
 		self.properties = properties
@@ -56,6 +52,20 @@ class GoDStructData: CustomStringConvertible {
 					rawValues += bitmask.bitArray(count: 8, startWithLeastSignificantBit: false)
 				}
 				return .bitArray(property: property, rawValues: rawValues)
+			case .bitMask(_, _, let fields):
+				currentOffset += property.alignmentBytes(at: currentOffset)
+				let rawByte = fileData.getByteAtOffset(currentOffset)
+				currentOffset += property.length
+				var rawValues = [Int]()
+				fields.forEach { (_, _, count, first) in
+					var mask = 0
+					for _ in 0 ..< count {
+						mask = mask << 1
+						mask += 1
+					}
+					rawValues += [(rawByte >> first) & (mask)]
+				}
+				return .bitMask(property: property, rawValues: rawValues)
 
 			default:
 				currentOffset += property.alignmentBytes(at: currentOffset)
@@ -93,7 +103,7 @@ class GoDStructData: CustomStringConvertible {
 		func flatten(values: [GoDStructValues]) {
 			values.forEach { structValue in
 				switch structValue.property {
-				case .byte, .short,.word, .float, .string, .bitArray:
+				case .byte, .short,.word, .float, .string, .bitArray, .bitMask:
 					flatValues.append(structValue)
 				case .subStruct:
 					if let data: GoDStructData = structValue.value() {
@@ -113,12 +123,12 @@ class GoDStructData: CustomStringConvertible {
 
 	static func fromJSON(properties: GoDStruct, fileData: XGMutableData, startOffset: Int, jsonFile: XGFiles) -> GoDStructData? {
 		guard jsonFile.exists else {
-			printg("Couldn't encode json file: \(jsonFile.path)\nFile doesn't exist.")
+			printg("Couldn't decode json file: \(jsonFile.path)\nFile doesn't exist.")
 			return nil
 		}
 		let jsonObject = jsonFile.json
 		guard let jsonDict = jsonObject as? [String: Any] else {
-			printg("Couldn't encode json file: \(jsonFile.path)\nInvalid json format.")
+			printg("Couldn't decode json file: \(jsonFile.path)\nInvalid json format.")
 			return nil
 		}
 
@@ -139,7 +149,7 @@ class GoDStructData: CustomStringConvertible {
 			properties.format.forEach { property in
 				guard let value = jsonDict[property.name] else {
 					success = false
-					printg("Couldn't encode json file: \(originalFile.path)\nMissing value for property: \(property.name).")
+					printg("Couldn't decode json file: \(originalFile.path)\nMissing value for property: \(property.name).")
 					return
 				}
 				currentOffset += property.alignmentBytes(at: currentOffset)
@@ -147,7 +157,7 @@ class GoDStructData: CustomStringConvertible {
 				case .byte, .short, .word:
 					guard let rawValue = value as? Int else {
 						success = false
-						printg("Couldn't encode json file: \(originalFile.path)\nInvalid integer number \(property.name) : \(value).")
+						printg("Couldn't decode json file: \(originalFile.path)\nInvalid integer number \(property.name) : \(value).")
 						return
 					}
 					values.append(.value(property: property, rawValue: rawValue))
@@ -155,15 +165,23 @@ class GoDStructData: CustomStringConvertible {
 				case .bitArray:
 					guard let rawValues = value as? [Bool] else {
 						success = false
-						printg("Couldn't encode json file: \(originalFile.path)\nInvalid boolean values \(property.name) : \(value).")
+						printg("Couldn't decode json file: \(originalFile.path)\nInvalid boolean values \(property.name) : \(value).")
 						return
 					}
 					values.append(.bitArray(property: property, rawValues: rawValues))
 					currentOffset += property.length
+				case .bitMask:
+					guard let rawValues = value as? [Int] else {
+						success = false
+						printg("Couldn't decode json file: \(originalFile.path)\nInvalid integer values \(property.name) : \(value).")
+						return
+					}
+					values.append(.bitMask(property: property, rawValues: rawValues))
+					currentOffset += property.length
 				case .float:
 					guard let rawValue = value as? Float else {
 						success = false
-						printg("Couldn't encode json file: \(originalFile.path)\nInvalid decimal number \(property.name) : \(value).")
+						printg("Couldn't decode json file: \(originalFile.path)\nInvalid decimal number \(property.name) : \(value).")
 						return
 					}
 					values.append(.float(property: property, rawValue: rawValue))
@@ -171,7 +189,7 @@ class GoDStructData: CustomStringConvertible {
 				case .string:
 					guard let rawValue = value as? String else {
 						success = false
-						printg("Couldn't encode json file: \(originalFile.path)\nInvalid text string \(property.name) : \(value).")
+						printg("Couldn't decode json file: \(originalFile.path)\nInvalid text string \(property.name) : \(value).")
 						return
 					}
 					values.append(.string(property: property, rawValue: rawValue))
@@ -179,7 +197,7 @@ class GoDStructData: CustomStringConvertible {
 				case .subStruct(_, _, let subProperties):
 					guard let rawValue = value as? [String: Any] else {
 						success = false
-						printg("Couldn't encode json file: \(originalFile.path)\nInvalid dictionary \(property.name) : \(value).")
+						printg("Couldn't decode json file: \(originalFile.path)\nInvalid dictionary \(property.name) : \(value).")
 						return
 					}
 					guard let subStruct = GoDStructData(properties: subProperties, fileData: fileData, startOffset: currentOffset, jsonDict: rawValue, originalFile: originalFile) else {
@@ -190,12 +208,12 @@ class GoDStructData: CustomStringConvertible {
 				case .array(_, _, let subProperty, let count):
 					guard let rawValue = value as? [Any] else {
 						success = false
-						printg("Couldn't encode json file: \(originalFile.path)\nInvalid array list \(property.name) : \(value).")
+						printg("Couldn't decode json file: \(originalFile.path)\nInvalid array list \(property.name) : \(value).")
 						return
 					}
 					guard rawValue.count == count else {
 						success = false
-						printg("Couldn't encode json file: \(originalFile.path)\nIncorrect array list length \(property.name) : \(value).")
+						printg("Couldn't decode json file: \(originalFile.path)\nIncorrect array list length \(property.name) : \(value).")
 						printg("Expected: \(count), got: \(rawValue.count)")
 						return
 					}
@@ -224,7 +242,7 @@ class GoDStructData: CustomStringConvertible {
 
 	static func fromCSV(properties: GoDStruct, fileData: XGMutableData, startOffset: Int, csvFile: XGFiles, row: Int) -> GoDStructData? {
 		guard csvFile.exists else {
-			printg("Couldn't encode csv file: \(csvFile.path)\nFile doesn't exist.")
+			printg("Couldn't decode csv file: \(csvFile.path)\nFile doesn't exist.")
 			return nil
 		}
 		let text = csvFile.text
@@ -263,9 +281,33 @@ class GoDStructData: CustomStringConvertible {
 			}
 		}
 
+		func splitCSV(_ csvText: String) -> [String] {
+			var separatedValues = [String]()
+			var currentValue = ""
+			var ignoreCommas = false
+			for character in csvText {
+				switch character {
+				case "\"":
+					ignoreCommas.toggle()
+				case ",":
+					if !ignoreCommas {
+						separatedValues.append(currentValue); currentValue = ""
+					} else {
+						fallthrough
+					}
+				default:
+					currentValue += "\(character)"
+				}
+			}
+			if currentValue.length > 0 {
+				separatedValues.append(currentValue)
+			}
+			return separatedValues
+		}
+
 		func loadProperties(_ properties: GoDStruct, csvText: String) -> [GoDStructValues] {
 			var values = [GoDStructValues]()
-			var rawValuesWithName = csvText.split(separator: ",")
+			var rawValuesWithName = splitCSV(csvText)
 			// Remove First entry which is just the name added in front for convenience
 			rawValuesWithName.removeFirst()
 			let rawValues = rawValuesWithName.map{String($0)}.stack
@@ -273,7 +315,7 @@ class GoDStructData: CustomStringConvertible {
 			properties.format.forEach { property in
 				guard !rawValues.isEmpty || property.length == 0 else {
 					success = false
-					printg("Couldn't encode csv file: \(originalFile.path) row: \(row). Invalid CSV data.")
+					printg("Couldn't decode csv file: \(originalFile.path) row: \(row). Invalid CSV data.")
 					printg(csvText)
 					return
 				}
@@ -287,7 +329,7 @@ class GoDStructData: CustomStringConvertible {
 
 					let rawValueString = rawValues.pop()
 					guard let rawValue = integerRawValue(rawValueString) else {
-						printg("Couldn't encode csv file: \(originalFile.path) row: \(row). Invalid CSV data.")
+						printg("Couldn't decode csv file: \(originalFile.path) row: \(row). Invalid CSV data.")
 						printg("Expected number, hex number or indexed value for property \(property.name). Got \(rawValueString).")
 						printg("Expectation Examples: 150 | 0x96 | Mewtwo (150) | Mewtwo (0x96) ")
 						printg(csvText)
@@ -298,7 +340,7 @@ class GoDStructData: CustomStringConvertible {
 				case .float:
 					let rawValueString = rawValues.pop()
 					guard let rawValue = Float(rawValueString) else {
-						printg("Couldn't encode csv file: \(originalFile.path) row: \(row). Invalid CSV data.")
+						printg("Couldn't decode csv file: \(originalFile.path) row: \(row). Invalid CSV data.")
 						printg("Expected decimal number value for property \(property.name). Got \(rawValueString).")
 						printg("Expectation Examples: 12.345 ")
 						printg(csvText)
@@ -326,6 +368,16 @@ class GoDStructData: CustomStringConvertible {
 						}
 					}
 					values.append(.bitArray(property: property, rawValues: rawBools))
+				case .bitMask(_, _, let bitFields):
+					var rawInts = [Int]()
+					bitFields.forEach {  fields in
+						if !rawValues.isEmpty, let bitsValue = integerRawValue(rawValues.pop()) {
+							rawInts.append(bitsValue)
+						} else {
+							success = false
+						}
+					}
+					values.append(.bitMask(property: property, rawValues: rawInts))
 
 				case .subStruct, .array:
 					assertionFailure("Properties should be flattened before importing from csv")
@@ -339,7 +391,7 @@ class GoDStructData: CustomStringConvertible {
 		}
 
 		guard let csvLine = line else {
-			printg("Couldn't encode csv file: \(originalFile.path) row: \(row). Invalid CSV data.")
+			printg("Couldn't decode csv file: \(originalFile.path) row: \(row). Invalid CSV data.")
 			printg("Not enough rows in data.")
 			success = false
 			return nil
@@ -358,14 +410,14 @@ class GoDStructData: CustomStringConvertible {
 		}
 	}
 
-	func rawValueForPropertyWithName<T>(_ name: String) -> T? {
+	func get<T>(_ name: String) -> T? {
 		return valueForPropertyWithName(name)?.value()
 	}
 
-	func setRawValue(_ newValue: Any, forPropertyWithName name: String) {
+	func set(_ propertyName: String, to newValue: Any) {
 		var updatedValues = [GoDStructValues]()
 		values.forEach { (value) in
-			if value.property.name == name {
+			if value.property.name == propertyName {
 				updatedValues.append(value.withUpdatedRawValue(newValue))
 			} else {
 				updatedValues.append(value)
@@ -426,14 +478,33 @@ class GoDStructData: CustomStringConvertible {
 					if value { currentByte = currentByte | 1 }
 					currentBitPosition += 1
 					if currentBitPosition == 8 {
-						writeValue(.value(property: .byte(name: "", description: "", type: .uint), rawValue: currentByte))
+						writeValue(.value(property: .byte(name: "", description: "", type: .uintHex), rawValue: currentByte))
 						currentBitPosition = 0
 						currentByte = 0
 					}
 				}
 				if currentBitPosition > 0 {
-					writeValue(.value(property: .byte(name: "", description: "", type: .uint), rawValue: currentByte))
+					writeValue(.value(property: .byte(name: "", description: "", type: .uintHex), rawValue: currentByte))
 				}
+
+			case .bitMask(let property, let rawValues):
+				var combinedValue = 0
+				if case .bitMask(_, _, let fields) = property {
+					fields.forEachIndexed { (index, field) in
+						if index < rawValues.count {
+							var rawValue = rawValues[index]
+							var mask = 0
+							for _ in 0 ..< field.numberOfBits {
+								mask = mask << 1
+								mask += 1
+							}
+							rawValue = rawValue & mask
+							rawValue = rawValue << field.firstBitIndexLittleEndian
+							combinedValue = combinedValue | rawValue
+						}
+					}
+				}
+				writeValue(.value(property: .byte(name: "", description: "", type: .uintHex), rawValue: combinedValue))
 
 			case .string(.string(_, _, let maxCharacterCount, let charLength), let rawValue):
 				var string = rawValue.unicodeRepresentation
@@ -485,6 +556,9 @@ class GoDStructData: CustomStringConvertible {
 				case .bitArray(let property, let rawValues):
 					string += "    \"\(property.name)\" : \(rawValues),\n"
 
+				case .bitMask(let property, let rawValues):
+					string += "    \"\(property.name)\" : \(rawValues),\n"
+
 				case .subStruct(let property, let data):
 					"\(jsonStringForValues(data.values, subStructName: property.name))".split(separator: "\n").forEach { (substring) in
 						string += "    " + String(substring) + "\n"
@@ -501,6 +575,8 @@ class GoDStructData: CustomStringConvertible {
 						case .string(_, let rawValue):
 							string += "        \"\(rawValue)\",\n"
 						case .bitArray(let property, let rawValues):
+							string += "    \"\(property.name)\" : \(rawValues),\n"
+						case .bitMask(let property, let rawValues):
 							string += "    \"\(property.name)\" : \(rawValues),\n"
 
 						case .subStruct(_, let data):

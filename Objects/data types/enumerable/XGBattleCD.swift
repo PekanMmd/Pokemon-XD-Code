@@ -9,7 +9,7 @@ import Foundation
 
 let kSizeOfBattleCDData = 0x3c
 
-let kBattleCDTurnLimitOffset = 0x00
+let kBattleCDTurnLimitOffset = 0x01
 let kBattleCDStyleOffset = 0x02
 let kBattleCDFieldOffset = 0x04
 let kBattleCDPlayer1DeckIDOffset = 0x08

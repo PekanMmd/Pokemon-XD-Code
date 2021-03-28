@@ -26,8 +26,7 @@ let kDolTableToRAMOffsetDifference: Int = {
 	case .XD:
 		return 0x3000
 	case .Colosseum:
-		assertionFailure("Not implemented")
-		return -1
+		return 0x3000
 	case .PBR:
 		return 0x3F00
 	}
@@ -66,59 +65,59 @@ let kRelFreeSpaceStart = 0x80590 + kRELtoRAMOffsetDifference // XD US
 
 let kPickupTableInDolStartOffset = 0x2F0758 // XD US
 
-fileprivate let kPBRDOLFreeSpaceStart: Int? = {
+fileprivate var kPBRDOLFreeSpaceStart: Int? {
 	switch region {
 	case .US: return 0x1D9474 - kDolToRAMOffsetDifference
 	case .EU: return 0x1D4838 - kDolToRAMOffsetDifference
 	case .JP: return 0x1CA57C - kDolToRAMOffsetDifference
 	case .OtherGame: return nil
 	}
-}()
+}
 
-fileprivate let kPBRDOLFreeSpaceEnd: Int? = {
+fileprivate var kPBRDOLFreeSpaceEnd: Int? {
 	switch region {
 	case .US: return 0x1DEEE0 - kDolToRAMOffsetDifference
 	case .EU: return 0x1D9F6C - kDolToRAMOffsetDifference
 	case .JP: return 0x1D076C - kDolToRAMOffsetDifference
 	case .OtherGame: return nil
 	}
-}()
+}
 
-fileprivate let kXDDOLFreeSpaceStart: Int? = {
+fileprivate var kXDDOLFreeSpaceStart: Int? {
 	switch region {
 	case .US: return 0xd39d0 - kDolToRAMOffsetDifference
 	case .EU: return 0xd4fec - kDolToRAMOffsetDifference
 	case .JP: return 0xcfef4 - kDolToRAMOffsetDifference
 	case .OtherGame: return nil
 	}
-}()
+}
 
-fileprivate let kXDDOLFreeSpaceEnd: Int? = {
+fileprivate var kXDDOLFreeSpaceEnd: Int? {
 	switch region {
 	case .US: return 0xd9c30 - kDolToRAMOffsetDifference
 	case .EU: return 0xdb240 - kDolToRAMOffsetDifference
 	case .JP: return 0xd6150 - kDolToRAMOffsetDifference
 	case .OtherGame: return nil
 	}
-}()
+}
 
-fileprivate let kCOLDOLFreeSpaceStart: Int? = {
+fileprivate var kCOLDOLFreeSpaceStart: Int? {
 	switch region {
 	case .US: return 0xbe348 - kDolToRAMOffsetDifference
 	case .EU: return 0xc1948 - kDolToRAMOffsetDifference
 	case .JP: return 0xbb4a8 - kDolToRAMOffsetDifference
 	case .OtherGame: return nil
 	}
-}()
+}
 
-fileprivate let kCOLDOLFreeSpaceEnd: Int? = {
+fileprivate var kCOLDOLFreeSpaceEnd: Int? {
 	switch region {
 	case .US: return 0xc45a0 - kDolToRAMOffsetDifference
 	case .EU: return 0xc7ba0 - kDolToRAMOffsetDifference
 	case .JP: return 0xc16fc - kDolToRAMOffsetDifference
 	case .OtherGame: return nil
 	}
-}()
+}
 
 let kDolFreeSpaceStart: Int? = {
 	switch game {

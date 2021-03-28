@@ -170,14 +170,14 @@ func randomiser() {
 func singleDataTableMenu(forTable table: GoDStructTableFormattable) {
 	while true {
 		printg("\nCurrent Table: \(table.properties.name)")
-		printg("File: \(table.file)")
+		printg("File: \(table.file.path)")
 		printg("Start Offset: \(table.firstEntryStartOffset.hexString()) (\(table.firstEntryStartOffset))")
 		printg("Number of Entries: \(table.numberOfEntries.hexString()) (\(table.numberOfEntries))")
 		printg("Entry Length: \(table.entryLength.hexString()) (\(table.entryLength))")
 
 		let prompt = """
-		Enter 'decode' to decode the table as an editable .json text file
-		Enter 'encode' to reencode the table from the .json files after editing
+		Enter 'encode' to encode the table as an editable .csv text file
+		Enter 'decode' to decode the table back into the game from the .csv files after editing
 		Enter 'document' to create .yaml and .csv documentation files for reference
 		Enter 'exit' to go back
 		"""
@@ -198,16 +198,16 @@ func singleMiscDocumentationMenu(tableClass: GoDCodable.Type) {
 		printg("Other Data Table format \(tableClass.className)")
 
 		let prompt = """
-		Enter 'decode' to decode as an editable .json text file
-		Enter 'encode' to reencode from the .json files after editing
+		Enter 'encode' to encode the table as an editable .json text file
+		Enter 'decode' to decode the table back into the game from the .json files after editing
 		Enter 'document' to document as .txt files
 		Enter 'exit' to go back
 		"""
 
 		let input = readInput(prompt)
 		switch input {
-		case "decode": tableClass.encodeData()
-		case "encode": tableClass.decodeData()
+		case "decode": tableClass.decodeData()
+		case "encode": tableClass.encodeData()
 		case "document": tableClass.documentData(); tableClass.documentEnumerationData()
 		case "exit": return
 		default: continue
@@ -217,29 +217,28 @@ func singleMiscDocumentationMenu(tableClass: GoDCodable.Type) {
 
 func dataTablesMenu() {
 	var prompt = "Select a data table\n\n0: exit\n"
-	for i in 0 ..< structTablesList.count {
-		let table = structTablesList[i]
-		prompt += "\(i + 1): \(table.properties.name)\n"
-	}
-	for i in 0 ..< otherTableFormatsList.count {
-		let tableName = otherTableFormatsList[i]
-		prompt += "\(i + structTablesList.count + 1): \(tableName)\n"
+	let allTables = TableTypes.allTables
+	for i in 0 ..< allTables.count {
+		let table = allTables[i]
+		prompt += "\(i + 1): \(table.name)\n"
 	}
 
 	while true {
 		let input = readInput(prompt)
-		guard let index = input.integerValue, index >= 0, index <= structTablesList.count + otherTableFormatsList.count else {
+		guard let index = input.integerValue, index >= 0, index <= allTables.count else {
 			printg("Invalid option:", input)
 			continue
 		}
 		if index == 0 {
 			return
-		} else if index <= structTablesList.count {
-			let table = structTablesList[index - 1]
-			singleDataTableMenu(forTable: table)
 		} else {
-			let tableClass = otherTableFormatsList[index - 1 - structTablesList.count]
-			singleMiscDocumentationMenu(tableClass: tableClass)
+			let table = allTables[index - 1]
+			switch table {
+			case .structTable(let table, _):
+				singleDataTableMenu(forTable: table)
+			case .codableData(let data):
+				singleMiscDocumentationMenu(tableClass: data)
+			}
 		}
 	}
 }

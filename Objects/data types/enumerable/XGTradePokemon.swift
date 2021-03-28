@@ -8,38 +8,38 @@
 
 import Foundation
 
-let kElekidOffset: Int = {
+var kElekidOffset: Int {
 	switch region {
 	case .US: return 0x1C57A4
 	case .JP: return 0x1C0CB4
 	case .EU: return 0x1C70A0
 	case .OtherGame: return 0
 	}
-}()
-let kMedititeOffset: Int = {
+}
+var kMedititeOffset: Int {
 	switch region {
 	case .US: return 0x1C5888
 	case .JP: return 0x1C0D1C
 	case .EU: return 0x1C7184
 	case .OtherGame: return 0
 	}
-}()
-let kShuckleOffset: Int = {
+}
+var kShuckleOffset: Int {
 	switch region {
 	case .US: return 0x1C58D8
 	case .JP: return 0x1C0D6C
 	case .EU: return 0x1C71D4
 	case .OtherGame: return 0
 	}
-}()
-let kLarvitarOffset: Int = {
+}
+var kLarvitarOffset: Int {
 	switch region {
 	case .US: return 0x1C5928
 	case .JP: return 0x1C0DBC
 	case .EU: return 0x1C7224
 	case .OtherGame: return 0
 	}
-}()
+}
 
 let kTradePokemonSpeciesOffset		=  0x02
 let kTradePokemonLevelOffset		=  0x0B
@@ -52,7 +52,7 @@ var giftPokemonShininessRAMOffset: Int {
 	switch region {
 	case .US: return 0x152c1a
 	case .EU: return 0x1544de
-	case .JP: return -1
+	case .JP: return 0x8014df42
 	case .OtherGame: return 0
 	}
 }
@@ -113,9 +113,7 @@ final class XGTradePokemon: NSObject, XGGiftPokemon, Codable {
 		
 		level = dol.getByteAtOffset(start + kTradePokemonLevelOffset)
 		
-		if region != .JP {
-			shinyValue = XGShinyValues(rawValue:  dol.get2BytesAtOffset(giftPokemonShininessRAMOffset - kDolToRAMOffsetDifference)) ?? .random
-		}
+		shinyValue = XGShinyValues(rawValue:  dol.get2BytesAtOffset(giftPokemonShininessRAMOffset - kDolToRAMOffsetDifference)) ?? .random
 	}
 	
 	func save() {
@@ -130,9 +128,7 @@ final class XGTradePokemon: NSObject, XGGiftPokemon, Codable {
 		dol.replace2BytesAtOffset(start + kTradePokemonMove3Offset, withBytes: move3.index)
 		dol.replace2BytesAtOffset(start + kTradePokemonMove4Offset, withBytes: move4.index)
 
-		if region == .US {
-			dol.replace2BytesAtOffset(giftPokemonShininessRAMOffset - kDolToRAMOffsetDifference, withBytes: shinyValue.rawValue)
-		}
+		dol.replace2BytesAtOffset(giftPokemonShininessRAMOffset - kDolToRAMOffsetDifference, withBytes: shinyValue.rawValue)
 		
 		dol.save()
 	}

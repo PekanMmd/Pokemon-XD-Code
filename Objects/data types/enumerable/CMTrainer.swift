@@ -8,7 +8,7 @@
 import Foundation
 
 //let kFirstTrainerOffset				= 0x92ED0
-let kFirstTrainerOffset				= 0x15bac // japanese
+//let kFirstTrainerOffset				= 0x15bac // japanese
 let kSizeOfTrainerData				= 0x34
 let kNumberOfTrainerPokemon			= 0x06
 let kNumberOfTrainerEntries			= CommonIndexes.NumberOfTrainers.value // 820
@@ -32,7 +32,7 @@ final class XGTrainer: NSObject, Codable {
 	
 	var index				= 0x0
 	
-	var AI				= 0
+	var AI					= 0
 	var cameraEffects		= 0 // xd only
 	
 	var nameID				= 0x0

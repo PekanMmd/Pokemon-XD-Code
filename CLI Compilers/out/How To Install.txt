@@ -1,0 +1,18 @@
+Gale of Darkness Tool and Colosseum Tool by @StarsMmd (Stars#4434)
+------------------------------------------------------------------
+
+- In order to use these tools first download and run this .exe to install swift on your machine:
+https://swift.org/builds/swift-5.3-release/windows10/swift-5.3-RELEASE/swift-5.3-RELEASE-windows10.exe
+
+- You may also need to run this .exe to install cygwin on your machine:
+https://cygwin.com/setup-x86_64.exe
+(You won't need this if you aren't importing/exporting textures. E.g. if you're only randomising the game.)
+
+- To use one of the tools simply drag and drop the file you want to open unto the .exe file and a window will appear.
+- The tool supports .iso, .fsys, .msg, .gtx and .atx files.
+
+If you need support the best option is to join our NGC/Wii ROM hacking discord server:
+discord.gg/xCPjjnv
+
+Tool Created by StarsMomodu
+Twitter: @StarsMmd

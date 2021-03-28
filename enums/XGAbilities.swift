@@ -8,30 +8,9 @@
 
 import Foundation
 
-let abilityListUpdated = XGFiles.dol.data!.getWordAtOffset(kAbilitiesStartOffset + 8) != 0
-
-let kNumberOfAbilities		= abilityListUpdated ? (0x3A8 / 8) : 0x4E
 let kAbilityNameIDOffset		= abilityListUpdated ? 0 : 4
 let kAbilityDescriptionIDOffset = abilityListUpdated ? 4 : 8
 let kSizeOfAbilityEntry			= abilityListUpdated ? 8 : 12
-
-var kAbilitiesStartOffset: Int = {
-	if game == .XD {
-		switch region {
-		case .US: return 0x3FCC50
-		case .EU: return 0x437530
-		case .JP: return 0x3DA310
-		case .OtherGame: return 0
-		}
-	} else {
-		switch region {
-		case .US: return 0x35C5E0
-		case .EU: return 0x3A9688
-		case .JP: return 0x348D20
-		case .OtherGame: return 0
-		}
-	}
-}()
 
 enum XGAbilities {
 	

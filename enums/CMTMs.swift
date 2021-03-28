@@ -7,14 +7,14 @@
 
 import Foundation
 
-let kFirstTMListOffset: Int = {
+var kFirstTMListOffset: Int {
 	switch region {
 	case .US: return 0x365018
 	case .JP: return 0x351758
 	case .EU: return 0x3B20D0
 	case .OtherGame: return 0
 	}
-}()
+}
 
 let kSizeOfTMEntry	   = 0x08
 let kFirstTMItemIndex  = 0x121

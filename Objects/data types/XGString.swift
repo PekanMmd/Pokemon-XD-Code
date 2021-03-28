@@ -72,6 +72,17 @@ class XGString: NSObject, Codable {
 			return stream
 		}
 	}
+
+	var unicodeString: String {
+		return chars.filter { (character) -> Bool in
+			if case .unicode = character {
+				return true
+			}
+			return false
+		}.map { (char) -> String in
+			return char.string
+		}.joined(separator: "")
+	}
 	
 	func append(_ char: XGUnicodeCharacters) {
 		self.chars.append(char)

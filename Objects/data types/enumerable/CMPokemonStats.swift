@@ -18,7 +18,7 @@ let kBaseEXPOffset			= 0x07
 let kBaseHappinessOffset	= 0x09
 let kHeightOffset			= 0x0A
 let kWeightOffset			= 0x0C
-let kNationalIndexOffset	= 0x0E
+let kNationalIndexOffset	= 0x10
 
 let kType1Offset			= 0x30
 let kType2Offset			= 0x31

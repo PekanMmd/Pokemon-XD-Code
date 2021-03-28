@@ -200,7 +200,7 @@ class XGRandomiser: NSObject {
 		#if GAME_XD
 		decks += [XGDecks.DeckDarkPokemon]
 		#endif
-		for deck in MainDecksArray + [XGDecks.DeckDarkPokemon] {
+		for deck in decks {
 			for pokemon in deck.allActivePokemon {
 				if shadowsOnly && !pokemon.isShadowPokemon {
 					continue

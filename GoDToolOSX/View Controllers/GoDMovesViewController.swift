@@ -140,20 +140,10 @@ class GoDMovesViewController: GoDTableViewController {
 		
 		let move = filteredMoves[row]
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 16, width: widthForTable())) as! GoDTableCellView
+		let cell = super.tableView(tableView, viewFor: tableColumn, row: row) as? GoDTableCellView
 		
-		cell.setBackgroundImage(move.isShadow ? XGMoveTypes.shadowImage : move.type.image)
-		cell.setTitle(move.name)
-		
-		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
-		cell.translatesAutoresizingMaskIntoConstraints = false
-		
-		cell.alphaValue = self.table.selectedRow == row ? 1 : 0.75
-		if self.table.selectedRow == row {
-			cell.addBorder(colour: GoDDesign.colourBlack(), width: 1)
-		} else {
-			cell.removeBorder()
-		}
+		cell?.setBackgroundImage(move.isShadow ? XGMoveTypes.shadowImage : move.type.image)
+		cell?.setTitle(move.name)
 		
 		return cell
 	}

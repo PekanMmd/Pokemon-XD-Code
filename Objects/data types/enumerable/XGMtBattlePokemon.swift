@@ -8,39 +8,39 @@
 
 import Foundation
 
-let kChikoritaOffset: Int = {
+var kChikoritaOffset: Int {
 	switch region {
 	case .US: return 0x1C5974
 	case .JP: return 0x1C0E08
 	case .EU: return 0x1C7270
 	case .OtherGame: return 0
 	}
-}()
-let kCyndaquilOffset: Int = {
+}
+var kCyndaquilOffset: Int {
 	switch region {
 	case .US: return 0x1C59A0
 	case .JP: return 0x1C0E34
 	case .EU: return 0x1C729C
 	case .OtherGame: return 0
 	}
-}()
-let kTotodileOffset: Int = {
+}
+var kTotodileOffset: Int {
 	switch region {
 	case .US: return 0x1C59CC
 	case .JP: return 0x1C0E60
 	case .EU: return 0x1C72C8
 	case .OtherGame: return 0
 	}
-}()
+}
 
-let kMtBattlePokemonLevelOffset: Int = {
+var kMtBattlePokemonLevelOffset: Int {
 	switch region {
 	case .US: return 0x1C56E8
 	case .JP: return 0x1C0BF8
 	case .EU: return 0x1C6FE4
 	case .OtherGame: return 0
 	}
-}()
+}
 
 let kMtBattlePokemonSpeciesOffset	=  0x02
 let kMtBattlePokemonMove1Offset		=  0x06

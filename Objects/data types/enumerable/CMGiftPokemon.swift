@@ -7,7 +7,7 @@
 
 import Foundation
 
-let kPlusleOffset: Int = {
+var kPlusleOffset: Int {
 	if game == .XD {
 		switch region {
 		case .US: return 0x14F514
@@ -23,8 +23,8 @@ let kPlusleOffset: Int = {
 		case .OtherGame: return 0
 		}
 	}
-}()
-let kHoohOffset: Int = {
+}
+var kHoohOffset: Int {
 	if game == .XD {
 		switch region {
 		case .US: return 0x14F430
@@ -40,8 +40,8 @@ let kHoohOffset: Int = {
 		case .OtherGame: return 0
 		}
 	}
-}()
-let kCelebiOffset: Int = {
+}
+var kCelebiOffset: Int {
 	if game == .XD {
 		switch region {
 		case .US: return 0x14F200
@@ -57,8 +57,8 @@ let kCelebiOffset: Int = {
 		case .OtherGame: return 0
 		}
 	}
-}()
-let kPikachuOffset: Int = {
+}
+var kPikachuOffset: Int {
 	if game == .XD {
 		switch region {
 		case .US: return 0x14F310
@@ -74,7 +74,7 @@ let kPikachuOffset: Int = {
 		case .OtherGame: return 0
 		}
 	}
-}()
+}
 
 let kDistroPokemonSpeciesOffset		= 0x02
 let kDistroPokemonLevelOffset		= 0x07

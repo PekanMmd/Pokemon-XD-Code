@@ -52,10 +52,6 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = ""
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
             argument = "/Users/starsmomodu/Documents/GoD\ Tool/Colo.iso"
             isEnabled = "YES">
          </CommandLineArgument>

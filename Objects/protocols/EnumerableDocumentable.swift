@@ -15,6 +15,7 @@ protocol GoDCodable: Codable {
 	func save()
 
 	static var className: String {get}
+	static var numberOfValues: Int {get}
 }
 
 extension GoDCodable {
@@ -105,12 +106,16 @@ extension XGEnumerable where Self: XGDocumentable {
 }
 
 extension XGEnumerable {
+	static var numberOfValues: Int {
+		return allValues.count
+	}
+	
 	static func encodedDataFolder() -> XGFolders {
 		let encodingFolder = XGFolders.nameAndFolder("JSON Data", .Reference)
 		return XGFolders.nameAndFolder(className, encodingFolder)
 	}
 	
-	static func encodedJSONFiles() -> [XGFiles] {
+	static func decodedJSONFiles() -> [XGFiles] {
 		return encodedDataFolder().files.filter { $0.fileType == .json }
 	}
 	
@@ -139,7 +144,7 @@ extension XGEnumerable {
 
 extension GoDCodable where Self: XGEnumerable  {
 	static func decodeData() {
-		for file in encodedJSONFiles() {
+		for file in decodedJSONFiles() {
 			do {
 				try Self.fromJSON(file: file).save()
 			} catch {

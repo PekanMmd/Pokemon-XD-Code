@@ -19,8 +19,8 @@ let kMaxStringID 		   = 0xFFFFF
 enum XGLanguages : Int, Codable {
 	
 	case Japanese = 0
-	case EnglishUS
 	case EnglishUK
+	case EnglishUS
 	case German
 	case French
 	case Italian
@@ -84,13 +84,15 @@ class XGStringTable: NSObject {
 	
 	class func common_rel() -> XGStringTable {
 		if game == .XD {
+			let start: Int
 			let size: Int
 			switch region {
-			case .US, .EU: size = 0xDC70
-			case .JP: size = 0xAC8C
-			case .OtherGame: size = 0
+			case .US: start = 0x4E274; size = 0xDC70
+			case .EU: start = 0x50234; size = 0xDC70
+			case .JP: start = 0x4D028; size = 0xAC8C
+			case .OtherGame: start = 0; size = 0
 			}
-			return XGStringTable(file: .common_rel, startOffset: CommonIndexes.stringTable1.startOffset + 0x68, fileSize: size)
+			return XGStringTable(file: .common_rel, startOffset: start, fileSize: size)
 		} else {
 			if region == .JP {
 				return XGStringTable(file: .common_rel, startOffset: 0x4580, fileSize: 0x9cf8)

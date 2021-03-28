@@ -52,6 +52,10 @@ class GoDStatsViewController: GoDTableViewController {
 	@IBOutlet var evo3: GoDEvolutionView!
 	@IBOutlet var evo4: GoDEvolutionView!
 	@IBOutlet var evo5: GoDEvolutionView!
+
+	// PBR only
+	@IBOutlet var evo6: GoDEvolutionView!
+	@IBOutlet var evo7: GoDEvolutionView!
 	
 	@IBOutlet var TMsContainer: GoDContainerView!
 	@IBOutlet var LUMContainer: GoDContainerView!
@@ -83,7 +87,7 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		self.title = "Pokemon Stats Editor"
 		
-		let evos = [evo1,evo2,evo3,evo4,evo5]
+		let evos = [evo1,evo2,evo3,evo4,evo5] + (game == .PBR ? [evo6, evo7] : [])
 		for i in 0 ..< evos.count {
 			evos[i]!.index = i
 			evos[i]!.delegate = self
@@ -133,21 +137,11 @@ class GoDStatsViewController: GoDTableViewController {
 		
 		let pokemon = filteredMons[row]
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 16, width: widthForTable())) as! GoDTableCellView
+		let cell = super.tableView(tableView, viewFor: tableColumn, row: row) as? GoDTableCellView
 		
-		cell.setBackgroundImage(pokemon.type1.image)
-		cell.setTitle(pokemon.name)
-		cell.setImage(image: XGFiles.pokeFace(pokemon.index).image)
-		
-		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
-		cell.translatesAutoresizingMaskIntoConstraints = false
-		
-		cell.alphaValue = table.selectedRow == row ? 1 : 0.75
-		if self.table.selectedRow == row {
-			cell.addBorder(colour: GoDDesign.colourBlack(), width: 1)
-		} else {
-			cell.removeBorder()
-		}
+		cell?.setBackgroundImage(pokemon.type1.image)
+		cell?.setTitle(pokemon.name)
+		cell?.setImage(image: XGFiles.pokeFace(pokemon.index).image)
 		
 		return cell
 	}
@@ -225,7 +219,7 @@ class GoDStatsViewController: GoDTableViewController {
 		ExpRatePopUp.select(pokemon.levelUpRate)
 		genderPopUp.select(pokemon.genderRatio)
         
-		let evos = [evo1,evo2,evo3,evo4,evo5]
+		let evos = [evo1,evo2,evo3,evo4,evo5] + (game == .PBR ? [evo6, evo7] : [])
 		for evo in evos {
 			evo?.reloadData()
 		}
@@ -548,17 +542,21 @@ class GoDStatsViewController: GoDTableViewController {
 				cell.setBackgroundImage(XGMoveTypes.shadowImage)
 			}
 			cell.setTitle(tm.move.name.unformattedString)
-			cell.addBorder(colour: GoDDesign.colourBlack(), width: 1)
+
+			let isLearnable: Bool
+			if isTM {
+				isLearnable = delegate.pokemon.learnableTMs[row]
+			} else {
+				isLearnable = delegate.pokemon.tutorMoves[row - kNumberOfTMsAndHMs]
+			}
+			if isLearnable {
+				cell.addBorder(colour: GoDDesign.colourWhite(), width: 1)
+			} else {
+				cell.removeBorder()
+			}
 			
 			cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
 			cell.translatesAutoresizingMaskIntoConstraints = false
-			
-			if isTM {
-				#warning("TODO: TM Ordering for PBR")
-				cell.alphaValue = delegate.pokemon.learnableTMs[row] ? 1 : 0.5
-			} else {
-				cell.alphaValue = delegate.pokemon.tutorMoves[row - kNumberOfTMsAndHMs] ? 1 : 0.5
-			}
 
 			return cell
 		}

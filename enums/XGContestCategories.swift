@@ -17,15 +17,15 @@ enum XGContestCategories: Int, Codable, CaseIterable {
 	var name: String {
 		switch self {
 		case .cool:
-			return "cool"
+			return "Cool"
 		case .beauty:
-			return "beauty"
+			return "Beauty"
 		case .cute:
-			return "cute"
+			return "Cute"
 		case .smart:
-			return "smart"
+			return "Smart"
 		case .tough:
-			return "tough"
+			return "Tough"
 		}
 	}
 	

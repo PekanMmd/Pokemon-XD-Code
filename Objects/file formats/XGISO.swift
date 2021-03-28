@@ -90,6 +90,10 @@ class XGISO: NSObject {
 		tocData = extractTOC()
 		#endif
 		current = XGISO()
+		#if !GAME_PBR
+		resetRelocationTables()
+		#endif
+		GSFsys.reload()
 		return true
 	}
 
@@ -274,26 +278,16 @@ class XGISO: NSObject {
 
 	func dataForFile(filename: String) -> XGMutableData? {
 
-		let start = self.locationForFile(filename)
-		let size  = self.sizeForFile(filename)
-
-		if (start == nil) || (size == nil) {
+		guard let start = self.locationForFile(filename),
+			  let size  = self.sizeForFile(filename) else {
 			return nil
 		}
 
-		if settings.verbose {
-			printg("\(filename) - start: \(start!.hexString()) size: \(size!.hexString())")
-		}
-
 		let data = self.data
-		let bytes = data.getCharStreamFromOffset(start!, length: size!)
+		let subData = data.getSubDataFromOffset(start, length: size)
+		subData.file = .nameAndFolder(filename.removeFileExtensions(), .ISOExport(filename.removeFileExtensions()))
 
-		if settings.verbose {
-			printg("\(filename): read \(bytes.count) bytes")
-		}
-
-		return XGMutableData(byteStream: bytes, file: XGFiles.nameAndFolder(filename, .Documents))
-
+		return subData
 	}
 
 	#else
@@ -742,6 +736,20 @@ class XGISO: NSObject {
 		}
 	}
 
+	class func extractTOC() -> XGMutableData {
+		let iso = XGFiles.iso.data!
+
+		let TOCStart = Int(iso.getWordAtOffset(kTOCStartOffsetLocation))
+		let TOCLength = Int(iso.getWordAtOffset(kTOCFileSizeLocation))
+
+		let bytes = iso.getCharStreamFromOffset(TOCStart, length: TOCLength)
+
+		return XGMutableData(byteStream: bytes, file: .toc)
+
+	}
+
+	#endif
+
 	func addFile(_ file: XGFiles, save: Bool = true) {
 
 		printg("Adding new file to ISO: " + file.path)
@@ -764,6 +772,7 @@ class XGISO: NSObject {
 			return
 		}
 
+		#if !GAME_PBR
 		let tocData = XGISO.tocData
 		let tocBackup = XGMutableData(byteStream: tocData.byteStream, file: .toc)
 		let lastFile = filesOrdered.last!
@@ -811,22 +820,26 @@ class XGISO: NSObject {
 
 		loadFST()
 
-		shiftAndReplaceFile(file, save: save)
+		shiftAndReplaceFile(file, save: false)
+		#else
+		importFiles([file])
+		#endif
+
+		if file.fileType == .fsys {
+			let fsysData = file.fsysData
+			GSFsys.shared.addEntry(id: fsysData.groupID, name: file.fileName)
+			if save {
+				GSFsys.shared.data().save()
+			}
+		}
+
+		#if !GAME_PBR
+		importFiles([.GSFsys], save: save)
+		#else
+		importFiles([.GSFsys])
+		#endif
+
 	}
-
-	class func extractTOC() -> XGMutableData {
-		let iso = XGFiles.iso.data!
-
-		let TOCStart = Int(iso.getWordAtOffset(kTOCStartOffsetLocation))
-		let TOCLength = Int(iso.getWordAtOffset(kTOCFileSizeLocation))
-
-		let bytes = iso.getCharStreamFromOffset(TOCStart, length: TOCLength)
-
-		return XGMutableData(byteStream: bytes, file: .toc)
-
-	}
-
-	#endif
 
 	func save() {
 		if settings.verbose {
@@ -844,36 +857,14 @@ class XGISO: NSObject {
 			printg("saved iso")
 		}
 	}
-	
-	var fsysGroupIDs = [Int : String]()
+
 	var fsysGroupIDsData = [Int : XGFsys]()
 	
 	func getFSYSNameWithGroupID(_ id: Int) -> String? {
-		
-		if let name = fsysGroupIDs[id] {
-			return name == "n/a" ? nil : name
-		}
 
-		#if !GAME_PBR
-		for file in self.allFileNames where file.fileExtensions == ".fsys" {
-			let start = locationForFile(file)!
-			let groupID = self.data.get4BytesAtOffset(start + kFSYSGroupIDOffset)
-			if groupID == id {
-				fsysGroupIDs[id] = file
-				return file
-			}
-		}
-		#else
-		for file in XGFolders.ISOFiles.files where file.fileType == .fsys {
-			if let groupID = file.data?.get4BytesAtOffset(kFSYSGroupIDOffset), groupID == id {
-				fsysGroupIDs[id] = file.fileName
-				return file.fileName
-			}
-		}
-		#endif
-		
-		fsysGroupIDs[id] = "n/a"
-		return nil
+		guard id > 0 else { return nil }
+
+		return GSFsys.shared.entryWithID(id)?.name
 	}
 	
 	func getFSYSDataWithGroupID(_ id: Int) -> XGFsys? {
@@ -921,17 +912,17 @@ class XGISO: NSObject {
 	func getFSYSForIdentifier(id: UInt32) -> XGFsys? {
 		#if !GAME_PBR
 		for file in self.allFileNames where file.contains(".fsys") {
-			let start = self.locationForFile(file)!
-			let entries = self.data.get4BytesAtOffset(start + kNumberOfEntriesOffset)
-			
-			for i in 0 ..< entries {
-				let details = self.data.get4BytesAtOffset(start + 0x60)
-				let identifier = self.data.getWordAtOffset(start + details + (i * kSizeOfArchiveEntry))
-				if identifier == id {
-					return self.dataForFile(filename: file)!.fsysData
+			if let start = self.locationForFile(file) {
+				let entries = self.data.get4BytesAtOffset(start + kNumberOfEntriesOffset)
+
+				for i in 0 ..< entries {
+					let details = self.data.get4BytesAtOffset(start + 0x60)
+					let identifier = self.data.getWordAtOffset(start + details + (i * kSizeOfArchiveEntry))
+					if identifier == id {
+						return self.dataForFile(filename: file)?.fsysData
+					}
 				}
 			}
-			
 		}
 		#else
 		for file in XGFolders.ISOFiles.files where file.fileType == .fsys {

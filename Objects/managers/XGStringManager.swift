@@ -15,31 +15,23 @@ func loadAllStrings(refresh: Bool = false) {
 
 	guard !fileDecodingMode else { return }
 	
-	if !stringsLoaded {
+	if !stringsLoaded || refresh {
 
 		#if !GAME_PBR
 		previousFound = 0
 		previousFrom = 0
 		previousFree = []
 		
-		allStringTables = [XGFiles.common_rel.stringTable]
+		allStringTables = [XGFiles.common_rel.stringTable, XGStringTable.dol()]
 		#endif
 		
 		#if GAME_COLO
-		allStringTables += [XGStringTable.dol()]
-
 		if game == .Colosseum {
 			allStringTables += [XGStringTable.common_rel2(), XGStringTable.common_rel3()]
 		}
 
 		#elseif GAME_XD
-		if game == .XD && !isDemo {
-			allStringTables += [XGStringTable.dol2()]
-		}
-
-		if XGFiles.tableres2.exists {
-			allStringTables += [XGFiles.tableres2.stringTable]
-		}
+		allStringTables += [XGStringTable.dol2(), XGFiles.tableres2.stringTable]
 
 		#elseif GAME_PBR
 		if game == .PBR {
@@ -64,8 +56,19 @@ func loadAllStrings(refresh: Bool = false) {
 
 		stringsLoaded = true
 	}
-	
 }
+
+#if GAME_PBR
+func getStringTableWithId(_ id: Int) -> XGStringTable? {
+	loadAllStrings()
+	for table in allStringTables {
+		if table.tableID == id {
+			return table
+		}
+	}
+	return nil
+}
+#endif
 
 func getStringWithID(id: Int) -> XGString? {
 	
@@ -74,7 +77,12 @@ func getStringWithID(id: Int) -> XGString? {
 	}
 	
 	loadAllStrings()
-	
+	#if GAME_PBR
+	if let (tableId, stringIndex) = PBRStringManager.tableIDAndIndexForStringWithID(id),
+	   let table = getStringTableWithId(tableId) {
+		return table.stringWithID(stringIndex)
+	}
+	#else
 	for table in allStringTables {
 		if table.containsStringWithId(id) {
 			if let s = table.stringWithID(id) {
@@ -82,30 +90,12 @@ func getStringWithID(id: Int) -> XGString? {
 			}
 		}
 	}
+	#endif
 	return nil
 }
 
 func getStringSafelyWithID(id: Int) -> XGString {
-	
-	if id == 0 {
-		return XGString(string: "-", file: nil, sid: nil)
-	}
-	
-	loadAllStrings()
-	
-	for i in 0 ..< allStringTables.count {
-		let table = allStringTables[i]
-		if table.containsStringWithId(id) {
-			allStringTables.remove(at: i)
-			allStringTables.insert(table, at: 0)
-			if let s = table.stringWithID(id) {
-				return s
-			}
-
-		}
-	}
-	
-	return XGString(string: "-", file: nil, sid: id)
+	return getStringWithID(id: id) ?? XGString(string: "-", file: nil, sid: id)
 }
 
 func getStringsContaining(substring: String) -> [XGString] {

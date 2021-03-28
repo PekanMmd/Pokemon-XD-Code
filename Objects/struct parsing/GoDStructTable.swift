@@ -129,10 +129,10 @@ extension GoDStructTableFormattable {
 		XGUtility.saveString(text, toFile: file)
 	}
 
-	func decodeData() {
+	func encodeData() {
 		let foldername = properties.name + (fileVaries ? " " + file.fileName.removeFileExtensions() : "")
 		let folder = XGFolders.nameAndFolder(foldername, .nameAndFolder("JSON Data", .Reference))
-		printg("Decoding \(properties.name) table from game files to:", folder.path)
+		printg("Encoding \(properties.name) table from game files to:", folder.path)
 		allEntries.forEachIndexed { (index, entry) in
 			let filename = properties.name + "_" + String(format: "%03d", index) + ".json"
 			let file = XGFiles.nameAndFolder(filename, folder)
@@ -140,10 +140,10 @@ extension GoDStructTableFormattable {
 		}
 	}
 
-	func encodeData() {
+	func decodeData() {
 		let foldername = properties.name + (fileVaries ? " " + file.fileName.removeFileExtensions() : "")
 		let folder = XGFolders.nameAndFolder(foldername, .nameAndFolder("JSON Data", .Reference))
-		printg("Encoding table \(properties.name) to game files table from:", folder.path)
+		printg("Decoding table \(properties.name) to game files table from:", folder.path)
 		(0 ..< numberOfEntriesInFile(file)).forEach { index in
 			let filename = properties.name + "_" + String(format: "%03d", index) + ".json"
 			let jsonFile = XGFiles.nameAndFolder(filename, folder)
@@ -162,7 +162,7 @@ extension GoDStructTableFormattable {
 		// -----------------------------------------
 		// \(properties.name + ".c")
 		//
-		// As seen in \(self.file.fileName) from \(XGFiles.iso.fileName.removeFileExtensions())
+		// As seen in \(self.file.fileName) from \(XGFiles.iso.fileName.removeFileExtensions()) region: \(region.name)
 		// At offset: \(firstEntryStartOffset.hexString()) (\(firstEntryStartOffset))
 		// Struct length: \(properties.length.hexString()) (\(properties.length)) bytes
 		// -----------------------------------------
@@ -172,11 +172,11 @@ extension GoDStructTableFormattable {
 		XGUtility.saveString(text + properties.CStruct, toFile: file)
 	}
 
-	func decodeCSVData() {
+	func encodeCSVData() {
 		let folder = XGFolders.nameAndFolder("CSV Data", .Reference)
 		let filename = properties.name + (fileVaries ? " " + file.fileName : "") + ".csv"
 		let csvFile = XGFiles.nameAndFolder(filename, folder)
-		printg("Decoding \(properties.name) table to:", csvFile.path)
+		printg("Encoding \(properties.name) table to:", csvFile.path)
 
 		var csv = ""
 		func appendFieldNames(property: GoDStructProperties) {
@@ -185,9 +185,15 @@ extension GoDStructTableFormattable {
 			}
 			switch property {
 			case .bitArray(_, _, let names):
-				names.forEachIndexed { (index, name) in
+				names.forEach { name in
 					if let fieldName = name {
 						appendFieldNames(property: .byte(name: fieldName, description: "", type: .bool))
+					}
+				}
+			case .bitMask(_, _, let fields):
+				fields.forEach { field in
+					if case .null = field.type {} else {
+						appendFieldNames(property: .byte(name: field.name, description: "", type: field.type))
 					}
 				}
 			case .array:
@@ -221,8 +227,23 @@ extension GoDStructTableFormattable {
 						bits.forEachIndexed { (index, bit) in
 							if index < names.count, names[index] != nil {
 								csv += "\(bit),"
-							} else if names.count == 0 {
-								csv += "\(bit),"
+							}
+						}
+					}
+				case .bitMask:
+					var fields = [(name: String, type: GoDStructPropertyTypes, numberOfBits: Int, firstBitIndexLittleEndian: Int)]()
+					if case .bitMask(_, _, let bitFields) = propertyValue.property {
+						fields = bitFields
+					}
+					if let bitFieldValues: [Int] = propertyValue.value() {
+						bitFieldValues.forEachIndexed { (index, fieldValue) in
+							if index < fields.count {
+								let field = fields[index]
+								let value = GoDStructValues.value(property: .byte(name: "", description: "", type: field.type), rawValue: fieldValue).description
+								if case .null = fields[index].type {}
+								else {
+									csv += "\(value),"
+								}
 							}
 						}
 					}
@@ -254,8 +275,10 @@ extension GoDStructTableFormattable {
 		}
 		allEntries.forEachIndexed { (index, entry) in
 			// Add the entries name to start for convenience
-			// This will be ignored when reencoding
-			csv += "\(assumedNameForEntry(index: index)),"
+			// This will be ignored when redecoding
+			// put quotes around string in case it contains a comma so it doesn't affect the csv alignment
+			let entryName = "\"" + assumedNameForEntry(index: index) + "\""
+			csv += "\(entryName),"
 			appendFieldValues(data: entry.flattened)
 			csv.removeLast()
 			csv += "\n"
@@ -264,11 +287,11 @@ extension GoDStructTableFormattable {
 		XGUtility.saveString(csv, toFile: csvFile)
 	}
 
-	func encodeCSVData() {
+	func decodeCSVData() {
 		let folder = XGFolders.nameAndFolder("CSV Data", .Reference)
 		let filename = properties.name + (fileVaries ? " " + file.fileName : "") + ".csv"
 		let csvFile = XGFiles.nameAndFolder(filename, folder)
-		printg("Encoding \(properties.name) table from:", csvFile.path)
+		printg("Decoding \(properties.name) table from:", csvFile.path)
 
 		guard let fileData = file.data else {
 			printg("Couldn't load data for file:", csvFile.path)

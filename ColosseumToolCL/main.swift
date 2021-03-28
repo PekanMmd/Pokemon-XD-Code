@@ -6,6 +6,12 @@
 //
 //
 
+loadISO(exitOnFailure: true)
+
+common.allPointers().forEachIndexed { (index, pointer) in
+	printg(index, pointer.hexString())
+}
+
 //XGAssembly.replaceRamASM(RAMOffset: 0x1f9f78, newASM: [
 //	.stwu(.sp, .sp, -0x84),
 //	.mflr(.r0),

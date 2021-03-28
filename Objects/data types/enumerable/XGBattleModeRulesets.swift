@@ -18,7 +18,7 @@ let kSizeOfBattleModeRuleSetData: Int = {
 	}
 }()
 
-let kFirstBattleModeRuleSetOffset: Int = {
+var kFirstBattleModeRuleSetOffset: Int {
 	if game == .XD {
 		switch region {
 		case .US: return 0x2E7C08
@@ -34,7 +34,7 @@ let kFirstBattleModeRuleSetOffset: Int = {
 		case .OtherGame: return 0
 		}
 	}
-}()
+} // in start.dol
 
 let kBattleModeRuleSetMinLevelOffset = 0x1
 let kBattleModeRuleSetMaxLevelOffset = 0x3

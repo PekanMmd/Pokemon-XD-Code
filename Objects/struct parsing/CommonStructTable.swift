@@ -1,5 +1,5 @@
 //
-//  GoDCommonStructTable.swift
+//  CommonStructTable.swift
 //  GoD Tool
 //
 //  Created by Stars Momodu on 17/03/2021.

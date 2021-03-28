@@ -9,14 +9,23 @@ import Foundation
 
 
 let kNumberOfItems				= 0x18d
-let kFirstItemOffset: Int = {
+var kFirstItemOffset: Int {
 	switch region {
 	case .US: return 0x360ce8
 	case .JP: return 0x34D428
 	case .EU: return 0x3ADDA0
 	case .OtherGame: return 0
 	}
-}()	// in start.dol for colosseum
+}	// in start.dol for colosseum
+var kFirstValidItemOffset: Int {
+	switch region {
+	case .US: return 0x30de58
+	case .JP: return 0x2fabf8
+	case .EU: return 0x35af10
+	case .OtherGame: return 0
+	}
+}	// in start.dol for colosseum
+
 let kSizeOfItemData				= 0x28
 let kNumberOfFriendshipEffects	= 0x03
 

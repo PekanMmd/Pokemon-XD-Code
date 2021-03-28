@@ -302,7 +302,7 @@ class GoDDataTable: CustomStringConvertible {
 	static var pokemonIcons: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 6 : 0, "common")) }
 	static var countries: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 7 : 1, "common")) }
 	static var shopItems: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 8 : 2, "common")) }
-	static var colosseumsUnknown: GoDDataTable? { region == .JP ? nil : tableForFile(.indexAndFsysName(3, "common")) } //Doesn't exist in JP I,) "common")O
+	static var colosseumsUnknown: GoDDataTable? { region == .JP ? nil : tableForFile(.indexAndFsysName(3, "common")) } //Doesn't exist in JP
 	static var typeMatchups: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 10 : 4, "common")) }
 	static var expTables: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 11 : 5, "common")) }
 	static var pokemonModels: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 12 : 6, "common")) }

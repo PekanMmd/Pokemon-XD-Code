@@ -132,7 +132,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			}
 		}
 	}
-	
+
+	@IBAction func addFileToISO(_ sender: Any) {
+		let panel = NSOpenPanel()
+		panel.allowsMultipleSelection = false
+		panel.canChooseDirectories = false
+		panel.canChooseFiles = true
+		panel.canDownloadUbiquitousContents = false
+		panel.canResolveUbiquitousConflicts = false
+		panel.isAccessoryViewDisclosed = false
+		panel.resolvesAliases = true
+		panel.begin { (result) in
+			if result == .OK {
+				let urls = panel.urls
+				if urls.count > 0 {
+					let files = urls.map { (fileurl) -> XGFiles in
+						return fileurl.file
+					}.filter{$0.fileType != .unknown}
+					files.forEach { (file) in
+						XGISO.current.addFile(file, save: true)
+					}
+				}
+			}
+		}
+	}
+
 	@IBAction func getFreeStringID(_ sender: Any) {
 		#if !GAME_PBR
 		guard checkRequiredFiles() else {

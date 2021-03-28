@@ -17,7 +17,7 @@ let kEvolvedFormOffset			= 0x4 // 2 bytes
 
 class XGEvolution: NSObject, Codable {
 	
-	var evolutionMethod		= XGEvolutionMethods.none
+	var evolutionMethod	= XGEvolutionMethods.none
 	var condition		= 0
 	var evolvesInto		= 0
 	

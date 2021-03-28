@@ -58,6 +58,7 @@ let NullFSYS = XGMutableData(byteStream:
 indirect enum XGFiles {
 	
 	case dol
+	case GSFsys
 	#if !GAME_PBR
 	case common_rel			
 	case tableres2
@@ -111,6 +112,7 @@ indirect enum XGFiles {
 		switch self {
 
 		case .dol					: return (game == .PBR ? "main" : "Start") + XGFileTypes.dol.fileExtension
+		case .GSFsys				: return "GSfsys.toc"
 		#if !GAME_PBR
 		case .common_rel			: return "common" + XGFileTypes.rel.fileExtension
 		case .tableres2				: return "tableres2" + XGFileTypes.rel.fileExtension
@@ -121,7 +123,7 @@ indirect enum XGFiles {
 		case .pokeBody(let id)		: return "body_" + String(format: "%03d", id) + XGFileTypes.png.fileExtension
 		case .typeImage(let id)		: return "type_" + String(id) + XGFileTypes.png.fileExtension
 		case .trainerFace(let id)	: return "trainer_" + String(id) + XGFileTypes.png.fileExtension
-		case .fsys(let s)			: return XGFiles.gameFile(s + XGFileTypes.fsys.fileExtension).fileName
+		case .fsys(let s)			: return s + XGFileTypes.fsys.fileExtension
 		case .lzss(let s)			: return s + XGFileTypes.lzss.fileExtension
 		case .toc					: return "game" + XGFileTypes.toc.fileExtension
 		case .log(let d)			: return d.description + XGFileTypes.txt.fileExtension
@@ -131,7 +133,7 @@ indirect enum XGFiles {
 		case .wimgt                 : return environment == .Windows ? "wimgt.exe" :  "wimgt"
 		case .tool(let s)			: return s + (environment == .Windows ? ".exe" : "")
 		case .embedded(let s)		: return s
-		case .gameFile(let s)			: return s
+		case .gameFile(let s)		: return s
 		case .nameAndFolder(let name, _) : return name
 		case .nameAndFsysName(let name, _): return name
 		case .typeAndFsysName(let type, _): return folder.files.first(where: {$0.fileType == type})?.fileName ?? "-"
@@ -157,6 +159,7 @@ indirect enum XGFiles {
 		case .pocket_menu		: return XGFiles.fsys("pocket_menu").folder
 		case .deck				: return XGFiles.fsys("deck_archive").folder
 		#endif
+		case .GSFsys			: return XGFiles.gameFile(fileName).folder
 		case .fsys(let s)		: return XGFiles.gameFile(s + XGFileTypes.fsys.fileExtension).folder
 		case .lzss				: return .LZSS
 		case .pokeFace			: return .PokeFace
@@ -226,6 +229,11 @@ indirect enum XGFiles {
 				}
 			case .dol:
 				if !XGUtility.exportFileFromISO(.dol, decode: false) {
+					printg("file doesn't exist and couldn't be extracted:", self.path)
+					return nil
+				}
+			case .GSFsys:
+				if !XGUtility.exportFileFromISO(.GSFsys, decode: false) {
 					printg("file doesn't exist and couldn't be extracted:", self.path)
 					return nil
 				}
@@ -353,9 +361,9 @@ indirect enum XGFiles {
 	}
 
 	var scriptData: XGScript {
-		switch self {
+		switch self.path {
 		#if !GAME_PBR
-		case .common_rel:
+		case XGFiles.common_rel.path:
 			guard game == .XD, region != .OtherGame else {
 				printg("common.rel script not documented for colosseum")
 				fatalError()
@@ -567,7 +575,7 @@ indirect enum XGFolders {
 		case .Wiimm				: return "Wiimm"
 		case .ISO				: return XGISO.inputISOFile?.folder.name ?? "ISO"
 		case .Logs				: return "Logs"
-		case .ISOExport      	: return "Game Files"
+		case .ISOExport(let name): return name
 		case .path(let s) 		: return s
 		case .nameAndPath(let s, _): return s
 		case .nameAndFolder(let s, _): return s
@@ -592,7 +600,7 @@ indirect enum XGFolders {
 
 		case .Documents	: return documentsPath
 		case .nameAndPath(let name, let path): return path + "/\(name)"
-		case .ISOExport(let folder): return documentsPath + "/" + self.name +
+		case .ISOExport(let folder): return documentsPath + "/Game Files" +
 			(folder == "" ? "" : "/" + folder)
 		case .Images	: path = XGFolders.Resources.path
 		case .JSON		: path = XGFolders.Resources.path

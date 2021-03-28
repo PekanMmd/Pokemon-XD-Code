@@ -13,7 +13,12 @@ class GoDStringViewController: GoDViewController {
 	@IBOutlet var stringid: NSTokenField!
 	@IBOutlet var minimumid: NSTextField!
 	@IBOutlet var freeid: NSTextField!
-	
+	@IBOutlet weak var filePathLabel: NSTextField!
+
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		loadAllStrings(refresh: true)
+	}
 	
 	@IBAction func findFreeID(_ sender: Any) {
 		guard !isSearchingForFreeStringID else {
@@ -31,7 +36,9 @@ class GoDStringViewController: GoDViewController {
 	
 	@IBAction func getString(_ sender: Any) {
 		if let val = stringid.stringValue.integerValue {
-			text.string = getStringSafelyWithID(id: val).string
+			let msgString = getStringSafelyWithID(id: val)
+			text.string = msgString.string
+			filePathLabel.stringValue = msgString.table?.path ?? "File unknown"
 		}
 	}
 	

@@ -8,7 +8,7 @@
 
 import Foundation
 
-let kVaporeonStartOffset: Int = {
+var kVaporeonStartOffset: Int {
 	if game == .XD {
 		switch region {
 		case .US: return 0x14F614
@@ -24,8 +24,8 @@ let kVaporeonStartOffset: Int = {
 		case .OtherGame: return 0
 		}
 	}
-}()
-let kJolteonStartOffset: Int = {
+}
+var kJolteonStartOffset: Int {
 	if game == .XD {
 		switch region {
 		case .US: return 0x14F73C
@@ -41,7 +41,7 @@ let kJolteonStartOffset: Int = {
 		case .OtherGame: return 0
 		}
 	}
-}()
+}
 
 let kDemoStarterSpeciesOffset		= 0x02
 let kDemoStarterLevelOffset			= 0x07

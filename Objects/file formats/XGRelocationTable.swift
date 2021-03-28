@@ -8,7 +8,12 @@
 
 import Foundation
 
-let common = XGCommon()
+func resetRelocationTables() {
+	common = XGCommon()
+	pocket = XGPocket()
+}
+
+var common = XGCommon()
 class XGCommon: XGRelocationTable {
 	
 	init() {
@@ -26,7 +31,7 @@ class XGCommon: XGRelocationTable {
 	
 }
 
-let pocket = XGPocket()
+var pocket = XGPocket()
 class XGPocket : XGRelocationTable {
 	init() {
 		super.init(file: .pocket_menu)

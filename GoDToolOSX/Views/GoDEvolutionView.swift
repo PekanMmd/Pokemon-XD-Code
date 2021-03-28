@@ -14,9 +14,9 @@ class GoDEvolutionView: NSView {
 
     var pokemonPopUp = GoDPokemonPopUpButton()
 	var methodPopUp = GoDEvolutionMethodPopUpButton()
-	var coniditionPopUp = GoDEvolutionConditionPopUpButton()
+	var conditionPopUp = GoDEvolutionConditionPopUpButton()
 	
-	var delegate : GoDStatsViewController! {
+	var delegate: GoDStatsViewController! {
 		didSet {
 			self.reloadData()
 		}
@@ -29,11 +29,11 @@ class GoDEvolutionView: NSView {
 		pokemonPopUp.action = #selector(setPokemon)
 		methodPopUp.target = self
 		methodPopUp.action = #selector(setMethod)
-		coniditionPopUp.target = self
-		coniditionPopUp.action = #selector(setCondition)
+		conditionPopUp.target = self
+		conditionPopUp.action = #selector(setCondition)
 		
-		let viewsArray : [GoDPopUpButton] = [pokemonPopUp,methodPopUp,coniditionPopUp]
-		let viewsDict : [String : NSView] = ["p" : pokemonPopUp, "m" : methodPopUp, "c" : coniditionPopUp]
+		let viewsArray : [GoDPopUpButton] = [pokemonPopUp,methodPopUp,conditionPopUp]
+		let viewsDict : [String : NSView] = ["p" : pokemonPopUp, "m" : methodPopUp, "c" : conditionPopUp]
 		for view in viewsArray  {
 			view.font = GoDDesign.fontOfSize(8)
 			view.translatesAutoresizingMaskIntoConstraints = false
@@ -42,7 +42,7 @@ class GoDEvolutionView: NSView {
 			self.addConstraintAlignCenterY(view1: self, view2: view)
 		}
 		self.addConstraints(visualFormat: "|[p]-(2)-[m]-(2)-[c]|", layoutFormat: [], metrics: nil, views: viewsDict)
-		self.addConstraintEqualWidths(view1: methodPopUp, view2: coniditionPopUp)
+		self.addConstraintEqualWidths(view1: methodPopUp, view2: conditionPopUp)
 		self.addConstraint(NSLayoutConstraint(item: pokemonPopUp, attribute: .width, relatedBy: .equal, toItem: methodPopUp, attribute: .width, multiplier: 1.5, constant: 0))
 		
 	}
@@ -57,15 +57,15 @@ class GoDEvolutionView: NSView {
 	@objc func setMethod() {
 		if delegate != nil {
 			delegate.pokemon.evolutions[index].evolutionMethod = methodPopUp.selectedValue
-			coniditionPopUp.method = delegate.pokemon.evolutions[index].evolutionMethod
-			coniditionPopUp.selectCondition(condition: 0)
+			conditionPopUp.method = delegate.pokemon.evolutions[index].evolutionMethod
+			conditionPopUp.selectCondition(condition: 0)
 			setCondition()
 		}
 	}
 	
 	@objc func setCondition() {
 		if delegate != nil {
-			delegate.pokemon.evolutions[index].condition = coniditionPopUp.selectedValue
+			delegate.pokemon.evolutions[index].condition = conditionPopUp.selectedValue
 			reloadData()
 		}
 	}
@@ -77,8 +77,8 @@ class GoDEvolutionView: NSView {
 			let method = evolution.evolutionMethod
 			pokemonPopUp.select(evolvesInto)
 			methodPopUp.select(method)
-			coniditionPopUp.method = method
-			coniditionPopUp.selectCondition(condition: evolution.condition)
+			conditionPopUp.method = method
+			conditionPopUp.selectCondition(condition: evolution.condition)
 		}
 	}
 }

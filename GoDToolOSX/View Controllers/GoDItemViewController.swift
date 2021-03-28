@@ -186,9 +186,6 @@ class GoDItemViewController: GoDTableViewController {
 			tmButton.isHidden = true
 			tmLabel.isHidden = true
 		}
-		
-		self.table.reloadData()
-		
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
@@ -203,7 +200,7 @@ class GoDItemViewController: GoDTableViewController {
 		
 		let item = filteredItems[row]
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), image: nil, fontSize: 12, width: widthForTable())) as! GoDTableCellView
+		let cell = super.tableView(tableView, viewFor: tableColumn, row: row) as? GoDTableCellView
 
 		var colour = GoDDesign.colourWhite()
 		switch item.data.bagSlot {
@@ -224,25 +221,20 @@ class GoDItemViewController: GoDTableViewController {
 		case .battleCDs:
 			colour = GoDDesign.colourGrey()
 		}
-		cell.setBackgroundColour(colour)
+		cell?.setBackgroundColour(colour)
 		
-		cell.setTitle(item.name.string)
-		
-		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
-		cell.translatesAutoresizingMaskIntoConstraints = false
-		
-		cell.alphaValue = self.table.selectedRow == row ? 1 : 0.75
-		if self.table.selectedRow == row {
-			cell.addBorder(colour: GoDDesign.colourBlack(), width: 1)
+		cell?.setTitle(item.name.string)
+
+		if table.selectedRow == row {
+			cell?.addBorder(colour: GoDDesign.colourWhite(), width: 1)
 		} else {
-			cell.removeBorder()
+			cell?.removeBorder()
 		}
-		
+
 		return cell
 	}
 	
 	override func tableView(_ tableView: GoDTableView, didSelectRow row: Int) {
-		super.tableView(tableView, didSelectRow: row)
 		if row >= 0 {
 			let item = filteredItems[row]
 			self.currentItem = XGItem(index: item.index)

@@ -75,6 +75,10 @@ class XGMutableData {
 		}
 	}
 
+	init(data: Data) {
+		self.data = data
+	}
+
 	@discardableResult
 	func save() -> Bool {
 		if data.write(to: file) {
@@ -234,7 +238,8 @@ class XGMutableData {
 	}
 
 	func getSubDataFromOffset(_ offset: Int, length: Int) -> XGMutableData {
-		let data = XGMutableData(byteStream: getByteStreamFromOffset(offset, length: length))
+		let subData = Data(data.suffix(from: offset).prefix(length))
+		let data = XGMutableData(data: subData)
 		data.file = file
 		return data
 	}
@@ -335,6 +340,10 @@ class XGMutableData {
 	// append bytes
 	func appendBytes(_ bytes: [UInt8]) {
 		data.append(contentsOf: bytes)
+	}
+
+	func appendData(_ data: XGMutableData) {
+		self.data.append(data.data)
 	}
 	
 	// insert bytes
@@ -448,6 +457,10 @@ class XGMutableData {
 
 	func writeString(_ string: XGString, at offset: Int) {
 		replaceBytesFromOffset(offset, withByteStream: string.byteStream)
+	}
+
+	func writeString(_ unicodeString: String, at offset: Int) {
+		replaceBytesFromOffset(offset, withByteStream: string.unicodeRepresentation)
 	}
 }
 
