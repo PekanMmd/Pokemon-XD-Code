@@ -126,7 +126,12 @@ indirect enum XGFiles {
 		case .fsys(let s)			: return s + XGFileTypes.fsys.fileExtension
 		case .lzss(let s)			: return s + XGFileTypes.lzss.fileExtension
 		case .toc					: return "game" + XGFileTypes.toc.fileExtension
-		case .log(let d)			: return d.description + XGFileTypes.txt.fileExtension
+		case .log(let d)			:
+			var name = (d.description + XGFileTypes.txt.fileExtension)
+			if environment == .Windows {
+				name = name.replacingOccurrences(of: ":", with: ".")
+			}
+			return name
 		case .json(let s)			: return s + XGFileTypes.json.fileExtension
 		case .iso					: return XGISO.inputISOFile?.fileName ?? "game" + XGFileTypes.iso.fileExtension
 		case .wit                   : return environment == .Windows ? "wit.exe" :  "wit"

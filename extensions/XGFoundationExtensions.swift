@@ -67,11 +67,7 @@ extension Data {
 			if !file.folder.exists { return false }
 		}
 		do {
-			var path = file.path
-			if environment == .Windows {
-				path = path.replacingOccurrences(of: ":", with: ".")
-			}
-			try self.write(to: URL(fileURLWithPath: path), options: [.atomic])
+			try self.write(to: URL(fileURLWithPath: file.path), options: [.atomic])
 		} catch {
 			return false
 		}
