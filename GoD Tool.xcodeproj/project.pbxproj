@@ -660,8 +660,8 @@
 		1CB3B883250D8E1C0069402D /* GoDBattleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB3B882250D8E1C0069402D /* GoDBattleViewController.swift */; };
 		1CB3B884250D8E1C0069402D /* GoDBattleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB3B882250D8E1C0069402D /* GoDBattleViewController.swift */; };
 		1CC362AE24BA1E58005D7B4A /* PBRTypeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AD24BA1E58005D7B4A /* PBRTypeManager.swift */; };
-		1CC362B024BA5560005D7B4A /* PBRDolPatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AF24BA5560005D7B4A /* PBRDolPatcher.swift */; };
-		1CC362B124BA5560005D7B4A /* PBRDolPatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AF24BA5560005D7B4A /* PBRDolPatcher.swift */; };
+		1CC362B024BA5560005D7B4A /* PBRPatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AF24BA5560005D7B4A /* PBRPatcher.swift */; };
+		1CC362B124BA5560005D7B4A /* PBRPatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AF24BA5560005D7B4A /* PBRPatcher.swift */; };
 		1CC362B624BA57EB005D7B4A /* GoDPatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362B524BA57EB005D7B4A /* GoDPatchViewController.swift */; };
 		1CC362B724BA60B9005D7B4A /* PBRTypeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AD24BA1E58005D7B4A /* PBRTypeManager.swift */; };
 		1CC362B824BF5114005D7B4A /* GoDStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F88F1F49CD050075C6D2 /* GoDStatsViewController.swift */; };
@@ -759,7 +759,7 @@
 		1CCFFF7E255501E50082BFE2 /* PBRMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50D721D12CDA009C707C /* PBRMove.swift */; };
 		1CCFFF7F255501E50082BFE2 /* PBRScriptCompiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6295FA243022080085C22F /* PBRScriptCompiler.swift */; };
 		1CCFFF80255501E50082BFE2 /* PBRStringTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50CE21D12CDA009C707C /* PBRStringTable.swift */; };
-		1CCFFF81255501E50082BFE2 /* PBRDolPatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AF24BA5560005D7B4A /* PBRDolPatcher.swift */; };
+		1CCFFF81255501E50082BFE2 /* PBRPatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AF24BA5560005D7B4A /* PBRPatcher.swift */; };
 		1CCFFF82255501E50082BFE2 /* PBRPokemonStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50D321D12CDA009C707C /* PBRPokemonStats.swift */; };
 		1CCFFF83255501E50082BFE2 /* GoDDataTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50FC21D2D724009C707C /* GoDDataTable.swift */; };
 		1CCFFF84255501E50082BFE2 /* PBRItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50D621D12CDA009C707C /* PBRItem.swift */; };
@@ -4507,7 +4507,7 @@
 		1CB3B87F250D519D0069402D /* GoDBattleTrainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDBattleTrainerView.swift; sourceTree = "<group>"; };
 		1CB3B882250D8E1C0069402D /* GoDBattleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDBattleViewController.swift; sourceTree = "<group>"; };
 		1CC362AD24BA1E58005D7B4A /* PBRTypeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRTypeManager.swift; sourceTree = "<group>"; };
-		1CC362AF24BA5560005D7B4A /* PBRDolPatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRDolPatcher.swift; sourceTree = "<group>"; };
+		1CC362AF24BA5560005D7B4A /* PBRPatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRPatcher.swift; sourceTree = "<group>"; };
 		1CC362B524BA57EB005D7B4A /* GoDPatchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDPatchViewController.swift; sourceTree = "<group>"; };
 		1CC362BA24BFDA5E005D7B4A /* Stats.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Stats.storyboard; sourceTree = "<group>"; };
 		1CC362BF24BFDC53005D7B4A /* GoDEnumerablePopUpButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDEnumerablePopUpButtons.swift; sourceTree = "<group>"; };
@@ -8530,7 +8530,7 @@
 			isa = PBXGroup;
 			children = (
 				B24A511021D40130009C707C /* PBRConstant.swift */,
-				1CC362AF24BA5560005D7B4A /* PBRDolPatcher.swift */,
+				1CC362AF24BA5560005D7B4A /* PBRPatcher.swift */,
 				B24A50D621D12CDA009C707C /* PBRItem.swift */,
 				B24A50D721D12CDA009C707C /* PBRMove.swift */,
 				B24A50D321D12CDA009C707C /* PBRPokemonStats.swift */,
@@ -13499,7 +13499,7 @@
 				1CCFFE0F2554FFBA0082BFE2 /* XGASM.swift in Sources */,
 				1CCFFF3F255501790082BFE2 /* XGTextureBlock.swift in Sources */,
 				1CCFFF142555013C0082BFE2 /* GoDShellManager.swift in Sources */,
-				1CCFFF81255501E50082BFE2 /* PBRDolPatcher.swift in Sources */,
+				1CCFFF81255501E50082BFE2 /* PBRPatcher.swift in Sources */,
 				1CCFFE7D255500030082BFE2 /* GoDTextureFormats.swift in Sources */,
 				1CCFFF6A255501BE0082BFE2 /* PBRPokemon.swift in Sources */,
 				1C7169842602AF3A000F1456 /* GoDStruct.swift in Sources */,
@@ -13788,7 +13788,7 @@
 				B20EEA6B21E921EB00E87D01 /* GoDTableCellView.swift in Sources */,
 				B20EEE9A21EF78EA00E87D01 /* XGPNGBlock.swift in Sources */,
 				B20EEA8921EF771A00E87D01 /* NSViewExtensions.swift in Sources */,
-				1CC362B124BA5560005D7B4A /* PBRDolPatcher.swift in Sources */,
+				1CC362B124BA5560005D7B4A /* PBRPatcher.swift in Sources */,
 				1C20013525B3222800A7CF7D /* GoDGameInit.swift in Sources */,
 				B20EEE8821EF786100E87D01 /* XGContestCategories.swift in Sources */,
 				1C37441224056F190089D3BA /* GoDShellManager.swift in Sources */,
@@ -13975,7 +13975,7 @@
 				B24A505521D1258E009C707C /* XGTexturePalette.swift in Sources */,
 				B24A502721D11145009C707C /* PBRExtensions.swift in Sources */,
 				1C56F62D2606994800CF1DEE /* MoveStatsTable.swift in Sources */,
-				1CC362B024BA5560005D7B4A /* PBRDolPatcher.swift in Sources */,
+				1CC362B024BA5560005D7B4A /* PBRPatcher.swift in Sources */,
 				1C54188225B9A75300CCE8E0 /* XDSConstant.swift in Sources */,
 				B24A50DA21D12CDA009C707C /* PBRFileTypes.swift in Sources */,
 				1C56F57F2605DE2C00CF1DEE /* PokemonStatsTable.swift in Sources */,

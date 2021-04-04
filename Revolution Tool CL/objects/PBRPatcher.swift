@@ -1,5 +1,5 @@
 //
-//  PBRDolPatcher.swift
+//  PBRPatcher.swift
 //  GoD Tool
 //
 //  Created by Stars Momodu on 11/07/2020.

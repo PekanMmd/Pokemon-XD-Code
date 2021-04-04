@@ -105,7 +105,7 @@ func applyPatches() {
 			return
 		}
 		let patch = patches[index - 1]
-		XGDolPatcher.applyPatch(patch)
+		XGPatcher.applyPatch(patch)
 	}
 }
 
