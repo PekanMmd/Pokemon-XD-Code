@@ -120,7 +120,7 @@ extension XGMusic: XGEnumerable {
 	
 	static var allValues: [XGMusic] {
 		var values = [XGMusic]()
-		for i in 0 ..< CommonIndexes.NumberBGM.value {
+		for i in 0 ..< CommonIndexes.NumberOfBGM.value {
 			values.append(XGMusic(index: i))
 		}
 		return values
