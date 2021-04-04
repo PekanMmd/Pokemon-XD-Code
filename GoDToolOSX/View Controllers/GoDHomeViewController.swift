@@ -77,12 +77,10 @@ class GoDHomeViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-		
-		let image = (row % 2 == 0 ? NSImage(named: "Item Cell") : NSImage(named: "Tool Cell"))!
-		
-		let view = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: tools[row], colour: GoDDesign.colourBlack(), background: image, fontSize: 14, width: widthForTable())) as! GoDTableCellView
-		
-		view.setTitle(tools[row])
+		let view = super.tableView(tableView, viewFor: tableColumn, row: row) as? GoDTableCellView
+
+		view?.image = (row % 2 == 0 ? NSImage(named: "Item Cell") : NSImage(named: "Tool Cell"))
+		view?.setTitle(tools[row])
 		
 		return view
 	}

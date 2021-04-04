@@ -1,5 +1,5 @@
 //
-//  XGDolPatcher.swift
+//  XGPatcher.swift
 //  XG Tool
 //
 //  Created by StarsMmd on 19/05/2015.
@@ -64,6 +64,7 @@ let kShinyCalcNewPIDInstruction				: UInt32 = 0x38600000
 
 let kNumberOfDolPatches = 12
 
+// XD
 var shadowPokemonShininessOffset: Int {
 	switch region {
 	case .US: return 0x1fc2b2
@@ -96,7 +97,8 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.removeEVCap,
 	.gen7CritRatios,
 	.allSingleBattles,
-	.allDoubleBattles
+	.allDoubleBattles,
+	.type9IndependentApply
 ] : [
 	.freeSpaceInDol,
 	.physicalSpecialSplitApply,
@@ -109,7 +111,9 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.enableDebugLogs,
 	.pokemonCanLearnAnyTM,
 	.pokemonHaveMaxCatchRate,
-	.gen7CritRatios
+	.gen7CritRatios,
+	.allSingleBattles,
+	.allDoubleBattles
 ]
 
 enum XGDolPatches: Int {
@@ -151,13 +155,13 @@ enum XGDolPatches: Int {
 		case .freeSpaceInDol: return "Create some space in \(XGFiles.dol.fileName) which is needed for other assembly patches. Recommended to use this first."
 		case .physicalSpecialSplitApply : return "Apply the gen IV physical/special split. (You still need to set the category for each move)"
 		case .physicalSpecialSplitRemove : return "Remove the physical/special split."
-		case .type9IndependentApply : return "Removes the dependecy on the ??? type allowing 1 additional type."
+		case .type9IndependentApply : return "Makes the battle engine treat the ??? type as regular type."
 		case .betaStartersApply : return "Allows the player to start with 2 pokemon."
 		case .betaStartersRemove : return "Revert to starting with 1 pokemon."
 		case .renameAllPokemonApply	: return "Allows the name rater to rename all pokemon - Crashes parts of game"
 		case .shinyChanceEditingApply : return "Removes shiny purification glitch by generating based on a fixed trainer ID."
 		case .shinyChanceEditingRemove : return "shininess will be determined by trainer ID as usual."
-		case .purgeUnusedText : return "Removes some unused text files. (Use this patch first)"
+		case .purgeUnusedText : return "Removes foreign language text from the US version."
 		case .decapitaliseNames : return "Decapitalises a lot of text."
 		case .tradeEvolutions : return "Trade Evolutions become level 40"
 		case .defaultMoveCategories: return "Sets the physical/special category for all moves to their expected values"
@@ -172,7 +176,7 @@ enum XGDolPatches: Int {
 		case .allowShinyShadowPokemon: return "Shadow pokemon can be shiny"
 		case .shinyLockShadowPokemon: return "Shadow pokemon can never be shiny"
 		case .alwaysShinyShadowPokemon: return "Shadow pokemon are always shiny"
-		case .enableDebugLogs: return "Enable Debug Logs"
+		case .enableDebugLogs: return "Enable Debug Logs (Only useful for script development)"
 		case .pokemonCanLearnAnyTM: return "Any pokemon can learn any TM"
 		case .pokemonHaveMaxCatchRate: return "All pokemon have the maximum catch rate of 255"
 		case .removeEVCap: return "Allow pokemon to have an EV total above 510"
@@ -652,7 +656,7 @@ class XGDolPatcher {
 	}
 	
 	class func removeTradeEvolutions() {
-		printg("Setting pokemon that require a trade to evolve to evolve at level 36 instead")
+		printg("Setting pokemon that require a trade to evolve to evolve at level 40 instead")
 		
 		for i in 0 ..< kNumberOfPokemon {
 			
@@ -661,7 +665,7 @@ class XGDolPatcher {
 			for j in 0 ..< kNumberOfEvolutions {
 				if (stats.evolutions[j].evolutionMethod == XGEvolutionMethods.trade) || (stats.evolutions[j].evolutionMethod == XGEvolutionMethods.tradeWithItem) {
 					stats.evolutions[j].evolutionMethod = .levelUp
-					stats.evolutions[j].condition = 36
+					stats.evolutions[j].condition = 40
 					stats.save()
 				}
 			}
@@ -859,15 +863,16 @@ class XGDolPatcher {
 	}
 
 	class func setAllBattlesTo(_ style: XGBattleStyles) {
-		#if GAME_XD
 		let battleStyle: XGBattleStyles = style == .single ? .single : .double
 		XGBattle.allValues.forEach { (battle) in
-			if battle.p2Trainer?.deck != .DeckVirtual {
-				battle.battleStyle = battleStyle
-				battle.save()
+			#if GAME_XD
+			guard battle.p2Trainer?.deck != .DeckVirtual, battle.p2Trainer?.deck != .DeckBingo else {
+				return
 			}
+			#endif
+			battle.battleStyle = battleStyle
+			battle.save()
 		}
-		#endif
 	}
 
 	

@@ -59,7 +59,13 @@ let kDolToISOOffsetDifference: Int = {
 	}
 }()
 
-let kRELtoRAMOffsetDifference = 0xb18dc0 // add this value to a common_rel offset to get it's offset in RAM,  XD US
+var kRELtoRAMOffsetDifference: Int {
+	if game == .XD, region == .US {
+		return 0xb18dc0 // add this value to a common_rel offset to get it's offset in RAM,  XD US
+	}
+	#warning("TODO: find rel to ram offset for other regions and colosseum")
+	return -0x80000000
+}
 let kRELDataStartOffset = 0x1CB0 // XD US
 let kRelFreeSpaceStart = 0x80590 + kRELtoRAMOffsetDifference // XD US
 
@@ -129,9 +135,9 @@ let kDolFreeSpaceStart: Int? = {
 
 let kDolFreeSpaceEnd: Int? = {
 	switch game {
-	case .Colosseum: return kCOLDOLFreeSpaceStart
-	case .XD: return kXDDOLFreeSpaceStart
-	case .PBR: return kPBRDOLFreeSpaceStart
+	case .Colosseum: return kCOLDOLFreeSpaceEnd
+	case .XD: return kXDDOLFreeSpaceEnd
+	case .PBR: return kPBRDOLFreeSpaceEnd
 	}
 }()
 

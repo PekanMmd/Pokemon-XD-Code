@@ -23,9 +23,24 @@ enum XGBattleStyles : Int, Codable, CaseIterable {
 		case .double:
 			return "Double"
 		case .other:
-			return "Other"
+			return game == .Colosseum ? "Multi" : "Other"
 		}
 	}
+
+	#if GAME_COLO
+	var valueFor6v6: Int {
+		switch self {
+		case .none:
+			return 3
+		case .single:
+			return 0
+		case .double:
+			return 1
+		case .other:
+			return 2
+		}
+	}
+	#endif
 }
 
 extension XGBattleStyles: XGEnumerable {

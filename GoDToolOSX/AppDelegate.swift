@@ -35,7 +35,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 
 	func decodeInputFiles(_ files: [XGFiles]) {
-		fileDecodingMode = true
+		// if no iso has been loaded then the tool needs to load these files without context from the rest of the iso
+		fileDecodingMode = XGISO.inputISOFile == nil
 		for file in files {
 			guard file.exists else {
 				printg("cannot open file:", file.path, "\nIt doesn't exist.")
@@ -424,7 +425,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	func performSegue(_ name: String) {
-		guard checkRequiredFiles(allowAnyISO: name == "toISOVC") else {
+		let alwaysAllowedSegues = ["toISOVC", "toAlertVC"]
+		guard checkRequiredFiles(allowAnyISO: alwaysAllowedSegues.contains(name)) else {
 			return
 		}
 		homeViewController.performSegue(withIdentifier: name, sender: self)
@@ -471,6 +473,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	private func checkRequiredFiles(allowAnyISO: Bool = false) -> Bool {
 		if game != .PBR && (XGISO.inputISOFile == nil || !XGFiles.iso.exists) {
 			if let appDelegate = (NSApplication.shared.delegate as? AppDelegate) {
+				printg("Please select the .iso to use with this tool")
 				appDelegate.openFilePicker(self)
 			} else {
 				homeViewController.performSegue(withIdentifier: "toHelpVC", sender: self)

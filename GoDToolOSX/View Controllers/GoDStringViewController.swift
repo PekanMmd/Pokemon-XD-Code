@@ -21,6 +21,9 @@ class GoDStringViewController: GoDViewController {
 	}
 	
 	@IBAction func findFreeID(_ sender: Any) {
+		#if GAME_PBR
+		freeid.stringValue = "\(PBRStringManager.messageDataTable.numberOfEntries + 1)"
+		#else
 		guard !isSearchingForFreeStringID else {
 			GoDAlertViewController.displayAlert(title: "Please wait", text: "Please wait for previous string id search to complete.")
 			return
@@ -32,6 +35,7 @@ class GoDStringViewController: GoDViewController {
 				freeid.stringValue = "0"
 			}
 		}
+		#endif
 	}
 	
 	@IBAction func getString(_ sender: Any) {
@@ -49,7 +53,7 @@ class GoDStringViewController: GoDViewController {
 				return
 			}
 			if text.string.length > 0 {
-				if !XGString(string: text.string, file: nil, sid: val).replace() {
+				if !XGString(string: text.string, sid: val).replace() {
 					GoDAlertViewController.displayAlert(title: "Replacement failed!", text: "The string could not be replaced")
 				}
 			} else {

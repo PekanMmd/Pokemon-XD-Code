@@ -44,3 +44,9 @@ func printg(_ args: Any...) {
 		XGUtility.saveString(logString, toFile: .log(date))
 	}
 }
+
+extension CustomStringConvertible {
+	func println() {
+		printg(self)
+	}
+}

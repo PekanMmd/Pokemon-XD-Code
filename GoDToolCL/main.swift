@@ -11,6 +11,9 @@ import Foundation
 
 loadISO(exitOnFailure: true)
 
+let file = XGFiles.typeAndFsysName(.dat, "pkx_groudon")
+DATModel(file: file)?.println()
+
 
 //XGUtility.exportFileFromISO(.fsys("D4_tower_1F_2"))
 //battleBingoTable.decodeData()

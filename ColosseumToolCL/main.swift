@@ -8,9 +8,93 @@
 
 loadISO(exitOnFailure: true)
 
-common.allPointers().forEachIndexed { (index, pointer) in
-	printg(index, pointer.hexString())
+func fixShinyGlitch() {
+	guard let getPlayerTrainerDataFunctionPointer = XGAssembly.ASMfreeSpaceRAMPointer() else {
+		printg("Couldn't find free space in Start.dol")
+		return
+	}
+	let coloShinyGlitchSetTrainerIDRAMOffset = 0x1f9e1c // colo us
+	let getTrainerDataForTrainerFunction = 0x129280 // colo us
+	let setPokemonTIDOffset = 0x80123f78 // colo us
+	let trainerGetValueWithIndexFunction = 0x8012a5b0 // colo us
+
+	// Creates a function which returns a pointer to the player's trainer data
+	// so we can get it any time with 1 bl instruction
+	XGAssembly.replaceRamASM(RAMOffset: getPlayerTrainerDataFunctionPointer, newASM: [
+		.stwu(.sp, .sp, -0x10),
+		.mflr(.r0),
+		.stw(.r0, .sp, 0x14),
+
+		.li(.r3, 0),
+		.li(.r4, 2),
+		.bl(getTrainerDataForTrainerFunction),
+		
+		.lwz(.r0, .sp, 0x14),
+		.mtlr(.r0),
+		.addi(.sp, .sp, 0x10),
+		.blr
+	])
+	// Get the player's trainer data where it would normally have got the opponent's
+	XGAssembly.replaceRamASM(RAMOffset: coloShinyGlitchSetTrainerIDRAMOffset, newASM: [
+		.bl(getPlayerTrainerDataFunctionPointer)
+	])
+
+	// extend the function which sets the TID for generated trainer pokemon
+	// so it gets the player's TID instead of the NPC's
+	guard let setTIDUpdateOffset = XGAssembly.ASMfreeSpaceRAMPointer() else {
+		printg("Couldn't find free space in Start.dol. The shiny glitch fix implementation was only partly complete so there may be some issues.")
+		return
+	}
+	XGAssembly.replaceRamASM(RAMOffset: setPokemonTIDOffset, newASM: [
+		.b(setTIDUpdateOffset)
+	])
+	XGAssembly.replaceRamASM(RAMOffset: setTIDUpdateOffset, newASM: [
+		.bl(getPlayerTrainerDataFunctionPointer), // get player trainer data
+		// get trainer id
+		.li(.r4, 2),
+		.li(.r5, 0),
+		.bl(trainerGetValueWithIndexFunction),
+		.mr(.r30, .r3), // put tid in register that will be used later for setting TID
+
+		// instruction that was overwritten by branch
+		.mr(.r3, .r26),
+		// branch back
+		.b(setPokemonTIDOffset + 4)
+	])
+
+	XGISO.current.importFiles([.dol])
 }
+
+func setNPCPokemonShininess(to: XGShinyValues, shadowsOnly: Bool = true) {
+	let shinyLockRAMOffset = 0x801fa3e8 // colo us
+	let shadowsOnlyLockRAMOffset = 0x801fa3d8 // colo us
+	let battlePokemonCheckIfShadowFunctionTAMPointer = 0x8011fc74 // colo us
+	if shadowsOnly {
+		guard let branchToOffset = XGAssembly.ASMfreeSpaceRAMPointer() else {
+			printg("Couldn't find free space in Start.dol")
+			return
+		}
+		XGAssembly.replaceRamASM(RAMOffset: shadowsOnlyLockRAMOffset, newASM: [
+			.b(branchToOffset),
+			.mr(.r3, .r31),
+			.mr(.r4, .r29),
+			.mr(.r5, .r28),
+			.mr(.r7, .r25)
+		])
+		XGAssembly.replaceRamASM(RAMOffset: branchToOffset, newASM: [
+			// pokemon data pointer in r31. check if shadow pokemon and set r6 to shininess value only if shadow, otherwise 0
+
+		])
+	} else {
+		XGAssembly.replaceRamASM(RAMOffset: shinyLockRAMOffset, newASM: [
+			.li(.r6, to.rawValue)
+		])
+	}
+}
+
+fixShinyGlitch()
+setNPCPokemonShininess(to: .always)
+
 
 //XGAssembly.replaceRamASM(RAMOffset: 0x1f9f78, newASM: [
 //	.stwu(.sp, .sp, -0x84),

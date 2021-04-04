@@ -25,7 +25,8 @@ class DeckTrainerStructTable: GoDStructTableFormattable {
 		}
 
 		properties = GoDStruct(name: "Trainer", format: [
-			.short(name: "ID String Pointer", description: "", type: .stringPointer(file: file, offsetBy: deck.DSTRDataOffset)),
+			.pointer(property: .string(name: "ID String Pointer", description: "", maxCharacterCount: nil, charLength: .char),
+					 offsetBy: deck.DSTRDataOffset, isShort: true),
 			.short(name: "Padding", description: "", type: .null),
 			.bitArray(name: "Shadow Flags", description: "Determines which of the trainer's pokemon ids are shadow ids, rather than ids of regular pokemon in the deck", bitFieldNames: [
 				nil,

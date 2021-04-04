@@ -144,6 +144,8 @@ class XGColour: NSObject, Codable {
 			setRGB565(raw: raw)
 		case .RGB5A3:
 			setRGB5A3(raw: raw)
+		case .RGBA32:
+			self.init(raw: raw.unsigned, format: .RGBA32)
 		default:
 			break
 		}
@@ -251,13 +253,10 @@ class XGColour: NSObject, Codable {
 	}
 	
 	func setRGBA32(raw: UInt32) {
-		
 		self.alpha   = ((raw >> 24) & 0xFF).int32
 		self.red = ((raw >> 16) & 0xFF).int32
 		self.green  = ((raw >>  8) & 0xFF).int32
 		self.blue = ((raw) & 0xFF).int32
-		
-		
 	}
 	
 	

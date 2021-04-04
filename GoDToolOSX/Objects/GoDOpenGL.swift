@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import OpenGL
 
 typealias Radians = Float
 let PI : Radians = Radians(Double.pi)

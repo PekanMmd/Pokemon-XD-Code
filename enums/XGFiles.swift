@@ -227,8 +227,8 @@ indirect enum XGFiles {
 			case .boot:
 				XGUtility.decompileISO()
 			#endif
-			case .fsys("people_archive"):
-				if !XGUtility.exportFileFromISO(.fsys("people_archive"), extractFsysContents: false) {
+			case .fsys:
+				if !XGUtility.exportFileFromISO(self, extractFsysContents: false) {
 					printg("file doesn't exist and couldn't be extracted:", self.path)
 					return nil
 				}
@@ -385,8 +385,8 @@ indirect enum XGFiles {
 	}
 	
 	var stringTable: XGStringTable {
-		if loadedStringTables[self.path] != nil {
-			return loadedStringTables[self.path]!
+		if let table = loadedStringTables[self.path] {
+			return table
 		}
 		var table: XGStringTable!
 

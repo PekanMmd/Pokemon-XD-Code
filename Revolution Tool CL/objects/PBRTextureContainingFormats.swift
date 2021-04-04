@@ -84,11 +84,6 @@ class PBRMNRData: PBRTextureContaining {
 	override var modelTextureHeadersPointersOffset: Int { return 0x20 }
 }
 
-class PBRSDRModel: PBRTextureContaining {
-	override var modelNumberOfTexturesOffset: Int { return 0x1a }
-	override var modelTextureHeadersPointersOffset: Int { return 0xc }
-}
-
 class PBRODRModel: PBRTextureContaining {
 	override var modelNumberOfTexturesOffset: Int { return 0x18 }
 	override var modelTextureHeadersPointersOffset: Int { return 0xc }
@@ -132,5 +127,61 @@ class PBRGFLData: PBRTextureContaining {
 			return dataRelativeOffset + headerOffset
 		}
 
+	}
+}
+
+struct SDRMaterial: CustomStringConvertible {
+	var headerOffset: Int
+	var name: String
+	var diffuseReflection: XGColour
+	var specularReflection: XGColour
+
+	var description: String {
+		return """
+		Material: \(name)
+		Header Offset: \(headerOffset)
+		Diffuse
+		red: \(diffuseReflection.red.hex()) green: \(diffuseReflection.green.hex()) blue: \(diffuseReflection.blue.hex())
+		Specular
+		red: \(specularReflection.red.hex()) green: \(specularReflection.green.hex()) blue: \(specularReflection.blue.hex())
+		"""
+	}
+}
+
+class PBRSDRModel: PBRTextureContaining {
+	override var modelNumberOfTexturesOffset: Int { return 0x1a }
+	override var modelTextureHeadersPointersOffset: Int { return 0xc }
+
+	var materials = [SDRMaterial]()
+
+	convenience init(file: XGFiles) {
+		self.init(data: file.data)
+	}
+
+	override init(data: XGMutableData?) {
+		super.init(data: data)
+		guard let data = data else { return }
+
+		let numberOfMaterials = data.get2BytesAtOffset(0x1e)
+		let materialHeadersPointersOffset = data.get4BytesAtOffset(0x14)
+		for i in 0 ..< numberOfMaterials {
+			let materialHeaderPointer = data.get4BytesAtOffset(materialHeadersPointersOffset + (i * 4))
+			let materialNamePointer = data.get4BytesAtOffset(materialHeaderPointer)
+			let materialName = data.getStringAtOffset(materialNamePointer, charLength: .char)
+			let materialProperties = data.getWordStreamFromOffset(materialHeaderPointer + 0x60, length: 8)
+			let diffuseColour = XGColour(raw: materialProperties[0], format: .RGBA32)
+			let specularColour = XGColour(raw: materialProperties[1], format: .RGBA32)
+			materials.append(.init(headerOffset: materialHeaderPointer, name: materialName, diffuseReflection: diffuseColour, specularReflection: specularColour))
+		}
+	}
+
+	func writeMaterials(save: Bool = true) {
+		guard let data = data else { return }
+		for material in materials {
+			data.replaceBytesFromOffset(material.headerOffset + 0x60, withWordStream: [material.diffuseReflection.RGBA32Representation.uint32, material.specularReflection.RGBA32Representation.uint32])
+		}
+		if save {
+			data.save()
+		}
 	}
 }

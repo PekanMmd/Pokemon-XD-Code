@@ -44,9 +44,9 @@ final class XGTrainer: NSObject, Codable {
 	var trainerClass		= XGTrainerClasses.none
 	var trainerModel		= XGTrainerModels.wes
 	
-	var battleData : XGBattle? {
-		return nil
-	}
+	lazy var battleData: XGBattle? = {
+		return XGBattle.battleForTrainer(index: self.index)
+	}()
 	
 	var startOffset : Int {
 		get {

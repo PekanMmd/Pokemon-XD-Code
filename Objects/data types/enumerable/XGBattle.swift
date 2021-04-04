@@ -8,7 +8,9 @@
 
 import Foundation
 
-let kSizeOfBattleData = 0x3c
+var kSizeOfBattleData: Int {
+	return region == .EU ? 0x4C : 0x3C
+}
 
 let kBattleBattleTypeOffset = 0x0
 let kBattleTrainersPerSideOffset = 0x1
@@ -21,30 +23,30 @@ let kBattleBGMOffset = 0x12
 let kBattleUnknown2Offset = 0x17
 let kBattleColosseumRoundOffset = 0x1b
 
-let kBattlePlayer1DeckIDOffset = 0x1C
-let kBattlePlayer1TrainerIDOffset = 0x1E
-let kBattlePlayer1ControlOffset = 0x23
+var kBattlePlayer1DeckIDOffset: Int { return region == .EU ? 0x2C : 0x1C }
+var kBattlePlayer1TrainerIDOffset: Int { return region == .EU ? 0x2E : 0x1E }
+var kBattlePlayer1ControlOffset: Int { return region == .EU ? 0x23 : 0x23 }
 
-let kBattlePlayer2DeckIDOffset = 0x24
-let kBattlePlayer2TrainerIDOffset = 0x26
-let kBattlePlayer2ControlOffset = 0x2B
+var kBattlePlayer2DeckIDOffset: Int { return region == .EU ? 0x34 : 0x24 }
+var kBattlePlayer2TrainerIDOffset: Int { return region == .EU ? 0x36 : 0x26 }
+var kBattlePlayer2ControlOffset: Int { return region == .EU ? 0x3B : 0x2B }
 
-let kBattlePlayer3DeckIDOffset = 0x2C
-let kBattlePlayer3TrainerIDOffset = 0x2E
-let kBattlePlayer3ControlOffset = 0x33
+var kBattlePlayer3DeckIDOffset: Int { return region == .EU ? 0x3C : 0x2C }
+var kBattlePlayer3TrainerIDOffset: Int { return region == .EU ? 0x3E : 0x2E }
+var kBattlePlayer3ControlOffset: Int { return region == .EU ? 0x33 : 0x33 }
 
-let kBattlePlayer4DeckIDOffset = 0x34
-let kBattlePlayer4TrainerIDOffset = 0x36
-let kBattlePlayer4ControlOffset = 0x3B
+var kBattlePlayer4DeckIDOffset: Int { return region == .EU ? 0x44 : 0x34 }
+var kBattlePlayer4TrainerIDOffset: Int { return region == .EU ? 0x46 : 0x36 }
+var kBattlePlayer4ControlOffset: Int { return region == .EU ? 0x4B : 0x3B }
 
-final class XGBattle: NSObject, Codable {
+final class XGBattle: Codable {
 	
 	var index = 0
 	var startOffset = 0
 	
-	var battleType : XGBattleTypes!
-	var battleStyle : XGBattleStyles!
-	var battleField : XGBattleField!
+	var battleType: XGBattleTypes
+	var battleStyle: XGBattleStyles
+	var battleField: XGBattleField
 	var trainersPerSide = 0
 	var pokemonPerPlayer = 0
 	var BGMusicID = 0
@@ -118,7 +120,7 @@ final class XGBattle: NSObject, Codable {
 		return str
 	}
 	
-	override var description: String {
+	var description: String {
 		
 		let p1t = p1Trainer
 		let p2t = p2Trainer
@@ -156,8 +158,6 @@ final class XGBattle: NSObject, Codable {
 	}
 	
 	init(index: Int) {
-		super.init()
-		
 		self.index = index
 		self.startOffset = CommonIndexes.Battles.startOffset + (index * kSizeOfBattleData)
 		

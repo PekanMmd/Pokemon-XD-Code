@@ -248,28 +248,7 @@ extension GoDStructTableFormattable {
 						}
 					}
 				default:
-					if case .msgID = propertyValue.property.type,
-					   propertyValue.description.contains(",") {
-						let fullText = propertyValue.description
-						let parts = fullText.split(separator: " ")
-
-						// put quotes around all but last part
-						if parts.count > 1, let last = parts.last {
-							var quotedText = "\""
-							for i in 0 ..< parts.count - 1 {
-								quotedText += parts[i] + " "
-							}
-							quotedText.removeLast() // remove extra space
-							quotedText += "\""
-							quotedText += " " + last
-							csv += "\(quotedText),"
-						} else {
-							assertionFailure("MSG ID should have the string text followed by the id in brackets after a space: \(fullText)")
-							csv += "\(propertyValue.description),"
-						}
-					} else {
-						csv += "\(propertyValue.description),"
-					}
+					csv += "\(propertyValue.description),"
 				}
 			}
 		}
@@ -279,7 +258,7 @@ extension GoDStructTableFormattable {
 			// put quotes around string in case it contains a comma so it doesn't affect the csv alignment
 			let entryName = "\"" + assumedNameForEntry(index: index) + "\""
 			csv += "\(entryName),"
-			appendFieldValues(data: entry.flattened)
+			appendFieldValues(data: entry.flattenedValues)
 			csv.removeLast()
 			csv += "\n"
 		}

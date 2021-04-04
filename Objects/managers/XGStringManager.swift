@@ -80,7 +80,9 @@ func getStringWithID(id: Int) -> XGString? {
 	#if GAME_PBR
 	if let (tableId, stringIndex) = PBRStringManager.tableIDAndIndexForStringWithID(id),
 	   let table = getStringTableWithId(tableId) {
-		return table.stringWithID(stringIndex)
+		let string = table.stringWithID(stringIndex)
+		string?.id = id
+		return string
 	}
 	#else
 	for table in allStringTables {

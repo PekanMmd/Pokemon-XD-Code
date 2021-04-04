@@ -55,33 +55,39 @@ let battlefieldsStruct = GoDStruct(name: "Battlefield", format: [
 let battlefieldsTable = CommonStructTable(index: .BattleFields, properties: battlefieldsStruct)
 
 #if GAME_XD
-let battleStruct = GoDStruct(name: "Battle", format: [
-	.byte(name: "Battle Type", description: "", type: .battleType),
-	.byte(name: "Trainers per side", description: "", type: .uint),
-	.byte(name: "Battle Style", description: "", type: .battleStyle),
-	.byte(name: "Pokemon Per Player", description: "", type: .uint),
-	.byte(name: "Is Story Battle", description: "", type: .bool),
-	.short(name: "Battle Field ID", description: "", type: .battleFieldID),
-	.short(name: "Battle CD ID", description: "Set programmatically at run time so is always set to 0 in the game files", type: .uint),
-	.word(name: "Unknown 1", description: "", type: .uintHex),
-	.word(name: "BGM ID", description: "", type: .uintHex),
-	.word(name: "Unknown 2", description: "", type: .uintHex),
-	.word(name: "Colosseum Round", description: "", type: .colosseumRound),
-	.array(name: "Players", description: "", property: .subStruct(name: "Battle Player", description: "", property: GoDStruct(name: "Battle Player", format: [
-		.short(name: "Deck ID", description: "", type: .deckID),
-		.short(name: "Trainer ID", description: "Use deck 0, id 5000 for the player's team", type: .uint),
-		.word(name: "Controller Index", description: "0 for AI", type: .playerController),
-	])), count: 4)
-])
+var battleStruct: GoDStruct {
+	return GoDStruct(name: "Battle", format: [
+		.byte(name: "Battle Type", description: "", type: .battleType),
+		.byte(name: "Trainers per side", description: "", type: .uint),
+		.byte(name: "Battle Style", description: "", type: .battleStyle),
+		.byte(name: "Pokemon Per Player", description: "", type: .uint),
+		.byte(name: "Is Story Battle", description: "", type: .bool),
+		.short(name: "Battle Field ID", description: "", type: .battleFieldID),
+		.short(name: "Battle CD ID", description: "Set programmatically at run time so is always set to 0 in the game files", type: .uint),
+		.word(name: "Unknown 1", description: "", type: .uintHex),
+		.word(name: "BGM ID", description: "", type: .uintHex),
+		.word(name: "Unknown 2", description: "", type: .uintHex)
+		]
+	+ (region == .EU ? [.array(name: "Unknown Values", description: "Only exist in the PAL version", property: .word(name: "", description: "", type: .uintHex), count: 4)] : [])
+	+ [
+		.word(name: "Colosseum Round", description: "", type: .colosseumRound),
+		.array(name: "Players", description: "", property: .subStruct(name: "Battle Player", description: "", property: GoDStruct(name: "Battle Player", format: [
+			.short(name: "Deck ID", description: "", type: .deckID),
+			.short(name: "Trainer ID", description: "Use deck 0, id 5000 for the player's team", type: .uint),
+			.word(name: "Controller Index", description: "0 for AI", type: .playerController),
+		]
+		)), count: 4)
+	])
+}
 #else
 let battleStruct = GoDStruct(name: "Battle", format: [
 	.byte(name: "Battle Type", description: "", type: .battleType),
 	.byte(name: "Battle Style", description: "", type: .battleStyle),
 	.byte(name: "Unknown Flag", description: "", type: .bool),
-	.short(name: "Unknown 1", description: "", type: .uintHex),
+	.short(name: "Battle Field ID", description: "", type: .battleFieldID),
 	.word(name: "Name ID", description: "", type: .msgID(file: .common_rel)),
 	.word(name: "Unknown 2", description: "", type: .uintHex),
-	.word(name: "Unknown 3", description: "", type: .uintHex),
+	.word(name: "BGM ID", description: "", type: .uintHex),
 	.word(name: "Unknown 4", description: "", type: .uintHex),
 	.array(name: "Players", description: "", property: .subStruct(name: "Battle Player", description: "", property: GoDStruct(name: "Battle Player", format: [
 		.short(name: "Trainer ID", description: "id 1 is the player", type: .indexOfEntryInTable(table: trainersTable, nameProperty: nil)),
@@ -89,7 +95,9 @@ let battleStruct = GoDStruct(name: "Battle", format: [
 	])), count: 4)
 ])
 #endif
-let battlesTable = CommonStructTable(index: .Battles, properties: battleStruct)
+var battlesTable: CommonStructTable {
+	return CommonStructTable(index: .Battles, properties: battleStruct)
+}
 
 
 #if GAME_COLO
@@ -149,6 +157,33 @@ let trainerPokemonTable = CommonStructTable(index: .TrainerPokemonData, properti
 		return XGPokemon.index(monIndex).name.unformattedString
 	}
 	return "Trainer Pokemon \(index)"
+}
+
+let shadowPokemonTable = CommonStructTable(index: .ShadowData, properties: GoDStruct(name: "Shadow Pokemon Data", format: [
+	.byte(name: "Catch Rate", description: "Overrides the catch rate for the pokemon species", type: .uint),
+	.short(name: "Species", description: "The species of the shadow pokemon that uses this id", type: .pokemonID),
+	.short(name: "First Trainer Index", description: "The index of the trainer entry of the first time this pokemon is encountered", type: .trainerID),
+	.short(name: "Alternative First Trainer Index", description: "The index of the trainer entry of another possibility for the first time this pokemon is encountered", type: .trainerID),
+	.short(name: "Heart Guage", description:"Determines how long it takes to purify the pokemon", type: .uint),
+	.short(name: "Index", description: "", type: .uint),
+	.short(name: "Unknown 1", description: "", type: .uintHex),
+	.short(name: "Padding", description: "", type: .null),
+	.array(name: "Unknown Values", description: "", property:
+		.short(name: "Unknown", description: "", type: .uintHex), count: 4),
+	.word(name: "Unknown 2", description: "", type: .uintHex),
+	.short(name: "Unknown 3", description: "", type: .uintHex),
+	.short(name: "Unknown 4", description: "", type: .uint),
+	.word(name: "Debug Name ID", description: "", type: .msgID(file: .common_rel)),
+	.array(name: "Unknown Values 2", description: "", property:
+		.short(name: "Unknown", description: "", type: .uintHex), count: 6),
+	.array(name: "Unknown Values 3", description: "", property:
+		.word(name: "Unknown", description: "", type: .uintHex), count: 2)
+
+])) { (index, data) -> String? in
+	if let species: Int = data.get("Species"), species < CommonIndexes.NumberOfPokemon.value {
+		return XGPokemon.index(species).name.unformattedString
+	}
+	return "Shadow Pokemon ID \(index)"
 }
 #endif
 

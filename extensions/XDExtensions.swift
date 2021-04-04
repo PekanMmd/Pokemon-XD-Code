@@ -440,7 +440,7 @@ extension XGUtility {
 		switch region {
 		case .US: start = 0x4014EA
 		case .JP: start = 0x3DEBAA
-		case .EU: start = 0x4014EA
+		case .EU: start = 0x43BDCA
 		case .OtherGame: start = 0
 		}
 		

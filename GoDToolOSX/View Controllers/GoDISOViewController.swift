@@ -87,8 +87,13 @@ class GoDISOViewController: GoDTableViewController {
 		filename.stringValue = "File name: \(currentFile.fileName)"
 		
 		filesText.string = ""
-		if currentFile.fileType == .fsys {
-			if let data = XGISO.current.dataForFile(filename: currentFile.fileName) {
+		if let data = XGISO.current.dataForFile(filename: currentFile.fileName) {
+
+			filesize.stringValue = "File size: \(data.length)"
+			filesText.string = "-"
+
+			if currentFile.fileType == .fsys {
+				filesText.string = "No files found in archive."
 				if data.length > 0 {
 					filesize.stringValue = "File size: \(data.length.hexString())"
 					let fsys = data.fsysData
@@ -96,6 +101,7 @@ class GoDISOViewController: GoDTableViewController {
 						filename.stringValue += " GID: \(fsys.groupID)"
 					}
 					if fsys.numberOfEntries > 0 {
+						filesText.string = ""
 						for i in  0 ..< fsys.numberOfEntries {
 							let filename = fsys.fileNameForFileWithIndex(index: i) ?? "-"
 							var identifier = fsys.identifierForFile(index: i).hex()
@@ -104,16 +110,8 @@ class GoDISOViewController: GoDTableViewController {
 							}
 							filesText.string += "\n\(i): \(filename) (\(identifier))"
 						}
-					} else {
-						filesText.string = "No files."
 					}
-				} else {
-					filesize.stringValue = "File size: -"
-					filesText.string = "No data."
 				}
-			} else {
-				filesize.stringValue = "File size: -"
-				filesText.string = "No data."
 			}
 		}
 	}

@@ -89,13 +89,13 @@ class XGString: NSObject, Codable {
 		initString += char.string
 	}
 	
-	init(string: String, file: XGFiles?, sid: Int?) {
+	init(string: String, file: XGFiles? = nil, sid: Int? = nil) {
 		// Forgive me! I wrote this years ago when I was still learning swift and the default
 		// swift library has some really bad string manipulation functions
 		// The function works. It used to be a lot worse... trust me :-)
 		super.init()
 		
-		self.table = file
+		self.table = game == .PBR ? nil : file
 		self.id = sid ?? 0
 		self.initString = string
 		let string = string.replacingOccurrences(of: "\n", with: "[New Line]")
@@ -177,17 +177,16 @@ class XGString: NSObject, Codable {
 		}
 		
 		loadAllStrings()
-		var success = false
-		for table in allStringTables {
-			if table.containsStringWithId(self.id) {
-				let tableSuccess = table.replaceString(self, save: save)
-				if !tableSuccess {
-					printg("Could not replace string with id \(self.id) in table: \(table.file.fileName)")
-				}
-				success = success || tableSuccess
-			}
+		#if GAME_PBR
+		if let (tableID, index) = PBRStringManager.tableIDAndIndexForStringWithID(self.id) {
+			return getStringTableWithId(tableID)?.replaceString(XGString(string: string, file: nil, sid: index)) ?? false
 		}
-		return success
+		#else
+		if let oldString = getStringWithID(id: self.id), let table = oldString.table {
+			return table.stringTable.replaceString(XGString(string: self.string, file: nil, sid: oldString.id), save: true)
+		}
+		#endif
+		return false
 	}
 	
 	func containsSubstring(_ sub: String) -> Bool {

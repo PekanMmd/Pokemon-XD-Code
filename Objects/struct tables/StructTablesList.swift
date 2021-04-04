@@ -63,19 +63,20 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		multipliersTable,
 		doorsTable,
 		roomsTable,
+		typesTable,
 		pokemonTable,
 		pokeFacesTable
 	]
 
 	#if GAME_COLO
 	let coloTables: [GoDStructTableFormattable] = [
-
+		shadowPokemonTable,
+		battleStylesTable
 	]
 	tables += coloTables
 	#elseif GAME_XD
 	let xdTables: [GoDStructTableFormattable] = [
 		battleBingoTable,
-		typesTable,
 		oasisPokespotTable,
 		rockPokespotTable,
 		cavePokespotTable,

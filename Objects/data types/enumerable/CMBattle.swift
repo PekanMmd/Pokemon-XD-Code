@@ -7,40 +7,100 @@
 
 import Foundation
 
-let kSizeOfBattleData = 0x38
+final class XGBattle {
 
-let kBattleBattleTypeOffset = 0x0
-let kBattleFieldOffset  = 0x5
-let kBattleNameIDOffset = 0x8
-let kBattleColosseumRoundOffset = 0x16
+	let index: Int
+	private let data: GoDStructData
 
-let kBattleTrainer1IndexOffset = 0x18
-let kBattleTrainer1ControlOffset = 0x1f
-let kBattleTrainer2IndexOffset = 0x20
-let kBattleTrainer2ControlOffset = 0x27
-let kBattleTrainer3IndexOffset = 0x28
-let kBattleTrainer3ControlOffset = 0x2f
-let kBattleTrainer4IndexOffset = 0x30
-let kBattleTrainer4ControlOffset = 0x37
+	var battleStyle: XGBattleStyles {
+		get {
+			return XGBattleStyles(rawValue: data.get("Battle Style") ?? 0) ?? .none
+		}
+		set {
+			data.update("Battle Style", with: newValue.valueFor6v6)
+		}
+	}
 
+	var battleType: XGBattleTypes {
+		get {
+			return XGBattleTypes(rawValue: data.get("Battle Type") ?? 0) ?? .none
+		}
+		set {
+			data.update("Battle Type", with: newValue.rawValue)
+		}
+	}
 
+	var BGMusicID: Int {
+		get {
+			return data.get("BGM ID") ?? 0
+		}
+		set {
+			data.update("BGM ID", with: newValue)
+		}
+	}
 
-class XGBattle: NSObject, Codable {
+	var players: [(id: Int, controller: XGTrainerController)] {
+		get {
+			guard let playersStructs: [GoDStructData] = data.get("Players") else { return [] }
+			return playersStructs.map { (playerData) -> (Int, XGTrainerController) in
+				let id: Int = playerData.get("Trainer ID") ?? 0
+				let controller: XGTrainerController = XGTrainerController(rawValue: playerData.get("Controller Index") ?? 0) ?? .AI
+				return (id, controller)
+			}
+		}
+		set {
+			guard let playersStructs: [GoDStructData] = data.get("Players") else { return }
+			for i in 0 ..< min(playersStructs.count, newValue.count) {
+				let newData = newValue[i]
+				playersStructs[i].update("Trainer ID", with: newData.id)
+				playersStructs[i].update("Controller Index", with: newData.controller)
+			}
+
+			data.update("Players", with: playersStructs)
+		}
+	}
 	
-	var battleType : XGBattleTypes?
-	var battleStyle : XGBattleStyles?
-	var battleField : XGBattleField?
-	var trainersPerSide = 0
-	var pokemonPerPlayer = 6
-	var BGMusicID = 0
-	var round = XGColosseumRounds.none
-	var unknown = false
-	var unknown2 = 0
-	var index = 0
-	
+	init?(index: Int) {
+		guard let data = battlesTable.dataForEntry(index) else {
+			return nil
+		}
+		self.data = data
+		self.index = index
+	}
+
 	func save() {
-		
+		data.save()
+	}
+
+	class func battleForTrainer(index: Int) -> XGBattle? {
+		return XGBattle.allValues.first(where: { battle in
+			battle.players.contains(where: { (id, _) -> Bool in
+				return id == index
+			})
+		})
 	}
 }
 
+extension XGBattle: XGEnumerable {
+	var enumerableName: String {
+		return "Battle \(index)"
+	}
 
+	var enumerableValue: String? {
+		return nil
+	}
+
+	static var className: String {
+		return "Battles"
+	}
+
+	static var allValues: [XGBattle] {
+		var battles = [XGBattle]()
+		(0 ..< CommonIndexes.NumberOfBattles.value).forEach { (index) in
+			if let battle = XGBattle(index: index) {
+				battles.append(battle)
+			}
+		}
+		return battles
+	}
+}

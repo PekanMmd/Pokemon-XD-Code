@@ -31,6 +31,21 @@ func !=(lhs: Int, rhs: XGIndexedValue) -> Bool {
 	return lhs != rhs.index
 }
 
+infix operator +?
+func +?(lhs: Int?, rhs: Int?) -> Int? {
+	guard let left = lhs, let right = rhs else {
+		return nil
+	}
+	return left + right
+}
+infix operator *?
+func *?(lhs: Int?, rhs: Int?) -> Int? {
+	guard let left = lhs, let right = rhs else {
+		return nil
+	}
+	return left * right
+}
+
 extension Sequence where Iterator.Element == Int {
 	var byteString : String {
 		var s = ""

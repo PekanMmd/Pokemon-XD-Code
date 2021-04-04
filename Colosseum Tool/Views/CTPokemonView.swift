@@ -12,7 +12,7 @@ class GoDPokemonView: NSImageView {
 	var index = 0
 	
 	var dpkm = GoDPokemonPopUpButton()
-	var ddpk = GoDPokemonPopUpButton()
+	var ddpk = CMShadowIDPopUpButton() // pokemon's shadow id
 	var body = NSImageView()
 	var name = GoDPokemonPopUpButton()
 	var item = GoDItemPopUpButton()
@@ -30,12 +30,14 @@ class GoDPokemonView: NSImageView {
 	var shadowMoves = [GoDMovePopUpButton]()
 	var shadowCatchrate = NSTextField(frame: .zero)
 	var shadowCounter = NSTextField(frame: .zero)
-	var shadowAggression = NSTextField(frame: .zero)
-	var shadowID = NSTextField(frame: .zero)
+	var shadowAggression = NSTextField(frame: .zero) // repurposed to be shadow pokemon's alternate first TID
+	var shadowID = NSTextField(frame: .zero) // repurposed to be shadow pokemon's first TID
 	var pokeball = GoDPokeballPopUpButton()
 	
 	var views = [String : NSView]()
 	var metrics = [String : NSNumber]()
+
+	// This class is copy and pasted from the XD one and tweaked slightly so there are some inconsistent variable names and such
 	
 	var delegate : GoDTrainerViewController! {
 		didSet {
@@ -70,7 +72,7 @@ class GoDPokemonView: NSImageView {
 		
 		self.name.select(pokemon.species)
 		self.dpkm.isHidden = true
-		self.ddpk.isHidden = true
+		self.ddpk.selectItem(at: pokemon.shadowID)
 		self.body.image = pokemon.species.body
 		self.level.selectLevel(level: pokemon.level)
 		self.item.select(pokemon.item)
@@ -99,8 +101,8 @@ class GoDPokemonView: NSImageView {
 		self.happiness.integerValue = pokemon.happiness
 		
 		self.shadowCounter.integerValue = pokemon.shadowCounter
-		self.shadowAggression.isHidden = true
-		self.shadowID.isHidden = true
+		self.shadowAggression.integerValue = pokemon.shadowAlternateFirstTID
+		self.shadowID.integerValue = pokemon.shadowFirstTID
 		self.shadowCatchrate.integerValue = pokemon.shadowCatchRate
 		self.pokeball.select(pokemon.pokeball)
 		
@@ -144,8 +146,8 @@ class GoDPokemonView: NSImageView {
 			self.addConstraintEqualSizes(view1: moves[0], view2: shadow)
 		}
 		
-		let texts = [shadowCounter, /*shadowFlee, shadowAggression,*/ shadowCatchrate, ivs, happiness]
-		let textSelectors = [#selector(setCounter(sender:)), #selector(setCatch(sender:)),#selector(setIVs(sender:)),#selector(setHappiness(sender:)),]
+		let texts = [shadowCounter, shadowID, shadowAggression, shadowCatchrate, ivs, happiness]
+		let textSelectors = [#selector(setCounter(sender:)), #selector(setFlee(sender:)), #selector(setAggression(sender:)), #selector(setCatch(sender:)),#selector(setIVs(sender:)),#selector(setHappiness(sender:)),]
 		for i in 0 ..< texts.count {
 			texts[i].target = self
 			texts[i].action = textSelectors[i]
@@ -153,8 +155,8 @@ class GoDPokemonView: NSImageView {
 		}
 		
 		
-		let popups = [ability,gender,nature,name,item,level,pokeball]
-		let popselectors = [#selector(setAbility(sender:)),#selector(setGender(sender:)),#selector(setNature(sender:)),#selector(setSpecies(sender:)),#selector(setItem(sender:)),#selector(setLevel(sender:)),#selector(setPokeball(sender:)),]
+		let popups = [ability,gender,nature,name,item,level,pokeball,ddpk]
+		let popselectors = [#selector(setAbility(sender:)),#selector(setGender(sender:)),#selector(setNature(sender:)),#selector(setSpecies(sender:)),#selector(setItem(sender:)),#selector(setLevel(sender:)),#selector(setPokeball(sender:)), #selector(setShadowID(sender:))]
 		
 		for i in 0 ..< popups.count {
 			popups[i].target = self
@@ -226,7 +228,7 @@ class GoDPokemonView: NSImageView {
 		self.views["shadowfl"] = shadowID
 		
 		
-		let titles = ["IVs","HP","Atk","Def","Sp.A","Sp.D","Speed","Happiness","Heart Guage","","","Catch rate"]
+		let titles = ["IVs","HP","Atk","Def","Sp.A","Sp.D","Speed","Happiness","Heart Guage","First TID","Alternate TID","Catch rate"]
 		let visuals = ["IVs","hpEV","atkEV","defEV","spaEV","spdEV","speEV","happiness","shadowctT","shadowflT","shadowagT","shadowcrT"]
 		for i in 0 ..< titles.count {
 			let title = titles[i]
@@ -319,9 +321,7 @@ class GoDPokemonView: NSImageView {
 		self.addConstraints(visualFormat: "H:|-(g)-[shadow0]-(g)-[shadow1]-(g)-[shadow2]-(g)-[shadow3]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
 		self.addConstraints(visualFormat: "H:|-(g)-[shadowctT]-(g)-[shadowflT]-(g)-[shadowagT]-(g)-[shadowcrT]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
 		self.addConstraints(visualFormat: "H:|-(g)-[shadowct]-(g)-[shadowfl]-(g)-[shadowag]-(g)-[shadowcr]-(g)-|", layoutFormat: [.alignAllTop, .alignAllBottom], metrics: metrics, views: views)
-		
-		
-		
+
 	}
 	
 	required init?(coder: NSCoder) {
@@ -414,13 +414,11 @@ class GoDPokemonView: NSImageView {
 	}
 	
 	@objc func setFlee(sender: NSTextField) {
-//		self.delegate.pokemon[self.index].shadowFleeValue = sender.integerValue
-//
+		self.delegate.pokemon[self.index].shadowFirstTID = sender.integerValue
 	}
 	
 	@objc func setAggression(sender: NSTextField) {
-//		self.delegate.pokemon[self.index].shadowAggression = sender.integerValue
-//
+		self.delegate.pokemon[self.index].shadowAlternateFirstTID = sender.integerValue
 	}
 	
 	@objc func setCatch(sender: NSTextField) {
@@ -442,6 +440,16 @@ class GoDPokemonView: NSImageView {
 	@objc func setEV(sender: NSTextField) {
 		self.delegate.pokemon[self.index].EVs[sender.tag] = sender.integerValue
 		
+	}
+
+	@objc func setShadowID(sender: CMShadowIDPopUpButton) {
+		self.delegate.pokemon[self.index].shadowID = sender.selectedValue
+		setUp()
+		let data = CMShadowData(index: sender.selectedValue)
+		shadowCounter.integerValue = data.purificationCounter
+		shadowID.integerValue = data.firstTID
+		shadowAggression.integerValue = data.alternateTID
+		shadowCatchrate.integerValue = data.catchRate
 	}
 	
 	func prepareForSave() {
@@ -477,12 +485,13 @@ class GoDPokemonView: NSImageView {
 		self.setIVs(sender: ivs)
 		self.setCatch(sender: shadowCatchrate)
 		self.setCounter(sender: shadowCounter)
-		
+		self.setFlee(sender: shadowID)
+		self.setAggression(sender: shadowAggression)
 	}
 	
 	func didSave() {
-		
-		
+		ddpk.setUpItems()
+		ddpk.selectItem(at: self.delegate.pokemon[self.index].shadowID)
 	}
 	
 }

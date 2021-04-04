@@ -197,21 +197,29 @@ class XGRandomiser: NSObject {
 		#endif
 
 		var decks = MainDecksArray
+		var additionalPokemon = [XGTrainerPokemon]()
 		#if GAME_XD
 		decks += [XGDecks.DeckDarkPokemon]
+		additionalPokemon = shadowsOnly ? [] : [
+			XGDeckPokemon.dpkm(1, .DeckVirtual).data,
+			XGDeckPokemon.dpkm(2, .DeckVirtual).data
+		]
 		#endif
+		var mons = additionalPokemon
 		for deck in decks {
 			for pokemon in deck.allActivePokemon {
 				if shadowsOnly && !pokemon.isShadowPokemon {
 					continue
 				}
-
-				pokemon.species = randomise(oldSpecies: pokemon.species, checkDuplicates: pokemon.isShadowPokemon, shadowID: pokemon.shadowID)
-				pokemon.shadowCatchRate = pokemon.species.catchRate
-				pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
-				pokemon.happiness = 128
-				pokemon.save()
+				mons.append(pokemon)
 			}
+		}
+		mons.forEach { (pokemon) in
+			pokemon.species = randomise(oldSpecies: pokemon.species, checkDuplicates: pokemon.isShadowPokemon, shadowID: pokemon.shadowID)
+			pokemon.shadowCatchRate = pokemon.species.catchRate
+			pokemon.moves = pokemon.species.movesForLevel(pokemon.level)
+			pokemon.happiness = 128
+			pokemon.save()
 		}
 
 		printg("done!")

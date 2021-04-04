@@ -16,7 +16,7 @@ struct GoDStruct {
 
 		format.forEach { (property) in
 			switch property {
-			case .byte, .short, .word, .float, .string, .bitArray, .bitMask, .array:
+			case .byte, .short, .word, .float, .vector, .string, .bitArray, .bitMask, .array, .pointer:
 				largestAlignment = max(largestAlignment, property.largestAlignment)
 			case .subStruct(_, _, let subStruct):
 				largestAlignment = max(largestAlignment, subStruct.largestAlignment)
@@ -64,7 +64,20 @@ struct GoDStruct {
 				switch property {
 				case .byte, .short,.word, .float, .string, .bitArray, .bitMask:
 					flatProperties.append(property)
+				case .pointer(let property, _, let isShort):
+					if isShort {
+						flatten(properties: [.short(name: property.name, description: property.description, type: .pointer)])
+					} else {
+						flatten(properties: [.word(name: property.name, description: property.description, type: .pointer)])
+					}
+				case .vector(let name, let description):
+					flatten(properties: [
+						.float(name: name + ".x", description: description),
+						.float(name: name + ".y", description: description),
+						.float(name: name + ".z", description: description)
+					])
 				case .subStruct(_, _, let structProperty):
+					// The same property but with the name update to include the struct it is in
 					let prefix = structProperty.name + " "
 					flatProperties += structProperty.flattened.format.map{ (property) -> GoDStructProperties in
 						switch property {
@@ -87,34 +100,56 @@ struct GoDStruct {
 							return .bitArray(name: prefix + name, description: description, bitFieldNames: bitFieldNames)
 						case .bitMask(let name, let description, let values):
 							return .bitMask(name: prefix + name, description: description, values: values)
+						case .vector(let name, let description):
+							return .vector(name: prefix + name, description: description)
+						case .pointer(_, _, let isShort):
+							if isShort {
+								return .short(name: prefix + property.name, description: property.description, type: .pointer)
+							} else {
+								return .word(name: prefix + property.name, description: property.description, type: .pointer)
+							}
 						}
 					}
-				case .array(let name, _, let property, let count):
-					let propertyList = (0 ..< count).map { (index) -> GoDStructProperties in
-						let subName = "\(name) \(index + 1)"
-						switch property {
-						case .byte(_, let description, let type):
-							return .byte(name: subName, description: description, type: type)
-						case .short(_, let description, let type):
-							return .short(name: subName, description: description, type: type)
-						case .word(_, let description, let type):
-							return .word(name: subName, description: description, type: type)
-						case .float(_, let description):
-							return .float(name: subName, description: description)
-						case .string(_, let description, let maxCharacterCount, let charLength):
-							return .string(name: subName, description: description, maxCharacterCount: maxCharacterCount, charLength: charLength)
-						case .subStruct(_, let description, let subProperty):
-							let subProperty = GoDStruct(name: "\(property.name) \(index + 1)", format: subProperty.format)
-							return .subStruct(name: subName, description: description, property: subProperty)
-						case .array(_, let description, let property, let count):
-							return .array(name: subName, description: description, property: property, count: count)
-						case .bitArray(_, let description, let bitFieldNames):
-							return .bitArray(name: subName, description: description, bitFieldNames: bitFieldNames)
-						case .bitMask(_, let description, let values):
-							return .bitMask(name: subName, description: description, values: values)
+				case .array(let name, _, let property, let entryCount):
+					// The same property but with the name update to include the array name and index
+					if let count = entryCount {
+						let propertyList = (0 ..< count).map { (index) -> GoDStructProperties in
+							let subName = "\(name) \(index + 1)"
+							switch property {
+							case .byte(_, let description, let type):
+								return .byte(name: subName, description: description, type: type)
+							case .short(_, let description, let type):
+								return .short(name: subName, description: description, type: type)
+							case .word(_, let description, let type):
+								return .word(name: subName, description: description, type: type)
+							case .float(_, let description):
+								return .float(name: subName, description: description)
+							case .string(_, let description, let maxCharacterCount, let charLength):
+								return .string(name: subName, description: description, maxCharacterCount: maxCharacterCount, charLength: charLength)
+							case .subStruct(_, let description, let subProperty):
+								let subProperty = GoDStruct(name: "\(property.name) \(index + 1)", format: subProperty.format)
+								return .subStruct(name: subName, description: description, property: subProperty)
+							case .array(_, let description, let property, let count):
+								return .array(name: subName, description: description, property: property, count: count)
+							case .bitArray(_, let description, let bitFieldNames):
+								return .bitArray(name: subName, description: description, bitFieldNames: bitFieldNames)
+							case .bitMask(_, let description, let values):
+								return .bitMask(name: subName, description: description, values: values)
+							case .vector(_, let description):
+								return .vector(name: subName, description: description)
+							case .pointer(_, _, let isShort):
+								if isShort {
+									return .short(name: subName, description: property.description, type: .pointer)
+								} else {
+									return .word(name: subName, description: property.description, type: .pointer)
+								}
+							}
 						}
+						flatten(properties: propertyList)
+					} else {
+						assertionFailure("Can't flatten an array without a fixed size")
+						flatProperties.append(property)
 					}
-					flatten(properties: propertyList)
 				}
 			}
 		}
@@ -135,30 +170,27 @@ struct GoDStruct {
 			case .short(let name, _, let type):
 				return (type.isSigned ? "int16_t " : "uint16_t ") + name.camelCaseBySpaces
 			case .word(let name, _, let type):
-				switch type {
-				case .pointerToProperty(_, let property, _):
-					var text = textForProperty(property).split(separator: " ")
-					text[text.count - 1] = "*" + text[text.count - 1]
-					return text.joined(separator: " ")
-				case .stringPointer:
-					return "char **" + name.camelCaseBySpaces
-				default:
-					return (type.isSigned ? "int32_t " : "uint32_t ") + name.camelCaseBySpaces
-				}
+				return (type.isSigned ? "int32_t " : "uint32_t ") + name.camelCaseBySpaces
 			case .bitArray(let name, let description, _):
 				return textForProperty(.array(name: name, description: description, property: .byte(name: "", description: "", type: .bitMask), count: property.length))
 			case .bitMask(let name, let description, _):
 				return textForProperty(.byte(name: name, description: description, type: .uintHex))
 			case .float(let name, _):
 				return "float " + name.camelCaseBySpaces
+			case .vector(let name, let description):
+				return textForProperty(.array(name: name, description: description, property: .float(name: "", description: ""), count: 3))
 			case .string(let name, let description, let maxCharacterCount, let charLength):
-				switch charLength {
-				case .char:
-					return textForProperty(.array(name: name, description: description, property: .byte(name: "", description: "", type: .uintHex), count: maxCharacterCount))
-				case .short:
-					return textForProperty(.array(name: name, description: description, property: .short(name: "", description: "", type: .uintHex), count: maxCharacterCount))
-				case .word:
-					return textForProperty(.array(name: name, description: description, property: .word(name: "", description: "", type: .uintHex), count: maxCharacterCount))
+				if let count = maxCharacterCount {
+					switch charLength {
+					case .char:
+						return textForProperty(.array(name: name, description: description, property: .byte(name: "", description: "", type: .uintHex), count: count))
+					case .short:
+						return textForProperty(.array(name: name, description: description, property: .short(name: "", description: "", type: .uintHex), count: count))
+					case .word:
+						return textForProperty(.array(name: name, description: description, property: .word(name: "", description: "", type: .uintHex), count: count))
+					}
+				} else {
+					return "char *" + name.camelCaseBySpaces
 				}
 			case .subStruct(let name, _, let property):
 				if !subStructs.contains(where: { (name, _) -> Bool in
@@ -168,28 +200,44 @@ struct GoDStruct {
 				}
 				return "struct " +  property.CStructName.camelCaseBySpacesCapitalised + " " + name.camelCaseBySpaces
 			case .array(let name, _, let property, let count):
-				var prefix = ""
+				let subProperty: GoDStructProperties
 				switch property {
 				case .byte(_, let description, let type):
-					prefix = textForProperty(.byte(name: name, description: description, type: type))
+					subProperty = .byte(name: name, description: description, type: type)
 				case .short(_, let description, let type):
-					prefix = textForProperty(.short(name: name, description: description, type: type))
+					subProperty = .short(name: name, description: description, type: type)
 				case .word(_, let description, let type):
-					prefix = textForProperty(.word(name: name, description: description, type: type))
+					subProperty = .word(name: name, description: description, type: type)
 				case .bitArray(_, let description, let bitFieldNames):
-					prefix = textForProperty(.bitArray(name: name, description: description, bitFieldNames: bitFieldNames))
+					subProperty = .bitArray(name: name, description: description, bitFieldNames: bitFieldNames)
 				case .bitMask(_, let description, let bitFields):
-					prefix = textForProperty(.bitMask(name: name, description: description, values: bitFields))
+					subProperty = .bitMask(name: name, description: description, values: bitFields)
 				case .float(_, let description):
-					prefix = textForProperty(.float(name: name, description: description))
+					subProperty = .float(name: name, description: description)
 				case .string(_, let description, let maxCharacterCount, let charLength):
-					prefix = textForProperty(.string(name: name, description: description, maxCharacterCount: maxCharacterCount, charLength: charLength))
+					subProperty = .string(name: name, description: description, maxCharacterCount: maxCharacterCount, charLength: charLength)
 				case .subStruct(_, let description, let property):
-					prefix = textForProperty(.subStruct(name: name, description: description, property: property))
+					subProperty = .subStruct(name: name, description: description, property: property)
+				case .vector(_, let description):
+					subProperty = .vector(name: name, description: description)
 				case .array(_, let description, let property, let count):
-					prefix = textForProperty(.array(name: name, description: description, property: property, count: count))
+					subProperty = .array(name: name, description: description, property: property, count: count)
+				case .pointer:
+					subProperty = property
 				}
-				return prefix + "[\(count)]"
+				if let size = count {
+					return textForProperty(subProperty) + "[\(size)]"
+				} else {
+					return textForProperty(.pointer(property: subProperty, offsetBy: 0, isShort: false))
+				}
+			case .pointer(let subProperty, _, let isShort):
+				if isShort {
+					return textForProperty(.short(name: subProperty.name + " Pointer", description: subProperty.description, type: .pointer))
+				} else {
+					var text = textForProperty(subProperty).split(separator: " ")
+					text[text.count - 1] = "*" + text[text.count - 1]
+					return text.joined(separator: " ")
+				}
 			}
 		}
 		format.forEach { (property) in
@@ -219,18 +267,17 @@ indirect enum GoDStructPropertyTypes {
 	case pokemonID, moveID, itemID, abilityID, natureID, genderID, typeID
 	case moveCategory, typeEffectiveness, moveEffectID, shininess
 	case genderRatio, expRate, evolutionMethod, moveTarget
-	case battleStyle, battleType, roomID, battleFieldID, deckID
+	case battleStyle, battleType, roomID, battleFieldID, deckID, trainerID
 	case colosseumRound, playerController, itemPocket, scriptFunction(scriptFile: XGFiles)
 	case battleBingoMysteryPanelType, contestAppeal, moveEffectType, eggGroup
 	case trainerClassID, trainerModelID, interactionMethod, scriptMarker
-	case pointerToProperty(file: XGFiles?, property: GoDStructProperties, offsetBy: Int), stringPointer(file: XGFiles?, offsetBy: Int)
 	case indexOfEntryInTable(table: GoDStructTableFormattable, nameProperty: String?) // can use a single property as name or list whole struct if nil
 	case fsysID, fsysFileIdentifier(fsysName: String?), fsysFileType
 	case msgID(file: XGFiles?) // set file to nil to search through all available string tables
 	case pkxTrainerID, pkxPokemonID
 	case any
 
-	case string, subStruct, array(type: GoDStructPropertyTypes)
+	case pointer, string, vector, subStruct, array(type: GoDStructPropertyTypes)
 
 	var isSigned: Bool {
 		switch self {
@@ -245,11 +292,13 @@ indirect enum GoDStructProperties {
 	case short(name: String, description: String, type: GoDStructPropertyTypes)
 	case word(name: String, description: String, type: GoDStructPropertyTypes)
 	case float(name: String, description: String)
-	case string(name: String, description: String, maxCharacterCount: Int, charLength: ByteLengths)
+	case vector(name: String, description: String)
+	case string(name: String, description: String, maxCharacterCount: Int?, charLength: ByteLengths) // char count doesn't include null byte, nil to read until null
 	case subStruct(name: String, description: String, property: GoDStruct)
-	case array(name: String, description: String, property: GoDStructProperties, count: Int)
+	case array(name: String, description: String, property: GoDStructProperties, count: Int?)
 	case bitArray(name: String, description: String, bitFieldNames: [String?]) // first bit name in array is most significant bit (left most bit), nil for unused bits
 	case bitMask(name: String, description: String, values: [(name: String, type: GoDStructPropertyTypes, numberOfBits: Int, firstBitIndexLittleEndian: Int)])
+	case pointer(property: GoDStructProperties, offsetBy: Int, isShort: Bool)
 
 	func alignmentBytes(at offset: Int) -> Int {
 		switch self {
@@ -259,6 +308,8 @@ indirect enum GoDStructProperties {
 			return property.alignmentBytes(at: offset)
 		case .string(_, _, _, let charLength):
 			return offset % charLength.rawValue
+		case .vector:
+			return 4
 		case .bitArray, .bitMask:
 				return 0
 		default:
@@ -272,10 +323,12 @@ indirect enum GoDStructProperties {
 
 	var largestAlignment: Int {
 		switch self {
-		case .byte, .short, .word, .float:
+		case .byte, .short, .word, .float, .pointer:
 			return length
 		case .string, .bitArray, .bitMask:
 			return 1
+		case .vector:
+			return 4
 		case .subStruct(_, _, let property):
 			return property.largestAlignment
 		case .array(_, _, let property, _):
@@ -288,13 +341,21 @@ indirect enum GoDStructProperties {
 		case .byte, .bitMask : return 1
 		case .short: return 2
 		case .word, .float: return 4
+		case .vector:
+			return 12
 		case .bitArray(_, _, let names): return names.isEmpty ? 0 : (names.count - 1) / 8 + 1
 		case .string(_, _, let maxLength, let charLength):
-			return maxLength * charLength.rawValue
+			if let length = maxLength {
+				return length * charLength.rawValue
+			} else {
+				return 1
+			}
 		case .subStruct(_, _, let properties):
 			return properties.length
 		case .array(_, _, let type, let count):
-			return type.length * count
+			return (type.length *? count) ?? 0
+		case .pointer(_, _, let isShort):
+			return isShort ? 2 : 4
 		}
 	}
 
@@ -306,10 +367,13 @@ indirect enum GoDStructProperties {
 			 .bitArray(let name, _, _),
 			 .bitMask(let name, _, _),
 			 .float(let name, _),
+			 .vector(let name, _),
 			 .string(let name, _, _, _),
 			 .subStruct(let name, _, _),
 			 .array(let name, _, _, _):
 			return name
+		case .pointer(let property, _, _):
+			return "Pointer->" + property.name
 		}
 	}
 
@@ -321,10 +385,13 @@ indirect enum GoDStructProperties {
 			 .bitArray(_, let description, _),
 			 .bitMask(_, let description, _),
 			 .float(_, let description),
+			 .vector(_, let description),
 			 .string(_, let description, _, _),
 			 .subStruct(_, let description, _),
 			 .array(_, let description, _, _):
 			return description
+		case .pointer(let property, _, _):
+			return property.description
 		}
 	}
 
@@ -342,10 +409,22 @@ indirect enum GoDStructProperties {
 			return .float
 		case .string:
 			return .string
+		case .vector:
+			return .vector
 		case .subStruct:
 			return .subStruct
 		case .array(_, _, let property, _):
 			return .array(type: property.type)
+		case .pointer(let property, _, _):
+			return property.type
+		}
+	}
+
+	var isNull: Bool {
+		switch type {
+		case .null: return true
+		case .array(type: .null): return true
+		default: return false
 		}
 	}
 }
@@ -358,31 +437,64 @@ indirect enum GoDStructValues: CustomStringConvertible {
 	case array(property: GoDStructProperties, rawValues: [GoDStructValues])
 	case bitArray(property: GoDStructProperties, rawValues: [Bool])
 	case bitMask(property: GoDStructProperties, rawValues: [Int])
+	case pointer(property: GoDStructProperties, rawValue: Int, value: GoDStructData)
+	case vector(property: GoDStructProperties, rawValue: Vector3)
 
 	var property: GoDStructProperties {
 		switch self {
-		case .value(let property, _), .float(let property, _), .string(let property, _), .subStruct(let property, _), .array(let property, _), .bitArray(let property, _), .bitMask(let property, _):
+		case .value(let property, _), .float(let property, _), .string(let property, _), .subStruct(let property, _), .array(let property, _), .bitArray(let property, _), .bitMask(let property, _), .pointer(let property, _, _), .vector(let property, _):
 			return property
 		}
 	}
 
 	func value<T>() -> T? {
 		switch self {
+		case .value(property: .word(_, _, type: .pointer), 0),
+			 .value(property: .short(_, _, type: .pointer), 0):
+			return nil
 		case .value(_, rawValue: let rawValue):
 			return rawValue as? T
 		case .float(_, rawValue: let rawValue):
 			return rawValue as? T
 		case .string(_, let rawValue):
 			return rawValue as? T
+		case .vector(_, let rawValue):
+			return rawValue as? T
 		case .subStruct(_, let data):
 			return data as? T
-		case .array(_, rawValues: let values):
-			let mappedValues: [Any] = values.map { $0.value()! }
+		case .array(_, let values):
+			let mappedValues: [Any] = values.map { $0.value() }
 			return mappedValues as? T
-		case .bitArray(_, let rawValues):
+		case .bitArray(let properties, let rawValues):
+			if case .bitArray(_, _, let bitFieldNames) = properties, bitFieldNames.count == rawValues.count {
+				var bitFieldsDict = [String: Bool]()
+				(0 ..< bitFieldNames.count).forEach { (index) in
+					if let name = bitFieldNames[index] {
+						let value = rawValues[index]
+						bitFieldsDict[name] = value
+					}
+				}
+				if let results = bitFieldsDict as? T {
+					return results
+				}
+			}
 			return rawValues as? T
 		case .bitMask(_, let rawValues):
 			return rawValues as? T
+		case .pointer(_, let rawValue, let value):
+			guard rawValue > 0 else { return nil }
+			return
+				(value as? T) // the struct data being pointed to
+				?? (value.values.count > 0 ? value.values[0].value() : nil) // or the actual individual value contained in that struct
+		}
+	}
+
+	func rawValue<T>() -> T? {
+		switch self {
+		case .pointer(_, let rawValue, _):
+			return rawValue as? T
+		default:
+			return value()
 		}
 	}
 
@@ -392,6 +504,8 @@ indirect enum GoDStructValues: CustomStringConvertible {
 			return .value(property: property, rawValue: (newValue as? Int) ?? rawValue)
 		case .float(let property, let rawValue):
 			return .float(property: property, rawValue: (newValue as? Float) ?? rawValue)
+		case .vector(let property, let rawValue):
+			return .vector(property: property, rawValue: (newValue as? Vector3) ?? rawValue)
 		case .string(let property, let rawValue):
 			return .string(property: property, rawValue: (newValue as? String) ?? rawValue)
 		case .subStruct(let property, let rawValue):
@@ -402,6 +516,8 @@ indirect enum GoDStructValues: CustomStringConvertible {
 			return .bitArray(property: property, rawValues: (newValue as? [Bool]) ?? rawValues)
 		case .bitMask(let property, let rawValues):
 			return .bitMask(property: property, rawValues: (newValue as? [Int]) ?? rawValues)
+		case .pointer(let property, let rawValue, let value):
+			return .pointer(property: property, rawValue: newValue as? Int ?? rawValue, value: value)
 		}
 	}
 
@@ -411,6 +527,8 @@ indirect enum GoDStructValues: CustomStringConvertible {
 			return .value(property: newValue, rawValue: rawValue)
 		case .float(_, let rawValue):
 			return .float(property: newValue, rawValue: rawValue)
+		case .vector(_, let rawValue):
+			return .vector(property: newValue, rawValue: rawValue)
 		case .string(_, let rawValue):
 			return .string(property: newValue, rawValue: rawValue)
 		case .subStruct(_, let rawValue):
@@ -421,12 +539,14 @@ indirect enum GoDStructValues: CustomStringConvertible {
 			return .bitArray(property: newValue, rawValues: rawValues)
 		case .bitMask(_, let rawValues):
 			return .bitMask(property: newValue, rawValues: rawValues)
+		case .pointer(_, let rawValue, let value):
+			return .pointer(property: property, rawValue: rawValue, value: value)
 		}
 	}
 
 	var description: String {
 		switch self {
-		case .value( let property, let rawValue):
+		case .value(let property, let rawValue):
 			var valueString: String
 			switch property.type {
 			case .null:
@@ -437,6 +557,8 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				return "\(rawValue)°"
 			case .float:
 				valueString = String(UInt32(rawValue & 0xFFFFFFFF).hexToSignedFloat())
+			case .vector:
+				valueString = "\(rawValue.hexString())"
 			case .bool:
 				valueString = "\(rawValue != 0)"
 			case .bitMask:
@@ -511,7 +633,7 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				if rawValue == 0 {
 					valueString = "No effect"
 				} else if let moveEffectNames = XGFiles.nameAndFolder("Move Effects.json", .JSON).json as? [String], rawValue < moveEffectNames.count {
-					valueString = moveEffectNames[rawValue]
+					valueString = "\"" + moveEffectNames[rawValue] + "\""
 				} else {
 					valueString = "MoveEffect_\(rawValue)"
 				}
@@ -645,36 +767,19 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				valueString = XGBattleBingoItem(rawValue: rawValue)?.name ?? "MysteryPanelType_\(rawValue)"
 				#endif
 				valueString += " (\(rawValue))"
-			case .stringPointer(let file, let offsetBy):
-				if let data = file?.data, data.length > rawValue + offsetBy {
-					valueString = data.getStringAtOffset(rawValue + offsetBy)
+			case .trainerID:
+				#if GAME_COLO
+				if rawValue == 0 {
+					valueString = "None (\(rawValue))"
+				} else if rawValue < CommonIndexes.NumberOfTrainers.value {
+					valueString = XGTrainer(index: rawValue).name.unformattedString
+					valueString += " (\(rawValue))"
 				} else {
-					valueString = (rawValue + offsetBy).hexString()
+					valueString = "(\(rawValue))"
 				}
-				valueString += " (\(rawValue.hexString()))"
-			case .pointerToProperty(let file, let property, let offsetBy):
-				#warning("TODO: properly encode/decode these")
-				if let data = file?.data, data.length < rawValue + property.length {
-					switch property {
-					case .subStruct(_, _, let properties):
-						let subStruct = GoDStructData(properties: properties, fileData: data, startOffset: rawValue + offsetBy)
-						if subStruct.values.count > 0 {
-							valueString = "\(GoDStructValues.subStruct(property: property, data: subStruct))"
-						} else {
-							valueString = (rawValue + offsetBy).hexString()
-						}
-					default:
-						let subStruct = GoDStructData(properties: GoDStruct(name: "", format: [property]), fileData: data, startOffset: rawValue + offsetBy)
-						if subStruct.values.count > 0 {
-							valueString = "\(subStruct.values[0])"
-						} else {
-							valueString = (rawValue + offsetBy).hexString()
-						}
-					}
-				} else {
-					valueString = (rawValue + offsetBy).hexString()
-					valueString += " (\(rawValue.hexString()))"
-				}
+				#else
+				valueString = "(\(rawValue))"
+				#endif
 			case .indexOfEntryInTable(let table, let nameProperty):
 				if let structData = table.dataForEntry(rawValue) {
 					if let property = nameProperty {
@@ -736,9 +841,9 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				if rawValue == 0 {
 					valueString = "None"
 				} else if let stringTable = file?.stringTable {
-					valueString = stringTable.stringWithID(rawValue)?.unformattedString ?? getStringWithID(id: rawValue)?.unformattedString ?? "MsgID \(rawValue.hexString())"
+					valueString = "\"" + (stringTable.stringWithID(rawValue)?.unformattedString ?? getStringWithID(id: rawValue)?.unformattedString ?? "MsgID \(rawValue.hexString())") + "\""
 				} else {
-					valueString = getStringWithID(id: rawValue)?.unformattedString ?? "MsgID \(rawValue.hexString())"
+					valueString = "\"" + (getStringWithID(id: rawValue)?.unformattedString ?? "MsgID \(rawValue.hexString())") + "\""
 				}
 				valueString += " (\(rawValue.hexString()))"
 			case .pkxTrainerID:
@@ -753,7 +858,7 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				valueString = "(\(rawValue))"
 				#else
 				let table = pkxPokemonModelsTable
-				valueString = "\(table.assumedNameForEntry(index: rawValue)) \(rawValue)"
+				valueString = "\(table.assumedNameForEntry(index: rawValue)) (\(rawValue))"
 				#endif
 			case .any:
 				valueString = "\(rawValue.hexString())"
@@ -764,6 +869,12 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				valueString += " (\(rawValue.hexString()))"
 			case .uint:
 				valueString = "\(rawValue)"
+			case .pointer:
+				if rawValue == 0 {
+					valueString = "Null"
+				} else {
+					valueString = "\(rawValue.hexString())"
+				}
 			case .int:
 				switch property.length {
 				case 1:
@@ -793,15 +904,18 @@ indirect enum GoDStructValues: CustomStringConvertible {
 		case .float(_, let rawValue):
 			return "\(rawValue)"
 		case .string(_, let rawValue):
-			return "\(rawValue)"
+			return "\"\(rawValue)\""
 		case .subStruct(_, let data):
 			return data.description
 		case .array(let property, let rawValues):
 			if case .null = property.type {
 				return ""
 			}
+			if rawValues.isEmpty {
+				return "\n-"
+			}
 			var text = ""
-			let valuePrefix = "    - "
+			let valuePrefix = "  - "
 			rawValues.forEach { (value) in
 				text += "\n" + valuePrefix
 				let valueStrings = "\(value)".split(separator: "\n")
@@ -810,6 +924,9 @@ indirect enum GoDStructValues: CustomStringConvertible {
 					extraSpacing = true
 				}
 				if case .array = value.property.type {
+					extraSpacing = true
+				}
+				if case .pointer = value.property.type {
 					extraSpacing = true
 				}
 				valueStrings.forEachIndexed { (index, substring) in
@@ -847,6 +964,19 @@ indirect enum GoDStructValues: CustomStringConvertible {
 			} else {
 				return "Invalid Bit array (\(property.name)"
 			}
+		case .vector(_, let rawValue):
+			return "<\(rawValue.v0), \(rawValue.v1), \(rawValue.v2)>"
+		case .pointer(_, let rawValue, let value):
+			let valuePrefix = " -> "
+			var text = "@\(rawValue.hexString())\n" + valuePrefix
+			let valueStrings = "\(value)".split(separator: "\n")
+			valueStrings.forEachIndexed { (index, substring) in
+				if index > 0 {
+					text += "".addRepeated(s: " ", count: valuePrefix.length)
+				}
+				text += String(substring) + "\n"
+			}
+			return text
 		}
 	}
 }

@@ -66,16 +66,15 @@ extension ASM {
 
 extension XGAssembly {
 
-	class func ASMfreeSpaceRAMPointer(numberOfBytes: Int? = nil) -> Int? {
+	class func ASMfreeSpaceRAMPointer(numberOfBytes: Int? = nil, updateLastUsedOffset: Bool = true) -> Int? {
 		// returns the next free instruction address (from dol file) as a pointer to ram
 		guard let start = kDolFreeSpaceStart, let end = kDolFreeSpaceEnd else {
 			printg("Couldn't find free space in dol, current iso isn't \(game.name).")
 			return nil
 		}
 
-		guard XGDolPatcher.checkIfUnusedFunctionsInDolWereCleared() else {
-			printg("Couldn't find free space in dol, the patch has not been applied.")
-			return nil
+		if !XGDolPatcher.checkIfUnusedFunctionsInDolWereCleared() {
+			XGDolPatcher.clearUnusedFunctionsInDol()
 		}
 
 		guard let dol = XGFiles.dol.data else {
@@ -84,8 +83,11 @@ extension XGAssembly {
 		}
 
 		var offset = dol.get4BytesAtOffset(start + 4)
-		if offset != 0xFFFFFFFF, offset >= 0x80000000 {
-			offset -= 0x80000000
+		if offset != 0xFFFFFFFF {
+			offset -= kDolToRAMOffsetDifference
+			if offset >= 0x80000000 {
+				offset -= 0x80000000
+			}
 		}
 		if offset == 0xFFFFFFFF || offset < start + 16 || offset > end /* In case offset was mistakenly/incorrectly written to */ {
 			offset = start + 16
@@ -99,7 +101,11 @@ extension XGAssembly {
 			offset += 4
 			values = dol.getWordStreamFromOffset(offset, length: checkSize * 4)
 		}
-		return offset >= end ? nil : offset
+		let RAMOffset = offset >= end ? nil : (offset + kDolToRAMOffsetDifference + 0x80000000)
+		if updateLastUsedOffset, let finalOffset = RAMOffset {
+			setLastRAMOffsetUsed(finalOffset)
+		}
+		return RAMOffset
 	}
 
 	/// Keeps track of last used free space pointer to make future searches faster
@@ -133,7 +139,7 @@ extension XGAssembly {
 		#if GAME_PBR
 		replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: asm)
 		#else
-		if RAMOffset > kRELtoRAMOffsetDifference {
+		if game == .XD, region == .US, RAMOffset > kRELtoRAMOffsetDifference {
 			replaceRELASM(startOffset: offset - kRELtoRAMOffsetDifference, newASM: asm)
 		} else {
 			replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: asm)

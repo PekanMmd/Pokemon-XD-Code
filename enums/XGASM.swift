@@ -447,7 +447,9 @@ enum XGASM {
 			
 		// relative branches
 		case .b_f(let o, let t):
-			return 0x48000000 | (UInt32(bitPattern: Int32(t - o)) & 0x3FFFFFF)
+			let to = t > 0x80000000 ? t - 0x80000000 : t
+			let offset = o > 0x80000000 ? o - 0x80000000 : o
+			return 0x48000000 | (UInt32(bitPattern: Int32(to - offset) & 0x3FFFFFF))
 		case .bl_f(let o, let t):
 			return XGASM.b_f(o, t).code + 1
 			

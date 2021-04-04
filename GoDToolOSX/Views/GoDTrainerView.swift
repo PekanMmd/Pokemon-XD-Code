@@ -83,11 +83,7 @@ class GoDTrainerView: NSView {
 		battleType.action = #selector(battleDataUpdate)
 
 		if game == .Colosseum {
-			battleStyle.isHidden = true
-			battleType.isHidden = true
-			bgm.isHidden = true
 			modelIntro.isHidden = true
-			battleID.isHidden = true
 		}
 		
 	}
@@ -112,35 +108,36 @@ class GoDTrainerView: NSView {
 		self.modelPopup.select(trainer.trainerModel)
 		self.AI.stringValue = trainer.AI.string
 		self.name.stringValue = trainer.nameID.stringIDToString().string
-		
-		if game == .XD {
-			
-			self.modelIntro.stringValue = trainer.cameraEffects.string
-			
-			if loadBattleData {
-				if let battle = trainer.battleData {
-					battleType.select(battle.battleType!)
-					battleStyle.select(battle.battleStyle!)
-					battleStyle.isHidden = false
-					battleType.isHidden = false
-					bgm.isHidden = false
-					bgm.stringValue = battle.BGMusicID.hexString()
-					modelIntro.stringValue = trainer.cameraEffects.string
-					previousBGMID = battle.BGMusicID
-					battleID.stringValue = battle.index.string
-				} else {
-					battleStyle.isHidden = true
-					battleType.isHidden = true
-					bgm.isHidden = true
-					previousBGMID = 0
-					battleID.stringValue = "0"
-				}
+
+		#if GAME_XD
+		self.modelIntro.stringValue = trainer.cameraEffects.string
+		#endif
+
+		if loadBattleData {
+			if let battle = trainer.battleData {
+				battleType.select(battle.battleType)
+				battleStyle.select(battle.battleStyle)
+				battleStyle.isEnabled = true
+				battleType.isEnabled = true
+				bgm.isEnabled = true
+				bgm.stringValue = battle.BGMusicID.hexString()
+				modelIntro.stringValue = trainer.cameraEffects.string
+				previousBGMID = battle.BGMusicID
+				battleID.stringValue = battle.index.string
+			} else {
+				battleStyle.stringValue = "-"
+				battleStyle.isEnabled = false
+				battleType.stringValue = "-"
+				battleType.isEnabled = false
+				bgm.stringValue = "-"
+				bgm.isEnabled = false
+				previousBGMID = 0
+				battleID.stringValue = "0"
 			}
-			
 		}
-		
+
 	}
-	
+
 	@objc func battleDataUpdate() {
 		self.battleDataUpdated = true
 	}
@@ -156,10 +153,6 @@ class GoDTrainerView: NSView {
 			self.delegate.currentTrainer.AI = val
 		}
 		
-		if game == .Colosseum {
-			self.delegate.currentTrainer.save()
-		}
-		
 		if name.stringValue.length > 0 {
 			if name.stringValue != self.delegate.currentTrainer.name.string {
 				if let s = getStringWithID(id: self.delegate.currentTrainer.nameID) {
@@ -170,38 +163,32 @@ class GoDTrainerView: NSView {
 			}
 		}
 		
-		
-		if game == .XD {
-			
-			if let m = self.modelIntro.stringValue.integerValue {
-				self.delegate.currentTrainer.cameraEffects = m
-			}
-			self.delegate.currentTrainer.save()
-			
-			if let b = self.bgm.stringValue.integerValue {
-				if previousBGMID != b {
-					battleDataUpdated = true
-				}
-			}
-			
-			if battleDataUpdated {
-				if let battle = self.delegate.currentTrainer.battleData {
-					
-					battle.battleType = self.battleType.selectedValue
-					battle.battleStyle = self.battleStyle.selectedValue
-					if let b = self.bgm.stringValue.integerValue {
-						battle.BGMusicID = b
-					} else {
-						self.bgm.stringValue = previousBGMID.string
-					}
-					
-					
-					battle.save()
-				}
-			}
-			battleDataUpdated = false
-			
+		#if GAME_XD
+		if let m = self.modelIntro.stringValue.integerValue {
+			self.delegate.currentTrainer.cameraEffects = m
 		}
+		#endif
+			
+		self.delegate.currentTrainer.save()
+			
+		if let b = self.bgm.stringValue.integerValue {
+			if previousBGMID != b {
+				battleDataUpdated = true
+			}
+		}
+			
+		if battleDataUpdated, let battle = self.delegate.currentTrainer.battleData {
+			battle.battleType = self.battleType.selectedValue
+			battle.battleStyle = self.battleStyle.selectedValue
+			if let b = self.bgm.stringValue.integerValue {
+				battle.BGMusicID = b
+			} else {
+				self.bgm.stringValue = previousBGMID.string
+			}
+			battle.save()
+		}
+		battleDataUpdated = false
+
 		
 		setUp(loadBattleData: false)
 		

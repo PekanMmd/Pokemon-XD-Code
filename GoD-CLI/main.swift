@@ -29,11 +29,11 @@ func importExportFiles() {
 		}
 	}
 
-	func exportFiles() {
+	func exportFiles(decode: Bool) {
 		for file in searchedFiles() {
 			let outputFile = XGFiles.nameAndFolder(file, .ISOExport(file.removeFileExtensions()))
 			printg("Exporting file", file, "to:", outputFile.folder.path)
-			if XGUtility.exportFileFromISO(outputFile) {
+			if XGUtility.exportFileFromISO(outputFile, decode: decode) {
 				printg("success")
 			} else {
 				printg("failed")
@@ -41,11 +41,11 @@ func importExportFiles() {
 		}
 	}
 
-	func importFiles() {
+	func importFiles(encode: Bool) {
 		for file in searchedFiles() {
 			let inputFile = XGFiles.nameAndFolder(file, .ISOExport(file.removeFileExtensions()))
 			printg("Importing file", file, "from:", inputFile.folder.path)
-			if XGUtility.importFileToISO(inputFile) {
+			if XGUtility.importFileToISO(inputFile, encode: encode) {
 				printg("success")
 			} else {
 				printg("failed")
@@ -64,15 +64,23 @@ func importExportFiles() {
 
 		let prompt = """
 		Enter 'export' to extract \(searchText)
+		Enter 'decode' to extract \(searchText)
+					   and then decode the data in the exported file such as extracting textures from models and decompiling scripts
+
 		Enter 'import' to import \(searchText)
+		Enter 'encode' to import \(searchText)
+						   after reencoding the files such as recompiling scripts and putting textures back into models
+
 		Enter 'list' to list \(searchText)
 		Enter 'exit' to go back
 		Enter any other text to search for files containing that text
 		"""
 		let input = readInput(prompt)
 		switch input {
-		case "export": exportFiles()
-		case "import": importFiles()
+		case "export": exportFiles(decode: false)
+		case "decode": exportFiles(decode: true)
+		case "import": importFiles(encode: false)
+		case "encode": importFiles(encode: true)
 		case "list": list()
 		case "exit": return
 		default: currentSearch = input

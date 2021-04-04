@@ -9,6 +9,19 @@ import Foundation
 
 loadISO(exitOnFailure: true)
 
+let mon = pokemon("Lapras")
+if mon.index > 0, mon.index < kNumberOfPokemon {
+	let modelFile = XGFiles.indexAndFsysName(0, "pkx_" + String(format: "%03d", mon.index))
+	let sdr = PBRSDRModel(file: modelFile)
+	for i in 0 ..< sdr.materials.count {
+		sdr.materials[i].diffuseReflection = .init(raw: 0x00ffff, format: .RGBA32)
+		sdr.materials[i].specularReflection = .init(raw: 0xffff00, format: .RGBA32)
+		printg(sdr.materials[i], "\n")
+	}
+	sdr.writeMaterials()
+}
+
+
 //let moves = PBRDataTable.moves
 
 // Expand pokemon tables

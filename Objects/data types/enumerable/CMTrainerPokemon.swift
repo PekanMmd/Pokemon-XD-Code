@@ -83,6 +83,7 @@ class XGTrainerPokemon : NSObject, Codable {
 	var shadowCatchRate = 0x0
 	var shadowCounter	= 0x0
 	var shadowFirstTID  = 0x0
+	var shadowAlternateFirstTID = 0x0
 	
 	var startOffset : Int {
 		return CommonIndexes.TrainerPokemonData.startOffset + (index * kSizeOfPokemonData)
@@ -145,6 +146,7 @@ class XGTrainerPokemon : NSObject, Codable {
 			shadowCatchRate 	= data.getByteAtOffset(start + kShadowCatchRateOffset)
 			shadowCounter		= data.get2BytesAtOffset(start + kShadowCounterOffset)
 			shadowFirstTID		= data.get2BytesAtOffset(start + kShadowTIDOffset)
+			shadowAlternateFirstTID = data.get2BytesAtOffset(start + kShadowTID2Offset)
 		}
 		
 	}
@@ -152,7 +154,7 @@ class XGTrainerPokemon : NSObject, Codable {
 	
 	func save(writeRelOnCompletion: Bool = true) {
 		
-		if self.isShadowPokemon {
+		if shadowID > 0, shadowID < CommonIndexes.NumberOfShadowPokemon.value {
 			
 			let data = XGFiles.common_rel.data!
 			let start = shadowStartOffset
@@ -160,6 +162,7 @@ class XGTrainerPokemon : NSObject, Codable {
 			data.replaceByteAtOffset(start + kShadowCatchRateOffset, withByte: shadowCatchRate)
 			data.replace2BytesAtOffset(start + kShadowCounterOffset, withBytes: shadowCounter)
 			data.replace2BytesAtOffset(start + kShadowTIDOffset, withBytes: shadowFirstTID)
+			data.replace2BytesAtOffset(start + kShadowTID2Offset, withBytes: shadowAlternateFirstTID)
 			data.replace2BytesAtOffset(start + kShadowSpeciesOffset, withBytes: self.species.index)
 
 			if writeRelOnCompletion {
@@ -177,7 +180,7 @@ class XGTrainerPokemon : NSObject, Codable {
 				data.replaceByteAtOffset(start + offset, withByte: 0x00)
 			}
 		}
-		
+		data.replaceByteAtOffset(start + kPokemonShadowIDOffset, withByte: shadowID)
 		data.replace2BytesAtOffset(start + kPokemonSpeciesOffset, withBytes: species.index)
 		data.replaceWordAtOffset(start + kPokemonNameIDOffset, withBytes: UInt32(species.nameID))
 		data.replace2BytesAtOffset(start + kPokemonItemOffset, withBytes: item.index)

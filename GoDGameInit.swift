@@ -8,7 +8,7 @@
 
 import Foundation
 
-let versionNumber = "V2.1.0"
+let versionNumber = "V2.1.2"
 var fileDecodingMode = false
 
 func aboutMessage() -> String {
@@ -35,7 +35,7 @@ let documentsFolderName = "GoD Tool"
 let game = XGGame.XD
 let console = Console.ngc
 var isDemo: Bool {
-	return XGFiles.iso.exists && XGISO.current.allFileNames.count < 200 // 166 in vanilla demo
+	return  XGFiles.iso.exists && region != .OtherGame && XGISO.current.allFileNames.count < 200 // 166 in vanilla demo
 }
 
 #elseif GAME_COLO
