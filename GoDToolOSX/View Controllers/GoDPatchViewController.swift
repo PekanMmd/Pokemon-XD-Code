@@ -45,7 +45,7 @@ class GoDPatchViewController: GoDTableViewController {
 			printg("Selected patch:", patches[row].name)
 		}
 		self.showActivityView {
-			XGDolPatcher.applyPatch(patches[row])
+			XGPatcher.applyPatch(patches[row])
 			self.hideActivityView()
 			printg("Patch completed")
 		}

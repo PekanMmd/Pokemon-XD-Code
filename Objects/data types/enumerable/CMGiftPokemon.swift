@@ -78,7 +78,8 @@ var kPikachuOffset: Int {
 
 let kDistroPokemonSpeciesOffset		= 0x02
 let kDistroPokemonLevelOffset		= 0x07
-let kDistroPokemonShininessOffset	= 0x5e
+let kDistroPokemonShininessOffset	= 0x5A
+let kDukingsPlusleshininessOffset	= 0x66
 
 let kNumberOfDistroPokemon = 4
 
@@ -127,7 +128,7 @@ final class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
 		
 		level = dol.getByteAtOffset(start + kDistroPokemonLevelOffset)
 		
-		let shiny = dol.get2BytesAtOffset(start + kDistroPokemonShininessOffset)
+		let shiny = dol.get2BytesAtOffset(start + (index == 0 ? kDukingsPlusleshininessOffset : kDistroPokemonShininessOffset))
 		self.shinyValue = XGShinyValues(rawValue: shiny) ?? .random
 		
 		let moves = self.species.movesForLevel(level)
@@ -152,8 +153,7 @@ final class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
 		
 		dol.replaceByteAtOffset(start + kDistroPokemonLevelOffset, withByte: level)
 		dol.replace2BytesAtOffset(start + kDistroPokemonSpeciesOffset, withBytes: species.index)
-		dol.replace2BytesAtOffset(start + kDistroPokemonShininessOffset, withBytes: shinyValue.rawValue)
-		
+		dol.replace2BytesAtOffset(start + (index == 0 ? kDukingsPlusleshininessOffset : kDistroPokemonShininessOffset), withBytes: shinyValue.rawValue)
 		dol.save()
 	}
 	

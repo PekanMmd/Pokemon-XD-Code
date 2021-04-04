@@ -20,9 +20,6 @@ enum CommonIndexes : Int {
 	
 	case NumberOfItems = -1 // items are in dol in colosseum
 	case stringTable1 = -2 // offset 0x59890 but not indexed apparently
-	// haven't looked for these in colosseum yet
-	case BGM = -3
-	case NumberOfBGMIDs = -4
 	
 	
 	case LegendaryPokemon = 2
@@ -51,8 +48,8 @@ enum CommonIndexes : Int {
 	case Battles = 50
 	case NumberOfBattles = 51
 	
-	case MusicSamples = 52 // 8bytes each. 0-3 file identifier, 6-7 unknown identifier
-	case NumberOfMusicSamples = 53
+	case BGM = 52
+	case NumberOfBGM = 53
 	
 	case BattleDebugScenarios = 56
 	case NumberOfBattleDebugScenarios = 57
@@ -74,7 +71,6 @@ enum CommonIndexes : Int {
 	
 	case Rooms = 14
 	case NumberOfRooms = 15
-	
 	
 	case TreasureBoxData = 60
 	case NumberTreasureBoxes = 61

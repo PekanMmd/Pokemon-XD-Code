@@ -93,7 +93,7 @@ enum CommonIndexes : Int {
 	case SoundsMetaData = 102
 	case NumberOfSounds = 103
 	case BGM = 104
-	case NumberBGM = 105
+	case NumberOfBGM = 105
 	
 	case Moves = 124
 	case NumberOfMoves = 125

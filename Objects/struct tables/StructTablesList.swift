@@ -64,6 +64,7 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		doorsTable,
 		roomsTable,
 		typesTable,
+		SoundsTable,
 		pokemonTable,
 		pokeFacesTable
 	]
@@ -86,7 +87,6 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		itemsTable,
 		flagsTable,
 //		SoundsMetaDataTable,
-		SoundsTable,
 		tutorMovesTable,
 	]
 	tables += xdTables

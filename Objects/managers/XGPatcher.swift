@@ -149,9 +149,11 @@ enum XGDolPatches: Int {
 	case allSingleBattles
 	case allDoubleBattles
 	case freeSpaceInDol
+	case deleteUnusedFiles
 	
 	var name: String {
 		switch self {
+		case .deleteUnusedFiles: return "Delete some unused files to free up some space in the ISO."
 		case .freeSpaceInDol: return "Create some space in \(XGFiles.dol.fileName) which is needed for other assembly patches. Recommended to use this first."
 		case .physicalSpecialSplitApply : return "Apply the gen IV physical/special split. (You still need to set the category for each move)"
 		case .physicalSpecialSplitRemove : return "Remove the physical/special split."
@@ -188,7 +190,7 @@ enum XGDolPatches: Int {
 	}	
 }
 
-class XGDolPatcher {
+class XGPatcher {
 
 	/// Clears some unused function data from the assembly so those addresses can be used for our own ASM
 	static func clearUnusedFunctionsInDol() {
@@ -214,6 +216,10 @@ class XGDolPatcher {
 			return data.getWordAtOffset(start) == 0x0DE1E7ED
 		}
 		return false
+	}
+
+	static func deleteUnusedFiles() {
+		XGUtility.deleteSuperfluousFiles()
 	}
 	
 	//Incorporates Physical/Special Split on all moves. The category is determined by byte 0x12 of the move's data.
@@ -879,37 +885,38 @@ class XGDolPatcher {
 	class func applyPatch(_ patch: XGDolPatches) {
 		
 		switch patch {
-			case .freeSpaceInDol				: XGDolPatcher.clearUnusedFunctionsInDol()
-			case .betaStartersApply				: XGDolPatcher.enableBetaStarters()
-			case .betaStartersRemove			: XGDolPatcher.disableBetaStarters()
-			case .physicalSpecialSplitApply		: XGDolPatcher.applyPhysicalSpecialSplitPatch()
-			case .physicalSpecialSplitRemove	: XGDolPatcher.removePhysicalSpecialSplitPatch()
-			case .renameAllPokemonApply			: XGDolPatcher.allowRenamingAnyPokemon()
-			case .shinyChanceEditingApply		: XGDolPatcher.removeShinyGlitch()
-			case .shinyChanceEditingRemove		: XGDolPatcher.replaceShinyGlitch()
-			case .type9IndependentApply			: XGDolPatcher.removeType9Dependencies()
-			case .purgeUnusedText				: XGDolPatcher.purgeUnusedText()
-			case .decapitaliseNames				: XGDolPatcher.decapitalise()
-			case .tradeEvolutions				: XGDolPatcher.removeTradeEvolutions()
+			case .freeSpaceInDol				: XGPatcher.clearUnusedFunctionsInDol()
+			case .betaStartersApply				: XGPatcher.enableBetaStarters()
+			case .betaStartersRemove			: XGPatcher.disableBetaStarters()
+			case .physicalSpecialSplitApply		: XGPatcher.applyPhysicalSpecialSplitPatch()
+			case .physicalSpecialSplitRemove	: XGPatcher.removePhysicalSpecialSplitPatch()
+			case .renameAllPokemonApply			: XGPatcher.allowRenamingAnyPokemon()
+			case .shinyChanceEditingApply		: XGPatcher.removeShinyGlitch()
+			case .shinyChanceEditingRemove		: XGPatcher.replaceShinyGlitch()
+			case .type9IndependentApply			: XGPatcher.removeType9Dependencies()
+			case .purgeUnusedText				: XGPatcher.purgeUnusedText()
+			case .decapitaliseNames				: XGPatcher.decapitalise()
+			case .tradeEvolutions				: XGPatcher.removeTradeEvolutions()
 			case .defaultMoveCategories			: XGUtility.defaultMoveCategories()
-			case .allowFemaleStarters			: XGDolPatcher.allowFemaleStarters()
+			case .allowFemaleStarters			: XGPatcher.allowFemaleStarters()
 			case .switchPokemonAtEndOfTurn		: XGAssembly.switchNextPokemonAtEndOfTurn()
-			case .fixShinyGlitch				: XGDolPatcher.removeShinyGlitch()
-			case .replaceShinyGlitch			: XGDolPatcher.replaceShinyGlitch()
+			case .fixShinyGlitch				: XGPatcher.removeShinyGlitch()
+			case .replaceShinyGlitch			: XGPatcher.replaceShinyGlitch()
 			case .infiniteTMs					: XGAssembly.infiniteUseTMs()
-			case .allowShinyStarters			: XGDolPatcher.setStarterShininess(to: .random)
-			case .shinyLockStarters				: XGDolPatcher.setStarterShininess(to: .never)
-			case .alwaysShinyStarters			: XGDolPatcher.setStarterShininess(to: .always)
-			case .allowShinyShadowPokemon		: XGDolPatcher.setShadowPokemonShininess(to: .random)
-			case .shinyLockShadowPokemon		: XGDolPatcher.setShadowPokemonShininess(to: .never)
-			case .alwaysShinyShadowPokemon		: XGDolPatcher.setShadowPokemonShininess(to: .always)
-			case .enableDebugLogs				: XGDolPatcher.enableDebugLogs()
-			case .pokemonCanLearnAnyTM			: XGDolPatcher.pokemonCanLearnAnyTM()
-			case .pokemonHaveMaxCatchRate		: XGDolPatcher.pokemonHaveMaxCatchRate()
-			case .removeEVCap					: XGDolPatcher.removeEVCap()
-			case .gen7CritRatios				: XGDolPatcher.gen7CritRatios()
-			case .allDoubleBattles				: XGDolPatcher.setAllBattlesTo(.double)
-			case .allSingleBattles				: XGDolPatcher.setAllBattlesTo(.single)
+			case .allowShinyStarters			: XGPatcher.setStarterShininess(to: .random)
+			case .shinyLockStarters				: XGPatcher.setStarterShininess(to: .never)
+			case .alwaysShinyStarters			: XGPatcher.setStarterShininess(to: .always)
+			case .allowShinyShadowPokemon		: XGPatcher.setShadowPokemonShininess(to: .random)
+			case .shinyLockShadowPokemon		: XGPatcher.setShadowPokemonShininess(to: .never)
+			case .alwaysShinyShadowPokemon		: XGPatcher.setShadowPokemonShininess(to: .always)
+			case .enableDebugLogs				: XGPatcher.enableDebugLogs()
+			case .pokemonCanLearnAnyTM			: XGPatcher.pokemonCanLearnAnyTM()
+			case .pokemonHaveMaxCatchRate		: XGPatcher.pokemonHaveMaxCatchRate()
+			case .removeEVCap					: XGPatcher.removeEVCap()
+			case .gen7CritRatios				: XGPatcher.gen7CritRatios()
+			case .allDoubleBattles				: XGPatcher.setAllBattlesTo(.double)
+			case .allSingleBattles				: XGPatcher.setAllBattlesTo(.single)
+			case .deleteUnusedFiles				: XGPatcher.deleteUnusedFiles()
 		}
 		
 		printg("patch applied: ", patch.name)

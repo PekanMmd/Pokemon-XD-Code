@@ -52,7 +52,7 @@ var giftPokemonShininessRAMOffset: Int {
 	switch region {
 	case .US: return 0x152c1a
 	case .EU: return 0x1544de
-	case .JP: return 0x8014df42
+	case .JP: return 0x14df42
 	case .OtherGame: return 0
 	}
 }

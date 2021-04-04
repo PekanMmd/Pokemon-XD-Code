@@ -425,7 +425,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	func performSegue(_ name: String) {
-		let alwaysAllowedSegues = ["toISOVC", "toAlertVC"]
+		let alwaysAllowedSegues = ["toISOVC", "toAlertVC", "toAboutVC"]
 		guard checkRequiredFiles(allowAnyISO: alwaysAllowedSegues.contains(name)) else {
 			return
 		}

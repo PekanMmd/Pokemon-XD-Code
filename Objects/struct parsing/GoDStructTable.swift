@@ -110,7 +110,9 @@ extension GoDStructTableFormattable {
 		let folder = XGFolders.nameAndFolder(foldername, .nameAndFolder("Documented Data", .Reference))
 		printg("Documenting \(properties.name) table to:", folder.path)
 		allEntries.forEachIndexed { (index, entry) in
-			let filename = assumedNameForEntry(index: index) + " " + String(format: "%03d", index)  + ".yaml"
+			var filename = assumedNameForEntry(index: index) + " " + String(format: "%03d", index)  + ".yaml"
+			filename = filename.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: "\"", with: "")
+			filename = filename.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: "\"", with: "")
 			let file = XGFiles.nameAndFolder(filename, folder)
 			XGUtility.saveString(entry.description, toFile: file)
 		}
@@ -256,7 +258,7 @@ extension GoDStructTableFormattable {
 			// Add the entries name to start for convenience
 			// This will be ignored when redecoding
 			// put quotes around string in case it contains a comma so it doesn't affect the csv alignment
-			let entryName = "\"" + assumedNameForEntry(index: index) + "\""
+			let entryName = assumedNameForEntry(index: index)
 			csv += "\(entryName),"
 			appendFieldValues(data: entry.flattenedValues)
 			csv.removeLast()

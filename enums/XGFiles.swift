@@ -40,7 +40,7 @@ var loadableFiles: [String] {
 #endif
 
 var loadableFsys: [String] {
-	[XGFiles.fsys("people_archive").path, XGFiles.fsys("common").path, XGFiles.fsys("deck").path]
+	[XGFiles.fsys("people_archive").path, XGFiles.fsys("common").path, XGFiles.fsys("deck").path, XGFiles.fsys("bgm_archive").path]
 }
 
 

@@ -105,20 +105,36 @@ let flagsStruct = GoDStruct(name: "Flags", format: [
 ])
 
 let flagsTable = CommonStructTable(index: .Flags, properties: flagsStruct)
+#endif
 
+#if GAME_XD
 let SoundsStruct = GoDStruct(name: "Sounds", format: [
 	.word(name: "Fsys ID", description: "", type: .fsysID),
 	.word(name: "ISD File ID", description: "", type: .fsysFileIdentifier(fsysName: nil)),
 	.word(name: "ISH File ID", description: "", type: .fsysFileIdentifier(fsysName: nil))
 ])
+#else
+let SoundsStruct = GoDStruct(name: "Sounds", format: [
+	.word(name: "Samp File ID", description: "In bgm_archive.fsys", type: .fsysFileIdentifier(fsysName: nil)),
+	.word(name: "Unknown", description: "", type: .uintHex)
+])
+#endif
 
 let SoundsTable = CommonStructTable(index: .BGM, properties: SoundsStruct) { (index, data) -> String? in
+	#if GAME_XD
 	if let fsysID: Int = data.get("Fsys ID"), let fsysName = XGISO.current.getFSYSNameWithGroupID(fsysID) {
 		return fsysName
 	}
+	#else
+	if let fileIdentifier: Int = data.get("Samp File ID") {
+		let fsys = XGFiles.fsys("bgm_archive").fsysData
+		return fsys.fileNameForFileWithIdentifier(fileIdentifier)
+	}
+	#endif
 	return nil
 }
 
+#if GAME_XD
 let SoundsMetaDataStruct = GoDStruct(name: "Sounds Metadata", format: [
 	.word(name: "Unknown", description: "", type: .uintHex),
 	.short(name: "Sound Sub Index", description: "", type: .uint),

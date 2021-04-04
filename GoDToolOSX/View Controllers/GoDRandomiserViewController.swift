@@ -63,7 +63,7 @@ class GoDRandomiserViewController: GoDViewController {
 				XGRandomiser.randomisePokemon(shadowsOnly: shadows, similarBST: bst)
 			}
 			if moves {
-				XGRandomiser.randomiseMoves()
+				XGRandomiser.randomiseMoves(shadowsOnly: shadows)
 			}
 			if types {
 				XGRandomiser.randomiseTypes()
@@ -89,7 +89,7 @@ class GoDRandomiserViewController: GoDViewController {
 			}
 			#endif
 			if tradeEvos {
-				XGDolPatcher.removeTradeEvolutions()
+				XGPatcher.removeTradeEvolutions()
 			}
 
 			XGUtility.compileMainFiles()

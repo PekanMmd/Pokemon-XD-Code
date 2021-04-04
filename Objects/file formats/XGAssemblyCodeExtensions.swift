@@ -73,8 +73,8 @@ extension XGAssembly {
 			return nil
 		}
 
-		if !XGDolPatcher.checkIfUnusedFunctionsInDolWereCleared() {
-			XGDolPatcher.clearUnusedFunctionsInDol()
+		if !XGPatcher.checkIfUnusedFunctionsInDolWereCleared() {
+			XGPatcher.clearUnusedFunctionsInDol()
 		}
 
 		guard let dol = XGFiles.dol.data else {

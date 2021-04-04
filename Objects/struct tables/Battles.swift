@@ -87,7 +87,7 @@ let battleStruct = GoDStruct(name: "Battle", format: [
 	.short(name: "Battle Field ID", description: "", type: .battleFieldID),
 	.word(name: "Name ID", description: "", type: .msgID(file: .common_rel)),
 	.word(name: "Unknown 2", description: "", type: .uintHex),
-	.word(name: "BGM ID", description: "", type: .uintHex),
+	.word(name: "Unknown 3", description: "", type: .uintHex),
 	.word(name: "Unknown 4", description: "", type: .uintHex),
 	.array(name: "Players", description: "", property: .subStruct(name: "Battle Player", description: "", property: GoDStruct(name: "Battle Player", format: [
 		.short(name: "Trainer ID", description: "id 1 is the player", type: .indexOfEntryInTable(table: trainersTable, nameProperty: nil)),

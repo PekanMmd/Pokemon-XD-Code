@@ -69,7 +69,7 @@ class GoDMovesViewController: GoDTableViewController {
 		power.formatter = NumberFormatter.byteFormatter()
 		accuracy.formatter = NumberFormatter.byteFormatter()
 		effectAcc.formatter = NumberFormatter.byteFormatter()
-		category.isEnabled = XGDolPatcher.isClassSplitImplemented()
+		category.isEnabled = XGPatcher.isClassSplitImplemented()
 
 		filteredMoves = moves
 		table.reloadData()
@@ -108,7 +108,7 @@ class GoDMovesViewController: GoDTableViewController {
 		targets.select(currentMove.target)
 		effectType.select(currentMove.effectType)
 
-		if XGDolPatcher.isClassSplitImplemented() || (game == .XD && currentMove.isShadowMove) {
+		if XGPatcher.isClassSplitImplemented() || (game == .XD && currentMove.isShadowMove) {
 			category.select(currentMove.category)
 			category.isEnabled = true
 		} else {

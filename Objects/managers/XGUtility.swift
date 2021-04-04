@@ -81,12 +81,10 @@ class XGUtility {
 	class func compileAllFiles() {
 		
 		prepareForCompilation()
-		for file in XGISO.current.allFileNames {
-			if file.fileExtensions == XGFileTypes.fsys.fileExtension {
-				XGUtility.importFileToISO(.fsys(file.removeFileExtensions()), encode: true, save: false)
-			} else {
-				XGUtility.importFileToISO(.nameAndFolder(file, .ISOExport(file.removeFileExtensions())), encode: false, save: false)
-			}
+		for filename in XGISO.current.allFileNames {
+			let file = XGFiles.nameAndFolder(filename, .ISOExport(filename.removeFileExtensions()))
+			guard file.exists else { continue }
+			XGUtility.importFileToISO(file, encode: file.fileType == .fsys, save: false)
 		}
 		XGISO.current.save()
 	}

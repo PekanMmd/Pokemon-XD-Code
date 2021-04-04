@@ -225,13 +225,16 @@ class XGRandomiser: NSObject {
 		printg("done!")
 	}
 	
-	class func randomiseMoves() {
+	class func randomiseMoves(shadowsOnly: Bool = false) {
 		printg("randomising pokemon moves...")
 		
 		for deck in MainDecksArray {
 			for pokemon in deck.allActivePokemon {
 				
 				if pokemon.species.index == 0 {
+					continue
+				}
+				if shadowsOnly && pokemon.isShadowPokemon {
 					continue
 				}
 				
