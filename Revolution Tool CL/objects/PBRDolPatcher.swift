@@ -32,7 +32,7 @@ enum XGDolPatches: Int {
 
 }
 
-class XGDolPatcher {
+class XGPatcher {
 
 	/// Clears some unused function data from the assembly so those addresses can be used for our own ASM
 	static func clearUnusedFunctionsInDol() {
@@ -159,10 +159,10 @@ class XGDolPatcher {
 
 	class func applyPatch(_ patch: XGDolPatches) {
 		switch patch {
-		case .freeSpaceInDol: XGDolPatcher.clearUnusedFunctionsInDol()
-		case .gen7CritRatios: XGDolPatcher.gen7CritRatios()
-		case .disableRentalPassChecksums: XGDolPatcher.disableRentalPassChecksums()
-		case .disableBlurEffect: XGDolPatcher.disableBlurEffect()
+		case .freeSpaceInDol: XGPatcher.clearUnusedFunctionsInDol()
+		case .gen7CritRatios: XGPatcher.gen7CritRatios()
+		case .disableRentalPassChecksums: XGPatcher.disableRentalPassChecksums()
+		case .disableBlurEffect: XGPatcher.disableBlurEffect()
 		}
 	}
 }

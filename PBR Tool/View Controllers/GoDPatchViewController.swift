@@ -28,15 +28,15 @@ class GoDPatchViewController: GoDTableViewController {
 	]
 	
 	@objc func moveTypeMatchupsTable() {
-		XGDolPatcher.moveTypeMatchupsTableToPassValidationFunction()
+		XGPatcher.moveTypeMatchupsTableToPassValidationFunction()
 	}
 
 	@objc func disableRentalPassChecksums() {
-		XGDolPatcher.disableRentalPassChecksums()
+		XGPatcher.disableRentalPassChecksums()
 	}
 
 	@objc func disableBlur() {
-		XGDolPatcher.disableBlurEffect()
+		XGPatcher.disableBlurEffect()
 	}
 	
 	override func numberOfRows(in tableView: NSTableView) -> Int {
