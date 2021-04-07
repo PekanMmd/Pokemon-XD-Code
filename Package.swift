@@ -14,14 +14,23 @@ let package = Package(
         .target(
             name: "GoD-CLI",
             dependencies: [],
-            path: "spm/virt/GoD-CLI"),
+            path: "spm/virt/GoD-CLI",
+            swiftSettings: [
+                .define("GAME_XD"),
+            ]),
         .target(
             name: "Colosseum-CLI",
             dependencies: [],
-            path: "spm/virt/Colosseum-CLI"),
+            path: "spm/virt/Colosseum-CLI",
+            swiftSettings: [
+                .define("GAME_COLO"),
+            ]),
         .target(
             name: "PBR-CLI",
             dependencies: [],
-            path: "spm/virt/PBR-CLI"),
+            path: "spm/virt/PBR-CLI",
+            swiftSettings: [
+                .define("GAME_PBR"),
+            ]),
     ]
 )

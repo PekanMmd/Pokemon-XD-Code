@@ -9,7 +9,7 @@
 import Foundation
 
 let kNumberOfItems				= CommonIndexes.NumberOfItems.value // 0x1bc
-//let kFirstItemOffset			= 0x1FEE4
+let kFirstItemOffset			= 0x1FEE4
 let kSizeOfItemData				= 0x28
 let kNumberOfFriendshipEffects	= 0x03
 
