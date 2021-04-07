@@ -430,14 +430,17 @@ indirect enum XGFiles {
 		if XGFileTypes.textureContainingFormats.contains(fileType) {
 			return PBRTextureContaining.fromFile(self)?.textures ?? []
 		}
+		#else
+		if XGFileTypes.modelFormats.contains(fileType) {
+			let datModel = DATModel(file: self)
+			return datModel?.textures ?? []
+		}
 		#endif
+
 		if fileType == .gsw {
 			return XGGSWTextures(file: self).extractTextureData().map { GoDTexture(data: $0) }
 		}
-		if XGFileTypes.modelFormats.contains(fileType) {
-			#warning("extract textures from models colo/xd")
-			return []
-		}
+
 		return []
 	}
 	

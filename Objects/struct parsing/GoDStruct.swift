@@ -275,6 +275,7 @@ indirect enum GoDStructPropertyTypes {
 	case fsysID, fsysFileIdentifier(fsysName: String?), fsysFileType
 	case msgID(file: XGFiles?) // set file to nil to search through all available string tables
 	case pkxTrainerID, pkxPokemonID
+	case textureFormat, paletteFormat
 	case any
 
 	case pointer, string, vector, subStruct, array(type: GoDStructPropertyTypes)
@@ -563,6 +564,12 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				valueString = "\(rawValue != 0)"
 			case .bitMask:
 				valueString = rawValue.binary()
+				valueString += " (\(rawValue))"
+			case .textureFormat:
+				valueString = GoDTextureFormats.fromStandardRawValue(rawValue)?.name ?? "Invalid Texture Format \(rawValue)"
+				valueString += " (\(rawValue))"
+			case .paletteFormat:
+				valueString = GoDTextureFormats.fromPaletteID(rawValue)?.name ?? "Invalid Palette Format \(rawValue)"
 				valueString += " (\(rawValue))"
 			case .pokemonID:
 				if rawValue == 0 {

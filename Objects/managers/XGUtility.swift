@@ -158,9 +158,10 @@ class XGUtility {
 									}
 									if let image = XGImage.loadImageData(fromFile: imageFile) {
 										let texture: GoDTexture
-										if file.fileName.contains(".gsw.") {
-											// preserves the image format so can easily be imported into gsw
-											texture = image.getTexture(format: file.texture.format)
+										if file.fileName.contains(".gsw.") || file.fileName.contains(".dat.") || file.fileName.contains(".rdat.") {
+											// preserves the image format so can easily be imported into same offset
+											let referenceTexture = file.texture
+											texture = image.getTexture(format: referenceTexture.format, paletteFormat: referenceTexture.paletteFormat)
 
 										} else {
 											// automatically chooses a good format for the new image
@@ -191,8 +192,26 @@ class XGUtility {
 							gsw.save()
 						}
 
+						#if !GAME_PBR
+						if XGFileTypes.modelFormats.contains(file.fileType) {
+							let datModel = DATModel(file: file)
+							var expectedFiles = datModel?.textures ?? []
+							var foundReplacement = false
+							for i in 0 ..< expectedFiles.count {
+								let textureFile = expectedFiles.map { $0.data.file }[i]
+								if textureFile.exists {
+									expectedFiles[i] = textureFile.texture
+									foundReplacement = true
+								}
+							}
+							if foundReplacement {
+								datModel?.importTextures(expectedFiles)
+								datModel?.data?.save()
+							}
+						}
+						#endif
+
 						// import textures into models after textures have been encoded
-						#warning("import textures into models for Colo/XD")
 						#if GAME_PBR
 						// import model textures after all gtxs have been encoded
 						if XGFileTypes.textureContainingFormats.contains(file.fileType) {

@@ -58,14 +58,21 @@ class GoDStructData: CustomStringConvertible {
 				} else {
 					currentOffset += property.alignmentBytes(at: currentOffset)
 					var rawValues = [GoDStructValues]()
-
+					
 					while currentOffset < fileData.length - type.length {
 						let nextValue = getValueForProperty(type)
 						rawValues.append(nextValue)
-						if nextValue.rawValue() == 0 || nextValue.rawValue() == "" || nextValue.rawValue() == Float(0.0) {
+						if case .pointer = type.type {
+							let pointerValue: Int? = nextValue.rawValue()
+							if pointerValue == nil || pointerValue == 0 {
+								rawValues.removeLast()
+								return .array(property: property, rawValues: rawValues)
+							}
+						} else if nextValue.rawValue() == 0 || nextValue.rawValue() == "" || nextValue.rawValue() == Float(0.0) {
 							rawValues.removeLast()
 							return .array(property: property, rawValues: rawValues)
 						}
+
 					}
 					return .array(property: property, rawValues: rawValues)
 				}

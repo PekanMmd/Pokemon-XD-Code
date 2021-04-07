@@ -44,7 +44,7 @@ extension XGImage {
 		data.appendBytes([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) // padding
 
 		// pixel data
-		data.appendBytes(getTexture(format: .RGB5A3).pixelCharStream())
+		data.appendBytes(getTexture(format: .RGB5A3, paletteFormat: nil).pixelCharStream())
 
 		// add file name
 		let filenameOffset = data.length
@@ -90,7 +90,7 @@ extension XGImage {
 		let imageWidth = data.get2BytesAtOffset(0x1c)
 		let imageHeight = data.get2BytesAtOffset(0x1e)
 
-		let texture = GoDTexture(forImage: .init(width: imageWidth, height: imageHeight, pixels: []), format: .RGB5A3)
+		let texture = GoDTexture(forImage: .init(width: imageWidth, height: imageHeight, pixels: []), format: .RGB5A3, paletteFormat: nil)
 		guard data.length > textureStartOffset + texture.textureLength else {
 			printg("Could not load image. Failed to parse pixels.")
 			return .dummy
@@ -124,8 +124,8 @@ extension XGImage {
 		return GoDTextureImporter.getTextureData(image: self)
 	}
 
-	func getTexture(format: GoDTextureFormats) -> GoDTexture {
-		return GoDTextureImporter.getTextureData(image: self, format: format)
+	func getTexture(format: GoDTextureFormats, paletteFormat: GoDTextureFormats?) -> GoDTexture {
+		return GoDTextureImporter.getTextureData(image: self, format: format, paletteFormat: paletteFormat)
 	}
 
 	var textures : [GoDTexture] {

@@ -309,6 +309,23 @@ class XGMutableData {
 	func replaceBytesFromOffset(_ offset: Int, withByteStream bytes: [UInt8]) {
 		replaceBytesFromOffset(offset, withByteStream: bytes.map{Int($0)})
 	}
+
+	func replaceBytesFromOffset(_ offset: Int, withNibbleStream nibbles: [Int]) {
+		if offset < 0 || offset + (nibbles.count / 2) > length {
+			printg("Attempting to write \((nibbles.count / 2).hexString()) bytes from offset: \(offset.hexString()), file: \(file.path), length: \(length.hexString())")
+			return
+		}
+
+		var currentByte = 0
+		for i in 0 ..< nibbles.count {
+			currentByte = currentByte << 4
+			currentByte = currentByte | (nibbles[i] & 0xF)
+			if (i % 2 == 1) || (i == nibbles.count - 1) {
+				replaceByteAtOffset(offset + (i / 2), withByte: currentByte)
+				currentByte = 0
+			}
+		}
+	}
 	
 	func replaceBytesFromOffset(_ offset: Int, withShortStream bytes: [Int]) {
 		if offset < 0 || offset + (bytes.count * 2) > self.length {

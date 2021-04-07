@@ -881,16 +881,6 @@ final class XGFsys : NSObject {
 					}
 				}
 
-				for texture in file.textures {
-					if !texture.file.exists || overwrite {
-						texture.save()
-					}
-					let pngFile = XGFiles.nameAndFolder(texture.file.fileName + XGFileTypes.png.fileExtension, file.folder)
-					if !pngFile.exists || overwrite {
-						texture.writePNGData(toFile: pngFile)
-					}
-				}
-
 				#if GAME_XD
 				let fileContainsScript = (file.fileType == .scd || file == .common_rel)
 				#elseif GAME_PBR
@@ -916,6 +906,17 @@ final class XGFsys : NSObject {
 							let thp = XGTHP(header: thpHeader, body: thpData)
 							thp.thpData.save()
 						}
+					}
+				}
+			}
+			for file in folder.files {
+				for texture in file.textures {
+					if !texture.file.exists || overwrite {
+						texture.save()
+					}
+					let pngFile = XGFiles.nameAndFolder(texture.file.fileName + XGFileTypes.png.fileExtension, file.folder)
+					if !pngFile.exists || overwrite {
+						texture.writePNGData(toFile: pngFile)
 					}
 				}
 			}

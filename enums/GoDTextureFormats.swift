@@ -24,7 +24,6 @@ enum GoDTextureFormats: Int, CaseIterable {
 
 	var standardRawValue : Int {
 		switch self {
-			
 		case .I4: return 0
 		case .I8: return 1
 		case .IA4: return 2
@@ -36,7 +35,6 @@ enum GoDTextureFormats: Int, CaseIterable {
 		case .C8: return 9
 		case .C14X2: return 10
 		case .CMPR: return 14
-			
 		}
 	}
 	
@@ -131,7 +129,7 @@ enum GoDTextureFormats: Int, CaseIterable {
 		switch self {
 		case .IA8: return 0
 		case .RGB565: return 1
-		case .RGB5A3: return 3
+		case .RGB5A3: return 3 // note other games use 2 for this, including .dat models in these games
 		default: return nil
 		}
 	}
@@ -146,6 +144,9 @@ enum GoDTextureFormats: Int, CaseIterable {
 	}
 
 	static func fromPaletteID(_ value: Int) -> GoDTextureFormats? {
+		if value == 2 {
+			return .RGB5A3 // In .dat models, 2 is used for these. Seems to be the standard in other games
+		}
 		for format in allCases {
 			if format.paletteID == value {
 				return format

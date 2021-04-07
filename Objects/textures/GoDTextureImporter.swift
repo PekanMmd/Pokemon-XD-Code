@@ -422,16 +422,7 @@ class GoDTextureImporter {
 			
 			if i < Palette.length {
 				colour = Palette[i]
-				
-				var pFormat = GoDTextureFormats.RGB5A3
-				if texture.paletteFormat == 0 {
-					pFormat = .IA8
-				}
-				if texture.paletteFormat == 1 {
-					pFormat = .RGB565
-				}
-				
-				let raw = colour.representation(format: pFormat)
+				let raw = colour.representation(format: texture.paletteFormat)
 				
 				bytes.append(raw >> 8)
 				bytes.append(raw %  0x100)
@@ -454,9 +445,9 @@ class GoDTextureImporter {
 		}
 	}
 	
-	class func getTextureData(image: XGImage, format: GoDTextureFormats, paletteFormat: GoDTextureFormats = .RGB5A3) -> GoDTexture {
+	class func getTextureData(image: XGImage, format: GoDTextureFormats, paletteFormat: GoDTextureFormats?) -> GoDTexture {
 		
-		let texture  = GoDTexture(forImage: image, format: format, paletteFormat: paletteFormat)
+		let texture  = GoDTexture(forImage: image, format: format, paletteFormat: paletteFormat ?? .IA8)
 		
 		let importer = GoDTextureImporter(oldTextureData: texture, newImage: image)
 		importer.replaceTextureData()
@@ -481,7 +472,7 @@ class GoDTextureImporter {
 			format = .RGB5A3
 		}
 		
-		return getTextureData(image: image, format: format)
+		return getTextureData(image: image, format: format, paletteFormat: format.isIndexed ? .RGB5A3 : nil)
 	}
 	
 	class func getMultiFormatTextureData(image: XGImage) -> [GoDTexture] {
@@ -497,7 +488,7 @@ class GoDTextureImporter {
 			}
 			XGColour.colourThreshold = colourThreshold
 			
-			let texture = getTextureData(image: image, format: format)
+			let texture = getTextureData(image: image, format: format, paletteFormat: format.isIndexed ? .RGB5A3 : nil)
 			textures.append(texture)
 		}
 		

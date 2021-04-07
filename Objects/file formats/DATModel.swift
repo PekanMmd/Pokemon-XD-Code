@@ -7,17 +7,31 @@
 
 import Foundation
 
-class DATModel: CustomStringConvertible {
+class DATModel: CustomStringConvertible, GoDTexturesContaining {
+
+	var data: XGMutableData?
+	var textureHeaderOffsets: [Int] {
+		return nodes?.textureHeaderOffsets.map { $0 + 32 } ?? []
+	}
+	var textureDataOffsets: [Int] {
+		return nodes?.textureDataOffsets.map { $0 + 32 } ?? []
+	}
+	var texturePaletteData: [(format: Int?, offset: Int?, numberOfEntries: Int)] {
+		return nodes?.texturePalettes.map {
+			return (format: $0.format, offset: $0.offset +? 32, numberOfEntries: $0.numberOfEntries)
+		} ?? []
+	}
+	var usesDATTextureHeaderFormat: Bool { return true }
 
 	var modelData: XGMutableData
 	var header: GoDStructData
-	var nodes: GoDStructData?
+	var nodes: DATNodes?
 
 	var description: String {
 		return "File: \(modelData.file.path)"
 			+ header.description
 			+ "\nNodes:\n"
-			+ (nodes?.description ?? "-")
+			+ (nodes?.rootNode.description ?? "-")
 	}
 
 	convenience init?(file: XGFiles) {
@@ -26,8 +40,18 @@ class DATModel: CustomStringConvertible {
 	}
 
 	init(data: XGMutableData) {
-		header = GoDStructData(properties: DATNodes.datArchiveHeaderStruct, fileData: data, startOffset: 0)
-		let headerLength = DATNodes.datArchiveHeaderStruct.length
+		self.data = data
+		let datArchiveHeaderStruct = GoDStruct(name: "DAT Model Header", format: [
+			.word(name: "File Size", description: "", type: .uint),
+			.word(name: "Data Size", description: "", type: .uint),
+			.word(name: "Node Count", description: "", type: .uint),
+			.word(name: "Public Root Nodes Count", description: "", type: .uint),
+			.word(name: "External Root Nodes Count", description: "", type: .uint),
+			.array(name: "Padding", description: "", property:
+					.word(name: "Padding", description: "", type: .null), count: 3)
+		])
+		header = GoDStructData(properties: datArchiveHeaderStruct, fileData: data, startOffset: 0)
+		let headerLength = datArchiveHeaderStruct.length
 		modelData = data.getSubDataFromOffset(headerLength, length: data.length - headerLength)
 
 		if let nodesSize: Int = header.get("Node Count") *? 4,
@@ -36,7 +60,7 @@ class DATModel: CustomStringConvertible {
 		   let dataSize: Int = header.get("Data Size")
 		{
 			let rootNodesOffset = dataSize + nodesSize
-			nodes = DATNodes.rootNodesData(firstRootNodeOffset: rootNodesOffset, publicCount: publicCount, externCount: externCount, data: modelData)
+			nodes = DATNodes(firstRootNodeOffset: rootNodesOffset, publicCount: publicCount, externCount: externCount, data: modelData)
 		}
 	}
 }

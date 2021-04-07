@@ -11,7 +11,7 @@ import Foundation
 
 loadISO(exitOnFailure: true)
 
-let file = XGFiles.typeAndFsysName(.dat, "pkx_groudon")
+let file = XGFiles.typeAndFsysName(.dat, "pkx_ken_a1")
 DATModel(file: file)?.println()
 
 

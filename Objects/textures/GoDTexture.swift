@@ -25,14 +25,14 @@ let kDancerStartOffset = 0xC
 
 class GoDTexture {
 
-	var data : XGMutableData!
+	var data: XGMutableData!
 	
 	var width = 0
 	var height = 0
 	var textureStart = 0
 	var paletteStart = 0
 	var format = GoDTextureFormats.C8
-	var paletteFormat = 0
+	var paletteFormat = GoDTextureFormats.IA8
 	
 	var isIndexed : Bool {
 		return format.isIndexed
@@ -76,6 +76,7 @@ class GoDTexture {
 	var startOffset: Int {
 		return isPokeDance ? data.get4BytesAtOffset(kDancerStartOffset) : 0x0
 	}
+	
 	var isPokeDance: Bool {
 		return data.length > kDancerBytes.count && data.getByteStreamFromOffset(0, length: kDancerBytes.count) == kDancerBytes
 	}
@@ -89,7 +90,7 @@ class GoDTexture {
 		self.setUp()
 	}
 
-	init(forImage image: XGImage, format: GoDTextureFormats, paletteFormat: GoDTextureFormats = .RGB565) {
+	init(forImage image: XGImage, format: GoDTextureFormats, paletteFormat: GoDTextureFormats?) {
 		width = image.width
 		height = image.height
 		self.format = format
@@ -105,14 +106,14 @@ class GoDTexture {
 		}
 		
 		let requiredTextureBytes = requiredPixelsPerRow * requiredPixelsPerCol * self.BPP / 8
-		let requiredPaletteBytes = format.isIndexed ? format.paletteCount * paletteFormat.bitsPerPixel / 8 : 0
+		let requiredPaletteBytes = format.isIndexed ? format.paletteCount * (paletteFormat ?? .IA8).bitsPerPixel / 8 : 0
 		
 		if self.format.isIndexed {
-			self.paletteFormat = paletteFormat.paletteID ?? GoDTextureFormats.RGB5A3.paletteID!
+			self.paletteFormat = paletteFormat ?? .IA8
 			self.paletteStart = 0x80 + requiredTextureBytes
 		}
 
-		self.data = XGMutableData(byteStream: [Int](repeating: 0, count: 0x80 + requiredTextureBytes + requiredPaletteBytes))
+		self.data = XGMutableData(length: 0x80 + requiredTextureBytes + requiredPaletteBytes)
 		
 		self.writeMetaData()
 	}
@@ -125,7 +126,7 @@ class GoDTexture {
 		self.paletteStart = startOffset + Int(data.getWordAtOffset(startOffset + kPalettePointerOffset))
 		let formatIndex = data.getByteAtOffset(startOffset + kTextureFormatOffset)
 		self.format = GoDTextureFormats(rawValue: formatIndex) ?? .C8
-		self.paletteFormat = data.getByteAtOffset(startOffset + kPaletteFormatOffset)
+		self.paletteFormat = GoDTextureFormats.fromPaletteID(data.getByteAtOffset(startOffset + kPaletteFormatOffset)) ?? .IA8
 		
 	}
 	
@@ -136,7 +137,7 @@ class GoDTexture {
 		self.data.replaceWordAtOffset(startOffset + kTexturePointerOffset, withBytes: UInt32(self.textureStart - startOffset))
 		self.data.replaceWordAtOffset(startOffset + kPalettePointerOffset, withBytes: UInt32(self.paletteStart - startOffset))
 		self.data.replaceByteAtOffset(startOffset + kTextureFormatOffset, withByte: self.format.rawValue)
-		self.data.replaceByteAtOffset(startOffset + kPaletteFormatOffset, withByte: self.paletteFormat)
+		self.data.replaceByteAtOffset(startOffset + kPaletteFormatOffset, withByte: self.paletteFormat.paletteID ?? 0)
 		self.data.replaceByteAtOffset(startOffset + kTextureIndexOffset, withByte: self.isIndexed ? 1 : 0)
 	}
 	
@@ -194,14 +195,7 @@ class GoDTexture {
 
 	var pixels: [XGColour] {
 		let palette = self.palette().map { (raw) -> XGColour in
-			var pFormat = GoDTextureFormats.RGB5A3
-			if self.paletteFormat == 0 {
-				pFormat = .IA8
-			}
-			if self.paletteFormat == 1 {
-				pFormat = .RGB565
-			}
-			return XGColour(raw: raw, format: pFormat)
+			return XGColour(raw: raw, format: paletteFormat)
 		}
 
 		var colourPixels = [XGColour]()
@@ -382,6 +376,27 @@ class GoDTexture {
 
 		return XGImage(width: cWidth, height: cHeight, pixels: orderedPixels)
 
+	}
+
+	@discardableResult
+	func limitColourIndexes(to: Int) -> Bool {
+		guard isIndexed, to > 0 else { return false }
+		var wasLimited = false
+		func limitIndex(_ index: Int) -> Int {
+			wasLimited = index >= to
+			return min(index, to - 1)
+		}
+
+		switch format.bitsPerPixel {
+		case 4:
+			let indexes = data.getNibbleStreamFromOffset(textureStart, length: textureLength).map(limitIndex)
+			data.replaceBytesFromOffset(textureStart, withNibbleStream: indexes)
+		case 8:
+			let indexes = data.getByteStreamFromOffset(textureStart, length: textureLength).map(limitIndex)
+			data.replaceBytesFromOffset(textureStart, withByteStream: indexes)
+		default: assertionFailure("No indexed formats should have \(format.bitsPerPixel) bits per pixel."); return false
+		}
+		return wasLimited
 	}
 }
 
