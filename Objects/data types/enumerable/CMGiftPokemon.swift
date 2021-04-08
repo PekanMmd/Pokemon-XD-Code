@@ -83,7 +83,7 @@ let kDukingsPlusleshininessOffset	= 0x66
 
 let kNumberOfDistroPokemon = 4
 
-final class CMGiftPokemon: NSObject, XGGiftPokemon, Codable {
+final class CMGiftPokemon: NSObject, XGGiftPokemon, GoDCodable {
 	
 	var index			= 0
 	

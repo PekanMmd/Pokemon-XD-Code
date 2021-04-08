@@ -233,7 +233,7 @@ class XGTrainerPokemon : NSObject, Codable {
 	
 }
 
-class CMShadowData {
+final class CMShadowData {
 
 	var index = 0
 
@@ -256,17 +256,54 @@ class CMShadowData {
 	init(index: Int) {
 		self.index = index
 
-		let data = XGFiles.common_rel.data!
-		let start = self.startOffset
+		if let data = XGFiles.common_rel.data {
+			let start = self.startOffset
 
-		catchRate 	= data.getByteAtOffset(start + kShadowCatchRateOffset)
-		purificationCounter		= data.get2BytesAtOffset(start + kShadowCounterOffset)
-		firstTID		= data.get2BytesAtOffset(start + kShadowTIDOffset)
-		alternateTID = data.get2BytesAtOffset(start + kShadowTID2Offset)
-		shadowID = data.getByteAtOffset(start + kShadowIDOffset)
-		nameID = data.get2BytesAtOffset(start + kShadowJapaneseMSGOffset)
-		let speciesID = data.get2BytesAtOffset(start + kShadowSpeciesOffset)
-		species = .index(speciesID)
+			catchRate 	= data.getByteAtOffset(start + kShadowCatchRateOffset)
+			purificationCounter		= data.get2BytesAtOffset(start + kShadowCounterOffset)
+			firstTID		= data.get2BytesAtOffset(start + kShadowTIDOffset)
+			alternateTID = data.get2BytesAtOffset(start + kShadowTID2Offset)
+			shadowID = data.getByteAtOffset(start + kShadowIDOffset)
+			nameID = data.get2BytesAtOffset(start + kShadowJapaneseMSGOffset)
+			let speciesID = data.get2BytesAtOffset(start + kShadowSpeciesOffset)
+			species = .index(speciesID)
+		}
+	}
+
+	func save() {
+		if let data = XGFiles.common_rel.data {
+			let start = startOffset
+
+			data.replaceByteAtOffset(start + kShadowCatchRateOffset, withByte: catchRate)
+			data.replace2BytesAtOffset(start + kShadowCounterOffset, withBytes: purificationCounter)
+			data.replace2BytesAtOffset(start + kShadowTIDOffset, withBytes: firstTID)
+			data.replace2BytesAtOffset(start + kShadowTID2Offset, withBytes: alternateTID)
+			data.replaceByteAtOffset(start + kShadowIDOffset, withByte: shadowID)
+			data.replace2BytesAtOffset(start + kShadowJapaneseMSGOffset, withBytes: nameID)
+			data.replace2BytesAtOffset(start + kShadowSpeciesOffset, withBytes: species.index)
+
+			data.save()
+		}
+	}
+}
+
+extension CMShadowData: XGEnumerable {
+	var enumerableName: String {
+		return species.name.unformattedString
+	}
+
+	var enumerableValue: String? {
+		return index.string
+	}
+
+	static var className: String {
+		return "Shadow Data"
+	}
+
+	static var allValues: [CMShadowData] {
+		return (0 ..< CommonIndexes.NumberOfShadowPokemon.value).map {
+			CMShadowData(index: $0)
+		}
 	}
 }
 

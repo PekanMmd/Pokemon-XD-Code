@@ -34,7 +34,7 @@ var tradeShadowPokemonShininessRAMOffset: Int {
 	}
 }
 
-final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, Codable {
+final class XGTradeShadowPokemon: NSObject, XGGiftPokemon, GoDCodable {
 	
 	var level			= 0x0
 	var species			= XGPokemon.index(0)

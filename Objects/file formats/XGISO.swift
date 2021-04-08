@@ -75,7 +75,7 @@ class XGISO: NSObject {
 			return false
 		}
 
-		guard !file.fileName.contains(".nkit.iso") else {
+		guard !file.fileName.contains(".nkit") else {
 			inputISOFile = nil
 			printg("nkit isos are currently unsupported:", file.path)
 			printg("Use this tool to convert it to a regular iso:\nhttps://vimm.net/vault/?p=nkit")

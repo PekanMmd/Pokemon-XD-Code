@@ -29,12 +29,21 @@ let kStarterExpValueOffset		= 0x66
 final class XGStarterPokemon: NSObject, XGGiftPokemon, GoDCodable {
 	
 	var level			= 0
-	var exp				= 0
+
 	var species			= XGPokemon.index(0)
 	var move1			= XGMoves.index(0)
 	var move2			= XGMoves.index(0)
 	var move3			= XGMoves.index(0)
 	var move4			= XGMoves.index(0)
+
+	var exp: Int {
+		get {
+			return species.expRate.expForLevel(level)
+		}
+		set {
+
+		}
+	}
 	
 	var giftType		= "Starter Pokemon"
 	
@@ -59,7 +68,7 @@ final class XGStarterPokemon: NSObject, XGGiftPokemon, GoDCodable {
 			let start = startOffset
 			
 			level = dol.getByteAtOffset(start + kStarterLevelOffset)
-			exp	  = dol.get2BytesAtOffset(start + kStarterExpValueOffset)
+//			exp	  = dol.get2BytesAtOffset(start + kStarterExpValueOffset)
 			
 			let species = dol.get2BytesAtOffset(start + kStarterSpeciesOffset)
 			self.species = .index(species)

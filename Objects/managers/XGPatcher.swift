@@ -831,6 +831,17 @@ class XGPatcher {
 			mon.catchRate = 255
 			mon.save()
 		}
+		#if GAME_XD
+		for mon in XGDecks.DeckDarkPokemon.allActivePokemon {
+			mon.shadowCatchRate = 255
+			mon.save()
+		}
+		#else
+		CMShadowData.allValues.forEach { (data) in
+			data.catchRate = 255
+			data.save()
+		}
+		#endif
 	}
 
 	class func removeEVCap() {

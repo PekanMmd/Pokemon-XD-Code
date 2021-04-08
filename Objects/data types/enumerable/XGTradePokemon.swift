@@ -57,7 +57,7 @@ var giftPokemonShininessRAMOffset: Int {
 	}
 }
 
-final class XGTradePokemon: NSObject, XGGiftPokemon, Codable {
+final class XGTradePokemon: NSObject, XGGiftPokemon, GoDCodable {
 	
 	var index			= 0
 	

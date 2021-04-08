@@ -151,10 +151,12 @@ class XGColour: NSObject, Codable {
 		}
 	}
 	
-	convenience init(raw: UInt32, format: GoDTextureFormats) {
+	convenience init(raw: UInt32, format: GoDTextureFormats?) {
 		self.init(red: 0, green: 0, blue: 0, alpha: 0)
 		
 		switch format {
+		case nil:
+			setStandardRGBA(raw: raw)
 		case .RGBA32:
 			setRGBA32(raw: raw)
 		case .I4:
@@ -259,7 +261,12 @@ class XGColour: NSObject, Codable {
 		self.blue = ((raw) & 0xFF).int32
 	}
 	
-	
+	func setStandardRGBA(raw: UInt32) {
+		self.red   = ((raw >> 24) & 0xFF).int32
+		self.green = ((raw >> 16) & 0xFF).int32
+		self.blue  = ((raw >>  8) & 0xFF).int32
+		self.alpha = ((raw) & 0xFF).int32
+	}
 }
 
 

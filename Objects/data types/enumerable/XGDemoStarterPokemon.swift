@@ -57,17 +57,16 @@ let kDemoStarterExpValueOffset		= 0x92
 final class XGDemoStarterPokemon: NSObject, XGGiftPokemon, GoDCodable {
 	
 	var index		= 0
-	
-	var exp			= 0
-	var level		= 0 {
-		didSet {
-			self.exp = self.species.expRate.expForLevel(level)
+
+	var level		= 0
+	var species			= XGPokemon.index(0)
+
+	var exp: Int {
+		get {
+			return species.expRate.expForLevel(level)
 		}
-	}
-	
-	var species			= XGPokemon.index(0) {
-		didSet {
-			self.exp = self.species.expRate.expForLevel(level)
+		set {
+			
 		}
 	}
 	
@@ -95,7 +94,7 @@ final class XGDemoStarterPokemon: NSObject, XGGiftPokemon, GoDCodable {
 		let start = startOffset
 		
 		level = dol.getByteAtOffset(start + kDemoStarterLevelOffset)
-		exp	  = dol.get2BytesAtOffset(start + kDemoStarterExpValueOffset)
+//		exp	  = dol.get2BytesAtOffset(start + kDemoStarterExpValueOffset)
 		
 		let species = dol.get2BytesAtOffset(start + kDemoStarterSpeciesOffset)
 		self.species = .index(species)

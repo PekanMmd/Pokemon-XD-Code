@@ -36,12 +36,16 @@ var structTablesList: [GoDStructTableFormattable] {
 
 var otherTableFormatsList: [GoDCodable.Type] {
 	var tables: [GoDCodable.Type] = [
-		XGDemoStarterPokemon.self
+		XGDemoStarterPokemon.self,
+		CMGiftPokemon.self
 	]
 
 	#if GAME_XD
 	tables += [
-		XGStarterPokemon.self
+		XGStarterPokemon.self,
+		XGTradePokemon.self,
+		XGTradeShadowPokemon.self,
+		XGMtBattlePrizePokemon.self,
 	]
 	#endif
 
