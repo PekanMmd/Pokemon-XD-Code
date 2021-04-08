@@ -22,8 +22,6 @@ let kFirstTMItemIndex  = 0x121
 let kNumberOfTMsAndHMs = 0x3A
 let kNumberOfTMs	   = 0x32
 
-//let kFirstTutorMoveDataOffset	= 0xA7918
-
 let kSizeOfTutorMoveEntry		= 0x0C
 let kNumberOfTutorMoves			= 0x0C
 

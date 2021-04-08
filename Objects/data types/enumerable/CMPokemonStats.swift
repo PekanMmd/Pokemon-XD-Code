@@ -9,7 +9,6 @@ import Foundation
 
 let kNumberOfPokemon		= 0x19D
 let kSizeOfPokemonStats		= 0x11C
-//let kFirstPokemonOffset		= 0x29DA8
 
 let kEXPRateOffset			= 0x00
 let kCatchRateOffset		= 0x01

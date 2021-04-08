@@ -8,8 +8,8 @@
 
 import Foundation
 
-let kNumberOfItems				= CommonIndexes.NumberOfItems.value // 0x1bc
-let kFirstItemOffset			= 0x1FEE4
+var kNumberOfItems: Int { CommonIndexes.NumberOfItems.value } // 0x1bc
+var kFirstItemOffset: Int { CommonIndexes.Items.startOffset } // 0x1fee4 xd us
 let kSizeOfItemData				= 0x28
 let kNumberOfFriendshipEffects	= 0x03
 

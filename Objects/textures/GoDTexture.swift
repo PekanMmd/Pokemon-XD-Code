@@ -201,6 +201,9 @@ class GoDTexture {
 		var colourPixels = [XGColour]()
 		if isIndexed {
 			colourPixels = self.pixelData().map { (index) -> XGColour in
+				guard index < palette.count else {
+					return XGColour(raw: 0, format: .RGB5A3)
+				}
 				return palette[index]
 			}
 		} else {

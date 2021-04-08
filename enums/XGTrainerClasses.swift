@@ -8,8 +8,6 @@
 
 import Foundation
 
-let kFirstTrainerClassStringID = 0x1B59
-
 enum XGTrainerClasses : Int, Codable, CaseIterable {
 	
 	case none			= 0x00

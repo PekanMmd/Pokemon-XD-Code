@@ -15,10 +15,16 @@ class DATNodes {
 	private let data: XGMutableData
 	var rootNode = GoDStructData.staticString("Null")
 
+	func validate(offset: Int) -> Bool {
+		return offset > 0 && offset < data.length
+	}
+
 	init(firstRootNodeOffset offset: Int, publicCount: Int, externCount: Int, data: XGMutableData) {
 		self.data = data
 		let rootNodesCount = publicCount + externCount
 		let stringsOffset = offset + (rootNodesCount * 8)
+
+		guard validate(offset: offset) else { return }
 
 		var rootNodes = [GoDStructData]()
 
@@ -53,6 +59,7 @@ class DATNodes {
 	}
 
 	func rootNodeStructData(offset: Int, stringsOffset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		// Read them once without pointers to check the type of each node
 		// Then read a second time with the names specified to get the specific struct for that node type
 		let rootNodeStruct = GoDStruct(name: "Root Node", format: [
@@ -73,11 +80,12 @@ class DATNodes {
 		default: return rootNodeTypeData
 		}
 
-		rootNodeTypeData.set("Pointer", to: .pointer(property: .subStruct(name: "Root Node", description: "", property: subStruct.properties), rawValue: pointer, value: subStruct))
+		rootNodeTypeData.set("Pointer", to: .pointer(property: .subStruct(name: "Root Node \(typeName)", description: "", property: subStruct.properties), rawValue: pointer, value: subStruct))
 		return rootNodeTypeData
 	}
 
 	func sceneData(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		func sceneDataStruct(modelSetsCount: Int? = nil) -> GoDStruct {
 			return GoDStruct(name: "Scene Data", format: [
 				.word(name: "Model Sets Array", description: "", type: .pointer),
@@ -112,22 +120,27 @@ class DATNodes {
 	}
 
 	func boundBox(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("Bound Box Not Implemented")
 	}
 
 	func cameraSet(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("Camera Set Not Implemented")
 	}
 
 	func lightSet(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("Light Set Not Implemented")
 	}
 
 	func fogData(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("Fog Data Not Implemented")
 	}
 
 	func modelSetsArray(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		let modelSetsArrayStruct = GoDStruct(name: "Model Sets Array", format: [
 			.array(name: "Model Sets", description: "", property: .word(name: "Model Set Pointers", description: "", type: .pointer), count: nil)
 		])
@@ -146,6 +159,7 @@ class DATNodes {
 	}
 
 	func modelSet(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		let modelSetStruct = GoDStruct(name: "Model Set", format: [
 			.word(name: "Joint", description: "", type: .pointer),
 			.word(name: "Animated Joint", description: "", type: .pointer),
@@ -178,10 +192,12 @@ class DATNodes {
 	}
 
 	func animatedJoint(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("Animated Joint Not Implemented")
 	}
 
 	func animatedMaterialJoint(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		let matAnimJointStruct = GoDStruct(name: "Animated Material Joint", format: [
 			.word(name: "Child", description: "", type: .pointer),
 			.word(name: "Next", description: "", type: .pointer),
@@ -208,6 +224,7 @@ class DATNodes {
 	}
 
 	func animatedMaterial(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		let matAnimStruct = GoDStruct(name: "Material Animated Joint", format: [
 			.word(name: "Next", description: "", type: .pointer),
 			.word(name: "Animated Object", description: "", type: .pointer),
@@ -240,18 +257,22 @@ class DATNodes {
 	}
 
 	func animatedObject(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("Animated Object Not Implemented")
 	}
 
 	func animatedRender(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("Animated Render Not Implemented")
 	}
 
 	func shapeAnimatedJoint(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("Animated Shape Joint Not Implemented")
 	}
 
 	func jointData(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		let jointStruct = GoDStruct(name: "Joint", format: [
 			.pointer(property:
 				.string(name: "Name", description: "", maxCharacterCount: nil, charLength: .char), offsetBy: 0, isShort: false),
@@ -326,14 +347,17 @@ class DATNodes {
 	}
 
 	func spline(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("Spline Not Implemented")
 	}
 
 	func particles(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("Particles Not Implemented")
 	}
 
 	func mesh(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		let meshStruct = GoDStruct(name: "Mesh", format: [
 			.pointer(property:
 				.string(name: "Name", description: "", maxCharacterCount: nil, charLength: .char), offsetBy: 0, isShort: false),
@@ -362,10 +386,12 @@ class DATNodes {
 	}
 
 	func pObj(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("P Object Not Implemented")
 	}
 
 	func mObj(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		let mObjectStruct = GoDStruct(name: "M Object", format: [
 			.pointer(property:
 				.string(name: "Class Name", description: "", maxCharacterCount: nil, charLength: .char), offsetBy: 0, isShort: false),
@@ -402,14 +428,17 @@ class DATNodes {
 	}
 
 	func material(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("Material Not Implemented")
 	}
 
 	func renderInfo(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("Render Info Not Implemented")
 	}
 
 	func peInfo(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("PE Info Not Implemented")
 	}
 
@@ -444,6 +473,7 @@ class DATNodes {
 	])
 
 	func texture(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		let textureData = GoDStructData(properties: DATNodes.textureStruct, fileData: data, startOffset: offset)
 
 		if let pointer: Int = textureData.get("Next") {
@@ -462,7 +492,8 @@ class DATNodes {
 		}
 
 		if let pointer: Int = textureData.get("Image") {
-			let imageData = image(offset: pointer, palette: textureData.get("Palette"))
+			let pointedPalette: GoDStructData? = textureData.get("Palette")
+			let imageData = image(offset: pointer, palette: pointedPalette?.get("Palette"))
 			textureData.set("Image", to: .pointer(property: .subStruct(name: "Image", description: "", property: imageData.properties), rawValue: pointer, value: imageData))
 		}
 
@@ -470,6 +501,7 @@ class DATNodes {
 	}
 
 	func animatedTexture(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		let animatedTextureStruct = GoDStruct(name: "Texture", format: [
 			.word(name: "Next", description: "", type: .pointer),
 			.word(name: "ID", description: "", type: .uint),
@@ -518,7 +550,7 @@ class DATNodes {
 			var imagesData = [GoDStructValues]()
 			for i in 0 ..< imagePointers.count {
 				let imagePointer = imagePointers[i]
-				let paletteData = i < (palettesInfo?.count ?? 0) ? palettesInfo![i] : nil
+				let paletteData: GoDStructData? = i < (palettesInfo?.count ?? 0) ? palettesInfo![i].get("Palette") : nil
 				let imageData = image(offset: imagePointer, palette: paletteData)
 				imagesData.append(.pointer(property: .word(name: "Image Pointer", description: "", type: .pointer), rawValue: imagePointer, value: imageData))
 			}
@@ -532,14 +564,17 @@ class DATNodes {
 	}
 
 	func lodInfo(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("Lod Not Implemented")
 	}
 
 	func tevInfo(offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		return .staticString("TEV Info Not Implemented")
 	}
 
 	func image(offset: Int, palette: GoDStructData?) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
 		let imageStruct = GoDStruct(name: "Image", format: [
 			.word(name: "Image Data Pointer", description: "", type: .pointer),
 			.short(name: "Width", description: "", type: .uint),

@@ -10,7 +10,6 @@ import Foundation
 
 let kNumberOfMoves				= CommonIndexes.NumberOfMoves.value //0x0177
 let kSizeOfMoveData				= 0x38
-//let kFirstMoveOffset			= game == .XD ? 0xA2710 : 0x11E010
 
 let kPriorityOffset				= 0x00
 let kPPOffset					= 0x01

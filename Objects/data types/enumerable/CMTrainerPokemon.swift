@@ -7,8 +7,6 @@
 
 import Foundation
 
-//let kFirstPokemonEntryOffset = 0x9FE28
-//let kFirstPokemonEntryOffset = 0x22b04 // japanese
 let kNumberOfTrainerPokemonEntries = 5510
 
 let kSizeOfPokemonData		= 0x50

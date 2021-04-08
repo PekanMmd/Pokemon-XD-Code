@@ -8,7 +8,6 @@
 
 import Foundation
 
-//let kFirstTypeOffset = 0xA7C30
 let kCategoryOffset = 0x0
 let kTypeIconBigIDOffset = 0x02
 let kTypeIconSmallIDOffset = 0x04

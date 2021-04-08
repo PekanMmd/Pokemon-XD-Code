@@ -65,7 +65,7 @@ let kShinyCalcNewPIDInstruction				: UInt32 = 0x38600000
 let kNumberOfDolPatches = 12
 
 // XD
-var shadowPokemonShininessOffset: Int {
+var shadowPokemonShininessRAMOffset: Int {
 	switch region {
 	case .US: return 0x1fc2b2
 	case .EU: return 0x1fdfe6
@@ -725,7 +725,7 @@ class XGPatcher {
 		}
 		
 		if let dol = XGFiles.dol.data {
-			dol.replace2BytesAtOffset(shadowPokemonShininessOffset - kDolToRAMOffsetDifference, withBytes: to.rawValue)
+			dol.replace2BytesAtOffset(shadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference, withBytes: to.rawValue)
 			#if GAME_XD
 			dol.replace2BytesAtOffset(tradeShadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference, withBytes: to.rawValue)
 			#endif

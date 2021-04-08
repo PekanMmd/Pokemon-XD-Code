@@ -12,7 +12,14 @@ let kNumberOfTrainerModels = 0x44
 
 // This table is pointed to by function 0x801d919c in RAM if you want to repoint to a larger
 // table at some point
-let kFirstTrainerPKXIdentifierOffset = 0x409e88 // in start.dol
+var kFirstTrainerPKXIdentifierOffset: Int {
+	switch region  {
+	case .US: return 0x409e88
+	case .EU: return 0x444768
+	case .JP: return 0x3e7538
+	case .OtherGame: return -1
+	}
+} // in start.dol
 
 enum XGTrainerModels : Int, Codable, CaseIterable {
 	

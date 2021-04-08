@@ -638,6 +638,12 @@
 		1CA238CD24118C17000E56AB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B20EEA2D21E9203A00E87D01 /* Main.storyboard */; };
 		1CA238CE24118CAC000E56AB /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238B92411765C000E56AB /* Messages.storyboard */; };
 		1CA238CF24118CAD000E56AB /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238B92411765C000E56AB /* Messages.storyboard */; };
+		1CA3E46B261DD26300E5089A /* StatusEffectsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E46A261DD26300E5089A /* StatusEffectsTable.swift */; };
+		1CA3E46C261DD26300E5089A /* StatusEffectsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E46A261DD26300E5089A /* StatusEffectsTable.swift */; };
+		1CA3E46D261DD26300E5089A /* StatusEffectsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E46A261DD26300E5089A /* StatusEffectsTable.swift */; };
+		1CA3E480261DD7B100E5089A /* StatusEffectsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E46A261DD26300E5089A /* StatusEffectsTable.swift */; };
+		1CA3E48B261DD7B200E5089A /* StatusEffectsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E46A261DD26300E5089A /* StatusEffectsTable.swift */; };
+		1CA3E48C261DD7B300E5089A /* StatusEffectsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E46A261DD26300E5089A /* StatusEffectsTable.swift */; };
 		1CADAF4425CFB7BE002B28F7 /* DummyThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9F22D8254104C0008D02EA /* DummyThreadManager.swift */; };
 		1CADAF4E25CFB7BF002B28F7 /* DummyThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9F22D8254104C0008D02EA /* DummyThreadManager.swift */; };
 		1CADAF4F25CFB7C0002B28F7 /* DummyThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9F22D8254104C0008D02EA /* DummyThreadManager.swift */; };
@@ -4501,6 +4507,7 @@
 		1CA238A724114725000E56AB /* Pokespot.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Pokespot.storyboard; sourceTree = "<group>"; };
 		1CA238B92411765C000E56AB /* Messages.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Messages.storyboard; sourceTree = "<group>"; };
 		1CA238BD241176BC000E56AB /* Type.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Type.storyboard; sourceTree = "<group>"; };
+		1CA3E46A261DD26300E5089A /* StatusEffectsTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StatusEffectsTable.swift; path = "Objects/struct tables/StatusEffectsTable.swift"; sourceTree = SOURCE_ROOT; };
 		1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumerableDocumentable.swift; sourceTree = "<group>"; };
 		1CB3B875250988710069402D /* wimgt */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = wimgt; sourceTree = "<group>"; };
 		1CB3B87C250D512A0069402D /* Battles.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Battles.storyboard; sourceTree = "<group>"; };
@@ -7120,6 +7127,7 @@
 				1C56F67C2608C9E200CF1DEE /* PokespotsTables.swift */,
 				1C56F736260C0C0900CF1DEE /* RoomsTable.swift */,
 				1C7169D22602D35F000F1456 /* SmallStructTables.swift */,
+				1CA3E46A261DD26300E5089A /* StatusEffectsTable.swift */,
 				1C56F7EE260D7EBE00CF1DEE /* TexturesTable.swift */,
 				1C56F716260BF47100CF1DEE /* TreasureTable.swift */,
 				1C56F7DE260D7BB500CF1DEE /* TypesTable.swift */,
@@ -13204,6 +13212,7 @@
 				1C7169B62602CB60000F1456 /* CommonStructTable.swift in Sources */,
 				1C16CD69253BC47000907D78 /* XGMoveTargets.swift in Sources */,
 				1C4E1609253E33D100EA318B /* XGCollisionData.swift in Sources */,
+				1CA3E46C261DD26300E5089A /* StatusEffectsTable.swift in Sources */,
 				1C16CBA0253BC25600907D78 /* EnumerableDocumentable.swift in Sources */,
 				1C16CF63253BC56500907D78 /* XGStringManager.swift in Sources */,
 				1C16D084253BC87300907D78 /* XGDemoStarterPokemon.swift in Sources */,
@@ -13332,6 +13341,7 @@
 				1C12C3DF25C25AA30062FA65 /* XGColosseumRounds.swift in Sources */,
 				1C56F71B260BF47100CF1DEE /* TreasureTable.swift in Sources */,
 				1C16CCA8253BC42700907D78 /* XGContestCategories.swift in Sources */,
+				1CA3E480261DD7B100E5089A /* StatusEffectsTable.swift in Sources */,
 				1C16CFA3253BC58200907D78 /* CMScript.swift in Sources */,
 				1C16CFD7253BC59A00907D78 /* XGTexturePalette.swift in Sources */,
 				1C16D0A3253BC87D00907D78 /* CMGiftPokemon.swift in Sources */,
@@ -13707,6 +13717,7 @@
 				1CB33AC322B8FB3C00F81C29 /* CMScript.swift in Sources */,
 				B2111841218DEDA500D3F2DF /* GoDTreasureViewController.swift in Sources */,
 				1C524D02234B7F0800A9659A /* GoDEnumerablePopUpButton.swift in Sources */,
+				1CA3E48B261DD7B200E5089A /* StatusEffectsTable.swift in Sources */,
 				B257242A20CC2E230019A22E /* XGDeoxysFormes.swift in Sources */,
 				B2560A91214C7E7C00137C37 /* XGStarterPokemon.swift in Sources */,
 				B20C402F218AEBE5006D7CD9 /* CMScriptCompiler.swift in Sources */,
@@ -14041,6 +14052,7 @@
 				1C56F71A260BF47100CF1DEE /* TreasureTable.swift in Sources */,
 				B20C4030218AEBE5006D7CD9 /* CMScriptCompiler.swift in Sources */,
 				B2562F6E2134979A004180F1 /* XGMoveTypes.swift in Sources */,
+				1CA3E48C261DD7B300E5089A /* StatusEffectsTable.swift in Sources */,
 				1CF4D02824DA2BF900EC2C65 /* XGEvolutionConditionType.swift in Sources */,
 				B2562F6621349789004180F1 /* XGGenderRatios.swift in Sources */,
 				B2562F73213497A3004180F1 /* XGStatBoosts.swift in Sources */,
@@ -14223,6 +14235,7 @@
 				B24A507621D126BA009C707C /* XGPNGBlock.swift in Sources */,
 				B22A1C3E2181FC3F001C41D3 /* CMGiftPokemon.swift in Sources */,
 				B2F5EC151F49A1FE0075C6D2 /* XGDecks.swift in Sources */,
+				1CA3E46B261DD26300E5089A /* StatusEffectsTable.swift in Sources */,
 				1C56F818260D8F6100CF1DEE /* DeckTables.swift in Sources */,
 				8915D62025170CD100C84884 /* XGStoryProgress.swift in Sources */,
 				1C20017C25B3231B00A7CF7D /* GoDLogManager.swift in Sources */,
@@ -14485,6 +14498,7 @@
 				1C56FA1A261069D700CF1DEE /* GSFsys.swift in Sources */,
 				B2F5ECD41F49A1FF0075C6D2 /* XGTradePokemon.swift in Sources */,
 				B2F5ECDA1F49A1FF0075C6D2 /* XGTrainer.swift in Sources */,
+				1CA3E46D261DD26300E5089A /* StatusEffectsTable.swift in Sources */,
 				B24A505821D1258E009C707C /* XGTextureBlock.swift in Sources */,
 				1C56F9DC261050B800CF1DEE /* XGEggGroups.swift in Sources */,
 				B25EF8212231A76E004ABF60 /* GoDTextureImporterViewController.swift in Sources */,

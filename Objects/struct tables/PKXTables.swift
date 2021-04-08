@@ -33,7 +33,6 @@ var pkxPokemonModelsTable: GoDStructTable {
 	case .OtherGame: startOffset = -1
 	}
 	#else
-	#warning("TODO: complete XD implementation")
 	switch region  {
 	case .US: startOffset = 0x40a0a8
 	case .EU: startOffset = 0x444988

@@ -8,9 +8,9 @@
 
 import Foundation
 
-let kNumberOfPokemon		= CommonIndexes.NumberOfPokemon.value //0x19F
+var kNumberOfPokemon: Int { CommonIndexes.NumberOfPokemon.value } //0x19F
+var kFirstPokemonOffset: Int { CommonIndexes.PokemonStats.startOffset }// 0x29DA8 xd us
 let kSizeOfPokemonStats		= 0x124
-//let kFirstPokemonOffset		= 0x29DA8
 
 let kEXPRateOffset			= 0x00
 let kCatchRateOffset		= 0x01
@@ -38,7 +38,14 @@ let kFirstEggMoveOffset		= 0x7E
 
 // This table is pointed to by function 0x801d8e20 in RAM if you want to repoint to a larger
 // table at some point
-let kFirstPokemonPKXIdentifierOffset = 0x40A0A8 // in start.dol
+var kFirstPokemonPKXIdentifierOffset: Int {
+	switch region  {
+	case .US: return 0x40a0a8
+	case .EU: return 0x444988
+	case .JP: return 0x3e7758
+	case .OtherGame: return -1
+	}
+}  // in start.dol
 let kModelDictionaryModelOffset = 0x4
 
 /* Tutor moves order:

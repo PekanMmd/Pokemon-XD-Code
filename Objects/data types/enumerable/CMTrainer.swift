@@ -7,8 +7,6 @@
 
 import Foundation
 
-//let kFirstTrainerOffset				= 0x92ED0
-//let kFirstTrainerOffset				= 0x15bac // japanese
 let kSizeOfTrainerData				= 0x34
 let kNumberOfTrainerPokemon			= 0x06
 let kNumberOfTrainerEntries			= CommonIndexes.NumberOfTrainers.value // 820

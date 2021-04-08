@@ -8,7 +8,24 @@
 
 import Foundation
 
-let kFirstStatusEffectOffset = 0x3f93e0
+var kFirstStatusEffectOffset: Int {
+	if game == .XD {
+		switch region {
+		case .US: return 0x3f93e0
+		case .EU: return 0x433d0c
+		case .JP: return 0x3d6aec
+		case .OtherGame: return -1
+		}
+	} else {
+		switch region {
+		case .US: return 0x358ba8
+		case .EU: return 0x3a5c50
+		case .JP: return 0x3452e8
+		case .OtherGame: return -1
+		}
+	}
+} // in Start.dol
+
 let kSizeOfStatusEffect = 0x14
 let kNumberOfStatusEffects = 87
 

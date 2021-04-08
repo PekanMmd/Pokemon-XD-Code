@@ -14,11 +14,12 @@ var structTablesList: [GoDStructTableFormattable] {
 		TMsTable,
 		pkxTrainerModelsTable,
 		pkxPokemonModelsTable,
+		statusEffectsTable
 	]
 
 	#if GAME_XD
 	tables += [
-		wzxTable,
+		wzxTable
 	]
 	#else
 	tables += [

@@ -42,6 +42,9 @@ class GoDStructData: CustomStringConvertible {
 
 		var currentOffset = startOffset
 		func getValueForProperty(_ property: GoDStructProperties) -> GoDStructValues {
+			guard currentOffset < fileData.length else {
+				return .value(property: property, rawValue: -1)
+			}
 			switch property {
 			case .subStruct(_, _, let properties):
 				currentOffset += property.alignmentBytes(at: currentOffset)
@@ -115,8 +118,11 @@ class GoDStructData: CustomStringConvertible {
 				let rawValue = fileData.get4BytesAtOffset(currentOffset) + offsetBy
 				currentOffset += property.length
 
-				guard rawValue > 0 else {
+				guard rawValue != 0 else {
 					return .pointer(property: property, rawValue: rawValue, value: GoDStructData.null)
+				}
+				guard  rawValue < fileData.length, rawValue > 0 else {
+					return .pointer(property: property, rawValue: rawValue, value: GoDStructData.staticString("Error"))
 				}
 				let value = GoDStructData(properties: GoDStruct(name: subProperty.name, format: [subProperty]), fileData: fileData, startOffset: rawValue)
 				return .pointer(property: property, rawValue: rawValue, value: value)

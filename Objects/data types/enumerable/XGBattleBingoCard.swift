@@ -8,8 +8,6 @@
 
 import Foundation
 
-//let kFirstBattleBingoCardOffset			= 0x1CB0
-
 let kNumberOfBingoCouponRewards			= 0x0A
 let kNumberOfBingoCards					= 0x0B
 let kNumberOfPanels						= 0x10

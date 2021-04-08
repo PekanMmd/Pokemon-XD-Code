@@ -8,7 +8,6 @@
 
 import Foundation
 
-let kFirstPokeSpotOffset		= 0x2FAC
 let kSizeOfPokeSpotData			= 0x0C
 let kNumberOfPokeSpotEntries	= 0x0B
 
