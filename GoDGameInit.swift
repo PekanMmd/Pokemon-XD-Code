@@ -98,15 +98,15 @@ enum Environment {
 	case Windows
 }
 
-#if ENV_OSX
+#if os(macOS)
 
 let environment = Environment.OSX
 
-#elseif ENV_WINDOWS
+#elseif os(Windows)
 
 let environment = Environment.Windows
 
-#elseif ENV_LINUX
+#elseif os(Linux)
 
 let environment = Environment.Linux
 

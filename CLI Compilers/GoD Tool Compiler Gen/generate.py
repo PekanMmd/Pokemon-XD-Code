@@ -30,6 +30,8 @@ def getFilePath(file):
     parent_group = [g for g in groups if child_group.get_id() in g.children]
     child_path = child_group.path if 'path' in child_group else ''
     parent_path = parent_group[0].path if len(parent_group) and 'path' in parent_group[0] else ''
+    if parent_path == "objects":
+        parent_path = 'Objects'
     if parent_path != '' and not os.path.isdir(parent_path):
         parent_path = ''
     if parent_path in child_path:
@@ -81,20 +83,6 @@ mkdir -p spm/virt/{ColoCLITargetName}/Sources
 
 rm -rf spm/virt/{PBRCLITargetName}/Sources
 mkdir -p spm/virt/{PBRCLITargetName}/Sources
-
-case "$(uname -s)" in
-   Darwin)
-     ln -s "$PWD/extensions/OSXExtensions.swift" spm/virt/{GoDCLITargetName}/Sources/
-     ln -s "$PWD/extensions/OSXExtensions.swift" spm/virt/{ColoCLITargetName}/Sources/
-     ln -s "$PWD/extensions/OSXExtensions.swift" spm/virt/{PBRCLITargetName}/Sources/
-     ;;
-
-   Linux)
-     ln -s "$PWD/extensions/LinuxExtensions.swift" spm/virt/{GoDCLITargetName}/Sources/
-     ln -s "$PWD/extensions/LinuxExtensions.swift" spm/virt/{ColoCLITargetName}/Sources/
-     ln -s "$PWD/extensions/LinuxExtensions.swift" spm/virt/{PBRCLITargetName}/Sources/
-     ;;
-esac
 """
 unix_link_lines = [unix_link_preamble]
 
@@ -111,10 +99,6 @@ rmdir /s /q spm\\virt\\{PBRCLITargetName}\\Sources
 md spm\\virt\\{PBRCLITargetName}\\Sources
 
 endlocal
-
-mklink spm\\virt\\{GoDCLITargetName}\\Sources\\WindowsExtensions.swift "%cd%\\extensions\\WindowsExtensions.swift"
-mklink spm\\virt\\{ColoCLITargetName}\\Sources\\WindowsExtensions.swift "%cd%\\extensions\\WindowsExtensions.swift"
-mklink spm\\virt\\{PBRCLITargetName}\\Sources\\WindowsExtensions.swift "%cd%\\extensions\\WindowsExtensions.swift"
 """
 win_link_lines = [win_link_preamble]
 
