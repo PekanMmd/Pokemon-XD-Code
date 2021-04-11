@@ -25,17 +25,17 @@ let statsStructShort = GoDStruct(name: "Stats", format: [
 	.short(name: "HP", description: "", type: .uint),
 	.short(name: "Attack", description: "", type: .uint),
 	.short(name: "Defense", description: "", type: .uint),
-	.short(name: "Speed", description: "", type: .uint),
 	.short(name: "Sp.Atk", description: "", type: .uint),
-	.short(name: "Sp.Def", description: "", type: .uint)
+	.short(name: "Sp.Def", description: "", type: .uint),
+	.short(name: "Speed", description: "", type: .uint)
 ])
 let statsStructByte = GoDStruct(name: "Stats", format: [
 	.byte(name: "HP", description: "", type: .uint),
 	.byte(name: "Attack", description: "", type: .uint),
 	.byte(name: "Defense", description: "", type: .uint),
-	.byte(name: "Speed", description: "", type: .uint),
 	.byte(name: "Sp.Atk", description: "", type: .uint),
-	.byte(name: "Sp.Def", description: "", type: .uint)
+	.byte(name: "Sp.Def", description: "", type: .uint),
+	.byte(name: "Speed", description: "", type: .uint)
 ])
 
 let evolutionStruct = GoDStruct(name: "Evolution", format: [

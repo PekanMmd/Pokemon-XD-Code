@@ -52,8 +52,8 @@ let deckPokemonStruct = GoDStruct(name: "Pokemon Deck", format: [
 	.byte(name: "Pokeball", description: "The pokeball the pokemon was caught in", type: .itemID),
 	.byte(name: "Unknown 2", description: "", type: .uint),
 	.byte(name: "Forme ID", description: "The id for alternate forms for Deoxys, Burmy and Wormadam", type: .int),
-	.byte(name: "Rank", description: "The rank this pokemon is used from", type: .int),
-	.byte(name: "Unknown 3", description: "", type: .int),
+	.byte(name: "Unknown 3", description: "The rank this pokemon is used from", type: .int),
+	.byte(name: "Minimum Rank", description: "", type: .int),
 	.subStruct(name: "IVs", description: "", property: GoDStruct(name: "IV Values", format: [
 		.byte(name: "HP", description: "", type: .uint),
 		.byte(name: "Attack", description: "", type: .uint),

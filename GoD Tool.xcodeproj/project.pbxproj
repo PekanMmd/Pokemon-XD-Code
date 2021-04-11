@@ -644,6 +644,18 @@
 		1CA3E480261DD7B100E5089A /* StatusEffectsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E46A261DD26300E5089A /* StatusEffectsTable.swift */; };
 		1CA3E48B261DD7B200E5089A /* StatusEffectsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E46A261DD26300E5089A /* StatusEffectsTable.swift */; };
 		1CA3E48C261DD7B300E5089A /* StatusEffectsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E46A261DD26300E5089A /* StatusEffectsTable.swift */; };
+		1CA3E4A9261F3D6A00E5089A /* PKXModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E4A8261F3D6A00E5089A /* PKXModel.swift */; };
+		1CA3E4AA261F3D6A00E5089A /* PKXModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E4A8261F3D6A00E5089A /* PKXModel.swift */; };
+		1CA3E4AB261F3D6A00E5089A /* PKXModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E4A8261F3D6A00E5089A /* PKXModel.swift */; };
+		1CA3E4E72622982B00E5089A /* gcitool_replace in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E4E62622982B00E5089A /* gcitool_replace */; };
+		1CA3E4E82622982B00E5089A /* gcitool_replace in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E4E62622982B00E5089A /* gcitool_replace */; };
+		1CA3E4E92622982B00E5089A /* gcitool_replace in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E4E62622982B00E5089A /* gcitool_replace */; };
+		1CA3E4F42622984000E5089A /* gcitool_replace in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E4F32622984000E5089A /* gcitool_replace */; };
+		1CA3E4F52622984000E5089A /* gcitool_replace in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E4F32622984000E5089A /* gcitool_replace */; };
+		1CA3E4F62622984000E5089A /* gcitool_replace in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E4F32622984000E5089A /* gcitool_replace */; };
+		1CA3E5012622984B00E5089A /* gcitool_replace.exe in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E5002622984B00E5089A /* gcitool_replace.exe */; };
+		1CA3E5022622984B00E5089A /* gcitool_replace.exe in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E5002622984B00E5089A /* gcitool_replace.exe */; };
+		1CA3E5032622984B00E5089A /* gcitool_replace.exe in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E5002622984B00E5089A /* gcitool_replace.exe */; };
 		1CADAF4425CFB7BE002B28F7 /* DummyThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9F22D8254104C0008D02EA /* DummyThreadManager.swift */; };
 		1CADAF4E25CFB7BF002B28F7 /* DummyThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9F22D8254104C0008D02EA /* DummyThreadManager.swift */; };
 		1CADAF4F25CFB7C0002B28F7 /* DummyThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9F22D8254104C0008D02EA /* DummyThreadManager.swift */; };
@@ -700,8 +712,6 @@
 		1CCF00272562FA810082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
 		1CCF00312562FA820082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
 		1CCF00322562FA820082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
-		1CCF005C2565C3B90082BFE2 /* gcitool in Resources */ = {isa = PBXBuildFile; fileRef = 1CCF005B2565C3B90082BFE2 /* gcitool */; };
-		1CCF005D2565C3B90082BFE2 /* gcitool in Resources */ = {isa = PBXBuildFile; fileRef = 1CCF005B2565C3B90082BFE2 /* gcitool */; };
 		1CCF0088258A3D9D0082BFE2 /* XGStatusEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD11F49A1FE0075C6D2 /* XGStatusEffects.swift */; };
 		1CCF0092258A3D9E0082BFE2 /* XGStatusEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD11F49A1FE0075C6D2 /* XGStatusEffects.swift */; };
 		1CCF0093258A3D9F0082BFE2 /* XGStatusEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBD11F49A1FE0075C6D2 /* XGStatusEffects.swift */; };
@@ -4508,6 +4518,10 @@
 		1CA238B92411765C000E56AB /* Messages.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Messages.storyboard; sourceTree = "<group>"; };
 		1CA238BD241176BC000E56AB /* Type.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Type.storyboard; sourceTree = "<group>"; };
 		1CA3E46A261DD26300E5089A /* StatusEffectsTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StatusEffectsTable.swift; path = "Objects/struct tables/StatusEffectsTable.swift"; sourceTree = SOURCE_ROOT; };
+		1CA3E4A8261F3D6A00E5089A /* PKXModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKXModel.swift; sourceTree = "<group>"; };
+		1CA3E4E62622982B00E5089A /* gcitool_replace */ = {isa = PBXFileReference; lastKnownFileType = file; path = gcitool_replace; sourceTree = "<group>"; };
+		1CA3E4F32622984000E5089A /* gcitool_replace */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = gcitool_replace; sourceTree = "<group>"; };
+		1CA3E5002622984B00E5089A /* gcitool_replace.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = gcitool_replace.exe; sourceTree = "<group>"; };
 		1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumerableDocumentable.swift; sourceTree = "<group>"; };
 		1CB3B875250988710069402D /* wimgt */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = wimgt; sourceTree = "<group>"; };
 		1CB3B87C250D512A0069402D /* Battles.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Battles.storyboard; sourceTree = "<group>"; };
@@ -4532,9 +4546,6 @@
 		1CC362D424C07E35005D7B4A /* PBR_body_497.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_497.png; sourceTree = "<group>"; };
 		1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleStyles.swift; sourceTree = "<group>"; };
 		1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGSaveManager.swift; sourceTree = "<group>"; };
-		1CCF003C2565C3870082BFE2 /* gcitool */ = {isa = PBXFileReference; lastKnownFileType = file; path = gcitool; sourceTree = "<group>"; };
-		1CCF005A2565C3A50082BFE2 /* gcitool.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = gcitool.exe; sourceTree = "<group>"; };
-		1CCF005B2565C3B90082BFE2 /* gcitool */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = gcitool; sourceTree = "<group>"; };
 		1CCFFDA72554FEF60082BFE2 /* PBR-CLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "PBR-CLI"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CCFFDA92554FEF60082BFE2 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		1CCFFFA2255509840082BFE2 /* Colosseum_Tool_OSX_Compiler.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Colosseum_Tool_OSX_Compiler.sh; sourceTree = "<group>"; };
@@ -7308,6 +7319,7 @@
 				B21A7CFD20BC68DA00BDD04C /* XGCollisionData.swift */,
 				1CFE74802616A8F30005BDE8 /* DATModel.swift */,
 				1CFE74992616A9170005BDE8 /* DATNodes.swift */,
+				1CA3E4A8261F3D6A00E5089A /* PKXModel.swift */,
 				B2F5EBC01F49A1FE0075C6D2 /* XGFsys.swift */,
 				1C56FA17261069D700CF1DEE /* GSFsys.swift */,
 				B24547802229C2670043F991 /* XGGSWTextures.swift */,
@@ -7360,7 +7372,7 @@
 		1CCF0067256606230082BFE2 /* other */ = {
 			isa = PBXGroup;
 			children = (
-				1CCF005B2565C3B90082BFE2 /* gcitool */,
+				1CA3E4F32622984000E5089A /* gcitool_replace */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -7368,7 +7380,7 @@
 		1CCF0068256606340082BFE2 /* other */ = {
 			isa = PBXGroup;
 			children = (
-				1CCF003C2565C3870082BFE2 /* gcitool */,
+				1CA3E4E62622982B00E5089A /* gcitool_replace */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -7376,7 +7388,7 @@
 		1CCF00692566063C0082BFE2 /* other */ = {
 			isa = PBXGroup;
 			children = (
-				1CCF005A2565C3A50082BFE2 /* gcitool.exe */,
+				1CA3E5002622984B00E5089A /* gcitool_replace.exe */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -10217,7 +10229,6 @@
 				1CA2387824113823000E56AB /* Patches.storyboard in Resources */,
 				B208E5F320C4D3D700D298BF /* face_099.png in Resources */,
 				B208E63A20C4D3D700D298BF /* face_170.png in Resources */,
-				1CCF005D2565C3B90082BFE2 /* gcitool in Resources */,
 				B280AEF620CABD660057A782 /* colo_trainer_54.png in Resources */,
 				B208E4B620C4D3BD00D298BF /* body_197.png in Resources */,
 				B208E70520C4D3D700D298BF /* face_373.png in Resources */,
@@ -10252,6 +10263,7 @@
 				B280AF7A20CABD660057A782 /* colo_trainer_73.png in Resources */,
 				B208E63420C4D3D700D298BF /* face_164.png in Resources */,
 				B208E69020C4D3D700D298BF /* face_256.png in Resources */,
+				1CA3E4E82622982B00E5089A /* gcitool_replace in Resources */,
 				B208E54220C4D3BD00D298BF /* body_337.png in Resources */,
 				B208E50020C4D3BD00D298BF /* body_271.png in Resources */,
 				B208E69F20C4D3D700D298BF /* face_271.png in Resources */,
@@ -10515,6 +10527,7 @@
 				B208E45620C4D3BD00D298BF /* body_101.png in Resources */,
 				B208E5F820C4D3D700D298BF /* face_104.png in Resources */,
 				B208E59320C4D3D700D298BF /* face_003.png in Resources */,
+				1CA3E4F52622984000E5089A /* gcitool_replace in Resources */,
 				B208E63D20C4D3D700D298BF /* face_173.png in Resources */,
 				B208E6E320C4D3D700D298BF /* face_339.png in Resources */,
 				B208E65D20C4D3D700D298BF /* face_205.png in Resources */,
@@ -10522,6 +10535,7 @@
 				B208E5DA20C4D3D700D298BF /* face_074.png in Resources */,
 				B208E66E20C4D3D700D298BF /* face_222.png in Resources */,
 				B208E43B20C4D3BC00D298BF /* body_074.png in Resources */,
+				1CA3E5022622984B00E5089A /* gcitool_replace.exe in Resources */,
 				B208E40B20C4D3BC00D298BF /* body_026.png in Resources */,
 				B208E6FD20C4D3D700D298BF /* face_365.png in Resources */,
 				B208E6B020C4D3D700D298BF /* face_288.png in Resources */,
@@ -11277,6 +11291,7 @@
 				B20EEC0E21EF77E100E87D01 /* PBR_body_318.png in Resources */,
 				B20EEBC821EF77E100E87D01 /* PBR_body_355.png in Resources */,
 				B20EEE1421EF77FD00E87D01 /* PBR_face_243.png in Resources */,
+				1CA3E4F62622984000E5089A /* gcitool_replace in Resources */,
 				B20EEAD921EF77E100E87D01 /* PBR_body_049.png in Resources */,
 				B20EEE1C21EF77FD00E87D01 /* PBR_face_121.png in Resources */,
 				B20EEDB021EF77FD00E87D01 /* PBR_face_153.png in Resources */,
@@ -11634,6 +11649,7 @@
 				B20EEA9B21EF77E100E87D01 /* PBR_body_258.png in Resources */,
 				B20EEDB121EF77FD00E87D01 /* PBR_face_147.png in Resources */,
 				B20EED0521EF77FD00E87D01 /* PBR_face_410.png in Resources */,
+				1CA3E5032622984B00E5089A /* gcitool_replace.exe in Resources */,
 				B20EEADF21EF77E100E87D01 /* PBR_body_459.png in Resources */,
 				B20EEBEF21EF77E100E87D01 /* PBR_body_319.png in Resources */,
 				B20EEAB621EF77E100E87D01 /* PBR_body_071.png in Resources */,
@@ -11759,6 +11775,7 @@
 				B20EEC7F21EF77FC00E87D01 /* PBR_face_472.png in Resources */,
 				B20EEDCC21EF77FD00E87D01 /* PBR_face_018.png in Resources */,
 				B20EED1421EF77FD00E87D01 /* PBR_face_201.png in Resources */,
+				1CA3E4E92622982B00E5089A /* gcitool_replace in Resources */,
 				B20EED7F21EF77FD00E87D01 /* PBR_face_396.png in Resources */,
 				B20EED2421EF77FD00E87D01 /* PBR_face_417.png in Resources */,
 				B20EECEF21EF77FD00E87D01 /* PBR_face_405.png in Resources */,
@@ -12250,7 +12267,6 @@
 				B2F508111F4C5FAB0075C6D2 /* body_119.png in Resources */,
 				B2F507371F4C5FAA0075C6D2 /* body_010.png in Resources */,
 				B2F509271F4C5FAB0075C6D2 /* body_258.png in Resources */,
-				1CCF005C2565C3B90082BFE2 /* gcitool in Resources */,
 				B2F50BA11F4C5FAC0075C6D2 /* face_160.png in Resources */,
 				B2F50A8B1F4C5FAB0075C6D2 /* face_021.png in Resources */,
 				B2F508391F4C5FAB0075C6D2 /* body_139.png in Resources */,
@@ -12285,6 +12301,7 @@
 				B2F50BEF1F4C5FAC0075C6D2 /* face_199.png in Resources */,
 				B2F50C691F4C5FAC0075C6D2 /* face_260.png in Resources */,
 				B2F509171F4C5FAB0075C6D2 /* body_250.png in Resources */,
+				1CA3E4E72622982B00E5089A /* gcitool_replace in Resources */,
 				B2F50C091F4C5FAC0075C6D2 /* face_212.png in Resources */,
 				B2F50D151F4C5FAC0075C6D2 /* face_346.png in Resources */,
 				B2F507EB1F4C5FAB0075C6D2 /* body_100.png in Resources */,
@@ -12548,6 +12565,7 @@
 				B2F50DCB1F4C5FAC0075C6D2 /* trainer_29.png in Resources */,
 				B2F508671F4C5FAB0075C6D2 /* body_162.png in Resources */,
 				B2F50D8D1F4C5FAC0075C6D2 /* face_406.png in Resources */,
+				1CA3E4F42622984000E5089A /* gcitool_replace in Resources */,
 				B2F508D31F4C5FAB0075C6D2 /* body_216.png in Resources */,
 				B2F509AF1F4C5FAB0075C6D2 /* body_326.png in Resources */,
 				B2F50D711F4C5FAC0075C6D2 /* face_392.png in Resources */,
@@ -12555,6 +12573,7 @@
 				B2F5ED171F49AE950075C6D2 /* Original Pokemon.json in Resources */,
 				B2F50A651F4C5FAB0075C6D2 /* face_002.png in Resources */,
 				B2F50CDD1F4C5FAC0075C6D2 /* face_318.png in Resources */,
+				1CA3E5012622984B00E5089A /* gcitool_replace.exe in Resources */,
 				B2F508851F4C5FAB0075C6D2 /* body_177.png in Resources */,
 				B2F507851F4C5FAB0075C6D2 /* body_049.png in Resources */,
 				B2F509DF1F4C5FAB0075C6D2 /* body_350.png in Resources */,
@@ -13270,6 +13289,7 @@
 				1C56F9F726105EE300CF1DEE /* PKXTables.swift in Sources */,
 				1C16CCCD253BC43200907D78 /* XGEffectivenessValues.swift in Sources */,
 				1C16CC1C253BC3D300907D78 /* XDExtensions.swift in Sources */,
+				1CA3E4AA261F3D6A00E5089A /* PKXModel.swift in Sources */,
 				1C16CD87253BC47F00907D78 /* XGPokemon.swift in Sources */,
 				1C4E14ED253DD05700EA318B /* XGUtility.swift in Sources */,
 				1C16CCE1253BC43A00907D78 /* XGEvolutionConditionType.swift in Sources */,
@@ -14293,6 +14313,7 @@
 				B2F5EC0F1F49A1FE0075C6D2 /* XGBattleBingoPanel.swift in Sources */,
 				B257242620CB52D80019A22E /* XDSScriptCompiler.swift in Sources */,
 				B2D1DF571F687B520023A876 /* GoDImageExtensions.swift in Sources */,
+				1CA3E4A9261F3D6A00E5089A /* PKXModel.swift in Sources */,
 				1C71684F25DF31A3000F1456 /* GoDStructTable.swift in Sources */,
 				B2F5EC211F49A1FE0075C6D2 /* XGFiles.swift in Sources */,
 				1CC362E224C1DF25005D7B4A /* XGBattleStyles.swift in Sources */,
@@ -14364,6 +14385,7 @@
 				1C54184F25B49C9500CCE8E0 /* XGMapRel.swift in Sources */,
 				B24A506821D12668009C707C /* XGResources.swift in Sources */,
 				1C56F6E726097A8200CF1DEE /* Battles.swift in Sources */,
+				1CA3E4AB261F3D6A00E5089A /* PKXModel.swift in Sources */,
 				1C20002E25A9585400A7CF7D /* XGTHP.swift in Sources */,
 				B2F5EC5C1F49A1FE0075C6D2 /* XGStatusEffects.swift in Sources */,
 				B2F5EC951F49A1FF0075C6D2 /* XGLevelUpMove.swift in Sources */,

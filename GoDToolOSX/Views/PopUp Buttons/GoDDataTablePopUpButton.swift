@@ -33,9 +33,13 @@ class GoDDataTablePopUpButton: GoDPopUpButton {
 		setTitles(values: titles)
 	}
 
-//	init(table: GoDStructTableFormattable) {
-//		self.table = table
-//		super.init()
-//	}
+	init(table: GoDStructTableFormattable) {
+		self.table = table
+		super.init()
+	}
+
+	required init?(coder: NSCoder) {
+		super.init(coder: coder)
+	}
 
 }

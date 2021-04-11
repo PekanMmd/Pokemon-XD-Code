@@ -71,7 +71,8 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		typesTable,
 		SoundsTable,
 		pokemonTable,
-		pokeFacesTable
+		pokeFacesTable,
+		//SoundsMetaDataTable
 	]
 
 	#if GAME_COLO
@@ -91,7 +92,6 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		battleLayoutsTable,
 		itemsTable,
 		flagsTable,
-//		SoundsMetaDataTable,
 		tutorMovesTable,
 	]
 	tables += xdTables

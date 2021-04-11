@@ -596,6 +596,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("getCurrentWildPokemon", 17, 2, [.objectName("Pokespot"), .pokespot], .pokemon, "(pokespot id)"), //# (int pokespotId)
 		("setSnacksTotal", 18, 3, [.objectName("Pokespot"), .pokespot, .integerQuantity], .null, "(pokespot id, total)"),
 		("getSnacksTotal", 19, 3, [.objectName("Pokespot"), .pokespot], .integerQuantity, "(pokespot id, total)"),
+		("isEncounterShiny", 20, 2, [.objectName("Pokespot"), .pokespot], .bool, "(pokespot id)")
 	]
 	
 ]
