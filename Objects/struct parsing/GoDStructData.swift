@@ -417,7 +417,7 @@ class GoDStructData: CustomStringConvertible {
 			let rawValues = rawValuesWithName.map{String($0)}.stack
 
 			properties.format.forEach { property in
-				guard !rawValues.isEmpty || property.length == 0 else {
+				guard !rawValues.isEmpty || property.length == 0 || property.type.isNull else {
 					success = false
 					printg("Couldn't decode csv file: \(originalFile.path) row: \(row). Invalid CSV data.")
 					printg(csvText)

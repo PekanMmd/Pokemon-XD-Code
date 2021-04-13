@@ -83,7 +83,7 @@ class XGSaveManager {
 			rawData.save()
 
 			if rawFile.exists {
-				GoDShellManager.run(.gcitool, args: "replace_all_slots --input_slot \(rawFile.path.escapedPath) --output_gci \(file.path.escapedPath)")
+				GoDShellManager.run(.gcitoolReplace, args: "replace_all_slots --input_slot \(rawFile.path.escapedPath) --output_gci \(file.path.escapedPath)")
 			}
 		}
 	}

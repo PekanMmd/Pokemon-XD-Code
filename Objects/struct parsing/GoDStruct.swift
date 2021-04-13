@@ -291,6 +291,13 @@ indirect enum GoDStructPropertyTypes {
 		default: return false
 		}
 	}
+
+	var isNull: Bool {
+		switch self {
+		case .null: return true
+		default: return false
+		}
+	}
 }
 
 indirect enum GoDStructProperties {

@@ -64,6 +64,16 @@ class UniversalEditorViewController: GoDTableViewController {
 	@IBAction func didClickDecodeButton(_ sender: Any) {
 		guard let tableInfo = currentTable else { return }
 		switch tableInfo {
+		#if !GAME_PBR
+		case .structTable(let table, type: .saveData):
+			table.decodeCSVData()
+			if let saveData = table.file.data {
+				let gciFile = XGFiles.nameAndFolder(saveData.file.fileName.replacingOccurrences(of: ".raw", with: ""), saveData.file.folder)
+				if gciFile.exists {
+					XGSaveManager(file: gciFile, saveType: .gciSaveData).save()
+				}
+			}
+		#endif
 		case .structTable(let table, _): table.decodeCSVData()
 		case .codableData(let type): type.decodeData()
 		}

@@ -192,7 +192,18 @@ func singleDataTableMenu(forTable table: GoDStructTableFormattable) {
 
 		let input = readInput(prompt)
 		switch input {
-		case "decode": table.decodeCSVData()
+		case "decode":
+			table.decodeCSVData()
+			#if !GAME_PBR
+			if table.file.fileType == .raw {
+				if let saveData = table.file.data {
+					let gciFile = XGFiles.nameAndFolder(saveData.file.fileName.replacingOccurrences(of: ".raw", with: ""), saveData.file.folder)
+					if gciFile.exists {
+						XGSaveManager(file: gciFile, saveType: .gciSaveData).save()
+					}
+				}
+			}
+			#endif
 		case "encode": table.encodeCSVData()
 		case "document": table.documentCStruct(); table.documentEnumerationData(); table.documentData()
 		case "exit": return
