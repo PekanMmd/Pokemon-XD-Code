@@ -69,9 +69,7 @@ enum XGPokeSpots : Int, Codable, CaseIterable {
 	
 	
 	func relocatePokespotData(toOffset offset: Int) {
-		
 		common.replacePointer(index: self.commonRelIndex.rawValue, newAbsoluteOffset: offset)
-		
 	}
 	
 }

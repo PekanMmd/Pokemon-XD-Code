@@ -16,6 +16,7 @@ protocol GoDTexturesContaining {
 }
 
 extension GoDTexturesContaining {
+	var texturePaletteData: [(format: Int?, offset: Int?, numberOfEntries: Int)] { return [] }
 	var usesDATTextureHeaderFormat: Bool { return false }
 
 	private var uniqueOffsets: [(header: Int, data: Int, palette: (format: Int?, offset: Int?, numberOfEntries: Int)?)] {

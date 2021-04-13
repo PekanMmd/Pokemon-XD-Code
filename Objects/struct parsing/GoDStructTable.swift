@@ -74,17 +74,28 @@ extension GoDStructTableFormattable {
 			return properties.name
 		}
 
-		if let name = nameForEntry?(index, data) {
-			return name
-		}
-		if let name: GoDStructValues = data.valueForPropertyWithName("Name ID") {
-			// remove raw value by assuming it is at the end and surrounded by "()"
-			let nameAndRawValue = name.description
-			var parts = nameAndRawValue.split(separator: "(")
-			if parts.count > 0 {
+		func removeRawValue(from: String) -> String {
+			var parts = from.split(separator: "(")
+			if parts.count > 1 {
 				parts.removeLast()
 			}
 			return parts.joined(separator: "(")
+		}
+
+		if let name = nameForEntry?(index, data) {
+			return removeRawValue(from: name)
+		}
+		if let name: GoDStructValues = data.valueForPropertyWithName("Name ID") {
+			// remove raw value by assuming it is at the end and surrounded by "()"
+			return removeRawValue(from: name.description)
+		}
+		if let name: GoDStructValues = data.valueForPropertyWithName("Name") {
+			// remove raw value by assuming it is at the end and surrounded by "()"
+			return removeRawValue(from: name.description)
+		}
+		if let name: GoDStructValues = data.valueForPropertyWithName("Species") {
+			// remove raw value by assuming it is at the end and surrounded by "()"
+			return removeRawValue(from: name.description)
 		}
 
 		return properties.name
@@ -233,7 +244,7 @@ extension GoDStructTableFormattable {
 						}
 					}
 				case .bitMask:
-					var fields = [(name: String, type: GoDStructPropertyTypes, numberOfBits: Int, firstBitIndexLittleEndian: Int)]()
+					var fields = [(name: String, type: GoDStructPropertyTypes, numberOfBits: Int, firstBitIndexLittleEndian: Int, mod: Int?, div: Int?)]()
 					if case .bitMask(_, _, let bitFields) = propertyValue.property {
 						fields = bitFields
 					}

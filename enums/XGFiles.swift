@@ -538,7 +538,7 @@ indirect enum XGFolders {
 	
 	case Documents
 	case JSON
-	case TextureImporter
+	case SaveFiles
 	case Import
 	case Export
 	case Textures
@@ -568,7 +568,7 @@ indirect enum XGFolders {
 		switch self {
 		case .Documents			: return "Documents"
 		case .JSON				: return "JSON"
-		case .TextureImporter	: return "Texture Importer"
+		case .SaveFiles			: return "Save Files"
 		case .Import			: return "Import"
 		case .Export			: return "Export"
 		case .Textures			: return "Textures"
@@ -612,9 +612,6 @@ indirect enum XGFolders {
 			(folder == "" ? "" : "/" + folder)
 		case .Images	: path = XGFolders.Resources.path
 		case .JSON		: path = XGFolders.Resources.path
-		case .Import	: path = XGFolders.TextureImporter.path
-		case .Export	: path = XGFolders.TextureImporter.path
-		case .Textures	: path = XGFolders.TextureImporter.path
 		case .PokeFace	: path = XGFolders.Images.path
 		case .PokeBody	: path = XGFolders.Images.path
 		case .Trainers	: path = XGFolders.Images.path
@@ -701,7 +698,7 @@ indirect enum XGFolders {
 			.Documents,
 			.Resources,
 			.JSON,
-			.TextureImporter,
+			.SaveFiles,
 			.Import,
 			.Export,
 			.Textures,
@@ -799,6 +796,12 @@ indirect enum XGFolders {
 			let gcitool = XGFiles.tool("gcitool")
 			if !gcitool.exists {
 				XGResources.tool("gcitool").copy(to: gcitool)
+			}
+
+			// use 2 versions until replace tool can split .gcis into raw slots
+			let gcitoolReplace = XGFiles.tool("gcitool_replace")
+			if !gcitoolReplace.exists {
+				XGResources.tool("gcitool_replace").copy(to: gcitoolReplace)
 			}
 		}
 	}

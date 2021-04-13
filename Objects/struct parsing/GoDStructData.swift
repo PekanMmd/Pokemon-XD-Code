@@ -104,13 +104,18 @@ class GoDStructData: CustomStringConvertible {
 				let rawByte = fileData.getByteAtOffset(currentOffset)
 				currentOffset += property.length
 				var rawValues = [Int]()
-				fields.forEach { (_, _, count, first) in
+				fields.forEach { (_, _, count, first, mod, div) in
 					var mask = 0
 					for _ in 0 ..< count {
 						mask = mask << 1
 						mask += 1
 					}
-					rawValues += [(rawByte >> first) & (mask)]
+					let divValue = div == nil ? 1 : max(div!, 1)
+					var newValue = ((rawByte >> first) & mask) / divValue * divValue
+					if let modValue = mod {
+						newValue = newValue % modValue
+					}
+					rawValues += [newValue]
 				}
 				return .bitMask(property: property, rawValues: rawValues)
 			case .pointer(let subProperty, let offsetBy, _):

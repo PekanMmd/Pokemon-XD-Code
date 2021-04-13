@@ -177,6 +177,15 @@ enum XGRegions: UInt32 {
 		case .OtherGame: return "Other Game"
 		}
 	}
+
+	static func fromId(_ index: Int) -> XGRegions? {
+		switch index {
+		case 1: return .JP
+		case 2: return .US
+		case 3: return .EU
+		default: return nil
+		}
+	}
 }
 
 

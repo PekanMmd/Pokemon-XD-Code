@@ -8,11 +8,16 @@
 import Foundation
 
 enum XDSFlags : Int, Codable {
+
+	case berryMasterVistied = 4
+	case stepsWalkedSinceLastBerryMasterVisit = 5
 	
 	case story = 964
 	
 	case dayCareVisited = 1124
-	
+
+	case mirorBHasBeenEncountered = 1191
+
 	case currentPokespotPokemonRock = 1248
 	case currentPokespotPokemonOasis = 1249
 	case currentPokespotPokemonCave = 1250
@@ -21,6 +26,8 @@ enum XDSFlags : Int, Codable {
 	case mirorbNoDespawn = 1415 // miror radar won't lost signal while this is set
 	
 	case MtBattleHighestClearedZone = 1433
+
+	case mirorBStepsWalked = 1449
 	
 	case mirorbLocation = 1452
 	
@@ -44,6 +51,10 @@ enum XDSFlags : Int, Codable {
 		case .currentPokespotPokemonRock: return "POKESPOT_ROCK_CURRENT_POKEMON"
 		case .currentPokespotPokemonOasis: return "POKESPOT_OASIS_CURRENT_POKEMON"
 		case .currentPokespotPokemonCave: return "POKESPOT_CAVE_CURRENT_POKEMON"
+		case .berryMasterVistied		: return "BERRY_MASTER_VISITED"
+		case .stepsWalkedSinceLastBerryMasterVisit : return "STEPS_SINCE_LAST_BERRY_MASTER_VISIT"
+		case .mirorBHasBeenEncountered	: return "HAS_ENCOUNTERED_MIROR_B"
+		case .mirorBStepsWalked			: return "MIROR_B_STEPS_WALKED"
 		}
 	}
 }

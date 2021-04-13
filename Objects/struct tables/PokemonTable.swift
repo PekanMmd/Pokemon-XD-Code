@@ -56,7 +56,7 @@ let spritesStruct = GoDStruct(name: "Pokemon Sprites", format: [
 ])
 
 #if GAME_XD
-let pokemonStatsStruct = GoDStruct(name: "Pokemon", format: [
+let pokemonStatsStruct = GoDStruct(name: "Pokemon Stats", format: [
 	.byte(name: "Level up Rate", description: "Determines how much exp it takes for the pokemon to level up", type: .expRate),
 	.byte(name: "Catch Rate", description: "", type: .uint),
 	.byte(name: "Gender Ratio", description: "", type: .genderRatio),
@@ -99,7 +99,7 @@ let pokemonStatsStruct = GoDStruct(name: "Pokemon", format: [
 	]
 )
 #else
-let pokemonStatsStruct = GoDStruct(name: "Pokemon", format: [
+let pokemonStatsStruct = GoDStruct(name: "Pokemon Stats", format: [
 	.byte(name: "Level up Rate", description: "Determines how much exp it takes for the pokemon to level up", type: .expRate),
 	.byte(name: "Catch Rate", description: "", type: .uint),
 	.byte(name: "Gender Ratio", description: "", type: .genderRatio),

@@ -37,10 +37,12 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 	case fsys = 0x80
 
 	// These have ids of 0 for some reason
-	case proj = 0xe0
-	case sdir = 0xe2
-	case pool = 0xe4
+	case proj = 0x82
+	case sdir = 0x84
+	case pool = 0x86
 
+	case raw  = 0xf0
+	case gci  = 0xf1
 	case thp  = 0xf2
 	case json = 0xf3
 	case txt  = 0xf4
@@ -102,6 +104,8 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 		case .txt : return ".txt"
 		case .json: return ".json"
 		case .thp : return ".thp"
+		case .gci : return ".gci"
+		case .raw : return ".raw"
 		case .unknown: return ".bin"
 		}
 	}

@@ -98,9 +98,9 @@ class DeckPokemonStructTable: GoDStructTableFormattable {
 				.byte(name: "Unused", description: "", type: .null),
 				.byte(name: "Unknown 2", description: "", type: .uintHex),
 				.bitMask(name: "Mini PID", description: "", values: [
-					(name: "Use species second ability", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 0),
-					(name: "Gender", type: .genderID, numberOfBits: 2, firstBitIndexLittleEndian: 1),
-					(name: "Nature", type: .natureID, numberOfBits: 5, firstBitIndexLittleEndian: 3),
+					(name: "Use species second ability", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 0, mod: nil, div: nil),
+					(name: "Gender", type: .genderID, numberOfBits: 2, firstBitIndexLittleEndian: 1, mod: nil, div: nil),
+					(name: "Nature", type: .natureID, numberOfBits: 5, firstBitIndexLittleEndian: 3, mod: nil, div: nil),
 				]),
 //				.byte(name: "Mini PID", description: "Determines Pokemon's gender, nature and ability slot", type: .uintHex),
 				.byte(name: "Use Random Nature and Gender", description: "", type: .bool)

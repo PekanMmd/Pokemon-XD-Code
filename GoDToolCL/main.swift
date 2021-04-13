@@ -14,9 +14,7 @@ loadISO(exitOnFailure: true)
 //let file = XGFiles.typeAndFsysName(.dat, "pkx_lantern")
 //DATModel(file: file)?.println()
 
-for file in XGISO.current.allFileNames where file.contains("pkx_") && file >= "pkx_lantern.fsys" {
-	XGUtility.exportFileFromISO(.fsys(file.removeFileExtensions()), extractFsysContents: true, decode: true, overwrite: true)
-}
+XGSaveManager()
 
 //XGUtility.exportFileFromISO(.fsys("D4_tower_1F_2"))
 //battleBingoTable.decodeData()

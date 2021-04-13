@@ -87,12 +87,14 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		oasisPokespotTable,
 		rockPokespotTable,
 		cavePokespotTable,
+		pokespotsTable,
 		allPokespotsTable,
 		battleCDsTable,
 		battleLayoutsTable,
 		itemsTable,
 		flagsTable,
 		tutorMovesTable,
+		mirorBDataTable
 	]
 	tables += xdTables
 	#endif
@@ -146,4 +148,23 @@ var deckAIStructList: [GoDStructTableFormattable] {
 	#else
 	return []
 	#endif
+}
+
+var saveFileStructList: [GoDStructTableFormattable] {
+	XGFolders.SaveFiles.files.forEach { (file) in
+		if file.fileType == .gci {
+			if !XGFolders.SaveFiles.contains(.nameAndFolder(file.fileName + ".raw", XGFolders.SaveFiles)) {
+				_ = XGSaveManager(file: file, saveType: .gciSaveData)
+			}
+		}
+	}
+	var tables = [GoDStructTableFormattable]()
+	XGFolders.SaveFiles.files.filter({$0.fileType == .raw}).sorted(by: {$0.fileName < $1.fileName}).forEach { (file) in
+		if let saveData = XGSaveManager(file: file, saveType: .decryptedSaveSlot).latestSaveSlot {
+			tables.append(saveData.partyPokemonTable())
+			tables += saveData.pcBoxPokemonTables()
+			tables.append(saveData.pcItemStorageTable())
+		}
+	}
+	return tables
 }

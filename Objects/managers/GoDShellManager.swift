@@ -14,12 +14,14 @@ class GoDShellManager {
         case wit
 		case wimgt
 		case gcitool
+		case gcitoolReplace
         
         var file: XGFiles {
 			switch self {
 			case .wit: return .wit
 			case .wimgt: return .wimgt
 			case .gcitool: return .tool("gcitool")
+			case .gcitoolReplace: return .tool("gcitool_replace")
 			default: return .nameAndFolder(rawValue, folder)
 			}
         }
@@ -28,7 +30,7 @@ class GoDShellManager {
             switch self {
 			case .wit, .wimgt:
                 return .Wiimm
-			case .gcitool:
+			case .gcitool, .gcitoolReplace:
 				return .Resources
             default:
 				return environment == .Windows ? .Resources : .path("/bin")

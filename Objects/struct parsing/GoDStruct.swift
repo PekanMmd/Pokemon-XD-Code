@@ -76,9 +76,9 @@ struct GoDStruct {
 						.float(name: name + ".y", description: description),
 						.float(name: name + ".z", description: description)
 					])
-				case .subStruct(_, _, let structProperty):
+				case .subStruct(let structName, _, let structProperty):
 					// The same property but with the name update to include the struct it is in
-					let prefix = structProperty.name + " "
+					let prefix = structName + " "
 					flatProperties += structProperty.flattened.format.map{ (property) -> GoDStructProperties in
 						switch property {
 						case .byte(let name, let description, let type):
@@ -161,6 +161,7 @@ struct GoDStruct {
 	var CStruct: String {
 
 		var subStructs = [(name: String, text: String)]()
+		var currentLength = 0
 		var string = "struct \(CStructName) {"
 
 		func textForProperty(_ property: GoDStructProperties) -> String {
@@ -198,7 +199,7 @@ struct GoDStruct {
 				}) {
 					subStructs.append((property.CStructName, property.CStruct))
 				}
-				return "struct " +  property.CStructName.camelCaseBySpacesCapitalised + " " + name.camelCaseBySpaces
+				return "struct " +  property.CStructName + " " + name.camelCaseBySpaces
 			case .array(let name, _, let property, let count):
 				let subProperty: GoDStructProperties
 				switch property {
@@ -241,7 +242,9 @@ struct GoDStruct {
 			}
 		}
 		format.forEach { (property) in
-			let descriptionText = property.description.isEmpty ? "" : " // \(property.description)"
+			currentLength += property.alignmentBytes(at: currentLength)
+			let descriptionText = " // offset: \(currentLength.hexString()) \(property.description)"
+			currentLength += property.length
 			string += "\n    " + textForProperty(property) + ";" + descriptionText
 		}
 		string += "\n};"
@@ -266,11 +269,13 @@ indirect enum GoDStructPropertyTypes {
 	case float, percentage, angle, bool, bitMask, null
 	case pokemonID, moveID, itemID, abilityID, natureID, genderID, typeID
 	case moveCategory, typeEffectiveness, moveEffectID, shininess
-	case genderRatio, expRate, evolutionMethod, moveTarget
+	case genderRatio, expRate, evolutionMethod, moveTarget, statusEffect, dayCareStatus
 	case battleStyle, battleType, roomID, battleFieldID, deckID, trainerID
 	case colosseumRound, playerController, itemPocket, scriptFunction(scriptFile: XGFiles)
 	case battleBingoMysteryPanelType, contestAppeal, moveEffectType, eggGroup
 	case trainerClassID, trainerModelID, interactionMethod, scriptMarker
+	case languageID, gameID, regionID
+	case flagID
 	case indexOfEntryInTable(table: GoDStructTableFormattable, nameProperty: String?) // can use a single property as name or list whole struct if nil
 	case fsysID, fsysFileIdentifier(fsysName: String?), fsysFileType
 	case msgID(file: XGFiles?) // set file to nil to search through all available string tables
@@ -298,7 +303,7 @@ indirect enum GoDStructProperties {
 	case subStruct(name: String, description: String, property: GoDStruct)
 	case array(name: String, description: String, property: GoDStructProperties, count: Int?)
 	case bitArray(name: String, description: String, bitFieldNames: [String?]) // first bit name in array is most significant bit (left most bit), nil for unused bits
-	case bitMask(name: String, description: String, values: [(name: String, type: GoDStructPropertyTypes, numberOfBits: Int, firstBitIndexLittleEndian: Int)])
+	case bitMask(name: String, description: String, values: [(name: String, type: GoDStructPropertyTypes, numberOfBits: Int, firstBitIndexLittleEndian: Int, mod: Int?, div: Int?)])
 	case pointer(property: GoDStructProperties, offsetBy: Int, isShort: Bool)
 
 	func alignmentBytes(at offset: Int) -> Int {
@@ -565,11 +570,32 @@ indirect enum GoDStructValues: CustomStringConvertible {
 			case .bitMask:
 				valueString = rawValue.binary()
 				valueString += " (\(rawValue))"
+			case .statusEffect:
+				#if !GAME_PBR
+				valueString = XGStatusEffects(rawValue: rawValue)?.string ?? "Invalid Status Effect \(rawValue)"
+				valueString += " (\(rawValue))"
+				#else
+				valueString = "(\(rawValue))"
+				#endif
 			case .textureFormat:
 				valueString = GoDTextureFormats.fromStandardRawValue(rawValue)?.name ?? "Invalid Texture Format \(rawValue)"
 				valueString += " (\(rawValue))"
 			case .paletteFormat:
 				valueString = GoDTextureFormats.fromPaletteID(rawValue)?.name ?? "Invalid Palette Format \(rawValue)"
+				valueString += " (\(rawValue))"
+			case .dayCareStatus:
+				#if !GAME_PBR
+				valueString = XGDayCareStatus(rawValue: rawValue)?.name ?? "Day Care Status \(rawValue)"
+				valueString += " (\(rawValue))"
+				#else
+				valueString = "(\(rawValue))"
+				#endif
+			case .flagID:
+				#if GAME_XD
+				valueString = XDSFlags(rawValue: rawValue)?.name ?? "FLAG_\(rawValue.hexString())"
+				#else
+				valueString = "FLAG_\(rawValue.hexString())"
+				#endif
 				valueString += " (\(rawValue))"
 			case .pokemonID:
 				if rawValue == 0 {
@@ -787,6 +813,19 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				#else
 				valueString = "(\(rawValue))"
 				#endif
+			case .languageID:
+				valueString = XGLanguages(rawValue: rawValue)?.name ?? "Language_\(rawValue)"
+				valueString += " (\(rawValue))"
+			case .gameID:
+				#if !GAME_PBR
+				valueString = GenIIIGames(rawValue: rawValue)?.name ?? "UnknownGame_\(rawValue)"
+				valueString += " (\(rawValue))"
+				#else
+				valueString = "(\(rawValue))"
+				#endif
+			case .regionID:
+				valueString = XGRegions.fromId(rawValue)?.name ?? "UnknownRegion_\(rawValue)"
+				valueString += " (\(rawValue))"
 			case .indexOfEntryInTable(let table, let nameProperty):
 				if let structData = table.dataForEntry(rawValue) {
 					if let property = nameProperty {

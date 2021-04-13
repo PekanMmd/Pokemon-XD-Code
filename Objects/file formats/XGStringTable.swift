@@ -16,29 +16,6 @@ let kEndOfHeader		   = 0x10
 // always seems to be 0 though
 let kMaxStringID 		   = 0xFFFFF
 
-enum XGLanguages : Int, Codable {
-	
-	case Japanese = 0
-	case EnglishUK
-	case EnglishUS
-	case German
-	case French
-	case Italian
-	case Spanish
-	
-	var name : String {
-		switch self {
-		case .Japanese: return "Japanese"
-		case .EnglishUK: return "English (UK)"
-		case .EnglishUS: return "English (US)"
-		case .French: return "French"
-		case .Spanish: return "Spanish"
-		case .German: return "German"
-		case .Italian: return "Italian"
-		}
-	}
-}
-
 class XGStringTable: NSObject {
 	
 	var file = XGFiles.nameAndFolder("", .Documents)

@@ -11,18 +11,23 @@ let kNumberOfPokemonPerParty = 6
 let kNumberOfPokemonPerPCBox = 30
 
 let kNumberOfBoxes = game == .Colosseum ? 3 : 8
-let kNumberOfRegisteredParties = game == .Colosseum ? 2 : 0 // confirm actual number
+let kNumberOfRegisteredParties = game == .Colosseum ? 2 : 2 // confirm actual number
 
-let kSizeOfBoxHeader = 0x10
+let kSizeOfBoxHeader = 0x14
 let kSizeOfRegisteredPartyHeader = 0x30
 let kMaxNameLength = 10
-let kSaveFilePokemonSize = game == .Colosseum ? 0x138 : 0x0
-let kSizeOfRegisteredPartData = game == .Colosseum ? 0xb18 : 0x0
+let kSaveFilePokemonSize = game == .Colosseum ? 0x138 : 0xc4
+let kSizeOfRegisteredPartyData = game == .Colosseum ? 0xb18 : 0x0 // find for xd
+let kSaveFilePCItemsOffset = game == .Colosseum ? 0x797C : 0x12ED8
+let kSaveFileNumberOfItemsInPC = 235
+let kSaveFileBagItemsOffset = game == .Colosseum ? -1 : 0x142f8 // find for colo
 
-let kSaveFilePlayerNameOffset = game == .Colosseum ? 0x78 : -1
-let kSaveFilePartyPokemonStartOffset = game == .Colosseum ? 0xa8 : -1
-let kSaveFilePCPokemonStartOffset = game == .Colosseum ? 0xb94 : -1
-let kSaveFileRegisteredPokemonStartOffset = game == .Colosseum ? 0x19744 : -1
+let kSaveFilePlayerNameOffset = game == .Colosseum ? 0x78 : 0x13db8
+let kSaveFilePlayerSIDOffset = game == .Colosseum ? 0xA4 : 0x13de4
+let kSaveFilePlayerTIDOffset = game == .Colosseum ? 0xA6 : 0x13de6
+let kSaveFilePartyPokemonStartOffset = game == .Colosseum ? 0xa8 : 0x13de8
+let kSaveFilePCBoxesStartOffset = game == .Colosseum ? 0xb90 : 0x7678
+let kSaveFileRegisteredPokemonStartOffset = game == .Colosseum ? 0x19744 : -1 // find for xd
 
 class XGSaveManager {
 
@@ -50,7 +55,9 @@ class XGSaveManager {
 		case .gciSaveData:
 			if file.exists {
 				let rawFile = XGFiles.nameAndFolder(file.fileName + ".raw", file.folder)
-				GoDShellManager.run(.gcitool, args: "extract \(file.path) \(rawFile.path)")
+				if !rawFile.exists {
+					GoDShellManager.run(.gcitool, args: "extract \(file.path.escapedPath) \(rawFile.path.escapedPath)")
+				}
 
 				if rawFile.exists, let data = rawFile.data {
 					latestSaveSlot = XGSave(decryptedSaveSlot: data)
@@ -76,7 +83,7 @@ class XGSaveManager {
 			rawData.save()
 
 			if rawFile.exists {
-				GoDShellManager.run(.gcitool, args: "replace \(file.path) \(rawFile.path)")
+				GoDShellManager.run(.gcitool, args: "replace_all_slots --input_slot \(rawFile.path.escapedPath) --output_gci \(file.path.escapedPath)")
 			}
 		}
 	}
@@ -94,11 +101,11 @@ class XGSave {
 			case .party(let index):
 				return kSaveFilePartyPokemonStartOffset + (index * kSaveFilePokemonSize)
 			case .pc(let box, let index):
-				let boxOffset = ((kSaveFilePokemonSize * kNumberOfPokemonPerPCBox) + kSizeOfBoxHeader) * box + kSaveFilePCPokemonStartOffset
+				let boxOffset = ((kSaveFilePokemonSize * kNumberOfPokemonPerPCBox) + kSizeOfBoxHeader) * box + kSaveFilePCBoxesStartOffset
 				let pokemonOffset = (index * kSaveFilePokemonSize) + kSizeOfBoxHeader
 				return boxOffset + pokemonOffset
 			case .battleMode(let partyIndex, let index):
-				let registeredOffset = kSaveFileRegisteredPokemonStartOffset + (kSizeOfRegisteredPartData * partyIndex)
+				let registeredOffset = kSaveFileRegisteredPokemonStartOffset + (kSizeOfRegisteredPartyData * partyIndex)
 				let pokemonOffset = (index * kSaveFilePokemonSize) + kSizeOfRegisteredPartyHeader
 				return registeredOffset + pokemonOffset
 			}
@@ -116,10 +123,20 @@ class XGSave {
 		}
 	}
 
+	var playerSID: Int {
+		get { return data.get2BytesAtOffset(kSaveFilePlayerSIDOffset) }
+		set { data.replace2BytesAtOffset(kSaveFilePlayerSIDOffset, withBytes: newValue) }
+	}
+	var playerTID: Int {
+		get { return data.get2BytesAtOffset(kSaveFilePlayerTIDOffset) }
+		set { data.replace2BytesAtOffset(kSaveFilePlayerTIDOffset, withBytes: newValue) }
+	}
+
 	init(decryptedSaveSlot: XGMutableData) {
 		data = decryptedSaveSlot
 	}
 
+	#if GAME_COLO
 	func readPokemon(slot: XGSavePokemonSlot) -> XGSavePokemon {
 		readPokemonAtOffset(slot.offset)
 	}
@@ -135,8 +152,29 @@ class XGSave {
 	func writePokemon(_ pokemon: XGSavePokemon, at offset: Int) {
 		data.replaceBytesFromOffset(offset, withByteStream: pokemon.data.charStream)
 	}
+	#endif
+
+	func partyPokemonTable() -> SaveFilePokemonStructTable {
+		return SaveFilePokemonStructTable(file: data.file, storage: .party)
+	}
+	
+	func pcBoxPokemonTables() -> [SaveFilePokemonStructTable] {
+		return (0 ..< kNumberOfBoxes).map { (index) -> SaveFilePokemonStructTable in
+			SaveFilePokemonStructTable(file: data.file, storage: .pcBox(index: index))
+		}
+	}
+
+	func pcItemStorageTable() -> GoDStructTable {
+		return GoDStructTable(file: data.file, properties: itemStorageStruct) { (_) -> Int in
+			return kSaveFilePCItemsOffset
+		} numberOfEntriesInFile: { (_) -> Int in
+			return kSaveFileNumberOfItemsInPC
+		}
+
+	}
 }
 
+#if GAME_COLO
 let kSavePokemonSpeciesOffset = 0x0
 let kSavePokemonPIDOffset = 0x4
 let kSavePokemonGameIDOffset = 0x8
@@ -154,9 +192,9 @@ let kSavePokemonNameOffset = game == .Colosseum ? 0x2e : 0x0
 let kSavePokemonName2Offset = game == .Colosseum ? 0x44 : 0x0
 let kSavePokemonEXPOffset = 0x5c
 let kSavePokemonPartyDataLevelOffset = 0x60
-let kSavePokemonPartyDataRemainingSleepTurnsOffset = 0x65
+let kSavePokemonPartyDataStatusOffset = 0x65
 let kSavePokemonPartyDataBadPoisonTurnsOffset = 0x69
-let kSavePokemonPartyDataStatusOffset = 0x6b
+let kSavePokemonPartyDataRemainingSleepTurnsOffset = 0x6b
 let kSavePokemonPartyDataStatusBitFieldOffset = 0x74
 let kSavePokemonMove1Offset = 0x78
 let kSavePokemonMove1PPOffset = 0x7a
@@ -867,3 +905,4 @@ class XGSavePokemon {
 	}
 }
 
+#endif

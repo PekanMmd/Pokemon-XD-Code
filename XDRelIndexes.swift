@@ -42,6 +42,8 @@ enum CommonIndexes : Int {
 	case NumberOfBingoCards = 1
 	case PeopleIDs = 2 // 2 bytes at offset 0 person id 4 bytes at offset 4 string id for character name
 	case NumberOfPeopleIDs = 3
+
+	case pokespots = 10
 	case numberOfPokespots = 11
 	case PokespotRock = 12
 	case PokespotRockEntries = 13
@@ -94,7 +96,10 @@ enum CommonIndexes : Int {
 	case NumberOfSounds = 103
 	case BGM = 104
 	case NumberOfBGM = 105
-	
+
+	case MirorBData = 122
+	case NumberOfMirorBDataEntries = 123 // Only 1 entry
+
 	case Moves = 124
 	case NumberOfMoves = 125
 	case TutorMoves = 126
