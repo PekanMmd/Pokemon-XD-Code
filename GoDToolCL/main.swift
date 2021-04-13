@@ -14,7 +14,7 @@ loadISO(exitOnFailure: true)
 //let file = XGFiles.typeAndFsysName(.dat, "pkx_lantern")
 //DATModel(file: file)?.println()
 
-XGSaveManager()
+//XGSaveManager(file: .nameAndFolder("xd.gci", .SaveFiles), saveType: .gciSaveData).save()
 
 //XGUtility.exportFileFromISO(.fsys("D4_tower_1F_2"))
 //battleBingoTable.decodeData()

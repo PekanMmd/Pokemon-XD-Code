@@ -29,7 +29,7 @@ let statsStructShort = GoDStruct(name: "Stats", format: [
 	.short(name: "Sp.Def", description: "", type: .uint),
 	.short(name: "Speed", description: "", type: .uint)
 ])
-let statsStructByte = GoDStruct(name: "Stats", format: [
+let statsStructByte = GoDStruct(name: "Byte Stats", format: [
 	.byte(name: "HP", description: "", type: .uint),
 	.byte(name: "Attack", description: "", type: .uint),
 	.byte(name: "Defense", description: "", type: .uint),

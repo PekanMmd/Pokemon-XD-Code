@@ -151,6 +151,7 @@ var deckAIStructList: [GoDStructTableFormattable] {
 }
 
 var saveFileStructList: [GoDStructTableFormattable] {
+	guard game == .Colosseum else { return  [] }
 	XGFolders.SaveFiles.files.forEach { (file) in
 		if file.fileType == .gci {
 			if !XGFolders.SaveFiles.contains(.nameAndFolder(file.fileName + ".raw", XGFolders.SaveFiles)) {

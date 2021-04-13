@@ -8,8 +8,7 @@
 
 loadISO(exitOnFailure: true)
 
-let gci = XGFiles.nameAndFolder("xd.gci", .Resources)
-XGSaveManager(file: gci, saveType: .gciSaveData).latestSaveSlot
+XGSaveManager(file: .nameAndFolder("save.gci", .SaveFiles), saveType: .gciSaveData).save()
 
 //
 //func fixShinyGlitch() {

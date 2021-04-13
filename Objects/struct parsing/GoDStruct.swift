@@ -98,8 +98,8 @@ struct GoDStruct {
 							return .array(name: prefix + name, description: description, property: property, count: count)
 						case .bitArray(let name, let description, let bitFieldNames):
 							return .bitArray(name: prefix + name, description: description, bitFieldNames: bitFieldNames)
-						case .bitMask(let name, let description, let values):
-							return .bitMask(name: prefix + name, description: description, values: values)
+						case .bitMask(let name, let description, let length, let values):
+							return .bitMask(name: prefix + name, description: description, length: length, values: values)
 						case .vector(let name, let description):
 							return .vector(name: prefix + name, description: description)
 						case .pointer(_, _, let isShort):
@@ -133,8 +133,8 @@ struct GoDStruct {
 								return .array(name: subName, description: description, property: property, count: count)
 							case .bitArray(_, let description, let bitFieldNames):
 								return .bitArray(name: subName, description: description, bitFieldNames: bitFieldNames)
-							case .bitMask(_, let description, let values):
-								return .bitMask(name: subName, description: description, values: values)
+							case .bitMask(_, let description, let length, let values):
+								return .bitMask(name: subName, description: description, length: length, values: values)
 							case .vector(_, let description):
 								return .vector(name: subName, description: description)
 							case .pointer(_, _, let isShort):
@@ -174,8 +174,12 @@ struct GoDStruct {
 				return (type.isSigned ? "int32_t " : "uint32_t ") + name.camelCaseBySpaces
 			case .bitArray(let name, let description, _):
 				return textForProperty(.array(name: name, description: description, property: .byte(name: "", description: "", type: .bitMask), count: property.length))
-			case .bitMask(let name, let description, _):
-				return textForProperty(.byte(name: name, description: description, type: .uintHex))
+			case .bitMask(let name, let description, let length, _):
+				switch length {
+				case .char: return textForProperty(.byte(name: name, description: description, type: .uintHex))
+				case .short: return textForProperty(.short(name: name, description: description, type: .uintHex))
+				case .word: return textForProperty(.word(name: name, description: description, type: .uintHex))
+				}
 			case .float(let name, _):
 				return "float " + name.camelCaseBySpaces
 			case .vector(let name, let description):
@@ -211,8 +215,8 @@ struct GoDStruct {
 					subProperty = .word(name: name, description: description, type: type)
 				case .bitArray(_, let description, let bitFieldNames):
 					subProperty = .bitArray(name: name, description: description, bitFieldNames: bitFieldNames)
-				case .bitMask(_, let description, let bitFields):
-					subProperty = .bitMask(name: name, description: description, values: bitFields)
+				case .bitMask(_, let description, let length, let bitFields):
+					subProperty = .bitMask(name: name, description: description, length: length, values: bitFields)
 				case .float(_, let description):
 					subProperty = .float(name: name, description: description)
 				case .string(_, let description, let maxCharacterCount, let charLength):
@@ -310,7 +314,7 @@ indirect enum GoDStructProperties {
 	case subStruct(name: String, description: String, property: GoDStruct)
 	case array(name: String, description: String, property: GoDStructProperties, count: Int?)
 	case bitArray(name: String, description: String, bitFieldNames: [String?]) // first bit name in array is most significant bit (left most bit), nil for unused bits
-	case bitMask(name: String, description: String, values: [(name: String, type: GoDStructPropertyTypes, numberOfBits: Int, firstBitIndexLittleEndian: Int, mod: Int?, div: Int?)])
+	case bitMask(name: String, description: String, length: ByteLengths, values: [(name: String, type: GoDStructPropertyTypes, numberOfBits: Int, firstBitIndexLittleEndian: Int, mod: Int?, div: Int?)])
 	case pointer(property: GoDStructProperties, offsetBy: Int, isShort: Bool)
 
 	func alignmentBytes(at offset: Int) -> Int {
@@ -323,7 +327,7 @@ indirect enum GoDStructProperties {
 			return offset % charLength.rawValue
 		case .vector:
 			return 4
-		case .bitArray, .bitMask:
+		case .bitArray:
 				return 0
 		default:
 			var bytesToNextAlignment = length - (offset % length)
@@ -336,9 +340,9 @@ indirect enum GoDStructProperties {
 
 	var largestAlignment: Int {
 		switch self {
-		case .byte, .short, .word, .float, .pointer:
+		case .byte, .short, .word, .float, .pointer, .bitMask:
 			return length
-		case .string, .bitArray, .bitMask:
+		case .string, .bitArray:
 			return 1
 		case .vector:
 			return 4
@@ -351,7 +355,7 @@ indirect enum GoDStructProperties {
 
 	var length: Int {
 		switch self {
-		case .byte, .bitMask : return 1
+		case .byte : return 1
 		case .short: return 2
 		case .word, .float: return 4
 		case .vector:
@@ -363,6 +367,8 @@ indirect enum GoDStructProperties {
 			} else {
 				return 1
 			}
+		case .bitMask(_, _, let length, _):
+			return length.rawValue
 		case .subStruct(_, _, let properties):
 			return properties.length
 		case .array(_, _, let type, let count):
@@ -378,7 +384,7 @@ indirect enum GoDStructProperties {
 			 .short(let name, _, _),
 			 .word(let name, _, _),
 			 .bitArray(let name, _, _),
-			 .bitMask(let name, _, _),
+			 .bitMask(let name, _, _, _),
 			 .float(let name, _),
 			 .vector(let name, _),
 			 .string(let name, _, _, _),
@@ -396,7 +402,7 @@ indirect enum GoDStructProperties {
 			 .short(_, let description, _),
 			 .word(_, let description, _),
 			 .bitArray(_, let description, _),
-			 .bitMask(_, let description, _),
+			 .bitMask(_, let description, _, _),
 			 .float(_, let description),
 			 .vector(_, let description),
 			 .string(_, let description, _, _),
@@ -1004,7 +1010,7 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				return "Invalid Bit array (\(property.name)"
 			}
 		case .bitMask(let property, let rawValues):
-			if case .bitMask(_, _, let bitFields) = property {
+			if case .bitMask(_, _, _, let bitFields) = property {
 				var text = ""
 				let valuePrefix = "    - "
 				bitFields.forEachIndexed { (index, field) in

@@ -99,9 +99,15 @@ class GoDStructData: CustomStringConvertible {
 					rawValues += bitmask.bitArray(count: 8, startWithLeastSignificantBit: false)
 				}
 				return .bitArray(property: property, rawValues: rawValues)
-			case .bitMask(_, _, let fields):
+			case .bitMask(_, _, let length, let fields):
 				currentOffset += property.alignmentBytes(at: currentOffset)
-				let rawByte = fileData.getByteAtOffset(currentOffset)
+				let rawValue: Int
+				switch length {
+				case .char: rawValue = fileData.getByteAtOffset(currentOffset)
+				case .short: rawValue = fileData.get2BytesAtOffset(currentOffset)
+				case .word: rawValue = fileData.get4BytesAtOffset(currentOffset)
+				}
+
 				currentOffset += property.length
 				var rawValues = [Int]()
 				fields.forEach { (_, _, count, first, mod, div) in
@@ -111,7 +117,7 @@ class GoDStructData: CustomStringConvertible {
 						mask += 1
 					}
 					let divValue = div == nil ? 1 : max(div!, 1)
-					var newValue = ((rawByte >> first) & mask) / divValue * divValue
+					var newValue = ((rawValue >> first) & mask) / divValue * divValue
 					if let modValue = mod {
 						newValue = newValue % modValue
 					}
@@ -472,7 +478,7 @@ class GoDStructData: CustomStringConvertible {
 						}
 					}
 					values.append(.bitArray(property: property, rawValues: rawBools))
-				case .bitMask(_, _, let bitFields):
+				case .bitMask(_, _, _, let bitFields):
 					var rawInts = [Int]()
 					bitFields.forEach {  fields in
 						if !rawValues.isEmpty, let bitsValue = integerRawValue(rawValues.pop()) {
@@ -622,7 +628,7 @@ class GoDStructData: CustomStringConvertible {
 
 			case .bitMask(let property, let rawValues):
 				var combinedValue = 0
-				if case .bitMask(_, _, let fields) = property {
+				if case .bitMask(_, _, _, let fields) = property {
 					fields.forEachIndexed { (index, field) in
 						if index < rawValues.count {
 							var rawValue = rawValues[index]
@@ -637,7 +643,12 @@ class GoDStructData: CustomStringConvertible {
 						}
 					}
 				}
-				writeValue(.value(property: .byte(name: "", description: "", type: .uintHex), rawValue: combinedValue))
+				switch property.length {
+				case 1: writeValue(.value(property: .byte(name: "", description: "", type: .uintHex), rawValue: combinedValue))
+				case 2: writeValue(.value(property: .short(name: "", description: "", type: .uintHex), rawValue: combinedValue))
+				case 4: writeValue(.value(property: .word(name: "", description: "", type: .uintHex), rawValue: combinedValue))
+				default: assertionFailure("Invalid property length")
+				}
 
 			case .string(.string(_, _, let maxCharacterCount, let charLength), let rawValue):
 				var string = rawValue.unicodeRepresentation

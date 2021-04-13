@@ -203,7 +203,7 @@ extension GoDStructTableFormattable {
 						appendFieldNames(property: .byte(name: fieldName, description: "", type: .bool))
 					}
 				}
-			case .bitMask(_, _, let fields):
+			case .bitMask(_, _, _, let fields):
 				fields.forEach { field in
 					if case .null = field.type {} else {
 						appendFieldNames(property: .byte(name: field.name, description: "", type: field.type))
@@ -245,7 +245,7 @@ extension GoDStructTableFormattable {
 					}
 				case .bitMask:
 					var fields = [(name: String, type: GoDStructPropertyTypes, numberOfBits: Int, firstBitIndexLittleEndian: Int, mod: Int?, div: Int?)]()
-					if case .bitMask(_, _, let bitFields) = propertyValue.property {
+					if case .bitMask(_, _, _, let bitFields) = propertyValue.property {
 						fields = bitFields
 					}
 					if let bitFieldValues: [Int] = propertyValue.value() {
