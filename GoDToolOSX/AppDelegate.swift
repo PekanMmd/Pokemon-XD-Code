@@ -184,19 +184,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		#endif
 	}
 	
-	@IBAction func importTextures(_ sender: Any) {
-		guard checkRequiredFiles() else {
-			return
-		}
-		XGUtility.importTextures()
-	}
-	
-	@IBAction func exportTextures(_ sender: Any) {
-		guard checkRequiredFiles() else {
-			return
-		}
-		XGUtility.exportTextures()
-	}
+//	@IBAction func importTextures(_ sender: Any) {
+//		guard checkRequiredFiles() else {
+//			return
+//		}
+//		XGUtility.importTextures()
+//	}
+//
+//	@IBAction func exportTextures(_ sender: Any) {
+//		guard checkRequiredFiles() else {
+//			return
+//		}
+//		XGUtility.exportTextures()
+//	}
 	
 	
 	@IBAction func setVerboseLogs(_ sender: Any) {

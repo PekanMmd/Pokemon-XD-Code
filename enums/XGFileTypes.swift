@@ -121,7 +121,7 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 	#endif
 
 	static let textureFormats: [XGFileTypes] = [.gtx, .atx]
-	static let modelFormats: [XGFileTypes] = [.dat, .rdat, /*.dats can't remember what these are so not adding for now*/]
+	static let modelFormats: [XGFileTypes] = [.dat, /*.rdat needs testing,*/ /*.dats can't remember what these are so not adding for now*/]
 	static let textureContainingFormats: [XGFileTypes] = [.dat, .rdat] // gsw once implemented and models
 
 	static func fileTypeForExtension(_ ext: String) -> XGFileTypes? {

@@ -157,16 +157,10 @@ class XGUtility {
 										printg("importing \(imageFile.path) into \(file.path)")
 									}
 									if let image = XGImage.loadImageData(fromFile: imageFile) {
-										let texture: GoDTexture
-										if file.fileName.contains(".gsw.") || file.fileName.contains(".dat.") || file.fileName.contains(".rdat.") {
-											// preserves the image format so can easily be imported into same offset
-											let referenceTexture = file.texture
-											texture = image.getTexture(format: referenceTexture.format, paletteFormat: referenceTexture.paletteFormat)
-
-										} else {
-											// automatically chooses a good format for the new image
-											texture = image.texture
-										}
+										let referenceTexture = file.texture
+										let forceIndexed = referenceTexture.data.getByteAtOffset(kTextureIndexOffset) == 1
+										let texture = image.getTexture(format: referenceTexture.format, paletteFormat: referenceTexture.paletteFormat)
+										texture.forceIndexedValue = forceIndexed
 										texture.file = file
 										texture.save()
 									}
@@ -314,101 +308,101 @@ class XGUtility {
 		}
 	}
 
-	class func importTPLFiles(_ files: [XGFiles]) {
-		if files.isEmpty { return }
-		
-		printg("importing tpl files...")
-		for file in files {
-			let source = file.path.escapedPath
-			var dest = (XGFolders.Textures.path + "/" + file.fileName).escapedPath
-			dest = dest.removeFileExtensions() + ".tpl"
+//	class func importTPLFiles(_ files: [XGFiles]) {
+//		if files.isEmpty { return }
+//
+//		printg("importing tpl files...")
+//		for file in files {
+//			let source = file.path.escapedPath
+//			var dest = (XGFolders.Textures.path + "/" + file.fileName).escapedPath
+//			dest = dest.removeFileExtensions() + ".tpl"
+//
+//			let imageFormatID: Int
+//			if let underscoreIndex = file.fileName.lastIndex(of: "_") {
+//				let imageFormatSubstring = file.fileName.substring(from: file.fileName.index(underscoreIndex, offsetBy: 1), to: file.fileName.endIndex)
+//				let imageFormatNumberString = imageFormatSubstring.removeFileExtensions()
+//				imageFormatID = imageFormatNumberString.integerValue ?? -1
+//			} else {
+//				imageFormatID = -1
+//			}
+//			let format = GoDTextureFormats.fromStandardRawValue(imageFormatID) ?? .C8
+//
+//			let overwrite = "-o"
+//			let formatString = "-x TPL." + format.name
+//			let args = "encode \(source) \(overwrite) \(formatString) -d \(dest)"
+//			if settings.verbose {
+//				printg(GoDShellManager.Commands.wimgt.file.path + " " + args)
+//			}
+//			GoDShellManager.run(.wimgt, args: args)
+//		}
+//	}
 
-			let imageFormatID: Int
-			if let underscoreIndex = file.fileName.lastIndex(of: "_") {
-				let imageFormatSubstring = file.fileName.substring(from: file.fileName.index(underscoreIndex, offsetBy: 1), to: file.fileName.endIndex)
-				let imageFormatNumberString = imageFormatSubstring.removeFileExtensions()
-				imageFormatID = imageFormatNumberString.integerValue ?? -1
-			} else {
-				imageFormatID = -1
-			}
-			let format = GoDTextureFormats.fromStandardRawValue(imageFormatID) ?? .C8
-
-			let overwrite = "-o"
-			let formatString = "-x TPL." + format.name
-			let args = "encode \(source) \(overwrite) \(formatString) -d \(dest)"
-			if settings.verbose {
-				printg(GoDShellManager.Commands.wimgt.file.path + " " + args)
-			}
-			GoDShellManager.run(.wimgt, args: args)
-		}
-	}
-
-	class func importTextures() {
-		// into the .gtx file, not into ISO
-		printg("importing textures...")
-		for imageFile in XGFolders.Import.files where XGFileTypes.imageFormats.contains(imageFile.fileType) && !imageFile.fileName.contains(".tpl") {
-			
-			let textureFilename = imageFile.fileName.removeFileExtensions() + XGFileTypes.gtx.fileExtension
-			let animTextureFilename = imageFile.fileName.removeFileExtensions() + XGFileTypes.atx.fileExtension
-
-			guard let image = XGImage.loadImageData(fromFile: imageFile) else {
-				continue
-			}
-			
-			let tFile = XGFiles.nameAndFolder(textureFilename, .Textures)
-			let aFile = XGFiles.nameAndFolder(animTextureFilename, .Textures)
-
-			if tFile.exists || aFile.exists {
-				if tFile.exists {
-					GoDTextureImporter.replaceTextureData(texture: tFile.texture, withImage: image, save: true)
-				}
-				if aFile.exists {
-					GoDTextureImporter.replaceTextureData(texture: aFile.texture, withImage: image, save: true)
-				}
-			} else {
-				let texture = image.texture
-				let filename = tFile.fileName.removeFileExtensions() + XGFileTypes.gtx.fileExtension
-				texture.file = .nameAndFolder(filename, tFile.folder)
-				texture.save()
-			}
-		}
-
-		importTPLFiles(XGFolders.Import.files.filter({ (file) -> Bool in
-			file.fileName.contains(".tpl.png")
-		}))
-	}
-
-	class func exportTPLFiles(_ files: [XGFiles]) {
-		if files.isEmpty { return }
-
-		printg("exporting tpl files...")
-		for file in files {
-			let source = file.path.escapedPath
-			let dest = (XGFolders.Export.path + "/" + file.fileName + ".png").escapedPath
-
-			let overwrite = "-o"
-
-			let args = "copy \(source) \(overwrite) -d \(dest)"
-			if settings.verbose {
-				printg(GoDShellManager.Commands.wimgt.file.path + " " + args)
-			}
-			GoDShellManager.run(.wimgt, args: args)
-		}
-	}
-
-	class func exportTextures() {
-		// from .gtx file, not from ISO
-		printg("exporting textures...")
-		for file in XGFolders.Textures.files where [.gtx, .atx].contains(file.fileType)  {
-			let filename = file.fileName.removeFileExtensions() + ".png"
-			file.texture.image.writePNGData(toFile: .nameAndFolder(filename, .Export))
-		}
-		#if !GAME_PBR
-		exportTPLFiles(XGFolders.Textures.files.filter({ (file) -> Bool in
-			file.fileType == .tpl
-		}))
-		#endif
-	}
+//	class func importTextures() {
+//		// into the .gtx file, not into ISO
+//		printg("importing textures...")
+//		for imageFile in XGFolders.Import.files where XGFileTypes.imageFormats.contains(imageFile.fileType) && !imageFile.fileName.contains(".tpl") {
+//
+//			let textureFilename = imageFile.fileName.removeFileExtensions() + XGFileTypes.gtx.fileExtension
+//			let animTextureFilename = imageFile.fileName.removeFileExtensions() + XGFileTypes.atx.fileExtension
+//
+//			guard let image = XGImage.loadImageData(fromFile: imageFile) else {
+//				continue
+//			}
+//
+//			let tFile = XGFiles.nameAndFolder(textureFilename, .Textures)
+//			let aFile = XGFiles.nameAndFolder(animTextureFilename, .Textures)
+//
+//			if tFile.exists || aFile.exists {
+//				if tFile.exists {
+//					GoDTextureImporter.replaceTextureData(texture: tFile.texture, withImage: image, save: true)
+//				}
+//				if aFile.exists {
+//					GoDTextureImporter.replaceTextureData(texture: aFile.texture, withImage: image, save: true)
+//				}
+//			} else {
+//				let texture = image.texture
+//				let filename = tFile.fileName.removeFileExtensions() + XGFileTypes.gtx.fileExtension
+//				texture.file = .nameAndFolder(filename, tFile.folder)
+//				texture.save()
+//			}
+//		}
+//
+//		importTPLFiles(XGFolders.Import.files.filter({ (file) -> Bool in
+//			file.fileName.contains(".tpl.png")
+//		}))
+//	}
+//
+//	class func exportTPLFiles(_ files: [XGFiles]) {
+//		if files.isEmpty { return }
+//
+//		printg("exporting tpl files...")
+//		for file in files {
+//			let source = file.path.escapedPath
+//			let dest = (XGFolders.Export.path + "/" + file.fileName + ".png").escapedPath
+//
+//			let overwrite = "-o"
+//
+//			let args = "copy \(source) \(overwrite) -d \(dest)"
+//			if settings.verbose {
+//				printg(GoDShellManager.Commands.wimgt.file.path + " " + args)
+//			}
+//			GoDShellManager.run(.wimgt, args: args)
+//		}
+//	}
+//
+//	class func exportTextures() {
+//		// from .gtx file, not from ISO
+//		printg("exporting textures...")
+//		for file in XGFolders.Textures.files where [.gtx, .atx].contains(file.fileType)  {
+//			let filename = file.fileName.removeFileExtensions() + ".png"
+//			file.texture.image.writePNGData(toFile: .nameAndFolder(filename, .Export))
+//		}
+//		#if !GAME_PBR
+//		exportTPLFiles(XGFolders.Textures.files.filter({ (file) -> Bool in
+//			file.fileType == .tpl
+//		}))
+//		#endif
+//	}
 	
 	class func searchForFsysForFile(file: XGFiles) {
 		let iso = XGISO.current
@@ -642,53 +636,30 @@ class XGUtility {
 
 	class func extractAllTextures() {
 		printg("extracting all textures")
-		let dumpFolder = XGFolders.nameAndFolder("Dump", .Textures)
+		guard region != .OtherGame else {
+			printg("")
+			return
+		}
 		XGFolders.setUpFolderFormat()
-		dumpFolder.createDirectory()
-		printg("output folder: \(dumpFolder.path)")
 		for filename in XGISO.current.allFileNames where filename.contains(".fsys") {
-			if settings.verbose {
-				printg("searching file:", filename)
-			}
-			guard let fsysData = XGISO.current.dataForFile(filename: filename) else {
-				if settings.verbose {
-					printg("no iso data found for file:", filename)
-				}
-				continue
-			}
-			let fsys = XGFsys(data: fsysData)
-			for i in 0 ..< fsys.numberOfEntries {
-				guard let fileType = fsys.fileTypeForFileWithIndex(index: i), [XGFileTypes.gtx, .atx, .gsw].contains(fileType) else {
-					continue
-				}
-				guard let textureData = fsys.extractDataForFileWithIndex(index: i) else {
-					continue
-				}
-
-				if settings.verbose {
-					printg("outputting:", textureData.file.fileName)
-				}
-
-				let folder = XGFolders.nameAndFolder(filename.removeFileExtensions(), dumpFolder)
-				folder.createDirectory()
-
-
-				if fileType == .gsw {
-					let gsw = XGGSWTextures(data: textureData)
-					let textures = gsw.extractTextureData()
-					textures.forEach { (data) in
-						data.file = .nameAndFolder(data.file.fileName, folder)
-						let texture = GoDTexture(data: data).image
-						texture.writePNGData(toFile: .nameAndFolder(data.file.fileName + ".png", folder))
-
+			let fsysFile = XGFiles.fsys(filename.removeFileExtensions())
+			exportFileFromISO(fsysFile, decode: false, overwrite: false)
+			guard fsysFile.exists else { continue }
+			let fsysData = XGFsys(file: fsysFile)
+			for i in 0 ..< fsysData.numberOfEntries {
+				if let fileType = fsysData.fileTypeForFileWithIndex(index: i),
+				   XGFileTypes.textureContainingFormats.contains(fileType)
+				   || XGFileTypes.textureFormats.contains(fileType) {
+					let fileData = fsysData.dataForFileWithIndex(index: i)
+					if fileData?.file.exists != true {
+						fileData?.save()
+					}
+					fileData?.file.textures.forEach {
+						if !$0.file.exists {
+							$0.save()
+						}
 					}
 				}
-				if fileType == .gtx || fileType == .atx {
-					textureData.file = .nameAndFolder(textureData.file.fileName, folder)
-					let texture = GoDTexture(data: textureData).image
-					texture.writePNGData(toFile: .nameAndFolder(textureData.file.fileName + ".png", folder))
-				}
-
 			}
 		}
 	}

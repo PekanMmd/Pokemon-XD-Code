@@ -38,15 +38,13 @@ enum GoDTextureFormats: Int, CaseIterable {
 		}
 	}
 	
-	var isIndexed : Bool {
+	var isIndexed: Bool {
 		switch self {
-		case .C4    : fallthrough
-		case .C8    : fallthrough
-		case .C14X2 : return true
-		default     : return false
+		case .C4, .C8, .C14X2	: return true
+		default     			: return false
 		}
 	}
-	
+
 	var paletteCount : Int {
 		return Int(pow(2, Double(bitsPerPixel)))
 	}

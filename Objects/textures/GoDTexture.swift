@@ -33,6 +33,7 @@ class GoDTexture {
 	var paletteStart = 0
 	var format = GoDTextureFormats.C8
 	var paletteFormat = GoDTextureFormats.IA8
+	var forceIndexedValue = false // for some reason non indexed formats set the indexed flag under some unknown circumstances
 	
 	var isIndexed : Bool {
 		return format.isIndexed
@@ -138,7 +139,7 @@ class GoDTexture {
 		self.data.replaceWordAtOffset(startOffset + kPalettePointerOffset, withBytes: UInt32(self.paletteStart - startOffset))
 		self.data.replaceByteAtOffset(startOffset + kTextureFormatOffset, withByte: self.format.rawValue)
 		self.data.replaceByteAtOffset(startOffset + kPaletteFormatOffset, withByte: self.paletteFormat.paletteID ?? 0)
-		self.data.replaceByteAtOffset(startOffset + kTextureIndexOffset, withByte: self.isIndexed ? 1 : 0)
+		self.data.replaceByteAtOffset(startOffset + kTextureIndexOffset, withByte: forceIndexedValue || format.isIndexed ? 1 : 0)
 	}
 	
 	func save() {

@@ -8,6 +8,7 @@
 import Foundation
 
 let patches: [XGDolPatches] = [
+	.unlockSaveFileBoxes,
 	.freeSpaceInDol,
 	.gen7CritRatios,
 	.disableRentalPassChecksums,
@@ -20,9 +21,11 @@ enum XGDolPatches: Int {
 	case gen7CritRatios
 	case disableRentalPassChecksums
 	case disableBlurEffect
+	case unlockSaveFileBoxes
 
 	var name: String {
 		switch self {
+		case .unlockSaveFileBoxes: return "Unlock save file. Links a DS to the save file which lets you use pokemon in your box to create battle passes."
 		case .freeSpaceInDol: return "Create some space in \(XGFiles.dol.fileName) which is needed for other assembly patches. Recommended to use this first."
 		case .gen7CritRatios : return "Update the critical hit ratios to gen 7 odds"
 		case .disableRentalPassChecksums : return "Disable legality checks on battle passes"
@@ -157,8 +160,40 @@ class XGPatcher {
 		}
 	}
 
+	static func unlockSaveFile() {
+		guard environment == .Windows else {
+			printg("The save file decrypting tool is only available on Windows.")
+			return
+		}
+
+		XGFolders.setUpFolderFormat()
+		guard XGFiles.saveData.exists else {
+			printg("Please place your save file at \(XGFiles.saveData.path) then try again.")
+			return
+		}
+		printg("Decrypting save file \(XGFiles.saveData.path) using PbrSaveTool")
+		GoDShellManager.run(.pbrSaveTool, inputRedirectFile: .nameAndFolder("pbrsavetool_decrypt", .Resources))
+		guard XGFiles.decryptedSaveData.exists, let saveData = XGFiles.decryptedSaveData.data else {
+			printg("Couldn't load decrypted save at \(XGFiles.decryptedSaveData.path)")
+			return
+		}
+
+		printg("Linking a random DS TID and SID to the save file.")
+		// SID and TID are randomly generated so we can put any non zero value here
+		saveData.replaceByteAtOffset(0x12860, withByte: 1) // TID second byte
+		saveData.replaceByteAtOffset(0x12865, withByte: 1) // SID second byte
+		saveData.replaceByteAtOffset(0x12866, withByte: 1) // SID first byte
+		saveData.replaceByteAtOffset(0x12867, withByte: 1) // TID first byte
+		saveData.save()
+
+		printg("Encrypting save file \(XGFiles.saveData.path) using PbrSaveTool")
+		GoDShellManager.run(.pbrSaveTool, inputRedirectFile: .nameAndFolder("pbrsavetool_encrypt", .Resources))
+		printg("Done.")
+	}
+
 	class func applyPatch(_ patch: XGDolPatches) {
 		switch patch {
+		case .unlockSaveFileBoxes: XGPatcher.unlockSaveFile()
 		case .freeSpaceInDol: XGPatcher.clearUnusedFunctionsInDol()
 		case .gen7CritRatios: XGPatcher.gen7CritRatios()
 		case .disableRentalPassChecksums: XGPatcher.disableRentalPassChecksums()

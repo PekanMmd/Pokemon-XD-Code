@@ -159,16 +159,6 @@ enum XGRegions: UInt32 {
 	case OtherGame = 0
 	#endif
 
-	var index : Int {
-		switch self {
-		// arbitrary values
-		case .US: return 0
-		case .EU: return 1
-		case .JP: return 2
-		case .OtherGame: return -1
-		}
-	}
-
 	var name: String {
 		switch self {
 		case .US: return "US"
@@ -178,7 +168,17 @@ enum XGRegions: UInt32 {
 		}
 	}
 
-	static func fromId(_ index: Int) -> XGRegions? {
+	static func fromNGCID(_ index: Int) -> XGRegions? {
+		switch index {
+		case 0: return .JP
+		case 1: return .US
+		case 2: return .EU
+		default: return nil
+		}
+	}
+
+	static func fromGBAID(_ index: Int) -> XGRegions? {
+		// ids as used in GBA games and in pokemon data
 		switch index {
 		case 1: return .JP
 		case 2: return .US

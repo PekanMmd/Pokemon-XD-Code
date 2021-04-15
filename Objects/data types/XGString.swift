@@ -190,7 +190,7 @@ class XGString: NSObject, Codable {
 	}
 	
 	func containsSubstring(_ sub: String) -> Bool {
-		return self.string.contains(sub)
+		return self.string.lowercased().contains(sub.lowercased())
 	}
 	
 	func replaceSubstring(_ sub: String, withString new: String) {

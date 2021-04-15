@@ -192,16 +192,6 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="8EN-e9-4nH"/>
-                                        <menuItem title="Import Textures" keyEquivalent="I" id="e3y-Y0-4Pd">
-                                            <connections>
-                                                <action selector="importTextures:" target="Voe-Tx-rLC" id="jdJ-ca-jHf"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Export Textures" keyEquivalent="E" id="SZR-LN-yrR">
-                                            <connections>
-                                                <action selector="exportTextures:" target="Voe-Tx-rLC" id="ZHS-Ye-Hvz"/>
-                                            </connections>
-                                        </menuItem>
                                         <menuItem title="Texture Tool" keyEquivalent="T" id="JUA-oP-Oyd">
                                             <connections>
                                                 <action selector="openTextureImporter:" target="Voe-Tx-rLC" id="z16-C6-OQw"/>

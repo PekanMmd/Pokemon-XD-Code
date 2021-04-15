@@ -294,7 +294,7 @@ class XGISO: NSObject {
 
 		let data = self.data
 		let subData = data.getSubDataFromOffset(start, length: size)
-		subData.file = .nameAndFolder(filename.removeFileExtensions(), .ISOExport(filename.removeFileExtensions()))
+		subData.file = .nameAndFolder(filename, .ISOExport(filename.removeFileExtensions()))
 
 		return subData
 	}

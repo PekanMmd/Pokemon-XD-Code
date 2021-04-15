@@ -837,7 +837,7 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				valueString = "(\(rawValue))"
 				#endif
 			case .regionID:
-				valueString = XGRegions.fromId(rawValue)?.name ?? "UnknownRegion_\(rawValue)"
+				valueString = XGRegions.fromGBAID(rawValue)?.name ?? "UnknownRegion_\(rawValue)"
 				valueString += " (\(rawValue))"
 			case .indexOfEntryInTable(let table, let nameProperty):
 				if let structData = table.dataForEntry(rawValue) {

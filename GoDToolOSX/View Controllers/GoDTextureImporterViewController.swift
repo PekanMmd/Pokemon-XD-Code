@@ -28,34 +28,34 @@ class GoDTextureImporterViewController: GoDTableViewController {
 	}
 	
 	
-	var fileList : [XGFiles] {
-		return XGFolders.Import.files.filter({ (ifile) -> Bool in
-			return XGFolders.Textures.files.contains(where: { (tfile) -> Bool in
-				return (ifile.fileName.removeFileExtensions() == tfile.fileName.removeFileExtensions()) &&
-					   (tfile.fileType == .gtx || tfile.fileType == .atx) &&
-					   (ifile.fileType == .png || ifile.fileType == .bmp || ifile.fileType == .png)
+	var fileList: [XGFiles] = {
+		var allSupportedImages = [XGFiles]()
+		XGFileTypes.imageFormats.forEach { (type) in
+			allSupportedImages += XGFiles.allFilesWithType(type)
+		}
+		return allSupportedImages.filter({ (ifile) -> Bool in
+			return ifile.folder.files.contains(where: { (tfile) -> Bool in
+				return XGFileTypes.textureFormats.contains(tfile.fileType) &&
+				(ifile.fileName.removeFileExtensions() == tfile.fileName.removeFileExtensions())
+
 			})
 		}).sorted(by: { (f1, f2) -> Bool in
 			f1.fileName < f2.fileName
 		})
-	}
+	}()
 	
 	func loadImage() {
 		
-		if let current = self.currentFile {
-			if current.exists {
-				var textureFile = XGFiles.nameAndFolder(current.fileName.removeFileExtensions() + ".gtx", .Textures)
-				if !textureFile.exists {
-					textureFile = XGFiles.nameAndFolder(current.fileName.removeFileExtensions() + ".atx", .Textures)
-				}
-				if textureFile.exists {
-					if let data = textureFile.data {
-						let textureData = GoDTexture(data: data)
-						self.importer = GoDTextureImporter(oldTextureData: textureData, newImage: XGImage(nsImage: current.image))
-						self.importer!.replaceTextureData()
-						self.imageView.image = self.importer?.texture.image.nsImage
-					}
-				}
+		if let current = self.currentFile, current.exists {
+			let tFile = current.folder.files.first { (tfile) -> Bool in
+				return XGFileTypes.textureFormats.contains(tfile.fileType) &&
+					tfile.fileName.removeFileExtensions() == current.fileName.removeFileExtensions()
+			}
+			if let textureFile = tFile, let data = textureFile.data {
+				let textureData = GoDTexture(data: data)
+				importer = GoDTextureImporter(oldTextureData: textureData, newImage: XGImage(nsImage: current.image))
+				importer?.replaceTextureData()
+				imageView.image = importer?.texture.image.nsImage
 			}
 		}
 	}
@@ -99,12 +99,7 @@ class GoDTextureImporterViewController: GoDTableViewController {
 		cell.setBackgroundColour(GoDDesign.colourWhite())
 		
 		if fileList.count == 0 {
-			if XGFolders.Import.files.count == 0 {
-				cell.setTitle("No images to import.")
-			} else {
-				cell.setTitle("No textures match the images to import.")
-			}
-			return cell
+			cell.setTitle("No images to import. Make sure Game Files sub folders contain the texture (.gtx/.atx) and the corresponding .png")
 		}
 		
 		let list = fileList

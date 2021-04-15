@@ -650,15 +650,9 @@
 		1CA3E4F42622984000E5089A /* gcitool_replace in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E4F32622984000E5089A /* gcitool_replace */; };
 		1CA3E4F52622984000E5089A /* gcitool_replace in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E4F32622984000E5089A /* gcitool_replace */; };
 		1CA3E4F62622984000E5089A /* gcitool_replace in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E4F32622984000E5089A /* gcitool_replace */; };
-		1CA3E5012622984B00E5089A /* gcitool_replace.exe in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E5002622984B00E5089A /* gcitool_replace.exe */; };
-		1CA3E5022622984B00E5089A /* gcitool_replace.exe in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E5002622984B00E5089A /* gcitool_replace.exe */; };
-		1CA3E5032622984B00E5089A /* gcitool_replace.exe in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E5002622984B00E5089A /* gcitool_replace.exe */; };
 		1CA3E52426229C3B00E5089A /* gcitool in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E52326229C3A00E5089A /* gcitool */; };
 		1CA3E52526229C3B00E5089A /* gcitool in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E52326229C3A00E5089A /* gcitool */; };
 		1CA3E52626229C3B00E5089A /* gcitool in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E52326229C3A00E5089A /* gcitool */; };
-		1CA3E53126229C4800E5089A /* gcitool.exe in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E53026229C4800E5089A /* gcitool.exe */; };
-		1CA3E53226229C4800E5089A /* gcitool.exe in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E53026229C4800E5089A /* gcitool.exe */; };
-		1CA3E53326229C4800E5089A /* gcitool.exe in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3E53026229C4800E5089A /* gcitool.exe */; };
 		1CA3E562262384DD00E5089A /* SaveFileTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E561262384DD00E5089A /* SaveFileTables.swift */; };
 		1CA3E563262384DD00E5089A /* SaveFileTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E561262384DD00E5089A /* SaveFileTables.swift */; };
 		1CA3E577262384EA00E5089A /* SaveFileTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E561262384DD00E5089A /* SaveFileTables.swift */; };
@@ -4621,6 +4615,7 @@
 		1CE1A7772326AA0D005141D8 /* XGSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGSettings.swift; sourceTree = "<group>"; };
 		1CED5D9724004864008566B0 /* GoDGCEnumerablePopUpButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDGCEnumerablePopUpButtons.swift; sourceTree = "<group>"; };
 		1CED5D9E2403E9EE008566B0 /* GoDGTXViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDGTXViewController.swift; sourceTree = "<group>"; };
+		1CF240152626463100BD734C /* pbrsavetool.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = pbrsavetool.exe; sourceTree = "<group>"; };
 		1CF4D02324DA2BF900EC2C65 /* XGEvolutionConditionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGEvolutionConditionType.swift; sourceTree = "<group>"; };
 		1CFE744B2613C2D50005BDE8 /* CMShadowIDPopUpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMShadowIDPopUpButton.swift; sourceTree = "<group>"; };
 		1CFE74802616A8F30005BDE8 /* DATModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DATModel.swift; sourceTree = "<group>"; };
@@ -7429,6 +7424,7 @@
 		1CCF00692566063C0082BFE2 /* other */ = {
 			isa = PBXGroup;
 			children = (
+				1CF240152626463100BD734C /* pbrsavetool.exe */,
 				1CA3E53026229C4800E5089A /* gcitool.exe */,
 				1CA3E5002622984B00E5089A /* gcitool_replace.exe */,
 			);
@@ -10578,7 +10574,6 @@
 				B208E5DA20C4D3D700D298BF /* face_074.png in Resources */,
 				B208E66E20C4D3D700D298BF /* face_222.png in Resources */,
 				B208E43B20C4D3BC00D298BF /* body_074.png in Resources */,
-				1CA3E5022622984B00E5089A /* gcitool_replace.exe in Resources */,
 				B208E40B20C4D3BC00D298BF /* body_026.png in Resources */,
 				B208E6FD20C4D3D700D298BF /* face_365.png in Resources */,
 				B208E6B020C4D3D700D298BF /* face_288.png in Resources */,
@@ -10881,7 +10876,6 @@
 				B208E63120C4D3D700D298BF /* face_161.png in Resources */,
 				B208E59220C4D3D700D298BF /* face_002.png in Resources */,
 				B208E4B920C4D3BD00D298BF /* body_200.png in Resources */,
-				1CA3E53226229C4800E5089A /* gcitool.exe in Resources */,
 				B208E53320C4D3BD00D298BF /* body_322.png in Resources */,
 				B208E64E20C4D3D700D298BF /* face_190.png in Resources */,
 				B208E5BC20C4D3D700D298BF /* face_044.png in Resources */,
@@ -11695,7 +11689,6 @@
 				B20EEA9B21EF77E100E87D01 /* PBR_body_258.png in Resources */,
 				B20EEDB121EF77FD00E87D01 /* PBR_face_147.png in Resources */,
 				B20EED0521EF77FD00E87D01 /* PBR_face_410.png in Resources */,
-				1CA3E5032622984B00E5089A /* gcitool_replace.exe in Resources */,
 				B20EEADF21EF77E100E87D01 /* PBR_body_459.png in Resources */,
 				B20EEBEF21EF77E100E87D01 /* PBR_body_319.png in Resources */,
 				B20EEAB621EF77E100E87D01 /* PBR_body_071.png in Resources */,
@@ -12047,7 +12040,6 @@
 				B20EED3621EF77FD00E87D01 /* PBR_face_358.png in Resources */,
 				B20EEE2421EF77FD00E87D01 /* PBR_face_479.png in Resources */,
 				B20EECBB21EF77FD00E87D01 /* PBR_face_138.png in Resources */,
-				1CA3E53326229C4800E5089A /* gcitool.exe in Resources */,
 				B20EEB9521EF77E100E87D01 /* PBR_body_147.png in Resources */,
 				B20EED8E21EF77FD00E87D01 /* PBR_face_195.png in Resources */,
 				B20EEDB621EF77FD00E87D01 /* PBR_face_437.png in Resources */,
@@ -12618,7 +12610,6 @@
 				B2F5ED171F49AE950075C6D2 /* Original Pokemon.json in Resources */,
 				B2F50A651F4C5FAB0075C6D2 /* face_002.png in Resources */,
 				B2F50CDD1F4C5FAC0075C6D2 /* face_318.png in Resources */,
-				1CA3E5012622984B00E5089A /* gcitool_replace.exe in Resources */,
 				B2F508851F4C5FAB0075C6D2 /* body_177.png in Resources */,
 				B2F507851F4C5FAB0075C6D2 /* body_049.png in Resources */,
 				B2F509DF1F4C5FAB0075C6D2 /* body_350.png in Resources */,
@@ -12921,7 +12912,6 @@
 				B2F50CFB1F4C5FAC0075C6D2 /* face_333.png in Resources */,
 				B2F50AB91F4C5FAC0075C6D2 /* face_044.png in Resources */,
 				B2F50DF71F4C5FAD0075C6D2 /* trainer_49.png in Resources */,
-				1CA3E53126229C4800E5089A /* gcitool.exe in Resources */,
 				B2F50B271F4C5FAC0075C6D2 /* face_099.png in Resources */,
 				B2F509C91F4C5FAB0075C6D2 /* body_339.png in Resources */,
 				B2F50AC91F4C5FAC0075C6D2 /* face_052.png in Resources */,

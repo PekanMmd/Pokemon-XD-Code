@@ -8,13 +8,14 @@
 import Foundation
 
 class GoDShellManager {
-    enum Commands: String {
-        case ls
-		case pwd
+    enum Commands {
         case wit
 		case wimgt
 		case gcitool
 		case gcitoolReplace
+		case pbrSaveTool
+		case standard(String)
+		case file(XGFiles)
         
         var file: XGFiles {
 			switch self {
@@ -22,26 +23,21 @@ class GoDShellManager {
 			case .wimgt: return .wimgt
 			case .gcitool: return .tool("gcitool")
 			case .gcitoolReplace: return .tool("gcitool_replace")
-			default: return .nameAndFolder(rawValue, folder)
+			case .pbrSaveTool: return .tool("pbrsavetool")
+			case .file(let file): return file
+			case .standard(let name):
+				let filename = name + (environment == .Windows ? ".exe" : "")
+				let folder = environment == .Windows ? XGFolders.Resources : XGFolders.path("/bin")
+				return .nameAndFolder(filename, folder)
 			}
-        }
-        
-        var folder: XGFolders {
-            switch self {
-			case .wit, .wimgt:
-                return .Wiimm
-			case .gcitool, .gcitoolReplace:
-				return .Resources
-            default:
-				return environment == .Windows ? .Resources : .path("/bin")
-            }
+
         }
     }
     
     @discardableResult
-    static func run(_ command: Commands, args: String? = nil, printOutput: Bool = true) -> String? {
+	static func run(_ command: Commands, args: String? = nil, printOutput: Bool = true, inputRedirectFile: XGFiles? = nil) -> String? {
         guard command.file.exists else {
-			printg("command, \(command.rawValue), doesn't exist\n\(command.file.path) not found")
+			printg("command, \(command.file.fileName), doesn't exist\n\(command.file.path) not found")
             return nil
         }
         
@@ -53,6 +49,11 @@ class GoDShellManager {
 				return arg.replacingOccurrences(of: "<!SPACE>", with: " ")
 			})
         }
+
+		if let inputFile = inputRedirectFile, inputFile.exists {
+			let fileHandle = FileHandle(forReadingAtPath: inputFile.path)
+			task.standardInput = fileHandle
+		}
             
         let outPipe = Pipe()
 		let errorPipe = Pipe()

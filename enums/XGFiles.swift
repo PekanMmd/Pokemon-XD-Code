@@ -66,6 +66,8 @@ indirect enum XGFiles {
 	case deck(XGDecks)
 	#else
 	case boot
+	case saveData
+	case decryptedSaveData
 	case indexAndFsysName(Int, String)
 	#endif
 	case pokeFace(Int)
@@ -145,6 +147,8 @@ indirect enum XGFiles {
 		case .typeAndFolder(let type, _): return folder.files.first(where: {$0.fileType == type})?.fileName ?? "-"
 		#if GAME_PBR
 		case .boot:	return "boot.bin"
+		case .saveData: return "PbrSaveData"
+		case .decryptedSaveData: return "PbrSaveData_decrypted_current"
 		case .indexAndFsysName(let index, let name): return XGFiles.fsys(name).fsysData.fileNameForFileWithIndex(index: index) ?? "-"
 		#endif
 		}
@@ -156,6 +160,8 @@ indirect enum XGFiles {
 		#if GAME_PBR
 		case .dol				: return .ISOExport("main")
 		case .boot				: return .Sys
+		case .saveData			: return .SaveFiles
+		case .decryptedSaveData	: return .SaveFiles
 		case .indexAndFsysName(_, let fsysName): return XGFiles.fsys(fsysName).folder
 		#else
 		case .dol				: return .ISOExport("Start")
@@ -177,6 +183,7 @@ indirect enum XGFiles {
 		case .json				: return .JSON
 		case .wit      		    : return .Wiimm
 		case .wimgt      		: return .Wiimm
+		case .tool("pbrsavetool"): return .SaveFiles
 		case .tool				: return .Resources
 		case .embedded			: return .Documents
 		case .gameFile(let s)	: return .ISOExport(s.removeFileExtensions())
@@ -539,9 +546,6 @@ indirect enum XGFolders {
 	case Documents
 	case JSON
 	case SaveFiles
-	case Import
-	case Export
-	case Textures
 	case Images
 	case PokeFace
 	case PokeBody
@@ -569,9 +573,6 @@ indirect enum XGFolders {
 		case .Documents			: return "Documents"
 		case .JSON				: return "JSON"
 		case .SaveFiles			: return "Save Files"
-		case .Import			: return "Import"
-		case .Export			: return "Export"
-		case .Textures			: return "Textures"
 		case .Images			: return "Images"
 		case .PokeFace			: return "PokeFace"
 		case .PokeBody			: return "PokeBody"
@@ -699,9 +700,6 @@ indirect enum XGFolders {
 			.Resources,
 			.JSON,
 			.SaveFiles,
-			.Import,
-			.Export,
-			.Textures,
 			.Images,
 			.PokeFace,
 			.PokeBody,
@@ -802,6 +800,15 @@ indirect enum XGFolders {
 			let gcitoolReplace = XGFiles.tool("gcitool_replace")
 			if !gcitoolReplace.exists {
 				XGResources.tool("gcitool_replace").copy(to: gcitoolReplace)
+			}
+		} else {
+			if environment == .Windows {
+				let saveTool = XGFiles.tool("pbrsavetool")
+				if !saveTool.exists {
+					XGResources.tool("pbrsavetool").copy(to: saveTool)
+				}
+				XGUtility.saveString("d", toFile: .nameAndFolder("pbrsavetool_decrypt", .Resources))
+				XGUtility.saveString("e", toFile: .nameAndFolder("pbrsavetool_encrypt", .Resources))
 			}
 		}
 	}
