@@ -91,6 +91,7 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.shinyLockShadowPokemon,
 	.alwaysShinyShadowPokemon,
 	.tradeEvolutions,
+	.removeItemEvolutions,
 	.enableDebugLogs,
 	.pokemonCanLearnAnyTM,
 	.pokemonHaveMaxCatchRate,
@@ -105,6 +106,7 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.defaultMoveCategories,
 	.allowFemaleStarters,
 	.tradeEvolutions,
+	.removeItemEvolutions,
 	.allowShinyStarters,
 	.shinyLockStarters,
 	.alwaysShinyStarters,
@@ -129,6 +131,7 @@ enum XGDolPatches: Int {
 	case purgeUnusedText
 	case decapitaliseNames
 	case tradeEvolutions
+	case removeItemEvolutions
 	case defaultMoveCategories
 	case allowFemaleStarters
 	case allowShinyStarters
@@ -165,7 +168,8 @@ enum XGDolPatches: Int {
 		case .shinyChanceEditingRemove : return "shininess will be determined by trainer ID as usual."
 		case .purgeUnusedText : return "Removes foreign language text from the US version."
 		case .decapitaliseNames : return "Decapitalises a lot of text."
-		case .tradeEvolutions : return "Trade Evolutions become level 40"
+		case .tradeEvolutions : return "Trade evolutions become level 40"
+		case .removeItemEvolutions : return "Evolution stone evolutions become level 40"
 		case .defaultMoveCategories: return "Sets the physical/special category for all moves to their expected values"
 		case .allowFemaleStarters: return "Allow starter pokemon to be female"
 		case .switchPokemonAtEndOfTurn: return "After a KO the next pokemon switches in at end of turn"
@@ -665,11 +669,24 @@ class XGPatcher {
 		printg("Setting pokemon that require a trade to evolve to evolve at level 40 instead")
 		
 		for i in 0 ..< kNumberOfPokemon {
-			
 			let stats = XGPokemonStats(index: i)
-			
 			for j in 0 ..< kNumberOfEvolutions {
 				if (stats.evolutions[j].evolutionMethod == XGEvolutionMethods.trade) || (stats.evolutions[j].evolutionMethod == XGEvolutionMethods.tradeWithItem) {
+					stats.evolutions[j].evolutionMethod = .levelUp
+					stats.evolutions[j].condition = 40
+					stats.save()
+				}
+			}
+		}
+	}
+
+	class func removeItemEvolutions() {
+		printg("Setting pokemon that require an item like an evolution stone to evolve to evolve at level 40 instead")
+
+		for i in 0 ..< kNumberOfPokemon {
+			let stats = XGPokemonStats(index: i)
+			for j in 0 ..< kNumberOfEvolutions {
+				if stats.evolutions[j].evolutionMethod == XGEvolutionMethods.evolutionStone {
 					stats.evolutions[j].evolutionMethod = .levelUp
 					stats.evolutions[j].condition = 40
 					stats.save()
@@ -908,6 +925,7 @@ class XGPatcher {
 			case .purgeUnusedText				: XGPatcher.purgeUnusedText()
 			case .decapitaliseNames				: XGPatcher.decapitalise()
 			case .tradeEvolutions				: XGPatcher.removeTradeEvolutions()
+			case .removeItemEvolutions			: XGPatcher.removeItemEvolutions()
 			case .defaultMoveCategories			: XGUtility.defaultMoveCategories()
 			case .allowFemaleStarters			: XGPatcher.allowFemaleStarters()
 			case .switchPokemonAtEndOfTurn		: XGAssembly.switchNextPokemonAtEndOfTurn()
