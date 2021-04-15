@@ -8,7 +8,7 @@
 
 import Foundation
 
-let versionNumber = "V2.1.4"
+let versionNumber = "V2.1.5"
 var fileDecodingMode = false
 
 func aboutMessage() -> String {
