@@ -13,13 +13,15 @@ class GoDStructTable: GoDStructTableFormattable {
 	let startOffsetForFirstEntryInFile: ((XGFiles) -> Int)
 	let numberOfEntriesInFile: ((XGFiles) -> Int)
 	let nameForEntry: ((Int, GoDStructData) -> String?)?
+	let documentByIndex: Bool
 
-	init(file: XGFiles, properties: GoDStruct, startOffsetForFirstEntryInFile: @escaping ((XGFiles) -> Int), numberOfEntriesInFile: @escaping ((XGFiles) -> Int), nameForEntry: ((Int, GoDStructData) -> String?)? = nil) {
+	init(file: XGFiles, properties: GoDStruct, documentByIndex: Bool = true, startOffsetForFirstEntryInFile: @escaping ((XGFiles) -> Int), numberOfEntriesInFile: @escaping ((XGFiles) -> Int), nameForEntry: ((Int, GoDStructData) -> String?)? = nil) {
 		self.file = file
 		self.properties = properties
 		self.startOffsetForFirstEntryInFile = startOffsetForFirstEntryInFile
 		self.numberOfEntriesInFile = numberOfEntriesInFile
 		self.nameForEntry = nameForEntry
+		self.documentByIndex = documentByIndex
 	}
 
 	static var dummy: GoDStructTable {
@@ -34,6 +36,7 @@ protocol GoDStructTableFormattable {
 	var numberOfEntriesInFile: ((XGFiles) -> Int) { get }
 	var nameForEntry: ((Int, GoDStructData) -> String?)? { get }
 	var fileVaries: Bool { get }
+	var documentByIndex: Bool { get }
 }
 
 extension GoDStructTableFormattable {
@@ -43,6 +46,8 @@ extension GoDStructTableFormattable {
 	var entryLength: Int {
 		properties.length
 	}
+
+	var documentByIndex: Bool { true }
 
 	var numberOfEntries: Int {
 		return numberOfEntriesInFile(file)
@@ -121,7 +126,9 @@ extension GoDStructTableFormattable {
 		let folder = XGFolders.nameAndFolder(foldername, .nameAndFolder("Documented Data", .Reference))
 		printg("Documenting \(properties.name) table to:", folder.path)
 		allEntries.forEachIndexed { (index, entry) in
-			var filename = assumedNameForEntry(index: index) + " " + String(format: "%03d", index)  + ".yaml"
+			var filename = documentByIndex ?
+				String(format: "%03d", index) + assumedNameForEntry(index: index) + " " + ".yaml" :
+				assumedNameForEntry(index: index) + " " + String(format: "%03d", index)  + ".yaml"
 			filename = filename.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: "\"", with: "")
 			filename = filename.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: "\"", with: "")
 			let file = XGFiles.nameAndFolder(filename, folder)
@@ -137,7 +144,7 @@ extension GoDStructTableFormattable {
 
 		var text = "\(properties.name) - count: \(numberOfEntries)\n"
 		allEntries.forEachIndexed { (index, entry) in
-			text += ("\n" + assumedNameForEntry(index: index)).spaceToLength(20) + " - \(index)"
+			text += ("\n" + "\(index) - " + assumedNameForEntry(index: index)).spaceToLength(20)
 		}
 		XGUtility.saveString(text, toFile: file)
 	}

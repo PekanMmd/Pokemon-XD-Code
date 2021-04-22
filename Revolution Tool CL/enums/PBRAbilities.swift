@@ -8,32 +8,27 @@
 
 import Foundation
 
-let kFirstAbilityNameID = 0xbae
-let kFirstAbilityDescriptionID = 0xc2a
-
-let kNumberOfAbilities	= 124
+var kNumberOfAbilities: Int {
+	return PBRAbilitiesManager.shared.entries?.count ?? 0
+} // 124 in vanilla
 
 enum XGAbilities : XGIndexedValue {
 	
 	case index(Int)
 	
 	var index : Int {
-		get {
-			switch self {
-				case .index(let i):
-					if i >= kNumberOfAbilities || i < 0 {
-						return 0
-					}
-					return i
-			}
+		switch self {
+		case .index(let i):
+			return i
 		}
 	}
-	
+
+	var data: PBRAbilityData? {
+		return PBRAbilitiesManager.shared.getAbility(index)
+	}
 	
 	var nameID : Int {
-		get {
-			return self.index + kFirstAbilityNameID
-		}
+		return data?.nameStringID ?? 0
 	}
 	
 	var name : XGString {
@@ -43,9 +38,7 @@ enum XGAbilities : XGIndexedValue {
 	}
 	
 	var descriptionID : Int {
-		get {
-			return self.index + kFirstAbilityDescriptionID
-		}
+		return data?.descriptionStringID ?? 0
 	}
 	
 	var adescription : XGString {
@@ -55,11 +48,7 @@ enum XGAbilities : XGIndexedValue {
 	}
 	
 	static func allAbilities() -> [XGAbilities] {
-		var abs = [XGAbilities]()
-		for i in 0 ..< kNumberOfAbilities {
-			abs.append(.index(i))
-		}
-		return abs
+		return (0 ..< kNumberOfAbilities).map { XGAbilities.index($0) }
 	}
 	
 	static func random() -> XGAbilities {
@@ -83,13 +72,7 @@ extension XGAbilities: XGEnumerable {
 	}
 	
 	static var allValues: [XGAbilities] {
-		var values = [XGAbilities]()
-		
-		for i in 0 ..< kNumberOfAbilities {
-			values.append(.index(i))
-		}
-		
-		return values
+		return allAbilities()
 	}
 }
 

@@ -93,6 +93,8 @@ class XGISO: NSObject {
 		if region != .OtherGame {
 			#if !GAME_PBR
 			resetRelocationTables()
+			#else
+			PBRAbilitiesManager.reload()
 			#endif
 			GSFsys.reload()
 		}
@@ -113,7 +115,7 @@ class XGISO: NSObject {
 		}
 
 		if !XGFiles.iso.exists {
-			printg("ISO file doesn't exist. Please place your \(game == .XD ? "Pokemon XD" : "Pokemon Colosseum") file in the folder \(XGFolders.ISO.path) and name it \(XGFiles.iso.fileName)")
+			printg("ISO file doesn't exist.")
 		}
 
 		if settings.verbose {

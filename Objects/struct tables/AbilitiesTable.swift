@@ -7,35 +7,9 @@
 
 import Foundation
 
-var kAbilitiesStartOffset: Int = {
-	if game == .XD {
-		switch region {
-		case .US: return 0x3FCC50
-		case .EU: return 0x437530
-		case .JP: return 0x3DA310
-		case .OtherGame: return 0
-		}
-	} else {
-		switch region {
-		case .US: return 0x35C5E0
-		case .EU: return 0x3A9688
-		case .JP: return 0x348D20
-		case .OtherGame: return 0
-		}
-	}
-}()
-
-var abilityListUpdated: Bool {
-	return (XGFiles.dol.data?.getWordAtOffset(kAbilitiesStartOffset + 8) ?? 0) != 0
-}
-
-var kNumberOfAbilities: Int {
-	return abilityListUpdated ? (0x3A8 / 8) : 0x4E
-}
-
 var abilityStruct: GoDStruct {
 	var properties: [GoDStructProperties] = []
-	if !abilityListUpdated {
+	if kSizeOfAbilityEntry == 12 {
 		properties.append(.word(name: "Unused", description: "", type: .null))
 	}
 	properties += [
@@ -46,8 +20,9 @@ var abilityStruct: GoDStruct {
 }
 
 var abilitiesTable: GoDStructTable {
-	return GoDStructTable(file: .dol, properties: abilityStruct) { (_) -> Int in
-		return kAbilitiesStartOffset
+	return GoDStructTable(file: abilitiesDataFile, properties: abilityStruct, documentByIndex: false) { (file) -> Int in
+		let offset = file == .common_rel ? kRELtoRAMOffsetDifference : kDolTableToRAMOffsetDifference
+		return kAbilitiesStartRAMOffset - offset
 	} numberOfEntriesInFile: { (_) -> Int in
 		return kNumberOfAbilities
 	}

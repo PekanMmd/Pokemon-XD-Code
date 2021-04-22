@@ -146,4 +146,4 @@ let pokemonStatsStruct = GoDStruct(name: "Pokemon Stats", format: [
 )
 #endif
 
-let pokemonTable = CommonStructTable(index: .PokemonStats, properties: pokemonStatsStruct)
+let pokemonTable = CommonStructTable(index: .PokemonStats, properties: pokemonStatsStruct, documentByIndex: false)

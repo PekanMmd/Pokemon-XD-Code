@@ -23,7 +23,7 @@ class SaveFilePokemonStructTable: GoDStructTableFormattable {
 			}
 		case .pcBox(let index):
 			return { (_) -> Int in
-				return kSaveFilePCBoxesStartOffset + kSizeOfBoxHeader + (index * (pokemonStruct.length + kSizeOfBoxHeader))
+				return kSaveFilePCBoxesStartOffset + kSizeOfBoxHeader + (index * ((pokemonStruct.length * kNumberOfPokemonPerPCBox) + kSizeOfBoxHeader))
 			}
 		}
 	}

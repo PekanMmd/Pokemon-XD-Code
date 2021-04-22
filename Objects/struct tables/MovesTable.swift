@@ -87,4 +87,4 @@ let moveStruct = GoDStruct(name: "Move", format: [
 ])
 #endif
 
-let movesTable = CommonStructTable(index: .Moves, properties: moveStruct)
+let movesTable = CommonStructTable(index: .Moves, properties: moveStruct, documentByIndex: false)

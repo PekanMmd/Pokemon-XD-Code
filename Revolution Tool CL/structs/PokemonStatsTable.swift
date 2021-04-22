@@ -59,7 +59,7 @@ let pokemonStatsTable = CommonStructTable(index: region == .JP ? 14 : 8, propert
 	.byte(name: "Unknown 2", description: "", type: .uint),
 	.byte(name: "Colour Data", description: "Determines colour category in the pokedex. Lowest bit of this value is used for something unknown.", type: .uint)
 
-]))
+]), documentByIndex: false)
 
 let evolutionsTable = CommonStructTable(index: region == .JP ? 15 : 9, properties: GoDStruct(name: "Evolutions", format: [
 	.array(name: "Evolutions", description: "", property:

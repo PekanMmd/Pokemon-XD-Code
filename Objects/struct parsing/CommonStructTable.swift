@@ -13,14 +13,15 @@ class CommonStructTable: GoDStructTableFormattable {
 	let startOffsetForFirstEntryInFile: ((XGFiles) -> Int)
 	let numberOfEntriesInFile: ((XGFiles) -> Int)
 	var nameForEntry: ((Int, GoDStructData) -> String?)?
+	let documentByIndex: Bool
 
 	let commonIndex: Int
 
-	convenience init(index: CommonIndexes, properties: GoDStruct, nameForEntry: ((Int, GoDStructData) -> String?)? = nil) {
-		self.init(index: index.rawValue, properties: properties, nameForEntry: nameForEntry)
+	convenience init(index: CommonIndexes, properties: GoDStruct, documentByIndex: Bool = true, nameForEntry: ((Int, GoDStructData) -> String?)? = nil) {
+		self.init(index: index.rawValue, properties: properties, documentByIndex: documentByIndex, nameForEntry: nameForEntry)
 	}
 
-	init(index: Int, properties: GoDStruct, nameForEntry: ((Int, GoDStructData) -> String?)? = nil) {
+	init(index: Int, properties: GoDStruct, documentByIndex: Bool = true, nameForEntry: ((Int, GoDStructData) -> String?)? = nil) {
 		self.commonIndex = index
 		self.properties = properties
 		startOffsetForFirstEntryInFile = { (file) in
@@ -31,5 +32,6 @@ class CommonStructTable: GoDStructTableFormattable {
 		}
 
 		self.nameForEntry = nameForEntry
+		self.documentByIndex = documentByIndex
 	}
 }

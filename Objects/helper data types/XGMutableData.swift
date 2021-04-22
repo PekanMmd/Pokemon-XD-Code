@@ -413,32 +413,6 @@ class XGMutableData {
 		replaceBytesFromOffset(start, withByteStream: [UInt8](repeating: 0, count: length))
 	}
 	
-	func getStringAtOffset(_ offset: Int, charLength: ByteLengths = .char, maxCharacters: Int? = nil) -> String {
-		if offset < 0 || offset + (2 * charLength.rawValue) > length {
-			printg("Attempting to read string at offset: \(offset.hexString()), file: \(file.path), length: \(length.hexString())")
-			return ""
-		}
-
-		var currentOffset = offset
-		
-		var currChar = 0x0
-		var nextChar = 0x1
-		var characterCounter = 0
-		
-		let string = XGString(string: "", file: nil, sid: nil)
-		
-		while nextChar != 0x00 && (maxCharacters == nil || characterCounter < maxCharacters!) {
-			currChar = self.getValueAtOffset(currentOffset, length: charLength)
-			currentOffset += charLength.rawValue
-			characterCounter += 1
-			
-			string.append(.unicode(currChar))
-			nextChar = self.getValueAtOffset(currentOffset, length: charLength)
-		}
-		
-		return string.string
-	}
-	
 	//MARK: - search for data
 	func occurencesOfBytes(_ bytes: [Int]) -> [Int] {
 		let searchData = XGMutableData(byteStream: bytes)
@@ -463,6 +437,51 @@ class XGMutableData {
 		return offsets
 	}
 
+	// MARK: - Strings
+
+	func getStringAtOffset(_ offset: Int, charLength: ByteLengths = .char, maxCharacters: Int? = nil) -> String {
+		if offset < 0 || offset + (2 * charLength.rawValue) > length {
+			printg("Attempting to read string at offset: \(offset.hexString()), file: \(file.path), length: \(length.hexString())")
+			return ""
+		}
+
+		var currentOffset = offset
+
+		var currChar = 0x0
+		var nextChar = 0x1
+		var characterCounter = 0
+
+		let string = XGString(string: "", file: nil, sid: nil)
+
+		while nextChar != 0x00 && (maxCharacters == nil || characterCounter < maxCharacters!) {
+			currChar = self.getValueAtOffset(currentOffset, length: charLength)
+			currentOffset += charLength.rawValue
+			characterCounter += 1
+
+			string.append(.unicode(currChar))
+			nextChar = self.getValueAtOffset(currentOffset, length: charLength)
+		}
+
+		return string.string
+	}
+
+	func writeString(_ string: String, at offset: Int, charLength: ByteLengths = .short, maxCharacters: Int? = nil) {
+		if offset < 0 || offset + (2 * charLength.rawValue) > length {
+			printg("Attempting to write string at offset: \(offset.hexString()), file: \(file.path), length: \(length.hexString())")
+			return
+		}
+
+		string.unicodeRepresentation.forEachIndexed { (index, unicode) in
+			guard maxCharacters == nil || index < maxCharacters! else { return }
+			let currentOffset = offset + (index * charLength.rawValue)
+			switch charLength {
+			case .char:	replaceByteAtOffset(currentOffset, withByte: unicode)
+			case .short: replace2BytesAtOffset(currentOffset, withBytes: unicode)
+			case .word: replace4BytesAtOffset(currentOffset, withBytes: unicode)
+			}
+		}
+	}
+
 	func readString(at offset: Int, length: Int) -> XGString {
 		let bytes = getShortStreamFromOffset(offset, length: length * 2)
 		let string = XGString(string: "", file: nil, sid: nil)
@@ -474,10 +493,6 @@ class XGMutableData {
 
 	func writeString(_ string: XGString, at offset: Int) {
 		replaceBytesFromOffset(offset, withByteStream: string.byteStream)
-	}
-
-	func writeString(_ unicodeString: String, at offset: Int) {
-		replaceBytesFromOffset(offset, withByteStream: string.unicodeRepresentation)
 	}
 }
 

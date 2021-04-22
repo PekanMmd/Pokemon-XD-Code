@@ -26,4 +26,4 @@ let natureStruct = GoDStruct(name: "Nature", format: [
 		.byte(name: "Unknown Value", description: "", type: .uintHex), count: 14)
 ])
 
-let naturesTable = CommonStructTable(index: .Natures, properties: natureStruct)
+let naturesTable = CommonStructTable(index: .Natures, properties: natureStruct, documentByIndex: false)

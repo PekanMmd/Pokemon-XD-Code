@@ -342,7 +342,9 @@ indirect enum GoDStructProperties {
 		switch self {
 		case .byte, .short, .word, .float, .pointer, .bitMask:
 			return length
-		case .string, .bitArray:
+		case .string(_, _, _, let charLength):
+			return charLength.rawValue
+		case .bitArray:
 			return 1
 		case .vector:
 			return 4
@@ -365,7 +367,7 @@ indirect enum GoDStructProperties {
 			if let length = maxLength {
 				return length * charLength.rawValue
 			} else {
-				return 1
+				return charLength.rawValue // Impossible to tell actual length here as it is variable
 			}
 		case .bitMask(_, _, let length, _):
 			return length.rawValue

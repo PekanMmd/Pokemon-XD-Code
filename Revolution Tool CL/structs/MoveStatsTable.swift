@@ -34,4 +34,4 @@ let moveStatsTable = CommonStructTable(index: region == .JP ? 31 : 30, propertie
 	]),
 	.byte(name: "Move effect type", description: "A broad category for the move's effect such as damaging or stat boost. Possibly used by the AI to strategise.", type: .moveEffectType),
 	.byte(name: "Unknown 2", description: "", type: .uint),
-]))
+]), documentByIndex: false)

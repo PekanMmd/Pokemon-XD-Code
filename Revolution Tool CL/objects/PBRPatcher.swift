@@ -19,6 +19,7 @@ enum XGDolPatches: Int {
 
 	case freeSpaceInDol
 	case gen7CritRatios
+	case gen6CriticalHitMultipliers
 	case disableRentalPassChecksums
 	case disableBlurEffect
 	case unlockSaveFileBoxes
@@ -27,9 +28,10 @@ enum XGDolPatches: Int {
 		switch self {
 		case .unlockSaveFileBoxes: return "Unlock save file. Links a DS to the save file which lets you use pokemon in your box to create battle passes."
 		case .freeSpaceInDol: return "Create some space in \(XGFiles.dol.fileName) which is needed for other assembly patches. Recommended to use this first."
-		case .gen7CritRatios : return "Update the critical hit ratios to gen 7 odds"
-		case .disableRentalPassChecksums : return "Disable legality checks on battle passes"
-		case .disableBlurEffect : return "Remove the blur effect from the games rendering"
+		case .gen7CritRatios: return "Update the critical hit ratios to gen 7 odds"
+		case .gen6CriticalHitMultipliers: return "Critical hits deal 1.5x damage, 2.25x with Sniper"
+		case .disableRentalPassChecksums: return "Disable legality checks on battle passes"
+		case .disableBlurEffect: return "Remove the blur effect from the games rendering"
 		}
 	}
 
@@ -129,6 +131,62 @@ class XGPatcher {
 		])
 	}
 
+	static func gen6CriticalHitMultipliers() {
+		guard region == .US else {
+			printg("This patch hasn't been implemented for this region yet:", region.name)
+			return
+		}
+		let damageMultipliersOffset: Int
+		switch region {
+		case .US: damageMultipliersOffset = -1
+		case .EU: damageMultipliersOffset = 0x3c85f4
+		case .JP: damageMultipliersOffset = -1
+		case .OtherGame: damageMultipliersOffset = -1
+		}
+
+		// These values have to be whole numbers so we will have to divide the damage by 4 after the multipliers are applied
+		// In order to get the proper 1.5x and 2.25x multipliers
+		XGAssembly.replaceRamASM(RAMOffset: damageMultipliersOffset, newASM: [
+			.li(.r30, 6), // regular crit multiplier
+			.cmpwi(.r30, 6),
+		])
+		XGAssembly.replaceRamASM(RAMOffset: damageMultipliersOffset + 0x24, newASM: [
+			.li(.r30, 9) // sniper crit multiplier
+		])
+
+		let damageCalcOffset: Int
+		switch region {
+		case .US: damageCalcOffset = -1
+		case .EU: damageCalcOffset = 0x3cad84
+		case .JP: damageCalcOffset = -1
+		case .OtherGame: damageCalcOffset = -1
+		}
+		let calcDamageBoostFunctionOffset = 0x3c6178
+
+		// Rewrite the assembly to be more concise so we can squeeze in 2 extra instructions for dividing the
+		// multiplied value by 4
+		XGAssembly.replaceRamASM(RAMOffset: damageCalcOffset, newASM: [
+			// shortened code
+			.lwz(.r8, .r31, 0x2154),
+			.lwz(.r10, .r31, 0x64),
+			.lwz(.r6, .r7, 0x01BC),
+			.lwz(.r5, .r31, 0x3044),
+			.lwz(.r7, .r31, 0x0180),
+			.bl(calcDamageBoostFunctionOffset),
+
+			// updated code for crit multipliers
+			.lwz(.r0, .r31, 0x2150), // get crit multiplier
+			.mullw(.r0, .r3, .r0), // multiply damage by our updated multipliers
+			.li(.r4, 4),
+			.divw(.r0, .r0, .r4), // divided result by 4
+			.stw(.r0, .r31, 0x2144), // store damage
+
+			// rearranged code. moved these instructions just for readability
+			.mr(.r3, .r31),
+			.lwz(.r4, .r31, 0x64)
+		])
+	}
+
 	static func overrideHardcodedPokemonCount(newCount count: Int) {
 		guard region == .EU else {
 			printg("Couldn't override hard coded pokemon count for game region \(region.name)")
@@ -196,6 +254,7 @@ class XGPatcher {
 		case .unlockSaveFileBoxes: XGPatcher.unlockSaveFile()
 		case .freeSpaceInDol: XGPatcher.clearUnusedFunctionsInDol()
 		case .gen7CritRatios: XGPatcher.gen7CritRatios()
+		case .gen6CriticalHitMultipliers: XGPatcher.gen6CriticalHitMultipliers()
 		case .disableRentalPassChecksums: XGPatcher.disableRentalPassChecksums()
 		case .disableBlurEffect: XGPatcher.disableBlurEffect()
 		}

@@ -38,7 +38,13 @@ enum TableTypes {
 
 	var name: String {
 		switch self {
-		case .structTable(let table, _): return table.properties.name + (table.fileVaries ? "\n" + table.file.fileName : "")
+		case .structTable(let table, _):
+			#if GUI
+			let separator = "\n"
+			#else
+			let separator = " "
+			#endif
+			return table.properties.name + (table.fileVaries ? separator + table.file.fileName : "")
 		case .codableData(let type): return type.className
 		}
 	}

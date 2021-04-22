@@ -19,7 +19,7 @@ let typeStruct = GoDStruct(name: "Type", format: [
 	.word(name: "Name ID", description: "", type: .msgID(file: .common_rel))
 ] + typeMatchups)
 
-let typesTable = CommonStructTable(index: .Types, properties: typeStruct)
+let typesTable = CommonStructTable(index: .Types, properties: typeStruct, documentByIndex: false)
 #else
 let typeMatchups = (0 ..< 18).map { (i) -> GoDStructProperties in
 	return .short(name: "Effectiveness against Type \(i)", description: "", type: .typeEffectiveness)
@@ -31,7 +31,7 @@ let typeStruct = GoDStruct(name: "Type", format: [
 	.word(name: "Name ID", description: "", type: .msgID(file: .common_rel))
 ] + typeMatchups)
 
-let typesTable = GoDStructTable(file: .dol, properties: typeStruct) { (_) -> Int in
+let typesTable = GoDStructTable(file: .dol, properties: typeStruct, documentByIndex: false) { (_) -> Int in
 	return kFirstTypeOffset
 } numberOfEntriesInFile: { (_) -> Int in
 	return 18

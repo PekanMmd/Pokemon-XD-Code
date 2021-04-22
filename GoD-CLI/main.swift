@@ -42,14 +42,19 @@ func importExportFiles() {
 	}
 
 	func importFiles(encode: Bool) {
+		var importedAFile = false
 		for file in searchedFiles() {
 			let inputFile = XGFiles.nameAndFolder(file, .ISOExport(file.removeFileExtensions()))
 			printg("Importing file", file, "from:", inputFile.folder.path)
-			if XGUtility.importFileToISO(inputFile, encode: encode) {
+			if XGUtility.importFileToISO(inputFile, encode: encode, save: false) {
 				printg("success")
+				importedAFile = true
 			} else {
 				printg("failed")
 			}
+		}
+		if importedAFile {
+			XGISO.current.save()
 		}
 	}
 

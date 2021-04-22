@@ -1266,7 +1266,7 @@ extension XDSScriptCompiler {
 									classIndex = gvars.values[gvarIndex].type.index
 									
 									if let params = getParameters() {
-										if classIndex <= 4 {
+										if classIndex <= 4 || classIndex > 60 {
 											functionParameters = [XDSExpr.loadVariable(variableName)] + params
 										} else {
 											functionParameters = [XDSExpr.loadPointer(variableName)] + params
@@ -1310,7 +1310,12 @@ extension XDSScriptCompiler {
 									}
 									
 									if let params = getParameters() {
-										functionParameters = [XDSExpr.loadPointer(variableName)] + params
+										if classIndex > 60 {
+											// custom classes won't have associated object
+											functionParameters = params
+										} else {
+											functionParameters = [XDSExpr.loadPointer(variableName)] + params
+										}
 									} else {
 										return nil
 									}

@@ -30,10 +30,10 @@ let validItemStruct = GoDStruct(name: "Valid Item", format: [
 ])
 
 #if GAME_XD
-let itemsTable = CommonStructTable(index: .Items, properties: itemsStruct)
+let itemsTable = CommonStructTable(index: .Items, properties: itemsStruct, documentByIndex: false)
 let validItemsTable = CommonStructTable(index: .ValidItems, properties: validItemStruct)
 #else
-let itemsTable = GoDStructTable(file: .dol, properties: itemsStruct) { (file) -> Int in
+let itemsTable = GoDStructTable(file: .dol, properties: itemsStruct, documentByIndex: false) { (file) -> Int in
 	kFirstItemOffset
 } numberOfEntriesInFile: { (file) -> Int in
 	kNumberOfItems

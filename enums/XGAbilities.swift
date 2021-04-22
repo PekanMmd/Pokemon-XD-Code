@@ -8,9 +8,84 @@
 
 import Foundation
 
-let kAbilityNameIDOffset		= abilityListUpdated ? 0 : 4
-let kAbilityDescriptionIDOffset = abilityListUpdated ? 4 : 8
-let kSizeOfAbilityEntry			= abilityListUpdated ? 8 : 12
+let kAbilityNameIDOffset		= kSizeOfAbilityEntry == 8 ? 0 : 4
+let kAbilityDescriptionIDOffset = kSizeOfAbilityEntry == 8 ? 4 : 8
+
+var kSizeOfAbilityEntry: Int {
+	return XGFiles.dol.data?.get2BytesAtOffset(abilityDataFunctionOffset + 26) ?? 0
+}
+
+var abilityDataFunctionOffset: Int {
+	// In Start.dol
+	if game == .XD {
+		switch region {
+		case .US: return 0x1411f8
+		case .EU: return 0x142abc
+		case .JP: return 0x13c5a8
+		case .OtherGame: return -1
+		}
+	} else {
+		switch region {
+		case .US: return 0x119b6c
+		case .EU: return 0x11db48
+		case .JP: return 0x11725c
+		case .OtherGame: return -1
+		}
+	}
+}
+
+var numberOfAbilitiesOffset: Int {
+	if game == .XD {
+		switch region {
+		case .US: return 0x41db38
+		case .EU: return 0x458538
+		case .JP: return 0x3fb1d0
+		case .OtherGame: return -1
+		}
+	} else {
+		switch region {
+		case .US: return 0x397a28
+		case .EU: return 0x3e4ec8
+		case .JP: return 0x384198
+		case .OtherGame: return -1
+		}
+	}
+}
+
+var kAbilitiesStartRAMOffset: Int = {
+	guard let offsetPart1 = XGFiles.dol.data?.get2BytesAtOffset(abilityDataFunctionOffset + 30),
+		  let offsetPart2 = XGFiles.dol.data?.get2BytesAtOffset(abilityDataFunctionOffset + 34) else {
+		return -1
+	}
+	let p1 = (offsetPart1 & 0xFFF) << 16
+	let p2 = UInt16(offsetPart2).signed()
+	return p1 + p2
+	// default offsets in start.dol
+//	if game == .XD {
+//		switch region {
+//		case .US: return 0x3FCC50
+//		case .EU: return 0x437530
+//		case .JP: return 0x3DA310
+//		case .OtherGame: return 0
+//		}
+//	} else {
+//		switch region {
+//		case .US: return 0x35C5E0
+//		case .EU: return 0x3A9688
+//		case .JP: return 0x348D20
+//		case .OtherGame: return 0
+//		}
+//	}
+}()
+
+var abilitiesDataFile: XGFiles {
+	return kAbilitiesStartRAMOffset < XGFiles.dol.fileSize + kDolTableToRAMOffsetDifference ? XGFiles.dol : XGFiles.common_rel
+}
+
+var kNumberOfAbilities: Int {
+	guard region != .OtherGame else { return 0 }
+	return XGFiles.dol.data?.get4BytesAtOffset(numberOfAbilitiesOffset) ?? 0
+}
 
 enum XGAbilities {
 	
@@ -31,12 +106,11 @@ enum XGAbilities {
 	}
 	
 	var nameIDOffset: Int {
-		return kAbilitiesStartOffset + (index * kSizeOfAbilityEntry) + kAbilityNameIDOffset
+		return kAbilitiesStartRAMOffset - kDolTableToRAMOffsetDifference + (index * kSizeOfAbilityEntry) + kAbilityNameIDOffset
 	}
 	
 	var nameID: Int {
-		let dol = XGFiles.dol.data!
-		return Int(dol.getWordAtOffset(nameIDOffset))
+		return abilitiesDataFile.data?.get4BytesAtOffset(nameIDOffset) ?? 0
 	}
 	
 	var name: XGString {
@@ -44,12 +118,11 @@ enum XGAbilities {
 	}
 	
 	var descriptionIDOffset: Int {
-		return kAbilitiesStartOffset + (index * kSizeOfAbilityEntry) + kAbilityDescriptionIDOffset
+		return kAbilitiesStartRAMOffset - kDolTableToRAMOffsetDifference + (index * kSizeOfAbilityEntry) + kAbilityDescriptionIDOffset
 	}
 	
 	var descriptionID: Int {
-		let dol = XGFiles.dol.data!
-		return Int(dol.getWordAtOffset(descriptionIDOffset))
+		return abilitiesDataFile.data?.get4BytesAtOffset(descriptionID) ?? 0
 	}
 	
 	var adescription: XGString {
@@ -68,6 +141,24 @@ enum XGAbilities {
 			dol.replace4BytesAtOffset(descriptionIDOffset, withBytes: newID)
 			dol.save()
 		}
+	}
+
+	static func setNumberOfAbilities(to: Int) {
+		if let dol = XGFiles.dol.data {
+			dol.replace4BytesAtOffset(numberOfAbilitiesOffset, withBytes: to)
+			dol.save()
+		}
+	}
+
+	static func setAbilitiesDataTableRAMOffset(to offset: UInt32) {
+		if game != .XD || region != .US {
+			guard offset.int < XGFiles.dol.fileSize + kDolTableToRAMOffsetDifference else {
+				printg("Couldn't set abilities RAM offset to be outside of Start.dol in RAM")
+				return
+			}
+		}
+		let (i1, i2) = XGASM.loadImmediateShifted32bit(register: .r3, value: offset, moveToRegister: .r0)
+		XGAssembly.replaceASM(startOffset: abilityDataFunctionOffset + 28, newASM: [i1, i2])
 	}
 	
 	static func random() -> XGAbilities {

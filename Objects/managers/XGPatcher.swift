@@ -115,7 +115,8 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.pokemonHaveMaxCatchRate,
 	.gen7CritRatios,
 	.allSingleBattles,
-	.allDoubleBattles
+	.allDoubleBattles,
+	.removeColbtlRegionLock
 ]
 
 enum XGDolPatches: Int {
@@ -153,6 +154,7 @@ enum XGDolPatches: Int {
 	case allDoubleBattles
 	case freeSpaceInDol
 	case deleteUnusedFiles
+	case removeColbtlRegionLock
 	
 	var name: String {
 		switch self {
@@ -189,6 +191,7 @@ enum XGDolPatches: Int {
 		case .gen7CritRatios: return "Gen 7+ critical hit probablities"
 		case .allSingleBattles: return "Set all battles to single battles"
 		case .allDoubleBattles: return "Set all battles to double battles"
+		case .removeColbtlRegionLock: return "Modify the ASM so it allows any region's colbtl.bin to be imported. Trades will be locked to whichever region's colbtl.bin was imported."
 
 		}
 	}	
@@ -909,6 +912,62 @@ class XGPatcher {
 		}
 	}
 
+	class func unlockColbtlBin() {
+		guard game == .Colosseum else {
+			printg("This patch hasn't been implemented for Pokemon XD yet")
+			return
+		}
+
+		// The game expects the GBA ROM to have a certain string to show it's the correct region
+		// It expects US/PAL carts to have AXVE (this is the US id for Ruby but is used for all games)
+		// Expects AXVJ for JP ROMs
+		// This value isn't the one in the header of the GBA ROM, it's a separated instance further in
+		// It's possible to edit the string in the GBA ROM to match but here we'll just
+		// disable the check altogether so it will ignore the region. The injected ROM for trading
+		// checks that the regions match anyway
+		let regionStringCheckRAMOffset: Int
+		if game == .Colosseum {
+			switch region {
+			case .US: regionStringCheckRAMOffset = 0x7448c
+			case .EU: regionStringCheckRAMOffset = 0x77990
+			case .JP: regionStringCheckRAMOffset = 0x735b0
+			case .OtherGame: regionStringCheckRAMOffset = -1
+			}
+		} else {
+			switch region {
+			case .US: regionStringCheckRAMOffset = 0x0
+			case .EU: regionStringCheckRAMOffset = 0x0
+			case .JP: regionStringCheckRAMOffset = 0x0
+			case .OtherGame: regionStringCheckRAMOffset = -1
+			}
+		}
+		XGAssembly.replaceRamASM(RAMOffset: regionStringCheckRAMOffset, newASM: [.b_f(0, 12)])
+
+		// I'm not sure where this value gets set but at a certain point when the game is verifying
+		// that all the regions match up it expects a certain value to be read from somewhere
+		// Hardcoding this value seems to be fine though it means if the region is incorrect then
+		// the game still attempts to open up the trade window and doesn't load anything from the GBA ROM
+		// To prevent this we could hardcode the previous region string check to only accept the region
+		// we're changing to
+		let validResponseHardcodeRAMOffset: Int
+		if game == .Colosseum {
+			switch region {
+			case .US: validResponseHardcodeRAMOffset = 0x939dc
+			case .EU: validResponseHardcodeRAMOffset = 0x96f00
+			case .JP: validResponseHardcodeRAMOffset = 0x9169c
+			case .OtherGame: validResponseHardcodeRAMOffset = -1
+			}
+		} else {
+			switch region {
+			case .US: validResponseHardcodeRAMOffset = 0x0
+			case .EU: validResponseHardcodeRAMOffset = 0x0
+			case .JP: validResponseHardcodeRAMOffset = 0x0
+			case .OtherGame: validResponseHardcodeRAMOffset = -1
+			}
+		}
+		XGAssembly.replaceRamASM(RAMOffset: validResponseHardcodeRAMOffset, newASM: [.li(.r6, 0x23)])
+	}
+
 	
 	class func applyPatch(_ patch: XGDolPatches) {
 		
@@ -946,6 +1005,7 @@ class XGPatcher {
 			case .allDoubleBattles				: XGPatcher.setAllBattlesTo(.double)
 			case .allSingleBattles				: XGPatcher.setAllBattlesTo(.single)
 			case .deleteUnusedFiles				: XGPatcher.deleteUnusedFiles()
+			case .removeColbtlRegionLock		: return XGPatcher.unlockColbtlBin()
 		}
 		
 		printg("patch applied: ", patch.name)

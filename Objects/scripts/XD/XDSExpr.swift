@@ -930,7 +930,7 @@ indirect enum XDSExpr {
 					}
 				}
 				s += xdsfunction.name + "("
-				let firstIndex = c > 0 ? 1 : 0
+				let firstIndex = c > 0 && c <= 60 ? 1 : 0 // custom classes above 60 shouldn't have associated objects (at least I don't think they would)
 				for i in firstIndex ..< es.count {
 					let e = es[i]
 					s += (i == firstIndex ? "" : " ") + e.text(ftbl: ftbl, stringTable: stringTable)[0]

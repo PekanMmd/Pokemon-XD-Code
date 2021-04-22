@@ -42,7 +42,7 @@ let kDolDataToRAMOffsetDifference: Int = {
 		return -1
 	case .PBR:
 		assertionFailure("Not implemented")
-		return -1
+		return 0x1CDFE0
 	}
 }()
 

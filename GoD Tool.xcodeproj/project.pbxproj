@@ -727,6 +727,9 @@
 		1CC362E224C1DF25005D7B4A /* XGBattleStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */; };
 		1CC5DD3222C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
 		1CC5DD3322C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
+		1CCB074D262BCF4300D4ABA5 /* PBRAbilitiesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCB074C262BCF4300D4ABA5 /* PBRAbilitiesManager.swift */; };
+		1CCB074E262BCF4300D4ABA5 /* PBRAbilitiesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCB074C262BCF4300D4ABA5 /* PBRAbilitiesManager.swift */; };
+		1CCB074F262BCF4300D4ABA5 /* PBRAbilitiesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCB074C262BCF4300D4ABA5 /* PBRAbilitiesManager.swift */; };
 		1CCF00272562FA810082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
 		1CCF00312562FA820082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
 		1CCF00322562FA820082BFE2 /* XGSaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */; };
@@ -4576,6 +4579,7 @@
 		1CC362D324C07E35005D7B4A /* PBR_body_500.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_500.png; sourceTree = "<group>"; };
 		1CC362D424C07E35005D7B4A /* PBR_body_497.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_497.png; sourceTree = "<group>"; };
 		1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleStyles.swift; sourceTree = "<group>"; };
+		1CCB074C262BCF4300D4ABA5 /* PBRAbilitiesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRAbilitiesManager.swift; sourceTree = "<group>"; };
 		1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGSaveManager.swift; sourceTree = "<group>"; };
 		1CCFFDA72554FEF60082BFE2 /* PBR-CLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "PBR-CLI"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CCFFDA92554FEF60082BFE2 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -8587,10 +8591,11 @@
 		B24A50CC21D12CDA009C707C /* objects */ = {
 			isa = PBXGroup;
 			children = (
+				1CCB074C262BCF4300D4ABA5 /* PBRAbilitiesManager.swift */,
 				B24A511021D40130009C707C /* PBRConstant.swift */,
-				1CC362AF24BA5560005D7B4A /* PBRPatcher.swift */,
 				B24A50D621D12CDA009C707C /* PBRItem.swift */,
 				B24A50D721D12CDA009C707C /* PBRMove.swift */,
+				1CC362AF24BA5560005D7B4A /* PBRPatcher.swift */,
 				B24A50D321D12CDA009C707C /* PBRPokemonStats.swift */,
 				B24A50CF21D12CDA009C707C /* PBRRandomiser.swift */,
 				B24A510E21D3FF4C009C707C /* PBRScript.swift */,
@@ -13528,6 +13533,7 @@
 			files = (
 				1C716B4326041AD7000F1456 /* main.swift in Sources */,
 				1CF23FEC26252F4C00BD734C /* GamesAndLangauages.swift in Sources */,
+				1CCB074E262BCF4300D4ABA5 /* PBRAbilitiesManager.swift in Sources */,
 				1CCFFE692554FFF90082BFE2 /* XGResources.swift in Sources */,
 				1CCFFEC3255501020082BFE2 /* XGFsys.swift in Sources */,
 				1CCFFF4A255501890082BFE2 /* GoDKeyCodes.swift in Sources */,
@@ -13863,6 +13869,7 @@
 				B20EEA6721E9214D00E87D01 /* PBRTrainer.swift in Sources */,
 				B20EEE9D21EF791900E87D01 /* XGString.swift in Sources */,
 				1CED5D9C24004B81008566B0 /* GoDTypeViewController.swift in Sources */,
+				1CCB074F262BCF4300D4ABA5 /* PBRAbilitiesManager.swift in Sources */,
 				B20EEE8721EF785800E87D01 /* XGASM.swift in Sources */,
 				B20EEA3A21E920F400E87D01 /* PBREvolutionMethods.swift in Sources */,
 				B20EEA6B21E921EB00E87D01 /* GoDTableCellView.swift in Sources */,
@@ -13991,6 +13998,7 @@
 			files = (
 				B24A50ED21D12CDA009C707C /* PBRTrainer.swift in Sources */,
 				1CF23FE226252F4B00BD734C /* GamesAndLangauages.swift in Sources */,
+				1CCB074D262BCF4300D4ABA5 /* PBRAbilitiesManager.swift in Sources */,
 				B24A50F321D12CDA009C707C /* PBRItem.swift in Sources */,
 				B24A504621D12426009C707C /* GoDTextureImporter.swift in Sources */,
 				1C20016F25B3231900A7CF7D /* GoDLogManager.swift in Sources */,
@@ -14943,7 +14951,7 @@
 				INFOPLIST_FILE = "Colosseum Tool/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 2.1.5;
+				MARKETING_VERSION = 2.1.6;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_SWIFT_FLAGS = "-DENV_OSX -DGAME_COLO -DGUI";
 				PRODUCT_BUNDLE_IDENTIFIER = "Stars.Colosseum-Tool";
@@ -14986,7 +14994,7 @@
 				INFOPLIST_FILE = "Colosseum Tool/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 2.1.5;
+				MARKETING_VERSION = 2.1.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_SWIFT_FLAGS = "-DENV_OSX -DGAME_COLO -DGUI";
 				PRODUCT_BUNDLE_IDENTIFIER = "Stars.Colosseum-Tool";
@@ -15034,7 +15042,7 @@
 				INFOPLIST_FILE = "PBR Tool/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 2.1.5;
+				MARKETING_VERSION = 2.1.6;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_SWIFT_FLAGS = "-DENV_OSX -DGAME_PBR -DGUI";
 				PRODUCT_BUNDLE_IDENTIFIER = "Stars.PBR-Tool";
@@ -15078,7 +15086,7 @@
 				INFOPLIST_FILE = "PBR Tool/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 2.1.5;
+				MARKETING_VERSION = 2.1.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_SWIFT_FLAGS = "-DENV_OSX -DGAME_PBR -DGUI";
 				PRODUCT_BUNDLE_IDENTIFIER = "Stars.PBR-Tool";
@@ -15472,7 +15480,7 @@
 				INFOPLIST_FILE = GoDToolOSX/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 2.1.5;
+				MARKETING_VERSION = 2.1.6;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_SWIFT_FLAGS = "-DENV_OSX -DGAME_XD -DGUI";
@@ -15529,7 +15537,7 @@
 				INFOPLIST_FILE = GoDToolOSX/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 2.1.5;
+				MARKETING_VERSION = 2.1.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_SWIFT_FLAGS = "-DENV_OSX -DGAME_XD -DGUI";
 				PRODUCT_BUNDLE_IDENTIFIER = Stars.GoDToolOSX;

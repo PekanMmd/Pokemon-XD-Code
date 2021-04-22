@@ -147,6 +147,10 @@ extension XGAssembly {
 		#endif
 	}
 
+	class func geckoCode(RAMOffset: Int, newASM asm: [XGASM]) -> String {
+		return asm.asGeckoCode(RAMOffset: RAMOffset)
+	}
+
 	class func removeASM(startOffset: Int, length: Int) {
 		let asm = [UInt32](repeating: XGASM.nop.code, count: length)
 		replaceASM(startOffset: startOffset, newASM: asm)
@@ -226,69 +230,51 @@ extension XGAssembly {
 		dol.save()
 	}
 
-	class func increaseNumberOfAbilities() {
-		// only run this once!
+	class func reduceSizeOfAbilityData() {
+		guard kSizeOfAbilityEntry == 12 else {
+			printg("Ability data size has already been reduced.")
+			return
+		}
+
+		guard abilitiesDataFile == .dol else {
+			printg("Couldn't apply patch. Abilities table has been moved to a different file.")
+			return
+		}
 
 		guard game == .XD else {
-			printg("This has not been implemented for Colosseum yet.")
+			printg("This patch has not been implemented for Colosseum yet.")
 			return
 		}
 
 		guard region == .US else {
-			printg("This has not yet been implemented for this region:", region.name)
+			printg("This patch has not yet been implemented for this region:", region.name)
 			return
 		}
 
-		let dol = XGFiles.dol.data!
-		let abilityStart = kAbilitiesStartOffset
-
-		let newAbilityEntryMultiplier : UInt32 = 0x1c830008
-		let abilityMultiplierAddress = 0x1442b0 - kDolToRAMOffsetDifference
-
-		let abilityGetName : UInt32 = 0x80630000
-		let abilityGetNameAddress = 0x144290 - kDolToRAMOffsetDifference
-
-		let abilityGetDescription : UInt32 = 0x80630004
-		let abilityGetDescriptionAddress = 0x144278 - kDolToRAMOffsetDifference
-
-		let sizeOfAbilityTable = 0x3A8
-		let newNumberOfEntries = sizeOfAbilityTable / 8
-
-		dol.replaceWordAtOffset(abilityMultiplierAddress, withBytes: newAbilityEntryMultiplier)
-		dol.replaceWordAtOffset(abilityGetNameAddress, withBytes: abilityGetName)
-		dol.replaceWordAtOffset(abilityGetDescriptionAddress, withBytes: abilityGetDescription)
-
-
-		var allabilities = [(UInt32,UInt32)]()
-
-		for j in 0 ... kNumberOfAbilities {
-
-			let offset = abilityStart + (j * 12)
-			allabilities.append((dol.getWordAtOffset(offset + 4),dol.getWordAtOffset(offset + 8)))
-
+		let abilityData = XGAbilities.allValues.map {
+			return ($0.nameID, $0.descriptionID)
 		}
 
-		for i in 0 ..< newNumberOfEntries {
+		XGAssembly.replaceASM(startOffset: abilityDataFunctionOffset + 24, newASM: [
+			.mulli(.r4, .r3, 8)
+		])
 
-			let offset = abilityStart + (i * 8)
-
-			if i < allabilities.count {
-
-				dol.replaceWordAtOffset(offset    , withBytes: allabilities[i].0)
-				dol.replaceWordAtOffset(offset + 4, withBytes: allabilities[i].1)
-
-			} else {
-
-				dol.replaceWordAtOffset(offset    , withBytes: 0)
-				dol.replaceWordAtOffset(offset + 4, withBytes: 0)
-
+		if let dol = XGFiles.dol.data {
+			let abilityGetNameIDAddress = 0x144290
+			let abilityGetDescriptionIDAddress = 0x144278
+			let tableSize = kNumberOfAbilities * 12
+			let newNumberOfEntries = tableSize / 8
+			let tableOffset = kAbilitiesStartRAMOffset - kDolTableToRAMOffsetDifference
+			XGAssembly.replaceRamASM(RAMOffset: abilityGetNameIDAddress, newASM: [.lwz(.r3, .r3, 0)])
+			XGAssembly.replaceRamASM(RAMOffset: abilityGetDescriptionIDAddress, newASM: [.lwz(.r3, .r3, 4)])
+			abilityData.forEachIndexed { (index, data) in
+				let offset = tableOffset + (index * 8)
+				dol.replace4BytesAtOffset(offset, withBytes: data.0)
+				dol.replace4BytesAtOffset(offset + 4, withBytes: data.1)
 			}
+			dol.save()
+			XGAbilities.setNumberOfAbilities(to: newNumberOfEntries)
 		}
-
-		dol.replaceWordAtOffset(0x41db38, withBytes: 0x74)
-
-		dol.save()
-
 	}
 
 	class func gen6CriticalHitMultiplier() {

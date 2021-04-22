@@ -383,6 +383,9 @@ class GoDStructData: CustomStringConvertible {
 			if let booleanValue = booleanRawValue(string) {
 				return booleanValue ? 1 : 0
 			}
+			if string.lowercased() == "null" {
+				return 0
+			}
 			if let part = string.split(separator: " ").map({String($0)}).last {
 				let unbracketed = part.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
 				let stripped = unbracketed.simplified // Removes % from percentage values, maybe other things added in future as well
