@@ -609,6 +609,7 @@ indirect enum XDSExpr {
 				case 0: return macroWithName("result_none".uppercased())
 				case 1: return macroWithName("result_lose".uppercased())
 				case 2: return macroWithName("result_win".uppercased())
+				case 3: return macroWithName("result_tie".uppercased())
 				default: return macroWithName("result_unknown".uppercased() + c.asInt.string)
 			}
 		case .shadowStatus:

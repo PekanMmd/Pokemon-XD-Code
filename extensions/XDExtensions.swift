@@ -724,7 +724,7 @@ extension XGUtility {
 			}
 		}
 		
-		for i in 0 ... 2 {
+		for i in 0 ... 3 {
 			addMacro(value: i, type: .battleResult)
 		}
 		for i in 0 ... 4 {
@@ -953,7 +953,7 @@ extension XGUtility {
 			macros.append(.macroImmediate(constant, .msgVar))
 		}
 		
-		for i in 0 ... 2 {
+		for i in 0 ... 3 {
 			let constant = XDSConstant.integer(i)
 			macros.append(.macroImmediate(constant, .battleResult))
 		}

@@ -172,7 +172,8 @@ let shadowPokemonStruct = GoDStruct(name: "Shadow Pokemon", format: [
 	.short(name: "Padding", description: "", type: .null),
 	.array(name: "Shadow Moves", description: "", property:
 		.short(name: "Move", description: "", type: .moveID), count: 4),
-	.byte(name: "Aggression", description: "The lower the value, the more likely it is to enter reverse mode", type: .uintHex)
+	.byte(name: "Aggression", description: "The lower the value, the more likely it is to enter reverse mode", type: .uintHex),
+	.byte(name: "Flees When Player Loses", description: "Determines if the pokemon should go to Miror B even if the player lost the battle", type: .bool)
 ])
 
 let shadowPokemonTable = GoDStructTable(file: XGDecks.DeckDarkPokemon.file, properties: shadowPokemonStruct) { (_) -> Int in

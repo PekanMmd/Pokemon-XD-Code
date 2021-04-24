@@ -400,7 +400,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("hideCouponsWindow", 71, 1, [.objectName("Dialogue")], .null, ""),
 		
 		("startBattle", 72, 2, [.objectName("Dialogue"), .battleID], .null, ""), //# (int battleid)
-		("getBattleResult", 74, 1, [.objectName("Dialogue")], .battleResult, "1 = lose, 2 = win"),
+		("getBattleResult", 74, 1, [.objectName("Dialogue")], .battleResult, "1 = lose, 2 = win, 3 = tie"),
 
 		("showMailMenu", 75, 1, [.objectName("Dialogue")], .integer, ""),
 
@@ -424,7 +424,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 	42 : [
 		
 		("startBattle", 16, 4, [.objectName("Battle"), .battleID, .bool, .bool], .null, "(battle id, unknown, don't black out?)"),// # (bool isTrainer, bool don't black out, int battleID) (battleID list in reference folder)
-		("getBattleResult", 18, 1, [.objectName("Battle")], .battleResult, "1 = lose, 2 = win"), // # sets last result to 2 if victory
+		("getBattleResult", 18, 1, [.objectName("Battle")], .battleResult, "1 = lose, 2 = win, 3 = tie"), // # sets last result to 2 if victory
 		
 		("setBattlefield", 23, 2, [.objectName("Battle"), .battlefield], .null, "overrides next battle"),
 		("setPostBattleText", 26, 3, [.objectName("Battle"), .battleResult, .msg], .null, "overrides next battle"),
