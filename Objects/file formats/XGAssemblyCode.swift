@@ -82,9 +82,9 @@ fileprivate var kPBRDOLFreeSpaceStart: Int? {
 
 fileprivate var kPBRDOLFreeSpaceEnd: Int? {
 	switch region {
-	case .US: return 0x1DEEE0 - kDolToRAMOffsetDifference
-	case .EU: return 0x1D9F6C - kDolToRAMOffsetDifference
-	case .JP: return 0x1D076C - kDolToRAMOffsetDifference
+	case .US: return 0x1DEEDC - kDolToRAMOffsetDifference
+	case .EU: return 0x1D9F68 - kDolToRAMOffsetDifference
+	case .JP: return 0x1D0768 - kDolToRAMOffsetDifference
 	case .OtherGame: return nil
 	}
 }
@@ -100,9 +100,9 @@ fileprivate var kXDDOLFreeSpaceStart: Int? {
 
 fileprivate var kXDDOLFreeSpaceEnd: Int? {
 	switch region {
-	case .US: return 0xd9c30 - kDolToRAMOffsetDifference
-	case .EU: return 0xdb240 - kDolToRAMOffsetDifference
-	case .JP: return 0xd6150 - kDolToRAMOffsetDifference
+	case .US: return 0xd9c2c - kDolToRAMOffsetDifference
+	case .EU: return 0xdb23c - kDolToRAMOffsetDifference
+	case .JP: return 0xd614c - kDolToRAMOffsetDifference
 	case .OtherGame: return nil
 	}
 }
@@ -118,9 +118,9 @@ fileprivate var kCOLDOLFreeSpaceStart: Int? {
 
 fileprivate var kCOLDOLFreeSpaceEnd: Int? {
 	switch region {
-	case .US: return 0xc45a0 - kDolToRAMOffsetDifference
-	case .EU: return 0xc7ba0 - kDolToRAMOffsetDifference
-	case .JP: return 0xc16fc - kDolToRAMOffsetDifference
+	case .US: return 0xc459c - kDolToRAMOffsetDifference
+	case .EU: return 0xc7b9c - kDolToRAMOffsetDifference
+	case .JP: return 0xc16f8 - kDolToRAMOffsetDifference
 	case .OtherGame: return nil
 	}
 }

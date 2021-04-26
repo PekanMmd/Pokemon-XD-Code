@@ -208,8 +208,13 @@ class XGPatcher {
 		if let data = XGFiles.dol.data,
 		let start = kDolFreeSpaceStart,
 		let end = kDolFreeSpaceEnd {
-			let length = end - start
-			data.nullBytes(start: start, length: length)
+			var offset = start
+			while offset < end {
+				// replace with nops rather than zeroes so dolphin doesn't complain
+				// when panic handlers aren't disabled
+				data.replace4BytesAtOffset(offset, withBytes: 0x60000000)
+				offset += 4
+			}
 			data.replaceWordAtOffset(start, withBytes: 0x0DE1E7ED)
 			(1 ... 3).forEach {
 				data.replaceWordAtOffset(start + ($0 * 4), withBytes: 0xFFFFFFFF)
@@ -1008,7 +1013,7 @@ class XGPatcher {
 			case .removeColbtlRegionLock		: return XGPatcher.unlockColbtlBin()
 		}
 		
-		printg("patch applied: ", patch.name)
+		printg("patch applied: ", patch.name, "\nDon't forget to rebuild the ISO after.")
 		
 	}
 	
