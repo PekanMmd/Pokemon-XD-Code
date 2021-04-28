@@ -8,8 +8,8 @@
 import Foundation
 
 let patches: [XGDolPatches] = [
-	.unlockSaveFileBoxes,
 	.freeSpaceInDol,
+	.moveTypeMatchupsTable,
 	.gen7CritRatios,
 	.disableRentalPassChecksums,
 	.disableBlurEffect
@@ -23,6 +23,7 @@ enum XGDolPatches: Int {
 	case disableRentalPassChecksums
 	case disableBlurEffect
 	case unlockSaveFileBoxes
+	case moveTypeMatchupsTable
 
 	var name: String {
 		switch self {
@@ -32,6 +33,7 @@ enum XGDolPatches: Int {
 		case .gen6CriticalHitMultipliers: return "Critical hits deal 1.5x damage, 2.25x with Sniper"
 		case .disableRentalPassChecksums: return "Disable legality checks on battle passes"
 		case .disableBlurEffect: return "Remove the blur effect from the games rendering"
+		case .moveTypeMatchupsTable: return "Move type matchups table to a large area so more matchups can be added"
 		}
 	}
 
@@ -261,6 +263,7 @@ class XGPatcher {
 		case .gen6CriticalHitMultipliers: XGPatcher.gen6CriticalHitMultipliers()
 		case .disableRentalPassChecksums: XGPatcher.disableRentalPassChecksums()
 		case .disableBlurEffect: XGPatcher.disableBlurEffect()
+		case .moveTypeMatchupsTable: XGPatcher.moveTypeMatchupsTableToPassValidationFunction()
 		}
 	}
 }

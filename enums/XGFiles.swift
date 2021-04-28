@@ -398,10 +398,10 @@ indirect enum XGFiles {
 		var table: XGStringTable!
 
 		#if !GAME_PBR
-		switch self {
-		case .common_rel: table = XGStringTable.common_rel()
-		case .tableres2:  table = XGStringTable.tableres2()!
-		case .dol:		  table = XGStringTable.dol()
+		switch self.fileName {
+		case XGFiles.common_rel.fileName : table = XGStringTable.common_rel()
+		case XGFiles.tableres2.fileName :  table = XGStringTable.tableres2()!
+		case XGFiles.dol.fileName :		  table = XGStringTable.dol()
 
 		default: table = XGStringTable(file: self, startOffset: 0, fileSize: self.fileSize)
 		}

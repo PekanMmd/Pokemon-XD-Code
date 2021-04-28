@@ -13,7 +13,7 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 	case rdat = 0x02 // room model in hal dat format. Also .dat files but considered different by the fsys headers
 	case dat  = 0x04 // character model in hal dat format
 	case col  = 0x06 // collision file
-	case samp = 0x08 // shorter music files for fanfares etc.
+	case samp = 0x08 // sequenced music data
 	case msg  = 0x0a // string table
 	case fnt  = 0x0c // font
 	case scd  = 0x0e // script data
@@ -37,10 +37,12 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 	case fsys = 0x80
 
 	// These have ids of 0 for some reason
+	// They are sound font data for sequenced music
 	case proj = 0x82
 	case sdir = 0x84
 	case pool = 0x86
 
+	// these aren't refernced in .fsys archives or are only used by this tool
 	case raw  = 0xf0
 	case gci  = 0xf1
 	case thp  = 0xf2

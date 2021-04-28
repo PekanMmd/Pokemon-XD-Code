@@ -186,8 +186,12 @@ class XGStringTable: NSObject {
 		super.init()
 		
 		self.file = file
+		var stringTablefile = file
+		if startOffset != 0 {
+			stringTablefile = .nameAndFolder(file.fileName + ".msg", file.folder)
+		}
 		self.startOffset = startOffset
-		self.stringTable = XGMutableData(byteStream: file.data!.charStream, file: file)
+		self.stringTable = XGMutableData(byteStream: file.data!.charStream, file: stringTablefile)
 		
 		stringTable.deleteBytes(start: 0, count: startOffset)
 		stringTable.deleteBytes(start: fileSize, count: stringTable.length - fileSize)
@@ -199,16 +203,9 @@ class XGStringTable: NSObject {
 		
 		if self.startOffset == 0 {
 			stringTable.save()
-		} else {
-			if let data = file.data {
-				data.replaceBytesFromOffset(self.startOffset, withByteStream: stringTable.byteStream)
-				if data.save() {
-					let msgFile = XGFiles.nameAndFolder(stringTable.file.fileName + XGFileTypes.json.fileExtension, stringTable.file.folder)
-					if msgFile.exists {
-						writeJSON(to: msgFile)
-					}
-				}
-			}
+		} else if let data = file.data {
+			data.replaceBytesFromOffset(self.startOffset, withByteStream: stringTable.byteStream)
+			data.save()
 		}
 	}
 	
@@ -260,7 +257,6 @@ class XGStringTable: NSObject {
 			return true
 			
 		} else {
-			
 			return replaceString(string, save: save)
 		}
 	}
@@ -472,6 +468,7 @@ struct XGStringTableMetaData: Codable {
 extension XGStringTable: Encodable {
 	enum XGStringTableDecodingError: Error {
 		case invalidFile(file: XGFiles)
+		case largerThanFixedSize
 	}
 	
 	enum CodingKeys: String, CodingKey {
@@ -489,9 +486,19 @@ extension XGStringTable: Encodable {
 		
 		let table = XGStringTable(file: file, startOffset: startOffset, fileSize: startOffset == 0 ? file.fileSize : fixedFileSize)
 		
-		let strings = metaData.strings
+		var strings = metaData.strings
+		if startOffset != 0 {
+			strings.sort(by: { (s1, s2) -> Bool in
+				// sort so it won't hit a string that's too large before shortened ones have been added
+				return s1.dataLength < s2.dataLength
+			})
+		}
 		for string in strings {
-			table.addString(string, increaseSize: startOffset == 0, save: save)
+			if !table.addString(string, increaseSize: startOffset == 0, save: save) {
+				printg("Couldn't load text into \(file.path)")
+				printg("The new text is too large for the file. Delete some unnecessary words in this file and try again.")
+				throw XGStringTableDecodingError.largerThanFixedSize
+			}
 		}
 		return table
 	}

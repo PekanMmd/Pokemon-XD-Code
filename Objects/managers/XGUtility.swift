@@ -103,6 +103,13 @@ class XGUtility {
 					let fsysData = data.fsysData
 					fsysData.extractFilesToFolder(folder: file.folder, decode: decode, overwrite: overwrite)
 				}
+				if file == .dol, decode {
+					let msgFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.json.fileExtension, file.folder)
+					if !msgFile.exists {
+						let table = file.stringTable
+						table.writeJSON(to: msgFile)
+					}
+				}
 				return true
 			}
 		}
@@ -120,6 +127,13 @@ class XGUtility {
 		}
 
 		if fileToImport.exists {
+			if game != .PBR, fileToImport.fileName == XGFiles.dol.fileName {
+				let msgFile = XGFiles.nameAndFolder(fileToImport.fileName + ".json", fileToImport.folder)
+				if let newTable = try? XGStringTable.fromJSONFile(file: msgFile) {
+					newTable.save()
+					loadedStringTables[fileToImport.path] = newTable
+				}
+			}
 			if fileToImport.fileType == .fsys {
 
 				if encode {
@@ -143,6 +157,17 @@ class XGUtility {
 								}
 							}
 						}
+
+						#if !GAME_PBR
+						let msgFile = XGFiles.nameAndFolder(file.fileName + ".json", file.folder)
+						if file == .common_rel || file == .tableres2, msgFile.exists {
+							let msgFile = XGFiles.nameAndFolder(fileToImport.fileName + ".json", fileToImport.folder)
+							if let newTable = try? XGStringTable.fromJSONFile(file: msgFile) {
+								newTable.save()
+								loadedStringTables[fileToImport.path] = newTable
+							}
+						}
+						#endif
 
 						if file.fileType == .thp, let thpData = file.data {
 							let thp = XGTHP(thpData: thpData)

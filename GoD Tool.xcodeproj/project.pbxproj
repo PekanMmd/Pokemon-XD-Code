@@ -585,6 +585,7 @@
 		1C7510CA25CCACA800EAB706 /* GoDDataTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50FC21D2D724009C707C /* GoDDataTable.swift */; };
 		1C7510CB25CCACA900EAB706 /* GoDDataTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50FC21D2D724009C707C /* GoDDataTable.swift */; };
 		1C75111E25CE54DA00EAB706 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CAC2253B86F100907D78 /* main.swift */; };
+		1C7CB5AF2638FC6900D678FC /* GoDPatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC0921F6EE81900AC263D /* GoDPatchViewController.swift */; };
 		1C8601D92478625C00A5B267 /* Original Items.json in Resources */ = {isa = PBXBuildFile; fileRef = 1C8601D82478625900A5B267 /* Original Items.json */; };
 		1C90B5252618593800C5BEFF /* GoDOpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FF6D2E20BCB50F00A84637 /* GoDOpenGL.swift */; };
 		1C90B52F2618593900C5BEFF /* GoDOpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FF6D2E20BCB50F00A84637 /* GoDOpenGL.swift */; };
@@ -698,7 +699,6 @@
 		1CC362AE24BA1E58005D7B4A /* PBRTypeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AD24BA1E58005D7B4A /* PBRTypeManager.swift */; };
 		1CC362B024BA5560005D7B4A /* PBRPatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AF24BA5560005D7B4A /* PBRPatcher.swift */; };
 		1CC362B124BA5560005D7B4A /* PBRPatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AF24BA5560005D7B4A /* PBRPatcher.swift */; };
-		1CC362B624BA57EB005D7B4A /* GoDPatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362B524BA57EB005D7B4A /* GoDPatchViewController.swift */; };
 		1CC362B724BA60B9005D7B4A /* PBRTypeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362AD24BA1E58005D7B4A /* PBRTypeManager.swift */; };
 		1CC362B824BF5114005D7B4A /* GoDStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F88F1F49CD050075C6D2 /* GoDStatsViewController.swift */; };
 		1CC362B924BFD274005D7B4A /* GoDStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F88F1F49CD050075C6D2 /* GoDStatsViewController.swift */; };
@@ -4563,7 +4563,6 @@
 		1CB3B882250D8E1C0069402D /* GoDBattleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDBattleViewController.swift; sourceTree = "<group>"; };
 		1CC362AD24BA1E58005D7B4A /* PBRTypeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRTypeManager.swift; sourceTree = "<group>"; };
 		1CC362AF24BA5560005D7B4A /* PBRPatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRPatcher.swift; sourceTree = "<group>"; };
-		1CC362B524BA57EB005D7B4A /* GoDPatchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoDPatchViewController.swift; sourceTree = "<group>"; };
 		1CC362BA24BFDA5E005D7B4A /* Stats.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Stats.storyboard; sourceTree = "<group>"; };
 		1CC362BF24BFDC53005D7B4A /* GoDEnumerablePopUpButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDEnumerablePopUpButtons.swift; sourceTree = "<group>"; };
 		1CC362C324C078D0005D7B4A /* PBR_face_499.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_face_499.png; sourceTree = "<group>"; };
@@ -7402,7 +7401,6 @@
 		1CC362B424BA57CE005D7B4A /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				1CC362B524BA57EB005D7B4A /* GoDPatchViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -13942,6 +13940,7 @@
 				1C56F9E2261050B900CF1DEE /* XGEggGroups.swift in Sources */,
 				1C716ADD2603FFD8000F1456 /* XGAssemblyCodeExtensions.swift in Sources */,
 				B20EEEAA21EF79A300E87D01 /* GoDTexture.swift in Sources */,
+				1C7CB5AF2638FC6900D678FC /* GoDPatchViewController.swift in Sources */,
 				B20EEE9221EF78AA00E87D01 /* XGWeather.swift in Sources */,
 				B20EEA8821EF771000E87D01 /* XGFoundationExtensions.swift in Sources */,
 				1C56FA5D26114A9000CF1DEE /* GoDDataTablePopUpButton.swift in Sources */,
@@ -13963,7 +13962,6 @@
 				1C1A0B502552315D00891C93 /* PBRTextureContainingFormats.swift in Sources */,
 				1C2000D625B31F7900A7CF7D /* GoDLogManager.swift in Sources */,
 				1C716A2926039D33000F1456 /* CommandLineArgs.swift in Sources */,
-				1CC362B624BA57EB005D7B4A /* GoDPatchViewController.swift in Sources */,
 				B20EEEB421EF7A2800E87D01 /* GoDHexCalculatorViewController.swift in Sources */,
 				B20EEE9121EF789F00E87D01 /* GoDTextureFormats.swift in Sources */,
 				B20EEE9F21EF792500E87D01 /* XGTexturePalette.swift in Sources */,

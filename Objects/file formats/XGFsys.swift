@@ -899,6 +899,16 @@ final class XGFsys : NSObject {
 				}
 				#endif
 
+				#if !GAME_PBR
+				if file == .common_rel || file == .tableres2 {
+					let msgFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.json.fileExtension, file.folder)
+					if !msgFile.exists {
+						let table = file.stringTable
+						table.writeJSON(to: msgFile)
+					}
+				}
+				#endif
+
 				if file.fileType == .thh {
 					let thpFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.thp.fileExtension, folder)
 					if (!thpFile.exists || overwrite), let thpData = folder.files.first(where: { $0.fileType == .thd && $0.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() })?.data {
