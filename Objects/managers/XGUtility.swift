@@ -45,7 +45,10 @@ class XGUtility {
 				filesToImport += [.fsys("deck_archive"), .fsys("M2_guild_1F_2"), .fsys("common_dvdeth")]
 			}
 		} else {
-			filesToImport += [.fsys("deck"), .fsys("mes_common")]
+			filesToImport += [.fsys("deck")]
+			+ (region == .JP ?
+				[.fsys("menu_fight_s"), .fsys("menu_name2")] :
+				[.fsys("mes_common"), .fsys("menu_btutorial"), .fsys("mes_fight_e"), .fsys("mes_name_e")])
 		}
 
 

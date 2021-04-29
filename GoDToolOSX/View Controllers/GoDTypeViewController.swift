@@ -79,14 +79,13 @@ class GoDTypeViewController: GoDTableViewController {
 				currentType.nameID = value
 				
 				if name.stringValue.length > 0 {
-                    let string = currentType.name.duplicateWithString(name.stringValue)
-                    if !string.table!.stringTable.addString(string, increaseSize: true, save: true) {
+					if !currentType.name.duplicateWithString(name.stringValue).replace(save: true) {
 						printg("Failed to set type name:", name.stringValue)
 					}
 				}
 			}
 			
-			for i in 0 ..< kNumberOfTypes {
+			for i in 0 ..< min(kNumberOfTypes, popups.count) {
 				currentType.effectivenessTable[i] = popups[i].selectedValue
 			}
 			
