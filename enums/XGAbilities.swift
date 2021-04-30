@@ -122,7 +122,7 @@ enum XGAbilities {
 	}
 	
 	var descriptionID: Int {
-		return abilitiesDataFile.data?.get4BytesAtOffset(descriptionID) ?? 0
+		return abilitiesDataFile.data?.get4BytesAtOffset(descriptionIDOffset) ?? 0
 	}
 	
 	var adescription: XGString {
