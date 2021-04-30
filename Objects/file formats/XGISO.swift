@@ -101,7 +101,7 @@ class XGISO: NSObject {
 		#if !GAME_PBR
 		let NGCISOSize = 1_459_978_240
 		if file.fileSize < NGCISOSize - 100_000 {
-			displayAlert(title: "Check your ISO", description: "This ISO's file size is smaller than expected of a Gamecube ISO. If it is compressed or scrubbed in some way then it may not work properly with this tool.\n\nA typical Gamecube ISO is around 1.35GB large though it is normal for some demo games and games contained on multigame discs to be a lot smaller.\n\nIf your iso is a .nkit.iso file then you'll need to convert it to a regular iso using this tool: \nhttps://vimm.net/vault/?p=nkit")
+			displayAlert(title: "Check your ISO", description: "This ISO's file size is smaller than expected of a Gamecube ISO. If it is compressed or scrubbed in some way then it may not work properly with this tool.\n\nA typical Gamecube ISO is around 1.4GB (1.35GiB) large though it is normal for some demo games and games contained on multigame discs to be a lot smaller.\n\nIf your iso is a .nkit.iso file then you'll need to convert it to a regular iso using this tool: \nhttps://vimm.net/vault/?p=nkit")
 		}
 		#endif
 
