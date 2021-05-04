@@ -144,10 +144,14 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Tools" id="cLm-M8-bxX">
                                     <items>
-                                        <menuItem title="Hex Calculator" id="Bq2-kU-Mvf">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        <menuItem title="Hex Calculator" keyEquivalent="H" id="Bq2-kU-Mvf">
                                             <connections>
                                                 <action selector="showHexCalculator:" target="Voe-Tx-rLC" id="M97-WT-9gQ"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="String ID Tool" keyEquivalent="S" id="h4n-lL-YwW">
+                                            <connections>
+                                                <action selector="showStringIDTool:" target="Voe-Tx-rLC" id="DbS-fy-FzO"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -269,11 +273,12 @@
                         <segue destination="BwZ-V1-R5n" kind="show" identifier="toTypeVC" id="c1n-m2-cGy"/>
                         <segue destination="fXj-SM-0bR" kind="show" identifier="toMessageVC" id="HCv-BF-sY4"/>
                         <segue destination="30l-3B-1Wn" kind="show" identifier="toISOVC" id="OBl-zD-LtM"/>
-                        <segue destination="833-jc-7gZ" kind="modal" identifier="toPatchVC" id="WSO-2H-kdJ"/>
-                        <segue destination="4Sk-bu-n10" kind="modal" identifier="toStatsVC" id="7Pn-CJ-tAt"/>
-                        <segue destination="Pqc-HY-Qb0" kind="modal" identifier="toHexCalcVC" id="2Sh-n0-kyO"/>
-                        <segue destination="Z8t-S9-kcP" kind="modal" identifier="toMoveVC" id="8RU-r2-bTu"/>
+                        <segue destination="833-jc-7gZ" kind="show" identifier="toPatchVC" id="WSO-2H-kdJ"/>
+                        <segue destination="4Sk-bu-n10" kind="show" identifier="toStatsVC" id="7Pn-CJ-tAt"/>
+                        <segue destination="Pqc-HY-Qb0" kind="show" identifier="toHexCalcVC" id="2Sh-n0-kyO"/>
+                        <segue destination="Z8t-S9-kcP" kind="show" identifier="toMoveVC" id="8RU-r2-bTu"/>
                         <segue destination="as4-yN-Bbz" kind="show" identifier="toUniversalVC" id="Twd-Oe-J8t"/>
+                        <segue destination="DVO-bT-lfH" kind="show" identifier="toStringVC" id="fHu-sM-VmJ"/>
                     </connections>
                 </viewController>
                 <customObject id="Ql1-wz-kzW" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -319,6 +324,14 @@
                 <customObject id="f5w-D8-MT2" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="735" y="749"/>
+        </scene>
+        <!--Strings-->
+        <scene sceneID="9oJ-vL-4qv">
+            <objects>
+                <controllerPlaceholder storyboardName="Strings" id="DVO-bT-lfH" sceneMemberID="viewController"/>
+                <customObject id="K7Y-0f-OOA" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="672" y="828"/>
         </scene>
         <!--Type-->
         <scene sceneID="beB-gy-VDz">

@@ -40,7 +40,7 @@ class PBRStringManager {
 	}
 
 	/// Returns the ID of the new string if successful
-	static func addString(_ string: String, toTableWithID id: Int, save: Bool = true) -> Int? {
+	static func addString(_ string: String, toTableWithID id: Int = 1, save: Bool = true) -> Int? {
 		if let table = getStringTableWithId(id), let messageTableData = messageDataTableFile.data {
 			if table.addString(XGString(string: string, file: table.file, sid: table.numberOfEntries + 1), increaseSize: true, save: save) {
 				let newID = messageDataTable.numberOfEntries + 1

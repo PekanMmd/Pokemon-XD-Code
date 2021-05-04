@@ -151,7 +151,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 						return fileurl.file
 					}.filter{$0.fileType != .unknown}
 					files.forEach { (file) in
-						XGISO.current.addFile(file, save: true)
+						XGISO.current.addFile(file, fsysID: nil, save: true)
 					}
 				}
 			}
@@ -221,7 +221,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func extractISO(_ sender: Any) {
-		guard checkRequiredFiles() else {
+		guard homeViewController.checkRequiredFiles() else {
 			return
 		}
 		printg("extracting iso")
@@ -236,7 +236,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	var isBuilding = false
 	
 	@IBAction func quickBuildISO(_ sender: Any) {
-		guard checkRequiredFiles() else {
+		guard homeViewController.checkRequiredFiles() else {
 			return
 		}
 		guard !isBuilding else {
@@ -272,7 +272,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func rebuildISO(_ sender: AnyObject) {
-		guard checkRequiredFiles(allowAnyISO: true) else {
+		guard homeViewController.checkRequiredFiles() else {
 			return
 		}
 		guard !isBuilding else {
@@ -308,7 +308,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func getXDSMacros(_ sender: Any) {
-		guard checkRequiredFiles() else {
+		guard homeViewController.checkRequiredFiles() else {
 			return
 		}
 		XGThreadManager.manager.runInBackgroundAsync {
@@ -320,7 +320,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func getXDSClasses(_ sender: Any) {
-		guard checkRequiredFiles() else {
+		guard homeViewController.checkRequiredFiles() else {
 			return
 		}
 		XGThreadManager.manager.runInBackgroundAsync {
@@ -332,7 +332,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func saveSublime(_ sender: Any) {
-		guard checkRequiredFiles() else {
+		guard homeViewController.checkRequiredFiles() else {
 			return
 		}
 		XGThreadManager.manager.runInBackgroundAsync {
@@ -357,7 +357,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func installSublime(_ sender: Any) {
-		guard checkRequiredFiles() else {
+		guard homeViewController.checkRequiredFiles() else {
 			return
 		}
 		printg("Installing XDS Plugin files for Sublime Text 3...")
@@ -397,9 +397,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func showStringIDTool(_ sender: Any) {
-		guard checkRequiredFiles() else {
-			return
-		}
 		performSegue("toStringVC")
 	}
 	
@@ -425,8 +422,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	func performSegue(_ name: String) {
-		let alwaysAllowedSegues = ["toISOVC", "toAlertVC", "toAboutVC"]
-		guard checkRequiredFiles(allowAnyISO: alwaysAllowedSegues.contains(name)) else {
+		let alwaysAllowedSegues = ["toAlertVC", "toAboutVC"]
+		guard alwaysAllowedSegues.contains(name) || homeViewController.checkRequiredFiles() else {
 			return
 		}
 		homeViewController.performSegue(withIdentifier: name, sender: self)
@@ -468,29 +465,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBAction func exporeISO(_ sender: Any) {
 		performSegue("toISOVC")
 	}
-
-	@discardableResult
-	private func checkRequiredFiles(allowAnyISO: Bool = false) -> Bool {
-		if game != .PBR && (XGISO.inputISOFile == nil || !XGFiles.iso.exists) {
-			if let appDelegate = (NSApplication.shared.delegate as? AppDelegate) {
-				printg("Please select the .iso to use with this tool")
-				appDelegate.openFilePicker(self)
-			} else {
-				homeViewController.performSegue(withIdentifier: "toHelpVC", sender: self)
-			}
-			return false
-		}
-		if game == .PBR && (!XGFiles.fsys("common").exists || !XGFiles.iso.exists) {
-			homeViewController.performSegue(withIdentifier: "toHelpVC", sender: self)
-			return false
-		}
-		guard allowAnyISO || region != .OtherGame else {
-			displayAlert(title: "Not available", text: "This option is only for \(game.name)")
-			return false
-		}
-		return true
-	}
-	
 }
 
 

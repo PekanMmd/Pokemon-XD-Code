@@ -67,7 +67,7 @@ let pokemonStatsStruct = GoDStruct(name: "Pokemon Stats", format: [
 	.short(name: "Cry ID", description: "", type: .uintHex),
 	.short(name: "National Dex Index", description: "", type: .uint),
 	.short(name: "Unknown 1", description: "Something sound related", type: .uintHex),
-	.short(name: "Unknown 2", description: "Same as national id?", type: .uintHex),
+	.short(name: "Hoenn dex regional id", description: "If not in the Hoenn dex then listed after deoxys", type: .uintHex),
 	.short(name: "Unknown 3", description: "", type: .uintHex),
 	.word(name: "Name ID", description: "", type: .msgID(file: .common_rel)),
 	.word(name: "Species Name ID", description: "The species name used in the pokedex entry", type: .msgID(file: .typeAndFsysName(.msg, "pda_menu"))),

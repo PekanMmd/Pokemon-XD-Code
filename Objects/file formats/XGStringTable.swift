@@ -201,10 +201,10 @@ class XGStringTable: NSObject {
 	
 	func save() {
 		
-		if self.startOffset == 0 {
+		if startOffset == 0 {
 			stringTable.save()
 		} else if let data = file.data {
-			data.replaceBytesFromOffset(self.startOffset, withByteStream: stringTable.byteStream)
+			data.replaceData(data: stringTable, atOffset: startOffset)
 			data.save()
 		}
 	}

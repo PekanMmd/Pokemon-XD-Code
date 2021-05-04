@@ -164,10 +164,10 @@ class XGUtility {
 						#if !GAME_PBR
 						let msgFile = XGFiles.nameAndFolder(file.fileName + ".json", file.folder)
 						if file == .common_rel || file == .tableres2, msgFile.exists {
-							let msgFile = XGFiles.nameAndFolder(fileToImport.fileName + ".json", fileToImport.folder)
+							let msgFile = XGFiles.nameAndFolder(file.fileName + ".json", file.folder)
 							if let newTable = try? XGStringTable.fromJSONFile(file: msgFile) {
 								newTable.save()
-								loadedStringTables[fileToImport.path] = newTable
+								loadedStringTables[file.path] = newTable
 							}
 						}
 						#endif
@@ -256,17 +256,36 @@ class XGUtility {
 						#endif
 
 						// strings in the xds scripts will override those particular strings in the msg's json
+						#if !GAME_PBR
 						if file.fileType == .xds && game != .PBR {
 							if settings.verbose {
 								printg("compiling \(file.path)")
 							}
 							XDSScriptCompiler.setFlags(disassemble: false, decompile: false, updateStrings: true, increaseMSG: true)
 							XDSScriptCompiler.baseStringID = 1000
-							if !XDSScriptCompiler.compile(textFile: file, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)) {
-								printg("XDS Compilation Error:\n" + XDSScriptCompiler.error)
-								return false
+							if file.fileName.replacingOccurrences(of: file.fileExtension, with: "") == XGFiles.common_rel.fileName {
+								if XGFiles.common_rel.exists, let newScript = XDSScriptCompiler.compile(file.text) {
+									let start = XGFiles.common_rel.scriptDataStartOffset
+									let length = XGFiles.common_rel.scriptDataLength
+									if newScript.length <= length, let rel = XGFiles.common_rel.data {
+										if newScript.length < length {
+											newScript.appendData(.init(length: length - newScript.length))
+										}
+										rel.replaceData(data: newScript, atOffset: start)
+										rel.save()
+									}
+								} else {
+									printg("XDS Compilation Error:\n" + XDSScriptCompiler.error)
+									return false
+								}
+							} else {
+								if !XDSScriptCompiler.compile(textFile: file, toFile: .nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, file.folder)) {
+									printg("XDS Compilation Error:\n" + XDSScriptCompiler.error)
+									return false
+								}
 							}
 						}
+						#endif
 					}
 
 					for file in fileToImport.folder.files where shouldIncludeFile(file) {

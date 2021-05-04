@@ -311,6 +311,12 @@ final class XGFsys : NSObject {
 		let start = startOffsetForFileDetails(index) + kFileIdentifierOffset
 		return data.get4BytesAtOffset(start)
 	}
+
+	func setIdentifier(_ identifier: Int, fileType: XGFileTypes, forFileWithIndex index: Int) {
+		let start = startOffsetForFileDetails(index) + kFileIdentifierOffset
+		data.replace2BytesAtOffset(start, withBytes: identifier)
+		data.replaceByteAtOffset(start + 2, withByte: fileType.rawValue)
+	}
 	
 	private func fileTypeForFile(index: Int) -> XGFileTypes {
 		if index >= numberOfEntries || index < 0 {
@@ -543,13 +549,17 @@ final class XGFsys : NSObject {
 	}
 	
 	func replaceFileWithIndex(_ index: Int, withFile newFile: XGFiles, saveWhenDone: Bool) {
-		if !newFile.exists {
+		guard newFile.exists, let data = newFile.data else {
 			printg("file doesn't exist: ", newFile.path)
 			return
 		}
-		
-		if !(index < self.numberOfEntries) {
-			printg("skipping fsys import: \(newFile.fileName) to \(self.fileName)\nindex doesn't exist:", index)
+
+		replaceFileWithIndex(index, withData: data, saveWhenDone: saveWhenDone)
+	}
+
+	func replaceFileWithIndex(_ index: Int, withData newData: XGMutableData, saveWhenDone: Bool) {
+		guard index < self.numberOfEntries else {
+			printg("skipping fsys import: \(data.file.fileName) to \(self.file.path)\nindex doesn't exist:", index)
 			return
 		}
 
@@ -559,24 +569,23 @@ final class XGFsys : NSObject {
 		}
 		
 		let fileStart = startOffsetForFile(index)
-		let fileEnd = fileStart + newFile.fileSize
+		let fileEnd = fileStart + newData.length
 		
-		if index < self.numberOfEntries - 1 {
-			if fileEnd > startOffsetForFile(index + 1) {
-				printg("file too large to replace: ", newFile.fileName, self.file.fileName)
-				return
-			}
+		if index < self.numberOfEntries - 1, fileEnd > startOffsetForFile(index + 1) {
+			printg(file.fileName)
+			printg("file too large to replace: ", newData.file.path)
+			return
 		}
 		
 		if fileEnd > self.dataEnd {
-			printg("file too large to replace: ", newFile.fileName, self.file.fileName)
+			printg(file.fileName)
+			printg("file too large to replace: ", newData.file.path)
 			return
 		}
 		
 		eraseDataForFile(index: index)
 		
-		let fileSize = UInt32(newFile.data!.length)
-		let newData = newFile.data!
+		let fileSize = UInt32(newData.length)
 		
 		let detailsStart = startOffsetForFileDetails(index)
 		data.replaceWordAtOffset(detailsStart + kCompressedSizeOffset, withBytes: fileSize)
@@ -628,7 +637,7 @@ final class XGFsys : NSObject {
 	}
 	
 	func addFile(_ file: XGFiles, fileType: XGFileTypes, compress: Bool, shortID: Int) {
-		guard let data = file.data else { return }
+		guard file.exists, let data = file.data else { return }
 		self.addFile(data, fileType: fileType, compress: compress, shortID: shortID)
 	}
 	
@@ -717,7 +726,6 @@ final class XGFsys : NSObject {
 		while (fileStart % 16) != 0 {
 			fileStart += 1
 		}
-		
 		
 		for i in 0 ..< numberOfEntries {
 			

@@ -108,7 +108,7 @@ class GoDHomeViewController: GoDTableViewController {
 	}
 	
     @discardableResult
-    private func checkRequiredFiles() -> Bool {
+    func checkRequiredFiles() -> Bool {
 		if XGISO.inputISOFile == nil || !XGFiles.iso.exists {
 			if let appDelegate = (NSApplication.shared.delegate as? AppDelegate) {
 				appDelegate.openFilePicker(self)

@@ -68,8 +68,7 @@ class GoDDataTable: CustomStringConvertible {
 	private init(file: XGFiles) {
 		self.file = file
 		
-		if self.file.exists {
-			let data = self.file.data!
+		if let data = file.data {
 			
 			var entryCount = 0
 			var entrySize = 0

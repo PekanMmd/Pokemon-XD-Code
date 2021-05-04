@@ -72,7 +72,7 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		SoundsTable,
 		pokemonTable,
 		pokeFacesTable,
-		//SoundsMetaDataTable
+		SoundsMetaDataTable
 	]
 
 	#if GAME_COLO

@@ -864,7 +864,7 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				} else {
 					valueString = XGISO.current.getFSYSNameWithGroupID(rawValue) ?? "Fsys file: \(rawValue)"
 				}
-				valueString += " (\(rawValue))"
+				valueString += " (\(rawValue.hexString()))"
 			case .fsysFileIdentifier(let fsysName):
 				if rawValue == 0 {
 					valueString = "None"
@@ -872,14 +872,14 @@ indirect enum GoDStructValues: CustomStringConvertible {
 					var fileFound = false
 					let mainIdentifier = rawValue & 0xFFFFFF00 // remove last byte so .rdat models can be found without their subIndex
 					valueString = ""
-					if let fsysFileName = fsysName, fsysFileName.length > 0 {
+					if let fsysFileName = fsysName, fsysFileName.length > 0, XGFiles.fsys(fsysFileName.removeFileExtensions()).exists {
 						let fsysFile = XGFiles.fsys(fsysFileName.removeFileExtensions()).fsysData
 						if let fileIndex = fsysFile.indexForIdentifier(identifier: mainIdentifier) {
 							fileFound = true
 							valueString = fsysFile.fileName + " -> " + (fsysFile.fileNameForFileWithIndex(index: fileIndex) ?? "File_\(fileIndex)")
 						}
 					}
-					if !fileFound, let fsys = XGISO.current.getFSYSForIdentifier(id: rawValue.unsigned),
+					if !fileFound, let fsys = XGISO.current.getFSYSForIdentifier(id: rawValue.unsigned, filterNamesWith: fsysName),
 					   let fileIndex = fsys.indexForIdentifier(identifier: mainIdentifier) {
 						fileFound = true
 						valueString = fsys.fileName + " -> " + (fsys.fileNameForFileWithIndex(index: fileIndex) ?? "File_\(fileIndex)")

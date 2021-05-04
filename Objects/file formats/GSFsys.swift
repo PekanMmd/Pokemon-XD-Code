@@ -17,7 +17,7 @@ struct GSFsysEntry {
 class GSFsys {
 
 	private let unknownValue: Int
-	private var entries: [GSFsysEntry]
+	private(set) var entries: [GSFsysEntry]
 
 	private init() {
 		entries = []

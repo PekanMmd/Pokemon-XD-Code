@@ -10,6 +10,7 @@ import Cocoa
 class GoDTextureImporterViewController: GoDTableViewController {
 	
 	@IBOutlet var filenameField: NSTextField!
+	@IBOutlet var detailsField: NSTextField!
 	var currentFile : XGFiles?
 	var importer : GoDTextureImporter?
 	
@@ -30,32 +31,28 @@ class GoDTextureImporterViewController: GoDTableViewController {
 	
 	var fileList: [XGFiles] = {
 		var allSupportedImages = [XGFiles]()
-		XGFileTypes.imageFormats.forEach { (type) in
-			allSupportedImages += XGFiles.allFilesWithType(type)
-		}
-		return allSupportedImages.filter({ (ifile) -> Bool in
-			return ifile.folder.files.contains(where: { (tfile) -> Bool in
-				return XGFileTypes.textureFormats.contains(tfile.fileType) &&
-				(ifile.fileName.removeFileExtensions() == tfile.fileName.removeFileExtensions())
-
+		for folder in XGFolders.ISOExport("").subfolders {
+			allSupportedImages += folder.files.filter({ (file) -> Bool in
+				let gtxFile = XGFiles.nameAndFolder(file.fileName.replacingOccurrences(of: file.fileExtension, with: ""), file.folder)
+				return XGFileTypes.imageFormats.contains(file.fileType)
+					&& gtxFile.exists && gtxFile.fileType == .gtx
 			})
-		}).sorted(by: { (f1, f2) -> Bool in
-			f1.fileName < f2.fileName
-		})
+		}
+		return allSupportedImages
 	}()
 	
 	func loadImage() {
-		
-		if let current = self.currentFile, current.exists {
-			let tFile = current.folder.files.first { (tfile) -> Bool in
-				return XGFileTypes.textureFormats.contains(tfile.fileType) &&
-					tfile.fileName.removeFileExtensions() == current.fileName.removeFileExtensions()
-			}
-			if let textureFile = tFile, let data = textureFile.data {
+		if let current = currentFile, current.exists {
+			let gtxFile = XGFiles.nameAndFolder(current.fileName.replacingOccurrences(of: current.fileExtension, with: ""), current.folder)
+			if let data = gtxFile.data {
 				let textureData = GoDTexture(data: data)
 				importer = GoDTextureImporter(oldTextureData: textureData, newImage: XGImage(nsImage: current.image))
 				importer?.replaceTextureData()
 				imageView.image = importer?.texture.image.nsImage
+				detailsField.stringValue = "Texture Format: \(textureData.format.name)"
+					+ (textureData.isIndexed ? "\nPalette Format: \(textureData.paletteFormat.name)" : "")
+					+ "\nMax Colours: \(textureData.isIndexed ? textureData.format.paletteCount.string : "None")"
+					+ "\nColours in image: \(XGImage.loadImageData(fromFile: current)?.colourCount.string ?? "Unknowm")"
 			}
 		}
 	}
@@ -87,31 +84,32 @@ class GoDTextureImporterViewController: GoDTableViewController {
 				self.currentFile = file
 				self.loadImage()
 			}
+		} else {
+			self.table.reloadData()
 		}
-		self.table.reloadData()
 	}
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: widthForTable())) as! GoDTableCellView
-		
-		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")
-		cell.setBackgroundColour(GoDDesign.colourWhite())
+		let cell = super.tableView(tableView, viewFor: tableColumn, row: row) as? GoDTableCellView
+		cell?.setBackgroundColour(GoDDesign.colourWhite())
 		
 		if fileList.count == 0 {
-			cell.setTitle("No images to import. Make sure Game Files sub folders contain the texture (.gtx/.atx) and the corresponding .png")
+			cell?.setTitle("No images to import. Export and decode some texture files from the ISO.")
 		}
 		
 		let list = fileList
-		if row < list.count {
+		if row < list.count, list[row].exists {
 			let file = list[row]
-			if file.exists {
-				cell.setTitle(file.fileName)
-			} else {
-				self.table.reloadData()
-			}
+			cell?.setTitle(file.fileName)
 		} else {
 			self.table.reloadData()
+		}
+
+		if self.table.selectedRow == row {
+			cell?.addBorder(colour: GoDDesign.colourBlack(), width: 1)
+		} else {
+			cell?.removeBorder()
 		}
 		
 		return cell

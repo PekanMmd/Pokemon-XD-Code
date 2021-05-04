@@ -138,7 +138,8 @@ let SoundsTable = CommonStructTable(index: .BGM, properties: SoundsStruct) { (in
 let SoundsMetaDataStruct = GoDStruct(name: "Sounds Metadata", format: [
 	.word(name: "Unknown", description: "", type: .uintHex),
 	.short(name: "Sound Sub Index", description: "", type: .uint),
-	.short(name: "Sound File Index", description: "", type: .indexOfEntryInTable(table: SoundsTable, nameProperty: nil))
+	.short(name: "Sound File Index", description: "", type: .indexOfEntryInTable(table: SoundsTable, nameProperty: nil)),
+	.word(name: "Unknown 2", description: "Unused?", type: .int)
 ])
 
 let SoundsMetaDataTable = CommonStructTable(index: .SoundsMetaData, properties: SoundsMetaDataStruct) { (index, data) -> String? in

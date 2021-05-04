@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="wHc-VN-PzF">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="wHc-VN-PzF">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -9,18 +10,18 @@
         <scene sceneID="SP0-am-F0v">
             <objects>
                 <viewController title="Texture Importer" id="wHc-VN-PzF" customClass="GoDTextureImporterViewController" customModule="GoD_Tool" sceneMemberID="viewController">
-                    <view key="view" id="ht2-iH-sej">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                    <view key="view" misplaced="YES" id="ht2-iH-sej">
+                        <rect key="frame" x="0.0" y="0.0" width="720" height="667"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <containerView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Yt-mj-LJ9">
-                                <rect key="frame" x="0.0" y="0.0" width="200" height="300"/>
+                                <rect key="frame" x="0.0" y="0.0" width="200" height="667"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="7jQ-sT-RJt"/>
                                 </constraints>
                             </containerView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="X3E-hf-uLp">
-                                <rect key="frame" x="208" y="220" width="104" height="25"/>
+                                <rect key="frame" x="208" y="587" width="104" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="fpI-0V-KUO"/>
                                     <constraint firstAttribute="height" constant="25" id="gSU-VV-dQ5"/>
@@ -32,11 +33,15 @@
                                 </textFieldCell>
                             </textField>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="H3l-El-ZQH">
-                                <rect key="frame" x="210" y="51" width="230" height="0.0"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="dIz-mg-CcZ"/>
+                                <rect key="frame" x="210" y="51" width="500" height="500"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="600" id="8f1-b2-0Pc"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="600" id="hj2-q2-x9e"/>
+                                </constraints>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ball grey" id="dIz-mg-CcZ"/>
                             </imageView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2f7-zd-AmK">
-                                <rect key="frame" x="285" y="13" width="81" height="32"/>
+                                <rect key="frame" x="420" y="13" width="81" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="69" id="T53-1R-VqR"/>
                                     <constraint firstAttribute="height" constant="21" id="krv-TW-O8K"/>
@@ -50,7 +55,7 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Uag-Ct-6Lh">
-                                <rect key="frame" x="208" y="255" width="234" height="25"/>
+                                <rect key="frame" x="208" y="622" width="504" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="0dw-2E-wfE"/>
                                 </constraints>
@@ -61,7 +66,7 @@
                                 </textFieldCell>
                             </textField>
                             <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LDY-lK-tlE">
-                                <rect key="frame" x="318" y="229" width="124" height="18"/>
+                                <rect key="frame" x="318" y="596" width="394" height="18"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="15" id="NKL-8s-e2L"/>
                                 </constraints>
@@ -70,15 +75,28 @@
                                     <action selector="setColourThreshold:" target="wHc-VN-PzF" id="DnP-lD-gnC"/>
                                 </connections>
                             </slider>
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="m1F-0D-23i">
+                                <rect key="frame" x="208" y="561" width="504" height="16"/>
+                                <textFieldCell key="cell" selectable="YES" title="Details:" id="68k-Ie-Tqk">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="m1F-0D-23i" secondAttribute="trailing" constant="10" id="0C3-uu-hGo"/>
+                            <constraint firstItem="8Yt-mj-LJ9" firstAttribute="top" secondItem="ht2-iH-sej" secondAttribute="top" id="0l8-l8-S4i"/>
                             <constraint firstAttribute="bottom" secondItem="2f7-zd-AmK" secondAttribute="bottom" constant="20" id="1Hv-S8-IpG"/>
                             <constraint firstItem="2f7-zd-AmK" firstAttribute="top" secondItem="H3l-El-ZQH" secondAttribute="bottom" constant="10" id="5Kt-6x-ADh"/>
                             <constraint firstItem="Uag-Ct-6Lh" firstAttribute="leading" secondItem="8Yt-mj-LJ9" secondAttribute="trailing" constant="10" id="D6z-1D-yph"/>
+                            <constraint firstItem="m1F-0D-23i" firstAttribute="top" secondItem="X3E-hf-uLp" secondAttribute="bottom" constant="10" id="Hn1-L8-fyx"/>
+                            <constraint firstAttribute="bottom" secondItem="8Yt-mj-LJ9" secondAttribute="bottom" id="K1H-Ns-Wlq"/>
                             <constraint firstItem="X3E-hf-uLp" firstAttribute="top" secondItem="Uag-Ct-6Lh" secondAttribute="bottom" constant="10" id="L1T-hk-ab4"/>
                             <constraint firstItem="LDY-lK-tlE" firstAttribute="leading" secondItem="X3E-hf-uLp" secondAttribute="trailing" constant="10" id="P5c-0P-a7V"/>
                             <constraint firstAttribute="trailing" secondItem="LDY-lK-tlE" secondAttribute="trailing" constant="10" id="P6v-If-zZS"/>
                             <constraint firstAttribute="trailing" secondItem="Uag-Ct-6Lh" secondAttribute="trailing" constant="10" id="R6a-f6-cYn"/>
+                            <constraint firstItem="H3l-El-ZQH" firstAttribute="top" secondItem="m1F-0D-23i" secondAttribute="bottom" constant="10" id="Ybh-7W-tN2"/>
                             <constraint firstItem="X3E-hf-uLp" firstAttribute="leading" secondItem="8Yt-mj-LJ9" secondAttribute="trailing" constant="10" id="aV5-V1-t0z"/>
                             <constraint firstItem="2f7-zd-AmK" firstAttribute="centerX" secondItem="H3l-El-ZQH" secondAttribute="centerX" id="apQ-au-fz8"/>
                             <constraint firstItem="Uag-Ct-6Lh" firstAttribute="top" secondItem="ht2-iH-sej" secondAttribute="top" constant="20" id="avU-Rr-TBs"/>
@@ -87,10 +105,12 @@
                             <constraint firstItem="8Yt-mj-LJ9" firstAttribute="leading" secondItem="ht2-iH-sej" secondAttribute="leading" id="iek-vI-O45"/>
                             <constraint firstItem="H3l-El-ZQH" firstAttribute="leading" secondItem="8Yt-mj-LJ9" secondAttribute="trailing" constant="10" id="lVP-0E-lYe"/>
                             <constraint firstItem="LDY-lK-tlE" firstAttribute="top" secondItem="X3E-hf-uLp" secondAttribute="top" id="nYT-dH-8JA"/>
+                            <constraint firstItem="m1F-0D-23i" firstAttribute="leading" secondItem="8Yt-mj-LJ9" secondAttribute="trailing" constant="10" id="pUS-OD-Sqn"/>
                             <constraint firstAttribute="trailing" secondItem="H3l-El-ZQH" secondAttribute="trailing" constant="10" id="yuk-Ms-B0a"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="detailsField" destination="m1F-0D-23i" id="LW9-2v-w0t"/>
                         <outlet property="filenameField" destination="Uag-Ct-6Lh" id="fI8-s3-agD"/>
                         <outlet property="imageView" destination="H3l-El-ZQH" id="FIP-cP-SGd"/>
                         <outlet property="thresholdSlider" destination="LDY-lK-tlE" id="61l-U1-wM0"/>
@@ -98,7 +118,10 @@
                 </viewController>
                 <customObject id="eub-At-HR2" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-551" y="-450"/>
+            <point key="canvasLocation" x="-694.5" y="-674.5"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ball grey" width="500" height="500"/>
+    </resources>
 </document>

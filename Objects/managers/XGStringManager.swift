@@ -35,6 +35,7 @@ func loadAllStrings(refresh: Bool = false) {
 
 		#elseif GAME_PBR
 		if game == .PBR {
+			allStringTables = []
 			for filename in
 						[region == .JP ? "common" : "mes_common",
 						(region == .JP ? "menu_fight_s" : "mes_fight_e"),

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="e5W-Gg-fXd">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="e5W-Gg-fXd">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--GoD Hex Calculator View Controller-->
+        <!--Hex Calculator-->
         <scene sceneID="nWu-kq-60Q">
             <objects>
-                <viewController id="e5W-Gg-fXd" customClass="GoDHexCalculatorViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Hex Calculator" id="e5W-Gg-fXd" customClass="GoDHexCalculatorViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="g89-o9-9tn">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="240"/>
                         <autoresizingMask key="autoresizingMask"/>

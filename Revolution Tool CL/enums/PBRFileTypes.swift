@@ -11,7 +11,7 @@ import Foundation
 enum XGFileTypes: Int, CaseIterable {
 	case none = 0x00
 	
-	case bin = 0x02 // binary data
+	case bin  = 0x02 // binary data
 	case sdr  = 0x04 // 3d model. PBR model format is documented in online forums and tool to convert to .obj exists
 	case odr  = 0x06 // contains multiple textures
 	case mdr  = 0x08 // contains multiple textures

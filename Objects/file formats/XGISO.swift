@@ -77,8 +77,7 @@ class XGISO: NSObject {
 
 		guard !file.fileName.contains(".nkit") else {
 			inputISOFile = nil
-			printg("nkit isos are currently unsupported:", file.path)
-			printg("Use this tool to convert it to a regular iso:\nhttps://vimm.net/vault/?p=nkit")
+			displayAlert(title: "nkit ISO unsupported", description: "nkit isos are currently unsupported: \(file.path)\nUse this tool to convert it to a regular iso:\nhttps://vimm.net/vault/?p=nkit")
 			return false
 		}
 
@@ -761,8 +760,16 @@ class XGISO: NSObject {
 
 	#endif
 
-	func addFile(_ file: XGFiles, save: Bool = true) {
+	func addFile(_ file: XGFiles, fsysID: Int?, save: Bool = true) {
+		guard file.exists, let data = file.data else {
+			printg("File doesn't exist:", file.path)
+			return
+		}
+		addFile(data, fsysID: fsysID, save: save)
+	}
 
+	func addFile(_ data: XGMutableData, fsysID: Int?, save: Bool = true) {
+		let file = data.file
 		printg("Adding new file to ISO: " + file.path)
 
 		let filename = file.fileName
@@ -775,11 +782,6 @@ class XGISO: NSObject {
 
 		guard !allFileNames.contains(filename) else {
 			printg("Could not add file: " + file.path + "\nA file with that name already exists.")
-			return
-		}
-
-		guard file.exists, file.data != nil else {
-			printg("Could not add file: " + file.path + "\nFile not found.")
 			return
 		}
 
@@ -831,14 +833,14 @@ class XGISO: NSObject {
 
 		loadFST()
 
-		shiftAndReplaceFile(file, save: false)
+		shiftAndReplaceFile(name: file.fileName, withData: data, save: false)
 		#else
-		importFiles([file])
+		data.file = .nameAndFolder(file.fileName, .ISOFiles)
+		data.save()
 		#endif
 
 		if file.fileType == .fsys {
-			let fsysData = file.fsysData
-			GSFsys.shared.addEntry(id: fsysData.groupID, name: file.fileName)
+			GSFsys.shared.addEntry(id: fsysID ?? file.fsysData.groupID, name: file.fileName)
 			if save {
 				GSFsys.shared.data().save()
 			}
@@ -849,6 +851,7 @@ class XGISO: NSObject {
 		#else
 		importFiles([.GSFsys])
 		#endif
+		printg("File added to ISO.")
 
 	}
 
@@ -920,9 +923,9 @@ class XGISO: NSObject {
 		return nil
 	}
 	
-	func getFSYSForIdentifier(id: UInt32) -> XGFsys? {
+	func getFSYSForIdentifier(id: UInt32, filterNamesWith filter: String? = nil) -> XGFsys? {
 		#if !GAME_PBR
-		for file in self.allFileNames where file.contains(".fsys") {
+		for file in self.allFileNames where file.contains(".fsys") && file.contains(filter ?? "") {
 			if let start = self.locationForFile(file) {
 				let entries = self.data.get4BytesAtOffset(start + kNumberOfEntriesOffset)
 
@@ -936,7 +939,7 @@ class XGISO: NSObject {
 			}
 		}
 		#else
-		for file in XGFolders.ISOFiles.files where file.fileType == .fsys {
+		for file in XGFolders.ISOFiles.files where file.fileType == .fsys && file.fileName.contains(filter ?? "") {
 			let data = file.fsysData
 			if let _ = data.indexForIdentifier(identifier: id.int32) {
 				return data

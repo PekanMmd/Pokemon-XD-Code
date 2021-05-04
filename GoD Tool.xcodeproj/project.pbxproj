@@ -560,6 +560,12 @@
 		1C716B6426043097000F1456 /* UniversalEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C716B6326043097000F1456 /* UniversalEditorViewController.swift */; };
 		1C716B6526043097000F1456 /* UniversalEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C716B6326043097000F1456 /* UniversalEditorViewController.swift */; };
 		1C716B6626043097000F1456 /* UniversalEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C716B6326043097000F1456 /* UniversalEditorViewController.swift */; };
+		1C740098263F8A6600DFC63C /* SmallStructTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C740097263F8A6600DFC63C /* SmallStructTables.swift */; };
+		1C740099263F8A6600DFC63C /* SmallStructTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C740097263F8A6600DFC63C /* SmallStructTables.swift */; };
+		1C74009A263F8A6600DFC63C /* SmallStructTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C740097263F8A6600DFC63C /* SmallStructTables.swift */; };
+		1C7400C42640705200DFC63C /* PokemonModelsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7400C32640705200DFC63C /* PokemonModelsTable.swift */; };
+		1C7400C52640705200DFC63C /* PokemonModelsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7400C32640705200DFC63C /* PokemonModelsTable.swift */; };
+		1C7400C62640705200DFC63C /* PokemonModelsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7400C32640705200DFC63C /* PokemonModelsTable.swift */; };
 		1C750FB125C3C3BE00EAB706 /* XGBattleModeRulesets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FB025C3C3BD00EAB706 /* XGBattleModeRulesets.swift */; };
 		1C750FB225C3C3BE00EAB706 /* XGBattleModeRulesets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FB025C3C3BD00EAB706 /* XGBattleModeRulesets.swift */; };
 		1C750FB325C3C3BE00EAB706 /* XGBattleModeRulesets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C750FB025C3C3BD00EAB706 /* XGBattleModeRulesets.swift */; };
@@ -4519,6 +4525,8 @@
 		1C716AA42603EBF8000F1456 /* StructTablesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructTablesList.swift; sourceTree = "<group>"; };
 		1C716B5626042C42000F1456 /* UniversalEditor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = UniversalEditor.storyboard; sourceTree = "<group>"; };
 		1C716B6326043097000F1456 /* UniversalEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalEditorViewController.swift; sourceTree = "<group>"; };
+		1C740097263F8A6600DFC63C /* SmallStructTables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallStructTables.swift; sourceTree = "<group>"; };
+		1C7400C32640705200DFC63C /* PokemonModelsTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonModelsTable.swift; sourceTree = "<group>"; };
 		1C750FB025C3C3BD00EAB706 /* XGBattleModeRulesets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleModeRulesets.swift; sourceTree = "<group>"; };
 		1C8601D82478625900A5B267 /* Original Items.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Original Items.json"; sourceTree = "<group>"; };
 		1C9F22D8254104C0008D02EA /* DummyThreadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyThreadManager.swift; sourceTree = "<group>"; };
@@ -7189,9 +7197,11 @@
 			children = (
 				1C716AA42603EBF8000F1456 /* StructTablesList.swift */,
 				1C56F5292604DB3800CF1DEE /* DeckStructTable.swift */,
-				1C56F57E2605DE2C00CF1DEE /* PokemonStatsTable.swift */,
-				1C56F62C2606994800CF1DEE /* MoveStatsTable.swift */,
 				1C56F64B2606A96300CF1DEE /* ItemStatsTable.swift */,
+				1C56F62C2606994800CF1DEE /* MoveStatsTable.swift */,
+				1C7400C32640705200DFC63C /* PokemonModelsTable.swift */,
+				1C56F57E2605DE2C00CF1DEE /* PokemonStatsTable.swift */,
+				1C740097263F8A6600DFC63C /* SmallStructTables.swift */,
 				1C56F863260DB42700CF1DEE /* PBRStringManager.swift */,
 			);
 			path = structs;
@@ -9672,6 +9682,7 @@
 				B247ED3E217B9FF30034CAF5 /* Sublime */,
 				B2F5EB851F49A11A0075C6D2 /* GoDToolCL */,
 				B2562F4621349567004180F1 /* ColosseumToolCL */,
+				B24A501D21D10D93009C707C /* Revolution Tool CL */,
 				B208E75A20C4DD2D00D298BF /* XDRelIndexes.swift */,
 				B208E75F20C4DD3E00D298BF /* CMRelIndexes.swift */,
 				B2F5F87F1F49C2EC0075C6D2 /* GoDGameInit.swift */,
@@ -9684,7 +9695,6 @@
 				B2F5EBD81F49A1FE0075C6D2 /* objects */,
 				B2F5EBA61F49A1980075C6D2 /* GoDToolOSX */,
 				B208E39320C4CA3A00D298BF /* Colosseum Tool */,
-				B24A501D21D10D93009C707C /* Revolution Tool CL */,
 				B20EEA2621E9203600E87D01 /* PBR Tool */,
 				1C16CAC1253B86F100907D78 /* GoD-CLI */,
 				1C16CAE1253B8A2200907D78 /* Colosseum-CLI */,
@@ -13532,6 +13542,7 @@
 				1C716B4326041AD7000F1456 /* main.swift in Sources */,
 				1CF23FEC26252F4C00BD734C /* GamesAndLangauages.swift in Sources */,
 				1CCB074E262BCF4300D4ABA5 /* PBRAbilitiesManager.swift in Sources */,
+				1C7400C52640705200DFC63C /* PokemonModelsTable.swift in Sources */,
 				1CCFFE692554FFF90082BFE2 /* XGResources.swift in Sources */,
 				1CCFFEC3255501020082BFE2 /* XGFsys.swift in Sources */,
 				1CCFFF4A255501890082BFE2 /* GoDKeyCodes.swift in Sources */,
@@ -13540,6 +13551,7 @@
 				1CCFFF49255501890082BFE2 /* XGVertex.swift in Sources */,
 				1CCFFF6D255501BE0082BFE2 /* PBRTMs.swift in Sources */,
 				1CCFFF62255501BE0082BFE2 /* PBRMoveTypes.swift in Sources */,
+				1C740099263F8A6600DFC63C /* SmallStructTables.swift in Sources */,
 				1CCFFE9B255500CB0082BFE2 /* XGEvolution.swift in Sources */,
 				1C716A2826039D33000F1456 /* CommandLineArgs.swift in Sources */,
 				1CCFFF87255501E50082BFE2 /* GoDDataTableEntry.swift in Sources */,
@@ -13877,6 +13889,7 @@
 				1C20013525B3222800A7CF7D /* GoDGameInit.swift in Sources */,
 				B20EEE8821EF786100E87D01 /* XGContestCategories.swift in Sources */,
 				1C37441224056F190089D3BA /* GoDShellManager.swift in Sources */,
+				1C7400C62640705200DFC63C /* PokemonModelsTable.swift in Sources */,
 				B20EEA3E21E920F400E87D01 /* PBRItems.swift in Sources */,
 				B20EEEA821EF799C00E87D01 /* GoDTableViewDelegate.swift in Sources */,
 				B20EEA6421E9214D00E87D01 /* PBRScriptClassData.swift in Sources */,
@@ -13887,6 +13900,7 @@
 				1CF23FED26252F4D00BD734C /* GamesAndLangauages.swift in Sources */,
 				B20EEEB321EF7A1C00E87D01 /* GoDHelpViewController.swift in Sources */,
 				B24547862229FEAE0043F991 /* XGGSWTextures.swift in Sources */,
+				1C74009A263F8A6600DFC63C /* SmallStructTables.swift in Sources */,
 				1C524D03234B7F0800A9659A /* GoDEnumerablePopUpButton.swift in Sources */,
 				B20EEA3521E920F400E87D01 /* PBRAbilities.swift in Sources */,
 				1C56FA20261069D700CF1DEE /* GSFsys.swift in Sources */,
@@ -13997,6 +14011,7 @@
 				B24A50ED21D12CDA009C707C /* PBRTrainer.swift in Sources */,
 				1CF23FE226252F4B00BD734C /* GamesAndLangauages.swift in Sources */,
 				1CCB074D262BCF4300D4ABA5 /* PBRAbilitiesManager.swift in Sources */,
+				1C7400C42640705200DFC63C /* PokemonModelsTable.swift in Sources */,
 				B24A50F321D12CDA009C707C /* PBRItem.swift in Sources */,
 				B24A504621D12426009C707C /* GoDTextureImporter.swift in Sources */,
 				1C20016F25B3231900A7CF7D /* GoDLogManager.swift in Sources */,
@@ -14005,6 +14020,7 @@
 				1C6295FB243022080085C22F /* PBRScriptCompiler.swift in Sources */,
 				1C716A2726039D33000F1456 /* CommandLineArgs.swift in Sources */,
 				B24A50DD21D12CDA009C707C /* PBRSpecialStringCharacters.swift in Sources */,
+				1C740098263F8A6600DFC63C /* SmallStructTables.swift in Sources */,
 				B24A50FD21D2D724009C707C /* GoDDataTable.swift in Sources */,
 				B24A507D21D129A5009C707C /* XGNatures.swift in Sources */,
 				1C2001A125B3281400A7CF7D /* XGUtility.swift in Sources */,
