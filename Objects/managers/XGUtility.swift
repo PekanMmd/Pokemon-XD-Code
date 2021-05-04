@@ -256,7 +256,7 @@ class XGUtility {
 						#endif
 
 						// strings in the xds scripts will override those particular strings in the msg's json
-						#if !GAME_PBR
+						#if GAME_XD
 						if file.fileType == .xds && game != .PBR {
 							if settings.verbose {
 								printg("compiling \(file.path)")
