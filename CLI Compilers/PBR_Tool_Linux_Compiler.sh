@@ -61,7 +61,7 @@ cp ../images/PBR\ body/PBR_body_179.png ./out/Assets/PBR/PBR_body_179.png
 cp ../images/PBR\ body/PBR_body_086.png ./out/Assets/PBR/PBR_body_086.png
 cp ../images/PBR\ body/PBR_body_473.png ./out/Assets/PBR/PBR_body_473.png
 cp ../images/PBR\ face/PBR_face_179.png ./out/Assets/PBR/PBR_face_179.png
-cp ../images/PBR\ body/PBR_body_495.png ./out/Assets/PBR/PBR_body_495.png
+cp ../images/PBR\ body/PBR_body_494_1.png ./out/Assets/PBR/PBR_body_494_1.png
 cp ../images/PBR\ body/PBR_body_135.png ./out/Assets/PBR/PBR_body_135.png
 cp ../images/PBR\ face/PBR_face_255.png ./out/Assets/PBR/PBR_face_255.png
 cp ../images/PBR\ face/PBR_face_161.png ./out/Assets/PBR/PBR_face_161.png
@@ -351,7 +351,7 @@ cp ../images/PBR\ body/PBR_body_256.png ./out/Assets/PBR/PBR_body_256.png
 cp ../images/PBR\ face/PBR_face_428.png ./out/Assets/PBR/PBR_face_428.png
 cp ../images/PBR\ face/PBR_face_447.png ./out/Assets/PBR/PBR_face_447.png
 cp ../images/PBR\ face/PBR_face_306.png ./out/Assets/PBR/PBR_face_306.png
-cp ../images/PBR\ face/PBR_face_495.png ./out/Assets/PBR/PBR_face_495.png
+cp ../images/PBR\ face/PBR_face_494_1.png ./out/Assets/PBR/PBR_face_494_1.png
 cp ../images/PBR\ body/PBR_body_061.png ./out/Assets/PBR/PBR_body_061.png
 cp ../images/Types/type_1.png ./out/Assets/PBR/type_1.png
 cp ../images/PBR\ face/PBR_face_132.png ./out/Assets/PBR/PBR_face_132.png
@@ -561,6 +561,7 @@ cp ../images/PBR\ body/PBR_body_291.png ./out/Assets/PBR/PBR_body_291.png
 cp ../images/PBR\ body/PBR_body_432.png ./out/Assets/PBR/PBR_body_432.png
 cp ../images/PBR\ face/PBR_face_436.png ./out/Assets/PBR/PBR_face_436.png
 cp ../images/PBR\ body/PBR_body_199.png ./out/Assets/PBR/PBR_body_199.png
+cp ../images/PBR\ face/PBR_face_495.png ./out/Assets/PBR/PBR_face_495.png
 cp ../images/PBR\ body/PBR_body_467.png ./out/Assets/PBR/PBR_body_467.png
 cp ../images/PBR\ face/PBR_face_345.png ./out/Assets/PBR/PBR_face_345.png
 cp ../images/PBR\ body/PBR_body_225.png ./out/Assets/PBR/PBR_body_225.png

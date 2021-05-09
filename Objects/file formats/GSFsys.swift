@@ -51,8 +51,36 @@ class GSFsys {
 		}
 	}
 
+	func entryWithName(_ name: String) -> GSFsysEntry? {
+		return entries.first { (entry) -> Bool in
+			entry.name == name
+		}
+	}
+
 	func addEntry(id: Int, name: String) {
 		entries.append(.init(name: name, id: id))
+	}
+
+	func renameEntry(withID id: Int, to newName: String) {
+		if let entry = entryWithID(id) {
+			let newEntry = GSFsysEntry(name: newName, id: entry.id)
+			if let index = entries.firstIndex(where: { (check) -> Bool in
+				return check.id == id
+			}) {
+				entries[index] = newEntry
+			}
+		}
+	}
+
+	func renameEntry(withName name: String, to newName: String) {
+		if let entry = entryWithName(name) {
+			let newEntry = GSFsysEntry(name: newName, id: entry.id)
+			if let index = entries.firstIndex(where: { (check) -> Bool in
+				return check.name == name
+			}) {
+				entries[index] = newEntry
+			}
+		}
 	}
 
 	func removeEntries(id: Int) {

@@ -42,7 +42,16 @@ class GoDStringViewController: GoDViewController {
 		if let val = stringid.stringValue.integerValue {
 			let msgString = getStringSafelyWithID(id: val)
 			text.string = msgString.string
+			#if !GAME_PBR
 			filePathLabel.stringValue = msgString.table?.path ?? "File unknown"
+			#else
+			if let (tableID, _) = PBRStringManager.tableIDAndIndexForStringWithID(val),
+			   let table = getStringTableWithId(tableID) {
+				filePathLabel.stringValue =  table.file.path
+			} else {
+				filePathLabel.stringValue =  "File unknown"
+			}
+			#endif
 		}
 	}
 	

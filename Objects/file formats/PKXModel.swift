@@ -11,7 +11,7 @@ class PKXModel {
 
 	var data: XGMutableData
 	var gameFormat: XGGame {
-		return data.getWordAtOffset(0x10) == 0xFFFFFF ? .XD : .Colosseum
+		return data.getWordAtOffset(0x20) == 0xFFFFFF ? .XD : .Colosseum
 	}
 	var isTrainer: Bool {
 		// I've only looked at a few so not sure how accuracte this is

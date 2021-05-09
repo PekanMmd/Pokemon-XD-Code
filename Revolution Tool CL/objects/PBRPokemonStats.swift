@@ -74,9 +74,13 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 	
 	var evolutions = [XGEvolution]()
 	var levelUpMoves = [XGLevelUpMove]()
-	
+
+	var facesEntry: GoDDataTableEntry {
+		return GoDDataTableEntry.pokemonFaces(index: baseIndex)
+	}
+
 	var faces : [PBRPokemonImage] {
-		let formesData = GoDDataTableEntry.pokemonFaces(index: baseIndex)
+		let formesData = facesEntry
 		let numberOfFormes = formesData.getByte(7) / 2 // unevolved pokemon that can evolve seem to have 3 for this value for some reason. least significant bit is read separately but don't know what it's used for atm
 		var formes = [PBRPokemonImage]()
 		let firstAlternate = formesData.getShort(4)
@@ -85,9 +89,13 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 		}
 		return formes
 	}
+
+	var bodiesEntry: GoDDataTableEntry {
+		return GoDDataTableEntry.pokemonBodies(index: baseIndex)
+	}
 	
 	var bodies : [PBRPokemonImage] {
-		let formesData = GoDDataTableEntry.pokemonBodies(index: baseIndex)
+		let formesData = bodiesEntry
 		let numberOfFormes = formesData.getByte(7)
 		var formes = [PBRPokemonImage]()
 		let firstAlternate = formesData.getShort(4)

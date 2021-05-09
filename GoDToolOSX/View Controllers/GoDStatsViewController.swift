@@ -373,11 +373,16 @@ class GoDStatsViewController: GoDTableViewController {
 			}
 			nameText += sender.stringValue
 
+			#if GAME_PBR
+			if !XGString(string: string, sid: pokemon.nameID).replace() {
+				GoDAlertViewController.displayAlert(title: "Replacement failed!", text: "The string could not be replaced")
+			}
+			#else
 			let string = XGString(string: nameText, file: XGFiles.commonStringTableFile, sid: pokemon.nameID)
-			let increaseSize = game == .PBR
-			if !XGFiles.commonStringTableFile.stringTable.addString(string, increaseSize: increaseSize, save: true) {
+			if !XGFiles.commonStringTableFile.stringTable.addString(string, increaseSize: false, save: true) {
 				printg("Failed to set pokemon name:", sender.stringValue)
 			}
+			#endif
 		}
 		
 		reloadView()

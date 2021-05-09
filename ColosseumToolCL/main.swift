@@ -8,7 +8,8 @@
 
 loadISO(exitOnFailure: true)
 
-XGSaveManager(file: .nameAndFolder("save.gci", .SaveFiles), saveType: .gciSaveData).save()
+
+//CommonIndexes.TrainerPokemonData.startOffset.hexString().println()
 
 //
 //func fixShinyGlitch() {

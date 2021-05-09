@@ -160,7 +160,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 	@IBAction func getFreeStringID(_ sender: Any) {
 		#if !GAME_PBR
-		guard checkRequiredFiles() else {
+		guard homeViewController.checkRequiredFiles() else {
 			return
 		}
 		

@@ -127,8 +127,8 @@ extension GoDStructTableFormattable {
 		printg("Documenting \(properties.name) table to:", folder.path)
 		allEntries.forEachIndexed { (index, entry) in
 			var filename = documentByIndex ?
-				String(format: "%03d", index) + assumedNameForEntry(index: index) + " " + ".yaml" :
-				assumedNameForEntry(index: index) + " " + String(format: "%03d", index)  + ".yaml"
+				String(format: "%03d ", index) + assumedNameForEntry(index: index) + ".yaml" :
+				assumedNameForEntry(index: index) + String(format: " %03d", index) + ".yaml"
 			filename = filename.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: "\"", with: "")
 			filename = filename.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: "\"", with: "")
 			let file = XGFiles.nameAndFolder(filename, folder)

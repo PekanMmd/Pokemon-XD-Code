@@ -180,6 +180,10 @@ class GoDDataTable: CustomStringConvertible {
 	func addEntry(data: XGMutableData) {
 		self.entries.append(data)
 	}
+
+	func insertEntry(_ data: XGMutableData, at index: Int) {
+		self.entries.insert(data, at: index)
+	}
 	
 	func setEntrySize(_ size: Int) {
 		guard size > 0 else {

@@ -13,11 +13,12 @@ let pokemonModelsStruct = GoDStruct(name: "Pokemon Model", format: [
 	.word(name: "Fsys ID", description: "", type: .fsysID),
 	.word(name: "Model File ID", description: "", type: .uintHex),
 	.word(name: "Shiny Model File ID", description: "", type: .uintHex),
-	.short(name: "Unknown 2", description: "", type: .uintHex),
+	.float(name: "Unknown 2", description: ""),
 	.short(name: "Padding", description: "", type: .null),
 	.short(name: "Pokemon Species", description: "", type: .pokemonID),
 	.short(name: "Padding 2", description: "", type: .null),
-	.array(name: "Unknown Values", description: "", property: .byte(name: "", description: "", type: .uintHex), count: 48)
+	.byte(name: "form id", description: "", type: .uint),
+	.array(name: "Unknown Values", description: "", property: .byte(name: "", description: "", type: .uintHex), count: 47)
 ])
 
 let pokemonModelsTable = CommonStructTable(file: .indexAndFsysName(region == .JP ? 12 : 6, "common"), properties: pokemonModelsStruct, documentByIndex: false) { (index, data) -> String? in
