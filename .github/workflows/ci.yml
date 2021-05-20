@@ -13,11 +13,11 @@ on:
       - master
 
 jobs:
-  Build:
+  macos:
     runs-on: macos-latest
     strategy:
         matrix:
-          target: ['GoD Tool ???']
+          target: ['GoD Tool']
     steps:
       - name: Checkout
         uses: actions/checkout@master
@@ -26,10 +26,8 @@ jobs:
           xcodebuild clean
       - name: Build
         run: |
-          xcodebuild build -project "GoD Tool.xcodeproj" -target "${target}" -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-          mkdir -p output
-          mv "build/Release/${target}.app" output/
-          tar -cvf "${target}.tar" output/
+          make build copy
+          tar -cvf "${target}.tar" out/
         env:
           target: ${{ matrix.target }}
       - name: Archive artifacts
