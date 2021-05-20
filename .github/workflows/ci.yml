@@ -1,0 +1,40 @@
+
+name: Pokemon Tools CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+    branches:
+      - master
+
+jobs:
+  Build:
+    runs-on: macos-latest
+    strategy:
+        matrix:
+          target: ['GoD Tool']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Clean
+        run: |
+          xcodebuild clean
+      - name: Build
+        run: |
+          xcodebuild build -project "GoD Tool.xcodeproj" -target "${target}" -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+          mkdir -p output
+          mv "build/Release/${target}.app" output/
+          tar -cvf "${target}.tar" output/
+        env:
+          target: ${{ matrix.target }}
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.target }}
+          path: |
+            ${{ matrix.target }}.tar
