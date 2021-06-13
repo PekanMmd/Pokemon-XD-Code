@@ -98,7 +98,7 @@ class PBRTypeManager {
 		let oldSize = currentTable.count
 		let newSize = newTable.count
 		let sizeDifference = oldSize - newSize
-		guard sizeDifference >= 0 || allowSizeIncrease else {
+		guard oldSize < newSize || allowSizeIncrease else {
 			printg("Error: New type matchup table is too large.\nTry setting more matchups to neutral.")
 			return false
 		}

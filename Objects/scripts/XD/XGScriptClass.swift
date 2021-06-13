@@ -243,7 +243,7 @@ enum XGScriptClass {
 		}
 	}
 
-	static func addCustomClassBoilerPlateCode(classOffsetInRAM: Int, numberOfFunctions: Int) {
+	static func addCustomClassBoilerPlateCode(classOffsetInRAM: Int, numberOfFunctions: Int) -> (classOffset: Int, jumpTableOffset: Int, returnOffset: UInt32)? {
 		// Writes the ASM needed to set up a custom script class
 		// Each function pointer in the jump table wil be a 4 byte word pointing
 		// to the offset in RAM where that index function will be
@@ -278,7 +278,7 @@ enum XGScriptClass {
 
 		guard numberOfFunctions < 0xFFFF else {
 			printg("A script class can't have more than \(0xFFFF) functions")
-			return
+			return nil
 		}
 
 		var offset = classOffsetInRAM
@@ -330,16 +330,17 @@ enum XGScriptClass {
 		printg("The new class' code is at RAM offset", offset.hexString())
 		printg("The jump table is at RAM offset", jumpOffset.hexString())
 		printg("The return offset for this class' functions is at RAM offset", returnOffset.hexString())
+		return (offset, jumpOffset, returnOffset)
 	}
 
-	static func createCustomClass(withIndex index: Int, atRAMOffset offset: Int, numberOfFunctions: Int) {
+	static func createCustomClass(withIndex index: Int, atRAMOffset offset: Int, numberOfFunctions: Int) -> (classOffset: Int, jumpTableOffset: Int, returnOffset: UInt32)? {
 		let customClass = XGScriptClass.classes(index)
 		guard customClass.repointToRAMOffset(UInt32(offset)) else {
 			printg("Couldn't repoint custom class \(index) to offset:", offset.hexString())
-			return
+			return nil
 		}
 
-		addCustomClassBoilerPlateCode(classOffsetInRAM: offset, numberOfFunctions: numberOfFunctions)
+		return addCustomClassBoilerPlateCode(classOffsetInRAM: offset, numberOfFunctions: numberOfFunctions)
 	}
 
 	static func addASMFunctionToCustomClass(jumpTableRAMOffset: Int, functionIndex: Int, codeOffsetInRAM: Int, code: ASM) {

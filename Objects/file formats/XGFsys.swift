@@ -253,7 +253,7 @@ final class XGFsys : NSObject {
 	func indexForIdentifier(identifier: Int) -> Int? {
 		// .rdat models use the last byte as the animation index so we ignore it here
 		// just to compare the file identifier itself
-		return identifiers.firstIndex(where: {$0 == (identifier % 0xFFFFFF00)})
+		return identifiers.firstIndex(where: { ($0 & 0xFFFFFF00) == (identifier & 0xFFFFFF00)})
 	}
 	
 	func indexForFileType(type: XGFileTypes) -> Int? {
@@ -847,27 +847,24 @@ final class XGFsys : NSObject {
 		data.save()
 	}
 	
-	func extractFilesToFolder(folder: XGFolders, decode: Bool, overwrite: Bool = false) {
-		
-		var data = [XGMutableData]()
-		for i in 0 ..< self.numberOfEntries {
-			if settings.verbose, let filename = fileNameForFileWithIndex(index: i) {
-				printg("extracting file: \(filename) from \(self.file.path)")
-			}
-			if let fileData = extractDataForFileWithIndex(index: i) {
-				fileData.file = .nameAndFolder(fileData.file.fileName, folder)
-				data.append(fileData)
-				if !fileData.file.exists || overwrite {
-					fileData.save()
+	func extractFilesToFolder(folder: XGFolders, extract: Bool = true, decode: Bool, overwrite: Bool = false) {
+		if extract {
+			for i in 0 ..< self.numberOfEntries {
+				if settings.verbose, let filename = fileNameForFileWithIndex(index: i) {
+					printg("extracting file: \(filename) from \(self.file.path)")
+				}
+				if let fileData = extractDataForFileWithIndex(index: i) {
+					fileData.file = .nameAndFolder(fileData.file.fileName, folder)
+					if !fileData.file.exists || overwrite {
+						fileData.save()
+					}
 				}
 			}
 		}
 		
 		// decode certain file types
 		if decode {
-			for file in folder.files where data.contains(where: { (d) -> Bool in
-				d.file.path == file.path
-			}) {
+			for file in folder.files where filenames.contains(file.fileName)  {
 				if settings.verbose {
 					printg("decoding file: \(file.fileName)")
 				}
@@ -889,23 +886,19 @@ final class XGFsys : NSObject {
 					}
 				}
 
-				#if GAME_XD
+				#if !GAME_PBR
 				let fileContainsScript = (file.fileType == .scd || file == .common_rel)
-				#elseif GAME_PBR
-				let fileContainsScript = file.fileType == .scd
 				#else
-				let fileContainsScript = false
+				let fileContainsScript = file.fileType == .scd
 				#endif
 
-				#if !GAME_COLO
-				if (fileContainsScript) {
+				if fileContainsScript, game != .Colosseum  { // TODO allow colosseum scripts once less buggy
 					let xdsFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.xds.fileExtension, folder)
 					if !xdsFile.exists || overwrite {
 						let scriptText = file.scriptData.getXDSScript()
 						XGUtility.saveString(scriptText, toFile: xdsFile)
 					}
 				}
-				#endif
 
 				#if !GAME_PBR
 				if file == .common_rel || file == .tableres2 {

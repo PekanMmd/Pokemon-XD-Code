@@ -145,6 +145,59 @@ final class XGTrainer: NSObject, Codable {
 		}
 		
 	}
+
+	var fullDescription : String {
+		let trainerLength = 30
+		let pokemonLength = 20
+
+		var string = ""
+		let className = self.trainerClass.name.unformattedString
+
+		string += (className + " " + name.string).spaceToLength(trainerLength) + "\n\n"
+		for p in pokemon {
+			if p.isSet {
+				string += ((p.isShadowPokemon ? "Shadow " : "") + p.species.name.string).spaceToLength(pokemonLength)
+			}
+		}
+		string += "\n"
+
+		for p in self.pokemon {
+			if p.isSet {
+				string += ("Level " + p.level.string).spaceToLength(pokemonLength)
+			}
+		}
+		string += "\n"
+
+		for p in pokemon {
+			if p.isSet {
+				if p.ability == 0xFF {
+					string += "Random".spaceToLength(pokemonLength)
+				} else {
+					string += (p.ability == 0 ? p.species.ability1 : p.species.ability2).spaceToLength(pokemonLength)
+				}
+			}
+		}
+		string += "\n"
+
+		for p in pokemon {
+			if p.isSet {
+				string += p.item.name.string.spaceToLength(pokemonLength)
+			}
+		}
+		string += "\n"
+
+		for i in 0 ..< 4 {
+			for p in pokemon {
+				if p.isSet {
+					string += p.moves[i].name.string.spaceToLength(pokemonLength)
+				}
+			}
+			string += "\n"
+		}
+
+		string += "\n"
+		return string
+	}
 	
 }
 

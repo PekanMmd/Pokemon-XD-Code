@@ -108,7 +108,8 @@ enum XGMoves : CustomStringConvertible {
 	
 	static func random() -> XGMoves {
 		var rand = 0
-		while (XGMoves.index(rand).isShadowMove) || (XGMoves.index(rand).descriptionID == 0) || rand == 0 || rand == 355 {
+		let discludedMoves = [0, 355, game == .Colosseum ? 357 : 374]
+		while (XGMoves.index(rand).isShadowMove) || (XGMoves.index(rand).descriptionID == 0) || discludedMoves.contains(rand) {
 			rand = Int.random(in: 1 ..< kNumberOfMoves)
 		}
 		return XGMoves.index(rand)
@@ -116,7 +117,8 @@ enum XGMoves : CustomStringConvertible {
 	
 	static func randomShadow() -> XGMoves {
 		var rand = 0
-		while (!XGMoves.index(rand).isShadowMove) || (XGMoves.index(rand).descriptionID == 0) || rand == 0 || rand == 355 {
+		let discludedMoves = [0, 355, game == .Colosseum ? 357 : 374]
+		while (!XGMoves.index(rand).isShadowMove) || (XGMoves.index(rand).descriptionID == 0) || discludedMoves.contains(rand) {
 			rand = Int.random(in: 1 ..< kNumberOfMoves)
 		}
 		return XGMoves.index(rand)

@@ -34,7 +34,7 @@ let kRoomNameIDOffset: Int = {
 
 let kRoomGroupIDOffset: Int = {
 	if game == .XD {
-		return region == .JP ? 0x30 : 0x6
+		return region == .JP ? 0x30 : 0x2E
 	} else {
 		return region == .EU ? 0x4A : 0x6
 	}
@@ -124,7 +124,6 @@ final class XGRoom: NSObject, Codable {
 	}
 
 	var script: XGFiles? {
-		guard game == .XD else { return nil }
 		if let fsys = fsysFilename {
 			return .typeAndFsysName(.scd, fsys.removeFileExtensions())
 		}

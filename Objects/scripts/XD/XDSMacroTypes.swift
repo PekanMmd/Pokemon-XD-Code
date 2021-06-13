@@ -63,6 +63,7 @@ indirect enum XDSMacroTypes {
 	case scriptFunction
 	case sfxID
 	case storyProgress
+	case buttonInput
 	
 	case array(XDSMacroTypes)
 	
@@ -132,10 +133,11 @@ indirect enum XDSMacroTypes {
 		case .scriptFunction: return 29
 		case .sfxID: return 30
 		case .storyProgress: return 31
-			
-		case .array: return 99
-			
+		case .buttonInput: return 32
+
 		// leave a gap in case of future additions
+		case .array: return 99
+
 		case .msg: return 100
 		case .bool: return 101
 			
@@ -187,7 +189,7 @@ indirect enum XDSMacroTypes {
 	}
 	
 	var needsDefine : Bool {
-		return self < XDSMacroTypes.msg && self > XDSMacroTypes.null
+		return self < XDSMacroTypes.msg && self > XDSMacroTypes.null && self != .scriptFunction
 	}
 	
 	var printsAsMacro : Bool {
@@ -211,6 +213,8 @@ indirect enum XDSMacroTypes {
 		case .flag:
 			fallthrough
 		case .integerBitMask:
+			fallthrough
+		case .buttonInput:
 			fallthrough
 		case .invalid:
 			fallthrough
@@ -295,6 +299,8 @@ indirect enum XDSMacroTypes {
 			return "PCBoxID"
 		case .transitionID:
 			return "TransitionID"
+		case .buttonInput:
+			return "ButtonInput"
 		case .msg:
 			return "StringID"
 		case .bool:
@@ -348,12 +354,46 @@ indirect enum XDSMacroTypes {
 			return "\(name)Object"
 		}
 	}
-	
-	
+
+	static var autocompletableTypes: [XDSMacroTypes] {
+		return [
+			.pokemon, .item, .model, .move, .room, .flag, .talk, .ability, .msgVar, .battleResult, .shadowStatus, .pokespot, .shadowID, .battlefield, .partyMember,  .vectorDimension, .giftPokemon, .region, .language, .PCBox, .transitionID, .scriptFunction, .sfxID, .storyProgress, .buttonInput
+		]
+	}
+
+	var autocompleteValues: [Int] {
+		switch self {
+		case .pokemon: return allPokemonArray().map{ $0.index }
+		case .item: return allItemsArray().map{ $0.index }
+		case .model: return XGFsys(file: .fsys("people_archive")).identifiers
+		case .move: return allPokemonArray().map{ $0.index }
+		case .room: return XGRoom.allValues.map{ $0.roomID }.sorted()
+		case .flag: return XDSFlags.allCases.map{ $0.rawValue }
+		case .talk: return XDSTalkTypes.allCases.map{ $0.rawValue }
+		case .ability: return Array(0 ..< kNumberOfAbilities)
+		case .msgVar: return XGSpecialCharacters.allCases.map { $0.rawValue }
+		case .battleResult: return Array(0 ... 3)
+		case .shadowStatus: return Array(0 ... 4)
+		case .pokespot: return XGPokeSpots.allCases.map{ $0.rawValue }
+		case .shadowID: return XGDecks.DeckDarkPokemon.allActivePokemon.map{ $0.shadowID }
+		case .battlefield: return Array(0 ..< CommonIndexes.NumberOfBattleFields.value)
+		case .partyMember: return Array(0 ... 3)
+		case .vectorDimension: return Array(0 ... 2)
+		case .giftPokemon: return Array(0 ..< kNumberOfGiftPokemon)
+		case .region: return Array(0 ... 2)
+		case .language: return XGLanguages.allCases.map{ $0.rawValue }
+		case .transitionID: return Array(2 ... 5)
+		case .scriptFunction: return (0 ..< XGFiles.common_rel.scriptData.ftbl.count).map { 0x596_0000 + $0 }
+		case .sfxID: return Array(0 ..< CommonIndexes.NumberOfSounds.value)
+		case .storyProgress: return XGStoryProgress.allCases.map{ $0.rawValue }
+		case .buttonInput: return (0 ..< 12).map{ Int(pow(2.0, Double($0))) }.filter{ $0 != 0x80 }
+		default: return []
+		}
+	}
 }
 
 let kNumberOfTalkTypes = 22
-enum XDSTalkTypes : Int {
+enum XDSTalkTypes: Int, CaseIterable {
 	
 	case none				= 0
 	case normal				= 1

@@ -318,7 +318,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 //MARK: - Map
 	38: [
 		("getGroupID", 17, 1, [.objectName("Map")], .integer, ""),
-		("getPreviousMapID", 18, 1, [.objectName("Map")], .room, ""),
+		("getCurrentMapID", 18, 1, [.objectName("Map")], .room, ""),
 		("getNextMapID", 19, 1, [.objectName("Map")], .room, ""),
 		
 		("warpToMap", 22, 2, [.objectName("Map"), .room, .integerIndex], .null, "room id and entry point index"), // # (int roomID, int entry warp index)
@@ -327,7 +327,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 
 		("showTitleScreen", 37, 1, [.objectName("Map")], .null, ""),
 		("enterMenuMap", 38, 2, [.objectName("Map"), .room], .null, ""),
-		("warpToMapWithOptions", 49, 2, [.objectName("Map"), .room, .bool, .scriptFunction, .scriptFunction], .null, ""), // # (int roomID, int unknown)
+		("warpToMapWithTransitions", 49, 2, [.objectName("Map"), .room, .bool, .scriptFunction, .integer], .null, "room id, unknown, current script function before warp, target room function after warp"), // # (int roomID, int unknown)
 
 		("showPurifyChamberMenu", 43, 1, [.objectName("Map")], .null, ""),
 		("showBingoMenu", 44, 1, [.objectName("Map")], .null, ""),
@@ -343,14 +343,14 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		// id starts with 0x596 for common script, 0x100 for current script
 		// id & 0xFFFF gives function index
 		
-		("createSyncTaskByID", 16, 6, [.objectName("Tasks"), .integer, .integer, .integer, .integer, .integer], .null, ""), //# (functionID, then 4 ints passed as parameters)
-		("createSyncTaskByName", 17, 6, [.objectName("Tasks"), .scriptFunction, .integer, .integer, .integer, .integer], .null, ""), //# the function is selected by its name in the CURRENT script.
+		("executeScriptWithIDSync", 16, 6, [.objectName("Tasks"), .integer, .integer, .integer, .integer, .integer], .null, ""), //# (functionID, then 4 parameters)
+		("executeScriptWithNameSync", 17, 6, [.objectName("Tasks"), .scriptFunction, .integer, .integer, .integer, .integer], .null, ""), //# the function is selected by its name in the CURRENT script.
 		//# HEAD sec. must be present
-		("createAsyncTaskByID", 18, 6, [.objectName("Tasks"), .integer, .integer, .integer, .integer, .integer], .null, ""), //# (functionID, then 4 ints passed as parameters)
-		("createAsyncTaskByName", 19, 6, [.objectName("Tasks"), .scriptFunction, .integer, .integer, .integer, .integer], .null, ""), //# the function is selected by its name in the CURRENT script.
+		("executeScriptWithIDAsync", 18, 6, [.objectName("Tasks"), .integer, .integer, .integer, .integer, .integer], .null, ""), //# (functionID, then 4 parameters)
+		("executeScriptWithNameAsync", 19, 6, [.objectName("Tasks"), .scriptFunction, .integer, .integer, .integer, .integer], .null, ""), //# the function is selected by its name in the CURRENT script.
 		//# HEAD sec. must be present
 		
-		("getLastReturnedInt", 20, 1, [.objectName("Tasks")], .integer, ""),
+		("getLastResult", 20, 1, [.objectName("Tasks")], .anyType, ""),
 		("sleep", 21, 2, [.objectName("Tasks"), .integerFloatOverload], .null, "(seconds)") //# (int/float) (seconds)
 	],
 	
@@ -441,6 +441,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		
 		("lockMovement", 18, 1, [.objectName("Player")], .null, ""),
 		("freeMovement", 19, 1, [.objectName("Player")], .null, ""),
+		("triggerScript", 20, 6, [.objectName("Player"), .scriptFunction, .anyType, .anyType, .anyType, .anyType], .null, "Used to trigger a script with the given parameters"),
 		
 		("receiveItem", 26, 3, [.objectName("Player"), .item, .integerQuantity], .bool, "use negative quantity to take item"), //# (int amount, int ID) gives the player the item and displays the obtained item message (or too bad bag is full). use negative quantity to remove item from bag. returns true if the bag is full
 		("receiveItemSilently", 27, 3, [.objectName("Player"), .item, .integerQuantity], .bool, "use negative quantity to take item"), //# (int item id, int quantity) -> bool success. gives the player the item without displaying a message. use negative quantity to remove item. returns true if the bag is full
@@ -516,7 +517,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("isPressingAnyStickInput", 17, 1, [.objectName("Controller")], .bool, ""), // true iff any button is being pressed
 		("isPressingAnyButton", 18, 1, [.objectName("Controller")], .bool, ""), // true iff any button is being pressed
 
-		("getPressedButtons", 20, 1, [.objectName("Controller")], .integerBitMask, ""), //# returns 2 byte value which is bit mask of currently pressed controller buttons
+		("getPressedButtons", 20, 1, [.objectName("Controller")], .buttonInput, ""), //# returns 2 byte value which is bit mask of currently pressed controller buttons
 
 	],
 	

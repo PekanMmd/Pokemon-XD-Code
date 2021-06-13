@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XDSFlags : Int, Codable {
+enum XDSFlags: Int, Codable, CaseIterable {
 
 	case berryMasterVistied = 4
 	case stepsWalkedSinceLastBerryMasterVisit = 5

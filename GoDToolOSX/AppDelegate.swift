@@ -14,9 +14,10 @@ let appDelegate = (NSApp.delegate as! AppDelegate)
 class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	var homeViewController : GoDHomeViewController!
-	
-	@IBOutlet weak var scriptMenuItem: NSMenuItem!
-	
+
+	@IBOutlet weak var scriptClassesMenuItem: NSMenuItem!
+	@IBOutlet weak var scriptCompilerMenuItem: NSMenuItem!
+
 	@IBOutlet weak var godtoolmenuitem: NSMenuItem!
 	@IBOutlet weak var godtoolaboutmenuitem: NSMenuItem!
 	@IBOutlet weak var quitgodtoolmenuitem: NSMenuItem!
@@ -26,7 +27,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		// Insert code here to initialize your application
 
 		if game == .Colosseum {
-			scriptMenuItem.isHidden = true
+			scriptClassesMenuItem.isHidden = true
+			scriptCompilerMenuItem.isHidden = true
 			godtoolmenuitem.title = "Colosseum Tool"
 			godtoolaboutmenuitem.title = "About Colosseum Tool"
 			quitgodtoolmenuitem.title = "Quit Colosseum Tool"
@@ -312,7 +314,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			return
 		}
 		XGThreadManager.manager.runInBackgroundAsync {
-			if game == .XD {
+			if game != .PBR {
 				XGUtility.documentMacrosXDS()
 				printg("Finished saving XDS macros file.")
 			}
@@ -336,22 +338,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			return
 		}
 		XGThreadManager.manager.runInBackgroundAsync {
+			let formatName = game == .Colosseum ? "CMS" : "XDS"
 			let files : [XGResources] = [
-				XGResources.sublimeSyntax("XDScript"),
-				XGResources.sublimeSettings("XDScript"),
-				XGResources.sublimeColourScheme("XDScript"),
-				//			XGResources.sublimeCompletions("XDScript"),
+				XGResources.sublimeSyntax("\(formatName)cript"),
+				XGResources.sublimeSettings("\(formatName)ript"),
+				XGResources.sublimeColourScheme("\(formatName)ript"),
 				XGResources.sublimeSyntax("SCD"),
-				XGResources.sublimeColourScheme("SCD")
+				XGResources.sublimeColourScheme("SCD"),
+				XGResources.sublimePreferences("Comments")
 			]
+			let folder = XGFolders.nameAndFolder("Sublime", .Reference)
 			for file in files {
-				printg("Saving: \(file.fileName) to folder: \(XGFolders.Reference.path)")
+				printg("Saving: \(file.fileName) to folder: \(folder.path)")
 				let data = file.data
-				data.file = .nameAndFolder(file.fileName, .Reference)
+				data.file = .nameAndFolder(file.fileName, folder)
 				data.save()
 			}
-			printg("Saving: XDScript.sublime-completions to folder: \(XGFolders.Reference.path). This may take a while")
-			XGUtility.documentXDSAutoCompletions(toFile: .nameAndFolder("XDScript.sublime-completions", .Reference))
+			printg("Saving: \(formatName)ript.sublime-completions to folder: \(folder.path). This may take a while")
+			if !fileDecodingMode {
+				XGUtility.documentXDSAutoCompletions(toFile: .nameAndFolder("\(formatName)ript.sublime-completions", folder))
+			}
 			printg("saved sublime files.")
 		}
 	}
@@ -360,19 +366,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		guard homeViewController.checkRequiredFiles() else {
 			return
 		}
-		printg("Installing XDS Plugin files for Sublime Text 3...")
+		let formatName = game == .Colosseum ? "CMS" : "XDS"
+		printg("Installing \(formatName) Plugin files for Sublime Text 3...")
 		XGThreadManager.manager.runInBackgroundAsync {
 			let files : [XGResources] = [
-				XGResources.sublimeSyntax("XDScript"),
-				XGResources.sublimeSettings("XDScript"),
-				XGResources.sublimeColourScheme("XDScript"),
-				//			XGResources.sublimeCompletions("XDScript"),
+				XGResources.sublimeSyntax("\(formatName)cript"),
+				XGResources.sublimeSettings("\(formatName)cript"),
+				XGResources.sublimeColourScheme("\(formatName)cript"),
 				XGResources.sublimeSyntax("SCD"),
-				XGResources.sublimeColourScheme("SCD")
+				XGResources.sublimeColourScheme("SCD"),
+				XGResources.sublimePreferences("Comments")
 			]
 			
 			let path = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0] + "/Application Support/Sublime Text 3/Packages"
 			let folder = XGFolders.nameAndPath("User", path)
+			folder.createDirectory()
 			if folder.exists {
 				for file in files {
 					let saveFile = XGFiles.nameAndFolder(file.fileName, folder)
@@ -381,9 +389,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 					data.file = saveFile
 					data.save()
 				}
-				let saveFile = XGFiles.nameAndFolder("XDScript.sublime-completions", folder)
-				printg("Installing: XDScript.sublime-completions to path: \(saveFile.path). This may take a while.")
-				XGUtility.documentXDSAutoCompletions(toFile: saveFile)
+				let saveFile = XGFiles.nameAndFolder("\(formatName)cript.sublime-completions", folder)
+				printg("Installing: \(formatName)cript.sublime-completions to path: \(saveFile.path). This may take a while.")
+				if !fileDecodingMode {
+					XGUtility.documentXDSAutoCompletions(toFile: saveFile)
+				}
 				printg("Installation Complete.")
 			} else {
 				printg("Failed to install. Couldn't find folder: \(folder.path)")

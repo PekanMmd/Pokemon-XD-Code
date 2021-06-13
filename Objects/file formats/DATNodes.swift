@@ -15,6 +15,8 @@ class DATNodes {
 	private let data: XGMutableData
 	var rootNode = GoDStructData.staticString("Null")
 
+	private var previouslySeenNodes = [Int]()
+
 	func validate(offset: Int) -> Bool {
 		return offset > 0 && offset < data.length
 	}
@@ -321,12 +323,14 @@ class DATNodes {
 		])
 		let joint = GoDStructData(properties: jointStruct, fileData: data, startOffset: offset)
 
-		if let pointer: Int = joint.get("Child Joint") {
+		if let pointer: Int = joint.get("Child Joint"), !previouslySeenNodes.contains(pointer) {
+			previouslySeenNodes.addUnique(pointer)
 			let child = jointData(offset: pointer)
 			joint.set("Child Joint", to: .pointer(property: .subStruct(name: "Joint", description: "", property: child.properties), rawValue: pointer, value: child))
 		}
 
-		if let pointer: Int = joint.get("Next Joint") {
+		if let pointer: Int = joint.get("Next Joint"), !previouslySeenNodes.contains(pointer) {
+			previouslySeenNodes.addUnique(pointer)
 			let next = jointData(offset: pointer)
 			joint.set("next Joint", to: .pointer(property: .subStruct(name: "Joint", description: "", property: next.properties), rawValue: pointer, value: next))
 		}

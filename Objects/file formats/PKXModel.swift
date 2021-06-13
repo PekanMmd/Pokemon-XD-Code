@@ -27,8 +27,9 @@ class PKXModel {
 	}
 
 	lazy var shinyFilter: (modifiers: (red: Int, green: Int, blue: Int, unused: Int), colour: XGColour) = {
-		let mods = data.getWordStreamFromOffset(0x70, length: 16).map{$0.int}
-		let rawColour = data.getWordAtOffset(0x80)
+		let shinyStartOffset = game == .XD ? 0x70 : data.length - 0x14
+		let mods = data.getWordStreamFromOffset(shinyStartOffset, length: 16).map{$0.int}
+		let rawColour = data.getWordAtOffset(shinyStartOffset + 0x10)
 		return (modifiers: (red: mods[0], green: mods[1], blue: mods[2], unused: mods[3]), colour: XGColour(raw: rawColour, format: nil))
 	}()
 

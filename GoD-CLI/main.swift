@@ -29,28 +29,28 @@ func importExportFiles() {
 		}
 	}
 
-	func exportFiles(decode: Bool) {
+	func exportFiles(extract: Bool, decode: Bool) {
 		for file in searchedFiles() {
 			let outputFile = XGFiles.nameAndFolder(file, .ISOExport(file.removeFileExtensions()))
 			printg("Exporting file", file, "to:", outputFile.folder.path)
-			if XGUtility.exportFileFromISO(outputFile, decode: decode) {
-				printg("success")
+			if XGUtility.exportFileFromISO(outputFile, extractFsysContents: extract, decode: decode) {
+				printg("Successfully exported", outputFile.path)
 			} else {
-				printg("failed")
+				displayAlert(title: "Failure", description: "Failed to  extract", outputFile.path)
 			}
 		}
 	}
 
-	func importFiles(encode: Bool) {
+	func importFiles(shouldImport: Bool, encode: Bool) {
 		var importedAFile = false
 		for file in searchedFiles() {
 			let inputFile = XGFiles.nameAndFolder(file, .ISOExport(file.removeFileExtensions()))
 			printg("Importing file", file, "from:", inputFile.folder.path)
-			if XGUtility.importFileToISO(inputFile, encode: encode, save: false) {
-				printg("success")
+			if XGUtility.importFileToISO(inputFile, shouldImport: shouldImport, encode: encode, save: false) {
 				importedAFile = true
+				printg("Successfully imported", inputFile.path)
 			} else {
-				printg("failed")
+				displayAlert(title: "Failure", description: "Failed to  import", inputFile.path)
 			}
 		}
 		if importedAFile {
@@ -65,27 +65,30 @@ func importExportFiles() {
 	}
 
 	while true {
-		let searchText = currentSearch.count == 0 ? "all files" : "all files containing `\(currentSearch)`"
+		let searchText = currentSearch.count == 0 ? "all ISO files" : "all ISO files containing `\(currentSearch)`"
 
 		let prompt = """
-		Enter 'export' to extract \(searchText)
-		Enter 'decode' to extract \(searchText)
-					   and then decode the data in the exported file such as extracting textures from models and decompiling scripts
+		Enter 'export' to extract and then decode files from \(searchText)
+		Enter 'extract' to only extract files without decoding for \(searchText)
+		Enter 'decode' to only decode the files previously extracted from \(searchText)
+		(decoding is used to decompile scripts, extract textures, convert textures to PNGs, etc.)
 
-		Enter 'import' to import \(searchText)
-		Enter 'encode' to import \(searchText)
-						   after reencoding the files such as recompiling scripts and putting textures back into models
+		Enter 'import' to encode and then import \(searchText)
+		Enter 'insert' to only import files without reencoding for \(searchText)
+		Enter 'encode' to only encode files decoded from \(searchText)
 
 		Enter 'list' to list \(searchText)
 		Enter 'exit' to go back
-		Enter any other text to search for files containing that text
+		Enter any other text to filter the list to only include files containing that text
 		"""
 		let input = readInput(prompt)
 		switch input {
-		case "export": exportFiles(decode: false)
-		case "decode": exportFiles(decode: true)
-		case "import": importFiles(encode: false)
-		case "encode": importFiles(encode: true)
+		case "export": exportFiles(extract: true, decode: true)
+		case "extract": exportFiles(extract: true, decode: false)
+		case "decode": exportFiles(extract: false, decode: true)
+		case "import": importFiles(shouldImport: true, encode: true)
+		case "insert": importFiles(shouldImport: true, encode: false)
+		case "encode": importFiles(shouldImport: false, encode: true)
 		case "list": list()
 		case "exit": return
 		default: currentSearch = input
@@ -175,7 +178,7 @@ func randomiser() {
 			isInitialRandomisation = false
 		}
 
-		printg("Don't forget to rebuild the ISO in the main menu once you're done")
+		displayAlert(title: "Randomisation complete", description: "Don't forget to rebuild the ISO in the main menu once you're done choosing all your options.")
 		#endif
 	}
 }

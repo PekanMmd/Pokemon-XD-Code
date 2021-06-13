@@ -32,8 +32,7 @@
 		1C13D3AE2646264900ED313D /* CMTrainersTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C13D3AD2646264900ED313D /* CMTrainersTable.swift */; };
 		1C13D3AF2646264900ED313D /* CMTrainersTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C13D3AD2646264900ED313D /* CMTrainersTable.swift */; };
 		1C13D3B02646264900ED313D /* CMTrainersTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C13D3AD2646264900ED313D /* CMTrainersTable.swift */; };
-		1C16CA74253406E400907D78 /* CMScriptStandardFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA73253406E400907D78 /* CMScriptStandardFunctions.swift */; };
-		1C16CA75253406E400907D78 /* CMScriptStandardFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA73253406E400907D78 /* CMScriptStandardFunctions.swift */; };
+		1C13D422264AF09F00ED313D /* Comments.tmPreferences in Resources */ = {isa = PBXBuildFile; fileRef = 1C13D421264AF09F00ED313D /* Comments.tmPreferences */; };
 		1C16CA7D2534099A00907D78 /* CMScriptValueTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA7C2534099A00907D78 /* CMScriptValueTypes.swift */; };
 		1C16CA7E2534099A00907D78 /* CMScriptValueTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA7C2534099A00907D78 /* CMScriptValueTypes.swift */; };
 		1C16CAC3253B86F100907D78 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CAC2253B86F100907D78 /* main.swift */; };
@@ -174,7 +173,6 @@
 		1C16CF97253BC57B00907D78 /* XGScriptClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF31F49A1FE0075C6D2 /* XGScriptClass.swift */; };
 		1C16CF98253BC57B00907D78 /* XGScriptInstruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27C5FDC1FA19FB000E0596F /* XGScriptInstruction.swift */; };
 		1C16CF99253BC57B00907D78 /* XDSScriptCompiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B257242520CB52D80019A22E /* XDSScriptCompiler.swift */; };
-		1C16CFA2253BC58200907D78 /* CMScriptStandardFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA73253406E400907D78 /* CMScriptStandardFunctions.swift */; };
 		1C16CFA3253BC58200907D78 /* CMScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24E5FB92238E3E100C55758 /* CMScript.swift */; };
 		1C16CFA4253BC58200907D78 /* CMScriptValueTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C16CA7C2534099A00907D78 /* CMScriptValueTypes.swift */; };
 		1C16CFA5253BC58200907D78 /* CMScriptCompiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20C402E218AEBE5006D7CD9 /* CMScriptCompiler.swift */; };
@@ -564,6 +562,27 @@
 		1C716B6426043097000F1456 /* UniversalEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C716B6326043097000F1456 /* UniversalEditorViewController.swift */; };
 		1C716B6526043097000F1456 /* UniversalEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C716B6326043097000F1456 /* UniversalEditorViewController.swift */; };
 		1C716B6626043097000F1456 /* UniversalEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C716B6326043097000F1456 /* UniversalEditorViewController.swift */; };
+		1C71A4BE26690C5700034154 /* CMScriptBuiltInFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A4BD26690C5700034154 /* CMScriptBuiltInFunctions.swift */; };
+		1C71A4BF26690C5700034154 /* CMScriptBuiltInFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A4BD26690C5700034154 /* CMScriptBuiltInFunctions.swift */; };
+		1C71A4C026690C5700034154 /* CMScriptBuiltInFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A4BD26690C5700034154 /* CMScriptBuiltInFunctions.swift */; };
+		1C71A4D4266911BC00034154 /* CMSExpr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A4D3266911BC00034154 /* CMSExpr.swift */; };
+		1C71A4D5266911BC00034154 /* CMSExpr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A4D3266911BC00034154 /* CMSExpr.swift */; };
+		1C71A4D6266911BC00034154 /* CMSExpr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A4D3266911BC00034154 /* CMSExpr.swift */; };
+		1C71A4EA2669126800034154 /* CMSMacroTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A4E92669126800034154 /* CMSMacroTypes.swift */; };
+		1C71A4EB2669126800034154 /* CMSMacroTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A4E92669126800034154 /* CMSMacroTypes.swift */; };
+		1C71A4EC2669126800034154 /* CMSMacroTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A4E92669126800034154 /* CMSMacroTypes.swift */; };
+		1C71A52D266FFECF00034154 /* CMSFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A52C266FFECF00034154 /* CMSFlags.swift */; };
+		1C71A52E266FFECF00034154 /* CMSFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A52C266FFECF00034154 /* CMSFlags.swift */; };
+		1C71A52F266FFECF00034154 /* CMSFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A52C266FFECF00034154 /* CMSFlags.swift */; };
+		1C71A5492671064F00034154 /* CMSExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A5482671064F00034154 /* CMSExtensions.swift */; };
+		1C71A54A2671064F00034154 /* CMSExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A5482671064F00034154 /* CMSExtensions.swift */; };
+		1C71A54B2671064F00034154 /* CMSExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71A5482671064F00034154 /* CMSExtensions.swift */; };
+		1C71A58726717F0E00034154 /* SCD.sublime-syntax in Resources */ = {isa = PBXBuildFile; fileRef = 1C71A58126717F0C00034154 /* SCD.sublime-syntax */; };
+		1C71A58826717F0E00034154 /* CMScript.sublime-color-scheme in Resources */ = {isa = PBXBuildFile; fileRef = 1C71A58226717F0D00034154 /* CMScript.sublime-color-scheme */; };
+		1C71A58926717F0E00034154 /* SCD.sublime-color-scheme in Resources */ = {isa = PBXBuildFile; fileRef = 1C71A58326717F0D00034154 /* SCD.sublime-color-scheme */; };
+		1C71A58A26717F0E00034154 /* CMScript.sublime-settings in Resources */ = {isa = PBXBuildFile; fileRef = 1C71A58426717F0D00034154 /* CMScript.sublime-settings */; };
+		1C71A58B26717F0E00034154 /* CMScript.sublime-syntax in Resources */ = {isa = PBXBuildFile; fileRef = 1C71A58526717F0D00034154 /* CMScript.sublime-syntax */; };
+		1C71A5E426718AE600034154 /* Comments.tmPreferences in Resources */ = {isa = PBXBuildFile; fileRef = 1C71A5E326718AE600034154 /* Comments.tmPreferences */; };
 		1C740098263F8A6600DFC63C /* SmallStructTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C740097263F8A6600DFC63C /* SmallStructTables.swift */; };
 		1C740099263F8A6600DFC63C /* SmallStructTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C740097263F8A6600DFC63C /* SmallStructTables.swift */; };
 		1C74009A263F8A6600DFC63C /* SmallStructTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C740097263F8A6600DFC63C /* SmallStructTables.swift */; };
@@ -1771,7 +1790,6 @@
 		B208E78520C85D4F00D298BF /* XGStringTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5EBF81F49A1FE0075C6D2 /* XGStringTable.swift */; };
 		B208E78720C85EAE00D298BF /* CMType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E78620C85EAE00D298BF /* CMType.swift */; };
 		B208E78920C85F9E00D298BF /* CMTrainerPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B208E78820C85F9E00D298BF /* CMTrainerPokemon.swift */; };
-		B20C401A2188B9D2006D7CD9 /* XDScript.sublime-completions in Resources */ = {isa = PBXBuildFile; fileRef = B20C40142188B9CF006D7CD9 /* XDScript.sublime-completions */; };
 		B20C401B2188B9D2006D7CD9 /* SCD.sublime-syntax in Resources */ = {isa = PBXBuildFile; fileRef = B20C40152188B9CF006D7CD9 /* SCD.sublime-syntax */; };
 		B20C401C2188B9D2006D7CD9 /* XDScript.sublime-color-scheme in Resources */ = {isa = PBXBuildFile; fileRef = B20C40162188B9D0006D7CD9 /* XDScript.sublime-color-scheme */; };
 		B20C401D2188B9D2006D7CD9 /* SCD.sublime-color-scheme in Resources */ = {isa = PBXBuildFile; fileRef = B20C40172188B9D1006D7CD9 /* SCD.sublime-color-scheme */; };
@@ -4465,7 +4483,7 @@
 		1C12C38425C23CCE0062FA65 /* CMDecks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDecks.swift; sourceTree = "<group>"; };
 		1C12C39A25C242AC0062FA65 /* XGGeneralExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGGeneralExtensions.swift; sourceTree = "<group>"; };
 		1C13D3AD2646264900ED313D /* CMTrainersTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CMTrainersTable.swift; path = "Objects/struct tables/CMTrainersTable.swift"; sourceTree = SOURCE_ROOT; };
-		1C16CA73253406E400907D78 /* CMScriptStandardFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMScriptStandardFunctions.swift; sourceTree = "<group>"; };
+		1C13D421264AF09F00ED313D /* Comments.tmPreferences */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Comments.tmPreferences; sourceTree = "<group>"; };
 		1C16CA7C2534099A00907D78 /* CMScriptValueTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMScriptValueTypes.swift; sourceTree = "<group>"; };
 		1C16CAC0253B86F100907D78 /* GoD-CLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "GoD-CLI"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C16CAC2253B86F100907D78 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -4531,6 +4549,17 @@
 		1C716AA42603EBF8000F1456 /* StructTablesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructTablesList.swift; sourceTree = "<group>"; };
 		1C716B5626042C42000F1456 /* UniversalEditor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = UniversalEditor.storyboard; sourceTree = "<group>"; };
 		1C716B6326043097000F1456 /* UniversalEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalEditorViewController.swift; sourceTree = "<group>"; };
+		1C71A4BD26690C5700034154 /* CMScriptBuiltInFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMScriptBuiltInFunctions.swift; sourceTree = "<group>"; };
+		1C71A4D3266911BC00034154 /* CMSExpr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMSExpr.swift; sourceTree = "<group>"; };
+		1C71A4E92669126800034154 /* CMSMacroTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMSMacroTypes.swift; sourceTree = "<group>"; };
+		1C71A52C266FFECF00034154 /* CMSFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMSFlags.swift; sourceTree = "<group>"; };
+		1C71A5482671064F00034154 /* CMSExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMSExtensions.swift; sourceTree = "<group>"; };
+		1C71A58126717F0C00034154 /* SCD.sublime-syntax */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SCD.sublime-syntax"; sourceTree = "<group>"; };
+		1C71A58226717F0D00034154 /* CMScript.sublime-color-scheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "CMScript.sublime-color-scheme"; sourceTree = "<group>"; };
+		1C71A58326717F0D00034154 /* SCD.sublime-color-scheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SCD.sublime-color-scheme"; sourceTree = "<group>"; };
+		1C71A58426717F0D00034154 /* CMScript.sublime-settings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "CMScript.sublime-settings"; sourceTree = "<group>"; };
+		1C71A58526717F0D00034154 /* CMScript.sublime-syntax */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "CMScript.sublime-syntax"; sourceTree = "<group>"; };
+		1C71A5E326718AE600034154 /* Comments.tmPreferences */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Comments.tmPreferences; sourceTree = "<group>"; };
 		1C740097263F8A6600DFC63C /* SmallStructTables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallStructTables.swift; sourceTree = "<group>"; };
 		1C7400C32640705200DFC63C /* PokemonModelsTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonModelsTable.swift; sourceTree = "<group>"; };
 		1C750FB025C3C3BD00EAB706 /* XGBattleModeRulesets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleModeRulesets.swift; sourceTree = "<group>"; };
@@ -4666,7 +4695,6 @@
 		B208E78020C85AF500D298BF /* CMPokemonStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMPokemonStats.swift; sourceTree = "<group>"; };
 		B208E78620C85EAE00D298BF /* CMType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMType.swift; sourceTree = "<group>"; };
 		B208E78820C85F9E00D298BF /* CMTrainerPokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTrainerPokemon.swift; sourceTree = "<group>"; };
-		B20C40142188B9CF006D7CD9 /* XDScript.sublime-completions */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "XDScript.sublime-completions"; sourceTree = "<group>"; };
 		B20C40152188B9CF006D7CD9 /* SCD.sublime-syntax */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SCD.sublime-syntax"; sourceTree = "<group>"; };
 		B20C40162188B9D0006D7CD9 /* XDScript.sublime-color-scheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "XDScript.sublime-color-scheme"; sourceTree = "<group>"; };
 		B20C40172188B9D1006D7CD9 /* SCD.sublime-color-scheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SCD.sublime-color-scheme"; sourceTree = "<group>"; };
@@ -6968,10 +6996,14 @@
 		1C11E340252BFD8E00026234 /* Colosseum */ = {
 			isa = PBXGroup;
 			children = (
+				1C71A4D3266911BC00034154 /* CMSExpr.swift */,
+				1C71A5482671064F00034154 /* CMSExtensions.swift */,
+				1C71A52C266FFECF00034154 /* CMSFlags.swift */,
+				1C71A4E92669126800034154 /* CMSMacroTypes.swift */,
+				1C71A4BD26690C5700034154 /* CMScriptBuiltInFunctions.swift */,
 				B20C402E218AEBE5006D7CD9 /* CMScriptCompiler.swift */,
 				1C11E337252BFD8A00026234 /* CMScriptOps.swift */,
 				B24E5FB92238E3E100C55758 /* CMScript.swift */,
-				1C16CA73253406E400907D78 /* CMScriptStandardFunctions.swift */,
 				1C16CA7C2534099A00907D78 /* CMScriptValueTypes.swift */,
 			);
 			path = Colosseum;
@@ -6983,6 +7015,7 @@
 				B2F5EBF51F49A1FE0075C6D2 /* XDSConstant.swift */,
 				B2EAFF0020BDA676009FC947 /* XDSExpr.swift */,
 				B208E37A20C4564B00D298BF /* XDSFlags.swift */,
+				B208E37C20C4569900D298BF /* XDSMacroTypes.swift */,
 				B2F5EBF21F49A1FE0075C6D2 /* XGScript.swift */,
 				B2F5EBF31F49A1FE0075C6D2 /* XGScriptClass.swift */,
 				B2F5EBF41F49A1FE0075C6D2 /* XGScriptClassFunctionsData.swift */,
@@ -7212,6 +7245,32 @@
 				1C56F863260DB42700CF1DEE /* PBRStringManager.swift */,
 			);
 			path = structs;
+			sourceTree = "<group>";
+		};
+		1C71A55E267146C300034154 /* XD */ = {
+			isa = PBXGroup;
+			children = (
+				1C13D421264AF09F00ED313D /* Comments.tmPreferences */,
+				B20C40172188B9D1006D7CD9 /* SCD.sublime-color-scheme */,
+				B20C40152188B9CF006D7CD9 /* SCD.sublime-syntax */,
+				B20C40162188B9D0006D7CD9 /* XDScript.sublime-color-scheme */,
+				B20C40182188B9D1006D7CD9 /* XDScript.sublime-settings */,
+				B20C40192188B9D1006D7CD9 /* XDScript.sublime-syntax */,
+			);
+			path = XD;
+			sourceTree = "<group>";
+		};
+		1C71A57F26717EC000034154 /* CM */ = {
+			isa = PBXGroup;
+			children = (
+				1C71A5E326718AE600034154 /* Comments.tmPreferences */,
+				1C71A58226717F0D00034154 /* CMScript.sublime-color-scheme */,
+				1C71A58426717F0D00034154 /* CMScript.sublime-settings */,
+				1C71A58526717F0D00034154 /* CMScript.sublime-syntax */,
+				1C71A58326717F0D00034154 /* SCD.sublime-color-scheme */,
+				1C71A58126717F0C00034154 /* SCD.sublime-syntax */,
+			);
+			path = CM;
 			sourceTree = "<group>";
 		};
 		1CA23858241120E3000E56AB /* storyboards */ = {
@@ -8556,12 +8615,8 @@
 		B247ED3E217B9FF30034CAF5 /* Sublime */ = {
 			isa = PBXGroup;
 			children = (
-				B20C40172188B9D1006D7CD9 /* SCD.sublime-color-scheme */,
-				B20C40152188B9CF006D7CD9 /* SCD.sublime-syntax */,
-				B20C40162188B9D0006D7CD9 /* XDScript.sublime-color-scheme */,
-				B20C40142188B9CF006D7CD9 /* XDScript.sublime-completions */,
-				B20C40182188B9D1006D7CD9 /* XDScript.sublime-settings */,
-				B20C40192188B9D1006D7CD9 /* XDScript.sublime-syntax */,
+				1C71A57F26717EC000034154 /* CM */,
+				1C71A55E267146C300034154 /* XD */,
 			);
 			path = Sublime;
 			sourceTree = "<group>";
@@ -9787,7 +9842,6 @@
 				B2F5EBC21F49A1FE0075C6D2 /* XGGenders.swift */,
 				B2F5EBC31F49A1FE0075C6D2 /* XGItems.swift */,
 				B208E76C20C8517200D298BF /* CMItems.swift */,
-				B208E37C20C4569900D298BF /* XDSMacroTypes.swift */,
 				B2F5EBC41F49A1FE0075C6D2 /* XGMaps.swift */,
 				B2F5EBC51F49A1FE0075C6D2 /* XGMoveCategory.swift */,
 				B2445AF6209F474E00B5404E /* XGMoveEffectTypes.swift */,
@@ -10507,6 +10561,7 @@
 				B208E4F920C4D3BD00D298BF /* body_264.png in Resources */,
 				B208E68120C4D3D700D298BF /* face_241.png in Resources */,
 				B208E6A520C4D3D700D298BF /* face_277.png in Resources */,
+				1C71A58826717F0E00034154 /* CMScript.sublime-color-scheme in Resources */,
 				B208E47520C4D3BD00D298BF /* body_132.png in Resources */,
 				B208E44E20C4D3BC00D298BF /* body_093.png in Resources */,
 				B208E6A420C4D3D700D298BF /* face_276.png in Resources */,
@@ -10702,6 +10757,7 @@
 				B208E53A20C4D3BD00D298BF /* body_329.png in Resources */,
 				B208E72820C4D3D800D298BF /* face_408.png in Resources */,
 				B208E6EF20C4D3D700D298BF /* face_351.png in Resources */,
+				1C71A5E426718AE600034154 /* Comments.tmPreferences in Resources */,
 				B208E4ED20C4D3BD00D298BF /* body_252.png in Resources */,
 				B208E47920C4D3BD00D298BF /* body_136.png in Resources */,
 				B208E6C520C4D3D700D298BF /* face_309.png in Resources */,
@@ -10768,6 +10824,7 @@
 				B208E55520C4D3BD00D298BF /* body_356.png in Resources */,
 				B208E5BD20C4D3D700D298BF /* face_045.png in Resources */,
 				B208E6F320C4D3D700D298BF /* face_355.png in Resources */,
+				1C71A58B26717F0E00034154 /* CMScript.sublime-syntax in Resources */,
 				B208E6F220C4D3D700D298BF /* face_354.png in Resources */,
 				B208E50120C4D3BD00D298BF /* body_272.png in Resources */,
 				B208E57520C4D3BD00D298BF /* body_388.png in Resources */,
@@ -10805,6 +10862,7 @@
 				B208E48820C4D3BD00D298BF /* body_151.png in Resources */,
 				B208E70120C4D3D700D298BF /* face_369.png in Resources */,
 				B208E6D920C4D3D700D298BF /* face_329.png in Resources */,
+				1C71A58726717F0E00034154 /* SCD.sublime-syntax in Resources */,
 				B208E54F20C4D3BD00D298BF /* body_350.png in Resources */,
 				B208E59C20C4D3D700D298BF /* face_012.png in Resources */,
 				B208E6E020C4D3D700D298BF /* face_336.png in Resources */,
@@ -10885,6 +10943,7 @@
 				B208E40120C4D3BC00D298BF /* body_016.png in Resources */,
 				B208E42720C4D3BC00D298BF /* body_054.png in Resources */,
 				B208E5E820C4D3D700D298BF /* face_088.png in Resources */,
+				1C71A58A26717F0E00034154 /* CMScript.sublime-settings in Resources */,
 				B208E5E220C4D3D700D298BF /* face_082.png in Resources */,
 				B280AF4220CABD660057A782 /* colo_trainer_6.png in Resources */,
 				B208E6CD20C4D3D700D298BF /* face_317.png in Resources */,
@@ -10901,6 +10960,7 @@
 				B208E64E20C4D3D700D298BF /* face_190.png in Resources */,
 				B208E5BC20C4D3D700D298BF /* face_044.png in Resources */,
 				B208E63B20C4D3D700D298BF /* face_171.png in Resources */,
+				1C71A58926717F0E00034154 /* SCD.sublime-color-scheme in Resources */,
 				B208E6AD20C4D3D700D298BF /* face_285.png in Resources */,
 				B208E72F20C4D3F000D298BF /* ball grey.png in Resources */,
 				B208E55320C4D3BD00D298BF /* body_354.png in Resources */,
@@ -12783,7 +12843,6 @@
 				B2F50CE31F4C5FAC0075C6D2 /* face_321.png in Resources */,
 				B2F5079B1F4C5FAB0075C6D2 /* body_060.png in Resources */,
 				B2F508A51F4C5FAB0075C6D2 /* body_193.png in Resources */,
-				B20C401A2188B9D2006D7CD9 /* XDScript.sublime-completions in Resources */,
 				B2F50D6F1F4C5FAC0075C6D2 /* face_391.png in Resources */,
 				B2F50AB11F4C5FAC0075C6D2 /* face_040.png in Resources */,
 				B2F50B851F4C5FAC0075C6D2 /* face_146.png in Resources */,
@@ -13018,6 +13077,7 @@
 				B2F50A191F4C5FAB0075C6D2 /* body_379.png in Resources */,
 				B2F5F7BE1F49AF120075C6D2 /* Item Cell.png in Resources */,
 				B2F50A031F4C5FAB0075C6D2 /* body_368.png in Resources */,
+				1C13D422264AF09F00ED313D /* Comments.tmPreferences in Resources */,
 				B2F50E0B1F4C5FAD0075C6D2 /* trainer_58.png in Resources */,
 				B2F50CC71F4C5FAC0075C6D2 /* face_307.png in Resources */,
 				B2F5082D1F4C5FAB0075C6D2 /* body_133.png in Resources */,
@@ -13407,9 +13467,11 @@
 				1C16CC6E253BC41400907D78 /* XGBagSlots.swift in Sources */,
 				1C16CD44253BC46700907D78 /* XGMoveCategory.swift in Sources */,
 				1C20003025A9585400A7CF7D /* XGTHP.swift in Sources */,
+				1C71A4EB2669126800034154 /* CMSMacroTypes.swift in Sources */,
 				1C56F8E6260FD41200CF1DEE /* StructTablesList.swift in Sources */,
 				1C13D3AF2646264900ED313D /* CMTrainersTable.swift in Sources */,
 				1CA3E5B42623DB5A00E5089A /* XGDayCareStatus.swift in Sources */,
+				1C71A4D5266911BC00034154 /* CMSExpr.swift in Sources */,
 				1C56F6F9260BF40D00CF1DEE /* InteractionPointTable.swift in Sources */,
 				1C71699D2602AF57000F1456 /* GoDStructData.swift in Sources */,
 				1C16CFE0253BC5B600907D78 /* GoDTexture.swift in Sources */,
@@ -13417,7 +13479,6 @@
 				1C16CE5F253BC4D100907D78 /* XGLevelUpMove.swift in Sources */,
 				1C16CE1E253BC4AD00907D78 /* XGUnicodeCharacters.swift in Sources */,
 				1CCF00312562FA820082BFE2 /* XGSaveManager.swift in Sources */,
-				1C16CFA2253BC58200907D78 /* CMScriptStandardFunctions.swift in Sources */,
 				1C16CE43253BC4C700907D78 /* XGCharacter.swift in Sources */,
 				1C71685325DF31A3000F1456 /* GoDStructTable.swift in Sources */,
 				1C56F803260D8C3D00CF1DEE /* AbilitiesTable.swift in Sources */,
@@ -13427,6 +13488,7 @@
 				1C12C3DF25C25AA30062FA65 /* XGColosseumRounds.swift in Sources */,
 				1C56F71B260BF47100CF1DEE /* TreasureTable.swift in Sources */,
 				1C16CCA8253BC42700907D78 /* XGContestCategories.swift in Sources */,
+				1C71A4BF26690C5700034154 /* CMScriptBuiltInFunctions.swift in Sources */,
 				1CA3E480261DD7B100E5089A /* StatusEffectsTable.swift in Sources */,
 				1C16CFA3253BC58200907D78 /* CMScript.swift in Sources */,
 				1C16CFD7253BC59A00907D78 /* XGTexturePalette.swift in Sources */,
@@ -13498,6 +13560,7 @@
 				1C16CCE4253BC43F00907D78 /* XGExpRate.swift in Sources */,
 				1C16CB21253B950C00907D78 /* XGISO.swift in Sources */,
 				1C16CDEE253BC49C00907D78 /* CMTMs.swift in Sources */,
+				1C71A52E266FFECF00034154 /* CMSFlags.swift in Sources */,
 				1C16CFA6253BC58200907D78 /* CMScriptOps.swift in Sources */,
 				1C16CD1D253BC45800907D78 /* XGGenders.swift in Sources */,
 				1C56F9CE26103DA400CF1DEE /* SmallStructTables.swift in Sources */,
@@ -13522,6 +13585,7 @@
 				1C56FA1C261069D700CF1DEE /* GSFsys.swift in Sources */,
 				1C16CCD8253BC43700907D78 /* XGEvolutionMethods.swift in Sources */,
 				1C56F987261034A800CF1DEE /* NatureTable.swift in Sources */,
+				1C71A54A2671064F00034154 /* CMSExtensions.swift in Sources */,
 				1C4E16C325405CCD00EA318B /* XGImage.swift in Sources */,
 				1C16CDDC253BC49700907D78 /* GoDTextureFormats.swift in Sources */,
 				1C4E14F6253DD05800EA318B /* XGUtility.swift in Sources */,
@@ -13692,6 +13756,7 @@
 				B2C1EE8420C8F6C800D7C2F7 /* GoDLevelPopUpButton.swift in Sources */,
 				1C64CF4624562EDF004C0C8F /* XGAssemblyCodeExtensions.swift in Sources */,
 				1CED5D9A24004864008566B0 /* GoDGCEnumerablePopUpButtons.swift in Sources */,
+				1C71A52F266FFECF00034154 /* CMSFlags.swift in Sources */,
 				B2C1EE7220C8F66D00D7C2F7 /* GoDItemViewController.swift in Sources */,
 				B2C1EE9420C8F71700D7C2F7 /* CTPokemonView.swift in Sources */,
 				B2611F5122465A98008A4B19 /* GoDInteractionViewController.swift in Sources */,
@@ -13744,6 +13809,7 @@
 				B2C1EE7820C8F6BF00D7C2F7 /* GoDTableCellView.swift in Sources */,
 				B2560A77213D4DAB00137C37 /* GoDKeyCodes.swift in Sources */,
 				B257242720CC2D040019A22E /* GoDPatchViewController.swift in Sources */,
+				1C71A4C026690C5700034154 /* CMScriptBuiltInFunctions.swift in Sources */,
 				1C71694125FF0DF8000F1456 /* GoDWindowController.swift in Sources */,
 				B208E76920C4F7E700D298BF /* CMTrainer.swift in Sources */,
 				B22A1C4A21829D7A001C41D3 /* XGThreadManager.swift in Sources */,
@@ -13797,6 +13863,7 @@
 				B22A1C46218202DD001C41D3 /* GoDGiftViewController.swift in Sources */,
 				1C56F6FA260BF40D00CF1DEE /* InteractionPointTable.swift in Sources */,
 				B22A1C41218201AD001C41D3 /* CMGiftPokemonManager.swift in Sources */,
+				1C71A54B2671064F00034154 /* CMSExtensions.swift in Sources */,
 				B208E76220C4DD8300D298BF /* CMTrainerModels.swift in Sources */,
 				1C56F767260C1EA000CF1DEE /* CharacterModelTable.swift in Sources */,
 				B208E77820C8575000D298BF /* XGCharacter.swift in Sources */,
@@ -13838,15 +13905,16 @@
 				B2C1EE6F20C8F5E700D7C2F7 /* GoDViewController.swift in Sources */,
 				B2562F8421349876004180F1 /* XGGiftPokemon.swift in Sources */,
 				1C56F923260FD65400CF1DEE /* XGRandomiser.swift in Sources */,
+				1C71A4D6266911BC00034154 /* CMSExpr.swift in Sources */,
 				1CE1A77A2326AA0D005141D8 /* XGSettings.swift in Sources */,
 				B2C1EE6A20C8F48500D7C2F7 /* XGRelocationTable.swift in Sources */,
-				1C16CA75253406E400907D78 /* CMScriptStandardFunctions.swift in Sources */,
 				1C56F9CF26103DA400CF1DEE /* SmallStructTables.swift in Sources */,
 				B208E74E20C4D79500D298BF /* XGMoveEffectTypes.swift in Sources */,
 				B208E77B20C8577900D298BF /* XGLevelUpMove.swift in Sources */,
 				B2C1EE9D20C95EE800D7C2F7 /* GoDTableViewDelegate.swift in Sources */,
 				1C1A0B3B25522ED600891C93 /* GoDTexturesContaining.swift in Sources */,
 				B2C1EE7920C8F6BF00D7C2F7 /* GoDTableView.swift in Sources */,
+				1C71A4EC2669126800034154 /* CMSMacroTypes.swift in Sources */,
 				B247ED532180D0350034CAF5 /* GoDStringViewController.swift in Sources */,
 				1C37440F24056F190089D3BA /* GoDShellManager.swift in Sources */,
 				B2C1EE7320C8F67000D7C2F7 /* GoDMovesViewController.swift in Sources */,
@@ -14138,9 +14206,11 @@
 				B24A505B21D1258E009C707C /* XGTextureBlock.swift in Sources */,
 				1C20002F25A9585400A7CF7D /* XGTHP.swift in Sources */,
 				1C11E338252BFD8A00026234 /* CMScriptOps.swift in Sources */,
+				1C71A4EA2669126800034154 /* CMSMacroTypes.swift in Sources */,
 				1C56F8F0260FD41400CF1DEE /* StructTablesList.swift in Sources */,
 				1C13D3AE2646264900ED313D /* CMTrainersTable.swift in Sources */,
 				1CA3E5B32623DB5A00E5089A /* XGDayCareStatus.swift in Sources */,
+				1C71A4D4266911BC00034154 /* CMSExpr.swift in Sources */,
 				1C56F6F8260BF40D00CF1DEE /* InteractionPointTable.swift in Sources */,
 				1C71699C2602AF57000F1456 /* GoDStructData.swift in Sources */,
 				B2562F822134983C004180F1 /* XGEvolution.swift in Sources */,
@@ -14158,6 +14228,7 @@
 				1C56F71A260BF47100CF1DEE /* TreasureTable.swift in Sources */,
 				B20C4030218AEBE5006D7CD9 /* CMScriptCompiler.swift in Sources */,
 				B2562F6E2134979A004180F1 /* XGMoveTypes.swift in Sources */,
+				1C71A4BE26690C5700034154 /* CMScriptBuiltInFunctions.swift in Sources */,
 				1CA3E48C261DD7B300E5089A /* StatusEffectsTable.swift in Sources */,
 				1CF4D02824DA2BF900EC2C65 /* XGEvolutionConditionType.swift in Sources */,
 				B2562F6621349789004180F1 /* XGGenderRatios.swift in Sources */,
@@ -14227,8 +14298,8 @@
 				1C56F970261022B300CF1DEE /* ItemsTable.swift in Sources */,
 				B2562F72213497A3004180F1 /* XGSpecialStringCharacters.swift in Sources */,
 				B2562F812134983C004180F1 /* XGPatcher.swift in Sources */,
-				1C16CA74253406E400907D78 /* CMScriptStandardFunctions.swift in Sources */,
 				B2562F522134960E004180F1 /* XGISO.swift in Sources */,
+				1C71A52D266FFECF00034154 /* CMSFlags.swift in Sources */,
 				B2562F6721349789004180F1 /* XGGenders.swift in Sources */,
 				1C56F9C426103DA300CF1DEE /* SmallStructTables.swift in Sources */,
 				1C16CA7D2534099A00907D78 /* CMScriptValueTypes.swift in Sources */,
@@ -14253,6 +14324,7 @@
 				1C56FA1B261069D700CF1DEE /* GSFsys.swift in Sources */,
 				B2562F942134990E004180F1 /* CMTrainerPokemon.swift in Sources */,
 				1C56F986261034A800CF1DEE /* NatureTable.swift in Sources */,
+				1C71A5492671064F00034154 /* CMSExtensions.swift in Sources */,
 				B2562F8D213498EE004180F1 /* CMPokemonStats.swift in Sources */,
 				B2611F572247D284008A4B19 /* XGDoor.swift in Sources */,
 				1C4E16C225405CCD00EA318B /* XGImage.swift in Sources */,

@@ -97,30 +97,28 @@ class XGUtility {
 		XGFolders.ISOExport("").createDirectory()
 
 		if let data = XGISO.current.dataForFile(filename: file.fileName) {
-			if data.length > 0 {
-				data.file = file
-				if !file.exists || overwrite {
-					data.save()
-				}
-				if extractFsysContents, file.fileType == .fsys {
-					let fsysData = data.fsysData
-					fsysData.extractFilesToFolder(folder: file.folder, decode: decode, overwrite: overwrite)
-				}
-				if file == .dol, decode {
-					let msgFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.json.fileExtension, file.folder)
-					if !msgFile.exists {
-						let table = file.stringTable
-						table.writeJSON(to: msgFile)
-					}
-				}
-				return true
+			data.file = file
+			if !file.exists || overwrite {
+				data.save()
 			}
+			if file.fileType == .fsys {
+				let fsysData = data.fsysData
+				fsysData.extractFilesToFolder(folder: file.folder, extract: extractFsysContents, decode: decode, overwrite: overwrite)
+			}
+			if file == .dol, decode, game != .PBR {
+				let msgFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.json.fileExtension, file.folder)
+				if !msgFile.exists {
+					let table = file.stringTable
+					table.writeJSON(to: msgFile)
+				}
+			}
+			return true
 		}
 		return false
 	}
 
 	@discardableResult
-	class func importFileToISO(_ fileToImport: XGFiles, encode: Bool = true, save: Bool = true, importFiles importFilesToFsysExclusively: [XGFiles]? = nil) -> Bool {
+	class func importFileToISO(_ fileToImport: XGFiles, shouldImport: Bool = true, encode: Bool = true, save: Bool = true, importFiles importFilesToFsysExclusively: [XGFiles]? = nil) -> Bool {
 
 		func shouldIncludeFile(_ file: XGFiles) -> Bool {
 			return importFilesToFsysExclusively?.contains(where: { (f1) -> Bool in
@@ -129,7 +127,7 @@ class XGUtility {
 			}) ?? true
 		}
 
-		if fileToImport.exists {
+		if fileToImport.exists || !shouldImport {
 			if game != .PBR, fileToImport.fileName == XGFiles.dol.fileName {
 				let msgFile = XGFiles.nameAndFolder(fileToImport.fileName + ".json", fileToImport.folder)
 				if let newTable = try? XGStringTable.fromJSONFile(file: msgFile) {
@@ -339,14 +337,17 @@ class XGUtility {
 			if settings.verbose {
 				printg("importing \(fileToImport.path) into \(XGFiles.iso.path)")
 			}
-			#if GAME_PBR
-			XGISO.current.importFiles([fileToImport])
-			if save {
-				XGISO.current.save()
+			
+			if shouldImport {
+				#if GAME_PBR
+				XGISO.current.importFiles([fileToImport])
+				if save {
+					XGISO.current.save()
+				}
+				#else
+				XGISO.current.importFiles([fileToImport], save: save)
+				#endif
 			}
-			#else
-			XGISO.current.importFiles([fileToImport], save: save)
-			#endif
 
 			return true
 		} else {

@@ -13,12 +13,11 @@ func resetRelocationTables() {
 	pocket = XGPocket()
 }
 
-var common = XGCommon()
+var common: XGCommon!
 class XGCommon: XGRelocationTable {
 	
 	init() {
 		super.init(file: .common_rel)
-		self.dataStart = Int(self.data!.getWordAtOffset(kCommonRELDataStartOffsetLocation))
 	}
 	
 	var dictionary : [Int : (pointer: Int, value: Int)] {
@@ -63,12 +62,11 @@ class XGRelocationTable: NSObject {
 		
 		self.file = file
 		self.data = file.data
-		
 		if data != nil {
-			self.dataStart = Int(data.getWordAtOffset(kRELDataStartOffsetLocation))
+			self.dataStart = Int(data.getWordAtOffset(file == .common_rel ? kCommonRELDataStartOffsetLocation : kRELDataStartOffsetLocation))
 			self.pointersStart = Int(data.getWordAtOffset(kRELPointersStartOffsetLocation))
 			self.firstPointer = pointersStart + kRELPointersFirstPointerOffset
-			
+
 			let pointersHeaderOffset = data.get4BytesAtOffset(kRELPointersHeaderPointerOffset)
 			let pointersEnd = data.get4BytesAtOffset(pointersHeaderOffset + 0xc)
 			var currentOffset = firstPointer
@@ -85,7 +83,8 @@ class XGRelocationTable: NSObject {
 			}
 			
 		}
-		
+
+		cachePointers()
 	}
 	
 	private var pointers = [Int : Int]()
@@ -95,13 +94,18 @@ class XGRelocationTable: NSObject {
 	}
 	
 	func getPointer(index: Int) -> Int {
-		
 		if pointers[index] == nil {
-			let offset = firstPointer + (index * kRELSizeOfPointer) + kRELPointerDataPointer1Offset
+			let offset = getPointerOffset(index: index)
 			pointers[index] = Int(data.getWordAtOffset(offset)) + dataStart
 		}
 		
 		return pointers[index] ?? 0
+	}
+
+	func cachePointers() {
+		for i in 0 ..< numberOfPointers {
+			_ = getPointer(index: i)
+		}
 	}
 	
 	func getValueAtPointer(index: Int) -> Int {

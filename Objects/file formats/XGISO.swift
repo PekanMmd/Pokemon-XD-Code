@@ -465,7 +465,7 @@ class XGISO: NSObject {
 			self.replaceDataForFile(filename: name, withData: newData, saveWhenDone: save)
 			return true
 		} else {
-			printg("Couldn't replace file \(name) as it is too large and ISO is full. Try deleting some files or increasing the ISO size.")
+			displayAlert(title: "Couldn't replace file \(name)", description: "\(name) is too large and ISO is full. Try deleting some files or increasing the ISO size. You can use one of the patches to delete some unused game files.")
 			return false
 		}
 		

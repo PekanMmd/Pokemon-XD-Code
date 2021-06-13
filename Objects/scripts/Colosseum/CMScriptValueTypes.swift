@@ -29,7 +29,7 @@ enum CMScriptValueTypes: Equatable {
 
 	var name: String {
 		switch self {
-		case .none: return "None"
+		case .none: return "Void"
 		case .integer: return "Int"
 		case .float: return "Float"
 		case .unknown(id: let id): return "Type\(id)"
@@ -50,10 +50,26 @@ enum CMScriptValueTypes: Equatable {
 struct CMScriptVar: CustomStringConvertible {
 
 	let type: CMScriptValueTypes
-	let flag0x100: Bool // If set, treat the value as a pointer and dereference it
-	let flag0x80: Bool  // If set, pop the top value from the stack, ignore other flags
+	let flag0x100: Bool
+	let flag0x80: Bool
 	let flag0x40: Bool
 	let flag0x20: Bool
+
+	var isPointer: Bool {
+		return flag0x100
+	}
+
+	var isGlobalVar: Bool {
+		return !isLocalVar && !isLiteral
+	}
+
+	var isLocalVar: Bool {
+		return flag0x40
+	}
+
+	var isLiteral: Bool {
+		return flag0x80
+	}
 
 	var mask: Int {
 		var val = type.id
@@ -65,34 +81,24 @@ struct CMScriptVar: CustomStringConvertible {
 	}
 
 	var varType: String {
+		var type = ""
 		if flag0x80 {
-			return "StackPop"
+			type = "Literal"
+		} else if flag0x40 {
+			type = "LocalVar"
+		} else {
+			type = "GlobalVar"
 		}
-		if flag0x40 && flag0x20 {
-			return "Var60"
-		}
-
-		if flag0x20 {
-			return "Var20"
-		}
-
-		if flag0x40 {
-			return "Var40"
+		if flag0x80 && flag0x40 {
+			type = "InvalidVar"
 		}
 
-		if (!flag0x100 && !flag0x80 && !flag0x40 && !flag0x20) {
-			return "Var00"
-		}
-
-		return "InvalidVar(\(mask.hex()))"
+		return "\(type)"
 	}
 
 	var description: String {
-		if type == .none {
-			return "Null"
-		}
-		let pointer = flag0x100 ? "Pointer:" : ""
-		return pointer + type.name + "(\(varType))"
+		let modifier = flag0x100 ? "*" : (flag0x20 ? "0x20" : "")
+		return "(" + type.name + modifier + ")\(varType)"
 	}
 
 	static func fromMask(_ mask: Int) -> CMScriptVar {

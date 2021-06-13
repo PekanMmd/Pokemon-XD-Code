@@ -7,11 +7,14 @@
 
 import Foundation
 
+let kNumberMapPointers = 1 // for xd compatibility
 enum MapRelIndexes : Int {
-	case FirstCharacter = 0
-	case NumberOfCharacters = 1
-	case FirstInteractionLocation = 6
-	case NumberOfInteractionLocations = 7
+	// these values are inconsistent
+	case FirstWarpEntryLocation = 1
+	case NumberOfWarpEntryLocations = 2
+	case FirstCharacter = 3
+	case NumberOfCharacters = 4
+	case groupData = 9
 }
 
 

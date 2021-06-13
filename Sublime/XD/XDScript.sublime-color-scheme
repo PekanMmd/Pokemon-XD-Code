@@ -1,0 +1,128 @@
+{
+    "name": "XDScript",
+    "globals":
+    {
+        "background": "#303840",
+        "foreground": "#EEEEEE",
+        "caret": "white",
+        "line_highlight": "#303030",
+        "selection" : "#606870",
+        "highlight" : "#a0a8b0",
+        "find_highlight" : "#a0a8b0",
+        "brackets_options": "#foreground bold underline",
+        "brackets_foreground" : "#ffff00"
+    },
+    "rules":
+    [
+        {
+            "name": "Comment",
+            "scope": "comment",
+            "foreground": "#888888"
+        },
+        {
+            "name": "String",
+            "scope": "string",
+            "foreground": "khaki",
+        },
+        {
+            "name": "Location",
+            "scope": "constant.location",
+            "foreground": ["#ffd8a8", "#c89868"],
+            "font_style": "italic",
+        },{
+            "name": "FunctionMacro",
+            "scope": "constant.functionmacro",
+            "foreground": ["#ffd8a8", "#c89868"],
+            "font_style": "italic",
+        },{
+            "name": "Keyword",
+            "scope": "keyword",
+            "foreground": "#f07040",
+        },{
+            "name": "Macro",
+            "scope": "constant.macro",
+            "foreground": "#b0f0b0",
+        },{
+            "name": "Object",
+            "scope": "constant.object",
+            "foreground": "#d0d0f0",
+        },{
+            "name": "Number",
+            "scope": "constant.numeric",
+            "foreground": "#c0e0e8",
+        },{
+            "name": "StringMacro",
+            "scope": "constant.macro.string",
+            "foreground": "#90d0c8",
+        },{
+            "name": "VariableCallstd",
+            "scope": "entity.callstd",
+            "foreground": "#e8e8c8",
+        },{
+            "name": "VariableAssignment",
+            "scope": "entity.assignment",
+            "foreground": "#90d0f0",
+        },{
+            "name": "StringEscape",
+            "scope": "string.escape",
+            "foreground": "#c0b080",
+        },{
+            "name": "StringEscapeParam",
+            "scope": "string.escape.param",
+            "foreground": "#e0c080",
+        },{
+            "name": "VectorLiteral",
+            "scope": "constant.vector",
+            "foreground": "#90b0b0",
+        },{
+            "name": "AssignmentOperator",
+            "scope": "keyword.operator.assignment",
+            "foreground": "#e0b0b0",
+        },{
+            "name": "Operator",
+            "scope": "keyword.operator",
+            "foreground": "#ffb0c0",
+        },{
+            "name": "BooleanTrue",
+            "scope": "constant.boolean.true",
+            "foreground": "#c0ffd0",
+        },{
+            "name": "BooleanFalse",
+            "scope": "constant.boolean.false",
+            "foreground": "#ffa0b0",
+        },{
+            "name": "AssignmentParameter",
+            "scope": "keyword.parameter",
+            "foreground": "#e8c0e8",
+        },
+
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

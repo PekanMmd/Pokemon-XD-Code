@@ -195,17 +195,17 @@ class XDSConstant : NSObject {
 		case .msg:
 			if let table = self.stringTable {
 				if let string = table.stringWithID(self.asInt) {
-					return XDSExpr.msgMacro(string).text()[0]
+					return XDSExpr.msgMacro(string).text(isCommonScript: false)[0]
 				}
 			}
-			return XDSExpr.msgMacro(getStringSafelyWithID(id: self.asInt)).text()[0]
+			return XDSExpr.msgMacro(getStringSafelyWithID(id: self.asInt)).text(isCommonScript: false)[0]
 
 		case .character:
 			return XGScriptInstruction(bytes: 0x03030080 + UInt32(self.asInt), next: 0).XDSVariable
 		#endif
 		case .codePointer:
 			#if GAME_XD
-			return XDSExpr.locationIndex(self.asInt).text()[0]
+			return XDSExpr.locationIndex(self.asInt).text(isCommonScript: false)[0]
 			#else
 			return XDSExpr.locationIndex(self.asInt).text[0]
 			#endif

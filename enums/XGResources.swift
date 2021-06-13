@@ -13,10 +13,10 @@ enum XGResources {
 	case JSON(String)
 	case png(String)
 	case shader(String)
+	case sublimePreferences(String)
 	case sublimeColourScheme(String)
 	case sublimeSyntax(String)
 	case sublimeSettings(String)
-	case sublimeCompletions(String)
     case tool(String)
 	case folder(String)
 	case nameAndFileType(String, String)
@@ -31,10 +31,10 @@ enum XGResources {
 				case .JSON(let name)							: return name
 				case .png(let name)								: return name
 				case .shader(let name)							: return name
+				case .sublimePreferences(let name)				: return name
 				case .sublimeColourScheme(let name)				: return name
 				case .sublimeSyntax(let name)					: return name
 				case .sublimeSettings(let name)					: return name
-				case .sublimeCompletions(let name)				: return name
                 case .tool(let name)                            : return name
 				case .folder(let name)                          : return name
 				case .nameAndFileType(let name, _)				: return name
@@ -47,10 +47,10 @@ enum XGResources {
 		case .JSON									: return ".json"
 		case .png									: return ".png"
 		case .shader								: return ".glsl"
+		case .sublimePreferences					: return ".tmPreferences"
 		case .sublimeColourScheme					: return ".sublime-color-scheme"
 		case .sublimeSyntax							: return ".sublime-syntax"
 		case .sublimeSettings						: return ".sublime-settings"
-		case .sublimeCompletions					: return ".sublime-completions"
 		case .tool                                  : return environment == .Windows ? ".exe" : ""
 		case .folder                                : return ""
 		case .nameAndFileType( _, let filetype)		: return filetype

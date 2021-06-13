@@ -19,7 +19,8 @@ let kIPScriptIndexOffset = 0xa
 let kIPScriptParameter1Offset = 0xc
 let kIPScriptParameter2Offset = 0x10
 let kIPScriptParameter3Offset = 0x14
-let kIPTypeOffset = 0xa
+let kIPScriptParameter4Offset = 0x18
+
 let kIPWarpTargetRoomIDOffset = 0xe
 let kIPWarpTargetEntryPointIDOffset = 0x13
 let kIPWarpSoundEffectOffset = 0x17
@@ -34,14 +35,13 @@ let kIPCameraIDOffset = 0x18
 let kIPPCRoomIDOffset = 0xe
 let kIPPCUnknownOffset = 0x13
 
+// These are the indexes of that script function in common.rel's script
 let kIPWarpValue = 0x4
 let kIPDoorValue = 0x5
 let kIPElevatorValue = 0x6
 let kIPTextValue = game == .XD ? 0xC : 0xB
 let kIPCutsceneValue = game == .XD ? 0xD : 0xC
 let kIPPCValue = game == .XD ? 0xE : 0xD
-let kIPTVValue = 0x13
-
 
 
 enum XGInteractionMethods : Int, Codable {
@@ -77,114 +77,39 @@ enum XGElevatorDirections : Int, Codable {
 
 enum XGInteractionPointInfo {
 	case None
+	// These are all just script indexes in common.rel's script
 	case Warp(targetRoom: Int, targetEntryID: Int, sound: Bool)
 	case Door(id: Int)
 	case Text(stringID: Int)
-	case Script(scriptIndex: Int, parameter1: Int, parameter2: Int, parameter3: Int) // in colosseum scripts can be called with parameters, maybe xd too?
 	case Elevator(elevatorID: Int, targetRoomID: Int, targetElevatorID: Int, direction: XGElevatorDirections)
 	case CutsceneWarp(targetRoom: Int, targetEntryID: Int, cutsceneID: Int, cameraFSYSID: Int)
 	case PC(roomID: Int, unknown: Int) // parameters are unused
-	case TV // colosseum only
-	
-}
 
-extension XGInteractionPointInfo: Codable {
-	enum XGInteractionPointDecodingError: Error {
-		case invalidType(key: String)
-	}
-	
-	enum CodingKeys: String, CodingKey {
-		case type, value1, value2, value3, value4
-	}
-	
-	init(from decoder: Decoder) throws {
-		let container = try decoder.container(keyedBy: CodingKeys.self)
-		let type = try container.decode(String.self, forKey: .type)
-		switch type {
-		case "None":
-			self = .None
-		case "Warp":
-			let value1 = try container.decode(Int.self, forKey: .value1)
-			let value2 = try container.decode(Int.self, forKey: .value2)
-			let value3 = try container.decode(Bool.self, forKey: .value3)
-			self = .Warp(targetRoom: value1, targetEntryID: value2, sound: value3)
-		case "Door":
-			let value1 = try container.decode(Int.self, forKey: .value1)
-			self = .Door(id: value1)
-		case "Text":
-			let value1 = try container.decode(Int.self, forKey: .value1)
-			self = .Text(stringID: value1)
-		case "Script":
-			let value1 = try container.decode(Int.self, forKey: .value1)
-			let value2 = try container.decode(Int.self, forKey: .value2)
-			let value3 = try container.decode(Int.self, forKey: .value3)
-			let value4 = try container.decode(Int.self, forKey: .value4)
-			self = .Script(scriptIndex: value1, parameter1: value2, parameter2: value3, parameter3: value4)
-		case "Elevator":
-			let value1 = try container.decode(Int.self, forKey: .value1)
-			let value2 = try container.decode(Int.self, forKey: .value2)
-			let value3 = try container.decode(Int.self, forKey: .value3)
-			let value4 = try container.decode(XGElevatorDirections.self, forKey: .value4)
-			self = .Elevator(elevatorID: value1, targetRoomID: value2, targetElevatorID: value3, direction: value4)
-		case "Cutscene":
-			let value1 = try container.decode(Int.self, forKey: .value1)
-			let value2 = try container.decode(Int.self, forKey: .value2)
-			let value3 = try container.decode(Int.self, forKey: .value3)
-			let value4 = try container.decode(Int.self, forKey: .value4)
-			self = .CutsceneWarp(targetRoom: value1, targetEntryID: value2, cutsceneID: value3, cameraFSYSID: value4)
-		case "TV":
-			self = .TV
-		case "PC":
-			let value1 = try container.decode(Int.self, forKey: .value1)
-			let value2 = try container.decode(Int.self, forKey: .value2)
-			self = .PC(roomID: value1, unknown: value2)
-		default:
-			throw XGInteractionPointDecodingError.invalidType(key: type)
-		}
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
+	case CurrentScript(scriptIndex: Int, parameter1: Int, parameter2: Int, parameter3: Int, parameter4: Int) // index into current map's script
+	case CommonScript(scriptIndex: Int, parameter1: Int, parameter2: Int, parameter3: Int, parameter4: Int) // for any other function in common.rel
+
+	var scriptIndex: Int {
 		switch self {
-		case .None:
-			try container.encode("None", forKey: .type)
-		case .Warp(let targetRoom, let targetEntryID, let sound):
-			try container.encode("Warp", forKey: .type)
-			try container.encode(targetRoom, forKey: .value1)
-			try container.encode(targetEntryID, forKey: .value2)
-			try container.encode(sound, forKey: .value3)
-		case .Door(let id):
-			try container.encode("Door", forKey: .type)
-			try container.encode(id, forKey: .value1)
-		case .Text(let stringID):
-			try container.encode("Text", forKey: .type)
-			try container.encode(stringID, forKey: .value1)
-		case .Script(let scriptIndex, let parameter1, let parameter2, let parameter3):
-			try container.encode("Script", forKey: .type)
-			try container.encode(scriptIndex, forKey: .value1)
-			try container.encode(parameter1, forKey: .value2)
-			try container.encode(parameter2, forKey: .value3)
-			try container.encode(parameter3, forKey: .value4)
-		case .Elevator(let elevatorID, let targetRoomID, let targetElevatorID, let direction):
-			try container.encode("Elevator", forKey: .type)
-			try container.encode(elevatorID, forKey: .value1)
-			try container.encode(targetRoomID, forKey: .value2)
-			try container.encode(targetElevatorID, forKey: .value3)
-			try container.encode(direction, forKey: .value4)
-		case .CutsceneWarp(let targetRoom, let targetEntryID, let cutsceneID, let cameraFSYSID):
-			try container.encode("Cutscene", forKey: .type)
-			try container.encode(targetRoom, forKey: .value1)
-			try container.encode(targetEntryID, forKey: .value2)
-			try container.encode(cutsceneID, forKey: .value3)
-			try container.encode(cameraFSYSID, forKey: .value4)
-		case .PC(let roomID, let unknown):
-			try container.encode("PC", forKey: .type)
-			try container.encode(roomID, forKey: .value1)
-			try container.encode(unknown, forKey: .value2)
-		case .TV:
-			try container.encode("TV", forKey: .type)
+		case .None: return 0
+		case .Warp:
+			return kIPWarpValue
+		case .Door:
+			return kIPDoorValue
+		case .Text:
+			return kIPTextValue
+		case .Elevator:
+			return kIPElevatorValue
+		case .CutsceneWarp:
+			return kIPCutsceneValue
+		case .PC:
+			return kIPPCValue
+		case .CurrentScript(let scriptIndex, _, _, _, _):
+			return scriptIndex
+		case .CommonScript(let scriptIndex, _, _, _, _):
+			return scriptIndex
 		}
 	}
+	
 }
 
 
@@ -201,7 +126,7 @@ var allInteractionPointData : [XGInteractionPointData] {
 	return IPData
 }
 
-final class XGInteractionPointData: NSObject, Codable {
+final class XGInteractionPointData: NSObject {
 	
 	// Each entry is actually a script function call
 	// if the script value is 0x596 then the script function is from common.scd
@@ -254,8 +179,8 @@ final class XGInteractionPointData: NSObject, Codable {
 			desc += "Open door with id: \(id)\n"
 		case .Text(let stringID):
 			desc += "Display text: \"\(getStringSafelyWithID(id: stringID))\"\n"
-		case .Script(let scriptIndex, let parameter1, let parameter2, let parameter3):
-			desc += "Call script with id: \(scriptIndex)"
+		case .CurrentScript(let scriptIndex, let parameter1, let parameter2, let parameter3, let parameter4):
+			desc += "Call script function with id: \(scriptIndex)"
 			if game == .XD {
 				if let room = XGRoom.roomWithID(roomID) {
 					if let script = room.script?.scriptData {
@@ -268,6 +193,24 @@ final class XGInteractionPointData: NSObject, Codable {
 				desc += " with parameter 1: \(parameter1)\n"
 				desc += " with parameter 2: \(parameter2)\n"
 				desc += " with parameter 3: \(parameter3)\n"
+				desc += " with parameter 4: \(parameter4)\n"
+			}
+			desc += "\n"
+		case .CommonScript(let scriptIndex, let parameter1, let parameter2, let parameter3, let parameter4):
+			desc += "Call common script function with id: \(scriptIndex)"
+			if game == .XD {
+				if let room = XGRoom.roomWithID(roomID) {
+					if let script = room.script?.scriptData {
+						if scriptIndex < script.ftbl.count {
+							desc += " @\(script.ftbl[scriptIndex].name)"
+						}
+					}
+				}
+			} else {
+				desc += " with parameter 1: \(parameter1)\n"
+				desc += " with parameter 2: \(parameter2)\n"
+				desc += " with parameter 3: \(parameter3)\n"
+				desc += " with parameter 4: \(parameter4)\n"
 			}
 			desc += "\n"
 		case .Elevator(let elevatorID, let targetRoomID, let targetElevatorID, let direction):
@@ -285,8 +228,6 @@ final class XGInteractionPointData: NSObject, Codable {
 				roomName = room.name
 			}
 			desc += "Cutscene warp \(cutsceneID.hexString()) to \(roomName) at Entry point: \(targetEntryID) with camera file \(cameraFSYSID.hexString())\n"
-		case .TV:
-			desc += "Watch TV\n"
 		}
 		
 		return desc
@@ -310,24 +251,22 @@ final class XGInteractionPointData: NSObject, Codable {
 			printg("Unknown interaction method: \(methodID) for point with index: \(index)")
 		}
 		
-		let unknownValue = rel.get2BytesAtOffset(startOffset + kIPScriptValueOffset)
+		let scriptIdentifier = rel.get2BytesAtOffset(startOffset + kIPScriptValueOffset)
+		let scriptID = rel.get2BytesAtOffset(startOffset + kIPScriptIndexOffset)
 		
-		if unknownValue == 0x100 {
-			
-			let scriptID = rel.get2BytesAtOffset(startOffset + kIPScriptIndexOffset)
+		if scriptIdentifier == 0x100 { // current script
+
 			let parameter1 = rel.get4BytesAtOffset(startOffset + kIPScriptParameter1Offset)
 			let parameter2 = rel.get4BytesAtOffset(startOffset + kIPScriptParameter2Offset)
 			let parameter3 = rel.get4BytesAtOffset(startOffset + kIPScriptParameter3Offset)
-			self.info = .Script(scriptIndex: scriptID, parameter1: parameter1, parameter2: parameter2, parameter3: parameter3)
+			let parameter4 = rel.get4BytesAtOffset(startOffset + kIPScriptParameter4Offset)
+			self.info = .CurrentScript(scriptIndex: scriptID, parameter1: parameter1, parameter2: parameter2, parameter3: parameter3, parameter4: parameter4)
 			
-		} else if unknownValue != 0x596 {
-			printg("Unknown variable value: \(unknownValue) for point with index: \(index)")
-		} else {
+		} else if scriptIdentifier == 0x596  { // common.rel
 			
-			let interactionType = rel.get2BytesAtOffset(startOffset + kIPTypeOffset)
-			
-			switch interactionType {
-				
+			switch scriptID {
+
+			// These are the function indexes within common.rel's script
 			case kIPWarpValue:
 				let targetRoom = rel.get2BytesAtOffset(startOffset + kIPWarpTargetRoomIDOffset)
 				let entryID = rel.getByteAtOffset(startOffset + kIPWarpTargetEntryPointIDOffset)
@@ -353,15 +292,17 @@ final class XGInteractionPointData: NSObject, Codable {
 				let roomID = rel.get2BytesAtOffset(startOffset + kIPPCRoomIDOffset)
 				let unknown = rel.getByteAtOffset(startOffset + kIPPCUnknownOffset)
 				self.info = .PC(roomID: roomID, unknown: unknown)
-			case kIPTVValue:
-				self.info = .TV
-			case 0:
-				self.info = .None
-				
 			default:
-				printg("Unknown interaction type: \(interactionType) for point with index: \(index)")
+				let parameter1 = rel.get4BytesAtOffset(startOffset + kIPScriptParameter1Offset)
+				let parameter2 = rel.get4BytesAtOffset(startOffset + kIPScriptParameter2Offset)
+				let parameter3 = rel.get4BytesAtOffset(startOffset + kIPScriptParameter3Offset)
+				let parameter4 = rel.get4BytesAtOffset(startOffset + kIPScriptParameter4Offset)
+				self.info = .CommonScript(scriptIndex: scriptID, parameter1: parameter1, parameter2: parameter2, parameter3: parameter3, parameter4: parameter4)
 			}
-			
+		} else if scriptIdentifier == 0 {
+			self.info = .None
+		} else {
+			printg("Unknown variable value: \(scriptIdentifier) for point with index: \(index)")
 		}
 		
 	}
@@ -377,43 +318,42 @@ final class XGInteractionPointData: NSObject, Codable {
 		rel.replaceByteAtOffset(startOffset + kIPRegionIndexOffset, withByte: self.interactionPointIndex)
 		
 		switch self.info {
-		case .Script: rel.replace2BytesAtOffset(startOffset + kIPScriptValueOffset, withBytes: 0x100)
+		case .None: break
+		case .CurrentScript: rel.replace2BytesAtOffset(startOffset + kIPScriptValueOffset, withBytes: 0x100)
 		default: rel.replace2BytesAtOffset(startOffset + kIPScriptValueOffset, withBytes: 0x596)
 		}
+
+		rel.replace2BytesAtOffset(startOffset + kIPScriptIndexOffset, withBytes: info.scriptIndex)
 		
 		switch self.info {
 		case .None:
 			break
 			
 		case .Warp(let targetRoom, let targetEntryID, let sound):
-			rel.replace2BytesAtOffset(startOffset + kIPTypeOffset, withBytes: kIPWarpValue)
 			rel.replace2BytesAtOffset(startOffset + kIPWarpTargetRoomIDOffset, withBytes: targetRoom)
 			rel.replaceByteAtOffset(startOffset + kIPWarpTargetEntryPointIDOffset, withByte: targetEntryID)
 			rel.replaceByteAtOffset(startOffset + kIPWarpSoundEffectOffset, withByte: sound ? 1 : 0)
 			
 		case .Door(let id):
-			rel.replace2BytesAtOffset(startOffset + kIPTypeOffset, withBytes: kIPDoorValue)
 			rel.replace2BytesAtOffset(startOffset + kIPDoorIDOffset, withBytes: id)
 			
 		case .Elevator(let elevatorID, let targetRoomID, let targetElevatorID, let direction):
-			rel.replace2BytesAtOffset(startOffset + kIPTypeOffset, withBytes: kIPElevatorValue)
 			rel.replace2BytesAtOffset(startOffset + kIPElevatorIDOffset, withBytes: elevatorID)
 			rel.replace2BytesAtOffset(startOffset + kIPElevatorTargetRoomIDOffset, withBytes: targetRoomID)
 			rel.replace2BytesAtOffset(startOffset + kIPTargetElevatorIDOffset, withBytes: targetElevatorID)
 			rel.replaceByteAtOffset(startOffset + kIPElevatorDirectionOffset, withByte: direction.rawValue)
 			
 		case .Text(let stringID):
-			rel.replace2BytesAtOffset(startOffset + kIPTypeOffset, withBytes: kIPTextValue)
 			rel.replace2BytesAtOffset(startOffset + kIPStringIDOffset, withBytes: stringID)
 			
-		case .Script(let scriptIndex, let parameter1, let parameter2, let parameter3):
-			rel.replace2BytesAtOffset(startOffset + kIPScriptIndexOffset, withBytes: scriptIndex)
+		case .CurrentScript(_, let parameter1, let parameter2, let parameter3, let parameter4),
+			 .CommonScript(_, let parameter1, let parameter2, let parameter3, let parameter4):
 			rel.replace4BytesAtOffset(startOffset + kIPScriptParameter1Offset, withBytes: parameter1)
 			rel.replace4BytesAtOffset(startOffset + kIPScriptParameter2Offset, withBytes: parameter2)
-			rel.replace4BytesAtOffset(startOffset + kIPScriptParameter2Offset, withBytes: parameter3)
+			rel.replace4BytesAtOffset(startOffset + kIPScriptParameter3Offset, withBytes: parameter3)
+			rel.replace4BytesAtOffset(startOffset + kIPScriptParameter4Offset, withBytes: parameter4)
 		
 		case .CutsceneWarp(let targetRoom, let targetEntryID, let cutsceneID, let cameraFSYSID):
-			rel.replace2BytesAtOffset(startOffset + kIPTypeOffset, withBytes: kIPCutsceneValue)
 			rel.replace2BytesAtOffset(startOffset + kIPWarpTargetRoomIDOffset, withBytes: targetRoom)
 			rel.replaceByteAtOffset(startOffset + kIPWarpTargetEntryPointIDOffset, withByte: targetEntryID)
 			rel.replace2BytesAtOffset(startOffset + kIPCutsceneIDOffset, withBytes: cutsceneID)
@@ -421,11 +361,8 @@ final class XGInteractionPointData: NSObject, Codable {
 			rel.replaceByteAtOffset(startOffset + kIPCameraIDOffset + 1, withByte: 0x18) // .cam filetype
 			
 		case .PC(let roomID, let unknown):
-			rel.replace2BytesAtOffset(startOffset + kIPTypeOffset, withBytes: kIPPCValue)
 			rel.replace2BytesAtOffset(startOffset + kIPPCRoomIDOffset, withBytes: roomID)
 			rel.replaceByteAtOffset(startOffset + kIPPCUnknownOffset, withByte: unknown)
-		case .TV:
-			rel.replace2BytesAtOffset(startOffset + kIPTypeOffset, withBytes: kIPTVValue)
 		}
 		
 		rel.save()

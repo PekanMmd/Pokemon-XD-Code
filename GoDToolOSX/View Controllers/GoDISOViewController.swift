@@ -13,13 +13,13 @@ class GoDISOViewController: GoDTableViewController {
 	var filteredFileNames = [String]()
 
 	var isExporting = false
-	func exportFiles(decode: Bool) {
+	func exportFiles(extract: Bool, decode: Bool) {
 		if isExporting {
 			return
 		}
 		isExporting = true
 		
-		if XGUtility.exportFileFromISO(currentFile, decode: decode) {
+		if XGUtility.exportFileFromISO(currentFile, extractFsysContents: extract, decode: decode) {
 			GoDAlertViewController.displayAlert(title: "Export Complete", text: "Exported \(currentFile.fileName) to \(self.currentFile.folder.path)")
 		} else {
 			GoDAlertViewController.displayAlert(title: "File export failed", text: "Couldn't export data for file \(self.currentFile.fileName) from the ISO.")
@@ -28,20 +28,24 @@ class GoDISOViewController: GoDTableViewController {
 	}
 	
 	@IBAction func export(_ sender: Any) {
-		self.exportFiles(decode: true)
+		self.exportFiles(extract: true, decode: true)
 	}
 	
 	@IBAction func quickExport(_ sender: Any) {
-		self.exportFiles(decode: false)
+		self.exportFiles(extract: true, decode: false)
+	}
+
+	@IBAction func decodeOnly(_ sender: Any) {
+		self.exportFiles(extract: false, decode: true)
 	}
 	
-	func importFsysFiles(encode: Bool) {
+	func importFsysFiles(shouldImport: Bool, encode: Bool) {
 		if isExporting {
 			return
 		}
 		isExporting = true
 
-		if XGUtility.importFileToISO(currentFile, encode: encode) {
+		if XGUtility.importFileToISO(currentFile, shouldImport: shouldImport, encode: encode) {
 			GoDAlertViewController.displayAlert(title: "Import Complete", text: "Imported \(currentFile.path) to ISO")
 		} else {
 			GoDAlertViewController.displayAlert(title: "File import failed", text: "Couldn't import data for file \(self.currentFile.path) to the ISO.")
@@ -50,11 +54,15 @@ class GoDISOViewController: GoDTableViewController {
 	}
 	
 	@IBAction func importFiles(_ sender: Any) {
-		self.importFsysFiles(encode: true)
+		self.importFsysFiles(shouldImport: true, encode: true)
 	}
 	
 	@IBAction func quickImport(_ sender: Any) {
-		self.importFsysFiles(encode: false)
+		self.importFsysFiles(shouldImport: true, encode: false)
+	}
+
+	@IBAction func encodeOnly(_ sender: Any) {
+		self.importFsysFiles(shouldImport: false, encode: true)
 	}
 	
 	@IBAction func delete(_ sender: Any) {

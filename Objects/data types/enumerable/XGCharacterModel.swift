@@ -16,56 +16,50 @@ let kCharacterModelFSYSIdentifier = game == .XD ? 0x4 : 0xc
 let kFirstBoundBoxVertexOffset = game == .XD ? 0x8 : 0x10
 
 
-final class XGCharacterModel : NSObject, Codable {
+final class XGCharacterModel: NSObject, Codable {
 
 	var index = 0
 	var identifier : UInt32 = 0
 	var name = ""
-	var fsysIndex = -1
 	var fileSize = -1
 	
 	var boundBox = [Float]()
 	
 	var startOffset = 0
-	
-	var archive : XGFsys? {
-		if game == .XD {
-			return XGFiles.fsys("people_archive").fsysData
-		}
-//		let files = XGUtility.searchForFsysForIdentifier(id: identifier)
-//		if files.count > 0 {
-//			return files[0]
-//		}
-		return nil
+
+	var archiveName: String?
+	var archive: XGFsys? {
+		return searchForArchive()
 	}
 	
 	var rawData : [Int] {
 		return XGFiles.common_rel.data!.getByteStreamFromOffset(self.startOffset, length: kSizeOfCharacterModel)
 	}
 	
-	var modelData : XGMutableData {
-		return archive!.decompressedDataForFileWithIndex(index: fsysIndex)!
+	var modelData: XGMutableData? {
+		if let fsys = archive,
+		   let index = fsys.indexForIdentifier(identifier: identifier.int) {
+			return fsys.decompressedDataForFileWithIndex(index: index)
+		}
+		return nil
 	}
 	
-	init(index: Int, loadArchive: Bool = true) {
+	init(index: Int, archiveName: String? = nil, loadArchive: Bool = true) {
 		super.init()
 		
 		let rel = XGFiles.common_rel.data!
 		
 		self.index = index
-		self.startOffset = CommonIndexes.CharacterModels.startOffset + (self.index * kSizeOfCharacterModel)
+		let firstModelOffset = CommonIndexes.CharacterModels.startOffset
+		self.startOffset = firstModelOffset + (self.index * kSizeOfCharacterModel)
 		self.identifier = rel.getWordAtOffset(self.startOffset + kCharacterModelFSYSIdentifier)
+		self.archiveName = archiveName
 		
-		if loadArchive, let arch = archive {
-			let file = arch.file!
-			if file.exists {
-				if let fsysIndex = arch.indexForIdentifier(identifier: self.identifier.int),
-				   fsysIndex >= 0 {
-					self.name = arch.fileNameForFileWithIndex(index: fsysIndex) ?? "-"
-					self.fsysIndex = fsysIndex
-					self.fileSize = arch.sizeForFile(index: fsysIndex)
-				}
-			}
+		if loadArchive, let arch = archive,
+		   let fsysIndex = arch.indexForIdentifier(identifier: self.identifier.int),
+		   fsysIndex >= 0 {
+			self.name = arch.fileNameForFileWithIndex(index: fsysIndex) ?? "-"
+			self.fileSize = arch.sizeForFile(index: fsysIndex)
 		} else {
 			self.name = "CharacterModel_\(index)"
 		}
@@ -75,6 +69,25 @@ final class XGCharacterModel : NSObject, Codable {
 			let f = rel.getWordAtOffset(offset).hexToSignedFloat()
 			self.boundBox.append(f)
 		}
+	}
+
+	private func searchForArchive() -> XGFsys? {
+		if identifier == 0 {
+			return nil
+		}
+
+		if let name = archiveName {
+			return XGFiles.fsys(name.removeFileExtensions()).fsysData
+		}
+		if game == .XD || XGFiles.fsys("people_archive").fsysData.indexForIdentifier(identifier: identifier.int) != nil {
+			return XGFiles.fsys("people_archive").fsysData
+		}
+
+		let files = XGUtility.searchForFsysForIdentifier(id: identifier)
+		if files.count > 0 {
+			return files[0]
+		}
+		return nil
 	}
 	
 	func save() {
@@ -90,11 +103,11 @@ final class XGCharacterModel : NSObject, Codable {
 		rel.save()
 	}
 	
-	class func modelWithIdentifier(id: Int) -> XGCharacterModel {
+	class func modelWithIdentifier(id: Int, archiveName: String? = nil) -> XGCharacterModel {
 		for i in 0 ..< CommonIndexes.NumberOfCharacterModels.value {
-			let model = XGCharacterModel(index: i, loadArchive: false)
+			let model = XGCharacterModel(index: i, archiveName: archiveName, loadArchive: false)
 			if model.identifier == id {
-				return XGCharacterModel(index: i, loadArchive: true)
+				return model
 			}
 		}
 		return XGCharacterModel(index: 0)

@@ -1,11 +1,10 @@
 %YAML 1.2
 ---
 
-name: XDScript
-file_extensions:
-  - xds
-scope: xdscript
-scopeName: xdscript
+name: CMScript
+file_extensions: 
+  - cms
+scope: source.cmscript
 
 variables:
   ident: '[a-z_][A-Za-z_0-9]*'
@@ -23,50 +22,49 @@ contexts:
   main:
     - match: '({{ident}})({{space}})(=)'
       captures:
-        1: entity.assignment.xds
+        1: entity.assignment.cms
     - match: \b(define|call|return|function|goto|if|ifnot|while|else|elif|Null|global|LastResult)\b
-      scope: keyword.xds
+      scope: keyword.cms
     - match: '\b({{type}})\:'
-      scope: keyword.parameter.xds
+      scope: keyword.parameter.cms
     - match: \b(YES|Yes|True|TRUE)\b
-      scope: constant.boolean.true.xds
+      scope: constant.boolean.true.cms
     - match: \b(NO|No|False|FALSE)\b
-      scope: constant.boolean.false.xds
+      scope: constant.boolean.false.cms
     - match: '\b(assign)({{space}})({{ident}})\b'
       captures:
-        1: keyword.xds
-        3: entity.assignment.xds
+        1: keyword.cms
+        3: entity.assignment.cms
     - match: (<)({{space}})?({{float}})({{space}})({{float}})({{space}})({{float}})({{space}})?(>)
-      scope: constant.numeric.xds
+      scope: constant.numeric.cms
     - match: '\b{{number}}\b'
-      scope: constant.numeric.xds
+      scope: constant.numeric.cms
     - match: '"'
       push: string
     - match: '\$:'
       push: string_macro
     - match: '\b({{type}})\.'
-      scope: constant.object.xds
+      scope: constant.object.cms
     - match: \b({{ident}}\.)({{type}}\.)
       captures:
-        1: entity.callstd.xds
-        2: constant.object.xds
+        1: entity.callstd.cms
+        2: constant.object.cms
     - match: '\b{{ident}}\.'
       captures:
-        0: entity.callstd.xds
+        0: entity.callstd.cms
     - match: '\b({{type}})\(({{number}})\)'
-      scope: constant.numeric.xds
+      scope: constant.numeric.cms
     - match: '\b({{type}})'
-      scope: constant.macro.xds
-
+      scope: constant.macro.cms
 
   string_macro:
-    - meta_scope: constant.macro.string.xds
+    - meta_scope: constant.macro.string.cms
     - match: ':'
       pop: true
 
   string:
     - meta_include_prototype: false
-    - meta_scope: string.quoted.double.xds
+    - meta_scope: string.quoted.double.cms
     - match: '\['
       push: string_escapes
     - match: '{'
@@ -76,26 +74,32 @@ contexts:
 
   string_escapes:
     - meta_include_prototype: false
-    - meta_scope: string.escape.xds
+    - meta_scope: string.escape.cms
     - match: '\]'
       pop: true
 
 
   string_escape_params:
     - meta_include_prototype: false
-    - meta_scope: string.escape.param.xds
+    - meta_scope: string.escape.param.cms
     - match: '}'
       pop: true
 
   macros:
-    - match: '#[A-Za-z_0-9]+\.'
-      scope: constant.macro.xds
-    - match: '#\b([A-Za-z_0-9$]+)\b'
-      scope: constant.macro.xds
+    - match: '#[A-Za-z_0-9\-]+\.'
+      scope: constant.macro.cms
+    - match: '#\b([A-Za-z_0-9\-$]+)\b'
+      scope: constant.macro.cms
     - match: '\+\+\b({{type}})\b'
-      scope: constant.object.xds
+      scope: constant.object.cms
     - match: '@\b({{ident}})\b'
-      scope: constant.location.xds
+      scope: constant.location.cms
+    - match: '&\b({{type}}\.{{ident}})\b'
+      scope: constant.functionmacro.cms
+    - match: '&\b({{type}}\.{{number}})\b'
+      scope: constant.functionmacro.cms
+    - match: '&\b({{ident}})\b'
+      scope: constant.functionmacro.cms
 
   comments:
     - match: '//'
@@ -105,13 +109,13 @@ contexts:
 
   comment:
     - meta_include_prototype: false
-    - meta_scope: comment.line.xds
+    - meta_scope: comment.line.cms
     - match: '\n'
       pop: true
 
   commentMultiLine:
     - meta_include_prototype: false
-    - meta_scope: comment.block.xds
+    - meta_scope: comment.block.cms
     - match: '\*/'
       pop: true
 

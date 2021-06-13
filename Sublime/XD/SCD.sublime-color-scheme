@@ -1,0 +1,119 @@
+{
+    "name": "XDScript",
+    "globals":
+    {
+        "background": "#303840",
+        "foreground": "#EEEEEE",
+        "caret": "white",
+        "line_highlight": "#303030",
+        "selection" : "#606870",
+        "highlight" : "#a0a8b0",
+        "find_highlight" : "#a0a8b0",
+        "brackets_options": "#foreground bold underline",
+        "brackets_foreground" : "#ffff00"
+    },
+    "rules":
+    [
+        {
+            "name": "Comment",
+            "scope": "comment",
+            "foreground": "#888888"
+        },
+        {
+            "name": "String",
+            "scope": "string",
+            "foreground": "khaki",
+        },
+        {
+            "name": "Location",
+            "scope": "constant.location",
+            "foreground": ["#ffd0a0", "#b08040"],
+            "font_style": "italic",
+        },{
+            "name": "Keyword",
+            "scope": "keyword",
+            "foreground": "#ff5000",
+        },{
+            "name": "Macro",
+            "scope": "constant.macro",
+            "foreground": "springgreen",
+        },{
+            "name": "MacroCallstd",
+            "scope": "constant.macro.callstd",
+            "foreground": "#d0ffd0",
+        },{
+            "name": "Object",
+            "scope": "constant.object",
+            "foreground": "#d0d0ff",
+        },{
+            "name": "Number",
+            "scope": "constant.numeric",
+            "foreground": "#c0f0ff",
+        },{
+            "name": "StringMacro",
+            "scope": "constant.macro.string",
+            "foreground": "turquoise",
+        },{
+            "name": "VariableCallstd",
+            "scope": "entity.callstd",
+            "foreground": "#ffffd0",
+        },{
+            "name": "VariableAssignment",
+            "scope": "entity.assignment",
+            "foreground": "#a0d0ff",
+        },{
+            "name": "StringEscape",
+            "scope": "string.escape",
+            "foreground": "#c0a060",
+        },{
+            "name": "StringEscapeParam",
+            "scope": "string.escape.param",
+            "foreground": "#e0c080",
+        },{
+            "name": "VectorLiteral",
+            "scope": "constant.vector",
+            "foreground": "#60b0b0",
+        },{
+            "name": "TypeName",
+            "scope": "keyword.type",
+            "foreground": "#9090f0",
+        },{
+            "name": "AssignmentOperator",
+            "scope": "keyword.operator.assignment",
+            "foreground": "#e0b0b0",
+        },{
+            "name": "Operator",
+            "scope": "keyword.operator",
+            "foreground": "#ffb0c0",
+        },
+
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

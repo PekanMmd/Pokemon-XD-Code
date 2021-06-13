@@ -1,0 +1,124 @@
+%YAML 1.2
+---
+
+name: XDScript
+file_extensions: [xds, cms]
+scope: source.xdscript
+
+variables:
+  ident: '[a-z_][A-Za-z_0-9]*'
+  type: '[A-Z][A-Za-z_0-9]*'
+  number: '-?((\d+(\.\d+)|\.\d+)|(0x([0-9A-Fa-f]+))|(\d+))'
+  float: '-?(\d+(\.\d+)|\.\d+)'
+  space: \s+
+
+contexts:
+
+  prototype:
+    - include: macros
+    - include: comments
+
+  main:
+    - match: '({{ident}})({{space}})(=)'
+      captures:
+        1: entity.assignment.xds
+    - match: \b(define|call|return|function|goto|if|ifnot|while|else|elif|Null|global|LastResult)\b
+      scope: keyword.xds
+    - match: '\b({{type}})\:'
+      scope: keyword.parameter.xds
+    - match: \b(YES|Yes|True|TRUE)\b
+      scope: constant.boolean.true.xds
+    - match: \b(NO|No|False|FALSE)\b
+      scope: constant.boolean.false.xds
+    - match: '\b(assign)({{space}})({{ident}})\b'
+      captures:
+        1: keyword.xds
+        3: entity.assignment.xds
+    - match: (<)({{space}})?({{float}})({{space}})({{float}})({{space}})({{float}})({{space}})?(>)
+      scope: constant.numeric.xds
+    - match: '\b{{number}}\b'
+      scope: constant.numeric.xds
+    - match: '"'
+      push: string
+    - match: '\$:'
+      push: string_macro
+    - match: '\b({{type}})\.'
+      scope: constant.object.xds
+    - match: \b({{ident}}\.)({{type}}\.)
+      captures:
+        1: entity.callstd.xds
+        2: constant.object.xds
+    - match: '\b{{ident}}\.'
+      captures:
+        0: entity.callstd.xds
+    - match: '\b({{type}})\(({{number}})\)'
+      scope: constant.numeric.xds
+    - match: '\b({{type}})'
+      scope: constant.macro.xds
+
+  string_macro:
+    - meta_scope: constant.macro.string.xds
+    - match: ':'
+      pop: true
+
+  string:
+    - meta_include_prototype: false
+    - meta_scope: string.quoted.double.xds
+    - match: '\['
+      push: string_escapes
+    - match: '{'
+      push: string_escape_params
+    - match: '"'
+      pop: true
+
+  string_escapes:
+    - meta_include_prototype: false
+    - meta_scope: string.escape.xds
+    - match: '\]'
+      pop: true
+
+
+  string_escape_params:
+    - meta_include_prototype: false
+    - meta_scope: string.escape.param.xds
+    - match: '}'
+      pop: true
+
+  macros:
+    - match: '#[A-Za-z_0-9\-]+\.'
+      scope: constant.macro.xds
+    - match: '#\b([A-Za-z_0-9\-$]+)\b'
+      scope: constant.macro.xds
+    - match: '\+\+\b({{type}})\b'
+      scope: constant.object.xds
+    - match: '@\b({{ident}})\b'
+      scope: constant.location.xds
+    - match: '&\b({{type}}\.{{ident}})\b'
+      scope: constant.functionmacro.xds
+    - match: '&\b({{type}}\.{{number}})\b'
+      scope: constant.functionmacro.xds
+    - match: '&\b({{ident}})\b'
+      scope: constant.functionmacro.xds
+
+  comments:
+    - match: '//'
+      push: comment
+    - match: '/\*'
+      push: commentMultiLine
+
+  comment:
+    - meta_include_prototype: false
+    - meta_scope: comment.line.xds
+    - match: '\n'
+      pop: true
+
+  commentMultiLine:
+    - meta_include_prototype: false
+    - meta_scope: comment.block.xds
+    - match: '\*/'
+      pop: true
+
+
+
+
+

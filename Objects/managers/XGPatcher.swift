@@ -75,11 +75,10 @@ var shadowPokemonShininessRAMOffset: Int {
 }
 
 let patches: [XGDolPatches] = game == .XD ? [
-	.freeSpaceInDol,
 	.purgeUnusedText,
 	.physicalSpecialSplitApply,
 	.physicalSpecialSplitRemove,
-	.defaultMoveCategories,
+	.disableSaveCorruption,
 	.infiniteTMs,
 	.allowFemaleStarters,
 	.betaStartersApply,
@@ -101,9 +100,8 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.allDoubleBattles,
 	.type9IndependentApply
 ] : [
-	.freeSpaceInDol,
 	.physicalSpecialSplitApply,
-	.defaultMoveCategories,
+	.disableSaveCorruption,
 	.allowFemaleStarters,
 	.tradeEvolutions,
 	.removeItemEvolutions,
@@ -155,12 +153,13 @@ enum XGDolPatches: Int {
 	case freeSpaceInDol
 	case deleteUnusedFiles
 	case removeColbtlRegionLock
+	case disableSaveCorruption
 	
 	var name: String {
 		switch self {
 		case .deleteUnusedFiles: return "Delete some unused files to free up some space in the ISO."
-		case .freeSpaceInDol: return "Create some space in \(XGFiles.dol.fileName) which is needed for other assembly patches. Recommended to use this first."
-		case .physicalSpecialSplitApply : return "Apply the gen IV physical/special split. (You still need to set the category for each move)"
+		case .freeSpaceInDol: return "Create some space in \(XGFiles.dol.fileName) which is needed for other assembly patches."
+		case .physicalSpecialSplitApply : return "Apply the gen IV physical/special split and set moves to their default category."
 		case .physicalSpecialSplitRemove : return "Remove the physical/special split."
 		case .type9IndependentApply : return "Makes the battle engine treat the ??? type as regular type."
 		case .betaStartersApply : return "Allows the player to start with 2 pokemon."
@@ -192,6 +191,7 @@ enum XGDolPatches: Int {
 		case .allSingleBattles: return "Set all battles to single battles"
 		case .allDoubleBattles: return "Set all battles to double battles"
 		case .removeColbtlRegionLock: return "Modify the ASM so it allows any region's colbtl.bin to be imported. Trades will be locked to whichever region's colbtl.bin was imported."
+		case .disableSaveCorruption: return "Disables some save file checks to prevent the save from being corrupted."
 
 		}
 	}	
@@ -255,7 +255,7 @@ class XGPatcher {
 		return false
 	}
 	
-	class func applyPhysicalSpecialSplitPatch() {
+	class func applyPhysicalSpecialSplitPatch(setDefaultMoveCategories: Bool = false) {
 
 		guard region == .US else {
 			printg("This patch has not been implemented for this game region:", region.name)
@@ -305,6 +305,10 @@ class XGPatcher {
 				XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [0x7fe3fb78])
 			}
 
+		}
+
+		if setDefaultMoveCategories {
+			XGUtility.defaultMoveCategories()
 		}
 		
 	}
@@ -904,6 +908,82 @@ class XGPatcher {
 		}
 	}
 
+	class func preventSaveFileCorruption() {
+		// based on https://github.com/dolphin-emu/dolphin/commit/49e6478817f17431612ab6246256fa83a1997d6f
+		let saveCountRAMOffset: Int
+		let memoryCardMatchOffset: Int
+
+		if game == .XD {
+			switch region {
+			case .US:
+				saveCountRAMOffset = 0x1cc304
+				memoryCardMatchOffset = 0x1cc4b0
+			case .EU:
+				saveCountRAMOffset = 0x1cd764
+				memoryCardMatchOffset = 0x1cd910
+			case .JP:
+				saveCountRAMOffset = 0x1c7984
+				memoryCardMatchOffset = 0x1c7b30
+			case .OtherGame:
+				saveCountRAMOffset = -1
+				memoryCardMatchOffset = -1
+			}
+		} else {
+			switch region {
+			case .US:
+				saveCountRAMOffset = 0x1cfc2c
+				memoryCardMatchOffset = 0x1cfc7c
+			case .EU:
+				saveCountRAMOffset = 0x1d429c
+				memoryCardMatchOffset = 0x1d42ec
+			case .JP:
+				saveCountRAMOffset = 0x1cb5b8
+				memoryCardMatchOffset = 0x1cb608
+			case .OtherGame:
+				saveCountRAMOffset = -1
+				memoryCardMatchOffset = -1
+			}
+		}
+
+		XGAssembly.replaceRamASM(RAMOffset: saveCountRAMOffset, newASM: [.stw(.r7, .r5, 0x2c)])
+		XGAssembly.replaceRamASM(RAMOffset: memoryCardMatchOffset, newASM: [.nop])
+	}
+
+	class func setPokefaceCropDimensions(to length: Int) {
+		guard game == .XD else {
+			printg("Pokeface crop offsets are only available for Pokemon XD atm")
+				return
+		}
+		guard region == .US else {
+			printg("Pokeface crop offsets aren't implemented for this region", region.name)
+			return
+		}
+		guard length <= 42 else {
+			printg("Pokeface crop currently doesn't work for increased lengths. Needs more research.")
+			return
+		}
+		let pokeFaceCropLengthRAMOffsets = [
+			0x111352,
+			0x111386,
+			0x11138e,
+			0x1113ba,
+			0x1113c2,
+
+			0x1115fa,
+			0x11162e,
+			0x111636,
+			0x111656,
+			0x111662
+		]
+
+		if let dol = XGFiles.dol.data {
+			pokeFaceCropLengthRAMOffsets.forEach { (offset) in
+				dol.replace2BytesAtOffset(offset - kDolToRAMOffsetDifference, withBytes: length)
+			}
+			dol.save()
+		}
+	}
+
 	class func setAllBattlesTo(_ style: XGBattleStyles) {
 		let battleStyle: XGBattleStyles = style == .single ? .single : .double
 		XGBattle.allValues.forEach { (battle) in
@@ -914,6 +994,33 @@ class XGPatcher {
 			#endif
 			battle.battleStyle = battleStyle
 			battle.save()
+		}
+	}
+
+	class func disableCStickMovement() {
+		// Allows the CStick's functionality to be repurposed
+		guard game == .XD else {
+			printg("This patch is for Pokemon XD: Gale of Darkness only.")
+			return
+		}
+
+		guard region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
+
+		let cstickRAMOffsets = [
+			0x14e930, // overworld
+			0x14e95c, // overworld
+			0x14e988,
+			0x14e9b4,
+//			0x10fef8, // menus
+//			0x10fee8  // menus
+		]
+		for offset in cstickRAMOffsets {
+			XGAssembly.replaceRamASM(RAMOffset: offset, newASM: [
+				.li(.r3, 0)
+			])
 		}
 	}
 
@@ -980,7 +1087,7 @@ class XGPatcher {
 			case .freeSpaceInDol				: XGPatcher.clearUnusedFunctionsInDol()
 			case .betaStartersApply				: XGPatcher.enableBetaStarters()
 			case .betaStartersRemove			: XGPatcher.disableBetaStarters()
-			case .physicalSpecialSplitApply		: XGPatcher.applyPhysicalSpecialSplitPatch()
+			case .physicalSpecialSplitApply		: XGPatcher.applyPhysicalSpecialSplitPatch(setDefaultMoveCategories: true)
 			case .physicalSpecialSplitRemove	: XGPatcher.removePhysicalSpecialSplitPatch()
 			case .renameAllPokemonApply			: XGPatcher.allowRenamingAnyPokemon()
 			case .shinyChanceEditingApply		: XGPatcher.removeShinyGlitch()
@@ -1010,7 +1117,8 @@ class XGPatcher {
 			case .allDoubleBattles				: XGPatcher.setAllBattlesTo(.double)
 			case .allSingleBattles				: XGPatcher.setAllBattlesTo(.single)
 			case .deleteUnusedFiles				: XGPatcher.deleteUnusedFiles()
-			case .removeColbtlRegionLock		: return XGPatcher.unlockColbtlBin()
+			case .removeColbtlRegionLock		: XGPatcher.unlockColbtlBin()
+			case .disableSaveCorruption			: XGPatcher.preventSaveFileCorruption()
 		}
 		
 		printg("patch applied: ", patch.name, "\nDon't forget to rebuild the ISO after.")

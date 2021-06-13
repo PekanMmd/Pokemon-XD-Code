@@ -7,13 +7,15 @@
 
 import Foundation
 
-let kNumberMapPointers = 8 // min required
+let kNumberMapPointers = 8 // min required in XD
 enum MapRelIndexes : Int {
 	case FirstCharacter = 0
 	case NumberOfCharacters = 1
 	
-	case FirstInteractionLocation = 6 // warp entry points
-	case NumberOfInteractionLocations = 7
+	case FirstWarpEntryLocation = 6 // warp entry points
+	case NumberOfWarpEntryLocations = 7
+
+	case groupData = 9
 }
 
 
@@ -65,7 +67,7 @@ enum CommonIndexes : Int {
 	case NumberOfBattleLayouts = 43
 	case Flags = 44
 	case NumberOfFlags = 45
-	case Rooms = 58 // same as maps
+	case Rooms = 58
 	case NumberOfRooms = 59
 	case Doors = 60 // doors that open when player is near
 	case NumberOfDoors = 61

@@ -64,7 +64,7 @@ class XGCharacter : NSObject, Codable {
 	var scriptName = "-"
 	var passiveScriptName = "-"
 	var characterIndex = 0
-	var startOffset = 0
+	var startOffset = -1
 	
 	// a few rel files have different formats and it's tough to tell in advance
 	// set this to false if anything looks suspicious so it won't be used and lead to crashes
@@ -79,21 +79,28 @@ class XGCharacter : NSObject, Codable {
 		super.init()
 	}
 	
-	init(file: XGFiles, index: Int, startOffset: Int) {
+	init(file: XGFiles, index: Int, startOffset: Int, groupID: Int) {
 		super.init()
-		
-		self.characterIndex = index
+
+
+		rid = index
+		gid = groupID
+		characterIndex = index
+
 		self.startOffset = startOffset
 		self.file = file
 		
 		let data = file.data!
+
 		let m = data.get2BytesAtOffset(startOffset + kModelOffset)
 
 		if !fileDecodingMode {
 			if m < CommonIndexes.NumberOfCharacterModels.value {
-				self.model = XGCharacterModel(index: m)
+				let archive = XGFiles.typeAndFolder(.fsys, file.folder)
+				self.model = XGCharacterModel(index: m, archiveName: archive.exists ? archive.fileName : nil)
 			} else {
 				isValid = false
+				self.model = XGCharacterModel(index: 0)
 			}
 		}
 		self.characterID = data.get2BytesAtOffset(startOffset + kCharacterIDOffset)
@@ -125,7 +132,7 @@ class XGCharacter : NSObject, Codable {
 		self.xCoordinate = data.getWordAtOffset(startOffset + kXOffset).hexToSignedFloat()
 		self.yCoordinate = data.getWordAtOffset(startOffset + kYOffset).hexToSignedFloat()
 		self.zCoordinate = data.getWordAtOffset(startOffset + kZOffset).hexToSignedFloat()
-		self.angle = data.get2BytesAtOffset(startOffset + kCharacterAngleOffset)
+		self.angle = data.getHalfAtOffset(startOffset + kCharacterAngleOffset).signed()
 		if self.angle > 360 && angle < 0xff00 {
 			isValid = false
 		}
@@ -141,8 +148,11 @@ class XGCharacter : NSObject, Codable {
 		
 		self.flags = data.getByteAtOffset(startOffset + kCharacterFlagsOffset)
 		self.isVisible = self.flags >> 7 == 1
-		
-		
+	}
+
+	init(groupID: Int = 0, resourceID: Int) {
+		self.gid = groupID
+		self.rid = resourceID
 	}
 	
 	func save() {

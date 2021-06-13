@@ -97,7 +97,7 @@ extension XGAssembly {
 		}
 		let checkSize = (numberOfBytes ?? 8) / 4
 		var values = dol.getWordStreamFromOffset(offset, length: checkSize * 4)
-		while values.contains(where: { $0 != 0x60000000 }) && (offset + checkSize < end)  {
+		while values.contains(where: { $0 != 0x60000000 && $0 != 0 }) && (offset + checkSize < end)  {
 			offset += 4
 			values = dol.getWordStreamFromOffset(offset, length: checkSize * 4)
 		}
@@ -139,7 +139,7 @@ extension XGAssembly {
 		#if GAME_PBR
 		replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: asm)
 		#else
-		if game == .XD, region == .US, RAMOffset > kRELtoRAMOffsetDifference {
+		if game == .XD, region == .US, offset > kRELtoRAMOffsetDifference {
 			replaceRELASM(startOffset: offset - kRELtoRAMOffsetDifference, newASM: asm)
 		} else {
 			replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: asm)

@@ -58,13 +58,13 @@ extension XDSScriptCompiler {
 		
 		while !stack.isEmpty {
 			
-			if leftBrackets.contains(stack.peek()) {
+			if leftBrackets.contains(stack.peek()!) {
 				bracketLevel += 1
-				bracketStack.push(stack.peek())
+				bracketStack.push(stack.peek()!)
 			}
 			
 			if bracketLevel > 0 {
-				if rightBrackets.contains(stack.peek()) {
+				if rightBrackets.contains(stack.peek()!) {
 					bracketLevel -= 1
 				}
 				let right = stack.peek()
@@ -249,7 +249,7 @@ extension XDSScriptCompiler {
 			return nil
 		}
 		
-		if text.first! == "@" {
+		if text.first == "&" {
 			error = "Uh oh, location as a literal! Technically allowed but hoped this day would never come. If you wrote this line yourself then it's probably wrong otherwise tell @StarsMmd he has to implement location literals. \(text)"
 			return nil
 		}
@@ -313,7 +313,7 @@ extension XDSScriptCompiler {
 		}
 		
 		if text.length > 2 {
-			if text.first! == "[" && text.last! == "]" {
+			if text.first == "[" && text.last == "]" {
 				var inner = text
 				inner.removeFirst()
 				inner.removeLast()
@@ -471,7 +471,12 @@ extension XDSScriptCompiler {
 			tokens.append(currentToken)
 		}
 		if scopeStack.peek() != .normal {
-			error = "End of line without closing " + scopeStack.peek().rawValue + ". " + currentToken
+			if scopeStack.isEmpty {
+				assertionFailure()
+				error = "End of line with no scope"
+			} else {
+				error = "End of line without closing " + scopeStack.peek()!.rawValue + ". " + currentToken
+			}
 			return nil
 		}
 		
@@ -1415,6 +1420,17 @@ extension XDSScriptCompiler {
 				
 				if let val = Float(token) {
 					return XDSConstant.float(val).expression
+				}
+
+				if token.substring(from: 0, to: 1) == "&" {
+					let parts = token.split(separator: ".").map { String($0) }
+					if parts.count == 2, let functionID = parts[1].integerValue {
+						let type = parts[0] == "&Common" ? 0x596 : 0x100
+						return .scriptFunctionId(type, functionID)
+					} else {
+						let functionName = token.substring(from: 1, to: token.length)
+						return .scriptFunctionMacro(functionName)
+					}
 				}
 				
 			}

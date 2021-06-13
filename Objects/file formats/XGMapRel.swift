@@ -14,15 +14,15 @@ class XGMapRel: XGRelocationTable {
 
 	var roomID = 0
 
-	#if GAME_XD
 	var treasure = [XGTreasure]()
 	var isValid = true
+
+	var groupID = 0
 
 	var script: XGScript? {
 		let scriptFile = XGFiles.typeAndFsysName(.scd, file.fileName.removeFileExtensions())
 		return scriptFile.exists ? scriptFile.scriptData : nil
 	}
-	#endif
 
 	override convenience init(file: XGFiles) {
 		self.init(file: file, checkScript: true)
@@ -31,24 +31,47 @@ class XGMapRel: XGRelocationTable {
 	init(file: XGFiles, checkScript: Bool) {
 		super.init(file: file)
 
-		#if GAME_XD
-		if self.numberOfPointers < kNumberMapPointers {
+		if game == .XD, self.numberOfPointers < kNumberMapPointers {
 			if settings.verbose {
 				printg("Map: \(file.path) has the incorrect number of map pointers. Possibly a colosseum file.")
 			}
 			self.isValid = false
 			return
 		}
-		#endif
 
-		let firstIP = self.getPointer(index: MapRelIndexes.FirstInteractionLocation.rawValue)
-		let numberOfIPs = self.getValueAtPointer(index: MapRelIndexes.NumberOfInteractionLocations.rawValue)
+		let data = file.data
+		let groupDataOffset = getPointer(index: MapRelIndexes.groupData.rawValue)
+		groupID = data?.get2BytesAtOffset(groupDataOffset + 8) ?? 0
 
-		for i in 0 ..< numberOfIPs {
-			let startOffset = firstIP + (i * kSizeOfMapEntryLocation)
+		var firstEntryPoint = self.getPointer(index: MapRelIndexes.FirstWarpEntryLocation.rawValue)
+		var numberOfEntryPoints = self.getValueAtPointer(index: MapRelIndexes.NumberOfWarpEntryLocations.rawValue)
+		var usesAlternateRelFormat = false
+
+		if game == .Colosseum {
+			// check if it starts with an expected angle meaning it's an entry point
+			let angleCheck = data?.getHalfAtOffset(firstEntryPoint).signed()
+			switch angleCheck {
+			case 0, 45, -45, 90, -90, 120, -120, 180, -180, 270, -270:
+				usesAlternateRelFormat = false
+			default:
+				usesAlternateRelFormat = true
+				firstEntryPoint = self.getPointer(index: 0)
+				numberOfEntryPoints = self.getValueAtPointer(index: 1)
+			}
+			// check if number of entry points is to large, suggesting index is incorrect
+			if numberOfEntryPoints > 20 {
+				usesAlternateRelFormat = true
+			}
+
+		}
+
+		for i in 0 ..< numberOfEntryPoints {
+			let startOffset = firstEntryPoint + (i * kSizeOfMapEntryLocation)
 			if startOffset + 16 < file.fileSize {
 				let ip = XGMapEntryLocation(file: file, index: i, startOffset: startOffset)
 				entryLocations.append(ip)
+			} else {
+				break
 			}
 		}
 
@@ -56,7 +79,6 @@ class XGMapRel: XGRelocationTable {
 			self.roomID = room.roomID
 		}
 
-		#if GAME_XD
 		if !fileDecodingMode {
 			for i in 0 ..< CommonIndexes.NumberTreasureBoxes.value {
 				let treasure = XGTreasure(index: i)
@@ -67,29 +89,34 @@ class XGMapRel: XGRelocationTable {
 		}
 
 		let script = checkScript ? self.script : nil
-		#endif
 
-		let firstCharacter = self.getPointer(index: MapRelIndexes.FirstCharacter.rawValue)
-		let numberOfCharacters = self.getValueAtPointer(index: MapRelIndexes.NumberOfCharacters.rawValue)
+		var firstCharacter = self.getPointer(index: MapRelIndexes.FirstCharacter.rawValue)
+		var numberOfCharacters = self.getValueAtPointer(index: MapRelIndexes.NumberOfCharacters.rawValue)
+
+		if game == .Colosseum, usesAlternateRelFormat {
+			firstCharacter = self.getPointer(index: 5)
+			numberOfCharacters = self.getValueAtPointer(index: 6)
+		}
 
 		for i in 0 ..< numberOfCharacters {
+			if game == .Colosseum, i > 30 {
+				// if index is incorrect prevent looping for too long
+				break
+			}
 			let startOffset = firstCharacter + (i * kSizeOfCharacter)
 			if startOffset + kSizeOfCharacter < file.fileSize {
-				let character = XGCharacter(file: file, index: i, startOffset: startOffset)
+				let character = XGCharacter(file: file, index: i, startOffset: startOffset, groupID: groupID)
 
-				#if GAME_XD
 				if character.isValid {
-					if character.hasScript {
-						if script != nil {
-							if character.scriptIndex < script!.ftbl.count {
-								character.scriptName = script!.ftbl[character.scriptIndex].name
-							}
+					if character.hasScript,
+					   let script = script {
+						if character.scriptIndex < script.ftbl.count {
+							character.scriptName = script.ftbl[character.scriptIndex].name
 						}
 					}
 				} else {
 					self.isValid = false
 				}
-				#endif
 
 				characters.append(character)
 			}

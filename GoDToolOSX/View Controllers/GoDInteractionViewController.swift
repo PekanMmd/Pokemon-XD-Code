@@ -16,40 +16,46 @@ class GoDInteractionViewController: GoDTableViewController {
 	@IBOutlet var triggerAButton: NSButton!
 	@IBOutlet var triggerWalkUp: NSButton!
 	@IBOutlet var triggerWalkThrough: NSButton!
-	
-	@IBOutlet var none: NSButton!
-	@IBOutlet var warp: NSButton!
-	@IBOutlet var door: NSButton!
-	@IBOutlet var elevator: NSButton!
-	@IBOutlet var text: NSButton!
-	@IBOutlet var cutscene: NSButton!
-	@IBOutlet var pc: NSButton!
-	@IBOutlet var script: NSButton!
-	
-	@IBOutlet var dataContainer: GoDContainerView!
-	
+
+	@IBOutlet weak var scriptTypePopUp: GoDPopUpButton!
+	@IBOutlet weak var scriptIndexPopUp: GoDPopUpButton!
+
+	@IBOutlet weak var dataContainer: GoDContainerView!
+	@IBOutlet weak var label1: NSTextField!
+	@IBOutlet weak var label2: NSTextField!
+	@IBOutlet weak var label3: NSTextField!
+	@IBOutlet weak var label4: NSTextField!
+	@IBOutlet weak var field1: NSTextField!
+	@IBOutlet weak var field2: NSTextField!
+	@IBOutlet weak var field3: NSTextField!
+	@IBOutlet weak var field4: NSTextField!
+
+	let commonFunctionNames = XGFiles.common_rel.scriptData.ftbl.map { $0.name }
+	var currentScriptFunctionNames = [String]()
+
+	var scriptFunctionNames: [String] {
+		switch scriptTypePopUp.indexOfSelectedItem {
+		case 1: return commonFunctionNames
+		case 2: return currentScriptFunctionNames.isEmpty ? ["-"] : currentScriptFunctionNames
+		default: return ["-"]
+		}
+	}
+
 	let targetRoom = GoDRoomPopUpButton()
 	let sound = NSButton(checkboxWithTitle: "Sound", target: nil, action: nil)
 	let direction = GoDDirectionPopUpButton()
 	
-	let label1 = NSTextField()
-	let field1 = NSTextField() // door id, string id, unknown, elevator id, target entry id
-	let label2 = NSTextField()
-	let field2 = NSTextField() // target elevator id, string text, cutscene id
-	let label3 = NSTextField()
-	let field3 = NSTextField() // camera fsys id
-	
 	let textView = NSTextView()
-	let scriptPopUp = GoDPopUpButton()
 	
 	var currentIndex = -1
 	
 	func setUpForData(_ data: XGInteractionPointData) {
+		scriptTypePopUp.isEnabled = true
 		self.currentIndex = data.index
 		self.roomPopup.select(XGRoom.roomWithID(data.roomID) ?? XGRoom(index: 0))
+		selectRoom(roomPopup)
 		self.regionField.stringValue = data.interactionPointIndex.string
 		switch data.interactionMethod {
-			
 		case .None:
 			self.triggerNone.state = .on
 		case .WalkThrough:
@@ -61,32 +67,74 @@ class GoDInteractionViewController: GoDTableViewController {
 		case .PressAButton2:
 			self.triggerNone.state = .on
 		}
-		self.setUpForInfo(data.info)
+
+		self.setUpForInfo(data.info, updatePopUp: true)
 	}
 	
-	@IBAction func selectRoom(_ sender: GoDRoomPopUpButton) {
-		if self.script.state == .on {
-			if let scriptFile = sender.selectedValue.script {
-				let titles = scriptFile.scriptData.ftbl.map { (f) -> String in
-					return "@" + f.name
-				}
-				self.scriptPopUp.setTitles(values: titles)
-				self.scriptPopUp.selectItem(at: 0)
+	@IBAction func selectRoom(_ sender: GoDRoomPopUpButton?) {
+		var isScriptValid = true
+		if let scriptFile = roomPopup.selectedValue.script {
+			currentScriptFunctionNames = scriptFile.scriptData.ftbl.map { (f) -> String in
+				return (game == .XD ? "@" : "") + f.name
 			}
+		} else {
+			currentScriptFunctionNames = ["-"]
+			isScriptValid = false
+		}
+
+		if scriptTypePopUp.indexOfSelectedItem == 2 {
+			scriptIndexPopUp.setTitles(values: scriptFunctionNames)
+			scriptIndexPopUp.selectItem(at: 0)
+			scriptIndexPopUp.isEnabled = isScriptValid
 		}
 	}
-	
-	
-	func setUpForInfo(_ info: XGInteractionPointInfo) {
+
+	@IBAction func didSelectScriptType(_ sender: GoDPopUpButton?) {
+		scriptIndexPopUp.setTitles(values: scriptFunctionNames)
+		scriptIndexPopUp.isEnabled = scriptTypePopUp.indexOfSelectedItem == 1 || (scriptTypePopUp.indexOfSelectedItem == 2 && currentScriptFunctionNames.count > 0)
+		scriptIndexPopUp.selectItem(at: 0)
+		if sender != nil {
+			didSelectScriptIndex(scriptIndexPopUp)
+		}
+	}
+
+	@IBAction func didSelectScriptIndex(_ sender: GoDPopUpButton) {
+		var info = XGInteractionPointInfo.None
+		let scriptIndex = sender.indexOfSelectedItem
+		if scriptTypePopUp.indexOfSelectedItem == 2 {
+			info = .CurrentScript(scriptIndex: scriptIndex, parameter1: 0, parameter2: 0, parameter3: 0, parameter4: 0)
+		} else {
+			if scriptTypePopUp.indexOfSelectedItem > 0 {
+				switch scriptIndex {
+				case kIPWarpValue: info = .Warp(targetRoom: 0xAF, targetEntryID: 0, sound: false)
+				case kIPDoorValue: info = .Door(id: 0)
+				case kIPElevatorValue: info = .Elevator(elevatorID: 0, targetRoomID: 0xAF, targetElevatorID: 0, direction: .up)
+				case kIPTextValue: info = .Text(stringID: 0)
+				case kIPCutsceneValue: info = .CutsceneWarp(targetRoom: 0xAF, targetEntryID: 0, cutsceneID: 0, cameraFSYSID: 0)
+				case kIPPCValue: info = .PC(roomID: 0xAF, unknown: 0)
+				default:
+					if scriptTypePopUp.indexOfSelectedItem == 1 {
+						info = .CommonScript(scriptIndex: scriptIndex, parameter1: 0, parameter2: 0, parameter3: 0, parameter4: 0)
+					} else {
+						info = .CurrentScript(scriptIndex: scriptIndex, parameter1: 0, parameter2: 0, parameter3: 0, parameter4: 0)
+					}
+				}
+			}
+		}
+		self.setUpForInfo(info)
+	}
+
+	func setUpForInfo(_ info: XGInteractionPointInfo, updatePopUp: Bool = false) {
 		hideVariableViews()
 		
 		switch info {
-			
 		case .None:
-			self.none.state = .on
+			if (updatePopUp) {
+				scriptTypePopUp.selectItem(at: 0)
+				scriptIndexPopUp.selectItem(at: 0)
+			}
 			
 		case .Warp(let targetRoom, let targetEntryID, let sound):
-			self.warp.state = .on
 			self.targetRoom.isHidden = false
 			self.targetRoom.select(XGRoom.roomWithID(targetRoom) ?? XGRoom(index: 0xAF))
 			self.field1.isHidden = false
@@ -95,9 +143,13 @@ class GoDInteractionViewController: GoDTableViewController {
 			label1.stringValue = "Entry point ID"
 			self.sound.isHidden = false
 			self.sound.state = sound ? .on : .off
+			if updatePopUp {
+				scriptTypePopUp.selectItem(at: 1)
+				didSelectScriptType(nil)
+				scriptIndexPopUp.selectItem(at: info.scriptIndex)
+			}
 			
 		case .Door(let id):
-			self.door.state = .on
 			self.field1.isHidden = false
 			self.label1.isHidden = false
 			label1.stringValue = "Door ID"
@@ -111,43 +163,72 @@ class GoDInteractionViewController: GoDTableViewController {
 				let door = XGDoor(index: id)
 				field2.stringValue = door.fileIdentifier.hexString()
 			}
+			if updatePopUp {
+				scriptTypePopUp.selectItem(at: 1)
+				didSelectScriptType(nil)
+				scriptIndexPopUp.selectItem(at: info.scriptIndex)
+			}
 			
 		case .Text(let stringID):
-			self.text.state = .on
 			self.field1.isHidden = false
 			self.label1.isHidden = false
 			self.label1.stringValue = "String ID"
 			self.field1.stringValue = stringID.string
 			self.textView.isHidden = false
 			self.textView.string = getStringSafelyWithID(id: stringID).string
-			
-		case .Script(let scriptIndex, let parameter1, let parameter2, let parameter3):
-			self.script.state = .on
-			if let scriptFile = roomPopup.selectedValue.script {
-				let titles = scriptFile.scriptData.ftbl.map { (f) -> String in
-					return "@" + f.name
-				}
-				self.scriptPopUp.setTitles(values: titles)
-				self.scriptPopUp.selectItem(at: scriptIndex)
-				self.scriptPopUp.isHidden = false
+			if updatePopUp {
+				scriptTypePopUp.selectItem(at: 1)
+				didSelectScriptType(nil)
+				scriptIndexPopUp.selectItem(at: info.scriptIndex)
 			}
-			if game == .Colosseum {
-				self.field1.isHidden = false
-				self.label1.isHidden = false
-				self.label1.stringValue = "Parameter1"
-				self.field1.stringValue = parameter1.string
-				self.field2.isHidden = false
-				self.label2.isHidden = false
-				self.label2.stringValue = "Parameter2"
-				self.field2.stringValue = parameter2.string
-				self.field3.isHidden = false
-				self.label3.isHidden = false
-				self.label3.stringValue = "Parameter3"
-				self.field3.stringValue = parameter3.string
+			
+		case .CurrentScript(_, let parameter1, let parameter2, let parameter3, let parameter4):
+			self.field1.isHidden = false
+			self.label1.isHidden = false
+			self.label1.stringValue = "Parameter1"
+			self.field1.stringValue = parameter1.string
+			self.field2.isHidden = false
+			self.label2.isHidden = false
+			self.label2.stringValue = "Parameter2"
+			self.field2.stringValue = parameter2.string
+			self.field3.isHidden = false
+			self.label3.isHidden = false
+			self.label3.stringValue = "Parameter3"
+			self.field3.stringValue = parameter3.string
+			self.field4.isHidden = false
+			self.label4.isHidden = false
+			self.label4.stringValue = "Parameter4"
+			self.field4.stringValue = parameter4.string
+			if updatePopUp {
+				scriptTypePopUp.selectItem(at: 2)
+				didSelectScriptType(nil)
+				scriptIndexPopUp.selectItem(at: info.scriptIndex)
+			}
+
+		case .CommonScript(_, let parameter1, let parameter2, let parameter3, let parameter4):
+			self.label1.isHidden = false
+			self.field1.isHidden = false
+			self.label1.stringValue = "Parameter1"
+			self.field1.stringValue = parameter1.string
+			self.field2.isHidden = false
+			self.label2.isHidden = false
+			self.label2.stringValue = "Parameter2"
+			self.field2.stringValue = parameter2.string
+			self.field3.isHidden = false
+			self.label3.isHidden = false
+			self.label3.stringValue = "Parameter3"
+			self.field3.stringValue = parameter3.string
+			self.field4.isHidden = false
+			self.label4.isHidden = false
+			self.label4.stringValue = "Parameter4"
+			self.field4.stringValue = parameter4.string
+			if updatePopUp {
+				scriptTypePopUp.selectItem(at: 1)
+				didSelectScriptType(nil)
+				scriptIndexPopUp.selectItem(at: info.scriptIndex)
 			}
 			
 		case .Elevator(let elevatorID, let targetRoomID, let targetElevatorID, let direction):
-			self.elevator.state = .on
 			self.label1.isHidden = false
 			self.field1.isHidden = false
 			self.label2.isHidden = false
@@ -160,9 +241,13 @@ class GoDInteractionViewController: GoDTableViewController {
 			self.field2.stringValue = targetElevatorID.string
 			self.targetRoom.select(XGRoom.roomWithID(targetRoomID) ?? XGRoom(index: 0xAF))
 			self.direction.select(direction)
+			if updatePopUp {
+				scriptTypePopUp.selectItem(at: 1)
+				didSelectScriptType(nil)
+				scriptIndexPopUp.selectItem(at: info.scriptIndex)
+			}
 			
 		case .CutsceneWarp(let targetRoom, let targetEntryID, let cutsceneID, let cameraFSYSID):
-			self.cutscene.state = .on
 			self.label1.isHidden = false
 			self.field1.isHidden = false
 			self.label2.isHidden = false
@@ -177,22 +262,24 @@ class GoDInteractionViewController: GoDTableViewController {
 			field1.stringValue = targetEntryID.string
 			field2.stringValue = cutsceneID.string
 			field3.stringValue = cameraFSYSID.string
-			
+			if updatePopUp {
+				scriptTypePopUp.selectItem(at: 1)
+				didSelectScriptType(nil)
+				scriptIndexPopUp.selectItem(at: info.scriptIndex)
+			}
 			
 		case .PC(let roomID, let unknown):
-			self.pc.state = .on
 			self.label1.isHidden = false
 			self.field1.isHidden = false
 			self.targetRoom.isHidden = false
 			self.targetRoom.select(XGRoom.roomWithID(roomID) ?? XGRoom(index: 0xAF))
 			self.label1.stringValue = "Unknown"
 			self.field1.stringValue = unknown.string
-			
-		case .TV:
-			if game == .Colosseum {
-				self.none.state = .on
+			if updatePopUp {
+				scriptTypePopUp.selectItem(at: 1)
+				didSelectScriptType(nil)
+				scriptIndexPopUp.selectItem(at: info.scriptIndex)
 			}
-			
 		}
 	}
 	
@@ -202,24 +289,8 @@ class GoDInteractionViewController: GoDTableViewController {
 		return
 	}
 	
-	@IBAction func setType(_ sender: NSButton) {
-		var info = game == .XD ? XGInteractionPointInfo.None : .TV
-		switch sender.tag {
-		case 1: info = .Warp(targetRoom: 0xAF, targetEntryID: 0, sound: false)
-		case 2: info = .Door(id: 0)
-		case 3: info = .Elevator(elevatorID: 0, targetRoomID: 0xAF, targetElevatorID: 0, direction: .up)
-		case 4: info = .Text(stringID: 0)
-		case 5: info = .CutsceneWarp(targetRoom: 0xAF, targetEntryID: 0, cutsceneID: 0, cameraFSYSID: 0)
-		case 6: info = .PC(roomID: 0xAF, unknown: 0)
-		case 7: info = .Script(scriptIndex: 0, parameter1: 0, parameter2: 0, parameter3: 0)
-		default:
-			break
-		}
-		self.setUpForInfo(info)
-	}
-	
 	func hideVariableViews() {
-		let variableControls : [NSView] = [targetRoom,sound,direction,label1,field1,label2,field2,label3,field3,textView,scriptPopUp]
+		let variableControls : [NSView] = [targetRoom,sound,direction,label1,field1,label2,field2,label3,field3,label4,field4,textView]
 		for view in variableControls {
 			view.isHidden = true
 		}
@@ -228,58 +299,42 @@ class GoDInteractionViewController: GoDTableViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		self.views["targetRoom"] = targetRoom
-		self.views["sound"] = sound
-		self.views["direction"] = direction
-		self.views["l1"] = label1
-		self.views["f1"] = field1
-		self.views["l2"] = label2
-		self.views["f2"] = field2
-		self.views["l3"] = label3
-		self.views["f3"] = field3
-		self.views["text"] = textView
-		self.views["script"] = scriptPopUp
+		scriptTypePopUp.setTitles(values: [
+			"-",
+			"Common",
+			"Current Room"
+		])
+		scriptTypePopUp.isEnabled = false
+		scriptIndexPopUp.isEnabled = false
 		
-		scriptPopUp.setTitles(values: ["-"])
-		
-		let variableControls : [NSView] = [targetRoom,sound,direction,label1,field1,label2,field2,label3,field3,textView,scriptPopUp]
+		let variableControls: [NSView] = [targetRoom,sound,direction,textView]
 		for view in variableControls {
 			self.dataContainer.addSubview(view)
 			view.translatesAutoresizingMaskIntoConstraints = false
 			
-			if view != targetRoom && view != textView && view != scriptPopUp {
-				self.addConstraintEqualWidths(view1: targetRoom, view2: view)
+			if view != textView {
+				field1.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
 			}
 		}
+
+		sound.centerYAnchor.constraint(equalTo: field2.centerYAnchor).isActive = true
+		sound.leadingAnchor.constraint(equalTo: field2.leadingAnchor).isActive = true
+		sound.trailingAnchor.constraint(equalTo: field2.trailingAnchor).isActive = true
+		direction.centerYAnchor.constraint(equalTo: field3.centerYAnchor).isActive = true
+		direction.leadingAnchor.constraint(equalTo: field3.leadingAnchor).isActive = true
+		direction.trailingAnchor.constraint(equalTo: field3.trailingAnchor).isActive = true
+		targetRoom.centerYAnchor.constraint(equalTo: field4.centerYAnchor).isActive = true
+		targetRoom.leadingAnchor.constraint(equalTo: field4.leadingAnchor).isActive = true
+		targetRoom.trailingAnchor.constraint(equalTo: field4.trailingAnchor).isActive = true
+		textView.leadingAnchor.constraint(equalTo: field3.leadingAnchor).isActive = true
+		textView.trailingAnchor.constraint(equalTo: field4.trailingAnchor).isActive = true
+		textView.topAnchor.constraint(equalTo: label4.topAnchor).isActive = true
+		textView.bottomAnchor.constraint(equalTo: field4.bottomAnchor).isActive = true
 		
-		self.addConstraints(visualFormat: "H:|-(10)-[l1]-(10)-[l2]-(10)-|", layoutFormat: [])
-		self.addConstraints(visualFormat: "H:|-(10)-[f1]-(10)-[f2]-(10)-|", layoutFormat: [])
-		self.addConstraints(visualFormat: "H:|-(10)-[targetRoom]-(10)-[l3]-(10)-|", layoutFormat: [])
-		self.addConstraints(visualFormat: "H:[targetRoom]-(10)-[f3]-(10)-|", layoutFormat: [])
-		self.addConstraints(visualFormat: "H:|-(10)-[f1]-(10)-[sound]-(10)-|", layoutFormat: [])
-		self.addConstraints(visualFormat: "H:|-(10)-[targetRoom]-(10)-[direction]-(10)-|", layoutFormat: [])
-		self.addConstraints(visualFormat: "V:|-(10)-[l1(20)][f1(20)]", layoutFormat: [])
-		self.addConstraints(visualFormat: "V:|-(10)-[l2(20)][f2(20)]", layoutFormat: [])
-		self.addConstraints(visualFormat: "V:|-(20)-[sound(20)]", layoutFormat: [])
-		self.addConstraints(visualFormat: "V:[l3(20)][f3(20)]-(10)-|", layoutFormat: [])
-		self.addConstraints(visualFormat: "V:[targetRoom(20)]-(20)-|", layoutFormat: [])
-		self.addConstraints(visualFormat: "V:[direction(20)]-(20)-|", layoutFormat: [])
-		self.addConstraints(visualFormat: "H:|-(10)-[text]-(10)-|", layoutFormat: [])
-		self.addConstraints(visualFormat: "V:[text(40)]-(10)-|", layoutFormat: [])
-		
-		if game == .XD {
-			self.addConstraints(visualFormat: "H:|-(10)-[script]-(10)-|", layoutFormat: [])
-			self.addConstraints(visualFormat: "V:|-(10)-[script(30)]", layoutFormat: [])
-		} else {
-			self.addConstraints(visualFormat: "H:|-(10)-[script]-(10)-[l3]", layoutFormat: [])
-			self.addConstraints(visualFormat: "V:[script(30)]-(10)-|", layoutFormat: [])
-		}
-		
-		self.hideVariableViews()
+		hideVariableViews()
 		
 		if game == .Colosseum {
-			self.none.title = "Watch TV"
-			self.triggerNone.title = "Press A Button (2)"
+			triggerNone.title = "Press A Button (2)"
 		}
 	}
 	
@@ -307,55 +362,41 @@ class GoDInteractionViewController: GoDTableViewController {
 			ip.interactionMethod = .PressAButton
 		}
 		
-		if self.none.state == .on {
-			ip.info = game == .XD ? .None : .TV
-		}
-		if self.warp.state == .on {
-			let targetRoom = self.targetRoom.selectedValue.roomID
-			ip.info = .Warp(targetRoom: targetRoom, targetEntryID: self.field1.stringValue.integerValue ?? 0, sound: self.sound.state == .on)
-		}
-		if self.door.state == .on {
-			
-			let doorID = self.field1.stringValue.integerValue
-			ip.info = .Door(id: doorID ?? 0)
-			
-			if let id = doorID {
-				
-				if id < CommonIndexes.NumberOfDoors.value {
-					let door = XGDoor(index: id)
-					door.roomID = ip.roomID
-					
-					if let fileIdentifier = self.field2.stringValue.integerValue {
-						if fileIdentifier & 0xFF00 == 0x1000 {
-							door.fileIdentifier = fileIdentifier.unsigned
+		if scriptTypePopUp.indexOfSelectedItem == 0 {
+			ip.info = .None
+		} else if scriptTypePopUp.indexOfSelectedItem == 1 {
+			switch scriptIndexPopUp.indexOfSelectedItem {
+			case kIPWarpValue:
+				let targetRoom = self.targetRoom.selectedValue.roomID
+				ip.info = .Warp(targetRoom: targetRoom, targetEntryID: self.field1.stringValue.integerValue ?? 0, sound: self.sound.state == .on)
+			case kIPDoorValue:
+				let doorID = self.field1.stringValue.integerValue
+				ip.info = .Door(id: doorID ?? 0)
+
+				if let id = doorID {
+
+					if id < CommonIndexes.NumberOfDoors.value {
+						let door = XGDoor(index: id)
+						door.roomID = ip.roomID
+
+						if let fileIdentifier = self.field2.stringValue.integerValue {
+							if fileIdentifier & 0xFF00 == 0x1000 {
+								door.fileIdentifier = fileIdentifier.unsigned
+							}
 						}
+
+						door.save()
 					}
-					
-					door.save()
 				}
-			}
-			
-		}
-		if self.script.state == .on {
-			if game == .XD {
-				ip.info = .Script(scriptIndex: self.scriptPopUp.indexOfSelectedItem, parameter1: 0, parameter2: 0, parameter3: 0)
-			} else {
-				let p1 = self.field1.stringValue.integerValue ?? 0
-				let p2 = self.field2.stringValue.integerValue ?? 0
-				let p3 = self.field3.stringValue.integerValue ?? 0
-				ip.info = .Script(scriptIndex: self.scriptPopUp.indexOfSelectedItem, parameter1: p1, parameter2: p2, parameter3: p3)
-			}
-		}
-		if self.text.state == .on {
-			let sid = self.field1.stringValue.integerValue ?? 0
-			if sid > 0 {
-				if self.textView.string.length > 0 {
-					if let string = getStringWithID(id: sid) {
-						_ = string.duplicateWithString(self.textView.string).replace()
-					} else {
-						let roomName = self.roomPopup.selectedValue.name
-						let msgFile = XGFiles.typeAndFsysName(.msg, roomName)
-						if msgFile.exists {
+			case kIPTextValue:
+				let sid = self.field1.stringValue.integerValue ?? 0
+				if sid > 0 {
+					if self.textView.string.length > 0 {
+						if let string = getStringWithID(id: sid) {
+							_ = string.duplicateWithString(self.textView.string).replace()
+						} else {
+							let roomName = self.roomPopup.selectedValue.name
+							let msgFile = XGFiles.typeAndFsysName(.msg, roomName)
 							let msg = msgFile.stringTable
 							let string = XGString(string: self.textView.string, file: msgFile, sid: sid)
 							if msg.addString(string, increaseSize: true, save: false) {
@@ -364,26 +405,37 @@ class GoDInteractionViewController: GoDTableViewController {
 						}
 					}
 				}
+				ip.info = .Text(stringID: sid)
+			case kIPElevatorValue:
+				let ei = self.field1.stringValue.integerValue ?? 0
+				let tei = self.field2.stringValue.integerValue ?? 0
+				let dir = self.direction.selectedValue
+				let targetRoom = self.targetRoom.selectedValue.roomID
+				ip.info = .Elevator(elevatorID: targetRoom, targetRoomID: ei, targetElevatorID: tei, direction: dir)
+			case kIPCutsceneValue:
+				let targetRoom = self.targetRoom.selectedValue.roomID
+				let te = self.field1.stringValue.integerValue ?? 0
+				let ci = self.field2.stringValue.integerValue ?? 0
+				let cf = self.field3.stringValue.integerValue ?? 0
+				ip.info = .CutsceneWarp(targetRoom: targetRoom, targetEntryID: te, cutsceneID: ci, cameraFSYSID: cf)
+
+			case kIPPCValue:
+				let targetRoom = self.targetRoom.selectedValue.roomID
+				ip.info = .PC(roomID: targetRoom, unknown: self.field1.stringValue.integerValue ?? 0)
+
+			default:
+				let p1 = self.field1.stringValue.integerValue ?? 0
+				let p2 = self.field2.stringValue.integerValue ?? 0
+				let p3 = self.field3.stringValue.integerValue ?? 0
+				let p4 = self.field4.stringValue.integerValue ?? 0
+				ip.info = .CommonScript(scriptIndex: scriptIndexPopUp.indexOfSelectedItem, parameter1: p1, parameter2: p2, parameter3: p3, parameter4: p4)
 			}
-			ip.info = .Text(stringID: sid)
-		}
-		if self.elevator.state == .on {
-			let ei = self.field1.stringValue.integerValue ?? 0
-			let tei = self.field2.stringValue.integerValue ?? 0
-			let dir = self.direction.selectedValue
-			let targetRoom = self.targetRoom.selectedValue.roomID
-			ip.info = .Elevator(elevatorID: targetRoom, targetRoomID: ei, targetElevatorID: tei, direction: dir)
-		}
-		if self.cutscene.state == .on {
-			let targetRoom = self.targetRoom.selectedValue.roomID
-			let te = self.field1.stringValue.integerValue ?? 0
-			let ci = self.field2.stringValue.integerValue ?? 0
-			let cf = self.field3.stringValue.integerValue ?? 0
-			ip.info = .CutsceneWarp(targetRoom: targetRoom, targetEntryID: te, cutsceneID: ci, cameraFSYSID: cf)
-		}
-		if self.pc.state == .on {
-			let targetRoom = self.targetRoom.selectedValue.roomID
-			ip.info = .PC(roomID: targetRoom, unknown: self.field1.stringValue.integerValue ?? 0)
+		} else {
+			let p1 = self.field1.stringValue.integerValue ?? 0
+			let p2 = self.field2.stringValue.integerValue ?? 0
+			let p3 = self.field3.stringValue.integerValue ?? 0
+			let p4 = self.field4.stringValue.integerValue ?? 0
+			ip.info = .CurrentScript(scriptIndex: scriptIndexPopUp.indexOfSelectedItem, parameter1: p1, parameter2: p2, parameter3: p3, parameter4: p4)
 		}
 		
 		ip.save()
@@ -482,8 +534,7 @@ class GoDInteractionViewController: GoDTableViewController {
 		}
 		
 	}
-	
-	
+
 }
 
 

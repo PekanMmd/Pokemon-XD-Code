@@ -65,6 +65,13 @@ let trainerPokemonTable = CommonStructTable(index: .TrainerPokemonData, properti
 	return "Trainer Pokemon \(index)"
 }
 
+let shadowPokemonFlagsStruct = GoDStruct(name: "Shadow Pokemon Flags", format: [
+	.short(name: "Unknown 1", description: "", type: .flagID),
+	.short(name: "Captured Flag", description: "Set once the pokemon is caught", type: .flagID),
+	.short(name: "Unknown 2", description: "", type: .flagID),
+	.short(name: "Unknown 3", description: "", type: .flagID)
+])
+
 let shadowPokemonTable = CommonStructTable(index: .ShadowData, properties: GoDStruct(name: "Shadow Pokemon Data", format: [
 	.byte(name: "Catch Rate", description: "Overrides the catch rate for the pokemon species", type: .uint),
 	.short(name: "Species", description: "The species of the shadow pokemon that uses this id", type: .pokemonID),
@@ -74,8 +81,7 @@ let shadowPokemonTable = CommonStructTable(index: .ShadowData, properties: GoDSt
 	.short(name: "Index", description: "", type: .uint),
 	.short(name: "Unknown 1", description: "", type: .uintHex),
 	.short(name: "Padding", description: "", type: .null),
-	.array(name: "Unknown Values", description: "", property:
-		.short(name: "Unknown", description: "", type: .uintHex), count: 4),
+	.subStruct(name: "Flag IDs", description: "The flags that are set when this pokemon is caught, etc.", property: shadowPokemonFlagsStruct),
 	.word(name: "Unknown 2", description: "", type: .uintHex),
 	.short(name: "Unknown 3", description: "", type: .uintHex),
 	.short(name: "Unknown 4", description: "", type: .uint),

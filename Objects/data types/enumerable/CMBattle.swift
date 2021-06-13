@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class XGBattle {
+final class XGBattle: CustomStringConvertible {
 
 	let index: Int
 	private let data: GoDStructData
@@ -59,7 +59,87 @@ final class XGBattle {
 			data.update("Players", with: playersStructs)
 		}
 	}
-	
+
+	var p1Trainer : XGTrainer? {
+		let id = players[0].id
+		if id == 0 {
+			return nil
+		}
+		return XGTrainer(index: id)
+	}
+
+	var p2Trainer : XGTrainer? {
+		let id = players[1].id
+		if id == 0 {
+			return nil
+		}
+		return XGTrainer(index: id)
+	}
+
+	var p3Trainer : XGTrainer? {
+		let id = players[2].id
+		if id == 0 {
+			return nil
+		}
+		return XGTrainer(index: id)
+	}
+
+	var p4Trainer : XGTrainer? {
+		let id = players[3].id
+		if id == 0 {
+			return nil
+		}
+		return XGTrainer(index: id)
+	}
+
+	var title : String {
+		let p1t = p1Trainer
+		let p1 = p1t == nil ? "Invalid" : (players[0].id == 1 ? "Player" : p1t!.name.string)
+
+		let p2t = p2Trainer
+		let p2 = p2t == nil ? "Invalid" : (players[1].id == 1 ? "Player" : p2t!.name.string)
+
+		let p3t = p3Trainer
+		let p3 = p3t == nil ? "Invalid" : (players[2].id == 1 ? "Player" : p3t!.name.string)
+
+		let p4t = p4Trainer
+		let p4 = p4t == nil ? "Invalid" : (players[3].id == 1 ? "Player" : p4t!.name.string)
+
+		var str = p1 + ( p3t == nil && p4t == nil ? " vs. " : " & ")
+		str += p2 + ( p3t == nil && p4t == nil ? "" : " vs. ")
+		if p3t != nil || p4t != nil { str += p3 + " & " + p4 }
+
+		return str
+	}
+
+	var description: String {
+		let p1t = p1Trainer
+		let p2t = p2Trainer
+		let p3t = p3Trainer
+		let p4t = p4Trainer
+
+		var desc = title + "\n"
+		desc += "\(battleStyle.name) battle - (\(battleType.name))\n\n"
+
+		if p1t != nil, players[0].id != 1 {
+			desc += p1t!.fullDescription + "\n"
+		}
+
+		if p2t != nil, players[1].id != 1 {
+			desc += p2t!.fullDescription + "\n"
+		}
+
+		if p3t != nil, players[2].id != 1 {
+			desc += p3t!.fullDescription + "\n"
+		}
+
+		if p4t != nil, players[3].id != 1 {
+			desc += p4t!.fullDescription + "\n"
+		}
+
+		return desc
+	}
+
 	init?(index: Int) {
 		guard let data = battlesTable.dataForEntry(index) else {
 			return nil

@@ -131,33 +131,33 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Script" id="s91-b4-sf4">
                                     <items>
-                                        <menuItem title="Save XDS Classes File" id="Zsg-MN-BjL">
+                                        <menuItem title="Save Script Classes File" id="Zsg-MN-BjL">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="getXDSClasses:" target="Voe-Tx-rLC" id="z54-83-rpC"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Save XDS Macros File" id="vda-DR-005">
+                                        <menuItem title="Save Script Macros File" id="vda-DR-005">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="getXDSMacros:" target="Voe-Tx-rLC" id="OMD-g0-ull"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Vzn-Kx-ALG"/>
-                                        <menuItem title="Save Sublime Text 3 XDS Plugin" id="nnV-rJ-lyQ">
+                                        <menuItem title="Save Sublime Text 3 Script Plugin" id="nnV-rJ-lyQ">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="saveSublime:" target="Voe-Tx-rLC" id="LGF-jB-GGj"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Install Sublime Text 3 XDS Plugin" id="RTx-xc-R4X">
+                                        <menuItem title="Install Sublime Text 3 Script Plugin" id="RTx-xc-R4X">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="installSublime:" target="Voe-Tx-rLC" id="dH3-2Q-hCA"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="H03-uh-lcM"/>
-                                        <menuItem title="XDS Script Compiler" keyEquivalent="x" id="IsQ-hd-Wby">
+                                        <menuItem title="Script Compiler" keyEquivalent="x" id="IsQ-hd-Wby">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="openScriptCompiler:" target="Voe-Tx-rLC" id="Occ-jG-urF"/>
@@ -269,7 +269,8 @@
                         <outlet property="godtoolhelpmenuitem" destination="FKE-Sm-Kum" id="kyN-Ez-awb"/>
                         <outlet property="godtoolmenuitem" destination="1Xt-HY-uBw" id="Ef4-Le-GYE"/>
                         <outlet property="quitgodtoolmenuitem" destination="4sb-4s-VLi" id="7q6-KU-Ton"/>
-                        <outlet property="scriptMenuItem" destination="sKq-bE-KZJ" id="GSI-he-tiF"/>
+                        <outlet property="scriptClassesMenuItem" destination="Zsg-MN-BjL" id="hP6-1I-aco"/>
+                        <outlet property="scriptCompilerMenuItem" destination="IsQ-hd-Wby" id="I16-8W-cs2"/>
                     </connections>
                 </customObject>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -295,7 +296,7 @@
                 <windowController showSeguePresentationStyle="single" id="B8D-0N-5wS" customClass="GoDWindowController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" title="GoD Tool" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
-                        <rect key="contentRect" x="50" y="59" width="111" height="41"/>
+                        <rect key="contentRect" x="-114" y="59" width="275" height="41"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                         <value key="maxSize" type="size" width="1000" height="1000"/>
                         <connections>
@@ -308,7 +309,7 @@
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-612" y="289"/>
+            <point key="canvasLocation" x="-627.5" y="316.5"/>
         </scene>
         <!--GoD Tool Home-->
         <scene sceneID="hIz-AP-VOD">
@@ -575,6 +576,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="NaH-4i-fmB"/>
+        <segue reference="PCr-YY-Lid"/>
     </inferredMetricsTieBreakers>
 </document>

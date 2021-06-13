@@ -19,8 +19,8 @@ class XGStack<T>: NSObject {
 		return data.removeLast()
 	}
 	
-	func peek() -> T {
-		return data.last!
+	func peek() -> T? {
+		return data.last
 	}
 	
 	var asArray : [T] {

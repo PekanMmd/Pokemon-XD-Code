@@ -65,7 +65,7 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 		return self.rawValue / 2
 	}
 	
-	var fileExtension : String {
+	var fileExtension: String {
 		switch self {
 		case .none: return ""
 		case .rdat: return ".rdat"
@@ -94,7 +94,7 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 		case .bin : return ".bin"
 		case .fsys: return ".fsys"
 		case .iso : return ".iso"
-		case .xds : return ".xds"
+		case .xds : return game == .Colosseum ? ".cms" : ".xds"
 		case .dol : return ".dol"
 		case .toc : return ".toc"
 		case .png : return ".png"

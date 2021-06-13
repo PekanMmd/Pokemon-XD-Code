@@ -11,5 +11,9 @@ class GoDWindowController: NSWindowController {
 
     override func windowDidLoad() {
         super.windowDidLoad()
+
+		if game == .Colosseum {
+			window?.title = "Colosseum Tool"
+		}
     }
 }

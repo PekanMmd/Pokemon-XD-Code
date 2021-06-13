@@ -128,9 +128,9 @@ extension GoDTexturesContaining {
 					if texture.limitColourIndexes(to: paletteCount) {
 						printg("Warning: The image \(texture.file.path) has more colours than the original file. The number of colours has been limited so the texture may not be accurate in game. This texture is limited to \(paletteCount) colours.")
 					}
-					data?.replaceBytesFromOffset(textureDataOffset, withByteStream: texture.pixelCharStream())
 					data?.replaceData(data: usedColours, atOffset: offset)
 				}
+				data?.replaceBytesFromOffset(textureDataOffset, withByteStream: texture.pixelCharStream())
 			} else {
 				data?.replaceBytesFromOffset(textureDataOffset, withByteStream: texture.pixelCharStream() + texture.paletteCharStream())
 			}

@@ -1,0 +1,13 @@
+{
+"color_scheme": "Packages/User/CMScript/CMScript.sublime-color-scheme",
+
+// Enable auto complete to be triggered automatically when typing.
+"auto_complete": true,
+
+// Additional situations to trigger auto complete
+"auto_complete_triggers": [ {"selector": "source.cmscript", "characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ#&abcdefghijklmnopqrstuvwyz"} ],
+
+// Controls what scopes auto complete will be triggered in
+"auto_complete_selector": "source.cmscript",
+
+}

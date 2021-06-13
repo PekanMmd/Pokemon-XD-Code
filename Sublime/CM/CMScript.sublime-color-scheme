@@ -1,5 +1,5 @@
 {
-    "name": "XDScript",
+    "name": "CMScript",
     "globals":
     {
         "background": "#303840",
@@ -27,6 +27,11 @@
         {
             "name": "Location",
             "scope": "constant.location",
+            "foreground": ["#ffd8a8", "#c89868"],
+            "font_style": "italic",
+        },{
+            "name": "FunctionMacro",
+            "scope": "constant.functionmacro",
             "foreground": ["#ffd8a8", "#c89868"],
             "font_style": "italic",
         },{
@@ -65,10 +70,6 @@
             "name": "StringEscapeParam",
             "scope": "string.escape.param",
             "foreground": "#e0c080",
-        },{
-            "name": "VectorLiteral",
-            "scope": "constant.vector",
-            "foreground": "#90b0b0",
         },{
             "name": "AssignmentOperator",
             "scope": "keyword.operator.assignment",

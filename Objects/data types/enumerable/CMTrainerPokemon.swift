@@ -43,6 +43,7 @@ let kShadowTIDOffset			= 0x04 // trainer index of the first time the shadow poke
 let kShadowTID2Offset			= 0x06 // trainer index of an alternate possibility for first encounter
 let kShadowCounterOffset		= 0x08
 let kShadowIDOffset				= 0x0B
+let kShadowCaughtFlagOffset		= 0x12 // flag is set automatically when the shadow pokemon is caught
 let kShadowJapaneseMSGOffset	= 0x22
 
 class XGTrainerPokemon : NSObject, Codable {
@@ -243,6 +244,7 @@ final class CMShadowData {
 	var alternateTID = 0
 	var shadowID = 0
 	var nameID = 0 // Japanese text of the pokemon's name
+	var captureFlag = 0
 
 	var species = XGPokemon.index(0)
 	var name: XGString {
@@ -265,6 +267,7 @@ final class CMShadowData {
 			alternateTID = data.get2BytesAtOffset(start + kShadowTID2Offset)
 			shadowID = data.getByteAtOffset(start + kShadowIDOffset)
 			nameID = data.get2BytesAtOffset(start + kShadowJapaneseMSGOffset)
+			captureFlag = data.get2BytesAtOffset(start + kShadowCaughtFlagOffset)
 			let speciesID = data.get2BytesAtOffset(start + kShadowSpeciesOffset)
 			species = .index(speciesID)
 		}
@@ -281,6 +284,7 @@ final class CMShadowData {
 			data.replaceByteAtOffset(start + kShadowIDOffset, withByte: shadowID)
 			data.replace2BytesAtOffset(start + kShadowJapaneseMSGOffset, withBytes: nameID)
 			data.replace2BytesAtOffset(start + kShadowSpeciesOffset, withBytes: species.index)
+			data.replace2BytesAtOffset(start + kShadowCaughtFlagOffset, withBytes: captureFlag)
 
 			data.save()
 		}

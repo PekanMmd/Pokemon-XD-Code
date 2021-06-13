@@ -26,8 +26,8 @@ typealias FTBL = (codeOffset: Int, end: Int, name: String, index: Int)
 typealias GIRI = (groupID: Int, resourceID: Int)
 typealias VECT = (x: Float, y: Float, z: Float)
 
-let currentXDSVersion: Float = 1.2
-let minXDSVersionCompatibilty: Float = 1.2
+let currentXDSVersion: Float = 1.3
+let minXDSVersionCompatibilty: Float = 1.3
 
 class XGScript: NSObject {
 	
@@ -704,7 +704,7 @@ class XGScript: NSObject {
 					var broken = false // ignore malformed instructions caused by returning mid function.
 					for _ in 0 ..< paramCount {
 						if !broken {
-							if stack.peek().isReturn {
+							if let next = stack.peek(), next.isReturn {
 								stack.push(.nop)
 								broken = true
 							} else {
@@ -751,7 +751,7 @@ class XGScript: NSObject {
 				
             case .xd_operator:
                 if instruction.subOpCode >= 16 && instruction.subOpCode <= 25 {
-					if stack.peek().isReturn {
+					if let next = stack.peek(), next.isReturn {
 						stack.push(.nop)
 					} else {
 						stack.push(.unaryOperator(instruction.subOpCode, stack.pop()))
@@ -761,10 +761,10 @@ class XGScript: NSObject {
 					// e.g. e1 % e2 has e1 on the stack first and then e2
 					var e1 = XDSExpr.nop
 					var e2 = XDSExpr.nop
-					if !stack.peek().isReturn {
+					if let next = stack.peek(), !next.isReturn {
 						e2 = stack.pop()
 					}
-					if !stack.peek().isReturn {
+					if let next = stack.peek(), !next.isReturn {
 						e1 = stack.pop()
 					}
 					
@@ -849,7 +849,7 @@ class XGScript: NSObject {
 				if instruction.XDSVariable != kXDSLastResultVariable { // TODO: evaluate success
 					stack.push(.loadVariable(instruction.XDSVariable))
 				} else {
-					if stack.peek().isReturn && !instruction.isScriptFunctionLastResult {
+					if let next = stack.peek(), next.isReturn && !instruction.isScriptFunctionLastResult {
 						stack.push(.nop)
 					} else {
 						let previous = stack.pop()
@@ -872,7 +872,7 @@ class XGScript: NSObject {
 				
 				
             case .setVariable:
-				if stack.peek().isReturn {
+				if let next = stack.peek(), next.isReturn {
 					stack.push(.nop)
 				} else {
 					let variable = instruction.XDSVariable
@@ -881,7 +881,7 @@ class XGScript: NSObject {
 				}
 				
             case .setVector:
-				if stack.peek().isReturn {
+				if let next = stack.peek(), next.isReturn {
 					stack.push(.nop)
 				} else {
 					stack.push(.setVector(instruction.XDSVariable, instruction.vectorDimension, stack.pop().bracketed))
@@ -945,7 +945,7 @@ class XGScript: NSObject {
 					if broken {
 						continue
 					}
-					if stack.peek().isReturn {
+					if let next = stack.peek(), next.isReturn {
 						broken = true
 						continue
 					}
@@ -1009,7 +1009,7 @@ class XGScript: NSObject {
 		var instructionIndex = 0
 		for expr in stack.asArray {
 			
-			macros += expr.macros(ftbl: ftbl, stringTable: stringTable)
+			macros += expr.macros(ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)
 			
 			if let fname = functionLocations[instructionIndex] {
 				let paramCount = getParameterCountForFunction(named: fname)
@@ -1179,7 +1179,7 @@ class XGScript: NSObject {
 								possible = false
 							}
 							if type.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)
 								macros.append(.macro(name, c.rawValueString))
 							}
 							
@@ -1197,7 +1197,7 @@ class XGScript: NSObject {
 								p1 = .macroImmediate(c, type)
 							}
 							if type.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -1240,7 +1240,7 @@ class XGScript: NSObject {
 								p2 = .macroImmediate(c, type)
 							}
 							if type.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -1283,7 +1283,7 @@ class XGScript: NSObject {
 								p2 = .macroImmediate(c, overrideType)
 							}
 							if overrideType.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: overrideType, ftbl: ftbl, stringTable: stringTable)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: overrideType, ftbl: ftbl, isCommonScript:  file == .common_rel, stringTable: stringTable)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -1302,7 +1302,7 @@ class XGScript: NSObject {
 								p1 = .macroImmediate(c, overrideType)
 							}
 							if overrideType.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: overrideType, ftbl: ftbl, stringTable: stringTable)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: overrideType, ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -1325,7 +1325,7 @@ class XGScript: NSObject {
 									p2 = .macroImmediate(c, type)
 								}
 								if type.needsDefine {
-									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
+									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)
 									macros.append(.macro(name, c.rawValueString))
 								}
 							}
@@ -1347,7 +1347,7 @@ class XGScript: NSObject {
 									p1 = .macroImmediate(c, type)
 								}
 								if type.needsDefine {
-									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
+									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)
 									macros.append(.macro(name, c.rawValueString))
 								}
 							}
@@ -1398,7 +1398,7 @@ class XGScript: NSObject {
 									params[j] = .macroImmediate(c, type)
 								}
 								if type.needsDefine {
-									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
+									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)
 									macros.append(.macro(name, c.rawValueString))
 								}
 							} else {
@@ -1442,7 +1442,7 @@ class XGScript: NSObject {
 									params[j] = .macroImmediate(c, type)
 								}
 								if type.needsDefine {
-									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
+									let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)
 									macros.append(.macro(name, c.rawValueString))
 								}
 							} else {
@@ -1538,7 +1538,7 @@ class XGScript: NSObject {
 										params[j] = .macroImmediate(c, type)
 									}
 									if type.needsDefine {
-										let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
+										let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)
 										macros.append(.macro(name, c.rawValueString))
 									}
 								}
@@ -1624,7 +1624,7 @@ class XGScript: NSObject {
 										params[j] = .macroImmediate(c, type)
 									}
 									if type.needsDefine {
-										let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
+										let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)
 										macros.append(.macro(name, c.rawValueString))
 									}
 								}
@@ -1669,7 +1669,7 @@ class XGScript: NSObject {
 								p1 = .macroImmediate(c, type)
 							}
 							if type.needsDefine {
-								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, stringTable: stringTable)
+								let name = XDSExpr.stringFromMacroImmediate(c: c, t: type, ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)
 								macros.append(.macro(name, c.rawValueString))
 							}
 						}
@@ -2149,7 +2149,7 @@ class XGScript: NSObject {
 				let value = val.rawValueString
 				
 				if let t = type {
-					let macroString = t.printsAsMacro ? XDSExpr.stringFromMacroImmediate(c: val, t: t, ftbl: ftbl, stringTable: stringTable) : value
+					let macroString = t.printsAsMacro ? XDSExpr.stringFromMacroImmediate(c: val, t: t, ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable) : value
 					str += (t == .msg ? "\n" : " ") + macroString
 					if t.needsDefine {
 						mac.append(.macro(macroString, value))
@@ -2168,7 +2168,7 @@ class XGScript: NSObject {
 			var value = gvar[i].rawValueString
 			str += "global " + variable + " = "
 			if let type = globalMacroTypes[variable] {
-				let macroString = type.printsAsMacro ? XDSExpr.stringFromMacroImmediate(c: gvar[i], t: type, ftbl: ftbl, stringTable: stringTable) : gvar[i].rawValueString
+				let macroString = type.printsAsMacro ? XDSExpr.stringFromMacroImmediate(c: gvar[i], t: type, ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable) : gvar[i].rawValueString
 				str += macroString
 				if type.needsDefine {
 					mac.append(.macro(macroString, value))
@@ -2287,12 +2287,12 @@ class XGScript: NSObject {
 		for macro in uniqueMacros.sorted(by: { (m1, m2) -> Bool in
 			return m1.macroName < m2.macroName
 		}) {
-			script += macro.text(ftbl: ftbl, stringTable: stringTable)[0] + "\n"
+			script += macro.text(ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)[0] + "\n"
 		}
 		for macro in uniqueCharacterMacros.sorted(by: { (m1, m2) -> Bool in
 			return m1.macroName < m2.macroName
 		}) {
-			script += macro.text(ftbl: ftbl, stringTable: stringTable)[0] + "    \n"
+			script += macro.text(ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)[0] + "    \n"
 		}
 		
 		script += "\n"
@@ -2324,7 +2324,7 @@ class XGScript: NSObject {
 			case .function:
 				newLines = 2
 			default:
-				newLines = expr.text(ftbl: ftbl, stringTable: stringTable)[0].length == 0 ? 0 : 1
+				newLines = expr.text(ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)[0].length == 0 ? 0 : 1
 			}
 			
 			for _ in 0 ..< newLines {
@@ -2332,7 +2332,7 @@ class XGScript: NSObject {
 			}
 			
 			// print expression
-			var text = expr.text(ftbl: ftbl, stringTable: stringTable)
+			var text = expr.text(ftbl: ftbl, isCommonScript: file == .common_rel, stringTable: stringTable)
 			
 			// override certain constants
 			var strgCount = 0
@@ -2458,7 +2458,7 @@ class XGScript: NSObject {
 	class func printXDSInstancesOfFlag(_ flagID: Int) {
 		for file in XGFiles.allFilesWithType(.xds) {
 			let text = file.text
-			if text.contains(XDSExpr.stringFromMacroImmediate(c: .integer(flagID), t: .flag)) {
+			if text.contains(XDSExpr.stringFromMacroImmediate(c: .integer(flagID), t: .flag, isCommonScript: false)) {
 				printg(file.fileName)
 			}
 		}

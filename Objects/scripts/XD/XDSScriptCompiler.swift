@@ -26,6 +26,7 @@ class XDSScriptCompiler: NSObject {
 	static var strgs  = [String]()
 	static var locations = [String : Int]()
 	static var characters = [XGCharacter]()
+	static var scriptFunctions = [String: Int]()
 	
 	// special variables
 	static var scriptID = 0 // currently unknown what this value represents
@@ -41,6 +42,7 @@ class XDSScriptCompiler: NSObject {
 	static var stringTable : XGStringTable?
 	static var relFile     : XGMapRel?
 	static var targetFileName = ""
+	static var targetFile: XGFiles?
 	
 	static var error = ""
 	static var currentFunction = ""
@@ -65,6 +67,7 @@ class XDSScriptCompiler: NSObject {
 		relFile = nil
 		stringTable = nil
 		targetFileName = ""
+		targetFile = nil
 		updatedText = ""
 		baseStringID = 100
 	}
@@ -95,6 +98,7 @@ class XDSScriptCompiler: NSObject {
 		XGScript.loadCustomClasses()
 		
 		targetFileName = file.fileName.removeFileExtensions()
+		targetFile = file
 		updatedText = text
 		if let file = XDSScriptCompiler.scriptFile {
 			
@@ -232,6 +236,7 @@ class XDSScriptCompiler: NSObject {
 		strgs  = [String]()
 		locations = [String : Int]()
 		characters = [XGCharacter]()
+		scriptFunctions = [String: Int]()
 		currentFunction = ""
 		sugarVarCounter = 1
 		
@@ -270,8 +275,21 @@ class XDSScriptCompiler: NSObject {
 		let stack = createExprStack(expressions)
 		locations = getLocations(expressions)
 		
-		let ftbl = getFTBL(expressions)
-		if let code = getCODE(stack, gvar: gvars.names, arry: arrys.names, giri: giris.names) {
+		var ftbl = getFTBL(expressions)
+		for function in ftbl {
+			scriptFunctions[function.name] = 0x100_0000 + function.index
+		}
+		if !fileDecodingMode {
+			if let target = targetFile, target != .common_rel {
+				ftbl = XGFiles.common_rel.scriptData.ftbl
+			}
+
+			for function in ftbl {
+				scriptFunctions["Common." + function.name] = 0x596_0000 + function.index
+			}
+		}
+
+		if let code = getCODE(stack, gvar: gvars.names, arry: arrys.names, giri: giris.names, scriptFunctions: scriptFunctions) {
 			
 			var data = XDSCode()
 			data += compileFTBL(ftbl)
@@ -561,7 +579,7 @@ class XDSScriptCompiler: NSObject {
 		return functions
 	}
 	
-	private class func getCODE(_ exprs: XGStack<XDSExpr>, gvar: [String], arry: [String], giri: [String]) -> [XGScriptInstruction]? {
+	private class func getCODE(_ exprs: XGStack<XDSExpr>, gvar: [String], arry: [String], giri: [String], scriptFunctions: [String: Int]) -> [XGScriptInstruction]? {
 		
 		var instructions = [XGScriptInstruction]()
 		
@@ -606,7 +624,7 @@ class XDSScriptCompiler: NSObject {
 				
 			}
 			
-			let (instructs, errorString) = nextExpression.instructions(gvar: gvar, arry: arry, giri: giri, locals: locals[currentFunction]!, args: args[currentFunction]!, locations: locations)
+			let (instructs, errorString) = nextExpression.instructions(gvar: gvar, arry: arry, giri: giri, locals: locals[currentFunction]!, args: args[currentFunction]!, locations: locations, scriptFunctions: scriptFunctions)
 			if let e = errorString {
 				error = e
 				return nil

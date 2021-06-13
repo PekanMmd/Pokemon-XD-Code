@@ -7802,8 +7802,48 @@ import Foundation
 //	XGUtility.saveString(text, toFile: file)
 //}
 
+// free cam with c stick
+//XGPatcher.disableCStickMovement()
+//
+//// Don't forget to update the custom script classes JSON to include the new class and functions before compiling scripts
+//// Create custom class in scripting engine
+//if let freeSpacePointer = XGAssembly.ASMfreeSpaceRAMPointer(),
+//   let (_, jumpTableRAMOffset, customClassReturnOffset) = XGScriptClass.createCustomClass(withIndex: 34, atRAMOffset: freeSpacePointer, numberOfFunctions: 2) {
+//
+//	// Add custom class function for reading c stick inputs
+//	let cstickXFunctionRAMOffset = 0x8010409c
+//	let cstickYFunctionRAMOffset = 0x80104040
+//	let functions = [cstickXFunctionRAMOffset, cstickYFunctionRAMOffset]
+//	for i in 0 ... 1 {
+//		let functionOffset = functions[i]
+//		guard let freeSpacePointer2 = XGAssembly.ASMfreeSpaceRAMPointer() else {
+//			continue
+//		}
+//
+//		XGScriptClass.addASMFunctionToCustomClass(jumpTableRAMOffset: jumpTableRAMOffset, functionIndex: i, codeOffsetInRAM: freeSpacePointer2, code: [
+//			.stwu(.sp, .sp, -8),
+//			.stw(.r31, .sp, 4),
+//			.mr(.r31, .r4),
+//			.li(.r3, 1), // controller index
+//			.li(.r4, 0), // not sure what this does
+//			.bl(functionOffset),
+//			.extsb(.r3, .r3),
+//			.stw(.r3, .r31, 4),
+//			.li(.r3, 1),
+//			.sth(.r3, .r31, 0),
+//			.lwz(.r31, .sp, 4),
+//			.addi(.sp, .sp, 8),
+//			XGASM.loadImmediateShifted32bit(register: .r4, value: customClassReturnOffset).0,
+//			XGASM.loadImmediateShifted32bit(register: .r4, value: customClassReturnOffset).1,
+//			.mr(.r0, .r4),
+//			.mtctr(.r0),
+//			.bctr
+//		])
+//	}
+//}
 
-
+//XGUtility.importFileToISO(.dol, save: false)
+//XGUtility.importFileToISO(.fsys("M2_out"), encode: true, save: true, importFiles: nil)
 
 
 

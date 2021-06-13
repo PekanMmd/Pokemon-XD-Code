@@ -64,6 +64,8 @@ indirect enum XDSExpr {
 	case comment(String)
 	case macro(XDSMacro, String)
 	case msgMacro(XGString)
+	case scriptFunctionMacro(String)
+	case scriptFunctionId(Int, Int) // script type identifier, function index
 	case exit
 	case setLine(Int)
 	
@@ -91,7 +93,7 @@ indirect enum XDSExpr {
 		return self.xdsID == XDSExpr.callStandard(0, 0, []).xdsID
 	}
 	
-	// used for comparison in order tyo eschew switch statements
+	// used for comparison in order to eschew switch statements
 	var xdsID : Int {
 		var id = 0
 		switch self {
@@ -173,6 +175,12 @@ indirect enum XDSExpr {
 		case .msgMacro:
 			id += 1
 			fallthrough
+		case .scriptFunctionMacro:
+			id += 1
+			fallthrough
+		case .scriptFunctionId:
+			id += 1
+			fallthrough
 		case .exit:
 			id += 1
 			fallthrough
@@ -195,7 +203,7 @@ indirect enum XDSExpr {
 		return id
 	}
 	
-	var bracketed : XDSExpr {
+	var bracketed: XDSExpr {
 		switch self {
 		case .loadVariable:
 			fallthrough
@@ -214,6 +222,10 @@ indirect enum XDSExpr {
 		case .exit:
 			fallthrough
 		case .msgMacro:
+			fallthrough
+		case .scriptFunctionMacro:
+			fallthrough
+		case .scriptFunctionId:
 			fallthrough
 		case .location:
 			fallthrough
@@ -251,7 +263,7 @@ indirect enum XDSExpr {
 		}
 	}
 	
-	var variable : XDSVariable? {
+	var variable: XDSVariable? {
 		switch self{
 		case .loadVariable(let v):
 			return v
@@ -411,8 +423,9 @@ indirect enum XDSExpr {
 			return 0
 		case .macro:
 			return 0
-		case .msgMacro:
-			return 2 // load immediate msgid
+		case .msgMacro, .scriptFunctionMacro, .scriptFunctionId:
+			// boils down to loading a regular integer
+			return XDSExpr.loadImmediate(.integer(0)).instructionCount
 		case .function(let def, let es):
 			var count = def.instructionCount
 			for e in es {
@@ -442,7 +455,7 @@ indirect enum XDSExpr {
 		}
 	}
 	
-	var macroName : String {
+	var macroName: String {
 		switch self {
 		case .macro(let s, _):
 			return s
@@ -451,7 +464,7 @@ indirect enum XDSExpr {
 		}
 	}
 	
-	var macroRawValue : String {
+	var macroRawValue: String {
 		switch self {
 		case .macro(_, let s):
 			return s
@@ -466,6 +479,10 @@ indirect enum XDSExpr {
 	
 	static func locationWithName(_ n: String) -> XDSLocation {
 		return "@" + n
+	}
+
+	static func functionPointerWithName(_ n: String) -> String {
+		return "&" + n
 	}
 	
 	static func macroWithName(_ n: String) -> String {
@@ -485,7 +502,7 @@ indirect enum XDSExpr {
 		return "$:\(xs.id):" + "\"\(updatedString)\""
 	}
 	
-	static func stringFromMacroImmediate(c: XDSConstant, t: XDSMacroTypes, ftbl: [FTBL] = [], stringTable: XGStringTable? = nil) -> String {
+	static func stringFromMacroImmediate(c: XDSConstant, t: XDSMacroTypes, ftbl: [FTBL] = [], isCommonScript: Bool, stringTable: XGStringTable? = nil) -> String {
 		switch t {
 		case .bool:
 			return c.asInt != 0 ? "YES" : "NO"
@@ -625,12 +642,16 @@ indirect enum XDSExpr {
 			if c.asInt == 0 {
 				return macroWithName("battle_none".uppercased())
 			}
-			return macroWithName("BATTLE_" + String(format: "%03d", c.asInt))
+			let mid: String
+			let battle = XGBattle(index: c.asInt)
+			mid = (battle.p3Trainer == nil ? "VS_\(battle.p2Trainer?.trainerClass.name.unformattedString ?? "unknown_class")_\(battle.p2Trainer?.name.unformattedString ?? "unknown_trainer")" : "VS_\(battle.p3Trainer?.name.unformattedString ?? "unknown_class")_AND_\(battle.p4Trainer?.name.unformattedString ?? "unknown_trainer")").underscoreSimplified.uppercased()
+
+			return macroWithName("BATTLE_\(mid)_" + String(format: "%03d", c.asInt))
 		case .shadowID:
 			if c.asInt == 0 {
 				return macroWithName("shadow_pokemon_none".uppercased())
 			}
-			let mid = fileDecodingMode ? "POKEMON" : XGDeckPokemon.ddpk(c.asInt).pokemon.name.string.underscoreSimplified.uppercased()
+			let mid = (fileDecodingMode || c.asInt < 0 || XGDeckPokemon.ddpk(c.asInt).pokemon.nameID == 0) ? "POKEMON" : XGDeckPokemon.ddpk(c.asInt).pokemon.name.string.underscoreSimplified.uppercased()
 			return macroWithName("SHADOW_" + mid + String(format: "_%02d", c.asInt))
 		case .treasureID:
 			if c.asInt == 0 {
@@ -656,6 +677,22 @@ indirect enum XDSExpr {
 			default:
 				printg("error unknown party member");return "error unknown party member"
 			}
+		case .buttonInput:
+			switch c.asInt {
+			case 0x1: return macroWithName("BUTTON_INPUT_D_PAD_LEFT")
+			case 0x2: return macroWithName("BUTTON_INPUT_D_PAD_RIGHT")
+			case 0x4: return macroWithName("BUTTON_INPUT_D_PAD_DOWN")
+			case 0x8: return macroWithName("BUTTON_INPUT_D_PAD_UP")
+			case 0x10: return macroWithName("BUTTON_INPUT_TRIGGER_Z")
+			case 0x20: return macroWithName("BUTTON_INPUT_TRIGGER_R")
+			case 0x40: return macroWithName("BUTTON_INPUT_TRIGGER_L")
+			case 0x100: return macroWithName("BUTTON_INPUT_A")
+			case 0x200: return macroWithName("BUTTON_INPUT_B")
+			case 0x400: return macroWithName("BUTTON_INPUT_X")
+			case 0x800: return macroWithName("BUTTON_INPUT_Y")
+			case 0x1000: return macroWithName("BUTTON_INPUT_START")
+			default: return macroWithName("BUTTON_INPUT_UNKNOWN_\(c.asInt)")
+			}
 			
 		case .integerMoney:
 			return macroWithName("P$\(c.asInt.string.replacingOccurrences(of: "-", with: "_"))")
@@ -673,38 +710,43 @@ indirect enum XDSExpr {
 			return macroWithName(c.asInt == 0 ? "INDEX_YES" : "INDEX_NO")
 		case .scriptFunction:
 			if c.asInt == 0 {
-				return macroWithName("NULL_SCRIPT_FUNCTION")
+				return "Null"
 			}
 			
 			let scriptIdentifier = (c.asInt & 0xFFFF0000) >> 16
 			let functionIndex = c.asInt & 0xFFFF
-			
+
 			if scriptIdentifier == 0x596 {
-				if !fileDecodingMode,  XGFiles.common_rel.exists {
-					let commonScript = XGFiles.common_rel.scriptData
-					let functions = commonScript.ftbl
+				var functions = ftbl
+				if !fileDecodingMode || isCommonScript {
+					if !isCommonScript {
+						let commonScript = XGFiles.common_rel.scriptData
+						functions = commonScript.ftbl
+					}
 					if functionIndex < functions.count {
 						let function = functions[functionIndex]
-						return macroWithName("COMMON_SCRIPT_" + function.name.uppercased())
+						return functionPointerWithName("Common." + function.name)
+					} else {
+						return functionPointerWithName("Common.\(functionIndex)")
 					}
+				} else {
+					return functionPointerWithName("Common.\(functionIndex)")
 				}
-				
-				return macroWithName("COMMON_SCRIPT_FUNCTION_\(functionIndex)")
 			} else if scriptIdentifier == 0x100 {
-				if functionIndex < ftbl.count {
+				if !isCommonScript, functionIndex < ftbl.count {
 					let function = ftbl[functionIndex]
-					return macroWithName("CURRENT_SCRIPT_" + function.name.uppercased())
+					return functionPointerWithName(function.name)
 				}
 				
-				return macroWithName("CURRENT_SCRIPT_FUNCTION_\(functionIndex)")
+				return functionPointerWithName("CurrentScript.\(functionIndex)")
 			} else {
-				return macroWithName("SCRIPT_\(scriptIdentifier.hexString())_" + "FUNCTION_\(functionIndex)")
+				return functionPointerWithName("UNKOWN_SCRIPT_\(scriptIdentifier.hexString())_FUNCTION_\(functionIndex)")
 			}
 		case .sfxID:
 			if fileDecodingMode {
 				return macroWithName("SFX_" + String(format: "%03d", c.asInt))
 			}
-			return macroWithName("SFX_" + XGMusicMetaData(index: c.asInt).name.uppercased())
+			return macroWithName("SFX_\(c.asInt)_" + XGMusicMetaData(index: c.asInt).name.uppercased())
 		case .storyProgress:
 			let storyProgress = XGStoryProgress(rawValue: c.asInt)!
 			return macroWithName(storyProgress.macroName)
@@ -737,13 +779,17 @@ indirect enum XDSExpr {
 					printg("error invalid region"); return macroWithName("INVALID_REGION")
 			}
 		case .language:
-//			if let lang = XGLanguages(rawValue: c.asInt) {
-//				return macroWithName("LANGUAGE_" + lang.name.underscoreSimplified.uppercased())
-//			}
-			if c.asInt == 0 {
-				return macroWithName("LANGUAGE_NONE")
+			switch c.asInt {
+				case 0: return macroWithName("LANGUAGE_JAPANESE")
+				case 1: return macroWithName("LANGUAGE_ENGLISH_UK")
+				case 2: return macroWithName("LANGUAGE_ENGLISH_US")
+				case 3: return macroWithName("LANGUAGE_GERMAN")
+				case 4: return macroWithName("LANGUAGE_FRENCH")
+				case 5: return macroWithName("LANGUAGE_ITALIAN")
+				case 6: return macroWithName("LANGUAGE_SPANISH")
+				default:
+					printg("error invalid language"); return macroWithName("INVALID_LANGUAGE")
 			}
-			return macroWithName("LANGUAGE_\(c.asInt)")
 			
 		case .PCBox:
 			return macroWithName("PCBOX_\(c.asInt)")
@@ -767,9 +813,9 @@ indirect enum XDSExpr {
 			return macroWithName("FLOAT_\(c.asFloat)")
 		case .integerFloatOverload:
 			if c.type.index == XDSConstantTypes.float.index {
-				return stringFromMacroImmediate(c: c, t: .float)
+				return stringFromMacroImmediate(c: c, t: .float, isCommonScript: isCommonScript)
 			}
-			return stringFromMacroImmediate(c: c, t: .integer)
+			return stringFromMacroImmediate(c: c, t: .integer, isCommonScript: isCommonScript)
 		case .integerAngleDegrees:
 			var angle = c.asInt
 			while angle >= 360 {
@@ -818,20 +864,20 @@ indirect enum XDSExpr {
 		case .string:
 			return macroWithName("STRING_LITERAL_\(c.asInt)")
 		case .anyType:
-			return stringFromMacroImmediate(c: c, t:.object(c.type.index))
+			return stringFromMacroImmediate(c: c, t:.object(c.type.index), isCommonScript: isCommonScript)
 		case .object(let cid):
-			return stringFromMacroImmediate(c: c, t: XDSMacroTypes.objectName(XGScriptClass.classes(cid).name))
+			return stringFromMacroImmediate(c: c, t: XDSMacroTypes.objectName(XGScriptClass.classes(cid).name), isCommonScript: isCommonScript)
 		case .objectName(let s):
 			return macroWithName(s.uppercased() + "_OBJECT")
 		case .invalid:
 			return macroWithName("INVALID_FUNCTION_CALL_RESULT")
 		
 		case .list(let t):
-			return stringFromMacroImmediate(c: c, t: t)
+			return stringFromMacroImmediate(c: c, t: t, isCommonScript: isCommonScript)
 		case .variableType:
 			return macroWithName("VARIABLE_TYPE_\(c.asInt)")
 		case .optional(let t):
-			return stringFromMacroImmediate(c: c, t: t)
+			return stringFromMacroImmediate(c: c, t: t, isCommonScript: isCommonScript)
 		case .integerUnsignedByte:
 			return macroWithName("UINT32_\(c.asInt.hexString())")
 		case .datsIdentifier:
@@ -847,7 +893,7 @@ indirect enum XDSExpr {
 		return l.replacingOccurrences(of: "@location_", with: "").integerValue ?? -1
 	}
 	
-	func text(ftbl: [FTBL] = [], stringTable: XGStringTable? = nil) -> [String] {
+	func text(ftbl: [FTBL] = [], isCommonScript: Bool, stringTable: XGStringTable? = nil) -> [String] {
 		switch self {
 			
 		// ignore these instructions
@@ -863,7 +909,7 @@ indirect enum XDSExpr {
 		case .loadImmediate(let c):
 			return [c.rawValueString]
 		case .macroImmediate(let c, let t):
-			return [XDSExpr.stringFromMacroImmediate(c: c, t: t, ftbl: ftbl, stringTable: stringTable)]
+			return [XDSExpr.stringFromMacroImmediate(c: c, t: t, ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)]
 		case .loadVariable(let v):
 			return [v]
 		case .loadPointer(let s):
@@ -871,17 +917,17 @@ indirect enum XDSExpr {
 		
 		// operations
 		case .bracket(let e):
-			return ["(" + e.text(ftbl: ftbl, stringTable: stringTable)[0] + ")"]
+			return ["(" + e.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0] + ")"]
 		case .unaryOperator(let o,let e):
-			return [XGScriptClass.operators[o].name + e.forcedBracketed.text(ftbl: ftbl, stringTable: stringTable)[0]]
+			return [XGScriptClass.operators[o].name + e.forcedBracketed.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]]
 		case .binaryOperator(let o, let e1, let e2):
-			return [e1.text(ftbl: ftbl, stringTable: stringTable)[0] + " \(XGScriptClass.operators[o].name) " + e2.text(ftbl: ftbl, stringTable: stringTable)[0]]
+			return [e1.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0] + " \(XGScriptClass.operators[o].name) " + e2.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]]
 			
 		// assignments
 		case .setVariable(let v, let e):
-			return [v + " = " + e.text(ftbl: ftbl, stringTable: stringTable)[0]]
+			return [v + " = " + e.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]]
 		case .setVector(let v, let d, let e):
-			return [v + "." + d.string + " = " + e.text(ftbl: ftbl, stringTable: stringTable)[0]]
+			return [v + "." + d.string + " = " + e.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]]
 			
 		// function calls
 		case .functionDefinition(let name, let params):
@@ -895,38 +941,38 @@ indirect enum XDSExpr {
 			s += ")"
 			return [s]
 		case .call(let l, let params):
-			return XDSExpr.callVoid(l, params).text(ftbl: ftbl, stringTable: stringTable)
+			return XDSExpr.callVoid(l, params).text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 		case .callVoid(let l, let params):
 			var s = l + "("
 			
 			var firstParam = true
 			for param in params {
-				s += (firstParam ? "" : " ") + param.text(ftbl: ftbl, stringTable: stringTable)[0]
+				s += (firstParam ? "" : " ") + param.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]
 				firstParam = false
 			}
 			s += ")"
 			return [s]
 		case .callStandard(let c, let f, let es):
-			return XDSExpr.callStandardVoid(c, f, es).text(ftbl: ftbl, stringTable: stringTable)
+			return XDSExpr.callStandardVoid(c, f, es).text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 		case .callStandardVoid(let c, let f, let es):
 			// array get
 			if c == 7 && f == 16 {
 				
-				return [es[0].text(ftbl: ftbl, stringTable: stringTable)[0] + "[" + es[1].text(ftbl: ftbl, stringTable: stringTable)[0] + "]"]
+				return [es[0].text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0] + "[" + es[1].text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0] + "]"]
 				
 			// array set
 			} else if c == 7 && f == 17 {
 				
-				return [es[0].text(ftbl: ftbl, stringTable: stringTable)[0] + "[" + es[1].text(ftbl: ftbl, stringTable: stringTable)[0] + "] = " + es[2].text(ftbl: ftbl, stringTable: stringTable)[0]]
+				return [es[0].text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0] + "[" + es[1].text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0] + "] = " + es[2].text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]]
 				
 			} else {
 				let xdsclass = XGScriptClass.classes(c)
 				let xdsfunction = xdsclass[f]
 				// don't need * in function calls as the type is explicitly included
-				var s = c > 0 ? es[0].text(ftbl: ftbl, stringTable: stringTable)[0].replacingOccurrences(of: "*", with: "") + "." : ""
+				var s = c > 0 ? es[0].text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0].replacingOccurrences(of: "*", with: "") + "." : ""
 				// local variables and function parameters need additional class info
 				if c > 0 {
-					if es[0].text(ftbl: ftbl, stringTable: stringTable)[0].contains("arg") || (es[0].text(ftbl: ftbl, stringTable: stringTable)[0].contains("var") && !es[0].text(ftbl: ftbl, stringTable: stringTable)[0].contains("gvar")) || es[0].text(ftbl: ftbl, stringTable: stringTable)[0].contains(kXDSLastResultVariable) {
+					if es[0].text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0].contains("arg") || (es[0].text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0].contains("var") && !es[0].text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0].contains("gvar")) || es[0].text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0].contains(kXDSLastResultVariable) {
 						s += xdsclass.name + "."
 					}
 				}
@@ -934,7 +980,7 @@ indirect enum XDSExpr {
 				let firstIndex = c > 0 && c <= 60 ? 1 : 0 // custom classes above 60 shouldn't have associated objects (at least I don't think they would)
 				for i in firstIndex ..< es.count {
 					let e = es[i]
-					s += (i == firstIndex ? "" : " ") + e.text(ftbl: ftbl, stringTable: stringTable)[0]
+					s += (i == firstIndex ? "" : " ") + e.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]
 				}
 				s += ")"
 				return [s]
@@ -948,15 +994,15 @@ indirect enum XDSExpr {
 		case .locationIndex(let i):
 			return [XDSExpr.locationWithIndex(i)]
 		case .jumpTrue(let e, let l):
-			return ["goto " + l + " if " + e.text(ftbl: ftbl, stringTable: stringTable)[0]]
+			return ["goto " + l + " if " + e.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]]
 		case .jumpFalse(let e, let l):
-			return ["goto " + l + " ifnot " + e.text(ftbl: ftbl, stringTable: stringTable)[0]]
+			return ["goto " + l + " ifnot " + e.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]]
 		case .jump(let l):
 			return ["goto " + l]
 		case .XDSReturn:
 			return ["return"]
 		case .XDSReturnResult(let e):
-			return ["return " + e.text(ftbl: ftbl, stringTable: stringTable)[0]]
+			return ["return " + e.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]]
 		case .exit:
 			return ["exit"]
 		
@@ -967,10 +1013,14 @@ indirect enum XDSExpr {
 			return ["define " + s + " " + t]
 		case .msgMacro(let x):
 			return [XDSExpr.macroForString(xs: x)]
+		case .scriptFunctionMacro(let x):
+			return [XDSExpr.functionPointerWithName(x)]
+		case .scriptFunctionId(let scriptType, let scriptID):
+			return [XDSExpr.functionPointerWithName((scriptType == 0x596 ? "Common" : "CurrentScript") + ".\(scriptID)")]
 			
 		// compound statements
 		case .function(let def, let es):
-			var s = [def.text(ftbl: ftbl, stringTable: stringTable)[0] + " {\n\n"]
+			var s = [def.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0] + " {\n\n"]
 			for e in es {
 				
 				switch e {
@@ -982,7 +1032,7 @@ indirect enum XDSExpr {
 					break
 				}
 				
-				let lines = e.text(ftbl: ftbl, stringTable: stringTable)
+				let lines = e.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 				var newLine = lines.count == 1 ? "\n" : ""
 				if lines.count == 0 {
 					newLine = ""
@@ -1008,15 +1058,15 @@ indirect enum XDSExpr {
 				var conditionText = ""
 				switch condition {
 				case .jumpFalse(.loadImmediate(let c), _):
-					conditionText = XDSExpr.macroImmediate(c, .bool).forcedBracketed.text(ftbl: ftbl, stringTable: stringTable)[0]
+					conditionText = XDSExpr.macroImmediate(c, .bool).forcedBracketed.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]
 				case .jumpFalse(let c, _):
-					conditionText = c.forcedBracketed.text(ftbl: ftbl, stringTable: stringTable)[0]
+					conditionText = c.forcedBracketed.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]
 				case .jumpTrue(let c, _):
-					conditionText = "!" + c.forcedBracketed.text(ftbl: ftbl, stringTable: stringTable)[0]
+					conditionText = "!" + c.forcedBracketed.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]
 				default:
 					// TODO: get rid of this as it messes with instruction count
 					// should always add condition as a jump
-					conditionText = condition.text(ftbl: ftbl, stringTable: stringTable)[0]
+					conditionText = condition.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]
 				}
 				if i == 0 {
 					lines += [keyword + " " + conditionText + " {\n"]
@@ -1027,13 +1077,13 @@ indirect enum XDSExpr {
 				
 				for i in 0 ..< exprs.count {
 					let expr = exprs[i]
-					let subLines = expr.text(ftbl: ftbl, stringTable: stringTable)
+					let subLines = expr.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 					var newLine = subLines.count == 1 ? "\n" : ""
-					if expr.text(ftbl: ftbl, stringTable: stringTable).count == 0 {
+					if expr.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable).count == 0 {
 						newLine = ""
 					}
 					
-					for subLine in expr.text(ftbl: ftbl, stringTable: stringTable) {
+					for subLine in expr.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable) {
 						lines += ["    " + subLine + newLine]
 					}
 				}
@@ -1047,27 +1097,27 @@ indirect enum XDSExpr {
 			var conditionText = ""
 			switch condition {
 			case .jumpFalse(.loadImmediate(let c), _):
-				conditionText = XDSExpr.macroImmediate(c, .bool).forcedBracketed.text(ftbl: ftbl, stringTable: stringTable)[0]
+				conditionText = XDSExpr.macroImmediate(c, .bool).forcedBracketed.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]
 			case .jumpFalse(let c, _):
-				conditionText = c.bracketed.text(ftbl: ftbl, stringTable: stringTable)[0]
+				conditionText = c.bracketed.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]
 			case .jumpTrue(let c, _):
-				conditionText = "!" + c.forcedBracketed.text(ftbl: ftbl, stringTable: stringTable)[0]
+				conditionText = "!" + c.forcedBracketed.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]
 			default:
 				// TODO: get rid of this as it messes with instruction count
 				// should always add condition as a jump
-				conditionText = condition.text(ftbl: ftbl, stringTable: stringTable)[0]
+				conditionText = condition.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0]
 			}
 			var lines = ["while " + conditionText + " {\n"]
 			
 			for i in 0 ..< exprs.count {
 				let expr = exprs[i]
-				let subLines = expr.text(ftbl: ftbl, stringTable: stringTable)
+				let subLines = expr.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 				var newLine = subLines.count == 0 ? "\n" : ""
-				if expr.text(ftbl: ftbl, stringTable: stringTable).count == 0 {
+				if expr.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable).count == 0 {
 					newLine = ""
 				}
 				
-				for subLine in expr.text(ftbl: ftbl, stringTable: stringTable) {
+				for subLine in expr.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable) {
 					lines += ["    " + subLine + newLine]
 				}
 			}
@@ -1190,70 +1240,70 @@ indirect enum XDSExpr {
 		}
 	}
 	
-	func macros(ftbl: [FTBL], stringTable: XGStringTable? = nil) -> [XDSExpr] {
+	func macros(ftbl: [FTBL], isCommonScript: Bool, stringTable: XGStringTable? = nil) -> [XDSExpr] {
 		switch self {
 			
 		case .bracket(let e):
-			return e.macros(ftbl: ftbl, stringTable: stringTable)
+			return e.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 		case .unaryOperator(_, let e):
-			return e.macros(ftbl: ftbl, stringTable: stringTable)
+			return e.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 		case .binaryOperator(_, let e1, let e2):
-			return e1.macros(ftbl: ftbl, stringTable: stringTable) + e2.macros(ftbl: ftbl, stringTable: stringTable)
+			return e1.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable) + e2.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 		case .macroImmediate(let c, let t):
 			let hex = t.printsAsHexadecimal
-			return [.macro(self.text(ftbl: ftbl, stringTable: stringTable)[0], hex ? c.asInt.hexString() : c.asInt.string)]
+			return [.macro(self.text(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)[0], hex ? c.asInt.hexString() : c.asInt.string)]
 		case .XDSReturnResult(let e):
-			return e.macros(ftbl: ftbl, stringTable: stringTable)
+			return e.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 		case .callStandard(_, _, let es):
 			var macs = [XDSExpr]()
 			for e in es {
-				macs += e.macros(ftbl: ftbl, stringTable: stringTable)
+				macs += e.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 			}
 			return macs
 		case .callStandardVoid(_, _, let es):
 			var macs = [XDSExpr]()
 			for e in es {
-				macs += e.macros(ftbl: ftbl, stringTable: stringTable)
+				macs += e.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 			}
 			return macs
 		case .setVariable(_, let e):
-			return e.macros(ftbl: ftbl, stringTable: stringTable)
+			return e.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 		case .setVector(_, _, let e):
-			return e.macros(ftbl: ftbl, stringTable: stringTable)
+			return e.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 		case .call(_, let es):
 			var macs = [XDSExpr]()
 			for e in es {
-				macs += e.macros(ftbl: ftbl, stringTable: stringTable)
+				macs += e.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 			}
 			return macs
 		case .callVoid(_, let es):
 			var macs = [XDSExpr]()
 			for e in es {
-				macs += e.macros(ftbl: ftbl, stringTable: stringTable)
+				macs += e.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 			}
 			return macs
 		case .jumpTrue(let e, _):
-			return e.macros(ftbl: ftbl, stringTable: stringTable)
+			return e.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 		case .jumpFalse(let e, _):
-			return e.macros(ftbl: ftbl, stringTable: stringTable)
+			return e.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 		case .function(let def, let es):
-			var macs = def.macros(ftbl: ftbl, stringTable: stringTable)
+			var macs = def.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 			for e in es {
-				macs += e.macros(ftbl: ftbl, stringTable: stringTable)
+				macs += e.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 			}
 			return macs
 		case .whileLoop(let c, let es):
-			var macs = c.macros(ftbl: ftbl, stringTable: stringTable)
+			var macs = c.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 			for e in es {
-				macs += e.macros(ftbl: ftbl, stringTable: stringTable)
+				macs += e.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 			}
 			return macs
 		case .ifStatement(let parts):
 			var macs = [XDSExpr]()
 			for (c, es) in parts {
-				macs += c.macros(ftbl: ftbl, stringTable: stringTable)
+				macs += c.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 				for e in es {
-					macs += e.macros(ftbl: ftbl, stringTable: stringTable)
+					macs += e.macros(ftbl: ftbl, isCommonScript: isCommonScript, stringTable: stringTable)
 				}
 				return macs
 			}
@@ -1346,7 +1396,7 @@ indirect enum XDSExpr {
 		}
 	}
 	
-	func instructions(gvar: [String], arry: [String], giri: [String], locals: [String], args: [String], locations: [String : Int]) -> (instructions: [XGScriptInstruction]?, error: String?) {
+	func instructions(gvar: [String], arry: [String], giri: [String], locals: [String], args: [String], locations: [String : Int], scriptFunctions: [String: Int]) -> (instructions: [XGScriptInstruction]?, error: String?) {
 		
 		func getLevelIndexForVariable(variable: String) -> (level: Int, index: Int)? {
 			if variable == kXDSLastResultVariable {
@@ -1373,9 +1423,9 @@ indirect enum XDSExpr {
 		case .nop:
 			return ([XGScriptInstruction.nopInstruction()], nil)
 		case .bracket(let e):
-			return e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			return e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations,scriptFunctions:scriptFunctions)
 		case .unaryOperator(let id, let es):
-			let (subs, err) = es.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			let (subs, err) = es.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations,scriptFunctions:scriptFunctions)
 			if err == nil {
 				return (subs! + [XGScriptInstruction.xdsoperator(op: id)], nil)
 			} else {
@@ -1384,8 +1434,8 @@ indirect enum XDSExpr {
 			
 			
 		case .binaryOperator(let id, let e1, let e2):
-			let (subs1, err1) = e1.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
-			let (subs2, err2) = e2.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			let (subs1, err1) = e1.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations,scriptFunctions:scriptFunctions)
+			let (subs2, err2) = e2.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations,scriptFunctions:scriptFunctions)
 			if subs1 != nil && subs2 != nil {
 				return (subs1! + subs2! + [XGScriptInstruction.xdsoperator(op: id)], nil)
 			} else {
@@ -1399,7 +1449,7 @@ indirect enum XDSExpr {
 		case .loadImmediate(let c):
 			return ([XGScriptInstruction.loadImmediate(c: c)], nil)
 		case .macroImmediate(let c, _):
-			return XDSExpr.loadImmediate(c).instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			return XDSExpr.loadImmediate(c).instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations,scriptFunctions:scriptFunctions)
 			
 			
 		case .loadVariable(let variable):
@@ -1418,7 +1468,7 @@ indirect enum XDSExpr {
 			}
 			
 		case .setVariable(let variable, let e):
-			let (subs, error) = e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			let (subs, error) = e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations,scriptFunctions:scriptFunctions)
 			if subs == nil {
 				return (nil, error)
 			}
@@ -1431,7 +1481,7 @@ indirect enum XDSExpr {
 			
 			
 		case .setVector(let variable, let dimension, let e):
-			let (subs, error) = e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			let (subs, error) = e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations,scriptFunctions:scriptFunctions)
 			if subs == nil {
 				return (nil, error)
 			}
@@ -1448,7 +1498,7 @@ indirect enum XDSExpr {
 		case .call(let name, let params):
 			var paramInstructions = [XGScriptInstruction]()
 			for param in params {
-				let (subs, error) = param.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+				let (subs, error) = param.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations,scriptFunctions:scriptFunctions)
 				if subs == nil {
 					return (nil, error)
 				}
@@ -1469,7 +1519,7 @@ indirect enum XDSExpr {
 		case .callVoid(let name, let params):
 			var paramInstructions = [XGScriptInstruction]()
 			for param in params {
-				let (subs, error) = param.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+				let (subs, error) = param.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations,scriptFunctions:scriptFunctions)
 				if subs == nil {
 					return (nil, error)
 				}
@@ -1492,7 +1542,7 @@ indirect enum XDSExpr {
 			return ([releaseInstruction, returnInstruction], nil)
 			
 		case .XDSReturnResult(let e):
-			let (subs, error) = XDSExpr.setVariable(kXDSLastResultVariable, e).instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			let (subs, error) = XDSExpr.setVariable(kXDSLastResultVariable, e).instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations,scriptFunctions:scriptFunctions)
 			if subs == nil {
 				return (nil, error)
 			}
@@ -1504,7 +1554,7 @@ indirect enum XDSExpr {
 		case .callStandard(let c, let f, let params):
 			var paramInstructions = [XGScriptInstruction]()
 			for param in params {
-				let (subs, error) = param.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+				let (subs, error) = param.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations,scriptFunctions:scriptFunctions)
 				if subs == nil {
 					return (nil, error)
 				}
@@ -1521,7 +1571,7 @@ indirect enum XDSExpr {
 		case .callStandardVoid(let c, let f, let params):
 			var paramInstructions = [XGScriptInstruction]()
 			for param in params {
-				let (subs, error) = param.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+				let (subs, error) = param.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations,scriptFunctions:scriptFunctions)
 				if subs == nil {
 					return (nil, error)
 				}
@@ -1535,7 +1585,7 @@ indirect enum XDSExpr {
 			return (paramInstructions + currentInstructions, nil)
 			
 		case .jumpTrue(let e, let location):
-			let (subs, err) = e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			let (subs, err) = e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations,scriptFunctions:scriptFunctions)
 			if subs != nil {
 				if locations[location] == nil {
 					return (nil, "Location '\(location)' doesn't exist.")
@@ -1548,7 +1598,7 @@ indirect enum XDSExpr {
 			
 			
 		case .jumpFalse(let e, let location):
-			let (subs, err) = e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations)
+			let (subs, err) = e.instructions(gvar:gvar,arry:arry,giri:giri,locals:locals,args:args,locations:locations,scriptFunctions:scriptFunctions)
 			if subs != nil {
 				if locations[location] == nil {
 					return (nil, "Location '\(location)' doesn't exist.")
@@ -1575,7 +1625,7 @@ indirect enum XDSExpr {
 			var list = [XGScriptInstruction]()
 			
 			for expr in [def] + es {
-				let (subs, err) = expr.instructions(gvar: gvar, arry: arry, giri: giri, locals: locals, args: args, locations: locations)
+				let (subs, err) = expr.instructions(gvar: gvar, arry: arry, giri: giri, locals: locals, args: args, locations: locations,scriptFunctions:scriptFunctions)
 				if subs != nil {
 					list += subs!
 				} else {
@@ -1588,7 +1638,7 @@ indirect enum XDSExpr {
 			var list = [XGScriptInstruction]()
 			
 			for expr in [c] + es {
-				let (subs, err) = expr.instructions(gvar: gvar, arry: arry, giri: giri, locals: locals, args: args, locations: locations)
+				let (subs, err) = expr.instructions(gvar: gvar, arry: arry, giri: giri, locals: locals, args: args, locations: locations,scriptFunctions:scriptFunctions)
 				if subs != nil {
 					list += subs!
 				} else {
@@ -1602,7 +1652,7 @@ indirect enum XDSExpr {
 			
 			for (c, es) in parts {
 				for expr in [c] + es {
-					let (subs, err) = expr.instructions(gvar: gvar, arry: arry, giri: giri, locals: locals, args: args, locations: locations)
+					let (subs, err) = expr.instructions(gvar: gvar, arry: arry, giri: giri, locals: locals, args: args, locations: locations,scriptFunctions:scriptFunctions)
 					if subs != nil {
 						list += subs!
 					} else {
@@ -1631,6 +1681,15 @@ indirect enum XDSExpr {
 			return ([], nil)
 		case .msgMacro(let string):
 			let constant = XDSConstant.integer(string.id)
+			return ([XGScriptInstruction.loadImmediate(c: constant)],nil)
+		case .scriptFunctionMacro(let string):
+			if let id = scriptFunctions[string] {
+				let constant = XDSConstant.integer(id)
+				return ([XGScriptInstruction.loadImmediate(c: constant)],nil)
+			}
+			return ([XGScriptInstruction.loadImmediate(c: .integer(0))],nil)
+		case .scriptFunctionId(let type, let function):
+			let constant = XDSConstant.integer((type << 16) + function)
 			return ([XGScriptInstruction.loadImmediate(c: constant)],nil)
 		case .exit:
 			return ([XGScriptInstruction(opCode: .exit, subOpCode: 0, parameter: 0)],nil)

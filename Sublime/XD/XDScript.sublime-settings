@@ -5,9 +5,9 @@
 "auto_complete": true,
 
 // Additional situations to trigger auto complete
-"auto_complete_triggers": [ {"selector": "xdscript", "characters": ".ABCDEFGHIJKLMNOPQRSTUVWXYZ"} ],
+"auto_complete_triggers": [ {"selector": "source.xdscript", "characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ#&abcdefghijklmnopqrstuvwyz"} ],
 
 // Controls what scopes auto complete will be triggered in
-"auto_complete_selector": "xdscript",
+"auto_complete_selector": "source.xdscript",
 
 }

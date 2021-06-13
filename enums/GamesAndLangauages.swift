@@ -31,7 +31,7 @@ enum GenIIIGames: Int {
 }
 #endif
 
-enum XGLanguages : Int, Codable {
+enum XGLanguages : Int, Codable, CaseIterable {
 
 	case Japanese = 0
 	case EnglishUK

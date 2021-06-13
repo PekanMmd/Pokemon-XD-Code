@@ -9,12 +9,12 @@ import Foundation
 
 // just a placeholder
 class XDSScriptCompiler: NSObject {
-	typealias XDSCode = [UInt32]
+	typealias CMSCode = [UInt32]
 	
 	// special variables
-	static var scriptID = 0 // currently unknown what this value represents
+	static var scriptTypeID = 0
 	static var baseStringID = 0
-	static var xdsversion : Float = 0.0
+	static var cmsversion : Float = 0.9
 	static var writeDisassembly = false
 	static var decompileXDS = false
 	static var updateStringIDs = false
@@ -22,7 +22,7 @@ class XDSScriptCompiler: NSObject {
 	static var createBackup = true
 	
 	static var scriptFile : XGFiles?
-	static var error = "No compiler for colosseum scripts"
+	static var error = ""
 	
 	class func setFlags(disassemble: Bool, decompile: Bool, updateStrings: Bool, increaseMSG: Bool) { }
 	
