@@ -462,7 +462,7 @@ class XGScript: NSObject {
 					var broken = false // ignore malformed instructions caused by returning mid function.
 					for _ in 0 ..< paramCount {
 						if !broken {
-							if stack.peek().isReturn {
+							if let next = stack.peek(), next.isReturn {
 								stack.push(.nop)
 								broken = true
 							} else {
@@ -509,7 +509,7 @@ class XGScript: NSObject {
 				
 			case .xd_operator:
 				if instruction.subOpCode >= 16 && instruction.subOpCode <= 25 {
-					if stack.peek().isReturn {
+					if let next = stack.peek(), next.isReturn {
 						stack.push(.nop)
 					} else {
 						stack.push(.unaryOperator(instruction.subOpCode, stack.pop()))
@@ -519,10 +519,10 @@ class XGScript: NSObject {
 					// e.g. e1 % e2 has e1 on the stack first and then e2
 					var e1 = XDSExpr.nop
 					var e2 = XDSExpr.nop
-					if !stack.peek().isReturn {
+					if let next = stack.peek(), !next.isReturn {
 						e2 = stack.pop()
 					}
-					if !stack.peek().isReturn {
+					if let next = stack.peek(), !next.isReturn {
 						e1 = stack.pop()
 					}
 					
@@ -585,7 +585,7 @@ class XGScript: NSObject {
 				if instruction.XDSVariable != kXDSLastResultVariable { // TODO: evaluate success
 					stack.push(.loadVariable(instruction.XDSVariable))
 				} else {
-					if stack.peek().isReturn && !instruction.isScriptFunctionLastResult {
+					if let next = stack.peek(), next.isReturn && !instruction.isScriptFunctionLastResult {
 						stack.push(.nop)
 					} else {
 						let previous = stack.pop()
@@ -608,7 +608,7 @@ class XGScript: NSObject {
 				
 				
 			case .setVariable:
-				if stack.peek().isReturn {
+				if let next = stack.peek(), next.isReturn {
 					stack.push(.nop)
 				} else {
 					let variable = instruction.XDSVariable
@@ -617,7 +617,7 @@ class XGScript: NSObject {
 				}
 				
 			case .setVector:
-				if stack.peek().isReturn {
+				if let next = stack.peek(), next.isReturn {
 					stack.push(.nop)
 				} else {
 					stack.push(.setVector(instruction.XDSVariable, instruction.vectorDimension, stack.pop().bracketed))
@@ -664,7 +664,7 @@ class XGScript: NSObject {
 					if broken {
 						continue
 					}
-					if stack.peek().isReturn {
+					if let next = stack.peek(), next.isReturn {
 						broken = true
 						continue
 					}

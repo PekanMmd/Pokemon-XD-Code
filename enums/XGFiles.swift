@@ -372,8 +372,10 @@ indirect enum XGFiles {
 	var scriptDataLength: Int {
 		#if GAME_XD
 		return self == .common_rel ? 0x3d20 : fileSize
-		#else
+		#elseif GAME_COLO
 		return self == .common_rel ? (region == .JP ? 0x1f78 : 0x1fb8) : fileSize
+		#else
+		return fileSize
 		#endif
 	}
 

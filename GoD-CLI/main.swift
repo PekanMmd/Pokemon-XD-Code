@@ -36,7 +36,7 @@ func importExportFiles() {
 			if XGUtility.exportFileFromISO(outputFile, extractFsysContents: extract, decode: decode) {
 				printg("Successfully exported", outputFile.path)
 			} else {
-				displayAlert(title: "Failure", description: "Failed to  extract", outputFile.path)
+				displayAlert(title: "Failure", description: "Failed to  extract " + outputFile.path)
 			}
 		}
 	}
@@ -50,7 +50,7 @@ func importExportFiles() {
 				importedAFile = true
 				printg("Successfully imported", inputFile.path)
 			} else {
-				displayAlert(title: "Failure", description: "Failed to  import", inputFile.path)
+				displayAlert(title: "Failure", description: "Failed to  import " + inputFile.path)
 			}
 		}
 		if importedAFile {
