@@ -374,7 +374,7 @@ class GoDStatsViewController: GoDTableViewController {
 			nameText += sender.stringValue
 
 			#if GAME_PBR
-			if !XGString(string: string, sid: pokemon.nameID).replace() {
+			if !XGString(string: nameText, sid: pokemon.nameID).replace() {
 				GoDAlertViewController.displayAlert(title: "Replacement failed!", text: "The string could not be replaced")
 			}
 			#else
