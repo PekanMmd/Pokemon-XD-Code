@@ -29,6 +29,7 @@ mklink "spm\virt\GoD-CLI\Sources\TypesTable.swift" "%cd%\Objects\struct tables\T
 mklink "spm\virt\GoD-CLI\Sources\GoDTexturesContaining.swift" "%cd%\Objects\file formats\GoDTexturesContaining.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGNatures.swift" "%cd%\enums\XGNatures.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGPNGBlock.swift" "%cd%\Objects\textures\XGPNGBlock.swift" > NUL
+mklink "spm\virt\GoD-CLI\Sources\XGDayCareStatus.swift" "%cd%\enums\XGDayCareStatus.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGStatusEffects.swift" "%cd%\enums\XGStatusEffects.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\GoDShellManager.swift" "%cd%\Objects\managers\GoDShellManager.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\TexturesTable.swift" "%cd%\Objects\struct tables\TexturesTable.swift" > NUL
@@ -63,8 +64,10 @@ mklink "spm\virt\GoD-CLI\Sources\XDSExpr.swift" "%cd%\Objects\scripts\XD\XDSExpr
 mklink "spm\virt\GoD-CLI\Sources\XGTexturePalette.swift" "%cd%\Objects\textures\XGTexturePalette.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGSpecialStringCharacters.swift" "%cd%\enums\XGSpecialStringCharacters.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGRandomiser.swift" "%cd%\Objects\managers\XGRandomiser.swift" > NUL
+mklink "spm\virt\GoD-CLI\Sources\XGSaveManager.swift" "%cd%\Objects\managers\XGSaveManager.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGPatcher.swift" "%cd%\Objects\managers\XGPatcher.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGAssemblyCodeExtensions.swift" "%cd%\Objects\file formats\XGAssemblyCodeExtensions.swift" > NUL
+mklink "spm\virt\GoD-CLI\Sources\GamesAndLangauages.swift" "%cd%\enums\GamesAndLangauages.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGGenders.swift" "%cd%\enums\XGGenders.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGColosseumRounds.swift" "%cd%\enums\XGColosseumRounds.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGBattleBingoCard.swift" "%cd%\Objects\data types\enumerable\XGBattleBingoCard.swift" > NUL
@@ -76,6 +79,7 @@ mklink "spm\virt\GoD-CLI\Sources\XGShinyValues.swift" "%cd%\enums\XGShinyValues.
 mklink "spm\virt\GoD-CLI\Sources\CommonStructTable.swift" "%cd%\Objects\struct parsing\CommonStructTable.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGMoveTargets.swift" "%cd%\enums\XGMoveTargets.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGCollisionData.swift" "%cd%\Objects\file formats\XGCollisionData.swift" > NUL
+mklink "spm\virt\GoD-CLI\Sources\StatusEffectsTable.swift" "%cd%\Objects\struct tables\StatusEffectsTable.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\EnumerableDocumentable.swift" "%cd%\Objects\protocols\EnumerableDocumentable.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGStringManager.swift" "%cd%\Objects\managers\XGStringManager.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGDemoStarterPokemon.swift" "%cd%\Objects\data types\enumerable\XGDemoStarterPokemon.swift" > NUL
@@ -93,6 +97,7 @@ mklink "spm\virt\GoD-CLI\Sources\SmallStructTables.swift" "%cd%\Objects\struct t
 mklink "spm\virt\GoD-CLI\Sources\XGString.swift" "%cd%\Objects\data types\XGString.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGSettings.swift" "%cd%\Objects\managers\XGSettings.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGGenderRatios.swift" "%cd%\enums\XGGenderRatios.swift" > NUL
+mklink "spm\virt\GoD-CLI\Sources\SaveFileTables.swift" "%cd%\Objects\struct tables\SaveFileTables.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGStoryProgress.swift" "%cd%\Objects\scripts\XD\XGStoryProgress.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\DATNodes.swift" "%cd%\Objects\file formats\DATNodes.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGType.swift" "%cd%\Objects\data types\enumerable\XGType.swift" > NUL
@@ -133,6 +138,7 @@ mklink "spm\virt\GoD-CLI\Sources\XGUnicodeCharacters.swift" "%cd%\enums\XGUnicod
 mklink "spm\virt\GoD-CLI\Sources\PKXTables.swift" "%cd%\Objects\struct tables\PKXTables.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGEffectivenessValues.swift" "%cd%\enums\XGEffectivenessValues.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XDExtensions.swift" "%cd%\extensions\XDExtensions.swift" > NUL
+mklink "spm\virt\GoD-CLI\Sources\PKXModel.swift" "%cd%\Objects\file formats\PKXModel.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGPokemon.swift" "%cd%\enums\XGPokemon.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGUtility.swift" "%cd%\Objects\managers\XGUtility.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGEvolutionConditionType.swift" "%cd%\enums\XGEvolutionConditionType.swift" > NUL
@@ -153,6 +159,7 @@ mklink "spm\virt\GoD-CLI\Sources\main.swift" "%cd%\GoD-CLI\main.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\CharacterModelTable.swift" "%cd%\Objects\struct tables\CharacterModelTable.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGMoveTypes.swift" "%cd%\enums\XGMoveTypes.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGEvolution.swift" "%cd%\Objects\data types\XGEvolution.swift" > NUL
+mklink "spm\virt\GoD-CLI\Sources\MirorBDataTable.swift" "%cd%\Objects\struct tables\MirorBDataTable.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGScriptInstruction.swift" "%cd%\Objects\scripts\XD\XGScriptInstruction.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\CMGiftPokemon.swift" "%cd%\Objects\data types\enumerable\CMGiftPokemon.swift" > NUL
 mklink "spm\virt\GoD-CLI\Sources\XGFsys.swift" "%cd%\Objects\file formats\XGFsys.swift" > NUL
@@ -182,6 +189,7 @@ mklink "spm\virt\Colosseum-CLI\Sources\XGBagSlots.swift" "%cd%\enums\XGBagSlots.
 mklink "spm\virt\Colosseum-CLI\Sources\XGMoveCategory.swift" "%cd%\enums\XGMoveCategory.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\XGTHP.swift" "%cd%\Objects\file formats\XGTHP.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\StructTablesList.swift" "%cd%\Objects\struct tables\StructTablesList.swift" > NUL
+mklink "spm\virt\Colosseum-CLI\Sources\XGDayCareStatus.swift" "%cd%\enums\XGDayCareStatus.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\InteractionPointTable.swift" "%cd%\Objects\struct tables\InteractionPointTable.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\GoDStructData.swift" "%cd%\Objects\struct parsing\GoDStructData.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\GoDTexture.swift" "%cd%\Objects\textures\GoDTexture.swift" > NUL
@@ -199,6 +207,7 @@ mklink "spm\virt\Colosseum-CLI\Sources\GoDStruct.swift" "%cd%\Objects\struct par
 mklink "spm\virt\Colosseum-CLI\Sources\XGColosseumRounds.swift" "%cd%\enums\XGColosseumRounds.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\TreasureTable.swift" "%cd%\Objects\struct tables\TreasureTable.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\XGContestCategories.swift" "%cd%\enums\XGContestCategories.swift" > NUL
+mklink "spm\virt\Colosseum-CLI\Sources\StatusEffectsTable.swift" "%cd%\Objects\struct tables\StatusEffectsTable.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\CMScript.swift" "%cd%\Objects\scripts\Colosseum\CMScript.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\XGTexturePalette.swift" "%cd%\Objects\textures\XGTexturePalette.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\CMGiftPokemon.swift" "%cd%\Objects\data types\enumerable\CMGiftPokemon.swift" > NUL
@@ -210,6 +219,7 @@ mklink "spm\virt\Colosseum-CLI\Sources\CMTrainerPokemon.swift" "%cd%\Objects\dat
 mklink "spm\virt\Colosseum-CLI\Sources\XGMoveTypes.swift" "%cd%\enums\XGMoveTypes.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\XGCollisionData.swift" "%cd%\Objects\file formats\XGCollisionData.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\DATNodes.swift" "%cd%\Objects\file formats\DATNodes.swift" > NUL
+mklink "spm\virt\Colosseum-CLI\Sources\SaveFileTables.swift" "%cd%\Objects\struct tables\SaveFileTables.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\XGStringManager.swift" "%cd%\Objects\managers\XGStringManager.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\CMType.swift" "%cd%\Objects\data types\enumerable\CMType.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\CMPokemonStats.swift" "%cd%\Objects\data types\enumerable\CMPokemonStats.swift" > NUL
@@ -259,6 +269,7 @@ mklink "spm\virt\Colosseum-CLI\Sources\CMItems.swift" "%cd%\enums\CMItems.swift"
 mklink "spm\virt\Colosseum-CLI\Sources\GoDGameInit.swift" "%cd%\GoDGameInit.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\XGMoves.swift" "%cd%\enums\XGMoves.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\XGNature.swift" "%cd%\Objects\data types\enumerable\XGNature.swift" > NUL
+mklink "spm\virt\Colosseum-CLI\Sources\GamesAndLangauages.swift" "%cd%\enums\GamesAndLangauages.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\XGRoom.swift" "%cd%\Objects\data types\enumerable\XGRoom.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\CMTrainer.swift" "%cd%\Objects\data types\enumerable\CMTrainer.swift" > NUL
 mklink "spm\virt\Colosseum-CLI\Sources\GoDDataTableEntry.swift" "%cd%\Objects\helper data types\GoDDataTableEntry.swift" > NUL
@@ -314,6 +325,9 @@ mklink "spm\virt\Colosseum-CLI\Sources\EnumerableDocumentable.swift" "%cd%\Objec
 
 REM PBR Sources
 mklink "spm\virt\PBR-CLI\Sources\main.swift" "%cd%\GoD-CLI\main.swift" > NUL
+mklink "spm\virt\PBR-CLI\Sources\GamesAndLangauages.swift" "%cd%\enums\GamesAndLangauages.swift" > NUL
+mklink "spm\virt\PBR-CLI\Sources\PBRAbilitiesManager.swift" "%cd%\Revolution Tool CL\objects\PBRAbilitiesManager.swift" > NUL
+mklink "spm\virt\PBR-CLI\Sources\PokemonModelsTable.swift" "%cd%\Revolution Tool CL\structs\PokemonModelsTable.swift" > NUL
 mklink "spm\virt\PBR-CLI\Sources\XGResources.swift" "%cd%\enums\XGResources.swift" > NUL
 mklink "spm\virt\PBR-CLI\Sources\XGFsys.swift" "%cd%\Objects\file formats\XGFsys.swift" > NUL
 mklink "spm\virt\PBR-CLI\Sources\GoDKeyCodes.swift" "%cd%\GoDToolOSX\Objects\GoDKeyCodes.swift" > NUL
@@ -322,6 +336,7 @@ mklink "spm\virt\PBR-CLI\Sources\GoDLogManager.swift" "%cd%\GoDLogManager.swift"
 mklink "spm\virt\PBR-CLI\Sources\XGVertex.swift" "%cd%\GoDToolOSX\Objects\XGVertex.swift" > NUL
 mklink "spm\virt\PBR-CLI\Sources\PBRTMs.swift" "%cd%\Revolution Tool CL\enums\PBRTMs.swift" > NUL
 mklink "spm\virt\PBR-CLI\Sources\PBRMoveTypes.swift" "%cd%\Revolution Tool CL\enums\PBRMoveTypes.swift" > NUL
+mklink "spm\virt\PBR-CLI\Sources\SmallStructTables.swift" "%cd%\Revolution Tool CL\structs\SmallStructTables.swift" > NUL
 mklink "spm\virt\PBR-CLI\Sources\XGEvolution.swift" "%cd%\Objects\data types\XGEvolution.swift" > NUL
 mklink "spm\virt\PBR-CLI\Sources\CommandLineArgs.swift" "%cd%\GoDToolCL\CommandLineArgs.swift" > NUL
 mklink "spm\virt\PBR-CLI\Sources\GoDDataTableEntry.swift" "%cd%\Objects\helper data types\GoDDataTableEntry.swift" > NUL
