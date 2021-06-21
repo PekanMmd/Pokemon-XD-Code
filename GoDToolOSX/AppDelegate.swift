@@ -17,6 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 	@IBOutlet weak var scriptClassesMenuItem: NSMenuItem!
 	@IBOutlet weak var scriptCompilerMenuItem: NSMenuItem!
+	@IBOutlet weak var experimentalFeaturesMenuItem: NSMenuItem!
 
 	@IBOutlet weak var godtoolmenuitem: NSMenuItem!
 	@IBOutlet weak var godtoolaboutmenuitem: NSMenuItem!
@@ -91,6 +92,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		if let isoFile = files.first(where: {$0.fileType == .iso && $0.exists}) {
 			printg("opening ISO:", isoFile.path)
 			guard XGISO.loadISO(file: isoFile) else {
+				updateExperimentalMenuItem()
 				return
 			}
 			homeViewController.reload()
@@ -200,12 +202,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //		XGUtility.exportTextures()
 //	}
 	
-	
+	@IBAction func enableExperimentalFeatures(_ sender: Any) {
+		settings.enableExperimentalFeatures = !settings.enableExperimentalFeatures
+		settings.save()
+		updateExperimentalMenuItem()
+	}
+
+	func updateExperimentalMenuItem() {
+		experimentalFeaturesMenuItem.title = settings.enableExperimentalFeatures ? "Disable Experimental Features" : "Enable Experimental Features"
+		experimentalFeaturesMenuItem.isEnabled = XGISO.inputISOFile != nil
+	}
+
 	@IBAction func setVerboseLogs(_ sender: Any) {
 		printg("Set verbose logs")
-//		settings.verbose = true
-//		settings.save()
-		XGUtility.deleteSuperfluousFiles()
+		settings.verbose = true
+		settings.save()
 	}
 	
 	@IBAction func setFastLogs(_ sender: Any) {

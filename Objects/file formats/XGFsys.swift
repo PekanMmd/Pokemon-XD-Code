@@ -892,7 +892,7 @@ final class XGFsys : NSObject {
 				let fileContainsScript = file.fileType == .scd
 				#endif
 
-				if fileContainsScript, game != .Colosseum  { // TODO allow colosseum scripts once less buggy
+				if fileContainsScript, (game != .Colosseum || settings.enableExperimentalFeatures)  { // TODO allow colosseum scripts once less buggy
 					let xdsFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.xds.fileExtension, folder)
 					if !xdsFile.exists || overwrite {
 						let scriptText = file.scriptData.getXDSScript()

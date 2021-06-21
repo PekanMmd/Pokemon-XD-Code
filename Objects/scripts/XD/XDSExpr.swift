@@ -739,6 +739,8 @@ indirect enum XDSExpr {
 				}
 				
 				return functionPointerWithName("CurrentScript.\(functionIndex)")
+			} else if scriptIdentifier == 0 {
+				return "Null"
 			} else {
 				return functionPointerWithName("UNKOWN_SCRIPT_\(scriptIdentifier.hexString())_FUNCTION_\(functionIndex)")
 			}

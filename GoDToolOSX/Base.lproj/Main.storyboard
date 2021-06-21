@@ -103,6 +103,12 @@
                                                 </items>
                                             </menu>
                                         </menuItem>
+                                        <menuItem title="Enable Experimental Features" id="cAC-sv-FGN">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="enableExperimentalFeatures:" target="Voe-Tx-rLC" id="wwt-nJ-xjh"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="gcK-uI-4ME"/>
                                         <menuItem title="Cut" keyEquivalent="x" id="uRl-iY-unG">
                                             <connections>
@@ -265,6 +271,7 @@
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Colosseum_Tool" customModuleProvider="target">
                     <connections>
+                        <outlet property="experimentalFeaturesMenuItem" destination="cAC-sv-FGN" id="3yp-Lh-bh2"/>
                         <outlet property="godtoolaboutmenuitem" destination="5kV-Vb-QxS" id="RzJ-5K-bSN"/>
                         <outlet property="godtoolhelpmenuitem" destination="FKE-Sm-Kum" id="kyN-Ez-awb"/>
                         <outlet property="godtoolmenuitem" destination="1Xt-HY-uBw" id="Ef4-Le-GYE"/>
@@ -576,6 +583,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="PCr-YY-Lid"/>
+        <segue reference="NaH-4i-fmB"/>
     </inferredMetricsTieBreakers>
 </document>

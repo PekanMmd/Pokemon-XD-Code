@@ -275,17 +275,16 @@ class XDSScriptCompiler: NSObject {
 		let stack = createExprStack(expressions)
 		locations = getLocations(expressions)
 		
-		var ftbl = getFTBL(expressions)
+		let ftbl = getFTBL(expressions)
 		for function in ftbl {
-			scriptFunctions[function.name] = 0x100_0000 + function.index
+			scriptFunctions[function.name.substring(from: 1, to: function.name.length)] = 0x100_0000 + function.index
 		}
 		if !fileDecodingMode {
 			if let target = targetFile, target != .common_rel {
-				ftbl = XGFiles.common_rel.scriptData.ftbl
-			}
-
-			for function in ftbl {
-				scriptFunctions["Common." + function.name] = 0x596_0000 + function.index
+				let ftbl = XGFiles.common_rel.scriptData.ftbl
+				for function in ftbl {
+					scriptFunctions["Common." + function.name] = 0x596_0000 + function.index
+				}
 			}
 		}
 

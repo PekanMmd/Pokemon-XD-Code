@@ -583,7 +583,7 @@ class XGScript: NSObject {
 				
 				var counter = 0
 				var lastI = 0
-				func getCodeIndexForInstruction(index: Int) -> Int {
+				func getCodeIndexForInstruction(index: Int) -> Int? {
 					for i in lastI ..< self.code.count {
 						if counter == index {
 							lastI = i
@@ -591,12 +591,15 @@ class XGScript: NSObject {
 						}
 						counter += code[i].length
 					}
-					return -1
+					return nil
 				}
 				
 				while currentIndex < lastIndex && currentIndex >= 0 {
-					let currentInstruction = self.code[getCodeIndexForInstruction(index: currentIndex)]
-					
+					guard let codeIndex = getCodeIndexForInstruction(index: currentIndex) else {
+						continue
+					}
+					let currentInstruction = self.code[codeIndex]
+
 					switch currentInstruction.opCode {
 					case .loadVariable:
 						fallthrough
@@ -656,7 +659,6 @@ class XGScript: NSObject {
 				}
 			}
 			currentInstructionIndex += instruction.length
-			
 			
 			switch instruction.opCode {
 				

@@ -13,15 +13,18 @@ let settings = XGSettings.load()
 class XGSettings {
 	var verbose = false
 	var increaseFileSizes = true
+	var enableExperimentalFeatures = false
 	
 	private struct Settings: Codable {
 		
 		var verbose: Bool?
 		var increaseFileSizes: Bool?
+		var enableExperimentalFeatures: Bool?
 		
 		enum CodingKeys: String, CodingKey {
 			case verbose = "Verbose Logs"
 			case increaseFileSizes = "Increase File Sizes"
+			case enableExperimentalFeatures = "Enable Experimental Features"
 		}
 	}
 	
@@ -34,10 +37,16 @@ class XGSettings {
 		if let increaseFileSizes = settings.increaseFileSizes {
 			self.increaseFileSizes = increaseFileSizes
 		}
+		if let experimental = settings.enableExperimentalFeatures {
+			self.enableExperimentalFeatures = experimental
+		}
 	}
 	
 	func save() {
-		let settingsData = Settings(verbose: verbose, increaseFileSizes: increaseFileSizes)
+		let settingsData = Settings(verbose: verbose,
+									increaseFileSizes: increaseFileSizes,
+									enableExperimentalFeatures: enableExperimentalFeatures
+									)
 		settingsData.writeJSON(to: settingsFile)
 	}
 	

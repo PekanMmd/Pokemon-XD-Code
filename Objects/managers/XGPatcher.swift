@@ -945,7 +945,12 @@ class XGPatcher {
 			}
 		}
 
-		XGAssembly.replaceRamASM(RAMOffset: saveCountRAMOffset, newASM: [.stw(.r7, .r5, 0x2c)])
+		if game == .XD {
+			XGAssembly.replaceRamASM(RAMOffset: saveCountRAMOffset, newASM: [.stw(.r7, .r5, 0x2c)])
+		} else {
+			XGAssembly.replaceRamASM(RAMOffset: saveCountRAMOffset, newASM: [.stw(.r0, .r5, 0x2c)])
+		}
+
 		XGAssembly.replaceRamASM(RAMOffset: memoryCardMatchOffset, newASM: [.nop])
 	}
 

@@ -327,7 +327,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 
 		("showTitleScreen", 37, 1, [.objectName("Map")], .null, ""),
 		("enterMenuMap", 38, 2, [.objectName("Map"), .room], .null, ""),
-		("warpToMapWithTransitions", 49, 2, [.objectName("Map"), .room, .bool, .scriptFunction, .integer], .null, "room id, unknown, current script function before warp, target room function after warp"), // # (int roomID, int unknown)
+		("warpToMapWithTransitions", 49, 2, [.objectName("Map"), .room, .bool, .scriptFunction, .scriptFunction], .null, "room id, unknown, current script function before warp, target room function after warp"), // # (int roomID, int unknown)
 
 		("showPurifyChamberMenu", 43, 1, [.objectName("Map")], .null, ""),
 		("showBingoMenu", 44, 1, [.objectName("Map")], .null, ""),
