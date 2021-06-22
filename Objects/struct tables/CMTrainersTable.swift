@@ -124,3 +124,30 @@ class TrainerStructTable: CommonStructTable {
 		}
 	}
 }
+
+let trainerAIStruct = GoDStruct(name: "Trainer AI", format: [
+	.array(name: "Unknown Flags A", description: "", property: .byte(name: "", description: "", type: .bool), count: 6),
+	.array(name: "Unknown Percentages A", description: "", property: .byte(name: "", description: "", type: .percentage), count: 3),
+	.array(name: "Unknown Flags B", description: "", property: .byte(name: "", description: "", type: .bool), count: 4),
+	.byte(name: "Unknown Percentages B", description: "", type: .percentage),
+	.byte(name: "Unknown Flag C", description: "", type: .bool),
+	.array(name: "Unkown Values A", description: "", property: .byte(name: "", description: "", type: .int), count: 2),
+	.array(name: "Unknown Flags D", description: "", property: .byte(name: "", description: "", type: .bool), count: 5),
+	.byte(name: "Unkown Percentage C", description: "", type: .percentage),
+	.byte(name: "Unknown Flag E", description: "", type: .bool),
+	.byte(name: "Unknown Percentage D", description: "", type: .percentage),
+	.bitArray(name: "Unknown Flags F", description: "", bitFieldNames: [
+		"Unknown",
+		"Unknown",
+		"Unknown",
+		"Unknown",
+		"Unknown",
+		"Unknown",
+		"Unknown",
+		"Unknown",
+	]),
+	.word(name: "Unknown ID", description: "", type: .int),
+	.array(name: "Unknown Values B", description: "", property: .byte(name: "", description: "", type: .int), count: 8)
+])
+
+let trainerAITable = CommonStructTable(index: .TrainerAIData, properties: trainerAIStruct)
