@@ -28,7 +28,7 @@ var abilityDataFunctionOffset: Int {
 		switch region {
 		case .US: return 0x119b6c
 		case .EU: return 0x11db48
-		case .JP: return 0x11725c
+		case .JP: return 0x117354
 		case .OtherGame: return -1
 		}
 	}
@@ -106,7 +106,8 @@ enum XGAbilities {
 	}
 	
 	var nameIDOffset: Int {
-		return kAbilitiesStartRAMOffset - kDolTableToRAMOffsetDifference + (index * kSizeOfAbilityEntry) + kAbilityNameIDOffset
+		let abilityFileOffset = abilitiesDataFile == .dol ? kDolTableToRAMOffsetDifference : kRELtoRAMOffsetDifference
+		return kAbilitiesStartRAMOffset - abilityFileOffset + (index * kSizeOfAbilityEntry) + kAbilityNameIDOffset
 	}
 	
 	var nameID: Int {
@@ -118,7 +119,8 @@ enum XGAbilities {
 	}
 	
 	var descriptionIDOffset: Int {
-		return kAbilitiesStartRAMOffset - kDolTableToRAMOffsetDifference + (index * kSizeOfAbilityEntry) + kAbilityDescriptionIDOffset
+		let abilityFileOffset = abilitiesDataFile == .dol ? kDolTableToRAMOffsetDifference : kRELtoRAMOffsetDifference
+		return kAbilitiesStartRAMOffset - abilityFileOffset + (index * kSizeOfAbilityEntry) + kAbilityDescriptionIDOffset
 	}
 	
 	var descriptionID: Int {

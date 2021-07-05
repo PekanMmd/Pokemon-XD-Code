@@ -96,6 +96,8 @@ var ScriptBuiltInFunctions : [Int : (name: String, parameterTypes: [CMSMacroType
 
 	68: (name: "characterTurnToAngle", parameterTypes: [.groupID, .resourceID, .float], returnType: nil, hint: "group id, resource id, angle"),
 
+	70: (name: "characterAttachToCharacter", parameterTypes: [.groupID, .resourceID, .groupID, .resourceID, .integer], returnType: nil, hint: "gid, rid, targer gid, target rid, unk"),
+
 	73: (name: "characterRunToPosition", parameterTypes: [.groupID, .resourceID, .float, .float, .float], returnType: nil, hint: "group id, resource id, x, y, z"),
 
 	78: (name: "flagSetFalse", parameterTypes: [.flag], returnType: nil, hint: ""),
@@ -115,6 +117,8 @@ var ScriptBuiltInFunctions : [Int : (name: String, parameterTypes: [CMSMacroType
 	103: (name: "battleGetResult", parameterTypes: nil, returnType: .battleResult, hint: ""),
 	104: (name: "soundSetBackgroundMusic", parameterTypes: [.integer, .integer, .integer], returnType: .battleResult, hint: "id, unk, volume"),
 
+	112: (name: "modelGetResourceID", parameterTypes: [.fileIdentifier], returnType: .resourceID, hint: "model id"),
+
 	119: (name: "playerReceiveItem", parameterTypes: [.item, .integer], returnType: .battleResult, hint: "item id, quantity"),
 
 	128: (name: "mapSetReturnMap", parameterTypes: nil, returnType: nil, hint: "unk, current map id, unk"),
@@ -124,14 +128,16 @@ var ScriptBuiltInFunctions : [Int : (name: String, parameterTypes: [CMSMacroType
 
 	144: (name: "mapWarpToNextRoomWithTransitions", parameterTypes: [.scriptFunction, .scriptFunction], returnType: nil, hint: "script before warp, script after"),
 
-	151: (name: "characterFaceForward", parameterTypes: [.groupID, .resourceID, .bool], returnType: nil, hint: "gid, rid, unk"),
+	151: (name: "characterFaceDirection", parameterTypes: [.groupID, .resourceID, .integer], returnType: nil, hint: "gid, rid, unk"),
 	152: (name: "battleStartBattleWithOptions", parameterTypes: [.battleID, .bool, .bool], returnType: nil, hint: ""),
 
 	157: (name: "sleep", parameterTypes: nil, returnType: nil, hint: "duration"),
 
 	163: (name: "useCologn", parameterTypes: nil, returnType: nil, hint: "duration"),
 
-	165: (name: "characterFaceCharacter", parameterTypes: [.groupID, .resourceID, .groupID, .resourceID, .float], returnType: nil, hint: "target gid, target sid, arg gid, arg, sid"),
+	165: (name: "characterFaceCharacter", parameterTypes: [.groupID, .resourceID, .groupID, .resourceID, .float], returnType: nil, hint: "target gid, target rid, arg gid, arg rid, unk (speed?)"),
+
+	181: (name: "characterTurnHeadTowardsCharacter", parameterTypes: [.groupID, .resourceID, .groupID, .resourceID], returnType: nil, hint: "arg gid, rag rid, target gid, target rid"),
 
 	189: (name: "pdaUpdateStrategyMemo", parameterTypes: [], returnType: .bool, hint: "-> is already up-to-date?"),
 

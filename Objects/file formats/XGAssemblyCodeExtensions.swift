@@ -462,6 +462,9 @@ extension XGAssembly {
 	}
 
 	class func switchNextPokemonAtEndOfTurn() {
+		printg("Patch disabled due to bug")
+		#warning("TODO: fix switch patch")
+		return
 		// you no longer send in a new pokemon as soon as one faints. Now waits until end of turn. Still experimental!
 		// pretty much a copy and paste of all the code that would be called at the end of the move routine with just a few lines of code where the switching happens being omitted. Not a very elegant solution but effective.
 

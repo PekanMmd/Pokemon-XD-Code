@@ -633,6 +633,24 @@ extension String {
 			return result.lowercased()
 		}
 	}
+
+	var simplifiedNumber: String {
+		get {
+			var result = ""
+			let chars = self.stack
+			while !chars.isEmpty {
+				let char = chars.pop()
+				if char == "é" {
+					result += "e"
+				} else {
+					if !"!@£$%^&*()+=|[]{}\\/?><,.;:'\"`~# 「」。°".contains(char) {
+						result += char
+					}
+				}
+			}
+			return result.lowercased()
+		}
+	}
 	
 	var underscoreSimplified: String {
 		get {

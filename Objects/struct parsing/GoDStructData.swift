@@ -388,7 +388,7 @@ class GoDStructData: CustomStringConvertible {
 			}
 			if let part = string.split(separator: " ").map({String($0)}).last {
 				let unbracketed = part.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
-				let stripped = unbracketed.simplified // Removes % from percentage values, maybe other things added in future as well
+				let stripped = unbracketed.simplifiedNumber // Removes % from percentage values, maybe other things added in future as well
 				return stripped.integerValue
 			}
 			return nil

@@ -15,7 +15,7 @@ func displayAlert(title: String, description: String) {
 	#if GUI
 	GoDAlertViewController.displayAlert(title: title, text: description)
 	#else
-	printg("\nAlert: \(title)\n\(description)\n")
+	printg("\nAlert: \(title)\n\(description)\n>> Press enter to continue...")
 	_ = readLine()
 	#endif
 }

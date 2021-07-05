@@ -52,10 +52,16 @@ let kUnlimitedTutorMovesJumpOffsets		= [0x02DC, 0x0290]
 let kUnlimitedTutorMovesJumpInstructions = [0x006B,0x007D]
 let kUnlimitedTutorMovesJumpOffsets2	 = [0x02B6, 0x0302]
 
-let kShinyCalcPIDOffset1				= 0x1410CC
-let kShinyCalcChanceOffset1				= 0x1410D2
-let kShinyCalcPIDOffset2				= 0x147EE0
-let kShinyCalcChanceOffset2				= 0x147EE6
+var kShinyCalcChanceRAMOffsets: (Int, Int) {
+	// Colosseum has multiple shiny calcs in various functions so this is currently
+	// only implemented for XD
+	switch region {
+	case .US: return (0x144172, 0x14af86)
+	case .EU: return (0x145a36, 0x14c84a)
+	case .JP: return (0x13f57e, 0x1462e2)
+	case .OtherGame: return (-1, -1)
+	}
+}
 
 let kShinyCalcOriginalPIDInstruction		: UInt32 = 0x7CA30278
 let kShinyCalcOriginalChanceInstruction		= 0x0008
@@ -83,7 +89,7 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.allowFemaleStarters,
 	.betaStartersApply,
 	.betaStartersRemove,
-	.switchPokemonAtEndOfTurn,
+//	.switchPokemonAtEndOfTurn,
 	.fixShinyGlitch,
 	.replaceShinyGlitch,
 	.allowShinyShadowPokemon,
@@ -575,10 +581,16 @@ class XGPatcher {
 		}
 	}
 	
-	class func getShinyChance() -> Float {
-		let dol = XGFiles.dol.data!
+	class func getShinyChance() -> Float? {
+		guard game == .XD else {
+			printg("Can't get shiny chance for this game:", game.name)
+			return nil
+		}
+		guard let dol = XGFiles.dol.data else {
+			return nil
+		}
 		
-		let val = Float(dol.get2BytesAtOffset(kShinyCalcChanceOffset1))
+		let val = Float(dol.get2BytesAtOffset(kShinyCalcChanceRAMOffsets.0 - kDolToRAMOffsetDifference))
 		return val / 0xFFFF * 100
 		
 	}
@@ -586,8 +598,8 @@ class XGPatcher {
 	class func changeShinyChancePercentage(_ newValue: Float) {
 		// Input the shiny chance as a percentage
 
-		guard region == .US else {
-			printg("This patch has not been implemented for this game region:", region.name)
+		guard game == .XD else {
+			printg("This patch has not been implemented for this game:", game.name)
 			return
 		}
 		
@@ -596,23 +608,42 @@ class XGPatcher {
 			return
 		}
 		
-		let dol = XGFiles.dol.data!
-		
-		var val = Int(newValue * 0xFFFF) / 100
-		
-		if val > 0xFFFF {
-			val = 0xFFFF
+		guard let dol = XGFiles.dol.data else {
+			return
 		}
 		
-		if val < 0 {
-			val = 0
-		}
+		var val = min(Int(newValue * 0xFFFF) / 100, 0x7FFF)
+		val = max(val, 0)
 		
-		dol.replace2BytesAtOffset(kShinyCalcChanceOffset1, withBytes: val)
-		dol.replace2BytesAtOffset(kShinyCalcChanceOffset2, withBytes: val)
-		
+		dol.replace2BytesAtOffset(kShinyCalcChanceRAMOffsets.0 - kDolToRAMOffsetDifference, withBytes: val)
+		dol.replace2BytesAtOffset(kShinyCalcChanceRAMOffsets.1 - kDolToRAMOffsetDifference, withBytes: val)
 		dol.save()
 
+	}
+
+	class func setType9BattleBingoPanelToUnusedPanel() {
+		guard game != .Colosseum else {
+			printg("This patch isn't for colosseum.")
+			return
+		}
+
+		guard region == .US else {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
+
+		if let dol = XGFiles.dol.data {
+			let type9BingoPanelType9Offset = 0x2E89BE
+			dol.replace2BytesAtOffset(type9BingoPanelType9Offset, withBytes: 725)
+
+			// replace the code that uses this texture in case it is actually used
+			// set it to myster panel texture
+			let blankPanelRAMOffsets = [0x095082, 0x095202]
+			for offset in blankPanelRAMOffsets {
+				dol.replace2BytesAtOffset(offset - kDolToRAMOffsetDifference, withBytes: 670)
+			}
+			dol.save()
+		}
 	}
 	
 	class func purgeUnusedText() {
@@ -633,8 +664,6 @@ class XGPatcher {
 			// clears colosseum debug string table
 			XGStringTable.common_rel2().purge()
 		}
-		
-		
 	}
 	
 	class func decapitalise() {
