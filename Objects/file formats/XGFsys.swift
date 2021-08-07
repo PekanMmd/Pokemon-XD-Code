@@ -907,6 +907,18 @@ final class XGFsys : NSObject {
 						let table = file.stringTable
 						table.writeJSON(to: msgFile)
 					}
+					if file == .common_rel && game == .Colosseum && region != .JP && settings.enableExperimentalFeatures {
+						let msgFile2 = XGFiles.nameAndFolder("common2.json", file.folder)
+						if !msgFile2.exists {
+							let table = XGStringTable.common_rel2()
+							table.writeJSON(to: msgFile2)
+						}
+						let msgFile3 = XGFiles.nameAndFolder("common3.json", file.folder)
+						if !msgFile3.exists {
+							let table = XGStringTable.common_rel3()
+							table.writeJSON(to: msgFile3)
+						}
+					}
 				}
 				#endif
 

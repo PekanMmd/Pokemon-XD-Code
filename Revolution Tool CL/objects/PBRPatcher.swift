@@ -138,7 +138,7 @@ class XGPatcher {
 	}
 
 	static func gen6CriticalHitMultipliers() {
-		guard region == .US else {
+		guard region == .EU else {
 			printg("This patch hasn't been implemented for this region yet:", region.name)
 			return
 		}
@@ -221,6 +221,45 @@ class XGPatcher {
 		if let dol = XGFiles.dol.data {
 			dol.replace4BytesAtOffset(bloomStrengthOffset, withBytes: 0)
 			dol.save()
+		}
+	}
+
+	static func hidePlayer2TeamPreview() {
+		let nopRAMAddresses = [
+			0x80154a48,
+			0x80154a5c,
+			0x80154a70,
+			0x80154a84,
+			0x80154a98,
+			0x80154aac,
+			0x80154ad4,
+			0x80154ae8,
+			0x80154b10,
+			0x80154b24,
+			0x80154b4c,
+			0x80154b60,
+			0x80154b88,
+			0x80154b9c,
+			0x80154bc4,
+			0x80154bd8,
+			0x80154c00,
+			0x80154c14,
+			0x80154c30,
+			0x80154c4c,
+			0x80154c68,
+			0x80154c84,
+			0x80154ca0,
+			0x80154cbc,
+			0x80154844,
+			0x8015485c,
+			0x80154874,
+			0x8015488c,
+			0x801548a4,
+			0x801548bc
+		]
+
+		for address in nopRAMAddresses {
+			XGAssembly.replaceRamASM(RAMOffset: address & 0xFFFFFF, newASM: [.nop])
 		}
 	}
 

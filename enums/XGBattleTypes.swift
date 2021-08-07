@@ -7,8 +7,9 @@
 
 import Foundation
 
-enum XGBattleTypes : Int, Codable, CaseIterable {
-	
+enum XGBattleTypes: Int, Codable, CaseIterable {
+	// These names are from the perspective of XD
+	// Refer to the name variable below for names for colosseum
 	case none = 0
 	case story_admin_colo = 1 // colosseum only
 	case story = 2
@@ -26,11 +27,11 @@ enum XGBattleTypes : Int, Codable, CaseIterable {
 	case battle_cd = 14
 	case battle_training = 15
 	case miror_b_pokespot = 16
-	case battle_mode_mt_battle_colo = 17 // colosseum only
+	case ecard_special_battle = 17 // colosseum only
+	case battle_mode_mt_battle_final = 18 // colosseum only
 	
-	var name : String {
+	var name: String {
 		switch self {
-			
 		case .none:
 			return "None"
 		case .story_admin_colo:
@@ -42,31 +43,33 @@ enum XGBattleTypes : Int, Codable, CaseIterable {
 		case .colosseum_final:
 			return "Colosseum Final Round"
 		case .sample:
-			return "Placeholder"
+			return "Test"
 		case .colosseum_orre_prelim:
-			return game == .XD ? "Orre Colosseum Preliminary Round" : "Colosseum Preliminary Round II"
+			return game == .XD ? "Orre Colosseum Preliminary Round" : "Phenac Colosseum Preliminary Round"
 		case .colosseum_orre_final:
-			return game == .XD ? "Orre Colosseum Final Round" : "Colosseum Final Round II"
+			return game == .XD ? "Orre Colosseum Final Round" : "Phenac Colosseum Final Round"
 		case .mt_battle:
 			return "Mt. Battle"
 		case .mt_battle_final:
 			return "Mt. Battle Final"
 		case .battle_mode:
-			return "Battle Mode"
+			return game == .XD ? "Battle Mode" : "E-Card Panel Battle"
 		case .link_battle:
-			return "Link Battle"
+			return game == .XD ? "Link Battle" : "E-Card Endless Battle"
 		case .wild_pokemon:
-			return "Wild Pokémon"
+			return game == .XD ? "Wild Pokémon" : "Battle Mode Battle Now"
 		case .battle_bingo:
-			return "Battle Bingo"
+			return game == .XD ? "Battle Bingo" : "Battle Mode Solo Colosseum"
 		case .battle_cd:
-			return "Battle CD"
+			return game == .XD ? "Battle Bingo" : "Battle Mode Solo Colosseum Final"
 		case .battle_training:
-			return "Battle Tutorial"
+			return game == .XD ? "Battle Tutorial" : "Battle Mode Mt. Battle"
 		case .miror_b_pokespot:
-			return "Miror B. Pokespot"
-		case .battle_mode_mt_battle_colo:
-			return "Battle Mode Mt. Battle (colosseum)"
+			return game == .XD ? "Miror B. Pokespot" : "Link Battle"
+		case .ecard_special_battle:
+			return "E-Card Special Battle"
+		case .battle_mode_mt_battle_final:
+			return "Battle Mode Mt. Battle Final"
 		}
 	}
 }

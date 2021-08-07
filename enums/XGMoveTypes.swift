@@ -27,6 +27,30 @@ enum XGMoveTypes : XGIndexedValue {
 			return data.name.string
 		}
 	}
+
+	var originalName: String {
+		switch self.index {
+		case 0: return "Normal"
+		case 1: return "Fighting"
+		case 2: return "Flying"
+		case 3: return "Poison"
+		case 4: return "Ground"
+		case 5: return "Rock"
+		case 6: return "Bug"
+		case 7: return "Ghost"
+		case 8: return "Steel"
+		case 9: return "???"
+		case 10: return "Fire"
+		case 11: return "Water"
+		case 12: return "Grass"
+		case 13: return "Electric"
+		case 14: return "Psychic"
+		case 15: return "Ice"
+		case 16: return "Dragon"
+		case 17: return "Dark"
+		default: return "???"
+		}
+	}
 	
 	var data : XGType {
 		return XGType(index: index)

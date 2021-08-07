@@ -86,9 +86,9 @@ let battleStruct = GoDStruct(name: "Battle", format: [
 	.byte(name: "Unknown Flag", description: "", type: .bool),
 	.short(name: "Battle Field ID", description: "", type: .battleFieldID),
 	.word(name: "Name ID", description: "", type: .msgID(file: .common_rel)),
-	.word(name: "Unknown 2", description: "", type: .uintHex),
+	.word(name: "BGM ID", description: "", type: .uintHex),
 	.word(name: "Unknown 3", description: "", type: .uintHex),
-	.word(name: "Unknown 4", description: "", type: .uintHex),
+	.word(name: "Colosseum Round", description: "", type: .colosseumRound),
 	.array(name: "Players", description: "", property: .subStruct(name: "Battle Player", description: "", property: GoDStruct(name: "Battle Player", format: [
 		.short(name: "Trainer ID", description: "id 1 is the player", type: .indexOfEntryInTable(table: trainersTable, nameProperty: nil)),
 		.word(name: "Controller Index", description: "0 for AI", type: .playerController),
@@ -120,5 +120,41 @@ let battleStylesTable = CommonStructTable(index: .BattleStyles, properties: batt
 		return "\(battleTypeName) Battle - \(pokemonPerTrainer) Pokemon Each"
 	}
 	return "Battle Style \(index)"
+}
+
+let battleTypesStruct = GoDStruct(name: "Battle Types", format: [
+	.byte(name: "Flag 1", description: "", type: .bool),
+	.byte(name: "Flag 2", description: "", type: .bool),
+	.byte(name: "Flag 3", description: "", type: .bool),
+	.byte(name: "Flag 4", description: "", type: .bool),
+	.byte(name: "Flag 5", description: "", type: .bool),
+	.byte(name: "Flag 6", description: "", type: .bool),
+	.byte(name: "Flag 7", description: "", type: .bool),
+	.byte(name: "Flag 8", description: "", type: .bool),
+	.byte(name: "Flag 9", description: "", type: .bool),
+	.byte(name: "Flag 10", description: "", type: .bool),
+	.byte(name: "Flag 11", description: "", type: .bool),
+	.byte(name: "Flag 12", description: "", type: .bool),
+	.byte(name: "Flag 13", description: "", type: .bool),
+	.byte(name: "Flag 14", description: "", type: .bool),
+	.byte(name: "Flag 15", description: "", type: .bool),
+	.byte(name: "Flag 16", description: "", type: .bool),
+	.byte(name: "Flag 17", description: "", type: .bool),
+	.byte(name: "Flag 18", description: "", type: .bool),
+	.byte(name: "Flag 19", description: "", type: .bool),
+	.byte(name: "Flag 20", description: "", type: .bool),
+	.byte(name: "Flag 21", description: "", type: .bool),
+	.byte(name: "Flag 22", description: "", type: .bool),
+	.byte(name: "Flag 23", description: "", type: .bool),
+	.byte(name: "Flag 24", description: "", type: .bool),
+	.byte(name: "Flag 25", description: "", type: .bool),
+	.word(name: "Name ID", description: "", type: .msgID(file: .common_rel))
+])
+
+let battleTypesTable = CommonStructTable(index: .BattleTypes, properties: battleTypesStruct) { (index, data) -> String? in
+	if let type = XGBattleTypes(rawValue: index) {
+		return type.name
+	}
+	return "Battle Type \(index)"
 }
 #endif

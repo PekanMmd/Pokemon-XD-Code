@@ -50,7 +50,7 @@ let levelUpMoveStruct = GoDStruct(name: "Level Up Move", format: [
 ])
 
 let spritesStruct = GoDStruct(name: "Pokemon Sprites", format: [
-	.byte(name: "Pokeon Dex Colour ID", description: "", type: .uintHex),
+	.byte(name: "Pokedex Colour ID", description: "", type: .uintHex),
 	.short(name: "Face ID", description: "The index of the image for the pokemon's face", type: .indexOfEntryInTable(table: pokeFacesTable, nameProperty: nil)),
 	.word(name: "Purify Chamber Image ID", description: "File identifier for the animated texture", type: .fsysFileIdentifier(fsysName: nil))
 ])
@@ -146,4 +146,4 @@ let pokemonStatsStruct = GoDStruct(name: "Pokemon Stats", format: [
 )
 #endif
 
-let pokemonTable = CommonStructTable(index: .PokemonStats, properties: pokemonStatsStruct, documentByIndex: false)
+let pokemonStatsTable = CommonStructTable(index: .PokemonStats, properties: pokemonStatsStruct, documentByIndex: false)

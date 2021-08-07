@@ -27,7 +27,7 @@ let moveStruct = GoDStruct(name: "Move", format: [
 		.byte(name: "Callable by Assist", description: "", type: .bool),
 		.byte(name: "Callable by Sleep Talk", description: "", type: .bool),
 		.byte(name: "Is Sound Based", description: "", type: .bool),
-		.byte(name: "Unknown Flag 5", description: "", type: .bool),
+		.byte(name: "Has unspecified target", description: "", type: .bool),
 		.byte(name: "Is HM Move", description: "", type: .bool)
 	])),
 	.byte(name: "Category", description: "Physical, Special or Status", type: .moveCategory),
@@ -68,9 +68,9 @@ var moveStruct: GoDStruct {
 			.byte(name: "Callable by Assist", description: "", type: .bool),
 			.byte(name: "Callable by Sleep Talk", description: "", type: .bool),
 			.byte(name: "Is Sound Based", description: "", type: .bool),
-			.byte(name: "Unknown Flag 5", description: "", type: .bool),
+			.byte(name: "Has unspecified target", description: "", type: .bool),
 			.byte(name: "Is HM Move", description: "", type: .bool),
-			.byte(name: "Unknown Flag 6", description: "", type: .bool)
+			.byte(name: "Negatively affects user", description: "", type: .bool)
 		])),
 		.byte(name: "Contest Appeal Jam Index", description: "", type: .uint),
 		.byte(name: "Contest Appeal Type", description: "", type: .contestAppeal),
@@ -79,7 +79,7 @@ var moveStruct: GoDStruct {
 		.short(name: "Animation ID", description: "", type: .uintHex)]
 		+ (XGPatcher.isClassSplitImplemented()
 			? [
-				.byte(name: "Unused", description: "Padding", type: .null),
+				.byte(name: "Unused", description: "Padding", type: .int),
 				.byte(name: "Category", description: "Physical or Special", type: .moveCategory)
 			]
 		: [])
@@ -91,7 +91,7 @@ var moveStruct: GoDStruct {
 		.short(name: "Padding 2", description: "", type: .null),
 		.short(name: "Animation ID 2", description: "", type: .uintHex),
 		.byte(name: "Move Effect Type", description: "", type: .moveEffectType),
-		.byte(name: "Unknown", description: "", type: .uintHex)
+		.byte(name: "Secondary Effect Type", description: "", type: .moveEffectType)
 	])
 }
 #endif

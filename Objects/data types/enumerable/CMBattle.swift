@@ -30,6 +30,15 @@ final class XGBattle: CustomStringConvertible {
 		}
 	}
 
+	var battleField: XGBattleField {
+		get {
+			return XGBattleField(index: data.get("Battle Field ID") ?? 0)
+		}
+		set {
+			data.update("Battle Field ID", with: newValue.index)
+		}
+	}
+
 	var BGMusicID: Int {
 		get {
 			return data.get("BGM ID") ?? 0

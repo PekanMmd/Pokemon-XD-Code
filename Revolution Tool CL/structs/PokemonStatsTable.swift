@@ -44,7 +44,7 @@ let pokemonStatsTable = CommonStructTable(index: region == .JP ? 14 : 8, propert
 		.byte(name: "Defense", description: "", type: .uint),
 		.byte(name: "Speed", description: "", type: .uint),
 		.byte(name: "Sp.Atk", description: "", type: .uint),
-		.byte(name: "sp.Def", description: "", type: .uint)
+		.byte(name: "Sp.Def", description: "", type: .uint)
 	])),
 	.array(name: "Types", description: "", property: .byte(name: "Type", description: "", type: .typeID), count: 2),
 	.byte(name: "Catch Rate", description: "", type: .uint),

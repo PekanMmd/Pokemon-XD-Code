@@ -14,6 +14,13 @@ let kBranchInstruction1	  : UInt32 = 0x40820024
 let kBranchInstruction2   : UInt32 = 0x40820014
 let kBranchInstruction9   : UInt32 = 0x480000E4
 
+var kColoLockedMoveIconIDRAMOffset: Int {
+	switch region {
+	case .US: return 0x094b0c
+	default: return -1
+	}
+}
+
 let kMirrorCoatOffset1	  = 0x002DFCBC
 let kMirrorCoatOffset2	  = 0x002DFCC0
 let kMirrorCoatBranch	  : UInt32 = 0x4BE5BA91
@@ -115,6 +122,7 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.shinyLockStarters,
 	.alwaysShinyStarters,
 	.enableDebugLogs,
+	.noTypeIconForLockedMoves,
 	.pokemonCanLearnAnyTM,
 	.pokemonHaveMaxCatchRate,
 	.gen7CritRatios,
@@ -128,6 +136,7 @@ enum XGDolPatches: Int {
 	case physicalSpecialSplitApply
 	case physicalSpecialSplitRemove
 	case type9IndependentApply
+	case noTypeIconForLockedMoves
 	case betaStartersApply
 	case betaStartersRemove
 	case renameAllPokemonApply
@@ -168,6 +177,7 @@ enum XGDolPatches: Int {
 		case .physicalSpecialSplitApply : return "Apply the gen IV physical/special split and set moves to their default category."
 		case .physicalSpecialSplitRemove : return "Remove the physical/special split."
 		case .type9IndependentApply : return "Makes the battle engine treat the ??? type as regular type."
+		case .noTypeIconForLockedMoves : return "When a shadow pokemon has locked moves the move doesn't show the ??? type icon"
 		case .betaStartersApply : return "Allows the player to start with 2 pokemon."
 		case .betaStartersRemove : return "Revert to starting with 1 pokemon."
 		case .renameAllPokemonApply	: return "Allows the name rater to rename all pokemon - Crashes parts of game"
@@ -366,8 +376,12 @@ class XGPatcher {
 			return false
 		}
 
-		let dol = XGFiles.dol.data!
-		return dol.getWordAtOffset(0x2C55B0) == kBranchInstruction9
+		if (game == .XD) {
+			let dol = XGFiles.dol.data!
+			return dol.getWordAtOffset(0x2C55B0) == kBranchInstruction9
+		} else {
+			return XGFiles.dol.data!.getWordAtOffset(kColoLockedMoveIconIDRAMOffset) == XGASM.li(.r0, 0).code
+		}
 	}
 	
 	class func removeType9Dependencies() {
@@ -381,20 +395,24 @@ class XGPatcher {
 			printg("This patch has not been implemented for this game region:", region.name)
 			return
 		}
-		
-		let dol = XGFiles.dol.data!
-		
-		dol.replaceWordAtOffset(0x2C55B0, withBytes: kBranchInstruction9)
-		dol.replaceWordAtOffset(0x031230, withBytes: 0x3B400000)
-		
-		
-		let nopOffsets = [0x2C59FC, 0x2C5D8C, 0x2C8870, 0x2C895C]
-		
-		for offset in nopOffsets {
-			dol.replaceWordAtOffset(offset, withBytes: kNopInstruction)
+
+		if (game == .XD) {
+			let dol = XGFiles.dol.data!
+
+			dol.replaceWordAtOffset(0x2C55B0, withBytes: kBranchInstruction9)
+			dol.replaceWordAtOffset(0x031230, withBytes: 0x3B400000)
+
+
+			let nopOffsets = [0x2C59FC, 0x2C5D8C, 0x2C8870, 0x2C895C]
+
+			for offset in nopOffsets {
+				dol.replaceWordAtOffset(offset, withBytes: kNopInstruction)
+			}
+
+			dol.save()
+		} else {
+			XGAssembly.replaceRamASM(RAMOffset: kColoLockedMoveIconIDRAMOffset, newASM: [.li(.r0, 0)])
 		}
-		
-		dol.save()
 		
 	}
 	
@@ -1126,7 +1144,8 @@ class XGPatcher {
 			case .renameAllPokemonApply			: XGPatcher.allowRenamingAnyPokemon()
 			case .shinyChanceEditingApply		: XGPatcher.removeShinyGlitch()
 			case .shinyChanceEditingRemove		: XGPatcher.replaceShinyGlitch()
-			case .type9IndependentApply			: XGPatcher.removeType9Dependencies()
+			case .type9IndependentApply			: XGPatcher.removeType9Dependencies() // xd
+			case .noTypeIconForLockedMoves		: XGPatcher.removeType9Dependencies() // colo
 			case .purgeUnusedText				: XGPatcher.purgeUnusedText()
 			case .decapitaliseNames				: XGPatcher.decapitalise()
 			case .tradeEvolutions				: XGPatcher.removeTradeEvolutions()

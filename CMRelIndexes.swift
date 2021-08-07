@@ -40,6 +40,8 @@ enum CommonIndexes : Int {
 	case NumberOfBattleFields = 29
 	case Doors = 30
 	case NumberOfDoors = 31
+	case BattleTypes = 32
+	case NumberOfBattleTypes = 33
 	
 	case Trainers = 44
 	case NumberOfTrainers = 45
@@ -58,9 +60,6 @@ enum CommonIndexes : Int {
 	case NumberOfBattleDebugScenarios = 57
 	case AIDebugScenarios = 58
 	case NumberOfAIDebugScenarios = 59
-	
-	case StoryDebugOptions = 32
-	case NumberOfStoryDebugOptions = 33
 	
 	case KeyboardCharacters = 36
 	case NumberOfKeyboardCharacters = 37

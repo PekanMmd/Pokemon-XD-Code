@@ -698,7 +698,7 @@ class GoDStructData: CustomStringConvertible {
 		}
 	}
 
-	func JSONString() -> String {
+	func JSONString(useRawValue: Bool = true) -> String {
 		func jsonStringForValues(_ values: [GoDStructValues], subStructName: String? = nil) -> String {
 			var string = (subStructName != nil ? "\"\(subStructName!)\" : " : "")
 			string += "{\n"
@@ -738,7 +738,16 @@ class GoDStructData: CustomStringConvertible {
 					values.forEach {
 						switch $0 {
 						case .value(_, let rawValue), .pointer(_, let rawValue, _):
-							string += "        \(rawValue),\n"
+							if useRawValue {
+								string += "        \(rawValue),\n"
+							} else {
+								var value = $0.description.split(separator: "(").first ?? "-"
+								while value.last == " " {
+									value.removeLast()
+								}
+								if value.isEmpty { value = "-" }
+								string += "        \"\(value)\",\n"
+							}
 						case .float(_, let rawValue):
 							string += "        \(rawValue),\n"
 						case .string(_, let rawValue):
@@ -791,7 +800,19 @@ class GoDStructData: CustomStringConvertible {
 		return jsonStringForValues(values)
 	}
 
-	func JSONData() -> Data? {
-		return JSONString().data(using: .utf8)
+	func JSONData(useRawValue: Bool = true) -> Data? {
+		return JSONString(useRawValue: useRawValue).data(using: .utf8)
+	}
+
+	func jsonObject(useRawValue: Bool = true) -> AnyObject? {
+		if let data = JSONData(useRawValue: useRawValue) {
+			let object = try? JSONSerialization.jsonObject(with: data as Data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+			if object == nil {
+				printg("Invalid JSON data for struct data")
+			}
+			return object
+		} else {
+			return [String: String]() as AnyObject
+		}
 	}
 }

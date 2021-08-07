@@ -634,6 +634,10 @@ extension String {
 		}
 	}
 
+	var titleCased: String {
+		return self.split(separator: " ").map{String($0).capitalized}.joined(separator: " ")
+	}
+
 	var simplifiedNumber: String {
 		get {
 			var result = ""

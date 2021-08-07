@@ -69,7 +69,7 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		doorsTable,
 		roomsTable,
 		SoundsTable,
-		pokemonTable,
+		pokemonStatsTable,
 		pokeFacesTable
 
 	]
@@ -78,7 +78,8 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 	let coloTables: [GoDStructTableFormattable] = [
 		shadowPokemonTable,
 		battleStylesTable,
-		trainerAITable
+		trainerAITable,
+		battleTypesTable
 	]
 	tables += coloTables
 	#elseif GAME_XD

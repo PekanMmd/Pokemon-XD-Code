@@ -185,7 +185,7 @@ class GoDPokemonView: NSImageView {
 		ivFormat.minimum = 0
 		ivFormat.maximum = 255
 		
-		for view in evs + [shadowCatchrate,shadowAggression,shadowID,happiness] {
+		for view in evs + [shadowCatchrate,shadowAggression,happiness] {
 			view.formatter = byteFormat
 		}
 		shadowCounter.formatter = byteFormat
@@ -453,7 +453,7 @@ class GoDPokemonView: NSImageView {
 	}
 	
 	func prepareForSave() {
-		for view in self.evs + [shadowCatchrate, happiness, shadowCounter] {
+		for view in self.evs + [shadowCatchrate, happiness] {
 			if let val = view.stringValue.integerValue {
 				if val > 0xFF {
 					view.stringValue = "255"

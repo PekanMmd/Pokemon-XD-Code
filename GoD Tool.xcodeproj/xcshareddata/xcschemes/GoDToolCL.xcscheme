@@ -52,7 +52,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/starsmomodu/Documents/GoD\ Tool/XD\ US.iso"
+            argument = "/Users/starsmomodu/Documents/GoD\ Tool/XD.iso"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

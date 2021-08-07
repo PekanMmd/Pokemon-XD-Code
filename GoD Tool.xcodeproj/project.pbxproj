@@ -754,6 +754,9 @@
 		1CC362DD24C1DF23005D7B4A /* XGBattleStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */; };
 		1CC362E024C1DF24005D7B4A /* XGBattleStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */; };
 		1CC362E224C1DF25005D7B4A /* XGBattleStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */; };
+		1CC4598626AF2F1000019C80 /* PDADumper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC4598526AF2F1000019C80 /* PDADumper.swift */; };
+		1CC4598726AF2F1000019C80 /* PDADumper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC4598526AF2F1000019C80 /* PDADumper.swift */; };
+		1CC4598826AF2F1000019C80 /* PDADumper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC4598526AF2F1000019C80 /* PDADumper.swift */; };
 		1CC5DD3222C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
 		1CC5DD3322C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
 		1CCB074D262BCF4300D4ABA5 /* PBRAbilitiesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCB074C262BCF4300D4ABA5 /* PBRAbilitiesManager.swift */; };
@@ -4621,6 +4624,7 @@
 		1CC362D324C07E35005D7B4A /* PBR_body_500.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_500.png; sourceTree = "<group>"; };
 		1CC362D424C07E35005D7B4A /* PBR_body_497.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_497.png; sourceTree = "<group>"; };
 		1CC362DB24C1DF0E005D7B4A /* XGBattleStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleStyles.swift; sourceTree = "<group>"; };
+		1CC4598526AF2F1000019C80 /* PDADumper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDADumper.swift; sourceTree = "<group>"; };
 		1CCB074C262BCF4300D4ABA5 /* PBRAbilitiesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRAbilitiesManager.swift; sourceTree = "<group>"; };
 		1CCF00112562F1C10082BFE2 /* XGSaveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGSaveManager.swift; sourceTree = "<group>"; };
 		1CCFFDA72554FEF60082BFE2 /* PBR-CLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "PBR-CLI"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -7325,6 +7329,7 @@
 				B208E3E520C4CD3B00D298BF /* XDExtensions.swift */,
 				B208E3E720C4CD4B00D298BF /* ColosseumExtensions.swift */,
 				B24A502521D11138009C707C /* PBRExtensions.swift */,
+				1CC4598526AF2F1000019C80 /* PDADumper.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -14153,6 +14158,7 @@
 				B24A511321D4014B009C707C /* PBRScriptInstruction.swift in Sources */,
 				B24A50F821D2BE89009C707C /* PBREffectivenessValues.swift in Sources */,
 				B24A510321D3CC0F009C707C /* PBRMoveCategory.swift in Sources */,
+				1CC4598826AF2F1000019C80 /* PDADumper.swift in Sources */,
 				1C56F52A2604DB3800CF1DEE /* DeckStructTable.swift in Sources */,
 				B20EE64221D97F5A00E87D01 /* XGWormadamForms.swift in Sources */,
 				B24A505521D1258E009C707C /* XGTexturePalette.swift in Sources */,
@@ -14315,6 +14321,7 @@
 				B2562F702134979A004180F1 /* XGPokemon.swift in Sources */,
 				B2562F9A213499DC004180F1 /* GoDTexture.swift in Sources */,
 				B2562F91213498FF004180F1 /* XGStringTable.swift in Sources */,
+				1CC4598726AF2F1000019C80 /* PDADumper.swift in Sources */,
 				B2562F5421349632004180F1 /* XGFoundationExtensions.swift in Sources */,
 				B2562F7E21349814004180F1 /* XGCharacter.swift in Sources */,
 				B2562F602134976C004180F1 /* XGEvolutionMethods.swift in Sources */,
@@ -14494,6 +14501,7 @@
 				B280AEA220CA8E270057A782 /* XDRelIndexes.swift in Sources */,
 				B2EAFF0120BDA676009FC947 /* XDSExpr.swift in Sources */,
 				B2F5EC331F49A1FE0075C6D2 /* XGMaps.swift in Sources */,
+				1CC4598626AF2F1000019C80 /* PDADumper.swift in Sources */,
 				B2D1DF541F6872740023A876 /* GoDTexture.swift in Sources */,
 				B2F5EC541F49A1FE0075C6D2 /* XGShinyValues.swift in Sources */,
 				1C56F77B260CC9F800CF1DEE /* PokemonTable.swift in Sources */,

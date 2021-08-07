@@ -60,10 +60,15 @@ let kDolToISOOffsetDifference: Int = {
 }()
 
 var kRELtoRAMOffsetDifference: Int {
-	if game == .XD, region == .US {
-		return 0xb18dc0 // add this value to a common_rel offset to get it's offset in RAM,  XD US
+	if region == .US {
+		if game == .XD {
+			return 0xb18dc0 // add this value to a common_rel offset to get it's offset in RAM,  XD US
+		} else {
+			return 0x7628A0
+		}
 	}
 	#warning("TODO: find rel to ram offset for other regions and colosseum")
+	assertionFailure("TODO: find rel to ram offset for other regions and colosseum")
 	return -0x80000000
 }
 let kRELDataStartOffset = 0x1CB0 // XD US

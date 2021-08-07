@@ -19,7 +19,7 @@ enum GoDTextureFormats: Int, CaseIterable {
 	case RGBA32 = 0x45
 	case C4 = 0x0
 	case C8 = 0x1
-	case C14X2 = 0xa
+	case C14X2 = 0x30
 	case CMPR = 0xB0
 
 	var standardRawValue : Int {
@@ -40,8 +40,10 @@ enum GoDTextureFormats: Int, CaseIterable {
 	
 	var isIndexed: Bool {
 		switch self {
-		case .C4, .C8, .C14X2	: return true
-		default     			: return false
+		case .C4, .C8, .C14X2:
+			return true
+		default:
+			return false
 		}
 	}
 
@@ -127,7 +129,11 @@ enum GoDTextureFormats: Int, CaseIterable {
 		switch self {
 		case .IA8: return 0
 		case .RGB565: return 1
+		#if GAME_PBR
+		case .RGB5A3: return 2
+		#else
 		case .RGB5A3: return 3 // note other games use 2 for this, including .dat models in these games
+		#endif
 		default: return nil
 		}
 	}
@@ -143,7 +149,7 @@ enum GoDTextureFormats: Int, CaseIterable {
 
 	static func fromPaletteID(_ value: Int) -> GoDTextureFormats? {
 		if value == 2 {
-			return .RGB5A3 // In .dat models, 2 is used for these. Seems to be the standard in other games
+			return .RGB5A3 // In .dat models, 2 is used for these. Seems to be the standard in other games. Also seen in PBR
 		}
 		for format in allCases {
 			if format.paletteID == value {

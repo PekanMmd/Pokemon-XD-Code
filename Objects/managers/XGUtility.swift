@@ -168,6 +168,18 @@ class XGUtility {
 								loadedStringTables[file.path] = newTable
 							}
 						}
+						if file == .common_rel && game == .Colosseum && region != .JP {
+							let msgFile2 = XGFiles.nameAndFolder("common2.json", file.folder)
+							let msgFile3 = XGFiles.nameAndFolder("common3.json", file.folder)
+							if msgFile2.exists, let newTable = try? XGStringTable.fromJSONFile(file: msgFile2) {
+								newTable.save()
+								loadedStringTables[file.path] = newTable
+							}
+							if msgFile3.exists, let newTable = try? XGStringTable.fromJSONFile(file: msgFile3) {
+								newTable.save()
+								loadedStringTables[file.path] = newTable
+							}
+						}
 						#endif
 
 						if file.fileType == .thp, let thpData = file.data {
