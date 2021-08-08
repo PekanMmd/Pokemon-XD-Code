@@ -79,7 +79,8 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		shadowPokemonTable,
 		battleStylesTable,
 		trainerAITable,
-		battleTypesTable
+		battleTypesTable,
+		aiWeightEffectsTable
 	]
 	tables += coloTables
 	#elseif GAME_XD

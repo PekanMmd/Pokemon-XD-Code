@@ -56,8 +56,8 @@ enum CommonIndexes : Int {
 	case BGM = 52
 	case NumberOfBGM = 53
 	
-	case BattleDebugScenarios = 56
-	case NumberOfBattleDebugScenarios = 57
+	case AIWeightEffects = 56
+	case NumberOfAIWeightEffects = 57
 	case AIDebugScenarios = 58
 	case NumberOfAIDebugScenarios = 59
 	

@@ -150,4 +150,14 @@ let SoundsMetaDataTable = CommonStructTable(index: .SoundsMetaData, properties: 
 }
 #endif
 
+#if GAME_COLO
+let aiWeightEffectsStruct = GoDStruct(name: "AI Weight Effect", format: [
+	.word(name: "Effect", description: "", type: .int),
+	.word(name: "Task Name ID", description: "", type: .msgID(file: nil)),
+	.word(name: "Sub task Name ID", description: "", type: .msgID(file: nil)),
+	.word(name: "Reason Name ID", description: "", type: .msgID(file: nil)),
+	.word(name: "Unknown", description: "", type: .uint)
+])
 
+let aiWeightEffectsTable = CommonStructTable(index: .AIWeightEffects, properties: aiWeightEffectsStruct)
+#endif
