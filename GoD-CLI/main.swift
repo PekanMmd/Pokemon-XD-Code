@@ -24,6 +24,12 @@ func importExportFiles() {
 		guard currentSearch.count > 0 else {
 			return XGISO.current.allFileNames
 		}
+		let exactMatch = XGISO.current.allFileNames.filter { (name) -> Bool in
+			return name.lowercased() == currentSearch.lowercased()
+		}
+		if exactMatch.count > 0 {
+			return exactMatch
+		}
 		return XGISO.current.allFileNames.filter { (name) -> Bool in
 			return name.lowercased().contains(currentSearch.lowercased())
 		}
