@@ -20,10 +20,9 @@ enum MapRelIndexes : Int {
 
 let kNumberRelPointers = 0x6c
 enum CommonIndexes : Int {
-	
+
+	// These are US indexes and vary in the JP version
 	case NumberOfItems = -1 // items are in dol in colosseum
-	case stringTable1 = -2 // offset 0x59890 but not indexed apparently
-	
 	
 	case LegendaryPokemon = 2
 	case NumberOfLegendaryPokemon = 3
@@ -91,8 +90,6 @@ enum CommonIndexes : Int {
 	case InteractionPoints = 86 // warps and interactable objects
 	case NumberOfInteractionPoints = 87
 	
-	case StringTableB = 101
-	
 	case PokemonStats = 68
 	case NumberOfPokemon = 69
 	
@@ -102,21 +99,38 @@ enum CommonIndexes : Int {
 	
 	case Moves = 62
 	case NumberOfMoves = 63
-	
-	var startOffset : Int {
-		return common.getPointer(index: self.rawValue)
+
+	case StringTable1 = 98
+	case StringTable2 = 99
+	case StringTable3 = 100
+	case Script = 101
+
+	var index: Int {
+		switch self {
+		case .StringTable1: return region == .JP ? 95 : 98
+		case .Script: return region == .JP ? 96 : 101
+		default: return self.rawValue
+		}
 	}
-	
+
+	var startOffset : Int {
+		return common.getPointer(index: self.index)
+	}
+
+	var length: Int {
+		return common.getSymbolLength(index: self.index)
+	}
+
 	func setStartOffset(_ offset: Int) {
-		common.replacePointer(index: self.rawValue, newAbsoluteOffset: offset)
+		common.replacePointer(index: self.index, newAbsoluteOffset: offset)
 	}
 	
 	var value : Int {
-		return common.getValueAtPointer(index: self.rawValue)
+		return common.getValueAtPointer(index: self.index)
 	}
 	
 	func setValue(_ value: Int) {
-		common.setValueAtPointer(index: self.rawValue, newValue: value)
+		common.setValueAtPointer(index: self.index, newValue: value)
 	}
 	
 	static func indexForStartOffset(offset: Int) -> Int? {

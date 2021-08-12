@@ -60,26 +60,26 @@ class XGStringTable: NSObject {
 	}
 	
 	class func common_rel() -> XGStringTable {
-		if game == .XD {
-			let start: Int
-			let size: Int
-			switch region {
-			case .US: start = 0x4E274; size = 0xDC70
-			case .EU: start = 0x50234; size = 0xDC70
-			case .JP: start = 0x4D028; size = 0xAC8C
-			case .OtherGame: start = 0; size = 0
-			}
-			return XGStringTable(file: .common_rel, startOffset: start, fileSize: size)
-		} else {
-			if region == .JP {
-				return XGStringTable(file: .common_rel, startOffset: 0x4580, fileSize: 0x9cf8)
-			} else if region == .US {
-				return XGStringTable(file: .common_rel, startOffset: 0x59890, fileSize: 0xC770)
-			} else {
-				return XGStringTable(file: .common_rel, startOffset: 0x5A448, fileSize: 0xC544)
-			}
-		}
-		
+//		if game == .XD {
+//			let start: Int
+//			let size: Int
+//			switch region {
+//			case .US: start = 0x4E274; size = 0xDC70
+//			case .EU: start = 0x50234; size = 0xDC70
+//			case .JP: start = 0x4D028; size = 0xAC8C
+//			case .OtherGame: start = 0; size = 0
+//			}
+//			return XGStringTable(file: .common_rel, startOffset: start, fileSize: size)
+//		} else {
+//			if region == .JP {
+//				return XGStringTable(file: .common_rel, startOffset: 0x4580, fileSize: 0x9cf8)
+//			} else if region == .US {
+//				return XGStringTable(file: .common_rel, startOffset: 0x59890, fileSize: 0xC770)
+//			} else {
+//				return XGStringTable(file: .common_rel, startOffset: 0x5A448, fileSize: 0xC544)
+//			}
+//		}
+		return XGStringTable(file: .common_rel, startOffset: CommonIndexes.StringTable1.startOffset, fileSize: CommonIndexes.StringTable1.length)
 	}
 
 	class func common_rel2() -> XGStringTable { // second string table in common_rel in colosseum
@@ -89,11 +89,9 @@ class XGStringTable: NSObject {
 		} else {
 			if region == .JP {
 				// same as common_rel1. couldn't find it in JP version
-				return XGStringTable(file: .common_rel, startOffset: 0x4580, fileSize: 0x9cf8)
-			} else if region == .US {
-				return XGStringTable(file: .common_rel, startOffset: 0x66000, fileSize: 0x124E0)
+				return common_rel()
 			} else {
-				return XGStringTable(file: .common_rel, startOffset: 0x995EC, fileSize: 0x12480)
+				return XGStringTable(file: .common_rel, startOffset: CommonIndexes.StringTable2.startOffset, fileSize: CommonIndexes.StringTable2.length)
 			}
 		}
 
@@ -106,11 +104,9 @@ class XGStringTable: NSObject {
 		} else {
 			if region == .JP {
 				// same as common_rel1. couldn't find it in JP version
-				return XGStringTable(file: .common_rel, startOffset: 0x4580, fileSize: 0x9cf8)
-			} else if region == .US {
-				return XGStringTable(file: .common_rel, startOffset: 0x784e0, fileSize: 0x13068)
+				return common_rel()
 			} else {
-				return XGStringTable(file: .common_rel, startOffset: 0xF7FD4, fileSize: 0x13110)
+				return XGStringTable(file: .common_rel, startOffset: CommonIndexes.StringTable3.startOffset, fileSize: CommonIndexes.StringTable3.length)
 			}
 		}
 		
@@ -204,6 +200,12 @@ class XGStringTable: NSObject {
 		if startOffset == 0 {
 			stringTable.save()
 		} else if let data = file.data {
+			if file == .common_rel, let symbol = common.idForSymbol(withAddress: startOffset) {
+				let oldLength = common.getSymbolLength(index: symbol)
+				if stringTable.length > oldLength {
+					common.expandSymbolAtOffset(startOffset, by: stringTable.length - oldLength)
+				}
+			}
 			data.replaceData(data: stringTable, atOffset: startOffset)
 			data.save()
 		}
@@ -227,18 +229,24 @@ class XGStringTable: NSObject {
 			if extraCharacters > bytesRequired {
 				stringTable.deleteBytes(start: stringTable.length - bytesRequired, count: bytesRequired)
 			} else {
-				if startOffset != 0 || !increaseSize {
-					printg("Couldn't add string \(string.string) to \(stringTable.file.fileName) because it doesn't have enough space.")
-					printg("Requires: \(bytesRequired) bytes but only has \(self.extraCharacters) bytes available.")
-					printg("Try shortening some other strings.")
-					if startOffset == 0 {
-						printg("You can also enable file size increases in the settings to allow larger text. This shouldn't cause any issues.")
+				if startOffset != 0 || !increaseSize  {
+					if !increaseSize || !(file == .common_rel && settings.enableExperimentalFeatures) {
+						printg("Couldn't add string \(string.string) to \(stringTable.file.fileName) because it doesn't have enough space.")
+						printg("Requires: \(bytesRequired) bytes but only has \(self.extraCharacters) bytes available.")
+						printg("Try shortening some other strings.")
+						if startOffset == 0 {
+							printg("You can also enable file size increases in the settings to allow larger text. This shouldn't cause any issues.")
+						}
+						return false
 					}
-					return false
 				}
 			}
-			
+
 			stringTable.insertRepeatedByte(byte: 0, count: bytesRequired, atOffset: (numberOfEntries * 8) + kEndOfHeader)
+			if file == .common_rel {
+				common.expandSymbolAtOffset(startOffset, by: bytesRequired + 0x200 + (16 - (bytesRequired % 16)))
+			}
+
 			let bytes = string.byteStream.map { (i) -> Int in
 				return Int(i)
 			}

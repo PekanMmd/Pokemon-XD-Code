@@ -275,8 +275,14 @@ class XGUtility {
 							XDSScriptCompiler.baseStringID = 1000
 							if file.fileName.replacingOccurrences(of: file.fileExtension, with: "") == XGFiles.common_rel.fileName {
 								if XGFiles.common_rel.exists, let newScript = XDSScriptCompiler.compile(file.text) {
-									let start = XGFiles.common_rel.scriptDataStartOffset
-									let length = XGFiles.common_rel.scriptDataLength
+									let start = CommonIndexes.Script.startOffset
+									var length = CommonIndexes.Script.length
+									if newScript.length > length && settings.enableExperimentalFeatures && settings.increaseFileSizes {
+										common.expandSymbolWithIndex(CommonIndexes.Script.index, by: newScript.length - length)
+										length = CommonIndexes.Script.length
+									} else {
+										printg("Warning: couldn't import new script for \(XGFiles.common_rel.path) because the new script is too large.")
+									}
 									if newScript.length <= length, let rel = XGFiles.common_rel.data {
 										if newScript.length < length {
 											newScript.appendData(.init(length: length - newScript.length))

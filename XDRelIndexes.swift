@@ -35,9 +35,8 @@ enum CommonIndexes : Int {
 	case NumberOfTrainerAIData = -7
 	case PokemonData = -8
 	case NumberOfPokemonData = -9
-	case AIDebugScenarios = -10
-	case StoryDebugOptions = -12
-	case BattleDebugScenarios = -13
+	case StringTable2 = -10
+	case StringTable3 = -11
 	
 	// xd
 	case BattleBingo  = 0
@@ -108,29 +107,36 @@ enum CommonIndexes : Int {
 	case NumberOfTutorMoves = 127
 	case Types = 130
 	case NumberOfTypes = 131
-	
-	var pointerOffset : Int {
-		return common.getPointerOffset(index: self.rawValue)
+
+	case StringTable1 = 136
+	case Script = 137
+
+	var index: Int {
+		return rawValue
 	}
-	
+
 	var startOffset : Int {
 		return common.getPointer(index: self.rawValue)
 	}
-	
+
+	var length: Int {
+		return common.getSymbolLength(index: self.rawValue)
+	}
+
 	func setStartOffset(_ offset: Int) {
 		common.replacePointer(index: self.rawValue, newAbsoluteOffset: offset)
 	}
-	
+
 	var value : Int {
 		return common.getValueAtPointer(index: self.rawValue)
 	}
-	
+
 	func setValue(_ value: Int) {
 		common.setValueAtPointer(index: self.rawValue, newValue: value)
 	}
-	
+
 	static func indexForStartOffset(offset: Int) -> Int? {
-		for i in 0 ... CommonIndexes.NumberOfTypes.rawValue{
+		for i in 0 ..< kNumberRelPointers {
 			if common.getPointer(index: i) == offset {
 				return i
 			}

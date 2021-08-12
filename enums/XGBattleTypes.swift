@@ -35,7 +35,7 @@ enum XGBattleTypes: Int, Codable, CaseIterable {
 		case .none:
 			return "None"
 		case .story_admin_colo:
-			return "Admin Battle (colosseum)"
+			return "Admin Battle"
 		case .story:
 			return "Story Battle"
 		case .colosseum_prelim:

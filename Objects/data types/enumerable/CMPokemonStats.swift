@@ -7,7 +7,9 @@
 
 import Foundation
 
-let kNumberOfPokemon		= 0x19D
+var kNumberOfPokemon: Int {
+	return CommonIndexes.NumberOfPokemon.value // 0x19D
+}
 let kSizeOfPokemonStats		= 0x11C
 
 let kEXPRateOffset			= 0x00

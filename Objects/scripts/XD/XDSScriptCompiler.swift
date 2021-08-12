@@ -134,14 +134,21 @@ class XDSScriptCompiler: NSObject {
 			}
 
 			if file == XGFiles.common_rel {
-				let maxLength = file.scriptDataLength
-				let start = file.scriptDataStartOffset
-				if data.length <= maxLength {
+				let start = CommonIndexes.Script.startOffset
+				var length = CommonIndexes.Script.length
+				if data.length > length && settings.enableExperimentalFeatures && settings.increaseFileSizes {
+					common.expandSymbolWithIndex(CommonIndexes.Script.index, by: data.length - length)
+					length = CommonIndexes.Script.length
+				} else {
+					printg("Warning: couldn't import new script for \(XGFiles.common_rel.path) because the new script is too large.")
+				}
+
+				if data.length <= length {
 					let commonData = file.data
 					commonData?.replaceBytesFromOffset(start, withByteStream: data.byteStream)
 					commonData?.save()
 				} else {
-					let errorString = "XDS compilation error, File: \(file.fileName) \nError- failed to import new script because it is larger than the maximum allowed size. Size: \(data.length), max: \(maxLength)"
+					let errorString = "XDS compilation error, File: \(file.fileName) \nError- failed to import new script because it is larger than the maximum allowed size. Size: \(data.length), max: \(length)"
 					printg(errorString)
 					return false
 				}
@@ -309,7 +316,7 @@ class XDSScriptCompiler: NSObject {
 			}
 			
 			if let rel = relFile {
-				if !writeCharacterDataToRel(file: rel.file, ftbl: ftbl) {
+				if !writeCharacterDataToRel(file: rel.data.file, ftbl: ftbl) {
 					printg("failed to save character data")
 					printg(error)
 				}

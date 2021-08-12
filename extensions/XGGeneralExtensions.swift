@@ -48,13 +48,14 @@ extension XGStringTable {
 
 		} else {
 			if settings.increaseFileSizes {
-				if self.startOffset == 0 {
+				if self.startOffset == 0 || (file == .common_rel && settings.enableExperimentalFeatures) {
 					if settings.verbose {
-						printg("string was too long, adding \(difference + 0x50 - extraCharacters) bytes to table \(self.file.fileName)")
+						printg("string was too long, adding \(difference + 0x200 - extraCharacters) bytes to table \(self.file.fileName)")
 					}
 					// add a little extra so it doesn't keep hitting this case every time there's even a 1 character increase
-					self.stringTable.insertRepeatedByte(byte: 0, count: difference + 0x50 - extraCharacters, atOffset: stringTable.length)
-					return self.replaceString(string, alert: alert, save: true)
+					self.stringTable.insertRepeatedByte(byte: 0, count: difference + 0x200 - extraCharacters, atOffset: stringTable.length)
+
+					return self.replaceString(string, alert: alert, save: save)
 				}
 			}
 		}

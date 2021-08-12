@@ -20,24 +20,12 @@ class XGMapRel: XGRelocationTable {
 	var groupID = 0
 
 	var script: XGScript? {
-		let scriptFile = XGFiles.typeAndFsysName(.scd, file.fileName.removeFileExtensions())
+		let scriptFile = XGFiles.typeAndFsysName(.scd, data.file.fileName.removeFileExtensions())
 		return scriptFile.exists ? scriptFile.scriptData : nil
 	}
 
-	override convenience init(file: XGFiles) {
-		self.init(file: file, checkScript: true)
-	}
-
-	init(file: XGFiles, checkScript: Bool) {
-		super.init(file: file)
-
-		if game == .XD, self.numberOfPointers < kNumberMapPointers {
-			if settings.verbose {
-				printg("Map: \(file.path) has the incorrect number of map pointers. Possibly a colosseum file.")
-			}
-			self.isValid = false
-			return
-		}
+	convenience init(file: XGFiles, checkScript: Bool) {
+		self.init(file: file)
 
 		let data = file.data
 		let groupDataOffset = getPointer(index: MapRelIndexes.groupData.rawValue)

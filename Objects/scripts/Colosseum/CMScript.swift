@@ -39,6 +39,9 @@ class XGScript: CustomStringConvertible {
 	var codeStartPointer1: UInt32 = 0
 	var codeStartPointer2: UInt32 = 0
 
+	var startOffset = 0
+	var fixedFileSize: Int?
+
 	var ftbl = [FTBL]()
 	
 	 var codeLength : Int {
@@ -52,12 +55,21 @@ class XGScript: CustomStringConvertible {
 		} else {
 			fileData.file = file
 		}
-		self.init(data: fileData)
+
+		var fixedStartOffset = 0
+		var fixedLength = fileData.length
+		if file == .common_rel {
+			fixedStartOffset = CommonIndexes.Script.startOffset
+			fixedLength = CommonIndexes.Script.length
+		}
+		self.init(data: fileData.getSubDataFromOffset(fixedStartOffset, length: fixedLength), startOffset: fixedStartOffset, fixedLength: fixedLength)
 	}
 
-	init(data: XGMutableData) {
+	private init(data: XGMutableData, startOffset: Int = 0, fixedLength: Int = 0) {
 		self.data = data
 		self.file = data.file
+		fixedFileSize = fixedLength
+		self.startOffset = startOffset
 		guard data.length > kCMScriptHeaderSize else {
 			return
 		}

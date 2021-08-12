@@ -341,57 +341,57 @@ indirect enum XGFiles {
 	}
 	#endif
 
-	var scriptDataStartOffset: Int {
-		#if !GAME_PBR
-		if self != .common_rel {
-			return 0
-		}
-		#endif
+//	var scriptDataStartOffset: Int {
+//		#if !GAME_PBR
+//		if self != .common_rel {
+//			return 0
+//		}
+//		#endif
+//
+//		if game == .XD {
+//			if isDemo {
+//				return 0x5BF5C
+//			} else {
+//				switch region {
+//				case .US: return 0x5BEE4
+//				case .JP: return 0x57CB4
+//				case .EU: return 0x5dea4
+//				case .OtherGame: return 0
+//				}
+//			}
+//		} else {
+//			switch region {
+//			case .US: return 0x8B548
+//			case .JP: return 0xE278
+//			case .EU: return 0x58490
+//			case .OtherGame: return 0
+//			}
+//		}
+//	}
 
-		if game == .XD {
-			if isDemo {
-				return 0x5BF5C
-			} else {
-				switch region {
-				case .US: return 0x5BEE4
-				case .JP: return 0x57CB4
-				case .EU: return 0x5dea4
-				case .OtherGame: return 0
-				}
-			}
-		} else {
-			switch region {
-			case .US: return 0x8B548
-			case .JP: return 0xE270
-			case .EU: return 0x58490
-			case .OtherGame: return 0
-			}
-		}
-	}
-
-	var scriptDataLength: Int {
-		#if GAME_XD
-		return self == .common_rel ? 0x3d20 : fileSize
-		#elseif GAME_COLO
-		return self == .common_rel ? (region == .JP ? 0x1f78 : 0x1fb8) : fileSize
-		#else
-		return fileSize
-		#endif
-	}
+//	var scriptDataLength: Int {
+//		#if GAME_XD
+//		return self == .common_rel ? 0x3d20 : fileSize
+//		#elseif GAME_COLO
+//		return self == .common_rel ? (region == .JP ? 0x1f78 : 0x1fb8) : fileSize
+//		#else
+//		return fileSize
+//		#endif
+//	}
 
 	var scriptData: XGScript {
-		switch self.path {
-		#if !GAME_PBR
-		case XGFiles.common_rel.path:
-			let start = scriptDataStartOffset
-			let length = scriptDataLength
-
-			let data = XGMutableData(byteStream: self.data!.getCharStreamFromOffset(start, length: length), file: .common_rel)
-			return XGScript(data: data)
-		#endif
-		default:
+//		switch self.path {
+//		#if !GAME_PBR
+//		case XGFiles.common_rel.path:
+//			let start = scriptDataStartOffset
+//			let length = scriptDataLength
+//
+//			let data = XGMutableData(byteStream: self.data!.getCharStreamFromOffset(start, length: length), file: .common_rel)
+//			return XGScript(data: data)
+//		#endif
+//		default:
 			return XGScript(file: self)
-		}
+//		}
 	}
 	
 	var stringTable: XGStringTable {
