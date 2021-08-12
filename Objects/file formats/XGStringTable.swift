@@ -23,6 +23,7 @@ class XGStringTable: NSObject {
 	var stringTable = XGMutableData()
 	var stringOffsets = [Int : Int]()
 	var stringIDs = [Int]()
+	var subFileIndex: Int? // Used for common.rel to differentiate between multiple tables
 	
 	var numberOfEntries: Int {
 		return stringTable.get2BytesAtOffset(kNumberOfStringsOffset)
@@ -91,7 +92,9 @@ class XGStringTable: NSObject {
 				// same as common_rel1. couldn't find it in JP version
 				return common_rel()
 			} else {
-				return XGStringTable(file: .common_rel, startOffset: CommonIndexes.StringTable2.startOffset, fileSize: CommonIndexes.StringTable2.length)
+				let table = XGStringTable(file: .common_rel, startOffset: CommonIndexes.StringTable2.startOffset, fileSize: CommonIndexes.StringTable2.length)
+				table.subFileIndex = 2
+				return table
 			}
 		}
 
@@ -106,7 +109,9 @@ class XGStringTable: NSObject {
 				// same as common_rel1. couldn't find it in JP version
 				return common_rel()
 			} else {
-				return XGStringTable(file: .common_rel, startOffset: CommonIndexes.StringTable3.startOffset, fileSize: CommonIndexes.StringTable3.length)
+				let table = XGStringTable(file: .common_rel, startOffset: CommonIndexes.StringTable3.startOffset, fileSize: CommonIndexes.StringTable3.length)
+				table.subFileIndex = 3
+				return table
 			}
 		}
 		
@@ -471,6 +476,7 @@ struct XGStringTableMetaData: Codable {
 	let startOffset: Int
 	let fixedFileSize: Int
 	let strings: [XGString]
+	let subFileIndex: Int?
 }
 
 extension XGStringTable: Encodable {
@@ -480,19 +486,35 @@ extension XGStringTable: Encodable {
 	}
 	
 	enum CodingKeys: String, CodingKey {
-		case file, startOffset, fixedFileSize, strings
+		case file, startOffset, fixedFileSize, subFileIndex, strings
 	}
 	
 	static func fromJSON(data: Data, save: Bool = false) throws -> XGStringTable {
 		let metaData = try JSONDecoder().decode(XGStringTableMetaData.self, from: data)
 		let file = metaData.file
-		guard file.exists else {
+		guard file.exists || file.data != nil else { // second part will try to extract the file if it doesn't exist already
+			printg("Couldn't load text into \(file.path)")
+			printg("\(file.path) doesn't exist!")
 			throw XGStringTableDecodingError.invalidFile(file: file)
 		}
 		let startOffset = metaData.startOffset
 		let fixedFileSize = metaData.fixedFileSize
 		
-		let table = XGStringTable(file: file, startOffset: startOffset, fileSize: startOffset == 0 ? file.fileSize : fixedFileSize)
+		let table: XGStringTable
+		if file == .common_rel {
+			switch metaData.subFileIndex {
+			case 2: table = XGStringTable.common_rel2()
+			case 3: table = XGStringTable.common_rel3()
+			default: table = XGStringTable.common_rel()
+			}
+		} else if file == .tableres2 {
+			guard let res = XGStringTable.tableres2() else {
+				throw XGStringTableDecodingError.invalidFile(file: file)
+			}
+			table = res
+		} else {
+			table = XGStringTable(file: file, startOffset: startOffset, fileSize: startOffset == 0 ? file.fileSize : fixedFileSize)
+		}
 		
 		var strings = metaData.strings
 		if startOffset != 0 {
@@ -522,6 +544,9 @@ extension XGStringTable: Encodable {
 		try container.encode(self.file, forKey: .file)
 		try container.encode(self.startOffset, forKey: .startOffset)
 		try container.encode(self.startOffset == 0 ? 0 : self.fileSize, forKey: .fixedFileSize)
+		if subFileIndex != nil {
+			try container.encode(self.subFileIndex, forKey: .subFileIndex)
+		}
 		try container.encode(self.allStrings(), forKey: .strings)
 	}
 }

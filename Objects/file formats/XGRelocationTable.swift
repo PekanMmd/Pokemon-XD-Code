@@ -365,23 +365,18 @@ class XGRelocationTable {
 				if !writeSectionHasHadSkipInserted && currentWriteSection == sectionID {
 					currentWriteAddress += seekUpdate
 					if currentWriteAddress >= fileOffset {
-						var bytesToAdd = alignedCount
+						var bytesToAdd = alignedCount + seekUpdate
 
-						if seekUpdate + bytesToAdd <= 0xFFFF {
-							data.replace2BytesAtOffset(currentOffset, withBytes: bytesToAdd + seekUpdate)
-							writeSectionHasHadSkipInserted = true
-						} else {
-							while bytesToAdd > 0xFFFF {
-								// add skip
-								data.insertBytes(bytes: [0xFF, 0xFF, 0xC9, 0x00, 0x00, 0x00, 0x00, 0x00], atOffset: currentOffset - 8)
-								extraRelocationsInserted += importSection == 0 ? 1 : 0
-								bytesToAdd -= 0xFFFF
-							}
-							data.insertBytes(bytes: bytesToAdd.byteArrayU16 + [0xC9, 0x00, 0x00, 0x00, 0x00, 0x00], atOffset: currentOffset - 8)
+						while bytesToAdd > 0xFFFF {
+							// add skip
+							data.insertBytes(bytes: [0xFF, 0xFF, 0xC9, 0x00, 0x00, 0x00, 0x00, 0x00], atOffset: currentOffset)
 							extraRelocationsInserted += importSection == 0 ? 1 : 0
-
-							writeSectionHasHadSkipInserted = true
+							bytesToAdd -= 0xFFFF
+							currentOffset += 8
 						}
+						data.replace2BytesAtOffset(currentOffset, withBytes: bytesToAdd)
+
+						writeSectionHasHadSkipInserted = true
 					}
 				}
 			}
