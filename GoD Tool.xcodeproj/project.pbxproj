@@ -9760,7 +9760,7 @@
 				B2F5ED0B1F49AE950075C6D2 /* JSON */,
 				1C39D85A240EA014006FDFBD /* tools */,
 				B2F5EBB51F49A1FE0075C6D2 /* enums */,
-				B2F5EBD81F49A1FE0075C6D2 /* objects */,
+				B2F5EBD81F49A1FE0075C6D2 /* Objects */,
 				B2F5EBA61F49A1980075C6D2 /* GoDToolOSX */,
 				B208E39320C4CA3A00D298BF /* Colosseum Tool */,
 				B20EEA2621E9203600E87D01 /* PBR Tool */,
@@ -9876,7 +9876,7 @@
 			path = enums;
 			sourceTree = "<group>";
 		};
-		B2F5EBD81F49A1FE0075C6D2 /* objects */ = {
+		B2F5EBD81F49A1FE0075C6D2 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
 				1CB33AA322B7903900F81C29 /* protocols */,
@@ -9889,7 +9889,7 @@
 				1CB33ABA22B8F98C00F81C29 /* scripts */,
 				1CB33ABC22B8FA0400F81C29 /* textures */,
 			);
-			path = objects;
+			path = Objects;
 			sourceTree = "<group>";
 		};
 		B2F5ED0B1F49AE950075C6D2 /* JSON */ = {
