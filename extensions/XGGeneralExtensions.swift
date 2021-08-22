@@ -48,7 +48,12 @@ extension XGStringTable {
 
 		} else {
 			if settings.increaseFileSizes {
-				if self.startOffset == 0 || (file == .common_rel && settings.enableExperimentalFeatures) {
+				#if GAME_PBR
+				let isCommonRelAndIsExpandable = false
+				#else
+				let isCommonRelAndIsExpandable = file == .common_rel && settings.enableExperimentalFeatures
+				#endif
+				if self.startOffset == 0 || isCommonRelAndIsExpandable {
 					if settings.verbose {
 						printg("string was too long, adding \(difference + 0x200 - extraCharacters) bytes to table \(self.file.fileName)")
 					}

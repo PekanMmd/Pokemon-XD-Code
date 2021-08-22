@@ -75,6 +75,11 @@ class XGMutableData {
 		}
 	}
 
+	convenience init(string: String, charLength: ByteLengths = .char) {
+		self.init(length: string.length)
+		writeString(string, at: 0, charLength: charLength, maxCharacters: nil)
+	}
+
 	init(data: Data) {
 		self.data = data
 	}

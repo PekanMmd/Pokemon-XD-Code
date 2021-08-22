@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="wHc-VN-PzF">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Texture Importer-->
+        <scene sceneID="SP0-am-F0v">
+            <objects>
+                <viewController title="Texture Importer" id="wHc-VN-PzF" customClass="GoDFiltersViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="ht2-iH-sej">
+                        <rect key="frame" x="0.0" y="0.0" width="580" height="666"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <containerView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Yt-mj-LJ9">
+                                <rect key="frame" x="0.0" y="0.0" width="200" height="666"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="7jQ-sT-RJt"/>
+                                </constraints>
+                            </containerView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2f7-zd-AmK">
+                                <rect key="frame" x="349" y="13" width="83" height="33"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="69" id="T53-1R-VqR"/>
+                                    <constraint firstAttribute="height" constant="21" id="krv-TW-O8K"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YOv-V8-MZn">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="save:" target="wHc-VN-PzF" id="4z4-VM-4sH"/>
+                                </connections>
+                            </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Uag-Ct-6Lh">
+                                <rect key="frame" x="208" y="621" width="364" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="0dw-2E-wfE"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="File" id="3tT-gd-4MO">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MAU-lv-k5F">
+                                <rect key="frame" x="210" y="361" width="360" height="240"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="240" id="AmJ-tf-o7Z"/>
+                                    <constraint firstAttribute="width" constant="360" id="p6h-cz-ufX"/>
+                                </constraints>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="ball grey" id="UjJ-05-l4O"/>
+                            </imageView>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="G67-HZ-qug">
+                                <rect key="frame" x="210" y="61" width="360" height="240"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="360" id="9pM-Aa-Hhj"/>
+                                    <constraint firstAttribute="height" constant="240" id="Y8f-KJ-Aou"/>
+                                </constraints>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="ball grey" id="kR6-5j-ly7"/>
+                            </imageView>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U4C-qM-6e8" customClass="GoDFilterPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
+                                <rect key="frame" x="207" y="317" width="367" height="25"/>
+                                <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Kmx-1f-Wuy" id="kBA-ng-Mor">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="ZVo-wC-kpR">
+                                        <items>
+                                            <menuItem title="None" state="on" id="Kmx-1f-Wuy"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="didSelectFilter:" target="wHc-VN-PzF" id="L5Q-mb-bJI"/>
+                                </connections>
+                            </popUpButton>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="G67-HZ-qug" firstAttribute="trailing" secondItem="Uag-Ct-6Lh" secondAttribute="trailing" id="0Uh-2d-sa1"/>
+                            <constraint firstItem="8Yt-mj-LJ9" firstAttribute="top" secondItem="ht2-iH-sej" secondAttribute="top" id="0l8-l8-S4i"/>
+                            <constraint firstItem="U4C-qM-6e8" firstAttribute="top" secondItem="MAU-lv-k5F" secondAttribute="bottom" constant="20" id="0pg-On-gjO"/>
+                            <constraint firstAttribute="bottom" secondItem="2f7-zd-AmK" secondAttribute="bottom" constant="20" id="1Hv-S8-IpG"/>
+                            <constraint firstItem="G67-HZ-qug" firstAttribute="leading" secondItem="Uag-Ct-6Lh" secondAttribute="leading" id="1IB-l8-QpJ"/>
+                            <constraint firstItem="MAU-lv-k5F" firstAttribute="leading" secondItem="Uag-Ct-6Lh" secondAttribute="leading" id="5ft-m0-qvs"/>
+                            <constraint firstItem="U4C-qM-6e8" firstAttribute="leading" secondItem="Uag-Ct-6Lh" secondAttribute="leading" id="8UH-r3-3LN"/>
+                            <constraint firstItem="MAU-lv-k5F" firstAttribute="top" secondItem="Uag-Ct-6Lh" secondAttribute="bottom" constant="20" id="BaW-va-aVK"/>
+                            <constraint firstItem="Uag-Ct-6Lh" firstAttribute="leading" secondItem="8Yt-mj-LJ9" secondAttribute="trailing" constant="10" id="D6z-1D-yph"/>
+                            <constraint firstAttribute="bottom" secondItem="8Yt-mj-LJ9" secondAttribute="bottom" id="K1H-Ns-Wlq"/>
+                            <constraint firstAttribute="trailing" secondItem="Uag-Ct-6Lh" secondAttribute="trailing" constant="10" id="R6a-f6-cYn"/>
+                            <constraint firstItem="U4C-qM-6e8" firstAttribute="trailing" secondItem="Uag-Ct-6Lh" secondAttribute="trailing" id="Wct-lm-bFV"/>
+                            <constraint firstItem="Uag-Ct-6Lh" firstAttribute="top" secondItem="ht2-iH-sej" secondAttribute="top" constant="20" id="avU-Rr-TBs"/>
+                            <constraint firstItem="2f7-zd-AmK" firstAttribute="top" secondItem="G67-HZ-qug" secondAttribute="bottom" constant="20" id="bMR-NK-Law"/>
+                            <constraint firstItem="2f7-zd-AmK" firstAttribute="centerX" secondItem="Uag-Ct-6Lh" secondAttribute="centerX" id="gxT-eI-oSb"/>
+                            <constraint firstItem="8Yt-mj-LJ9" firstAttribute="leading" secondItem="ht2-iH-sej" secondAttribute="leading" id="iek-vI-O45"/>
+                            <constraint firstItem="MAU-lv-k5F" firstAttribute="trailing" secondItem="Uag-Ct-6Lh" secondAttribute="trailing" id="p5q-qD-iwD"/>
+                            <constraint firstItem="G67-HZ-qug" firstAttribute="top" secondItem="U4C-qM-6e8" secondAttribute="bottom" constant="20" id="tXr-2D-Yv2"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="filenameField" destination="Uag-Ct-6Lh" id="fI8-s3-agD"/>
+                        <outlet property="filterSelectorPopUp" destination="U4C-qM-6e8" id="FDL-id-gGx"/>
+                        <outlet property="filteredImageView" destination="G67-HZ-qug" id="8Io-Su-Nae"/>
+                        <outlet property="imageView" destination="MAU-lv-k5F" id="MzR-n5-WlG"/>
+                    </connections>
+                </viewController>
+                <customObject id="eub-At-HR2" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-695" y="-674.5"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ball grey" width="500" height="500"/>
+    </resources>
+</document>

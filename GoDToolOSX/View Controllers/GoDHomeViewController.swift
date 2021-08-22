@@ -8,11 +8,11 @@
 
 import Cocoa
 
-let xdtools = ["Trainer Editor","Shadow Pokemon Editor","Pokemon Stats Editor","Move Editor","Item Editor","Pokespot Editor","Gift Pokemon Editor", "Type Editor", "Treasure Editor", "Patches", "Randomiser", "Message Editor", "Script Compiler", "Collision Viewer", "Interaction Editor", "Universal Editor", "ISO Explorer"]
-let xdsegues = ["toTrainerVC","toShadowVC","toStatsVC","toMoveVC","toItemVC","toSpotVC","toGiftVC", "toTypeVC", "toTreasureVC", "toPatchVC", "toRandomiserVC", "toMessageVC", "toScriptVC", "toCollisionVC", "toInteractionVC", "toUniversalVC", "toISOVC"]
+let xdtools = ["Trainer Editor","Shadow Pokemon Editor","Pokemon Stats Editor","Move Editor","Item Editor","Pokespot Editor","Gift Pokemon Editor", "Type Editor", "Treasure Editor", "Patches", "Randomiser", "Message Editor", "Script Compiler", "Collision Viewer", "Interaction Editor", "Vertex Filters", "Universal Editor", "ISO Explorer"]
+let xdsegues = ["toTrainerVC","toShadowVC","toStatsVC","toMoveVC","toItemVC","toSpotVC","toGiftVC", "toTypeVC", "toTreasureVC", "toPatchVC", "toRandomiserVC", "toMessageVC", "toScriptVC", "toCollisionVC", "toInteractionVC", "toFiltersVC", "toUniversalVC", "toISOVC"]
 
-let colotools = ["Trainer Editor","Pokemon Stats Editor","Move Editor","Item Editor","Gift Pokemon Editor", "Type Editor", "Treasure Editor", "Patches", "Randomiser", "Message Editor", "Collision Viewer", "Interaction Editor", "Universal Editor", "ISO Explorer"]
-let colosegues = ["toTrainerVC","toStatsVC","toMoveVC","toItemVC","toGiftVC", "toTypeVC", "toTreasureVC", "toPatchVC", "toRandomiserVC", "toMessageVC", "toCollisionVC", "toInteractionVC", "toUniversalVC", "toISOVC"]
+let colotools = ["Trainer Editor","Pokemon Stats Editor","Move Editor","Item Editor","Gift Pokemon Editor", "Type Editor", "Treasure Editor", "Patches", "Randomiser", "Message Editor", "Collision Viewer", "Interaction Editor", "Vertex Filters", "Universal Editor", "ISO Explorer"]
+let colosegues = ["toTrainerVC","toStatsVC","toMoveVC","toItemVC","toGiftVC", "toTypeVC", "toTreasureVC", "toPatchVC", "toRandomiserVC", "toMessageVC", "toCollisionVC", "toInteractionVC", "toFiltersVC", "toUniversalVC", "toISOVC"]
 
 let pbrtools = ["Pokemon Stats Editor", "Move Editor", "Type Editor", "Message Editor", "Patches", "Universal Editor", "ISO Explorer"]
 let pbrsegues = ["toStatsVC", "toMoveVC", "toTypeVC", "toMessageVC", "toPatchVC", "toUniversalVC", "toISOVC"]

@@ -20,8 +20,8 @@ let pokemonFacesStruct = GoDStruct(name: "Pokemon Faces", format: [
 	.word(name: "Species", description: "", type: .pokemonID),
 	.short(name: "Icons Index", description: "", type: .indexOfEntryInTable(table: iconsTable, nameProperty: nil)),
 	.bitMask(name: "Forms", description: "Divide by 2 for form count, last bit is unknown but seems set for NFE pokemon?", length: .short, values: [
-		(name: "Form Count", type: .uint, numberOfBits: 15, firstBitIndexLittleEndian: 1, mod: nil, div: nil),
-		(name: "Has an Evolution", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 0, mod: nil, div: nil),
+		(name: "Form Count", type: .uint, numberOfBits: 15, firstBitIndexLittleEndian: 1, mod: nil, div: nil, scale: nil),
+		(name: "Has an Evolution", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 0, mod: nil, div: nil, scale: nil),
 	]),
 ])
 let pokemonFacesTable = CommonStructTable(file: .indexAndFsysName(region == .JP ? 5 : 22, "common"), properties: pokemonFacesStruct) { (index, entry) -> String? in

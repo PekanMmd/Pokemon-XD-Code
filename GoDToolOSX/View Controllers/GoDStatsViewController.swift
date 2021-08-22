@@ -170,6 +170,7 @@ class GoDStatsViewController: GoDTableViewController {
 
 		filteredMons = mons.filter({ (mon) -> Bool in
 			mon.name.simplified.contains(text.simplified)
+				|| mon.index == text.integerValue
 		})
 	}
 	

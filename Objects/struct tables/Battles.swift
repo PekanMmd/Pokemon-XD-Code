@@ -127,7 +127,7 @@ let battleTypesStruct = GoDStruct(name: "Battle Types", format: [
 	.byte(name: "Flag 2", description: "", type: .bool),
 	.byte(name: "Flag 3", description: "", type: .bool),
 	.byte(name: "Flag 4", description: "", type: .bool),
-	.byte(name: "Flag 5", description: "", type: .bool),
+	.byte(name: "Can Use Items", description: "", type: .bool),
 	.byte(name: "Flag 6", description: "", type: .bool),
 	.byte(name: "Flag 7", description: "", type: .bool),
 	.byte(name: "Flag 8", description: "", type: .bool),

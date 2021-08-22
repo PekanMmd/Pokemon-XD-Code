@@ -110,7 +110,7 @@ class GoDStructData: CustomStringConvertible {
 
 				currentOffset += property.length
 				var rawValues = [Int]()
-				fields.forEach { (_, _, count, first, mod, div) in
+				fields.forEach { (_, _, count, first, mod, div, scale) in
 					var mask = 0
 					for _ in 0 ..< count {
 						mask = mask << 1
@@ -120,6 +120,9 @@ class GoDStructData: CustomStringConvertible {
 					var newValue = ((rawValue >> first) & mask) / divValue * divValue
 					if let modValue = mod {
 						newValue = newValue % modValue
+					}
+					if let scaleValue = scale {
+						newValue *= scaleValue
 					}
 					rawValues += [newValue]
 				}

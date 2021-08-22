@@ -52,7 +52,7 @@ class GoDTextureImporter {
 		}
 		for i in 0 ..< numberOfPixels {
 			
-			let currentColour = pixels[i]
+			let currentColour = i < pixels.count ? pixels[i] : [0,0,0,0]
 
 			let alpha	  = Int(currentColour[0])
 			let red		  = Int(currentColour[1])

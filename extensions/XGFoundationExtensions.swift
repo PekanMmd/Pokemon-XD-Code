@@ -468,7 +468,7 @@ extension String {
 		if parts.count > 0 {
 			parts[0] = parts[0].simplified.lowercased()
 			(1 ..< parts.count).forEach { (index) in
-				parts[index] = parts[index].capitalized
+				parts[index] = parts[index].simplified.capitalized
 			}
 		}
 		var joined = parts.joined(separator: "")

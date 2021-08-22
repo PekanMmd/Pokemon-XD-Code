@@ -61,9 +61,9 @@ class XGRelocationTable {
 
 		let sectionInfoStruct = GoDStruct(name: "Section Info", format: [
 			.bitMask(name: "Entry", description: "", length: .word, values: [
-				(name: "File Offset", type: .uintHex, numberOfBits: 32, firstBitIndexLittleEndian: 0, mod: nil, div: 4),
-				(name: "Unknown", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 1, mod: nil, div: nil),
-				(name: "Is Executable", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 0, mod: nil, div: nil)
+				(name: "File Offset", type: .uintHex, numberOfBits: 32, firstBitIndexLittleEndian: 0, mod: nil, div: 4, scale: nil),
+				(name: "Unknown", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 1, mod: nil, div: nil, scale: nil),
+				(name: "Is Executable", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 0, mod: nil, div: nil, scale: nil)
 			]),
 			.word(name: "Section Length", description: "", type: .uintHex)
 		])

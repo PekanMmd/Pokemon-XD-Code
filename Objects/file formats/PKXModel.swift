@@ -92,7 +92,6 @@ class PKXModel {
 
 	init(data: XGMutableData) {
 		self.data = data
-
 	}
 
 	var pkxMetaDataPokemonAnimationNames: [String] {

@@ -132,6 +132,10 @@ extension XGImage {
 		return GoDTextureImporter.getMultiFormatTextureData(image: self)
 	}
 
+	func copy() -> XGImage {
+		return texture.image
+	}
+
 	func writePNGData(toFile file: XGFiles) {
 		#if canImport(Cocoa)
 		pngData.write(to: file)
@@ -191,7 +195,6 @@ extension XGImage {
 		return data(fileType: .bmp)
 	}
 
-
 	var nsImage: NSImage {
 		return NSImage(data: self.pngData) ?? NSImage()
 	}
@@ -213,8 +216,10 @@ extension XGImage {
 			let x = index % width
 			let y = index / width
 
-			let colour = pixels[index]
-			bitmap.setColor(colour.NSColour, atX: x, y: y)
+			if index < pixels.count {
+				let colour = pixels[index]
+				bitmap.setColor(colour.NSColour, atX: x, y: y)
+			}
 		}
 
 		return bitmap.representation(using: fileType.NSFileType, properties: [:]) ?? Data()

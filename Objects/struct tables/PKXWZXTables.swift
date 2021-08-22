@@ -76,3 +76,60 @@ var pkxTrainerModelsTable: GoDStructTable {
 		return GSFsys.shared.entryWithID(fsysID)?.name
 	}
 }
+
+#if GAME_XD
+let wzxStructProperties: [GoDStructProperties] = [
+	.word(name: "Attack Fsys ID", description: "", type: .fsysID),
+	.word(name: "Attack File Identifier", description: "", type: .fsysFileIdentifier(fsysName: nil)),
+	.word(name: "Damage Fsys ID", description: "", type: .fsysID),
+	.word(name: "Damage File Identifier", description: "", type: .fsysFileIdentifier(fsysName: nil))
+]
+#else
+let wzxStructProperties: [GoDStructProperties] = [
+	.word(name: "id", description: "", type: .uint),
+	.word(name: "Attack Fsys ID", description: "", type: .fsysID),
+	.word(name: "Attack File Identifier", description: "", type: .fsysFileIdentifier(fsysName: nil)),
+	.word(name: "Damage Fsys ID", description: "", type: .fsysID),
+	.word(name: "Damage File Identifier", description: "", type: .fsysFileIdentifier(fsysName: nil)),
+	.word(name: "Special Fsys ID", description: "", type: .fsysID),
+	.word(name: "Special File Identifier", description: "", type: .fsysFileIdentifier(fsysName: nil)),
+]
+#endif
+
+let wzxMoveAnimationStruct = GoDStruct(name: "WZX Move Animation", format: wzxStructProperties)
+
+var wzxMoveModelsTable: GoDStructTable {
+	let startOffset: Int
+	#if GAME_COLO
+	switch region  {
+	case .US: startOffset = 0x36b150
+	case .EU: startOffset = -1
+	case .JP: startOffset = -1
+	case .OtherGame: startOffset = -1
+	}
+	#else
+	switch region  {
+	case .US: startOffset = 0x40d0f0
+	case .EU: startOffset = -1
+	case .JP: startOffset = -1
+	case .OtherGame: startOffset = -1
+	}
+	#endif
+	return GoDStructTable(file: .dol, properties: wzxMoveAnimationStruct) { (_) -> Int in
+		return startOffset
+	} numberOfEntriesInFile: { (_) -> Int in
+		return game == .Colosseum ? 417 : 419
+	} nameForEntry: { (index, data) -> String? in
+		if let fsysID: Int = data.get("Attack Fsys ID") {
+			return GSFsys.shared.entryWithID(fsysID)?.name
+		}
+		if let fsysID: Int = data.get("Damage Fsys ID") {
+			return GSFsys.shared.entryWithID(fsysID)?.name
+		}
+		if let fsysID: Int = data.get("Special Fsys ID") {
+			return GSFsys.shared.entryWithID(fsysID)?.name
+		}
+		return nil
+	}
+}
+

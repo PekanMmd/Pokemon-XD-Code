@@ -878,6 +878,19 @@ final class XGFsys : NSObject {
 					}
 				}
 
+				#if !GAME_PBR
+				if file.fileType == .wzx {
+					if let wzxData = file.data {
+						let wzx = WZXModel(data: wzxData)
+						for modelData in wzx.models {
+							if !modelData.file.exists {
+								modelData.save()
+							}
+						}
+					}
+				}
+				#endif
+
 				if file.fileType == .msg, !XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.scd.fileExtension, folder).exists || game == .Colosseum {
 					let msgFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.json.fileExtension, file.folder)
 					if !msgFile.exists || overwrite {

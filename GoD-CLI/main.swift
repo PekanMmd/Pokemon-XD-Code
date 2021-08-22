@@ -64,6 +64,25 @@ func importExportFiles() {
 		}
 	}
 
+	func deleteFiles() {
+		guard searchedFiles().count > 0 else {
+			printg("No files selected")
+			return
+		}
+		var prompt = "Deleting files:\n"
+		for file in searchedFiles() {
+			prompt += file + "\n"
+		}
+		prompt += "\nAre you sure? y/n"
+
+		let input =  readInput(prompt)
+		if input.lowercased() == "y" || input.lowercased() == "yes" {
+			for file in searchedFiles() {
+				XGISO.current.deleteFile(name: file, save: true)
+			}
+		}
+	}
+
 	func list() {
 		searchedFiles().forEach { (file) in
 			printg(file)
@@ -83,6 +102,8 @@ func importExportFiles() {
 		Enter 'insert' to only import files without reencoding for \(searchText)
 		Enter 'encode' to only encode files decoded from \(searchText)
 
+		Enter 'delete' to delete files containing \(searchText)
+
 		Enter 'list' to list \(searchText)
 		Enter 'exit' to go back
 		Enter any other text to filter the list to only include files containing that text
@@ -95,6 +116,7 @@ func importExportFiles() {
 		case "import": importFiles(shouldImport: true, encode: true)
 		case "insert": importFiles(shouldImport: true, encode: false)
 		case "encode": importFiles(shouldImport: false, encode: true)
+		case "delete": deleteFiles()
 		case "list": list()
 		case "exit": return
 		default: currentSearch = input

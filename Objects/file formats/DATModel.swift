@@ -23,6 +23,10 @@ class DATModel: CustomStringConvertible, GoDTexturesContaining {
 	}
 	var usesDATTextureHeaderFormat: Bool { return true }
 
+	var vertexColourProfile: XGImage {
+		return nodes?.vertexColourProfile ?? .dummy
+	}
+
 	var modelData: XGMutableData
 	var header: GoDStructData
 	var nodes: DATNodes?
@@ -39,17 +43,19 @@ class DATModel: CustomStringConvertible, GoDTexturesContaining {
 		self.init(data: data)
 	}
 
+	private let datArchiveHeaderStruct = GoDStruct(name: "DAT Model Header", format: [
+		.word(name: "File Size", description: "", type: .uint),
+		.word(name: "Data Size", description: "", type: .uint),
+		.word(name: "Node Count", description: "", type: .uint),
+		.word(name: "Public Root Nodes Count", description: "", type: .uint),
+		.word(name: "External Root Nodes Count", description: "", type: .uint),
+		.array(name: "Padding", description: "", property:
+				.word(name: "Padding", description: "", type: .null), count: 3)
+	])
+
 	init(data: XGMutableData) {
 		self.data = data
-		let datArchiveHeaderStruct = GoDStruct(name: "DAT Model Header", format: [
-			.word(name: "File Size", description: "", type: .uint),
-			.word(name: "Data Size", description: "", type: .uint),
-			.word(name: "Node Count", description: "", type: .uint),
-			.word(name: "Public Root Nodes Count", description: "", type: .uint),
-			.word(name: "External Root Nodes Count", description: "", type: .uint),
-			.array(name: "Padding", description: "", property:
-					.word(name: "Padding", description: "", type: .null), count: 3)
-		])
+
 		header = GoDStructData(properties: datArchiveHeaderStruct, fileData: data, startOffset: 0)
 		let headerLength = datArchiveHeaderStruct.length
 		modelData = data.getSubDataFromOffset(headerLength, length: data.length - headerLength)
@@ -62,5 +68,11 @@ class DATModel: CustomStringConvertible, GoDTexturesContaining {
 			let rootNodesOffset = dataSize + nodesSize
 			nodes = DATNodes(firstRootNodeOffset: rootNodesOffset, publicCount: publicCount, externCount: externCount, data: modelData)
 		}
+	}
+
+	func save() {
+		let headerLength = datArchiveHeaderStruct.length
+		data?.replaceData(data: modelData, atOffset: headerLength)
+		data?.save()
 	}
 }

@@ -72,6 +72,7 @@ extension XGUtility {
 		disableAntiModChecks()
 	}
 
+	@discardableResult
 	class func exportFileFromISO(_ file: XGFiles, decode: Bool = true) -> Bool {
 		XGFolders.ISOExport("").createDirectory()
 

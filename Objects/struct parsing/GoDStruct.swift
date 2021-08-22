@@ -314,7 +314,7 @@ indirect enum GoDStructProperties {
 	case subStruct(name: String, description: String, property: GoDStruct)
 	case array(name: String, description: String, property: GoDStructProperties, count: Int?)
 	case bitArray(name: String, description: String, bitFieldNames: [String?]) // first bit name in array is most significant bit (left most bit), nil for unused bits
-	case bitMask(name: String, description: String, length: ByteLengths, values: [(name: String, type: GoDStructPropertyTypes, numberOfBits: Int, firstBitIndexLittleEndian: Int, mod: Int?, div: Int?)])
+	case bitMask(name: String, description: String, length: ByteLengths, values: [(name: String, type: GoDStructPropertyTypes, numberOfBits: Int, firstBitIndexLittleEndian: Int, mod: Int?, div: Int?, scale: Int?)])
 	case pointer(property: GoDStructProperties, offsetBy: Int, isShort: Bool)
 
 	func alignmentBytes(at offset: Int) -> Int {

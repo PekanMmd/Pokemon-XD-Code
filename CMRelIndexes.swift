@@ -57,8 +57,8 @@ enum CommonIndexes : Int {
 	
 	case AIWeightEffects = 56
 	case NumberOfAIWeightEffects = 57
-	case AIDebugScenarios = 58
-	case NumberOfAIDebugScenarios = 59
+	case AIPokemonRoles = 58
+	case NumberOfAIPokemonRoles = 59
 	
 	case KeyboardCharacters = 36
 	case NumberOfKeyboardCharacters = 37

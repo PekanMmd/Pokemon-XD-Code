@@ -8,24 +8,28 @@
 
 import Foundation
 
-class XGColour: NSObject, Codable {
+class XGColour: Codable {
 	
 	static var colourThreshold = 4
 	
-	var red	= 0
+	var red		= 0
 	var green	= 0
 	var blue	= 0
 	var alpha	= 0
-	
+
+	var hex: Int {
+		return (red << 24) + (green << 16) + (blue << 8) + alpha
+	}
+
+	var hexString: String {
+		return hex.hexString()
+	}
 	
 	init(red: Int, green: Int, blue: Int, alpha: Int) {
-		super.init()
-		
 		self.red   = red
 		self.green = green
 		self.blue  = blue
 		self.alpha = alpha
-		
 	}
 	
 	func isEqual(to colour: XGColour) -> Bool {
@@ -266,6 +270,39 @@ class XGColour: NSObject, Codable {
 		self.green = ((raw >> 16) & 0xFF).int32
 		self.blue  = ((raw >>  8) & 0xFF).int32
 		self.alpha = ((raw) & 0xFF).int32
+	}
+
+	var hsv: (hue: Double, saturation: Double, value: Double) {
+		let r = Double(red)
+		let g = Double(green)
+		let b = Double(blue)
+
+		let minV = min(r, g, b)
+		let maxV = max(r, g, b)
+
+		let delta = maxV - minV
+		var hue: Double = 0
+
+		if delta != 0 {
+			if r == maxV {
+				hue = (g - b) / delta
+			}
+			else if g == maxV {
+				hue = 2 + (b - r) / delta
+			}
+			else {
+				hue = 4 + (r - g) / delta
+			}
+			hue *= 60
+			if hue < 0 {
+				hue += 360
+			}
+			hue /= 360
+		}
+		let saturation = maxV == 0 ? 0 : (delta / maxV)
+		let brightness = maxV
+
+		return (hue: hue, saturation :saturation, value:brightness)
 	}
 }
 

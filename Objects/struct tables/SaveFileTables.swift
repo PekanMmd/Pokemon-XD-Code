@@ -79,9 +79,9 @@ let pokemonStruct = GoDStruct(name: "Pokemon", format: [
 	.short(name: "Species", description: "", type: .pokemonID),
 	.short(name: "Padding", description: "", type: .null),
 	.bitMask(name: "PID Determinant Values", description: "", length: .word, values: [
-		(name: "PID First 3 bytes", type: .uintHex, numberOfBits: 24, firstBitIndexLittleEndian: 8, mod: nil, div: nil),
-		(name: "PID Gender Determinant", type: .uintHex, numberOfBits: 8, firstBitIndexLittleEndian: 0, mod: nil, div: 25),
-		(name: "PID Nature", type: .natureID, numberOfBits: 32, firstBitIndexLittleEndian: 0, mod: 25, div: nil)
+		(name: "PID First 3 bytes", type: .uintHex, numberOfBits: 24, firstBitIndexLittleEndian: 8, mod: nil, div: nil, scale: nil),
+		(name: "PID Gender Determinant", type: .uintHex, numberOfBits: 8, firstBitIndexLittleEndian: 0, mod: nil, div: 25, scale: nil),
+		(name: "PID Nature", type: .natureID, numberOfBits: 32, firstBitIndexLittleEndian: 0, mod: 25, div: nil, scale: nil)
 	]),
 	.byte(name: "Game ID", description: "", type: .gameID),
 	.byte(name: "Current Game Region", description: "", type: .regionID),
@@ -94,8 +94,8 @@ let pokemonStruct = GoDStruct(name: "Pokemon", format: [
 	.array(name: "Unknown Values", description: "Unused?", property:
 		.byte(name: "", description: "", type: .uint), count: 3),
 	.bitMask(name: "OT SID and TID", description: "", length: .word, values: [
-		(name: "Original Trainer SID", type: .uintHex, numberOfBits: 16, firstBitIndexLittleEndian: 16, mod: nil, div: nil),
-		(name: "Original Trainer TID", type: .uintHex, numberOfBits: 16, firstBitIndexLittleEndian: 0, mod: nil, div: nil)
+		(name: "Original Trainer SID", type: .uintHex, numberOfBits: 16, firstBitIndexLittleEndian: 16, mod: nil, div: nil, scale: nil),
+		(name: "Original Trainer TID", type: .uintHex, numberOfBits: 16, firstBitIndexLittleEndian: 0, mod: nil, div: nil, scale: nil)
 	]),
 	.string(name: "Original Trainer Name", description: "", maxCharacterCount: 10, charLength: .short),
 	.short(name: "Padding", description: "", type: .null),
@@ -208,9 +208,9 @@ let pokemonStruct = GoDStruct(name: "Pokemon", format: [
 	.short(name: "PID First Half", description: "", type: .uintHex),
 	.byte(name: "PID Third Byte", description: "", type: .uintHex),
 	.bitMask(name: "PID Determinant Values", description: "", length: .word, values: [
-		(name: "PID First 3 bytes", type: .uintHex, numberOfBits: 24, firstBitIndexLittleEndian: 8, mod: nil, div: nil),
-		(name: "PID Gender Determinant", type: .uintHex, numberOfBits: 8, firstBitIndexLittleEndian: 0, mod: nil, div: 25),
-		(name: "PID Nature", type: .natureID, numberOfBits: 32, firstBitIndexLittleEndian: 0, mod: 25, div: nil)
+		(name: "PID First 3 bytes", type: .uintHex, numberOfBits: 24, firstBitIndexLittleEndian: 8, mod: nil, div: nil, scale: nil),
+		(name: "PID Gender Determinant", type: .uintHex, numberOfBits: 8, firstBitIndexLittleEndian: 0, mod: nil, div: 25, scale: nil),
+		(name: "PID Nature", type: .natureID, numberOfBits: 32, firstBitIndexLittleEndian: 0, mod: 25, div: nil, scale: nil)
 	]),
 	.word(name: "Status Bit Fields", description: "", type: .bitMask),
 	.byte(name: "Obedience", description: "", type: .uint),

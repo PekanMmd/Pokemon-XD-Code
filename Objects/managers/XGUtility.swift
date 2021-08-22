@@ -305,9 +305,9 @@ class XGUtility {
 					}
 
 					for file in fileToImport.folder.files where shouldIncludeFile(file) {
-						// import models into pkxs after textures have been imported into models
+						// import models into pkxs and wzxs after textures have been imported into models
 						if file.fileType == .pkx {
-							for dat in fileToImport.folder.files where dat.fileType == .dat {
+							for dat in fileToImport.folder.files where dat.fileType == .dat && dat.fileName.contains(".pkx") {
 								if dat.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
 									if let datData = dat.data, let pkxData = file.data {
 										if settings.verbose {
@@ -318,6 +318,25 @@ class XGUtility {
 								}
 							}
 						}
+
+						#if !GAME_PBR
+						if file.fileType == .wzx, let wzxData = file.data {
+							let wzx = WZXModel(data: wzxData)
+							var didImport = false
+							for index in 0 ..< wzx.datModelOffsets.count {
+								if let file = wzx.fileForModelWithIndex(index),
+								   file.exists,
+								   let datData = file.data {
+									if wzx.importModel(datData, atIndex: index, save: false) {
+										didImport = true
+									}
+								}
+							}
+							if didImport {
+								wzx.save()
+							}
+						}
+						#endif
 					}
 				}
 

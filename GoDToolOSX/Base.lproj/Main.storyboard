@@ -399,6 +399,7 @@
                         <segue destination="tmF-fI-3qI" kind="show" identifier="toInteractionVC" id="9Ou-YI-6K0"/>
                         <segue destination="3Hc-6b-5SS" kind="show" identifier="toMessageVC" id="bbh-lY-5bm"/>
                         <segue destination="WWu-VH-ZU8" kind="show" identifier="toUniversalVC" id="T2U-ra-GPf"/>
+                        <segue destination="xUK-B2-CyF" kind="show" identifier="toFiltersVC" id="haj-Bq-QtX"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -549,6 +550,14 @@
             </objects>
             <point key="canvasLocation" x="-53" y="1322"/>
         </scene>
+        <!--FiltersManager-->
+        <scene sceneID="Hwg-O2-2wh">
+            <objects>
+                <controllerPlaceholder storyboardName="FiltersManager" id="xUK-B2-CyF" sceneMemberID="viewController"/>
+                <customObject id="kyi-Pk-1gt" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="477" y="1039"/>
+        </scene>
         <!--Trainer-->
         <scene sceneID="Uvt-N8-WLa">
             <objects>
@@ -583,6 +592,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="NaH-4i-fmB"/>
+        <segue reference="PCr-YY-Lid"/>
     </inferredMetricsTieBreakers>
 </document>

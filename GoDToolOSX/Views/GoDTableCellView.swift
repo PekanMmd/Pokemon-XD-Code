@@ -46,7 +46,7 @@ class GoDTableCellView: NSImageView {
 		addSubview(titleField)
 		addSubview(imageView)
 		
-		titleField.maximumNumberOfLines = title.contains("\n") ? 2 : 1
+		titleField.maximumNumberOfLines = 0
 		titleField.isBezeled         = false
 		titleField.isEditable        = false
 		titleField.drawsBackground   = false
@@ -72,7 +72,6 @@ class GoDTableCellView: NSImageView {
 	}
 	
 	func setTitle(_ title: String) {
-		self.titleField.maximumNumberOfLines = title.contains("\n") ? 2 : 1
 		self.titleField.stringValue = title
 	}
 	
