@@ -4527,6 +4527,7 @@
 		1C2000172596947400A7CF7D /* TrainerPokemon.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TrainerPokemon.storyboard; sourceTree = "<group>"; };
 		1C20002B25A9585400A7CF7D /* XGTHP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGTHP.swift; sourceTree = "<group>"; };
 		1C25E5BC26D3357500F050DC /* EreaderTables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EreaderTables.swift; sourceTree = "<group>"; };
+		1C25E5DB26D3B84200F050DC /* EcardCoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcardCoder.swift; sourceTree = "<group>"; };
 		1C291C0425138A1400E3B124 /* Move.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Move.storyboard; sourceTree = "<group>"; };
 		1C37440C24056F190089D3BA /* GoDShellManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDShellManager.swift; sourceTree = "<group>"; };
 		1C39D85B240EA03D006FDFBD /* wit */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = wit; sourceTree = "<group>"; };
@@ -7379,6 +7380,7 @@
 		1CB33AAE22B8F7FC00F81C29 /* managers */ = {
 			isa = PBXGroup;
 			children = (
+				1C25E5DB26D3B84200F050DC /* EcardCoder.swift */,
 				1C12C26E26CC009000501FB0 /* GoDFiltersManager.swift */,
 				B22A1C43218201CA001C41D3 /* XGGiftPokemonManager.swift */,
 				B22A1C40218201AD001C41D3 /* CMGiftPokemonManager.swift */,

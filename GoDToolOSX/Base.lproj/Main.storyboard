@@ -53,8 +53,7 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="mLq-Zu-sy3"/>
-                                        <menuItem title="Add File To ISO" id="pVb-YK-IBf">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        <menuItem title="Add File To ISO" keyEquivalent="a" id="pVb-YK-IBf">
                                             <connections>
                                                 <action selector="addFileToISO:" target="Voe-Tx-rLC" id="1cc-ft-5JM"/>
                                             </connections>

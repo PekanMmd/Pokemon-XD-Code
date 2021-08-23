@@ -55,9 +55,14 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="EFX-V6-aWg"/>
-                                        <menuItem title="Extract ISO" keyEquivalent="e" id="NbP-da-EfV">
+                                        <menuItem title="Add File to ISO" keyEquivalent="a" id="NbP-da-EfV">
                                             <connections>
-                                                <action selector="extractISO:" target="Voe-Tx-rLC" id="aSL-36-CwN"/>
+                                                <action selector="addFileToISO:" target="Voe-Tx-rLC" id="Oay-1U-5lp"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Extract ISO" keyEquivalent="e" id="MXV-pI-Myr">
+                                            <connections>
+                                                <action selector="extractISO:" target="Voe-Tx-rLC" id="eMR-ZZ-6bw"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="View ISO Files" keyEquivalent="i" id="yg4-p4-LQb">
