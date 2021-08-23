@@ -131,6 +131,7 @@ extension GoDStructTableFormattable {
 				assumedNameForEntry(index: index) + String(format: " %03d", index) + ".yaml"
 			filename = filename.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: "\"", with: "")
 			filename = filename.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: "\"", with: "")
+			filename = filename.replacingOccurrences(of: "\0", with: "")
 			let file = XGFiles.nameAndFolder(filename, folder)
 			XGUtility.saveString(entry.description, toFile: file)
 		}

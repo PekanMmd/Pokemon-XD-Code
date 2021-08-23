@@ -89,8 +89,13 @@ indirect enum XGFiles {
 	case typeAndFsysName(XGFileTypes, String)
 	case typeAndFolder(XGFileTypes, XGFolders)
 	case nameAndFolder(String, XGFolders)
+	case path(String)
 	
 	var path: String {
+		if case .path(let s) = self {
+			return s
+		}
+
 		switch self {
 		case .tool:
 			if fileDecodingMode {
@@ -145,6 +150,7 @@ indirect enum XGFiles {
 		case .nameAndFsysName(let name, _): return name
 		case .typeAndFsysName(let type, _): return folder.files.first(where: {$0.fileType == type})?.fileName ?? "-"
 		case .typeAndFolder(let type, _): return folder.files.first(where: {$0.fileType == type})?.fileName ?? "-"
+		case .path(let s) 		: return s.replacingOccurrences(of: self.folder.path + "/", with: "")
 		#if GAME_PBR
 		case .boot:	return "boot.bin"
 		case .saveData: return "PbrSaveData"
@@ -191,6 +197,16 @@ indirect enum XGFiles {
 		case .nameAndFsysName(_, let fsysName): return XGFiles.fsys(fsysName).folder
 		case .typeAndFsysName(_, let fsysName): return XGFiles.fsys(fsysName).folder
 		case .typeAndFolder(_, let f): return f
+		case .path(let s)		:
+			var folderPath = s
+			var done = false
+			while !s.isEmpty && s.contains("/") && !done {
+				let last = folderPath.removeLast()
+				if last == "/" {
+					done = true
+				}
+			}
+			return .path(folderPath)
 		}
 	}
 	

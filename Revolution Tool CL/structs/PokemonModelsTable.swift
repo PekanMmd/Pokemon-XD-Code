@@ -14,9 +14,8 @@ let pokemonModelsStruct = GoDStruct(name: "Pokemon Model", format: [
 	.word(name: "Model File ID", description: "", type: .uintHex),
 	.word(name: "Shiny Model File ID", description: "", type: .uintHex),
 	.float(name: "Unknown 2", description: ""),
-	.short(name: "Padding", description: "", type: .null),
 	.short(name: "Pokemon Species", description: "", type: .pokemonID),
-	.short(name: "Padding 2", description: "", type: .null),
+	.short(name: "Padding", description: "", type: .null),
 	.byte(name: "form id", description: "", type: .uint),
 	.array(name: "Unknown Values", description: "", property: .byte(name: "", description: "", type: .uintHex), count: 47)
 ])

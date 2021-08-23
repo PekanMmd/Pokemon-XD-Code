@@ -78,7 +78,7 @@ func importExportFiles() {
 		let input =  readInput(prompt)
 		if input.lowercased() == "y" || input.lowercased() == "yes" {
 			for file in searchedFiles() {
-				XGISO.current.deleteFile(name: file, save: true)
+				XGISO.current.deleteFileAndPreserve(name: file, save: true)
 			}
 		}
 	}
@@ -298,6 +298,63 @@ func dataTablesMenu() {
 	}
 }
 
+func addFile() {
+	while true {
+		printg("\nAdd file to \(XGISO.inputISOFile?.path ?? "ISO")")
+
+		let prompt = """
+		Enter the path to the file you would like to add
+		or enter 'exit' to go back
+		"""
+
+		let input = readInput(prompt)
+		if input == "exit" {
+			return
+		} else {
+			let file = XGFiles.path(input)
+			if file.exists {
+				if let uniqueID = GSFsys.shared.nextFreeFsysID() {
+					XGISO.current.addFile(file, fsysID: uniqueID)
+					printg("Done. Added file with new Fsys id: \(uniqueID)")
+				} else {
+					displayAlert(title: "Failed", description: "Couldn't add file to ISO. Couldn't genereate a new Fsys ID")
+				}
+			} else {
+				displayAlert(title: "Failed", description: "File doesn't exist: \(file.path)")
+			}
+		}
+	}
+}
+
+func utilities() {
+	guard game == .PBR else {
+		displayAlert(title: "Coming soon!", description: "There are no utilities for this game yet.")
+		return
+	}
+	#if GAME_PBR
+	while true {
+		let prompt = """
+		Type the number of the function you want and press enter:
+
+		0: Back to main menu
+
+		1: Increase number of pokemon slots in the game by 1
+		2: Increase number of pokemon slots in the game by 10
+		3: Increase number of pokemon slots in the game by 100
+		"""
+		let input = readInput(prompt)
+		switch input {
+		case "": continue
+		case "0": return
+		case "1": XGPatcher.increasePokemonTotal(by: 1)
+		case "2": XGPatcher.increasePokemonTotal(by: 10)
+		case "3": XGPatcher.increasePokemonTotal(by: 100)
+		default: invalidOption(input)
+		}
+	}
+	#endif
+}
+
 func showAbout() {
 	printg(aboutMessage())
 	_ = readInput("Press enter to continue...")
@@ -316,14 +373,16 @@ func mainMenu() {
 
 		3: List files - List all files in the ISO
 		4: Import/Export files - Use this to export files for manual editing and to reimport them
+		5: Add File - Add a file to the ISO
 
-		5: Patches - Pick some useful patches to apply to the game
+		6: Patches - Pick some useful patches to apply to the game
+		7: Utilities - Useful code functions to make updates to the game
 
-		6: Randomiser - Select options for randomising the game (rebuild ISO after)
+		8: Randomiser - Select options for randomising the game (rebuild ISO after)
 
-		7: Data Tables - Export, Import or Document game data like pokemon stats
+		9: Data Tables - Export, Import or Document game data like pokemon stats
 
-		8: About - View version number and contact information
+		10: About - View version number and contact information
 		"""
 
 
@@ -337,10 +396,12 @@ func mainMenu() {
 		case "2": XGUtility.deleteSuperfluousFiles()
 		case "3": listFiles()
 		case "4": importExportFiles()
-		case "5": applyPatches()
-		case "6": randomiser()
-		case "7": dataTablesMenu()
-		case "8": showAbout()
+		case "5": addFile()
+		case "6": applyPatches()
+		case "7": utilities()
+		case "8": randomiser()
+		case "9": dataTablesMenu()
+		case "10": showAbout()
 		default: invalidOption(input)
 		}
 	}

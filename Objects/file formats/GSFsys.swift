@@ -45,6 +45,14 @@ class GSFsys {
 		shared = GSFsys()
 	}
 
+	func nextFreeFsysID() -> Int? {
+		var result = 0x2000
+		while entryWithID(result) != nil && result <= 0xFFFF {
+			result += 1
+		}
+		return entryWithID(result) == nil ? result : nil
+	}
+
 	func entryWithID(_ id: Int) -> GSFsysEntry? {
 		return entries.first { (entry) -> Bool in
 			entry.id == id
