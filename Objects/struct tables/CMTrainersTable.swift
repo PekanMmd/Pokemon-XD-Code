@@ -152,19 +152,20 @@ let trainerAITable = CommonStructTable(index: .TrainerAIData, properties: traine
 let pokemonAIRolesStruct = GoDStruct(name: "Pokemon AI Roles", format: [
 	.word(name: "Name ID", description: "", type: .msgID(file: nil)),
 	.word(name: "Unknown 1", description: "", type: .uint),
-	.byte(name: "Weight On Move Type: No Effect", description: "Affects how often this role uses moves with no effect", type: .int),
-	.byte(name: "Weight On Move Type: Attack", description: "Affects how often this role uses attacking moves", type: .int),
-	.byte(name: "Weight On Move Type: Healing", description: "Affects how often this role uses healing moves", type: .int),
-	.byte(name: "Weight On Move Type: Stat Decrease", description: "Affects how often this role uses stat decrease moves", type: .int),
-	.byte(name: "Weight On Move Type: Stat Increase", description: "Affects how often this role uses stat increasing moves", type: .int),
-	.byte(name: "Weight On Move Type: Status", description: "Affects how often this role uses status moves", type: .int),
-	.byte(name: "Weight On Move Type: Field", description: "Affects how often this role uses field moves", type: .int),
-	.byte(name: "Weight On Move Type: Affect Opponent's Move", description: "Affects how often this role uses moves which affect the opponent's move", type: .int),
-	.byte(name: "Weight On Move Type: OHKO", description: "Affects how often this role uses OHKO moves", type: .int),
-	.byte(name: "Weight On Move Type: Multi-turn", description: "Affects how often this role uses multi-turn moves", type: .int),
-	.byte(name: "Weight On Move Type: Misc", description: "Affects how often this role uses certain moves", type: .int),
-	.byte(name: "Weight On Move Type: Misc 2", description: "Affects how often this role uses certain moves", type: .int),
-
+	.subStruct(name: "Move Type Weights", description: "How much more/less likely this role is to use a certain type of move", property: GoDStruct(name: "AI Role Weights", format: [
+		.byte(name: "No Effect", description: "", type: .byteRange),
+		.byte(name: "Attack", description: "", type: .byteRange),
+		.byte(name: "Healing", description: "", type: .byteRange),
+		.byte(name: "Stat Decrease", description: "", type: .byteRange),
+		.byte(name: "Stat Increase", description: "", type: .byteRange),
+		.byte(name: "Status", description: "", type: .byteRange),
+		.byte(name: "Field", description: "", type: .byteRange),
+		.byte(name: "Affect Opponent's Move", description: "", type: .byteRange),
+		.byte(name: "OHKO", description: "", type: .byteRange),
+		.byte(name: "Multi-turn", description: "", type: .byteRange),
+		.byte(name: "Misc", description: "", type: .byteRange),
+		.byte(name: "Misc 2", description: "", type: .byteRange)
+	]))
 ])
 
 let pokemonAIRolesTable = CommonStructTable(index: .AIPokemonRoles, properties: pokemonAIRolesStruct)

@@ -452,7 +452,19 @@ class GoDStructData: CustomStringConvertible {
 						success = false
 						return
 					}
-					values.append(.value(property: property, rawValue: rawValue))
+					if case .byteRange = property.type {
+						let originalValue: Int
+						if rawValue == 0 {
+							originalValue = 0x80
+						} else if rawValue > 0 {
+							originalValue = Int(Double(rawValue) * 0x7F / 100) + 0x80
+						} else {
+							originalValue = 0x80 - Int(Double(rawValue.magnitude) * 0x80 / 100)
+						}
+						values.append(.value(property: property, rawValue: originalValue))
+					} else {
+						values.append(.value(property: property, rawValue: rawValue))
+					}
 				case .float:
 					let rawValueString = rawValues.pop()
 					guard let rawValue = Float(rawValueString) else {
