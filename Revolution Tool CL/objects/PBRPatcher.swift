@@ -12,7 +12,10 @@ let patches: [XGDolPatches] = [
 	.moveTypeMatchupsTable,
 	.gen7CritRatios,
 	.disableRentalPassChecksums,
-	.disableBlurEffect
+	.disableBlurEffect,
+	.add1PokemonEntry,
+	.add10PokemonEntries,
+	.add100PokemonEntries
 ]
 
 enum XGDolPatches: Int {
@@ -24,6 +27,9 @@ enum XGDolPatches: Int {
 	case disableBlurEffect
 	case unlockSaveFileBoxes
 	case moveTypeMatchupsTable
+	case add1PokemonEntry
+	case add10PokemonEntries
+	case add100PokemonEntries
 
 	var name: String {
 		switch self {
@@ -34,6 +40,9 @@ enum XGDolPatches: Int {
 		case .disableRentalPassChecksums: return "Disable legality checks on battle passes"
 		case .disableBlurEffect: return "Remove the blur effect from the games rendering"
 		case .moveTypeMatchupsTable: return "Move type matchups table to a large area so more matchups can be added"
+		case .add1PokemonEntry: return "Add 1 extra pokemon slot to the game"
+		case .add10PokemonEntries: return "Add 10 extra pokemon slots to the game"
+		case .add100PokemonEntries: return "Add 100 extra pokemon slots to the game"
 		}
 	}
 
@@ -608,6 +617,9 @@ class XGPatcher {
 		case .disableRentalPassChecksums: XGPatcher.disableRentalPassChecksums()
 		case .disableBlurEffect: XGPatcher.disableBlurEffect()
 		case .moveTypeMatchupsTable: XGPatcher.moveTypeMatchupsTableToPassValidationFunction()
+		case .add1PokemonEntry: XGPatcher.increasePokemonTotal(by: 1)
+		case .add10PokemonEntries: XGPatcher.increasePokemonTotal(by: 10)
+		case .add100PokemonEntries: XGPatcher.increasePokemonTotal(by: 100)
 		}
 	}
 }
