@@ -15,56 +15,56 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="m8a-C3-nFY">
-                                <rect key="frame" x="8" y="353" width="130" height="18"/>
+                                <rect key="frame" x="8" y="365" width="134" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Species" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="0bR-q3-Ucq">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DRo-Dc-sIh">
-                                <rect key="frame" x="158" y="309" width="130" height="18"/>
+                                <rect key="frame" x="158" y="319" width="134" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Abilities" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Hdx-E2-Y2q">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dl1-qm-izc">
-                                <rect key="frame" x="8" y="265" width="113" height="18"/>
+                                <rect key="frame" x="8" y="273" width="117" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Stats" bezelStyle="regularSquare" imagePosition="left" inset="2" id="MXW-O4-NOc">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w7a-JO-od0">
-                                <rect key="frame" x="8" y="177" width="96" height="18"/>
+                                <rect key="frame" x="8" y="181" width="100" height="18"/>
                                 <buttonCell key="cell" type="check" title="Battle Bingo" bezelStyle="regularSquare" imagePosition="left" inset="2" id="mwJ-Il-9I1">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5Jq-Yi-2jS">
-                                <rect key="frame" x="158" y="265" width="144" height="18"/>
+                                <rect key="frame" x="158" y="273" width="148" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Evolutions" bezelStyle="regularSquare" imagePosition="left" inset="2" id="TKt-D1-FON">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ggv-x8-P7o">
-                                <rect key="frame" x="8" y="221" width="95" height="18"/>
+                                <rect key="frame" x="8" y="227" width="99" height="18"/>
                                 <buttonCell key="cell" type="check" title="Move Types" bezelStyle="regularSquare" imagePosition="left" inset="2" id="TNM-ZD-7bp">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IdL-GV-3WZ">
-                                <rect key="frame" x="158" y="221" width="85" height="18"/>
+                                <rect key="frame" x="158" y="227" width="89" height="18"/>
                                 <buttonCell key="cell" type="check" title="TM Moves" bezelStyle="regularSquare" imagePosition="left" inset="2" id="a9B-av-A4g">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bOX-gC-QF6">
-                                <rect key="frame" x="100" y="13" width="112" height="32"/>
+                                <rect key="frame" x="99" y="13" width="114" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="LDb-1M-kgV"/>
                                 </constraints>
@@ -77,35 +77,35 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Meo-I9-p3a">
-                                <rect key="frame" x="8" y="309" width="118" height="18"/>
+                                <rect key="frame" x="8" y="319" width="122" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Types" bezelStyle="regularSquare" imagePosition="left" inset="2" id="ilM-ET-TiP">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HAm-s3-kBK">
-                                <rect key="frame" x="8" y="113" width="229" height="18"/>
+                                <rect key="frame" x="8" y="115" width="232" height="18"/>
                                 <buttonCell key="cell" type="check" title="Only randomise Shadow Pokemon" bezelStyle="regularSquare" imagePosition="left" inset="2" id="cxt-UX-QPk">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="C41-co-vFw">
-                                <rect key="frame" x="158" y="353" width="121" height="18"/>
+                                <rect key="frame" x="158" y="365" width="125" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Moves" bezelStyle="regularSquare" imagePosition="left" inset="2" id="imd-qM-0kN">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bt0-6S-ONl">
-                                <rect key="frame" x="158" y="177" width="144" height="18"/>
+                                <rect key="frame" x="158" y="180" width="148" height="20"/>
                                 <buttonCell key="cell" type="check" title="Remove Trade Evolutions" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="VEZ-f8-8nH">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system" size="10"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zrR-sC-KC2">
-                                <rect key="frame" x="8" y="89" width="260" height="18"/>
+                                <rect key="frame" x="8" y="89" width="264" height="18"/>
                                 <buttonCell key="cell" type="check" title="Randomise Pokemon Using Similar BST" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Tb0-TS-Eci">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>

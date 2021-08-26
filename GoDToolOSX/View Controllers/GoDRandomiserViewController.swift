@@ -25,8 +25,11 @@ class GoDRandomiserViewController: GoDViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-		if game == .Colosseum {
+		if game != .XD {
 			bbingo.isHidden = true
+		}
+		if game == .PBR {
+			randomiseShadowsOnly.title = "Only Randomise Rental Pass Pokemon"
 		}
     }
 	
@@ -41,7 +44,7 @@ class GoDRandomiserViewController: GoDViewController {
 		let moveTypes = mtypes.state == .on
 		let tms = tmmoves.state == .on
 		let tradeEvos = removeTrades.state == .on
-		let shadows = randomiseShadowsOnly.state == .on
+		let limit = randomiseShadowsOnly.state == .on
 		let bst = randomiseByBST.state == .on
 
 		#if GAME_XD
@@ -60,10 +63,10 @@ class GoDRandomiserViewController: GoDViewController {
 			XGUtility.deleteSuperfluousFiles()
 
 			if species {
-				XGRandomiser.randomisePokemon(shadowsOnly: shadows, similarBST: bst)
+				XGRandomiser.randomisePokemon(limitToMainMons: limit, similarBST: bst)
 			}
 			if moves {
-				XGRandomiser.randomiseMoves(shadowsOnly: shadows)
+				XGRandomiser.randomiseMoves()
 			}
 			if types {
 				XGRandomiser.randomiseTypes()
@@ -88,9 +91,11 @@ class GoDRandomiserViewController: GoDViewController {
 				XGRandomiser.randomiseBattleBingo()
 			}
 			#endif
+			#if !GAME_PBR
 			if tradeEvos {
 				XGPatcher.removeTradeEvolutions()
 			}
+			#endif
 
 			XGUtility.compileMainFiles()
 			GoDAlertViewController.displayAlert(title: "Randomisation complete!", text: "done.")

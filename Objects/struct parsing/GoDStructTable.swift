@@ -298,6 +298,27 @@ extension GoDStructTableFormattable {
 			return
 		}
 
+		#if GAME_PBR
+		if self.properties.name == "Type Matchups" {
+			for i in 0 ..< numberOfEntriesInFile(file) {
+				let startOffset = firstEntryStartOffset + (i * properties.length)
+				if i < kNumberOfTypes, let structData = GoDStructData.fromCSV(properties: properties, fileData: fileData, startOffset: startOffset, csvFile: csvFile, row: i) {
+
+					let typeData = XGType(index: i)
+					structData.values.forEachIndexed { (index, value) in
+						guard index < kNumberOfTypes else {
+							return
+						}
+						let effectiveness = XGEffectivenessValues(rawValue: value.rawValue() ?? 0) ?? .neutral
+						typeData.setEffectiveness(effectiveness, againstType: .index(index))
+					}
+					typeData.save()
+				}
+			}
+			return
+		}
+		#endif
+
 		for i in 0 ..< numberOfEntriesInFile(file) {
 			let startOffset = firstEntryStartOffset + (i * properties.length)
 			if let structData = GoDStructData.fromCSV(properties: properties, fileData: fileData, startOffset: startOffset, csvFile: csvFile, row: i) {

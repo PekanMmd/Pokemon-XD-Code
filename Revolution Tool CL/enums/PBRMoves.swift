@@ -93,6 +93,11 @@ enum XGMoves: XGIndexedValue {
 	static func randomMoveset() -> [XGMoves] {
 		return [XGMoves.random(),XGMoves.random(),XGMoves.random(),XGMoves.random()]
 	}
+
+	// The game already has logic around generating random movesets
+	static func inGameRandomMoveset() -> [XGMoves] {
+		return [XGMoves.randomMove(.offensive, .levelup),XGMoves.randomMove(.offensive, .levelup),XGMoves.randomMove(.defensive, .levelup),XGMoves.randomMove(.offensive, .tm)]
+	}
 	
 }
 

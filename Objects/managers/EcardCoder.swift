@@ -38,7 +38,7 @@ class EcardCoder {
 
 	// Default "key" value is the one used in Colosseum
 	static func decode(data: XGMutableData, key: Int = 4160) -> XGMutableData? {
-		let output = XGMutableData(length: 0x814) // Card itelf is 0x810. Extra 4 bytes at start.
+		let output = XGMutableData(length: 0xb20)
 		output.file = .nameAndFolder(data.file.fileName.removeFileExtensions() + "-decoded.bin", data.file.folder)
 
 		// This code is a port of a decomp produced using ghidra so the variable names are generic
@@ -54,7 +54,6 @@ class EcardCoder {
 		let local_428 = XGMutableData(length: 256) // confirm type
 		let local_228 = XGMutableData(length: 256) // confirm type
 
-		unknown_240c(output: output, param1: 0, param2: 0xb20)
 		var iVar6 = globalData[0x268dc4]!
 		var iVar17 = globalData[0x268dc8]!
 		var local_a2c = 0
@@ -559,11 +558,6 @@ class EcardCoder {
 //		return uVar16;
 		return uVar16 == 0 ? nil : output
 	}
-
-	private static func unknown_240c(output: XGMutableData, param1: Int, param2: Int) {
-
-	}
-
 
 	// TODO: confirm type of param 5, same as local_228 in main function
 	private static func unknown_7e02c(output: XGMutableData, globalPointer: Int, param3: UInt32, param4: UInt32, param5: XGMutableData?, param6: Int) -> UInt8 {

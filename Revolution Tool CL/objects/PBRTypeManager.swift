@@ -20,6 +20,15 @@ class PBRTypeManager {
 		}
 	}
 
+	static var typeMatchUpOriginalLocation: Int {
+		switch region {
+		case .EU: return 0x401348
+		case .JP: return -1
+		case .US: return -1
+		case .OtherGame: return -1
+		}
+	}
+
 	static var typeMatchupDataDolOffset: Int? {
 		guard let dol = XGFiles.dol.data else {
 			printg("Dol file not found")
@@ -36,6 +45,10 @@ class PBRTypeManager {
 		let isInDataSection = dataTableRAMOffset >= 0x3e1e60
 		let offsetDifference = isInDataSection ? kDolTableToRAMOffsetDifference : kDolToRAMOffsetDifference
 		return Int(dataTableRAMOffset) - offsetDifference
+	}
+
+	static var numberOfTypeMatchupEntries: Int {
+		return currentMatchupTable?.count ?? 0
 	}
 
 	private static var currentMatchupTable: [PBRTypeMatchup]? {
@@ -79,6 +92,10 @@ class PBRTypeManager {
 			return false
 		}
 
+		if let currentOffset = typeMatchupDataDolOffset, currentOffset == typeMatchUpOriginalLocation, region == .EU {
+			XGPatcher.moveTypeMatchupsTableToPassValidationFunction()
+		}
+
 		var newTable = [PBRTypeMatchup]()
 		for offensiveType in XGMoveTypes.allValues {
 			let data = GoDDataTableEntry.typeMatchups(index: offensiveType.index)
@@ -97,11 +114,12 @@ class PBRTypeManager {
 
 		let oldSize = currentTable.count
 		let newSize = newTable.count
-		let sizeDifference = oldSize - newSize
-		guard oldSize < newSize || allowSizeIncrease else {
+		guard newSize <= oldSize || allowSizeIncrease else {
 			printg("Error: New type matchup table is too large.\nTry setting more matchups to neutral.")
 			return false
 		}
+
+		let sizeDifference = oldSize - newSize
 
 		var currentOffset = startOffset
 		for matchup in newTable.filter({ (matchup) -> Bool in !matchup.ignoredByForesight }) {
@@ -135,7 +153,7 @@ class PBRTypeManager {
 		return true
 	}
 
-	static func moveTypeMatchupTableToDolOffset(_ offset: Int, increaseEntryNumberBy: Int? = nil) {
+	static func moveTypeMatchupTableToDolOffset(_ offset: Int, newEntryCount: Int? = nil) {
 
 		guard let currentMatchups = currentMatchupTable else {
 			printg("Couldn't move type matchups table because old table couldn't be found.")
@@ -143,7 +161,10 @@ class PBRTypeManager {
 		}
 
 		let dolSize = XGFiles.dol.fileSize
-		guard offset < dolSize else {
+		let newEntryCount = newEntryCount ?? currentMatchups.count
+		let entrySizeDifference = newEntryCount - currentMatchups.count
+		let spaceRequired = (newEntryCount * 3) + 6 // + 6 for the two entries to mark foresight and end of table
+		guard offset + spaceRequired < dolSize else {
 			printg("Couldn't move type matchup table to offset \(offset.hexString()) as it's outside the dol file (\(dolSize.hexString()) bytes)")
 			return
 		}
@@ -152,15 +173,15 @@ class PBRTypeManager {
 		let offsetDifference = isInDataSection ? kDolTableToRAMOffsetDifference : kDolToRAMOffsetDifference
 		let RAMOffset = UInt32(offset + offsetDifference) + 0x80000000
 
-		let offsetUpperHalf = Int(RAMOffset >> 16)
-		let offsetLowerHalf = Int(RAMOffset & 0xFFFF)
+		// It takes 2 instructions to load the address into a register
+		let offsetInstructionsR4 = XGASM.loadImmediateShifted32bit(register: .r4, value: RAMOffset)
 
 		let r4Offsets: [UInt32] = [0x803be7c4, 0x803be804, 0x803be830, 0x803be870] // in RAM
 		for offset in r4Offsets {
 			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference
 			XGAssembly.replaceASM(startOffset: adjustedOffset, newASM: [
-				.lis(.r4, offsetUpperHalf),
-				.addi(.r4, .r4, offsetLowerHalf)
+				offsetInstructionsR4.0,
+				offsetInstructionsR4.1
 			])
 		}
 
@@ -168,50 +189,40 @@ class PBRTypeManager {
 		for offset in r4OffsetsWithGap {
 			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference
 			XGAssembly.replaceASM(startOffset: adjustedOffset, newASM: [
-				.lis(.r4, offsetUpperHalf),
+				offsetInstructionsR4.0
 			])
 			XGAssembly.replaceASM(startOffset: adjustedOffset + 8, newASM: [
-				.addi(.r4, .r4, offsetLowerHalf)
+				offsetInstructionsR4.1
 			])
 		}
+
+		let offsetInstructionsR7 = XGASM.loadImmediateShifted32bit(register: .r7, value: RAMOffset)
 
 		let r7OffsetsWithGap: [UInt32] = [0x803bf874] // in RAM
 		for offset in r7OffsetsWithGap {
 			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference
 			XGAssembly.replaceASM(startOffset: adjustedOffset, newASM: [
-				.lis(.r7, offsetUpperHalf),
+				offsetInstructionsR7.0
 			])
 			XGAssembly.replaceASM(startOffset: adjustedOffset + 8, newASM: [
-				.addi(.r7, .r7, offsetLowerHalf)
+				offsetInstructionsR7.1
 			])
 		}
+
+		let offsetInstructionsR17 = XGASM.loadImmediateShifted32bit(register: .r17, value: RAMOffset)
 
 		let r17OffsetsWithGap: [UInt32] = [0x803beaa4, 0x803bef28] // in RAM
 		for offset in r17OffsetsWithGap {
 			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference
 			XGAssembly.replaceASM(startOffset: adjustedOffset, newASM: [
-				.lis(.r17, offsetUpperHalf),
+				offsetInstructionsR17.0
 			])
 			XGAssembly.replaceASM(startOffset: adjustedOffset + 8, newASM: [
-				.addi(.r17, .r17, offsetLowerHalf)
+				offsetInstructionsR17.1
 			])
 		}
 
-		// should have probably left a comment as to why this is commented out
-		// guessing it isn't needed
-//		let r30OffsetsWithJump: [UInt32] = [0x803c618c, 0x803c72f4] // in RAM
-//		for offset in r30OffsetsWithJump {
-//			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference
-//			XGAssembly.replaceASM(startOffset: adjustedOffset, newASM: [
-//				.lis(.r30, offsetUpperHalf),
-//			])
-//			XGAssembly.replaceASM(startOffset: adjustedOffset + 0x2c, newASM: [
-//				.addi(.r30, .r30, offsetLowerHalf)
-//			])
-//		}
-
 		// copy old data to new location, possibly with extra space
-
 		guard let dol = XGFiles.dol.data else {
 			return
 		}
@@ -230,11 +241,13 @@ class PBRTypeManager {
 			currentOffset += 3
 		}
 
-		for _ in 0 ..< (increaseEntryNumberBy ?? 0) {
-			// add extra dummy matchups to increase the size of the table
-			let matchup = PBRTypeMatchup(offensiveType: .index(0xfd), defensiveType: .index(0xfd), multiplier: 0, ignoredByForesight: true)
-			dol.replaceBytesFromOffset(currentOffset, withByteStream: matchup.data)
-			currentOffset += 3
+		if entrySizeDifference > 0 {
+			for _ in 0 ..< entrySizeDifference {
+				// add extra dummy matchups to pad out the rest of the table until they're needed
+				let matchup = PBRTypeMatchup(offensiveType: .index(0xfd), defensiveType: .index(0xfd), multiplier: 0, ignoredByForesight: true)
+				dol.replaceBytesFromOffset(currentOffset, withByteStream: matchup.data)
+				currentOffset += 3
+			}
 		}
 
 		dol.replaceBytesFromOffset(currentOffset, withByteStream: [0xFF, 0xFF, 0x00])

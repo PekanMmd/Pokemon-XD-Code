@@ -9,7 +9,6 @@ import Foundation
 
 let patches: [XGDolPatches] = [
 	.freeSpaceInDol,
-	.moveTypeMatchupsTable,
 	.gen7CritRatios,
 	.disableRentalPassChecksums,
 	.disableBlurEffect,
@@ -34,12 +33,12 @@ enum XGDolPatches: Int {
 	var name: String {
 		switch self {
 		case .unlockSaveFileBoxes: return "Unlock save file. Links a DS to the save file which lets you use pokemon in your box to create battle passes."
-		case .freeSpaceInDol: return "Create some space in \(XGFiles.dol.fileName) which is needed for other assembly patches. Recommended to use this first."
+		case .freeSpaceInDol: return "Create some space in \(XGFiles.dol.fileName) which van be used for adding new assembly assembly instructions."
 		case .gen7CritRatios: return "Update the critical hit ratios to gen 7 odds"
 		case .gen6CriticalHitMultipliers: return "Critical hits deal 1.5x damage, 2.25x with Sniper"
 		case .disableRentalPassChecksums: return "Disable legality checks on battle passes"
 		case .disableBlurEffect: return "Remove the blur effect from the games rendering"
-		case .moveTypeMatchupsTable: return "Move type matchups table to a large area so more matchups can be added"
+		case .moveTypeMatchupsTable: return "Move type matchups table to a large area so more matchups can be added. The tool does this automatically when editing type matchups."
 		case .add1PokemonEntry: return "Add 1 extra pokemon slot to the game"
 		case .add10PokemonEntries: return "Add 10 extra pokemon slots to the game"
 		case .add100PokemonEntries: return "Add 100 extra pokemon slots to the game"
@@ -84,22 +83,30 @@ class XGPatcher {
 	/// Removes the code for rental pass validation checks
 	/// allowing the space to be reused for the type matchups table
 	static func moveTypeMatchupsTableToPassValidationFunction() {
+		let rentalPassStartOffset: Int
+		switch region {
+		case .EU: rentalPassStartOffset = 0x1317cc - kDolToRAMOffsetDifference
+		case .JP: rentalPassStartOffset = -1
+		case .US: rentalPassStartOffset = -1
+		case .OtherGame: rentalPassStartOffset = -1
+		}
+		guard PBRTypeManager.typeMatchupDataDolOffset != rentalPassStartOffset + 8 else {
+			// already been moved
+			return
+		}
 		guard region == .EU else {
 			printg("Couldn't move type match ups table. Not implemented for region: \(region.name)")
 			return
 		}
-		let startOffset = 0x1317cc - kDolToRAMOffsetDifference
 
 		// rental pass validation checks just pass immediately
-		XGAssembly.replaceASM(startOffset: startOffset, newASM: [
+		XGAssembly.replaceASM(startOffset: rentalPassStartOffset, newASM: [
 			.li(.r3, 1),
 			.blr
 		])
 
-		let movedFromOriginalLocation = PBRTypeManager.typeMatchupDataDolOffset == 0x401348
-		let additionalEntryCount = movedFromOriginalLocation ? 20 : 0
-
-		PBRTypeManager.moveTypeMatchupTableToDolOffset(startOffset + 8, increaseEntryNumberBy: additionalEntryCount)
+		let newEntriesCount = 0x84 // The number of type matchup entries that can fit in this function after stubbing it out
+		PBRTypeManager.moveTypeMatchupTableToDolOffset(rentalPassStartOffset + 8, newEntryCount: newEntriesCount)
 	}
 
 	static func gen7CritRatios() {

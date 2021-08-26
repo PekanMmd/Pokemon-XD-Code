@@ -14,6 +14,16 @@ let kNumberOfPokemonMoves	= 0x04
 let kNumberOfEVs			= 0x06
 let kNumberOfIVs			= 0x06
 
+var allDeckFileIndexes: [Int] = {
+	Array(26 ... 33) + Array(35 ... 40) + Array(43 ... 44)
+}()
+var allDeckFiles: [XGFiles] = {
+	allDeckFileIndexes.map {
+		XGFiles.indexAndFsysName($0, "deck")
+	}
+}()
+let rentalPassDeckIndex = 33
+
 class XGTrainerPokemon {
 	
 	var index			= 0

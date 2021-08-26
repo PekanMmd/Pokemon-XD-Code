@@ -32,6 +32,12 @@ enum XGTMs: XGIndexedValue {
 		return index > 92
 	}
 
+	func replaceWithMove(_ move: XGMoves) {
+		let tableEntry = GoDDataTableEntry.TMs(index: index - 1)
+		tableEntry.setShort(0, to: move.index)
+		tableEntry.save()
+	}
+
 	static var allTMs: [XGTMs] {
 		(1 ... kNumberOfTMsAndHMs).map { (index) -> XGTMs in
 			.tm(index)

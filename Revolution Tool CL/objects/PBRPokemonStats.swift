@@ -75,6 +75,10 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 	var evolutions = [XGEvolution]()
 	var levelUpMoves = [XGLevelUpMove]()
 
+	var baseStatTotal: Int {
+		return hp + attack + defense + specialAttack + specialDefense + speed
+	}
+
 	var facesEntry: GoDDataTableEntry {
 		return GoDDataTableEntry.pokemonFaces(index: baseIndex)
 	}

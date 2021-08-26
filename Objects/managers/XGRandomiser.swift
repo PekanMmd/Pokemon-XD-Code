@@ -39,7 +39,7 @@ class XGRandomiser: NSObject {
 	}
 	#endif
 	
-	class func randomisePokemon(shadowsOnly: Bool = false, similarBST: Bool = false) {
+	class func randomisePokemon(limitToMainMons: Bool = false, similarBST: Bool = false) {
 		printg("randomising pokemon species...")
 
 		let cachedPokemonStats = XGPokemon.allPokemon().map{$0.stats}.filter{$0.catchRate > 0}
@@ -155,7 +155,8 @@ class XGRandomiser: NSObject {
 			return newSpecies
 		}
 
-		if !shadowsOnly {
+		if !limitToMainMons {
+			#if !GAME_PBR
 			for gift in XGGiftPokemonManager.allNonShadowGiftPokemon() {
 
 				var pokemon = gift
@@ -169,6 +170,7 @@ class XGRandomiser: NSObject {
 				pokemon.save()
 
 			}
+			#endif
 
 			#if GAME_XD
 			for p in 0 ... 3 {
@@ -196,19 +198,24 @@ class XGRandomiser: NSObject {
 		tradeShadowPokemon.save()
 		#endif
 
+		#if !GAME_PBR
 		var decks = MainDecksArray
 		var additionalPokemon = [XGTrainerPokemon]()
+		#endif
+
 		#if GAME_XD
 		decks += [XGDecks.DeckDarkPokemon]
-		additionalPokemon = shadowsOnly ? [] : [
+		additionalPokemon = limitToMainMons ? [] : [
 			XGDeckPokemon.dpkm(1, .DeckVirtual).data,
 			XGDeckPokemon.dpkm(2, .DeckVirtual).data
 		]
 		#endif
+
+		#if !GAME_PBR
 		var mons = additionalPokemon
 		for deck in decks {
 			for pokemon in deck.allActivePokemon {
-				if shadowsOnly && !pokemon.isShadowPokemon {
+				if limitToMainMons && !pokemon.isShadowPokemon {
 					continue
 				}
 				mons.append(pokemon)
@@ -221,20 +228,37 @@ class XGRandomiser: NSObject {
 			pokemon.happiness = 128
 			pokemon.save()
 		}
+		#endif
+
+		#if GAME_PBR
+		for index in allDeckFileIndexes {
+			guard !limitToMainMons || index == rentalPassDeckIndex else {
+				continue
+			}
+			let file = XGFiles.indexAndFsysName(index, "deck")
+			let deck = GoDDataTable.tableForFile(file)
+			for i in 0 ..< deck.numberOfEntries {
+				let mon = XGTrainerPokemon(index: i, file: file)
+				mon.species = randomise(oldSpecies: mon.species, checkDuplicates: index == rentalPassDeckIndex)
+				// For rental mons, use their last 4 level up moves at level 55 to make the movesets decent
+				// without too many super high level moves which tend to be quite bad anyway
+				mon.moves = index == rentalPassDeckIndex ? mon.species.movesForLevel(55) : XGMoves.inGameRandomMoveset()
+				mon.save()
+			}
+		}
+		#endif
 
 		printg("done!")
 	}
 	
-	class func randomiseMoves(shadowsOnly: Bool = false) {
+	class func randomiseMoves() {
 		printg("randomising pokemon moves...")
-		
+
+		#if !GAME_PBR
 		for deck in MainDecksArray {
 			for pokemon in deck.allActivePokemon {
 				
 				if pokemon.species.index == 0 {
-					continue
-				}
-				if shadowsOnly && pokemon.isShadowPokemon {
 					continue
 				}
 				
@@ -242,7 +266,7 @@ class XGRandomiser: NSObject {
 				pokemon.save()
 			}
 		}
-
+		#endif
 
 		#if GAME_XD
 		for shadow in XGDecks.DeckDarkPokemon.allActivePokemon {
@@ -254,7 +278,7 @@ class XGRandomiser: NSObject {
 		}
 		#endif
 		
-		
+		#if !GAME_PBR
 		for gift in XGGiftPokemonManager.allGiftPokemon() {
 			
 			var pokemon = gift
@@ -267,7 +291,8 @@ class XGRandomiser: NSObject {
 			pokemon.save()
 			
 		}
-		
+		#endif
+
 		for i in 1 ..< kNumberOfPokemon {
 			
 			if XGPokemon.index(i).nameID == 0 {
@@ -297,6 +322,20 @@ class XGRandomiser: NSObject {
 				p.save()
 			}
 		}
+
+		#if GAME_PBR
+		for index in allDeckFileIndexes {
+			let file = XGFiles.indexAndFsysName(index, "deck")
+			let deck = GoDDataTable.tableForFile(file)
+			for i in 0 ..< deck.numberOfEntries {
+				let mon = XGTrainerPokemon(index: i, file: file)
+				mon.moves = index == rentalPassDeckIndex ? XGMoves.randomMoveset() : XGMoves.inGameRandomMoveset()
+				mon.save()
+			}
+		}
+		randomiseTMs()
+		#endif
+
 		printg("done!")
 	}
 	
@@ -367,7 +406,11 @@ class XGRandomiser: NSObject {
 	}
 	
 	class func randomiseTMs() {
-		printg("randomising TMs and Tutor Moves...")
+		if game == .PBR {
+			printg("randomising TMs...")
+		} else {
+			printg("randomising TMs and Tutor Moves...")
+		}
 		
 		var tmIndexes = [Int]()
 		while tmIndexes.count < kNumberOfTMsAndHMs + kNumberOfTutorMoves {
@@ -378,13 +421,13 @@ class XGRandomiser: NSObject {
 			let tm = XGTMs.tm(i)
 			tm.replaceWithMove(.index(tmIndexes[i - 1]))
 		}
-		if game == .XD {
-			for i in 1 ... kNumberOfTutorMoves {
-				let tm = XGTMs.tutor(i)
-				tm.replaceWithMove(XGMoves.random())
-				tm.replaceWithMove(.index(tmIndexes[i + kNumberOfTMsAndHMs - 1]))
-			}
+		#if GAME_XD
+		for i in 1 ... kNumberOfTutorMoves {
+			let tm = XGTMs.tutor(i)
+			tm.replaceWithMove(XGMoves.random())
+			tm.replaceWithMove(.index(tmIndexes[i + kNumberOfTMsAndHMs - 1]))
 		}
+		#endif
 		printg("done!")
 	}
 	

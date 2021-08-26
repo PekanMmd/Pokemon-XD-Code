@@ -785,6 +785,11 @@
 		1CC4598826AF2F1000019C80 /* PDADumper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC4598526AF2F1000019C80 /* PDADumper.swift */; };
 		1CC5DD3222C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
 		1CC5DD3322C50EA500DC2736 /* XGBattleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29E55FB1FA4DA40006BE597 /* XGBattleField.swift */; };
+		1CC8564626D693E700B910DE /* XGRandomiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A98214CA25200137C37 /* XGRandomiser.swift */; };
+		1CC8565026D693E700B910DE /* XGRandomiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A98214CA25200137C37 /* XGRandomiser.swift */; };
+		1CC8565126D693E800B910DE /* XGRandomiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A98214CA25200137C37 /* XGRandomiser.swift */; };
+		1CC8567626D7052500B910DE /* Randomiser.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA238822411409E000E56AB /* Randomiser.storyboard */; };
+		1CC8568026D7052E00B910DE /* GoDRandomiserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2560A93214CA1FF00137C37 /* GoDRandomiserViewController.swift */; };
 		1CCB074D262BCF4300D4ABA5 /* PBRAbilitiesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCB074C262BCF4300D4ABA5 /* PBRAbilitiesManager.swift */; };
 		1CCB074E262BCF4300D4ABA5 /* PBRAbilitiesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCB074C262BCF4300D4ABA5 /* PBRAbilitiesManager.swift */; };
 		1CCB074F262BCF4300D4ABA5 /* PBRAbilitiesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCB074C262BCF4300D4ABA5 /* PBRAbilitiesManager.swift */; };
@@ -867,6 +872,9 @@
 		1CCFFF8D255501E50082BFE2 /* PBRScriptInstruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A511221D4014B009C707C /* PBRScriptInstruction.swift */; };
 		1CCFFF8E255501E50082BFE2 /* PBRScriptClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A511621D405F9009C707C /* PBRScriptClass.swift */; };
 		1CCFFF8F255501E50082BFE2 /* PBRTrainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24A50D021D12CDA009C707C /* PBRTrainer.swift */; };
+		1CD1AA5626D4FA1F00E86226 /* TypeMatchupsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD1AA5526D4FA1F00E86226 /* TypeMatchupsTable.swift */; };
+		1CD1AA5726D4FA1F00E86226 /* TypeMatchupsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD1AA5526D4FA1F00E86226 /* TypeMatchupsTable.swift */; };
+		1CD1AA5826D4FA1F00E86226 /* TypeMatchupsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD1AA5526D4FA1F00E86226 /* TypeMatchupsTable.swift */; };
 		1CE1A7782326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
 		1CE1A7792326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
 		1CE1A77A2326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
@@ -4695,6 +4703,7 @@
 		1CCFFFE12555F5470082BFE2 /* cygp11-kit-0.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygp11-kit-0.dll"; sourceTree = "<group>"; };
 		1CCFFFE22555F5470082BFE2 /* cyggcc_s-1.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cyggcc_s-1.dll"; sourceTree = "<group>"; };
 		1CCFFFE32555F5470082BFE2 /* cygsigsegv-2.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygsigsegv-2.dll"; sourceTree = "<group>"; };
+		1CD1AA5526D4FA1F00E86226 /* TypeMatchupsTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeMatchupsTable.swift; sourceTree = "<group>"; };
 		1CE1A7772326AA0D005141D8 /* XGSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGSettings.swift; sourceTree = "<group>"; };
 		1CED5D9724004864008566B0 /* GoDGCEnumerablePopUpButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDGCEnumerablePopUpButtons.swift; sourceTree = "<group>"; };
 		1CED5D9E2403E9EE008566B0 /* GoDGTXViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDGTXViewController.swift; sourceTree = "<group>"; };
@@ -5775,7 +5784,6 @@
 		B24A50C821D12CDA009C707C /* PBRUnicodeCharacters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRUnicodeCharacters.swift; sourceTree = "<group>"; };
 		B24A50CD21D12CDA009C707C /* PBRTrainerPokemon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRTrainerPokemon.swift; sourceTree = "<group>"; };
 		B24A50CE21D12CDA009C707C /* PBRStringTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRStringTable.swift; sourceTree = "<group>"; };
-		B24A50CF21D12CDA009C707C /* PBRRandomiser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRRandomiser.swift; sourceTree = "<group>"; };
 		B24A50D021D12CDA009C707C /* PBRTrainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRTrainer.swift; sourceTree = "<group>"; };
 		B24A50D321D12CDA009C707C /* PBRPokemonStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRPokemonStats.swift; sourceTree = "<group>"; };
 		B24A50D521D12CDA009C707C /* PBRType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRType.swift; sourceTree = "<group>"; };
@@ -7281,6 +7289,7 @@
 				1C56F57E2605DE2C00CF1DEE /* PokemonStatsTable.swift */,
 				1C740097263F8A6600DFC63C /* SmallStructTables.swift */,
 				1C56F863260DB42700CF1DEE /* PBRStringManager.swift */,
+				1CD1AA5526D4FA1F00E86226 /* TypeMatchupsTable.swift */,
 			);
 			path = structs;
 			sourceTree = "<group>";
@@ -8712,7 +8721,6 @@
 				B24A50D721D12CDA009C707C /* PBRMove.swift */,
 				1CC362AF24BA5560005D7B4A /* PBRPatcher.swift */,
 				B24A50D321D12CDA009C707C /* PBRPokemonStats.swift */,
-				B24A50CF21D12CDA009C707C /* PBRRandomiser.swift */,
 				B24A510E21D3FF4C009C707C /* PBRScript.swift */,
 				B24A511621D405F9009C707C /* PBRScriptClass.swift */,
 				B24A511821D40980009C707C /* PBRScriptClassData.swift */,
@@ -12245,6 +12253,7 @@
 				B20EEC9321EF77FC00E87D01 /* PBR_face_301.png in Resources */,
 				B20EEAE321EF77E100E87D01 /* PBR_body_471.png in Resources */,
 				B20EED4621EF77FD00E87D01 /* PBR_face_038.png in Resources */,
+				1CC8567626D7052500B910DE /* Randomiser.storyboard in Resources */,
 				B20EED1921EF77FD00E87D01 /* PBR_face_188.png in Resources */,
 				1C716B5926042C43000F1456 /* UniversalEditor.storyboard in Resources */,
 				B20EEB0621EF77E100E87D01 /* PBR_body_171.png in Resources */,
@@ -13670,6 +13679,7 @@
 				1CF23FEC26252F4C00BD734C /* GamesAndLangauages.swift in Sources */,
 				1CCB074E262BCF4300D4ABA5 /* PBRAbilitiesManager.swift in Sources */,
 				1C7400C52640705200DFC63C /* PokemonModelsTable.swift in Sources */,
+				1CD1AA5726D4FA1F00E86226 /* TypeMatchupsTable.swift in Sources */,
 				1CCFFE692554FFF90082BFE2 /* XGResources.swift in Sources */,
 				1CCFFEC3255501020082BFE2 /* XGFsys.swift in Sources */,
 				1CCFFF4A255501890082BFE2 /* GoDKeyCodes.swift in Sources */,
@@ -13699,6 +13709,7 @@
 				1C75102A25C8EFB900EAB706 /* XGStringManager.swift in Sources */,
 				1CCFFE552554FFE40082BFE2 /* XGGenders.swift in Sources */,
 				1CCFFF65255501BE0082BFE2 /* PBRPokemonSprite.swift in Sources */,
+				1CC8565026D693E700B910DE /* XGRandomiser.swift in Sources */,
 				1C56F51E2604D86B00CF1DEE /* PBRCommonStructTable.swift in Sources */,
 				1CCFFF8F255501E50082BFE2 /* PBRTrainer.swift in Sources */,
 				1C20013F25B3222900A7CF7D /* GoDGameInit.swift in Sources */,
@@ -14007,6 +14018,7 @@
 				B20EEE9021EF789600E87D01 /* XGShinyValues.swift in Sources */,
 				B20EEA8721EF770300E87D01 /* XGThreadManager.swift in Sources */,
 				1CC362DC24C1DF0E005D7B4A /* XGBattleStyles.swift in Sources */,
+				1CD1AA5826D4FA1F00E86226 /* TypeMatchupsTable.swift in Sources */,
 				1C71685725DF31A3000F1456 /* GoDStructTable.swift in Sources */,
 				1CC362B924BFD274005D7B4A /* GoDStatsViewController.swift in Sources */,
 				B20EEA6D21E921EB00E87D01 /* GoDContainerView.swift in Sources */,
@@ -14068,6 +14080,7 @@
 				B20EEEB521EF7A3300E87D01 /* GoDHomeViewController.swift in Sources */,
 				1C6295FC243022080085C22F /* PBRScriptCompiler.swift in Sources */,
 				B20EEA8521E9227B00E87D01 /* GoDEffectsPopUpButton.swift in Sources */,
+				1CC8568026D7052E00B910DE /* GoDRandomiserViewController.swift in Sources */,
 				B20EEA5F21E9214D00E87D01 /* PBRItem.swift in Sources */,
 				B20EEE9621EF78CF00E87D01 /* XGEvolution.swift in Sources */,
 				B20EEA8021E9226800E87D01 /* GoDOriginalMovePopUpButton.swift in Sources */,
@@ -14118,6 +14131,7 @@
 				1C716A2926039D33000F1456 /* CommandLineArgs.swift in Sources */,
 				B20EEEB421EF7A2800E87D01 /* GoDHexCalculatorViewController.swift in Sources */,
 				B20EEE9121EF789F00E87D01 /* GoDTextureFormats.swift in Sources */,
+				1CC8565126D693E800B910DE /* XGRandomiser.swift in Sources */,
 				B20EEE9F21EF792500E87D01 /* XGTexturePalette.swift in Sources */,
 				B23E44EC2263BBD7009548A0 /* GoDFolderPopUpButton.swift in Sources */,
 				1C75102025C8EFB900EAB706 /* XGStringManager.swift in Sources */,
@@ -14164,6 +14178,7 @@
 				B24A50FD21D2D724009C707C /* GoDDataTable.swift in Sources */,
 				B24A507D21D129A5009C707C /* XGNatures.swift in Sources */,
 				1C2001A125B3281400A7CF7D /* XGUtility.swift in Sources */,
+				1CC8564626D693E700B910DE /* XGRandomiser.swift in Sources */,
 				B20EE63E21D6DB1E00E87D01 /* PBRTMs.swift in Sources */,
 				1C64CF4124562E29004C0C8F /* XGAssemblyCode.swift in Sources */,
 				1C56FA1E261069D700CF1DEE /* GSFsys.swift in Sources */,
@@ -14189,6 +14204,7 @@
 				1C90B5312618593A00C5BEFF /* GoDOpenGL.swift in Sources */,
 				1C71699F2602AF57000F1456 /* GoDStructData.swift in Sources */,
 				B24A505C21D1258E009C707C /* XGTextureBlock.swift in Sources */,
+				1CD1AA5626D4FA1F00E86226 /* TypeMatchupsTable.swift in Sources */,
 				B24A503221D12162009C707C /* XGWeather.swift in Sources */,
 				B24A511721D405F9009C707C /* PBRScriptClass.swift in Sources */,
 				B24A504921D12435009C707C /* GoDKeyCodes.swift in Sources */,
