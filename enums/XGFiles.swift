@@ -97,10 +97,10 @@ indirect enum XGFiles {
 		}
 
 		switch self {
-		case .tool:
+		case .tool, .wit, .wimgt:
 			if fileDecodingMode {
-				if case .Wiimm = folder, environment == .Windows {
-					return XGResources.tool("wiimm/" + fileName).path
+				if case .Wiimm = folder {
+					return XGResources.tool("wiimm/" + fileName.removeFileExtensions()).path
 				}
 				return XGResources.tool(fileName).path
 			}
@@ -803,6 +803,7 @@ indirect enum XGFolders {
 		#if GAME_XD
 		XGScript.encodeDummyJSON()
 		#endif
+
 
 		let wiimm = XGFolders.Wiimm
         if !wiimm.exists {

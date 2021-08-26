@@ -62,6 +62,7 @@ class XGISO: NSObject {
 
 	@discardableResult
 	class func loadISO(file: XGFiles) -> Bool {
+		printg("Loading ISO. This may take a minute or two...")
 		loadedFiles.removeAll()
 		loadedStringTables.removeAll()
 		loadedFsys.removeAll()
