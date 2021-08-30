@@ -88,6 +88,7 @@ cp ../images/PBR\ body/PBR_body_243.png ./out/Assets/PBR/PBR_body_243.png
 cp ../images/PBR\ face/PBR_face_401.png ./out/Assets/PBR/PBR_face_401.png
 cp ../images/PBR\ face/PBR_face_480.png ./out/Assets/PBR/PBR_face_480.png
 cp ../images/PBR\ body/PBR_body_311.png ./out/Assets/PBR/PBR_body_311.png
+cp ../images/PBR\ face/PBR_face_495.png ./out/Assets/PBR/PBR_face_495.png
 cp ../images/PBR\ face/PBR_face_008.png ./out/Assets/PBR/PBR_face_008.png
 cp ../images/PBR\ face/PBR_face_053.png ./out/Assets/PBR/PBR_face_053.png
 cp ../images/PBR\ face/PBR_face_040.png ./out/Assets/PBR/PBR_face_040.png
@@ -896,6 +897,7 @@ cp ../images/PBR\ face/PBR_face_365.png ./out/Assets/PBR/PBR_face_365.png
 cp ../images/PBR\ face/PBR_face_371.png ./out/Assets/PBR/PBR_face_371.png
 cp ../images/Table\ View\ Cells/Item\ Cell.png ./out/Assets/PBR/Item\ Cell.png
 cp ../images/PBR\ body/PBR_body_036.png ./out/Assets/PBR/PBR_body_036.png
+cp ../images/PBR\ body/PBR_body_495.png ./out/Assets/PBR/PBR_body_495.png
 cp ../images/PBR\ body/PBR_body_026.png ./out/Assets/PBR/PBR_body_026.png
 cp ../images/PBR\ body/PBR_body_125.png ./out/Assets/PBR/PBR_body_125.png
 cp ../images/PBR\ body/PBR_body_042.png ./out/Assets/PBR/PBR_body_042.png

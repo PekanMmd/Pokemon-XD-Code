@@ -51,7 +51,6 @@ class XGUtility {
 				[.fsys("mes_common"), .fsys("menu_btutorial"), .fsys("mes_fight_e"), .fsys("mes_name_e")])
 		}
 
-
 		filesToImport.forEach {
 			if $0.exists {
 				printg("Compiling", $0.path)

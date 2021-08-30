@@ -502,7 +502,7 @@ func mainMenu() {
 		switch input {
 		case "": continue
 		case "0": return
-		case "1": if readInput("This will overwritee the ISO at \(XGFiles.iso.path)\nAre you sure? Y/N").lowercased() == "y" {
+		case "1": if readInput("This will overwrite the ISO at \(XGFiles.iso.path)\nAre you sure? Y/N").lowercased() == "y" {
 				XGUtility.compileMainFiles()
 			}
 		case "2": XGUtility.deleteSuperfluousFiles()

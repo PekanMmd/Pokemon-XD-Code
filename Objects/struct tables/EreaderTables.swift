@@ -74,7 +74,7 @@ let ecardTrainerPokemonStruct = GoDStruct(name: "Ecard Pokemon", format: [
 	.byte(name: "Nature", description: "", type: .natureID),
 	.byte(name: "Unknown 1", description: "", type: .uintHex),
 	.byte(name: "Unknown 2", description: "", type: .uintHex),
-	.byte(name: "Unknown Shadow Value", description: "Only set on shadow pokemon. Location met?", type: .uintHex)
+	.byte(name: "Heart Gauge", description: "", type: .uintHex)
 ])
 
 let ecardTrainerStruct = GoDStruct(name: "Ecard Trainer", format: [

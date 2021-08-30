@@ -875,6 +875,8 @@
 		1CD1AA5626D4FA1F00E86226 /* TypeMatchupsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD1AA5526D4FA1F00E86226 /* TypeMatchupsTable.swift */; };
 		1CD1AA5726D4FA1F00E86226 /* TypeMatchupsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD1AA5526D4FA1F00E86226 /* TypeMatchupsTable.swift */; };
 		1CD1AA5826D4FA1F00E86226 /* TypeMatchupsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD1AA5526D4FA1F00E86226 /* TypeMatchupsTable.swift */; };
+		1CDC181B26DAD3A5005A984D /* PBR_face_495.png in Resources */ = {isa = PBXBuildFile; fileRef = 1CDC181A26DAD3A5005A984D /* PBR_face_495.png */; };
+		1CDC182626DAD3F1005A984D /* PBR_body_495.png in Resources */ = {isa = PBXBuildFile; fileRef = 1CDC182526DAD3F0005A984D /* PBR_body_495.png */; };
 		1CE1A7782326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
 		1CE1A7792326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
 		1CE1A77A2326AA0D005141D8 /* XGSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE1A7772326AA0D005141D8 /* XGSettings.swift */; };
@@ -4704,6 +4706,8 @@
 		1CCFFFE22555F5470082BFE2 /* cyggcc_s-1.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cyggcc_s-1.dll"; sourceTree = "<group>"; };
 		1CCFFFE32555F5470082BFE2 /* cygsigsegv-2.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cygsigsegv-2.dll"; sourceTree = "<group>"; };
 		1CD1AA5526D4FA1F00E86226 /* TypeMatchupsTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeMatchupsTable.swift; sourceTree = "<group>"; };
+		1CDC181A26DAD3A5005A984D /* PBR_face_495.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_face_495.png; sourceTree = "<group>"; };
+		1CDC182526DAD3F0005A984D /* PBR_body_495.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PBR_body_495.png; sourceTree = "<group>"; };
 		1CE1A7772326AA0D005141D8 /* XGSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGSettings.swift; sourceTree = "<group>"; };
 		1CED5D9724004864008566B0 /* GoDGCEnumerablePopUpButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDGCEnumerablePopUpButtons.swift; sourceTree = "<group>"; };
 		1CED5D9E2403E9EE008566B0 /* GoDGTXViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDGTXViewController.swift; sourceTree = "<group>"; };
@@ -7632,6 +7636,7 @@
 			children = (
 				1CC362C624C078D1005D7B4A /* PBR_face_494_1.png */,
 				1CC362C524C078D1005D7B4A /* PBR_face_496.png */,
+				1CDC181A26DAD3A5005A984D /* PBR_face_495.png */,
 				1CC362C724C078D1005D7B4A /* PBR_face_497.png */,
 				1CC362C824C078D2005D7B4A /* PBR_face_498.png */,
 				1CC362C324C078D0005D7B4A /* PBR_face_499.png */,
@@ -8143,6 +8148,7 @@
 				B20EE83321DC45E000E87D01 /* PBR_body_489.png */,
 				B20EE83421DC45E000E87D01 /* PBR_body_338.png */,
 				B20EE83521DC45E000E87D01 /* PBR_body_462.png */,
+				1CDC182526DAD3F0005A984D /* PBR_body_495.png */,
 				B20EE83621DC45E000E87D01 /* PBR_body_304.png */,
 				B20EE83721DC45E000E87D01 /* PBR_body_310.png */,
 				B20EE83821DC45E000E87D01 /* PBR_body_476.png */,
@@ -11387,6 +11393,7 @@
 				1CC362BB24BFDA5E005D7B4A /* Stats.storyboard in Resources */,
 				B20EEE6521EF77FD00E87D01 /* PBR_face_480.png in Resources */,
 				B20EEAA621EF77E100E87D01 /* PBR_body_311.png in Resources */,
+				1CDC181B26DAD3A5005A984D /* PBR_face_495.png in Resources */,
 				B20EED6321EF77FD00E87D01 /* PBR_face_008.png in Resources */,
 				B20EEE6121EF77FD00E87D01 /* PBR_face_053.png in Resources */,
 				B20EEE0B21EF77FD00E87D01 /* PBR_face_040.png in Resources */,
@@ -12207,6 +12214,7 @@
 				B20EED2321EF77FD00E87D01 /* PBR_face_371.png in Resources */,
 				B20EEE8421EF783C00E87D01 /* Item Cell.png in Resources */,
 				B20EEBB721EF77E100E87D01 /* PBR_body_036.png in Resources */,
+				1CDC182626DAD3F1005A984D /* PBR_body_495.png in Resources */,
 				B20EEB9F21EF77E100E87D01 /* PBR_body_026.png in Resources */,
 				B20EEC2B21EF77E100E87D01 /* PBR_body_125.png in Resources */,
 				B20EEC6621EF77E200E87D01 /* PBR_body_042.png in Resources */,

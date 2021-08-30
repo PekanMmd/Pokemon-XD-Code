@@ -105,6 +105,8 @@ class XGISO: NSObject {
 		}
 		#endif
 
+		printg("ISO loaded.")
+
 		return true
 	}
 

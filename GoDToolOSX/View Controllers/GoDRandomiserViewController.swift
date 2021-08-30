@@ -30,6 +30,7 @@ class GoDRandomiserViewController: GoDViewController {
 		}
 		if game == .PBR {
 			randomiseShadowsOnly.title = "Only Randomise Rental Pass Pokemon"
+			removeTrades.isHidden = true
 		}
     }
 	

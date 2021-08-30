@@ -177,18 +177,35 @@ class XGPatcher {
 		])
 
 		let damageCalcOffset: Int
+		let calcDamageBoostFunctionOffset: Int
 		switch region {
-		case .US: damageCalcOffset = -1
-		case .EU: damageCalcOffset = 0x3cad84
-		case .JP: damageCalcOffset = -1
-		case .OtherGame: damageCalcOffset = -1
+		case .US:
+			damageCalcOffset = -1
+			calcDamageBoostFunctionOffset = -1
+		case .EU:
+			damageCalcOffset = 0x3cad5c
+			calcDamageBoostFunctionOffset = 0x3c6178
+		case .JP:
+			damageCalcOffset = -1
+			calcDamageBoostFunctionOffset = -1
+		case .OtherGame:
+			damageCalcOffset = -1
+			calcDamageBoostFunctionOffset = -1
 		}
-		let calcDamageBoostFunctionOffset = 0x3c6178
 
 		// Rewrite the assembly to be more concise so we can squeeze in 2 extra instructions for dividing the
 		// multiplied value by 4
 		XGAssembly.replaceRamASM(RAMOffset: damageCalcOffset, newASM: [
 			// shortened code
+			.rlwinm(.r3, .r3, 2, 22, 29),
+			.stw(.r30, .sp, 8),
+			.add(.r7, .r31, .r3),
+			.mr(.r3, .r28),
+			.mr(.r4, .r31),
+			.lwz(.r0, .r31, 0x2150),
+			.stw(.r0, .sp, 12),
+			.rlwinm(.r9, .r29, 0, 24, 31),
+
 			.lwz(.r8, .r31, 0x2154),
 			.lwz(.r10, .r31, 0x64),
 			.lwz(.r6, .r7, 0x01BC),
@@ -198,9 +215,13 @@ class XGPatcher {
 
 			// updated code for crit multipliers
 			.lwz(.r0, .r31, 0x2150), // get crit multiplier
+			.cmpwi(.r0, 1),
 			.mullw(.r0, .r3, .r0), // multiply damage by our updated multipliers
+			.beq_l("end of crit multiplier"),
 			.li(.r4, 4),
 			.divw(.r0, .r0, .r4), // divided result by 4
+
+			.label("end of crit multiplier"),
 			.stw(.r0, .r31, 0x2144), // store damage
 
 			// rearranged code. moved these instructions just for readability
