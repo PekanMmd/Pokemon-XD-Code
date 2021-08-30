@@ -65,7 +65,7 @@ class XGScript: CustomStringConvertible {
 		self.init(data: fileData.getSubDataFromOffset(fixedStartOffset, length: fixedLength), startOffset: fixedStartOffset, fixedLength: fixedLength)
 	}
 
-	private init(data: XGMutableData, startOffset: Int = 0, fixedLength: Int = 0) {
+	init(data: XGMutableData, startOffset: Int = 0, fixedLength: Int = 0) {
 		self.data = data
 		self.file = data.file
 		fixedFileSize = fixedLength
