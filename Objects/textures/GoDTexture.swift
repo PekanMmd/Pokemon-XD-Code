@@ -81,6 +81,13 @@ class GoDTexture {
 	var isPokeDance: Bool {
 		return data.length > kDancerBytes.count && data.getByteStreamFromOffset(0, length: kDancerBytes.count) == kDancerBytes
 	}
+
+//	var dolphinNamingScheme: String {
+//		// Need to find out how the hash is calculated
+//		let hash = ""
+//		let paletteHash = isIndexed ? "_" : ""
+//		return "tex1_\(width)x\(height)_\(hash)\(paletteHash)_\(format.standardRawValue)"
+//	}
 	
 	convenience init(file: XGFiles) {
 		self.init(data: file.data!)

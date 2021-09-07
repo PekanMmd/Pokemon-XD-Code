@@ -18,21 +18,6 @@ protocol GoDCodable: Codable {
 	static var numberOfValues: Int {get}
 }
 
-extension GoDCodable {
-	func encodeData() {
-		printg("Encoding has not been implemented for this class")
-	}
-	func decodeData() {
-		printg("Decoding has not been implemented for this class")
-	}
-	func saveDocumentedData() {
-		printg("Documentation has not been implemented for this class")
-	}
-	func save() {
-		
-	}
-}
-
 protocol XGEnumerable {
 	var enumerableName: String {get}
 	var enumerableValue: String? {get}

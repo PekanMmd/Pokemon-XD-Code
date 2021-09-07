@@ -724,6 +724,10 @@ indirect enum XGFolders {
 	}
 	
 	static func setUpFolderFormat() {
+
+		guard !fileDecodingMode else {
+			return
+		}
 		
 		let folders: [XGFolders] = [
 			.Documents,

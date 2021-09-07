@@ -129,11 +129,8 @@ enum GoDTextureFormats: Int, CaseIterable {
 		switch self {
 		case .IA8: return 0
 		case .RGB565: return 1
-		#if GAME_PBR
-		case .RGB5A3: return 2
-		#else
+//		case .RGB5A3: return 2 // Models use 2
 		case .RGB5A3: return 3 // note other games use 2 for this, including .dat models in these games
-		#endif
 		default: return nil
 		}
 	}
