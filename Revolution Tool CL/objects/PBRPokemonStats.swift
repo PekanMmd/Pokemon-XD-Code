@@ -27,7 +27,7 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 	
 	var nameID			= 0
 	var speciesNameID	= 0
-	var cryFileIndex	= 0
+	var jpNameID		= 0
 	var firstModelIndex = 0
 	
 	var type1			= XGMoveTypes.index(0)
@@ -165,31 +165,31 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 		height = Double(data.getShort(20)) / 10 // m
 		weight = Double(data.getShort(22)) / 10 // kg
 		nameID = data.getShort(24)
-		cryFileIndex = data.getShort(26)
-		firstModelIndex = data.getShort(28)
-		hp = data.getByte(30)
-		attack = data.getByte(31)
-		defense = data.getByte(32)
-		speed = data.getByte(33)
-		specialAttack = data.getByte(34)
-		specialDefense = data.getByte(35)
-		type1 = .index(data.getByte(36))
-		type2 = .index(data.getByte(37))
-		catchRate = data.getByte(38)
-		baseExp = data.getByte(39)
-		genderRatio = XGGenderRatios(rawValue: data.getByte(42)) ?? .genderless
-		eggCycles = data.getByte(43)
-		baseHappiness = data.getByte(44)
-		levelUpRate = XGExpRate(rawValue: data.getByte(45)) ?? .standard
-		eggGroup1 = data.getByte(46)
-		eggGroup2 = data.getByte(47)
-		ability1 = .index(data.getByte(48))
-		ability2 = .index(data.getByte(49))
-		unknown = data.getByte(50)
-		// let unknownValue = data.getByte(51) & 0x1
-		colourID = (data.getByte(51) & 0xfe) >> 1
+		jpNameID = region == .JP ? 0 : data.getShort(26)
+		firstModelIndex = data.getShort(region == .JP ? 26 : 28)
+		hp = data.getByte(region == .JP ? 28 : 30)
+		attack = data.getByte(region == .JP ? 29 : 31)
+		defense = data.getByte(region == .JP ? 30 : 32)
+		speed = data.getByte(region == .JP ? 31 : 33)
+		specialAttack = data.getByte(region == .JP ? 32 : 34)
+		specialDefense = data.getByte(region == .JP ? 33 : 35)
+		type1 = .index(data.getByte(region == .JP ? 34 : 36))
+		type2 = .index(data.getByte(region == .JP ? 35 : 37))
+		catchRate = data.getByte(region == .JP ? 36 : 38)
+		baseExp = data.getByte(region == .JP ? 37 : 39)
+		genderRatio = XGGenderRatios(rawValue: data.getByte(region == .JP ? 40 : 42)) ?? .genderless
+		eggCycles = data.getByte(region == .JP ? 41 : 43)
+		baseHappiness = data.getByte(region == .JP ? 42 : 44)
+		levelUpRate = XGExpRate(rawValue: data.getByte(region == .JP ? 43 : 45)) ?? .standard
+		eggGroup1 = data.getByte(region == .JP ? 44 : 46)
+		eggGroup2 = data.getByte(region == .JP ? 45 : 47)
+		ability1 = .index(data.getByte(region == .JP ? 46 : 48))
+		ability2 = .index(data.getByte(region == .JP ? 47 : 49))
+		unknown = data.getByte(region == .JP ? 48 : 50)
+		// let unknownValue = data.getByte(region == .JP ? 49 : 51) & 0x1
+		colourID = (data.getByte(region == .JP ? 49 : 51) & 0xfe) >> 1
 		
-		let EVs = data.getShort(40).bitArray(count: 16)
+		let EVs = data.getShort(region == .JP ? 38 : 40).bitArray(count: 16)
 		// bit mask of EV yields. Each stat is 2 bits starting from the most significant bit being hp.
 		if EVs[15] { hpYield += 2 }
 		if EVs[14] { hpYield += 1 }
@@ -248,28 +248,30 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 		data.setShort(20, to: Int(height * 10))
 		data.setShort(22, to: Int(weight * 10))
 		data.setShort(24, to: nameID)
-		data.setShort(26, to: cryFileIndex)
-		data.setShort(28, to: firstModelIndex)
-		data.setByte(30, to: hp)
-		data.setByte(31, to: attack)
-		data.setByte(32, to: defense)
-		data.setByte(33, to: speed)
-		data.setByte(34, to: specialAttack)
-		data.setByte(35, to: specialDefense)
-		data.setByte(36, to: type1.index)
-		data.setByte(37, to: type2.index)
-		data.setByte(38, to: catchRate)
-		data.setByte(39, to: baseExp)
-		data.setByte(42, to: genderRatio.rawValue)
-		data.setByte(43, to: eggCycles)
-		data.setByte(44, to: baseHappiness)
-		data.setByte(45, to: levelUpRate.rawValue)
-		data.setByte(46, to: eggGroup1)
-		data.setByte(47, to: eggGroup2)
-		data.setByte(48, to: ability1.index)
-		data.setByte(49, to: ability2.index)
-		data.setByte(50, to: unknown)
-//		data.setByte(51, to: colourID)
+		if region != .JP {
+			data.setShort(26, to: jpNameID)
+		}
+		data.setShort(region == .JP ? 26 : 28, to: firstModelIndex)
+		data.setByte(region == .JP ? 28 : 30, to: hp)
+		data.setByte(region == .JP ? 29 : 31, to: attack)
+		data.setByte(region == .JP ? 30 : 32, to: defense)
+		data.setByte(region == .JP ? 31 : 33, to: speed)
+		data.setByte(region == .JP ? 32 : 34, to: specialAttack)
+		data.setByte(region == .JP ? 33 : 35, to: specialDefense)
+		data.setByte(region == .JP ? 34 : 36, to: type1.index)
+		data.setByte(region == .JP ? 35 : 37, to: type2.index)
+		data.setByte(region == .JP ? 36 : 38, to: catchRate)
+		data.setByte(region == .JP ? 37 : 39, to: baseExp)
+		data.setByte(region == .JP ? 40 : 42, to: genderRatio.rawValue)
+		data.setByte(region == .JP ? 41 : 43, to: eggCycles)
+		data.setByte(region == .JP ? 42 : 44, to: baseHappiness)
+		data.setByte(region == .JP ? 43 : 45, to: levelUpRate.rawValue)
+		data.setByte(region == .JP ? 44 : 46, to: eggGroup1)
+		data.setByte(region == .JP ? 45 : 47, to: eggGroup2)
+		data.setByte(region == .JP ? 46 : 48, to: ability1.index)
+		data.setByte(region == .JP ? 47 : 49, to: ability2.index)
+		data.setByte(region == .JP ? 48 : 50, to: unknown)
+//		data.setByte(region == .JP ? 49 : 51, to: colourID)
 
 		var EVs = 0
 		for evYield in [hpYield, attackYield, defenseYield, speedYield, specialAttackYield, specialDefenseYield] {
@@ -279,7 +281,7 @@ final class XGPokemonStats: NSObject, XGIndexedValue {
 			EVs += evYield & 0x1
 		}
 		EVs = EVs << 4
-		data.setShort(40, to: EVs)
+		data.setShort(region == .JP ? 38 : 40, to: EVs)
 		
 		data.save()
 		

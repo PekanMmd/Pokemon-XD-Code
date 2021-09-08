@@ -27,39 +27,94 @@ let TMHMFieldNames: [String?] = {
 	return TMNames
 }()
 
+var pokemonStatsStruct: GoDStruct {
+	if region == .JP {
+		return GoDStruct(name: "Pokemon Stats", format: [
+			.bitArray(name: "TMs and HMs", description: "Need to confirm how these are ordered", bitFieldNames: TMHMFieldNames),
+			.array(name: "Items", description: "The Items the pokemon may carry when caught in the wild", property: .short(name: "Item", description: "", type: .itemID), count: 2),
+			.subStruct(name: "Proportions", description: "Physical dimensions of the species", property: GoDStruct(name: "Height and Weight", format: [
+				.short(name: "Height", description: "The pokemon's height in meters, multiplied by 10", type: .uint),
+				.short(name: "Weight", description: "The pokemon's weight in kilograms, multiplied by 10", type: .uint)
+			])),
+			.short(name: "Name ID", description: "", type: .msgID(file: nil)),
+			.short(name: "Model Index", description: "The index of the pokemon's first model", type: .uint),
+			.subStruct(name: "Base Stats", description: "", property: GoDStruct(name: "Stats", format: [
+				.byte(name: "HP", description: "", type: .uint),
+				.byte(name: "Attack", description: "", type: .uint),
+				.byte(name: "Defense", description: "", type: .uint),
+				.byte(name: "Speed", description: "", type: .uint),
+				.byte(name: "Sp.Atk", description: "", type: .uint),
+				.byte(name: "Sp.Def", description: "", type: .uint)
+			])),
+			.array(name: "Types", description: "", property: .byte(name: "Type", description: "", type: .typeID), count: 2),
+			.byte(name: "Catch Rate", description: "", type: .uint),
+			.byte(name: "Base EXP", description: "Determines how much exp you get for defeating this species", type: .uint),
+			.bitMask(name: "EV Yields", description: "EVs gained upon knocking out the pokemon", length: .short, values: [
+				(name: "HP", type: .uint, numberOfBits: 2, firstBitIndexLittleEndian: 14, mod: nil, div: nil, scale: nil),
+				(name: "Attack", type: .uint, numberOfBits: 2, firstBitIndexLittleEndian: 12, mod: nil, div: nil, scale: nil),
+				(name: "Defense", type: .uint, numberOfBits: 2, firstBitIndexLittleEndian: 10, mod: nil, div: nil, scale: nil),
+				(name: "Speed", type: .uint, numberOfBits: 2, firstBitIndexLittleEndian: 8, mod: nil, div: nil, scale: nil),
+				(name: "Sp.Atk", type: .uint, numberOfBits: 2, firstBitIndexLittleEndian: 6, mod: nil, div: nil, scale: nil),
+				(name: "Sp.Def", type: .uint, numberOfBits: 2, firstBitIndexLittleEndian: 4, mod: nil, div: nil, scale: nil)
+			]),
+			.byte(name: "Gender Ratio", description: "", type: .genderRatio),
+			.byte(name: "Egg Cycles", description: "The number of cycles of steps to hatch from an egg", type: .uint),
+			.byte(name: "Base Happiness", description: "", type: .uint),
+			.byte(name: "Level Up Rate", description: "Determines how much exp it takes for each level up", type: .expRate),
+			.array(name: "Egg Groups", description: "Can breed with any pokemon with a matching group", property: .byte(name: "Egg Group", description: "", type: .eggGroup), count: 2),
+			.array(name: "Abilities", description: "", property: .byte(name: "Ability", description: "", type: .abilityID), count: 2),
+			.byte(name: "Unknown 2", description: "", type: .uint),
+			.byte(name: "Colour Data", description: "Determines colour category in the pokedex. Lowest bit of this value is used for something unknown.", type: .uint),
+			.byte(name: "Unknown 3", description: "", type: .uint),
+			.byte(name: "Unknown 4", description: "", type: .uint),
 
-let pokemonStatsTable = CommonStructTable(index: region == .JP ? 14 : 8, properties: GoDStruct(name: "Pokemon Stats", format: [
-	.bitArray(name: "TMs and HMs", description: "Need to confirm how these are ordered", bitFieldNames: TMHMFieldNames),
-	.array(name: "Items", description: "The Items the pokemon may carry when caught in the wild", property: .short(name: "Item", description: "", type: .itemID), count: 2),
-	.subStruct(name: "Proportions", description: "Physical dimensions of the species", property: GoDStruct(name: "Height and Weight", format: [
-		.short(name: "Height", description: "The pokemon's height in meters, multiplied by 10", type: .uint),
-		.short(name: "Weight", description: "The pokemon's weight in kilograms, multiplied by 10", type: .uint)
-	])),
-	.short(name: "Name ID", description: "", type: .msgID(file: nil)),
-	.short(name: "Cry ID", description: "", type: .uint),
-	.short(name: "Model Index", description: "The index of the pokemon's first model", type: .uint),
-	.subStruct(name: "Base Stats", description: "", property: GoDStruct(name: "Stats", format: [
-		.byte(name: "HP", description: "", type: .uint),
-		.byte(name: "Attack", description: "", type: .uint),
-		.byte(name: "Defense", description: "", type: .uint),
-		.byte(name: "Speed", description: "", type: .uint),
-		.byte(name: "Sp.Atk", description: "", type: .uint),
-		.byte(name: "Sp.Def", description: "", type: .uint)
-	])),
-	.array(name: "Types", description: "", property: .byte(name: "Type", description: "", type: .typeID), count: 2),
-	.byte(name: "Catch Rate", description: "", type: .uint),
-	.byte(name: "Base EXP", description: "Determines how much exp you get for defeating this species", type: .uint),
-	.array(name: "Unknown 1", description: "", property: .byte(name: "", description: "", type: .uint), count: 2),
-	.byte(name: "Gender Ratio", description: "", type: .genderRatio),
-	.byte(name: "Egg Cycles", description: "The number of cycles of steps to hatch from an egg", type: .uint),
-	.byte(name: "Base Happiness", description: "", type: .uint),
-	.byte(name: "Level Up Rate", description: "Determines how much exp it takes for each level up", type: .expRate),
-	.array(name: "Egg Groups", description: "Can breed with any pokemon with a matching group", property: .byte(name: "Egg Group", description: "", type: .eggGroup), count: 2),
-	.array(name: "Abilities", description: "", property: .byte(name: "Ability", description: "", type: .abilityID), count: 2),
-	.byte(name: "Unknown 2", description: "", type: .uint),
-	.byte(name: "Colour Data", description: "Determines colour category in the pokedex. Lowest bit of this value is used for something unknown.", type: .uint)
+		])
+	} else {
+		return GoDStruct(name: "Pokemon Stats", format: [
+			.bitArray(name: "TMs and HMs", description: "Need to confirm how these are ordered", bitFieldNames: TMHMFieldNames),
+			.array(name: "Items", description: "The Items the pokemon may carry when caught in the wild", property: .short(name: "Item", description: "", type: .itemID), count: 2),
+			.subStruct(name: "Proportions", description: "Physical dimensions of the species", property: GoDStruct(name: "Height and Weight", format: [
+				.short(name: "Height", description: "The pokemon's height in meters, multiplied by 10", type: .uint),
+				.short(name: "Weight", description: "The pokemon's weight in kilograms, multiplied by 10", type: .uint)
+			])),
+			.short(name: "Name ID", description: "", type: .msgID(file: nil)),
+			.short(name: "JP Name ID", description: "", type: .msgID(file: nil)),
+			.short(name: "Model Index", description: "The index of the pokemon's first model", type: .uint),
+			.subStruct(name: "Base Stats", description: "", property: GoDStruct(name: "Stats", format: [
+				.byte(name: "HP", description: "", type: .uint),
+				.byte(name: "Attack", description: "", type: .uint),
+				.byte(name: "Defense", description: "", type: .uint),
+				.byte(name: "Speed", description: "", type: .uint),
+				.byte(name: "Sp.Atk", description: "", type: .uint),
+				.byte(name: "Sp.Def", description: "", type: .uint)
+			])),
+			.array(name: "Types", description: "", property: .byte(name: "Type", description: "", type: .typeID), count: 2),
+			.byte(name: "Catch Rate", description: "", type: .uint),
+			.byte(name: "Base EXP", description: "Determines how much exp you get for defeating this species", type: .uint),
+			.bitMask(name: "EV Yields", description: "EVs gained upon knocking out the pokemon", length: .short, values: [
+				(name: "HP", type: .uint, numberOfBits: 2, firstBitIndexLittleEndian: 14, mod: nil, div: nil, scale: nil),
+				(name: "Attack", type: .uint, numberOfBits: 2, firstBitIndexLittleEndian: 12, mod: nil, div: nil, scale: nil),
+				(name: "Defense", type: .uint, numberOfBits: 2, firstBitIndexLittleEndian: 10, mod: nil, div: nil, scale: nil),
+				(name: "Speed", type: .uint, numberOfBits: 2, firstBitIndexLittleEndian: 8, mod: nil, div: nil, scale: nil),
+				(name: "Sp.Atk", type: .uint, numberOfBits: 2, firstBitIndexLittleEndian: 6, mod: nil, div: nil, scale: nil),
+				(name: "Sp.Def", type: .uint, numberOfBits: 2, firstBitIndexLittleEndian: 4, mod: nil, div: nil, scale: nil)
+			]),
+			.byte(name: "Gender Ratio", description: "", type: .genderRatio),
+			.byte(name: "Egg Cycles", description: "The number of cycles of steps to hatch from an egg", type: .uint),
+			.byte(name: "Base Happiness", description: "", type: .uint),
+			.byte(name: "Level Up Rate", description: "Determines how much exp it takes for each level up", type: .expRate),
+			.array(name: "Egg Groups", description: "Can breed with any pokemon with a matching group", property: .byte(name: "Egg Group", description: "", type: .eggGroup), count: 2),
+			.array(name: "Abilities", description: "", property: .byte(name: "Ability", description: "", type: .abilityID), count: 2),
+			.byte(name: "Unknown 2", description: "", type: .uint),
+			.byte(name: "Colour Data", description: "Determines colour category in the pokedex. Lowest bit of this value is used for something unknown.", type: .uint)
 
-]), documentByIndex: false)
+		])
+	}
+}
+
+var pokemonStatsTable: CommonStructTable {
+	return CommonStructTable(index: region == .JP ? 14 : 8, properties: pokemonStatsStruct, documentByIndex: false)
+}
 
 let evolutionsTable = CommonStructTable(index: region == .JP ? 15 : 9, properties: GoDStruct(name: "Evolutions", format: [
 	.array(name: "Evolutions", description: "", property:
