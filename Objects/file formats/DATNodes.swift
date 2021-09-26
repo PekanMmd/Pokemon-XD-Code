@@ -120,6 +120,19 @@ class DATNodes {
 			])
 	}
 
+	/// wrapper around function for loading the static data for the struct to be parsed later
+	/// This helps cache the static struct data in cases where there are infinite cycles of
+	/// nodes trying to load the same nodes. Once a node has started being loaded and parsed
+	/// it will be cached so subsequent loads from that offset will return the incomplete static version
+	/// and only when that node is fully loaded will the parsed version be cached.
+	private func loadStruct(properties: GoDStruct, offset: Int) -> GoDStructData {
+		guard validate(offset: offset) else { return .staticString("Error") }
+		let structData = nodesCache[offset] ?? GoDStructData(properties: properties, fileData: data, startOffset: offset)
+		nodesCache[offset] = structData
+		return structData
+	}
+
+	/// wrapper around functions for loading and parsing nodes
 	private func loadNode(offset: Int, function: (Int) -> GoDStructData) -> GoDStructData {
 		guard validate(offset: offset) else { return .staticString("Error") }
 		let node = nodesCache[offset] ?? function(offset)
@@ -135,7 +148,7 @@ class DATNodes {
 			.word(name: "Pointer", description: "", type: .pointer),
 			.pointer(property: .string(name: "Node Type Name", description: "", maxCharacterCount: nil, charLength: .char), offsetBy: stringsOffset, isShort: false)
 		])
-		let rootNodeTypeData = GoDStructData(properties: rootNodeStruct, fileData: data, startOffset: offset)
+		let rootNodeTypeData = loadStruct(properties: rootNodeStruct, offset: offset)
 		
 		guard let typeName: String = rootNodeTypeData.get("Node Type Name"),
 			  let pointer: Int = rootNodeTypeData.get("Pointer") else {
@@ -200,7 +213,7 @@ class DATNodes {
 				.word(name: "Fog Data", description: "", type: .pointer)
 			])
 		}
-		let sceneData = GoDStructData(properties: sceneDataStruct(), fileData: data, startOffset: offset)
+		let sceneData = loadStruct(properties: sceneDataStruct(), offset: offset)
 
 		if let pointer: Int = sceneData.get("Model Sets Array") {
 			let array = loadNode(offset: pointer, function: modelSetsArray)
@@ -245,7 +258,7 @@ class DATNodes {
 		let modelSetsArrayStruct = GoDStruct(name: "Model Sets Array", format: [
 			.array(name: "Model Sets", description: "", property: .word(name: "Model Set Pointers", description: "", type: .pointer), count: nil)
 		])
-		let modelSetsArray = GoDStructData(properties: modelSetsArrayStruct, fileData: data, startOffset: offset)
+		let modelSetsArray = loadStruct(properties: modelSetsArrayStruct, offset: offset)
 		var modelSets = [GoDStructData]()
 		if let pointers: [Int] = modelSetsArray.get("Model Sets") {
 			pointers.forEach { (pointer) in
@@ -266,7 +279,7 @@ class DATNodes {
 			.word(name: "Animated Material Joint", description: "", type: .pointer),
 			.word(name: "Animated Shape Joint", description: "", type: .pointer)
 		])
-		let modelSet = GoDStructData(properties: modelSetStruct, fileData: data, startOffset: offset)
+		let modelSet = loadStruct(properties: modelSetStruct, offset: offset)
 
 		if let pointer: Int = modelSet.get("Joint") {
 			let joint = loadNode(offset: pointer, function: jointData)
@@ -301,7 +314,7 @@ class DATNodes {
 			.word(name: "Next", description: "", type: .pointer),
 			.word(name: "Animated Material", description: "", type: .pointer)
 		])
-		let matAnimJoint = GoDStructData(properties: matAnimJointStruct, fileData: data, startOffset: offset)
+		let matAnimJoint = loadStruct(properties: matAnimJointStruct, offset: offset)
 
 		if let pointer: Int = matAnimJoint.get("Child") {
 			let joint = loadNode(offset: pointer, function: animatedMaterialJoint)
@@ -328,7 +341,7 @@ class DATNodes {
 			.word(name: "Animated Texture", description: "", type: .pointer),
 			.word(name: "Animated Render", description: "", type: .pointer)
 		])
-		let matAnim = GoDStructData(properties: matAnimStruct, fileData: data, startOffset: offset)
+		let matAnim = loadStruct(properties: matAnimStruct, offset: offset)
 
 		if let pointer: Int = matAnim.get("Next") {
 			let anim = loadNode(offset: pointer, function: animatedMaterial)
@@ -412,7 +425,7 @@ class DATNodes {
 			.word(name: "Invbind", description: "", type: .pointer),
 			.word(name: "R Object", description: "", type: .pointer)
 		])
-		let joint = GoDStructData(properties: jointStruct, fileData: data, startOffset: offset)
+		let joint = loadStruct(properties: jointStruct, offset: offset)
 
 		if let pointer: Int = joint.get("Child Joint") {
 			let child = loadNode(offset: pointer, function: jointData)
@@ -455,7 +468,7 @@ class DATNodes {
 			.word(name: "M Object", description: "", type: .pointer),
 			.word(name: "P Object", description: "", type: .pointer)
 		])
-		let meshData = GoDStructData(properties: meshStruct, fileData: data, startOffset: offset)
+		let meshData = loadStruct(properties: meshStruct, offset: offset)
 
 		if let pointer: Int = meshData.get("Next Mesh") {
 			let next = loadNode(offset: pointer, function: mesh)
@@ -487,7 +500,7 @@ class DATNodes {
 			.word(name: "Variable Object", description: "", type: .pointer)
 
 		])
-		let pobjData = GoDStructData(properties: pobjStruct, fileData: data, startOffset: offset)
+		let pobjData = loadStruct(properties: pobjStruct, offset: offset)
 
 		if let pointer: Int = pobjData.get("Next P Object") {
 			let next = loadNode(offset: pointer, function: pObj)
@@ -528,7 +541,7 @@ class DATNodes {
 			.word(name: "PE Info", description: "", type: .pointer)
 		])
 
-		let mObjectData = GoDStructData(properties: mObjectStruct, fileData: data, startOffset: offset)
+		let mObjectData = loadStruct(properties: mObjectStruct, offset: offset)
 
 		if let pointer: Int = mObjectData.get("Material") {
 			let mat = loadNode(offset: pointer, function: material)
@@ -573,7 +586,7 @@ class DATNodes {
 			.word(name: "Normal Indices", description: "", type: .pointer)
 		])
 
-		let shapeSetData = GoDStructData(properties: shapeSetStruct, fileData: data, startOffset: offset)
+		let shapeSetData = loadStruct(properties: shapeSetStruct, offset: offset)
 
 		if let pointer: Int = shapeSetData.get("Vertices") {
 			let vertices = substructArray(offset: pointer, count: nil, entryLength: vertextStruct.length, propertyFunction: vertex)
@@ -593,7 +606,7 @@ class DATNodes {
 			.word(name: "Joint", description: "", type: .pointer),
 			.float(name: "Weight", description: "")
 		])
-		let envelopeData = GoDStructData(properties: envelopeStruct, fileData: data, startOffset: offset)
+		let envelopeData = loadStruct(properties: envelopeStruct, offset: offset)
 
 		if let pointer: Int = envelopeData.get("Joint") {
 			let joint = loadNode(offset: pointer, function: jointData)
@@ -638,7 +651,7 @@ class DATNodes {
 	])
 
 	func texture(offset: Int) -> GoDStructData {
-		let textureData = GoDStructData(properties: DATNodes.textureStruct, fileData: data, startOffset: offset)
+		let textureData = loadStruct(properties: DATNodes.textureStruct, offset: offset)
 
 		if let pointer: Int = textureData.get("Next") {
 			let next = loadNode(offset: pointer, function: texture)
@@ -675,7 +688,7 @@ class DATNodes {
 			.short(name: "Number Of Palettes", description: "", type: .uint)
 		])
 
-		let animatedTextureData = GoDStructData(properties: animatedTextureStruct, fileData: data, startOffset: offset)
+		let animatedTextureData = loadStruct(properties: animatedTextureStruct, offset: offset)
 
 		if let pointer: Int = animatedTextureData.get("Next") {
 			let next = loadNode(offset: pointer, function: animatedTexture)
@@ -748,7 +761,7 @@ class DATNodes {
 			.float(name: "maxLOD", description: "")
 		])
 
-		let imageMetaData = GoDStructData(properties: imageStruct, fileData: data, startOffset: offset)
+		let imageMetaData = loadStruct(properties: imageStruct, offset: offset)
 
 		if let imageDataPointer: Int = imageMetaData.get("Image Data Pointer") {
 			if !textureDataOffsets.contains(imageDataPointer) {
@@ -775,7 +788,7 @@ class DATNodes {
 	])
 
 	func vertex(offset: Int) -> GoDStructData {
-		let vertexData = GoDStructData(properties: vertextStruct, fileData: data, startOffset: offset)
+		let vertexData = loadStruct(properties: vertextStruct, offset: offset)
 
 		if let attribute: Int = vertexData.get("Attribute"),
 		   let compType: Int = vertexData.get("Component Type"),
@@ -888,7 +901,7 @@ class DATNodes {
 			])
 		}
 
-		let colourData = GoDStructData(properties: dataFormat, fileData: data, startOffset: offset)
+		let colourData = loadStruct(properties: dataFormat, offset: offset)
 		nodesCache[offset] = colourData
 		let vertexColour = VertexColour(data: colourData)
 		vertexColours[offset] = vertexColour

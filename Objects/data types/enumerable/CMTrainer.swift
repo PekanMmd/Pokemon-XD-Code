@@ -41,6 +41,8 @@ final class XGTrainer: NSObject, Codable {
 	var pokemon				= [XGTrainerPokemon]()
 	var trainerClass		= XGTrainerClasses.none
 	var trainerModel		= XGTrainerModels.wes
+
+	var items				= [XGItems]()
 	
 	lazy var battleData: XGBattle? = {
 		return XGBattle.battleForTrainer(index: self.index)
@@ -108,6 +110,10 @@ final class XGTrainer: NSObject, Codable {
 		
 		self.trainerClass = XGTrainerClasses(rawValue: tClass) ?? .none
 		self.trainerModel = XGTrainerModels(rawValue: tModel)  ?? .wes
+
+		self.items = deck.getShortStreamFromOffset(start + kTrainerFirstItemOffset, length: 8).map({ (index) -> XGItems in
+			return .index(index)
+		})
 		
 		let first = deck.get2BytesAtOffset(start + kTrainerFirstPokemonOffset)
 		if first < CommonIndexes.NumberOfTrainerPokemonData.value {
@@ -131,7 +137,10 @@ final class XGTrainer: NSObject, Codable {
 		deck.replace2BytesAtOffset(start + kTrainerAIOffset, withBytes: self.AI)
 		deck.replaceByteAtOffset(start + kTrainerClassOffset , withByte: self.trainerClass.rawValue)
 		deck.replaceByteAtOffset(start + kTrainerClassModelOffset, withByte: self.trainerModel.rawValue)
-		
+		deck.replaceBytesFromOffset(start + kTrainerFirstItemOffset, withShortStream: items.map({ (item) -> Int in
+			return item.index
+		}))
+
 		deck.save()
 	}
 	

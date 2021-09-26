@@ -324,6 +324,10 @@ class XGISO: NSObject {
 		if !file.exists {
 			XGUtility.decompileISO()
 		}
+		if !file.exists {
+			printg("Couldn't find file in ISO: " + filename)
+			return nil
+		}
 		return file.data
 	}
 	#endif

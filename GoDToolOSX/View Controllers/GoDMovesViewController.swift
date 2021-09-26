@@ -174,7 +174,8 @@ class GoDMovesViewController: GoDTableViewController {
 
 		lastSearchText = text
 		filteredMoves = moves.filter({ (move) -> Bool in
-			move.name.simplified.contains(text.simplified)
+			return move.name.simplified.contains(text.simplified)
+				|| move.index == text.integerValue
 		})
 	}
 	

@@ -52,8 +52,12 @@ let levelUpMoveStruct = GoDStruct(name: "Level Up Move", format: [
 let spritesStruct = GoDStruct(name: "Pokemon Sprites", format: [
 	.byte(name: "Pokedex Colour ID", description: "", type: .uintHex),
 	.short(name: "Face ID", description: "The index of the image for the pokemon's face", type: .indexOfEntryInTable(table: pokeFacesTable, nameProperty: nil)),
-	.word(name: "Purify Chamber Image ID", description: "File identifier for the animated texture", type: .fsysFileIdentifier(fsysName: nil))
-])
+	] + (
+	game == .XD
+		? [.word(name: "Purify Chamber Image ID", description: "File identifier for the animated texture", type: .fsysFileIdentifier(fsysName: "poke_dance"))]
+		: [.word(name: "Body Image ID", description: "File identifier for the animated texture", type: .fsysFileIdentifier(fsysName: "poke_body"))]
+	)
+)
 
 #if GAME_XD
 let pokemonStatsStruct = GoDStruct(name: "Pokemon Stats", format: [
@@ -65,15 +69,15 @@ let pokemonStatsStruct = GoDStruct(name: "Pokemon Stats", format: [
 	.short(name: "Height", description: "Height in meters x10", type: .int),
 	.short(name: "Weight", description: "Weight in kg x10", type: .int),
 	.short(name: "Cry ID", description: "", type: .uintHex),
+	.short(name: "Unknown 1", description: "", type: .uintHex),
+	.short(name: "Unknown 2", description: "Something sound related", type: .uintHex),
 	.short(name: "National Dex Index", description: "", type: .uint),
-	.short(name: "Unknown 1", description: "Something sound related", type: .uintHex),
-	.short(name: "Hoenn dex regional id", description: "If not in the Hoenn dex then listed after deoxys", type: .uintHex),
-	.short(name: "Unknown 3", description: "", type: .uintHex),
+	.short(name: "Hoenn dex regional id", description: "If not in the Hoenn dex then listed after deoxys", type: .uint),
 	.word(name: "Name ID", description: "", type: .msgID(file: .common_rel)),
 	.word(name: "Species Name ID", description: "The species name used in the pokedex entry", type: .msgID(file: .typeAndFsysName(.msg, "pda_menu"))),
-	.word(name: "Unknown 2", description: "unused?", type: .uintHex),
-	.word(name: "Unknown 3", description: "", type: .uintHex),
+	.word(name: "Unknown 3", description: "unused?", type: .uintHex),
 	.word(name: "Unknown 4", description: "", type: .uintHex),
+	.word(name: "Unknown 5", description: "", type: .uintHex),
 //	.word(name: "Model ID", description: "", type: .indexOfEntryInTable(table: pkxFsysIdentifiers, nameProperty: nil))
 	.word(name: "Model ID", description: "", type: .pkxPokemonID),
 	.array(name: "Types", description: "", property:
@@ -112,13 +116,13 @@ let pokemonStatsStruct = GoDStruct(name: "Pokemon Stats", format: [
 	.short(name: "Cry ID", description: "", type: .uintHex),
 	.short(name: "National Dex Index", description: "", type: .uint),
 	.short(name: "Unknown 2", description: "Same as national id?", type: .uintHex),
-	.short(name: "Unknown 3", description: "", type: .uintHex),
+	.short(name: "Hoenn Regional Dex ID", description: "If not in the Hoenn dex then listed after deoxys", type: .uintHex),
 	.short(name: "Unknown 4", description: "", type: .uintHex),
 	.word(name: "Name ID", description: "", type: .msgID(file: .common_rel)),
 	.word(name: "Species Name ID", description: "The species name used in the pokedex entry", type: .msgID(file: .typeAndFsysName(.msg, "pda_menu"))),
-	.word(name: "Unknown 2", description: "unused?", type: .uintHex),
-	.word(name: "Unknown 3", description: "", type: .uintHex),
-	.word(name: "Unknown 4", description: "", type: .uintHex),
+	.word(name: "Unknown 5", description: "unused?", type: .uintHex),
+	.word(name: "Unknown 6", description: "", type: .uintHex),
+	.word(name: "Unknown 7", description: "", type: .uintHex),
 	.word(name: "Model ID", description: "", type: .pkxPokemonID),
 	.array(name: "Types", description: "", property:
 			.byte(name: "Type", description: "", type: .typeID), count: 2),

@@ -113,7 +113,7 @@ class XGRelocationTable {
 		moduleID = header.get("Module ID")
 
 		guard let sectionsInfo: [GoDStructData] = header.get("Sections Info") else {
-			assertionFailure("Couldn't parse sections info from rel data")
+			printg("Couldn't parse sections info from rel data")
 			return
 		}
 
@@ -130,10 +130,7 @@ class XGRelocationTable {
 		}
 		self.sections = sections
 
-		guard let importsInfo: [GoDStructData] = header.get("Module Imports") else {
-			assertionFailure("Couldn't parse imports info from rel data")
-			return
-		}
+		let importsInfo: [GoDStructData] = header.get("Module Imports") ?? []
 
 		var imports = [Int : (importPointerOffset: Int, dataOffset: Int)]()
 		let firstImportOffset = data.get4BytesAtOffset(0x28)
@@ -165,7 +162,7 @@ class XGRelocationTable {
 			if command == 203 { break }
 
 			guard let sectionStart = sections[sectionID]?.sectionDataOffset else {
-				assertionFailure("Invalid section in relocation command")
+				printg("Invalid section in relocation command")
 				return
 			}
 			let fileOffset = sectionStart + symbolOffset

@@ -264,21 +264,31 @@ class XGPatcher {
 			let machineInstruction = dol.getWordAtOffset(offset)
 			return machineInstruction == kNopInstruction
 
-		} else if game == .Colosseum, region == .US {
-			return dol.getWordAtOffset(0x10c4ac - kDolToRAMOffsetDifference) == 0x8863001F
+		} else if game == .Colosseum {
+			switch region {
+			case .US:
+				return dol.getWordAtOffset(0x10c4ac - kDolToRAMOffsetDifference) == 0x8863001F
+			case .EU:
+				return dol.getWordAtOffset(0x10fac4 - kDolToRAMOffsetDifference) == 0x8863001F
+			case .JP:
+				return dol.getWordAtOffset(0x109e54 - kDolToRAMOffsetDifference) == 0x8863001F
+			case .OtherGame:
+				return false
+			}
+
 		}
 
 		return false
 	}
 	
 	class func applyPhysicalSpecialSplitPatch(setDefaultMoveCategories: Bool = false) {
-
-		guard region == .US else {
-			printg("This patch has not been implemented for this game region:", region.name)
-			return
-		}
 		
 		if game == .XD {
+
+			guard region == .US else {
+				printg("This patch has not been implemented for this game region:", region.name)
+				return
+			}
 			
 			let dol = XGFiles.dol.data!
 			for offset in kClassPatchOffsets {
@@ -293,21 +303,46 @@ class XGPatcher {
 			
 		} else if game == .Colosseum {
 			
-			let typeGetCategory = 0x10c4a0 // ram
-			
-			let move17Offsets = [0x232938,0x2324c8]
-			let move23Offsets = [0x24462c,0x2447b8]
-			let move30Offsets = [0x226c18]
-			let move31Offsets = [0x228b5c]
-			
-			XGAssembly.replaceASM(startOffset: typeGetCategory - kDolToRAMOffsetDifference, newASM: [
-				// get move data pointer
-				0x1c030038, // mulli r0, r3, 56
-				0x806d85dc, // lwz	r3, -0x7A24 (r13)
-				0x7c630214, // add	r3, r3, r0
-				0x8863001F, // move data get category (byte 0x1f which is unused in vanilla)
-				0x4e800020, // blr
-				])
+			let typeGetCategory: Int
+			let move17Offsets: [Int]
+			let move23Offsets: [Int]
+			let move30Offsets: [Int]
+			let move31Offsets: [Int]
+
+			switch region {
+			case .US:
+				typeGetCategory = 0x10c4a0
+				move17Offsets = [0x232938,0x2324c8]
+				move23Offsets = [0x24462c,0x2447b8]
+				move30Offsets = [0x226c18]
+				move31Offsets = [0x228b5c]
+			case .EU:
+				typeGetCategory = 0x10FAB8
+				move17Offsets = [0x236FC8,0x237438]
+				move23Offsets = [0x249154,0x2492e0]
+				move30Offsets = [0x22b718]
+				move31Offsets = [0x22d65c]
+			case .JP:
+				typeGetCategory = 0x109e48
+				move17Offsets = [0x22E0D0,0x22DC60]
+				move23Offsets = [0x23FDC4,0x23FF50]
+				move30Offsets = [0x2223B0]
+				move31Offsets = [0x2242f4]
+			case .OtherGame:
+				typeGetCategory = 0
+				move17Offsets = []
+				move23Offsets = []
+				move30Offsets = []
+				move31Offsets = []
+			}
+
+			XGAssembly.replaceRamASM(RAMOffset: typeGetCategory, newASM: [
+				.mulli(.r0, .r3, 56),
+				.lwz(.r3, .r13, -0x7a24),
+				.add(.r3, .r3, .r0),
+				.lbz(.r3, .r3, 0x1f), // move data get category (byte 0x1f which is unused in vanilla)
+				.blr
+			])
 			for offset in move17Offsets {
 				XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [0x7e238b78])
 			}

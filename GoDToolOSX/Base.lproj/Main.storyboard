@@ -171,6 +171,25 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Utilities" id="5j9-eq-jIH">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Utilities" id="NO5-Ap-L7l">
+                                    <items>
+                                        <menuItem title="Dump Textures" id="vEi-oU-BJC">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="dumpTextures:" target="Voe-Tx-rLC" id="4vx-yu-10p"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Dump Dolphin Textures" id="vB9-EW-Tms">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="dumpDolphinTextures:" target="Voe-Tx-rLC" id="JE9-F2-NBf"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                             <menuItem title="Tools" id="Qlv-Yj-Yw5">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Tools" id="qNW-i3-nDl">

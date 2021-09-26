@@ -40,7 +40,7 @@ var loadableFiles: [String] {
 #endif
 
 var loadableFsys: [String] {
-	[XGFiles.fsys("people_archive").path, XGFiles.fsys("common").path, XGFiles.fsys("deck").path, XGFiles.fsys("bgm_archive").path]
+	[XGFiles.fsys("people_archive").path, XGFiles.fsys("common").path, XGFiles.fsys("deck").path, XGFiles.fsys("poke_face").path, XGFiles.fsys("poke_body").path, XGFiles.fsys("poke_dance").path, XGFiles.fsys("menu_face").path, XGFiles.fsys("menu_pokemon").path, XGFiles.fsys("bgm_archive").path]
 }
 
 
@@ -336,10 +336,8 @@ indirect enum XGFiles {
 	}
 	
 	var fsysData: XGFsys {
-		if loadableFsys.contains(self.path) {
-			if loadedFsys[self.path] != nil {
-				return loadedFsys[self.path]!
-			}
+		if loadedFsys[self.path] != nil {
+			return loadedFsys[self.path]!
 		}
 
 		let fsys = XGFsys(file: self)
@@ -471,6 +469,11 @@ indirect enum XGFiles {
 		if XGFileTypes.modelFormats.contains(fileType) {
 			let datModel = DATModel(file: self)
 			return datModel?.textures ?? []
+		}
+		if fileType == .pkx,
+		   let data = self.data {
+			let pkx = PKXModel(data: data)
+			return pkx.datModel.textures
 		}
 		#endif
 

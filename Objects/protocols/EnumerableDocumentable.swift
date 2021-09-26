@@ -11,6 +11,7 @@ protocol GoDCodable: Codable {
 	static func encodeData()
 	static func decodeData()
 	static func documentData()
+	static func getEnumerationData() -> String
 	static func documentEnumerationData()
 	func save()
 
@@ -26,12 +27,9 @@ protocol XGEnumerable {
 }
 
 extension XGEnumerable {
-	
-	static func documentEnumerationData() {
-		let folder = XGFolders.nameAndFolder("Enumerations", .Reference)
-		folder.createDirectory()
-		let file = XGFiles.nameAndFolder(className + ".txt", folder)
-		
+
+	@discardableResult
+	static func getEnumerationData() -> String {
 		var text = "\(className) - count: \(allValues.count)\n"
 		allValues.forEach { (value) in
 			text += "\n\(value.enumerableName.spaceToLength(20))"
@@ -39,8 +37,16 @@ extension XGEnumerable {
 				text += " - \(rawValue)"
 			}
 		}
-		
-		XGUtility.saveString(text, toFile: file)
+
+		return text
+	}
+
+	static func documentEnumerationData() {
+		let folder = XGFolders.nameAndFolder("Enumerations", .Reference)
+		folder.createDirectory()
+		let file = XGFiles.nameAndFolder(className + ".txt", folder)
+
+		XGUtility.saveString(getEnumerationData(), toFile: file)
 	}
 }
 

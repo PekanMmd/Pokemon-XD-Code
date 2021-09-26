@@ -169,7 +169,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 		
 		guard !isSearchingForFreeStringID else {
-			self.displayAlert(title: "Please wait", text: "Please wait for previous string id search to complete.")
+			displayAlert(title: "Please wait", description: "Please wait for previous string id search to complete.")
 			return
 		}
 
@@ -177,30 +177,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		XGThreadManager.manager.runInBackgroundAsync {
 			if let id = freeMSGID() {
 				XGThreadManager.manager.runInForegroundAsync {
-					self.displayAlert(title: "Free String ID", text: "The next free id is: \(id) (\(id.hexString()))")
+					displayAlert(title: "Free String ID", description: "The next free id is: \(id) (\(id.hexString()))")
 				}
 			} else {
 				XGThreadManager.manager.runInForegroundAsync {
-					self.displayAlert(title: "Free String ID", text: "Failed to find a free string id")
+					displayAlert(title: "Free String ID", description: "Failed to find a free string id")
 				}
 			}
 		}
 		#endif
 	}
-	
-//	@IBAction func importTextures(_ sender: Any) {
-//		guard checkRequiredFiles() else {
-//			return
-//		}
-//		XGUtility.importTextures()
-//	}
-//
-//	@IBAction func exportTextures(_ sender: Any) {
-//		guard checkRequiredFiles() else {
-//			return
-//		}
-//		XGUtility.exportTextures()
-//	}
 	
 	@IBAction func enableExperimentalFeatures(_ sender: Any) {
 		settings.enableExperimentalFeatures = !settings.enableExperimentalFeatures
@@ -243,7 +229,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		XGUtility.extractAllFiles()
 		
 		printg("extraction complete")
-		self.displayAlert(title: "ISO Extraction Complete", text: "Done.")
+		displayAlert(title: "ISO Extraction Complete", description: "Done.")
 	}
 	
 	var isBuilding = false
@@ -253,7 +239,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			return
 		}
 		guard !isBuilding else {
-			self.displayAlert(title: "Please wait", text: "Please wait for previous build to complete.")
+			displayAlert(title: "Please wait", description: "Please wait for previous build to complete.")
 			return
 		}
 		isBuilding = true
@@ -271,14 +257,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				text += "\n\nSet 'ISO > Enable File Size Increases' to include them."
 				filesTooLargeForReplacement = nil
 				
-				XGThreadManager.manager.runInForegroundAsync {
-					self.displayAlert(title: "Quick Build Incomplete", text: text)
-				}
+				displayAlert(title: "Quick Build Incomplete", description: text)
 				
 			} else {
-				XGThreadManager.manager.runInForegroundAsync {
-					self.displayAlert(title: "Done", text: "Quick build completed successfully!")
-				}
+				displayAlert(title: "Done", description: "Quick build completed successfully!")
 			}
 			self.isBuilding = false
 		}
@@ -289,7 +271,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			return
 		}
 		guard !isBuilding else {
-			self.displayAlert(title: "Please wait", text: "Please wait for previous build to complete.")
+			displayAlert(title: "Please wait", description: "Please wait for previous build to complete.")
 			return
 		}
 		isBuilding = true
@@ -306,14 +288,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				
 				text += "\n\nSet 'ISO > Enable File Size Increases' to include them."
 				filesTooLargeForReplacement = nil
-				
-				XGThreadManager.manager.runInForegroundAsync {
-					self.displayAlert(title: "Reuild Incomplete", text: text)
-				}
+
+				displayAlert(title: "Reuild Incomplete", description: text)
 			} else {
-				XGThreadManager.manager.runInForegroundAsync {
-					self.displayAlert(title: "Done", text: "ISO rebuild completed successfully!")
-				}
+				displayAlert(title: "Done", description: "ISO rebuild completed successfully!")
 			}
 			self.isBuilding = false
 		}
@@ -411,6 +389,51 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			}
 		}
 	}
+
+	@IBAction func dumpTextures(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		displayAlert(title: "Dumping Textures", description: "This will run in the background. It will take a while. There will be an alert once it is done.")
+		XGThreadManager.manager.runInBackgroundAsync {
+			XGUtility.extractAllTextures(forDolphin: false)
+			displayAlert(title: "Texture Dump Finsihed", description: "Done.")
+		}
+	}
+
+	@IBAction func dumpDolphinTextures(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		displayAlert(title: "Dumping Textures", description: "This will run in the background. It will take a while. There will be an alert once it is done.")
+		XGThreadManager.manager.runInBackgroundAsync {
+			XGUtility.extractAllTextures(forDolphin: true)
+			displayAlert(title: "Texture Dump Finsihed", description: "Done.")
+		}
+	}
+
+	#if GAME_PBR
+	@IBAction func create1Pokemon(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		XGPatcher.increasePokemonTotal(by: 1)
+	}
+
+	@IBAction func create10Pokemon(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		XGPatcher.increasePokemonTotal(by: 10)
+	}
+
+	@IBAction func create100Pokemon(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		XGPatcher.increasePokemonTotal(by: 100)
+	}
+	#endif
 	
 	
 	@IBAction func showHexCalculator(_ sender: Any) {
@@ -427,19 +450,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	
 	@IBAction func showAbout(_ sender: AnyObject) {
-		GoDAlertViewController.displayAlert(title: "About GoD Tool", text: aboutMessage())
+		displayAlert(title: "About GoD Tool", description: aboutMessage())
 	}
 	
 	@IBAction func showHelp(_ sender: Any) {
 		self.performSegue("toHelpVC")
-	}
-	
-	func createDirectories() {
-		XGFolders.setUpFolderFormat()
-	}
-	
-	func displayAlert(title: String, text: String) {
-		GoDAlertViewController.displayAlert(title: title, text: text)
 	}
 	
 	func performSegue(_ name: String) {
@@ -452,38 +467,65 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	
 	@IBAction func openTextureImporter(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
 		performSegue("toTextureVC")
 	}
 	
 	@IBAction func openScriptCompiler(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
 		performSegue("toScriptVC")
 	}
 	
 	@IBAction func openStatsEditor(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
 		performSegue("toStatsVC")
 	}
 	
 	@IBAction func openMoveEditor(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
 		performSegue("toMoveVC")
 	}
 	
 	@IBAction func openGiftEditor(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
 		performSegue("toGiftVC")
 	}
 	
 	@IBAction func openPatchEditor(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
 		performSegue("toPatchVC")
 	}
 	
 	@IBAction func openContextTool(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
 		performSegue("toContextVC")
 	}
 	
 	@IBAction func openRandomiser(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
 		performSegue("toRandomiserVC")
 	}
 	
 	@IBAction func exporeISO(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
 		performSegue("toISOVC")
 	}
 }

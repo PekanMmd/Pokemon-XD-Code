@@ -117,7 +117,6 @@ final class XGFsys : NSObject {
 				names[i] = updatedName
 			}
 
-
 			if game == .PBR {
 				let updatedName = names[i]
 				if updatedName.contains("mes_common"), updatedName.fileExtensions == ".bin" {
@@ -274,7 +273,6 @@ final class XGFsys : NSObject {
 	
 	func startOffsetForFileDetails(_ index: Int) -> Int {
 		return data.get4BytesAtOffset(kFirstFileDetailsPointerOffset + (index * 4))
-		
 	}
 	
 	func startOffsetForFile(_ index: Int) -> Int {
@@ -914,7 +912,7 @@ final class XGFsys : NSObject {
 				}
 
 				#if !GAME_PBR
-				if file == .common_rel || file == .tableres2 {
+				if file == .common_rel || file == .tableres2 || file == .dol {
 					let msgFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.json.fileExtension, file.folder)
 					if !msgFile.exists {
 						let table = file.stringTable
@@ -932,6 +930,18 @@ final class XGFsys : NSObject {
 							table.writeJSON(to: msgFile3)
 						}
 					}
+					if file == .dol && game == .XD && region != .JP && settings.enableExperimentalFeatures {
+						let msgFile2 = XGFiles.nameAndFolder("Start2.json", file.folder)
+						if !msgFile2.exists {
+							let table = XGStringTable.dol2()
+							table.writeJSON(to: msgFile2)
+						}
+						let msgFile3 = XGFiles.nameAndFolder("Start3.json", file.folder)
+						if !msgFile3.exists {
+							let table = XGStringTable.dol3()
+							table.writeJSON(to: msgFile3)
+						}
+					}
 				}
 				#endif
 
@@ -946,6 +956,10 @@ final class XGFsys : NSObject {
 				}
 			}
 			for file in folder.files {
+				#if !GAME_PBR
+				// skip pkx textures since the .dat inside should already have been exported and the textures will be dumped from that
+				if file.fileType == .pkx { continue }
+				#endif
 				for texture in file.textures {
 					if !texture.file.exists || overwrite {
 						texture.save()

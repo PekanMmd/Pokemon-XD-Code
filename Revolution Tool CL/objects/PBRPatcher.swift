@@ -332,6 +332,10 @@ class XGPatcher {
 	}
 
 	static func increasePokemonTotal(by increase: Int) {
+		guard region != .JP else {
+			printg("Increasing the number of pokemon hasn't been implemented for \(region.name) yet")
+			return
+		}
 		printg("Increasing number of pokemon in game by \(increase).\nThis may take a while...")
 		// Expand pokemon tables
 		// Edit these parameters as required ----
@@ -510,104 +514,74 @@ class XGPatcher {
 		}
 
 		// Edit code for setting pokemon species to eggs or alt forms
-		let RAMOffsets493 = [
-			0x012ae6,
-			0x0143fa,
-			0x014576,
-			0x014606,
-			0x014892,
-			0x0148d2,
-			0x0149a6,
-			0x014a1a,
-			0x0159d6,
-			0x015a3e,
-			0x015aa6,
-			0x015b0e,
-			0x015b76,
-			0x01a6f2,
-			0x01cc8e,
-			0x01f4be,
-			0x01f592,
-			0x01f666,
-			0x01f73a,
-			0x01f80e,
-			0x01f8e2,
-			0x01f99e,
-			0x02142e,
-			0x02149a,
-			0x021506,
-			0x021572,
-			0x0215de,
-			0x024762,
-			0x0247ee,
-			0x0248ba,
-
+		let RAMOffsets493: [Int]
+		switch region {
+		case .EU:
+		RAMOffsets493 = [
+			0x012ae6, 0x0143fa, 0x014576, 0x014606, 0x014892, 0x0148d2, 0x0149a6, 0x014a1a, 0x0159d6, 0x015a3e, 0x015aa6, 0x015b0e, 0x015b76, 0x01a6f2, 0x01cc8e, 0x01f4be, 0x01f592, 0x01f666, 0x01f73a, 0x01f80e, 0x01f8e2, 0x01f99e, 0x02142e, 0x02149a, 0x021506, 0x021572, 0x0215de, 0x024762, 0x0247ee, 0x0248ba
 		]
+		case .US:
+			RAMOffsets493 = [
+				0x124a2, 0x13e1e, 0x13ff6, 0x14086, 0x14332, 0x14372, 0x1443a, 0x144aa, 0x1560a, 0x15672, 0x156da, 0x15742, 0x157aa, 0x1b93a, 0x1ee36, 0x218c2, 0x219d2, 0x21ae2, 0x21bf2, 0x21d02, 0x21e12, 0x21f0a, 0x23bb6, 0x23c2a, 0x23c9e, 0x23d12, 0x23d86, 0x26f42, 0x26fce, 0x2709a,
+	]
+		case .JP:
+			RAMOffsets493 = []
+		default:
+			RAMOffsets493 = []
+		}
 
-		let RAMOffsets494 = [
-			0x05ca92,
-			0x05ca96,
-			0x05cbde,
-			0x05cc0e,
-			0x05cdb6,
-			0x05cc0e,
-			0x05cd82,
-			0x05cdb6,
-			0x0aa152,
-			0x102452,
-			0x10254a,
-			0x3b032a,
-			0x3b0476,
-			0x3b057a,
-			0x3b065e,
-			0x3b28ca,
-			0x3b2992,
-			0x3b2a72,
-			0x3b5a0a,
-			0x3b5b02,
-			0x3b7cca,
-			0x3b98b2,
-			0x3b99ae,
-			0x3b9a1a,
-			0x3b9af6,
-			0x3d2396,
-			0x3d256e,
-			0x3d29f6,
-			0x3d4a6a,
-			0x3d4b66,
-			0x3d6162,
-			0x3d61f2,
-			0x3d6292,
-			0x3d6d1e,
-			0x3d6df2,
-			0x3db0b2,
-			0x3db0da,
-			0x3dbe2a,
-			0x3dce5e,
-		]
+		let RAMOffsets494: [Int]
+		switch region {
+		case .EU:
+			RAMOffsets494 = [
+				0x05ca92, 0x05ca96, 0x05cbde, 0x05cc0e, 0x05cdb6, 0x05cc0e, 0x05cd82, 0x05cdb6, 0x0aa152, 0x102452, 0x10254a, 0x3b032a, 0x3b0476, 0x3b057a, 0x3b065e, 0x3b28ca, 0x3b2992, 0x3b2a72, 0x3b5a0a, 0x3b5b02, 0x3b7cca, 0x3b98b2, 0x3b99ae, 0x3b9a1a, 0x3b9af6, 0x3d2396, 0x3d256e, 0x3d29f6, 0x3d4a6a, 0x3d4b66, 0x3d6162, 0x3d61f2, 0x3d6292, 0x3d6d1e, 0x3d6df2, 0x3db0b2, 0x3db0da, 0x3dbe2a, 0x3dce5e
+			]
+		case .US:
+			RAMOffsets494 = [
+				0x5e582, 0x5e586, 0x5e6ce, 0x5e6fe, 0x5e8a6, 0x5e6fe, 0x5e872, 0x5e8a6, 0xab4fe, 0x104db6, 0x104eae, 0x3b3a16, 0x3b3b62, 0x3b3c66, 0x3b3d4a, 0x3b5fb6, 0x3b607e, 0x3b615e, 0x3b90ea, 0x3b91e2, 0x3bb38a, 0x3bcf5e, 0x3bd05a, 0x3bd0c6, 0x3bd1a2, 0x3d59f2, 0x3d5bca, 0x3d603e, 0x3d80aa, 0x3d81a6, 0x3d97a2, 0x3d9832, 0x3d98d2, 0x3da35e, 0x3da432, 0x3de6e2, 0x3de70a, 0x3df45a, 0x3e048e,
+			]
+		case .JP:
+			RAMOffsets494 = []
+		default:
+			RAMOffsets494 = []
+		}
 
-		let RAMOffsets495 = [
-			0x056c86,
-			0x05b7aa,
-			0x05ba86,
-			0x05bdbe,
-			0x05c142,
-			0x05c416,
-			0x05c6fa,
-			0x10244a,
-			0x102542,
-			0x3db2c6,
-			0x3db322,
-		]
+		let RAMOffsets495: [Int]
+		switch region {
+		case .EU:
+			RAMOffsets495 = [
+				0x056c86, 0x05b7aa, 0x05ba86, 0x05bdbe, 0x05c142, 0x05c416, 0x05c6fa, 0x10244a, 0x102542, 0x3db2c6, 0x3db322
+			]
+		case .US:
+			RAMOffsets495 = [
+				0x58ce6, 0x5d29a, 0x5d576, 0x5d8ae, 0x5dc32, 0x5df06, 0x5e1ea, 0x104dae, 0x104ea6, 0x3de8f6, 0x3de952,
+			]
+		case .JP:
+			RAMOffsets495 = []
+		default:
+			RAMOffsets495 = []
+		}
 
 		// 601 is used to reference the substitute doll.
 		// These may need to be updated if adding a pokemon with id 601 interferes with substitute logic
-		let RAMOffsets601 = [
-			0x0247f6,
-			0x0248c2,
-			0x16d442, // unsure if sub
-			0x16d44a, // also unsure
-		]
+		let RAMOffsets601: [Int]
+		switch region {
+		case .EU:
+			RAMOffsets601 = [
+				0x0247f6,
+				0x0248c2,
+				0x16d442, // unsure if sub
+				0x16d44a // also unsure
+			]
+		case .US:
+			RAMOffsets601 = [
+				0x26fd6, 0x270a2, 0x171db6, 0x171dbe,
+			]
+		case .JP:
+			RAMOffsets601 = []
+		default:
+			RAMOffsets601 = []
+		}
 
 		// Edit code for mapping pokemon species to stats
 		// Wormadam and deoxys forms are moved to still be at the end
@@ -616,6 +590,7 @@ class XGPatcher {
 		let newWormadamShift = newEggIndex + 4
 		let firstDeoxysInstructionRAMOffset = 0x3dd902
 		let newDeoxysShift = newEggIndex + 1
+		let newSubstituteIndex = newEggIndex + 107
 
 		if let dol = XGFiles.dol.data {
 			for offset in RAMOffsets493 {
@@ -627,6 +602,9 @@ class XGPatcher {
 			for offset in RAMOffsets495 {
 				dol.replace2BytesAtOffset(offset - kDolToRAMOffsetDifference, withBytes: newBadEggIndex)
 			}
+//			for offset in RAMOffsets601 {
+//				dol.replace2BytesAtOffset(offset - kDolToRAMOffsetDifference, withBytes: newSubstituteIndex)
+//			}
 			dol.replace2BytesAtOffset(firstWormadamInstructionRAMOffset - kDolToRAMOffsetDifference, withBytes: newWormadamShift)
 			dol.replace2BytesAtOffset(firstDeoxysInstructionRAMOffset - kDolToRAMOffsetDifference, withBytes: newDeoxysShift)
 			dol.save()

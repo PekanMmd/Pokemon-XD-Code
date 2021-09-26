@@ -52,7 +52,7 @@ extension GoDTexturesContaining {
 			}
 
 			let textureData = XGMutableData(data: headerData.data)
-			textureData.file = .nameAndFolder(data.file.fileName.removeFileExtensions() + "_\(i)" + data.file.fileType.fileExtension + ".gtx", data.file.folder)
+			textureData.file = .nameAndFolder(data.file.fileName.removeFileExtensions() + "_\(i)" + data.file.fileName.fileExtensions + ".gtx", data.file.folder)
 			textureData.appendBytes(.init(repeating: 0, count: 0x30))
 
 			let texture = GoDTexture(data: textureData)

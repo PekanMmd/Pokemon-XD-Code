@@ -73,48 +73,103 @@
                             </menuItem>
                             <menuItem title="Edit" id="5QF-Oa-p0T">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Edit" id="W48-6f-4Dl">
+                                <menu key="submenu" title="Edit" id="eDC-Yc-Hyw">
                                     <items>
-                                        <menuItem title="Logs" id="BDc-rc-4RA">
+                                        <menuItem title="Logs" id="sJd-Cb-xsk">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Logs" id="blU-Ft-ud5">
+                                            <menu key="submenu" title="Logs" id="Epc-mR-ojz">
                                                 <items>
-                                                    <menuItem title="Set Verbose Logs" keyEquivalent="v" id="eZf-Br-hSx">
+                                                    <menuItem title="Set Verbose Logs" keyEquivalent="v" id="O7Y-W2-kbz">
                                                         <modifierMask key="keyEquivalentModifierMask" control="YES"/>
                                                         <connections>
-                                                            <action selector="setVerboseLogs:" target="Voe-Tx-rLC" id="tKh-zD-Cqr"/>
+                                                            <action selector="setVerboseLogs:" target="Voe-Tx-rLC" id="76T-kG-TCW"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Set Fast Logs" keyEquivalent="f" id="hrV-sz-K52">
+                                                    <menuItem title="Set Fast Logs" keyEquivalent="f" id="HxM-uI-XU6">
                                                         <modifierMask key="keyEquivalentModifierMask" control="YES"/>
                                                         <connections>
-                                                            <action selector="setFastLogs:" target="Voe-Tx-rLC" id="nMA-mH-6l7"/>
+                                                            <action selector="setFastLogs:" target="Voe-Tx-rLC" id="iiy-bZ-7dh"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem isSeparatorItem="YES" id="6zR-4P-uM2"/>
-                                                    <menuItem title="Delete Logs" id="SYr-fa-34t">
+                                                    <menuItem isSeparatorItem="YES" id="BSw-th-aoC"/>
+                                                    <menuItem title="Delete Logs" id="GGi-M7-4e8">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
-                                                            <action selector="deleteLogs:" target="Voe-Tx-rLC" id="7Bk-ix-qcq"/>
+                                                            <action selector="deleteLogs:" target="Voe-Tx-rLC" id="i6J-5z-2wn"/>
                                                         </connections>
                                                     </menuItem>
                                                 </items>
                                             </menu>
                                         </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="E4y-el-EQ5"/>
-                                        <menuItem title="Cut" keyEquivalent="x" id="uRl-iY-unG">
+                                        <menuItem isSeparatorItem="YES" id="t2I-9m-EE3"/>
+                                        <menuItem title="Cut" keyEquivalent="x" id="P25-Sp-wdi">
                                             <connections>
-                                                <action selector="cut:" target="Ady-hI-5gd" id="YJe-68-I9s"/>
+                                                <action selector="cut:" target="Ady-hI-5gd" id="pGB-uV-MQj"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Copy" keyEquivalent="c" id="x3v-GG-iWU">
+                                        <menuItem title="Copy" keyEquivalent="c" id="TyX-Sw-1JJ">
                                             <connections>
-                                                <action selector="copy:" target="Ady-hI-5gd" id="G1f-GL-Joy"/>
+                                                <action selector="copy:" target="Ady-hI-5gd" id="Aao-hC-XAb"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Paste" keyEquivalent="v" id="gVA-U4-sdL">
+                                        <menuItem title="Paste" keyEquivalent="v" id="S0i-TX-6yA">
                                             <connections>
-                                                <action selector="paste:" target="Ady-hI-5gd" id="UvS-8e-Qdg"/>
+                                                <action selector="paste:" target="Ady-hI-5gd" id="xMQ-xq-b0s"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Utilities" id="yMq-Hb-ggL">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Utilities" id="9e3-W5-9Kz">
+                                    <items>
+                                        <menuItem title="Dump Textures" id="b4e-TT-wMc">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="dumpTextures:" target="Voe-Tx-rLC" id="Eog-ui-abi"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Dump Dolphin Textures" id="yS1-DU-1i7">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="dumpDolphinTextures:" target="Voe-Tx-rLC" id="ug2-LH-ZnL"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="QP3-qf-tvX"/>
+                                        <menuItem title="Create 1 New Pokemon" id="z5a-un-qFx">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="create1Pokemon:" target="Voe-Tx-rLC" id="TIl-BI-oTS"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Create 10 New Pokemon" id="zC5-KK-QOH">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="create10Pokemon:" target="Voe-Tx-rLC" id="BGO-bu-tzR"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Create 100 New Pokemon" id="0gN-xK-0c6">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="create100Pokemon:" target="Voe-Tx-rLC" id="UaC-D3-JsG"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Tools" id="IGe-KO-2IR">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Tools" id="cLm-M8-bxX">
+                                    <items>
+                                        <menuItem title="Hex Calculator" keyEquivalent="H" id="Bq2-kU-Mvf">
+                                            <connections>
+                                                <action selector="showHexCalculator:" target="Voe-Tx-rLC" id="M97-WT-9gQ"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="String ID Tool" keyEquivalent="S" id="h4n-lL-YwW">
+                                            <connections>
+                                                <action selector="showStringIDTool:" target="Voe-Tx-rLC" id="DbS-fy-FzO"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -140,23 +195,6 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="arrangeInFront:" target="Ady-hI-5gd" id="DRN-fu-gQh"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </menuItem>
-                            <menuItem title="Tools" id="IGe-KO-2IR">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Tools" id="cLm-M8-bxX">
-                                    <items>
-                                        <menuItem title="Hex Calculator" keyEquivalent="H" id="Bq2-kU-Mvf">
-                                            <connections>
-                                                <action selector="showHexCalculator:" target="Voe-Tx-rLC" id="M97-WT-9gQ"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="String ID Tool" keyEquivalent="S" id="h4n-lL-YwW">
-                                            <connections>
-                                                <action selector="showStringIDTool:" target="Voe-Tx-rLC" id="DbS-fy-FzO"/>
                                             </connections>
                                         </menuItem>
                                     </items>

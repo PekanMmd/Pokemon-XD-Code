@@ -12,7 +12,7 @@ let natureStruct = GoDStruct(name: "Nature", format: [
 	.byte(name: "Walking Purification Multiplier", description: "Determines how effective walking is for purifying a pokemon with this nature", type: .indexOfEntryInTable(table: multipliersTable, nameProperty: nil)),
 	.byte(name: "Call Purification Multiplier", description: "Determines how effective calling out of reverse mode is for purifying a pokemon with this nature", type: .indexOfEntryInTable(table: multipliersTable, nameProperty: nil)),
 	.byte(name: "Day Care Purification Multiplier", description: "Determines how effective leaving the pokemon in the day care is for purifying a pokemon with this nature", type: .indexOfEntryInTable(table: multipliersTable, nameProperty: nil)),
-	.byte(name: "Cologn Massage Purification Multiplier", description: "Determines how effective Cologn Massaging is for purifying a pokemon with this nature", type: .indexOfEntryInTable(table: multipliersTable, nameProperty: nil)),
+	.byte(name: "Cologne Massage Purification Multiplier", description: "Determines how effective Cologne Massaging is for purifying a pokemon with this nature", type: .indexOfEntryInTable(table: multipliersTable, nameProperty: nil)),
 	.byte(name: "Attack Multiplier", description: "", type: .indexOfEntryInTable(table: multipliersTable, nameProperty: nil)),
 	.byte(name: "Defense Multiplier", description: "", type: .indexOfEntryInTable(table: multipliersTable, nameProperty: nil)),
 	.byte(name: "Sp.Atk Multiplier", description: "", type: .indexOfEntryInTable(table: multipliersTable, nameProperty: nil)),

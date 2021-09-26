@@ -27,6 +27,10 @@ class PBRStringManager {
 		}
 	}
 
+	static var totalNumberOfStrings: Int {
+		messageDataTableFile.data?.get4BytesAtOffset(4) ?? 0
+	}
+
 	static func tableIDAndIndexForStringWithID(_ id: Int) -> (tableId: Int, index: Int)? {
 		guard id != 0 else { return nil }
 		let table = messageDataTable

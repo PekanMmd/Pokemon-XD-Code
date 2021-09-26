@@ -62,7 +62,7 @@ class GoDTexture {
 	}
 	
 	var paletteCount : Int {
-		return paletteLength / 2
+		return paletteLength / 2 // assuming palette formats are all 2 bytes per colour
 	}
 	
 	var file : XGFiles {

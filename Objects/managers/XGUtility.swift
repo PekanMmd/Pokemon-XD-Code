@@ -179,6 +179,18 @@ class XGUtility {
 								loadedStringTables[file.path] = newTable
 							}
 						}
+						if file == .dol && game == .XD && region != .JP {
+							let msgFile2 = XGFiles.nameAndFolder("Start2.json", file.folder)
+							let msgFile3 = XGFiles.nameAndFolder("Start3.json", file.folder)
+							if msgFile2.exists, let newTable = try? XGStringTable.fromJSONFile(file: msgFile2) {
+								newTable.save()
+								loadedStringTables[file.path] = newTable
+							}
+							if msgFile3.exists, let newTable = try? XGStringTable.fromJSONFile(file: msgFile3) {
+								newTable.save()
+								loadedStringTables[file.path] = newTable
+							}
+						}
 						#endif
 
 						if file.fileType == .thp, let thpData = file.data {
@@ -718,32 +730,46 @@ class XGUtility {
 		
 	}
 
-	class func extractAllTextures() {
-		printg("extracting all textures")
-		guard region != .OtherGame else {
-			printg("")
-			return
+	class func extractAllTextures(forDolphin: Bool = false) {
+		let outputFolder = XGFolders.nameAndFolder("Texture Dump", .Reference)
+		printg("extracting all textures to \(outputFolder.path)")
+		if forDolphin {
+			printg("textures will be saved with dolphin compatible filenames")
 		}
-		XGFolders.setUpFolderFormat()
+		printg("This will take a while...")
+
 		for filename in XGISO.current.allFileNames where filename.contains(".fsys") {
-			let fsysFile = XGFiles.fsys(filename.removeFileExtensions())
-			exportFileFromISO(fsysFile, decode: false, overwrite: false)
-			guard fsysFile.exists else { continue }
-			let fsysData = XGFsys(file: fsysFile)
-			for i in 0 ..< fsysData.numberOfEntries {
-				if let fileType = fsysData.fileTypeForFileWithIndex(index: i),
-				   XGFileTypes.textureContainingFormats.contains(fileType)
-				   || XGFileTypes.textureFormats.contains(fileType) {
-					let fileData = fsysData.dataForFileWithIndex(index: i)
-					if fileData?.file.exists != true {
-						fileData?.save()
-					}
-					fileData?.file.textures.forEach {
-						if !$0.file.exists {
-							$0.save()
+			printg(filename)
+
+			let dumpFolder = XGFolders.nameAndFolder(filename.removeFileExtensions(), outputFolder)
+			if !dumpFolder.exists {
+
+				let fsysFile = XGFiles.fsys(filename.removeFileExtensions())
+				exportFileFromISO(fsysFile, decode: false, overwrite: false)
+
+				let folder = XGFolders.ISOExport(filename.removeFileExtensions())
+				#if !GAME_PBR
+				folder.files.forEach { (file) in
+					if file.fileType == .pkx, file.exists {
+						let dat = exportDatFromPKX(pkx: file.data!)
+						if !dat.file.exists {
+							dat.save()
 						}
 					}
 				}
+				#endif
+
+				folder.files.forEach { (file) in
+					file.textures.forEach { (texture) in
+						if forDolphin {
+							texture.writeDolphinFormatted(to: dumpFolder)
+						} else {
+							texture.writePNGData(toFile: .nameAndFolder(texture.data.file.fileName + ".png", dumpFolder))
+						}
+					}
+				}
+			} else {
+				printg("Skipping \(filename)\nFolder already exists: \(dumpFolder.path)")
 			}
 		}
 	}

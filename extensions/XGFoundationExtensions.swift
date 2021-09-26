@@ -492,6 +492,10 @@ extension String {
 		}
 		return joined
 	}
+
+	func lines() -> [String] {
+		return self.split(separator: "\n").map { String($0) }
+	}
 	
 	var functionName: String? {
 		if !self.contains("(") || !self.contains(")") {
@@ -632,6 +636,10 @@ extension String {
 			}
 			return result.lowercased()
 		}
+	}
+
+	var simplifiedKey: String {
+		return self.simplified.replacingOccurrences(of: "_", with: "")
 	}
 
 	var titleCased: String {
@@ -795,6 +803,19 @@ extension String {
 			return ""
 		}
 		
+	}
+
+	func regex() -> NSRegularExpression? {
+		return try? NSRegularExpression(pattern: self, options: [])
+	}
+
+	func subStringsMatching(_ expr: NSRegularExpression) -> [String] {
+		var results = [String]()
+		let matches = expr.matches(in: self, options: [], range: .init(location: 0, length: self.count))
+		matches.forEach { (result) in
+			results.addUnique(self.substring(from: result.range.lowerBound, to: result.range.upperBound))
+		}
+		return results
 	}
 }
 
