@@ -44,7 +44,7 @@ class GoDMessageViewController: GoDTableViewController {
 			currentTable = table
 		} else {
 			loadAllStrings(refresh: true)
-			let tables = allStringTables.sorted { $0.file.fileName < $1.file.fileName }
+			let tables = allStringTables.sorted { $0.file.fileName.simplified < $1.file.fileName.simplified }
 			self.filesPopup.setTitles(values: ["-"] + tables.map {
 				$0.file.folder.name + "/" + $0.file.fileName
 
@@ -81,7 +81,7 @@ class GoDMessageViewController: GoDTableViewController {
 			currentTable = nil
 			return
 		}
-		currentTable = allStringTables.sorted { $0.file.fileName < $1.file.fileName }[sender.indexOfSelectedItem - 1]
+		currentTable = allStringTables.sorted { $0.file.fileName.simplified < $1.file.fileName.simplified }[sender.indexOfSelectedItem - 1]
 	}
 	
 	@IBAction func save(_ sender: Any) {

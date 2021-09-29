@@ -185,30 +185,80 @@ class GoDStructData: CustomStringConvertible {
 	var flattenedValues: [GoDStructValues] {
 		var flatValues = [GoDStructValues]()
 
-		func flatten(values: [GoDStructValues]) {
+		func flatten(values: [GoDStructValues], prefix: String = "") {
 			values.forEach { structValue in
 				switch structValue.property {
-				case .byte, .short,.word, .float, .string, .bitArray, .bitMask:
-					flatValues.append(structValue)
-				case .subStruct:
+				case .byte(let name, let description, let type):
+					if case .value(_, let rawValue) = structValue {
+						flatValues.append(.value(property: .byte(name: prefix + name, description: description, type: type), rawValue: rawValue))
+					} else {
+						flatValues.append(structValue)
+					}
+				case .short(let name, let description, let type):
+					if case .value(_, let rawValue) = structValue {
+						flatValues.append(.value(property: .short(name: prefix + name, description: description, type: type), rawValue: rawValue))
+					} else {
+						flatValues.append(structValue)
+					}
+				case .word(let name, let description, let type):
+					if case .value(_, let rawValue) = structValue {
+						flatValues.append(.value(property: .word(name: prefix + name, description: description, type: type), rawValue: rawValue))
+					} else {
+						flatValues.append(structValue)
+					}
+				case .float(let name, let description):
+					if case .float(_, let rawValue) = structValue {
+						flatValues.append(.float(property: .float(name: prefix + name, description: description), rawValue: rawValue))
+					} else {
+						flatValues.append(structValue)
+					}
+				case .string(let name, let description, let maxCharacterCount, let charLength):
+					if case .string(_, let rawValue) = structValue {
+						flatValues.append(.string(property: .string(name: prefix + name, description: description, maxCharacterCount: maxCharacterCount, charLength: charLength), rawValue: rawValue))
+					} else {
+						flatValues.append(structValue)
+					}
+				case .bitArray(let name, let description, let bitFieldNames):
+					if case .bitArray(_, let rawValues) = structValue {
+						flatValues.append(.bitArray(property: .bitArray(name: prefix + name, description: description, bitFieldNames: bitFieldNames), rawValues: rawValues))
+					} else {
+						flatValues.append(structValue)
+					}
+				case .bitMask(let name, let description, let length, let values):
+					if case .bitMask(_, let rawValues) = structValue {
+						flatValues.append(.bitMask(property: .bitMask(name: prefix + name, description: description, length: length, values: values), rawValues: rawValues))
+					} else {
+						flatValues.append(structValue)
+					}
+				case .subStruct(let name, _, _):
 					if let data: GoDStructData = structValue.value() {
-						flatten(values: data.values)
+						flatten(values: data.values, prefix: prefix + name + " ")
+					} else {
+						flatValues.append(structValue)
 					}
 				case .vector:
 					if case .vector(let properties, let rawValue) = structValue {
 						[rawValue.v0, rawValue.v1, rawValue.v2].forEach { (value) in
-							flatten(values: [.float(property: .float(name: properties.name + ".x", description: ""), rawValue: value)])
+							flatten(values: [.float(property: .float(name: properties.name + ".x", description: ""), rawValue: value)], prefix: prefix)
 						}
+					} else {
+						flatValues.append(structValue)
 					}
 				case .array:
-					if case .array(_, let rawValues) = structValue {
-						flatten(values: rawValues)
+					if case .array(let property, let rawValues) = structValue {
+						rawValues.forEachIndexed { (index, value) in
+							flatten(values: [value], prefix: prefix + property.name + " \(index) ")
+						}
+					} else {
+						flatValues.append(structValue)
 					}
 				case .pointer:
 					if case .pointer(let property, let rawValue, _) = structValue {
 						flatten(values: [
 							.value(property: .word(name: property.name, description: property.description, type: .pointer), rawValue: rawValue)
-						])
+						], prefix: prefix)
+					} else {
+						flatValues.append(structValue)
 					}
 				}
 			}
@@ -718,13 +768,30 @@ class GoDStructData: CustomStringConvertible {
 			var string = (subStructName != nil ? "\"\(subStructName!)\" : " : "")
 			string += "{\n"
 			values.forEachIndexed { (index, propertyValue) in
+				if (index == 172) {
+					let _ = 0
+				}
 				switch propertyValue {
 				case .value(let property, let rawValue), .pointer(let property, let rawValue, _):
 					switch property.type {
+					case .null:
+						break
 					case .bool:
 						string += "    \"\(property.name)\" : \(rawValue != 0),\n"
 					default:
-						string += "    \"\(property.name)\" : \(rawValue),\n"
+						var value = String(propertyValue.description.split(separator: "(").first ?? "-")
+						while value.last == " " || value.last == "\"" {
+							value.removeLast()
+						}
+						while value.first == " " || value.first == "\"" {
+							value.removeFirst()
+						}
+						value = value.replacingOccurrences(of: "\"", with: "\\\"")
+						if value.integerValue == nil {
+							string += "    \"\(property.name)\" : \(useRawValue ? rawValue.string : "\"\(value)\""),\n"
+						} else {
+							string += "    \"\(property.name)\" : \(useRawValue ? rawValue.string : value),\n"
+						}
 					}
 
 				case .float(let property, let rawValue):
@@ -823,6 +890,7 @@ class GoDStructData: CustomStringConvertible {
 		if let data = JSONData(useRawValue: useRawValue) {
 			let object = try? JSONSerialization.jsonObject(with: data as Data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
 			if object == nil {
+//				JSONData(useRawValue: useRawValue)?.write(to: .nameAndFolder("broken json.json", .Documents))
 				printg("Invalid JSON data for struct data")
 			}
 			return object

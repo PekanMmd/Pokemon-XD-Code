@@ -126,6 +126,18 @@ class XGStringTable: NSObject {
 		}
 		
 	}
+
+	class func tableres2_2() -> XGStringTable? {
+
+		if game == .XD && !isDemo && region != .JP {
+			let table = XGStringTable(file: .tableres2, startOffset: 0x05FE0C, fileSize: 0x21E24)
+			table.subFileIndex = 2
+			return table
+		} else {
+			return nil
+		}
+
+	}
 	
 	class func dol() -> XGStringTable {
 		
@@ -179,7 +191,33 @@ class XGStringTable: NSObject {
 			start = 0
 			size = 0
 		}
-		return  XGStringTable(file: .dol, startOffset: start, fileSize: size)
+		let table = XGStringTable(file: .dol, startOffset: start, fileSize: size)
+		table.subFileIndex = 2
+		return table
+	}
+
+	class func dol3() -> XGStringTable {
+		guard game == .XD, region != .JP else { return dol() }
+
+		let start: Int
+		let size: Int
+		switch region {
+		case .US:
+			start = 0x38cbe0
+			size = 0x21eb4
+		case .JP:
+			start = 0
+			size = 0
+		case .EU:
+			start = 0x3Eb754
+			size = 0x21ee4
+		case .OtherGame:
+			start = 0
+			size = 0
+		}
+		let table = XGStringTable(file: .dol, startOffset: start, fileSize: size)
+		table.subFileIndex = 3
+		return table
 	}
 	
 	

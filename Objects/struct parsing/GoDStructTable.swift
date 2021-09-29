@@ -137,17 +137,25 @@ extension GoDStructTableFormattable {
 		}
 	}
 
-	func documentEnumerationData() {
-		let folder = XGFolders.nameAndFolder("Enumerations", .Reference)
-		let filename = properties.name + (fileVaries ? " " + file.fileName : "") + ".txt"
-		let file = XGFiles.nameAndFolder(filename, folder)
-		printg("Documenting \(properties.name) list to:", file.path)
-
+	@discardableResult
+	func getEnumerationData() -> String {
 		var text = "\(properties.name) - count: \(numberOfEntries)\n"
 		allEntries.forEachIndexed { (index, entry) in
 			text += ("\n" + "\(index) - " + assumedNameForEntry(index: index)).spaceToLength(20)
 		}
-		XGUtility.saveString(text, toFile: file)
+
+		return text
+	}
+
+	func documentEnumerationData(write: Bool = true) {
+		let folder = XGFolders.nameAndFolder("Enumerations", .Reference)
+		let filename = properties.name + (fileVaries ? " " + file.fileName : "") + ".txt"
+		let file = XGFiles.nameAndFolder(filename, folder)
+		if write {
+			printg("Documenting \(properties.name) list to:", file.path)
+		}
+
+		XGUtility.saveString(getEnumerationData(), toFile: file)
 	}
 
 	func encodeData() {

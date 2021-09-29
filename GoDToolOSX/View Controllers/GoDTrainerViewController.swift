@@ -216,9 +216,23 @@ class GoDTrainerViewController: GoDTableViewController {
 				|| info.name.simplified.contains(text.simplified)
 				|| trainer.className.simplified.contains(text.simplified)
 				|| trainer.locationString.simplified.contains(text.simplified)
-				|| trainer.pokemon.contains(where: { (mon) -> Bool in
-					mon.pokemon.name.string.simplified.contains(text.simplified)
-				})
+				|| (GoD_Tool.pokemon(text).index > 0 && trainer.pokemon.contains(where: { (mon) -> Bool in
+					mon.pokemon.index == GoD_Tool.pokemon(text).index
+				}))
+				|| (GoD_Tool.move(text).index > 0 && trainer.pokemon.contains(where: { (mon) -> Bool in
+					mon.data.moves.contains(where: { (m) -> Bool in
+						m.index == GoD_Tool.move(text).index
+					})
+				}))
+				|| (GoD_Tool.item(text).index > 0 && trainer.pokemon.contains(where: { (mon) -> Bool in
+					mon.data.item.index == GoD_Tool.item(text).index
+				}))
+				|| (GoD_Tool.ability(text).index > 0 && trainer.pokemon.contains(where: { (mon) -> Bool in
+					let stats = mon.pokemon.stats
+					let abilities = [stats.ability1, stats.ability2]
+					return abilities[mon.data.ability].index == GoD_Tool.ability(text).index
+				}))
+				|| trainer.index == text.integerValue
 		}
 
 		defer {

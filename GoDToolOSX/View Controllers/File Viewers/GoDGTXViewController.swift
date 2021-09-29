@@ -35,11 +35,14 @@ class GoDGTXViewController: NSViewController {
 		saveButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
 			view.widthAnchor.constraint(lessThanOrEqualToConstant: 800),
+			view.widthAnchor.constraint(greaterThanOrEqualToConstant: 480),
 			view.heightAnchor.constraint(lessThanOrEqualToConstant: 800),
-            view.topAnchor.constraint(equalTo: imageView.topAnchor),
+			view.heightAnchor.constraint(greaterThanOrEqualToConstant: 360),
             view.leadingAnchor.constraint(lessThanOrEqualTo: imageView.leadingAnchor),
             view.trailingAnchor.constraint(greaterThanOrEqualTo: imageView.trailingAnchor),
+			imageView.topAnchor.constraint(equalTo: view.topAnchor),
 			imageView.bottomAnchor.constraint(equalTo: saveButton.topAnchor),
+			imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 			saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 			saveButton.widthAnchor.constraint(equalToConstant: 200),
 			saveButton.heightAnchor.constraint(equalToConstant: 80),

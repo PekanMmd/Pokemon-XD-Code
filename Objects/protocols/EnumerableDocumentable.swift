@@ -11,26 +11,12 @@ protocol GoDCodable: Codable {
 	static func encodeData()
 	static func decodeData()
 	static func documentData()
+	static func getEnumerationData() -> String
 	static func documentEnumerationData()
 	func save()
 
 	static var className: String {get}
 	static var numberOfValues: Int {get}
-}
-
-extension GoDCodable {
-	func encodeData() {
-		printg("Encoding has not been implemented for this class")
-	}
-	func decodeData() {
-		printg("Decoding has not been implemented for this class")
-	}
-	func saveDocumentedData() {
-		printg("Documentation has not been implemented for this class")
-	}
-	func save() {
-		
-	}
 }
 
 protocol XGEnumerable {
@@ -41,12 +27,9 @@ protocol XGEnumerable {
 }
 
 extension XGEnumerable {
-	
-	static func documentEnumerationData() {
-		let folder = XGFolders.nameAndFolder("Enumerations", .Reference)
-		folder.createDirectory()
-		let file = XGFiles.nameAndFolder(className + ".txt", folder)
-		
+
+	@discardableResult
+	static func getEnumerationData() -> String {
 		var text = "\(className) - count: \(allValues.count)\n"
 		allValues.forEach { (value) in
 			text += "\n\(value.enumerableName.spaceToLength(20))"
@@ -54,8 +37,16 @@ extension XGEnumerable {
 				text += " - \(rawValue)"
 			}
 		}
-		
-		XGUtility.saveString(text, toFile: file)
+
+		return text
+	}
+
+	static func documentEnumerationData() {
+		let folder = XGFolders.nameAndFolder("Enumerations", .Reference)
+		folder.createDirectory()
+		let file = XGFiles.nameAndFolder(className + ".txt", folder)
+
+		XGUtility.saveString(getEnumerationData(), toFile: file)
 	}
 }
 

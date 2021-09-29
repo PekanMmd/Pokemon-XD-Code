@@ -15,6 +15,10 @@ class XGString: NSObject, Codable {
 	
 	var table: XGFiles?
 	var id	  = 0
+
+	#if GAME_PBR
+	var filename: String?
+	#endif
 	
 	var dataLength: Int {
 		get {
@@ -94,8 +98,12 @@ class XGString: NSObject, Codable {
 		// swift library has some really bad string manipulation functions
 		// The function works. It used to be a lot worse... trust me :-)
 		super.init()
-		
+
+		// PBR: set table to nil so we don't accidentally mix up the overall game id with the id within the table itself
 		self.table = game == .PBR ? nil : file
+		#if GAME_PBR
+		filename = file?.fileName
+		#endif
 		self.id = sid ?? 0
 		self.initString = string
 		let string = string.replacingOccurrences(of: "\n", with: "[New Line]")

@@ -156,6 +156,21 @@ final class XGBattle: Codable {
 
 		return desc
 	}
+
+	var shortDescription: String {
+		var desc = title + "\n"
+		desc += "Location: \(p2Trainer == nil ? "-" : p2Trainer!.locationString)\n"
+		if battleField.roomID > 0 {
+			desc += "Battle Field: \(battleField.room!.name)\n"
+		}
+		if round != .none {
+			desc += round.name
+		}
+		let style = p3Trainer == nil ? battleStyle.name : XGBattleStyles.double.name
+		desc += "\(pokemonPerPlayer) pokémon \(style) battle (\(battleType.name))\n\n"
+
+		return desc
+	}
 	
 	init(index: Int) {
 		self.index = index

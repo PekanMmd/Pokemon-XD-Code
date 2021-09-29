@@ -191,7 +191,7 @@ func randomiser() {
 	}
 
 	while true {
-		var prompt = "Select your randomization settings then enter 'start' to start the randomization:\n\n 0: exit\n"
+		var prompt = " 0: exit\n"
 		options.forEach { (option) in
 			prompt += option + "\n"
 		}
@@ -238,6 +238,7 @@ func randomiser() {
 		}
 		#endif
 		prompt.removeLast()
+		prompt += "\n\nSelect your randomization settings then enter 'start' to start the randomization:"
 
 		let input = readInput(prompt)
 		if input.lowercased() == "start" {
@@ -304,7 +305,16 @@ func randomiser() {
 		}
 
 		switch index {
-		case 0: return
+		case 0:
+			if isInitialRandomisation {
+				if randomisePokemon || randomiseMoves || randomiseTypes || randomiseAbilities || randomiseStats || randomiseMoveTypes || randomiseTMs || randomiseEvolutions || randomiseBingo {
+					if readInput("You haven't run the randomiser yet, are you sure you want to leave? Y/N").lowercased() == "n" {
+						printg("Don't forget to enter 'start' after you enter your randomiser options.")
+						continue
+					}
+				}
+			}
+			return
 		case 1: randomisePokemon.toggle()
 		case 2: randomiseShadowsOnly.toggle()
 		case 3: randomiseByBST.toggle()
@@ -439,32 +449,40 @@ func addFile() {
 }
 
 func utilities() {
-	guard game == .PBR else {
-		displayAlert(title: "Coming soon!", description: "There are no utilities for this game yet.")
-		return
-	}
-	#if GAME_PBR
+
 	while true {
-		let prompt = """
+		var prompt = """
 		Type the number of the function you want and press enter:
 
 		0: Back to main menu
 
-		1: Increase number of pokemon slots in the game by 1
-		2: Increase number of pokemon slots in the game by 10
-		3: Increase number of pokemon slots in the game by 100
+		1: Extract all textures
+		2: Extract all textures with Dolphin filenames
 		"""
+
+		#if GAME_PBR
+		prompt += """
+
+		3: Increase number of pokemon slots in the game by 1
+		4: Increase number of pokemon slots in the game by 10
+		5: Increase number of pokemon slots in the game by 100
+		"""
+		#endif
+
 		let input = readInput(prompt)
 		switch input {
 		case "": continue
 		case "0": return
-		case "1": XGPatcher.increasePokemonTotal(by: 1)
-		case "2": XGPatcher.increasePokemonTotal(by: 10)
-		case "3": XGPatcher.increasePokemonTotal(by: 100)
+		case "1": XGUtility.extractAllTextures(forDolphin: false)
+		case "2": XGUtility.extractAllTextures(forDolphin: true)
+		#if GAME_PBR
+		case "3": XGPatcher.increasePokemonTotal(by: 1)
+		case "4": XGPatcher.increasePokemonTotal(by: 10)
+		case "5": XGPatcher.increasePokemonTotal(by: 100)
+		#endif
 		default: invalidOption(input)
 		}
 	}
-	#endif
 }
 
 func showAbout() {
@@ -576,6 +594,13 @@ func main() {
 
 	if !loadISO() {
 		let args = CommandLine.arguments
+
+		for arg in args {
+			if arg == "--version" || arg == "-v" {
+				printg(aboutMessage())
+				return
+			}
+		}
 
 		let files = args.map { (filename) -> XGFiles in
 			let fileurl = URL(fileURLWithPath: filename)

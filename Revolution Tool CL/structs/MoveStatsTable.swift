@@ -7,14 +7,14 @@
 
 import Foundation
 
-let moveStatsTable = CommonStructTable(index: region == .JP ? 31 : 30, properties: GoDStruct(name: "Moves", format: [
+let movesTable = CommonStructTable(index: region == .JP ? 31 : 30, properties: GoDStruct(name: "Moves", format: [
 	.short(name: "Effect", description: "", type: .moveEffectID),
 	.short(name: "Targets", description: "", type: .moveTarget),
 	.short(name: "Unknown", description: "Unused?", type: .uint),
 	.byte(name: "Contest Appeal", description: "The contest appeal type for the move", type: .contestAppeal),
 	.short(name: "Name ID", description: "", type: .msgID(file: nil)),
-	.short(name: "Description", description: "", type: .msgID(file: nil)),
-	.short(name: "Description 2", description: "", type: .msgID(file: nil)),
+	.short(name: "Description ID", description: "", type: .msgID(file: nil)),
+	.short(name: "Description ID 2", description: "", type: .msgID(file: nil)),
 	.byte(name: "Category", description: "Physical, Special or Status", type: .moveCategory),
 	.byte(name: "Base Power", description: "", type: .uint),
 	.byte(name: "Type", description: "", type: .typeID),

@@ -1497,7 +1497,7 @@ extension XGUtility {
 		}
 		var start = 0xE60
 		if gpt1Length > 0 && pkx.getWordAtOffset(0xe60) == 0x47505431 /*GPT1 magic*/ {
-			start += gpt1Length + 4
+			start += gpt1Length
 		}
 		let charStream = pkx.getCharStreamFromOffset(start, length: length)
 		let filename = pkx.file.fileName.removeFileExtensions() + ".dat"

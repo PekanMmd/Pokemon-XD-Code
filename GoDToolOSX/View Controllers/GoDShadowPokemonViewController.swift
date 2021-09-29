@@ -110,7 +110,9 @@ class GoDShadowPokemonViewController: GoDTableViewController {
 		}
 
 		filteredShadows = allShadows.filter({ (mon) -> Bool in
-			mon.species.name.string.simplified.contains(text.simplified)
+			return mon.species.name.string.simplified.contains(text.simplified)
+				|| mon.species.index == text.integerValue
+				|| mon.shadowID == text.integerValue
 		})
 	}
 

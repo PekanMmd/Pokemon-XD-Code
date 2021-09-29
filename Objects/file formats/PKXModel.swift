@@ -11,7 +11,7 @@ class PKXModel {
 
 	var data: XGMutableData
 	var gameFormat: XGGame {
-		return data.getWordAtOffset(0x20) == 0xFFFFFF ? .XD : .Colosseum
+		return data.getWordAtOffset(0x20) == 0xFFFFFFFF ? .XD : .Colosseum
 	}
 	var isTrainer: Bool {
 		// I've only looked at a few so not sure how accuracte this is
@@ -43,7 +43,7 @@ class PKXModel {
 		var gpt1Start = gameFormat == .XD ? 0xE60 : 0x40 + datLength
 
 		let gpt1Data = data.getSubDataFromOffset(gpt1Start, length: gpt1Length)
-		gpt1Data.file = .nameAndFolder(data.file.fileName.removeFileExtensions() + ".dat", data.file.folder)
+		gpt1Data.file = .nameAndFolder(data.file.fileName + ".gpt1", data.file.folder)
 		return gpt1Data
 	}()
 
@@ -56,7 +56,7 @@ class PKXModel {
 		var datStart = gameFormat == .XD ? 0xE60 + gpt1Length : 0x40
 
 		let datData = data.getSubDataFromOffset(datStart, length: datLength)
-		datData.file = .nameAndFolder(data.file.fileName.removeFileExtensions() + ".dat", data.file.folder)
+		datData.file = .nameAndFolder(data.file.fileName + ".dat", data.file.folder)
 		return DATModel(data: datData)
 	}()
 

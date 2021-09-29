@@ -133,7 +133,7 @@ var ScriptBuiltInFunctions : [Int : (name: String, parameterTypes: [CMSMacroType
 
 	157: (name: "sleep", parameterTypes: nil, returnType: nil, hint: "duration"),
 
-	163: (name: "useCologn", parameterTypes: nil, returnType: nil, hint: "duration"),
+	163: (name: "useCologne", parameterTypes: nil, returnType: nil, hint: "duration"),
 
 	165: (name: "characterFaceCharacter", parameterTypes: [.groupID, .resourceID, .groupID, .resourceID, .float], returnType: nil, hint: "target gid, target rid, arg gid, arg rid, unk (speed?)"),
 

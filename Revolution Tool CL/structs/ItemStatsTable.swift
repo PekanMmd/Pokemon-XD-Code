@@ -1,5 +1,5 @@
 //
-//  ItemStatsTable.swift
+//  ItemsTable.swift
 //  GoD Tool
 //
 //  Created by Stars Momodu on 20/03/2021.
@@ -7,10 +7,10 @@
 
 import Foundation
 
-let itemStatsTable = CommonStructTable(index: region == .JP ? 2 : 19, properties: GoDStruct(name: "Items", format: [
+let itemsTable = CommonStructTable(index: region == .JP ? 2 : 19, properties: GoDStruct(name: "Items", format: [
 	.short(name: "Price", description: "", type: .uint),
 	.short(name: "Name ID", description: "", type: .msgID(file: nil)),
-	.short(name: "Description", description: "", type: .msgID(file: nil)),
+	.short(name: "Description ID", description: "", type: .msgID(file: nil)),
 	.short(name: "Unknown 1", description: "", type: .uint),
 	.byte(name: "Hold Item ID", description: "Identifier used for item type. Referenced by the Assembly code.", type: .uint),
 	.byte(name: "Parameter", description: "Determines how effective the item is. Referenced by the Assembly code.", type: .int),

@@ -198,7 +198,7 @@ final class XGTrainer: NSObject, Codable {
 			var maxLevel = 0
 			
 			for poke in self.pokemon {
-				let lev = poke.isShadow ? poke.level + 5 : poke.level
+				let lev = poke.isShadow ? poke.data.shadowBoostLevel : poke.level
 				
 				maxLevel = lev > maxLevel ? lev : maxLevel
 			}

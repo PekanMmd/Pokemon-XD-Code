@@ -149,6 +149,17 @@ final class XGBattle: CustomStringConvertible {
 		return desc
 	}
 
+	var shortDescription: String {
+		var desc = title + "\n"
+		if battleField.roomID > 0 {
+			desc += "Battle Field: \(battleField.room!.name)\n"
+		}
+		desc += "\(battleStyle.name) battle - (\(battleType.name))\n\n"
+
+
+		return desc
+	}
+
 	init?(index: Int) {
 		guard let data = battlesTable.dataForEntry(index) else {
 			return nil

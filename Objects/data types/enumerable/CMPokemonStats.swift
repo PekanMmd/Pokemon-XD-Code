@@ -48,6 +48,8 @@ let kSpeciesNameIDOffset	= 0x1C
 
 let kPokemonModelIndexOffset = 0x2E // Same as pokemon's index
 let kPokemonFaceIndexOffset	 = 0x10E // Same as Pokemon's national dex index
+let kPokemonBodyOffset		 = 0x110
+let kPokemonBodyShinyOffset	 = 0x118
 
 let kModelDictionaryModelOffset = 0x4
 
@@ -61,6 +63,25 @@ final class XGPokemonStats: NSObject, Codable {
 	var cryIndex		= 0x0
 	var modelIndex		= 0x0
 	var faceIndex		= 0x0
+
+	var bodyID: UInt32 	 = 0x0
+	var bodyShinyID: UInt32 = 0x0
+
+	var bodyFileName: String? {
+		let dance =  XGFiles.fsys("poke_body").fsysData
+		if let index = dance.indexForIdentifier(identifier: bodyID.int) {
+			return dance.fileNameForFileWithIndex(index: index)
+		}
+		return nil
+	}
+
+	var bodyShinyFileName: String? {
+		let dance =  XGFiles.fsys("poke_body").fsysData
+		if let index = dance.indexForIdentifier(identifier: bodyShinyID.int) {
+			return dance.fileNameForFileWithIndex(index: index)
+		}
+		return nil
+	}
 
 	var height			= 0.0 // feet
 	var weight 			= 0.0 // pounds
@@ -127,8 +148,37 @@ final class XGPokemonStats: NSObject, Codable {
 		return evolutions.filter{ $0.isSet() }.count
 	}
 	
-	var face: Int {
-		return XGFiles.common_rel.data!.getWordAtOffset(CommonIndexes.PokefaceTextures.startOffset + (faceIndex * 8) + 4).int
+	var faceTextureIdentifier: UInt32 {
+		let id: Int? = pokeFacesTable.dataForEntry(faceIndex)?.get("Image File ID")
+		return id?.unsigned ?? 0
+	}
+
+	var pkxModelIdentifier: UInt32 {
+		let id: Int? = pkxPokemonModelsTable.dataForEntry(modelIndex)?.get("File Identifier")
+		return id?.unsigned ?? 0
+	}
+
+	var pkxFSYSID: Int {
+		return pkxPokemonModelsTable.dataForEntry(modelIndex)?.get("Fsys ID") ?? 0
+	}
+
+	var pkxData: XGMutableData? {
+		let fileid = pkxModelIdentifier
+		let fsysid = pkxFSYSID
+		guard fileid > 0,
+			  fsysid > 0,
+			  let fsysName = GSFsys.shared.entryWithID(pkxFSYSID)?.name,
+			  let fsysData = XGISO.current.dataForFile(filename: fsysName)
+		else { return nil }
+
+		let fsys = XGFsys(data: fsysData)
+		guard let index = fsys.indexForIdentifier(identifier: fileid.int) else { return nil }
+		return fsys.extractDataForFileWithIndex(index: index)
+	}
+
+	var pkxModel: PKXModel? {
+		guard let data = pkxData else { return nil }
+		return PKXModel(data: data)
 	}
 	
 	var baseStatTotal: Int {
@@ -148,6 +198,8 @@ final class XGPokemonStats: NSObject, Codable {
 		self.cryIndex		= rel.get2BytesAtOffset(startOffset + kPokemonCryIndexOffset)
 		self.modelIndex		= rel.get2BytesAtOffset(startOffset + kPokemonModelIndexOffset)
 		self.faceIndex		= rel.get2BytesAtOffset(startOffset + kPokemonFaceIndexOffset)
+		self.bodyID		    = rel.getWordAtOffset(startOffset + kPokemonBodyOffset)
+		self.bodyShinyID	= rel.getWordAtOffset(startOffset + kPokemonBodyShinyOffset)
 
 		height = Double(rel.get2BytesAtOffset(startOffset + kHeightOffset)) / 10
 		weight = Double(rel.get2BytesAtOffset(startOffset + kWeightOffset)) / 10
@@ -225,6 +277,8 @@ final class XGPokemonStats: NSObject, Codable {
 		rel.replace2BytesAtOffset(startOffset + kPokemonCryIndexOffset, withBytes: cryIndex)
 		rel.replace2BytesAtOffset(startOffset + kPokemonModelIndexOffset, withBytes: modelIndex)
 		rel.replace2BytesAtOffset(startOffset + kPokemonFaceIndexOffset, withBytes: faceIndex)
+		rel.replaceWordAtOffset(startOffset + kPokemonBodyOffset, withBytes: bodyID)
+		rel.replaceWordAtOffset(startOffset + kPokemonBodyShinyOffset, withBytes: bodyShinyID)
 
 		rel.replace2BytesAtOffset(startOffset + kHeightOffset, withBytes: Int(height * 10))
 		rel.replace2BytesAtOffset(startOffset + kWeightOffset, withBytes: Int(weight * 10))

@@ -33,7 +33,7 @@ func loadAllStrings(refresh: Bool = false) {
 		#elseif GAME_XD
 		allStringTables += [XGStringTable.dol2()]
 		if region != .JP && !isDemo {
-			allStringTables += [XGFiles.tableres2.stringTable]
+			allStringTables += [XGStringTable.dol3(), XGFiles.tableres2.stringTable, XGStringTable.tableres2_2()!]
 		}
 
 		#elseif GAME_PBR

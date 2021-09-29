@@ -8,21 +8,23 @@
 
 import Foundation
 
-let versionNumber = "V2.4.1"
+let versionNumber = "V2.4.4"
 var fileDecodingMode = false
 
-func aboutMessage() -> String {
-	let gameName: String
+var toolName: String {
 	switch game {
 	case .XD:
-		gameName = "GoD Tool"
+		return "GoD Tool"
 	case .Colosseum:
-		gameName = "Colosseum Tool"
+		return "Colosseum Tool"
 	case .PBR:
-		gameName = "Pokemon Battle Revolution Tool"
+		return "Pokemon Battle Revolution Tool"
 	}
+}
+
+func aboutMessage() -> String {
 	return """
-	\(gameName) \(versionNumber)
+	\(toolName) \(versionNumber)
 	by Stars Momodu
 	Twitter: @StarsMmd | Discord: Stars#4434
 

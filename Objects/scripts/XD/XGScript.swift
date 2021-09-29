@@ -70,17 +70,17 @@ class XGScript: NSObject {
 		return count
 	}
 	
-	convenience init(file: XGFiles) {
-		self.init(data: file.data!)
+	convenience init(file: XGFiles, loadRel: Bool = true) {
+		self.init(data: file.data!, loadRel: loadRel)
 	}
 	
-	init(data: XGMutableData) {
+	init(data: XGMutableData, loadRel: Bool = true) {
 		super.init()
 		
 		self.file = data.file
 		self.data = data
 
-		if file != .common_rel {
+		if file != .common_rel && loadRel {
 			// check for rel file in same folder
 			let relFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.rel.fileExtension, file.folder)
 			if relFile.exists {
@@ -100,7 +100,9 @@ class XGScript: NSObject {
 					}
 				}
 			}
+		}
 
+		if file != .common_rel {
 			// check for msg file in same folder
 			let msgFile = XGFiles.typeAndFolder(.msg, file.folder)
 			if msgFile.exists {

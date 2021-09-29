@@ -257,7 +257,12 @@ class GoDItemViewController: GoDTableViewController {
 		}
 
 		filteredItems = allItems.filter({ (item) -> Bool in
-			item.name.string.simplified.contains(text.simplified)
+			let data = item.data
+			return item.name.string.simplified.contains(text.simplified)
+				|| item.index == text.integerValue
+				|| item.TMIndex == text.integerValue
+				|| data.inBattleUseID == text.integerValue
+				|| data.holdItemID == text.integerValue
 		})
 	}
 }

@@ -191,7 +191,7 @@ class XGScript: NSObject {
 			
 		}
 		
-		return string.string
+		return string.string.replacingOccurrences(of: "[", with: "(").replacingOccurrences(of: "]", with: ")")
 		
 	}
 	

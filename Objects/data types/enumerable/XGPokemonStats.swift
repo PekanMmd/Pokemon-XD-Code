@@ -96,12 +96,20 @@ final class XGPokemonStats: NSObject, Codable {
 	var modelIndex		= 0x0
 	var faceIndex		= 0x0
 	
-	var bodyID: UInt32 		= 0x0
+	var bodyID: UInt32 	 = 0x0
 	var bodyShinyID: UInt32 = 0x0
 	
-	var bodyName: String? {
+	var bodyFileName: String? {
 		let dance =  XGFiles.fsys("poke_dance").fsysData
 		if let index = dance.indexForIdentifier(identifier: bodyID.int) {
+			return dance.fileNameForFileWithIndex(index: index)
+		}
+		return nil
+	}
+
+	var bodyShinyFileName: String? {
+		let dance =  XGFiles.fsys("poke_dance").fsysData
+		if let index = dance.indexForIdentifier(identifier: bodyShinyID.int) {
 			return dance.fileNameForFileWithIndex(index: index)
 		}
 		return nil
@@ -150,24 +158,38 @@ final class XGPokemonStats: NSObject, Codable {
 	var baseStatTotal: Int {
 		return hp + attack + defense + specialAttack + specialDefense + speed
 	}
-	
-	var pkxModelIdentifier: UInt32 {
-		let dol = XGFiles.dol.data!
-		return dol.getWordAtOffset(kFirstPokemonPKXIdentifierOffset + (self.modelIndex * 8) + kModelDictionaryModelOffset)
+
+	var faceTextureIdentifier: UInt32 {
+		let id: Int? = pokeFacesTable.dataForEntry(faceIndex)?.get("Image File ID")
+		return id?.unsigned ?? 0
 	}
 	
-	var pkxFSYS: XGFsys? {
-		return XGISO.current.getPKXModelWithIdentifier(id: self.pkxModelIdentifier)
+	var pkxModelIdentifier: UInt32 {
+		let id: Int? = pkxPokemonModelsTable.dataForEntry(modelIndex)?.get("File Identifier")
+		return id?.unsigned ?? 0
+	}
+	
+	var pkxFSYSID: Int {
+		return pkxPokemonModelsTable.dataForEntry(modelIndex)?.get("Fsys ID") ?? 0
 	}
 	
 	var pkxData: XGMutableData? {
-		let fsys = self.pkxFSYS
+		let fileid = pkxModelIdentifier
+		let fsysid = pkxFSYSID
+		guard fileid > 0,
+			  fsysid > 0,
+			  let fsysName = GSFsys.shared.entryWithID(pkxFSYSID)?.name,
+			  let fsysData = XGISO.current.dataForFile(filename: fsysName)
+		else { return nil }
 		
-		if fsys != nil {
-			return fsys!.decompressedDataForFileWithIndex(index: 0)
-		}
-		
-		return nil
+		let fsys = XGFsys(data: fsysData)
+		guard let index = fsys.indexForIdentifier(identifier: fileid.int) else { return nil }
+		return fsys.extractDataForFileWithIndex(index: index)
+	}
+
+	var pkxModel: PKXModel? {
+		guard let data = pkxData else { return nil }
+		return PKXModel(data: data)
 	}
 	
 	var name: XGString {
