@@ -195,6 +195,10 @@ extension Bool {
 	var string: String {
 		return self ? "Yes" : "No"
 	}
+
+	var booleanString: String {
+		return self ? "true" : "false"
+	}
 }
 
 extension Int {
@@ -423,6 +427,20 @@ extension String {
 
 	var unicodeRepresentation: [Int] {
 		self.unicodeScalars.map{ $0.value.int } + [0]
+	}
+
+	func data() -> XGMutableData {
+		var data = self.data(using: .utf8)
+		if data == nil {
+			data = self.data(using: .utf16)
+		}
+		if data == nil {
+			data = self.data(using: .ascii)
+		}
+		guard let stringData = data else {
+			return .init()
+		}
+		return XGMutableData(data: stringData)
 	}
 	
 	func println() {

@@ -31,6 +31,23 @@ class XGMutableData {
 		}
 		return ""
 	}
+
+	func hexStream(grouping: UInt = 1, bytesPerRow: UInt = 16) -> String {
+		var stream = ""
+		byteStream.forEachIndexed { (index, byte) in
+			var hex = byte.hex()
+			if hex.length == 1 {
+				hex = "0" + hex
+			}
+			stream += hex
+			if bytesPerRow > 0 && index > 0 && index % Int(bytesPerRow) == 0 {
+				stream += "\n"
+			} else if grouping > 0 && index != length - 1 && index % Int(grouping) == grouping - 1 {
+				stream += " "
+			}
+		}
+		return stream
+	}
 	
 	var rawBytes: [UInt8] {
 		return data.rawBytes
@@ -77,7 +94,7 @@ class XGMutableData {
 
 	convenience init(string: String, charLength: ByteLengths = .char) {
 		self.init(length: string.length)
-		writeString(string, at: 0, charLength: charLength, maxCharacters: nil)
+		writeString(string, at: 0, charLength: charLength, maxCharacters: nil, includeNullTerminator: false)
 	}
 
 	init(data: Data) {
@@ -86,6 +103,11 @@ class XGMutableData {
 
 	@discardableResult
 	func save() -> Bool {
+		return writeToFile(file)
+	}
+
+	@discardableResult
+	func writeToFile(_ file: XGFiles) -> Bool {
 		if data.write(to: file) {
 			if settings.verbose {
 				printg("data successfully written to file:", file.path)
@@ -252,13 +274,19 @@ class XGMutableData {
 	//MARK: - Replace Bytes
 	
 	func replaceByteAtOffset(_ start : Int, withByte byte: Int) {
+		let byte = UInt8(byte & 0xFF)
+		replaceCharAtOffset(start, withByte: byte)
+		
+	}
+
+	func replaceCharAtOffset(_ start : Int, withByte byte: UInt8) {
 		if start < 0 || start + 1 > length {
 			printg("Attempting to write byte from offset: \(start.hexString()), file: \(file.path), length: \(length.hexString())")
 			return
 		}
-		let byte = UInt8(byte & 0xFF)
+
 		data[start] = byte
-		
+
 	}
 	
 	func replace2BytesAtOffset(_ start : Int, withBytes bytes: Int) {
@@ -470,13 +498,18 @@ class XGMutableData {
 		return string.string
 	}
 
-	func writeString(_ string: String, at offset: Int, charLength: ByteLengths = .short, maxCharacters: Int? = nil) {
+	func writeString(_ string: String, at offset: Int, charLength: ByteLengths = .short, maxCharacters: Int? = nil, includeNullTerminator: Bool = true) {
 		if offset < 0 || offset + (2 * charLength.rawValue) > length {
 			printg("Attempting to write string at offset: \(offset.hexString()), file: \(file.path), length: \(length.hexString())")
 			return
 		}
 
-		string.unicodeRepresentation.forEachIndexed { (index, unicode) in
+		var unicodeRepresentation = string.unicodeRepresentation
+		if !includeNullTerminator {
+			unicodeRepresentation.removeLast()
+		}
+
+		unicodeRepresentation.forEachIndexed { (index, unicode) in
 			guard maxCharacters == nil || index < maxCharacters! else { return }
 			let currentOffset = offset + (index * charLength.rawValue)
 			switch charLength {

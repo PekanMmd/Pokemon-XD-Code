@@ -67,8 +67,10 @@ enum XGStatusEffects: Int, Codable, CaseIterable {
 	case fly = 31
 	case dig = 32
 	case dive = 33
+	case truant = 34
 	case charge = 36
 	case ingrain = 37
+	case fainted = 40
 	case disabled = 41
 	case encored = 42
 	case protected = 43
@@ -194,6 +196,8 @@ enum XGStatusEffects: Int, Codable, CaseIterable {
 			return "locked on"
 		case .perish_song:
 			return "perish song"
+		case .truant:
+			return "truant"
 		case .fly:
 			return "fly"
 		case .dig:
@@ -204,6 +208,8 @@ enum XGStatusEffects: Int, Codable, CaseIterable {
 			return "charge"
 		case .ingrain:
 			return "ingrain"
+		case .fainted:
+			return "fainted"
 		case .disabled:
 			return "disabled"
 		case .encored:

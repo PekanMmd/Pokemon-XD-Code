@@ -146,6 +146,20 @@ let kDolFreeSpaceEnd: Int? = {
 	}
 }()
 
+let kRAMFreeSpaceStart: Int? = {
+	guard let start = kDolFreeSpaceStart else {
+		return nil
+	}
+	return start + kDolToRAMOffsetDifference
+}()
+
+let kRAMFreeSpaceEnd: Int? = {
+	guard let end = kDolFreeSpaceEnd else {
+		return nil
+	}
+	return end + kDolToRAMOffsetDifference
+}()
+
 let moveEffectTableStartRAM = 0x417edf // XD US
 let moveEffectTableStartDOL = moveEffectTableStartRAM - kDolTableToRAMOffsetDifference // XD US
 

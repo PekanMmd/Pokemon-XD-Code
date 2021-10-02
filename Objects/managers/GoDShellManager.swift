@@ -41,27 +41,27 @@ class GoDShellManager {
             return nil
         }
         
-        let task = Process()
-        task.executableURL = URL(fileURLWithPath: command.file.path)
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: command.file.path)
         if let args = args {
 			let escaped = args.replacingOccurrences(of: "\\ ", with: "<!SPACE>")
-			task.arguments = escaped.split(separator: " ").compactMap(String.init).map({ (arg) -> String in
+			process.arguments = escaped.split(separator: " ").compactMap(String.init).map({ (arg) -> String in
 				return arg.replacingOccurrences(of: "<!SPACE>", with: " ")
 			})
         }
 
 		if let inputFile = inputRedirectFile, inputFile.exists {
 			let fileHandle = FileHandle(forReadingAtPath: inputFile.path)
-			task.standardInput = fileHandle
+			process.standardInput = fileHandle
 		}
             
         let outPipe = Pipe()
 		let errorPipe = Pipe()
-        task.standardOutput = outPipe
-		task.standardError = errorPipe
+        process.standardOutput = outPipe
+		process.standardError = errorPipe
 		do {
-			try task.run()
-			task.waitUntilExit()
+			try process.run()
+			process.waitUntilExit()
 		} catch let error {
 			printg("Shell error:", error)
 			return nil
@@ -78,4 +78,50 @@ class GoDShellManager {
         if printOutput { printg(output) }
         return output
     }
+
+	@discardableResult
+	static func runAsync(_ command: Commands, args: String? = nil, inputRedirectFile: XGFiles? = nil, outputRedirectFile: XGFiles? = nil, errorRedirectFile: XGFiles? = nil) -> GoDProcess? {
+		guard command.file.exists else {
+			printg("command, \(command.file.fileName), doesn't exist\n\(command.file.path) not found")
+			return nil
+		}
+
+		let process = Process()
+		process.executableURL = URL(fileURLWithPath: command.file.path)
+		if let args = args {
+			let escaped = args.replacingOccurrences(of: "\\ ", with: "<!SPACE>")
+			process.arguments = escaped.split(separator: " ").compactMap(String.init).map({ (arg) -> String in
+				return arg.replacingOccurrences(of: "<!SPACE>", with: " ")
+			})
+		}
+
+		if let inputFile = inputRedirectFile, inputFile.exists {
+			let fileHandle = FileHandle(forReadingAtPath: inputFile.path)
+			process.standardInput = fileHandle
+		}
+
+		if let outputFile = outputRedirectFile {
+			let fileHandle = FileHandle(forWritingAtPath: outputFile.path)
+			process.standardOutput = fileHandle
+		} else {
+			process.standardOutput = nil
+		}
+
+		if let errorFile = errorRedirectFile {
+			let fileHandle = FileHandle(forWritingAtPath: errorFile.path)
+			process.standardError = fileHandle
+		} else {
+			process.standardError = nil
+		}
+
+		do {
+			try process.run()
+			return GoDProcess(process: process)
+		} catch let error {
+			printg("Shell error:", error)
+		}
+		return nil
+	}
+
+	
 }

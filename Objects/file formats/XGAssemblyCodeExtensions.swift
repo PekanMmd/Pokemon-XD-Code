@@ -43,11 +43,12 @@ extension ASM {
 			case .bge_l:
 				let code = inst.instructionForBranchToLabel(labels: labels).codeAtOffset(currentOffset)
 				instructions.append(code)
+				currentOffset += 4
 			default:
 				let code = inst.codeAtOffset(currentOffset)
 				instructions.append(code)
+				currentOffset += 4
 			}
-			currentOffset += 4
 		}
 		return instructions
 	}

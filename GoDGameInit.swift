@@ -170,6 +170,25 @@ enum XGRegions: UInt32 {
 		}
 	}
 
+	var identifier: String {
+		let regionPrefix: String
+		switch game {
+		case .Colosseum: regionPrefix = "GC6"
+		case .XD: regionPrefix = "GXX"
+		case .PBR: regionPrefix = "RPB"
+		}
+
+		let regionSuffix: String
+		switch self {
+		case .US: regionSuffix = "E"
+		case .EU: regionSuffix = "P"
+		case .JP: regionSuffix = "J"
+		default: regionSuffix = ""
+		}
+
+		return regionPrefix + regionSuffix
+	}
+
 	static func fromNGCID(_ index: Int) -> XGRegions? {
 		switch index {
 		case 0: return .JP

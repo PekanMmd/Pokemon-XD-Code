@@ -651,6 +651,12 @@ class PDADumper {
 				}
 
 				data[entryName] = fileObject as AnyObject
+				if game != .PBR,
+				   file.fileType == .fsys,
+				   let fsysId = fileObject["fsysID"] as? Int {
+					let groupIDName = "groupid\(fsysId)"
+					data[groupIDName] = fileObject as AnyObject
+				}
 			}
 		}
 		writeDump(data, to: fileWithName("files", forXG: forXG))
