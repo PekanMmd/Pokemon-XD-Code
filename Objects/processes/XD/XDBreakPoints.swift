@@ -15,8 +15,8 @@ enum XDBreakPointTypes: Int, CaseIterable {
 	case onWillWriteSave
 	case onWillChangeMap
 	case onDidChangeMap
-	case onPlayerDidSelectMove
-	case onAIDidSelectMove
+	case onDidConfirmMoveSelection
+	case onDidConfirmTurnSelection
 	case onWillUseMove
 	case onMoveEnd
 	case onWillCallPokemon
@@ -106,11 +106,16 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			case .US: return 0x80120650
 			default: return nil
 			}
-		case .onPlayerDidSelectMove:
-			return nil
-		case .onAIDidSelectMove:
-			#warning("TODO: Research this")
-			return nil
+		case .onDidConfirmMoveSelection:
+			switch region {
+			case .US: return 0x802043d0 // r3 pokemon pointer, r7 move routine, r8 move id, r9 target mask, r10 move index
+			default: return nil
+			}
+		case .onDidConfirmTurnSelection:
+			switch region {
+			case .US: return 0x8020446c // r3 pokemon pointer, r5 option type, r8 parameter
+			default: return nil
+			}
 		case .onWillUseMove:
 			switch region {
 			case .US: return 0x8020ed04 // r4 is move id
@@ -276,72 +281,236 @@ enum XDBreakPointTypes: Int, CaseIterable {
 	}
 }
 
-class RNGRollState: Codable {
-	var roll: UInt16
-	init(process: XDProcess, registers: [Int: Int]) {
-		self.roll = UInt16(registers[3] ?? 0)
-	}
-
-	func getRegisters() -> [Int: Int] {
-		return [3: Int(roll)]
-	}
-}
-
-class GetFlagState: Codable {
-	var flagID: Int
+class BreakPointContext: Codable {
 	private var forcedReturnValue: Int?
 
-	init(process: XDProcess, registers: [Int: Int]) {
-		flagID = registers[3] ?? 0
-	}
-
-	func getRegisters() -> [Int: Int] {
-		return [3: flagID]
-	}
+	init() {}
+	init(process: XDProcess, registers: [Int: Int]) {}
+	func getRegisters() -> [Int: Int] { return [:] }
 
 	func setReturnValue(_ to: Int) {
 		forcedReturnValue = to
 	}
+
+	func getForcedReturnValue() -> Int? {
+		return forcedReturnValue
+	}
 }
 
-class SetFlagState: Codable {
+class RNGRollContext: BreakPointContext {
+	var roll: UInt16 = 0
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		self.roll = UInt16(registers[3] ?? 0)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [3: Int(roll)]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class GetFlagContext: BreakPointContext {
+	var flagID: Int
+	private var forcedReturnValue: Int?
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		flagID = registers[3] ?? 0
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [3: flagID]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class SetFlagContext: BreakPointContext {
 	var flagID: Int
 	var value: Int
 
-	init(process: XDProcess, registers: [Int: Int]) {
+	override init(process: XDProcess, registers: [Int: Int]) {
 		flagID = registers[3] ?? 0
 		value = registers[4] ?? 0
+		super.init()
 	}
 
-	func getRegisters() -> [Int: Int] {
+	override func getRegisters() -> [Int: Int] {
 		return [3: flagID, 4: value]
 	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
-class SaveLoadedState: Codable {
+class SaveLoadedContext: BreakPointContext {
 	enum Status: Int, Codable {
 		case cancelled = -1, success = 3, noSaveData = 5, unknown = -2
 	}
+
 	var status: Status
-	init(process: XDProcess, registers: [Int: Int]) {
+
+	override init(process: XDProcess, registers: [Int: Int]) {
 		status = Status(rawValue: registers[3] ?? 0) ?? .unknown
+		super.init()
 	}
 
-	func getRegisters() -> [Int: Int] {
+	override func getRegisters() -> [Int: Int] {
 		return [3: status.rawValue]
 	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
-class MapChangeState: Codable {
-	var nextRoomID: Int
+class MapWillChangeContext: BreakPointContext {
+	var nextRoom: XGRoom
 	var startingPointIndex: Int
 
-	init(process: XDProcess, registers: [Int: Int]) {
-		nextRoomID = registers[3] ?? 0
+	override init(process: XDProcess, registers: [Int: Int]) {
+		nextRoom = XGRoom.roomWithID(registers[3] ?? 0) ?? XGRoom(index: 0)
 		startingPointIndex = registers[5] ?? 0
+		super.init()
 	}
 
-	func getRegisters() -> [Int: Int] {
-		return [3: nextRoomID, 5: startingPointIndex]
+	override func getRegisters() -> [Int: Int] {
+		return [3: nextRoom.roomID, 5: startingPointIndex]
 	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class MapDidChangeContext: BreakPointContext {
+	let newRoom: XGRoom
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		let currentRoomID = process.read2Bytes(atAddress: kCurrentRoomIDRAMOffset) ?? 0
+		newRoom = XGRoom.roomWithID(currentRoomID) ?? XGRoom(index: 0)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [:]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class BattleMoveSelectionContext: BreakPointContext {
+	enum Targets: Int, Codable {
+		case none = 0x0
+		case topFoe = 0x1
+		case topAlly = 0xC
+		case bottomAlly = 0xD
+		case bottomFoe = 0x10
+	}
+
+	let moveRoutinePointer: Int
+	var pokemonPointer: Int
+	var move: XGMoves
+	var targets: Targets
+	var selectedMoveIndex: Int
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		pokemonPointer = registers[3] ?? 0
+		moveRoutinePointer = registers[7] ?? 0
+		move = .index( registers[8] ?? 0)
+		targets = Targets(rawValue: registers[9] ?? 0) ?? .none
+		selectedMoveIndex = registers[10] ?? 0
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [
+			3: pokemonPointer,
+			8: move.index,
+			9: targets.rawValue,
+			10: selectedMoveIndex
+		]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class BattleTurnSelectionContext: BreakPointContext {
+	enum Option: Codable {
+		case fight(move: XGMoves)
+		case item(item: XGItems)
+		case switchPokemon(index: Int)
+		case call
+		case unknown(id: Int, parameter: Int)
+
+		var optionID: Int {
+			switch self {
+			case .fight: return 19
+			case .item: return 18
+			case .switchPokemon: return 9
+			case .call: return 10
+			case .unknown(let id, _): return id
+			}
+		}
+
+		var parameter: Int {
+			switch self {
+			case .fight(let move): return move.index
+			case .item(let item): return item.index
+			case .switchPokemon(let index): return index
+			case .call: return 0
+			case .unknown(_, let param): return param
+			}
+		}
+
+		enum CodingKeys: String, CodingKey {
+			case type, parameter
+		}
+
+		init(from decoder: Decoder) throws {
+			let container = try decoder.container(keyedBy: CodingKeys.self)
+			let type = try container.decode(Int.self, forKey: .type)
+			let parameter = try container.decode(Int.self, forKey: .parameter)
+			switch type {
+			case 19: self = .fight(move: .index(parameter))
+			case 18: self = .item(item: .index(parameter))
+			case 9: self = .switchPokemon(index: parameter)
+			case 10: self = .call
+			default: self = .unknown(id: type, parameter: parameter)
+			}
+		}
+
+		func encode(to encoder: Encoder) throws {
+			var container = encoder.container(keyedBy: CodingKeys.self)
+			try container.encode(optionID, forKey: .type)
+			try container.encode(parameter, forKey: .parameter)
+		}
+	}
+
+	let moveRoutinePointer: Int
+	var pokemonPointer: Int
+	var option: Option
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		pokemonPointer = registers[3] ?? 0
+		moveRoutinePointer = registers[7] ?? 0
+		let parameter = registers[8] ?? 0
+		let type = registers[5] ?? 0
+		switch type {
+		case  9: option = .switchPokemon(index: parameter)
+		case 10: option = .call
+		case 18: option = .item(item: .index(parameter))
+		case 19: option = .fight(move: .index(parameter))
+		default: option = .unknown(id: type, parameter: parameter)
+		}
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [
+			3: pokemonPointer,
+			5: option.optionID,
+			8: option.parameter
+		]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
 }

@@ -13,14 +13,14 @@ enum XDSConstantTypes: Equatable {
 	// same as classes in script class info
 	case void
 	case integer		
-	case float // internal name: Single
-	case string			
+	case float
+	case string		// 1 byte per character
 	case vector
 	case matrix
 	case object
 	case array
 	#if GAME_XD
-	case msg // internal name: funcptr
+	case text      // 2 bytes per character
 	#endif
 	// possible type names from strings in start.dol
 	/*
@@ -66,7 +66,7 @@ enum XDSConstantTypes: Equatable {
 		case .object			: return "Object"
 		case .array				: return "Array"
 		#if GAME_XD
-		case .msg				: return "MsgID"
+		case .text				: return "Text"
 		case .character			: return "Character"
 		case .index			: return "Pokemon"
 		#endif
@@ -86,7 +86,7 @@ enum XDSConstantTypes: Equatable {
 		case .object			: return 6
 		case .array				: return 7
 		#if GAME_XD
-		case .msg				: return 8
+		case .text				: return 8
 		case .character			: return 35
 		case .index			: return 37
 		#endif
@@ -106,7 +106,7 @@ enum XDSConstantTypes: Equatable {
 		case  6: return .object
 		case  7: return .array
 		#if GAME_XD
-		case  8: return .msg
+		case  8: return .text
 		case 35: return .character
 		case 37: return .index
 		#endif
@@ -192,7 +192,7 @@ class XDSConstant : NSObject {
 		case .object:
 			return "Object(\(self.asInt))"
 		#if GAME_XD
-		case .msg:
+		case .text:
 			if let table = self.stringTable {
 				if let string = table.stringWithID(self.asInt) {
 					return XDSExpr.msgMacro(string).text(isCommonScript: false)[0]

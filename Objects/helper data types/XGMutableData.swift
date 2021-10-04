@@ -392,6 +392,10 @@ class XGMutableData {
 		data.append(contentsOf: bytes)
 	}
 
+	func appendBytes(_ bytes: [Int]) {
+		appendBytes(bytes.map { UInt8($0) })
+	}
+
 	func appendData(_ data: XGMutableData) {
 		self.data.append(data.data)
 	}

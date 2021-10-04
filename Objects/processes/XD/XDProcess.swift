@@ -93,16 +93,36 @@ class XDProcess {
 					  onStart: ((XDProcess) -> Bool)?,
 					  onFinish: (() -> Void)?,
 
-					  onRNGRoll: ((RNGRollState, XDProcess, XDGameState) -> Bool)? = nil
+					  onRNGRoll: ((RNGRollContext, XDProcess, XDGameState) -> Bool)? = nil,
+					  onWillGetFlag: ((GetFlagContext, XDProcess, XDGameState) -> Bool)? = nil,
+					  onWillSetFlag: ((SetFlagContext, XDProcess, XDGameState) -> Bool)? = nil,
+					  onDidLoadSave: ((SaveLoadedContext, XDProcess, XDGameState) -> Bool)? = nil,
+					  onDidChangeMap: ((MapDidChangeContext, XDProcess, XDGameState) -> Bool)? = nil,
+					  onDidConfirmMoveSelection: ((BattleMoveSelectionContext, XDProcess, XDGameState) -> Bool)? = nil,
+					  onDidConfirmTurnSelection: ((BattleTurnSelectionContext, XDProcess, XDGameState) -> Bool)? = nil
 					  ) {
 
 		guard region == .US else {
 			printg("Couldn't launch XD process for region:", region.name)
+			onFinish?()
 			return
 		}
 
 		var enabledBreakPoints = [XDBreakPointTypes]()
-		if let _ = onRNGRoll { enabledBreakPoints.append(.onDidRNGRoll) }
+		let breakPoints: [(Any?, XDBreakPointTypes)] = [
+			(onRNGRoll, .onDidRNGRoll),
+			(onWillGetFlag, .onWillGetFlag),
+			(onWillSetFlag, .onWillSetFlag),
+			(onDidLoadSave, .onDidLoadSave),
+			(onDidChangeMap, .onDidChangeMap),
+			(onDidConfirmMoveSelection, .onDidConfirmMoveSelection),
+			(onDidConfirmTurnSelection, .onDidConfirmTurnSelection),
+		]
+		for (callback, breakPoint) in breakPoints {
+			if let _ = callback {
+				enabledBreakPoints.append(breakPoint)
+			}
+		}
 
 		var xd: XDProcess!
 		DolphinProcess.launch(delaySeconds: 0,
@@ -132,22 +152,57 @@ class XDProcess {
 				xd.markBreakPointPending()
 
 				var registers = xd.getBreakPointRegisters()
-				var forceReturnValue: Bool = false
+				var context = BreakPointContext()
 
 				switch breakPointType {
 				case .onDidRNGRoll:
 					if let callback = onRNGRoll {
-						let rngState = RNGRollState(process: xd, registers: registers)
-						shouldContinue = callback(rngState, xd, state)
-						registers = rngState.getRegisters()
+						let c = RNGRollContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onWillGetFlag:
+					if let callback = onWillGetFlag {
+						let c = GetFlagContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onWillSetFlag:
+					if let callback = onWillSetFlag {
+						let c = SetFlagContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onDidLoadSave:
+					if let callback = onDidLoadSave {
+						let c = SaveLoadedContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onDidChangeMap:
+					if let callback = onDidChangeMap {
+						let c = MapDidChangeContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onDidConfirmMoveSelection:
+					if let callback = onDidConfirmMoveSelection {
+						let c = BattleMoveSelectionContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onDidConfirmTurnSelection:
+					if let callback = onDidConfirmTurnSelection {
+						let c = BattleTurnSelectionContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
 					}
 				default:
-					break
+					xd.disableBreakPoint(breakPointType)
+					return shouldContinue
 				}
 
-				xd.setBreakPointRegisters(registers)
+				let forcedReturnValue = context.getForcedReturnValue()
+				if let value = forcedReturnValue {
+					registers[3] = value
+				}
+
+				xd.setBreakPointRegisters(context.getRegisters())
 				state.write(process: xd)
-				if forceReturnValue {
+				if forcedReturnValue != nil, breakPointType.forcedReturnValueAddress != nil {
 					xd.forceReturnValueForBreakPoint()
 				} else {
 					xd.clearBreakPoint()

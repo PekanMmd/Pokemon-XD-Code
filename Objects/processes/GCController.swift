@@ -269,15 +269,27 @@ class ControllerInputs {
 	// buttons currently pressed in game by player
 
 	var nextInput: [GCPad] {
-		var pads = [GCPad(player: .p1), GCPad(player: .p2), GCPad(player: .p3), GCPad(player: .p4)]
+		var pads = [
+			GCPad(player: .p1), GCPad(player: .p2), GCPad(player: .p3), GCPad(player: .p4),
+			GCPad(player: .p1, tag: "write:origin"), GCPad(player: .p2, tag: "write:origin"), GCPad(player: .p3, tag: "write:origin"), GCPad(player: .p4, tag: "write:origin")
+		]
 
+		var hasWriteOrigin = false
 		for sequence in inputSequences {
 			if let next = sequence.first(where: { (pad) -> Bool in
 				pad.duration > 0
 			}) {
-				let index = next.player.rawValue - 1
+				var index = next.player.rawValue - 1
+				if next.tag?.contains("write:origin") ?? false {
+					index += 4
+					hasWriteOrigin = true
+				}
 				pads[index] = pads[index].maskedWith(pad: next)
 			}
+		}
+
+		if !hasWriteOrigin {
+			pads = Array(pads[0 ... 3])
 		}
 
 		return pads

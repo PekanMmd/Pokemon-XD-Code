@@ -531,6 +531,9 @@
 		1C6AB47D27066A1B0069D209 /* GCController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6AB47627066A1B0069D209 /* GCController.swift */; };
 		1C6AB47E27066A1B0069D209 /* GCController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6AB47627066A1B0069D209 /* GCController.swift */; };
 		1C6AB47F27066A1B0069D209 /* GCController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6AB47627066A1B0069D209 /* GCController.swift */; };
+		1C6AB4E7270B89E50069D209 /* EcardCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C25E5DB26D3B84200F050DC /* EcardCoder.swift */; };
+		1C6AB4E8270B89E60069D209 /* EcardCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C25E5DB26D3B84200F050DC /* EcardCoder.swift */; };
+		1C6AB4F2270B89E60069D209 /* EcardCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C25E5DB26D3B84200F050DC /* EcardCoder.swift */; };
 		1C71684F25DF31A3000F1456 /* GoDStructTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71684E25DF31A3000F1456 /* GoDStructTable.swift */; };
 		1C71685025DF31A3000F1456 /* GoDStructTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71684E25DF31A3000F1456 /* GoDStructTable.swift */; };
 		1C71685125DF31A3000F1456 /* GoDStructTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71684E25DF31A3000F1456 /* GoDStructTable.swift */; };
@@ -13777,6 +13780,7 @@
 				1C16CCA8253BC42700907D78 /* XGContestCategories.swift in Sources */,
 				1C6AB47B27066A1B0069D209 /* GCController.swift in Sources */,
 				1C71A4BF26690C5700034154 /* CMScriptBuiltInFunctions.swift in Sources */,
+				1C6AB4E7270B89E50069D209 /* EcardCoder.swift in Sources */,
 				1CA3E480261DD7B100E5089A /* StatusEffectsTable.swift in Sources */,
 				1C16CFA3253BC58200907D78 /* CMScript.swift in Sources */,
 				1C16CFD7253BC59A00907D78 /* XGTexturePalette.swift in Sources */,
@@ -14092,6 +14096,7 @@
 				B280AE9F20C9CA8D0057A782 /* XGDemoStarterPokemon.swift in Sources */,
 				1CB33AA822B7906600F81C29 /* EnumerableDocumentable.swift in Sources */,
 				1CFE744C2613C2D50005BDE8 /* CMShadowIDPopUpButton.swift in Sources */,
+				1C6AB4F2270B89E60069D209 /* EcardCoder.swift in Sources */,
 				B208E74D20C4D78700D298BF /* XGMoveCategory.swift in Sources */,
 				1C56FA5C26114A8F00CF1DEE /* GoDDataTablePopUpButton.swift in Sources */,
 				1C91546B2701C52C004BA0E6 /* GoDProcess.swift in Sources */,
@@ -14583,6 +14588,7 @@
 				1C71A4EA2669126800034154 /* CMSMacroTypes.swift in Sources */,
 				1C56F8F0260FD41400CF1DEE /* StructTablesList.swift in Sources */,
 				1C13D3AE2646264900ED313D /* CMTrainersTable.swift in Sources */,
+				1C6AB4E8270B89E60069D209 /* EcardCoder.swift in Sources */,
 				1CA3E5B32623DB5A00E5089A /* XGDayCareStatus.swift in Sources */,
 				1C71A4D4266911BC00034154 /* CMSExpr.swift in Sources */,
 				1C56F6F8260BF40D00CF1DEE /* InteractionPointTable.swift in Sources */,

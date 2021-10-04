@@ -316,8 +316,16 @@ func randomiser() {
 			}
 			return
 		case 1: randomisePokemon.toggle()
-		case 2: randomiseShadowsOnly.toggle()
-		case 3: randomiseByBST.toggle()
+		case 2:
+			randomiseShadowsOnly.toggle()
+			if randomiseShadowsOnly && !randomisePokemon {
+				randomisePokemon.toggle()
+			}
+		case 3:
+			randomiseByBST.toggle()
+			if randomiseByBST && !randomisePokemon {
+				randomisePokemon.toggle()
+			}
 		case 4: randomiseMoves.toggle()
 		case 5: randomiseTypes.toggle()
 		case 6: randomiseAbilities.toggle()

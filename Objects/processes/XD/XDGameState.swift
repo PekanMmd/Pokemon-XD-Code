@@ -39,20 +39,12 @@ class XDGameState: Codable {
 	init?(process: XDProcess) {
 		guard region == .US else { return nil }
 
-		let battleID: Int
-		switch region {
-		case .US: battleID = process.read2Bytes(atAddress: kCurrentBattleIDRAMOffset) ?? 0
-		default: battleID = 0
-		}
+		let battleID = process.read2Bytes(atAddress: kCurrentBattleIDRAMOffset) ?? 0
 		if battleID > 0, battleID < CommonIndexes.NumberOfBattles.value {
 			battle = XGBattle(index: battleID)
 		} else { battle = nil }
 
-		let currentRoomID: Int
-		switch region {
-		case .US: currentRoomID = process.read2Bytes(atAddress: kCurrentRoomIDRAMOffset) ?? 0
-		default: currentRoomID = 0
-		}
+		let currentRoomID = process.read2Bytes(atAddress: kCurrentRoomIDRAMOffset) ?? 0
 		currentRoom = currentRoomID > 0 ? XGRoom.roomWithID(currentRoomID) : nil
 	}
 

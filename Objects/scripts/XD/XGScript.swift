@@ -145,7 +145,7 @@ class XGScript: NSObject {
 		for i in 0 ..< numberGVAREntries {
 			let start = GVARStart + kScriptSectionHeaderSize + (i * kScriptGVARSize)
 			let constant = XDSConstant(type: data.get2BytesAtOffset(start + 2), rawValue: data.getWordAtOffset(start + 4))
-			if case .msg = constant.type {
+			if case .text = constant.type {
 				constant.stringTable = self.stringTable
 			}
 			self.gvar.append(constant)
@@ -184,7 +184,7 @@ class XGScript: NSObject {
 			for j in 0 ..< entries {
 				let varStart = start + startPointer + (j * kScriptGVARSize)
 				let constant = XDSConstant(type: data.get2BytesAtOffset(varStart), rawValue: data.getWordAtOffset(varStart + 4))
-				if case .msg = constant.type {
+				if case .text = constant.type {
 					constant.stringTable = self.stringTable
 				}
 				arr.append(constant)
