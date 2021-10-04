@@ -189,6 +189,168 @@ class EcardCoder {
 
 	@discardableResult
 	private static func write(output: XGMutableData, operation: Int, chunkGroupIndex: Int? = nil, bitsAsMask: Int? = nil, loopCounter: Int? = nil, bitsAsBuffer: [Int]? = nil) -> Bool {
+		guard operation <= 0x4a else { return false }
+
+		let charValue  = (bitsAsMask ?? 0) & 0xFF
+		let shortValue = (bitsAsMask ?? 0) & 0xFFFF
+		let wordValue  = (bitsAsMask ?? 0) & 0xFFFFFFFF
+		let stringValue = bitsAsBuffer ?? []
+		let multiplier = chunkGroupIndex ?? 0
+		let loop = loopCounter ?? 0
+
+		switch operation {
+		case 0x1:
+			guard charValue != 0, charValue <= 5 else { return false }
+			output.replaceByteAtOffset(1, withByte: charValue)
+		case 0x2:
+			guard charValue != 0, charValue <= 3 else { return false }
+			output.replaceByteAtOffset(5, withByte: charValue)
+		case 0x3:
+			guard charValue != 0, charValue <= 9 else { return false }
+			output.replaceByteAtOffset(6, withByte: charValue)
+		case 0x4:
+			guard charValue != 0 else { return false }
+			output.replaceByteAtOffset(7, withByte: charValue)
+		case 0x5:
+			output.replaceByteAtOffset(2, withByte: charValue)
+		case 0x6:
+			output.replaceBytesFromOffset(10, withByteStream: stringValue)
+		case 0x7:
+			guard charValue >= 0, charValue <= 5 else { return false }
+			output.replaceByteAtOffset(9, withByte: charValue - 1)
+		case 0x8:
+			output.replaceByteAtOffset(0x25, withByte: charValue)
+		case 0x9:
+			guard charValue >= 0, charValue <= 4 else { return false }
+			output.replaceByteAtOffset(0x26, withByte: charValue - 1)
+		case 0xa:
+			output.replaceBytesFromOffset(10, withByteStream: stringValue)
+		case 0xb:
+			output.replaceBytesFromOffset(0xe, withByteStream: stringValue)
+		case 0xc:
+			output.replaceBytesFromOffset(0x12, withByteStream: stringValue)
+		case 0xd:
+			guard charValue >= 1, charValue <= 3 else { return false }
+			output.replaceByteAtOffset(0x16, withByte: charValue)
+		case 0xe:
+			guard charValue >= 1, charValue <= 6 else { return false }
+			output.replaceByteAtOffset(0x59, withByte: charValue)
+		case 0xf:
+			guard charValue >= 1, charValue <= 5 else { return false }
+			output.replaceByteAtOffset(0x5a, withByte: charValue)
+		case 0x10:
+			guard charValue >= 1, charValue <= 9 else { return false }
+			output.replaceByteAtOffset(0x5b, withByte: charValue - 1)
+		case 0x11:
+			guard charValue >= 1, charValue <= 9 else { return false }
+			output.replaceByteAtOffset(0x17, withByte: charValue - 1)
+		case 0x12:
+			guard charValue >= 1, charValue <= 9 else { return false }
+			output.replaceByteAtOffset(0x5d, withByte: charValue - 1)
+		case 0x13:
+			guard charValue >= 1, charValue <= 9 else { return false }
+			output.replaceByteAtOffset(0x5e, withByte: charValue - 1)
+		case 0x14:
+			guard charValue >= 1, charValue <= 9 else { return false }
+			output.replaceByteAtOffset(0x5f, withByte: charValue - 1)
+		case 0x15:
+			guard charValue >= 1, charValue <= 9 else { return false }
+			output.replaceByteAtOffset(0x18, withByte: charValue - 1)
+		case 0x16:
+			guard charValue >= 1, charValue <= 9 else { return false }
+			output.replaceByteAtOffset(0x61, withByte: charValue - 1)
+		case 0x17:
+			guard charValue >= 1, charValue <= 9 else { return false }
+			output.replaceByteAtOffset(0x62, withByte: charValue - 1)
+		case 0x18:
+			guard charValue >= 1, charValue <= 9 else { return false }
+			output.replaceByteAtOffset(99, withByte: charValue - 1)
+		case 0x19:
+			guard shortValue >= 0, shortValue < (0x2f * 7) else { return false }
+			output.replace2BytesAtOffset(0x19, withBytes: shortValue)
+		case 0x1a:
+			guard shortValue >= 0, shortValue < (0x2f * 7) else { return false }
+			output.replace2BytesAtOffset(0x66, withBytes: shortValue)
+		case 0x1b:
+			guard shortValue >= 0, shortValue < (0x2f * 7) else { return false }
+			output.replace2BytesAtOffset(0x1a, withBytes: shortValue)
+		case 0x1c:
+			switch charValue {
+			case 0: fallthrough
+			case 0xd: fallthrough
+			case 0x12: fallthrough
+			case 0x19: fallthrough
+			case 0x1a: fallthrough
+			case 0x1b: fallthrough
+			case 0x1c: fallthrough
+			case 0x1d: fallthrough
+			case 0x1e: fallthrough
+			case 0x20: fallthrough
+			case 0x24: output.replaceByteAtOffset(0x6a, withByte: charValue)
+			default: return false
+			}
+		case 0x1d:
+			switch charValue {
+			case 0: fallthrough
+			case 0xd: fallthrough
+			case 0x12: fallthrough
+			case 0x19: fallthrough
+			case 0x1a: fallthrough
+			case 0x1b: fallthrough
+			case 0x1c: fallthrough
+			case 0x1d: fallthrough
+			case 0x1e: fallthrough
+			case 0x20: fallthrough
+			case 0x24: output.replaceByteAtOffset(0x6b, withByte: charValue)
+			default: return false
+			}
+		case 0x1e:
+			switch charValue {
+			case 0: fallthrough
+			case 0xd: fallthrough
+			case 0x12: fallthrough
+			case 0x19: fallthrough
+			case 0x1a: fallthrough
+			case 0x1b: fallthrough
+			case 0x1c: fallthrough
+			case 0x1d: fallthrough
+			case 0x1e: fallthrough
+			case 0x20: fallthrough
+			case 0x24: output.replaceByteAtOffset(0x1b, withByte: charValue)
+			default: return false
+			}
+		case 0x1f:
+			output.replaceBytesFromOffset(0x6e, withByteStream: stringValue)
+		case 0x20:
+			output.replaceBytesFromOffset(0x182, withByteStream: stringValue)
+		case 0x21:
+			output.replaceBytesFromOffset(0x296, withByteStream: stringValue)
+		case 0x22:
+			output.replaceBytesFromOffset(0xca, withByteStream: stringValue)
+		case 0x23:
+			output.replaceBytesFromOffset(0x1de, withByteStream: stringValue)
+		case 0x24:
+			output.replaceBytesFromOffset(0x2f2, withByteStream: stringValue)
+		case 0x25:
+			output.replaceBytesFromOffset(0x126, withByteStream: stringValue)
+		case 0x26:
+			output.replaceBytesFromOffset(0x23a, withByteStream: stringValue)
+		case 0x27:
+			output.replaceBytesFromOffset(0x34e, withByteStream: stringValue)
+		case 0x28:
+			output.replaceBytesFromOffset(0xeb + (multiplier * 10), withByteStream: stringValue)
+		case 0x29:
+			output.replaceByteAtOffset(0xee + (multiplier * 10), withByte: wordValue == 0 ? 1 : 0)
+		case 0x2a:
+			guard charValue >= 1, charValue <= 0x24 else { return false }
+			output.replaceByteAtOffset(loop + (multiplier * 0x28) + 0x3b9, withByte: charValue - 1)
+
+
+
+		default:
+			guard charValue >= 0, charValue <= 1 else { return false }
+			output.replaceByteAtOffset(0, withByte: charValue)
+		}
 
 		return false
 	}
