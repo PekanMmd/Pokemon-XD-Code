@@ -18,19 +18,22 @@ class EcardCoder {
 
 	static func decode(file: XGFiles) -> XGMutableData? {
 		guard let data = file.data else { return nil }
-		return decode(data: data)
+		return decode(input: data)
 	}
 
 	// Default "key" value is the one used in Colosseum
-	static func decode(data: XGMutableData, key: Int = 4160) -> XGMutableData? {
+	static func decode(input: XGMutableData, key: Int = 4160) -> XGMutableData? {
 		let output = XGMutableData(length: 0xb20)
-		output.file = .nameAndFolder(data.file.fileName.removeFileExtensions() + "-decoded.bin", data.file.folder)
+		output.file = .nameAndFolder(input.file.fileName.removeFileExtensions() + "-decoded.bin", input.file.folder)
+		let data = input.getSubDataFromOffset(0x51, length: input.length - 0x51)
 
 		var readPosition = 0
 
 		/// **readLength** : number of bits to read
 		func readBits(readLength: Int) -> Int {
-			guard readLength > 0 else { return 0 }
+			guard readLength > 0 else {
+				return 0
+			}
 
 			var mask = 0
 
@@ -59,8 +62,8 @@ class EcardCoder {
 				return valid
 			} else {
 				var byteBuffer = [Int]()
-				while readLength - byteBuffer.count > 0 {
-					let nextReadLength = min(readLength - byteBuffer.count, 0x10)
+				while readLength - (byteBuffer.count * 8) > 0 {
+					let nextReadLength = min(readLength - (byteBuffer.count * 8), 0x10)
 					let bits = readBits(readLength: nextReadLength)
 					byteBuffer += bits.byteArrayU16
 				}
@@ -187,9 +190,14 @@ class EcardCoder {
 		return output
 	}
 
+	/// This function is used to read individual fields such as strings or values from the structs saved on the cards
+	/// Different operations are used to perform different types of validation to make sure the card was read correctly
+	/// The values are things like checking pokemon ids and item ids fall within valid ranges
 	@discardableResult
 	private static func write(output: XGMutableData, operation: Int, chunkGroupIndex: Int? = nil, bitsAsMask: Int? = nil, loopCounter: Int? = nil, bitsAsBuffer: [Int]? = nil) -> Bool {
-		guard operation <= 0x4a else { return false }
+		guard operation <= 0x4a else {
+			return false
+		}
 
 		let charValue  = (bitsAsMask ?? 0) & 0xFF
 		let shortValue = (bitsAsMask ?? 0) & 0xFFFF
@@ -200,80 +208,122 @@ class EcardCoder {
 
 		switch operation {
 		case 0x1:
-			guard charValue != 0, charValue <= 5 else { return false }
-			output.replaceByteAtOffset(1, withByte: charValue)
+			guard charValue != 0, charValue <= 5 else {
+				return false
+			}
+			output.replaceByteAtOffset(4, withByte: charValue)
 		case 0x2:
-			guard charValue != 0, charValue <= 3 else { return false }
+			guard charValue != 0, charValue <= 3 else {
+				return false
+			}
 			output.replaceByteAtOffset(5, withByte: charValue)
 		case 0x3:
-			guard charValue != 0, charValue <= 9 else { return false }
+			guard charValue != 0, charValue <= 9 else {
+				return false
+			}
 			output.replaceByteAtOffset(6, withByte: charValue)
 		case 0x4:
-			guard charValue != 0 else { return false }
+			guard charValue != 0 else {
+				return false
+			}
 			output.replaceByteAtOffset(7, withByte: charValue)
 		case 0x5:
-			output.replaceByteAtOffset(2, withByte: charValue)
+			output.replaceByteAtOffset(8, withByte: charValue)
 		case 0x6:
 			output.replaceBytesFromOffset(10, withByteStream: stringValue)
 		case 0x7:
-			guard charValue >= 0, charValue <= 5 else { return false }
-			output.replaceByteAtOffset(9, withByte: charValue - 1)
+			guard charValue >= 0, charValue <= 5 else {
+				return false
+			}
+			output.replaceByteAtOffset(0x24, withByte: charValue - 1)
 		case 0x8:
 			output.replaceByteAtOffset(0x25, withByte: charValue)
 		case 0x9:
-			guard charValue >= 0, charValue <= 4 else { return false }
+			guard charValue >= 0, charValue <= 4 else {
+				return false
+			}
 			output.replaceByteAtOffset(0x26, withByte: charValue - 1)
 		case 0xa:
-			output.replaceBytesFromOffset(10, withByteStream: stringValue)
+			output.replaceBytesFromOffset(0x28, withByteStream: stringValue)
 		case 0xb:
-			output.replaceBytesFromOffset(0xe, withByteStream: stringValue)
+			output.replaceBytesFromOffset(0x38, withByteStream: stringValue)
 		case 0xc:
-			output.replaceBytesFromOffset(0x12, withByteStream: stringValue)
+			output.replaceBytesFromOffset(0x48, withByteStream: stringValue)
 		case 0xd:
-			guard charValue >= 1, charValue <= 3 else { return false }
-			output.replaceByteAtOffset(0x16, withByte: charValue)
+			guard charValue >= 1, charValue <= 3 else {
+				return false
+			}
+			output.replaceByteAtOffset(0x58, withByte: charValue)
 		case 0xe:
-			guard charValue >= 1, charValue <= 6 else { return false }
+			guard charValue >= 1, charValue <= 6 else {
+				return false
+			}
 			output.replaceByteAtOffset(0x59, withByte: charValue)
 		case 0xf:
-			guard charValue >= 1, charValue <= 5 else { return false }
+			guard charValue >= 1, charValue <= 5 else {
+				return false
+			}
 			output.replaceByteAtOffset(0x5a, withByte: charValue)
 		case 0x10:
-			guard charValue >= 1, charValue <= 9 else { return false }
+			guard charValue >= 0, charValue <= 9 else {
+				return false
+			}
 			output.replaceByteAtOffset(0x5b, withByte: charValue - 1)
 		case 0x11:
-			guard charValue >= 1, charValue <= 9 else { return false }
-			output.replaceByteAtOffset(0x17, withByte: charValue - 1)
+			guard charValue >= 0, charValue <= 9 else {
+				return false
+			}
+			output.replaceByteAtOffset(0x5c, withByte: charValue - 1)
 		case 0x12:
-			guard charValue >= 1, charValue <= 9 else { return false }
+			guard charValue >= 0, charValue <= 9 else {
+				return false
+			}
 			output.replaceByteAtOffset(0x5d, withByte: charValue - 1)
 		case 0x13:
-			guard charValue >= 1, charValue <= 9 else { return false }
+			guard charValue >= 0, charValue <= 9 else {
+				return false
+			}
 			output.replaceByteAtOffset(0x5e, withByte: charValue - 1)
 		case 0x14:
-			guard charValue >= 1, charValue <= 9 else { return false }
+			guard charValue >= 0, charValue <= 9 else {
+				return false
+			}
 			output.replaceByteAtOffset(0x5f, withByte: charValue - 1)
 		case 0x15:
-			guard charValue >= 1, charValue <= 9 else { return false }
-			output.replaceByteAtOffset(0x18, withByte: charValue - 1)
+			guard charValue >= 0, charValue <= 9 else {
+				return false
+			}
+			output.replaceByteAtOffset(0x60, withByte: charValue - 1)
 		case 0x16:
-			guard charValue >= 1, charValue <= 9 else { return false }
+			guard charValue >= 0, charValue <= 9 else {
+				return false
+			}
 			output.replaceByteAtOffset(0x61, withByte: charValue - 1)
 		case 0x17:
-			guard charValue >= 1, charValue <= 9 else { return false }
+			guard charValue >= 0, charValue <= 9 else {
+				return false
+			}
 			output.replaceByteAtOffset(0x62, withByte: charValue - 1)
 		case 0x18:
-			guard charValue >= 1, charValue <= 9 else { return false }
-			output.replaceByteAtOffset(99, withByte: charValue - 1)
+			guard charValue >= 0, charValue <= 9 else {
+				return false
+			}
+			output.replaceByteAtOffset(0x63, withByte: charValue - 1)
 		case 0x19:
-			guard shortValue >= 0, shortValue < (0x2f * 7) else { return false }
-			output.replace2BytesAtOffset(0x19, withBytes: shortValue)
+			guard shortValue >= 0, shortValue < (0x2f * 7) else {
+				return false
+			}
+			output.replace2BytesAtOffset(0x64, withBytes: shortValue)
 		case 0x1a:
-			guard shortValue >= 0, shortValue < (0x2f * 7) else { return false }
+			guard shortValue >= 0, shortValue < (0x2f * 7) else {
+				return false
+			}
 			output.replace2BytesAtOffset(0x66, withBytes: shortValue)
 		case 0x1b:
-			guard shortValue >= 0, shortValue < (0x2f * 7) else { return false }
-			output.replace2BytesAtOffset(0x1a, withBytes: shortValue)
+			guard shortValue >= 0, shortValue < (0x2f * 7) else {
+				return false
+			}
+			output.replace2BytesAtOffset(0x68, withBytes: shortValue)
 		case 0x1c:
 			switch charValue {
 			case 0: fallthrough
@@ -316,7 +366,7 @@ class EcardCoder {
 			case 0x1d: fallthrough
 			case 0x1e: fallthrough
 			case 0x20: fallthrough
-			case 0x24: output.replaceByteAtOffset(0x1b, withByte: charValue)
+			case 0x24: output.replaceByteAtOffset(0x6c, withByte: charValue)
 			default: return false
 			}
 		case 0x1f:
@@ -338,20 +388,135 @@ class EcardCoder {
 		case 0x27:
 			output.replaceBytesFromOffset(0x34e, withByteStream: stringValue)
 		case 0x28:
-			output.replaceBytesFromOffset(0xeb + (multiplier * 10), withByteStream: stringValue)
+			output.replaceBytesFromOffset((0xeb + (multiplier * 10)) * 4, withByteStream: stringValue)
 		case 0x29:
-			output.replaceByteAtOffset(0xee + (multiplier * 10), withByte: wordValue == 0 ? 1 : 0)
+			output.replaceByteAtOffset((0xee + (multiplier * 10)) * 4, withByte: wordValue == 0 ? 1 : 0)
 		case 0x2a:
-			guard charValue >= 1, charValue <= 0x24 else { return false }
+			guard charValue >= 0, charValue <= 0x24 else {
+				return false
+			}
 			output.replaceByteAtOffset(loop + (multiplier * 0x28) + 0x3b9, withByte: charValue - 1)
+		case 0x2b:
+			guard shortValue >= 0, shortValue < (0x2f * 7) else {
+				return false
+			}
+			output.replace2BytesAtOffset((loop * 2) + (multiplier * 0x28) + 0x3be, withBytes: shortValue)
+		case 0x2c:
+			output.replace4BytesAtOffset(((multiplier * 10) + 0xf2) * 4, withBytes: wordValue)
+		case 0x2d:
+			guard shortValue == 0 || shortValue >= 0x6 || shortValue <= 0x50 else {
+				return false
+			}
+			output.replace2BytesAtOffset(((multiplier * 10) + 0xf3) * 4, withBytes: shortValue)
+		case 0x2e:
+			guard ((output.getByteAtOffset(0x5b) != multiplier)
+			&& (output.getByteAtOffset(0x5c) != multiplier)
+			&& (output.getByteAtOffset(0x5d) != multiplier))
+					|| shortValue <= 999 else {
+				return false
+			}
+			output.replace2BytesAtOffset((multiplier * 0x28) + 0x3ce, withBytes: shortValue)
+		case 0x2f:
+			guard true else {
+				return false
+			} // Lots of gaps in the table at RAM offset 80269470. CBA to validate within all valid range
+			output.replaceByteAtOffset(((multiplier * 10) + 0xf4) * 4, withByte: charValue)
+		case 0x30:
+			guard shortValue >= 0, shortValue <= 411 else {
+				return false
+			}
+			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x514, withBytes: shortValue)
+		case 0x31:
+			guard (charValue == 0)
+			|| ((charValue >= 0x44)
+			&& (charValue <= 0x60)) else {
+				return false
+			}
+			output.replaceByteAtOffset((multiplier * 0x2a) + 0x516, withByte: charValue)
+		case 0x32:
+			output.replaceByteAtOffset((multiplier * 0x2a) + 0x517, withByte: charValue)
+		case 0x33:
+			guard charValue >= 0, charValue <= 0x47 * 5 else {
+				return false
+			}
+			output.replace2BytesAtOffset((loop * 2) + (multiplier * 0x2a) + 0x518, withBytes: shortValue)
+		case 0x34:
+			guard shortValue >= 0, shortValue < (0x2f * 7) else {
+				return false
+			}
+			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x520, withBytes: shortValue)
+		case 0x35:
+			output.replaceByteAtOffset((multiplier * 0x2a) + 0x522, withByte: wordValue > -1 && wordValue < 2 ? charValue : 0xFF)
+		case 0x36:
+			output.replaceByteAtOffset((multiplier * 0x2a) + 0x523, withByte: wordValue > -1 && wordValue < 0x20 ? charValue : 0xFF)
+		case 0x37:
+			output.replaceByteAtOffset((multiplier * 0x2a) + 0x524, withByte: wordValue > -1 && wordValue < 0x20 ? charValue : 0xFF)
+		case 0x38:
+			output.replaceByteAtOffset((multiplier * 0x2a) + 0x525, withByte: wordValue > -1 && wordValue < 0x20 ? charValue : 0xFF)
+		case 0x39:
+			output.replaceByteAtOffset((multiplier * 0x2a) + 0x526, withByte: wordValue > -1 && wordValue < 0x20 ? charValue : 0xFF)
+		case 0x3a:
+			output.replaceByteAtOffset((multiplier * 0x2a) + 0x527, withByte: wordValue > -1 && wordValue < 0x20 ? charValue : 0xFF)
+		case 0x3b:
+			output.replaceByteAtOffset((multiplier * 0x2a) + 0x528, withByte: wordValue > -1 && wordValue < 0x20 ? charValue : 0xFF)
+		case 0x3c:
+			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x52a, withBytes: wordValue > -1 && wordValue < 0x100 ? shortValue : 0xFFFF)
+		case 0x3d:
+			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x52c, withBytes: wordValue > -1 && wordValue < 0x100 ? shortValue : 0xFFFF)
+		case 0x3e:
+			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x52e, withBytes: wordValue > -1 && wordValue < 0x100 ? shortValue : 0xFFFF)
+		case 0x3f:
+			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x530, withBytes: wordValue > -1 && wordValue < 0x100 ? shortValue : 0xFFFF)
+		case 0x40:
+			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x532, withBytes: wordValue > -1 && wordValue < 0x100 ? shortValue : 0xFFFF)
+		case 0x41:
+			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x534, withBytes: wordValue > -1 && wordValue < 0x100 ? shortValue : 0xFFFF)
+		case 0x42:
+			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x536, withBytes: wordValue > -1 && wordValue < 0x100 ? shortValue : 0xFFFF)
+		case 0x43:
+			if wordValue >= 1, wordValue <= 3 {
+				output.replaceByteAtOffset((multiplier * 0x2a) + 0x538, withByte: wordValue - 1)
+			} else {
+				output.replaceByteAtOffset((multiplier * 0x2a) + 0x538, withByte: 0)
+			}
+		case 0x44:
+			if wordValue & 0x20 == 0 {
+				output.replaceByteAtOffset((multiplier * 0x2a) + 0x539, withByte: charValue - 1)
+				guard (charValue - 1) >= 0, (charValue - 1) <= 0x18 else {
+					return false
 
-
-
+				}
+			} else {
+				output.replaceByteAtOffset((multiplier * 0x2a) + 0x539, withByte: 0xFF)
+			}
+		case 0x45:
+			guard charValue <= 3 else {
+				return false
+			}
+			output.replaceByteAtOffset((multiplier * 0x2a) + 0x53a, withByte: charValue)
+		case 0x46:
+			guard charValue <= 4 else {
+				return false
+			}
+			output.replaceByteAtOffset((multiplier * 0x2a) + 0x53b, withByte: charValue)
+		case 0x47:
+			output.replaceByteAtOffset((multiplier * 0x2a) + 0x53c, withByte: charValue)
+		case 0x49:
+			guard true else {
+				return false
+			} // Lots of gaps in the table at RAM offset 80269abc. CBA to validate within all valid range
+			output.replace4BytesAtOffset(0x2bf * 4, withBytes: wordValue)
+		case 0x4a:
+			output.replaceBytesFromOffset(0x2c0 * 4, withByteStream: stringValue)
 		default:
-			guard charValue >= 0, charValue <= 1 else { return false }
+			guard charValue >= 0, charValue <= 1 else {
+				return false
+			}
 			output.replaceByteAtOffset(0, withByte: charValue)
 		}
 
-		return false
+		#warning("TODO: take this out")
+		output.save()
+		return true
 	}
 }
