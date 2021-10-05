@@ -15,7 +15,45 @@ extension Bool {
 
 enum EcardFieldTypes: Int {
 	case CardTypeBattle = 0
-	
+	case MetaDataUnknown1 = 1
+	case MetaDataUnknown2 = 2
+	case MetaDataUnknown3 = 3
+	case MetaDataUnknown4 = 4
+	case MetaDataUnknown5 = 5
+	case MetaDataCardName = 6
+	case MetaDataUnknown6 = 7
+	case MetaDataUnknown7 = 8
+	case MetaDataUnknown8 = 9
+	case MetaDataEasyDifficultyName = 10
+	case MetaDataNormalDifficultyName = 11
+	case MetaDataHardDifficultyName = 12
+	case MetaDataUnknown9 = 13
+	case MetaDataUnknown10 = 14
+	case MetaDataUnknown11 = 15
+	case MetaDataUnknown12 = 16
+	case MetaDataUnknown13 = 17
+	case MetaDataUnknown14 = 18
+	case MetaDataUnknown15 = 19
+	case MetaDataUnknown16 = 20
+	case MetaDataUnknown17 = 21
+	case MetaDataUnknown18 = 22
+	case MetaDataUnknown19 = 23
+	case MetaDataUnknown20 = 24
+	case MetaDataUnknown21 = 25
+	case MetaDataUnknown22 = 26
+	case MetaDataUnknown23 = 27
+	case MetaDataUnknown24 = 28
+	case MetaDataUnknown25 = 29
+	case MetaDataUnknown26 = 30
+	case MetaDataBonusTrainer1Text1 = 31
+	case MetaDataBonusTrainer1Text2 = 32
+	case MetaDataBonusTrainer1Text3 = 33
+	case MetaDataBonusTrainer2Text1 = 34
+	case MetaDataBonusTrainer2Text2 = 35
+	case MetaDataBonusTrainer2Text3 = 36
+	case MetaDataBonusTrainer3Text1 = 37
+	case MetaDataBonusTrainer3Text2 = 38
+	case MetaDataBonusTrainer3Text3 = 39
 	case TrainerName = 40
 	case TrainerGender = 41
 	case TrainerPokemonSlot = 42
@@ -55,8 +93,6 @@ enum EcardFieldTypes: Int {
 }
 
 class EcardCoder {
-	
-	private static let bitMaskForBitOfByteWithIndex = [0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1]
 
 	static func decode(file: XGFiles) -> XGMutableData? {
 		guard let data = file.data else { return nil }
@@ -94,7 +130,7 @@ class EcardCoder {
 		}
 
 		@discardableResult
-		func decodeField(fieldType: Int, bitLength: Int, arrayCount: Int, entryIndex: Int? = nil) -> Bool {
+		func decodeField(fieldType: EcardFieldTypes, bitLength: Int, arrayCount: Int, entryIndex: Int? = nil) -> Bool {
 			if bitLength < 0x10 {
 				var valid = true
 				for i in 0 ..< arrayCount {
@@ -115,7 +151,7 @@ class EcardCoder {
 		}
 
 		@discardableResult
-		func decodeFields(withParameters parameters: [(fieldType: Int, bitLength: Int, loopCount: Int)], entryIndex: Int? = nil) -> Bool {
+		func decodeFields(withParameters parameters: [(fieldType: EcardFieldTypes, bitLength: Int, loopCount: Int)], entryIndex: Int? = nil) -> Bool {
 			var valid = true
 			for params in parameters {
 				valid = valid && decodeField(fieldType: params.fieldType, bitLength: params.bitLength, arrayCount: params.loopCount, entryIndex: entryIndex)
@@ -126,103 +162,103 @@ class EcardCoder {
 		@discardableResult
 		func decodeStadium() -> Bool {
 			return decodeFields(withParameters: [
-				(0x48, 4, 0x1),
-				(0x49, 6, 0x1),
-				(0x4a, 240, 0x1)
+				(.CardTypeStadium, 4, 0x1),
+				(.StadiumBattleField, 6, 0x1),
+				(.StadiumName, 240, 0x1)
 			])
 		}
 
 		@discardableResult
 		func decodeMetaData() -> Bool {
 			return decodeFields(withParameters: [
-				(0x0, 4, 1),
-				(0x1, 3, 1),
-				(0x2, 2, 1),
-				(0x3, 4, 1),
-				(0x4, 4, 1),
-				(0x5, 8, 1),
-				(0x6, 192, 1),
-				(0x7, 3, 1),
-				(0x8, 3, 1),
-				(0x9, 3, 1),
-				(0xA, 112, 1),
-				(0xB, 112, 1),
-				(0xC, 112, 1),
-				(0xD, 2, 1),
-				(0xE, 3, 1),
-				(0xF, 3, 1),
-				(0x10, 4, 1),
-				(0x11, 4, 1),
-				(0x12, 4, 1),
-				(0x13, 4, 1),
-				(0x14, 4, 1),
-				(0x15, 4, 1),
-				(0x16, 4, 1),
-				(0x17, 4, 1),
-				(0x18, 4, 1),
-				(0x19, 10, 1),
-				(0x1A, 10, 1),
-				(0x1B, 10, 1),
-				(0x1C, 7, 1),
-				(0x1D, 7, 1),
-				(0x1E, 7, 1),
-				(0x1F, 720, 1),
-				(0x20, 720, 1),
-				(0x21, 720, 1),
-				(0x22, 720, 1),
-				(0x23, 720, 1),
-				(0x24, 720, 1),
-				(0x25, 720, 1),
-				(0x26, 720, 1),
-				(0x27, 720, 1)
+				(.CardTypeBattle, 4, 1),
+				(.MetaDataUnknown1, 3, 1),
+				(.MetaDataUnknown2, 2, 1),
+				(.MetaDataUnknown3, 4, 1),
+				(.MetaDataUnknown4, 4, 1),
+				(.MetaDataUnknown5, 8, 1),
+				(.MetaDataCardName, 192, 1),
+				(.MetaDataUnknown6, 3, 1),
+				(.MetaDataUnknown7, 3, 1),
+				(.MetaDataUnknown8, 3, 1),
+				(.MetaDataEasyDifficultyName, 112, 1),
+				(.MetaDataNormalDifficultyName, 112, 1),
+				(.MetaDataHardDifficultyName, 112, 1),
+				(.MetaDataUnknown9, 2, 1),
+				(.MetaDataUnknown10, 3, 1),
+				(.MetaDataUnknown11, 3, 1),
+				(.MetaDataUnknown12, 4, 1),
+				(.MetaDataUnknown13, 4, 1),
+				(.MetaDataUnknown14, 4, 1),
+				(.MetaDataUnknown15, 4, 1),
+				(.MetaDataUnknown16, 4, 1),
+				(.MetaDataUnknown17, 4, 1),
+				(.MetaDataUnknown18, 4, 1),
+				(.MetaDataUnknown19, 4, 1),
+				(.MetaDataUnknown20, 4, 1),
+				(.MetaDataUnknown21, 10, 1),
+				(.MetaDataUnknown22, 10, 1),
+				(.MetaDataUnknown23, 10, 1),
+				(.MetaDataUnknown24, 7, 1),
+				(.MetaDataUnknown25, 7, 1),
+				(.MetaDataUnknown26, 7, 1),
+				(.MetaDataBonusTrainer1Text1, 720, 1),
+				(.MetaDataBonusTrainer1Text2, 720, 1),
+				(.MetaDataBonusTrainer1Text3, 720, 1),
+				(.MetaDataBonusTrainer2Text1, 720, 1),
+				(.MetaDataBonusTrainer2Text2, 720, 1),
+				(.MetaDataBonusTrainer2Text3, 720, 1),
+				(.MetaDataBonusTrainer3Text1, 720, 1),
+				(.MetaDataBonusTrainer3Text2, 720, 1),
+				(.MetaDataBonusTrainer3Text3, 720, 1)
 			])
 		}
 
 		@discardableResult
 		func decodeTrainer(withIndex index: Int) -> Bool {
 			return decodeFields(withParameters: [
-				(0x28, 80, 1),
-				(0x29, 1, 1),
-				(0x2A, 6, 4),
-				(0x2B, 10, 4),
-				(0x2C, 1, 1),
-				(0x2D, 14, 1),
-				(0x2E, 10, 1),
-				(0x2F, 7, 1)
+				(.TrainerName, 80, 1),
+				(.TrainerGender, 1, 1),
+				(.TrainerPokemonSlot, 6, 4),
+				(.TrainerItem, 10, 4),
+				(.TrainerUnknown, 1, 1),
+				(.TrainerAI, 14, 1),
+				(.TrainerID, 10, 1),
+				(.TrainerModel, 7, 1)
 			], entryIndex: index)
 		}
 
 		@discardableResult
 		func decodePokemon(withIndex index: Int) -> Bool {
 			return decodeFields(withParameters: [
-				(0x30, 9, 1),
-				(0x31, 7, 1),
-				(0x32, 7, 1),
-				(0x33, 10, 4),
-				(0x34, 11, 1),
-				(0x35, 2, 1),
-				(0x36, 6, 1),
-				(0x37, 6, 1),
-				(0x38, 6, 1),
-				(0x39, 6, 1),
-				(0x3A, 6, 1),
-				(0x3B, 6, 1),
-				(0x3C, 9, 1),
-				(0x3D, 9, 1),
-				(0x3E, 9, 1),
-				(0x3F, 9, 1),
-				(0x40, 9, 1),
-				(0x41, 9, 1),
-				(0x42, 9, 1),
-				(0x43, 2, 1),
-				(0x44, 6, 1),
-				(0x45, 3, 1),
-				(0x46, 6, 1),
-				(0x47, 8, 1)
+				(.PokemonSpecies, 9, 1),
+				(.PokemonShadowID, 7, 1),
+				(.PokemonLevel, 7, 1),
+				(.PokemonMove, 10, 4),
+				(.PokemonUnknown, 11, 1),
+				(.PokemonAbilitySlot, 2, 1),
+				(.PokemonIVHP, 6, 1),
+				(.PokemonIVAttack, 6, 1),
+				(.PokemonIVDefense, 6, 1),
+				(.PokemonIVSpatk, 6, 1),
+				(.PokemonIVSpdef, 6, 1),
+				(.PokemonIVSpeed, 6, 1),
+				(.PokemonEVHP, 9, 1),
+				(.PokemonEVAttack, 9, 1),
+				(.PokemonEVDefense, 9, 1),
+				(.PokemonEVSpatk, 9, 1),
+				(.PokemonEVSpdef, 9, 1),
+				(.PokemonEVSpeed, 9, 1),
+				(.PokemonHappiness, 9, 1),
+				(.PokemonGender, 2, 1),
+				(.PokemonNature, 6, 1),
+				(.PokemonUnknown2, 3, 1),
+				(.PokemonUnknown3, 6, 1),
+				(.PokemonHeartGauge, 8, 1)
 			], entryIndex: index)
 		}
 
-		decodeField(fieldType: 0x0, bitLength: 4, arrayCount: 1)
+		decodeField(fieldType: .CardTypeBattle, bitLength: 4, arrayCount: 1)
 		let cardType = output.get4BytesAtOffset(0)
 		readPosition = 0
 
@@ -247,10 +283,7 @@ class EcardCoder {
 	/// Different fieldTypes are used to perform different types of validation to make sure the card was read correctly
 	/// The values are things like checking pokemon ids and item ids fall within valid ranges
 	@discardableResult
-	private static func write(output: XGMutableData, fieldType: Int, entryIndex: Int? = nil, bitsAsMask: Int? = nil, arrayCounter: Int? = nil, bitsAsBuffer: [Int]? = nil) -> Bool {
-		guard fieldType <= 0x4a else {
-			return false
-		}
+	private static func write(output: XGMutableData, fieldType: EcardFieldTypes, entryIndex: Int? = nil, bitsAsMask: Int? = nil, arrayCounter: Int? = nil, bitsAsBuffer: [Int]? = nil) -> Bool {
 
 		let charValue  = (bitsAsMask ?? 0) & 0xFF
 		let shortValue = (bitsAsMask ?? 0) & 0xFFFF
@@ -259,7 +292,7 @@ class EcardCoder {
 		let multiplier = entryIndex ?? 0
 		let loop = arrayCounter ?? 0
 
-		switch fieldType {
+		switch fieldType.rawValue {
 		case 0x1:
 			output.replaceByteAtOffset(4, withByte: charValue)
 			guard charValue != 0, charValue <= 5 else {
