@@ -7414,6 +7414,7 @@
 				1C56F6E426097A8100CF1DEE /* Battles.swift */,
 				1C56F761260C1EA000CF1DEE /* CharacterModelTable.swift */,
 				1C56F817260D8F6100CF1DEE /* DeckTables.swift */,
+				1C25E5BC26D3357500F050DC /* EreaderTables.swift */,
 				1C56F6F4260BF40C00CF1DEE /* InteractionPointTable.swift */,
 				1C56F726260BF7B600CF1DEE /* ItemsTable.swift */,
 				1CA3E606262467D200E5089A /* MirorBDataTable.swift */,
@@ -7430,7 +7431,6 @@
 				1C56F716260BF47100CF1DEE /* TreasureTable.swift */,
 				1C56F7DE260D7BB500CF1DEE /* TypesTable.swift */,
 				1C56F9F526105EE300CF1DEE /* PKXWZXTables.swift */,
-				1C25E5BC26D3357500F050DC /* EreaderTables.swift */,
 			);
 			path = "struct tables";
 			sourceTree = "<group>";

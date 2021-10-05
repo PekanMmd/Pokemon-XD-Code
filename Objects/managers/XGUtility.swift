@@ -651,6 +651,22 @@ class XGUtility {
 		}
 		#endif
 	}
+
+	class func decodeEReaderCards() {
+		guard game == .Colosseum, XGISO.inputISOFile != nil else { return }
+		if !XGFolders.Decrypted.files.contains(where:{ $0.fileType == .bin }) {
+			displayAlert(title: "No Ereader Cards Found", description: "Place your decrypted E Reader cards in \(XGFolders.Decrypted.path)\nthen use this utility to output the decoded data for those cards in \(XGFolders.Decoded.path)")
+			return
+		}
+
+		XGFolders.Decrypted.files.forEach { (file) in
+			if file.fileType == .bin {
+				let decodedFile = XGFiles.nameAndFolder(file.fileName, XGFolders.Decoded)
+				printg("Writing decoded ereader card to \(decodedFile.path)")
+				EcardCoder.decode(file: file)?.writeToFile(decodedFile)
+			}
+		}
+	}
 	
 	//MARK: - Utilities 2
 	

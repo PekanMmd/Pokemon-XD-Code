@@ -12,13 +12,15 @@ import Cocoa
 
 enum TableTypes {
 	enum StructTableTypes {
-		case deckTrainer, deckPokemon, deckAI, common, saveData, other
+		case deckTrainer, deckPokemon, deckAI, common, saveData, ereader, other
 
 		#if GUI
 		var colour: NSColor {
 			switch self {
 			case .saveData:
 				return GoDDesign.colourPink()
+			case .ereader:
+				return GoDDesign.colourPeach()
 			case .deckTrainer:
 				return GoDDesign.colourLightBlue()
 			case .deckPokemon:
@@ -71,6 +73,12 @@ enum TableTypes {
 		#if !GAME_PBR
 		list += saveFileStructList.map({ (table) -> TableTypes in
 			.structTable(table: table, type: .saveData)
+		})
+		#endif
+
+		#if GAME_COLO
+		list += eReaderStructList.map({ (table) -> TableTypes in
+			.structTable(table: table, type: .ereader)
 		})
 		#endif
 

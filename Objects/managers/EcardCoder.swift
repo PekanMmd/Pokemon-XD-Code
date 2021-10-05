@@ -512,11 +512,9 @@ class EcardCoder {
 			guard charValue >= 0, charValue <= 1 else {
 				return false
 			}
-			output.replaceByteAtOffset(0, withByte: charValue)
+			output.replace4BytesAtOffset(0, withBytes: wordValue)
 		}
 
-		#warning("TODO: take this out")
-		output.save()
 		return true
 	}
 }

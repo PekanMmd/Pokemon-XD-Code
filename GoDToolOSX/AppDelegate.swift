@@ -18,6 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var scriptClassesMenuItem: NSMenuItem!
 	@IBOutlet weak var scriptCompilerMenuItem: NSMenuItem!
 	@IBOutlet weak var experimentalFeaturesMenuItem: NSMenuItem!
+	@IBOutlet weak var ereaderMenuItem: NSMenuItem!
 
 	@IBOutlet weak var godtoolmenuitem: NSMenuItem!
 	@IBOutlet weak var godtoolaboutmenuitem: NSMenuItem!
@@ -35,6 +36,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			quitgodtoolmenuitem.title = "Quit Colosseum Tool"
 			godtoolhelpmenuitem.title = "Colosseum Tool Help"
 		}
+
+		#if !GAME_PBR
+		if game != .Colosseum {
+			ereaderMenuItem.isEnabled = false
+		}
+		#endif
 	}
 
 	func decodeInputFiles(_ files: [XGFiles]) {
@@ -409,6 +416,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		XGThreadManager.manager.runInBackgroundAsync {
 			XGUtility.extractAllTextures(forDolphin: true)
 			displayAlert(title: "Texture Dump Finsihed", description: "Done.")
+		}
+	}
+
+	@IBAction func dumpEreaderCards(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		if game == .Colosseum {
+			XGUtility.decodeEReaderCards()
 		}
 	}
 
