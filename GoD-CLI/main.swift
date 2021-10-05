@@ -468,7 +468,14 @@ func utilities() {
 		2: Extract all textures with Dolphin filenames
 		"""
 
-		#if GAME_PBR
+		#if GAME_COLO
+		prompt += """
+
+		3: Decode Ereader Cards
+		-  Place your decrypted E Reader cards in \(XGFolders.Decrypted.path)
+		-  then use this utility to output the decoded data for those cards in \(XGFolders.Decoded.path)
+		"""
+		#elseif GAME_PBR
 		prompt += """
 
 		3: Increase number of pokemon slots in the game by 1
@@ -483,7 +490,9 @@ func utilities() {
 		case "0": return
 		case "1": XGUtility.extractAllTextures(forDolphin: false)
 		case "2": XGUtility.extractAllTextures(forDolphin: true)
-		#if GAME_PBR
+		#if GAME_COLO
+		case "3": XGUtility.decodeEReaderCards()
+		#elseif GAME_PBR
 		case "3": XGPatcher.increasePokemonTotal(by: 1)
 		case "4": XGPatcher.increasePokemonTotal(by: 10)
 		case "5": XGPatcher.increasePokemonTotal(by: 100)

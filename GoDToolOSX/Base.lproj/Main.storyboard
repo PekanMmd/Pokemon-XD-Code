@@ -187,6 +187,13 @@
                                                 <action selector="dumpDolphinTextures:" target="Voe-Tx-rLC" id="JE9-F2-NBf"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="My5-pk-g6t"/>
+                                        <menuItem title="Decode Ereader Cards" id="6sA-RZ-buw">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="dumpEreaderCards:" target="Voe-Tx-rLC" id="cVm-8g-y5o"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
@@ -289,6 +296,7 @@
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Colosseum_Tool" customModuleProvider="target">
                     <connections>
+                        <outlet property="ereaderMenuItem" destination="6sA-RZ-buw" id="xJn-i6-rRq"/>
                         <outlet property="experimentalFeaturesMenuItem" destination="cAC-sv-FGN" id="3yp-Lh-bh2"/>
                         <outlet property="godtoolaboutmenuitem" destination="5kV-Vb-QxS" id="RzJ-5K-bSN"/>
                         <outlet property="godtoolhelpmenuitem" destination="FKE-Sm-Kum" id="kyN-Ez-awb"/>
@@ -610,6 +618,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="PCr-YY-Lid"/>
+        <segue reference="NaH-4i-fmB"/>
     </inferredMetricsTieBreakers>
 </document>

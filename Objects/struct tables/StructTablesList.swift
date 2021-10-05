@@ -174,3 +174,23 @@ var saveFileStructList: [GoDStructTableFormattable] {
 	}
 	return tables
 }
+
+var eReaderStructList: [GoDStructTableFormattable] {
+	guard game == .Colosseum else { return  [] }
+	XGFolders.Decrypted.files.forEach { (file) in
+		if file.fileType == .bin {
+			let decodedFile = XGFiles.nameAndFolder(file.fileName, XGFolders.Decoded)
+			if !XGFolders.Decoded.contains(decodedFile) {
+				EcardCoder.decode(file: file)?.writeToFile(decodedFile)
+			}
+		}
+	}
+	var tables = [GoDStructTableFormattable]()
+	XGFolders.Decoded.files.filter({$0.fileType == .bin}).sorted(by: {$0.fileName < $1.fileName}).forEach { (file) in
+		if let data = file.data, data.getByteAtOffset(3) == 0 {
+			tables.append(EreaderStructTable(type: .pokemon, inFile: file))
+			tables.append(EreaderStructTable(type: .trainers, inFile: file))
+		}
+	}
+	return tables
+}

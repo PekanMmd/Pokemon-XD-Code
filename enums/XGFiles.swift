@@ -90,6 +90,8 @@ indirect enum XGFiles {
 	case tool(String)
 	case embedded(String)
 	case gameFile(String)
+	case eCardDecrypted(String)
+	case eCardDecoded(String)
 	case nameAndFsysName(String, String)
 	case typeAndFsysName(XGFileTypes, String)
 	case typeAndFolder(XGFileTypes, XGFolders)
@@ -155,6 +157,8 @@ indirect enum XGFiles {
 		case .objcopy 				: return environment == .Windows ? "powerpc-eabi-objcopy.exe": "powerpc-eabi-objcopy"
 		case .tool(let s)			: return s + (environment == .Windows ? ".exe" : "")
 		case .embedded(let s)		: return s
+		case .eCardDecrypted(let s)	: return s + ".bin"
+		case .eCardDecoded(let s)	: return s + ".bin"
 		case .gameFile(let s)		: return s
 		case .nameAndFolder(let name, _) : return name
 		case .nameAndFsysName(let name, _): return name
@@ -197,6 +201,8 @@ indirect enum XGFiles {
 		case .toc				: return .ISOExport("TOC")
 		case .log				: return .Logs
 		case .json				: return .JSON
+		case .eCardDecrypted		: return .EreaderCards
+		case .eCardDecoded		: return .EreaderCards
 		case .wit      		    : return .Wiimm
 		case .wimgt      		: return .Wiimm
 		case .gcc				: return .DevKitPPC
@@ -559,7 +565,7 @@ indirect enum XGFiles {
 	}
 	
 	var fileType: XGFileTypes {
-		for i in 2 ..< 255 {
+		for i in 2 ... 255 {
 			if let type = XGFileTypes(rawValue: i) {
 				if type.fileExtension == self.fileExtension {
 					return type
@@ -594,6 +600,9 @@ indirect enum XGFolders {
 	case Documents
 	case JSON
 	case SaveFiles
+	case EreaderCards
+	case Decrypted
+	case Decoded
 	case Images
 	case PokeFace
 	case PokeBody
@@ -623,6 +632,9 @@ indirect enum XGFolders {
 		case .Documents			: return "Documents"
 		case .JSON				: return "JSON"
 		case .SaveFiles			: return "Save Files"
+		case .EreaderCards		: return "Ereader Cards"
+		case .Decrypted			: return "Decrypted"
+		case .Decoded			: return "Decoded"
 		case .Images			: return "Images"
 		case .PokeFace			: return "PokeFace"
 		case .PokeBody			: return "PokeBody"
@@ -671,6 +683,8 @@ indirect enum XGFolders {
 		case .Types		: path = XGFolders.Images.path
 		case .Wiimm		: path = XGFolders.Resources.path
 		case .DevKitPPC	: path = "/opt/devkitpro/devkitPPC"
+		case .Decrypted	: path = XGFolders.EreaderCards.path
+		case .Decoded	: path = XGFolders.EreaderCards.path
 		case .nameAndFolder(_, let f): path = f.path
 		case .ISO		: return XGISO.inputISOFile?.folder.path ?? documentsPath + "/" + self.name
 		case .path(let s): return s
@@ -752,7 +766,7 @@ indirect enum XGFolders {
 			return
 		}
 		
-		let folders: [XGFolders] = [
+		var folders: [XGFolders] = [
 			.Documents,
 			.Resources,
 			.JSON,
@@ -767,8 +781,12 @@ indirect enum XGFolders {
 			.ISO,
 			.Logs,
 			.ISOExport("")
-			]
-		
+		]
+
+		#if GAME_COLO
+		folders += [.EreaderCards, .Decoded, .Decrypted]
+		#endif
+
 		for folder in folders {
 			folder.createDirectory()
 		}

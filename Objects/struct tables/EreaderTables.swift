@@ -28,7 +28,7 @@ class EreaderStructTable: GoDStructTableFormattable {
 		case .pokemon:
 			properties = ecardTrainerPokemonStruct
 			startOffsetForFirstEntryInFile = { (file) in
-				return 0x510
+				return 0x514
 			}
 			numberOfEntriesInFile = { (file) in
 				return 36
@@ -42,7 +42,7 @@ class EreaderStructTable: GoDStructTableFormattable {
 		case .trainers:
 			properties = ecardTrainerStruct
 			startOffsetForFirstEntryInFile = { (file) in
-				return 0x3A8
+				return 0x3AC
 			}
 			numberOfEntriesInFile = { (file) in
 				return 9

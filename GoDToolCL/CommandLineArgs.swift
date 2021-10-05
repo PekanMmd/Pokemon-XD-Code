@@ -14,7 +14,9 @@ func loadISO(exitOnFailure: Bool = false) -> Bool {
 	let files = args.map { (filename) -> XGFiles in
 		let fileurl = URL(fileURLWithPath: filename)
 		return fileurl.file
-	}.filter{$0.fileType != .unknown}
+	}.filter{
+		$0.fileType != .unknown
+	}
 
 	guard files.count > 0 else {
 		let message = environment == .Windows
