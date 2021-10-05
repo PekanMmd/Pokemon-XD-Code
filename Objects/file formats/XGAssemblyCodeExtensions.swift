@@ -132,6 +132,22 @@ extension XGAssembly {
 	}
 	#endif
 
+	class func replaceRamASM(RAMOffset: Int, newASM asm: [UInt32]) {
+		var offset = RAMOffset
+		if offset > 0x80000000 {
+			offset -= 0x80000000
+		}
+		#if GAME_PBR
+		replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: asm)
+		#else
+		if game == .XD, region == .US, offset > kRELtoRAMOffsetDifference {
+			replaceRELASM(startOffset: offset - kRELtoRAMOffsetDifference, newASM: asm)
+		} else {
+			replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: asm)
+		}
+		#endif
+	}
+
 	class func replaceRamASM(RAMOffset: Int, newASM asm: [XGASM]) {
 		var offset = RAMOffset
 		if offset > 0x80000000 {
