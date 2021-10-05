@@ -550,7 +550,7 @@ indirect enum XGFiles {
 	}
 	
 	var fileType: XGFileTypes {
-		for i in 2 ..< 255 {
+		for i in 2 ... 255 {
 			if let type = XGFileTypes(rawValue: i) {
 				if type.fileExtension == self.fileExtension {
 					return type

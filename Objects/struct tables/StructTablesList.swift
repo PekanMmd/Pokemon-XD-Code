@@ -187,7 +187,7 @@ var eReaderStructList: [GoDStructTableFormattable] {
 	}
 	var tables = [GoDStructTableFormattable]()
 	XGFolders.Decoded.files.filter({$0.fileType == .bin}).sorted(by: {$0.fileName < $1.fileName}).forEach { (file) in
-		if let data = file.data, data.getByteAtOffset(0) == 0 {
+		if let data = file.data, data.getByteAtOffset(3) == 0 {
 			tables.append(EreaderStructTable(type: .pokemon, inFile: file))
 			tables.append(EreaderStructTable(type: .trainers, inFile: file))
 		}
