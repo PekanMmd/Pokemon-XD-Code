@@ -267,12 +267,12 @@ extension Int {
 			return UInt8(i)
 		})
 	}
-	
-	func bitArray(count: Int, startWithLeastSignificantBit: Bool = true) -> [Bool] {
+
+	func bits(count: Int, startWithLeastSignificantBit: Bool = true) -> [Int] {
 		var value = self
-		var bits = [Bool]()
+		var bits = [Int]()
 		for _ in 0 ..< count {
-			bits.append((value & 0x1) == 1)
+			bits.append(value & 0x1)
 			value = value >> 1
 		}
 
@@ -280,6 +280,12 @@ extension Int {
 			return bits
 		} else {
 			return bits.reversed()
+		}
+	}
+	
+	func bitArray(count: Int, startWithLeastSignificantBit: Bool = true) -> [Bool] {
+		bits(count: count, startWithLeastSignificantBit: startWithLeastSignificantBit).map { (bit) -> Bool in
+			return bit == 1
 		}
 	}
 	

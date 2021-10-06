@@ -72,7 +72,7 @@ var pkxTrainerModelsTable: GoDStructTable {
 	} numberOfEntriesInFile: { (_) -> Int in
 		return game == .Colosseum ? 76 : 68
 	} nameForEntry: { (index, data) -> String? in
-		guard game != .Colosseum, let fsysID: Int = data.get("Fsys ID") else { return nil }
+		guard let fsysID: Int = data.get("Fsys ID") else { return nil }
 		return GSFsys.shared.entryWithID(fsysID)?.name
 	}
 }

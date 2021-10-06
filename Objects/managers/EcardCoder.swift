@@ -12,8 +12,41 @@ extension Bool {
 	}
 }
 
+enum EcardTableSections {
+	case MetaData
+	case Trainer
+	case Pokemon
+	case Stadium
 
-enum EcardFieldTypes: Int {
+	var numberOfEntries: Int {
+		switch self {
+		case .MetaData: return 1
+		case .Trainer: return 9
+		case .Pokemon: return 36
+		case .Stadium: return 1
+		}
+	}
+
+	var startOffset: Int {
+		switch self {
+		case .MetaData: return 0
+		case .Trainer: return 940
+		case .Pokemon: return 1300
+		case .Stadium: return 2812
+		}
+	}
+
+	var length: Int {
+		switch self {
+		case .MetaData: return 940
+		case .Trainer: return 40
+		case .Pokemon: return 42
+		case .Stadium: return 36
+		}
+	}
+}
+
+enum EcardFields: Int {
 	case CardTypeBattle = 0
 	case MetaDataUnknown1 = 1
 	case MetaDataUnknown2 = 2
@@ -21,9 +54,9 @@ enum EcardFieldTypes: Int {
 	case MetaDataUnknown4 = 4
 	case MetaDataUnknown5 = 5
 	case MetaDataCardName = 6
-	case MetaDataUnknown6 = 7
+	case MetaDataPackID = 7
 	case MetaDataUnknown7 = 8
-	case MetaDataUnknown8 = 9
+	case MetaDataCardIndex = 9
 	case MetaDataEasyDifficultyName = 10
 	case MetaDataNormalDifficultyName = 11
 	case MetaDataHardDifficultyName = 12
@@ -46,13 +79,13 @@ enum EcardFieldTypes: Int {
 	case MetaDataUnknown25 = 29
 	case MetaDataUnknown26 = 30
 	case MetaDataBonusTrainer1Text1 = 31
-	case MetaDataBonusTrainer1Text2 = 32
-	case MetaDataBonusTrainer1Text3 = 33
-	case MetaDataBonusTrainer2Text1 = 34
+	case MetaDataBonusTrainer2Text1 = 32
+	case MetaDataBonusTrainer3Text1 = 33
+	case MetaDataBonusTrainer1Text2 = 34
 	case MetaDataBonusTrainer2Text2 = 35
-	case MetaDataBonusTrainer2Text3 = 36
-	case MetaDataBonusTrainer3Text1 = 37
-	case MetaDataBonusTrainer3Text2 = 38
+	case MetaDataBonusTrainer3Text2 = 36
+	case MetaDataBonusTrainer1Text3 = 37
+	case MetaDataBonusTrainer2Text3 = 38
 	case MetaDataBonusTrainer3Text3 = 39
 	case TrainerName = 40
 	case TrainerGender = 41
@@ -90,7 +123,92 @@ enum EcardFieldTypes: Int {
 	case StadiumBattleField = 73
 	case StadiumName = 74
 
+	var info: (bits: Int, bytes: Int, arrayCount: Int, relativeOffset: Int, section: EcardTableSections) {
+		switch self {
+		case .CardTypeBattle: return (4,4,1,0, .MetaData)
+		case .CardTypeStadium: return (4,4,1,0, .MetaData)
+
+		case .MetaDataUnknown1: return (3,1,1,4, .MetaData)
+		case .MetaDataUnknown2: return (2,1,1,5, .MetaData)
+		case .MetaDataUnknown3: return (4,1,1,6, .MetaData)
+		case .MetaDataUnknown4: return (4,1,1,7, .MetaData)
+		case .MetaDataUnknown5: return (8,1,1,8, .MetaData)
+		case .MetaDataCardName: return (192,24,1,10, .MetaData)
+		case .MetaDataPackID: return (3,1,1,36, .MetaData)
+		case .MetaDataUnknown7: return (3,1,1,37, .MetaData)
+		case .MetaDataCardIndex: return (3,1,1,38, .MetaData)
+		case .MetaDataEasyDifficultyName: return (112,14,1,40, .MetaData)
+		case .MetaDataNormalDifficultyName: return (112,14,1,56, .MetaData)
+		case .MetaDataHardDifficultyName: return (112,14,1,72, .MetaData)
+		case .MetaDataUnknown9: return (2,1,1,88, .MetaData)
+		case .MetaDataUnknown10: return (3,1,1,89, .MetaData)
+		case .MetaDataUnknown11: return (3,1,1,90, .MetaData)
+		case .MetaDataUnknown12: return (4,1,1,91, .MetaData)
+		case .MetaDataUnknown13: return (4,1,1,92, .MetaData)
+		case .MetaDataUnknown14: return (4,1,1,93, .MetaData)
+		case .MetaDataUnknown15: return (4,1,1,94, .MetaData)
+		case .MetaDataUnknown16: return (4,1,1,95, .MetaData)
+		case .MetaDataUnknown17: return (4,1,1,96, .MetaData)
+		case .MetaDataUnknown18: return (4,1,1,97, .MetaData)
+		case .MetaDataUnknown19: return (4,1,1,98, .MetaData)
+		case .MetaDataUnknown20: return (4,1,1,99, .MetaData)
+		case .MetaDataUnknown21: return (10,2,1,100, .MetaData)
+		case .MetaDataUnknown22: return (10,2,1,102, .MetaData)
+		case .MetaDataUnknown23: return (10,2,1,104, .MetaData)
+		case .MetaDataUnknown24: return (7,1,1,106, .MetaData)
+		case .MetaDataUnknown25: return (7,1,1,107, .MetaData)
+		case .MetaDataUnknown26: return (7,1,1,108, .MetaData)
+		case .MetaDataBonusTrainer1Text1: return (720,90,1,110, .MetaData)
+		case .MetaDataBonusTrainer2Text1: return (720,90,1,202, .MetaData)
+		case .MetaDataBonusTrainer3Text1: return (720,90,1,294, .MetaData)
+		case .MetaDataBonusTrainer1Text2: return (720,90,1,386, .MetaData)
+		case .MetaDataBonusTrainer2Text2: return (720,90,1,478, .MetaData)
+		case .MetaDataBonusTrainer3Text2: return (720,90,1,570, .MetaData)
+		case .MetaDataBonusTrainer1Text3: return (720,90,1,662, .MetaData)
+		case .MetaDataBonusTrainer2Text3: return (720,90,1,754, .MetaData)
+		case .MetaDataBonusTrainer3Text3: return (720,90,1,846, .MetaData)
+
+		case .TrainerName: return (80,10,1,0, .Trainer)
+		case .TrainerGender: return (1,1,1,12, .Trainer)
+		case .TrainerPokemonSlot: return (6,1,4,13, .Trainer)
+		case .TrainerItem: return (10,2,4,20, .Trainer)
+		case .TrainerUnknown: return (1,4,1,28, .Trainer)
+		case .TrainerAI: return (14,2,1,32, .Trainer)
+		case .TrainerID: return (10,2,1,34, .Trainer)
+		case .TrainerModel: return (7,1,1,36, .Trainer)
+
+		case .PokemonSpecies: return (9,2,1,0, .Pokemon)
+		case .PokemonShadowID: return (7,1,1,2, .Pokemon)
+		case .PokemonLevel: return (7,1,1,3, .Pokemon)
+		case .PokemonMove: return (10,2,4,4, .Pokemon)
+		case .PokemonUnknown: return (11,2,1,12, .Pokemon)
+		case .PokemonAbilitySlot: return (2,1,1,14, .Pokemon)
+		case .PokemonIVHP: return (6,1,1,15, .Pokemon)
+		case .PokemonIVAttack: return (6,1,1,16, .Pokemon)
+		case .PokemonIVDefense: return (6,1,1,17, .Pokemon)
+		case .PokemonIVSpatk: return (6,1,1,18, .Pokemon)
+		case .PokemonIVSpdef: return (6,1,1,19, .Pokemon)
+		case .PokemonIVSpeed: return (6,1,1,20, .Pokemon)
+		case .PokemonEVHP: return (9,2,1,22, .Pokemon)
+		case .PokemonEVAttack: return (9,2,1,24, .Pokemon)
+		case .PokemonEVDefense: return (9,2,1,26, .Pokemon)
+		case .PokemonEVSpatk: return (9,2,1,28, .Pokemon)
+		case .PokemonEVSpdef: return (9,2,1,30, .Pokemon)
+		case .PokemonEVSpeed: return (9,2,1,32, .Pokemon)
+		case .PokemonHappiness: return (9,1,1,34, .Pokemon)
+		case .PokemonGender: return (2,1,1,36, .Pokemon)
+		case .PokemonNature: return (6,1,1,37, .Pokemon)
+		case .PokemonUnknown2: return (3,1,1,38, .Pokemon)
+		case .PokemonUnknown3: return (6,1,1,39, .Pokemon)
+		case .PokemonHeartGauge: return (8,1,1,40, .Pokemon)
+
+		case .StadiumBattleField: return (6,4,1,0, .Stadium)
+		case .StadiumName: return (240,30,1,4, .Stadium)
+		}
+	}
 }
+
+let kEcardHeader = [0x00, 0x30, 0x01, 0x02, 0x00, 0x01, 0x08, 0x10, 0x00, 0x00, 0x10, 0x12, 0xF0, 0xD2, 0x01, 0x00, 0x00, 0x04, 0x10, 0xEC, 0xB2, 0x19, 0x00, 0x00, 0x00, 0x08, 0x4E, 0x49, 0x4E, 0x54, 0x45, 0x4E, 0x44, 0x4F, 0x00, 0x22, 0x00, 0x09, 0x22, 0x90, 0x0F, 0x02, 0x02, 0x00, 0x00, 0x00, 0x9B, 0x2B, 0x83, 0x7C, 0x83, 0x50, 0x83, 0x82, 0x83, 0x93, 0x83, 0x52, 0x83, 0x8D, 0x83, 0x56, 0x83, 0x41, 0x83, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
 
 class EcardCoder {
 
@@ -99,19 +217,17 @@ class EcardCoder {
 		return decode(input: data)
 	}
 
-	// Default "key" value is the one used in Colosseum
-	static func decode(input: XGMutableData, key: Int = 4160) -> XGMutableData? {
+	static func decode(input: XGMutableData) -> XGMutableData? {
 		let output = XGMutableData(length: 0xb20)
 		output.file = .nameAndFolder(input.file.fileName.removeFileExtensions() + "-decoded.bin", input.file.folder)
-		let data = input.getSubDataFromOffset(0x51, length: input.length - 0x51)
+		let headerLength = kEcardHeader.count
+		let data = input.getSubDataFromOffset(headerLength, length: input.length - headerLength)
 
 		var readPosition = 0
 
 		/// **bitLength** : number of bits to read
 		func readBits(bitLength: Int) -> Int {
-			guard bitLength > 0 else {
-				return 0
-			}
+			guard bitLength > 0 else { return 0 }
 
 			var mask = 0
 
@@ -129,136 +245,155 @@ class EcardCoder {
 			return mask
 		}
 
-		@discardableResult
-		func decodeField(fieldType: EcardFieldTypes, bitLength: Int, arrayCount: Int, entryIndex: Int? = nil) -> Bool {
-			if bitLength < 0x10 {
-				var valid = true
-				for i in 0 ..< arrayCount {
-					let bits = readBits(bitLength: bitLength)
-					valid = valid && write(output: output, fieldType: fieldType, entryIndex: entryIndex, bitsAsMask: bits, arrayCounter: i)
+		func write(field: EcardFields, entryIndex: Int = 0, bitsAsMask: Int = 0, arrayCounter: Int = 0, bitsAsBuffer: [Int] = []) {
+			// The game normally does validation on the fields like ensuring a pokemon id is a valid pokemon but we can skip that
+			let info = field.info
+			var value = bitsAsMask
+			if field.rawValue == 7
+				|| field.rawValue == 9
+				|| (field.rawValue >= 0x10 && field.rawValue <= 0x18)
+				|| field.rawValue == 0x2a
+				|| (field.rawValue == 0x44 && field.rawValue & 0x20 == 0) {
+				value -= 1
+			} else if (field.rawValue >= 0x35 && field.rawValue <= 0x42)
+				||  field.rawValue == 0x44 {
+				let isRandom = value >> (field.info.bits - 1) == 1
+				value = isRandom ? -1 : value
+			} else if field.rawValue == 0x43 {
+				value = (value >= 1 && value <= 3) ? value - 1 : 0
+			} else if field.rawValue == 0x29 {
+				value = value == 0 ? 1 : 0
+			}
+			let offset = info.section.startOffset + (entryIndex * info.section.length) + (arrayCounter * field.info.bytes) + info.relativeOffset
+			switch field.info.bytes {
+			case 1: output.replaceByteAtOffset(offset, withByte: value & 0xFF)
+			case 2: output.replace2BytesAtOffset(offset, withBytes: value & 0xFFFF)
+			case 4: output.replace4BytesAtOffset(offset, withBytes: value & 0xFFFFFFFF)
+			default: output.replaceBytesFromOffset(offset, withByteStream: bitsAsBuffer)
+			}
+		}
+
+		func decodeField(_ field: EcardFields, entryIndex: Int = 0) {
+			let info = field.info
+			if info.bits < 0x10 {
+				for i in 0 ..< info.arrayCount {
+					let bits = readBits(bitLength: info.bits)
+					write(field: field, entryIndex: entryIndex, bitsAsMask: bits, arrayCounter: i)
 				}
-				return valid
 			} else {
 				var byteBuffer = [Int]()
-				while bitLength - (byteBuffer.count * 8) > 0 {
-					let nextbitLength = min(bitLength - (byteBuffer.count * 8), 0x10)
+				while info.bits - (byteBuffer.count * 8) > 0 {
+					let nextbitLength = min(info.bits - (byteBuffer.count * 8), 0x10)
 					let bits = readBits(bitLength: nextbitLength)
 					byteBuffer += bits.byteArrayU16
 				}
 				byteBuffer += [0,0]
-				return write(output: output, fieldType: fieldType, entryIndex: entryIndex, bitsAsBuffer: byteBuffer)
+				write(field: field, entryIndex: entryIndex, bitsAsBuffer: byteBuffer)
 			}
 		}
 
-		@discardableResult
-		func decodeFields(withParameters parameters: [(fieldType: EcardFieldTypes, bitLength: Int, loopCount: Int)], entryIndex: Int? = nil) -> Bool {
-			var valid = true
-			for params in parameters {
-				valid = valid && decodeField(fieldType: params.fieldType, bitLength: params.bitLength, arrayCount: params.loopCount, entryIndex: entryIndex)
+		func decodeFields(_ fields: [EcardFields], entryIndex: Int = 0) {
+			for field in fields {
+				decodeField(field, entryIndex: entryIndex)
 			}
-			return valid
 		}
 
-		@discardableResult
-		func decodeStadium() -> Bool {
-			return decodeFields(withParameters: [
-				(.CardTypeStadium, 4, 0x1),
-				(.StadiumBattleField, 6, 0x1),
-				(.StadiumName, 240, 0x1)
+		func decodeStadium() {
+			decodeFields([
+				.CardTypeStadium,
+				.StadiumBattleField,
+				.StadiumName
 			])
 		}
 
-		@discardableResult
-		func decodeMetaData() -> Bool {
-			return decodeFields(withParameters: [
-				(.CardTypeBattle, 4, 1),
-				(.MetaDataUnknown1, 3, 1),
-				(.MetaDataUnknown2, 2, 1),
-				(.MetaDataUnknown3, 4, 1),
-				(.MetaDataUnknown4, 4, 1),
-				(.MetaDataUnknown5, 8, 1),
-				(.MetaDataCardName, 192, 1),
-				(.MetaDataUnknown6, 3, 1),
-				(.MetaDataUnknown7, 3, 1),
-				(.MetaDataUnknown8, 3, 1),
-				(.MetaDataEasyDifficultyName, 112, 1),
-				(.MetaDataNormalDifficultyName, 112, 1),
-				(.MetaDataHardDifficultyName, 112, 1),
-				(.MetaDataUnknown9, 2, 1),
-				(.MetaDataUnknown10, 3, 1),
-				(.MetaDataUnknown11, 3, 1),
-				(.MetaDataUnknown12, 4, 1),
-				(.MetaDataUnknown13, 4, 1),
-				(.MetaDataUnknown14, 4, 1),
-				(.MetaDataUnknown15, 4, 1),
-				(.MetaDataUnknown16, 4, 1),
-				(.MetaDataUnknown17, 4, 1),
-				(.MetaDataUnknown18, 4, 1),
-				(.MetaDataUnknown19, 4, 1),
-				(.MetaDataUnknown20, 4, 1),
-				(.MetaDataUnknown21, 10, 1),
-				(.MetaDataUnknown22, 10, 1),
-				(.MetaDataUnknown23, 10, 1),
-				(.MetaDataUnknown24, 7, 1),
-				(.MetaDataUnknown25, 7, 1),
-				(.MetaDataUnknown26, 7, 1),
-				(.MetaDataBonusTrainer1Text1, 720, 1),
-				(.MetaDataBonusTrainer1Text2, 720, 1),
-				(.MetaDataBonusTrainer1Text3, 720, 1),
-				(.MetaDataBonusTrainer2Text1, 720, 1),
-				(.MetaDataBonusTrainer2Text2, 720, 1),
-				(.MetaDataBonusTrainer2Text3, 720, 1),
-				(.MetaDataBonusTrainer3Text1, 720, 1),
-				(.MetaDataBonusTrainer3Text2, 720, 1),
-				(.MetaDataBonusTrainer3Text3, 720, 1)
+		func decodeMetaData() {
+			decodeFields([
+				.CardTypeBattle,
+				.MetaDataUnknown1,
+				.MetaDataUnknown2,
+				.MetaDataUnknown3,
+				.MetaDataUnknown4,
+				.MetaDataUnknown5,
+				.MetaDataCardName,
+				.MetaDataPackID,
+				.MetaDataUnknown7,
+				.MetaDataCardIndex,
+				.MetaDataEasyDifficultyName,
+				.MetaDataNormalDifficultyName,
+				.MetaDataHardDifficultyName,
+				.MetaDataUnknown9,
+				.MetaDataUnknown10,
+				.MetaDataUnknown11,
+				.MetaDataUnknown12,
+				.MetaDataUnknown13,
+				.MetaDataUnknown14,
+				.MetaDataUnknown15,
+				.MetaDataUnknown16,
+				.MetaDataUnknown17,
+				.MetaDataUnknown18,
+				.MetaDataUnknown19,
+				.MetaDataUnknown20,
+				.MetaDataUnknown21,
+				.MetaDataUnknown22,
+				.MetaDataUnknown23,
+				.MetaDataUnknown24,
+				.MetaDataUnknown25,
+				.MetaDataUnknown26,
+				.MetaDataBonusTrainer1Text1,
+				.MetaDataBonusTrainer1Text2,
+				.MetaDataBonusTrainer1Text3,
+				.MetaDataBonusTrainer2Text1,
+				.MetaDataBonusTrainer2Text2,
+				.MetaDataBonusTrainer2Text3,
+				.MetaDataBonusTrainer3Text1,
+				.MetaDataBonusTrainer3Text2,
+				.MetaDataBonusTrainer3Text3
 			])
 		}
 
-		@discardableResult
-		func decodeTrainer(withIndex index: Int) -> Bool {
-			return decodeFields(withParameters: [
-				(.TrainerName, 80, 1),
-				(.TrainerGender, 1, 1),
-				(.TrainerPokemonSlot, 6, 4),
-				(.TrainerItem, 10, 4),
-				(.TrainerUnknown, 1, 1),
-				(.TrainerAI, 14, 1),
-				(.TrainerID, 10, 1),
-				(.TrainerModel, 7, 1)
+		func decodeTrainer(withIndex index: Int) {
+			decodeFields([
+				.TrainerName,
+				.TrainerGender,
+				.TrainerPokemonSlot,
+				.TrainerItem,
+				.TrainerUnknown,
+				.TrainerAI,
+				.TrainerID,
+				.TrainerModel
 			], entryIndex: index)
 		}
 
-		@discardableResult
-		func decodePokemon(withIndex index: Int) -> Bool {
-			return decodeFields(withParameters: [
-				(.PokemonSpecies, 9, 1),
-				(.PokemonShadowID, 7, 1),
-				(.PokemonLevel, 7, 1),
-				(.PokemonMove, 10, 4),
-				(.PokemonUnknown, 11, 1),
-				(.PokemonAbilitySlot, 2, 1),
-				(.PokemonIVHP, 6, 1),
-				(.PokemonIVAttack, 6, 1),
-				(.PokemonIVDefense, 6, 1),
-				(.PokemonIVSpatk, 6, 1),
-				(.PokemonIVSpdef, 6, 1),
-				(.PokemonIVSpeed, 6, 1),
-				(.PokemonEVHP, 9, 1),
-				(.PokemonEVAttack, 9, 1),
-				(.PokemonEVDefense, 9, 1),
-				(.PokemonEVSpatk, 9, 1),
-				(.PokemonEVSpdef, 9, 1),
-				(.PokemonEVSpeed, 9, 1),
-				(.PokemonHappiness, 9, 1),
-				(.PokemonGender, 2, 1),
-				(.PokemonNature, 6, 1),
-				(.PokemonUnknown2, 3, 1),
-				(.PokemonUnknown3, 6, 1),
-				(.PokemonHeartGauge, 8, 1)
+		func decodePokemon(withIndex index: Int) {
+			decodeFields([
+				.PokemonSpecies,
+				.PokemonShadowID,
+				.PokemonLevel,
+				.PokemonMove,
+				.PokemonUnknown,
+				.PokemonAbilitySlot,
+				.PokemonIVHP,
+				.PokemonIVAttack,
+				.PokemonIVDefense,
+				.PokemonIVSpatk,
+				.PokemonIVSpdef,
+				.PokemonIVSpeed,
+				.PokemonEVHP,
+				.PokemonEVAttack,
+				.PokemonEVDefense,
+				.PokemonEVSpatk,
+				.PokemonEVSpdef,
+				.PokemonEVSpeed,
+				.PokemonHappiness,
+				.PokemonGender,
+				.PokemonNature,
+				.PokemonUnknown2,
+				.PokemonUnknown3,
+				.PokemonHeartGauge
 			], entryIndex: index)
 		}
 
-		decodeField(fieldType: .CardTypeBattle, bitLength: 4, arrayCount: 1)
+		decodeField(.CardTypeBattle)
 		let cardType = output.get4BytesAtOffset(0)
 		readPosition = 0
 
@@ -266,10 +401,10 @@ class EcardCoder {
 			decodeStadium()
 		} else if cardType == 0 {
 			decodeMetaData()
-			for i in 0 ..< 9 {
+			for i in 0 ..< EcardTableSections.Trainer.numberOfEntries {
 				decodeTrainer(withIndex: i)
 			}
-			for i in 0 ..< 0x24 {
+			for i in 0 ..< EcardTableSections.Pokemon.numberOfEntries {
 				decodePokemon(withIndex: i)
 			}
 		} else {
@@ -279,331 +414,207 @@ class EcardCoder {
 		return output
 	}
 
-	/// This function is used to read individual fields such as strings or values from the structs saved on the cards
-	/// Different fieldTypes are used to perform different types of validation to make sure the card was read correctly
-	/// The values are things like checking pokemon ids and item ids fall within valid ranges
-	@discardableResult
-	private static func write(output: XGMutableData, fieldType: EcardFieldTypes, entryIndex: Int? = nil, bitsAsMask: Int? = nil, arrayCounter: Int? = nil, bitsAsBuffer: [Int]? = nil) -> Bool {
+	static func encode(file: XGFiles) -> XGMutableData? {
+		guard let data = file.data else { return nil }
+		return encode(data: data)
+	}
 
-		let charValue  = (bitsAsMask ?? 0) & 0xFF
-		let shortValue = (bitsAsMask ?? 0) & 0xFFFF
-		let wordValue  = (bitsAsMask ?? 0) & 0xFFFFFFFF
-		let stringValue = bitsAsBuffer ?? []
-		let multiplier = entryIndex ?? 0
-		let loop = arrayCounter ?? 0
+	static func encode(data: XGMutableData) -> XGMutableData? {
+		let output = XGMutableData()
+		output.file = .nameAndFolder(data.file.fileName.removeFileExtensions() + "-decrypted.bin", data.file.folder)
 
-		switch fieldType.rawValue {
-		case 0x1:
-			output.replaceByteAtOffset(4, withByte: charValue)
-			guard charValue != 0, charValue <= 5 else {
-				return false
-			}
-		case 0x2:
-			output.replaceByteAtOffset(5, withByte: charValue)
-			guard charValue != 0, charValue <= 3 else {
-				return false
-			}
-		case 0x3:
-			output.replaceByteAtOffset(6, withByte: charValue)
-			guard charValue != 0, charValue <= 9 else {
-				return false
-			}
-		case 0x4:
-			output.replaceByteAtOffset(7, withByte: charValue)
-			guard charValue != 0 else {
-				return false
-			}
-		case 0x5:
-			output.replaceByteAtOffset(8, withByte: charValue)
-		case 0x6:
-			output.replaceBytesFromOffset(10, withByteStream: stringValue)
-		case 0x7:
-			output.replaceByteAtOffset(0x24, withByte: charValue - 1)
-			guard charValue >= 0, charValue <= 5 else {
-				return false
-			}
-		case 0x8:
-			output.replaceByteAtOffset(0x25, withByte: charValue)
-		case 0x9:
-			output.replaceByteAtOffset(0x26, withByte: charValue - 1)
-			guard charValue >= 1, charValue <= 5 else {
-				return false
-			}
-		case 0xa:
-			output.replaceBytesFromOffset(0x28, withByteStream: stringValue)
-		case 0xb:
-			output.replaceBytesFromOffset(0x38, withByteStream: stringValue)
-		case 0xc:
-			output.replaceBytesFromOffset(0x48, withByteStream: stringValue)
-		case 0xd:
-			output.replaceByteAtOffset(0x58, withByte: charValue)
-			guard charValue >= 1, charValue <= 3 else {
-				return false
-			}
-		case 0xe:
-			output.replaceByteAtOffset(0x59, withByte: charValue)
-			guard charValue >= 1, charValue <= 6 else {
-				return false
-			}
-		case 0xf:
-			output.replaceByteAtOffset(0x5a, withByte: charValue)
-			guard charValue >= 1, charValue <= 5 else {
-				return false
-			}
-		case 0x10:
-			output.replaceByteAtOffset(0x5b, withByte: charValue - 1)
-			guard charValue >= 0, charValue <= 9 else {
-				return false
-			}
-		case 0x11:
-			output.replaceByteAtOffset(0x5c, withByte: charValue - 1)
-			guard charValue >= 0, charValue <= 9 else {
-				return false
-			}
-		case 0x12:
-			output.replaceByteAtOffset(0x5d, withByte: charValue - 1)
-			guard charValue >= 0, charValue <= 9 else {
-				return false
-			}
-		case 0x13:
-			output.replaceByteAtOffset(0x5e, withByte: charValue - 1)
-			guard charValue >= 0, charValue <= 9 else {
-				return false
-			}
-		case 0x14:
-			output.replaceByteAtOffset(0x5f, withByte: charValue - 1)
-			guard charValue >= 0, charValue <= 9 else {
-				return false
-			}
-		case 0x15:
-			output.replaceByteAtOffset(0x60, withByte: charValue - 1)
-			guard charValue >= 0, charValue <= 9 else {
-				return false
-			}
-		case 0x16:
-			output.replaceByteAtOffset(0x61, withByte: charValue - 1)
-			guard charValue >= 0, charValue <= 9 else {
-				return false
-			}
-		case 0x17:
-			output.replaceByteAtOffset(0x62, withByte: charValue - 1)
-			guard charValue >= 0, charValue <= 9 else {
-				return false
-			}
-		case 0x18:
-			output.replaceByteAtOffset(0x63, withByte: charValue - 1)
-			guard charValue >= 0, charValue <= 9 else {
-				return false
-			}
-		case 0x19:
-			output.replace2BytesAtOffset(0x64, withBytes: shortValue)
-			guard shortValue >= 0, shortValue < (0x2f * 7) else {
-				return false
-			}
-		case 0x1a:
-			output.replace2BytesAtOffset(0x66, withBytes: shortValue)
-			guard shortValue >= 0, shortValue < (0x2f * 7) else {
-				return false
-			}
-		case 0x1b:
-			output.replace2BytesAtOffset(0x68, withBytes: shortValue)
-			guard shortValue >= 0, shortValue < (0x2f * 7) else {
-				return false
-			}
-		case 0x1c:
-			output.replaceByteAtOffset(0x6a, withByte: charValue)
-			switch charValue {
-			case 0: fallthrough
-			case 0xd: fallthrough
-			case 0x12: fallthrough
-			case 0x19: fallthrough
-			case 0x1a: fallthrough
-			case 0x1b: fallthrough
-			case 0x1c: fallthrough
-			case 0x1d: fallthrough
-			case 0x1e: fallthrough
-			case 0x20: fallthrough
-			case 0x24: return true
-			default: return false
-			}
-		case 0x1d:
-			output.replaceByteAtOffset(0x6b, withByte: charValue)
-			switch charValue {
-			case 0: fallthrough
-			case 0xd: fallthrough
-			case 0x12: fallthrough
-			case 0x19: fallthrough
-			case 0x1a: fallthrough
-			case 0x1b: fallthrough
-			case 0x1c: fallthrough
-			case 0x1d: fallthrough
-			case 0x1e: fallthrough
-			case 0x20: fallthrough
-			case 0x24: return true
-			default: return false
-			}
-		case 0x1e:
-			output.replaceByteAtOffset(0x6c, withByte: charValue)
-			switch charValue {
-			case 0: fallthrough
-			case 0xd: fallthrough
-			case 0x12: fallthrough
-			case 0x19: fallthrough
-			case 0x1a: fallthrough
-			case 0x1b: fallthrough
-			case 0x1c: fallthrough
-			case 0x1d: fallthrough
-			case 0x1e: fallthrough
-			case 0x20: fallthrough
-			case 0x24: return true
-			default: return false
-			}
-		case 0x1f:
-			output.replaceBytesFromOffset(0x6e, withByteStream: stringValue)
-		case 0x20:
-			output.replaceBytesFromOffset(0x182, withByteStream: stringValue)
-		case 0x21:
-			output.replaceBytesFromOffset(0x296, withByteStream: stringValue)
-		case 0x22:
-			output.replaceBytesFromOffset(0xca, withByteStream: stringValue)
-		case 0x23:
-			output.replaceBytesFromOffset(0x1de, withByteStream: stringValue)
-		case 0x24:
-			output.replaceBytesFromOffset(0x2f2, withByteStream: stringValue)
-		case 0x25:
-			output.replaceBytesFromOffset(0x126, withByteStream: stringValue)
-		case 0x26:
-			output.replaceBytesFromOffset(0x23a, withByteStream: stringValue)
-		case 0x27:
-			output.replaceBytesFromOffset(0x34e, withByteStream: stringValue)
-		case 0x28:
-			output.replaceBytesFromOffset((0xeb + (multiplier * 10)) * 4, withByteStream: stringValue)
-		case 0x29:
-			output.replaceByteAtOffset((0xee + (multiplier * 10)) * 4, withByte: wordValue == 0 ? 1 : 0)
-		case 0x2a:
-			output.replaceByteAtOffset(loop + (multiplier * 0x28) + 0x3b9, withByte: charValue - 1)
-			guard charValue >= 0, charValue <= 0x24 else {
-				return false
-			}
-		case 0x2b:
-			output.replace2BytesAtOffset((loop * 2) + (multiplier * 0x28) + 0x3be, withBytes: shortValue)
-			guard shortValue >= 0, shortValue < (0x2f * 7) else {
-				return false
-			}
-		case 0x2c:
-			output.replace4BytesAtOffset(((multiplier * 10) + 0xf2) * 4, withBytes: wordValue)
-		case 0x2d:
-			output.replace2BytesAtOffset(((multiplier * 10) + 0xf3) * 4, withBytes: shortValue)
-			guard shortValue == 0 || shortValue >= 0x6 || shortValue <= 0x50 else {
-				return false
-			}
-		case 0x2e:
-			output.replace2BytesAtOffset((multiplier * 0x28) + 0x3ce, withBytes: shortValue)
-			guard ((output.getByteAtOffset(0x5b) != multiplier)
-			&& (output.getByteAtOffset(0x5c) != multiplier)
-			&& (output.getByteAtOffset(0x5d) != multiplier))
-					|| shortValue <= 999 else {
-				return false
-			}
-		case 0x2f:
-			output.replaceByteAtOffset(((multiplier * 10) + 0xf4) * 4, withByte: charValue)
-			guard true else {
-				return false
-			} // Lots of gaps in the table at RAM offset 80269470. CBA to validate within all valid range
-		case 0x30:
-			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x514, withBytes: shortValue)
-			guard shortValue >= 0, shortValue <= 411 else {
-				return false
-			}
-		case 0x31:
-			output.replaceByteAtOffset((multiplier * 0x2a) + 0x516, withByte: charValue)
-			guard (charValue == 0)
-			|| ((charValue >= 0x44)
-			&& (charValue <= 0x60)) else {
-				return false
-			}
-		case 0x32:
-			output.replaceByteAtOffset((multiplier * 0x2a) + 0x517, withByte: charValue)
-		case 0x33:
-			output.replace2BytesAtOffset((loop * 2) + (multiplier * 0x2a) + 0x518, withBytes: shortValue)
-			guard charValue >= 0, charValue <= 0x47 * 5 else {
-				return false
-			}
-		case 0x34:
-			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x520, withBytes: shortValue)
-			guard shortValue >= 0, shortValue < (0x2f * 7) else {
-				return false
-			}
-		case 0x35:
-			output.replaceByteAtOffset((multiplier * 0x2a) + 0x522, withByte: wordValue > -1 && wordValue < 2 ? charValue : 0xFF)
-		case 0x36:
-			output.replaceByteAtOffset((multiplier * 0x2a) + 0x523, withByte: wordValue > -1 && wordValue < 0x20 ? charValue : 0xFF)
-		case 0x37:
-			output.replaceByteAtOffset((multiplier * 0x2a) + 0x524, withByte: wordValue > -1 && wordValue < 0x20 ? charValue : 0xFF)
-		case 0x38:
-			output.replaceByteAtOffset((multiplier * 0x2a) + 0x525, withByte: wordValue > -1 && wordValue < 0x20 ? charValue : 0xFF)
-		case 0x39:
-			output.replaceByteAtOffset((multiplier * 0x2a) + 0x526, withByte: wordValue > -1 && wordValue < 0x20 ? charValue : 0xFF)
-		case 0x3a:
-			output.replaceByteAtOffset((multiplier * 0x2a) + 0x527, withByte: wordValue > -1 && wordValue < 0x20 ? charValue : 0xFF)
-		case 0x3b:
-			output.replaceByteAtOffset((multiplier * 0x2a) + 0x528, withByte: wordValue > -1 && wordValue < 0x20 ? charValue : 0xFF)
-		case 0x3c:
-			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x52a, withBytes: wordValue > -1 && wordValue < 0x100 ? shortValue : 0xFFFF)
-		case 0x3d:
-			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x52c, withBytes: wordValue > -1 && wordValue < 0x100 ? shortValue : 0xFFFF)
-		case 0x3e:
-			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x52e, withBytes: wordValue > -1 && wordValue < 0x100 ? shortValue : 0xFFFF)
-		case 0x3f:
-			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x530, withBytes: wordValue > -1 && wordValue < 0x100 ? shortValue : 0xFFFF)
-		case 0x40:
-			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x532, withBytes: wordValue > -1 && wordValue < 0x100 ? shortValue : 0xFFFF)
-		case 0x41:
-			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x534, withBytes: wordValue > -1 && wordValue < 0x100 ? shortValue : 0xFFFF)
-		case 0x42:
-			output.replace2BytesAtOffset((multiplier * 0x2a) + 0x536, withBytes: wordValue > -1 && wordValue < 0x100 ? shortValue : 0xFFFF)
-		case 0x43:
-			if wordValue >= 1, wordValue <= 3 {
-				output.replaceByteAtOffset((multiplier * 0x2a) + 0x538, withByte: wordValue - 1)
-			} else {
-				output.replaceByteAtOffset((multiplier * 0x2a) + 0x538, withByte: 0)
-			}
-		case 0x44:
-			if wordValue & 0x20 == 0 {
-				output.replaceByteAtOffset((multiplier * 0x2a) + 0x539, withByte: charValue - 1)
-				guard (charValue - 1) >= 0, (charValue - 1) <= 0x18 else {
-					return false
+		var writePosition = 7
+		var currentByte = 0
 
+		func writeBits(_ bits: [Int]) {
+			for bit in bits {
+				let nextBit = bit << writePosition
+				currentByte |= nextBit
+
+				if writePosition == 0 {
+					output.appendBytes([currentByte])
+					currentByte = 0
+					writePosition = 7
+				} else {
+					writePosition -= 1
 				}
-			} else {
-				output.replaceByteAtOffset((multiplier * 0x2a) + 0x539, withByte: 0xFF)
-			}
-		case 0x45:
-			output.replaceByteAtOffset((multiplier * 0x2a) + 0x53a, withByte: charValue)
-			guard charValue <= 3 else {
-				return false
-			}
-		case 0x46:
-			output.replaceByteAtOffset((multiplier * 0x2a) + 0x53b, withByte: charValue)
-			guard charValue <= 4 else {
-				return false
-			}
-		case 0x47:
-			output.replaceByteAtOffset((multiplier * 0x2a) + 0x53c, withByte: charValue)
-		case 0x49:
-			output.replace4BytesAtOffset(0x2bf * 4, withBytes: wordValue)
-			guard true else {
-				return false
-			} // Lots of gaps in the table at RAM offset 80269abc. CBA to validate within all valid range
-		case 0x4a:
-			output.replaceBytesFromOffset(0x2c0 * 4, withByteStream: stringValue)
-		default:
-			output.replace4BytesAtOffset(0, withBytes: wordValue)
-			guard charValue >= 0, charValue <= 1 else {
-				return false
 			}
 		}
 
-		return true
+		func encodeField(_ field: EcardFields, entryIndex: Int = 0) {
+			let info = field.info
+			for arrayCounter in 0 ..< info.arrayCount {
+				let offset = info.section.startOffset + (entryIndex * info.section.length) + (arrayCounter * field.info.bytes) + info.relativeOffset
+				var values = data.getByteStreamFromOffset(offset, length: info.bytes)
+
+				if field.rawValue == 7
+					|| field.rawValue == 9
+					|| (field.rawValue >= 0x10 && field.rawValue <= 0x18)
+					|| field.rawValue == 0x2a
+					|| (field.rawValue == 0x44 && field.rawValue & 0x20 == 0) {
+					values[0] = values[0] + 1
+				} else if field.rawValue == 0x43 {
+					values[0] = values[0] + 1
+				} else if field.rawValue == 0x29 {
+					values[0] = values[0] == 0 ? 1 : 0
+				}
+
+				var bits = [Int]()
+				for value in values {
+					bits += value.bits(count: 8, startWithLeastSignificantBit: false)
+				}
+				while bits.count < info.bits {
+					bits = [0] + bits
+				}
+				let bitsToRemove = bits.count - info.bits
+				bits = Array(bits[bitsToRemove ..< bits.count])
+				writeBits(bits)
+			}
+		}
+
+		func encodeFields(_ fields: [EcardFields], entryIndex: Int = 0) {
+			for field in fields {
+				encodeField(field, entryIndex: entryIndex)
+			}
+		}
+
+		func encodeStadium() {
+			encodeFields([
+				.CardTypeStadium,
+				.StadiumBattleField,
+				.StadiumName
+			])
+		}
+
+		func encodeMetaData() {
+			encodeFields([
+				.CardTypeBattle,
+				.MetaDataUnknown1,
+				.MetaDataUnknown2,
+				.MetaDataUnknown3,
+				.MetaDataUnknown4,
+				.MetaDataUnknown5,
+				.MetaDataCardName,
+				.MetaDataPackID,
+				.MetaDataUnknown7,
+				.MetaDataCardIndex,
+				.MetaDataEasyDifficultyName,
+				.MetaDataNormalDifficultyName,
+				.MetaDataHardDifficultyName,
+				.MetaDataUnknown9,
+				.MetaDataUnknown10,
+				.MetaDataUnknown11,
+				.MetaDataUnknown12,
+				.MetaDataUnknown13,
+				.MetaDataUnknown14,
+				.MetaDataUnknown15,
+				.MetaDataUnknown16,
+				.MetaDataUnknown17,
+				.MetaDataUnknown18,
+				.MetaDataUnknown19,
+				.MetaDataUnknown20,
+				.MetaDataUnknown21,
+				.MetaDataUnknown22,
+				.MetaDataUnknown23,
+				.MetaDataUnknown24,
+				.MetaDataUnknown25,
+				.MetaDataUnknown26,
+				.MetaDataBonusTrainer1Text1,
+				.MetaDataBonusTrainer1Text2,
+				.MetaDataBonusTrainer1Text3,
+				.MetaDataBonusTrainer2Text1,
+				.MetaDataBonusTrainer2Text2,
+				.MetaDataBonusTrainer2Text3,
+				.MetaDataBonusTrainer3Text1,
+				.MetaDataBonusTrainer3Text2,
+				.MetaDataBonusTrainer3Text3
+			])
+		}
+
+		func encodeTrainer(withIndex index: Int) {
+			encodeFields([
+				.TrainerName,
+				.TrainerGender,
+				.TrainerPokemonSlot,
+				.TrainerItem,
+				.TrainerUnknown,
+				.TrainerAI,
+				.TrainerID,
+				.TrainerModel
+			], entryIndex: index)
+		}
+
+		func encodePokemon(withIndex index: Int) {
+			encodeFields([
+				.PokemonSpecies,
+				.PokemonShadowID,
+				.PokemonLevel,
+				.PokemonMove,
+				.PokemonUnknown,
+				.PokemonAbilitySlot,
+				.PokemonIVHP,
+				.PokemonIVAttack,
+				.PokemonIVDefense,
+				.PokemonIVSpatk,
+				.PokemonIVSpdef,
+				.PokemonIVSpeed,
+				.PokemonEVHP,
+				.PokemonEVAttack,
+				.PokemonEVDefense,
+				.PokemonEVSpatk,
+				.PokemonEVSpdef,
+				.PokemonEVSpeed,
+				.PokemonHappiness,
+				.PokemonGender,
+				.PokemonNature,
+				.PokemonUnknown2,
+				.PokemonUnknown3,
+				.PokemonHeartGauge
+			], entryIndex: index)
+		}
+
+		let cardType = data.get4BytesAtOffset(0)
+
+		if cardType == 1 {
+			encodeStadium()
+		} else if cardType == 0 {
+			encodeMetaData()
+			for i in 0 ..< EcardTableSections.Trainer.numberOfEntries {
+				encodeTrainer(withIndex: i)
+			}
+			for i in 0 ..< EcardTableSections.Pokemon.numberOfEntries {
+				encodePokemon(withIndex: i)
+			}
+		} else {
+			return nil
+		}
+
+		if writePosition != 7 {
+			output.appendBytes([currentByte])
+		}
+
+		output.insertBytes(bytes: kEcardHeader, atOffset: 0)
+		var lastDummyValue = 0
+		while output.length < 0x840 {
+			output.appendBytes([lastDummyValue])
+			lastDummyValue += 1
+			if lastDummyValue == 256 { lastDummyValue = 0 }
+		}
+
+		var info = EcardFields.MetaDataCardName.info
+		output.nullBytes(start: info.relativeOffset, length: info.bytes)
+		output.writeString("Colo Tool", at: info.relativeOffset, charLength: .short, maxCharacters: info.bytes / 2, includeNullTerminator: false)
+
+		info = EcardFields.MetaDataEasyDifficultyName.info
+		output.nullBytes(start: info.relativeOffset, length: info.bytes)
+		output.writeString("Easy", at: info.relativeOffset, charLength: .short, maxCharacters: info.bytes / 2, includeNullTerminator: false)
+		info = EcardFields.MetaDataNormalDifficultyName.info
+		output.nullBytes(start: info.relativeOffset, length: info.bytes)
+		output.writeString("Normal", at: info.relativeOffset, charLength: .short, maxCharacters: info.bytes / 2, includeNullTerminator: false)
+		info = EcardFields.MetaDataHardDifficultyName.info
+		output.nullBytes(start: info.relativeOffset, length: info.bytes)
+		output.writeString("Hard", at: info.relativeOffset, charLength: .short, maxCharacters: info.bytes / 2, includeNullTerminator: false)
+
+		return output
 	}
 }

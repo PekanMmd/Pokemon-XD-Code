@@ -28,10 +28,10 @@ class EreaderStructTable: GoDStructTableFormattable {
 		case .pokemon:
 			properties = ecardTrainerPokemonStruct
 			startOffsetForFirstEntryInFile = { (file) in
-				return 0x514
+				return EcardTableSections.Pokemon.startOffset
 			}
 			numberOfEntriesInFile = { (file) in
-				return 36
+				return EcardTableSections.Pokemon.numberOfEntries
 			}
 			nameForEntry = { (index, data) -> String? in
 				if let monIndex: Int = data.get("Species") {
@@ -42,10 +42,10 @@ class EreaderStructTable: GoDStructTableFormattable {
 		case .trainers:
 			properties = ecardTrainerStruct
 			startOffsetForFirstEntryInFile = { (file) in
-				return 0x3AC
+				return EcardTableSections.Trainer.startOffset
 			}
 			numberOfEntriesInFile = { (file) in
-				return 9
+				return EcardTableSections.Trainer.numberOfEntries
 			}
 			nameForEntry = { (index, data) -> String? in
 				if let name: String = data.get("Name") {

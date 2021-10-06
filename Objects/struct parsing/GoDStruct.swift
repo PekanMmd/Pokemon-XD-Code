@@ -921,7 +921,7 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				valueString = "(\(rawValue))"
 				#else
 				let table = pkxTrainerModelsTable
-				valueString = "\(table.assumedNameForEntry(index: rawValue)) \(rawValue)"
+				valueString = "\(table.assumedNameForEntry(index: rawValue)) (\(rawValue))"
 				#endif
 			case .pkxPokemonID:
 				#if GAME_PBR

@@ -19,6 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var scriptCompilerMenuItem: NSMenuItem!
 	@IBOutlet weak var experimentalFeaturesMenuItem: NSMenuItem!
 	@IBOutlet weak var ereaderMenuItem: NSMenuItem!
+	@IBOutlet weak var ereaderencodeMenuItem: NSMenuItem!
 
 	@IBOutlet weak var godtoolmenuitem: NSMenuItem!
 	@IBOutlet weak var godtoolaboutmenuitem: NSMenuItem!
@@ -40,6 +41,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		#if !GAME_PBR
 		if game != .Colosseum {
 			ereaderMenuItem.isEnabled = false
+			ereaderencodeMenuItem.isEnabled = false
 		}
 		#endif
 	}
@@ -425,6 +427,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 		if game == .Colosseum {
 			XGUtility.decodeEReaderCards()
+		}
+	}
+
+	@IBAction func encodeEreaderCards(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		if game == .Colosseum {
+			XGUtility.encodeEReaderCards()
 		}
 	}
 
