@@ -7774,6 +7774,7 @@
 		1CD30095270525A1003CCAD2 /* XD */ = {
 			isa = PBXGroup;
 			children = (
+				1CE3498B2710D34700B803FD /* DiscordPlaysPokemon.swift */,
 				1CD65236270E98AD006A39B0 /* XDBattlePokemon.swift */,
 				1CD300962705262E003CCAD2 /* XDBreakPoints.swift */,
 				1CD300B527052655003CCAD2 /* XDGameState.swift */,
@@ -10085,7 +10086,6 @@
 				B2F7C8E61F8FB4F300BB664D /* default move routines.txt */,
 				B27AA6361F8EDE0F001D06CF /* move routine seconday effects.txt */,
 				B27AA63A1F8F141B001D06CF /* move routine functions.txt */,
-				1CE3498B2710D34700B803FD /* DiscordPlaysPokemon.swift */,
 			);
 			path = GoDToolCL;
 			sourceTree = "<group>";
