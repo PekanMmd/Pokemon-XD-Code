@@ -105,6 +105,80 @@ class DiscordPlaysPokemon {
 			return true
 		}
 
+		setup.onPurification = { [weak self] (context, process, state) -> Bool in
+			print("purification")
+			return true
+		}
+
+		setup.onCaptureFailed = { [weak self] (context, process, state) -> Bool in
+			print("capture failed")
+			return true
+		}
+
+		setup.onCaptureSucceeded = { [weak self] (context, process, state) -> Bool in
+			print("capture succeeded")
+			return true
+		}
+
+		setup.onPokeballThrow = { [weak self] (context, process, state) -> Bool in
+			print("pokeball throw")
+			return true
+		}
+
+		setup.onDidEvolve = { [weak self] (context, process, state) -> Bool in
+			print("evolution")
+			return true
+		}
+
+		setup.onBattleStart = { [weak self] (context, process, state) -> Bool in
+			print("battle start")
+			return true
+		}
+
+		setup.onPokemonFainted = { [weak self] (context, process, state) -> Bool in
+			print("pokemon fainted")
+			return true
+		}
+
+		setup.onReceiveGiftPokemon = { [weak self] (context, process, state) -> Bool in
+			print("received gift mon")
+			return true
+		}
+
+		setup.onSpotMonitorActivated = { [weak self] (process, state) -> Bool in
+			print("spot monitor active")
+			return true
+		}
+
+		setup.onWillUseMove = { [weak self] (context, process, state) -> Bool in
+			print("use move")
+			return true
+		}
+
+		setup.onTeamWhiteOut = { [weak self] (process, state) -> Bool in
+			print("white out")
+			return true
+		}
+
+		setup.onMirorRadarActivated = { [weak self] (process, state) -> Bool in
+			print("miror radar active")
+			return true
+		}
+
+		setup.onShadowPokemonEncountered = { [weak self] (context, process, state) -> Bool in
+			print("shadow encounter")
+			return true
+		}
+
+		setup.onPokemonWillSwitchIn = { [weak self] (context, process, state) -> Bool in
+			print("switched in")
+			return true
+		}
+
+		setup.onPokemonDidEnterReverseMode = { [weak self] (context, process, state) -> Bool in
+			print("reverse mode")
+			return true
+		}
 
 
 		setup.launch(settings: [
