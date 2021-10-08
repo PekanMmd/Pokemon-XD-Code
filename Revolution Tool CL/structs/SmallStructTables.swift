@@ -65,3 +65,14 @@ let experienceStruct = GoDStruct(name: "Experience Table", format: [
 let experienceTable = CommonStructTable(file: .indexAndFsysName(region == .JP ? 11 : 5, "common"), properties: experienceStruct) { (index, data) -> String? in
 	return XGExpRate(rawValue: index)?.string ?? "Experience Rate \(index)"
 }
+
+let tmsStruct = GoDStruct(name: "TMs", format: [
+	.short(name: "Move", description: "", type: .moveID),
+	.byte(name: "Chance for random selection", description: "0 means never selected for random moves on npc mons", type: .uint)
+])
+let tmsTable = CommonStructTable(file: .indexAndFsysName(region == .JP ? 30 : 29, "common"), properties: tmsStruct) { (index, data) -> String? in
+	if let move: Int = data.get("Move") {
+		return XGMoves.index(move).name.unformattedString
+	}
+	return nil
+}

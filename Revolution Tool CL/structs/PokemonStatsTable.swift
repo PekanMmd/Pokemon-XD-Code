@@ -105,7 +105,7 @@ var pokemonStatsStruct: GoDStruct {
 			.byte(name: "Level Up Rate", description: "Determines how much exp it takes for each level up", type: .expRate),
 			.array(name: "Egg Groups", description: "Can breed with any pokemon with a matching group", property: .byte(name: "Egg Group", description: "", type: .eggGroup), count: 2),
 			.array(name: "Abilities", description: "", property: .byte(name: "Ability", description: "", type: .abilityID), count: 2),
-			.byte(name: "Unknown 2", description: "", type: .uint),
+			.byte(name: "Safari Zone Flee Rate", description: "", type: .uint),
 			.byte(name: "Colour Data", description: "Determines colour category in the pokedex. Lowest bit of this value is used for something unknown.", type: .uint)
 
 		])

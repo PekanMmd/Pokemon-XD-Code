@@ -126,6 +126,28 @@ class DolphinProcess {
 	}
 
 	@discardableResult
+	func write8(_ value: Int, atAddress address: Int) -> Bool {
+		return write(UInt8(value & 0xFFFF), atAddress: address)
+	}
+
+	@discardableResult
+	func write(_ value: UInt8, atAddress address: Int) -> Bool {
+		let data = XGMutableData(byteStream: [value])
+		return write(data, atAddress: address)
+	}
+
+	@discardableResult
+	func write16(_ value: Int, atAddress address: Int) -> Bool {
+		return write(UInt16(value & 0xFFFF), atAddress: address)
+	}
+
+	@discardableResult
+	func write(_ value: UInt16, atAddress address: Int) -> Bool {
+		let data = XGMutableData(byteStream: Int(value).byteArrayU16)
+		return write(data, atAddress: address)
+	}
+
+	@discardableResult
 	func write(_ value: UInt32, atAddress address: Int) -> Bool {
 		let data = XGMutableData(byteStream: value.charArray)
 		return write(data, atAddress: address)

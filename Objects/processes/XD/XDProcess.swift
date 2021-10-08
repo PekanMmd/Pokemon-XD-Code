@@ -81,6 +81,26 @@ class XDProcess {
 	}
 
 	@discardableResult
+	func write(_ value: UInt8, atAddress address: Int) -> Bool {
+		return process.write(value, atAddress: address)
+	}
+
+	@discardableResult
+	func write8(_ value: Int, atAddress address: Int) -> Bool {
+		return process.write8(value, atAddress: address)
+	}
+
+	@discardableResult
+	func write(_ value: UInt16, atAddress address: Int) -> Bool {
+		return process.write(value, atAddress: address)
+	}
+
+	@discardableResult
+	func write16(_ value: Int, atAddress address: Int) -> Bool {
+		return process.write16(value, atAddress: address)
+	}
+
+	@discardableResult
 	func write(_ value: UInt32, atAddress address: Int) -> Bool {
 		return process.write(value, atAddress: address)
 	}
@@ -677,6 +697,11 @@ class XDProcess {
 		}
 
 		breakPointDataOffset = breakPointsOffset
+
+		// enable logs
+		let OSReport = 0x800abc80
+		let GSLog = 0x802a65cc
+		write([.b(OSReport)], atAddress: GSLog)
 
 		for breakPointType in XDBreakPointTypes.allCases {
 			writeAssemblyforBreakPoint(withType: breakPointType, isEnabled: enabledBreakPoints.contains(breakPointType))

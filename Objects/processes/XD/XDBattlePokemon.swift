@@ -89,13 +89,19 @@ class XDBattlePokemon: Codable {
 	var species: XGPokemon = .index(0)
 
 	convenience init?(pointerOffset: Int, process: XDProcess) {
-		guard let offset = process.read4Bytes(atAddress: pointerOffset) else { return nil }
+		guard let offset = process.read4Bytes(atAddress: pointerOffset) else {
+			return nil
+		}
 		self.init(offset: offset, process: process)
 	}
 
 	init?(offset: Int, process: XDProcess) {
-		guard let speciesIndex = process.read4Bytes(atAddress: offset + kBattlePokemonSpeciesOffset) else { return nil }
-		if species.index == 0 { return nil }
+		guard let speciesIndex = process.read2Bytes(atAddress: offset + kBattlePokemonSpeciesOffset) else {
+			return nil
+		}
+		if speciesIndex == 0 {
+			return nil
+		}
 		species = .index(speciesIndex)
 	}
 
@@ -105,6 +111,6 @@ class XDBattlePokemon: Codable {
 	}
 
 	func write(offset: Int, process: XDProcess) {
-		process.write(species.index, atAddress: offset + kBattlePokemonSpeciesOffset)
+		process.write16(species.index, atAddress: offset + kBattlePokemonSpeciesOffset)
 	}
 }

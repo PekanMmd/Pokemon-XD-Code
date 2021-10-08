@@ -65,7 +65,8 @@ var commonStructTablesList: [GoDStructTableFormattable] = {
 		iconsTable,
 		pokemonFacesTable,
 		pokemonBodiesTable,
-		typeMatchupsStructTable
+		typeMatchupsStructTable,
+		tmsTable
 	].sorted { (t1, t2) -> Bool in
 		return t1.properties.name < t2.properties.name
 	}
