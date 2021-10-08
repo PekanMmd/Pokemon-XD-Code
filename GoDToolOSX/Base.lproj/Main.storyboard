@@ -266,6 +266,12 @@
                                                 <action selector="openRandomiser:" target="Voe-Tx-rLC" id="gZu-TL-LRK"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Special" id="NkR-yS-Qbw">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="specialButton:" target="Voe-Tx-rLC" id="oWw-j2-niU"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>

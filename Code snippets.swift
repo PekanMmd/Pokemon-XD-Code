@@ -7846,7 +7846,17 @@ import Foundation
 //XGUtility.importFileToISO(.fsys("M2_out"), encode: true, save: true, importFiles: nil)
 
 
-
+// String ids for stat names used in pokemon summary screen
+// in order to show which stats are affected by a pokemon's nature
+// in the pokemon summary screen loop, every time the current pokemon is queried
+// check its nature and based on that update the strings
+// starting with msg id 0x3ada at offset 0x31c860 in start.dol
+// Each subsequent stat msg id is stored 0x1c bytes after the previous one
+// The string itself starts with a predefined colour special flag
+// Make copies of each string with the colour set to red and blue using the custom colour special character
+// e.g. [8]{FF0000FF} for hard red
+// Then each loop overwrite those addresses so the msg id that gets used will match the current pokemon's nature
+// Bonus, reset them when summary screen is closed
 
 
 

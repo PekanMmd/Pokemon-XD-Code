@@ -967,6 +967,9 @@
 		1CE3490F270FF33300B803FD /* XDProcessSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE3490E270FF33300B803FD /* XDProcessSetup.swift */; };
 		1CE34910270FF33300B803FD /* XDProcessSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE3490E270FF33300B803FD /* XDProcessSetup.swift */; };
 		1CE34911270FF33300B803FD /* XDProcessSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE3490E270FF33300B803FD /* XDProcessSetup.swift */; };
+		1CE3498C2710D34700B803FD /* DiscordPlaysPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE3498B2710D34700B803FD /* DiscordPlaysPokemon.swift */; };
+		1CE3498D2710D34700B803FD /* DiscordPlaysPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE3498B2710D34700B803FD /* DiscordPlaysPokemon.swift */; };
+		1CE3498E2710D34700B803FD /* DiscordPlaysPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE3498B2710D34700B803FD /* DiscordPlaysPokemon.swift */; };
 		1CEC203C26EA9FA200A886E9 /* XXH64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CEC203426EA9FA100A886E9 /* XXH64.swift */; };
 		1CEC203D26EA9FA200A886E9 /* XXH64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CEC203426EA9FA100A886E9 /* XXH64.swift */; };
 		1CEC203E26EA9FA200A886E9 /* XXH64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CEC203426EA9FA100A886E9 /* XXH64.swift */; };
@@ -4877,6 +4880,7 @@
 		1CE1A7772326AA0D005141D8 /* XGSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGSettings.swift; sourceTree = "<group>"; };
 		1CE348F5270FC60100B803FD /* XGBattleResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleResult.swift; sourceTree = "<group>"; };
 		1CE3490E270FF33300B803FD /* XDProcessSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDProcessSetup.swift; sourceTree = "<group>"; };
+		1CE3498B2710D34700B803FD /* DiscordPlaysPokemon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscordPlaysPokemon.swift; sourceTree = "<group>"; };
 		1CEC203426EA9FA100A886E9 /* XXH64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XXH64.swift; sourceTree = "<group>"; };
 		1CEC203526EA9FA100A886E9 /* xxHash-Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "xxHash-Common.swift"; sourceTree = "<group>"; };
 		1CEC203626EA9FA200A886E9 /* XXH32.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XXH32.swift; sourceTree = "<group>"; };
@@ -10081,6 +10085,7 @@
 				B2F7C8E61F8FB4F300BB664D /* default move routines.txt */,
 				B27AA6361F8EDE0F001D06CF /* move routine seconday effects.txt */,
 				B27AA63A1F8F141B001D06CF /* move routine functions.txt */,
+				1CE3498B2710D34700B803FD /* DiscordPlaysPokemon.swift */,
 			);
 			path = GoDToolCL;
 			sourceTree = "<group>";
@@ -13673,6 +13678,7 @@
 				1C16CE42253BC4C600907D78 /* XGCharacter.swift in Sources */,
 				1C9154672701C52C004BA0E6 /* GoDProcess.swift in Sources */,
 				1C16D0CA253BC88900907D78 /* XGMtBattlePokemon.swift in Sources */,
+				1CE3498D2710D34700B803FD /* DiscordPlaysPokemon.swift in Sources */,
 				1C16CE01253BC4A400907D78 /* XGTrainerContoller.swift in Sources */,
 				1C16CF95253BC57B00907D78 /* XDSConstant.swift in Sources */,
 				1C56F67E2608C9E300CF1DEE /* PokespotsTables.swift in Sources */,
@@ -14977,6 +14983,7 @@
 				1C7169992602AF57000F1456 /* GoDStructData.swift in Sources */,
 				B29E56071FA6E7F6006BE597 /* XGCharacter.swift in Sources */,
 				B27C5FDD1FA19FB000E0596F /* XGScriptInstruction.swift in Sources */,
+				1CE3498C2710D34700B803FD /* DiscordPlaysPokemon.swift in Sources */,
 				B2F9B2951FA4A04200E1489E /* XGRoom.swift in Sources */,
 				B2F5EC7E1F49A1FF0075C6D2 /* XGDemoStarterPokemon.swift in Sources */,
 				1C71697D2602AF3A000F1456 /* GoDStruct.swift in Sources */,
@@ -15238,6 +15245,7 @@
 				B27AA6281F863FD7001D06CF /* GoDEffectsPopUpButton.swift in Sources */,
 				1C4EF5E526CC2E7C0040B800 /* GoDFiltersViewController.swift in Sources */,
 				B2F5EC291F49A1FE0075C6D2 /* XGFsys.swift in Sources */,
+				1CE3498E2710D34700B803FD /* DiscordPlaysPokemon.swift in Sources */,
 				B2EAFEFF20BDA498009FC947 /* XGStack.swift in Sources */,
 				B2F5ECB31F49A1FF0075C6D2 /* XGPokeSpotPokemon.swift in Sources */,
 				B24CBAB2212FF3C400481C1D /* XGBattleTypes.swift in Sources */,

@@ -171,6 +171,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 	}
 
+	@IBAction func specialButton(_ sender: Any) {
+		#if GAME_XD
+		XGThreadManager.manager.runInBackgroundAsync(queue: 3) {
+			DiscordPlaysPokemon().launch()
+		}
+		#endif
+	}
+
+
 	@IBAction func getFreeStringID(_ sender: Any) {
 		#if !GAME_PBR
 		guard homeViewController.checkRequiredFiles() else {

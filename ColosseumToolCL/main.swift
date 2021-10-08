@@ -6,8 +6,154 @@
 //
 //
 
-loadISO(exitOnFailure: true)
+//loadISO(exitOnFailure: true)
 
+
+
+//var documentedText = "- Unused text in Pokemon Colosseum (US) - \n\n"
+//
+//let interactionPoints = XGInteractionPointData.allValues
+//var interactionIDs = interactionPoints.map { (point) -> Int? in
+//	switch point.info {
+//	case .Text(let msgID): return msgID
+//	default: return nil
+//	}
+//}
+//
+//for folder in XGFolders.ISOExport("").subfolders {
+//	if let _ = XGMaps(rawValue: folder.name.substring(from: 0, to: 2)) {
+//		printg(folder.path)
+//		let script = XGFiles.nameAndFolder(folder.name + ".scd", folder).scriptData.getXDSScript()
+//		let msg = XGFiles.nameAndFolder(folder.name + ".msg", folder).stringTable
+//
+//		let usedIDs = script.subStringsMatching("\\$:([0-9]+):".regex()!).map { $0.replacingOccurrences(of: "$", with: "").replacingOccurrences(of: ":", with: "").integerValue }
+//		for msgID in msg.stringIDs {
+//			if !usedIDs.contains(msgID) && !interactionIDs.contains(msgID) {
+//				documentedText +=  msg.stringSafelyWithID(msgID).stringPlusIDAndFile + "\n\n"
+//			}
+//		}
+//	}
+//}
+//
+//documentedText.save(toFile: .nameAndFolder("Colosseum Unused Text.txt", .Documents))
+
+//let editedCommon = XGFiles.nameAndFolder("common.rel", .Documents).data!
+//let originalCommon = XGFiles.common_rel.data!
+//for pokemon in XGPokemonStats.allValues {
+//	let startOffset = pokemon.startOffset
+//	let evolutionData = originalCommon.getSubDataFromOffset(startOffset + kFirstEvolutionOffset, length: kSizeOfEvolutionData * 5)
+//	editedCommon.replaceData(data: evolutionData, atOffset: startOffset + kFirstEvolutionOffset)
+//}
+//editedCommon.save()
+
+//PDADumper.dumpData()
+//PDADumper.dumpFiles(writeTextures: false)
+//PDADumper.dumpMSG()
+
+//let ecardFile = XGFiles.nameAndFolder("13-A005-decoded.bin", .Documents)
+//let ePokemonTable = EreaderStructTable(type: .pokemon, inFile: ecardFile)
+//let eTrainersTable = EreaderStructTable(type: .trainers, inFile: ecardFile)
+//
+//for table in [ePokemonTable, eTrainersTable] {
+//	table.documentCStruct()
+//	table.documentData()
+//	table.encodeCSVData()
+//}
+
+//let baseName = "kamikudaku_damage"
+//let fsys = XGFiles.fsys("wzx_" + baseName)
+////XGUtility.exportFileFromISO(fsys)
+//let wzx = XGFiles.nameAndFsysName(baseName + ".wzx", fsys.fileName)
+////let wzxData = WZXModel(file: wzx)
+////wzxData?.datModelOffsets.forEach {
+////	printg($0)
+////}
+//let dat = XGFiles.nameAndFolder(wzx.fileName.removeFileExtensions() + "_0.wzx.dat", wzx.folder)
+//if let datData = DATModel(file: dat) {
+////	datData.description.println()
+//	datData.nodes?.vertexColours.keys.forEach({ (k) in
+//		let v = datData.nodes!.vertexColours[k]!
+//		printg(v.hexString)
+//	})
+//	let profile = datData.nodes!.vertexColourProfile
+//	profile.writePNGData(toFile: .nameAndFolder("kamikudaku_profile.png", .Documents))
+//	GoDFiltersManager.Filters.shiftRedMinor.apply(to: profile)
+//	profile.writePNGData(toFile: .nameAndFolder("kamikudaku_profile red.png", .Documents))
+//}
+
+//let numberOfPokemon = CommonIndexes.NumberOfPokemon.value
+//CommonIndexes.NumberOfPokemon.setValue(1000)
+//common.expandSymbolWithIndex(CommonIndexes.PokemonStats.index, by: (1000 - numberOfPokemon) * kSizeOfPokemonStats)
+//common.data.save()
+//XGUtility.importFileToISO(.fsys("common"))
+//XGUtility.exportFileFromISO(.fsys("common"))
+
+
+//pokemonStatsTable.encodeCSVData()
+//movesTable.encodeCSVData()
+//naturesTable.encodeCSVData()
+//shadowPokemonTable.encodeCSVData()
+
+//printg("-- Expansion --")
+//rel.expandSymbolWithIndex(100, by: 0x30, save: true)
+//printPointersInfo()
+
+//PDADumper.dumpAll()
+
+//let table = try? XGStringTable.fromJSONFile(file: .nameAndFolder("common3.json", .Documents))
+//let allShadows = CMShadowData.allValues.map { (data) -> String in
+//	return table!.stringSafelyWithID(data.nameID).string
+//}
+//table?.allStrings().forEach { (string) in
+//	if string.string.substring(from: 0, to: 2) == "DP" && !string.string.contains("エクストラ") && string.string.length > 4 {
+//		let monName = string.string
+//		if !allShadows.contains(monName) {
+//			printg(monName)
+//		}
+//	}
+//}
+
+// Create shadow pokemon table data for bulbapedia
+//for mon in CMShadowData.allValues where mon.species.index > 0 {
+//	let firstTID = mon.firstTID
+//	let trainer = XGTrainer(index: firstTID)
+//	let data = trainer.pokemon.first { (data) -> Bool in
+//		mon.species.index == data.species.index
+//	}!
+//	let battle = trainer.battleData!
+//	printg("{{lop/shadow|\(mon.species.stats.nationalIndex)|\(mon.species.name.unformattedString.capitalized)|\(data.level)|-|\(data.shadowCatchRate)|\(mon.purificationCounter/10),000|Shadow Rush|XD|\(data.moves[1].name.unformattedString.titleCased)|\(data.moves[1].type.originalName)|\(data.moves[2].name.unformattedString.titleCased)|\(data.moves[2].type.originalName)|\(data.moves[3].name.unformattedString.titleCased)|\(data.moves[3].type.originalName)|Colo|\(trainer.trainerClass.name.unformattedString.titleCased)|\(trainer.name.unformattedString.titleCased)|[[\(battle.battleField.room!.mapName.titleCased)]]|pure1=\(data.moves[0].name.unformattedString.titleCased)|pure1t=\(data.moves[0].type.originalName)|link=\(trainer.name.unformattedString.titleCased)}}")
+//}
+//printg("{{lop/shadow|175|Togepi|20|-|N/A|N/A|Shadow Rush|XD|Charm|Normal|Sweet Kiss|Normal|Yawn|Normal|Colo|Chaser|ボデス|[[Card e Room]] (Japanese games only)|pure1=Metronome|pure1t=Normal}}")
+//printg("{{lop/shadow|179|Mareep|37|-|N/A|N/A|???|Shadow Rush|XD|ThunderShock|Electric|Thunder Wave|Electric|Cotton Spore|Grass|Colo|Hunter|ホル|[[Card e Room]] (Japanese games only)|pure1=Thunder|pure1t=Electric}}")
+//printg("{{lop/shadow|212|Scizor|50|-|N/A|N/A|???|Shadow Rush|XD|Metal Claw|Steel|Swords Dance|Normal|Slash|Normal|Colo|Bodybuilder|ワーバン|[[Card e Room]] (Japanese games only)|pure1=Fury Cutter|pure1t=Bug}}")
+
+//CommonIndexes.TrainerAIData.startOffset.hexString().println()
+
+//XGUtility.documentMacrosXDS()
+
+//let file = XGFiles.common_rel //XGFiles.typeAndFsysName(.scd, "M1_out")
+//let script = file.scriptData
+//script.getXDSScript().save(toFile: .nameAndFolder(file.fileName + ".cms", .nameAndFolder("Scripts", .Documents)))
+
+//XGMaps.allCases.reversed().forEach { (map) in
+//	if case .Pokespot = map {
+//		return
+//	}
+//	let files = XGISO.current.allFileNames.filter { (name) -> Bool in
+//		name.contains(map.code)
+//	}
+//	files.forEach { (filename) in
+//		if let fileData = XGISO.current.dataForFile(filename: filename) {
+//			let fsys = XGFsys(data: fileData)
+//			let folder = XGFolders.ISOExport(filename.removeFileExtensions())
+//			fsys.extractFilesToFolder(folder: folder, decode: false)
+//			let scriptFile = XGFiles.typeAndFolder(.scd, folder)
+//			if scriptFile.exists {
+//				scriptFile.scriptData.getXDSScript().save(toFile: .nameAndFolder(scriptFile.fileName + ".cms", .nameAndFolder("Scripts", .Documents)))
+//			}
+//		}
+//	}
+//}
 
 //CommonIndexes.TrainerPokemonData.startOffset.hexString().println()
 
