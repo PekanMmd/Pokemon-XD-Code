@@ -12,8 +12,8 @@ class XGThreadManager {
 	static let manager = XGThreadManager()
 	private init() {}
 
-	func runInBackgroundAsync(_ closure: @escaping () -> Void) {
-		let dispatchQueue = DispatchQueue(label: "GoDBackgroundQueueAsync", qos: .background)
+	func runInBackgroundAsync(queue: Int = 0, _ closure: @escaping () -> Void) {
+		let dispatchQueue = DispatchQueue(label: "GoDBackgroundQueueAsync\(queue)", qos: .background)
 		dispatchQueue.async {
 			closure()
 		}

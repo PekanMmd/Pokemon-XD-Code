@@ -92,7 +92,11 @@ class DeckPokemonStructTable: GoDStructTableFormattable {
 		let propertiesEnding: [GoDStructProperties] = isShinyAvailable ?
 			[
 				.short(name: "Shininess", description: "", type: .shininess),
-				.byte(name: "Mini PID", description: "Determines Pokemon's gender, nature and ability slot", type: .uintHex),
+				.bitMask(name: "Mini PID", description: "", length: .char, values: [
+					(name: "Use species second ability", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 0, mod: nil, div: nil, scale: nil),
+					(name: "Gender", type: .genderID, numberOfBits: 2, firstBitIndexLittleEndian: 1, mod: nil, div: nil, scale: nil),
+					(name: "Nature", type: .natureID, numberOfBits: 5, firstBitIndexLittleEndian: 3, mod: nil, div: nil, scale: nil),
+				]),
 				.byte(name: "Unknown 2", description: "", type: .uintHex),
 			] : [
 				.byte(name: "Unused", description: "", type: .null),
@@ -102,7 +106,6 @@ class DeckPokemonStructTable: GoDStructTableFormattable {
 					(name: "Gender", type: .genderID, numberOfBits: 2, firstBitIndexLittleEndian: 1, mod: nil, div: nil, scale: nil),
 					(name: "Nature", type: .natureID, numberOfBits: 5, firstBitIndexLittleEndian: 3, mod: nil, div: nil, scale: nil),
 				]),
-//				.byte(name: "Mini PID", description: "Determines Pokemon's gender, nature and ability slot", type: .uintHex),
 				.byte(name: "Use Random Nature and Gender", description: "", type: .bool)
 			]
 

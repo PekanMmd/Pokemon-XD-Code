@@ -116,6 +116,7 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.physicalSpecialSplitApply,
 	.disableSaveCorruption,
 	.allowFemaleStarters,
+	.infiniteTMs,
 	.tradeEvolutions,
 	.removeItemEvolutions,
 	.allowShinyStarters,

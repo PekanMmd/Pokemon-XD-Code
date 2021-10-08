@@ -42,3 +42,7 @@ func loadISO(exitOnFailure: Bool = false) -> Bool {
 	}
 	return false
 }
+
+func close() {
+	exit(EXIT_SUCCESS)
+}

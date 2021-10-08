@@ -72,6 +72,35 @@ class DolphinProcess {
 		return read(RAMOffset: RAMOffset, length: 4)?.getWordAtOffset(0)
 	}
 
+	func readString(RAMOffset: Int, charLength: ByteLengths = .char, maxCharacters: Int? = nil) -> String {
+		var currentOffset = RAMOffset
+
+		var currChar: Int? = 0x0
+		var nextChar: Int? = 0x1
+		var characterCounter = 0
+
+		let string = XGString(string: "", file: nil, sid: nil)
+
+		while nextChar != 0x00 && nextChar != nil && (maxCharacters == nil || characterCounter < maxCharacters!) {
+			switch charLength {
+			case .char: currChar = Int(readChar(RAMOffset: currentOffset) ?? 0)
+			case .short: currChar = Int(readShort(RAMOffset: currentOffset) ?? 0)
+			case .word: currChar = Int(readWord(RAMOffset: currentOffset) ?? 0)
+			}
+			currentOffset += charLength.rawValue
+			characterCounter += 1
+
+			string.append(.unicode(currChar ?? 0))
+			switch charLength {
+			case .char: nextChar = Int(readChar(RAMOffset: currentOffset) ?? 0)
+			case .short: nextChar = Int(readShort(RAMOffset: currentOffset) ?? 0)
+			case .word: nextChar = Int(readWord(RAMOffset: currentOffset) ?? 0)
+			}
+		}
+
+		return string.string
+	}
+
 	@discardableResult
 	func write(_ data: XGMutableData, atAddress address: UInt) -> Bool {
 		guard validate(),
@@ -110,6 +139,26 @@ class DolphinProcess {
 		return write(data, atAddress: address)
 	}
 
+	func writeString(_ string: String, atAddress offset: Int, charLength: ByteLengths = .short, maxCharacters: Int? = nil, includeNullTerminator: Bool = true) {
+		var unicodeRepresentation = string.unicodeRepresentation
+		if !includeNullTerminator {
+			unicodeRepresentation.removeLast()
+		}
+
+		unicodeRepresentation.forEachIndexed { (index, unicode) in
+			guard maxCharacters == nil || index < maxCharacters! else { return }
+			let currentOffset = offset + (index * charLength.rawValue)
+			let data: XGMutableData
+			switch charLength {
+			case .char: data = XGMutableData(byteStream: [UInt8(unicode & 0xFF)])
+			case .short: data = XGMutableData(byteStream: (unicode & 0xFFFF).byteArrayU16)
+			case .word: data = XGMutableData(byteStream: (unicode & 0xFF).byteArray)
+			}
+			write(data, atAddress: currentOffset)
+		}
+	}
+
+
 	func dumpDolphinRAM(toFile file: XGFiles, size: UInt) {
 		let fullRAM = XGMutableData()
 		for region in process.getRegions(maxOffset: size) {
@@ -132,7 +181,7 @@ class DolphinProcess {
 					  onUpdate: ((DolphinProcess) -> Bool)?,
 					  onFinish: ((DolphinProcess?) -> Void)?) {
 
-		let dolphinFile = XGFiles.path("/Applications/Dolphin5.app/Contents/MacOS/Dolphin")
+		let dolphinFile = XGFiles.path("/Applications/Dolphin.app/Contents/MacOS/Dolphin")
 		var args = "--exec=\(XGFiles.iso.path.escapedPath)"
 		settings.forEach { (setting) in
 			var value = setting.value

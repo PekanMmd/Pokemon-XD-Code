@@ -175,6 +175,7 @@ var saveFileStructList: [GoDStructTableFormattable] {
 	return tables
 }
 
+#if GAME_COLO
 var eReaderStructList: [GoDStructTableFormattable] {
 	guard game == .Colosseum else { return  [] }
 	XGFolders.Decrypted.files.forEach { (file) in
@@ -194,3 +195,4 @@ var eReaderStructList: [GoDStructTableFormattable] {
 	}
 	return tables
 }
+#endif

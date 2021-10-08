@@ -472,8 +472,11 @@ func utilities() {
 		prompt += """
 
 		3: Decode Ereader Cards
-		-  Place your decrypted E Reader cards in \(XGFolders.Decrypted.path)
-		-  then use this utility to output the decoded data for those cards in \(XGFolders.Decoded.path)
+		-      Place your decrypted E Reader cards in \(XGFolders.Decrypted.path)
+		-      then use this utility to output the decoded data for those cards in \(XGFolders.Decoded.path)
+		4: Decode Ereader Cards
+		-      Place your edited E Reader cards in \(XGFolders.Decoded.path)
+		-      then use this utility to output the reencoded data for those cards in \(XGFolders.Decrypted.path)
 		"""
 		#elseif GAME_PBR
 		prompt += """
@@ -492,6 +495,7 @@ func utilities() {
 		case "2": XGUtility.extractAllTextures(forDolphin: true)
 		#if GAME_COLO
 		case "3": XGUtility.decodeEReaderCards()
+		case "4": XGUtility.encodeEReaderCards()
 		#elseif GAME_PBR
 		case "3": XGPatcher.increasePokemonTotal(by: 1)
 		case "4": XGPatcher.increasePokemonTotal(by: 10)

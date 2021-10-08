@@ -11,13 +11,16 @@ class XDProcess {
 
 	let inputHandler = ControllerInputs()
 	var playerInputs: [GCPad?] = [nil, nil, nil, nil]
+	var isRunning: Bool {
+		return process.isRunning
+	}
 
 	private let process: DolphinProcess
 	private var JITCacheClearFlagOffset: Int?
 	private var breakPointDataOffset: Int?
 	private var controllerMirrorsOffset: Int?
 
-	private var breakPointEnableOffsets = [XDBreakPointTypes: Int]()
+	private var breakPointEnableOffsets = [XDBreakPointTypes: [Int]]()
 
 	private init(process: DolphinProcess) {
 		self.process = process
@@ -55,6 +58,10 @@ class XDProcess {
 		return process.readChar(RAMOffset: address)
 	}
 
+	func readString(RAMOffset: Int, charLength: ByteLengths = .char, maxCharacters: Int? = nil) -> String {
+		return process.readString(RAMOffset: RAMOffset, charLength: charLength, maxCharacters: maxCharacters)
+	}
+
 	func readShort(atAddress address: Int) -> UInt16? {
 		return process.readShort(RAMOffset: address)
 	}
@@ -87,20 +94,16 @@ class XDProcess {
 		return result
 	}
 
+	func writeString(_ string: String, atAddress offset: Int, charLength: ByteLengths = .short, maxCharacters: Int? = nil, includeNullTerminator: Bool = true) {
+		process.writeString(string, atAddress: offset, charLength: charLength, maxCharacters: maxCharacters, includeNullTerminator: includeNullTerminator)
+	}
+
 	class func launch(settings: [(key: DolphinSystems, value: String)] = [],
 					  autoSkipWarningScreen: Bool = false,
 					  autoCloseDolphinOnFinish: Bool = false,
 					  onStart: ((XDProcess) -> Bool)?,
 					  onFinish: (() -> Void)?,
-
-					  onRNGRoll: ((RNGRollContext, XDProcess, XDGameState) -> Bool)? = nil,
-					  onWillGetFlag: ((GetFlagContext, XDProcess, XDGameState) -> Bool)? = nil,
-					  onWillSetFlag: ((SetFlagContext, XDProcess, XDGameState) -> Bool)? = nil,
-					  onDidLoadSave: ((SaveLoadedContext, XDProcess, XDGameState) -> Bool)? = nil,
-					  onDidChangeMap: ((MapDidChangeContext, XDProcess, XDGameState) -> Bool)? = nil,
-					  onDidConfirmMoveSelection: ((BattleMoveSelectionContext, XDProcess, XDGameState) -> Bool)? = nil,
-					  onDidConfirmTurnSelection: ((BattleTurnSelectionContext, XDProcess, XDGameState) -> Bool)? = nil
-					  ) {
+					  callbacks: XDProcessSetup) {
 
 		guard region == .US else {
 			printg("Couldn't launch XD process for region:", region.name)
@@ -110,13 +113,45 @@ class XDProcess {
 
 		var enabledBreakPoints = [XDBreakPointTypes]()
 		let breakPoints: [(Any?, XDBreakPointTypes)] = [
-			(onRNGRoll, .onDidRNGRoll),
-			(onWillGetFlag, .onWillGetFlag),
-			(onWillSetFlag, .onWillSetFlag),
-			(onDidLoadSave, .onDidLoadSave),
-			(onDidChangeMap, .onDidChangeMap),
-			(onDidConfirmMoveSelection, .onDidConfirmMoveSelection),
-			(onDidConfirmTurnSelection, .onDidConfirmTurnSelection),
+			(callbacks.onFrame, .onFrameAdvance),
+			(callbacks.onRNGRoll, .onDidRNGRoll),
+			(callbacks.onStep, .onStepCount),
+			(callbacks.onDidLoadSave, .onDidLoadSave),
+			(callbacks.onWillWriteSave, .onWillWriteSave),
+			(callbacks.onWillChangeMap, .onWillChangeMap),
+			(callbacks.onDidChangeMap, .onDidChangeMap),
+			(callbacks.onMoveSelectionConfirmed, .onDidConfirmMoveSelection),
+			(callbacks.onTurnSelectionConfirmed, .onDidConfirmTurnSelection),
+			(callbacks.onWillUseMove, .onWillUseMove),
+			(callbacks.onMoveDidEnd, .onMoveEnd),
+			(callbacks.onWillCallPokemon, .onWillCallPokemon),
+			(callbacks.onPokemonWillSwitchIn, .onPokemonWillSwitchIntoBattle),
+			(callbacks.onShadowPokemonEncountered, .onShadowPokemonEncountered),
+			(callbacks.onPokemonDidEnterReverseMode, .onShadowPokemonDidEnterReverseMode),
+			(callbacks.onWillUseItem, .onWillUseItem),
+			(callbacks.onWillUseCologne, .onWillUseCologne),
+			(callbacks.onWillUseTM, .onWillUseTM),
+			(callbacks.onDidUseTM, .onDidUseTM),
+			(callbacks.onWillGainExp, .onWillGainExp),
+			(callbacks.onWillEvolve, .onWillEvolve),
+			(callbacks.onDidEvolve, .onDidEvolve),
+			(callbacks.onPurification, .onDidPurification),
+			(callbacks.onBattleStart, .onWillStartBattle),
+			(callbacks.onBattleEnd, .onDidEndBattle),
+			(callbacks.onTeamWhiteOut, .onBattleWhiteout),
+			(callbacks.onTurnStart, .onBattleTurnStart),
+			(callbacks.onTurnEnd, .onBattleTurnEnd),
+			(callbacks.onPokemonFainted, .onPokemonDidFaint),
+			(callbacks.onPokeballThrow, .onWillAttemptPokemonCapture),
+			(callbacks.onCaptureSucceeded, .onDidSucceedPokemonCapture),
+			(callbacks.onCaptureFailed, .onDidFailPokemonCapture),
+			(callbacks.onMirorRadarActivated, .onMirorRadarActive),
+			(callbacks.onMirorRadarSignalLost, .onMirorRadarLostSignal),
+			(callbacks.onSpotMonitorActivated, .onSpotMonitorActivated),
+			(callbacks.onWillGetFlag, .onWillGetFlag),
+			(callbacks.onWillSetFlag, .onWillSetFlag),
+			(callbacks.onReceiveGiftPokemon, .onReceivedGiftPokemon),
+			(callbacks.onPrint, .onPrint),
 		]
 		for (callback, breakPoint) in breakPoints {
 			if let _ = callback {
@@ -153,41 +188,194 @@ class XDProcess {
 
 				var registers = xd.getBreakPointRegisters()
 				var context = BreakPointContext()
+				var forcedReturnValue: Int?
 
 				switch breakPointType {
+				case .onFrameAdvance:
+					if let callback = callbacks.onFrame {
+						shouldContinue = callback(xd, state)
+					}
 				case .onDidRNGRoll:
-					if let callback = onRNGRoll {
+					if let callback = callbacks.onRNGRoll {
 						let c = RNGRollContext(process: xd, registers: registers)
 						shouldContinue = callback(c, xd, state); context = c
 					}
-				case .onWillGetFlag:
-					if let callback = onWillGetFlag {
-						let c = GetFlagContext(process: xd, registers: registers)
-						shouldContinue = callback(c, xd, state); context = c
-					}
-				case .onWillSetFlag:
-					if let callback = onWillSetFlag {
-						let c = SetFlagContext(process: xd, registers: registers)
-						shouldContinue = callback(c, xd, state); context = c
+				case .onStepCount:
+					if let callback = callbacks.onStep {
+						shouldContinue = callback(xd, state)
 					}
 				case .onDidLoadSave:
-					if let callback = onDidLoadSave {
+					if let callback = callbacks.onDidLoadSave {
 						let c = SaveLoadedContext(process: xd, registers: registers)
 						shouldContinue = callback(c, xd, state); context = c
 					}
+				case .onWillWriteSave:
+					if let callback = callbacks.onWillWriteSave {
+						shouldContinue = callback(xd, state)
+					}
+				case .onWillChangeMap:
+					if let callback = callbacks.onWillChangeMap {
+						let c = MapWillChangeContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
 				case .onDidChangeMap:
-					if let callback = onDidChangeMap {
+					if let callback = callbacks.onDidChangeMap {
 						let c = MapDidChangeContext(process: xd, registers: registers)
 						shouldContinue = callback(c, xd, state); context = c
 					}
 				case .onDidConfirmMoveSelection:
-					if let callback = onDidConfirmMoveSelection {
+					if let callback = callbacks.onMoveSelectionConfirmed {
 						let c = BattleMoveSelectionContext(process: xd, registers: registers)
 						shouldContinue = callback(c, xd, state); context = c
 					}
 				case .onDidConfirmTurnSelection:
-					if let callback = onDidConfirmTurnSelection {
+					if let callback = callbacks.onTurnSelectionConfirmed {
 						let c = BattleTurnSelectionContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onWillUseMove:
+					if let callback = callbacks.onWillUseMove {
+						let c = WillUseMoveContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onMoveEnd:
+					if let callback = callbacks.onMoveDidEnd {
+						shouldContinue = callback(xd, state)
+					}
+				case .onWillCallPokemon:
+					if let callback = callbacks.onWillCallPokemon {
+						let c = WillCallPokemonContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onPokemonWillSwitchIntoBattle:
+					if let callback = callbacks.onPokemonWillSwitchIn {
+						let c = PokemonSwitchInContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onShadowPokemonEncountered:
+					if let callback = callbacks.onShadowPokemonEncountered {
+						let c = ShadowPokemonEncounterContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onShadowPokemonDidEnterReverseMode:
+					if let callback = callbacks.onPokemonDidEnterReverseMode {
+						let c = ReverseModeContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onWillUseItem:
+					if let callback = callbacks.onWillUseItem {
+						let c = UseItemContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onWillUseCologne:
+					if let callback = callbacks.onWillUseCologne {
+						let c = UseCologneContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onWillUseTM:
+					if let callback = callbacks.onWillUseTM {
+						let c = WillUseTMContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onDidUseTM:
+					if let callback = callbacks.onDidUseTM {
+						let c = DidUseTMContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onWillGainExp:
+					if let callback = callbacks.onWillGainExp {
+						let c = ExpGainContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onWillEvolve:
+					if let callback = callbacks.onWillEvolve {
+						let c = WillEvolveContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onDidEvolve:
+					if let callback = callbacks.onDidEvolve {
+						let c = DidEvolveContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onDidPurification:
+					if let callback = callbacks.onPurification {
+						let c = DidPurifyContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onWillStartBattle:
+					if let callback = callbacks.onBattleStart {
+						let c = BattleStartContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onDidEndBattle:
+					if let callback = callbacks.onBattleEnd {
+						let c = BattleEndContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onBattleWhiteout:
+					if let callback = callbacks.onTeamWhiteOut {
+						shouldContinue = callback(xd, state)
+					}
+				case .onBattleTurnStart:
+					if let callback = callbacks.onTurnStart {
+						let c = TurnStartContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onBattleTurnEnd:
+					if let callback = callbacks.onTurnEnd {
+						shouldContinue = callback(xd, state)
+					}
+				case .onPokemonDidFaint:
+					if let callback = callbacks.onPokemonFainted {
+						let c = PokemonFaintedContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onWillAttemptPokemonCapture:
+					if let callback = callbacks.onPokeballThrow {
+						let c = CaptureAttemptContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onDidSucceedPokemonCapture:
+					if let callback = callbacks.onCaptureSucceeded {
+						let c = CaptureAttemptedContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onDidFailPokemonCapture:
+					if let callback = callbacks.onCaptureFailed {
+						let c = CaptureAttemptedContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onMirorRadarActive:
+					if let callback = callbacks.onMirorRadarActivated {
+						shouldContinue = callback(xd, state)
+					}
+				case .onMirorRadarLostSignal:
+					if let callback = callbacks.onMirorRadarSignalLost {
+						shouldContinue = callback(xd, state)
+					}
+				case .onSpotMonitorActivated:
+					if let callback = callbacks.onSpotMonitorActivated {
+						shouldContinue = callback(xd, state)
+					}
+				case .onWillGetFlag:
+					if let callback = callbacks.onWillGetFlag {
+						let c = GetFlagContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onWillSetFlag:
+					if let callback = callbacks.onWillSetFlag {
+						let c = SetFlagContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+						forcedReturnValue = c.getForcedReturnValue()
+					}
+				case .onReceivedGiftPokemon:
+					if let callback = callbacks.onReceiveGiftPokemon {
+						let c = ReceiveGiftPokemonContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
+				case .onPrint:
+					if let callback = callbacks.onPrint {
+						let c = PrintContext(process: xd, registers: registers)
 						shouldContinue = callback(c, xd, state); context = c
 					}
 				default:
@@ -195,7 +383,6 @@ class XDProcess {
 					return shouldContinue
 				}
 
-				let forcedReturnValue = context.getForcedReturnValue()
 				if let value = forcedReturnValue {
 					registers[3] = value
 				}
@@ -266,13 +453,17 @@ class XDProcess {
 	}
 
 	func enableBreakPoint(_ bp: XDBreakPointTypes) {
-		guard let offset = breakPointEnableOffsets[bp] else { return }
-		write(0x01000000, atAddress: offset)
+		guard let offsets = breakPointEnableOffsets[bp] else { return }
+		for offset in offsets {
+			write(0x01000000, atAddress: offset)
+		}
 	}
 
 	func disableBreakPoint(_ bp: XDBreakPointTypes) {
-		guard let offset = breakPointEnableOffsets[bp] else { return }
-		write(0x00000000, atAddress: offset)
+		guard let offsets = breakPointEnableOffsets[bp] else { return }
+		for offset in offsets {
+			write(0x00000000, atAddress: offset)
+		}
 	}
 
 	/// The assembly will clear the break point and then skip the rest of that function.
@@ -495,122 +686,125 @@ class XDProcess {
 
 	private func writeAssemblyforBreakPoint(withType type: XDBreakPointTypes, isEnabled: Bool) {
 		guard let freeSpace = ASMfreeSpaceRAMPointer(),
-			  let address = type.address,
-			  let forcedReturnValueAddress = type.forcedReturnValueAddress,
-			  let overwrittenInstruction = readWord(atAddress: address),
+			  let addresses = type.addresses,
 			  let breakPointDataStart = breakPointDataOffset else {
 			return
 		}
 
-		write([
-			.b(freeSpace + 4) // first word is enabled flag
-		], atAddress: address)
+		for address in addresses {
+			guard let overwrittenInstruction = readWord(atAddress: address) else {
+				continue
+			}
+			write([
+				.b(freeSpace + 4) // first word is enabled flag
+			], atAddress: address)
 
-		// Bear in mind r0 is lost in the process
-		// All other registers are preserved
-		// The value in r3 is stored in the r0 slot
-		let loadBreakPointOffset = XGASM.loadImmediateShifted32bit(register: .r3, value: breakPointDataStart.unsigned)
-		let loadIsEnabledOffset = XGASM.loadImmediateShifted32bit(register: .r3, value: freeSpace.unsigned)
-		let yieldFrame = 0x800b165c
-		write([
-			// This address is a flag for whether or not this break point is currently enabled
-			.raw(isEnabled ? 0x01000000 : 0x00),
+			// Bear in mind r0 is lost in the process
+			// All other registers are preserved
+			// The value in r3 is stored in the r0 slot
+			let loadBreakPointOffset = XGASM.loadImmediateShifted32bit(register: .r3, value: breakPointDataStart.unsigned)
+			let loadIsEnabledOffset = XGASM.loadImmediateShifted32bit(register: .r3, value: freeSpace.unsigned)
+			let yieldFrame = 0x800b165c
+			write([
+				// This address is a flag for whether or not this break point is currently enabled
+				.raw(isEnabled ? 0x01000000 : 0x00),
 
-			// preserve r3
-			.mr(.r0, .r3),
+				// preserve r3
+				.mr(.r0, .r3),
 
-			// Get address where this break point's status is set
-			loadIsEnabledOffset.0,
-			loadIsEnabledOffset.1,
+				// Get address where this break point's status is set
+				loadIsEnabledOffset.0,
+				loadIsEnabledOffset.1,
 
-			// Check that this break point is currently enabled
-			.lbz(.r3, .r3, 0),
-			.cmpwi(.r3, 1),
-			.bne_l("return"),
+				// Check that this break point is currently enabled
+				.lbz(.r3, .r3, 0),
+				.cmpwi(.r3, 1),
+				.bne_l("return"),
 
-			// Get address for general break point status
-			loadBreakPointOffset.0,
-			loadBreakPointOffset.1,
+				// Get address for general break point status
+				loadBreakPointOffset.0,
+				loadBreakPointOffset.1,
 
-			// Check the tool hasn't already broken elsewhere on another thread
-			.lhz(.r3, .r3, 2),
-			.cmpwi(.r3, 0),
-			.bne_l("return"),
+				// Check the tool hasn't already broken elsewhere on another thread
+				.lhz(.r3, .r3, 2),
+				.cmpwi(.r3, 0),
+				.bne_l("return"),
 
-			// Get address for general break point status
-			loadBreakPointOffset.0,
-			loadBreakPointOffset.1,
+				// Get address for general break point status
+				loadBreakPointOffset.0,
+				loadBreakPointOffset.1,
 
-			// Store all registers for reference in the tool's callback
-			.stmw(.r0, .r3, 4),
+				// Store all registers for reference in the tool's callback
+				.stmw(.r0, .r3, 4),
 
-			// Write break point value for reference by tool's callback
-			.li(.r0, type.rawValue),
-			.sth(.r0, .r3, 2),
+				// Write break point value for reference by tool's callback
+				.li(.r0, type.rawValue),
+				.sth(.r0, .r3, 2),
 
-			// loop until tool clears the break point value
-			.label("continue break"),
+				// loop until tool clears the break point value
+				.label("continue break"),
 
-			// Get address for general break point status
-			loadBreakPointOffset.0,
-			loadBreakPointOffset.1,
+				// Get address for general break point status
+				loadBreakPointOffset.0,
+				loadBreakPointOffset.1,
 
-			// get current break point value
-			.lhz(.r0, .r3, 2),
+				// get current break point value
+				.lhz(.r0, .r3, 2),
 
-			// 0 means the break point has been unpaused by the tool
-			.cmpwi(.r0, 0),
-			.beq_l("end break"),
+				// 0 means the break point has been unpaused by the tool
+				.cmpwi(.r0, 0),
+				.beq_l("end break"),
 
-			// The function we broke on will be skipped
-			// and the return value will be side loaded into r3 before
-			// jumping to its blr
-			.cmpwi(.r0, XDBreakPointTypes.forcedReturn.rawValue),
-			.beq_l("force return value"),
+				// The function we broke on will be skipped
+				// and the return value will be side loaded into r3 before
+				// jumping to its blr
+				.cmpwi(.r0, XDBreakPointTypes.forcedReturn.rawValue),
+				.beq_l("force return value"),
 
-			// The break point will let other threads keep running while it decides what to do
-			.cmpwi(.r0, XDBreakPointTypes.yield.rawValue),
-			.bne_l("continue break"),
+				// The break point will let other threads keep running while it decides what to do
+				.cmpwi(.r0, XDBreakPointTypes.yield.rawValue),
+				.bne_l("continue break"),
 
-			// Call thread yield
-			.stwu(.sp, .sp, -0x10),
-			.mflr(.r0),
-			.stw(.r0, .sp, 0x14),
-			.bl(yieldFrame),
-			.lwz(.r0, .sp, 0x14),
-			.mtlr(.r0),
-			.addi(.sp, .sp, 0x10),
+				// Call thread yield
+				.stwu(.sp, .sp, -0x10),
+				.mflr(.r0),
+				.stw(.r0, .sp, 0x14),
+				.bl(yieldFrame),
+				.lwz(.r0, .sp, 0x14),
+				.mtlr(.r0),
+				.addi(.sp, .sp, 0x10),
 
-			// Break point is still paused
-			.b_l("continue break"),
+				// Break point is still paused
+				.b_l("continue break"),
 
-			// Restore register state and resume code execution
-			.label("end break"),
-			loadBreakPointOffset.0,
-			loadBreakPointOffset.1,
-			.lmw(.r0, .r3, 4),
+				// Restore register state and resume code execution
+				.label("end break"),
+				loadBreakPointOffset.0,
+				loadBreakPointOffset.1,
+				.lmw(.r0, .r3, 4),
 
-			.label("return"),
-			// restore r3
-			.mr(.r3, .r0),
+				.label("return"),
+				// restore r3
+				.mr(.r3, .r0),
 
-			.raw(overwrittenInstruction),
-			.b(address + 4),
+				.raw(overwrittenInstruction),
+				.b(address + 4),
 
-			.label("force return value"),
-			loadBreakPointOffset.0,
-			loadBreakPointOffset.1,
-			.li(.r0, 0),
-			.sth(.r0, .r3, 2), // clear break point completely
-			.lmw(.r0, .r3, 4), // reload all registers though only r3 is important here
-			.mr(.r3, .r0),
+				.label("force return value"),
+				loadBreakPointOffset.0,
+				loadBreakPointOffset.1,
+				.li(.r0, 0),
+				.sth(.r0, .r3, 2), // clear break point completely
+				.lmw(.r0, .r3, 4), // reload all registers though only r3 is important here
+				.mr(.r3, .r0),
 
-			.b(forcedReturnValueAddress),
+				.b(type.forcedReturnValueAddress ?? 0),
 
 
-		], atAddress: freeSpace)
+			], atAddress: freeSpace)
 
-		breakPointEnableOffsets[type] = freeSpace
+		}
+		breakPointEnableOffsets[type] = addresses
 	}
 
 	/// This allows the tool to inject controller inputs into a separate offset and
@@ -657,5 +851,16 @@ class XDProcess {
 		], atAddress: patchedInputCopyFunction)
 
 		controllerMirrorsOffset = programmaticControllerWriteOffset
+	}
+
+	func getPokemonFromPointerOffset(_ pointer: Int) -> XDBattlePokemon? {
+		if let offset =  read4Bytes(atAddress: pointer) {
+			return getPokemonFromOffset(offset)
+		}
+		return nil
+	}
+
+	func getPokemonFromOffset(_ offset: Int) -> XDBattlePokemon? {
+		return XDBattlePokemon(offset: offset, process: self)
 	}
 }

@@ -10,7 +10,7 @@ import Foundation
 let defaultButtonPressDuration = 0.3
 
 #if !GAME_PBR
-enum GameController: Int {
+enum GameController: Int, Codable {
 	case p1 = 1, p2, p3, p4
 
 	var startOffset: Int {
@@ -26,7 +26,7 @@ enum GameController: Int {
 		}
 	}
 }
-enum ControllerButtons: Int {
+enum ControllerButtons: Int, Codable {
 	case LEFT    = 0x1
 	case RIGHT   = 0x2
 	case DOWN    = 0x4
@@ -41,8 +41,8 @@ enum ControllerButtons: Int {
 	case START   = 0x1000
 }
 
-struct ControllerStickInput {
-	enum StickDirectionX {
+struct ControllerStickInput: Codable {
+	enum StickDirectionX: Int, Codable {
 		case left, right, neutral
 		var offsets: [Int] {
 			switch self {
@@ -51,7 +51,7 @@ struct ControllerStickInput {
 			}
 		}
 	}
-	enum StickDirectionY {
+	enum StickDirectionY: Int, Codable {
 		case up, down, neutral
 		var offsets: [Int] {
 			switch self {
@@ -146,7 +146,7 @@ extension ControllerStickInput {
 	}
 }
 
-struct GCPad {
+struct GCPad: Codable {
 	var player: GameController = .p1
 	var duration = defaultButtonPressDuration
 
