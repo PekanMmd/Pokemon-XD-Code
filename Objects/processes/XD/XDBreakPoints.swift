@@ -108,17 +108,17 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			}
 		case .onDidConfirmMoveSelection:
 			switch region {
-			case .US: return [0x802043d0] // r3 pokemon pointer, r7 move routine, r8 move id, r9 target mask, r10 move index
+			case .US: return [0x802043d0]
 			default: return nil
 			}
 		case .onDidConfirmTurnSelection:
 			switch region {
-			case .US: return [0x8020446c] // r3 pokemon pointer, r5 option type, r8 parameter
+			case .US: return [0x8020446c]
 			default: return nil
 			}
 		case .onWillUseMove:
 			switch region {
-			case .US: return [0x8020ed04] // r4 is move id
+			case .US: return [0x8020ed90]
 			default: return nil
 			}
 		case .onMoveEnd:
@@ -128,47 +128,47 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			}
 		case .onWillCallPokemon:
 			switch region {
-			case .US: return [0x8020f104] //r3 battle pokemon pointer
+			case .US: return [0x8020f104]
 			default: return nil
 			}
 		case .onPokemonWillSwitchIntoBattle:
 			switch region {
-			case .US: return [0x8021b388] //r3 trainer pointer, r30 battle pokemon pointer
+			case .US: return [0x8021b388]
 			default: return nil
 			}
 		case .onShadowPokemonEncountered:
 			switch region {
-			case .US: return [0x802263ac] // r29 battle pokemon pointer
+			case .US: return [0x802263ac]
 			default: return nil
 			}
 		case .onShadowPokemonDidEnterReverseMode:
 			switch region {
-			case .US: return [0x802269a4] // r30 battle pokemon pointer
+			case .US: return [0x802269a4]
 			default: return nil
 			}
 		case .onWillUseItem:
 			switch region {
-			case .US: return [0x8015f438] //r5 battle pokemon pointer, r6 item id
+			case .US: return [0x8015f438]
 			default: return nil
 			}
 		case .onWillUseCologne:
 			switch region {
-			case .US: return [0x800a546c] // r31 is party index of pokemon
+			case .US: return [0x800a546c]
 			default: return nil
 			}
 		case .onWillUseTM:
 			switch region {
-			case .US: return [0x800a5094] // r30 hm index, r29 tm index, r25 item id
+			case .US: return [0x800a5094]
 			default: return nil
 			}
 		case .onDidUseTM:
 			switch region {
-			case .US: return [0x800a5140] // r30 hm index, r29 tm index, r25 item id, party pokemon index r27, success/fail r26
+			case .US: return [0x800a5140]
 			default: return nil
 			}
 		case .onWillGainExp:
 			switch region {
-			case .US: return [0x80212e80] // r18 exp, r19 battle pokemon pointer (init read only struct)
+			case .US: return [0x80212e80]
 			default: return nil
 			}
 		case .onLevelUp:
@@ -176,27 +176,27 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			return nil
 		case .onWillEvolve:
 			switch region {
-			case .US: return [0x80149cf0] // r4 evolved form, r3 battle pokemon pointer
+			case .US: return [0x80149cf0]
 			default: return nil
 			}
 		case .onDidEvolve:
 			switch region {
-			case .US: return [0x80149d5c] // r22 evolved form, r27 battle pokemon pointer
+			case .US: return [0x80149d5c]
 			default: return nil
 			}
 		case .onDidPurification:
 			switch region {
-			case .US: return [0x8023370c] // r31 battle pokemon pointer
+			case .US: return [0x8023370c]
 			default: return nil
 			}
 		case .onWillStartBattle:
 			switch region {
-			case .US: return [0x801f0e94] // r3 battle id
+			case .US: return [0x801f0e94]
 			default: return nil
 			}
 		case .onDidEndBattle:
 			switch region {
-			case .US: return [0x801f11a4] // r3 battle result
+			case .US: return [0x801f11a4]
 			default: return nil
 			}
 		case .onBattleWhiteout:
@@ -216,7 +216,7 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			}
 		case .onPokemonTurnStart:
 			switch region {
-			case .US: return [0x80209b40] // r3 battle pokemon stats pointer
+			case .US: return [0x80209b40]
 			default: return nil
 			}
 		case .onPokemonTurnEnd:
@@ -226,22 +226,22 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			}
 		case .onPokemonDidFaint:
 			switch region {
-			case .US: return [0x80213b24] // r31 defending pokemon, r29 attacking pokemon
+			case .US: return [0x80213b24]
 			default: return nil
 			}
 		case .onWillAttemptPokemonCapture:
 			switch region {
-			case .US: return [0x80219304] // r24 pokeball id, r29 catch rate, r19 species, r25 shadow id, r30 foe trainer, r20 max hp, r21 current hp, r26 battle pokemon data, r22 level, r23 room type
+			case .US: return [0x80219304] 
 			default: return nil
 			}
 		case .onDidSucceedPokemonCapture:
 			switch region {
-			case .US: return [0x80219700] // r27 battle pokemon data, r28 number of shakes
+			case .US: return [0x80219700]
 			default: return nil
 			}
 		case .onDidFailPokemonCapture:
 			switch region {
-			case .US: return [0x80219798] // r27 battle pokemon data, r28 number of shakes
+			case .US: return [0x80219798]
 			default: return nil
 			}
 		case .onMirorRadarActive:
@@ -261,7 +261,7 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			}
 		case .onReceivedGiftPokemon:
 			switch region {
-			case .US: return [0x801c86e0] // r3 gift pokemon id
+			case .US: return [0x801c86e0]
 			default: return nil
 			}
 		case .onReceivedItem:
@@ -275,7 +275,7 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			return nil
 		case .onPrint:
 			switch region {
-			case .US: return [0x802a65cc]
+			case .US: return [0x800abc80]
 			default: return nil
 			}
 		case .onSoftReset:
@@ -547,14 +547,18 @@ class BattleTurnSelectionContext: BreakPointContext {
 
 class WillUseMoveContext: BreakPointContext {
 	var move: XGMoves
+	var attackingPokemon: XDBattlePokemon?
+	let attackingPokemonPointer: Int
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		move = .index(registers[4] ?? 0)
+		move = .index(registers[24] ?? 0)
+		attackingPokemonPointer = registers[27] ?? 0
+		attackingPokemon = XDBattlePokemon(pointerOffset: attackingPokemonPointer, process: process)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
-		return [4: move.index]
+		return [24: move.index, 27: attackingPokemonPointer]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
