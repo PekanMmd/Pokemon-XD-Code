@@ -769,15 +769,15 @@ class WillEvolveContext: BreakPointContext {
 }
 
 class DidEvolveContext: BreakPointContext {
-	var pokemon: XDBattlePokemon
+	var pokemon: XDPartyPokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemon = XDBattlePokemon(process: process, offset: registers[27] ?? 0)
+		pokemon = XDPartyPokemon(process: process, offset: registers[27] ?? 0)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
-		return [27: pokemon.battleDataOffset]
+		return [27: pokemon.partyDataOffset]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }

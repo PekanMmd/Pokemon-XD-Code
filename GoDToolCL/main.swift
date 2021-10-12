@@ -9,6 +9,6 @@
 
 import Foundation
 
-loadISO(exitOnFailure: true)
+ToolProcess.loadISO(exitOnFailure: true)
 
 DiscordPlaysPokemon().launch()

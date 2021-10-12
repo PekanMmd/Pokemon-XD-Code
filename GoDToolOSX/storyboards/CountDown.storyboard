@@ -16,6 +16,13 @@
                         <subviews>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dDM-IL-3Jk">
                                 <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+                                <gestureRecognizers>
+                                    <clickGestureRecognizer delaysPrimaryMouseButtonEvents="YES" numberOfClicksRequired="1" id="BGl-Ml-yyH">
+                                        <connections>
+                                            <action selector="onClick:" target="jxS-m7-J2m" id="ggP-bC-7KO"/>
+                                        </connections>
+                                    </clickGestureRecognizer>
+                                </gestureRecognizers>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ball purple" id="PiU-2A-Ed8"/>
                             </imageView>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vTT-di-FGV">

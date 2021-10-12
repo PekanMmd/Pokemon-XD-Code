@@ -7,8 +7,6 @@
 
 import Foundation
 
-let defaultButtonPressDuration = 0.3
-
 #if !GAME_PBR
 enum GameController: Int, Codable {
 	case p1 = 1, p2, p3, p4
@@ -148,7 +146,7 @@ extension ControllerStickInput {
 
 struct GCPad: Codable {
 	var player: GameController = .p1
-	var duration = defaultButtonPressDuration
+	var duration = settings.inputDuration
 
 	var Start = false
 	var A = false
@@ -214,7 +212,28 @@ struct GCPad: Codable {
 		return newPad
 	}
 
-	static func button(_ button: ControllerButtons, duration: Double = defaultButtonPressDuration, player: GameController = .p1) -> GCPad {
+	func disableButtons(_ buttons: [ControllerButtons]) -> GCPad {
+		var pad = self
+		buttons.forEach { (button) in
+			switch button {
+			case .UP: pad.Up = false
+			case .RIGHT: pad.Right = false
+			case .DOWN: pad.Down = false
+			case .LEFT: pad.Left = false
+			case .Z: pad.Z = false
+			case .R: pad.R = false
+			case .L: pad.L = false
+			case .A: pad.A = false
+			case .B: pad.B = false
+			case .X: pad.X = false
+			case .Y: pad.Y = false
+			case .START: pad.Start = false
+			}
+		}
+		return pad
+	}
+
+	static func button(_ button: ControllerButtons, duration: Double = settings.inputDuration, player: GameController = .p1) -> GCPad {
 		var pad = GCPad(player: player, duration: duration)
 		switch button {
 		case .UP: pad.Up = true
@@ -296,19 +315,19 @@ class ControllerInputs {
 		return pads
 	}
 
-	func input(_ button: ControllerButtons, duration: Double = defaultButtonPressDuration, player: GameController = .p1, tag: String? = nil) {
+	func input(_ button: ControllerButtons, duration: Double = settings.inputDuration, player: GameController = .p1, tag: String? = nil) {
 		input(buttons: [button], duration: duration, player: player)
 	}
 
-	func stickInput(_ stick: ControllerStickInput, duration: Double = defaultButtonPressDuration, player: GameController = .p1, tag: String? = nil) {
+	func stickInput(_ stick: ControllerStickInput, duration: Double = settings.inputDuration, player: GameController = .p1, tag: String? = nil) {
 		input(stick: stick, duration: duration, player: player)
 	}
 
-	func cStickInput(_ stick: ControllerStickInput, duration: Double = defaultButtonPressDuration, player: GameController = .p1, tag: String? = nil) {
+	func cStickInput(_ stick: ControllerStickInput, duration: Double = settings.inputDuration, player: GameController = .p1, tag: String? = nil) {
 		input(cStick: stick, duration: duration, player: player)
 	}
 
-	func input(buttons: [ControllerButtons] = [], stick: ControllerStickInput? = nil, cStick: ControllerStickInput? = nil, duration: Double = defaultButtonPressDuration, player: GameController = .p1, tag: String? = nil) {
+	func input(buttons: [ControllerButtons] = [], stick: ControllerStickInput? = nil, cStick: ControllerStickInput? = nil, duration: Double = settings.inputDuration, player: GameController = .p1, tag: String? = nil) {
 		var pad = GCPad(player: player, duration: duration)
 		for button in buttons {
 			switch button {

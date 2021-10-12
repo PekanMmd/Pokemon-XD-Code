@@ -613,7 +613,7 @@ func decodeInputFiles(_ files: [XGFiles]) {
 
 func main() {
 
-	if !loadISO() {
+	if !ToolProcess.loadISO() {
 		let args = CommandLine.arguments
 
 		for arg in args {

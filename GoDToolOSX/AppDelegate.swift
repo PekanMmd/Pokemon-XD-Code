@@ -47,6 +47,66 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			ereaderencodeMenuItem.isEnabled = false
 		}
 		#endif
+
+		var countDownDate: Date?
+		var posterFile: XGFiles?
+		var iso: XGFiles?
+		var argsAreInvalid = false
+
+		let args = CommandLine.arguments
+		for i in 0 ..< args.count {
+			guard i < args.count - 1 else { continue }
+			let arg = args[i]
+			let next = args[i + 1]
+			if arg == "--launch-dpp-date" {
+				countDownDate = Date.fromString(next)
+				if countDownDate == nil {
+					let secondsToDecember: Double = 31_104_000
+					print("Invalid arg for \(arg) \(next)\nDate must be of format:", Date(timeIntervalSince1970: secondsToDecember).referenceString())
+					argsAreInvalid = true
+				}
+			} else if arg == "--launch-dpp-secs",
+					  let seconds = next.integerValue {
+				countDownDate = Date(timeIntervalSinceNow: Double(seconds))
+			} else if arg == "--launch-dpp-poster" {
+				let file = XGFiles.path(next)
+				if XGFileTypes.imageFormats.contains(file.fileType) {
+					posterFile = file
+					if !file.exists {
+						print("Invalid arg for \(arg).\nFile doesn't exist:", file.path)
+						argsAreInvalid = true
+					}
+				} else {
+					print("Invalid arg for \(arg): \(file.path).\nThese image formats are supported:", XGFileTypes.imageFormats.map{$0.fileExtension})
+					argsAreInvalid = true
+				}
+			} else if arg == "-i" || arg == "--iso" {
+				let file = XGFiles.path(next)
+				if file.fileType == .iso {
+					iso = file
+				}
+				if !file.exists {
+					print("Invalid arg for \(arg).\nFile doesn't exist:", file.path)
+					argsAreInvalid = true
+				}
+			} else if arg == "-s" || arg == "--silent-logs" {
+				silentLogs = true
+			}
+		}
+		if argsAreInvalid {
+			ToolProcess.terminate()
+		}
+
+		if let isoFile = iso {
+			XGISO.loadISO(file: isoFile)
+		}
+
+		if let date = countDownDate {
+			let timer = Timer(timeInterval: 2, repeats: false) { (t) in
+				self.launchDPP(startDate: date, posterFile: posterFile)
+			}
+			RunLoop.current.add(timer, forMode: .common)
+		}
 	}
 
 	func decodeInputFiles(_ files: [XGFiles]) {
@@ -174,13 +234,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 	}
 
-	func launchDPP(startDate: Date) {
+	func launchDPP(startDate: Date?, posterFile: XGFiles?) {
 		guard homeViewController.checkRequiredFiles() else {
 			return
 		}
 		#if GAME_XD
-		GoDCountDownViewController.launch(endDate: startDate,
-										  image: .nameAndFolder("poster.gif", .Documents),
+		GoDCountDownViewController.launch(endDate: startDate ?? .init(timeIntervalSinceNow: 0),
+										  image: posterFile,
 										  isFullScreen: true) { countdownVC in
 			XGThreadManager.manager.runInBackgroundAsync(queue: 3) {
 				DiscordPlaysPokemon().launch()
@@ -190,15 +250,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 
 	@IBAction func specialButton(_ sender: Any) {
-		launchDPP(startDate: .init(timeIntervalSinceNow: 0))
+		launchDPP(startDate: .init(timeIntervalSinceNow: 0), posterFile: .nameAndFolder("poster.gif", .Documents))
 	}
 
 	@IBAction func specialButton2(_ sender: Any) {
-		launchDPP(startDate: .init(timeIntervalSinceNow: 60))
+		launchDPP(startDate: .init(timeIntervalSinceNow: 60), posterFile: .nameAndFolder("poster.gif", .Documents))
 	}
 
 	@IBAction func specialButton3(_ sender: Any) {
-		launchDPP(startDate: settings.countDownDate ?? .init(timeIntervalSinceNow: 3600))
+		launchDPP(startDate: .init(timeIntervalSinceNow: 3600), posterFile: .nameAndFolder("poster.gif", .Documents))
 	}
 
 	@IBAction func getFreeStringID(_ sender: Any) {

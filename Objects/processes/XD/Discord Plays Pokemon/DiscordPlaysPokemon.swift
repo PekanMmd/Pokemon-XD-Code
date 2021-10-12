@@ -25,6 +25,7 @@ class DiscordPlaysPokemon {
 		case startup
 		case inGame
 		case finished
+		case evolution
 
 		var acceptOverrides: Bool {
 			return self != .none && self != .finished
@@ -37,11 +38,34 @@ class DiscordPlaysPokemon {
 		var postUpdates: Bool {
 			return self != .none && self != .finished
 		}
+
+		var disabledButtons: [ControllerButtons] {
+			switch self {
+			case .evolution: return [.B]
+			default: return []
+			}
+		}
 	}
 
 	let updatesURL = "http://localhost:8080"
-	var processState = ProcessStates.none
-	var shouldRelaunch = true
+	private let processStateStack = XGStack<ProcessStates>()
+	var processState: ProcessStates {
+		return processStateStack.peek() ?? .none
+	}
+	func pushState(_ state: ProcessStates) {
+		processStateStack.push(state)
+		switch state {
+		case .startup: postContext("> <:pokeballicon:896975942738673735> Input is disabled while starting up game.")
+		case .inGame: postContext("> <a:michael_run:896978303892750416> Now accepting inputs. Let's play!")
+		case .evolution: postContext("> <:evolution:897055856657575957> **B** button is disabled until the evolution is finished.")
+		default: break
+		}
+	}
+	func popState() {
+		processStateStack.pop()
+	}
+
+	var shouldRelaunchOnDolphinClosed = false
 
 	let mapsURLs = [
 		"S1_out" : ("https://cdn2.bulbagarden.net/upload/0/07/Outskirt_Stand.png", GoDDesign.colourOrange()),
@@ -101,6 +125,9 @@ class DiscordPlaysPokemon {
 
 		var previousRoom: XGRoom?
 		setup.onDidChangeMap = { [weak self] (context, process, state) -> Bool in
+			// Don't continue any sequences from a previous room
+			process.inputHandler.clearPendingInput()
+
 			if context.newRoom.name == "title"
 				&& previousRoom?.name == "title" {
 				// This should be the name entry menu on a new game
@@ -118,7 +145,7 @@ class DiscordPlaysPokemon {
 			}
 			switch context.newRoom.name {
 			case "title":
-				self?.processState = .startup
+				self?.pushState(.startup)
 				process.inputHandler.input([
 					.init(duration: 3),
 					.init(duration: 0.5, A: true),
@@ -138,7 +165,7 @@ class DiscordPlaysPokemon {
 				])
 			default:
 				if self?.processState == .startup {
-					self?.processState = .inGame
+					self?.pushState(.inGame)
 				}
 			}
 			previousRoom = context.newRoom
@@ -227,6 +254,8 @@ class DiscordPlaysPokemon {
 
 		setup.onWillEvolve = { [weak self] (context, process, state) -> Bool in
 			if context.pokemon.species.index > 0 {
+				process.inputHandler.clearPendingInput()
+				self?.pushState(.evolution)
 				let pokemon = context.pokemon
 				let evolvedForm = context.evolvedForm.stats
 				let name = pokemon.nickname.titleCased
@@ -238,6 +267,13 @@ class DiscordPlaysPokemon {
 				var embed = pokemon.discordEmbed(fieldTypes: [.types, .level, .nature, .ability, .moves])
 				embed.thumbnail?.url = "pokemon:" + evolvedForm.name.string
 				self?.postUpdate("> <:evolution:897055856657575957> " + name + " is evolving into **" + evolvedForm.name.string.titleCased + "**!", embed: embed)
+			}
+			return true
+		}
+
+		setup.onDidEvolve = { [weak self] (context, process, state) -> Bool in
+			if self?.processState == .evolution {
+				self?.popState()
 			}
 			return true
 		}
@@ -427,21 +463,37 @@ class DiscordPlaysPokemon {
 
 			print("Launched Dolphin Process")
 
+			var overridePending = false
+			func getInputEndpoint() -> String {
+				defer {
+					overridePending = false
+				}
+				return overridePending ? "/override" : "/input"
+			}
+
 			XGThreadManager.manager.runInBackgroundAsync(queue: 2) { [weak self] in
 				while process.isRunning {
 					guard let self = self else { return }
 
 					if self.processState.acceptInputs || self.processState.acceptOverrides {
 						usleep(500_000)
-						GoDNetworkingManager.get(self.updatesURL + "/input") { (controller: GCPad?) in
+						GoDNetworkingManager.get(self.updatesURL + getInputEndpoint()) { (controller: GCPad?) in
 							if let pad = controller {
 								if pad.tag == "terminate" || pad.tag == "reset" {
-									if pad.tag == "terminate" {
-										self.shouldRelaunch = false
+									if pad.tag == "reset" {
+										self.shouldRelaunchOnDolphinClosed = true
 									}
 									process.terminate()
-								} else if self.processState.acceptInputs {
+								} else if pad.tag == "override-pending" {
+									overridePending = true
+								} else if pad.tag == "reload-settings" {
+									XGSettings.reload()
+									
+							   } else if pad.tag == "override" {
 									process.inputHandler.input(pad)
+								} else if self.processState.acceptInputs {
+									let updatedPad = pad.disableButtons(self.processState.disabledButtons)
+									process.inputHandler.input(updatedPad)
 								}
 							}
 						}
@@ -449,7 +501,7 @@ class DiscordPlaysPokemon {
 						sleep(5)
 					}
 				}
-				self?.processState = .finished
+				self?.pushState(.finished)
 			}
 
 			return true
@@ -458,9 +510,12 @@ class DiscordPlaysPokemon {
 
 			printg("Finished running XD Process")
 
-			if self?.shouldRelaunch == true {
+			if self?.shouldRelaunchOnDolphinClosed == true {
 				printg("Process marked for relaunch")
 				self?.launch()
+			} else {
+				printg("Closing tool")
+				ToolProcess.terminate()
 			}
 
 		}

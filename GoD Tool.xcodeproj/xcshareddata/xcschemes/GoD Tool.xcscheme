@@ -50,6 +50,24 @@
             ReferencedContainer = "container:GoD Tool.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "--launch-dpp-poster /Users/starsmomodu/Documents/GoD\ Tool/XD\ GoD\ Tool/poster.gif"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--launch-dpp-secs 30"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--silent-logs"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--iso /Users/starsmomodu/Documents/GoD\ Tool/XD.iso"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

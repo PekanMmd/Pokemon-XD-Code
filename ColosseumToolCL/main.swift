@@ -6,7 +6,7 @@
 //
 //
 
-//loadISO(exitOnFailure: true)
+//ToolProcess.loadISO(exitOnFailure: true)
 
 
 

@@ -57,9 +57,10 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 	case bmp  = 0xf7
 	case jpeg = 0xf8
 	case png  = 0xf9
-	case tex0 = 0xfa
-	case xds  = 0xfb
-	case ups  = 0xfc
+	case gif  = 0xfa
+	case tex0 = 0xfb
+	case xds  = 0xfc
+	case ups  = 0xfd
 	case iso  = 0xfe
 	case nkit = 0xff
 	case csv  = 0x100
@@ -103,6 +104,7 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 		case .dol : return ".dol"
 		case .toc : return ".toc"
 		case .png : return ".png"
+		case .gif : return ".gif"
 		case .bmp : return ".bmp"
 		case .jpeg: return ".jpg"
 		case .tex0: return ".tex0"
@@ -153,6 +155,7 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 		case .dol : return "The main executable file containing most of the game's assembly code. https://wiibrew.org/wiki/DOL"
 		case .toc : return "The file which specifies the file layout of the iso. Used to link filenames to their offsets in the iso."
 		case .png : return "A common image format used outside of the game."
+		case .gif : return "A common animated image format used outside of the game."
 		case .bmp : return "A common image format used outside of the game."
 		case .jpeg: return "A common image format used outside of the game."
 		case .tex0: return "An image file format used in other games. It's similar to `.gtx` so `\(toolName)` converts `.gtx` files to `.tex0` as an intermediate step before converting the `.tex0` into `.png` using an external tool. http://wiki.tockdom.com/wiki/TEX0_(File_Format) https://szs.wiimm.de/wimgt/"
@@ -179,7 +182,7 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 	}
 
 	#if canImport(Cocoa)
-	static let imageFormats: [XGFileTypes] = [.png, .jpeg, .bmp]
+	static let imageFormats: [XGFileTypes] = [.png, .jpeg, .bmp, .gif]
 	#else
 	static let imageFormats: [XGFileTypes] = [.png]
 	#endif

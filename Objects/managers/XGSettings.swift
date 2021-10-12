@@ -8,26 +8,26 @@
 import Foundation
 
 private let settingsFile = XGFiles.nameAndFolder("Settings.json", XGFolders.Documents)
-let settings = XGSettings.load()
+var settings = XGSettings.load()
 
 class XGSettings {
 	var verbose = false
 	var increaseFileSizes = true
 	var enableExperimentalFeatures = false
-	var countDownDate: Date?
+	var inputDuration = 0.3
 	
 	private struct Settings: Codable {
 		
 		var verbose: Bool?
 		var increaseFileSizes: Bool?
 		var enableExperimentalFeatures: Bool?
-		var countDownDate: String?
+		var inputDuration: Double?
 		
 		enum CodingKeys: String, CodingKey {
 			case verbose = "Verbose Logs"
 			case increaseFileSizes = "Increase File Sizes"
 			case enableExperimentalFeatures = "Enable Experimental Features"
-			case countDownDate = "Date when count down screens should end by default"
+			case inputDuration = "The default duration (seconds) for button inputs when running Dolphin"
 		}
 	}
 	
@@ -44,9 +44,8 @@ class XGSettings {
 			self.enableExperimentalFeatures = experimental
 		}
 
-		if let dateString = settings.countDownDate,
-		   let date = Date.fromString(dateString) {
-			self.countDownDate = date
+		if let duration = settings.inputDuration {
+			self.inputDuration = duration
 		}
 	}
 	
@@ -54,12 +53,16 @@ class XGSettings {
 		let settingsData = Settings(verbose: verbose,
 									increaseFileSizes: increaseFileSizes,
 									enableExperimentalFeatures: enableExperimentalFeatures,
-									countDownDate: countDownDate?.referenceString()
+									inputDuration: inputDuration
 									)
 		settingsData.writeJSON(to: settingsFile)
 	}
+
+	static func reload() {
+		settings = load()
+	}
 	
-	static func load() -> XGSettings {
+	fileprivate static func load() -> XGSettings {
 		if settingsFile.exists {
 			do {
 				let settings = try Settings.fromJSON(file: settingsFile)

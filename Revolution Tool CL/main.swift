@@ -7,7 +7,7 @@
 
 import Foundation
 
-loadISO(exitOnFailure: true)
+ToolProcess.loadISO(exitOnFailure: true)
 
 //let args = "extract --raw \(XGFiles.iso.path.escapedPath) \(XGFolders.ISODump.path.escapedPath)"
 //let process = GoDShellManager.runAsync(.wit, args: args, shouldReturnProcess: true)

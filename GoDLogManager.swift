@@ -10,6 +10,7 @@ import Foundation
 
 let date = Date(timeIntervalSinceNow: 0)
 var logString = ""
+var silentLogs = false
 
 func displayAlert(title: String, description: String) {
 	#if GUI
@@ -32,11 +33,13 @@ func printg(_ args: Any...) {
 	logString += newString
 
 	#if GUI
-	XGThreadManager.manager.runInForegroundAsync {
-		let hvc = appDelegate.homeViewController
-		if hvc != nil {
-			let log = hvc!.logView!
-			log.string = log.string + newString
+	if !silentLogs {
+		XGThreadManager.manager.runInForegroundAsync {
+			let hvc = appDelegate.homeViewController
+			if hvc != nil {
+				let log = hvc!.logView!
+				log.string = log.string + newString
+			}
 		}
 	}
 	#endif

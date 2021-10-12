@@ -69,6 +69,10 @@ class GoDCountDownViewController: GoDViewController {
 		}
 	}
 
+	@IBAction func onClick(_ sender: Any) {
+		NSCursor.setHiddenUntilMouseMoves(true)
+	}
+
 	func stop() {
 		shouldCancel = true
 	}
