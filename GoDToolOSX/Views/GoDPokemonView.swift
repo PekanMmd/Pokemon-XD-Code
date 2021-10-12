@@ -108,7 +108,7 @@ class GoDPokemonView: NSImageView {
 		self.happiness.integerValue = pokemon.happiness
 		
 		self.shadowCounter.integerValue = pokemon.shadowCounter
-		self.shadowAggression.integerValue = pokemon.shadowAggression
+		self.shadowAggression.integerValue = pokemon.shadowAggression.rawValue
 		self.shadowFlee.integerValue = pokemon.shadowFleeValue
 		self.shadowCatchrate.integerValue = pokemon.shadowCatchRate
 		self.shadowBoost.selectLevel(level: pokemon.shadowBoostLevel)
@@ -446,7 +446,7 @@ class GoDPokemonView: NSImageView {
 	}
 	
 	@objc func setAggression(sender: NSTextField) {
-		self.delegate.pokemon[self.index].shadowAggression = sender.integerValue
+		self.delegate.pokemon[self.index].shadowAggression = XGShadowAggression(rawValue: sender.integerValue) ?? .none
 		
 	}
 	
