@@ -68,7 +68,7 @@ extension XDSScriptCompiler {
 					bracketLevel -= 1
 				}
 				let right = stack.peek()
-				let left = bracketStack.peek()
+				let left = bracketStack.peek() ?? ""
 				if right == "}" && left == "{" {
 					bracketStack.pop()
 				} else if right == "]" && left == "[" {

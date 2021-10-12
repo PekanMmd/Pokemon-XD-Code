@@ -147,10 +147,10 @@ class GoDISOViewController: GoDTableViewController {
 		cell.alphaValue = self.table.selectedRow == row ? 1 : 0.75
 		if self.table.selectedRow == row {
 			cell.addBorder(colour: GoDDesign.colourBlack(), width: 1)
-			cell.titleField.textColor = GoDDesign.colourBlue()
+			cell.titleField.textColor = GoDDesign.colourBlue().NSColour
 		} else {
 			cell.removeBorder()
-			cell.titleField.textColor = GoDDesign.colourBlack()
+			cell.titleField.textColor = GoDDesign.colourBlack().NSColour
 		}
 		
 		return cell

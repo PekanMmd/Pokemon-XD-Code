@@ -17,6 +17,7 @@ class GoDStringViewController: GoDViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		title = "String Search"
 		loadAllStrings(refresh: true)
 	}
 	

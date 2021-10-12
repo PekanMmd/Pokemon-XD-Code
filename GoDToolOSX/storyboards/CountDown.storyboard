@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="jxS-m7-J2m">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Count Down-->
+        <scene sceneID="umh-gz-DcV">
+            <objects>
+                <viewController title="Count Down" showSeguePresentationStyle="single" id="jxS-m7-J2m" customClass="GoDCountDownViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="PYc-zz-Y5W">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dDM-IL-3Jk">
+                                <rect key="frame" x="0.0" y="0.0" width="1000" height="500"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ball purple" id="PiU-2A-Ed8"/>
+                            </imageView>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vTT-di-FGV">
+                                <rect key="frame" x="250" y="135" width="500" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="dJg-Ee-aP5"/>
+                                </constraints>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="kVY-Bk-aIo"/>
+                            </imageView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xx1-ad-Owl">
+                                <rect key="frame" x="250" y="135" width="500" height="80"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" borderStyle="border" alignment="center" title="00:00:00" drawsBackground="YES" id="UW0-2l-HjX">
+                                    <font key="font" metaFont="system" size="55"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="dDM-IL-3Jk" secondAttribute="bottom" id="0hA-6t-FKV"/>
+                            <constraint firstItem="xx1-ad-Owl" firstAttribute="bottom" secondItem="vTT-di-FGV" secondAttribute="bottom" id="Dvs-EP-T4W"/>
+                            <constraint firstItem="xx1-ad-Owl" firstAttribute="top" secondItem="vTT-di-FGV" secondAttribute="top" id="Elz-K2-Yux"/>
+                            <constraint firstItem="vTT-di-FGV" firstAttribute="centerY" secondItem="dDM-IL-3Jk" secondAttribute="centerY" multiplier="1.3" id="MMT-qe-ZIB"/>
+                            <constraint firstItem="dDM-IL-3Jk" firstAttribute="top" secondItem="PYc-zz-Y5W" secondAttribute="top" id="NP4-5I-DbN"/>
+                            <constraint firstItem="xx1-ad-Owl" firstAttribute="trailing" secondItem="vTT-di-FGV" secondAttribute="trailing" id="Usb-9d-ftb"/>
+                            <constraint firstItem="xx1-ad-Owl" firstAttribute="leading" secondItem="vTT-di-FGV" secondAttribute="leading" id="Z9f-AX-uFG"/>
+                            <constraint firstItem="dDM-IL-3Jk" firstAttribute="leading" secondItem="PYc-zz-Y5W" secondAttribute="leading" id="atl-Bt-dlg"/>
+                            <constraint firstItem="vTT-di-FGV" firstAttribute="width" secondItem="dDM-IL-3Jk" secondAttribute="width" multiplier="0.5" id="dDD-Eu-I9X"/>
+                            <constraint firstItem="vTT-di-FGV" firstAttribute="centerX" secondItem="PYc-zz-Y5W" secondAttribute="centerX" id="ukh-Mx-qBA"/>
+                            <constraint firstAttribute="trailing" secondItem="dDM-IL-3Jk" secondAttribute="trailing" id="w4U-e2-7QP"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="backgroundView" destination="dDM-IL-3Jk" id="ESx-2y-JRj"/>
+                        <outlet property="countDownField" destination="xx1-ad-Owl" id="i39-DJ-cFn"/>
+                        <outlet property="timerContainer" destination="vTT-di-FGV" id="o3M-o7-WyE"/>
+                    </connections>
+                </viewController>
+                <customObject id="ZBL-EO-2To" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-33" y="-143"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ball purple" width="500" height="500"/>
+    </resources>
+</document>

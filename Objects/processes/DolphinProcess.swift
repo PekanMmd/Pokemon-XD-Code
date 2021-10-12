@@ -195,8 +195,7 @@ class DolphinProcess {
 		fullRAM.writeToFile(file)
 	}
 
-	class func launch(delaySeconds seconds: Int = 0,
-					  refreshTimeMicroSeconds: UInt32,
+	class func launch(refreshTimeMicroSeconds: UInt32,
 					  settings: [(key: DolphinSystems, value: String)] = [],
 					  autoCloseDolphinOnFinish: Bool = false,
 					  onStart: ((DolphinProcess) -> Bool)?,
@@ -237,11 +236,13 @@ class DolphinProcess {
 		}
 		if dolphin.validate() {
 			if onStart?(dolphin) ?? true {
-				DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(seconds))) {
+				DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(5))) {
 					dolphin.runLoop(refreshTimeMicroSeconds: refreshTimeMicroSeconds, onUpdate: onUpdate)
 				}
 				process.await()
 			}
+		} else {
+			printg("Timed out waiting for Dolphin process.")
 		}
 		onFinish?(dolphin)
 		if dolphin.isRunning && autoCloseDolphinOnFinish {

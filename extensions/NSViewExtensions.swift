@@ -9,10 +9,18 @@
 import Cocoa
 
 extension NSView {
+
+	func setBackgroundColour(_ colour: XGColour) {
+		setBackgroundColour(colour.NSColour)
+	}
 	
 	func setBackgroundColour(_ colour: NSColor) {
 		self.wantsLayer = true
 		self.layer?.backgroundColor = colour.cgColor
+	}
+
+	func addBorder(colour: XGColour, width: CGFloat) {
+		addBorder(colour: colour.NSColour, width: width)
 	}
 	
 	func addBorder(colour: NSColor, width: CGFloat) {

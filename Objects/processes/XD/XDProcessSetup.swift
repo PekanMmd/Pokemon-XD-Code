@@ -41,6 +41,7 @@ class XDProcessSetup {
 	var onWillCallPokemon: ((WillCallPokemonContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onPokemonWillSwitchIn: ((PokemonSwitchInContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onShadowPokemonEncountered: ((ShadowPokemonEncounterContext, XDProcess, XDGameState) -> Bool)? = nil
+	var onShadowPokemonFled: ((ShadowPokemonFledContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onPokemonDidEnterReverseMode: ((ReverseModeContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onWillUseItem: ((UseItemContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onWillUseCologne: ((UseCologneContext, XDProcess, XDGameState) -> Bool)? = nil
@@ -70,4 +71,15 @@ class XDProcessSetup {
 //	var onTeamHealed: ((XDProcess, XDGameState) -> Bool)? = nil
 //	var onNewGame: ((XDProcess, XDGameState) -> Bool)? = nil
 	var onPrint: ((PrintContext, XDProcess, XDGameState) -> Bool)? = nil
+}
+
+extension Dictionary where Key: Equatable, Value: Equatable {
+	func isIdenticalTo(_ other: Self) -> Bool {
+		for (key, value) in self {
+			if other[key] != value {
+				return false
+			}
+		}
+		return true
+	}
 }

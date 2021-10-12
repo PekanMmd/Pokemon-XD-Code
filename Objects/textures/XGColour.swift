@@ -132,10 +132,12 @@ class XGColour: Codable {
 		return XGColour(red: 0, green: 0, blue: 0, alpha: 0)
 	}
 	
-	convenience init(raw: Int, format: GoDTextureFormats) {
+	convenience init(raw: Int, format: GoDTextureFormats? = nil) {
 		self.init(red: 0, green: 0, blue: 0, alpha: 0)
 		
 		switch format {
+		case nil:
+			setStandardRGBA(raw: raw.unsigned)
 		case .I4:
 			setI4(raw: raw)
 		case .I8:
@@ -155,7 +157,7 @@ class XGColour: Codable {
 		}
 	}
 	
-	convenience init(raw: UInt32, format: GoDTextureFormats?) {
+	convenience init(raw: UInt32, format: GoDTextureFormats? = nil) {
 		self.init(red: 0, green: 0, blue: 0, alpha: 0)
 		
 		switch format {

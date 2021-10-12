@@ -209,6 +209,7 @@ struct GCPad: Codable {
 
 		newPad.stick = self.stick.maskedWith(stick: pad.stick)
 		newPad.cStick = self.cStick.maskedWith(stick: pad.cStick)
+		newPad.tag = self.tag
 
 		return newPad
 	}
@@ -265,7 +266,7 @@ extension GCPad {
 
 class ControllerInputs {
 	typealias GCPadInputSequence = [GCPad] // pads within a sequence are input serially
-	private(set) var inputSequences = [GCPadInputSequence]() // all sequences are input concurrently
+	@Atomic private(set) var inputSequences = [GCPadInputSequence]() // all sequences are input concurrently
 	// buttons currently pressed in game by player
 
 	var nextInput: [GCPad] {

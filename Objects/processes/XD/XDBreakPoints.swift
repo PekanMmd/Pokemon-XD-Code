@@ -8,7 +8,8 @@
 import Foundation
 
 enum XDBreakPointTypes: Int, CaseIterable {
-	case onFrameAdvance = 1
+	case clear = 0
+	case onFrameAdvance
 	case onDidRNGRoll
 	case onStepCount
 	case onDidLoadSave
@@ -22,6 +23,7 @@ enum XDBreakPointTypes: Int, CaseIterable {
 	case onWillCallPokemon
 	case onPokemonWillSwitchIntoBattle
 	case onShadowPokemonEncountered
+	case onShadowPokemonFled
 	case onShadowPokemonDidEnterReverseMode
 	case onWillUseItem
 	case onWillUseCologne
@@ -56,8 +58,7 @@ enum XDBreakPointTypes: Int, CaseIterable {
 	case onSoftReset
 	case onInconsistentState
 
-	case forcedReturn = 0x7FFE
-	case yield = 0x7FFF
+	case forcedReturn = 0x7FFF
 
 	var addresses: [Int]? {
 		switch self {
@@ -83,7 +84,7 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			}
 		case .onStepCount:
 			switch region {
-			case .US: return [0x8014f918]
+			case .US: return [0x8014f890]
 			default: return nil
 			}
 		case .onDidLoadSave:
@@ -138,7 +139,12 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			}
 		case .onShadowPokemonEncountered:
 			switch region {
-			case .US: return [0x802263ac]
+			case .US: return [0x802263cc, 0x802263dc, 0x802263e4]
+			default: return nil
+			}
+		case .onShadowPokemonFled:
+			switch region {
+			case .US: return [0x80209a58]
 			default: return nil
 			}
 		case .onShadowPokemonDidEnterReverseMode:
@@ -287,7 +293,7 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			return nil
 		case .forcedReturn:
 			return nil
-		case .yield:
+		case .clear:
 			return nil
 		}
 	}
@@ -341,6 +347,14 @@ class GetFlagContext: BreakPointContext {
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
+
+	func setReturnValue(_ to: Int) {
+		forcedReturnValue = to
+	}
+
+	func getForcedReturnValue() -> Int? {
+		return forcedReturnValue
+	}
 }
 
 class SetFlagContext: BreakPointContext {
@@ -358,19 +372,26 @@ class SetFlagContext: BreakPointContext {
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
+}
 
-	func setReturnValue(_ to: Int) {
-		forcedReturnValue = to
+class StepCounterContext: BreakPointContext {
+	var stepsAdded: Int
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		stepsAdded = registers[4] ?? 0
+		super.init()
 	}
 
-	func getForcedReturnValue() -> Int? {
-		return forcedReturnValue
+	override func getRegisters() -> [Int: Int] {
+		return [4: stepsAdded]
 	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
 class SaveLoadedContext: BreakPointContext {
 	enum Status: Int, Codable {
-		case cancelled = -1, success = 3, noSaveData = 5, unknown = -2
+		case cancelled = -1, previouslyLoadedNCleanSaveNoData = 1, success = 3, firstLoadNoSaveData = 5, unknown = -2
 	}
 
 	var status: Status
@@ -408,7 +429,7 @@ class MapDidChangeContext: BreakPointContext {
 	let newRoom: XGRoom
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		let currentRoomID = process.read2Bytes(atAddress: kCurrentRoomIDRAMOffset) ?? 0
+		let currentRoomID = process.read2Bytes(atAddress: XDCurrentRoomState.kCurrentRoomIDRAMOffset) ?? 0
 		newRoom = XGRoom.roomWithID(currentRoomID) ?? XGRoom(index: 0)
 		super.init()
 	}
@@ -430,14 +451,13 @@ class BattleMoveSelectionContext: BreakPointContext {
 	}
 
 	let moveRoutinePointer: Int
-	let pokemonPointer: Int
 	var move: XGMoves
 	var targets: Targets
 	var selectedMoveIndex: Int
-	var pokemon: XDBattlePokemon?
+	var pokemon: XDBattlePokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemonPointer = registers[3] ?? 0
+		pokemon = XDBattlePokemon(process: process, offset: registers[3] ?? 0)
 		moveRoutinePointer = registers[7] ?? 0
 		move = .index( registers[8] ?? 0)
 		targets = Targets(rawValue: registers[9] ?? 0) ?? .none
@@ -445,13 +465,12 @@ class BattleMoveSelectionContext: BreakPointContext {
 			printg("Undocumented move targets case \(registers[9] ?? 0) for move \(move.name.string)")
 		}
 		selectedMoveIndex = registers[10] ?? 0
-		pokemon = XDBattlePokemon(pointerOffset: pokemonPointer, process: process)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
 		return [
-			3: pokemonPointer,
+			3: pokemon.battleDataOffset,
 			8: move.index,
 			9: targets.rawValue,
 			10: selectedMoveIndex
@@ -514,12 +533,11 @@ class BattleTurnSelectionContext: BreakPointContext {
 	}
 
 	let moveRoutinePointer: Int
-	let pokemonPointer: Int
-	var pokemon: XDBattlePokemon?
+	var pokemon: XDBattlePokemon
 	var option: Option
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemonPointer = registers[3] ?? 0
+		pokemon = XDBattlePokemon(process: process, offset: registers[3] ?? 0)
 		moveRoutinePointer = registers[7] ?? 0
 		let parameter = registers[8] ?? 0
 		let type = registers[5] ?? 0
@@ -530,13 +548,12 @@ class BattleTurnSelectionContext: BreakPointContext {
 		case 19: option = .fight(move: .index(parameter))
 		default: option = .unknown(id: type, parameter: parameter)
 		}
-		pokemon = XDBattlePokemon(pointerOffset: pokemonPointer, process: process)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
 		return [
-			3: pokemonPointer,
+			3: pokemon.battleDataOffset,
 			5: option.optionID,
 			8: option.parameter
 		]
@@ -547,109 +564,112 @@ class BattleTurnSelectionContext: BreakPointContext {
 
 class WillUseMoveContext: BreakPointContext {
 	var move: XGMoves
-	var attackingPokemon: XDBattlePokemon?
-	let attackingPokemonPointer: Int
+	var attackingPokemon: XDBattlePokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
 		move = .index(registers[24] ?? 0)
-		attackingPokemonPointer = registers[27] ?? 0
-		attackingPokemon = XDBattlePokemon(pointerOffset: attackingPokemonPointer, process: process)
+		attackingPokemon = XDBattlePokemon(process: process, offset: registers[27] ?? 0)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
-		return [24: move.index, 27: attackingPokemonPointer]
+		return [24: move.index, 27: attackingPokemon.battleDataOffset]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
 class WillCallPokemonContext: BreakPointContext {
-	var pokemon: XDBattlePokemon?
-	let pokemonPointer: Int
+	var pokemon: XDBattlePokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemonPointer = registers[3] ?? 0
-		pokemon = XDBattlePokemon(pointerOffset: pokemonPointer, process: process)
+		pokemon = XDBattlePokemon(process: process, offset: registers[3] ?? 0)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
-		return [3: pokemonPointer]
+		return [3: pokemon.battleDataOffset]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
 class PokemonSwitchInContext: BreakPointContext {
-	var pokemon: XDBattlePokemon?
-	let pokemonPointer: Int
+	var pokemon: XDBattlePokemon
 	var trainer: XDTrainer?
 	let trainerPointer: Int
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemonPointer = registers[30] ?? 0
-		pokemon = XDBattlePokemon(pointerOffset: pokemonPointer, process: process)
+		pokemon = XDBattlePokemon(process: process, offset: registers[30] ?? 0)
 		trainerPointer = registers[3] ?? 0
-		trainer = XDTrainer(offset: trainerPointer, process: process)
+		trainer = XDTrainer(process: process, offset: trainerPointer)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
-		return [3: trainerPointer, 30: pokemonPointer]
+		return [3: trainerPointer, 30: pokemon.battleDataOffset]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
 class ShadowPokemonEncounterContext: BreakPointContext {
-	var pokemon: XDBattlePokemon?
-	let pokemonPointer: Int
+	var pokemon: XDBattlePokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemonPointer = registers[29] ?? 0
-		pokemon = XDBattlePokemon(pointerOffset: pokemonPointer, process: process)
+		pokemon = XDBattlePokemon(process: process, offset: registers[29] ?? 0)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
-		return [29: pokemonPointer]
+		return [29: pokemon.battleDataOffset]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class ShadowPokemonFledContext: BreakPointContext {
+	var pokemon: XDPartyPokemon
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		pokemon = XDPartyPokemon(process: process, offset: registers[28] ?? 0)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [28: pokemon.partyDataOffset]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
 class ReverseModeContext: BreakPointContext {
-	var pokemon: XDBattlePokemon?
-	let pokemonPointer: Int
+	var pokemon: XDBattlePokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemonPointer = registers[30] ?? 0
-		pokemon = XDBattlePokemon(pointerOffset: pokemonPointer, process: process)
+		pokemon = XDBattlePokemon(process: process, offset: registers[30] ?? 0)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
-		return [30: pokemonPointer]
+		return [30: pokemon.battleDataOffset]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
 class UseItemContext: BreakPointContext {
-	var pokemon: XDBattlePokemon?
-	let pokemonPointer: Int
+	var pokemon: XDBattlePokemon
 	var item: XGItems
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemonPointer = registers[5] ?? 0
-		pokemon = XDBattlePokemon(pointerOffset: pokemonPointer, process: process)
+		pokemon = XDBattlePokemon(process: process, offset: registers[5] ?? 0)
 		item = .index(registers[6] ?? 0)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
-		return [5: pokemonPointer, 6: item.index]
+		return [5: pokemon.battleDataOffset, 6: item.index]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
@@ -713,72 +733,68 @@ class DidUseTMContext: BreakPointContext {
 }
 
 class ExpGainContext: BreakPointContext {
-	let pokemon: XDBattlePokemon?
-	let pokemonPointer: Int
+	let pokemon: XDBattlePokemon
 	var exp: Int
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemonPointer = registers[19] ?? 0
-		pokemon = XDBattlePokemon(pointerOffset: pokemonPointer, process: process)
+		pokemon = XDBattlePokemon(process: process, offset: registers[19] ?? 0)
 		exp = registers[18] ?? 0
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
-		return [18: exp, 19: pokemonPointer]
+		return [18: exp, 19: pokemon.battleDataOffset]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
 class WillEvolveContext: BreakPointContext {
-	var pokemon: XDBattlePokemon?
-	let pokemonPointer: Int
+	var pokemon: XDPartyPokemon
+	let pokemonOffset: Int
 	var evolvedForm: XGPokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemonPointer = registers[3] ?? 0
-		pokemon = XDBattlePokemon(pointerOffset: pokemonPointer, process: process)
+		pokemonOffset = registers[3] ?? 0
+		pokemon = XDPartyPokemon(process: process, offset: pokemonOffset)
 		evolvedForm = .index(registers[4] ?? 0)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
-		return [3: pokemonPointer, 4: evolvedForm.index]
+		return [3: pokemonOffset, 4: evolvedForm.index]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
 class DidEvolveContext: BreakPointContext {
-	var pokemon: XDBattlePokemon?
-	let pokemonPointer: Int
+	var pokemon: XDBattlePokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemonPointer = registers[27] ?? 0
-		pokemon = XDBattlePokemon(pointerOffset: pokemonPointer, process: process)
+		pokemon = XDBattlePokemon(process: process, offset: registers[27] ?? 0)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
-		return [27: pokemonPointer]
+		return [27: pokemon.battleDataOffset]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
 class DidPurifyContext: BreakPointContext {
-	var pokemon: XDBattlePokemon?
-	let pokemonPointer: Int
+	var pokemon: XDPartyPokemon
+	let pokemonOffset: Int
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemonPointer = registers[31] ?? 0
-		pokemon = XDBattlePokemon(pointerOffset: pokemonPointer, process: process)
+		pokemonOffset = registers[31] ?? 0
+		pokemon = XDPartyPokemon(process: process, offset: pokemonOffset)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
-		return [31: pokemonPointer]
+		return [31: pokemonOffset]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
@@ -821,12 +837,12 @@ class BattleEndContext: BreakPointContext {
 }
 
 class TurnStartContext: BreakPointContext {
-	var pokemon: XDBattlePokemon?
+	var pokemon: XDPartyPokemon
 	let pokemonPointer: Int
 
 	override init(process: XDProcess, registers: [Int: Int]) {
 		pokemonPointer = registers[3] ?? 0
-		pokemon = XDBattlePokemon(offset: pokemonPointer, process: process)
+		pokemon = XDPartyPokemon(process: process, offset: pokemonPointer)
 		super.init()
 	}
 
@@ -838,28 +854,24 @@ class TurnStartContext: BreakPointContext {
 }
 
 class PokemonFaintedContext: BreakPointContext {
-	var attackingPokemon: XDBattlePokemon?
-	let attackingPokemonPointer: Int
-	var defendingPokemon: XDBattlePokemon?
-	let defendingPokemonPointer: Int
+	var attackingPokemon: XDBattlePokemon
+	var defendingPokemon: XDBattlePokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		attackingPokemonPointer = registers[29] ?? 0
-		attackingPokemon = XDBattlePokemon(pointerOffset: attackingPokemonPointer, process: process)
-		defendingPokemonPointer = registers[31] ?? 0
-		defendingPokemon = XDBattlePokemon(pointerOffset: defendingPokemonPointer, process: process)
+		attackingPokemon = XDBattlePokemon(process: process, offset: registers[29] ?? 0)
+		defendingPokemon = XDBattlePokemon(process: process, offset: registers[31] ?? 0)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
-		return [29: attackingPokemonPointer, 31: defendingPokemonPointer]
+		return [29: attackingPokemon.battleDataOffset, 31: defendingPokemon.battleDataOffset]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
 class CaptureAttemptContext: BreakPointContext {
-	var pokemon: XDBattlePokemon?
+	var pokemon: XDPartyPokemon
 	let pokemonOffset: Int
 	var pokeball: XGItems
 	var baseCatchRate: Int
@@ -870,7 +882,7 @@ class CaptureAttemptContext: BreakPointContext {
 	var currentHP: Int
 	var level: Int
 	var roomType: Int
-	private let species: XGPokemon
+	var species: XGPokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
 		species = .index(registers[19] ?? 0)
@@ -879,18 +891,18 @@ class CaptureAttemptContext: BreakPointContext {
 		level = registers[22] ?? 0
 		roomType = registers[23] ?? 0
 		pokemonOffset = registers[26] ?? 0
-		pokemon = XDBattlePokemon(offset: pokemonOffset, process: process)
+		pokemon = XDPartyPokemon(process: process, offset: pokemonOffset)
 		pokeball = .index(registers[24] ?? 0)
 		shadowID = registers[25] ?? 0
 		shadowData = .ddpk(shadowID)
 		baseCatchRate = registers[29] ?? 0
-		foeTrainer = XDTrainer(offset: registers[30] ?? 0, process: process)
+		foeTrainer = XDTrainer(process: process, offset: registers[30] ?? 0)
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
 		return [
-			19: pokemon?.species.index ?? species.index,
+			19: species.index,
 			20: maxHP,
 			21: currentHP,
 			22: level,
@@ -906,19 +918,17 @@ class CaptureAttemptContext: BreakPointContext {
 }
 
 class CaptureAttemptedContext: BreakPointContext {
-	var pokemon: XDBattlePokemon?
-	let pokemonOffset: Int
+	var pokemon: XDBattlePokemon
 	let numberOfShakes: Int
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemonOffset = registers[27] ?? 0
-		pokemon = XDBattlePokemon(offset: pokemonOffset, process: process)
+		pokemon = XDBattlePokemon(process: process, offset: registers[27] ?? 0)
 		numberOfShakes = registers[28] ?? 0
 		super.init()
 	}
 
 	override func getRegisters() -> [Int: Int] {
-		return [27: pokemonOffset, 28: numberOfShakes]
+		return [27: pokemon.battleDataOffset, 28: numberOfShakes]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }

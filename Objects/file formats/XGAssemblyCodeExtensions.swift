@@ -595,19 +595,19 @@ extension XGAssembly {
 
 	}
 
-	class func routineForSingleStatBoost(stat: XGStats, stages: XGStatStages) -> [Int] {
+	class func routineForSingleStatBoost(stat: XGStats, stages: XGStatModifiers) -> [Int] {
 		return [0x2f, 0xff, 0x01, 0x60, 0x1e, stat.rawValue + stages.rawValue, 0x29, 0x80, 0x41, 0x44, 0x39,]
 	}
 
-	class func routineForTargetStatDrop(stat: XGStats, stages: XGStatStages) -> [Int] {
+	class func routineForTargetStatDrop(stat: XGStats, stages: XGStatModifiers) -> [Int] {
 		return [0x2f, 0xff, 0x01, 0x60, 0x1e, stat.rawValue + stages.rawValue, 0x29, 0x80, 0x41, 0x44, 0xcd,]
 	}
 
-	class func routineForMultipleStatBoosts(RAMOffset: Int, boosts: [(stat: XGStats, stages: XGStatStages)], affectsUser: Bool) -> [Int] {
+	class func routineForMultipleStatBoosts(RAMOffset: Int, boosts: [(stat: XGStats, stages: XGStatModifiers)], affectsUser: Bool) -> [Int] {
 		return routineForMultipleStatBoosts(RAMOffset: RAMOffset, boosts: boosts, isSecondaryEffect: false, affectsUser: affectsUser)
 	}
 
-	class func routineForMultipleStatBoosts(RAMOffset: Int, boosts: [(stat: XGStats, stages: XGStatStages)], isSecondaryEffect: Bool, affectsUser: Bool) -> [Int] {
+	class func routineForMultipleStatBoosts(RAMOffset: Int, boosts: [(stat: XGStats, stages: XGStatModifiers)], isSecondaryEffect: Bool, affectsUser: Bool) -> [Int] {
 		// MULTI STAT BOOST
 		// intro
 		// --> stat checks
@@ -626,11 +626,11 @@ extension XGAssembly {
 			return [Int]()
 		}
 
-		let posBoosts = boosts.filter { (boost : (stat: XGStats, stages: XGStatStages)) -> Bool in
+		let posBoosts = boosts.filter { (boost : (stat: XGStats, stages: XGStatModifiers)) -> Bool in
 			return boost.stages.trueValue > 0
 		}
 
-		let stats = boosts.map { (boost: (stat: XGStats, stages: XGStatStages)) -> XGStats in
+		let stats = boosts.map { (boost: (stat: XGStats, stages: XGStatModifiers)) -> XGStats in
 			return boost.stat
 		}
 
@@ -646,7 +646,7 @@ extension XGAssembly {
 		let sizeOfStatBoost = 31
 		let statCheckEnd = RAMOffset + (posBoosts.count * sizeOfCheckStat) + intro.count
 
-		func checkStat(stat: XGStats, stages: XGStatStages, final: Bool) -> [Int] {
+		func checkStat(stat: XGStats, stages: XGStatModifiers, final: Bool) -> [Int] {
 			let comp = stages.trueValue > 0 ? 0x3 : 0x2
 
 			// comparisons
@@ -659,7 +659,7 @@ extension XGAssembly {
 			return [0x21, 0x11, final ? 0x00 : comp, stat.rawValue, stages.trueValue > 0 ? 0x0c : 0x00]
 		}
 
-		func boostStart(stat: XGStats, stages: XGStatStages) -> [Int] {
+		func boostStart(stat: XGStats, stages: XGStatModifiers) -> [Int] {
 
 			// if set then even if mist is active or the user has the ability clear body/white smoke,
 			// the stat buff/nerf will still occur. e.g. superpower
@@ -743,7 +743,7 @@ extension XGAssembly {
 		return routineRegularHitOpenEnded() + [0x29] + intAsByteArray(offset)
 	}
 
-	class func routineHitAndStatChange(routineOffsetRAM offset: Int, boosts: [((stat: XGStats, stages: XGStatStages))], affectsUser: Bool) -> [Int] {
+	class func routineHitAndStatChange(routineOffsetRAM offset: Int, boosts: [((stat: XGStats, stages: XGStatModifiers))], affectsUser: Bool) -> [Int] {
 		let regularHit = routineRegularHitOpenEnded()
 		let statStart = offset + regularHit.count
 
@@ -870,7 +870,7 @@ extension XGAssembly {
 	}
 
 
-	class func newStatBoostRoutine(effect: Int, boosts: [(stat: XGStats, stages: XGStatStages)], RAMOffset: Int?, affectsUser: Bool) -> [Int]? {
+	class func newStatBoostRoutine(effect: Int, boosts: [(stat: XGStats, stages: XGStatModifiers)], RAMOffset: Int?, affectsUser: Bool) -> [Int]? {
 
 		var routine = [Int]()
 		guard let offset = RAMOffset ?? ASMfreeSpaceRAMPointer() else {

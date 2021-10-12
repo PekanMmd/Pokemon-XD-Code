@@ -14,17 +14,20 @@ class XGSettings {
 	var verbose = false
 	var increaseFileSizes = true
 	var enableExperimentalFeatures = false
+	var countDownDate: Date?
 	
 	private struct Settings: Codable {
 		
 		var verbose: Bool?
 		var increaseFileSizes: Bool?
 		var enableExperimentalFeatures: Bool?
+		var countDownDate: String?
 		
 		enum CodingKeys: String, CodingKey {
 			case verbose = "Verbose Logs"
 			case increaseFileSizes = "Increase File Sizes"
 			case enableExperimentalFeatures = "Enable Experimental Features"
+			case countDownDate = "Date when count down screens should end by default"
 		}
 	}
 	
@@ -40,12 +43,18 @@ class XGSettings {
 		if let experimental = settings.enableExperimentalFeatures {
 			self.enableExperimentalFeatures = experimental
 		}
+
+		if let dateString = settings.countDownDate,
+		   let date = Date.fromString(dateString) {
+			self.countDownDate = date
+		}
 	}
 	
 	func save() {
 		let settingsData = Settings(verbose: verbose,
 									increaseFileSizes: increaseFileSizes,
-									enableExperimentalFeatures: enableExperimentalFeatures
+									enableExperimentalFeatures: enableExperimentalFeatures,
+									countDownDate: countDownDate?.referenceString()
 									)
 		settingsData.writeJSON(to: settingsFile)
 	}

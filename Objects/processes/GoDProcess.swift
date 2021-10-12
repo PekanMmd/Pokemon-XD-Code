@@ -42,7 +42,7 @@ class GoDProcess {
 		let kret = task_threads(task, &threadList, &threadCount)
 		guard kret == KERN_SUCCESS,
 			  let threads = threadList else {
-			printg("Couldn't load process threads for pid: \(pid). Make sure to run the app with root permissions.")
+			printg("Couldn't load process threads for pid: \(pid). You may need to run the app with root permissions.")
 			return []
 		}
 		var threadArray = [thread_act_t]()
@@ -58,11 +58,11 @@ class GoDProcess {
 	}
 
 	private func load() {
-		// Make sure to run the app with root permissions
+		// You may need to run the app with root permissions
 		var task: mach_port_name_t = 0
 		let kret = task_for_pid(mach_task_self_, pid, &task)
 		guard kret == KERN_SUCCESS else {
-			printg("Couldn't load process for pid: \(pid). Make sure to run the app with root permissions.")
+			printg("Couldn't load process for pid: \(pid). You may need to run the app with root permissions.")
 			printg("K Return:", kret)
 			return
 		}
@@ -189,8 +189,10 @@ class GoDProcess {
 
 		let kret = mach_vm_region(task, &address, &size, VM_REGION_BASIC_INFO, &info, &count, &object_name)
 		guard kret == KERN_SUCCESS else {
-			printg("Couldn't load base address for task: \(task). Make sure to run the app with root permissions.")
-			printg("Error no:", kret)
+			if settings.verbose {
+				printg("Couldn't load base address for task: \(task).")
+				printg("Error no:", kret)
+			}
 			return nil
 		}
 

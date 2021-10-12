@@ -61,8 +61,7 @@ class GoDTrainerViewController: GoDTableViewController {
 		
 		self.pokemonContainer.translatesAutoresizingMaskIntoConstraints = false
 		self.pokemonContainer.wantsLayer = true
-		self.pokemonContainer.layer?.borderColor = GoDDesign.colourBlack().cgColor
-		self.pokemonContainer.layer?.borderWidth = 1
+		self.pokemonContainer.addBorder(colour: GoDDesign.colourBlack(), width: 1)
 		
 		self.saveButton = GoDButton(title: "Save", buttonType: NSButton.ButtonType.momentaryPushIn, target: self, action: #selector(save))
 		
@@ -148,7 +147,6 @@ class GoDTrainerViewController: GoDTableViewController {
 	}
 	
 	override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-		
 		let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: widthForTable())) as! GoDTableCellView
 		
 		cell.identifier = NSUserInterfaceItemIdentifier(rawValue: "cell")

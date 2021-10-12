@@ -18,19 +18,19 @@ enum TableTypes {
 		var colour: NSColor {
 			switch self {
 			case .saveData:
-				return GoDDesign.colourPink()
+				return GoDDesign.colourPink().NSColour
 			case .ereader:
-				return GoDDesign.colourPeach()
+				return GoDDesign.colourPeach().NSColour
 			case .deckTrainer:
-				return GoDDesign.colourLightBlue()
+				return GoDDesign.colourLightBlue().NSColour
 			case .deckPokemon:
-				return GoDDesign.colourLightGreen()
+				return GoDDesign.colourLightGreen().NSColour
 			case .deckAI:
-				return GoDDesign.colourRed()
+				return GoDDesign.colourRed().NSColour
 			case .common:
-				return GoDDesign.colourYellow()
+				return GoDDesign.colourYellow().NSColour
 			case .other:
-				return GoDDesign.colourLightOrange()
+				return GoDDesign.colourLightOrange().NSColour
 			}
 		}
 		#endif
@@ -62,7 +62,7 @@ enum TableTypes {
 	var colour: NSColor {
 		switch self {
 		case .structTable(_, let type): return type.colour
-		case .codableData: return GoDDesign.colourLightGrey()
+		case .codableData: return GoDDesign.colourLightGrey().NSColour
 		}
 	}
 	#endif

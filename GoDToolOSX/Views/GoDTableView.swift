@@ -75,7 +75,7 @@ class GoDTableView: NSView {
 		tableView.addTableColumn(column)
 		tableView.intercellSpacing = NSSize(width: 0, height: 0)
 		
-		tableView.backgroundColor = GoDDesign.colourClear()
+		tableView.backgroundColor = GoDDesign.colourClear().NSColour
 		tableView.delegate = delegate
 		tableView.dataSource = dataSource
 		tableView.target = self

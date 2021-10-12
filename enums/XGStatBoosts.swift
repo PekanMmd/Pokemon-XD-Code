@@ -49,7 +49,7 @@ enum XGStats : Int, Codable, CaseIterable {
 	}
 }
 
-enum XGStatStages : Int, Codable, CaseIterable {
+enum XGStatModifiers : Int, Codable, CaseIterable {
 	
 	// legit
 	case plus_1 = 0x10
@@ -79,6 +79,13 @@ enum XGStatStages : Int, Codable, CaseIterable {
 		}
 	}
 }
+
+enum XGStatStages: Int {
+	case minus6 = 0, minus5, minus4, minus3, minus2, minus1
+	case neutral
+	case plus1, plus2, plus3, plus4, plus5, plus6
+}
+
 
 extension XGStats: XGEnumerable {
 	var enumerableName: String {

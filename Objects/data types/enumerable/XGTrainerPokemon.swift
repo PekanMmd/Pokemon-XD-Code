@@ -74,7 +74,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 	var shadowMoves				= [XGMoves](repeating: XGMoves.index(0), count: kNumberOfPokemonMoves)
 	var shadowFleeValue 	= 0x0
 	
-	var shadowAggression = 0x0
+	var shadowAggression = XGShadowAggression.none
 	var shadowAlwaysFlee = 0x0
 	var shadowBoostLevel = 0x0 // level before snagged
 	
@@ -162,7 +162,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 			shadowFleeValue = data.getByteAtOffset(start + kFleeAfterBattleOffset)
 			ShadowDataInUse	= data.getByteAtOffset(start + kShadowInUseFlagOffset) == 0x80
 			
-			shadowAggression = data.getByteAtOffset(start + kShadowAggressionOffset)
+			shadowAggression = XGShadowAggression(rawValue: data.getByteAtOffset(start + kShadowAggressionOffset)) ?? .none
 			shadowAlwaysFlee = data.getByteAtOffset(start + kShadowAlwaysFleeOffset)
 			
 			
@@ -195,7 +195,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 			data.replaceByteAtOffset(shadowStartOffset + kShadowLevelOffset, withByte: level)
 			data.replace2BytesAtOffset(shadowStartOffset + kShadowCounterOffset, withBytes: shadowCounter)
 			data.replaceByteAtOffset(shadowStartOffset + kFleeAfterBattleOffset, withByte: shadowFleeValue)
-			data.replaceByteAtOffset(shadowStartOffset + kShadowAggressionOffset, withByte: shadowAggression)
+			data.replaceByteAtOffset(shadowStartOffset + kShadowAggressionOffset, withByte: shadowAggression.rawValue)
 			data.replaceByteAtOffset(shadowStartOffset + kShadowInUseFlagOffset, withByte: ShadowDataInUse ? 0x80 : 0x00)
 			data.replaceByteAtOffset(shadowStartOffset + kShadowAlwaysFleeOffset, withByte: shadowAlwaysFlee)
 			

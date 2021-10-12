@@ -117,7 +117,7 @@ class GoDTreasureViewController: GoDTableViewController {
 		let map = XGMaps(rawValue: prefix)
 		
 		if map == nil {
-			cell.setBackgroundColour(GoDDesign.colourWhite())
+			cell.setBackgroundColour(GoDDesign.colourWhite().NSColour)
 		} else {
 			var colour = GoDDesign.colourWhite()
 			
@@ -160,12 +160,12 @@ class GoDTreasureViewController: GoDTableViewController {
 				colour = GoDDesign.colourWhite()
 			}
 			
-			cell.setBackgroundColour(colour)
+			cell.setBackgroundColour(colour.NSColour)
 			cell.setTitle(row.string + " - " + room + "\n" + map!.name)
 		}
 		
 		if self.table.selectedRow == row {
-			cell.setBackgroundColour(GoDDesign.colourOrange())
+			cell.setBackgroundColour(GoDDesign.colourOrange().NSColour)
 		}
 		
 		if self.table.selectedRow == row {

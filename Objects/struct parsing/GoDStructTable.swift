@@ -127,8 +127,8 @@ extension GoDStructTableFormattable {
 		printg("Documenting \(properties.name) table to:", folder.path)
 		allEntries.forEachIndexed { (index, entry) in
 			var filename = documentByIndex ?
-				String(format: "%03d ", index) + assumedNameForEntry(index: index) + ".yaml" :
-				assumedNameForEntry(index: index) + String(format: " %03d", index) + ".yaml"
+				String(format: "%03d ", index) + assumedNameForEntry(index: index) + ".txt" :
+				assumedNameForEntry(index: index) + String(format: " %03d", index) + ".txt"
 			filename = filename.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: "\"", with: "")
 			filename = filename.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: "\"", with: "")
 			filename = filename.replacingOccurrences(of: "\0", with: "")

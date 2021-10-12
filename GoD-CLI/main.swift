@@ -352,7 +352,7 @@ func singleDataTableMenu(forTable table: GoDStructTableFormattable) {
 		let prompt = """
 		Enter 'encode' to encode the table as an editable .csv text file
 		Enter 'decode' to decode the table back into the game from the .csv files after editing
-		Enter 'document' to create .yaml and .csv documentation files for reference
+		Enter 'document' to create .txt and .csv documentation files for reference
 		Enter 'exit' to go back
 		"""
 

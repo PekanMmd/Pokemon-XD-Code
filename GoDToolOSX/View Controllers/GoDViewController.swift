@@ -56,6 +56,30 @@ class GoDViewController: NSViewController {
 			super.presentAsModalWindow(viewController)
 		}
 	}
+
+	var isInFullScreen: Bool {
+		if let styleMask = view.window?.styleMask {
+			let fullScreenMask = NSWindow.StyleMask.fullScreen
+			return styleMask.isSuperset(of: fullScreenMask)
+		}
+		return false
+	}
+
+	func toggleFullScreen() {
+		view.window?.toggleFullScreen(self)
+	}
+
+	func enterFullScreen() {
+		if !isInFullScreen {
+			toggleFullScreen()
+		}
+	}
+
+	func exitFullScreen() {
+		if isInFullScreen {
+			toggleFullScreen()
+		}
+	}
 	
 	@objc func showActivityView() {
 		self.showActivityView(nil)

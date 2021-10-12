@@ -66,6 +66,10 @@ enum CommonIndexes : Int {
 	case NumberOfBattleLayouts = 43
 	case Flags = 44
 	case NumberOfFlags = 45
+
+	case FlagsMetaData = 50
+	case NumberOfFlagsMetaData = 51
+
 	case Rooms = 58
 	case NumberOfRooms = 59
 	case Doors = 60 // doors that open when player is near

@@ -28,12 +28,12 @@ class GoDBattleTrainerView: NSView {
 
 		for i in 0 ..< 6 {
 			pokemonImageViews[i].image = nil
-			pokemonImageViews[i].layer?.borderColor = GoDDesign.colourBlack().cgColor
+			pokemonImageViews[i].addBorder(colour: GoDDesign.colourBlack(), width: 1)
 			if (i < trainer.pokemon.count) {
 				let mon = trainer.pokemon[i]
 				pokemonImageViews[i].image = mon.data.species.face
 				if mon.isShadow {
-					pokemonImageViews[i].layer?.borderColor = GoDDesign.colourPurple().cgColor
+					pokemonImageViews[i].addBorder(colour: GoDDesign.colourPurple(), width: 1)
 				}
 			}
 		}

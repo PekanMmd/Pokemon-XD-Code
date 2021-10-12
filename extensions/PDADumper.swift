@@ -402,6 +402,7 @@ class PDADumper {
 				pokemonData["deck"] = deckPokemon.pokemonDeck.fileName as AnyObject
 				pokemonData["shadowLevel"] = pokemon.shadowBoostLevel as AnyObject
 				pokemonData["heartGauge"] = pokemon.shadowCounter as AnyObject
+				pokemonData["aggression"] = pokemon.shadowAggression.name as AnyObject
 				if forXG {
 					pokemonData["isShiny"] = pokemon.shinyness.string as AnyObject
 					if pokemon.species.index > 251 && pokemon.species.index < 277 {

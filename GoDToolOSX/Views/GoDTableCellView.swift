@@ -25,7 +25,7 @@ class GoDTableCellView: NSImageView {
         super.draw(dirtyRect)
     }
 	
-	init(title: String, colour: NSColor, image: NSImage? = nil, background: NSImage? = nil, fontSize: CGFloat, width: CGFloat) {
+	init(title: String, colour: XGColour, image: NSImage? = nil, background: NSImage? = nil, fontSize: CGFloat, width: CGFloat) {
 		super.init(frame: .zero)
 
 		pinWidth(as: width)
@@ -35,7 +35,7 @@ class GoDTableCellView: NSImageView {
 		imageAlignment = .alignCenter
 		imageScaling   = .scaleAxesIndependently
 		
-		setTitleColour(colour)
+		setTitleColour(colour.NSColour)
 		setTitle(title)
 		setBackgroundImage(background)
 		imageView.image = image
@@ -51,7 +51,7 @@ class GoDTableCellView: NSImageView {
 		titleField.isEditable        = false
 		titleField.drawsBackground   = false
 		titleField.refusesFirstResponder = true
-		titleField.setBackgroundColour(GoDDesign.colourClear())
+		titleField.setBackgroundColour(GoDDesign.colourClear().NSColour)
 		titleField.font = GoDDesign.fontOfSize(fontSize)
 		titleField.alignment = .center
 		
@@ -78,7 +78,7 @@ class GoDTableCellView: NSImageView {
 	func setTitleColour(_ colour: NSColor) {
 		self.titleField.textColor = colour
 	}
-	
+
 	func setBackgroundImage(_ image: NSImage?) {
 		self.image = image
 	}

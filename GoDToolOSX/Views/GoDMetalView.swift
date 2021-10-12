@@ -63,7 +63,7 @@ class GoDMetalManager : NSObject {
 	var specular : Float = 1.0
 	var shininess : Float = 32
 	
-	var clearColour = GoDDesign.isDarkModeEnabled ? GoDDesign.colourDarkGrey() : GoDDesign.colourLightGrey()
+	var clearColour = GoDDesign.isDarkModeEnabled ? GoDDesign.colourDarkGrey().NSColour : GoDDesign.colourLightGrey().NSColour
 	
 	override init() {
 		super.init()

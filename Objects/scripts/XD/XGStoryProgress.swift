@@ -5,7 +5,7 @@
 //  Created on 9/19/20.
 //
 
-enum XGStoryProgress: Int, CaseIterable {
+enum XGStoryProgress: Int, CaseIterable, Codable {
 	case start = 0
 	case completedTutorialBattle = 10
 	case lookingForPDA = 20
@@ -114,11 +114,45 @@ extension XGStoryProgress: Comparable {
 }
 
 extension XGStoryProgress {
-	var macroName: String {
-		return "STORY_" + macroBaseName
+
+	var progress: String {
+		guard rawValue < XGStoryProgress.defeatedGreevil.rawValue else { return "100%" }
+		let progress = Double(rawValue) / Double(XGStoryProgress.defeatedGreevil.rawValue) * 100
+		var multiplier = 1.0
+		if rawValue < XGStoryProgress.acquiredMachinePart.rawValue {
+			multiplier = 0.10
+		} else if rawValue < XGStoryProgress.directedToCipherLab.rawValue {
+			multiplier = 0.15
+		} else if rawValue < XGStoryProgress.defeatedLovrinaInCipherLab.rawValue {
+			multiplier = 0.20
+		} else if rawValue < XGStoryProgress.directedToRockPokespot.rawValue {
+			multiplier = 0.25
+		} else if rawValue < XGStoryProgress.defeatedExolAtONBS.rawValue {
+			multiplier = 0.33
+		} else if rawValue < XGStoryProgress.defeatedSnattleInPhenacCity.rawValue {
+			multiplier = 0.40
+		} else if rawValue < XGStoryProgress.departedForSSLibraWithUpgradedScooter.rawValue {
+			multiplier = 0.50
+		} else if rawValue < XGStoryProgress.lostSnagMachine.rawValue {
+			multiplier = 0.60
+		} else if rawValue < XGStoryProgress.directedToOutskirtStand.rawValue {
+			multiplier = 0.67
+		} else if rawValue < XGStoryProgress.reclaimedSnagMachine.rawValue {
+			multiplier = 0.75
+		} else if rawValue < XGStoryProgress.assistedByTeamSnagemAtCipherKeyLair.rawValue {
+			multiplier = 0.85
+		} else if rawValue <= XGStoryProgress.steppedFootOnCitadarkIsle.rawValue {
+			multiplier = 0.9
+		}
+		let percentage = String(format: "%.1f", progress * multiplier) + "%"
+		return percentage
 	}
 
-	private var macroBaseName: String {
+	var macroName: String {
+		return "STORY_" + name
+	}
+
+	var name: String {
 		switch self {
 		case .start:
 			return "START"

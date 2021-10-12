@@ -26,6 +26,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var quitgodtoolmenuitem: NSMenuItem!
 	@IBOutlet weak var godtoolhelpmenuitem: NSMenuItem!
 
+	@IBOutlet weak var specialUtilities: NSMenuItem!
+
+
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		// Insert code here to initialize your application
 
@@ -171,14 +174,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 	}
 
-	@IBAction func specialButton(_ sender: Any) {
+	func launchDPP(startDate: Date) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
 		#if GAME_XD
-		XGThreadManager.manager.runInBackgroundAsync(queue: 3) {
-			DiscordPlaysPokemon().launch()
+		GoDCountDownViewController.launch(endDate: startDate,
+										  image: .nameAndFolder("poster.gif", .Documents),
+										  isFullScreen: true) { countdownVC in
+			XGThreadManager.manager.runInBackgroundAsync(queue: 3) {
+				DiscordPlaysPokemon().launch()
+			}
 		}
 		#endif
 	}
 
+	@IBAction func specialButton(_ sender: Any) {
+		launchDPP(startDate: .init(timeIntervalSinceNow: 0))
+	}
+
+	@IBAction func specialButton2(_ sender: Any) {
+		launchDPP(startDate: .init(timeIntervalSinceNow: 60))
+	}
+
+	@IBAction func specialButton3(_ sender: Any) {
+		launchDPP(startDate: settings.countDownDate ?? .init(timeIntervalSinceNow: 3600))
+	}
 
 	@IBAction func getFreeStringID(_ sender: Any) {
 		#if !GAME_PBR
@@ -215,6 +236,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	func updateExperimentalMenuItem() {
 		experimentalFeaturesMenuItem.title = settings.enableExperimentalFeatures ? "Disable Experimental Features" : "Enable Experimental Features"
 		experimentalFeaturesMenuItem.isEnabled = XGISO.inputISOFile != nil
+		specialUtilities.isHidden = !settings.enableExperimentalFeatures
 	}
 
 	@IBAction func setVerboseLogs(_ sender: Any) {
@@ -483,7 +505,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	func present(_ controller: NSViewController) {
 		homeViewController.presentAsModalWindow(controller)
 	}
-	
+
+	func show(_ controller: NSViewController) {
+		let window = NSWindow(contentViewController: controller)
+		NSWindowController().showWindow(window)
+	}
 	
 	@IBAction func showAbout(_ sender: AnyObject) {
 		displayAlert(title: "About GoD Tool", description: aboutMessage())

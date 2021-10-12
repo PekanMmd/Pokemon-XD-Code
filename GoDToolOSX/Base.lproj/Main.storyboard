@@ -200,6 +200,32 @@
                                                 <action selector="encodeEreaderCards:" target="Voe-Tx-rLC" id="k81-RL-v2W"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="dIM-jo-tGP"/>
+                                        <menuItem title="Special" id="44m-UN-gcR">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Special" id="kRI-hI-SAz">
+                                                <items>
+                                                    <menuItem title="Play now" id="y2i-ye-PzJ">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="specialButton:" target="Voe-Tx-rLC" id="ivf-Zx-BhP"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Play soon" id="xO8-NQ-wqo">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="specialButton2:" target="Voe-Tx-rLC" id="1SY-Eg-SDn"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Play later" id="c6a-sf-oS6">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="specialButton3:" target="Voe-Tx-rLC" id="bNU-F8-7Cu"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
@@ -266,12 +292,6 @@
                                                 <action selector="openRandomiser:" target="Voe-Tx-rLC" id="gZu-TL-LRK"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Special" id="NkR-yS-Qbw">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="specialButton:" target="Voe-Tx-rLC" id="oWw-j2-niU"/>
-                                            </connections>
-                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
@@ -317,6 +337,7 @@
                         <outlet property="quitgodtoolmenuitem" destination="4sb-4s-VLi" id="7q6-KU-Ton"/>
                         <outlet property="scriptClassesMenuItem" destination="Zsg-MN-BjL" id="hP6-1I-aco"/>
                         <outlet property="scriptCompilerMenuItem" destination="IsQ-hd-Wby" id="I16-8W-cs2"/>
+                        <outlet property="specialUtilities" destination="44m-UN-gcR" id="aOc-DO-dUR"/>
                     </connections>
                 </customObject>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
