@@ -82,6 +82,11 @@ indirect enum XGFiles {
 	case log(Date)
 	case wit
 	case wimgt
+	case gcc
+	case ld
+	case nm
+	case objdump
+	case objcopy
 	case tool(String)
 	case embedded(String)
 	case gameFile(String)
@@ -145,6 +150,11 @@ indirect enum XGFiles {
 		case .iso					: return XGISO.inputISOFile?.fileName ?? "game" + XGFileTypes.iso.fileExtension
 		case .wit                   : return environment == .Windows ? "wit.exe" :  "wit"
 		case .wimgt                 : return environment == .Windows ? "wimgt.exe" :  "wimgt"
+		case .gcc     				: return environment == .Windows ? "powerpc-eabi-gcc.exe": "powerpc-eabi-gcc"
+		case .ld      				: return environment == .Windows ? "powerpc-eabi-ld.exe": "powerpc-eabi-ld"
+		case .nm      				: return environment == .Windows ? "powerpc-eabi-nm.exe": "powerpc-eabi-nm"
+		case .objdump 				: return environment == .Windows ? "powerpc-eabi-objdump.exe": "powerpc-eabi-objdump"
+		case .objcopy 				: return environment == .Windows ? "powerpc-eabi-objcopy.exe": "powerpc-eabi-objcopy"
 		case .tool(let s)			: return s + (environment == .Windows ? ".exe" : "")
 		case .embedded(let s)		: return s
 		case .eCardDecrypted(let s)	: return s + ".bin"
@@ -195,6 +205,11 @@ indirect enum XGFiles {
 		case .eCardDecoded		: return .EreaderCards
 		case .wit      		    : return .Wiimm
 		case .wimgt      		: return .Wiimm
+		case .gcc				: return .DevKitPPC
+		case .ld				: return .DevKitPPC
+		case .nm				: return .DevKitPPC
+		case .objdump			: return .DevKitPPC
+		case .objcopy			: return .DevKitPPC
 		case .tool("pbrsavetool"): return .SaveFiles
 		case .tool				: return .Resources
 		case .embedded			: return .Documents
@@ -596,7 +611,9 @@ indirect enum XGFolders {
 	case LZSS
 	case Reference
 	case Resources
+	case Compiler
 	case Wiimm
+	case DevKitPPC
 	case ISO
 	case Logs
 	case ISOExport(String)
@@ -626,7 +643,9 @@ indirect enum XGFolders {
 		case .LZSS				: return "LZSS"
 		case .Reference			: return "Reference"
 		case .Resources			: return "Resources"
+		case .Compiler          : return "Compiler"
 		case .Wiimm				: return "Wiimm"
+		case .DevKitPPC			: return "bin"
 		case .ISO				: return XGISO.inputISOFile?.folder.name ?? "ISO"
 		case .Logs				: return "Logs"
 		case .ISOExport(let name): return name
@@ -663,6 +682,7 @@ indirect enum XGFolders {
 		case .Trainers	: path = XGFolders.Images.path
 		case .Types		: path = XGFolders.Images.path
 		case .Wiimm		: path = XGFolders.Resources.path
+		case .DevKitPPC	: path = "/opt/devkitpro/devkitPPC"
 		case .Decrypted	: path = XGFolders.EreaderCards.path
 		case .Decoded	: path = XGFolders.EreaderCards.path
 		case .nameAndFolder(_, let f): path = f.path

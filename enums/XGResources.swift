@@ -143,7 +143,7 @@ enum XGResources {
         do {
             try FileManager.default.copyItem(atPath: srcPath, toPath: dstPath)
         } catch let error {
-            printg("Error copying resource:", error)
+            printg("Error copying resource \(srcPath) to \(dstPath):", error)
         }
     }
 }
