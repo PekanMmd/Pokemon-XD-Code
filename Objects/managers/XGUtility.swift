@@ -38,7 +38,7 @@ class XGUtility {
 	
 	class func compileMainFiles() {
 		prepareForCompilation()
-		var filesToImport = [XGFiles.fsys("common"), .dol]
+		var filesToImport = [XGFiles.fsys("common"), .dol, .GSFsys]
 		if game != .PBR {
 			filesToImport += [.fsys("pocket_menu"), XGFiles.fsys("fight_common")]
 			if game == .XD {
@@ -288,7 +288,7 @@ class XGUtility {
 								if XGFiles.common_rel.exists, let newScript = XDSScriptCompiler.compile(file.text) {
 									let start = CommonIndexes.Script.startOffset
 									var length = CommonIndexes.Script.length
-									if newScript.length > length && settings.enableExperimentalFeatures && settings.increaseFileSizes {
+									if newScript.length > length && settings.increaseFileSizes {
 										common.expandSymbolWithIndex(CommonIndexes.Script.index, by: newScript.length - length)
 										length = CommonIndexes.Script.length
 									} else {
@@ -808,6 +808,25 @@ class XGUtility {
 				printg("Skipping \(filename)\nFolder already exists: \(dumpFolder.path)")
 			}
 		}
+	}
+
+	class func increasePokemonLevelsByPercentage(_ percentage: Int) {
+		#if GAME_COLO
+		for trainer in allTrainers() {
+			for mon in trainer.pokemon {
+				mon.level = min(mon.level * (percentage + 100) / 100, 100)
+				mon.save()
+			}
+		}
+		#elseif GAME_XD
+		for trainer in allTrainers() where ![XGDecks.DeckBingo, .DeckVirtual, .DeckSample, .DeckImasugu].contains(trainer.deck) {
+			for pokemon in trainer.pokemon {
+				let mon = pokemon.data
+				mon.level = min(mon.level * (percentage + 100) / 100, 100)
+				mon.save()
+			}
+		}
+		#endif
 	}
 
 	class func encodeJSONObject<T: Encodable>(_ object: T, toFile file: XGFiles) {

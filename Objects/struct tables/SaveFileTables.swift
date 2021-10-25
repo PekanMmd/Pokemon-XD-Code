@@ -35,6 +35,7 @@ class SaveFilePokemonStructTable: GoDStructTableFormattable {
 	}
 	var nameForEntry: ((Int, GoDStructData) -> String?)?
 	var fileVaries: Bool = true
+	let canExpand = false
 
 	init(file: XGFiles, storage: PokemonStorage) {
 		self.file = file
@@ -59,6 +60,8 @@ class SaveFilePokemonStructTable: GoDStructTableFormattable {
 
 		properties = GoDStruct(name: structName, format: pokemonStruct.format)
 	}
+
+	func addEntries(count: Int) {}
 }
 
 let contestStatsStruct = GoDStruct(name: "Contest Stats", format: [

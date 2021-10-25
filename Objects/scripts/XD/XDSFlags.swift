@@ -18,10 +18,13 @@ enum XDSFlags: Int, Codable, CaseIterable {
 
 	case mirorBHasBeenEncountered = 1191
 
-	case currentPokespotPokemonRock = 1248
-	case currentPokespotPokemonOasis = 1249
-	case currentPokespotPokemonCave = 1250
-	
+	case currentPokespotSnacksRock = 1248
+	case currentPokespotSnacksOasis = 1249
+	case currentPokespotSnacksCave = 1250
+
+	case currentPokespotSpawnRock = 1407
+	case currentPokespotSpawnOasis = 1408
+	case currentPokespotSpawnCave = 1409
 	
 	case mirorbNoDespawn = 1415 // miror radar won't lost signal while this is set
 	
@@ -48,9 +51,12 @@ enum XDSFlags: Int, Codable, CaseIterable {
 		case .MtBattleHighestClearedZone	: return "MT_BATTLE_HIGHEST_CLEARED_ZONE"
 		case .MtBattleCurrentZone		: return "MT_BATTLE_CURRENT_ZONE"
 		case .MtBattleCanBeChallenged	: return "MT_BATTLE_CHALLENGE_AVAILABLE"
-		case .currentPokespotPokemonRock: return "POKESPOT_ROCK_CURRENT_POKEMON"
-		case .currentPokespotPokemonOasis: return "POKESPOT_OASIS_CURRENT_POKEMON"
-		case .currentPokespotPokemonCave: return "POKESPOT_CAVE_CURRENT_POKEMON"
+		case .currentPokespotSnacksRock: return "POKESPOT_ROCK_CURRENT_SNACKS"
+		case .currentPokespotSnacksOasis: return "POKESPOT_OASIS_CURRENT_SNACKS"
+		case .currentPokespotSnacksCave: return "POKESPOT_CAVE_CURRENT_SNACKS"
+		case .currentPokespotSpawnRock: return "POKESPOT_ROCK_CURRENT_POKEMON"
+		case .currentPokespotSpawnOasis: return "POKESPOT_OASIS_CURRENT_POKEMON"
+		case .currentPokespotSpawnCave: return "POKESPOT_CAVE_CURRENT_POKEMON"
 		case .berryMasterVistied		: return "BERRY_MASTER_VISITED"
 		case .stepsWalkedSinceLastBerryMasterVisit : return "STEPS_SINCE_LAST_BERRY_MASTER_VISIT"
 		case .mirorBHasBeenEncountered	: return "HAS_ENCOUNTERED_MIROR_B"

@@ -28,12 +28,13 @@ class XDProcessSetup {
 	}
 
 	var onFrame: ((XDProcess, XDGameState) -> Bool)? = nil
+	var onWillRender: ((RenderFrameBufferContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onRNGRoll: ((RNGRollContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onStep: ((XDProcess, XDGameState) -> Bool)? = nil
 	var onDidLoadSave: ((SaveLoadedContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onWillWriteSave: ((XDProcess, XDGameState) -> Bool)? = nil
 	var onWillChangeMap: ((MapWillChangeContext, XDProcess, XDGameState) -> Bool)? = nil
-	var onDidChangeMap: ((MapDidChangeContext, XDProcess, XDGameState) -> Bool)? = nil
+	var onDidChangeMapOrMenu: ((MapOrMenuDidChangeContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onMoveSelectionConfirmed: ((BattleMoveSelectionContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onTurnSelectionConfirmed: ((BattleTurnSelectionContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onWillUseMove: ((WillUseMoveContext, XDProcess, XDGameState) -> Bool)? = nil
@@ -57,13 +58,16 @@ class XDProcessSetup {
 	var onTeamWhiteOut: ((XDProcess, XDGameState) -> Bool)? = nil
 	var onTurnStart: ((TurnStartContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onTurnEnd: ((XDProcess, XDGameState) -> Bool)? = nil
+	var onBattleDamageOrHealing: ((BattleDamageHealingContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onPokemonFainted: ((PokemonFaintedContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onPokeballThrow: ((CaptureAttemptContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onCaptureSucceeded: ((CaptureAttemptedContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onCaptureFailed: ((CaptureAttemptedContext, XDProcess, XDGameState) -> Bool)? = nil
-	var onMirorRadarActivated: ((XDProcess, XDGameState) -> Bool)? = nil
+	var onMirorRadarActivatedColosseum: ((XDProcess, XDGameState) -> Bool)? = nil
+	var onMirorRadarActivatedPokespot: ((XDProcess, XDGameState) -> Bool)? = nil
 	var onMirorRadarSignalLost: ((XDProcess, XDGameState) -> Bool)? = nil
 	var onSpotMonitorActivated: ((XDProcess, XDGameState) -> Bool)? = nil
+	var onWildBattleGenerated: ((WildBattleContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onWillGetFlag: ((GetFlagContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onWillSetFlag: ((SetFlagContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onReceiveGiftPokemon: ((ReceiveGiftPokemonContext, XDProcess, XDGameState) -> Bool)? = nil

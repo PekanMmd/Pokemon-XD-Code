@@ -52,7 +52,7 @@ enum XGStoryProgress: Int, CaseIterable, Codable {
 	case directedToCavePokespot = 470
 	case battledMirorBAtCavePokespot = 480
 	case enteredONBSDuringCipherInvasion = 481
-	case defeatedExolAtONBS = 490
+	case battledExolAtONBS = 490
 	case directedToPhenacCity = 500
 	case directedToRealgamTower = 510
 	case visitedRealgamTower = 520
@@ -127,7 +127,7 @@ extension XGStoryProgress {
 			multiplier = 0.20
 		} else if rawValue < XGStoryProgress.directedToRockPokespot.rawValue {
 			multiplier = 0.25
-		} else if rawValue < XGStoryProgress.defeatedExolAtONBS.rawValue {
+		} else if rawValue < XGStoryProgress.battledExolAtONBS.rawValue {
 			multiplier = 0.33
 		} else if rawValue < XGStoryProgress.defeatedSnattleInPhenacCity.rawValue {
 			multiplier = 0.40
@@ -229,7 +229,7 @@ extension XGStoryProgress {
 		case .arrivedAtPyriteTown:
 			return "ARRIVED_AT_PYRITE"
 		case .watchedTrudlyAndFollyAnnoyOfficerJohnson:
-			return "WATCHED_TRUDLYANDFOLLY_ANNOY_JOHNSON"
+			return "WATCHED_TRUDLY_AND_FOLLY_ANNOY_JOHNSON"
 		case .canEnterNettsOffice:
 			return "CAN_ENTER_NETTS_OFFICE"
 		case .directedToRockPokespot:
@@ -243,11 +243,11 @@ extension XGStoryProgress {
 		case .directedToCavePokespot:
 			return "DIRECTED_TO_CAVE_POKESPOT"
 		case .battledMirorBAtCavePokespot:
-			return "BATTLED_MIRORB_AT_CAVE_POKESPOT"
+			return "BATTLED_MIROR_B_AT_CAVE_POKESPOT"
 		case .enteredONBSDuringCipherInvasion:
 			return "ENTERED_INVADED_ONBS"
-		case .defeatedExolAtONBS:
-			return "DEFEATED_EXOL"
+		case .battledExolAtONBS:
+			return "BATTLED_EXOL"
 		case .directedToPhenacCity:
 			return "DIRECTED_TO_PHENAC"
 		case .directedToRealgamTower:
@@ -271,13 +271,13 @@ extension XGStoryProgress {
 		case .rescuedGymHostages:
 			return "RESCUED_GYM_HOSTAGES"
 		case .directedToSSLibra:
-			return "DIRECTED_TO_SSLIBRA"
+			return "DIRECTED_TO_S_S_LIBRA"
 		case .unlockedAgateDayCare:
 			return "UNLOCKED_DAY_CARE"
 		case .exitedGymBasement:
 			return "EXITED_GYM_BASEMENT"
 		case .gotStuckInDesertSand:
-			return "GOT_SAND_IN_YA_SCOOTER"
+			return "GOT_SAND_IN_YOUR_SCOOTER"
 		case .agreedToFindBonsly:
 			return "AGREED_TO_FIND_BONSLY"
 		case .lookingForMakan:
@@ -307,7 +307,7 @@ extension XGStoryProgress {
 		case .directedToOutskirtStand:
 			return "DIRECTED_TO_OUTSKIRT_STAND"
 		case .defeatedMirorBAtOutskirtStand:
-			return "DEFEATED_MIRORB_AT_OUTSKIRT_STAND"
+			return "DEFEATED_MIROR_B_AT_OUTSKIRT_STAND"
 		case .watchedNewsAtOutskirtStand:
 			return "WATCHED_OUTSKIRT_STAND_NEWS"
 		case .spokeWithHordel:
@@ -351,7 +351,7 @@ extension XGStoryProgress {
 		case .unlockedOrreColosseum:
 			return "UNLOCKED_ORRE_COLOSSEUM"
 		case .defeatedOrreColosseumRound1:
-			return "DEFEATED_ORRE_COLOSSEUM_R1"
+			return "DEFEATED_ORRE_COLOSSEUM_ROUND_1"
 		}
 	}
 }

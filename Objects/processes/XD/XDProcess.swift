@@ -10,7 +10,7 @@ import Foundation
 class XDProcess {
 
 	let inputHandler = ControllerInputs()
-	var playerInputs: [GCPad?] = [nil, nil, nil, nil]
+	private(set) var playerInputs: [GCPad?] = [nil, nil, nil, nil]
 	var isRunning: Bool {
 		return process.isRunning
 	}
@@ -37,6 +37,11 @@ class XDProcess {
 
 	func resume() {
 		process.resume()
+	}
+
+	func RAMDump(to file: XGFiles) {
+		let data = read(atAddress: 0, length: Int(process.kMEMSize))
+		data?.writeToFile(file)
 	}
 
 	func read(atAddress address: Int, length: Int) -> XGMutableData? {
@@ -119,6 +124,15 @@ class XDProcess {
 		return result
 	}
 
+	func saveStateToSlot(_ slot: Int) {
+		process.saveStateToSlot(slot)
+	}
+
+	func loadStateFromSlot(_ slot: Int) {
+		process.loadStateFromSlot(slot)
+		clearBreakPoint()
+	}
+
 	func getBooleanFlag(_ flag: XDSFlags) -> Bool {
 		return getBooleanFlag(flag.rawValue)
 	}
@@ -185,12 +199,13 @@ class XDProcess {
 		var enabledBreakPoints = [XDBreakPointTypes]()
 		let breakPoints: [(Any?, XDBreakPointTypes)] = [
 			(callbacks.onFrame, .onFrameAdvance),
+			(callbacks.onWillRender, .onWillRenderFrame),
 			(callbacks.onRNGRoll, .onDidRNGRoll),
 			(callbacks.onStep, .onStepCount),
 			(callbacks.onDidLoadSave, .onDidLoadSave),
 			(callbacks.onWillWriteSave, .onWillWriteSave),
 			(callbacks.onWillChangeMap, .onWillChangeMap),
-			(callbacks.onDidChangeMap, .onDidChangeMap),
+			(callbacks.onDidChangeMapOrMenu, .onDidChangeMapOrMenu),
 			(callbacks.onMoveSelectionConfirmed, .onDidConfirmMoveSelection),
 			(callbacks.onTurnSelectionConfirmed, .onDidConfirmTurnSelection),
 			(callbacks.onWillUseMove, .onWillUseMove),
@@ -213,13 +228,16 @@ class XDProcess {
 			(callbacks.onTeamWhiteOut, .onBattleWhiteout),
 			(callbacks.onTurnStart, .onBattleTurnStart),
 			(callbacks.onTurnEnd, .onBattleTurnEnd),
+			(callbacks.onBattleDamageOrHealing, .onBattleDamageOrHealing),
 			(callbacks.onPokemonFainted, .onPokemonDidFaint),
 			(callbacks.onPokeballThrow, .onWillAttemptPokemonCapture),
 			(callbacks.onCaptureSucceeded, .onDidSucceedPokemonCapture),
 			(callbacks.onCaptureFailed, .onDidFailPokemonCapture),
-			(callbacks.onMirorRadarActivated, .onMirorRadarActive),
+			(callbacks.onMirorRadarActivatedColosseum, .onMirorRadarActiveAtColosseum),
+			(callbacks.onMirorRadarActivatedPokespot, .onMirorRadarActiveAtPokespot),
 			(callbacks.onMirorRadarSignalLost, .onMirorRadarLostSignal),
 			(callbacks.onSpotMonitorActivated, .onSpotMonitorActivated),
+			(callbacks.onWildBattleGenerated, .onWildBattleGenerated),
 			(callbacks.onWillGetFlag, .onWillGetFlag),
 			(callbacks.onWillSetFlag, .onWillSetFlag),
 			(callbacks.onReceiveGiftPokemon, .onReceivedGiftPokemon),
@@ -232,6 +250,17 @@ class XDProcess {
 		}
 
 		var xd: XDProcess!
+		var inputTimer: Timer?
+		let inputLoop = { (timer: Timer) in
+			XGThreadManager.manager.runInBackgroundAsyncNamed(queue: "XD_Process_inputs") { [weak xd] in
+				if let process = xd {
+					process.writeControllers()
+					process.elapseTime()
+				} else {
+					return
+				}
+			}
+		}
 
 		DolphinProcess.launch(refreshTimeMicroSeconds: 0,
 							  settings: settings,
@@ -242,30 +271,28 @@ class XDProcess {
 
 			xd.setupRAMForInjection(enabledBreakPoints: enabledBreakPoints)
 			if autoSkipWarningScreen {
-				sleep(5)
+				sleep(8)
 				xd.inputHandler.input([
-					GCPad(duration: 1, tag: "write:origin"),
 					GCPad(duration: 0.5, A: true, tag: "write:origin"),
-					GCPad(duration: 1, tag: "write:origin"),
-					GCPad(duration: 0.5, A: true, tag: "write:origin"),
-					GCPad(duration: 1, tag: "write:origin"),
+					GCPad(duration: 2, tag: "write:origin"),
 					GCPad(duration: 0.5, A: true, tag: "write:origin"),
 				])
 
 			}
+
+			inputTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: inputLoop)
+
 			return onStart?(xd) ?? true
 
 		} onUpdate: { (process) -> Bool in
 
 			var shouldContinue = true
 
-			xd.updatePlayerInputState()
-			xd.elapseTime()
-
 			if !xd.checkBreakPointPending(),
 			   let breakPointType = xd.getBreakPointType() {
 
 				xd.markBreakPointPending()
+				xd.updatePlayerInputState()
 
 				var registers = xd.getBreakPointRegisters()
 				xd.r13GlobalPointer = registers[13]
@@ -278,6 +305,11 @@ class XDProcess {
 				case .onFrameAdvance:
 					if let callback = callbacks.onFrame {
 						shouldContinue = callback(xd, state)
+					}
+				case .onWillRenderFrame:
+					if let callback = callbacks.onWillRender {
+						let c = RenderFrameBufferContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
 					}
 				case .onDidRNGRoll:
 					if let callback = callbacks.onRNGRoll {
@@ -302,9 +334,9 @@ class XDProcess {
 						let c = MapWillChangeContext(process: xd, registers: registers)
 						shouldContinue = callback(c, xd, state); context = c
 					}
-				case .onDidChangeMap:
-					if let callback = callbacks.onDidChangeMap {
-						let c = MapDidChangeContext(process: xd, registers: registers)
+				case .onDidChangeMapOrMenu:
+					if let callback = callbacks.onDidChangeMapOrMenu {
+						let c = MapOrMenuDidChangeContext(process: xd, registers: registers)
 						shouldContinue = callback(c, xd, state); context = c
 					}
 				case .onDidConfirmMoveSelection:
@@ -414,6 +446,11 @@ class XDProcess {
 					if let callback = callbacks.onTurnEnd {
 						shouldContinue = callback(xd, state)
 					}
+				case .onBattleDamageOrHealing:
+					if let callback = callbacks.onBattleDamageOrHealing {
+						let c = BattleDamageHealingContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
+					}
 				case .onPokemonDidFaint:
 					if let callback = callbacks.onPokemonFainted {
 						let c = PokemonFaintedContext(process: xd, registers: registers)
@@ -434,8 +471,12 @@ class XDProcess {
 						let c = CaptureAttemptedContext(process: xd, registers: registers)
 						shouldContinue = callback(c, xd, state); context = c
 					}
-				case .onMirorRadarActive:
-					if let callback = callbacks.onMirorRadarActivated {
+				case .onMirorRadarActiveAtColosseum:
+					if let callback = callbacks.onMirorRadarActivatedColosseum {
+						shouldContinue = callback(xd, state)
+					}
+				case .onMirorRadarActiveAtPokespot:
+					if let callback = callbacks.onMirorRadarActivatedPokespot {
 						shouldContinue = callback(xd, state)
 					}
 				case .onMirorRadarLostSignal:
@@ -445,6 +486,11 @@ class XDProcess {
 				case .onSpotMonitorActivated:
 					if let callback = callbacks.onSpotMonitorActivated {
 						shouldContinue = callback(xd, state)
+					}
+				case .onWildBattleGenerated:
+					if let callback = callbacks.onWildBattleGenerated {
+						let c = WildBattleContext(process: xd, registers: registers)
+						shouldContinue = callback(c, xd, state); context = c
 					}
 				case .onWillGetFlag:
 					if let callback = callbacks.onWillGetFlag {
@@ -488,11 +534,10 @@ class XDProcess {
 				}
 			}
 
-			xd.writeControllers()
-
 			return shouldContinue
 
 		} onFinish: { (process) in
+			inputTimer?.invalidate()
 			onFinish?()
 		}
 	}
@@ -579,6 +624,11 @@ class XDProcess {
 	private func markBreakPointPending() {
 		guard let offset = breakPointDataOffset else { return }
 		write16(0x0200, atAddress: offset)
+	}
+
+	func yieldThread() {
+		guard let offset = breakPointDataOffset else { return }
+		write16(XDBreakPointTypes.yield.rawValue, atAddress: offset + 2)
 	}
 
 	private func getBreakPointRegisters() -> [Int: Int] {
@@ -803,9 +853,23 @@ class XDProcess {
 			// The value in r3 is stored in the r0 slot
 			let loadBreakPointOffset = XGASM.loadImmediateShifted32bit(register: .r3, value: breakPointDataStart.unsigned)
 			let loadIsEnabledOffset = XGASM.loadImmediateShifted32bit(register: .r3, value: freeSpace.unsigned)
+
+			// This function lets other threads keep running if we keep a thread paused for a while.
+			// Can be used for things like letting the battle camera keep moving around dynamically
+			// while pausing the battle for a noticeable length of time like to make a network request
+			let yield = 0x801034e8
+
+			let returnAddress = type.standardReturnOffset ?? address + 4
+			let preReturnInstruction: XGASM = type.standardReturnOffset != nil ? .nop : .raw(overwrittenInstruction)
+
 			write([
 				// this address is a flag for whether or not this break point is currently enabled
 				.raw(isEnabled ? 0x01000000 : 0x00),
+
+				// preserve link register state
+				.stwu(.sp, .sp, -0x20),
+				.mflr(.r0),
+				.stw(.r0, .sp, 0x24),
 
 				// preserve r3
 				.mr(.r0, .r3),
@@ -855,16 +919,14 @@ class XDProcess {
 
 				.label("check breakpoint cleared"),
 
-				// 0 means the break point has been unpaused by the tool
+				// Check if the break point has been unpaused by the tool
 				.cmpwi(.r0, XDBreakPointTypes.clear.rawValue),
 				.bne_l("check forced return"),
 
 				// break point was cleared
 
 				// clear instruction cache if necessary
-				.stwu(.sp, .sp, -0x10),
-				.mflr(.r0),
-				.stw(.r0, .sp, 0x14),
+
 				.bl(cacheCheckFunction),
 				.lwz(.r0, .sp, 0x14),
 				.mtlr(.r0),
@@ -880,8 +942,12 @@ class XDProcess {
 				// restore r3
 				.mr(.r3, .r0),
 
-				.raw(overwrittenInstruction),
-				.b(address + 4),
+				.lwz(.r0, .sp, 0x24),
+				.mtlr(.r0),
+				.addi(.sp, .sp, 0x20),
+
+				preReturnInstruction,
+				.b(returnAddress),
 
 				.label("check forced return"),
 
@@ -889,16 +955,10 @@ class XDProcess {
 				// and the return value will be side loaded into r3 before
 				// jumping to its blr
 				.cmpwi(.r0, XDBreakPointTypes.forcedReturn.rawValue),
-				.bne_l("continue break"),
+				.bne_l("check yield thread"),
 
 				// clear instruction cache if necessary
-				.stwu(.sp, .sp, -0x10),
-				.mflr(.r0),
-				.stw(.r0, .sp, 0x14),
 				.bl(cacheCheckFunction),
-				.lwz(.r0, .sp, 0x14),
-				.mtlr(.r0),
-				.addi(.sp, .sp, 0x10),
 
 				loadBreakPointOffset.0,
 				loadBreakPointOffset.1,
@@ -907,8 +967,22 @@ class XDProcess {
 				.lmw(.r0, .r3, 4), // restore register state
 				.mr(.r3, .r0),
 
+				.lwz(.r0, .sp, 0x24),
+				.mtlr(.r0),
+				.addi(.sp, .sp, 0x20),
+
 				.b(type.forcedReturnValueAddress ?? 0), // jump to end of function we broke on
 
+				// Check if the break point has been unpaused by the tool
+				.label("check yield thread"),
+
+				// This will let other threads keep running even if the current one continues to stay paused
+				.cmpwi(.r0, XDBreakPointTypes.clear.rawValue),
+				.bne_l("continue break"),
+
+				.bl(yield),
+
+				.b_l("continue break")
 
 			], atAddress: freeSpace)
 

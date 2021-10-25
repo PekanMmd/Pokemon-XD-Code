@@ -272,8 +272,8 @@ class XGStringTable: NSObject {
 			if extraCharacters > bytesRequired {
 				stringTable.deleteBytes(start: stringTable.length - bytesRequired, count: bytesRequired)
 			} else {
-				if startOffset != 0 || !increaseSize  {
-					if !increaseSize || !(file == .common_rel && settings.enableExperimentalFeatures) {
+				if (startOffset != 0 || !increaseSize) && file != .common_rel  {
+					if !increaseSize {
 						printg("Couldn't add string \(string.string) to \(stringTable.file.fileName) because it doesn't have enough space.")
 						printg("Requires: \(bytesRequired) bytes but only has \(self.extraCharacters) bytes available.")
 						printg("Try shortening some other strings.")

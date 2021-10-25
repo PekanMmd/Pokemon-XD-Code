@@ -21,8 +21,11 @@ class GoDCountDownViewController: GoDViewController {
 	private var useFullScreen: Bool = false
 	private var closeOnFinish: Bool = true
 
+	private var musicProcess: GoDProcess?
+
 	static func launch(endDate: Date,
 					   image: XGFiles?,
+					   musicScript: XGFiles? = nil,
 					   isFullScreen: Bool = false,
 					   closeOnFinish: Bool = true,
 					   onFinish: ((GoDCountDownViewController?) -> Void)? = nil) {
@@ -43,6 +46,10 @@ class GoDCountDownViewController: GoDViewController {
 			countdown.useFullScreen = isFullScreen
 			countdown.closeOnFinish = closeOnFinish
 			countdown.start()
+
+			if let music = musicScript {
+				countdown.musicProcess = GoDShellManager.runAsync(.file(music))
+			}
 		}
 	}
 
@@ -96,6 +103,7 @@ class GoDCountDownViewController: GoDViewController {
 			  endDate.timeIntervalSinceNow > 0 else {
 			timer?.invalidate()
 			timer = nil
+			musicProcess?.terminate()
 			if !shouldCancel {
 				if closeOnFinish {
 					view.window?.close()

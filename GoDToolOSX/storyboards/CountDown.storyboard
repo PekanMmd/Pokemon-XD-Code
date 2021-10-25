@@ -23,7 +23,7 @@
                                         </connections>
                                     </clickGestureRecognizer>
                                 </gestureRecognizers>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ball purple" id="PiU-2A-Ed8"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="ball purple" id="PiU-2A-Ed8"/>
                             </imageView>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vTT-di-FGV">
                                 <rect key="frame" x="250" y="135" width="500" height="80"/>

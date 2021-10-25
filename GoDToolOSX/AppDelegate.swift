@@ -50,6 +50,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 		var countDownDate: Date?
 		var posterFile: XGFiles?
+		var musicScriptFile: XGFiles?
 		var iso: XGFiles?
 		var argsAreInvalid = false
 
@@ -80,6 +81,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 					print("Invalid arg for \(arg): \(file.path).\nThese image formats are supported:", XGFileTypes.imageFormats.map{$0.fileExtension})
 					argsAreInvalid = true
 				}
+			} else if arg == "--launch-dpp-music" {
+				let file = XGFiles.path(next)
+				musicScriptFile = file
+				if !file.exists {
+					print("Invalid arg for \(arg).\nFile doesn't exist:", file.path)
+					argsAreInvalid = true
+				}
 			} else if arg == "-i" || arg == "--iso" {
 				let file = XGFiles.path(next)
 				if file.fileType == .iso {
@@ -103,7 +111,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 		if let date = countDownDate {
 			let timer = Timer(timeInterval: 2, repeats: false) { (t) in
-				self.launchDPP(startDate: date, posterFile: posterFile)
+				self.launchDPP(startDate: date, posterFile: posterFile, musicScriptFile: musicScriptFile)
 			}
 			RunLoop.current.add(timer, forMode: .common)
 		}
@@ -234,13 +242,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 	}
 
-	func launchDPP(startDate: Date?, posterFile: XGFiles?) {
+	func launchDPP(startDate: Date?, posterFile: XGFiles?, musicScriptFile: XGFiles? = nil) {
 		guard homeViewController.checkRequiredFiles() else {
 			return
 		}
 		#if GAME_XD
 		GoDCountDownViewController.launch(endDate: startDate ?? .init(timeIntervalSinceNow: 0),
 										  image: posterFile,
+										  musicScript: musicScriptFile,
 										  isFullScreen: true) { countdownVC in
 			XGThreadManager.manager.runInBackgroundAsync(queue: 3) {
 				DiscordPlaysPokemon().launch()
@@ -250,15 +259,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 
 	@IBAction func specialButton(_ sender: Any) {
-		launchDPP(startDate: .init(timeIntervalSinceNow: 0), posterFile: .nameAndFolder("poster.gif", .Documents))
+		launchDPP(startDate: .init(timeIntervalSinceNow: 0), posterFile: .nameAndFolder("poster.gif", .Documents), musicScriptFile: .nameAndFolder("music.sh", .Documents))
 	}
 
 	@IBAction func specialButton2(_ sender: Any) {
-		launchDPP(startDate: .init(timeIntervalSinceNow: 60), posterFile: .nameAndFolder("poster.gif", .Documents))
+		launchDPP(startDate: .init(timeIntervalSinceNow: 60), posterFile: .nameAndFolder("poster.gif", .Documents), musicScriptFile: .nameAndFolder("music.sh", .Documents))
 	}
 
 	@IBAction func specialButton3(_ sender: Any) {
-		launchDPP(startDate: .init(timeIntervalSinceNow: 3600), posterFile: .nameAndFolder("poster.gif", .Documents))
+		launchDPP(startDate: .init(timeIntervalSinceNow: 3600), posterFile: .nameAndFolder("poster.gif", .Documents), musicScriptFile: .nameAndFolder("music.sh", .Documents))
 	}
 
 	@IBAction func getFreeStringID(_ sender: Any) {
@@ -510,6 +519,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			XGUtility.extractAllTextures(forDolphin: true)
 			displayAlert(title: "Texture Dump Finsihed", description: "Done.")
 		}
+	}
+
+
+	@IBAction func increaseNPCLevelsBy10(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		XGUtility.increasePokemonLevelsByPercentage(10)
+	}
+
+	@IBAction func increaseNPCLevelsBy20(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		XGUtility.increasePokemonLevelsByPercentage(20)
+	}
+
+	@IBAction func increaseNPCLevelsBy50(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		XGUtility.increasePokemonLevelsByPercentage(50)
 	}
 
 	@IBAction func dumpEreaderCards(_ sender: Any) {

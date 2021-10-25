@@ -285,7 +285,7 @@ extension GCPad {
 
 class ControllerInputs {
 	typealias GCPadInputSequence = [GCPad] // pads within a sequence are input serially
-	@Atomic private(set) var inputSequences = [GCPadInputSequence]() // all sequences are input concurrently
+	private(set) var inputsSequences = SafeArray<GCPadInputSequence>() // all sequences are input concurrently
 	// buttons currently pressed in game by player
 
 	var nextInput: [GCPad] {
@@ -295,18 +295,21 @@ class ControllerInputs {
 		]
 
 		var hasWriteOrigin = false
-		for sequence in inputSequences {
-			if let next = sequence.first(where: { (pad) -> Bool in
-				pad.duration > 0
-			}) {
-				var index = next.player.rawValue - 1
-				if next.tag?.contains("write:origin") ?? false {
-					index += 4
-					hasWriteOrigin = true
+		inputsSequences.perform(operation: { (inputSequences) in
+
+			for sequence in inputSequences {
+				if let next = sequence.first(where: { (pad) -> Bool in
+					pad.duration > 0
+				}) {
+					var index = next.player.rawValue - 1
+					if next.tag?.contains("write:origin") ?? false {
+						index += 4
+						hasWriteOrigin = true
+					}
+					pads[index] = pads[index].maskedWith(pad: next)
 				}
-				pads[index] = pads[index].maskedWith(pad: next)
 			}
-		}
+		})
 
 		if !hasWriteOrigin {
 			pads = Array(pads[0 ... 3])
@@ -359,43 +362,48 @@ class ControllerInputs {
 	}
 
 	func input(_ sequence: GCPadInputSequence) {
-		inputSequences.append(sequence)
+		inputsSequences.append(sequence)
 	}
 
 	func delayPendingInput(duration: Double) {
-		var newSequences = [GCPadInputSequence]()
-		for sequence in inputSequences {
-			newSequences.append([GCPad(duration: duration)] + sequence)
+		inputsSequences.perform { (inputSequences) -> [GCPadInputSequence] in
+			var newSequences = [GCPadInputSequence]()
+			for sequence in inputSequences {
+				newSequences.append([GCPad(duration: duration)] + sequence)
+			}
+			return newSequences
 		}
-		inputSequences = newSequences
 	}
 
 	func clearPendingInput() {
-		inputSequences.removeAll()
+		inputsSequences.removeAll()
 	}
 
 	func elapseTime(_ duration: Double) {
 		var newSequences = [GCPadInputSequence]()
 
-		for sequence in inputSequences {
-			var newSequence = GCPadInputSequence()
-			var nextInputDecreased = false
+		inputsSequences.perform { (inputSequences) -> [GCPadInputSequence] in
+			for sequence in inputSequences {
+				var newSequence = GCPadInputSequence()
+				var nextInputDecreased = false
 
-			for pad in sequence {
-				var updatedPad = pad
-				if !nextInputDecreased, pad.duration > 0 {
-					nextInputDecreased = true
-					updatedPad.duration = max(0, pad.duration - duration)
+				for pad in sequence {
+					var updatedPad = pad
+					if !nextInputDecreased, pad.duration > 0 {
+						nextInputDecreased = true
+						updatedPad.duration = max(0, pad.duration - duration)
+					}
+					newSequence.append(updatedPad)
 				}
-				newSequence.append(updatedPad)
+
+				if nextInputDecreased {
+					newSequences.append(newSequence)
+				}
 			}
 
-			if nextInputDecreased {
-				newSequences.append(newSequence)
-			}
+			return newSequences
 		}
 
-		inputSequences = newSequences
 	}
 }
 #endif

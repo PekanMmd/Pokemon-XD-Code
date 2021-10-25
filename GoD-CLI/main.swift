@@ -156,6 +156,7 @@ func randomiser() {
 	var randomiseMoveTypes = false
 	var randomiseTMs = false
 	var randomiseEvolutions = false
+	var randomiseTreasure = false
 
 	var randomiseShadowsOnly = false
 	var randomiseByBST = false
@@ -182,12 +183,13 @@ func randomiser() {
 	if game != .PBR {
 		options += [
 			" 9: Randomize TM and Tutor Moves",
-			"10: Randomize Evolutions"
+			"10: Randomize Evolutions",
+			"11: Randomize Item Boxes"
 		]
 	}
 
 	if game == .XD {
-		options += ["11: Randomize Battle Bingo"]
+		options += ["12: Randomize Battle Bingo"]
 	}
 
 	while true {
@@ -224,6 +226,9 @@ func randomiser() {
 		}
 		if randomiseMoveTypes {
 			prompt += " Move types,"
+		}
+		if randomiseTreasure {
+			prompt += " Item Boxes,"
 		}
 		if randomiseTMs {
 			prompt += " TMs"
@@ -274,6 +279,11 @@ func randomiser() {
 			if randomiseTMs {
 				XGRandomiser.randomiseTMs()
 			}
+			#if !GAME_PBR
+			if randomiseTreasure {
+				XGRandomiser.randomiseTreasureBoxes()
+			}
+			#endif
 			#if GAME_XD
 			if randomiseBingo {
 				XGRandomiser.randomiseBattleBingo()
@@ -292,6 +302,7 @@ func randomiser() {
 			randomiseMoveTypes = false
 			randomiseTMs = false
 			randomiseEvolutions = false
+			randomiseTreasure = false
 			randomiseShadowsOnly = false
 			randomiseByBST = false
 			randomiseBingo = false
@@ -333,8 +344,9 @@ func randomiser() {
 		case 8: randomiseMoveTypes.toggle()
 		case 9: randomiseTMs.toggle()
 		case 10: randomiseEvolutions.toggle()
+		case 11: randomiseTreasure.toggle()
 		#if GAME_XD
-		case 11: randomiseBingo.toggle()
+		case 12: randomiseBingo.toggle()
 		#endif
 		default: printg("Invalid option:", input); continue
 		}
@@ -468,13 +480,22 @@ func utilities() {
 		2: Extract all textures with Dolphin filenames
 		"""
 
+		#if !GAME_PBR
+		prompt += """
+
+		3: Increase NPC Pokemon levels by 10%
+		4: Increase NPC Pokemon levels by 20%
+		5: Increase NPC Pokemon levels by 50%
+		"""
+		#endif
+
 		#if GAME_COLO
 		prompt += """
 
-		3: Decode Ereader Cards
+		6: Decode Ereader Cards
 		-      Place your decrypted E Reader cards in \(XGFolders.Decrypted.path)
 		-      then use this utility to output the decoded data for those cards in \(XGFolders.Decoded.path)
-		4: Decode Ereader Cards
+		7: Decode Ereader Cards
 		-      Place your edited E Reader cards in \(XGFolders.Decoded.path)
 		-      then use this utility to output the reencoded data for those cards in \(XGFolders.Decrypted.path)
 		"""
@@ -493,9 +514,14 @@ func utilities() {
 		case "0": return
 		case "1": XGUtility.extractAllTextures(forDolphin: false)
 		case "2": XGUtility.extractAllTextures(forDolphin: true)
+		#if !GAME_PBR
+		case "3": XGUtility.increasePokemonLevelsByPercentage(10)
+		case "4": XGUtility.increasePokemonLevelsByPercentage(20)
+		case "5": XGUtility.increasePokemonLevelsByPercentage(50)
+		#endif
 		#if GAME_COLO
-		case "3": XGUtility.decodeEReaderCards()
-		case "4": XGUtility.encodeEReaderCards()
+		case "6": XGUtility.decodeEReaderCards()
+		case "7": XGUtility.encodeEReaderCards()
 		#elseif GAME_PBR
 		case "3": XGPatcher.increasePokemonTotal(by: 1)
 		case "4": XGPatcher.increasePokemonTotal(by: 10)

@@ -15,8 +15,13 @@ class DeckTrainerStructTable: GoDStructTableFormattable {
 	var nameForEntry: ((Int, GoDStructData) -> String?)?
 	var fileVaries: Bool = true
 
+	let canExpand = true
+
+	private let deck: XGDecks
+
 	init(deck: XGDecks) {
 		file = deck.file
+		self.deck = deck
 		startOffsetForFirstEntryInFile = { _ -> Int in
 			return deck.DTNRDataOffset
 		}
@@ -59,6 +64,10 @@ class DeckTrainerStructTable: GoDStructTableFormattable {
 				.byte(name: "", description: "", type: .uintHex), count: 4)
 		])
 	}
+
+	func addEntries(count: Int) {
+		deck.addTrainerEntries(count: count)
+	}
 }
 
 class DeckPokemonStructTable: GoDStructTableFormattable {
@@ -69,8 +78,13 @@ class DeckPokemonStructTable: GoDStructTableFormattable {
 	var nameForEntry: ((Int, GoDStructData) -> String?)?
 	var fileVaries: Bool = true
 
+	let canExpand = true
+
+	private let deck: XGDecks
+
 	init(deck: XGDecks) {
 		file = deck.file
+		self.deck = deck
 		startOffsetForFirstEntryInFile = { _ -> Int in
 			return deck.DPKMDataOffset
 		}
@@ -131,6 +145,10 @@ class DeckPokemonStructTable: GoDStructTableFormattable {
 				.short(name: "Move", description: "", type: .moveID), count: 4),
 		] + propertiesEnding)
 	}
+
+	func addEntries(count: Int) {
+		deck.addPokemonEntries(count: count)
+	}
 }
 
 class DeckAIStructTable: GoDStructTableFormattable {
@@ -141,8 +159,13 @@ class DeckAIStructTable: GoDStructTableFormattable {
 	var nameForEntry: ((Int, GoDStructData) -> String?)?
 	var fileVaries: Bool = true
 
+	let canExpand = true
+
+	private let deck: XGDecks
+
 	init(deck: XGDecks) {
 		file = deck.file
+		self.deck = deck
 		startOffsetForFirstEntryInFile = { _ -> Int in
 			return deck.DTAIDataOffset
 		}
@@ -153,6 +176,10 @@ class DeckAIStructTable: GoDStructTableFormattable {
 		properties = GoDStruct(name: "Trainer AI", format: [
 			.array(name: "Unknown Values", description: "", property: .byte(name: "Unknown", description: "", type: .uintHex), count: 32)
 		])
+	}
+
+	func addEntries(count: Int) {
+		deck.addAIEntries(count: count)
 	}
 }
 
@@ -170,7 +197,7 @@ let shadowPokemonStruct = GoDStruct(name: "Shadow Pokemon", format: [
 		"Unknown Flag 7",
 		"Unknown Flag 8",
 	]),
-	.word(name: "Pokemon ID", description: "The ID in Deck Story for the pokemon that this shadow ID is attached to", type: .indexOfEntryInTable(table: DeckPokemonStructTable(deck: .DeckStory), nameProperty: "Species")),
+	.word(name: "Pokemon Index In Story Deck", description: "The ID in Deck Story for the pokemon that this shadow ID is attached to", type: .indexOfEntryInTable(table: DeckPokemonStructTable(deck: .DeckStory), nameProperty: "Species")),
 	.short(name: "Heart Guage", description: "Determines how long it takes to purify the pokemon", type: .uint),
 	.short(name: "Padding", description: "", type: .null),
 	.array(name: "Shadow Moves", description: "", property:

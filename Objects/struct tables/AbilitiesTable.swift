@@ -25,5 +25,9 @@ var abilitiesTable: GoDStructTable {
 		return kAbilitiesStartRAMOffset - offset
 	} numberOfEntriesInFile: { (_) -> Int in
 		return kNumberOfAbilities
+	} canExpand: { (file) -> Bool in
+		return game == .XD && region == .US && kSizeOfAbilityEntry == 12
+	} addEntries: { (count) in
+		XGAssembly.reduceSizeOfAbilityData()
 	}
 }

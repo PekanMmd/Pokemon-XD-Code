@@ -15,17 +15,43 @@ class GoDStructTable: GoDStructTableFormattable {
 	let nameForEntry: ((Int, GoDStructData) -> String?)?
 	let documentByIndex: Bool
 
-	init(file: XGFiles, properties: GoDStruct, documentByIndex: Bool = true, startOffsetForFirstEntryInFile: @escaping ((XGFiles) -> Int), numberOfEntriesInFile: @escaping ((XGFiles) -> Int), nameForEntry: ((Int, GoDStructData) -> String?)? = nil) {
+	var canExpand: Bool {
+		return canExpandFunc?(file) ?? false
+	}
+
+	private let canExpandFunc: ((XGFiles) -> Bool)?
+	private let expandFunc: ((Int) -> Void)?
+
+	init(file: XGFiles,
+		 properties: GoDStruct,
+		 documentByIndex: Bool = true,
+		 startOffsetForFirstEntryInFile: @escaping ((XGFiles) -> Int),
+		 numberOfEntriesInFile: @escaping ((XGFiles) -> Int),
+		 nameForEntry: ((Int, GoDStructData) -> String?)? = nil,
+		 canExpand: ((XGFiles) -> Bool)? = nil,
+		 addEntries: ((Int) -> Void)? = nil
+	) {
 		self.file = file
 		self.properties = properties
 		self.startOffsetForFirstEntryInFile = startOffsetForFirstEntryInFile
 		self.numberOfEntriesInFile = numberOfEntriesInFile
 		self.nameForEntry = nameForEntry
 		self.documentByIndex = documentByIndex
+		self.canExpandFunc = canExpand
+		self.expandFunc = addEntries
+	}
+
+	func addEntries(count: Int) {
+		expandFunc?(count)
 	}
 
 	static var dummy: GoDStructTable {
-		return .init(file: .nameAndFolder("", .Documents), properties: .dummy, startOffsetForFirstEntryInFile: {_ in 0}, numberOfEntriesInFile: {_ in 0})
+		return .init(file: .nameAndFolder("", .Documents),
+					 properties: .dummy,
+					 startOffsetForFirstEntryInFile: {_ in 0},
+					 numberOfEntriesInFile: {_ in 0},
+					 canExpand: nil,
+					 addEntries: nil)
 	}
 }
 
@@ -37,6 +63,8 @@ protocol GoDStructTableFormattable {
 	var nameForEntry: ((Int, GoDStructData) -> String?)? { get }
 	var fileVaries: Bool { get }
 	var documentByIndex: Bool { get }
+	var canExpand: Bool { get }
+	func addEntries(count: Int)
 }
 
 extension GoDStructTableFormattable {
@@ -327,7 +355,21 @@ extension GoDStructTableFormattable {
 		}
 		#endif
 
-		for i in 0 ..< numberOfEntriesInFile(file) {
+		let csvLineCount = csvFile.text.split(separator: "\n").count - 1 // don't count the header row
+		guard csvLineCount > 0 else {
+			return
+		}
+
+		if csvLineCount > numberOfEntries {
+			if canExpand {
+				addEntries(count: csvLineCount - numberOfEntries)
+			} else {
+				printg("The csv file has too many rows for \(properties.name). Max entries \(numberOfEntries). Entries after this row will be ignored.")
+			}
+		}
+
+
+		for i in 0 ..< min(numberOfEntries, csvLineCount) {
 			let startOffset = firstEntryStartOffset + (i * properties.length)
 			if let structData = GoDStructData.fromCSV(properties: properties, fileData: fileData, startOffset: startOffset, csvFile: csvFile, row: i) {
 				structData.save()

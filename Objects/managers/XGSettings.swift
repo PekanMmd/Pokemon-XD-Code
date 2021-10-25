@@ -14,7 +14,8 @@ class XGSettings {
 	var verbose = false
 	var increaseFileSizes = true
 	var enableExperimentalFeatures = false
-	var inputDuration = 0.3
+	var inputDuration = 0.2 // How long a button press lasts by default when input into Dolphin
+	var inputPollDuration: UInt32 = 500 // How often to poll for new inputs (ms)
 	
 	private struct Settings: Codable {
 		
@@ -22,12 +23,15 @@ class XGSettings {
 		var increaseFileSizes: Bool?
 		var enableExperimentalFeatures: Bool?
 		var inputDuration: Double?
+		var inputPollDuration: UInt32?
+		var username: String?
 		
 		enum CodingKeys: String, CodingKey {
 			case verbose = "Verbose Logs"
 			case increaseFileSizes = "Increase File Sizes"
 			case enableExperimentalFeatures = "Enable Experimental Features"
 			case inputDuration = "The default duration (seconds) for button inputs when running Dolphin"
+			case inputPollDuration = "The length of time (milliseconds) after which to poll for new inputs when running Dolphin"
 		}
 	}
 	
@@ -47,13 +51,18 @@ class XGSettings {
 		if let duration = settings.inputDuration {
 			self.inputDuration = duration
 		}
+
+		if let duration = settings.inputPollDuration {
+			self.inputPollDuration = duration
+		}
 	}
 	
 	func save() {
 		let settingsData = Settings(verbose: verbose,
 									increaseFileSizes: increaseFileSizes,
 									enableExperimentalFeatures: enableExperimentalFeatures,
-									inputDuration: inputDuration
+									inputDuration: inputDuration,
+									inputPollDuration: inputPollDuration
 									)
 		settingsData.writeJSON(to: settingsFile)
 	}
@@ -65,8 +74,10 @@ class XGSettings {
 	fileprivate static func load() -> XGSettings {
 		if settingsFile.exists {
 			do {
-				let settings = try Settings.fromJSON(file: settingsFile)
-				return XGSettings(settings: settings)
+				let loadedSettings = try Settings.fromJSON(file: settingsFile)
+				let settings = XGSettings(settings: loadedSettings)
+				settings.save()
+				return settings
 			} catch {
 				printg("Error loading settings file: \(settingsFile.path)")
 				printg("Overwriting settings with new file. Corrupt file will be renamed.")

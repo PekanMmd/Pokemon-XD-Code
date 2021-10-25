@@ -525,7 +525,20 @@ class XGRandomiser: NSObject {
 		}
 		printg("done!")
 	}
-	
+
+	#if !GAME_PBR
+	static func randomiseTreasureBoxes() {
+		for treasure in XGTreasure.allValues {
+			guard treasure.item.data.bagSlot.rawValue < XGBagSlots.keyItems.rawValue,
+				  treasure.item.data.price > 0 else {
+				// don't randomise key items
+				continue
+			}
+			treasure.quantity = Int.random(in: 1 ... 3)
+			treasure.itemID = XGItems.random().index
+		}
+	}
+	#endif
 	
 }
 

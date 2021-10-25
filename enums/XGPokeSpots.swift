@@ -30,6 +30,12 @@ enum XGPokeSpots : Int, Codable, CaseIterable {
 		let rel = XGFiles.common_rel.data!
 		return rel.get4BytesAtOffset(self.commonRelEntriesIndex.startOffset)
 	}
+
+	var entries: [XGPokeSpotPokemon] {
+		return (0 ..< numberOfEntries).map { (index) -> XGPokeSpotPokemon in
+			return XGPokeSpotPokemon(index: index, pokespot: self)
+		}
+	}
 	
 	func setEntries(entries: Int) {
 		let rel = XGFiles.common_rel.data!

@@ -15,6 +15,8 @@ class CommonStructTable: GoDStructTableFormattable {
 	var nameForEntry: ((Int, GoDStructData) -> String?)?
 	let documentByIndex: Bool
 
+	let canExpand = true
+
 	convenience init(index: Int, properties: GoDStruct, documentByIndex: Bool = true, nameForEntry: ((Int, GoDStructData) -> String?)? = nil) {
 		self.init(file: .indexAndFsysName(index, "common"), properties: properties, documentByIndex: documentByIndex, nameForEntry: nameForEntry)
 	}
@@ -32,5 +34,10 @@ class CommonStructTable: GoDStructTableFormattable {
 
 		self.nameForEntry = nameForEntry
 		self.documentByIndex = documentByIndex
+	}
+
+	func addEntries(count: Int) {
+		file.data?.insertRepeatedByte(byte: 0, count: count * properties.length, atOffset: firstEntryStartOffset + (numberOfEntries * properties.length))
+		file.data?.replace4BytesAtOffset(0, withBytes: numberOfEntries + count)
 	}
 }

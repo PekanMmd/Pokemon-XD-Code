@@ -32,6 +32,29 @@ let kNumberOfStatusEffects = 87
 let kStatusEffectDurationOffset = 0x4
 let kStatusEffectNameIDOffset = 0x10
 
+enum XGNonVolatileStatusEffects: Int, Codable, CaseIterable {
+	case none			= 0
+
+	case poison			= 3
+	case badPoison		= 4
+	case paralysis		= 5
+	case burn			= 6
+	case freeze			= 7
+	case sleep			= 8
+
+	var name: String {
+		switch self {
+		case .none: return "None"
+		case .poison: return "Poisoned"
+		case .badPoison: return "Badly Poisoned"
+		case .paralysis: return "Paralyzed"
+		case .burn: return "Burned"
+		case .freeze: return "Frozen"
+		case .sleep: return "Asleep"
+		}
+	}
+}
+
 enum XGStatusEffects: Int, Codable, CaseIterable {
 	
 	case none			= 0

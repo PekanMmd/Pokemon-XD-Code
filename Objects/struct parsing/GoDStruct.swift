@@ -853,8 +853,9 @@ indirect enum GoDStructValues: CustomStringConvertible {
 			case .indexOfEntryInTable(let table, let nameProperty):
 				if let structData = table.dataForEntry(rawValue) {
 					if let property = nameProperty {
-						if let value = structData.valueForPropertyWithName(property) {
-							valueString = value.description
+						if let value = structData.valueForPropertyWithName(property),
+						   let mainText = value.description.split(separator: "(").first {
+							valueString = String(mainText)
 						} else {
 							valueString = "\(table.properties.name), index \(rawValue)"
 						}

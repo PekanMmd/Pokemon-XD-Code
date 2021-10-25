@@ -23,6 +23,7 @@ var allDeckFiles: [XGFiles] = {
 	}
 }()
 let rentalPassDeckIndex = 33
+let rentalPassDeck = XGFiles.indexAndFsysName(rentalPassDeckIndex, "deck")
 
 class XGTrainerPokemon {
 	

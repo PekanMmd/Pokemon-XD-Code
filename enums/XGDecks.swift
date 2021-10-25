@@ -263,6 +263,19 @@ enum XGDecks: String, Codable, CaseIterable {
 		
 		data.save()
 	}
+
+	func addAIEntries(count: Int) {
+		let data = self.data
+
+		let bytesToAdd = count * kSizeOfAIData
+		let insertionPoint = DTAIHeaderOffset
+		data.replaceWordAtOffset(DTAIHeaderOffset + 0x4, withBytes: UInt32(DTAISize + bytesToAdd))
+		data.replaceWordAtOffset(DTAIHeaderOffset + 0x8, withBytes: UInt32(DTAIEntries + count))
+		data.insertRepeatedByte(byte: 0, count: bytesToAdd, atOffset: insertionPoint)
+		data.replaceWordAtOffset(0x4, withBytes: UInt32(data.length))
+
+		data.save()
+	}
 	
 	func unusedPokemon() -> XGDeckPokemon {
 		let next = nextUnusedIndexFromIndex(0)

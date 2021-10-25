@@ -266,6 +266,10 @@ class XGRelocationTable {
 		insertBytes(count: byteCount, at: pointerInfo.dataPointer - sectionForInsertion.sectionDataOffset + symbolLength, relativeToSectionWithID: pointerInfo.section, save: save)
 	}
 
+	func expandSymbol(_ symbol: CommonIndexes, by byteCount: Int, save: Bool = false) {
+		expandSymbolWithIndex(symbol.index, by: byteCount)
+	}
+
 	func idForSymbol(withAddress address: Int) -> Int? {
 		for (id, info) in pointers {
 			if info.dataPointer == address {

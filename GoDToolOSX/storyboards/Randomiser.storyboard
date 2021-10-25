@@ -98,15 +98,23 @@
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bt0-6S-ONl">
-                                <rect key="frame" x="158" y="180" width="148" height="20"/>
-                                <buttonCell key="cell" type="check" title="Remove Trade Evolutions" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="VEZ-f8-8nH">
+                                <rect key="frame" x="158" y="181" width="93" height="18"/>
+                                <buttonCell key="cell" type="check" title="Item Boxes" bezelStyle="regularSquare" imagePosition="left" inset="2" id="VEZ-f8-8nH">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system" size="10"/>
+                                    <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zrR-sC-KC2">
                                 <rect key="frame" x="8" y="89" width="264" height="18"/>
                                 <buttonCell key="cell" type="check" title="Randomise Pokemon Using Similar BST" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Tb0-TS-Eci">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vwE-9L-6yi">
+                                <rect key="frame" x="8" y="59" width="225" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Remove Item or Trade Evolutions" bezelStyle="regularSquare" imagePosition="left" inset="2" id="khx-qs-INt">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -146,6 +154,7 @@
                     </view>
                     <connections>
                         <outlet property="bbingo" destination="w7a-JO-od0" id="Szk-Tb-LJs"/>
+                        <outlet property="items" destination="Bt0-6S-ONl" id="gEh-az-le8"/>
                         <outlet property="mtypes" destination="Ggv-x8-P7o" id="4WA-UR-XUi"/>
                         <outlet property="pabilities" destination="DRo-Dc-sIh" id="vAa-um-FXg"/>
                         <outlet property="pevolutions" destination="5Jq-Yi-2jS" id="tPa-sB-8sI"/>
@@ -155,7 +164,7 @@
                         <outlet property="ptypes" destination="Meo-I9-p3a" id="Drh-iv-hbx"/>
                         <outlet property="randomiseByBST" destination="zrR-sC-KC2" id="3dV-Wt-6Tm"/>
                         <outlet property="randomiseShadowsOnly" destination="HAm-s3-kBK" id="VWb-if-Wta"/>
-                        <outlet property="removeTrades" destination="Bt0-6S-ONl" id="ksF-ei-llN"/>
+                        <outlet property="removeTrades" destination="vwE-9L-6yi" id="upz-KI-Afk"/>
                         <outlet property="tmmoves" destination="IdL-GV-3WZ" id="nKc-Zg-R0Y"/>
                     </connections>
                 </viewController>

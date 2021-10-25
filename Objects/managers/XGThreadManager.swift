@@ -7,27 +7,53 @@
 
 import Foundation
 
-@propertyWrapper
-struct Atomic<Value> {
+class SafeArray<T> {
 
 	private let lock = DispatchSemaphore(value: 1)
-	private var value: Value
+	private var array: [T]
 
-	init(wrappedValue: Value) {
-		self.value = wrappedValue
+	convenience init() {
+		self.init(initialValue: [])
 	}
 
-	var wrappedValue: Value {
-		get {
-			lock.wait()
-			defer { lock.signal() }
-			return value
-		}
-		set {
-			lock.wait()
-			value = newValue
-			lock.signal()
-		}
+	init(initialValue: [T]) {
+		self.array = initialValue
+	}
+
+	subscript(index: Int) -> T? {
+		lock.wait()
+		defer { lock.signal() }
+		return index < array.count ? array[index] : nil
+	}
+
+	func remove(atIndex index: Int) {
+		lock.wait()
+		array.remove(at: index)
+		lock.signal()
+	}
+
+	func removeAll() {
+		lock.wait()
+		array.removeAll()
+		lock.signal()
+	}
+
+	func append(_ value: T) {
+		lock.wait()
+		array.append(value)
+		lock.signal()
+	}
+
+	func perform(operation: ([T]) -> Void) {
+		lock.wait()
+		operation(array)
+		lock.signal()
+	}
+
+	func perform(mutation: ([T]) -> [T]) {
+		lock.wait()
+		array = mutation(array)
+		lock.signal()
 	}
 }
 
@@ -38,6 +64,13 @@ class XGThreadManager {
 
 	func runInBackgroundAsync(queue: Int = 0, _ closure: @escaping () -> Void) {
 		let dispatchQueue = DispatchQueue(label: "GoDBackgroundQueueAsync\(queue)", qos: .background)
+		dispatchQueue.async {
+			closure()
+		}
+	}
+
+	func runInBackgroundAsyncNamed(queue: String = "", _ closure: @escaping () -> Void) {
+		let dispatchQueue = DispatchQueue(label: "GoDBackgroundQueueAsync_\(queue)", qos: .background)
 		dispatchQueue.async {
 			closure()
 		}

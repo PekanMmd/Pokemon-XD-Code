@@ -45,9 +45,6 @@ let kRoomTypeOffset = 0x0
 final class XGRoom: NSObject, Codable {
 	
 	var nameID = 0
-	var location: String {
-		return XGFiles.common_rel.stringTable.stringSafelyWithID(self.nameID).string
-	}
 	
 	var name: String {
 		if XGFiles.json("Room IDs").exists {

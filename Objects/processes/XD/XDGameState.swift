@@ -104,16 +104,46 @@ class XDCurrentRoomState: ProcessState<XGRoom> {
 
 	init(process: XDProcess) {
 		super.init(process: process) { (process) -> XGRoom? in
-			let roomID = process?.read2Bytes(atAddress: Self.kCurrentRoomIDRAMOffset) ?? 0
-			return XGRoom.roomWithID(roomID)
+			let currentRoomID = process?.read2Bytes(atAddress: Self.kCurrentRoomIDRAMOffset) ?? 0
+			return XGRoom.roomWithID(currentRoomID)
 		}
 	}
 
 	override func write(process: XDProcess) {
 		super.write(process: process)
-		if wasSet,
-		   let room = value {
-			process.write16(room.roomID, atAddress: Self.kCurrentRoomIDRAMOffset)
+		if wasSet{
+			if let room = value {
+				process.write16(room.roomID, atAddress: Self.kCurrentRoomIDRAMOffset)
+			} else {
+				process.write16(0, atAddress: Self.kCurrentRoomIDRAMOffset)
+			}
+		}
+	}
+}
+
+class XDLastMenuState: ProcessState<XGRoom> {
+	static var kLastMenuIDRAMOffset: Int {
+		switch region {
+		case .US: return 0x80814cd8
+		default: return -1
+		}
+	}
+
+	init(process: XDProcess) {
+		super.init(process: process) { (process) -> XGRoom? in
+			let currentSubRoomID = process?.read4Bytes(atAddress: Self.kLastMenuIDRAMOffset) ?? 0
+			return XGRoom.roomWithID(currentSubRoomID)
+		}
+	}
+
+	override func write(process: XDProcess) {
+		super.write(process: process)
+		if wasSet {
+			if let room = value {
+				process.write(room.roomID, atAddress: Self.kLastMenuIDRAMOffset)
+			} else {
+				process.write(0, atAddress: Self.kLastMenuIDRAMOffset)
+			}
 		}
 	}
 }
@@ -214,12 +244,22 @@ class XDFlagsState {
 	func getSpawnAtPokespot(_ spot: PokeSpotFlagTypes) -> XGPokemon? {
 		let flag: XDSFlags
 		switch spot {
-		case .rock: flag = .currentPokespotPokemonRock
-		case .oasis: flag = .currentPokespotPokemonOasis
-		case .cave: flag = .currentPokespotPokemonCave
+		case .rock: flag = .currentPokespotSpawnRock
+		case .oasis: flag = .currentPokespotSpawnOasis
+		case .cave: flag = .currentPokespotSpawnCave
 		}
 		guard let species = process?.getFlag(flag) else { return nil }
 		return .index(species)
+	}
+
+	func getSnacksAtPokespot(_ spot: PokeSpotFlagTypes) -> Int? {
+		let flag: XDSFlags
+		switch spot {
+		case .rock: flag = .currentPokespotSnacksRock
+		case .oasis: flag = .currentPokespotSnacksOasis
+		case .cave: flag = .currentPokespotSnacksCave
+		}
+		return  process?.getFlag(flag)
 	}
 }
 
@@ -230,6 +270,7 @@ class XDGameState {
 	// Load everything lazily instead and only write things that were referenced.
 	let battleState: XDBattleState?
 	let currentRoomState: XDCurrentRoomState?
+	let lastMenuState: XDLastMenuState?
 	let shadowDataState: XDShadowDataState?
 	let trainerState: XDTrainerState?
 	let flagsState: XDFlagsState?
@@ -237,6 +278,7 @@ class XDGameState {
 	init(process: XDProcess) {
 		battleState = XDBattleState(process: process)
 		currentRoomState = XDCurrentRoomState(process: process)
+		lastMenuState = XDLastMenuState(process: process)
 		shadowDataState = XDShadowDataState(process: process)
 		trainerState = XDTrainerState(process: process)
 		flagsState = XDFlagsState(process: process)

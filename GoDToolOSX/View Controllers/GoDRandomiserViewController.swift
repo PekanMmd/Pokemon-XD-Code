@@ -18,9 +18,10 @@ class GoDRandomiserViewController: GoDViewController {
 	@IBOutlet var mtypes: NSButton!
 	@IBOutlet var tmmoves: NSButton!
 	@IBOutlet var bbingo: NSButton!
-	@IBOutlet var removeTrades: NSButton!
+	@IBOutlet weak var items: NSButton!
 	@IBOutlet weak var randomiseShadowsOnly: NSButton!
 	@IBOutlet weak var randomiseByBST: NSButton!
+	@IBOutlet var removeTrades: NSButton!
 
 
     override func viewDidLoad() {
@@ -31,6 +32,7 @@ class GoDRandomiserViewController: GoDViewController {
 		if game == .PBR {
 			randomiseShadowsOnly.title = "Only Randomise Rental Pass Pokemon"
 			removeTrades.isHidden = true
+			items.isHidden = true
 		}
     }
 	
@@ -44,6 +46,7 @@ class GoDRandomiserViewController: GoDViewController {
 		let evolutions = pevolutions.state == .on
 		let moveTypes = mtypes.state == .on
 		let tms = tmmoves.state == .on
+		let boxes = items.state == .on
 		let tradeEvos = removeTrades.state == .on
 		let limit = randomiseShadowsOnly.state == .on
 		let bst = randomiseByBST.state == .on
@@ -87,14 +90,19 @@ class GoDRandomiserViewController: GoDViewController {
 			if tms {
 				XGRandomiser.randomiseTMs()
 			}
+
 			#if GAME_XD
 			if bingo {
 				XGRandomiser.randomiseBattleBingo()
 			}
 			#endif
 			#if !GAME_PBR
+			if boxes {
+				XGRandomiser.randomiseTreasureBoxes()
+			}
 			if tradeEvos {
 				XGPatcher.removeTradeEvolutions()
+				XGPatcher.removeItemEvolutions()
 			}
 			#endif
 

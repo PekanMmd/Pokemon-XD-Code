@@ -16,6 +16,7 @@ class CommonStructTable: GoDStructTableFormattable {
 	let documentByIndex: Bool
 
 	let commonIndex: Int
+	let canExpand = true
 
 	convenience init(index: CommonIndexes, properties: GoDStruct, documentByIndex: Bool = true, nameForEntry: ((Int, GoDStructData) -> String?)? = nil) {
 		self.init(index: index.rawValue, properties: properties, documentByIndex: documentByIndex, nameForEntry: nameForEntry)
@@ -33,5 +34,10 @@ class CommonStructTable: GoDStructTableFormattable {
 
 		self.nameForEntry = nameForEntry
 		self.documentByIndex = documentByIndex
+	}
+
+	func addEntries(count: Int) {
+		common.expandSymbolWithIndex(commonIndex, by: count * properties.length)
+		common.setValueAtPointer(index: commonIndex + 1, newValue: numberOfEntries + count)
 	}
 }

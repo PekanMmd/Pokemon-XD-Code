@@ -14,6 +14,7 @@ let kPartyPokemonHappinessOffset = 6
 let kPartyPokemonLevelCaughtOffset = 14
 let kPartyPokemonPokeballOffset = 15
 let kPartyPokemonLevelOffset = 17
+let kPartyPokemonStatusOffset = 22
 let kPartyPokemonAbilityIndexOffset = 29
 let kPartyPokemonTotalExpOffset = 32
 let kPartyPokemonSIDOffset = 36
@@ -64,8 +65,8 @@ let kBattlePokemonCurrentACCStagesOffset = 0x7b5
 let kBattlePokemonCurrentEVAStagesOffset = 0x7b6
 
 let kTrainerDeckIDOffset = 0
-let kTrainerName1Offset = 4
-let kTrainerName2Offset = 26
+let kTrainerName1Offset = 0
+let kTrainerName2Offset = 22
 let kTrainerFirstPartyPokemonOffset = 48
 let kSizeOfPartyPokemonData = 0xc4
 
@@ -79,7 +80,7 @@ class XDTrainer: Codable {
 	init(process: XDProcess, offset: Int) {
 		self.offset = offset
 
-		name = process.readString(RAMOffset: offset + kTrainerName1Offset, maxCharacters: 10)
+		name = process.readString(RAMOffset: offset + kTrainerName1Offset, charLength: .short, maxCharacters: 10)
 		deckID = process.read4Bytes(atAddress: offset + kTrainerDeckIDOffset)
 		var mons = [XDPartyPokemon?]()
 		for i in 0 ..< 6 {
@@ -170,6 +171,7 @@ class XDPartyPokemon: Codable {
 	var abilityInBattle: XGAbilities? = nil
 	var usesSecondAbility = false
 	var currentHP = 0
+	var status = XGNonVolatileStatusEffects.none
 	var happiness = 0
 	var level = 0
 	var levelCaughtAt = 0
@@ -236,6 +238,7 @@ class XDPartyPokemon: Codable {
 			species = .index(process.read2Bytes(atAddress: offset + kPartyPokemonSpeciesOffset) ?? 0)
 			item = .index(process.read2Bytes(atAddress: offset + kPartyPokemonItemOffset) ?? 0)
 			currentHP = process.read2Bytes(atAddress: offset + kPartyPokemonCurrentHPOffset) ?? 0
+			status = XGNonVolatileStatusEffects(rawValue: process.readByte(atAddress: offset + kPartyPokemonStatusOffset) ?? 0) ?? .none
 			happiness = process.read2Bytes(atAddress: offset + kPartyPokemonHappinessOffset) ?? 0
 			level = process.readByte(atAddress: offset + kPartyPokemonLevelOffset) ?? 0
 			levelCaughtAt = process.readByte(atAddress: offset + kPartyPokemonLevelCaughtOffset) ?? 0
@@ -284,6 +287,7 @@ class XDPartyPokemon: Codable {
 			process.write16(species.index, atAddress: partyDataOffset + kPartyPokemonSpeciesOffset)
 			process.write16(item.index, atAddress: partyDataOffset + kPartyPokemonItemOffset)
 			process.write16(currentHP, atAddress: partyDataOffset + kPartyPokemonCurrentHPOffset)
+			process.write8(status.rawValue, atAddress: partyDataOffset + kPartyPokemonStatusOffset)
 			process.write16(happiness, atAddress: partyDataOffset + kPartyPokemonHappinessOffset)
 			process.write8(level, atAddress: partyDataOffset + kPartyPokemonLevelOffset)
 			process.write8(levelCaughtAt, atAddress: partyDataOffset + kPartyPokemonLevelCaughtOffset)

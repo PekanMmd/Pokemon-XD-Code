@@ -49,11 +49,11 @@ extension XGStringTable {
 		} else {
 			if settings.increaseFileSizes {
 				#if GAME_PBR
-				let isCommonRelAndIsExpandable = false
+				let isCommonRel = false
 				#else
-				let isCommonRelAndIsExpandable = file == .common_rel && settings.enableExperimentalFeatures
+				let isCommonRel = file == .common_rel
 				#endif
-				if self.startOffset == 0 || isCommonRelAndIsExpandable {
+				if self.startOffset == 0 || isCommonRel {
 					if settings.verbose {
 						printg("string was too long, adding \(difference + 0x200 - extraCharacters) bytes to table \(self.file.fileName)")
 					}

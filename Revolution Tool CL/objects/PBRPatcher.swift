@@ -231,15 +231,25 @@ class XGPatcher {
 	}
 
 	static func overrideHardcodedPokemonCount(newCount count: Int) {
-		guard region == .EU else {
+		guard region != .JP else {
 			printg("Couldn't override hard coded pokemon count for game region \(region.name)")
 			return
 		}
-		XGAssembly.replaceASM(startOffset: 0x56c0c - kDolToRAMOffsetDifference, newASM: [.cmpwi(.r0, count)])
-
-		for offset in [0x5b704 , 0x5b9b4 , 0x5c09c , 0x5c348] {
-			XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [.cmpwi(.r4, count)])
+		switch region {
+		case .EU:
+			XGAssembly.replaceASM(startOffset: 0x56c0c - kDolToRAMOffsetDifference, newASM: [.cmpwi(.r0, count)])
+			for offset in [0x5b704 , 0x5b9b4 , 0x5c09c , 0x5c348] {
+				XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [.cmpwi(.r4, count)])
+			}
+		case .US:
+			XGAssembly.replaceASM(startOffset: 0x58c6c - kDolToRAMOffsetDifference, newASM: [.cmpwi(.r0, count)])
+			for offset in [0x5d1f4 , 0x5d4a4 , 0x5db8c , 0x5de38] {
+				XGAssembly.replaceASM(startOffset: offset - kDolToRAMOffsetDifference, newASM: [.cmpwi(.r4, count)])
+			}
+		default:
+			return
 		}
+
 	}
 
 	static func isClassSplitImplemented() -> Bool {
@@ -488,8 +498,8 @@ class XGPatcher {
 		evolutions.save()
 		menu_face.save()
 		menu_pokemon.save()
-		XGUtility.importFileToISO(menu_face.file, save: false)
-		XGUtility.importFileToISO(menu_pokemon.file, save: false)
+		XGUtility.importFileToISO(menu_face.file, encode: false, save: false, importFiles: [])
+		XGUtility.importFileToISO(menu_pokemon.file, encode: false, save: false, importFiles: [])
 
 		printg("Updating game data...")
 
@@ -610,7 +620,7 @@ class XGPatcher {
 			dol.save()
 		}
 
-		XGPatcher.overrideHardcodedPokemonCount(newCount: GoDDataTable.pokemonBaseStats.numberOfEntries)
+		XGPatcher.overrideHardcodedPokemonCount(newCount: newBadEggIndex)
 		printg("done")
 	}
 

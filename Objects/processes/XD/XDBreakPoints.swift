@@ -10,12 +10,13 @@ import Foundation
 enum XDBreakPointTypes: Int, CaseIterable {
 	case clear = 0
 	case onFrameAdvance
+	case onWillRenderFrame
 	case onDidRNGRoll
 	case onStepCount
 	case onDidLoadSave
 	case onWillWriteSave
 	case onWillChangeMap
-	case onDidChangeMap
+	case onDidChangeMapOrMenu
 	case onDidConfirmMoveSelection
 	case onDidConfirmTurnSelection
 	case onWillUseMove
@@ -41,13 +42,16 @@ enum XDBreakPointTypes: Int, CaseIterable {
 	case onBattleTurnEnd
 	case onPokemonTurnStart
 	case onPokemonTurnEnd
+	case onBattleDamageOrHealing
 	case onPokemonDidFaint
 	case onWillAttemptPokemonCapture
 	case onDidSucceedPokemonCapture
 	case onDidFailPokemonCapture
-	case onMirorRadarActive
+	case onMirorRadarActiveAtColosseum
+	case onMirorRadarActiveAtPokespot
 	case onMirorRadarLostSignal
 	case onSpotMonitorActivated
+	case onWildBattleGenerated
 	case onWillGetFlag
 	case onWillSetFlag
 	case onReceivedGiftPokemon
@@ -58,10 +62,21 @@ enum XDBreakPointTypes: Int, CaseIterable {
 	case onSoftReset
 	case onInconsistentState
 
+	case yield = 0x7FFE
 	case forcedReturn = 0x7FFF
 
 	var addresses: [Int]? {
 		switch self {
+		case .onFrameAdvance:
+			switch region {
+			case .US: return [0x802af65c]
+			default: return nil
+			}
+		case .onWillRenderFrame:
+			switch region {
+			case .US: return [0x802af880]
+			default: return nil
+			}
 		case .onDidRNGRoll:
 			switch region {
 			case .US: return [0x8025ca34]
@@ -75,11 +90,6 @@ enum XDBreakPointTypes: Int, CaseIterable {
 		case .onWillSetFlag:
 			switch region {
 			case .US: return [0x801a03a4]
-			default: return nil
-			}
-		case .onFrameAdvance:
-			switch region {
-			case .US: return [0x802af65c]
 			default: return nil
 			}
 		case .onStepCount:
@@ -102,9 +112,9 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			case .US: return [0x80120304]
 			default: return nil
 			}
-		case .onDidChangeMap:
+		case .onDidChangeMapOrMenu:
 			switch region {
-			case .US: return [0x80120650]
+			case .US: return [0x8012705c]
 			default: return nil
 			}
 		case .onDidConfirmMoveSelection:
@@ -230,6 +240,11 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			case .US: return [0x80209c3c]
 			default: return nil
 			}
+		case .onBattleDamageOrHealing:
+			switch region {
+			case .US: return [0x80215bbc]
+			default: return nil
+			}
 		case .onPokemonDidFaint:
 			switch region {
 			case .US: return [0x80213b24]
@@ -250,9 +265,14 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			case .US: return [0x80219798]
 			default: return nil
 			}
-		case .onMirorRadarActive:
+		case .onMirorRadarActiveAtColosseum:
 			switch region {
-			case .US: return [0x80296414, 0x80296680]
+			case .US: return [0x802966b0]
+			default: return nil
+			}
+		case .onMirorRadarActiveAtPokespot:
+			switch region {
+			case .US: return [0x80296438]
 			default: return nil
 			}
 		case .onMirorRadarLostSignal:
@@ -263,6 +283,11 @@ enum XDBreakPointTypes: Int, CaseIterable {
 		case .onSpotMonitorActivated:
 			switch region {
 			case .US: return [0x8005f49c]
+			default: return nil
+			}
+		case .onWildBattleGenerated:
+			switch region {
+			case .US: return [0x801fb100]
 			default: return nil
 			}
 		case .onReceivedGiftPokemon:
@@ -291,9 +316,20 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			}
 		case .onInconsistentState:
 			return nil
+		case .yield:
+			return nil
 		case .forcedReturn:
 			return nil
 		case .clear:
+			return nil
+		}
+	}
+
+	var standardReturnOffset: Int? {
+		switch self {
+		case .onMirorRadarActiveAtPokespot:
+			return 0x80296464
+		default:
 			return nil
 		}
 	}
@@ -317,6 +353,42 @@ class BreakPointContext: Codable {
 	init() {}
 	init(process: XDProcess, registers: [Int: Int]) {}
 	func getRegisters() -> [Int: Int] { return [:] }
+}
+
+class RenderFrameBufferContext: BreakPointContext {
+	let nextBufferMetaDataPointer: Int
+	let nextBufferWidth: Int
+	let nextBufferHeight: Int
+	let frameBuffer1Address: Int
+	let frameBuffer2Address: Int
+
+	static var nextBufferWidthAddress: Int {
+		switch region {
+		case .US: return 0x804e6bac
+		default: return -1
+		}
+	}
+	static var nextBufferHeightAddress: Int {
+		switch region {
+		case .US: return 0x804e6bae
+		default: return -1
+		}
+	}
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		self.nextBufferMetaDataPointer = registers[31] ?? 0
+		nextBufferWidth = process.read2Bytes(atAddress: RenderFrameBufferContext.nextBufferWidthAddress) ?? 0
+		nextBufferHeight = process.read2Bytes(atAddress: RenderFrameBufferContext.nextBufferHeightAddress) ?? 0
+		frameBuffer1Address = process.read4Bytes(atAddress: nextBufferMetaDataPointer + 4) ?? 0
+		frameBuffer2Address = process.read4Bytes(atAddress: nextBufferMetaDataPointer + 12) ?? 0
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [31: nextBufferMetaDataPointer]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
 class RNGRollContext: BreakPointContext {
@@ -391,7 +463,7 @@ class StepCounterContext: BreakPointContext {
 
 class SaveLoadedContext: BreakPointContext {
 	enum Status: Int, Codable {
-		case cancelled = -1, previouslyLoadedNCleanSaveNoData = 1, success = 3, firstLoadNoSaveData = 5, unknown = -2
+		case cancelled = -1, previouslyLoadedCleanSave = 1, success = 3, firstLoadNoSaveData = 5, unknown = -2
 	}
 
 	var status: Status
@@ -403,6 +475,21 @@ class SaveLoadedContext: BreakPointContext {
 
 	override func getRegisters() -> [Int: Int] {
 		return [3: status.rawValue]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class MapOrMenuDidChangeContext: BreakPointContext {
+	var newRoom: XGRoom
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		newRoom = XGRoom.roomWithID(registers[4] ?? 0) ?? XGRoom(index: 0)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [4: newRoom.roomID]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
@@ -420,22 +507,6 @@ class MapWillChangeContext: BreakPointContext {
 
 	override func getRegisters() -> [Int: Int] {
 		return [3: nextRoom.roomID, 5: startingPointIndex]
-	}
-
-	required init(from decoder: Decoder) throws { fatalError("-") }
-}
-
-class MapDidChangeContext: BreakPointContext {
-	let newRoom: XGRoom
-
-	override init(process: XDProcess, registers: [Int: Int]) {
-		let currentRoomID = process.read2Bytes(atAddress: XDCurrentRoomState.kCurrentRoomIDRAMOffset) ?? 0
-		newRoom = XGRoom.roomWithID(currentRoomID) ?? XGRoom(index: 0)
-		super.init()
-	}
-
-	override func getRegisters() -> [Int: Int] {
-		return [:]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }
@@ -853,6 +924,23 @@ class TurnStartContext: BreakPointContext {
 	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
+class BattleDamageHealingContext: BreakPointContext {
+	var attackingPokemon: XDBattlePokemon
+	var defendingPokemon: XDBattlePokemon
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		attackingPokemon = XDBattlePokemon(process: process, offset: registers[26] ?? 0)
+		defendingPokemon = XDBattlePokemon(process: process, offset: registers[29] ?? 0)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [26: attackingPokemon.battleDataOffset, 29: defendingPokemon.battleDataOffset]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
 class PokemonFaintedContext: BreakPointContext {
 	var attackingPokemon: XDBattlePokemon
 	var defendingPokemon: XDBattlePokemon
@@ -964,6 +1052,23 @@ class PrintContext: BreakPointContext {
 
 	override func getRegisters() -> [Int: Int] {
 		return [3: offset]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class WildBattleContext: BreakPointContext {
+	var trainer: XDTrainer?
+	let trainerPointer: Int
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		trainerPointer = registers[26] ?? 0
+		trainer = XDTrainer(process: process, offset: trainerPointer)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [26: trainerPointer]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }

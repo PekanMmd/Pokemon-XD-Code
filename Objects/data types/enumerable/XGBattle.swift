@@ -102,16 +102,16 @@ final class XGBattle: Codable {
 	var title : String {
 		
 		let p1t = p1Trainer
-		let p1 = p1t == nil ? (p1TID == 0x1388 ? "Player" : "Invalid") : p1t!.name.string.titleCased
+		let p1 = p1t == nil ? (p1TID == 0x1388 ? "Player" : "Invalid") : p1t!.trainerClass.name.unformattedString.titleCased + " " + p1t!.name.string.titleCased
 		
 		let p2t = p2Trainer
-		let p2 = p2t == nil ? (p2TID == 0x1388 ? "Player" : "Invalid") : p2t!.name.string.titleCased
+		let p2 = p2t == nil ? (p2TID == 0x1388 ? "Player" : "Invalid") : p2t!.trainerClass.name.unformattedString.titleCased + " " + p2t!.name.string.titleCased
 		
 		let p3t = p3Trainer
-		let p3 = p3t == nil ? (p3TID == 0x1388 ? "Player" : "Invalid") : p3t!.name.string.titleCased
+		let p3 = p3t == nil ? (p3TID == 0x1388 ? "Player" : "Invalid") : p3t!.trainerClass.name.unformattedString.titleCased + " " + p3t!.name.string.titleCased
 		
 		let p4t = p4Trainer
-		let p4 = p4t == nil ? (p4TID == 0x1388 ? "Player" : "Invalid") : p4t!.name.string.titleCased
+		let p4 = p4t == nil ? (p4TID == 0x1388 ? "Player" : "Invalid") : p4t!.trainerClass.name.unformattedString.titleCased + " " + p4t!.name.string.titleCased
 		
 		var str = p1 + ( p3t == nil && p4t == nil ? " vs. " : " & ")
 		str += p2 + ( p3t == nil && p4t == nil ? "" : " vs. ")

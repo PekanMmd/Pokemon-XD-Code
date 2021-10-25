@@ -88,7 +88,18 @@ enum XGItems {
 			.index(index)
 		})
 	}
-	
+
+	static func random() -> XGItems {
+		var rand = 0
+		while (rand == 0)
+				|| (XGItems.index(rand).nameID == 0)
+				|| (XGItems.index(rand).descriptionID == 0)
+				|| (XGItems.index(rand).data.bagSlot.rawValue >= XGBagSlots.keyItems.rawValue)
+				|| (XGItems.index(rand).data.price == 0) {
+			rand = Int.random(in: 1 ..< kNumberOfItems)
+		}
+		return .index(rand)
+	}
 }
 
 func allItems() -> [String : XGItems] {

@@ -8,8 +8,11 @@
 import Foundation
 
 class DolphinProcess {
-	
-	private let kMEMSize: UInt = 0x2_000_000
+
+	let kMEMSize: UInt = 0x2_000_000
+
+	private let saveStateScriptFile = XGFiles.nameAndFolder("Dolphin Save States.sh", .Resources)
+	private let loadStateScriptFile = XGFiles.nameAndFolder("Dolphin Load States.sh", .Resources)
 
 	private let process: GoDProcess
 	private var RAMInfo: (mem1: VMRegionInfo, mem2: VMRegionInfo)?
@@ -20,10 +23,26 @@ class DolphinProcess {
 
 	private init(process: GoDProcess) {
 		self.process = process
+		let appleScriptUser = "sudo -H -u `logname`" // username.isEmpty ? "" : "sudo -H -u " + username
+		let saveStateScript =
+		"""
+		#!/bin/bash
+		SCRIPT='tell application "System Events" to tell application process "Dolphin" to click (every menu item of menu of menu item "Save State to Slot" of menu of menu item "Save State" of menu "Emulation" of menu bar 1 whose (name starts with "Save to Slot '$1' - "))'
+		\(appleScriptUser) osascript -e "${SCRIPT}"
+		"""
+		let loadStateScript =
+		"""
+		#!/bin/bash
+		SCRIPT='tell application "System Events" to tell application process "Dolphin" to click (every menu item of menu of menu item "Load State from Slot" of menu of menu item "Load State" of menu "Emulation" of menu bar 1 whose (name starts with "Load from Slot '$1' - "))'
+		\(appleScriptUser) osascript -e "${SCRIPT}"
+		"""
+		saveStateScript.save(toFile: saveStateScriptFile)
+		loadStateScript.save(toFile: loadStateScriptFile)
 		load()
 	}
 
 	func terminate() {
+		process.terminate()
 		process.terminate()
 	}
 
@@ -180,6 +199,13 @@ class DolphinProcess {
 		}
 	}
 
+	func saveStateToSlot(_ slot: Int) {
+		GoDShellManager.run(.file(saveStateScriptFile), args: [slot.string])
+	}
+
+	func loadStateFromSlot(_ slot: Int) {
+		GoDShellManager.run(.file(loadStateScriptFile), args: [slot.string])
+	}
 
 	func dumpDolphinRAM(toFile file: XGFiles, size: UInt) {
 		let fullRAM = XGMutableData()

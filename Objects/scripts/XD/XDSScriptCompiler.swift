@@ -136,7 +136,7 @@ class XDSScriptCompiler: NSObject {
 			if file == XGFiles.common_rel {
 				let start = CommonIndexes.Script.startOffset
 				var length = CommonIndexes.Script.length
-				if data.length > length && settings.enableExperimentalFeatures && settings.increaseFileSizes {
+				if data.length > length && settings.increaseFileSizes {
 					common.expandSymbolWithIndex(CommonIndexes.Script.index, by: data.length - length)
 					length = CommonIndexes.Script.length
 				} else {

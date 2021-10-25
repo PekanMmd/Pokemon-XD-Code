@@ -27,7 +27,7 @@ var loadedStringTables = [String : XGStringTable]()
 var loadedFsys = [String: XGFsys]()
 
 #if GAME_XD
-var loadableFiles: [String] { [XGFiles.common_rel.path,XGFiles.dol.path,XGDecks.DeckStory.file.path,XGDecks.DeckDarkPokemon.file.path, XGDecks.DeckColosseum.file.path,XGDecks.DeckHundred.file.path,XGDecks.DeckVirtual.file.path,XGFiles.iso.path, XGFiles.fsys("people_archive").path, XGFiles.pocket_menu.path, XGFiles.toc.path]
+var loadableFiles: [String] { [XGFiles.common_rel.path,XGFiles.dol.path,XGDecks.DeckStory.file.path,XGDecks.DeckDarkPokemon.file.path, XGDecks.DeckColosseum.file.path,XGDecks.DeckHundred.file.path,XGDecks.DeckVirtual.file.path,XGDecks.DeckSample.file.path,XGDecks.DeckImasugu.file.path,XGDecks.DeckBingo.file.path,XGFiles.iso.path, XGFiles.fsys("people_archive").path, XGFiles.pocket_menu.path, XGFiles.toc.path]
 }
 #elseif GAME_COLO
 var loadableFiles: [String] {

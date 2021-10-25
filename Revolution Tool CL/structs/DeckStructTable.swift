@@ -89,6 +89,8 @@ class DeckStructTable: GoDStructTableFormattable {
 	let numberOfEntriesInFile: ((XGFiles) -> Int)
 	var nameForEntry: ((Int, GoDStructData) -> String?)?
 
+	let canExpand = true
+
 	var fileVaries: Bool {
 		return true
 	}
@@ -112,6 +114,13 @@ class DeckStructTable: GoDStructTableFormattable {
 		case .dckp: properties = deckPokemonStruct
 		case .dcka: properties = deckAIStruct
 		default: properties = GoDStruct(name: "Dummy", format: [])
+		}
+	}
+
+	func addEntries(count: Int) {
+		if let data = file.data {
+			data.insertRepeatedByte(byte: 0, count: count * properties.length, atOffset: startOffsetForEntry(numberOfEntries - 1) + properties.length)
+			data.save()
 		}
 	}
 }

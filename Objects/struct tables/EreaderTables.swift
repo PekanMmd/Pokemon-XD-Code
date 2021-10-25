@@ -22,6 +22,8 @@ class EreaderStructTable: GoDStructTableFormattable {
 		return true
 	}
 
+	let canExpand = false
+
 	init(type: EreaderTableType, inFile file: XGFiles) {
 		self.file = file
 		switch type {
@@ -57,6 +59,8 @@ class EreaderStructTable: GoDStructTableFormattable {
 
 		self.documentByIndex = true
 	}
+
+	func addEntries(count: Int) {}
 }
 
 let ecardTrainerPokemonStruct = GoDStruct(name: "Ecard Pokemon", format: [
@@ -65,7 +69,7 @@ let ecardTrainerPokemonStruct = GoDStruct(name: "Ecard Pokemon", format: [
 	.byte(name: "Level", description: "", type: .uint),
 	.array(name: "Moves", description: "", property:
 		.short(name: "Move", description: "", type: .moveID), count: 4),
-	.short(name: "Unknown", description: "", type: .uintHex),
+	.short(name: "Item", description: "", type: .itemID),
 	.byte(name: "Ability Slot", description: "", type: .uint),
 	.subStruct(name: "IVs", description: "", property: statsStructByte),
 	.subStruct(name: "EVs", description: "", property: statsStructShort),

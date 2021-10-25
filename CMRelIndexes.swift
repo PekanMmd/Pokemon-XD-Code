@@ -132,6 +132,10 @@ enum CommonIndexes : Int {
 	func setValue(_ value: Int) {
 		common.setValueAtPointer(index: self.index, newValue: value)
 	}
+
+	func expand(by bytes: Int, save: Bool = false) {
+		common.expandSymbol(self, by: bytes, save: save)
+	}
 	
 	static func indexForStartOffset(offset: Int) -> Int? {
 		for i in 0 ..< kNumberRelPointers {

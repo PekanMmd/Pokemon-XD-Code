@@ -8,6 +8,7 @@
 import Foundation
 
 class XGStack<T>: NSObject {
+	typealias Element = T
 
 	private var data : [T] = [T]()
 	
@@ -34,6 +35,12 @@ class XGStack<T>: NSObject {
 	
 	var isEmpty : Bool {
 		return data.count == 0
+	}
+}
+
+extension XGStack where Element:Equatable {
+	func contains(_ element: Element) -> Bool {
+		return data.contains(element)
 	}
 }
 
