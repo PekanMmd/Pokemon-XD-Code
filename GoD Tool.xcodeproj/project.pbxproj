@@ -14,9 +14,6 @@
 		1C0D8BAF2713804200BC7D7F /* ColoursByName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0D8BAC2713804200BC7D7F /* ColoursByName.swift */; };
 		1C0D8BC327144FF900BC7D7F /* XDStoredShadowData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0D8BC227144FF900BC7D7F /* XDStoredShadowData.swift */; };
 		1C0D8BC527144FF900BC7D7F /* XDStoredShadowData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0D8BC227144FF900BC7D7F /* XDStoredShadowData.swift */; };
-		1C0D8BD927146ED200BC7D7F /* XGShadowAggression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0D8BD827146ED200BC7D7F /* XGShadowAggression.swift */; };
-		1C0D8BDA27146ED200BC7D7F /* XGShadowAggression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0D8BD827146ED200BC7D7F /* XGShadowAggression.swift */; };
-		1C0D8BDB27146ED200BC7D7F /* XGShadowAggression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0D8BD827146ED200BC7D7F /* XGShadowAggression.swift */; };
 		1C11E338252BFD8A00026234 /* CMScriptOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C11E337252BFD8A00026234 /* CMScriptOps.swift */; };
 		1C11E339252BFD8A00026234 /* CMScriptOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C11E337252BFD8A00026234 /* CMScriptOps.swift */; };
 		1C12C26F26CC009000501FB0 /* GoDFiltersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C12C26E26CC009000501FB0 /* GoDFiltersManager.swift */; };
@@ -783,6 +780,9 @@
 		1CA887EE2727822100C1A08C /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
 		1CA887F82727822200C1A08C /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
 		1CA887F92727822300C1A08C /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
+		1CA88804272789F200C1A08C /* XGShadowAggression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA88803272789F200C1A08C /* XGShadowAggression.swift */; };
+		1CA88805272789F200C1A08C /* XGShadowAggression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA88803272789F200C1A08C /* XGShadowAggression.swift */; };
+		1CA88806272789F200C1A08C /* XGShadowAggression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA88803272789F200C1A08C /* XGShadowAggression.swift */; };
 		1CB33AA522B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
 		1CB33AA722B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
 		1CB33AA822B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
@@ -4679,7 +4679,6 @@
 		1C0D8B962713607D00BC7D7F /* Discord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Discord.swift; sourceTree = "<group>"; };
 		1C0D8BAC2713804200BC7D7F /* ColoursByName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoursByName.swift; sourceTree = "<group>"; };
 		1C0D8BC227144FF900BC7D7F /* XDStoredShadowData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDStoredShadowData.swift; sourceTree = "<group>"; };
-		1C0D8BD827146ED200BC7D7F /* XGShadowAggression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = XGShadowAggression.swift; path = ../../../../../XGShadowAggression.swift; sourceTree = "<group>"; };
 		1C11E337252BFD8A00026234 /* CMScriptOps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMScriptOps.swift; sourceTree = "<group>"; };
 		1C12C26E26CC009000501FB0 /* GoDFiltersManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDFiltersManager.swift; sourceTree = "<group>"; };
 		1C12C2A726CC06F800501FB0 /* FiltersManager.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = FiltersManager.storyboard; sourceTree = "<group>"; };
@@ -4813,6 +4812,7 @@
 		1CA3E5842623BAEF00E5089A /* GamesAndLangauages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesAndLangauages.swift; sourceTree = "<group>"; };
 		1CA3E5AF2623DB5A00E5089A /* XGDayCareStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGDayCareStatus.swift; sourceTree = "<group>"; };
 		1CA3E606262467D200E5089A /* MirorBDataTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MirorBDataTable.swift; path = "Objects/struct tables/MirorBDataTable.swift"; sourceTree = SOURCE_ROOT; };
+		1CA88803272789F200C1A08C /* XGShadowAggression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGShadowAggression.swift; sourceTree = "<group>"; };
 		1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumerableDocumentable.swift; sourceTree = "<group>"; };
 		1CB3B875250988710069402D /* wimgt */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = wimgt; sourceTree = "<group>"; };
 		1CB3B87C250D512A0069402D /* Battles.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Battles.storyboard; sourceTree = "<group>"; };
@@ -10178,7 +10178,7 @@
 				B208E76120C4DD8300D298BF /* CMTrainerModels.swift */,
 				B2F5EBD61F49A1FE0075C6D2 /* XGUnicodeCharacters.swift */,
 				B2F5EBD71F49A1FE0075C6D2 /* XGWeather.swift */,
-				1C0D8BD827146ED200BC7D7F /* XGShadowAggression.swift */,
+				1CA88803272789F200C1A08C /* XGShadowAggression.swift */,
 			);
 			path = enums;
 			sourceTree = "<group>";
@@ -13646,6 +13646,7 @@
 				1C16CD9A253BC48500907D78 /* XGResources.swift in Sources */,
 				1C16D0FA253BC89A00907D78 /* XGRoom.swift in Sources */,
 				1C56F718260BF47100CF1DEE /* TreasureTable.swift in Sources */,
+				1CA88805272789F200C1A08C /* XGShadowAggression.swift in Sources */,
 				1C16D05F253BC86800907D78 /* XGBattleCD.swift in Sources */,
 				1C16CFE9253BC5B600907D78 /* GoDTexture.swift in Sources */,
 				1C16D08E253BC87600907D78 /* XGDoor.swift in Sources */,
@@ -13789,7 +13790,6 @@
 				1C16D0B6253BC88200907D78 /* XGItem.swift in Sources */,
 				1C16CD99253BC48200907D78 /* XGPokeSpots.swift in Sources */,
 				1C16CDE5253BC49900907D78 /* XGTMs.swift in Sources */,
-				1C0D8BDA27146ED200BC7D7F /* XGShadowAggression.swift in Sources */,
 				1C56F79E260D2D2F00CF1DEE /* NatureTable.swift in Sources */,
 				1C16CD43253BC46600907D78 /* XGMoveCategory.swift in Sources */,
 				1C16D129253BC8A900907D78 /* XGTrainer.swift in Sources */,
@@ -14907,6 +14907,7 @@
 				B2FB748F1FC0522900B6B2AE /* XGFileTypes.swift in Sources */,
 				1C7169E62602D4C8000F1456 /* BattleBingoTable.swift in Sources */,
 				B2F5EC511F49A1FE0075C6D2 /* XGScriptOps.swift in Sources */,
+				1CA88804272789F200C1A08C /* XGShadowAggression.swift in Sources */,
 				B2F5ECC61F49A1FF0075C6D2 /* XGStringTable.swift in Sources */,
 				B2F5ECD51F49A1FF0075C6D2 /* XGTradeShadowPokemon.swift in Sources */,
 				B2F5ECE71F49A1FF0075C6D2 /* XGAssemblyCode.swift in Sources */,
@@ -14915,7 +14916,6 @@
 				B2F5ECAE1F49A1FF0075C6D2 /* XGPokemonStats.swift in Sources */,
 				1C6AB46C27061BAE0069D209 /* XGThreadManager.swift in Sources */,
 				1C56F9DA261050B700CF1DEE /* XGEggGroups.swift in Sources */,
-				1C0D8BD927146ED200BC7D7F /* XGShadowAggression.swift in Sources */,
 				B29E55FC1FA4DA40006BE597 /* XGBattleField.swift in Sources */,
 				1C54184D25B49C9500CCE8E0 /* XGMapRel.swift in Sources */,
 				1C0D8B972713607D00BC7D7F /* Discord.swift in Sources */,
@@ -15012,6 +15012,7 @@
 				B2F5EC8F1F49A1FF0075C6D2 /* XGISO.swift in Sources */,
 				1C56F79F260D2D2F00CF1DEE /* NatureTable.swift in Sources */,
 				B29E56011FA63836006BE597 /* XGInteractionPoint.swift in Sources */,
+				1CA88806272789F200C1A08C /* XGShadowAggression.swift in Sources */,
 				B2F5EC261F49A1FE0075C6D2 /* XGFontColours.swift in Sources */,
 				B2D1DF4B1F6870EE0023A876 /* GoDTextureImporter.swift in Sources */,
 				B2F5EC561F49A1FE0075C6D2 /* XGShinyValues.swift in Sources */,
@@ -15117,7 +15118,6 @@
 				B2F5EC6E1F49A1FF0075C6D2 /* XGWeather.swift in Sources */,
 				B2F5EC171F49A1FE0075C6D2 /* XGDecks.swift in Sources */,
 				B2F5F8A41F49CD050075C6D2 /* GoDTableViewDelegate.swift in Sources */,
-				1C0D8BDB27146ED200BC7D7F /* XGShadowAggression.swift in Sources */,
 				B23DD76D20BEE5E100348D26 /* XDSExpr.swift in Sources */,
 				1CC362C024BFDC53005D7B4A /* GoDEnumerablePopUpButtons.swift in Sources */,
 				1C71694025FF0DF8000F1456 /* GoDWindowController.swift in Sources */,
