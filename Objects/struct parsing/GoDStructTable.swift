@@ -355,7 +355,8 @@ extension GoDStructTableFormattable {
 		}
 		#endif
 
-		let csvLineCount = csvFile.text.split(separator: "\n").count - 1 // don't count the header row
+		let lines = csvFile.text.replacingOccurrences(of: "\r", with: "").split(separator: "\n")
+		let csvLineCount = lines.count - 1 // don't count the header row
 		guard csvLineCount > 0 else {
 			return
 		}

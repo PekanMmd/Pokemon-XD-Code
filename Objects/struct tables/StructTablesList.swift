@@ -156,7 +156,7 @@ var deckAIStructList: [GoDStructTableFormattable] {
 }
 
 var saveFileStructList: [GoDStructTableFormattable] {
-	guard game == .Colosseum else { return  [] }
+//	guard game == .Colosseum else { return  [] }
 	XGFolders.SaveFiles.files.forEach { (file) in
 		if file.fileType == .gci {
 			if !XGFolders.SaveFiles.contains(.nameAndFolder(file.fileName + ".raw", XGFolders.SaveFiles)) {
@@ -169,6 +169,9 @@ var saveFileStructList: [GoDStructTableFormattable] {
 		if let saveData = XGSaveManager(file: file, saveType: .decryptedSaveSlot).latestSaveSlot {
 			tables.append(saveData.partyPokemonTable())
 			tables += saveData.pcBoxPokemonTables()
+			#if GAME_XD
+			tables += saveData.purifyChamberxPokemonTables()
+			#endif
 			tables.append(saveData.pcItemStorageTable())
 		}
 	}

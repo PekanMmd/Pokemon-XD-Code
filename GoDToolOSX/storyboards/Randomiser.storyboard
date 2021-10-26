@@ -10,54 +10,54 @@
         <scene sceneID="RLC-BP-HlD">
             <objects>
                 <viewController title="Randomiser" id="bib-3E-KV4" customClass="GoDRandomiserViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" misplaced="YES" id="XxS-rD-gwb">
-                        <rect key="frame" x="0.0" y="0.0" width="311" height="419"/>
+                    <view key="view" id="XxS-rD-gwb">
+                        <rect key="frame" x="0.0" y="0.0" width="311" height="413"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="m8a-C3-nFY">
-                                <rect key="frame" x="8" y="365" width="134" height="18"/>
+                                <rect key="frame" x="8" y="366" width="134" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Species" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="0bR-q3-Ucq">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DRo-Dc-sIh">
-                                <rect key="frame" x="158" y="319" width="134" height="18"/>
+                                <rect key="frame" x="158" y="320" width="134" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Abilities" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Hdx-E2-Y2q">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dl1-qm-izc">
-                                <rect key="frame" x="8" y="273" width="117" height="18"/>
+                                <rect key="frame" x="8" y="274" width="117" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Stats" bezelStyle="regularSquare" imagePosition="left" inset="2" id="MXW-O4-NOc">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w7a-JO-od0">
-                                <rect key="frame" x="8" y="181" width="100" height="18"/>
+                                <rect key="frame" x="8" y="182" width="100" height="18"/>
                                 <buttonCell key="cell" type="check" title="Battle Bingo" bezelStyle="regularSquare" imagePosition="left" inset="2" id="mwJ-Il-9I1">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5Jq-Yi-2jS">
-                                <rect key="frame" x="158" y="273" width="148" height="18"/>
+                                <rect key="frame" x="158" y="274" width="148" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Evolutions" bezelStyle="regularSquare" imagePosition="left" inset="2" id="TKt-D1-FON">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ggv-x8-P7o">
-                                <rect key="frame" x="8" y="227" width="99" height="18"/>
+                                <rect key="frame" x="8" y="228" width="99" height="18"/>
                                 <buttonCell key="cell" type="check" title="Move Types" bezelStyle="regularSquare" imagePosition="left" inset="2" id="TNM-ZD-7bp">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IdL-GV-3WZ">
-                                <rect key="frame" x="158" y="227" width="89" height="18"/>
+                                <rect key="frame" x="158" y="228" width="89" height="18"/>
                                 <buttonCell key="cell" type="check" title="TM Moves" bezelStyle="regularSquare" imagePosition="left" inset="2" id="a9B-av-A4g">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -77,43 +77,42 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Meo-I9-p3a">
-                                <rect key="frame" x="8" y="319" width="122" height="18"/>
+                                <rect key="frame" x="8" y="320" width="122" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Types" bezelStyle="regularSquare" imagePosition="left" inset="2" id="ilM-ET-TiP">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HAm-s3-kBK">
-                                <rect key="frame" x="8" y="115" width="232" height="18"/>
+                                <rect key="frame" x="8" y="116" width="232" height="18"/>
                                 <buttonCell key="cell" type="check" title="Only randomise Shadow Pokemon" bezelStyle="regularSquare" imagePosition="left" inset="2" id="cxt-UX-QPk">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="C41-co-vFw">
-                                <rect key="frame" x="158" y="365" width="125" height="18"/>
+                                <rect key="frame" x="158" y="366" width="125" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Moves" bezelStyle="regularSquare" imagePosition="left" inset="2" id="imd-qM-0kN">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bt0-6S-ONl">
-                                <rect key="frame" x="158" y="181" width="93" height="18"/>
+                                <rect key="frame" x="158" y="182" width="93" height="18"/>
                                 <buttonCell key="cell" type="check" title="Item Boxes" bezelStyle="regularSquare" imagePosition="left" inset="2" id="VEZ-f8-8nH">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zrR-sC-KC2">
-                                <rect key="frame" x="8" y="89" width="264" height="18"/>
+                                <rect key="frame" x="8" y="90" width="264" height="18"/>
                                 <buttonCell key="cell" type="check" title="Randomise Pokemon Using Similar BST" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Tb0-TS-Eci">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vwE-9L-6yi">
-                                <rect key="frame" x="8" y="59" width="225" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vwE-9L-6yi">
+                                <rect key="frame" x="8" y="64" width="225" height="18"/>
                                 <buttonCell key="cell" type="check" title="Remove Item or Trade Evolutions" bezelStyle="regularSquare" imagePosition="left" inset="2" id="khx-qs-INt">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -131,6 +130,7 @@
                             <constraint firstItem="m8a-C3-nFY" firstAttribute="top" secondItem="XxS-rD-gwb" secondAttribute="top" constant="30" id="IJg-Xg-A4e"/>
                             <constraint firstItem="HAm-s3-kBK" firstAttribute="top" secondItem="w7a-JO-od0" secondAttribute="bottom" constant="50" id="Idt-rT-fEt"/>
                             <constraint firstItem="Bt0-6S-ONl" firstAttribute="bottom" secondItem="w7a-JO-od0" secondAttribute="bottom" id="Iq3-NQ-GDm"/>
+                            <constraint firstItem="vwE-9L-6yi" firstAttribute="top" secondItem="zrR-sC-KC2" secondAttribute="bottom" constant="10" id="KAs-Ii-SUo"/>
                             <constraint firstItem="IdL-GV-3WZ" firstAttribute="leading" secondItem="C41-co-vFw" secondAttribute="leading" id="Lrk-IZ-j4u"/>
                             <constraint firstItem="dl1-qm-izc" firstAttribute="top" secondItem="Meo-I9-p3a" secondAttribute="bottom" constant="30" id="N9T-yC-5Vb"/>
                             <constraint firstItem="zrR-sC-KC2" firstAttribute="top" secondItem="HAm-s3-kBK" secondAttribute="bottom" constant="10" id="Nyk-bS-Ftm"/>
@@ -143,10 +143,10 @@
                             <constraint firstItem="5Jq-Yi-2jS" firstAttribute="centerY" secondItem="dl1-qm-izc" secondAttribute="centerY" id="dyS-Ee-nVq"/>
                             <constraint firstItem="m8a-C3-nFY" firstAttribute="top" secondItem="XxS-rD-gwb" secondAttribute="top" constant="30" id="g1O-sa-95D"/>
                             <constraint firstItem="HAm-s3-kBK" firstAttribute="leading" secondItem="w7a-JO-od0" secondAttribute="leading" id="gHT-tC-h3d"/>
+                            <constraint firstItem="bOX-gC-QF6" firstAttribute="top" secondItem="vwE-9L-6yi" secondAttribute="bottom" constant="25" id="kO2-8O-jtj"/>
                             <constraint firstItem="DRo-Dc-sIh" firstAttribute="centerY" secondItem="Meo-I9-p3a" secondAttribute="centerY" id="mEU-Fb-0TP"/>
                             <constraint firstItem="Bt0-6S-ONl" firstAttribute="leading" secondItem="IdL-GV-3WZ" secondAttribute="leading" id="qnv-ZT-Nx0"/>
                             <constraint firstItem="w7a-JO-od0" firstAttribute="leading" secondItem="m8a-C3-nFY" secondAttribute="leading" id="r9g-tD-4gR"/>
-                            <constraint firstItem="bOX-gC-QF6" firstAttribute="top" secondItem="zrR-sC-KC2" secondAttribute="bottom" constant="50" id="rDF-JQ-qxo"/>
                             <constraint firstItem="zrR-sC-KC2" firstAttribute="leading" secondItem="HAm-s3-kBK" secondAttribute="leading" id="tV3-2V-2R1"/>
                             <constraint firstItem="Meo-I9-p3a" firstAttribute="top" secondItem="m8a-C3-nFY" secondAttribute="bottom" constant="30" id="twO-8T-fug"/>
                             <constraint firstItem="Meo-I9-p3a" firstAttribute="leading" secondItem="m8a-C3-nFY" secondAttribute="leading" id="uAD-8p-Lz4"/>

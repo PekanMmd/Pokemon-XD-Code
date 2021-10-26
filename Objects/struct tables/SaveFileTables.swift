@@ -10,6 +10,9 @@ import Foundation
 class SaveFilePokemonStructTable: GoDStructTableFormattable {
 	enum PokemonStorage {
 		case party, pcBox(index: Int)
+		#if GAME_XD
+		case purifyChamber(index: Int)
+		#endif
 	}
 
 	var file: XGFiles
@@ -25,12 +28,21 @@ class SaveFilePokemonStructTable: GoDStructTableFormattable {
 			return { (_) -> Int in
 				return kSaveFilePCBoxesStartOffset + kSizeOfBoxHeader + (index * ((pokemonStruct.length * kNumberOfPokemonPerPCBox) + kSizeOfBoxHeader))
 			}
+		#if GAME_XD
+		case .purifyChamber(let index):
+			return { (_) -> Int in
+				return kSaveFilePurifyChamberStartOffset + (index * kSizeOfPurifyChamber)
+			}
+		#endif
 		}
 	}
 	var numberOfEntriesInFile: ((XGFiles) -> Int) {
 		switch storage {
 		case .party: return {(XGFiles) -> Int in return kNumberOfPokemonPerParty }
 		case .pcBox: return {(XGFiles) -> Int in return kNumberOfPokemonPerPCBox }
+		#if GAME_XD
+		case .purifyChamber: return {(XGFiles) -> Int in return kNumberOfPurifyChamberPokemon }
+		#endif
 		}
 	}
 	var nameForEntry: ((Int, GoDStructData) -> String?)?
@@ -48,7 +60,10 @@ class SaveFilePokemonStructTable: GoDStructTableFormattable {
 			}
 			switch storage {
 			case .party: return "Party Pokemon \(index)"
-			case .pcBox(let boxIndex):return "PC Box \(boxIndex + 1) Pokemon \(index)"
+			case .pcBox(let boxIndex): return "PC Box \(boxIndex + 1) Pokemon \(index)"
+			#if GAME_XD
+			case .purifyChamber(let setIndex): return "Purify Chamber Set \(setIndex + 1) Pokemon \(index)"
+			#endif
 			}
 		}
 
@@ -56,6 +71,9 @@ class SaveFilePokemonStructTable: GoDStructTableFormattable {
 		switch storage {
 		case .party: structName = "Party Pokemon"
 		case .pcBox(let index): structName = "PC Box \(index + 1) Pokemon"
+		#if GAME_XD
+		case .purifyChamber(let setIndex): structName = "Purify Chamber Set \(setIndex + 1) Pokemon"
+		#endif
 		}
 
 		properties = GoDStruct(name: structName, format: pokemonStruct.format)
@@ -208,8 +226,6 @@ let pokemonStruct = GoDStruct(name: "Pokemon", format: [
 	.word(name: "Experience", description: "", type: .uint),
 	.short(name: "Original Trainer SID", description: "", type: .uintHex),
 	.short(name: "Original Trainer TID", description: "", type: .uintHex),
-	.short(name: "PID First Half", description: "", type: .uintHex),
-	.byte(name: "PID Third Byte", description: "", type: .uintHex),
 	.bitMask(name: "PID Determinant Values", description: "", length: .word, values: [
 		(name: "PID First 3 bytes", type: .uintHex, numberOfBits: 24, firstBitIndexLittleEndian: 8, mod: nil, div: nil, scale: nil),
 		(name: "PID Gender Determinant", type: .uintHex, numberOfBits: 8, firstBitIndexLittleEndian: 0, mod: nil, div: 25, scale: nil),

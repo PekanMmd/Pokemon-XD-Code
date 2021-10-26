@@ -139,10 +139,12 @@ class GoDShellManager {
 		return nil
 	}
 
+	#if os(OSX)
 	@discardableResult
 	static func runAppleScript(_ script: String) -> String? {
 		let escapedScript = script.replacingOccurrences(of: "\n", with: " ")
 		return run(.appleScript, args: ["-e", escapedScript])
 	}
+	#endif
 	
 }

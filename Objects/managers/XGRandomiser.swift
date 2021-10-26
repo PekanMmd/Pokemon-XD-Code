@@ -536,6 +536,7 @@ class XGRandomiser: NSObject {
 			}
 			treasure.quantity = Int.random(in: 1 ... 3)
 			treasure.itemID = XGItems.random().index
+			treasure.save()
 		}
 	}
 	#endif

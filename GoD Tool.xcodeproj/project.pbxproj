@@ -537,13 +537,10 @@
 		1C6AB4E8270B89E60069D209 /* EcardCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C25E5DB26D3B84200F050DC /* EcardCoder.swift */; };
 		1C6AB4F2270B89E60069D209 /* EcardCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C25E5DB26D3B84200F050DC /* EcardCoder.swift */; };
 		1C6AB511270E2DA20069D209 /* GoDNetworkingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6AB510270E2DA20069D209 /* GoDNetworkingManager.swift */; };
-		1C6AB512270E2DA20069D209 /* GoDNetworkingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6AB510270E2DA20069D209 /* GoDNetworkingManager.swift */; };
 		1C6AB513270E2DA20069D209 /* GoDNetworkingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6AB510270E2DA20069D209 /* GoDNetworkingManager.swift */; };
 		1C6AB514270E2DA30069D209 /* GoDNetworkingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6AB510270E2DA20069D209 /* GoDNetworkingManager.swift */; };
-		1C6AB515270E2DA30069D209 /* GoDNetworkingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6AB510270E2DA20069D209 /* GoDNetworkingManager.swift */; };
 		1C6AB516270E2DA30069D209 /* GoDNetworkingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6AB510270E2DA20069D209 /* GoDNetworkingManager.swift */; };
 		1C6AB517270E2DA30069D209 /* GoDNetworkingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6AB510270E2DA20069D209 /* GoDNetworkingManager.swift */; };
-		1C6AB518270E2DA30069D209 /* GoDNetworkingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6AB510270E2DA20069D209 /* GoDNetworkingManager.swift */; };
 		1C6AB519270E2DA30069D209 /* GoDNetworkingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6AB510270E2DA20069D209 /* GoDNetworkingManager.swift */; };
 		1C71684F25DF31A3000F1456 /* GoDStructTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71684E25DF31A3000F1456 /* GoDStructTable.swift */; };
 		1C71685025DF31A3000F1456 /* GoDStructTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C71684E25DF31A3000F1456 /* GoDStructTable.swift */; };
@@ -687,25 +684,19 @@
 		1C90B5322618593A00C5BEFF /* GoDOpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FF6D2E20BCB50F00A84637 /* GoDOpenGL.swift */; };
 		1C90B5452619304200C5BEFF /* GoDStringViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B247ED502180D0350034CAF5 /* GoDStringViewController.swift */; };
 		1C9154662701C52C004BA0E6 /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
-		1C9154672701C52C004BA0E6 /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
 		1C9154682701C52C004BA0E6 /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
 		1C9154692701C52C004BA0E6 /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
-		1C91546A2701C52C004BA0E6 /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
 		1C91546B2701C52C004BA0E6 /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
 		1C91546C2701C52C004BA0E6 /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
-		1C91546D2701C52C004BA0E6 /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
 		1C91546E2701C52C004BA0E6 /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
 		1C9154A52701FC88004BA0E6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B2F5EBB01F49A1980075C6D2 /* Info.plist */; };
 		1C9154AF2701FC8A004BA0E6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B208E39D20C4CA3A00D298BF /* Info.plist */; };
 		1C9154B92701FC8D004BA0E6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B20EEA3021E9203A00E87D01 /* Info.plist */; };
 		1C9154C427022B2E004BA0E6 /* DolphinProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154C327022B2E004BA0E6 /* DolphinProcess.swift */; };
-		1C9154C527022B2E004BA0E6 /* DolphinProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154C327022B2E004BA0E6 /* DolphinProcess.swift */; };
 		1C9154C627022B2E004BA0E6 /* DolphinProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154C327022B2E004BA0E6 /* DolphinProcess.swift */; };
 		1C9154C727022B2E004BA0E6 /* DolphinProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154C327022B2E004BA0E6 /* DolphinProcess.swift */; };
-		1C9154C827022B2E004BA0E6 /* DolphinProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154C327022B2E004BA0E6 /* DolphinProcess.swift */; };
 		1C9154C927022B2E004BA0E6 /* DolphinProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154C327022B2E004BA0E6 /* DolphinProcess.swift */; };
 		1C9154CA27022B2E004BA0E6 /* DolphinProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154C327022B2E004BA0E6 /* DolphinProcess.swift */; };
-		1C9154CB27022B2E004BA0E6 /* DolphinProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154C327022B2E004BA0E6 /* DolphinProcess.swift */; };
 		1C9154CC27022B2E004BA0E6 /* DolphinProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154C327022B2E004BA0E6 /* DolphinProcess.swift */; };
 		1C9154D727026FCA004BA0E6 /* XDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154D627026FCA004BA0E6 /* XDProcess.swift */; };
 		1C9154D927026FCA004BA0E6 /* XDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154D627026FCA004BA0E6 /* XDProcess.swift */; };
@@ -789,6 +780,9 @@
 		1CA3E607262467D200E5089A /* MirorBDataTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E606262467D200E5089A /* MirorBDataTable.swift */; };
 		1CA3E608262467D200E5089A /* MirorBDataTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E606262467D200E5089A /* MirorBDataTable.swift */; };
 		1CA3E609262467D200E5089A /* MirorBDataTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3E606262467D200E5089A /* MirorBDataTable.swift */; };
+		1CA887EE2727822100C1A08C /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
+		1CA887F82727822200C1A08C /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
+		1CA887F92727822300C1A08C /* GoDProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9154652701C52C004BA0E6 /* GoDProcess.swift */; };
 		1CB33AA522B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
 		1CB33AA722B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
 		1CB33AA822B7906600F81C29 /* EnumerableDocumentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB33AA422B7906600F81C29 /* EnumerableDocumentable.swift */; };
@@ -934,13 +928,10 @@
 		1CD2B1A226E5402F00A89D25 /* GoDHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F88E1F49CD050075C6D2 /* GoDHomeViewController.swift */; };
 		1CD2B1A326E5403000A89D25 /* GoDHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F5F88E1F49CD050075C6D2 /* GoDHomeViewController.swift */; };
 		1CD300772704D438003CCAD2 /* DolphinSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD300762704D438003CCAD2 /* DolphinSettings.swift */; };
-		1CD300782704D438003CCAD2 /* DolphinSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD300762704D438003CCAD2 /* DolphinSettings.swift */; };
 		1CD300792704D438003CCAD2 /* DolphinSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD300762704D438003CCAD2 /* DolphinSettings.swift */; };
 		1CD3007A2704D438003CCAD2 /* DolphinSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD300762704D438003CCAD2 /* DolphinSettings.swift */; };
-		1CD3007B2704D438003CCAD2 /* DolphinSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD300762704D438003CCAD2 /* DolphinSettings.swift */; };
 		1CD3007C2704D438003CCAD2 /* DolphinSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD300762704D438003CCAD2 /* DolphinSettings.swift */; };
 		1CD3007D2704D438003CCAD2 /* DolphinSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD300762704D438003CCAD2 /* DolphinSettings.swift */; };
-		1CD3007E2704D438003CCAD2 /* DolphinSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD300762704D438003CCAD2 /* DolphinSettings.swift */; };
 		1CD3007F2704D438003CCAD2 /* DolphinSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD300762704D438003CCAD2 /* DolphinSettings.swift */; };
 		1CD300972705262E003CCAD2 /* XDBreakPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD300962705262E003CCAD2 /* XDBreakPoints.swift */; };
 		1CD300992705262E003CCAD2 /* XDBreakPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD300962705262E003CCAD2 /* XDBreakPoints.swift */; };
@@ -13643,7 +13634,6 @@
 				1C16CD7D253BC47600907D78 /* XGNatures.swift in Sources */,
 				1C16CFBA253BC59200907D78 /* XGPNGBlock.swift in Sources */,
 				1CA3E5B12623DB5A00E5089A /* XGDayCareStatus.swift in Sources */,
-				1CD300782704D438003CCAD2 /* DolphinSettings.swift in Sources */,
 				1C16CDD2253BC49300907D78 /* XGStatusEffects.swift in Sources */,
 				1C16CF77253BC56C00907D78 /* GoDShellManager.swift in Sources */,
 				1C56F7F0260D7EBE00CF1DEE /* TexturesTable.swift in Sources */,
@@ -13654,7 +13644,6 @@
 				1C16CC9C253BC41F00907D78 /* XGBattleBingoPanel.swift in Sources */,
 				1C16CF94253BC57B00907D78 /* XGScriptOps.swift in Sources */,
 				1C16CD9A253BC48500907D78 /* XGResources.swift in Sources */,
-				1C9154C527022B2E004BA0E6 /* DolphinProcess.swift in Sources */,
 				1C16D0FA253BC89A00907D78 /* XGRoom.swift in Sources */,
 				1C56F718260BF47100CF1DEE /* TreasureTable.swift in Sources */,
 				1C16D05F253BC86800907D78 /* XGBattleCD.swift in Sources */,
@@ -13705,7 +13694,6 @@
 				1C16D147253BC8B500907D78 /* XGTreasure.swift in Sources */,
 				1C12C27026CC009000501FB0 /* GoDFiltersManager.swift in Sources */,
 				1C16CE42253BC4C600907D78 /* XGCharacter.swift in Sources */,
-				1C9154672701C52C004BA0E6 /* GoDProcess.swift in Sources */,
 				1C16D0CA253BC88900907D78 /* XGMtBattlePokemon.swift in Sources */,
 				1C16CE01253BC4A400907D78 /* XGTrainerContoller.swift in Sources */,
 				1CE349EE27121E7A00B803FD /* GoDDesign.swift in Sources */,
@@ -13736,6 +13724,7 @@
 				1C16CEBB253BC51F00907D78 /* XGGSWTextures.swift in Sources */,
 				1C750FB225C3C3BE00EAB706 /* XGBattleModeRulesets.swift in Sources */,
 				1C16D128253BC8A700907D78 /* XGTradeShadowPokemon.swift in Sources */,
+				1CA887EE2727822100C1A08C /* GoDProcess.swift in Sources */,
 				1C16D0C8253BC88600907D78 /* XGMove.swift in Sources */,
 				1CEC206A26EA9FA200A886E9 /* XXH3-Bit128.swift in Sources */,
 				1C16CE56253BC4CF00907D78 /* XGLevelUpMove.swift in Sources */,
@@ -13759,7 +13748,6 @@
 				1C16D072253BC86E00907D78 /* XGCharacterModel.swift in Sources */,
 				1C16CE27253BC4AF00907D78 /* XGWeather.swift in Sources */,
 				1C16D068253BC86A00907D78 /* XGBattleField.swift in Sources */,
-				1C6AB512270E2DA20069D209 /* GoDNetworkingManager.swift in Sources */,
 				1C16CE1D253BC4AC00907D78 /* XGUnicodeCharacters.swift in Sources */,
 				1C56F9F726105EE300CF1DEE /* PKXWZXTables.swift in Sources */,
 				1C16CCCD253BC43200907D78 /* XGEffectivenessValues.swift in Sources */,
@@ -13859,6 +13847,7 @@
 				1C4E1613253E33D200EA318B /* XGCollisionData.swift in Sources */,
 				1CFE749E2616A9170005BDE8 /* DATNodes.swift in Sources */,
 				1CA3E577262384EA00E5089A /* SaveFileTables.swift in Sources */,
+				1CA887F82727822200C1A08C /* GoDProcess.swift in Sources */,
 				1C16CF64253BC56600907D78 /* XGStringManager.swift in Sources */,
 				1C16D15A253BC8BB00907D78 /* CMType.swift in Sources */,
 				1C16D0F0253BC89500907D78 /* CMPokemonStats.swift in Sources */,
@@ -13876,7 +13865,6 @@
 				1C16CFA4253BC58200907D78 /* CMScriptValueTypes.swift in Sources */,
 				1C56FA342610801100CF1DEE /* XGBattleStyles.swift in Sources */,
 				1C16D0BF253BC88400907D78 /* CMItem.swift in Sources */,
-				1C6AB515270E2DA30069D209 /* GoDNetworkingManager.swift in Sources */,
 				1C16CC25253BC3D600907D78 /* ColosseumExtensions.swift in Sources */,
 				1C6AB46927061BA90069D209 /* DummyThreadManager.swift in Sources */,
 				1C16D08F253BC87700907D78 /* XGDoor.swift in Sources */,
@@ -13893,7 +13881,6 @@
 				1C16CEA9253BC51500907D78 /* XGFsys.swift in Sources */,
 				1C56F944260FE20800CF1DEE /* EncodableTableTypes.swift in Sources */,
 				1C16D04D253BC85D00907D78 /* CMBattle.swift in Sources */,
-				1CD3007B2704D438003CCAD2 /* DolphinSettings.swift in Sources */,
 				1C716A2526039D33000F1456 /* CommandLineArgs.swift in Sources */,
 				1C16CD86253BC47700907D78 /* XGNatures.swift in Sources */,
 				1C16CEEA253BC53D00907D78 /* XGMutableData.swift in Sources */,
@@ -13917,7 +13904,6 @@
 				1CA3E5892623BAEF00E5089A /* GamesAndLangauages.swift in Sources */,
 				1C16D0FB253BC89B00907D78 /* XGRoom.swift in Sources */,
 				1C16D132253BC8AB00907D78 /* CMTrainer.swift in Sources */,
-				1C91546A2701C52C004BA0E6 /* GoDProcess.swift in Sources */,
 				1C75109D25CCAC9100EAB706 /* GoDDataTableEntry.swift in Sources */,
 				1C16CF80253BC56D00907D78 /* GoDShellManager.swift in Sources */,
 				1C56F971261022B300CF1DEE /* ItemsTable.swift in Sources */,
@@ -13925,7 +13911,6 @@
 				1C16CB21253B950C00907D78 /* XGISO.swift in Sources */,
 				1C16CDEE253BC49C00907D78 /* CMTMs.swift in Sources */,
 				1C8A16AC26DED595009ED90D /* ASMScriptManager.swift in Sources */,
-				1C9154C827022B2E004BA0E6 /* DolphinProcess.swift in Sources */,
 				1C71A52E266FFECF00034154 /* CMSFlags.swift in Sources */,
 				1C16CFA6253BC58200907D78 /* CMScriptOps.swift in Sources */,
 				1C16CD1D253BC45800907D78 /* XGGenders.swift in Sources */,
@@ -14015,6 +14000,7 @@
 				1CCFFF82255501E50082BFE2 /* PBRPokemonStats.swift in Sources */,
 				1CCFFF5E255501BE0082BFE2 /* PBRUnicodeCharacters.swift in Sources */,
 				1CCFFF5D255501BE0082BFE2 /* PBRTrainerModels.swift in Sources */,
+				1CA887F92727822300C1A08C /* GoDProcess.swift in Sources */,
 				1C56F64D2606A96300CF1DEE /* ItemStatsTable.swift in Sources */,
 				1C20003325A9585400A7CF7D /* XGTHP.swift in Sources */,
 				1CCFFF89255501E50082BFE2 /* PBRTypeManager.swift in Sources */,
@@ -14047,7 +14033,6 @@
 				1CCFFF142555013C0082BFE2 /* GoDShellManager.swift in Sources */,
 				1CCFFF81255501E50082BFE2 /* PBRPatcher.swift in Sources */,
 				1CCFFE7D255500030082BFE2 /* GoDTextureFormats.swift in Sources */,
-				1C6AB518270E2DA30069D209 /* GoDNetworkingManager.swift in Sources */,
 				1C12C27626CC009000501FB0 /* GoDFiltersManager.swift in Sources */,
 				1CCFFF6A255501BE0082BFE2 /* PBRPokemon.swift in Sources */,
 				1C7169842602AF3A000F1456 /* GoDStruct.swift in Sources */,
@@ -14061,7 +14046,6 @@
 				1C8A16AF26DED595009ED90D /* ASMScriptManager.swift in Sources */,
 				1CEC209726EAA30B00A886E9 /* HashExtensions.swift in Sources */,
 				1CCFFE872555000E0082BFE2 /* XGWeather.swift in Sources */,
-				1C91546D2701C52C004BA0E6 /* GoDProcess.swift in Sources */,
 				1C6AB46B27061BAB0069D209 /* DummyThreadManager.swift in Sources */,
 				1CCFFF7F255501E50082BFE2 /* PBRScriptCompiler.swift in Sources */,
 				1CCFFE372554FFD40082BFE2 /* XGEvolutionConditionType.swift in Sources */,
@@ -14083,7 +14067,6 @@
 				1C12C3CB25C245610062FA65 /* GoDImageExtensions.swift in Sources */,
 				1CCFFF73255501BE0082BFE2 /* PBRMoveTargets.swift in Sources */,
 				1CCFFF84255501E50082BFE2 /* PBRItem.swift in Sources */,
-				1CD3007E2704D438003CCAD2 /* DolphinSettings.swift in Sources */,
 				1CCFFE4B2554FFDF0082BFE2 /* XGGenderRatios.swift in Sources */,
 				1CCFFF80255501E50082BFE2 /* PBRStringTable.swift in Sources */,
 				1CCFFF88255501E50082BFE2 /* PBRTextureContainingFormats.swift in Sources */,
@@ -14105,7 +14088,6 @@
 				1CCFFF72255501BE0082BFE2 /* PBRMoveEffectTypes.swift in Sources */,
 				1CCFFEEB2555011C0082BFE2 /* XGMutableData.swift in Sources */,
 				1CCFFF8A255501E50082BFE2 /* PBRScript.swift in Sources */,
-				1C9154CB27022B2E004BA0E6 /* DolphinProcess.swift in Sources */,
 				1CCFFF83255501E50082BFE2 /* GoDDataTable.swift in Sources */,
 				1CCFFF32255501750082BFE2 /* XGPNGBlock.swift in Sources */,
 				1CEC207026EA9FA200A886E9 /* XXH3-Bit128.swift in Sources */,

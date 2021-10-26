@@ -220,4 +220,20 @@ class GoDProcess {
 		return regions
 	}
 }
+#else
+class GoDProcess {
+	private let process: Process
+
+	var pid: Int32 {
+		return process.processIdentifier
+	}
+
+	var isRunning: Bool {
+		return process.isRunning
+	}
+
+	init(process: Process) {
+		self.process = process
+	}
+}
 #endif
