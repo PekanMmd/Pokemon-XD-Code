@@ -582,10 +582,18 @@ class GoDStructData: CustomStringConvertible {
 	}
 
 	func valueForPropertyWithName(_ name: String) -> GoDStructValues? {
+		func getPropertyName(_ property: GoDStructProperties) -> String {
+			switch property {
+			case .pointer(let property, _, _):
+				return getPropertyName(property)
+			default:
+				return property.name
+			}
+		}
 		return self.values.first { (value) -> Bool in
 			switch value.property {
 			case .pointer(let subProperty, _, _):
-				return subProperty.name.simplified == name.simplified
+				return getPropertyName(subProperty).simplified == name.simplified
 			default:
 				return value.property.name.simplified == name.simplified
 			}

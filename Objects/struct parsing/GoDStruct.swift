@@ -484,9 +484,43 @@ indirect enum GoDStructValues: CustomStringConvertible {
 			return rawValue as? T
 		case .subStruct(_, let data):
 			return data as? T
-		case .array(_, let values):
-			let mappedValues: [Any] = values.map { $0.value() }
-			return mappedValues as? T
+		case .array(let property, let values):
+			switch property.type {
+			case .array(let type):
+				switch type {
+				case .float:
+					let mappedValues: [Float] = values.map { $0.value() ?? 0 }
+					return mappedValues as? T
+				case .bool:
+					let mappedValues: [Bool] = values.map { $0.value() ?? false }
+					return mappedValues as? T
+				case .null:
+					return nil
+				case .any:
+					let mappedValues: [Any] = values.map { $0.value() ?? () }
+					return mappedValues as? T
+				case .string:
+					let mappedValues: [String] = values.map { $0.value() ?? "" }
+					return mappedValues as? T
+				case .vector:
+					let mappedValues: [Vector3] = values.map { $0.value() ?? Vector3() }
+					return mappedValues as? T
+				case .bitMask:
+					let mappedValues: [[Int]] = values.map { $0.value() ?? [] }
+					return mappedValues as? T
+				case .subStruct:
+					let mappedValues: [GoDStructData] = values.map { $0.value() ?? GoDStructData.null }
+					return mappedValues as? T
+				case .array:
+					assertionFailure("Nested array in struct tables not handled")
+					return nil
+				default:
+					let mappedValues: [Int] = values.map { $0.value() ?? 0 }
+					return mappedValues as? T
+				}
+			default:
+				return nil
+			}
 		case .bitArray(let properties, let rawValues):
 			if case .bitArray(_, _, let bitFieldNames) = properties, bitFieldNames.count == rawValues.count {
 				var bitFieldsDict = [String: Bool]()
