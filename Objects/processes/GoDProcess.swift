@@ -12,12 +12,13 @@ import Darwin
 import glibc
 #endif
 
-#if !os(Windows)
 struct VMRegionInfo {
 	let virtualAddress: vm_address_t
 	let size: UInt
 }
 
+#warning("TODO: Investigate using glibc on Linux")
+#if canImport(Darwin)
 class GoDProcess {
 	private let process: Process
 
