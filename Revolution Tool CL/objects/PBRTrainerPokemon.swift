@@ -14,11 +14,11 @@ let kNumberOfPokemonMoves	= 0x04
 let kNumberOfEVs			= 0x06
 let kNumberOfIVs			= 0x06
 
-var allDeckFileIndexes: [Int] = {
+var allPokemonDeckFileIndexes: [Int] = {
 	Array(26 ... 33) + Array(35 ... 40) + Array(43 ... 44)
 }()
-var allDeckFiles: [XGFiles] = {
-	allDeckFileIndexes.map {
+var allPokemonDeckFiles: [XGFiles] = {
+	allPokemonDeckFileIndexes.map {
 		XGFiles.indexAndFsysName($0, "deck")
 	}
 }()
@@ -32,26 +32,25 @@ class XGTrainerPokemon {
 	
 	var id				= 0
 	var species			= XGPokemon.index(0)
-//	var happiness		= 0x0 can't find it. Not sure how this is determined
 	var nature			= XGNatures.hardy
 	var gender			= XGGenders.male
 	var IVs				= [Int]()
-	var EVTotal			= 0
-	var EVs				= [Int]() // a weighted distibution of total evs
+	var EVs				= [Int]()
 	var moves			= [XGMoves]()
 	var items			= [XGItems]() // pokemon can have up to 4 options for item
-	var abilityIndex	= 0x0
 	var pokeball		= XGItems.index(4)
-	var rank 			= 0 // colosseum rank
+	var rank 			= 0 // average colosseum rank it can be chosen in. Between one rank below and one rank above this value.
 	var formeID			= 0
 	var minLevel		= 0
 	var flags			= [Bool]()
-	
-	var unknown2		= 0
-	var unknown3		= 0
-	
+
+	var usesSecondAbility: Bool {
+		get { return flags[11] }
+		set { flags[11] = newValue }
+	}
+
 	var ability : XGAbilities {
-		return abilityIndex == 0 ? self.species.stats.ability1 : self.species.stats.ability2
+		return usesSecondAbility ? self.species.stats.ability2 : self.species.stats.ability1
 	}
 	
 	init(index: Int, file: XGFiles) {
@@ -66,7 +65,6 @@ class XGTrainerPokemon {
 		
 		id = data.getShort(0)
 		flags = data.getShort(2).bitArray(count: 16)
-		abilityIndex = flags[11] ? 1 : 0
 		
 		minLevel 		= data.getByte(5)
 		let speciesID  	= data.getShort(6)
@@ -89,13 +87,9 @@ class XGTrainerPokemon {
 		
 		
 		pokeball 		= .index(data.getByte(10))
-		gender		  	= XGGenders(rawValue: data.getByte(11))!
-		nature			= XGNatures(rawValue: data.getByte(12))!
+		gender		  	= XGGenders(rawValue: data.getByte(11)) ?? .genderless
+		nature			= XGNatures(rawValue: data.getByte(12)) ?? .hardy
 		rank 		 	= data.getByte(14)
-		unknown2		= data.getByte(15)
-		EVTotal			= data.getShort(22)
-		unknown3		= data.getByte(48)
-		
 		
 		for i in 0 ..< kNumberOfPokemonMoves {
 			let moveIndex = data.getShort(32 + (i * 2))
@@ -111,12 +105,22 @@ class XGTrainerPokemon {
 		for i in 0 ..< 4 {
 			items.append(.index(data.getShort(40 + (i * 2))))
 		}
-		for i in 0 ..< kNumberOfEVs {
+		for i in 0 ..< kNumberOfIVs {
 			IVs.append(data.getByte(16 + i))
 		}
+
+		let EVTotal	= data.getShort(22)
+		var EVProportionsTotal = 0
 		for i in 0 ..< kNumberOfEVs {
-			EVs.append(data.getByte(24 + i))
+			EVProportionsTotal += data.getByte(24 + i)
 		}
+		var EVsArray = [Int]()
+		for i in 0 ..< kNumberOfEVs {
+			let proportion = data.getByte(24 + i)
+			let weighted = (EVTotal * proportion) / max(EVProportionsTotal, 1)
+			EVsArray.append(weighted)
+		}
+		EVs = EVsArray
 	}
 	
 	
@@ -129,6 +133,8 @@ class XGTrainerPokemon {
 		}
 		
 		data.setShort(0, to: id)
+		data.setShort(2, to: flags.binaryBitsToInt())
+		data.setByte(5, to: minLevel)
 
 		data.setShort(6, to: species.index)
 		data.setByte(13, to: species.formeID)
@@ -136,7 +142,36 @@ class XGTrainerPokemon {
 		let stats = species.stats
 		data.setByte(8, to: stats.type1.index)
 		data.setByte(9, to: stats.type2.index)
+
+		data.setByte(10, to: pokeball.index)
+		data.setByte(11, to: gender.rawValue)
+		data.setByte(12, to: nature.rawValue)
+
+		data.setByte(14, to: rank)
+
+
+
 		data.save()
+
+		pokeball 		= .index(data.getByte(10))
+		gender		  	= XGGenders(rawValue: data.getByte(11))!
+		nature			= XGNatures(rawValue: data.getByte(12))!
+		rank 		 	= data.getByte(14)
+
+		for i in 0 ..< min(kNumberOfPokemonMoves, moves.count) {
+			data.setShort(32 + (i * 2), to: moves[i].index)
+		}
+		for i in 0 ..< min(4, items.count) {
+			data.setShort(40 + (i * 2), to: items[i].index)
+		}
+		for i in 0 ..< kNumberOfIVs {
+			data.setByte(16 + i, to: IVs[i])
+		}
+		let EVTotal	= EVs.sum
+		data.setShort(22, to: EVTotal)
+		for i in 0 ..< min(kNumberOfEVs, EVs.count) {
+			data.setByte(24 + i, to: EVs[i])
+		}
 	}
 }
 

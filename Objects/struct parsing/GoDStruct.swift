@@ -48,6 +48,11 @@ struct GoDStruct {
 		return .init(name: "Dummy", format: [])
 	}
 
+	init(name: String, format: [GoDStructProperties]) {
+		self.name = name
+		self.format = format
+	}
+
 	func dummyValues() -> GoDStructData {
 		return GoDStructData(properties: self, fileData: XGMutableData(length: length), startOffset: 0)
 	}
@@ -278,11 +283,11 @@ indirect enum GoDStructPropertyTypes {
 	case battleStyle, battleType, roomID, battleFieldID, deckID, trainerID
 	case colosseumRound, playerController, itemPocket, scriptFunction(scriptFile: XGFiles)
 	case battleBingoMysteryPanelType, contestAppeal, moveEffectType, eggGroup
-	case trainerClassID, trainerModelID, interactionMethod, scriptMarker
+	case trainerClassID, trainerModelID, skinTone, interactionMethod, scriptMarker
 	case languageID, gameID, regionID
 	case flagID
 	case indexOfEntryInTable(table: GoDStructTableFormattable, nameProperty: String?) // can use a single property as name or list whole struct if nil
-	case fsysID, fsysFileIdentifier(fsysName: String?), fsysFileType
+	case fsysID, fsysFileIdentifier(fsysName: String?), fsysFileIdentifierSearch(fsysNames: [String]), fsysFileType
 	case msgID(file: XGFiles?) // set file to nil to search through all available string tables
 	case pkxTrainerID, pkxPokemonID
 	case textureFormat, paletteFormat
@@ -703,14 +708,26 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				}
 				valueString += " (\(rawValue))"
 			case .natureID:
-				valueString = XGNatures(rawValue: rawValue)?.string ?? "Nature_\(rawValue)"
-				valueString += " (\(rawValue))"
+				if rawValue == -1 || rawValue == 0xFF {
+					valueString = "Random (\(rawValue))"
+				} else {
+					valueString = XGNatures(rawValue: rawValue)?.string ?? "Nature_\(rawValue)"
+					valueString += " (\(rawValue))"
+				}
 			case .genderID:
-				valueString = XGGenders(rawValue: rawValue)?.string ?? "Gender_\(rawValue)"
-				valueString += " (\(rawValue))"
+				if rawValue == -1 || rawValue == 0xFF {
+					valueString = "Random (\(rawValue))"
+				} else {
+					valueString = XGGenders(rawValue: rawValue)?.string ?? "Gender_\(rawValue)"
+					valueString += " (\(rawValue))"
+				}
 			case .typeID:
-				valueString = rawValue < kNumberOfTypes ? XGMoveTypes.index(rawValue).name : "Type_\(rawValue)"
-				valueString += " (\(rawValue))"
+				if rawValue == -1 || rawValue == 0xFF {
+					valueString = "Random (\(rawValue))"
+				} else {
+					valueString = rawValue < kNumberOfTypes ? XGMoveTypes.index(rawValue).name : "Type_\(rawValue)"
+					valueString += " (\(rawValue))"
+				}
 			case .moveCategory:
 				valueString = XGMoveCategories(rawValue: rawValue)?.string ?? "MoveCategory_\(rawValue)"
 				valueString += " (\(rawValue))"
@@ -746,6 +763,13 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				} else {
 					valueString = XGTrainerModels(rawValue: rawValue)?.name ?? "TrainerModel_\(rawValue)"
 				}
+				valueString += " (\(rawValue))"
+			case .skinTone:
+				#if !GAME_PBR
+				valueString = "SkinTone_\(rawValue)"
+				#else
+				valueString = PBRSkinTones(rawValue: rawValue)?.name ?? "SkinTone_\(rawValue)"
+				#endif
 				valueString += " (\(rawValue))"
 			case .genderRatio:
 				valueString = XGGenderRatios(rawValue: rawValue)?.string ?? "GenderRatio_\(rawValue)"
@@ -916,18 +940,44 @@ indirect enum GoDStructValues: CustomStringConvertible {
 					var fileFound = false
 					let mainIdentifier = rawValue & 0xFFFFFF00 // remove last byte so .rdat models can be found without their subIndex
 					valueString = ""
-					if let fsysFileName = fsysName, fsysFileName.length > 0, XGFiles.fsys(fsysFileName.removeFileExtensions()).exists {
-						let fsysFile = XGFiles.fsys(fsysFileName.removeFileExtensions()).fsysData
+					if let fsysFileName = fsysName, fsysFileName.length > 0, let fsysData = XGFiles.fsys(fsysFileName.removeFileExtensions()).data {
+						let fsysFile = XGFsys(data: fsysData)
 						if let fileIndex = fsysFile.indexForIdentifier(identifier: mainIdentifier) {
 							fileFound = true
 							valueString = fsysFile.fileName + " -> " + (fsysFile.fileNameForFileWithIndex(index: fileIndex) ?? "File_\(fileIndex)")
 						}
 					}
-					if !fileFound, let fsys = XGISO.current.getFSYSForIdentifier(id: rawValue.unsigned, filterNamesWith: fsysName),
-					   let fileIndex = fsys.indexForIdentifier(identifier: mainIdentifier) {
-						fileFound = true
-						valueString = fsys.fileName + " -> " + (fsys.fileNameForFileWithIndex(index: fileIndex) ?? "File_\(fileIndex)")
-					} else if !fileFound {
+					if !fileFound {
+						valueString = "FileIdentifier_\(rawValue.hexString())"
+					}
+				}
+				if valueString.length > 0 {
+					valueString += " "
+				}
+				valueString += "(\(rawValue.hexString()))"
+			case .fsysFileIdentifierSearch(let fsysNames):
+				for fsysName in fsysNames {
+					loadableFsys.addUnique(XGFiles.fsys(fsysName.removeFileExtensions()).path)
+				}
+				if rawValue == 0 {
+					valueString = "None"
+				} else {
+					var fileFound = false
+					let mainIdentifier = rawValue & 0xFFFFFF00 // remove last byte so .rdat models can be found without their subIndex
+					valueString = ""
+					for fsysFileName in fsysNames {
+						autoreleasepool {
+							if !fileFound, fsysFileName.length > 0 {
+								let fsysFile = XGFiles.fsys(fsysFileName.removeFileExtensions())
+								let file = fsysFile.fsysData
+								if let fileIndex = file.indexForIdentifier(identifier: mainIdentifier) {
+									fileFound = true
+									valueString = file.fileName + " -> " + (file.fileNameForFileWithIndex(index: fileIndex) ?? "File_\(fileIndex)")
+								}
+							}
+						}
+					}
+					if !fileFound {
 						valueString = "FileIdentifier_\(rawValue.hexString())"
 					}
 				}

@@ -11,10 +11,7 @@ let patches: [XGDolPatches] = [
 	.freeSpaceInDol,
 	.gen7CritRatios,
 	.disableRentalPassChecksums,
-	.disableBlurEffect,
-	.add1PokemonEntry,
-	.add10PokemonEntries,
-	.add100PokemonEntries
+	.disableBlurEffect
 ]
 
 enum XGDolPatches: Int {
@@ -310,6 +307,61 @@ class XGPatcher {
 		}
 	}
 
+	static func reimplementHardcodedNameIDsForPokemonEnum() {
+		guard region != .JP else {
+			if settings.verbose {
+				printg("Couldn't update hardcoded name ids for pokemon enum for region:", region.name)
+			}
+			return
+		}
+
+		let branchOffset: Int
+		let getNameForSpeciesFunction: Int
+		let statsPointerOffset: UInt32
+		switch region {
+		case .US:
+			branchOffset = 0x3e3478
+			getNameForSpeciesFunction = 0x396b0c
+			statsPointerOffset = 0x80625184
+		case .EU:
+			branchOffset = 0x3dfe48
+			getNameForSpeciesFunction = 0x391f94
+			statsPointerOffset = 0x8063CE44
+		case .JP:
+			branchOffset = -1
+			getNameForSpeciesFunction = -1
+			statsPointerOffset = 0
+		case .OtherGame:
+			branchOffset = -1
+			getNameForSpeciesFunction = -1
+			statsPointerOffset = 0
+		}
+
+		if let dol = XGFiles.dol.data {
+			guard dol.get4BytesAtOffset(branchOffset - kDolToRAMOffsetDifference) == 0x3864000a else {
+				if settings.verbose {
+					printg("Hardcoded name IDs for pokemon enum already updated")
+				}
+				return
+			}
+
+			guard let freeSpace = XGAssembly.ASMfreeSpaceRAMPointer() else { return }
+
+			let statsPointerInstructions = XGASM.loadImmediateShifted32bit(register: .r3, value: statsPointerOffset)
+
+			XGAssembly.replaceRamASM(RAMOffset: branchOffset, newASM: [.b(freeSpace)])
+			let assembly: ASM = [
+				statsPointerInstructions.0,
+				statsPointerInstructions.1,
+				.bl(getNameForSpeciesFunction)
+			]
+			XGAssembly.replaceRamASM(RAMOffset: freeSpace, newASM:
+					assembly.wrapped())
+			dol.save()
+		}
+
+	}
+
 	static func unlockSaveFile() {
 		guard environment == .Windows else {
 			printg("The save file decrypting tool is only available on Windows.")
@@ -501,6 +553,29 @@ class XGPatcher {
 		XGUtility.importFileToISO(menu_face.file, encode: false, save: false, importFiles: [])
 		XGUtility.importFileToISO(menu_pokemon.file, encode: false, save: false, importFiles: [])
 
+		// This tells the AI which moves to watch out for from the pokemon. However the official
+		// Implementation is bugged so all pokemon after deoxys are mapped to the wrong data.
+		// Since this doesn't seem to have a noticeable effect on gameplay we'll add dummy rows
+		// for the new pokemon which will also be incorrectly positioned.
+		if let aiExpectedMovesTable = GoDDataTable.fightAIExpectData.file.data {
+			let moveTableEndOffset = aiExpectedMovesTable.get4BytesAtOffset(0x20)
+			let lastSectionStartOFfset = aiExpectedMovesTable.get4BytesAtOffset(0x18)
+			let injectedByteCount = increase * 0x2c
+			let dummyEntry = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0x4F, 0, 0, 0, 0, 1, 0x9C, 0, 0xBC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0xD0]
+			for i in 0 ..< increase {
+				let offset = moveTableEndOffset + (i * 0x2c)
+				aiExpectedMovesTable.insertBytes(bytes: dummyEntry, atOffset: offset)
+			}
+			aiExpectedMovesTable.replace4BytesAtOffset(0x20, withBytes: moveTableEndOffset + injectedByteCount)
+			aiExpectedMovesTable.replace4BytesAtOffset(0x18, withBytes: lastSectionStartOFfset + injectedByteCount)
+			let entryCount = aiExpectedMovesTable.get4BytesAtOffset(0)
+			aiExpectedMovesTable.replace4BytesAtOffset(0, withBytes: entryCount + increase)
+			let tableSize = aiExpectedMovesTable.get4BytesAtOffset(0x14)
+			aiExpectedMovesTable.replace4BytesAtOffset(0x14, withBytes: tableSize + injectedByteCount)
+
+			aiExpectedMovesTable.save()
+		}
+
 		printg("Updating game data...")
 
 		// Egg and bad egg data are moved to still at the end of the stats table
@@ -557,19 +632,29 @@ class XGPatcher {
 		}
 
 		let RAMOffsets495: [Int]
+		let RAMOffsetsSubtract495: [Int]
 		switch region {
 		case .EU:
 			RAMOffsets495 = [
 				0x056c86, 0x05b7aa, 0x05ba86, 0x05bdbe, 0x05c142, 0x05c416, 0x05c6fa, 0x10244a, 0x102542, 0x3db2c6, 0x3db322
 			]
+			RAMOffsetsSubtract495 = [
+				0x1c6256
+			]
+			
 		case .US:
 			RAMOffsets495 = [
 				0x58ce6, 0x5d29a, 0x5d576, 0x5d8ae, 0x5dc32, 0x5df06, 0x5e1ea, 0x104dae, 0x104ea6, 0x3de8f6, 0x3de952,
 			]
+			RAMOffsetsSubtract495 = [
+				0x1cae92
+			]
 		case .JP:
 			RAMOffsets495 = []
+			RAMOffsetsSubtract495 = []
 		default:
 			RAMOffsets495 = []
+			RAMOffsetsSubtract495 = []
 		}
 
 		// 601 is used to reference the substitute doll.
@@ -612,6 +697,9 @@ class XGPatcher {
 			for offset in RAMOffsets495 {
 				dol.replace2BytesAtOffset(offset - kDolToRAMOffsetDifference, withBytes: newBadEggIndex)
 			}
+			for offset in RAMOffsetsSubtract495 {
+				dol.replace2BytesAtOffset(offset - kDolToRAMOffsetDifference, withBytes: 0x10000 - 495)
+			}
 //			for offset in RAMOffsets601 {
 //				dol.replace2BytesAtOffset(offset - kDolToRAMOffsetDifference, withBytes: newSubstituteIndex)
 //			}
@@ -619,7 +707,7 @@ class XGPatcher {
 			dol.replace2BytesAtOffset(firstDeoxysInstructionRAMOffset - kDolToRAMOffsetDifference, withBytes: newDeoxysShift)
 			dol.save()
 		}
-
+		XGPatcher.reimplementHardcodedNameIDsForPokemonEnum()
 		XGPatcher.overrideHardcodedPokemonCount(newCount: newBadEggIndex)
 		printg("done")
 	}

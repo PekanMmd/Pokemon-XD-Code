@@ -11,6 +11,7 @@ class GoDShellManager {
     enum Commands {
         case wit
 		case wimgt
+		case nedcenc
 		case gcitool
 		case gcitoolReplace
 		case pbrSaveTool
@@ -22,6 +23,7 @@ class GoDShellManager {
 			switch self {
 			case .wit: return .wit
 			case .wimgt: return .wimgt
+			case .nedcenc: return .nedcenc
 			case .gcitool: return .tool("gcitool")
 			case .gcitoolReplace: return .tool("gcitool_replace")
 			case .pbrSaveTool: return .tool("pbrsavetool")

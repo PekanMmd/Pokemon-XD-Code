@@ -38,6 +38,8 @@ class XGRelocationTable {
 
 	var header: GoDStructData!
 
+	var isValid = true
+
 	convenience init(file: XGFiles) {
 		self.init(data: file.data ?? XGMutableData())
 	}
@@ -114,6 +116,7 @@ class XGRelocationTable {
 
 		guard let sectionsInfo: [GoDStructData] = header.get("Sections Info") else {
 			printg("Couldn't parse sections info from rel data")
+			isValid = false
 			return
 		}
 
@@ -124,6 +127,7 @@ class XGRelocationTable {
 		sectionsInfo.forEachIndexed { (id, data) in
 			guard let dataEntry: [Int] = data.get("Entry"),
 				  let sectionLength: Int = data.get("Section Length") else {
+					  isValid = false
 				return
 			}
 			sections[id] = (sectionInfoOffset: firstSectionOffset + (id * sizeOfSectionInfo), sectionDataOffset: dataEntry[0], isTextSection: dataEntry[2].boolean, length: sectionLength)
@@ -139,6 +143,7 @@ class XGRelocationTable {
 		importsInfo.forEachIndexed { (index, data) in
 			guard let moduleID: Int = data.get("Module ID"),
 				  let moduleOffset: Int = data.get("File Offset") else {
+					  isValid = false
 				return
 			}
 			imports[moduleID] = (importPointerOffset: firstImportOffset + (index * sizeOfImportInfo) + 4, dataOffset: moduleOffset)
@@ -163,6 +168,7 @@ class XGRelocationTable {
 
 			guard let sectionStart = sections[sectionID]?.sectionDataOffset else {
 				printg("Invalid section in relocation command")
+				isValid = false
 				return
 			}
 			let fileOffset = sectionStart + symbolOffset
@@ -355,6 +361,7 @@ class XGRelocationTable {
 			} else if command == 202 {
 				guard let sectionStart = sections[sectionID]?.sectionDataOffset else {
 					assertionFailure("Invalid section in relocation command")
+					isValid = false
 					return
 				}
 

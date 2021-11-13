@@ -82,6 +82,10 @@ class GoDTableView: NSView {
 		tableView.action = #selector(didClickCell)
 		tableView.headerView = nil
 
+		if #available(macOS 11.0.0, *) {
+			tableView.style = .plain
+		}
+
 		scrollView.scrollsDynamically = true
 		scrollView.documentView = tableView
 		scrollView.hasVerticalScroller = true

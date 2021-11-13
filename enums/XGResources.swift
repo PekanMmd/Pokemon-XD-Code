@@ -122,6 +122,19 @@ enum XGResources {
 					}
 					return
 				}
+			} else if name == "nedclib" {
+				let folder = XGFolders.path(srcPath)
+				if !folder.exists {
+					let nedclib = XGFolders.Nedclib
+					let nedcenc = XGFiles.nedcenc
+					if !nedclib.exists {
+						nedclib.createDirectory()
+					}
+					if !nedcenc.exists {
+						XGResources.tool(nedcenc.fileName).copy(to: nedcenc)
+					}
+					return
+				}
 			}
 		default:
 			break

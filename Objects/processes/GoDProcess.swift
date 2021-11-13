@@ -33,7 +33,7 @@ class GoDProcess {
 		return process.isRunning
 	}
 
-	var threads: [thread_act_t] {
+	private var threads: [thread_act_t] {
 		guard let task = self.task else {
 			printg("Couldn't get threads for unloaded process")
 			return []
@@ -56,23 +56,6 @@ class GoDProcess {
 	init(process: Process) {
 		self.process = process
 		load()
-	}
-
-	private func load() {
-		// You may need to run the app with root permissions
-		var task: mach_port_name_t = 0
-		let kret = task_for_pid(mach_task_self_, pid, &task)
-		guard kret == KERN_SUCCESS else {
-			printg("Couldn't load process for pid: \(pid). You may need to run the app with root permissions.")
-			printg("K Return:", kret)
-			return
-		}
-		self.task = task
-
-		guard let baseAddress = GoDProcess.getBaseAddress(forTask: task) else {
-			return
-		}
-		self.baseAddress = baseAddress
 	}
 
 	func await() {
@@ -155,25 +138,6 @@ class GoDProcess {
 		return kret == KERN_SUCCESS
 	}
 
-	static func getBaseAddress(forTask task: mach_port_t) -> vm_address_t? {
-		let VM_REGION_BASIC_INFO_COUNT_64 = MemoryLayout<vm_region_basic_info_data_64_t>.size/4
-
-		var info: [Int32] = [Int32](repeating: 0, count: VM_REGION_BASIC_INFO_COUNT_64)
-		var size: mach_vm_size_t = 0
-
-		var object_name: mach_port_t = 0
-		var count: mach_msg_type_number_t = VM_REGION_BASIC_INFO_COUNT_64.unsigned
-		var address: mach_vm_address_t = 1
-
-		let kret = mach_vm_region(task, &address, &size, VM_REGION_BASIC_INFO, &info, &count, &object_name);
-		guard kret == KERN_SUCCESS else {
-			printg("Couldn't load base address for task: \(task). Make sure the application is runinng and the tool is running with root permissions.")
-			return nil
-		}
-
-		return UInt(address)
-	}
-
 	func getNextRegion(fromOffset offset: vm_address_t) -> VMRegionInfo? {
 		guard let task = self.task else {
 			printg("Couldn't scan virtual memory for unloaded process")
@@ -220,7 +184,44 @@ class GoDProcess {
 
 		return regions
 	}
+
+	private func load() {
+		// You may need to run the app with root permissions
+		var task: mach_port_name_t = 0
+		let kret = task_for_pid(mach_task_self_, pid, &task)
+		guard kret == KERN_SUCCESS else {
+			printg("Couldn't load process for pid: \(pid). You may need to run the app with root permissions.")
+			printg("K Return:", kret)
+			return
+		}
+		self.task = task
+
+		guard let baseAddress = GoDProcess.getBaseAddress(forTask: task) else {
+			return
+		}
+		self.baseAddress = baseAddress
+	}
+
+	private static func getBaseAddress(forTask task: mach_port_t) -> vm_address_t? {
+		let VM_REGION_BASIC_INFO_COUNT_64 = MemoryLayout<vm_region_basic_info_data_64_t>.size/4
+
+		var info: [Int32] = [Int32](repeating: 0, count: VM_REGION_BASIC_INFO_COUNT_64)
+		var size: mach_vm_size_t = 0
+
+		var object_name: mach_port_t = 0
+		var count: mach_msg_type_number_t = VM_REGION_BASIC_INFO_COUNT_64.unsigned
+		var address: mach_vm_address_t = 1
+
+		let kret = mach_vm_region(task, &address, &size, VM_REGION_BASIC_INFO, &info, &count, &object_name);
+		guard kret == KERN_SUCCESS else {
+			printg("Couldn't load base address for task: \(task). Make sure the application is runinng and the tool is running with root permissions.")
+			return nil
+		}
+
+		return UInt(address)
+	}
 }
+
 #else
 class GoDProcess {
 	private let process: Process
@@ -235,6 +236,39 @@ class GoDProcess {
 
 	init(process: Process) {
 		self.process = process
+	}
+
+	func await() {
+		process.waitUntilExit()
+	}
+
+	func terminate() {
+		process.terminate()
+	}
+
+	func pause() {
+		process.suspend()
+	}
+
+	func resume() {
+		process.resume()
+	}
+
+	func readVirtualMemory(at offset: UInt, length: UInt, relativeToRegion region: VMRegionInfo? = nil) -> XGMutableData? {
+		return nil
+	}
+
+	@discardableResult
+	func writeVirtualMemory(at offset: UInt, data: XGMutableData, relativeToRegion region: VMRegionInfo? = nil) -> Bool {
+		return false
+	}
+
+	func getNextRegion(fromOffset offset: vm_address_t) -> VMRegionInfo? {
+		return nil
+	}
+
+	func getRegions(maxOffset: UInt) -> [VMRegionInfo] {
+		return []
 	}
 }
 #endif

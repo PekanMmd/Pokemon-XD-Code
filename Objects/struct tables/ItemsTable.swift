@@ -44,4 +44,14 @@ let validItemsTable = GoDStructTable(file: .dol, properties: validItemStruct) { 
 } numberOfEntriesInFile: { (file) -> Int in
 	return 1220
 }
+
+let validItemStruct2 = GoDStruct(name: "Valid Item 2", format: [
+	.short(name: "Item ID", description: "", type: .itemID)
+])
+
+let validItemsTable2 = GoDStructTable(file: .dol, properties: validItemStruct2) { (file) -> Int in
+	return kFirstValidItem2Offset
+} numberOfEntriesInFile: { (file) -> Int in
+	return 1220
+}
 #endif

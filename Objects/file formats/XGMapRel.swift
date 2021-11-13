@@ -15,7 +15,6 @@ class XGMapRel: XGRelocationTable {
 	var roomID = 0
 
 	var treasure = [XGTreasure]()
-	var isValid = true
 
 	var groupID = 0
 

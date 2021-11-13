@@ -77,6 +77,14 @@ enum XGItems {
 			return XGItem(index: self.index)
 		}
 	}
+
+	private var isFunctionless: Bool {
+		let info = self.data
+		return info.inBattleUseID == 0
+		&& info.holdItemID == 0
+		&& info.parameter == 0
+		&& info.price < 1000
+	}
 	
 	static func allItems() -> [XGItems] {
 		var items = [XGItems]()
@@ -100,7 +108,8 @@ enum XGItems {
 				|| (XGItems.index(rand).nameID == 0)
 				|| (XGItems.index(rand).descriptionID == 0)
 				|| (XGItems.index(rand).data.bagSlot.rawValue >= XGBagSlots.keyItems.rawValue)
-				|| (XGItems.index(rand).data.price == 0) {
+				|| (XGItems.index(rand).data.price == 0)
+				|| (XGItems.index(rand)).isFunctionless {
 			rand = Int.random(in: 1 ..< kNumberOfItems)
 		}
 		return .index(rand)

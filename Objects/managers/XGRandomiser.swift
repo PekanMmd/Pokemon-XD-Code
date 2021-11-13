@@ -231,7 +231,7 @@ class XGRandomiser: NSObject {
 		#endif
 
 		#if GAME_PBR
-		for index in allDeckFileIndexes {
+		for index in allPokemonDeckFileIndexes {
 			guard !limitToMainMons || index == rentalPassDeckIndex else {
 				continue
 			}
@@ -324,7 +324,7 @@ class XGRandomiser: NSObject {
 		}
 
 		#if GAME_PBR
-		for index in allDeckFileIndexes {
+		for index in allPokemonDeckFileIndexes {
 			let file = XGFiles.indexAndFsysName(index, "deck")
 			let deck = GoDDataTable.tableForFile(file)
 			for i in 0 ..< deck.numberOfEntries {

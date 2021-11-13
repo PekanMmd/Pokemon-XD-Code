@@ -63,6 +63,24 @@ extension ASM {
 
 		return codeText
 	}
+
+	func wrapped(preserveStacksFrom register: XGRegisters = .r14, allocateStackBytes: Int = 0, includeBLR: Bool = true) -> ASM {
+		let preservedRegisterCount = 32 - register.rawValue.int
+		let preservedRegisterSize = preservedRegisterCount * 4
+		let prefix: ASM = [
+			.stwu(.sp, .sp, -0x10 - allocateStackBytes - preservedRegisterSize),
+			.mflr(.r0),
+			.stw(.r0, .sp, 0x14 + allocateStackBytes + preservedRegisterSize),
+			.stmw(register, .sp, 0x10 + allocateStackBytes)
+		]
+		let suffix: ASM = [
+			.lmw(register, .sp, 0x10 + allocateStackBytes),
+			.lwz(.r0, .sp, 0x14 + allocateStackBytes + preservedRegisterSize),
+			.mtlr(.r0),
+			.addi(.sp, .sp, 0x10 + allocateStackBytes + preservedRegisterSize)
+		]
+		return prefix + self + suffix + (includeBLR ? [.blr] : [])
+	}
 }
 
 extension XGAssembly {

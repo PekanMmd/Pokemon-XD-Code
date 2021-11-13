@@ -64,6 +64,26 @@ extension XGUtility {
 			}
 		}
 	}
+
+	class func updateValidItems() {
+		let itemListStart = kFirstValidItemOffset
+		if let dol = XGFiles.dol.data {
+
+			printg("Updating items list...")
+
+			for i in 1 ..< kNumberOfItems {
+				let currentOffset = itemListStart + (i * 2)
+
+				if XGItems.index(i).nameID != 0 {
+					dol.replace2BytesAtOffset(currentOffset, withBytes: i)
+				} else {
+					dol.replace2BytesAtOffset(currentOffset, withBytes: 0)
+				}
+			}
+
+			dol.save()
+		}
+	}
 	
 	//MARK: - Documentation
 	class func documentXDS() { }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -214,17 +214,49 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="nhq-8l-RYW"/>
-                                        <menuItem title="Decode Ereader Cards" id="6sA-RZ-buw">
+                                        <menuItem title=" Ereader Cards" id="yxl-Rf-ke1">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="dumpEreaderCards:" target="Voe-Tx-rLC" id="cVm-8g-y5o"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Reencode Ereader Cards" id="YYO-qJ-bRx">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="encodeEreaderCards:" target="Voe-Tx-rLC" id="k81-RL-v2W"/>
-                                            </connections>
+                                            <menu key="submenu" title=" Ereader Cards" id="J2s-iD-Jjc">
+                                                <items>
+                                                    <menuItem title="Decrypt + Decode" id="oaB-XW-vpV">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="decryptAndDecodeEreaderCards:" target="Voe-Tx-rLC" id="nYT-t9-vFM"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Decrypt" id="wY0-vV-Mll">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="decryptEreaderCards:" target="Voe-Tx-rLC" id="Zva-CC-Gs1"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Decode" id="ikH-kG-nHB">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="decodeEreaderCards:" target="Voe-Tx-rLC" id="VEa-x8-0OC"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem isSeparatorItem="YES" id="oCM-Pk-Q72"/>
+                                                    <menuItem title="Encode + Encrypt" id="Fz2-nh-t2f">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="encodeAndEncryptEreaderCards:" target="Voe-Tx-rLC" id="yLF-qe-5Mu"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Encrypt" id="khe-X3-vjD">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="encryptEreaderCards:" target="Voe-Tx-rLC" id="vwv-eY-kfV"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Encode" id="iWd-A7-hMw">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="encodeEreaderCards:" target="Voe-Tx-rLC" id="GcI-IM-I7z"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
                                         </menuItem>
                                     </items>
                                 </menu>
@@ -328,8 +360,8 @@
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Colosseum_Tool" customModuleProvider="target">
                     <connections>
-                        <outlet property="ereaderMenuItem" destination="6sA-RZ-buw" id="xJn-i6-rRq"/>
-                        <outlet property="ereaderencodeMenuItem" destination="YYO-qJ-bRx" id="mIB-hy-SmU"/>
+                        <outlet property="ereaderSeparator" destination="nhq-8l-RYW" id="iE7-ew-UZd"/>
+                        <outlet property="ereaderSubMenu" destination="yxl-Rf-ke1" id="oR6-bN-J60"/>
                         <outlet property="experimentalFeaturesMenuItem" destination="cAC-sv-FGN" id="3yp-Lh-bh2"/>
                         <outlet property="godtoolaboutmenuitem" destination="5kV-Vb-QxS" id="RzJ-5K-bSN"/>
                         <outlet property="godtoolhelpmenuitem" destination="FKE-Sm-Kum" id="kyN-Ez-awb"/>

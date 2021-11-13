@@ -37,7 +37,14 @@ class CommonStructTable: GoDStructTableFormattable {
 	}
 
 	func addEntries(count: Int) {
-		file.data?.insertRepeatedByte(byte: 0, count: count * properties.length, atOffset: firstEntryStartOffset + (numberOfEntries * properties.length))
-		file.data?.replace4BytesAtOffset(0, withBytes: numberOfEntries + count)
+		if let data = file.data {
+			data.insertRepeatedByte(byte: 0, count: count * properties.length, atOffset: firstEntryStartOffset + (numberOfEntries * properties.length))
+			let newEntryCount = numberOfEntries + count
+			let entryLength = data.get4BytesAtOffset(4)
+			data.replace4BytesAtOffset(0, withBytes: newEntryCount)
+			data.replace4BytesAtOffset(20, withBytes: newEntryCount * entryLength)
+			data.replace4BytesAtOffset(24, withBytes: data.length)
+			data.save()
+		}
 	}
 }

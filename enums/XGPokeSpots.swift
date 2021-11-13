@@ -38,9 +38,10 @@ enum XGPokeSpots : Int, Codable, CaseIterable {
 	}
 	
 	func setEntries(entries: Int) {
-		let rel = XGFiles.common_rel.data!
-		rel.replace4BytesAtOffset(self.commonRelEntriesIndex.startOffset, withBytes: entries)
-		rel.save()
+		if let rel = XGFiles.common_rel.data {
+			rel.replace4BytesAtOffset(self.commonRelEntriesIndex.startOffset, withBytes: entries)
+			rel.save()
+		}
 	}
 	
 	var commonRelIndex : CommonIndexes {

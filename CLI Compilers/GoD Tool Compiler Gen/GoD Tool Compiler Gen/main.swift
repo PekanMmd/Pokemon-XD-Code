@@ -146,6 +146,7 @@ let PBRAssetsFolder = PBRAssetsSubFolder + "/PBR"
 let GoDWiimmsAssetsFolder = GoDAssetsFolder + "/wiimm"
 let ColoWiimmsAssetsFolder = ColoAssetsFolder + "/wiimm"
 let PBRWiimmsAssetsFolder = PBRAssetsFolder + "/wiimm"
+let ColoNedclibAssetsFolder = ColoAssetsFolder + "/nedclib"
 
 // MARK: - Script set up
 
@@ -203,8 +204,10 @@ for asset in ColoAssets {
 	windowsColoCompiler += "copy \"..\\\(asset.path.replacingOccurrences(of: "/", with: "\\"))\" \"\((ColoAssetsFolder + "/" + asset.filename).replacingOccurrences(of: "/", with: "\\"))\"\n"
 }
 osxColoCompiler += "cp ../tools/OSX/wiimm/* \(ColoWiimmsAssetsFolder)\n"
+osxColoCompiler += "cp ../tools/OSX/nedclib/* \(ColoNedclibAssetsFolder)\n"
 osxColoCompiler += "cp ../tools/OSX/other/* \(ColoAssetsFolder)\n"
 windowsColoCompiler += "copy ..\\tools\\Windows\\wiimm\\* \((ColoWiimmsAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
+windowsColoCompiler += "copy ..\\tools\\Windows\\nedclib\\* \((ColoNedclibAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
 windowsColoCompiler += "copy ..\\tools\\Windows\\other\\* \((ColoAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
 
 // MARK: - Add Colosseum swiftc compiler to scripts
@@ -258,6 +261,7 @@ linuxCompiler = linuxCompiler.replacingOccurrences(of: "/tools/OSX/wiimm", with:
 linuxCompiler = linuxCompiler.replacingOccurrences(of: "/tools/OSX/other", with: "/tools/Linux/other")
 var linuxColoCompiler = osxColoCompiler.replacingOccurrences(of: "-DENV_OSX", with: "-DENV_LINUX")
 linuxColoCompiler = linuxColoCompiler.replacingOccurrences(of: "/tools/OSX/wiimm", with: "/tools/Linux/wiimm")
+linuxColoCompiler = linuxColoCompiler.replacingOccurrences(of: "/tools/OSX/nedclib", with: "/tools/Linux/nedclib")
 linuxColoCompiler = linuxColoCompiler.replacingOccurrences(of: "/tools/OSX/other", with: "/tools/Linux/other")
 var linuxPBRCompiler = osxPBRCompiler.replacingOccurrences(of: "-DENV_OSX", with: "-DENV_LINUX")
 linuxPBRCompiler = linuxPBRCompiler.replacingOccurrences(of: "/tools/OSX/wiimm", with: "/tools/Linux/wiimm")

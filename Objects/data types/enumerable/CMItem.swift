@@ -26,6 +26,16 @@ var kFirstValidItemOffset: Int {
 	}
 }	// in start.dol for colosseum
 
+// A second valid item table
+var kFirstValidItem2Offset: Int {
+	switch region {
+	case .US: return 0x3651e8
+	case .JP: return 0x351928
+	case .EU: return 0x3b22a0
+	case .OtherGame: return 0
+	}
+}	// in start.dol for colosseum
+
 let kSizeOfItemData				= 0x28
 let kNumberOfFriendshipEffects	= 0x03
 

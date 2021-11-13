@@ -137,11 +137,15 @@ final class XGInteractionPointData: NSObject {
 	
 	var index = 0
 	var startOffset = 0
-	
-	var interactionMethod = XGInteractionMethods.None
+
 	var roomID = 0
+	var interactionMethod = XGInteractionMethods.None
 	var interactionPointIndex = 0
 	var info = XGInteractionPointInfo.None
+
+	var room: XGRoom? {
+		return XGRoom.roomWithID(roomID)
+	}
 	
 	override var description: String {
 		var desc = "Interaction Point: \(index) - offset: \(startOffset.hexString())"

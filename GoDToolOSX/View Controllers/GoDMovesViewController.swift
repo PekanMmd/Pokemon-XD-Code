@@ -210,7 +210,7 @@ class GoDMovesViewController: GoDTableViewController {
 							if let oldString = animationStringsTable.stringWithID(id), oldString.containsSubstring(XGSpecialCharacters.newLine.string) {
 								let newStringTextParts = oldString.string.replacingOccurrences(of: XGSpecialCharacters.newLine.string, with: "\n").split(separator: "\n")
 								if newStringTextParts.count == 2 && oldString.string.last == "!" {
-									let newStringText = newStringTextParts[0] + XGSpecialCharacters.newLine.string + sender.stringValue + "!"
+									let newStringText = String(newStringTextParts[0]) + XGSpecialCharacters.newLine.string + sender.stringValue + "!"
 									let newString = XGString(string: newStringText, file: animationStringsTable.file, sid: id)
 									if !animationStringsTable.replaceString(newString, save: true) {
 										printg("Failed to update animation strings move name:", sender.stringValue)

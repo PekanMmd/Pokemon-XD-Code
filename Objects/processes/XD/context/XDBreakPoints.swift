@@ -528,7 +528,7 @@ class BattleMoveSelectionContext: BreakPointContext {
 	var pokemon: XDBattlePokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemon = XDBattlePokemon(process: process, offset: registers[3] ?? 0)
+		pokemon = XDBattlePokemon(file: process, offset: registers[3] ?? 0)
 		moveRoutinePointer = registers[7] ?? 0
 		move = .index( registers[8] ?? 0)
 		targets = Targets(rawValue: registers[9] ?? 0) ?? .none
@@ -608,7 +608,7 @@ class BattleTurnSelectionContext: BreakPointContext {
 	var option: Option
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemon = XDBattlePokemon(process: process, offset: registers[3] ?? 0)
+		pokemon = XDBattlePokemon(file: process, offset: registers[3] ?? 0)
 		moveRoutinePointer = registers[7] ?? 0
 		let parameter = registers[8] ?? 0
 		let type = registers[5] ?? 0
@@ -639,7 +639,7 @@ class WillUseMoveContext: BreakPointContext {
 
 	override init(process: XDProcess, registers: [Int: Int]) {
 		move = .index(registers[24] ?? 0)
-		attackingPokemon = XDBattlePokemon(process: process, offset: registers[27] ?? 0)
+		attackingPokemon = XDBattlePokemon(file: process, offset: registers[27] ?? 0)
 		super.init()
 	}
 
@@ -654,7 +654,7 @@ class WillCallPokemonContext: BreakPointContext {
 	var pokemon: XDBattlePokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemon = XDBattlePokemon(process: process, offset: registers[3] ?? 0)
+		pokemon = XDBattlePokemon(file: process, offset: registers[3] ?? 0)
 		super.init()
 	}
 
@@ -671,9 +671,9 @@ class PokemonSwitchInContext: BreakPointContext {
 	let trainerPointer: Int
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemon = XDBattlePokemon(process: process, offset: registers[30] ?? 0)
+		pokemon = XDBattlePokemon(file: process, offset: registers[30] ?? 0)
 		trainerPointer = registers[3] ?? 0
-		trainer = XDTrainer(process: process, offset: trainerPointer)
+		trainer = XDTrainer(file: process, offset: trainerPointer)
 		super.init()
 	}
 
@@ -688,7 +688,7 @@ class ShadowPokemonEncounterContext: BreakPointContext {
 	var pokemon: XDBattlePokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemon = XDBattlePokemon(process: process, offset: registers[29] ?? 0)
+		pokemon = XDBattlePokemon(file: process, offset: registers[29] ?? 0)
 		super.init()
 	}
 
@@ -703,7 +703,7 @@ class ShadowPokemonFledContext: BreakPointContext {
 	var pokemon: XDPartyPokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemon = XDPartyPokemon(process: process, offset: registers[28] ?? 0)
+		pokemon = XDPartyPokemon(file: process, offset: registers[28] ?? 0)
 		super.init()
 	}
 
@@ -718,7 +718,7 @@ class ReverseModeContext: BreakPointContext {
 	var pokemon: XDBattlePokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemon = XDBattlePokemon(process: process, offset: registers[30] ?? 0)
+		pokemon = XDBattlePokemon(file: process, offset: registers[30] ?? 0)
 		super.init()
 	}
 
@@ -734,7 +734,7 @@ class UseItemContext: BreakPointContext {
 	var item: XGItems
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemon = XDBattlePokemon(process: process, offset: registers[5] ?? 0)
+		pokemon = XDBattlePokemon(file: process, offset: registers[5] ?? 0)
 		item = .index(registers[6] ?? 0)
 		super.init()
 	}
@@ -808,7 +808,7 @@ class ExpGainContext: BreakPointContext {
 	var exp: Int
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemon = XDBattlePokemon(process: process, offset: registers[19] ?? 0)
+		pokemon = XDBattlePokemon(file: process, offset: registers[19] ?? 0)
 		exp = registers[18] ?? 0
 		super.init()
 	}
@@ -827,7 +827,7 @@ class WillEvolveContext: BreakPointContext {
 
 	override init(process: XDProcess, registers: [Int: Int]) {
 		pokemonOffset = registers[3] ?? 0
-		pokemon = XDPartyPokemon(process: process, offset: pokemonOffset)
+		pokemon = XDPartyPokemon(file: process, offset: pokemonOffset)
 		evolvedForm = .index(registers[4] ?? 0)
 		super.init()
 	}
@@ -843,7 +843,7 @@ class DidEvolveContext: BreakPointContext {
 	var pokemon: XDPartyPokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemon = XDPartyPokemon(process: process, offset: registers[27] ?? 0)
+		pokemon = XDPartyPokemon(file: process, offset: registers[27] ?? 0)
 		super.init()
 	}
 
@@ -860,7 +860,7 @@ class DidPurifyContext: BreakPointContext {
 
 	override init(process: XDProcess, registers: [Int: Int]) {
 		pokemonOffset = registers[31] ?? 0
-		pokemon = XDPartyPokemon(process: process, offset: pokemonOffset)
+		pokemon = XDPartyPokemon(file: process, offset: pokemonOffset)
 		super.init()
 	}
 
@@ -913,7 +913,7 @@ class TurnStartContext: BreakPointContext {
 
 	override init(process: XDProcess, registers: [Int: Int]) {
 		pokemonPointer = registers[3] ?? 0
-		pokemon = XDPartyPokemon(process: process, offset: pokemonPointer)
+		pokemon = XDPartyPokemon(file: process, offset: pokemonPointer)
 		super.init()
 	}
 
@@ -929,8 +929,8 @@ class BattleDamageHealingContext: BreakPointContext {
 	var defendingPokemon: XDBattlePokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		attackingPokemon = XDBattlePokemon(process: process, offset: registers[26] ?? 0)
-		defendingPokemon = XDBattlePokemon(process: process, offset: registers[29] ?? 0)
+		attackingPokemon = XDBattlePokemon(file: process, offset: registers[26] ?? 0)
+		defendingPokemon = XDBattlePokemon(file: process, offset: registers[29] ?? 0)
 		super.init()
 	}
 
@@ -946,8 +946,8 @@ class PokemonFaintedContext: BreakPointContext {
 	var defendingPokemon: XDBattlePokemon
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		attackingPokemon = XDBattlePokemon(process: process, offset: registers[29] ?? 0)
-		defendingPokemon = XDBattlePokemon(process: process, offset: registers[31] ?? 0)
+		attackingPokemon = XDBattlePokemon(file: process, offset: registers[29] ?? 0)
+		defendingPokemon = XDBattlePokemon(file: process, offset: registers[31] ?? 0)
 		super.init()
 	}
 
@@ -979,12 +979,12 @@ class CaptureAttemptContext: BreakPointContext {
 		level = registers[22] ?? 0
 		roomType = registers[23] ?? 0
 		pokemonOffset = registers[26] ?? 0
-		pokemon = XDPartyPokemon(process: process, offset: pokemonOffset)
+		pokemon = XDPartyPokemon(file: process, offset: pokemonOffset)
 		pokeball = .index(registers[24] ?? 0)
 		shadowID = registers[25] ?? 0
 		shadowData = .ddpk(shadowID)
 		baseCatchRate = registers[29] ?? 0
-		foeTrainer = XDTrainer(process: process, offset: registers[30] ?? 0)
+		foeTrainer = XDTrainer(file: process, offset: registers[30] ?? 0)
 		super.init()
 	}
 
@@ -1010,7 +1010,7 @@ class CaptureAttemptedContext: BreakPointContext {
 	let numberOfShakes: Int
 
 	override init(process: XDProcess, registers: [Int: Int]) {
-		pokemon = XDBattlePokemon(process: process, offset: registers[27] ?? 0)
+		pokemon = XDBattlePokemon(file: process, offset: registers[27] ?? 0)
 		numberOfShakes = registers[28] ?? 0
 		super.init()
 	}
@@ -1046,7 +1046,7 @@ class PrintContext: BreakPointContext {
 
 	override init(process: XDProcess, registers: [Int: Int]) {
 		offset = registers[3] ?? 0
-		string = offset > 0x80000000 ? process.readString(RAMOffset: offset, charLength: .char) : ""
+		string = offset > 0x80000000 ? process.readString(atAddress: offset, charLength: .char) : ""
 		super.init()
 	}
 
@@ -1063,7 +1063,7 @@ class WildBattleContext: BreakPointContext {
 
 	override init(process: XDProcess, registers: [Int: Int]) {
 		trainerPointer = registers[26] ?? 0
-		trainer = XDTrainer(process: process, offset: trainerPointer)
+		trainer = XDTrainer(file: process, offset: trainerPointer)
 		super.init()
 	}
 

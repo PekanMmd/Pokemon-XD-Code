@@ -40,7 +40,7 @@ let kFSYSbytes: UInt32				= 0x46535953
 let kUSbytes						= 0x5553
 let kJPbytes						= 0x4A50
 
-final class XGFsys : NSObject {
+final class XGFsys {
 	
 	var file: XGFiles!
 	var data: XGMutableData!
@@ -60,16 +60,12 @@ final class XGFsys : NSObject {
 	}
 	
 	init(file: XGFiles) {
-		super.init()
-		
 		self.file = file
 		self.data = file.data
 		setupFilenames()
 	}
 	
 	init(data: XGMutableData) {
-		super.init()
-		
 		self.data = data
 		self.file = data.file
 		setupFilenames()
@@ -147,7 +143,7 @@ final class XGFsys : NSObject {
 		filenames = names
 	}
 	
-	override var description: String {
+	var description: String {
 		var s = "\(self.fileName) - contains \(self.numberOfEntries) files\n"
 		for i in 0 ..< self.numberOfEntries {
 			let offset = String(format: "0x%x", self.startOffsetForFile(i))

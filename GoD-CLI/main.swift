@@ -495,9 +495,17 @@ func utilities() {
 		6: Decode Ereader Cards
 		-      Place your decrypted E Reader cards in \(XGFolders.Decrypted.path)
 		-      then use this utility to output the decoded data for those cards in \(XGFolders.Decoded.path)
-		7: Decode Ereader Cards
+		7: Encode Ereader Cards
 		-      Place your edited E Reader cards in \(XGFolders.Decoded.path)
 		-      then use this utility to output the reencoded data for those cards in \(XGFolders.Decrypted.path)
+		8: Decrypt Ereader Cards
+		-      Place your encrypted E Reader cards in \(XGFolders.Encrypted.path)
+		-      then use this utility to output the decrypted data for those cards in \(XGFolders.Decrypted.path)
+		9: Encrypt Ereader Cards
+		-      Place your decrypted E Reader cards in \(XGFolders.Decrypted.path)
+		-      then use this utility to output the reencrypted data for those cards in \(XGFolders.Encrypted.path)
+		10: Decrypt and Decode Ereader Cards
+		11: Encode and Encrypt Ereader Cards
 		"""
 		#elseif GAME_PBR
 		prompt += """
@@ -522,6 +530,10 @@ func utilities() {
 		#if GAME_COLO
 		case "6": XGUtility.decodeEReaderCards()
 		case "7": XGUtility.encodeEReaderCards()
+		case "8": XGUtility.decryptEReaderCards()
+		case "9": XGUtility.encryptEReaderCards()
+		case "10": XGUtility.decryptEReaderCards(); XGUtility.decodeEReaderCards()
+		case "11": XGUtility.encodeEReaderCards(); XGUtility.encryptEReaderCards()
 		#elseif GAME_PBR
 		case "3": XGPatcher.increasePokemonTotal(by: 1)
 		case "4": XGPatcher.increasePokemonTotal(by: 10)

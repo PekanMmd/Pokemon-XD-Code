@@ -111,7 +111,8 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.gen7CritRatios,
 	.allSingleBattles,
 	.allDoubleBattles,
-	.type9IndependentApply
+	.type9IndependentApply,
+	.maxPokespotEntries
 ] : [
 	.physicalSpecialSplitApply,
 	.disableSaveCorruption,
@@ -170,6 +171,7 @@ enum XGDolPatches: Int {
 	case deleteUnusedFiles
 	case removeColbtlRegionLock
 	case disableSaveCorruption
+	case maxPokespotEntries
 	
 	var name: String {
 		switch self {
@@ -209,7 +211,7 @@ enum XGDolPatches: Int {
 		case .allDoubleBattles: return "Set all battles to double battles"
 		case .removeColbtlRegionLock: return "Modify the ASM so it allows any region's colbtl.bin to be imported. Trades will be locked to whichever region's colbtl.bin was imported."
 		case .disableSaveCorruption: return "Disables some save file checks to prevent the save from being corrupted."
-
+		case .maxPokespotEntries: return "Change the max number of pokemon per pokespot from 3 to 100"
 		}
 	}	
 }
@@ -1168,46 +1170,71 @@ class XGPatcher {
 		XGAssembly.replaceRamASM(RAMOffset: validResponseHardcodeRAMOffset, newASM: [.li(.r6, 0x23)])
 	}
 
+	// The game will check this many entries for a match in the pokespot table
+	// when generating the battle for the encounter. It stops as soon as it finds
+	// a match so it's fine to make this number really large as long as we don't
+	// change the spawns at run time.
+	static func setMaxPokespotEntriesPerSpot(to count: Int) {
+		guard game == .XD else {
+			printg("Couldn't apply patch. Pokespots are only in XD.")
+				return
+		}
+		guard region == .US else {
+			printg("Pokespot max entries patch is currently not available for this region:", region.name)
+			return
+		}
+		let offset: Int
+		switch region {
+		case .US: offset = 0x1faf52
+		case .EU: offset = -1
+		case .JP: offset = -1
+		case .OtherGame: offset = -1
+		}
+		if let dol = XGFiles.dol.data {
+			dol.replace2BytesAtOffset(offset - kDolToRAMOffsetDifference, withBytes: count)
+		}
+	}
 	
 	class func applyPatch(_ patch: XGDolPatches) {
 		
 		switch patch {
-			case .freeSpaceInDol				: XGPatcher.clearUnusedFunctionsInDol()
-			case .betaStartersApply				: XGPatcher.enableBetaStarters()
-			case .betaStartersRemove			: XGPatcher.disableBetaStarters()
-			case .physicalSpecialSplitApply		: XGPatcher.applyPhysicalSpecialSplitPatch(setDefaultMoveCategories: true)
-			case .physicalSpecialSplitRemove	: XGPatcher.removePhysicalSpecialSplitPatch()
-			case .renameAllPokemonApply			: XGPatcher.allowRenamingAnyPokemon()
-			case .shinyChanceEditingApply		: XGPatcher.removeShinyGlitch()
-			case .shinyChanceEditingRemove		: XGPatcher.replaceShinyGlitch()
-			case .type9IndependentApply			: XGPatcher.removeType9Dependencies() // xd
-			case .noTypeIconForLockedMoves		: XGPatcher.removeType9Dependencies() // colo
-			case .purgeUnusedText				: XGPatcher.purgeUnusedText()
-			case .decapitaliseNames				: XGPatcher.decapitalise()
-			case .tradeEvolutions				: XGPatcher.removeTradeEvolutions()
-			case .removeItemEvolutions			: XGPatcher.removeItemEvolutions()
-			case .defaultMoveCategories			: XGUtility.defaultMoveCategories()
-			case .allowFemaleStarters			: XGPatcher.allowFemaleStarters()
-			case .switchPokemonAtEndOfTurn		: XGAssembly.switchNextPokemonAtEndOfTurn()
-			case .fixShinyGlitch				: XGPatcher.removeShinyGlitch()
-			case .replaceShinyGlitch			: XGPatcher.replaceShinyGlitch()
-			case .infiniteTMs					: XGAssembly.infiniteUseTMs()
-			case .allowShinyStarters			: XGPatcher.setStarterShininess(to: .random)
-			case .shinyLockStarters				: XGPatcher.setStarterShininess(to: .never)
-			case .alwaysShinyStarters			: XGPatcher.setStarterShininess(to: .always)
-			case .allowShinyShadowPokemon		: XGPatcher.setShadowPokemonShininess(to: .random)
-			case .shinyLockShadowPokemon		: XGPatcher.setShadowPokemonShininess(to: .never)
-			case .alwaysShinyShadowPokemon		: XGPatcher.setShadowPokemonShininess(to: .always)
-			case .enableDebugLogs				: XGPatcher.enableDebugLogs()
-			case .pokemonCanLearnAnyTM			: XGPatcher.pokemonCanLearnAnyTM()
-			case .pokemonHaveMaxCatchRate		: XGPatcher.pokemonHaveMaxCatchRate()
-			case .removeEVCap					: XGPatcher.removeEVCap()
-			case .gen7CritRatios				: XGPatcher.gen7CritRatios()
-			case .allDoubleBattles				: XGPatcher.setAllBattlesTo(.double)
-			case .allSingleBattles				: XGPatcher.setAllBattlesTo(.single)
-			case .deleteUnusedFiles				: XGPatcher.deleteUnusedFiles()
-			case .removeColbtlRegionLock		: XGPatcher.unlockColbtlBin()
-			case .disableSaveCorruption			: XGPatcher.preventSaveFileCorruption()
+		case .freeSpaceInDol				: XGPatcher.clearUnusedFunctionsInDol()
+		case .betaStartersApply				: XGPatcher.enableBetaStarters()
+		case .betaStartersRemove			: XGPatcher.disableBetaStarters()
+		case .physicalSpecialSplitApply		: XGPatcher.applyPhysicalSpecialSplitPatch(setDefaultMoveCategories: true)
+		case .physicalSpecialSplitRemove	: XGPatcher.removePhysicalSpecialSplitPatch()
+		case .renameAllPokemonApply			: XGPatcher.allowRenamingAnyPokemon()
+		case .shinyChanceEditingApply		: XGPatcher.removeShinyGlitch()
+		case .shinyChanceEditingRemove		: XGPatcher.replaceShinyGlitch()
+		case .type9IndependentApply			: XGPatcher.removeType9Dependencies() // xd
+		case .noTypeIconForLockedMoves		: XGPatcher.removeType9Dependencies() // colo
+		case .purgeUnusedText				: XGPatcher.purgeUnusedText()
+		case .decapitaliseNames				: XGPatcher.decapitalise()
+		case .tradeEvolutions				: XGPatcher.removeTradeEvolutions()
+		case .removeItemEvolutions			: XGPatcher.removeItemEvolutions()
+		case .defaultMoveCategories			: XGUtility.defaultMoveCategories()
+		case .allowFemaleStarters			: XGPatcher.allowFemaleStarters()
+		case .switchPokemonAtEndOfTurn		: XGAssembly.switchNextPokemonAtEndOfTurn()
+		case .fixShinyGlitch				: XGPatcher.removeShinyGlitch()
+		case .replaceShinyGlitch			: XGPatcher.replaceShinyGlitch()
+		case .infiniteTMs					: XGAssembly.infiniteUseTMs()
+		case .allowShinyStarters			: XGPatcher.setStarterShininess(to: .random)
+		case .shinyLockStarters				: XGPatcher.setStarterShininess(to: .never)
+		case .alwaysShinyStarters			: XGPatcher.setStarterShininess(to: .always)
+		case .allowShinyShadowPokemon		: XGPatcher.setShadowPokemonShininess(to: .random)
+		case .shinyLockShadowPokemon		: XGPatcher.setShadowPokemonShininess(to: .never)
+		case .alwaysShinyShadowPokemon		: XGPatcher.setShadowPokemonShininess(to: .always)
+		case .enableDebugLogs				: XGPatcher.enableDebugLogs()
+		case .pokemonCanLearnAnyTM			: XGPatcher.pokemonCanLearnAnyTM()
+		case .pokemonHaveMaxCatchRate		: XGPatcher.pokemonHaveMaxCatchRate()
+		case .removeEVCap					: XGPatcher.removeEVCap()
+		case .gen7CritRatios				: XGPatcher.gen7CritRatios()
+		case .allDoubleBattles				: XGPatcher.setAllBattlesTo(.double)
+		case .allSingleBattles				: XGPatcher.setAllBattlesTo(.single)
+		case .deleteUnusedFiles				: XGPatcher.deleteUnusedFiles()
+		case .removeColbtlRegionLock		: XGPatcher.unlockColbtlBin()
+		case .disableSaveCorruption			: XGPatcher.preventSaveFileCorruption()
+		case .maxPokespotEntries			: XGPatcher.setMaxPokespotEntriesPerSpot(to: 100)
 		}
 		
 		printg("patch applied: ", patch.name, "\nDon't forget to rebuild the ISO after.")

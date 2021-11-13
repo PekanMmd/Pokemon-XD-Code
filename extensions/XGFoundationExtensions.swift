@@ -62,6 +62,12 @@ extension Sequence where Iterator.Element == Int {
 		}
 		return s
 	}
+
+	var sum: Int {
+		var total = 0
+		self.forEach { total += $0 }
+		return total
+	}
 }
 
 extension Array where Element: Equatable {
@@ -134,14 +140,17 @@ extension Array {
 	}
 }
 
-extension Array where Element == String {
-	
+extension Array where Element: CustomStringConvertible {
+
 	func println() {
 		for s in self {
 			s.println()
 		}
 	}
-	
+
+	func asStrings() -> [String] {
+		return self.map { $0.description }
+	}
 }
 
 extension Array where Element == UInt8 {
@@ -332,6 +341,10 @@ extension UInt8 {
 extension UInt16 {
 	func hex() -> String {
 		return String(format: "%02x", self).uppercased()
+	}
+
+	func hexString() -> String {
+		return "0x" + hex()
 	}
 
 	func signed() -> Int {

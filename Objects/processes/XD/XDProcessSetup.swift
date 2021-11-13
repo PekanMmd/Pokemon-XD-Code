@@ -9,22 +9,19 @@ import Foundation
 
 class XDProcessSetup {
 
-	private(set) var process: XDProcess?
-
-	init() {}
-
-	func launch(settings: [(key: DolphinSystems, value: String)] = [],
+	func launch(processType: XDProcess.ProcessType,
 				autoSkipWarningScreen: Bool = false,
-				autoCloseDolphinOnFinish: Bool = false,
 				onStart: ((XDProcess) -> Bool)?,
 				onFinish: (() -> Void)?) {
-		XDProcess.launch(settings: settings,
-						 autoSkipWarningScreen: autoSkipWarningScreen,
-						 autoCloseDolphinOnFinish: autoCloseDolphinOnFinish,
-						 onStart: { (process) -> Bool in
-							self.process = process
-							return onStart?(process) ?? true
-						 }, onFinish: onFinish, callbacks: self)
+		guard let xd = XDProcess(processType: processType) else {
+			onFinish?()
+			return
+		}
+
+		xd.begin(autoSkipWarningScreen: autoSkipWarningScreen,
+				 onStart: onStart,
+				 onFinish: onFinish,
+				 callbacks: self)
 	}
 
 	var onFrame: ((XDProcess, XDGameState) -> Bool)? = nil

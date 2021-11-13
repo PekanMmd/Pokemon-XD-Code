@@ -76,3 +76,9 @@ let tmsTable = CommonStructTable(file: .indexAndFsysName(region == .JP ? 30 : 29
 	}
 	return nil
 }
+
+let trainerTitlesStruct = GoDStruct(name: "Trainer Titles", format: [
+	.short(name: "Name", description: "", type: .msgID(file: nil)),
+	.array(name: "Quotes", description: "", property: .short(name: "Quote", description: "", type: .msgID(file: nil)), count: 6)
+])
+let trainerTitlesTable = CommonStructTable(file: .indexAndFsysName(region == .JP ? 22 : 28, "common"), properties: trainerTitlesStruct)

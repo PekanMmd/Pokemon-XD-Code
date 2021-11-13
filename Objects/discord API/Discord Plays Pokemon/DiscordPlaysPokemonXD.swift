@@ -1,5 +1,5 @@
 //
-//  DiscordPlaysPokemon.swift
+//  DiscordPlaysPokemonXD.swift
 //  GoD Tool
 //
 //  Created by Stars Momodu on 08/10/2021.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DiscordPlaysPokemon {
+class DiscordPlaysPokemonXD {
 
 	class SaveSlotsState: Codable {
 		private static let file = XGFiles.nameAndFolder("DPP Continuity.json", .Documents)
@@ -676,11 +676,7 @@ class DiscordPlaysPokemon {
 			return true
 		}
 
-		setup.launch(settings: [
-			(key: .Dolphin(.Interface(.DebugModeEnabled)),"no"),
-			(key: .Dolphin(.Core(.EnableCheats)),"no"),
-			(key: .Dolphin(.Interface(.ConfirmStop)),"yes"),
-		], autoSkipWarningScreen: true) { (process) in
+		setup.launch(processType: .Dolphin(dolphinFile: nil, isoFile: nil)) { (process) in
 
 			print("Launched Dolphin Process")
 
@@ -801,6 +797,7 @@ class DiscordPlaysPokemon {
 								  self.processState != .startup,
 								  self.processState != .none {
 							self.saveSlotsState.load(process: process)
+							sleep(2)
 						}
 					}
 					sleep(3)
@@ -816,7 +813,7 @@ class DiscordPlaysPokemon {
 			if self?.shouldRelaunchOnDolphinClosed == true {
 				self?.shouldRelaunchOnDolphinClosed = false
 				printg("Process marked for relaunch")
-				DiscordPlaysPokemon().launch()
+				DiscordPlaysPokemonXD().launch()
 			} else {
 				printg("Closing tool")
 				ToolProcess.terminate()

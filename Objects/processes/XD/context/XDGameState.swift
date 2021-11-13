@@ -172,7 +172,7 @@ class XDShadowDataState: ProcessState<[XDStoredShadowData]> {
 		if wasSet,
 		   let data = value {
 			data.forEach { (shadowData) in
-				shadowData.write(process: process)
+				shadowData.write(file: process)
 			}
 		}
 	}
@@ -195,7 +195,7 @@ class XDTrainerState: ProcessState<XDTrainer> {
 			guard let process = process,
 				  let trainerDataOrigin = process.readPointerRelativeToR13(offset: -0x4728) else { return nil }
 			let partyDataOffset = trainerDataOrigin + 320
-			return XDTrainer(process: process, offset: partyDataOffset)
+			return XDTrainer(file: process, offset: partyDataOffset)
 		}
 	}
 
@@ -203,7 +203,7 @@ class XDTrainerState: ProcessState<XDTrainer> {
 		super.write(process: process)
 		if wasSet,
 		   let trainer = value {
-			trainer.write(process: process)
+			trainer.write(file: process)
 		}
 	}
 }
@@ -292,3 +292,10 @@ class XDGameState {
 	}
 }
 
+extension XDStoredShadowData {
+	convenience init?(process: XDProcess, index: Int) {
+		guard let trainerDataOrigin = process.readPointerRelativeToR13(offset: -0x4728) else { return nil }
+		let shadowDataOffset = trainerDataOrigin + 0xE380
+		self.init(file: process, offset: shadowDataOffset + (index * kSizeOfStoredShadowData))
+	}
+}

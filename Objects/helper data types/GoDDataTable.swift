@@ -305,7 +305,7 @@ class GoDDataTable: CustomStringConvertible {
 	static var pokemonIcons: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 6 : 0, "common")) }
 	static var countries: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 7 : 1, "common")) }
 	static var shopItems: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 8 : 2, "common")) }
-	static var colosseumsUnknown: GoDDataTable? { region == .JP ? nil : tableForFile(.indexAndFsysName(3, "common")) } //Doesn't exist in JP
+	static var colosseumsUnknown: GoDDataTable? { region == .JP ? nil : tableForFile(.indexAndFsysName(3, "common")) } //Doesn't exist in JP. Seems to be strings to use in the battle tutorial
 	static var typeMatchups: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 10 : 4, "common")) }
 	static var expTables: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 11 : 5, "common")) }
 	static var pokemonModels: GoDDataTable { tableForFile(.indexAndFsysName(region == .JP ? 12 : 6, "common")) }
@@ -339,7 +339,58 @@ class GoDDataTable: CustomStringConvertible {
 	
 }
 
-
+// Colosseum Rules Entries
+//0    Colosseums - 0
+//1    Gateway 1
+//2    Gateway 2
+//3    Gateway 3
+//4    Gateway 4
+//5    Main Street 1
+//6    Main Street 2
+//7    Main Street 3
+//8    Waterfall 1
+//9    Waterfall 2
+//10    Waterfall 3
+//11    Neon 1
+//12    Neon 2
+//13    Neon 3
+//14    Crystal 1
+//15    Crystal 2
+//16    Crystal 3
+//17    Sunny Park 1
+//18    Sunny Park 2
+//19    Sunny Park 3
+//20    Sunny Park 4
+//21    Magma 1
+//22    Magma 2
+//23    Magma 3
+//24    Sunset 1
+//25    Sunset 2
+//26    Sunset 3
+//27    Courtyard 1
+//28    Courtyard 2
+//29    Courtyard 3
+//30    Stargazer 1
+//31    Stargazer 2
+//32    Stargazer 3
+//33    Stargazer 4
+//34    Stargazer 5
+//35    Stargazer 6
+//36    Stargazer 7
+//37    Stargazer 8
+//38    Stargazer 9
+//39    Colosseums - 39
+//40    Colosseums - 40
+//41    Colosseums - 41
+//42    Colosseums - 42
+//43    Colosseums - 43
+//44    Colosseums - 44
+//45    Colosseums - 45
+//46    Colosseums - 46
+//47    Colosseums - 47
+//48    Colosseums - 48
+//49    Colosseums - 49
+//50    Colosseums - 50
 
 
 

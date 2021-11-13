@@ -39,9 +39,7 @@ var loadableFiles: [String] {
 }
 #endif
 
-var loadableFsys: [String] {
-	[XGFiles.fsys("people_archive").path, XGFiles.fsys("common").path, XGFiles.fsys("deck").path, XGFiles.fsys("poke_face").path, XGFiles.fsys("poke_body").path, XGFiles.fsys("poke_dance").path, XGFiles.fsys("menu_face").path, XGFiles.fsys("menu_pokemon").path, XGFiles.fsys("bgm_archive").path]
-}
+var loadableFsys: [String] = [XGFiles.fsys("people_archive").path, XGFiles.fsys("common").path, XGFiles.fsys("deck").path, XGFiles.fsys("poke_face").path, XGFiles.fsys("poke_body").path, XGFiles.fsys("poke_dance").path, XGFiles.fsys("menu_face").path, XGFiles.fsys("menu_pokemon").path, XGFiles.fsys("bgm_archive").path]
 
 
 let DeckDataEmptyLZSS = XGMutableData(byteStream: [0x4C, 0x5A, 0x53, 0x53, 0x00, 0x00, 0x01, 0xF4, 0x00, 0x00, 0x00, 0x54, 0x00, 0x00, 0x00, 0x00, 0xAF, 0x44, 0x45, 0x43, 0x4B, 0xEB, 0xF0, 0xD0, 0xEB, 0xF0, 0x02, 0xAE, 0xEA, 0xF2, 0x54, 0x4E, 0x52, 0xEB, 0xF0, 0x48, 0xEB, 0xF0, 0x01, 0x70, 0xDC, 0xFF, 0x1B, 0x0F, 0x2D, 0x0F, 0xE8, 0xF4, 0x50, 0x4B, 0x4D, 0xEB, 0xF0, 0x31, 0x30, 0x06, 0x0F, 0x5F, 0x0F, 0xFA, 0xF3, 0x41, 0x49, 0x4A, 0x0F, 0x8B, 0x0F, 0xD6, 0xE6, 0xF6, 0x53, 0x54, 0x01, 0x01, 0x18, 0xE6, 0xF5, 0x4E, 0x55, 0x03, 0x4C, 0x4C, 0x94, 0x01], file: .embedded("DeckData_Empty.bin.lzss"))
@@ -82,6 +80,7 @@ indirect enum XGFiles {
 	case log(Date)
 	case wit
 	case wimgt
+	case nedcenc
 	case tool(String)
 	case embedded(String)
 	case gameFile(String)
@@ -103,6 +102,14 @@ indirect enum XGFiles {
 			if fileDecodingMode {
 				if case .Wiimm = folder {
 					return XGResources.tool("wiimm/" + fileName.removeFileExtensions()).path
+				}
+				return XGResources.tool(fileName).path
+			}
+			return folder.path + "/" + self.fileName
+		case .nedcenc:
+			if fileDecodingMode {
+				if case .Nedclib = folder {
+					return XGResources.tool("nedclib/" + fileName.removeFileExtensions()).path
 				}
 				return XGResources.tool(fileName).path
 			}
@@ -145,6 +152,7 @@ indirect enum XGFiles {
 		case .iso					: return XGISO.inputISOFile?.fileName ?? "game" + XGFileTypes.iso.fileExtension
 		case .wit                   : return environment == .Windows ? "wit.exe" :  "wit"
 		case .wimgt                 : return environment == .Windows ? "wimgt.exe" :  "wimgt"
+		case .nedcenc				: return environment == .Windows ? "nedcenc.exe" :  "nedcenc"
 		case .tool(let s)			: return s + (environment == .Windows ? ".exe" : "")
 		case .embedded(let s)		: return s
 		case .eCardDecrypted(let s)	: return s + ".bin"
@@ -195,6 +203,7 @@ indirect enum XGFiles {
 		case .eCardDecoded		: return .EreaderCards
 		case .wit      		    : return .Wiimm
 		case .wimgt      		: return .Wiimm
+		case .nedcenc			: return .Nedclib
 		case .tool("pbrsavetool"): return .SaveFiles
 		case .tool				: return .Resources
 		case .embedded			: return .Documents
@@ -342,8 +351,8 @@ indirect enum XGFiles {
 	}
 	
 	var fsysData: XGFsys {
-		if loadedFsys[self.path] != nil {
-			return loadedFsys[self.path]!
+		if let fsys = loadedFsys[self.path] {
+			return fsys
 		}
 
 		let fsys = XGFsys(file: self)
@@ -588,6 +597,7 @@ indirect enum XGFolders {
 	case EreaderCards
 	case Decrypted
 	case Decoded
+	case Encrypted
 	case Images
 	case PokeFace
 	case PokeBody
@@ -597,6 +607,7 @@ indirect enum XGFolders {
 	case Reference
 	case Resources
 	case Wiimm
+	case Nedclib
 	case ISO
 	case Logs
 	case ISOExport(String)
@@ -617,6 +628,7 @@ indirect enum XGFolders {
 		case .SaveFiles			: return "Save Files"
 		case .EreaderCards		: return "Ereader Cards"
 		case .Decrypted			: return "Decrypted"
+		case .Encrypted			: return "Encrypted"
 		case .Decoded			: return "Decoded"
 		case .Images			: return "Images"
 		case .PokeFace			: return "PokeFace"
@@ -627,6 +639,7 @@ indirect enum XGFolders {
 		case .Reference			: return "Reference"
 		case .Resources			: return "Resources"
 		case .Wiimm				: return "Wiimm"
+		case .Nedclib			: return "Nedclib"
 		case .ISO				: return XGISO.inputISOFile?.folder.name ?? "ISO"
 		case .Logs				: return "Logs"
 		case .ISOExport(let name): return name
@@ -663,7 +676,9 @@ indirect enum XGFolders {
 		case .Trainers	: path = XGFolders.Images.path
 		case .Types		: path = XGFolders.Images.path
 		case .Wiimm		: path = XGFolders.Resources.path
+		case .Nedclib	: path = XGFolders.Resources.path
 		case .Decrypted	: path = XGFolders.EreaderCards.path
+		case .Encrypted	: path = XGFolders.EreaderCards.path
 		case .Decoded	: path = XGFolders.EreaderCards.path
 		case .nameAndFolder(_, let f): path = f.path
 		case .ISO		: return XGISO.inputISOFile?.folder.path ?? documentsPath + "/" + self.name
@@ -764,7 +779,7 @@ indirect enum XGFolders {
 		]
 
 		#if GAME_COLO
-		folders += [.EreaderCards, .Decoded, .Decrypted]
+		folders += [.EreaderCards, .Decoded, .Decrypted, .Encrypted]
 		#endif
 
 		for folder in folders {
@@ -845,6 +860,13 @@ indirect enum XGFolders {
         if !wiimm.exists {
 			XGResources.folder("wiimm").copy(to: wiimm)
         }
+
+		if game == .Colosseum {
+			let nedclib = XGFolders.Nedclib
+			if !nedclib.exists {
+				XGResources.folder("nedclib").copy(to: nedclib)
+			}
+		}
 
 		if game != .PBR {
 			let gcitool = XGFiles.tool("gcitool")

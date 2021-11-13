@@ -24,6 +24,7 @@ var structTablesList: [GoDStructTableFormattable] {
 	#else
 	tables += [
 		validItemsTable,
+		validItemsTable2,
 		itemsTable,
 		typesTable,
 	]

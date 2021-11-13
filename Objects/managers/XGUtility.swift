@@ -403,102 +403,6 @@ class XGUtility {
 			return false
 		}
 	}
-
-//	class func importTPLFiles(_ files: [XGFiles]) {
-//		if files.isEmpty { return }
-//
-//		printg("importing tpl files...")
-//		for file in files {
-//			let source = file.path.escapedPath
-//			var dest = (XGFolders.Textures.path + "/" + file.fileName).escapedPath
-//			dest = dest.removeFileExtensions() + ".tpl"
-//
-//			let imageFormatID: Int
-//			if let underscoreIndex = file.fileName.lastIndex(of: "_") {
-//				let imageFormatSubstring = file.fileName.substring(from: file.fileName.index(underscoreIndex, offsetBy: 1), to: file.fileName.endIndex)
-//				let imageFormatNumberString = imageFormatSubstring.removeFileExtensions()
-//				imageFormatID = imageFormatNumberString.integerValue ?? -1
-//			} else {
-//				imageFormatID = -1
-//			}
-//			let format = GoDTextureFormats.fromStandardRawValue(imageFormatID) ?? .C8
-//
-//			let overwrite = "-o"
-//			let formatString = "-x TPL." + format.name
-//			let args = "encode \(source) \(overwrite) \(formatString) -d \(dest)"
-//			if settings.verbose {
-//				printg(GoDShellManager.Commands.wimgt.file.path + " " + args)
-//			}
-//			GoDShellManager.run(.wimgt, args: args)
-//		}
-//	}
-
-//	class func importTextures() {
-//		// into the .gtx file, not into ISO
-//		printg("importing textures...")
-//		for imageFile in XGFolders.Import.files where XGFileTypes.imageFormats.contains(imageFile.fileType) && !imageFile.fileName.contains(".tpl") {
-//
-//			let textureFilename = imageFile.fileName.removeFileExtensions() + XGFileTypes.gtx.fileExtension
-//			let animTextureFilename = imageFile.fileName.removeFileExtensions() + XGFileTypes.atx.fileExtension
-//
-//			guard let image = XGImage.loadImageData(fromFile: imageFile) else {
-//				continue
-//			}
-//
-//			let tFile = XGFiles.nameAndFolder(textureFilename, .Textures)
-//			let aFile = XGFiles.nameAndFolder(animTextureFilename, .Textures)
-//
-//			if tFile.exists || aFile.exists {
-//				if tFile.exists {
-//					GoDTextureImporter.replaceTextureData(texture: tFile.texture, withImage: image, save: true)
-//				}
-//				if aFile.exists {
-//					GoDTextureImporter.replaceTextureData(texture: aFile.texture, withImage: image, save: true)
-//				}
-//			} else {
-//				let texture = image.texture
-//				let filename = tFile.fileName.removeFileExtensions() + XGFileTypes.gtx.fileExtension
-//				texture.file = .nameAndFolder(filename, tFile.folder)
-//				texture.save()
-//			}
-//		}
-//
-//		importTPLFiles(XGFolders.Import.files.filter({ (file) -> Bool in
-//			file.fileName.contains(".tpl.png")
-//		}))
-//	}
-//
-//	class func exportTPLFiles(_ files: [XGFiles]) {
-//		if files.isEmpty { return }
-//
-//		printg("exporting tpl files...")
-//		for file in files {
-//			let source = file.path.escapedPath
-//			let dest = (XGFolders.Export.path + "/" + file.fileName + ".png").escapedPath
-//
-//			let overwrite = "-o"
-//
-//			let args = "copy \(source) \(overwrite) -d \(dest)"
-//			if settings.verbose {
-//				printg(GoDShellManager.Commands.wimgt.file.path + " " + args)
-//			}
-//			GoDShellManager.run(.wimgt, args: args)
-//		}
-//	}
-//
-//	class func exportTextures() {
-//		// from .gtx file, not from ISO
-//		printg("exporting textures...")
-//		for file in XGFolders.Textures.files where [.gtx, .atx].contains(file.fileType)  {
-//			let filename = file.fileName.removeFileExtensions() + ".png"
-//			file.texture.image.writePNGData(toFile: .nameAndFolder(filename, .Export))
-//		}
-//		#if !GAME_PBR
-//		exportTPLFiles(XGFolders.Textures.files.filter({ (file) -> Bool in
-//			file.fileType == .tpl
-//		}))
-//		#endif
-//	}
 	
 	class func searchForFsysForFile(file: XGFiles) {
 		let iso = XGISO.current
@@ -683,6 +587,42 @@ class XGUtility {
 				let encodedFile = XGFiles.nameAndFolder(file.fileName, XGFolders.Decrypted)
 				printg("Writing encoded ereader card to \(encodedFile.path)")
 				EcardCoder.encode(file: file)?.writeToFile(encodedFile)
+			}
+		}
+		#endif
+	}
+
+	class func decryptEReaderCards() {
+		#if GAME_COLO
+		guard game == .Colosseum, XGISO.inputISOFile != nil else { return }
+		if !XGFolders.Encrypted.files.contains(where:{ $0.fileType == .raw }) {
+			displayAlert(title: "No Ereader Cards Found", description: "Place your encrypted E Reader cards in \(XGFolders.Encrypted.path)\nthen use this utility to output the decoded data for those cards in \(XGFolders.Decrypted.path)")
+			return
+		}
+
+		XGFolders.Encrypted.files.forEach { (file) in
+			if file.fileType == .raw {
+				let decryptedFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + ".bin", XGFolders.Decrypted)
+				printg("Writing decrypted ereader card to \(decryptedFile.path)")
+				EcardCoder.decrypt(file: file, toFile: decryptedFile)
+			}
+		}
+		#endif
+	}
+
+	class func encryptEReaderCards() {
+		#if GAME_COLO
+		guard game == .Colosseum, XGISO.inputISOFile != nil else { return }
+		if !XGFolders.Decrypted.files.contains(where:{ $0.fileType == .bin }) {
+			displayAlert(title: "No Ereader Cards Found", description: "Place your decrypted E Reader cards in \(XGFolders.Decrypted.path)\nthen use this utility to output the reencrypted data for those cards in \(XGFolders.Encrypted.path)")
+			return
+		}
+
+		XGFolders.Decrypted.files.forEach { (file) in
+			if file.fileType == .bin {
+				let encryptedFile = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + ".raw", XGFolders.Encrypted)
+				printg("Writing encrypted ereader card to \(encryptedFile.path)")
+				EcardCoder.encrypt(file: file, toFile: encryptedFile)
 			}
 		}
 		#endif

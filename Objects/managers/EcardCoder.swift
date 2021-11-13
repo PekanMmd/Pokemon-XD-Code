@@ -419,9 +419,26 @@ class EcardCoder {
 		return encode(data: data)
 	}
 
-	static func encode(data: XGMutableData) -> XGMutableData? {
+	static func encode(data inputData: XGMutableData) -> XGMutableData? {
 		let output = XGMutableData()
-		output.file = .nameAndFolder(data.file.fileName.removeFileExtensions() + "-decrypted.bin", data.file.folder)
+		output.file = .nameAndFolder(inputData.file.fileName.removeFileExtensions() + "-decrypted.bin", inputData.file.folder)
+
+		let data = XGMutableData(byteStream: inputData.rawBytes)
+
+// 		Uncomment this when the ecard encoder works and test whether or not we can get away with adding our own English data in these headers
+//		var info = EcardFields.MetaDataCardName.info
+//		data.nullBytes(start: info.relativeOffset, length: info.bytes)
+//		data.writeString("Colo Tool", at: info.relativeOffset, charLength: .short, maxCharacters: info.bytes / 2, includeNullTerminator: false)
+//
+//		info = EcardFields.MetaDataEasyDifficultyName.info
+//		data.nullBytes(start: info.relativeOffset, length: info.bytes)
+//		data.writeString("Easy", at: info.relativeOffset, charLength: .short, maxCharacters: info.bytes / 2, includeNullTerminator: false)
+//		info = EcardFields.MetaDataNormalDifficultyName.info
+//		data.nullBytes(start: info.relativeOffset, length: info.bytes)
+//		data.writeString("Normal", at: info.relativeOffset, charLength: .short, maxCharacters: info.bytes / 2, includeNullTerminator: false)
+//		info = EcardFields.MetaDataHardDifficultyName.info
+//		data.nullBytes(start: info.relativeOffset, length: info.bytes)
+//		data.writeString("Hard", at: info.relativeOffset, charLength: .short, maxCharacters: info.bytes / 2, includeNullTerminator: false)
 
 		var writePosition = 7
 		var currentByte = 0
@@ -601,20 +618,28 @@ class EcardCoder {
 			if lastDummyValue == 256 { lastDummyValue = 0 }
 		}
 
-		var info = EcardFields.MetaDataCardName.info
-		output.nullBytes(start: info.relativeOffset, length: info.bytes)
-		output.writeString("Colo Tool", at: info.relativeOffset, charLength: .short, maxCharacters: info.bytes / 2, includeNullTerminator: false)
-
-		info = EcardFields.MetaDataEasyDifficultyName.info
-		output.nullBytes(start: info.relativeOffset, length: info.bytes)
-		output.writeString("Easy", at: info.relativeOffset, charLength: .short, maxCharacters: info.bytes / 2, includeNullTerminator: false)
-		info = EcardFields.MetaDataNormalDifficultyName.info
-		output.nullBytes(start: info.relativeOffset, length: info.bytes)
-		output.writeString("Normal", at: info.relativeOffset, charLength: .short, maxCharacters: info.bytes / 2, includeNullTerminator: false)
-		info = EcardFields.MetaDataHardDifficultyName.info
-		output.nullBytes(start: info.relativeOffset, length: info.bytes)
-		output.writeString("Hard", at: info.relativeOffset, charLength: .short, maxCharacters: info.bytes / 2, includeNullTerminator: false)
-
 		return output
+	}
+
+	static func encrypt(file: XGFiles, toFile output: XGFiles? = nil) {
+		let outputFile = output ?? .nameAndFolder(file.fileName.removeFileExtensions() + ".raw", file.folder)
+		GoDShellManager.run(.nedcenc, args: [
+			"-e",
+			"-i",
+			file.path,
+			"-o",
+			outputFile.path
+		])
+	}
+
+	static func decrypt(file: XGFiles, toFile output: XGFiles? = nil) {
+		let outputFile = output ?? .nameAndFolder(file.fileName.removeFileExtensions() + ".bin", file.folder)
+		GoDShellManager.run(.nedcenc, args: [
+			"-d",
+			"-i",
+			file.path,
+			"-o",
+			outputFile.path
+		])
 	}
 }

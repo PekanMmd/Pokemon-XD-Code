@@ -50,6 +50,12 @@
             ReferencedContainer = "container:GoD Tool.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "--iso /Users/starsmomodu/Documents/GoD\ Tool/Colo.iso"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

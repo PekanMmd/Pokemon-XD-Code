@@ -18,8 +18,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var scriptClassesMenuItem: NSMenuItem!
 	@IBOutlet weak var scriptCompilerMenuItem: NSMenuItem!
 	@IBOutlet weak var experimentalFeaturesMenuItem: NSMenuItem!
-	@IBOutlet weak var ereaderMenuItem: NSMenuItem!
-	@IBOutlet weak var ereaderencodeMenuItem: NSMenuItem!
+	@IBOutlet weak var ereaderSubMenu: NSMenuItem!
+	@IBOutlet weak var ereaderSeparator: NSMenuItem!
 
 	@IBOutlet weak var godtoolmenuitem: NSMenuItem!
 	@IBOutlet weak var godtoolaboutmenuitem: NSMenuItem!
@@ -43,8 +43,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 		#if !GAME_PBR
 		if game != .Colosseum {
-			ereaderMenuItem.isEnabled = false
-			ereaderencodeMenuItem.isEnabled = false
+			ereaderSubMenu.isHidden = true
+			ereaderSeparator.isHidden = true
 		}
 		#endif
 
@@ -252,7 +252,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 										  musicScript: musicScriptFile,
 										  isFullScreen: true) { countdownVC in
 			XGThreadManager.manager.runInBackgroundAsync(queue: 3) {
-				DiscordPlaysPokemon().launch()
+				DiscordPlaysPokemonXD().launch()
 			}
 		}
 		#endif
@@ -543,7 +543,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		XGUtility.increasePokemonLevelsByPercentage(50)
 	}
 
-	@IBAction func dumpEreaderCards(_ sender: Any) {
+	@IBAction func decryptEreaderCards(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		if game == .Colosseum {
+			XGUtility.decryptEReaderCards()
+		}
+	}
+
+	@IBAction func decodeEreaderCards(_ sender: Any) {
 		guard homeViewController.checkRequiredFiles() else {
 			return
 		}
@@ -559,6 +568,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		if game == .Colosseum {
 			XGUtility.encodeEReaderCards()
 		}
+	}
+
+	@IBAction func encryptEreaderCards(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		if game == .Colosseum {
+			XGUtility.encryptEReaderCards()
+		}
+	}
+
+	@IBAction func decryptAndDecodeEreaderCards(_ sender: Any) {
+		decryptEreaderCards(self)
+		decodeEreaderCards(self)
+	}
+
+	@IBAction func encodeAndEncryptEreaderCards(_ sender: Any) {
+		encodeEreaderCards(self)
+		encryptEreaderCards(self)
 	}
 
 	#if GAME_PBR

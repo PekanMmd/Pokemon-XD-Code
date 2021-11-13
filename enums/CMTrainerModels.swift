@@ -22,81 +22,81 @@ enum XGTrainerModels : Int, Codable, CaseIterable {
 	
 	case none	= 0x00
 	
-	case wes
-	case ruby
-	case sapphire
-	case cipherPeonF
-	case cipherPeonM1
-	case verde
-	case rosso
-	case bluno
-	case skrub
-	case green
-	case red
-	case funOldLady
-	case dakim
-	case gonzap
-	case mirorB
-	case venus
-	case nascour
-	case newsCaster
-	case stPerformer
-	case eagun
-	case vander
-	case superTrainerM2
-	case arth
-	case superTrainerF1
-	case ferma
-	case reath
-	case hunterM
-	case folly
-	case ladyInSuit
-	case glassesMan
-	case funOldMan
-	case bodyBuilderF
-	case bodyBuilderM
-	case richBoy1
-	case guy
-	case lady1
-	case riderF
-	case willie
-	case riderM
-	case teacher
-	case evice
-	case snagem1
-	case athleteF
-	case athleteM
-	case ein
-	case chaserF1
-	case chaserM1
-	case rollerBoy
-	case worker
-	case rui
-	case richBoy2
-	case lady2
-	case coolTrainerM
-	case coolTrainerF
-	case justy
-	case bandanaGuy
-	case researcher
-	case hunterF
-	case battlus
-	case bodyBuilderM2
-	case deepKing
-	case chaserM2
-	case eagun2
-	case eagun3
-	case superTrainerF2
-	case fein
-	case snagem2
-	case snagem3
-	case mirakleB
-	case superTrainerM1
-	case trinch
-	case athey
-	case trudly
-	case cail
-	case chaserF2
+	case wes = 1
+	case ruby = 2
+	case sapphire = 3
+	case cipherPeonF = 4
+	case cipherPeonM1 = 5
+	case verde = 6
+	case rosso = 7
+	case bluno = 8
+	case skrub = 9
+	case green = 10
+	case red = 11
+	case funOldLady = 12
+	case dakim = 13
+	case gonzap = 14
+	case mirorB = 15
+	case venus = 16
+	case nascour = 17
+	case newsCaster = 18
+	case stPerformer = 19
+	case eagun = 20
+	case vander = 21
+	case superTrainerM2 = 22
+	case arth = 23
+	case superTrainerF1 = 24
+	case ferma = 25
+	case reath = 26
+	case hunterM = 27
+	case folly = 28
+	case ladyInSuit = 29
+	case glassesMan = 30
+	case funOldMan = 31
+	case bodyBuilderF = 32
+	case bodyBuilderM = 33
+	case richBoy1 = 34
+	case guy = 35
+	case lady1 = 36
+	case riderF = 37
+	case willie = 38
+	case riderM = 39
+	case teacher = 40
+	case evice = 41
+	case snagem1 = 42
+	case athleteF = 43
+	case athleteM = 44
+	case ein = 45
+	case chaserF1 = 46
+	case chaserM1 = 47
+	case rollerBoy = 48
+	case worker = 49
+	case rui = 50
+	case richBoy2 = 51
+	case lady2 = 52
+	case coolTrainerM = 53
+	case coolTrainerF = 54
+	case justy = 55
+	case bandanaGuy = 56
+	case researcher = 57
+	case hunterF = 58
+	case battlus = 59
+	case bodyBuilderM2 = 60
+	case deepKing = 61
+	case chaserM2 = 62
+	case eagun2 = 63
+	case eagun3 = 64
+	case superTrainerF2 = 65
+	case fein = 66
+	case snagem2 = 67
+	case snagem3 = 68
+	case mirakleB = 69
+	case superTrainerM1 = 70
+	case trinch = 71
+	case athey = 72
+	case trudly = 73
+	case cail = 74
+	case chaserF2 = 75
 	
 	var name : String {
 		if self.rawValue == 0 {
