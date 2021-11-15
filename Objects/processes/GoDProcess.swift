@@ -13,7 +13,7 @@ import glibc
 #endif
 
 struct VMRegionInfo {
-	let virtualAddress: vm_address_t
+	let virtualAddress: UInt
 	let size: UInt
 }
 
