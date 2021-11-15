@@ -966,6 +966,7 @@ indirect enum GoDStructValues: CustomStringConvertible {
 					let mainIdentifier = rawValue & 0xFFFFFF00 // remove last byte so .rdat models can be found without their subIndex
 					valueString = ""
 					for fsysFileName in fsysNames {
+						#if os(macOS)
 						autoreleasepool {
 							if !fileFound, fsysFileName.length > 0 {
 								let fsysFile = XGFiles.fsys(fsysFileName.removeFileExtensions())
@@ -976,6 +977,16 @@ indirect enum GoDStructValues: CustomStringConvertible {
 								}
 							}
 						}
+						#else
+						if !fileFound, fsysFileName.length > 0 {
+							let fsysFile = XGFiles.fsys(fsysFileName.removeFileExtensions())
+							let file = fsysFile.fsysData
+							if let fileIndex = file.indexForIdentifier(identifier: mainIdentifier) {
+								fileFound = true
+								valueString = file.fileName + " -> " + (file.fileNameForFileWithIndex(index: fileIndex) ?? "File_\(fileIndex)")
+							}
+						}
+						#endif
 					}
 					if !fileFound {
 						valueString = "FileIdentifier_\(rawValue.hexString())"
