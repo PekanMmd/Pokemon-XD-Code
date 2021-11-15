@@ -8,7 +8,7 @@
 import Foundation
 
 class EreaderStructTable: GoDStructTableFormattable {
-	enum EreaderTableType {
+	enum EreaderTableType: CaseIterable {
 		case pokemon, trainers
 	}
 

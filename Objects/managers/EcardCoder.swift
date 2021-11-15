@@ -220,7 +220,7 @@ class EcardCoder {
 	static func decode(input: XGMutableData) -> XGMutableData? {
 		let output = XGMutableData(length: 0xb20)
 		output.file = .nameAndFolder(input.file.fileName.removeFileExtensions() + "-decoded.bin", input.file.folder)
-		let headerLength = kEcardHeader.count
+		let headerLength = input.length < 0x840 ? 0 : kEcardHeader.count
 		let data = input.getSubDataFromOffset(headerLength, length: input.length - headerLength)
 
 		var readPosition = 0

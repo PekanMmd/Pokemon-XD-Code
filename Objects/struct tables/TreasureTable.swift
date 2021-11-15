@@ -13,7 +13,8 @@ let treasureStruct = GoDStruct(name: "Treasure", format: [
 	.short(name: "Angle", description: "", type: .angle),
 	.short(name: "Room ID", description: "", type: .roomID),
 	.short(name: "Flag ID", description: "The flag that determines if the item has been received already", type: .uintHex),
-	.word(name: "Padding", description: "", type: .null),
+	.short(name: "Unknown", description: "", type: .uintHex),
+	.short(name: "Padding", description: "", type: .null),
 	.word(name: "Item ID", description: "", type: .itemID),
 	.subStruct(name: "Coordinates", description: "", property: GoDStruct(name: "Coordinates", format: [
 		.float(name: "Position X", description: ""),
