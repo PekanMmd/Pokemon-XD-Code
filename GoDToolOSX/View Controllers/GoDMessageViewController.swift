@@ -102,7 +102,7 @@ class GoDMessageViewController: GoDTableViewController {
 			let message = messageField.string == "" ? "-" : messageField.string
 			let string = XGString(string: message, file: table.file, sid: stringID)
 			let operation = table.containsStringWithId(stringID) ? "replacing" : "adding"
-			let success = table.addString(string, increaseSize: settings.increaseFileSizes, save: true)
+			let success = table.addString(string, increaseSize: XGSettings.current.increaseFileSizes, save: true)
 			let successMessage = success ? "Completed" : "Failed"
 			let successTitle = success ? "Success" : "Failure"
 			GoDAlertViewController.displayAlert(title: successTitle, text: "\(successMessage) \(operation) id: \(stringID) message: \(message) to \(table.file.path)")

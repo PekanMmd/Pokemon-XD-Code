@@ -10,7 +10,7 @@ import Foundation
 class XDProcessSetup {
 
 	func launch(processType: XDProcess.ProcessType,
-				autoSkipWarningScreen: Bool = false,
+				autoSkipWarningScreen: Bool = true,
 				onStart: ((XDProcess) -> Bool)?,
 				onFinish: (() -> Void)?) {
 		guard let xd = XDProcess(processType: processType) else {
@@ -28,7 +28,7 @@ class XDProcessSetup {
 	var onWillRender: ((RenderFrameBufferContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onRNGRoll: ((RNGRollContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onStep: ((XDProcess, XDGameState) -> Bool)? = nil
-	var onDidLoadSave: ((SaveLoadedContext, XDProcess, XDGameState) -> Bool)? = nil
+	var onDidReadOrWriteSave: ((SaveReadOrWriteContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onWillWriteSave: ((XDProcess, XDGameState) -> Bool)? = nil
 	var onWillChangeMap: ((MapWillChangeContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onDidChangeMapOrMenu: ((MapOrMenuDidChangeContext, XDProcess, XDGameState) -> Bool)? = nil

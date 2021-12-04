@@ -109,12 +109,12 @@ class XGMutableData {
 	@discardableResult
 	func writeToFile(_ file: XGFiles) -> Bool {
 		if data.write(to: file) {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("data successfully written to file:", file.path)
 			}
 			return true
 		} else {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("data failed to be written to file:", file.path)
 			}
 			return false

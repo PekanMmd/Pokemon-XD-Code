@@ -58,6 +58,7 @@ extension XDPartyPokemon {
 	func discordEmbed(fieldTypes: [EmbedFieldTypes], storedShadowData: XDStoredShadowData? = nil) -> DiscordEmbed {
 		var fields: [DiscordEmbed.Field] = []
 
+		#if GAME_XD
 		let isShadowPokemon = (storedShadowData != nil && shadowID > 0 && !storedShadowData!.hasBeenPurified)
 		let useBoostLevel = isShadowPokemon && !storedShadowData!.hasBeenCaught
 
@@ -155,6 +156,9 @@ extension XDPartyPokemon {
 				fields.append(.init(name: "HP", value: bar + "\n\(currentHP)/\(maxHP)", inline: true))
 			}
 		}
+		#else
+		var overrideColour: Int? = nil
+		#endif
 
 		return DiscordEmbed(
 			title: speciesName.titleCased.spaceToLength(10),
@@ -276,4 +280,14 @@ extension XDTrainer {
 		}
 		return embeds
 	}
+}
+
+enum Emoji: String {
+	#if GAME_XD
+	case protagRun = "<a:michael_run:896978303892750416>"
+	case protagRide = "<a:michael_scooter:896976067464663061>"
+	#else
+	case protagRun = "<a:michael_run:896978303892750416>"
+	case protagRide = "<a:michael_scooter:896976067464663061>"
+	#endif
 }

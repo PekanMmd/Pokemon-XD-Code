@@ -7,63 +7,7 @@
 
 import Foundation
 
-enum XDBreakPointTypes: Int, CaseIterable {
-	case clear = 0
-	case onFrameAdvance
-	case onWillRenderFrame
-	case onDidRNGRoll
-	case onStepCount
-	case onDidLoadSave
-	case onWillWriteSave
-	case onWillChangeMap
-	case onDidChangeMapOrMenu
-	case onDidConfirmMoveSelection
-	case onDidConfirmTurnSelection
-	case onWillUseMove
-	case onMoveEnd
-	case onWillCallPokemon
-	case onPokemonWillSwitchIntoBattle
-	case onShadowPokemonEncountered
-	case onShadowPokemonFled
-	case onShadowPokemonDidEnterReverseMode
-	case onWillUseItem
-	case onWillUseCologne
-	case onWillUseTM
-	case onDidUseTM
-	case onWillGainExp
-	case onLevelUp
-	case onWillEvolve
-	case onDidEvolve
-	case onDidPurification
-	case onWillStartBattle
-	case onDidEndBattle
-	case onBattleWhiteout
-	case onBattleTurnStart
-	case onBattleTurnEnd
-	case onPokemonTurnStart
-	case onPokemonTurnEnd
-	case onBattleDamageOrHealing
-	case onPokemonDidFaint
-	case onWillAttemptPokemonCapture
-	case onDidSucceedPokemonCapture
-	case onDidFailPokemonCapture
-	case onMirorRadarActiveAtColosseum
-	case onMirorRadarActiveAtPokespot
-	case onMirorRadarLostSignal
-	case onSpotMonitorActivated
-	case onWildBattleGenerated
-	case onWillGetFlag
-	case onWillSetFlag
-	case onReceivedGiftPokemon
-	case onReceivedItem
-	case onHealTeam
-	case onNewGameStart
-	case onPrint
-	case onSoftReset
-	case onInconsistentState
-
-	case yield = 0x7FFE
-	case forcedReturn = 0x7FFF
+extension XDBreakPointTypes {
 
 	var addresses: [Int]? {
 		switch self {
@@ -97,14 +41,14 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			case .US: return [0x8014f890]
 			default: return nil
 			}
-		case .onDidLoadSave:
+		case .onDidReadOrWriteSave:
 			switch region {
 			case .US: return [0x801ce874]
 			default: return nil
 			}
 		case .onWillWriteSave:
 			switch region {
-			case .US: return [0x801cd160]
+			case .US: return [0x801cdf0c, 0x801cdf14, 0x801cdf1c]
 			default: return nil
 			}
 		case .onWillChangeMap:
@@ -112,9 +56,14 @@ enum XDBreakPointTypes: Int, CaseIterable {
 			case .US: return [0x80120304]
 			default: return nil
 			}
-		case .onDidChangeMapOrMenu:
+		case .onDidChangeMap:
 			switch region {
 			case .US: return [0x8012705c]
+			default: return nil
+			}
+		case .onDidChangeMenuMap:
+			switch region {
+			case .US: return nil
 			default: return nil
 			}
 		case .onDidConfirmMoveSelection:
@@ -461,9 +410,9 @@ class StepCounterContext: BreakPointContext {
 	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
-class SaveLoadedContext: BreakPointContext {
+class SaveReadOrWriteContext: BreakPointContext {
 	enum Status: Int, Codable {
-		case cancelled = -1, previouslyLoadedCleanSave = 1, success = 3, firstLoadNoSaveData = 5, unknown = -2
+		case cancelled = -1, previouslyLoadedCleanSave = 1, readSuccessfully = 3, wroteSuccessfully = 4, firstLoadNoSaveData = 5, unknown = -2
 	}
 
 	var status: Status

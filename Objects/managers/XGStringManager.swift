@@ -117,7 +117,7 @@ func getStringsContaining(substring: String) -> [XGString] {
 	return found
 }
 
-private func doesMSGIDExists(_ id: Int) -> Bool {
+private func doesMSGIDExist(_ id: Int) -> Bool {
 	loadAllStrings()
 	
 	for table in allStringTables {
@@ -185,7 +185,7 @@ func freeMSGID(from: Int) -> Int? {
 	}
 	
 	for i in min ... kMaxStringID {
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("checking id: \(i)")
 		}
 		

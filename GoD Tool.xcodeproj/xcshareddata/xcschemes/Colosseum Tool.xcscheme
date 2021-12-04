@@ -34,6 +34,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      debugAsWhichUser = "root"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -53,6 +54,10 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "--iso /Users/starsmomodu/Documents/GoD\ Tool/Colo.iso"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--launch-dpp-secs 0"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

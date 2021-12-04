@@ -339,7 +339,7 @@ class XGStringTable: NSObject {
 			printg("Failed to write JSON to:", file.path)
 			return
 		}
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("Successfully wrote JSON to:", file.path)
 		}
 	}

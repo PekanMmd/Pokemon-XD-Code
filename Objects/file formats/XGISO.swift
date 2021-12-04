@@ -112,7 +112,7 @@ class XGISO: NSObject {
 
 	#if !GAME_PBR
 	func loadFST() {
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("Reading FST from ISO...")
 		}
 
@@ -120,7 +120,7 @@ class XGISO: NSObject {
 			printg("ISO file doesn't exist.")
 		}
 
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("ISO size: \(self.data.length.hexString())")
 		}
 
@@ -128,7 +128,7 @@ class XGISO: NSObject {
 		let TOCStart  = self.data.get4BytesAtOffset(kTOCStartOffsetLocation)
 		let TOCLength = self.data.get4BytesAtOffset(kTOCFileSizeLocation)
 
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("DOL start: \(DOLStart.hexString()), TOC start: \(TOCStart.hexString()), TOC size: \(TOCLength.hexString())")
 		}
 
@@ -147,7 +147,7 @@ class XGISO: NSObject {
 		}
 		fileSizes["Start.dol"] = size
 		allFileNames = ["Start.dol", "Game.toc"]
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("DOL size: \(size.hexString())")
 		}
 
@@ -181,7 +181,7 @@ class XGISO: NSObject {
 			return locationForFile(s1)! < locationForFile(s2)!
 		}
 
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("FST was read.")
 		}
 	}
@@ -225,7 +225,7 @@ class XGISO: NSObject {
 
 	func importFiles(_ fileList: [XGFiles], save: Bool = true) {
 
-		if settings.increaseFileSizes {
+		if XGSettings.current.increaseFileSizes {
 			for file in fileList {
 				guard file.exists else {
 					printg("Couldn't import file to ISO. File doesn't exist:", file.path)
@@ -374,7 +374,7 @@ class XGISO: NSObject {
 	}
 	
 	func shiftAndReplaceFile(_ file: XGFiles, save: Bool = false) {
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("shifting files and replacing file:", file.fileName)
 		}
 		if file.fileName == XGFiles.dol.fileName || file.fileName == XGFiles.toc.fileName {
@@ -685,7 +685,7 @@ class XGISO: NSObject {
 			return
 		}
 		
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("Moving iso file:", name, "to:", startOffset.hexString())
 		}
 		
@@ -704,7 +704,7 @@ class XGISO: NSObject {
 			return
 		}
 		
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("shifting iso file:", name, "by:", offset.hexString(), " bytes")
 		}
 		
@@ -847,9 +847,11 @@ class XGISO: NSObject {
 		#endif
 
 		if file.fileType == .fsys {
-			GSFsys.shared.addEntry(id: fsysID ?? file.fsysData.groupID, name: file.fileName)
+			let newID = fsysID ?? file.fsysData.groupID
+			GSFsys.shared.addEntry(id: newID, name: file.fileName)
 			if save {
 				GSFsys.shared.data().save()
+				printg("Added fsys archive to iso with id:", newID)
 			}
 		}
 
@@ -863,7 +865,7 @@ class XGISO: NSObject {
 	}
 
 	func save() {
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("saving iso...")
 		}
 
@@ -874,7 +876,7 @@ class XGISO: NSObject {
 		self.data.save()
 		#endif
 
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("saved iso")
 		}
 	}

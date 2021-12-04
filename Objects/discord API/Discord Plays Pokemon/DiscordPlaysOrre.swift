@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DiscordPlaysPokemonXD {
+class DiscordPlaysOrre {
 
 	class SaveSlotsState: Codable {
 		private static let file = XGFiles.nameAndFolder("DPP Continuity.json", .Documents)
@@ -18,38 +18,38 @@ class DiscordPlaysPokemonXD {
 		}
 
 		func save(process: XDProcess) {
-			incrementSlot()
-			process.inputHandler.clearPendingInput()
-			process.saveStateToSlot(latestSaveSlot)
-			usleep(1_000)
-			write()
+//			incrementSlot()
+//			process.inputHandler.clearPendingInput()
+//			process.saveStateToSlot(latestSaveSlot)
+//			usleep(1_000)
+//			write()
 		}
 
 		func load(process: XDProcess) {
-			guard latestSaveSlot > 0 else {
-				return
-			}
-			process.inputHandler.clearPendingInput()
-			process.loadStateFromSlot(latestSaveSlot)
-			sleep(2)
+//			guard latestSaveSlot > 0 else {
+//				return
+//			}
+//			process.inputHandler.clearPendingInput()
+//			process.loadStateFromSlot(latestSaveSlot)
+//			sleep(2)
 		}
 
 		func loadPrevious(process: XDProcess) {
-			guard latestSaveSlot > 0 else {
-				return
-			}
-			let previousSlot = latestSaveSlot == 1 ? 7 : latestSaveSlot - 1
-			process.inputHandler.clearPendingInput()
-			process.loadStateFromSlot(previousSlot)
+//			guard latestSaveSlot > 0 else {
+//				return
+//			}
+//			let previousSlot = latestSaveSlot == 1 ? 7 : latestSaveSlot - 1
+//			process.inputHandler.clearPendingInput()
+//			process.loadStateFromSlot(previousSlot)
 		}
 
 		func write() {
-			writeJSON(to: SaveSlotsState.file)
+//			writeJSON(to: SaveSlotsState.file)
 		}
 
 		func reset() {
-			latestSaveSlot = 0
-			write()
+//			latestSaveSlot = 0
+//			write()
 		}
 
 		static func read() -> SaveSlotsState? {
@@ -57,14 +57,18 @@ class DiscordPlaysPokemonXD {
 		}
 
 		private func incrementSlot() {
-			latestSaveSlot = latestSaveSlot == 7 ? 1 : latestSaveSlot + 1
+//			latestSaveSlot = latestSaveSlot == 7 ? 1 : latestSaveSlot + 1
 		}
 	}
 
 	struct XDStatusUpdate: Encodable {
 		let embeds: [DiscordEmbed]?
 		let text: String?
+		#if GAME_XD
 		var game = "XD"
+		#elseif GAME_COLO
+		var game = "CM"
+		#endif
 
 		init(text: String? = nil, embeds: [DiscordEmbed]? = nil) {
 			self.text = text
@@ -117,7 +121,7 @@ class DiscordPlaysPokemonXD {
 		processStateStack.push(state)
 		switch state {
 		case .startup: postContext("> <:pokeballicon:896975942738673735> Input is disabled while the game starts up.")
-		case .inGame: postContext("> <a:michael_run:896978303892750416> Now accepting inputs. Let's play!")
+		case .inGame: postContext("> \(Emoji.protagRun.rawValue) Now accepting inputs. Let's play!")
 		case .evolution: postContext("> <:evolution:897055856657575957> **B** button is disabled until the evolution is finished.")
 		default: break
 		}
@@ -186,15 +190,15 @@ class DiscordPlaysPokemonXD {
 	func launch () {
 		let setup = XDProcessSetup()
 
-		setup.onFrame = { [weak self] (process, state) in
-			self?.lastFrameAdvanceHeartBeat = Date(timeIntervalSinceNow: 0)
-			return true
-		}
-
-		setup.onWillRender = { [weak self] (context, process, state) in
-			self?.lastRenderBufferHeartBeat = Date(timeIntervalSinceNow: 0)
-			return true
-		}
+//		setup.onFrame = { [weak self] (process, state) in
+//			self?.lastFrameAdvanceHeartBeat = Date(timeIntervalSinceNow: 0)
+//			return true
+//		}
+//
+//		setup.onWillRender = { [weak self] (context, process, state) in
+//			self?.lastRenderBufferHeartBeat = Date(timeIntervalSinceNow: 0)
+//			return true
+//		}
 
 		var previousRoom: XGRoom?
 		setup.onDidChangeMapOrMenu = { [weak self] (context, process, state) -> Bool in
@@ -207,14 +211,12 @@ class DiscordPlaysPokemonXD {
 				self?.currentShadowTable = state.shadowDataState
 			}
 
-//			print(context.newRoom.name)
-
 			switch context.newRoom.name {
 			case "pokemon_logo":
 				if let savedStates = self?.saveSlotsState,
 				   savedStates.hasStates() {
-					self?.pushState(.inGame)
 					savedStates.load(process: process)
+					self?.pushState(.inGame)
 					self?.currentParty = state.trainerState?.value
 					self?.currentShadowTable = state.shadowDataState
 				}
@@ -226,28 +228,53 @@ class DiscordPlaysPokemonXD {
 			case "title":
 				if let savedStates = self?.saveSlotsState,
 				   savedStates.hasStates() {
-					self?.pushState(.inGame)
 					savedStates.load(process: process)
+					self?.pushState(.inGame)
 					self?.currentParty = state.trainerState?.value
 					self?.currentShadowTable = state.shadowDataState
 				} else {
 					self?.pushState(.startup)
+					if game == .XD {
+						process.inputHandler.input([
+							GCPad(duration: 3),
+							GCPad(duration: 0.5, A: true),
+							GCPad(duration: 3),
+							GCPad(duration: 0.5, A: true),
+							// Wait to see if a save gets loaded in which case that
+							// callback will skip the rest of these inputs
+							GCPad(duration: 5),
+							GCPad(A: true),
+							GCPad(duration: 3),
+							GCPad(A: true),
+							GCPad(A: true),
+							GCPad(duration: 3),
+							GCPad(Up: true),
+							GCPad(duration: 3),
+							GCPad(A: true)
+						])
+					} else {
+						process.inputHandler.input([
+							GCPad(duration: 3),
+							GCPad(duration: 0.5, A: true),
+							GCPad(duration: 3),
+							GCPad(duration: 0.5, A: true),
+							GCPad(duration: 3),
+							GCPad(duration: 0.5, A: true),
+							GCPad(duration: 3),
+							GCPad(duration: 0.5, A: true),
+						])
+					}
+				}
+			case "topmenu":
+				// Colosseum only
+				if game == .Colosseum {
 					process.inputHandler.input([
-						.init(duration: 3),
-						.init(duration: 0.5, A: true),
-						.init(duration: 3),
-						.init(duration: 0.5, A: true),
-						// Wait to see if a save gets loaded in which case that
-						// callback will skip the rest of these inputs
-						.init(duration: 5),
-						.init(A: true),
-						.init(duration: 3),
-						.init(A: true),
-						.init(A: true),
-						.init(duration: 3),
-						.init(Up: true),
-						.init(duration: 3),
-						.init(A: true)
+						GCPad(duration: 3),
+						GCPad(A: true),
+						GCPad(duration: 3),
+						GCPad(Up: true),
+						GCPad(duration: 3),
+						GCPad(A: true)
 					])
 				}
 			case "pcbox_menu":
@@ -255,14 +282,14 @@ class DiscordPlaysPokemonXD {
 				self?.saveSlotsState.save(process: process)
 			case "name_entry_menu":
 				if self?.processState == .startup,
-				   previousRoom?.name == "title" {
+				   previousRoom?.name == "title" || previousRoom?.name == "top_menu" {
 					process.inputHandler.input([
-						.init(duration: 3),
-						.init(Down: true),
-						.init(duration: 3),
-						.init(A: true),
-						.init(duration: 3),
-						.init(A: true)
+						GCPad(duration: 3),
+						GCPad(Down: true),
+						GCPad(duration: 3),
+						GCPad(A: true),
+						GCPad(duration: 3),
+						GCPad(A: true)
 					])
 				}
 			default:
@@ -279,24 +306,28 @@ class DiscordPlaysPokemonXD {
 			return true
 		}
 
-		setup.onDidLoadSave = { [weak self] (context, process, state) -> Bool in
+		setup.onDidReadOrWriteSave = { [weak self] (context, process, state) -> Bool in
 			switch context.status {
 			case .firstLoadNoSaveData:
 				break
-			case .success, .previouslyLoadedCleanSave:
-				if self?.processState == .startup {
+			case .readSuccessfully, .previouslyLoadedCleanSave:
+				if self?.processState == .startup,
+				   game == .XD {
+					// XD only
 					process.inputHandler.clearPendingInput()
 					process.inputHandler.input([
-						.init(duration: 3),
-						.init(A: true),
-						.init(duration: 3),
-						.init(Up: true),
-						.init(duration: 3),
-						.init(A: true)
+						GCPad(duration: 3),
+						GCPad(A: true),
+						GCPad(duration: 3),
+						GCPad(Up: true),
+						GCPad(duration: 3),
+						GCPad(A: true)
 					])
 				}
 				self?.currentParty = state.trainerState?.value
 				self?.currentShadowTable = state.shadowDataState
+			case .wroteSuccessfully:
+				self?.saveSlotsState.reset()
 			default: break
 			}
 
@@ -304,11 +335,12 @@ class DiscordPlaysPokemonXD {
 		}
 
 		setup.onWillChangeMap =  { [weak self] (context, process, state) -> Bool in
-			let emoji = state.currentRoomState?.value?.name == "worldmap" ? "<a:michael_scooter:896976067464663061>" : "<a:michael_run:896978303892750416>"
+			let emoji = state.currentRoomState?.value?.name == "worldmap" ? "\(Emoji.protagRide.rawValue)" : "\(Emoji.protagRun.rawValue)"
 			let announcementText = "> \(emoji) Now entering: " + context.nextRoom.mapName + "\n> " + context.nextRoom.name
 			print(announcementText)
 
-			if !context.nextRoom.name.contains("_bf") {
+			if !context.nextRoom.name.contains("_bf"),
+			   !context.nextRoom.name.contains("menu") {
 				if context.nextRoom.name != state.currentRoomState?.value?.name { // check previous room id.
 					if let info = self?.mapsURLs[context.nextRoom.name] {
 						let embed = DiscordEmbed(title: context.nextRoom.name,
@@ -324,11 +356,7 @@ class DiscordPlaysPokemonXD {
 			return true
 		}
 
-		setup.onWillWriteSave = { [weak self] (process, state) -> Bool in
-			self?.saveSlotsState.reset()
-			return true
-		}
-
+		#if GAME_XD
 		setup.onPurification = { [weak self] (context, process, state) -> Bool in
 			if context.pokemon.species.index > 0 {
 				let pokemon = context.pokemon
@@ -521,6 +549,7 @@ class DiscordPlaysPokemonXD {
 			self?.currentParty = state.trainerState?.value
 			return true
 		}
+		#endif
 
 		setup.onWillUseMove = { [weak self] (context, process, state) -> Bool in
 			if context.attackingPokemon.species.index > 0 {
@@ -532,6 +561,7 @@ class DiscordPlaysPokemonXD {
 			return true
 		}
 
+		#if GAME_XD
 		setup.onBattleDamageOrHealing = { [weak self] (context, process, state) -> Bool in
 			let defendingPokemon = context.defendingPokemon
 			if defendingPokemon.species.index > 0,
@@ -547,6 +577,66 @@ class DiscordPlaysPokemonXD {
 			return true
 		}
 
+		setup.onShadowPokemonEncountered = { [weak self] (context, process, state) -> Bool in
+			if context.pokemon.species.index > 0 {
+				let pokemon = context.pokemon
+				let name = pokemon.speciesName.titleCased
+				let fields: [XDPartyPokemon.EmbedFieldTypes] = [.types, .level, .catchRate]
+				let embed = pokemon.discordEmbed(fieldTypes: fields, storedShadowData: state.shadowDataState?.shadowData(pokemon: pokemon))
+				self?.postUpdate("> ⚠️ The aura reader responded to **Shadow " + name + "**!", embed: embed)
+				self?.currentShadowTable = state.shadowDataState
+			}
+			return true
+		}
+
+		setup.onPokemonDidEnterReverseMode = { [weak self] (context, process, state) -> Bool in
+			if context.pokemon.species.index > 0 {
+				let pokemon = context.pokemon
+				let embed = pokemon.discordEmbed(fieldTypes: [.hp, .status, .types, .reverseMode], storedShadowData: state.shadowDataState?.shadowData(pokemon: pokemon))
+				self?.postContext("> 😡 " + pokemon.nickname.titleCased + " entered **\(game == .XD ? "Reverse Mode" : "Hyper Mode")**!", embed: embed)
+			}
+			return true
+		}
+
+		setup.onWillSetFlag = { [weak self] (context, process, state) -> Bool in
+			if context.flagID == XDSFlags.story.rawValue {
+				if let storyFlag = XGStoryProgress(rawValue: context.value),
+				   storyFlag.rawValue <= XGStoryProgress.defeatedGreevil.rawValue {
+					let emoji = storyFlag == XGStoryProgress.defeatedGreevil ? "<a:goodmichael:896976065296232489>" : "📃"
+					self?.postUpdate("> \(emoji) **Progress \(storyFlag.progress)**: " + storyFlag.name
+										.replacingOccurrences(of: "_", with: " ").titleCased
+										.replacingOccurrences(of: "Pda", with: "PDA")
+										, skipContext: true)
+
+					switch storyFlag {
+					case .completedTutorialBattle:
+						self?.currentParty = state.trainerState?.value
+						self?.currentShadowTable = state.shadowDataState
+						fallthrough
+					case .defeatedLovrinaInCipherLab: fallthrough
+					case .battledMirorBAtCavePokespot: fallthrough
+					case .battledExolAtONBS: fallthrough
+					case .defeatedSnattleInPhenacCity: fallthrough
+					case .defeatedMirorBAtOutskirtStand: fallthrough
+					case .reclaimedSnagMachine: fallthrough
+					case .defeatedGoriganAtShadowPokemonFactory: fallthrough
+					case .defeatedEldes: fallthrough
+					case .defeatedGreevil:
+						if let player = state.trainerState,
+						   let trainerData = player.value {
+							self?.postUpdate("> <:pokeballicon:896975942738673735> Team Status:", embeds: trainerData.embeds(trainerModel: .michael1WithoutSnagMachine, shadowTable: state.shadowDataState))
+						}
+					default:
+						break
+					}
+				}
+				self?.saveSlotsState.save(process: process)
+			}
+			return true
+		}
+		#endif
+
+		#if GAME_XD
 		setup.onSpotMonitorActivated = { [weak self] (process, state) -> Bool in
 			var embeds = [DiscordEmbed]()
 			func addEmbedForSpawn(spot: XGPokeSpots, species: XGPokemon, snacks: Int) {
@@ -617,64 +707,7 @@ class DiscordPlaysPokemonXD {
 			return true
 		}
 		setup.onMirorRadarActivatedPokespot = setup.onMirorRadarActivatedColosseum
-
-		setup.onShadowPokemonEncountered = { [weak self] (context, process, state) -> Bool in
-			if context.pokemon.species.index > 0 {
-				let pokemon = context.pokemon
-				let name = pokemon.speciesName.titleCased
-				let fields: [XDPartyPokemon.EmbedFieldTypes] = [.types, .level, .catchRate]
-				let embed = pokemon.discordEmbed(fieldTypes: fields, storedShadowData: state.shadowDataState?.shadowData(pokemon: pokemon))
-				self?.postUpdate("> ⚠️ The aura reader responded to **Shadow " + name + "**!", embed: embed)
-				self?.currentShadowTable = state.shadowDataState
-			}
-			return true
-		}
-
-		setup.onPokemonDidEnterReverseMode = { [weak self] (context, process, state) -> Bool in
-			if context.pokemon.species.index > 0 {
-				let pokemon = context.pokemon
-				let embed = pokemon.discordEmbed(fieldTypes: [.hp, .status, .types, .reverseMode], storedShadowData: state.shadowDataState?.shadowData(pokemon: pokemon))
-				self?.postContext("> 😡 " + pokemon.nickname.titleCased + " entered **Reverse Mode**!", embed: embed)
-			}
-			return true
-		}
-
-		setup.onWillSetFlag = { [weak self] (context, process, state) -> Bool in
-			if context.flagID == XDSFlags.story.rawValue {
-				if let storyFlag = XGStoryProgress(rawValue: context.value),
-				   storyFlag.rawValue <= XGStoryProgress.defeatedGreevil.rawValue {
-					let emoji = storyFlag == XGStoryProgress.defeatedGreevil ? "<a:goodmichael:896976065296232489>" : "📃"
-					self?.postUpdate("> \(emoji) **Progress \(storyFlag.progress)**: " + storyFlag.name
-										.replacingOccurrences(of: "_", with: " ").titleCased
-										.replacingOccurrences(of: "Pda", with: "PDA")
-										, skipContext: true)
-
-					switch storyFlag {
-					case .completedTutorialBattle:
-						self?.currentParty = state.trainerState?.value
-						self?.currentShadowTable = state.shadowDataState
-						fallthrough
-					case .defeatedLovrinaInCipherLab: fallthrough
-					case .battledMirorBAtCavePokespot: fallthrough
-					case .battledExolAtONBS: fallthrough
-					case .defeatedSnattleInPhenacCity: fallthrough
-					case .defeatedMirorBAtOutskirtStand: fallthrough
-					case .reclaimedSnagMachine: fallthrough
-					case .defeatedGoriganAtShadowPokemonFactory: fallthrough
-					case .defeatedEldes: fallthrough
-					case .defeatedGreevil:
-						if let player = state.trainerState,
-						   let trainerData = player.value {
-							self?.postUpdate("> <:pokeballicon:896975942738673735> Team Status:", embeds: trainerData.embeds(trainerModel: .michael1WithoutSnagMachine, shadowTable: state.shadowDataState))
-						}
-					default:
-						break
-					}
-				}
-				self?.saveSlotsState.save(process: process)
-			}
-			return true
-		}
+		#endif
 
 		setup.launch(processType: .Dolphin(dolphinFile: nil, isoFile: nil)) { (process) in
 
@@ -695,11 +728,11 @@ class DiscordPlaysPokemonXD {
 					guard let self = self else { return }
 
 					if self.processState.acceptInputs || self.processState.acceptOverrides {
-						guard settings.inputPollDuration > 0 else {
+						guard XGSettings.current.inputPollDuration > 0 else {
 							sleep(5)
 							continue
 						}
-						let sleepDuration = settings.inputPollDuration > 0 ? settings.inputPollDuration * 1000 : 10_000_000
+						let sleepDuration = XGSettings.current.inputPollDuration > 0 ? XGSettings.current.inputPollDuration * 1000 : 10_000_000
 						usleep(sleepDuration)
 						GoDNetworkingManager.get(self.updatesURL + getInputEndpoint()) { (controller: GCPad?) in
 							if let pad = controller {
@@ -740,15 +773,20 @@ class DiscordPlaysPokemonXD {
 									if self.processStateStack.contains(.inGame),
 									   let party = self.currentParty,
 									   let shadowData = self.currentShadowTable {
+										#if GAME_XD
 										self.postContext("> <:pokeballicon:896975942738673735> Team Status:", embeds: party.embeds(trainerModel: .michael1WithoutSnagMachine, shadowTable: shadowData))
+										#else
+										self.postContext("> <:pokeballicon:896975942738673735> Team Status:", embeds: party.embeds(trainerModel: .wes, shadowTable: shadowData))
+										#endif
 									}
 									fallthrough
+
 								default:
 									let timeSinceLastInputEnd =  Date(timeIntervalSinceNow: 0).timeIntervalSince1970 - lastInputEndTime.timeIntervalSince1970
 									guard timeSinceLastInputEnd >= 0 else {
 										return
 									}
-									if self.processState.acceptInputs && settings.inputPollDuration > 0 {
+									if self.processState.acceptInputs && XGSettings.current.inputPollDuration > 0 {
 										var updatedPad = pad.disableButtons(self.processState.disabledButtons)
 										if self.processState == .pc_menu {
 											// The controls seems to be more sensitive in the pc menus
@@ -813,7 +851,7 @@ class DiscordPlaysPokemonXD {
 			if self?.shouldRelaunchOnDolphinClosed == true {
 				self?.shouldRelaunchOnDolphinClosed = false
 				printg("Process marked for relaunch")
-				DiscordPlaysPokemonXD().launch()
+				DiscordPlaysOrre().launch()
 			} else {
 				printg("Closing tool")
 				ToolProcess.terminate()

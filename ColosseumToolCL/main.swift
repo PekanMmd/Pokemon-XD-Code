@@ -6,9 +6,9 @@
 //
 //
 
-//ToolProcess.loadISO(exitOnFailure: true)
+import Foundation
 
-
+ToolProcess.loadISO(exitOnFailure: true)
 
 //var documentedText = "- Unused text in Pokemon Colosseum (US) - \n\n"
 //

@@ -36,6 +36,7 @@ class ProcessState<T> {
 	fileprivate func write(process: XDProcess) {}
 }
 
+#if GAME_XD
 class XDBattleState: ProcessState<XGBattle> {
 	private static var kCurrentBattleIDRAMOffset: Int {
 		switch region {
@@ -93,12 +94,20 @@ class XDBattleState: ProcessState<XGBattle> {
 		}
 	}
 }
+#endif
 
 class XDCurrentRoomState: ProcessState<XGRoom> {
 	static var kCurrentRoomIDRAMOffset: Int {
-		switch region {
-		case .US: return 0x80814ab6
-		default: return -1
+		if game == .XD {
+			switch region {
+			case .US: return 0x80814ab6
+			default: return -1
+			}
+		} else {
+			switch region {
+			case .US: return 0x80478B1a
+			default: return -1
+			}
 		}
 	}
 
@@ -121,6 +130,7 @@ class XDCurrentRoomState: ProcessState<XGRoom> {
 	}
 }
 
+#if GAME_XD
 class XDLastMenuState: ProcessState<XGRoom> {
 	static var kLastMenuIDRAMOffset: Int {
 		switch region {
@@ -263,6 +273,14 @@ class XDFlagsState {
 	}
 }
 
+extension XDStoredShadowData {
+	convenience init?(process: XDProcess, index: Int) {
+		guard let trainerDataOrigin = process.readPointerRelativeToR13(offset: -0x4728) else { return nil }
+		let shadowDataOffset = trainerDataOrigin + 0xE380
+		self.init(file: process, offset: shadowDataOffset + (index * kSizeOfStoredShadowData))
+	}
+}
+
 class XDGameState {
 
 	// Reading and writing too much in each break cycle causes too much lag
@@ -291,11 +309,83 @@ class XDGameState {
 		trainerState?.write(process: process)
 	}
 }
+#else
+class XDShadowDataState: ProcessState<[XDStoredShadowData]> {
+
+	init(process: XDProcess) {
+		super.init(process: process) { (process) -> [XDStoredShadowData]? in
+			return []
+		}
+	}
+
+	override func write(process: XDProcess) {
+	}
+
+	func shadowData(id: Int) -> XDStoredShadowData? {
+		return nil
+	}
+
+	func shadowData(pokemon: XDPartyPokemon) -> XDStoredShadowData? {
+		return nil
+	}
+}
+
+class XDGameState {
+
+	var battleState: XDBattleState?
+	var currentRoomState: XDCurrentRoomState?
+	var shadowDataState: XDShadowDataState?
+	var trainerState: XDTrainerState?
+	var flagsState: XDFlagsState?
+
+	init(process: XDProcess) {
+
+	}
+
+	func write(process: XDProcess) {
+		
+	}
+}
+
+class XDTrainerState: ProcessState<XDTrainer> {
+	init(process: XDProcess) {
+		super.init(process: process) { (process) -> XDTrainer? in
+			return nil
+		}
+	}
+
+	override func write(process: XDProcess) {
+
+	}
+}
+
+class XDFlagsState: ProcessState<XDSFlags> {
+	init(process: XDProcess) {
+		super.init(process: process) { (process) -> XDSFlags? in
+			return nil
+		}
+	}
+
+	override func write(process: XDProcess) {
+
+	}
+}
+
+class XDBattleState: ProcessState<XGBattle> {
+	init(process: XDProcess) {
+		super.init(process: process) { (process) -> XGBattle? in
+			return nil
+		}
+	}
+
+	override func write(process: XDProcess) {
+
+	}
+}
 
 extension XDStoredShadowData {
 	convenience init?(process: XDProcess, index: Int) {
-		guard let trainerDataOrigin = process.readPointerRelativeToR13(offset: -0x4728) else { return nil }
-		let shadowDataOffset = trainerDataOrigin + 0xE380
-		self.init(file: process, offset: shadowDataOffset + (index * kSizeOfStoredShadowData))
+		return nil
 	}
 }
+#endif

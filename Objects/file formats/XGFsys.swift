@@ -345,7 +345,7 @@ final class XGFsys {
 	func decompressedDataForFileWithFiletype(type: XGFileTypes) -> XGMutableData? {
 		if let index = indexForFileType(type: type) {
 			if index < 0 || index > self.numberOfEntries {
-				if settings.verbose {
+				if XGSettings.current.verbose {
 					printg(self.fileName + " - file type: " + type.fileExtension + " doesn't exists.")
 				}
 				return nil
@@ -358,7 +358,7 @@ final class XGFsys {
 	func dataForFileWithFiletype(type: XGFileTypes) -> XGMutableData? {
 		if let index = indexForFileType(type: type) {
 			if index < 0 || index > self.numberOfEntries {
-				if settings.verbose {
+				if XGSettings.current.verbose {
 					printg(self.fileName + " - file type: " + type.fileExtension + " doesn't exists.")
 				}
 				return nil
@@ -844,7 +844,7 @@ final class XGFsys {
 	func extractFilesToFolder(folder: XGFolders, extract: Bool = true, decode: Bool, overwrite: Bool = false) {
 		if extract {
 			for i in 0 ..< self.numberOfEntries {
-				if settings.verbose, let filename = fileNameForFileWithIndex(index: i) {
+				if XGSettings.current.verbose, let filename = fileNameForFileWithIndex(index: i) {
 					printg("extracting file: \(filename) from \(self.file.path)")
 				}
 				if let fileData = extractDataForFileWithIndex(index: i) {
@@ -859,7 +859,7 @@ final class XGFsys {
 		// decode certain file types
 		if decode {
 			for file in folder.files where filenames.contains(file.fileName)  {
-				if settings.verbose {
+				if XGSettings.current.verbose {
 					printg("decoding file: \(file.fileName)")
 				}
 
@@ -899,7 +899,7 @@ final class XGFsys {
 				let fileContainsScript = file.fileType == .scd
 				#endif
 
-				if fileContainsScript, (game != .Colosseum || settings.enableExperimentalFeatures)  { // TODO allow colosseum scripts once less buggy
+				if fileContainsScript, (game != .Colosseum || XGSettings.current.enableExperimentalFeatures)  { // TODO allow colosseum scripts once less buggy
 					let xdsFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.xds.fileExtension, folder)
 					if !xdsFile.exists || overwrite {
 						let scriptText = file.scriptData.getXDSScript()
@@ -914,7 +914,7 @@ final class XGFsys {
 						let table = file.stringTable
 						table.writeJSON(to: msgFile)
 					}
-					if file == .common_rel && game == .Colosseum && region != .JP && settings.enableExperimentalFeatures {
+					if file == .common_rel && game == .Colosseum && region != .JP && XGSettings.current.enableExperimentalFeatures {
 						let msgFile2 = XGFiles.nameAndFolder("common2.json", file.folder)
 						if !msgFile2.exists {
 							let table = XGStringTable.common_rel2()
@@ -926,7 +926,7 @@ final class XGFsys {
 							table.writeJSON(to: msgFile3)
 						}
 					}
-					if file == .dol && game == .XD && region != .JP && settings.enableExperimentalFeatures {
+					if file == .dol && game == .XD && region != .JP && XGSettings.current.enableExperimentalFeatures {
 						let msgFile2 = XGFiles.nameAndFolder("Start2.json", file.folder)
 						if !msgFile2.exists {
 							let table = XGStringTable.dol2()

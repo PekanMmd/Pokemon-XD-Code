@@ -41,7 +41,7 @@ class GoDPatchViewController: GoDTableViewController {
 		if row == -1 {
 			return
 		}
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("Selected patch:", patches[row].name)
 		}
 		self.showActivityView {

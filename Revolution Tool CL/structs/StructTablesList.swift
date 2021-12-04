@@ -66,6 +66,7 @@ var commonStructTablesList: [GoDStructTableFormattable] = {
 		pokemonBodiesTable,
 		typeMatchupsStructTable,
 		trainerCustomisationsTable,
+		trainerModelsTable,
 		trainerTitlesTable,
 		colosseumsTable,
 		tmsTable

@@ -35,7 +35,15 @@ var loadableFiles: [String] {
 }
 #else
 var loadableFiles: [String] {
-		[XGFiles.dol.path, XGFiles.fsys("common").path]
+	var paths = [XGFiles.dol.path, XGFiles.fsys("common").path]
+	if XGFolders.ISOExport("deck").exists {
+		paths += XGFolders.ISOExport("deck").files.filter {
+			return $0.fileType == .bin
+		}.map {
+			$0.path
+		}
+	}
+	return paths
 }
 #endif
 

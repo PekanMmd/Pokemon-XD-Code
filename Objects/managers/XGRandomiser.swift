@@ -539,6 +539,37 @@ class XGRandomiser: NSObject {
 			treasure.save()
 		}
 	}
+
+	private var entryPointsByWarp: [String: String] = [:
+
+	]
+
+	static func randomiseWarps() {
+
+		// First pass to set parse options
+		var warps = [XGInteractionPointInfo]()
+		var elevators = [XGInteractionPointInfo]()
+		var cutscenes = [XGInteractionPointInfo]()
+		for interactionPoint in XGInteractionPointData.allValues {
+//			guard interactionPoint.room?.map != .PokemonHQ,
+//				  guard interactionPoint.room?.name != "worldmap" else {
+//				continue
+//			}
+//
+//			let info = interactionPoint.info
+//
+//			switch info {
+//			case .Warp(let targetRoom, let targetEntryID, let sound):
+//
+//			case .Elevator(let elevatorID, let targetRoomID, let targetElevatorID, let direction):
+//
+//			case .CutsceneWarp(let targetRoom, let targetEntryID, cutsceneID: let cutsceneID, cameraFSYSID: let cameraFSYSID):
+//
+//			default:
+//				break
+//			}
+		}
+	}
 	#endif
 	
 }

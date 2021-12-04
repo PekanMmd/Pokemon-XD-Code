@@ -178,7 +178,7 @@ func allPokemon() -> [String : XGPokemon] {
 let pokemons = allPokemon()
 
 func pokemon(_ name: String) -> XGPokemon {
-	if settings.verbose && (pokemons[name.lowercased()] == nil) { printg("couldn't find: " + name) }
+	if XGSettings.current.verbose && (pokemons[name.lowercased()] == nil) { printg("couldn't find: " + name) }
 	return pokemons[name.lowercased()] ?? .index(0)
 }
 

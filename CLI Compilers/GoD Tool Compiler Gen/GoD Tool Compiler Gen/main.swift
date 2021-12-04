@@ -218,8 +218,6 @@ for file in ColoSources {
 	osxColoCompiler += " ../" + file.replacingOccurrences(of: " ", with: "\\ ")
 	windowsColoCompiler += " \"..\\" + file.replacingOccurrences(of: "/", with: "\\") + "\""
 }
-windowsCompiler += "\nPAUSE"
-windowsColoCompiler += "\nPAUSE"
 
 // MARK: - Copy PBR assets to scripts
 

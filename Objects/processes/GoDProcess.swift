@@ -76,7 +76,7 @@ class GoDProcess {
 
 	func readVirtualMemory(at offset: UInt, length: UInt, relativeToRegion region: VMRegionInfo? = nil) -> XGMutableData? {
 		guard let task = self.task, let baseAddress = self.baseAddress else {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("Couldn't read virtual memory for unloaded process")
 			}
 			return nil
@@ -88,7 +88,7 @@ class GoDProcess {
 		var sizeRead: mach_msg_type_number_t = 0
 		var kret = vm_read(task, relativeToAddress + offset, length, &pointer, &sizeRead)
 		guard kret == KERN_SUCCESS else {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("Couldn't read virtual memory for process: \(pid). Length: \(length)")
 				printg(kret == KERN_INVALID_ADDRESS ? "Invalid Address" : "KRETURN:\(kret)")
 			}
@@ -111,7 +111,7 @@ class GoDProcess {
 	@discardableResult
 	func writeVirtualMemory(at offset: UInt, data: XGMutableData, relativeToRegion region: VMRegionInfo? = nil) -> Bool {
 		guard let task = self.task, let baseAddress = self.baseAddress else {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("Couldn't write virtual memory for unloaded process")
 			}
 			return false
@@ -127,7 +127,7 @@ class GoDProcess {
 		
 		let kret = vm_write(task, relativeToAddress + offset, pointer, count.unsigned)
 		if kret != KERN_SUCCESS {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("Couldn't write virtual memory for process: \(pid).", kret)
 				if kret == KERN_INVALID_ADDRESS {
 					print("Invalid Address")
@@ -154,7 +154,7 @@ class GoDProcess {
 
 		let kret = mach_vm_region(task, &address, &size, VM_REGION_BASIC_INFO, &info, &count, &object_name)
 		guard kret == KERN_SUCCESS else {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("Couldn't load base address for task: \(task).")
 				printg("Error no:", kret)
 			}

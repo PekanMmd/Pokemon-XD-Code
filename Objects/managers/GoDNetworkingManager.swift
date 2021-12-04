@@ -46,7 +46,7 @@ class GoDNetworkingManager {
 		let task = URLSession.shared.dataTask(with: request) { data, response, error in
 			guard let data = data, error == nil else {
 				printg("Failed to make \(method.rawValue) request to:", urlString)
-				if settings.verbose {
+				if XGSettings.current.verbose {
 					printg(error?.localizedDescription ?? "No data")
 				}
 				completion?(nil)

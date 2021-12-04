@@ -144,7 +144,7 @@ class XGUtility {
 						if file.fileType == .msg {
 							for json in fileToImport.folder.files where json.fileType == .json {
 								if json.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-									if settings.verbose {
+									if XGSettings.current.verbose {
 										printg("importing \(json.path) into \(file.path)")
 									}
 									let table = try? XGStringTable.fromJSONFile(file: json)
@@ -202,7 +202,7 @@ class XGUtility {
 						if file.fileType == .gtx || file.fileType == .atx {
 							for imageFile in fileToImport.folder.files where XGFileTypes.imageFormats.contains(imageFile.fileType) {
 								if imageFile.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
-									if settings.verbose {
+									if XGSettings.current.verbose {
 										printg("importing \(imageFile.path) into \(file.path)")
 									}
 									if let image = XGImage.loadImageData(fromFile: imageFile) {
@@ -224,7 +224,7 @@ class XGUtility {
 							let gsw = XGGSWTextures(data: file.data!)
 
 							for subFile in fileToImport.folder.files where subFile.fileName.contains(gsw.subFilenamesPrefix) && subFile.fileType == .gtx {
-								if settings.verbose {
+								if XGSettings.current.verbose {
 									printg("importing \(subFile.path) into \(file.path)")
 								}
 								if let id = subFile.fileName.removeFileExtensions().replacingOccurrences(of: gsw.subFilenamesPrefix, with: "").integerValue {
@@ -279,7 +279,7 @@ class XGUtility {
 						// strings in the xds scripts will override those particular strings in the msg's json
 						#if GAME_XD
 						if file.fileType == .xds && game != .PBR {
-							if settings.verbose {
+							if XGSettings.current.verbose {
 								printg("compiling \(file.path)")
 							}
 							XDSScriptCompiler.setFlags(disassemble: false, decompile: false, updateStrings: true, increaseMSG: true)
@@ -288,7 +288,7 @@ class XGUtility {
 								if XGFiles.common_rel.exists, let newScript = XDSScriptCompiler.compile(file.text) {
 									let start = CommonIndexes.Script.startOffset
 									var length = CommonIndexes.Script.length
-									if newScript.length > length && settings.increaseFileSizes {
+									if newScript.length > length && XGSettings.current.increaseFileSizes {
 										common.expandSymbolWithIndex(CommonIndexes.Script.index, by: newScript.length - length)
 										length = CommonIndexes.Script.length
 									} else {
@@ -321,7 +321,7 @@ class XGUtility {
 							for dat in fileToImport.folder.files where dat.fileType == .dat && dat.fileName.contains(".pkx") {
 								if dat.fileName.removeFileExtensions() == file.fileName.removeFileExtensions() {
 									if let datData = dat.data, let pkxData = file.data {
-										if settings.verbose {
+										if XGSettings.current.verbose {
 											printg("importing \(dat.path) into \(file.path)")
 										}
 										XGUtility.importDatToPKX(dat: datData, pkx: pkxData).save()
@@ -351,7 +351,7 @@ class XGUtility {
 					}
 				}
 
-				if settings.verbose {
+				if XGSettings.current.verbose {
 					printg("loading fsys data")
 				}
 				let fsysData = fileToImport.fsysData
@@ -360,16 +360,16 @@ class XGUtility {
 					for file in fileToImport.folder.files where shouldIncludeFile(file) {
 						if file.fileName == filename {
 							if fsysData.isFileCompressed(index: i) {
-								if settings.verbose {
+								if XGSettings.current.verbose {
 									printg("compressing file", file.path)
 								}
 								let compressed = file.compress()
-								if settings.verbose {
+								if XGSettings.current.verbose {
 									printg("importing \(file.path) into \(fileToImport.path)")
 								}
 								fsysData.shiftAndReplaceFileWithIndex(i, withFile: compressed, save: false)
 							} else {
-								if settings.verbose {
+								if XGSettings.current.verbose {
 									printg("importing \(file.path) into \(fileToImport.path)")
 								}
 								fsysData.shiftAndReplaceFileWithIndex(i, withFile: file, save: false)
@@ -377,12 +377,12 @@ class XGUtility {
 						}
 					}
 				}
-				if settings.verbose {
+				if XGSettings.current.verbose {
 					printg("saving updated fsys \(fsysData.file.path)")
 				}
 				fsysData.save()
 			}
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("importing \(fileToImport.path) into \(XGFiles.iso.path)")
 			}
 			
@@ -420,14 +420,14 @@ class XGUtility {
 	class func searchForFsysForIdentifier(id: UInt32) -> [XGFsys] {
 		let iso = XGISO.current
 		var found = [XGFsys]()
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("Searching for fsys containing identifier: \(id.hexString())")
 		}
 		for name in iso.allFileNames where name.fileExtensions == ".fsys" {
 			let fsys = iso.dataForFile(filename: name)!.fsysData
 			for index in 0 ..< fsys.identifiers.count {
 				if fsys.identifiers[index] == id {
-					if settings.verbose {
+					if XGSettings.current.verbose {
 						printg("found id: \(id), fsys: ",name,", index: ", index, ", name: ", fsys.fileNameForFileWithIndex(index: index) ?? "-")
 					}
 					found += [fsys]
@@ -627,6 +627,39 @@ class XGUtility {
 		}
 		#endif
 	}
+
+	#if GAME_PBR
+	static func dumpAvatarCustomisations(toFile file: XGFiles) {
+		var text = ""
+		XGTrainerModels.allCases.forEachIndexed { (index, model) in
+			text += "\(model.name): \(index)\n"
+			if let clothes = model.clothingOptions {
+				let categories: [(name: String, values: [PBRTrainerClothing])] = [
+					("hats", clothes.hats),
+					("hair", clothes.hairColours),
+					("face", clothes.faces),
+					("tops", clothes.tops),
+					("bottoms", clothes.bottoms),
+					("shoes", clothes.shoes),
+					("hands", clothes.hands),
+					("bags", clothes.bags),
+					("glasses", clothes.glasses),
+					("badges", clothes.badges)
+				]
+				categories.forEachIndexed { (index, category) in
+					text += "  - " + category.name.titleCased + "\n"
+					category.values.forEachIndexed { index, clothing in
+						text += "      - " + clothing.name.unformattedString + ": \(index)\n"
+					}
+				}
+			} else {
+				text += "  - No Customisations Available\n"
+			}
+			text += "\n"
+		}
+		text.save(toFile: file)
+	}
+	#endif
 	
 	//MARK: - Utilities 2
 	

@@ -134,7 +134,7 @@ func allItems() -> [String : XGItems] {
 let items = allItems()
 
 func item(_ name: String) -> XGItems {
-	if settings.verbose && (items[name.simplified] == nil) { printg("couldn't find: " + name) }
+	if XGSettings.current.verbose && (items[name.simplified] == nil) { printg("couldn't find: " + name) }
 	return items[name.simplified] ?? .index(0)
 }
 

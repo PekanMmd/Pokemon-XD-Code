@@ -47,14 +47,14 @@ extension XGStringTable {
 			return true
 
 		} else {
-			if settings.increaseFileSizes {
+			if XGSettings.current.increaseFileSizes {
 				#if GAME_PBR
 				let isCommonRel = false
 				#else
 				let isCommonRel = file == .common_rel
 				#endif
 				if self.startOffset == 0 || isCommonRel {
-					if settings.verbose {
+					if XGSettings.current.verbose {
 						printg("string was too long, adding \(difference + 0x200 - extraCharacters) bytes to table \(self.file.fileName)")
 					}
 					// add a little extra so it doesn't keep hitting this case every time there's even a 1 character increase

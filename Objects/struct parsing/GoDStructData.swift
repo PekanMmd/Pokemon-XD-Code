@@ -636,7 +636,7 @@ class GoDStructData: CustomStringConvertible {
 
 	func save(writeData: Bool = true) {
 		guard startOffset >= 0 else {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("Couldn't save struct data at offset \(startOffset) to file:", fileData.file.path)
 			}
 			return

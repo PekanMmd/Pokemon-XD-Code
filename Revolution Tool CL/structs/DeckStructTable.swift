@@ -109,7 +109,7 @@ let deckPokemonStruct = GoDStruct(name: "Pokemon Deck", format: [
 	.short(name: "Unknown 5", description: "", type: .uint),
 	.array(name: "Moves", description: "", property: .short(name: "Move", description: "", type: .moveID), count: 4),
 	.array(name: "Items", description: "Potential items the pokemon may hold", property: .short(name: "Item", description: "", type: .itemID), count: 4),
-	.word(name: "Unknown 6", description: "", type: .uint),
+	.byte(name: "Unknown 6", description: "", type: .uint),
 	.word(name: "Unknown 7", description: "", type: .uint)
 ])
 

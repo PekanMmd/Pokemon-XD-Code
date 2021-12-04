@@ -53,31 +53,31 @@ struct PBRTrainerCustomizationOptions: Codable {
 	}
 }
 
-enum XGTrainerModels: Int {
+enum XGTrainerModels: Int, CaseIterable {
 
-	case none	= 0x00
-	case youngBoy
-	case coolBoy
-	case muscleMan
-	case youngGirl
-	case coolGirl
-	case littleGirl
-	case poketopiaBoy
-	case poketopiaGirl
-	case masterJoe
-	case masterSashay
-	case masterKruger
-	case masterMysterial
-	case lucas
-	case dawn
+	case none	= 0
+	case youngBoy = 1
+	case coolBoy = 2
+	case muscleMan = 3
+	case youngGirl = 4
+	case coolGirl = 5
+	case littleGirl = 6
+	case poketopiaBoy = 7
+	case poketopiaGirl = 8
+	case masterJoe = 9
+	case masterSashay = 10
+	case masterKruger = 11
+	case masterMysterial = 12
+	case lucas = 13
+	case dawn = 14
 	
-	var name : String {
+	var name: String {
 		switch self {
 		case .none: return "None"
 		case .youngBoy: return "Young Boy"
 		case .coolBoy: return "Cool Boy"
 		case .muscleMan: return "Muscle Man"
-		case .youngGirl: return "Uoung Girl"
+		case .youngGirl: return "Young Girl"
 		case .coolGirl: return "Cool Girl"
 		case .littleGirl: return "Little Girl"
 		case .poketopiaBoy: return "Poketopia Boy"
@@ -91,11 +91,11 @@ enum XGTrainerModels: Int {
 		}
 	}
 	
-	var pkxFSYS : XGFsys? {
+	var pkxFSYS: XGFsys? {
 		return nil
 	}
 	
-	var pkxData : XGMutableData? {
+	var pkxData: XGMutableData? {
 		return nil
 	}
 
@@ -120,7 +120,6 @@ enum XGTrainerModels: Int {
 		}
 		return PBRTrainerCustomizationOptions(hats: itemsLists[0], hairColours: itemsLists[1], faces: itemsLists[2], tops: itemsLists[3], bottoms: itemsLists[4], shoes: itemsLists[5], hands: itemsLists[6], bags: itemsLists[7], glasses: itemsLists[8], badges: itemsLists[9])
 	}
-	
 }
 
 struct PBRTrainerClothing: Codable, CustomStringConvertible {

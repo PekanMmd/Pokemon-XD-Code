@@ -172,7 +172,7 @@ func randomiser() {
 			: " 2: Setting - Randomize Shadow Pokemon Only"
 	]
 	options += [
-		" 3: Setting - Randomize Pokemon Using Similar BST",
+		" 3: Setting - Randomize Pokemon Using Similar Base Stat Total (BST)",
 		" 4: Randomize Moves",
 		" 5: Randomize Pokemon Types",
 		" 6: Randomize Abilities",
@@ -250,7 +250,7 @@ func randomiser() {
 			#if !GAME_PBR
 			if isInitialRandomisation {
 				XGUtility.deleteSuperfluousFiles()
-				settings.increaseFileSizes = true
+				XGSettings.current.increaseFileSizes = true
 				isInitialRandomisation = false
 			}
 			#endif
