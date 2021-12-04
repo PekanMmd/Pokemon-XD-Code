@@ -253,7 +253,7 @@ class XDProcess: ProcessIO {
 						shouldContinue = callback(c, self, state); context = c
 					}
 				#if GAME_XD
-				case .onDidChangeMapOrMenu:
+				case .onDidChangeMap:
 					if let callback = callbacks.onDidChangeMapOrMenu {
 						let c = MapOrMenuDidChangeContext(process: self, registers: registers)
 						shouldContinue = callback(c, self, state); context = c
