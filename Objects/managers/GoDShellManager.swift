@@ -17,6 +17,7 @@ class GoDShellManager {
 		case pbrSaveTool
 		case appleScript
 		case standard(String)
+		case usrbin(String)
 		case file(XGFiles)
         
         var file: XGFiles {
@@ -28,6 +29,7 @@ class GoDShellManager {
 			case .gcitoolReplace: return .tool("gcitool_replace")
 			case .pbrSaveTool: return .tool("pbrsavetool")
 			case .appleScript: return .nameAndFolder("osascript", XGFolders.path("/usr/bin"))
+			case .usrbin(let name): return .nameAndFolder(name, XGFolders.path("/usr/bin"))
 			case .file(let file): return file
 			case .standard(let name):
 				let filename = name + (environment == .Windows ? ".exe" : "")
@@ -146,6 +148,15 @@ class GoDShellManager {
 	static func runAppleScript(_ script: String) -> String? {
 		let escapedScript = script.replacingOccurrences(of: "\n", with: " ")
 		return run(.appleScript, args: ["-e", escapedScript])
+	}
+	
+	static func stripEntitlements(appFile: XGFiles) {
+		stripEntitlements(appPath: appFile.path.escapedPath)
+	}
+	
+	static func stripEntitlements(appPath: String) {
+		printg("Stripping entitlements from " + appPath)
+		run(.usrbin("codesign"), args: "--force --deep -s - " + appPath, printOutput: true)
 	}
 	#endif
 	

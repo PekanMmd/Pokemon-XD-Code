@@ -159,11 +159,32 @@ extension XDPartyPokemon {
 		#else
 		var overrideColour: Int? = nil
 		#endif
+		
+		var speciesName = species.name.string
+		// for XG
+		switch species.index {
+		case 252: speciesName = "XD001"
+		case 253: speciesName = "Robo Groudon"
+		case 254: speciesName = "Robo Kyogre"
+		case 255: speciesName = "Mawile"
+		case 256: speciesName = "Kirlia"
+		case 257: speciesName = "Gardevoir"
+		case 258: speciesName = "Marill"
+		case 259: speciesName = "Azumarill"
+		case 260: speciesName = "Wigglytuff"
+		case 261: speciesName = "Snubbull"
+		case 262: speciesName = "Granbull"
+		case 263: speciesName = "Altaria"
+		case 264: speciesName = "Alolan Ninetales"
+		case 265: speciesName = "Alolan Marowak"
+		case 266: speciesName = "Alolan Sandslash"
+		default: break
+		}
 
 		return DiscordEmbed(
 			title: speciesName.titleCased.spaceToLength(10),
 			colour: overrideColour ?? colour(forType: species.type1) ?? 0,
-			imageUrl: "pokemon:" + species.name.string, // gc pad bot will automatically look up the pokemon's name
+			imageUrl: "pokemon:" + speciesName, // gc pad bot will automatically look up the pokemon's name
 			fields: fields)
 	}
 }
@@ -180,7 +201,7 @@ extension XGMoveTypes {
 		case XGMoveTypes.bug.rawValue: return "<:bugicon:896942163026391080>"
 		case XGMoveTypes.ghost.rawValue: return "<:ghosticon:896942163403890728>"
 		case XGMoveTypes.steel.rawValue: return "<:steelicon:896942163454230559>"
-		case XGMoveTypes.none.rawValue: return "❓" //"<:fairyicon:896942163093491772>"
+		case XGMoveTypes.none.rawValue: return XGMoveTypes.none.name.simplified == "fairy" ? "<:fairyicon:896942163093491772>" : "❓"
 		case XGMoveTypes.fire.rawValue: return "<:fireicon:896942163340967986>"
 		case XGMoveTypes.water.rawValue: return "<:watericon:896942163944964136>"
 		case XGMoveTypes.grass.rawValue: return "<:grassicon:896942163416457227>"
@@ -204,7 +225,7 @@ extension XGMoveTypes {
 		case XGMoveTypes.bug.rawValue: return "<:BugIC:897192944845606922>"
 		case XGMoveTypes.ghost.rawValue: return "<:GhostIC:897192945827074058>"
 		case XGMoveTypes.steel.rawValue: return "<:SteelIC:897192945889996862>"
-		case XGMoveTypes.none.rawValue: return "❓" //"<:FairyIC:897192944925278249>"
+		case XGMoveTypes.none.rawValue: return XGMoveTypes.none.name.simplified == "fairy" ? "<:FairyIC:897192944925278249>" : "❓"
 		case XGMoveTypes.fire.rawValue: return "<:FireIC:897192945449570365>"
 		case XGMoveTypes.water.rawValue: return "<:WaterIC:897192945910968361>"
 		case XGMoveTypes.grass.rawValue: return "<:GrassIC:897192945894182923>"

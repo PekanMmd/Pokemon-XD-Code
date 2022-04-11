@@ -16,7 +16,7 @@ class XGSettings {
 	var verbose = false
 	var increaseFileSizes = true
 	var enableExperimentalFeatures = false
-	var inputDuration = 0.2 // How long a button press lasts by default when input into Dolphin
+	var inputDuration = 0.18 // How long a button press lasts by default when input into Dolphin
 	var inputPollDuration: UInt32 = 500 // How often to poll for new inputs (ms)
 	
 	private struct Settings: Codable {

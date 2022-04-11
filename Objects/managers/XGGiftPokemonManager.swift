@@ -42,13 +42,23 @@ class XGGiftPokemonManager {
 		return gifts
 	}
 
-	class func allNonShadowGiftPokemon() -> [XGGiftPokemon] {
+	class func nonShadowGiftPokemon() -> [XGGiftPokemon] {
 		var gifts = [XGGiftPokemon]()
 
-		for i in 1 ... kNumberOfGiftPokemon {
+		for i in 3 ... kNumberOfGiftPokemon {
 			if i != 7 {
 				gifts.append(XGGiftPokemonManager.giftWithID(i))
 			}
+		}
+
+		return gifts
+	}
+	
+	class func allStarterGiftPokemon() -> [XGGiftPokemon] {
+		var gifts = [XGGiftPokemon]()
+
+		for i in 0 ... 2 {
+			gifts.append(XGGiftPokemonManager.giftWithID(i))
 		}
 
 		return gifts

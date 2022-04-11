@@ -214,7 +214,7 @@ class GoDProcess {
 
 		let kret = mach_vm_region(task, &address, &size, VM_REGION_BASIC_INFO, &info, &count, &object_name);
 		guard kret == KERN_SUCCESS else {
-			printg("Couldn't load base address for task: \(task). Make sure the application is runinng and the tool is running with root permissions.")
+			printg("Couldn't load base address for task: \(task). Make sure the application is running and the tool is running with root permissions.")
 			return nil
 		}
 

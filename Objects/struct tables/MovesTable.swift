@@ -31,7 +31,7 @@ let moveStruct = GoDStruct(name: "Move", format: [
 		.byte(name: "Is HM Move", description: "", type: .bool)
 	])),
 	.byte(name: "Category", description: "Physical, Special or Status", type: .moveCategory),
-	.byte(name: "Unknown Flag", description: "", type: .bool),
+	.byte(name: "Has Risk Flag", description: "Marks that the move negatively imapcts the user", type: .bool),
 	.byte(name: "Match Up Chart Type", description: "Determines how the type match up chart appears in the summary screen", type: .uintHex),
 	.byte(name: "Contest Appeal Jam Index", description: "", type: .uint),
 	.byte(name: "Contest Appeal Type", description: "", type: .contestAppeal),
@@ -43,8 +43,7 @@ let moveStruct = GoDStruct(name: "Move", format: [
 	.word(name: "Unused String ID", description: "", type: .msgID(file: nil)),
 	.word(name: "Exclamation String ID", description: "", type: .msgID(file: .typeAndFsysName(.msg, "fight_common"))),
 	.word(name: "Description ID", description: "", type: .msgID(file: .dol)),
-	.short(name: "Padding 2", description: "", type: .null),
-	.short(name: "Animation ID 2", description: "", type: .uintHex),
+	.word(name: "Animation ID 2", description: "", type: .uintHex),
 	.byte(name: "Move Effect Type", description: "", type: .moveEffectType)
 ])
 #else
@@ -70,7 +69,7 @@ var moveStruct: GoDStruct {
 			.byte(name: "Is Sound Based", description: "", type: .bool),
 			.byte(name: "Has unspecified target", description: "", type: .bool),
 			.byte(name: "Is HM Move", description: "", type: .bool),
-			.byte(name: "Negatively affects user", description: "", type: .bool)
+			.byte(name: "Has Risk Flag", description: "Marks that the move negatively imapcts the user", type: .bool)
 		])),
 		.byte(name: "Contest Appeal Jam Index", description: "", type: .uint),
 		.byte(name: "Contest Appeal Type", description: "", type: .contestAppeal),

@@ -63,14 +63,14 @@ class XGThreadManager {
 	private init() {}
 
 	func runInBackgroundAsync(queue: Int = 0, _ closure: @escaping () -> Void) {
-		let dispatchQueue = DispatchQueue(label: "GoDBackgroundQueueAsync\(queue)", qos: .background)
+		let dispatchQueue = DispatchQueue(label: "GoDBackgroundQueueAsync\(queue)", qos: .background, attributes: .concurrent)
 		dispatchQueue.async {
 			closure()
 		}
 	}
 
 	func runInBackgroundAsyncNamed(queue: String = "", _ closure: @escaping () -> Void) {
-		let dispatchQueue = DispatchQueue(label: "GoDBackgroundQueueAsync_\(queue)", qos: .background)
+		let dispatchQueue = DispatchQueue(label: "GoDBackgroundQueueAsync_\(queue)", qos: .background, attributes: .concurrent)
 		dispatchQueue.async {
 			closure()
 		}

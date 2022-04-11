@@ -7,367 +7,288 @@
 //
 
 import Foundation
+import AppKit
 
 ToolProcess.loadISO(exitOnFailure: true)
 
-//var documentedText = "- Unused text in Pokemon Colosseum (US) - \n\n"
+//let ws = NSWorkspace.shared
+//let apps = ws.runningApplications
 //
-//let interactionPoints = XGInteractionPointData.allValues
-//var interactionIDs = interactionPoints.map { (point) -> Int? in
-//	switch point.info {
-//	case .Text(let msgID): return msgID
-//	default: return nil
+//for app in apps {
+//	guard let id = app.bundleIdentifier else { continue }
+//	print(id)
+//	if id.contains("dolphin") {
+//		app.activate(options: .activateIgnoringOtherApps)
 //	}
 //}
-//
-//for folder in XGFolders.ISOExport("").subfolders {
-//	if let _ = XGMaps(rawValue: folder.name.substring(from: 0, to: 2)) {
-//		printg(folder.path)
-//		let script = XGFiles.nameAndFolder(folder.name + ".scd", folder).scriptData.getXDSScript()
-//		let msg = XGFiles.nameAndFolder(folder.name + ".msg", folder).stringTable
-//
-//		let usedIDs = script.subStringsMatching("\\$:([0-9]+):".regex()!).map { $0.replacingOccurrences(of: "$", with: "").replacingOccurrences(of: ":", with: "").integerValue }
-//		for msgID in msg.stringIDs {
-//			if !usedIDs.contains(msgID) && !interactionIDs.contains(msgID) {
-//				documentedText +=  msg.stringSafelyWithID(msgID).stringPlusIDAndFile + "\n\n"
-//			}
-//		}
-//	}
-//}
-//
-//documentedText.save(toFile: .nameAndFolder("Colosseum Unused Text.txt", .Documents))
 
-//let editedCommon = XGFiles.nameAndFolder("common.rel", .Documents).data!
-//let originalCommon = XGFiles.common_rel.data!
-//for pokemon in XGPokemonStats.allValues {
-//	let startOffset = pokemon.startOffset
-//	let evolutionData = originalCommon.getSubDataFromOffset(startOffset + kFirstEvolutionOffset, length: kSizeOfEvolutionData * 5)
-//	editedCommon.replaceData(data: evolutionData, atOffset: startOffset + kFirstEvolutionOffset)
+//// get all unused strings by id
+//let unusedIDRanges = [
+//	[0x12d],
+//	[0xc68],
+//	[0xd49 ... 0xd51],
+//	[0xd5d ... 0xd60],
+//	[0xdb1],
+//	[0xdb3],
+//	[0xdbc],
+//	[0xdc5],
+//	[0xfa1 ... 0xfa2],
+//	[0x1007],
+//	[0x1053],
+//	[0x1078],
+//	[0x110b ... 0x110e],
+//	[0x111f ... 0x1122],
+//	[0x1133 ... 0x113b],
+//	[0x113d ... 0x113e],
+//	[0x1141 ... 0x1146],
+//	[0x1148 ... 0x1149],
+//	[0x1163 ... 0x1164],
+//	[0x116d],
+//	[0x1179],
+//	[0x1181],
+//	[0x118a],
+//	[0x1193],
+//	[0x119d],
+//	[0x11a6 ... 0x11a7],
+//	[0x11ac],
+//	[0x11ae ... 0x11af],
+//	[0x1224],
+//	[0x1279],
+//	[0x128b],
+//	[0x128f],
+//	[0x129d],
+//	[0x12ae ... 0x12af],
+//	[0x12b2 ... 0x12b3],
+//	[0x138d],
+//	[0x13e0 ... 0x13eb],
+//	[0x1416],
+//	[0x17a2 ... 0x17a5],
+//	[0x191f ... 0x1923],
+//	[0x1b65 ... 0x1b66],
+//	[0x2715],
+//	[0x2768 ... 0x2773],
+//	[0x279e],
+//	[0x2be9],
+//	[0x2ee1 ... 0x2ee8],
+//	[0x2ef8],
+//	[0x3b53 ... 0x3b91],
+//	[0x3bcb],
+//	[0x3bd7],
+//	[0x3c50 ... 0x3c51],
+//	[0x3c53],
+//	[0x3c7c ... 0x3cb2],
+//	[0x3cbe ... 0x3cd3],
+//	[0x3d8a],
+//	[0x3d8c],
+//	[0x3e94 ... 0x3e96],
+//	[0x3e99 ... 0x3e9e],
+//	[0x3ea0],
+//	[0x3ea2],
+//	[0x3ea4],
+//	[0x3ea6 ... 0x3ea7],
+//	[0x3ea9],
+//	[0x3eab ... 0x3eb8],
+//	[0x3eba],
+//	[0x3ec2 ... 0x3ec4],
+//	[0x3ec6 ... 0x3ec8],
+//	[0x3ed0 ... 0x3ed2],
+//	[0x3ed4 ... 0x3ed6],
+//	[0x3ed8 ... 0x3ee1],
+//	[0x3ee3 ... 0x3ee4],
+//	[0x3ee6 ... 0x3eeb],
+//	[0x3eed],
+//	[0x3eef],
+//	[0x3ef5 ... 0x3ef8],
+//	[0x3efe ... 0x3f01],
+//	[0x3f05 ... 0x3f07],
+//	[0x3f0b ... 0x3f02],
+//	[0x3f10 ... 0x3f14],
+//	[0x3f16],
+//	[0x3f18],
+//	[0x3f1a],
+//	[0x3f1c],
+//	[0x3f1e ... 0x3f2b],
+//	[0x3f82 ... 0x3f83],
+//	[0x3f96],
+//	[0x3f9e],
+//	[0x3fae],
+//	[0x3fba],
+//	[0x3fc0],
+//	[0x3fcd ... 0x3fcf],
+//	[0x3ff3],
+//	[0x4031],
+//	[0x4042],
+//	[0x404c],
+//	[0x405d],
+//	[0x407c],
+//	[0x408b],
+//	[0x40af],
+//	[0x04b3],
+//	[0x40c3],
+//	[0x40cc],
+//	[0x40e0],
+//	[0x40f6],
+//	[0x4138],
+//	[0x413a],
+//	[0x4140],
+//	[0x4164 ... 0x4167],
+//	[0x416c ... 0x4180],
+//	[0x4184],
+//	[0x4186],
+//	[0x4188],
+//	[0x418a],
+//	[0x418c ... 0x41a0],
+//	[0x41a2],
+//	[0x41a4],
+//	[0x41a7 ... 0x41ab],
+//	[0x41ad ... 0x41ae],
+//	[0x41b0 ... 0x41f8],
+//	[0x425f],
+//	[0x4264],
+//	[0x4267 ... 0x4268],
+//	[0x4273],
+//	[0x4278 ... 0x427b],
+//	[0x4280 ... 0x4281],
+//	[0x4288],
+//	[0x428b],
+//	[0x428d ... 0x428e],
+//	[0x4290],
+//	[0x4292 ... 0x429d],
+//	[0x429f ... 0x42a0],
+//	[0x42a2 ... 0x42a3],
+//	[0x42a5 ... 0x42b3],
+//	[0x42b5],
+//	[0x42b7],
+//	[0x42b9],
+//	[0x42bc],
+//	[0x42bf],
+//	[0x42c1 ... 0x42d0],
+//	[0x42d3 ... 0x42d4],
+//	[0x42de ... 0x42e6],
+//	[0x42e9 ... 0x4309],
+//	[0x430b],
+//	[0x430d ... 0x430e],
+//	[0x4310 ... 0x4311],
+//	[0x4313 ... 0x4317],
+//	[0x431b ... 0x431c],
+//	[0x431e],
+//	[0x4320 ... 0x4327],
+//	[0x4329],
+//	[0x432b ... 0x432c],
+//	[0x432e ... 0x4332],
+//	[0x4334],
+//	[0x4337],
+//	[0x4341 ... 0x4346],
+//	[0x434d ... 0x4356],
+//	[0x4358 ... 0x436d],
+//	[0x436f ... 0x437f],
+//	[0x4386 ... 0x438f],
+//	[0x4392 ... 0x439c],
+//	[0x43a1 ... 0x43d3],
+//	[0x43f5],
+//	[0x4361],
+//	[0x440f ... 0x4410],
+//	[0x4417],
+//	[0x4434 ... 0x443e],
+//	[0x4458],
+//	[0x445a],
+//	[0x445c ... 0x4464],
+//	[0x4466],
+//	[0x4469],
+//	[0x446b],
+//	[0x446d],
+//	[0x446f],
+//	[0x4471],
+//	[0x4473 ... 0x4474],
+//	[0x4476 ... 0x4477],
+//	[0x4479 ... 0x4471],
+//	[0x4473 ... 0x4474],
+//	[0x4476 ... 0x4477],
+//	[0x4479 ... 0x447a],
+//	[0x447d ... 0x4482],
+//	[0x4485],
+//	[0x4487],
+//	[0x4489],
+//	[0x448b ... 0x44a8],
+//	[0x44b0],
+//	[0x44cf],
+//	[0x44e0],
+//	[0x44ed ... 0x44ee],
+//	[0x4e21],
+//	[0x4f63 ... 0x4f64],
+//	[0x4f9a],
+//	[0x4ff1],
+//	[0x5176],
+//	[0x517b ... 0x517d],
+//	[0x523c ... 0x523f],
+//	[0x5241],
+//	[0x5243],
+//	[0x5245],
+//	[0x5247],
+//	[0x5249 ... 0x524b],
+//	[0x5256 ... 0x5257],
+//	[0x5264 ... 0x5265],
+//	[0x526a ... 0x526b],
+//	[0x5271],
+//	[0x5277],
+//	[0x52b5],
+//	[0x52ed],
+//	[0x52ef],
+//	[0x5355],
+//	[0x5364],
+//	[0x5390],
+//	[0x539d],
+//	[0x53d5],
+//	[0x542c],
+//	[0x5431],
+//	[0x5452 ... 0x5453],
+//	[0x54f7 ... 0x54fa],
+//	[0x5506 ... 0x5508],
+//	[0x5512],
+//	[0x55d3],
+//	[0x5a26 ... 0x5a27],
+//	[0x5bf7 ... 0x5bfa],
+//	[0x5bfc],
+//	[0x5c71],
+//	[0x7549 ... 0x754a],
+//	[0x755d],
+//	[0x756a ... 0x756b],
+//	[0x75d0],
+//	[0x75f7],
+//	[0x7638 ... 0x763b],
+//	[0x763d],
+//	[0x763f ... 0x7645],
+//	[0x764b],
+//	[0x764d],
+//	[0x765a],
+//	[0x766e ... 0x766f],
+//	[0x769e ... 0x769f],
+//	[0x76a6],
+//	[0x76a9],
+//	[0x76ad],
+//	[0x76e4 ... 0x76f5],
+//	[0x76ff ... 0x7700],
+//	[0x7a7e],
+//	[0xea60 ... 0xf318],
+//]
+//
+//for range in unusedIDRanges {
+//	for id in range {
+//		getStringSafelyWithID(id: id).println()
+//	}
 //}
-//editedCommon.save()
+
 
 //PDADumper.dumpData()
 //PDADumper.dumpFiles(writeTextures: false)
 //PDADumper.dumpMSG()
 
-//let ecardFile = XGFiles.nameAndFolder("13-A005-decoded.bin", .Documents)
-//let ePokemonTable = EreaderStructTable(type: .pokemon, inFile: ecardFile)
-//let eTrainersTable = EreaderStructTable(type: .trainers, inFile: ecardFile)
-//
-//for table in [ePokemonTable, eTrainersTable] {
-//	table.documentCStruct()
-//	table.documentData()
-//	table.encodeCSVData()
-//}
 
-//let baseName = "kamikudaku_damage"
-//let fsys = XGFiles.fsys("wzx_" + baseName)
-////XGUtility.exportFileFromISO(fsys)
-//let wzx = XGFiles.nameAndFsysName(baseName + ".wzx", fsys.fileName)
-////let wzxData = WZXModel(file: wzx)
-////wzxData?.datModelOffsets.forEach {
-////	printg($0)
-////}
-//let dat = XGFiles.nameAndFolder(wzx.fileName.removeFileExtensions() + "_0.wzx.dat", wzx.folder)
-//if let datData = DATModel(file: dat) {
-////	datData.description.println()
-//	datData.nodes?.vertexColours.keys.forEach({ (k) in
-//		let v = datData.nodes!.vertexColours[k]!
-//		printg(v.hexString)
-//	})
-//	let profile = datData.nodes!.vertexColourProfile
-//	profile.writePNGData(toFile: .nameAndFolder("kamikudaku_profile.png", .Documents))
-//	GoDFiltersManager.Filters.shiftRedMinor.apply(to: profile)
-//	profile.writePNGData(toFile: .nameAndFolder("kamikudaku_profile red.png", .Documents))
-//}
-
-//let numberOfPokemon = CommonIndexes.NumberOfPokemon.value
-//CommonIndexes.NumberOfPokemon.setValue(1000)
-//common.expandSymbolWithIndex(CommonIndexes.PokemonStats.index, by: (1000 - numberOfPokemon) * kSizeOfPokemonStats)
-//common.data.save()
-//XGUtility.importFileToISO(.fsys("common"))
-//XGUtility.exportFileFromISO(.fsys("common"))
-
-
-//pokemonStatsTable.encodeCSVData()
-//movesTable.encodeCSVData()
-//naturesTable.encodeCSVData()
-//shadowPokemonTable.encodeCSVData()
-
-//printg("-- Expansion --")
-//rel.expandSymbolWithIndex(100, by: 0x30, save: true)
-//printPointersInfo()
 
 //PDADumper.dumpAll()
 
-//let table = try? XGStringTable.fromJSONFile(file: .nameAndFolder("common3.json", .Documents))
-//let allShadows = CMShadowData.allValues.map { (data) -> String in
-//	return table!.stringSafelyWithID(data.nameID).string
-//}
-//table?.allStrings().forEach { (string) in
-//	if string.string.substring(from: 0, to: 2) == "DP" && !string.string.contains("エクストラ") && string.string.length > 4 {
-//		let monName = string.string
-//		if !allShadows.contains(monName) {
-//			printg(monName)
-//		}
-//	}
-//}
-
-// Create shadow pokemon table data for bulbapedia
-//for mon in CMShadowData.allValues where mon.species.index > 0 {
-//	let firstTID = mon.firstTID
-//	let trainer = XGTrainer(index: firstTID)
-//	let data = trainer.pokemon.first { (data) -> Bool in
-//		mon.species.index == data.species.index
-//	}!
-//	let battle = trainer.battleData!
-//	printg("{{lop/shadow|\(mon.species.stats.nationalIndex)|\(mon.species.name.unformattedString.capitalized)|\(data.level)|-|\(data.shadowCatchRate)|\(mon.purificationCounter/10),000|Shadow Rush|XD|\(data.moves[1].name.unformattedString.titleCased)|\(data.moves[1].type.originalName)|\(data.moves[2].name.unformattedString.titleCased)|\(data.moves[2].type.originalName)|\(data.moves[3].name.unformattedString.titleCased)|\(data.moves[3].type.originalName)|Colo|\(trainer.trainerClass.name.unformattedString.titleCased)|\(trainer.name.unformattedString.titleCased)|[[\(battle.battleField.room!.mapName.titleCased)]]|pure1=\(data.moves[0].name.unformattedString.titleCased)|pure1t=\(data.moves[0].type.originalName)|link=\(trainer.name.unformattedString.titleCased)}}")
-//}
-//printg("{{lop/shadow|175|Togepi|20|-|N/A|N/A|Shadow Rush|XD|Charm|Normal|Sweet Kiss|Normal|Yawn|Normal|Colo|Chaser|ボデス|[[Card e Room]] (Japanese games only)|pure1=Metronome|pure1t=Normal}}")
-//printg("{{lop/shadow|179|Mareep|37|-|N/A|N/A|???|Shadow Rush|XD|ThunderShock|Electric|Thunder Wave|Electric|Cotton Spore|Grass|Colo|Hunter|ホル|[[Card e Room]] (Japanese games only)|pure1=Thunder|pure1t=Electric}}")
-//printg("{{lop/shadow|212|Scizor|50|-|N/A|N/A|???|Shadow Rush|XD|Metal Claw|Steel|Swords Dance|Normal|Slash|Normal|Colo|Bodybuilder|ワーバン|[[Card e Room]] (Japanese games only)|pure1=Fury Cutter|pure1t=Bug}}")
-
-//CommonIndexes.TrainerAIData.startOffset.hexString().println()
-
-//XGUtility.documentMacrosXDS()
-
-//let file = XGFiles.common_rel //XGFiles.typeAndFsysName(.scd, "M1_out")
-//let script = file.scriptData
-//script.getXDSScript().save(toFile: .nameAndFolder(file.fileName + ".cms", .nameAndFolder("Scripts", .Documents)))
-
-//XGMaps.allCases.reversed().forEach { (map) in
-//	if case .Pokespot = map {
-//		return
-//	}
-//	let files = XGISO.current.allFileNames.filter { (name) -> Bool in
-//		name.contains(map.code)
-//	}
-//	files.forEach { (filename) in
-//		if let fileData = XGISO.current.dataForFile(filename: filename) {
-//			let fsys = XGFsys(data: fileData)
-//			let folder = XGFolders.ISOExport(filename.removeFileExtensions())
-//			fsys.extractFilesToFolder(folder: folder, decode: false)
-//			let scriptFile = XGFiles.typeAndFolder(.scd, folder)
-//			if scriptFile.exists {
-//				scriptFile.scriptData.getXDSScript().save(toFile: .nameAndFolder(scriptFile.fileName + ".cms", .nameAndFolder("Scripts", .Documents)))
-//			}
-//		}
-//	}
-//}
-
-//CommonIndexes.TrainerPokemonData.startOffset.hexString().println()
-
-//
-//func fixShinyGlitch() {
-//	guard let getPlayerTrainerDataFunctionPointer = XGAssembly.ASMfreeSpaceRAMPointer() else {
-//		printg("Couldn't find free space in Start.dol")
-//		return
-//	}
-//	let coloShinyGlitchSetTrainerIDRAMOffset = 0x1f9e1c // colo us
-//	let getTrainerDataForTrainerFunction = 0x129280 // colo us
-//	let setPokemonTIDOffset = 0x80123f78 // colo us
-//	let trainerGetValueWithIndexFunction = 0x8012a5b0 // colo us
-//
-//	// Creates a function which returns a pointer to the player's trainer data
-//	// so we can get it any time with 1 bl instruction
-//	XGAssembly.replaceRamASM(RAMOffset: getPlayerTrainerDataFunctionPointer, newASM: [
-//		.stwu(.sp, .sp, -0x10),
-//		.mflr(.r0),
-//		.stw(.r0, .sp, 0x14),
-//
-//		.li(.r3, 0),
-//		.li(.r4, 2),
-//		.bl(getTrainerDataForTrainerFunction),
-//		
-//		.lwz(.r0, .sp, 0x14),
-//		.mtlr(.r0),
-//		.addi(.sp, .sp, 0x10),
-//		.blr
-//	])
-//	// Get the player's trainer data where it would normally have got the opponent's
-//	XGAssembly.replaceRamASM(RAMOffset: coloShinyGlitchSetTrainerIDRAMOffset, newASM: [
-//		.bl(getPlayerTrainerDataFunctionPointer)
-//	])
-//
-//	// extend the function which sets the TID for generated trainer pokemon
-//	// so it gets the player's TID instead of the NPC's
-//	guard let setTIDUpdateOffset = XGAssembly.ASMfreeSpaceRAMPointer() else {
-//		printg("Couldn't find free space in Start.dol. The shiny glitch fix implementation was only partly complete so there may be some issues.")
-//		return
-//	}
-//	XGAssembly.replaceRamASM(RAMOffset: setPokemonTIDOffset, newASM: [
-//		.b(setTIDUpdateOffset)
-//	])
-//	XGAssembly.replaceRamASM(RAMOffset: setTIDUpdateOffset, newASM: [
-//		.bl(getPlayerTrainerDataFunctionPointer), // get player trainer data
-//		// get trainer id
-//		.li(.r4, 2),
-//		.li(.r5, 0),
-//		.bl(trainerGetValueWithIndexFunction),
-//		.mr(.r30, .r3), // put tid in register that will be used later for setting TID
-//
-//		// instruction that was overwritten by branch
-//		.mr(.r3, .r26),
-//		// branch back
-//		.b(setPokemonTIDOffset + 4)
-//	])
-//
-//	XGISO.current.importFiles([.dol])
-//}
-//
-//func setNPCPokemonShininess(to: XGShinyValues, shadowsOnly: Bool = true) {
-//	let shinyLockRAMOffset = 0x801fa3e8 // colo us
-//	let shadowsOnlyLockRAMOffset = 0x801fa3d8 // colo us
-//	let battlePokemonCheckIfShadowFunctionTAMPointer = 0x8011fc74 // colo us
-//	if shadowsOnly {
-//		guard let branchToOffset = XGAssembly.ASMfreeSpaceRAMPointer() else {
-//			printg("Couldn't find free space in Start.dol")
-//			return
-//		}
-//		XGAssembly.replaceRamASM(RAMOffset: shadowsOnlyLockRAMOffset, newASM: [
-//			.b(branchToOffset),
-//			.mr(.r3, .r31),
-//			.mr(.r4, .r29),
-//			.mr(.r5, .r28),
-//			.mr(.r7, .r25)
-//		])
-//		XGAssembly.replaceRamASM(RAMOffset: branchToOffset, newASM: [
-//			// pokemon data pointer in r31. check if shadow pokemon and set r6 to shininess value only if shadow, otherwise 0
-//
-//		])
-//	} else {
-//		XGAssembly.replaceRamASM(RAMOffset: shinyLockRAMOffset, newASM: [
-//			.li(.r6, to.rawValue)
-//		])
-//	}
-//}
-//
-//fixShinyGlitch()
-//setNPCPokemonShininess(to: .always)
 
 
-//XGAssembly.replaceRamASM(RAMOffset: 0x1f9f78, newASM: [
-//	.stwu(.sp, .sp, -0x84),
-//	.mflr(.r0),
-//	.lis(.r7, 0x8028),
-//	.lis(.r6, 0x8028),
-//	.stw(.r0, .sp, 0x88),
-//	.stmw(.r18, .sp, 0x4c)
-//])
-//
-//XGAssembly.replaceRamASM(RAMOffset: 0x1fa4a0, newASM: [
-//	.lmw(.r18, .sp, 0x4c),
-//	.lwz(.r0, .sp, 0x88),
-//	.mtlr(.r0),
-//	.addi(.sp, .sp, 132)
-//])
-//
-//XGAssembly.replaceRamASM(RAMOffset: 0x1fa15c, newASM: [
-//	.b(0x2446a0)
-//])
-//
-//XGAssembly.replaceRamASM(RAMOffset: 0x1fc928, newASM: [
-//	.lha(.r3, .r3, 0x12)
-//])
-//
-//XGAssembly.replaceRamASM(RAMOffset: 0x2446a0, newASM: [
-//	.mr(.r29, .r3),
-//	.mr(.r3, .r28),
-//	.bl(0x1fca2c),
-//	.lha(.r18, .r3, 0x10),
-//	.b(0x801fa160)
-//])
-//
-//XGAssembly.replaceRamASM(RAMOffset: 0x1fa3e8, newASM: [
-//	.mr(.r6, .r18)
-//])
-
-
-
-//let gciFile = XGFiles.nameAndFolder("GC6E_pokemon_colosseum.gci", .Documents)
-//let saveFile = XGFiles.nameAndFolder("GC6E_pokemon_colosseum.gci.raw", .Documents)
-//let saveManager = XGSaveManager(file: gciFile, saveType: .gciSaveData)
-//if let save = saveManager.latestSaveSlot {
-//	for i in 0 ... 5 {
-//		let mon = save.readPokemon(slot: .pc(box: 0, index: i))
-//		XGSave.XGSavePokemonSlot.pc(box: 0, index: i).offset.hexString().println()
-//		mon.name.println()
-//		let copyMon = save.readPokemon(slot: .pc(box: 0, index: i + 12))
-//		copyMon.name.println()
-//		save.writePokemon(copyMon, to: .pc(box: 0, index: i))
-//		save.readPokemon(slot: .pc(box: 0, index: i)).name.println()
-//	}
-//}
-//saveManager.save()
-
-//let gciFile = XGFiles.nameAndFolder("pokemon_colosseum_save.gci", .Documents)
-//let saveFile = XGFiles.nameAndFolder("pokemon_colosseum_save.raw", .Documents)
-//let saveManager = XGSaveManager(file: saveFile, saveType: .decryptedSaveSlot)
-//if let save = saveManager.latestSaveSlot {
-//	let registeredParty = (0 ... 5).map { (index) -> XGSavePokemon in
-//		return save.readPokemon(slot: .battleMode(partyIndex: 0, index: index))
-//	}
-//	(10 ... 15).forEach { (boxSlot) in
-//		let pcSlot = XGSave.XGSavePokemonSlot.pc(box: 0, index: boxSlot)
-//		let registeredSlot = registeredParty[boxSlot - 10]
-//		let mon = save.readPokemon(slot: pcSlot)
-//		printg(boxSlot)
-//		mon.copyFrom(registeredSlot)
-//		save.writePokemon(mon, to: pcSlot)
-//	}
-//}
-//saveManager.save()
-//GoDShellManager.run(.gcitool, args: "replace \(gciFile.path) \(saveFile.path)", printOutput: true)
-
-
-//let saveFile = XGFiles.nameAndFolder("pokemon_colosseum_save.raw", .Documents)
-//let saveManager = XGSaveManager(saveType: .decryptedSaveSlot(data: saveFile.data!))
-//let save = saveManager.saveSlots[0]
-//save.playerName.println()
-//for i in 0 ..< 6 {
-//	print("party",i)
-//	let slot = XGSave.XGSavePokemonSlot.party(index: i)
-//	save.readPokemon(slot: slot).name.println()
-//}
-//print("")
-//for i in 0 ..< 3 {
-//	for j in 0 ..< 30 {
-//		print("box",i,"slot",j)
-//		let slot = XGSave.XGSavePokemonSlot.pc(box: i, index: j)
-//		save.readPokemon(slot: slot).name.println()
-//	}
-//}
-//print("")
-//for i in 0 ..< 2 {
-//	for j in 0 ..< 6 {
-//		print("registered party",i,"slot",j)
-//		let slot = XGSave.XGSavePokemonSlot.battleMode(partyIndex: i, index: j)
-//		save.readPokemon(slot: slot).name.println()
-//	}
-//}
-
-//let scdFile = XGFiles.scd("M1_out")
-//let script = XGScript(file: scdFile)
-//XGUtility.saveString(script.description, toFile: .nameAndFolder(scdFile.fileName + ".txt", .Documents))
-
-//var seenIDs = [Int]()
-//for mon in XGDecks.DeckStory.allActivePokemon where mon.isShadow {
-//    if !seenIDs.contains(mon.shadowID) {
-//        seenIDs.append(mon.shadowID)
-//        if mon.species.catchRate != mon.shadowCatchRate {
-//            print(mon.species.name, mon.species.catchRate, mon.shadowCatchRate)
-//        }
-//    }
-//}
-
-//let p = common.allPointers()
-//for i in 0 ..< p.count {
-//	printg(i, p[i].hexString())
-//}
-
-//for file in XGFolders.Documents.files where file.fileName.contains("pkx") {
-//	file.fsysData.extractFilesToFolder(folder: .Documents)
-//}
 
 
 

@@ -341,7 +341,7 @@ indirect enum CMSExpr {
 			case 0x596:
 				return "&Common.\(index)"
 			case 0x100:
-				return "&CurrentScript.\(index)"
+				return "&This.\(index)"
 			default:
 				return "&UnknownScript.\(index)"
 			}

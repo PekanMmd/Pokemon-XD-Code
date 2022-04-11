@@ -146,14 +146,18 @@ enum XGTMs {
 		if move == XGMoves.index(0) { return }
 		
 		switch self {
-			case .tm    :
-				let dol = XGFiles.dol.data!
+		case .tm:
+			if let dol = XGFiles.dol.data {
 				dol.replace2BytesAtOffset(startOffset, withBytes: move.index)
 				dol.save()
+				updateItemDescription()
+			}
 			
-			case .tutor : let rel = XGFiles.common_rel.data!
-						rel.replace2BytesAtOffset(startOffset + kTutorMoveMoveIndexOffset, withBytes: move.index)
-						rel.save()
+		case .tutor:
+			if let rel = XGFiles.common_rel.data {
+				rel.replace2BytesAtOffset(startOffset + kTutorMoveMoveIndexOffset, withBytes: move.index)
+				rel.save()
+			}
 		}
 	}
 	
@@ -195,7 +199,7 @@ enum XGTMs {
 	}
 	
 	func updateItemDescription() {
-		_ = self.item.descriptionString.duplicateWithString(XGTMs.createItemDescriptionForMove(self.move)).replace()
+		item.descriptionString.duplicateWithString(XGTMs.createItemDescriptionForMove(self.move)).replace()
 	}
 	
 	static func allTMs() -> [XGTMs] {
@@ -252,7 +256,6 @@ extension XGTMs: Codable {
 		case "TM":
 			let tm = XGTMs.tm(index)
 			tm.replaceWithMove(move)
-			tm.updateItemDescription()
 		case "tutor":
 			let flag = try container.decode(Int.self, forKey: .flag)
 			let tutor = XGTMs.tutor(index)

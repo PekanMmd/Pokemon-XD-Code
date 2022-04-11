@@ -12,28 +12,12 @@ class XGUtility {
 	
 	//MARK: - ISO Building
 
-	class func extractAllFiles() {
-		#if GAME_PBR
-		let excludedFiles = [ "pkx_", "wzx_"]
-		for filename in XGISO.current.allFileNames {
-			guard !excludedFiles.contains(where: { (str) -> Bool in
-				filename.contains(str)
-			}) else {
-				continue
-			}
-			exportFileFromISO(.nameAndFolder(filename, .ISOExport(filename.removeFileExtensions())), decode: true, overwrite: false)
+	class func extractAllFiles(decode: Bool = true) {
+		let excludedFileNames = [XGFiles.toc.fileName]
+		
+		for filename in XGISO.current.allFileNames where !excludedFileNames.contains(filename) {
+			exportFileFromISO(.nameAndFolder(filename, .ISOExport(filename.removeFileExtensions())), decode: decode, overwrite: false)
 		}
-		#else
-		let excludedFiles = ["stm_", "pkx_", "wzx_"]
-		for filename in XGISO.current.allFileNames where filename != XGFiles.toc.fileName {
-			guard !excludedFiles.contains(where: { (str) -> Bool in
-				filename.contains(str)
-			}) else {
-				continue
-			}
-			exportFileFromISO(.nameAndFolder(filename, .ISOExport(filename.removeFileExtensions())), decode: true, overwrite: false)
-		}
-		#endif
 	}
 	
 	class func compileMainFiles() {

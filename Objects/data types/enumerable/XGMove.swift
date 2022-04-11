@@ -26,6 +26,7 @@ let kMirrorMoveFlagOffset		= 0x0A
 let kKingsRockFlagOffset		= 0x0B
 let kSoundBasedFlagOffset		= 0x10
 let kHMFlagOffset				= 0x12
+let kRiskFlagOffset				= game == .XD ? 0x14 : 0x13
 
 let kMoveCategoryOffset			= game == .XD ? 0x13 : 0x1F // added through hacking in colosseum
 let kBasePowerOffset			= game == .XD ? 0x19 : 0x17

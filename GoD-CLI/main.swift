@@ -148,7 +148,9 @@ func applyPatches() {
 func randomiser() {
 	var isInitialRandomisation = true
 
-	var randomisePokemon = false
+	var randomiseStarters = false
+	var randomiseObtainablePokemon = false
+	var randomiseUnobtainablePokemon = false
 	var randomiseMoves = false
 	var randomiseTypes = false
 	var randomiseAbilities = false
@@ -164,32 +166,34 @@ func randomiser() {
 
 	var options = [String]()
 	options += [
-		game == .PBR ? " 1: Randomize Rental and Colosseum Pokemon"
-			: " 1: Randomize All Trainer/Wild Pokemon"
+		game == .PBR ? " 1: Randomize Rental Pokemon"
+			: " 1: Randomize Starter Pokemon"
 	]
 	options += [
-		game == .PBR ? " 2: Setting - Randomize Rental Pass Pokemon Only"
-			: " 2: Setting - Randomize Shadow Pokemon Only"
+		game == .PBR ? " 2: -"
+			: " 2: Randomize Obtainable Pokemon"
 	]
+	
 	options += [
-		" 3: Setting - Randomize Pokemon Using Similar Base Stat Total (BST)",
-		" 4: Randomize Moves",
-		" 5: Randomize Pokemon Types",
-		" 6: Randomize Abilities",
-		" 7: Randomize Pokemon Base Stats",
-		" 8: Randomize Move Types"
+		" 3: Randomize NPC Trainer Pokemon (unobtainable)",
+		" 4: Setting - Randomize Pokemon Using Similar Base Stat Total (BST)",
+		" 5: Randomize Moves",
+		" 6: Randomize Pokemon Types",
+		" 7: Randomize Abilities",
+		" 8: Randomize Pokemon Base Stats",
+		" 9: Randomize Move Types"
 	]
 
 	if game != .PBR {
 		options += [
-			" 9: Randomize TM and Tutor Moves",
-			"10: Randomize Evolutions",
-			"11: Randomize Item Boxes"
+			"10: Randomize TM and Tutor Moves",
+			"11: Randomize Evolutions",
+			"12: Randomize Item Boxes"
 		]
 	}
 
 	if game == .XD {
-		options += ["12: Randomize Battle Bingo"]
+		options += ["13: Randomize Battle Bingo"]
 	}
 
 	while true {
@@ -199,13 +203,24 @@ func randomiser() {
 		}
 		prompt += "\n"
 		prompt += "Options selected: "
-		if randomisePokemon {
-			prompt += "Pokemon"
+		if randomiseStarters {
+			prompt += "Starter pokemon"
 			if randomiseByBST {
-				prompt += " randomised to similar BSTs"
+				prompt += " (randomised to similar BSTs)"
 			}
-			if randomiseShadowsOnly {
-				prompt += game == .PBR ? " (Rentals only)" : " (Shadows only)"
+			prompt += ","
+		}
+		if randomiseObtainablePokemon {
+			prompt += "Obtainable pokemon"
+			if randomiseByBST {
+				prompt += " (randomised to similar BSTs)"
+			}
+			prompt += ","
+		}
+		if randomiseUnobtainablePokemon {
+			prompt += "Unobtainable pokemon"
+			if randomiseByBST {
+				prompt += " (randomised to similar BSTs)"
 			}
 			prompt += ","
 		}
@@ -255,8 +270,8 @@ func randomiser() {
 			}
 			#endif
 
-			if randomisePokemon {
-				XGRandomiser.randomisePokemon(limitToMainMons: randomiseShadowsOnly, similarBST: randomiseByBST)
+			if randomiseStarters || randomiseObtainablePokemon || randomiseUnobtainablePokemon {
+				XGRandomiser.randomisePokemon(includeStarters: randomiseStarters, includeObtainableMons: randomiseObtainablePokemon, includeUnobtainableMons: randomiseUnobtainablePokemon, similarBST: randomiseByBST)
 			}
 			if randomiseMoves {
 				XGRandomiser.randomiseMoves()
@@ -294,7 +309,9 @@ func randomiser() {
 
 			displayAlert(title: "Randomisation complete", description: "The ISO is now ready.")
 
-			randomisePokemon = false
+			randomiseStarters = false
+			randomiseObtainablePokemon = false
+			randomiseUnobtainablePokemon = false
 			randomiseMoves = false
 			randomiseTypes = false
 			randomiseAbilities = false
@@ -318,7 +335,7 @@ func randomiser() {
 		switch index {
 		case 0:
 			if isInitialRandomisation {
-				if randomisePokemon || randomiseMoves || randomiseTypes || randomiseAbilities || randomiseStats || randomiseMoveTypes || randomiseTMs || randomiseEvolutions || randomiseBingo {
+				if randomiseStarters || randomiseObtainablePokemon || randomiseUnobtainablePokemon || randomiseMoves || randomiseTypes || randomiseAbilities || randomiseStats || randomiseMoveTypes || randomiseTMs || randomiseEvolutions || randomiseBingo {
 					if readInput("You haven't run the randomiser yet, are you sure you want to leave? Y/N").lowercased() == "n" {
 						printg("Don't forget to enter 'start' after you enter your randomiser options.")
 						continue
@@ -326,27 +343,20 @@ func randomiser() {
 				}
 			}
 			return
-		case 1: randomisePokemon.toggle()
-		case 2:
-			randomiseShadowsOnly.toggle()
-			if randomiseShadowsOnly && !randomisePokemon {
-				randomisePokemon.toggle()
-			}
-		case 3:
-			randomiseByBST.toggle()
-			if randomiseByBST && !randomisePokemon {
-				randomisePokemon.toggle()
-			}
-		case 4: randomiseMoves.toggle()
-		case 5: randomiseTypes.toggle()
-		case 6: randomiseAbilities.toggle()
-		case 7: randomiseStats.toggle()
-		case 8: randomiseMoveTypes.toggle()
-		case 9: randomiseTMs.toggle()
-		case 10: randomiseEvolutions.toggle()
-		case 11: randomiseTreasure.toggle()
+		case 1: randomiseStarters.toggle()
+		case 2: randomiseObtainablePokemon.toggle()
+		case 3: randomiseUnobtainablePokemon.toggle()
+		case 4: randomiseByBST.toggle()
+		case 5: randomiseMoves.toggle()
+		case 6: randomiseTypes.toggle()
+		case 7: randomiseAbilities.toggle()
+		case 8: randomiseStats.toggle()
+		case 9: randomiseMoveTypes.toggle()
+		case 10: randomiseTMs.toggle()
+		case 11: randomiseEvolutions.toggle()
+		case 12: randomiseTreasure.toggle()
 		#if GAME_XD
-		case 12: randomiseBingo.toggle()
+		case 13: randomiseBingo.toggle()
 		#endif
 		default: printg("Invalid option:", input); continue
 		}

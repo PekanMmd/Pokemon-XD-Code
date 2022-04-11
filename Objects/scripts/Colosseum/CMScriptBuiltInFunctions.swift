@@ -50,7 +50,7 @@ enum CMSOperators: CustomStringConvertible {
 }
 
 var ScriptBuiltInFunctions : [Int : (name: String, parameterTypes: [CMSMacroTypes?]?, returnType: CMSMacroTypes?, hint: String)] = [
-
+	2: (name: "randomNumberMod", parameterTypes: [.integer, hint: "generates a random number between 0 and the parameter-1"),
 	3: (name: "threadRunScriptInBackground", parameterTypes: [.scriptFunction, .integer, .integer, .integer, .integer], returnType: .integer, hint: "script function, arg1, arg2, arg3, arg4"),
 
 	6: (name: "threadWaitForCompletion", parameterTypes: [.integer], returnType: nil, hint: "thread descriptor"),

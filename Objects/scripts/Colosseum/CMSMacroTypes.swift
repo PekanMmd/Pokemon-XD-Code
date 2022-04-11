@@ -187,7 +187,7 @@ indirect enum CMSMacroTypes {
 			switch value.integerValue >> 16 {
 			case 0: return "Null"
 			case 0x596: return "Common.\(value.integerValue & 0xFFFF)"
-			case 0x100: return "CurrentScript.\(value.integerValue & 0xFFFF)"
+			case 0x100: return "This.\(value.integerValue & 0xFFFF)"
 			default: return "Error(Invalid macro value)"
 			}
 		case .integer, .float:

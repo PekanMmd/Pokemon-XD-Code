@@ -416,7 +416,7 @@ class PDADumper {
 						case 258: pokemonData["species"] = "Marill" as AnyObject
 						case 259: pokemonData["species"] = "Azumarill" as AnyObject
 						case 260: pokemonData["species"] = "Wigglytuff" as AnyObject
-						case 261: pokemonData["species"] = "Snubbul" as AnyObject
+						case 261: pokemonData["species"] = "Snubbull" as AnyObject
 						case 262: pokemonData["species"] = "Granbull" as AnyObject
 						case 263: pokemonData["species"] = "Altaria" as AnyObject
 						case 264: pokemonData["species"] = "Alolan Ninetales" as AnyObject

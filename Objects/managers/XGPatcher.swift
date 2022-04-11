@@ -607,6 +607,11 @@ class XGPatcher {
 			printg("This patch has not been implemented for this game region:", region.name)
 			return
 		}
+		
+		guard game == .XD else {
+			printg("This patch has not been implemented for Pokemon Colosseum")
+			return
+		}
 
 		if XGFiles.dol.exists {
 

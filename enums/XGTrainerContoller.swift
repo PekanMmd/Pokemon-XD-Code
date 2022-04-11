@@ -31,3 +31,23 @@ enum XGTrainerController: Int, Codable, CaseIterable {
 	}
 	
 }
+
+extension XGTrainerController: XGEnumerable {
+	var enumerableName: String {
+		return string
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var className: String {
+		return "Trainer Controller"
+	}
+	
+	static var allValues: [XGTrainerController] {
+		return allCases
+	}
+	
+	
+}

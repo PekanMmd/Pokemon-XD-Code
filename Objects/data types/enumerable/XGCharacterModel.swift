@@ -12,8 +12,8 @@ let kSizeOfCharacterModel = game == .XD ? 0x34 : 0x2c
 
 // corresponds to the id of the model's file in people_archive.fsys. This is the word at offset 0 of each of the file entry details in the fsys (also used to refer to the model in scripts)
 let kCharacterModelFSYSIdentifier = game == .XD ? 0x4 : 0xc
-// 8 total, assuming they make up vertices of bound box
-let kFirstBoundBoxVertexOffset = game == .XD ? 0x8 : 0x10
+let kCharacterCollisionRadiusOffset = game == .XD ? 0x10 : 0x18
+let kCharacterInteractionRadiusOffset = game == .XD ? 0x24 : -1
 
 
 final class XGCharacterModel: NSObject, Codable {
@@ -22,8 +22,11 @@ final class XGCharacterModel: NSObject, Codable {
 	var identifier : UInt32 = 0
 	var name = ""
 	var fileSize = -1
+	var collisionRadius: Float = 0
 	
-	var boundBox = [Float]()
+	#if GAME_XD
+	var interactionRadius: Float = 0
+	#endif
 	
 	var startOffset = 0
 
@@ -64,11 +67,10 @@ final class XGCharacterModel: NSObject, Codable {
 			self.name = "CharacterModel_\(index)"
 		}
 		
-		for i in 0 ..< 8 {
-			let offset = self.startOffset + (i * 4) + kFirstBoundBoxVertexOffset
-			let f = rel.getWordAtOffset(offset).hexToSignedFloat()
-			self.boundBox.append(f)
-		}
+		collisionRadius = rel.getWordAtOffset(self.startOffset + kCharacterCollisionRadiusOffset).hexToSignedFloat()
+		#if GAME_XD
+		interactionRadius = rel.getWordAtOffset(self.startOffset + kCharacterInteractionRadiusOffset).hexToSignedFloat()
+		#endif
 	}
 
 	private func searchForArchive() -> XGFsys? {
@@ -94,11 +96,10 @@ final class XGCharacterModel: NSObject, Codable {
 		let rel = XGFiles.common_rel.data!
 		
 		rel.replaceWordAtOffset(self.startOffset + kCharacterModelFSYSIdentifier, withBytes: self.identifier)
-		for i in 0 ..< 8 {
-			let offset = self.startOffset + (i * 4) + kFirstBoundBoxVertexOffset
-			let f = self.boundBox[i]
-			rel.replaceWordAtOffset(offset, withBytes: f.floatToHex())
-		}
+		rel.replaceWordAtOffset(self.startOffset + kCharacterCollisionRadiusOffset, withBytes: self.collisionRadius.floatToHex())
+		#if GAME_XD
+		rel.replaceWordAtOffset(self.startOffset + kCharacterInteractionRadiusOffset, withBytes: self.interactionRadius.floatToHex())
+		#endif
 		
 		rel.save()
 	}

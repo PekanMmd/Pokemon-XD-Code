@@ -57,9 +57,11 @@ enum XGTMs {
 	func replaceWithMove(_ move: XGMoves) {
 		if move == XGMoves.index(0) { return }
 		
-		let dol = XGFiles.dol.data!
-		dol.replace2BytesAtOffset(startOffset, withBytes: move.index)
-		dol.save()
+		if let dol = XGFiles.dol.data {
+			dol.replace2BytesAtOffset(startOffset, withBytes: move.index)
+			dol.save()
+			updateItemDescription()
+		}
 	}
 	
 	static func createItemDescriptionForMove(_ move: XGMoves) -> String {
@@ -100,7 +102,7 @@ enum XGTMs {
 	}
 	
 	func updateItemDescription() {
-		self.item.descriptionString.duplicateWithString(XGTMs.createItemDescriptionForMove(self.move)).replace()
+		item.descriptionString.duplicateWithString(XGTMs.createItemDescriptionForMove(self.move)).replace()
 		
 	}
 	
@@ -191,7 +193,6 @@ extension XGTMs: Codable {
 		let move = try container.decode(XGMoves.self, forKey: .move)
 		let tm = XGTMs.tm(index)
 		tm.replaceWithMove(move)
-		tm.updateItemDescription()
 	}
 	
 	func encode(to encoder: Encoder) throws {

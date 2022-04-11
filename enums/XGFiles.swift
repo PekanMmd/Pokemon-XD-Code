@@ -385,6 +385,15 @@ indirect enum XGFiles {
 		if self != .common_rel {
 			return 0
 		}
+		if isDemo {
+			switch region {
+			case .JP: return 0xFB710
+			case .US:
+				assertionFailure("Check for us offset")
+				return 0x0
+			default: return 0x0
+			}
+		}
 		return CommonIndexes.Script.startOffset
 		#endif
 
@@ -415,6 +424,9 @@ indirect enum XGFiles {
 		#else
 		if self != .common_rel {
 			return fileSize
+		}
+		if isDemo {
+			return 0x3D20
 		}
 		return CommonIndexes.Script.length
 		#endif

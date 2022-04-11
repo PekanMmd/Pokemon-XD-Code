@@ -74,7 +74,7 @@ indirect enum XDSMacroTypes {
 	// Types simply used for documentation but are printed as raw values
 	case integer
 	case float
-	case integerFloatOverload // accepts either an integer or a float
+	case number // accepts either an integer, a float or a string representation of a number
 	case integerAngleDegrees
 	case floatAngleDegrees
 	case floatAngleRadians
@@ -85,6 +85,7 @@ indirect enum XDSMacroTypes {
 	case integerBitMask
 	case datsIdentifier // id for a .dats model archive]
 	case camIdentifier // id for a .cam file
+	case cameraType
 	
 	case vector
 	case arrayIndex
@@ -144,7 +145,7 @@ indirect enum XDSMacroTypes {
 		// another gap for same reason
 		case .integer: return 200
 		case .float: return 201
-		case .integerFloatOverload: return 202
+		case .number: return 202
 		case .integerAngleDegrees: return 203
 		case .floatAngleDegrees: return 204
 		case .floatAngleRadians: return 205
@@ -155,6 +156,7 @@ indirect enum XDSMacroTypes {
 		case .integerBitMask: return 210
 		case .datsIdentifier: return 211
 		case .camIdentifier: return 212
+		case .cameraType: return 213
 			
 		// more gaps
 		case .vector: return 300
@@ -309,8 +311,8 @@ indirect enum XDSMacroTypes {
 			return "Integer"
 		case .float:
 			return "Decimal"
-		case .integerFloatOverload:
-			return "IntegerOrDecimal"
+		case .number:
+			return "AnyNumber"
 		case .integerAngleDegrees:
 			return "Degrees"
 		case .floatAngleDegrees:
@@ -331,6 +333,8 @@ indirect enum XDSMacroTypes {
 			return "DatsID"
 		case .camIdentifier:
 			return "CameraRoutineID"
+		case .cameraType:
+			return "CameraType"
 		case .vector:
 			return "Vector"
 		case .array(let t):

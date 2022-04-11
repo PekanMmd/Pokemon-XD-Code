@@ -18,38 +18,38 @@ class DiscordPlaysOrre {
 		}
 
 		func save(process: XDProcess) {
-//			incrementSlot()
-//			process.inputHandler.clearPendingInput()
-//			process.saveStateToSlot(latestSaveSlot)
-//			usleep(1_000)
-//			write()
+			incrementSlot()
+			process.inputHandler.clearPendingInput()
+			process.saveStateToSlot(latestSaveSlot)
+			usleep(1_000)
+			write()
 		}
 
 		func load(process: XDProcess) {
-//			guard latestSaveSlot > 0 else {
-//				return
-//			}
-//			process.inputHandler.clearPendingInput()
-//			process.loadStateFromSlot(latestSaveSlot)
-//			sleep(2)
+			guard latestSaveSlot > 0 else {
+				return
+			}
+			process.inputHandler.clearPendingInput()
+			process.loadStateFromSlot(latestSaveSlot)
+			sleep(2)
 		}
 
 		func loadPrevious(process: XDProcess) {
-//			guard latestSaveSlot > 0 else {
-//				return
-//			}
-//			let previousSlot = latestSaveSlot == 1 ? 7 : latestSaveSlot - 1
-//			process.inputHandler.clearPendingInput()
-//			process.loadStateFromSlot(previousSlot)
+			guard latestSaveSlot > 0 else {
+				return
+			}
+			let previousSlot = latestSaveSlot == 1 ? 7 : latestSaveSlot - 1
+			process.inputHandler.clearPendingInput()
+			process.loadStateFromSlot(previousSlot)
 		}
 
 		func write() {
-//			writeJSON(to: SaveSlotsState.file)
+			writeJSON(to: SaveSlotsState.file)
 		}
 
 		func reset() {
-//			latestSaveSlot = 0
-//			write()
+			latestSaveSlot = 0
+			write()
 		}
 
 		static func read() -> SaveSlotsState? {
@@ -57,7 +57,7 @@ class DiscordPlaysOrre {
 		}
 
 		private func incrementSlot() {
-//			latestSaveSlot = latestSaveSlot == 7 ? 1 : latestSaveSlot + 1
+			latestSaveSlot = latestSaveSlot == 7 ? 1 : latestSaveSlot + 1
 		}
 	}
 
@@ -190,15 +190,15 @@ class DiscordPlaysOrre {
 	func launch () {
 		let setup = XDProcessSetup()
 
-//		setup.onFrame = { [weak self] (process, state) in
-//			self?.lastFrameAdvanceHeartBeat = Date(timeIntervalSinceNow: 0)
-//			return true
-//		}
-//
-//		setup.onWillRender = { [weak self] (context, process, state) in
-//			self?.lastRenderBufferHeartBeat = Date(timeIntervalSinceNow: 0)
-//			return true
-//		}
+		setup.onFrame = { [weak self] (process, state) in
+			self?.lastFrameAdvanceHeartBeat = Date(timeIntervalSinceNow: 0)
+			return true
+		}
+
+		setup.onWillRender = { [weak self] (context, process, state) in
+			self?.lastRenderBufferHeartBeat = Date(timeIntervalSinceNow: 0)
+			return true
+		}
 
 		var previousRoom: XGRoom?
 		setup.onDidChangeMapOrMenu = { [weak self] (context, process, state) -> Bool in

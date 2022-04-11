@@ -354,7 +354,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		printg("extracting iso")
 
 		XGFolders.setUpFolderFormat()
-		XGUtility.extractAllFiles()
+		XGUtility.extractAllFiles(decode: false)
+		
+		printg("extraction complete")
+		displayAlert(title: "ISO Extraction Complete", description: "Done.")
+	}
+	
+	@IBAction func extractAndDecodeISO(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		printg("extracting iso")
+
+		XGFolders.setUpFolderFormat()
+		XGUtility.extractAllFiles(decode: true)
 		
 		printg("extraction complete")
 		displayAlert(title: "ISO Extraction Complete", description: "Done.")

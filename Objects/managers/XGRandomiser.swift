@@ -39,7 +39,7 @@ class XGRandomiser: NSObject {
 	}
 	#endif
 	
-	class func randomisePokemon(limitToMainMons: Bool = false, similarBST: Bool = false) {
+	class func randomisePokemon(includeStarters: Bool = true, includeObtainableMons: Bool = true, includeUnobtainableMons: Bool = true, similarBST: Bool = false) {
 		printg("randomising pokemon species...")
 
 		let cachedPokemonStats = XGPokemon.allPokemon().map{$0.stats}.filter{$0.catchRate > 0}
@@ -155,9 +155,9 @@ class XGRandomiser: NSObject {
 			return newSpecies
 		}
 
-		if !limitToMainMons {
-			#if !GAME_PBR
-			for gift in XGGiftPokemonManager.allNonShadowGiftPokemon() {
+		#if !GAME_PBR
+		if includeStarters {
+			for gift in XGGiftPokemonManager.allStarterGiftPokemon() {
 
 				var pokemon = gift
 				pokemon.species = randomise(oldSpecies: pokemon.species, checkDuplicates: true)
@@ -170,7 +170,28 @@ class XGRandomiser: NSObject {
 				pokemon.save()
 
 			}
+		}
+		
+		if includeObtainableMons {
+			
+			#if GAME_XD
+			let gifts = XGGiftPokemonManager.nonShadowGiftPokemon()
+			#else
+			let gifts = XGGiftPokemonManager.allNonStarterGiftPokemon()
 			#endif
+			for gift in gifts {
+
+				var pokemon = gift
+				pokemon.species = randomise(oldSpecies: pokemon.species, checkDuplicates: true)
+				let moves = pokemon.species.movesForLevel(pokemon.level)
+				pokemon.move1 = moves[0]
+				pokemon.move2 = moves[1]
+				pokemon.move3 = moves[2]
+				pokemon.move4 = moves[3]
+
+				pokemon.save()
+
+			}
 
 			#if GAME_XD
 			for p in 0 ... 3 {
@@ -184,38 +205,37 @@ class XGRandomiser: NSObject {
 					pokemon.save()
 				}
 			}
+			
+			let tradeShadowPokemon = XGTradeShadowPokemon()
+			tradeShadowPokemon.species = randomise(oldSpecies: tradeShadowPokemon.species, checkDuplicates: true, shadowID: tradeShadowPokemon.shadowID)
+			let moves = tradeShadowPokemon.species.movesForLevel(tradeShadowPokemon.level)
+			tradeShadowPokemon.move1 = moves[0]
+			tradeShadowPokemon.move2 = moves[1]
+			tradeShadowPokemon.move3 = moves[2]
+			tradeShadowPokemon.move4 = moves[3]
+			tradeShadowPokemon.save()
 			#endif
 		}
-
-		#if GAME_XD
-		let tradeShadowPokemon = XGTradeShadowPokemon()
-		tradeShadowPokemon.species = randomise(oldSpecies: tradeShadowPokemon.species, checkDuplicates: true, shadowID: tradeShadowPokemon.shadowID)
-		let moves = tradeShadowPokemon.species.movesForLevel(tradeShadowPokemon.level)
-		tradeShadowPokemon.move1 = moves[0]
-		tradeShadowPokemon.move2 = moves[1]
-		tradeShadowPokemon.move3 = moves[2]
-		tradeShadowPokemon.move4 = moves[3]
-		tradeShadowPokemon.save()
-		#endif
-
-		#if !GAME_PBR
+		
 		var decks = MainDecksArray
 		var additionalPokemon = [XGTrainerPokemon]()
-		#endif
+
 
 		#if GAME_XD
 		decks += [XGDecks.DeckDarkPokemon]
-		additionalPokemon = limitToMainMons ? [] : [
+		additionalPokemon = includeUnobtainableMons ? [] : [
 			XGDeckPokemon.dpkm(1, .DeckVirtual).data,
 			XGDeckPokemon.dpkm(2, .DeckVirtual).data
 		]
 		#endif
 
-		#if !GAME_PBR
 		var mons = additionalPokemon
 		for deck in decks {
 			for pokemon in deck.allActivePokemon {
-				if limitToMainMons && !pokemon.isShadowPokemon {
+				if !includeUnobtainableMons && !pokemon.isShadowPokemon {
+					continue
+				}
+				if !includeObtainableMons && pokemon.isShadowPokemon {
 					continue
 				}
 				mons.append(pokemon)
@@ -232,7 +252,10 @@ class XGRandomiser: NSObject {
 
 		#if GAME_PBR
 		for index in allPokemonDeckFileIndexes {
-			guard !limitToMainMons || index == rentalPassDeckIndex else {
+			if !includeStarters && index == rentalPassDeckIndex {
+				continue
+			}
+			if !includeUnobtainableMons && index != rentalPassDeckIndex {
 				continue
 			}
 			let file = XGFiles.indexAndFsysName(index, "deck")
@@ -528,6 +551,7 @@ class XGRandomiser: NSObject {
 
 	#if !GAME_PBR
 	static func randomiseTreasureBoxes() {
+		printg("randomising item boxes...")
 		for treasure in XGTreasure.allValues {
 			guard treasure.item.data.bagSlot.rawValue < XGBagSlots.keyItems.rawValue,
 				  treasure.item.data.price > 0 else {

@@ -27,7 +27,7 @@ let multipliersStruct = GoDStruct(name: "Multiplier", format: [
 	.byte(name: "Denominator", description: "The bottom part of the fraction", type: .uint)
 ])
 
-let multipliersTable = CommonStructTable(index: .Multipliers, properties: multipliersStruct) { (index, data) -> String? in
+let multipliersTable = CommonStructTable(index: .NatureMultipliers, properties: multipliersStruct) { (index, data) -> String? in
 	if let numerator: Int = data.get("Numerator"),
 	   let denominator: Int = data.get("Denominator") {
 		if denominator == 100 {
@@ -120,7 +120,7 @@ let SoundsStruct = GoDStruct(name: "Sounds", format: [
 ])
 #endif
 
-let SoundsTable = CommonStructTable(index: .BGM, properties: SoundsStruct) { (index, data) -> String? in
+let SoundsTable = CommonStructTable(index: .SoundFiles, properties: SoundsStruct) { (index, data) -> String? in
 	#if GAME_XD
 	if let fsysID: Int = data.get("Fsys ID"), let fsysName = XGISO.current.getFSYSNameWithGroupID(fsysID) {
 		return fsysName
@@ -160,4 +160,14 @@ let aiWeightEffectsStruct = GoDStruct(name: "AI Weight Effect", format: [
 ])
 
 let aiWeightEffectsTable = CommonStructTable(index: .AIWeightEffects, properties: aiWeightEffectsStruct)
+#endif
+
+#if GAME_XD
+let rgbaStruct = GoDStruct(name: "RGBA Colour", format: [
+	.byte(name: "Red", description: "", type: .uintHex),
+	.byte(name: "Green", description: "", type: .uintHex),
+	.byte(name: "Blue", description: "", type: .uintHex),
+	.byte(name: "Alpha", description: "", type: .uintHex),
+])
+let msgPalettesTable = CommonStructTable(index: .MsgPalettes, properties: rgbaStruct)
 #endif

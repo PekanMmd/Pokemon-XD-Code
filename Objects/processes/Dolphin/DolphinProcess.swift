@@ -17,7 +17,8 @@ class DolphinProcess: ProcessIO {
 	/// Settings don't seem to work atm
 	convenience init?(isoFile: XGFiles? = nil, dolphinFile: XGFiles? = nil, settings: [(key: DolphinSystems, value: String)] = []) {
 		#warning("TODO: get default paths for windows and linux")
-		let defaultDolphinFile = XGFiles.path("/Applications/Dolphin.app/Contents/MacOS/Dolphin")
+		let dolphinApp = dolphinFile ?? XGFiles.path("/Applications/Dolphin.app")
+		let dolphinExecutable = XGFiles.path(dolphinApp.path + "/Contents/MacOS/Dolphin")
 
 		let iso = isoFile ?? XGFiles.iso
 		guard iso.exists else { return nil }
@@ -41,7 +42,11 @@ class DolphinProcess: ProcessIO {
 
 			args += " " + "--config=\(key)=\(value)".replacingOccurrences(of: " ", with: "\\ ")
 		}
-		guard let process = GoDShellManager.runAsync(.file(dolphinFile ?? defaultDolphinFile), args: args) else {
+		
+		// remove the code signing entitlements from the Dolphin app to enable debugging
+		GoDShellManager.stripEntitlements(appFile: dolphinApp)
+		
+		guard let process = GoDShellManager.runAsync(.file(dolphinExecutable), args: args) else {
 			return nil
 		}
 		self.init(process: process)
@@ -145,7 +150,7 @@ class DolphinProcess: ProcessIO {
 		}
 		if validate() {
 			if onStart?(self) ?? true {
-				DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(5))) { [weak self] in
+				DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) { [weak self] in
 					var shouldContinue = true
 					while let self = self,
 						  self.isRunning && shouldContinue {

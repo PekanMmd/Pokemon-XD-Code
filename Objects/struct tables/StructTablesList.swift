@@ -100,7 +100,9 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		tutorMovesTable,
 		mirorBDataTable,
 		typesTable,
-		SoundsMetaDataTable
+		SoundsMetaDataTable,
+		worldMapLocationsTable,
+		msgPalettesTable
 	]
 	tables += xdTables
 	#endif

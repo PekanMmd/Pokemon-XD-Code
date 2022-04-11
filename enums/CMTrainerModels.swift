@@ -98,11 +98,11 @@ enum XGTrainerModels : Int, Codable, CaseIterable {
 	case cail = 74
 	case chaserF2 = 75
 	
-	var name : String {
+	var name: String {
 		if self.rawValue == 0 {
 			return "-"
 		}
-		return pkxFSYS!.fileName.removeFileExtensions()
+		return pkxFSYS?.fileName.removeFileExtensions() ?? "-"
 	}
 	
 	var pkxModelIdentifier : UInt32 {

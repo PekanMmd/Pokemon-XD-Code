@@ -64,13 +64,13 @@ var battleStruct: GoDStruct {
 		.byte(name: "Is Story Battle", description: "", type: .bool),
 		.short(name: "Battle Field ID", description: "", type: .battleFieldID),
 		.short(name: "Battle CD ID", description: "Set programmatically at run time so is always set to 0 in the game files", type: .uint),
-		.word(name: "Unknown 1", description: "", type: .uintHex),
+		.word(name: "Battle Identifier String", description: "", type: .msgID(file: .dol)),
 		.word(name: "BGM ID", description: "", type: .uintHex),
 		.word(name: "Unknown 2", description: "", type: .uintHex)
 		]
 	+ (region == .EU ? [.array(name: "Unknown Values", description: "Only exist in the PAL version", property: .word(name: "", description: "", type: .uintHex), count: 4)] : [])
 	+ [
-		.word(name: "Colosseum Round", description: "", type: .colosseumRound),
+		.word(name: "Colosseum Round", description: "wzx id for intro text", type: .colosseumRound),
 		.array(name: "Players", description: "", property: .subStruct(name: "Battle Player", description: "", property: GoDStruct(name: "Battle Player", format: [
 			.short(name: "Deck ID", description: "", type: .deckID),
 			.short(name: "Trainer ID", description: "Use deck 0, id 5000 for the player's team", type: .uint),

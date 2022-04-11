@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 #if canImport(Cocoa)
 import Cocoa
 #endif
@@ -139,7 +140,7 @@ extension XGImage {
 	func writePNGData(toFile file: XGFiles) {
 		#if canImport(Cocoa)
 		pngData.write(to: file)
-		#else
+		#elseif USE_WIMGT
 		let tex0File = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.tex0.fileExtension, file.folder)
 		let data = tex0Data
 		data.file = tex0File
@@ -151,6 +152,8 @@ extension XGImage {
 		let args = "decode -o \(tex0File.path.escapedPath) -d \(file.path.escapedPath)"
 		GoDShellManager.run(.wimgt, args: args)
 		tex0File.delete()
+		#else
+		encodePNG(toFile: file)
 		#endif
 	}
 
@@ -158,10 +161,11 @@ extension XGImage {
 		guard file.exists, XGFileTypes.imageFormats.contains(file.fileType) else {
 			return nil
 		}
+		
 		#if canImport(Cocoa)
 		let image = file.image
 		return XGImage(nsImage: image)
-		#else
+		#elseif USE_WIMGT
 		let tex0File = XGFiles.nameAndFolder(file.fileName.removeFileExtensions() + XGFileTypes.tex0.fileExtension, file.folder)
 		let format = "-x TEX.RGB5A3"
 		let overwrite = "-o"
@@ -176,7 +180,39 @@ extension XGImage {
 			tex0File.delete()
 		}
 		return XGImage.fromTEX0Data(tex0Data: data)
+		#else
+		return XGImage.decodePNG(fromFile: file)
 		#endif
+	}
+}
+
+extension XGImage {
+	private typealias PNGColor = PNG.RGBA<UInt8>
+	
+	private var rectangle: PNG.Data.Rectangular {
+		let pixelColours = pixels.map { colour -> PNGColor in
+			return PNGColor(r: UInt8(colour.red), g: UInt8(colour.green), b: UInt8(colour.blue), a: UInt8(colour.alpha))
+		}
+		return PNG.Data.Rectangular(packing: pixelColours, size: (x: width, y: height), layout: .init(format: .rgba8(palette: [], fill: nil)))
+	}
+	
+	private func encodePNG(toFile file: XGFiles) {
+		// This seems to be quite slow so using a lower compression level for now
+		// Aim to use level 9 if it becomes feasible in future
+		try? rectangle.compress(path: file.path, level: 0)
+	}
+	
+	private static func decodePNG(fromFile file: XGFiles) -> XGImage? {
+		guard let image = try? PNG.Data.Rectangular.decompress(path: file.path) else {
+			return nil
+		}
+		
+		let size = image.size
+		let rgba: [PNGColor] = image.unpack(as: PNGColor.self)
+		let pixels = rgba.map { colour -> XGColour in
+			return XGColour(red: Int(colour.r), green: Int(colour.g), blue: Int(colour.b), alpha: Int(colour.a))
+		}
+		return XGImage(width: size.x, height: size.y, pixels: pixels)
 	}
 }
 

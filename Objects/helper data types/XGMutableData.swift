@@ -124,6 +124,15 @@ class XGMutableData {
 	func duplicated() -> XGMutableData {
 		return XGMutableData(byteStream: rawBytes, file: file)
 	}
+	
+	var isNull: Bool {
+		for byte in byteStream {
+			if byte != 0 {
+				return false
+			}
+		}
+		return true
+	}
 
 	//MARK: - Get Bytes
 	
@@ -472,6 +481,14 @@ class XGMutableData {
 		}
 		
 		return offsets
+	}
+	
+	func search(for data: XGMutableData, fromOffset: Int = 0) -> Int? {
+		let searchRange: Range<Data.Index> = fromOffset ..< self.length
+		guard let resultRange = self.data.range(of: data.data, options: [], in: searchRange) else {
+			return nil
+		}
+		return Int(resultRange.startIndex)
 	}
 
 	// MARK: - Strings

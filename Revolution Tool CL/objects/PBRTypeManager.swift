@@ -30,19 +30,39 @@ class PBRTypeManager {
 	}
 
 	static var typeMatchupDataDolOffset: Int? {
+		guard region != .JP else {
+			return nil
+		}
 		guard let dol = XGFiles.dol.data else {
 			printg("Dol file not found")
 			return nil
 		}
+		
+		// TODO: update all pointers
+		// US pointer locations
+//		803c1e70
+//		803c1eb0
+//		803c1edc
+//		803c1f1c
+//		803c2150
+//		803c25d4
+//		803c2ee0
+//		803c2f20
 
-		let dataTableOffsetInstructionsStartOffset = 0x3be7c4 - kDolToRAMOffsetDifference
-		let instruction1 = dol.getWordAtOffset(dataTableOffsetInstructionsStartOffset)
-		let instruction2 = dol.getWordAtOffset(dataTableOffsetInstructionsStartOffset + 4)
+		let dataTableOffsetInstructionsStartOffset: Int
+		switch region {
+		case .EU: dataTableOffsetInstructionsStartOffset = 0x3be7c4
+		case .US: dataTableOffsetInstructionsStartOffset = 0x3f61a0
+		case .JP: dataTableOffsetInstructionsStartOffset = -1
+		case .OtherGame: dataTableOffsetInstructionsStartOffset = -1
+		}
+		let instruction1 = dol.getWordAtOffset(dataTableOffsetInstructionsStartOffset - kDolToRAMOffsetDifference)
+		let instruction2 = dol.getWordAtOffset(dataTableOffsetInstructionsStartOffset + 4 - kDolToRAMOffsetDifference)
 
 		// use 0xFFF for first mask to remove the leading 8 in the offset.
 		let dataTableRAMOffset = ((instruction1 & 0xFFF) << 16) + (instruction2 & 0xFFFF)
 
-		let isInDataSection = dataTableRAMOffset >= 0x3e1e60
+		let isInDataSection = dataTableRAMOffset >= 0x3e1e60 // TODO: get precise value for non pal regions
 		let offsetDifference = isInDataSection ? kDolTableToRAMOffsetDifference : kDolToRAMOffsetDifference
 		return Int(dataTableRAMOffset) - offsetDifference
 	}

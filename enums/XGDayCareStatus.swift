@@ -20,3 +20,23 @@ enum XGDayCareStatus: Int {
 		}
 	}
 }
+
+extension XGDayCareStatus: XGEnumerable {
+	var enumerableName: String {
+		return name
+	}
+	
+	var enumerableValue: String? {
+		return rawValue.string
+	}
+	
+	static var className: String {
+		return "Day Care Status"
+	}
+	
+	static var allValues: [XGDayCareStatus] {
+		return [.notVisited, .noPokemonDeposited, .pokemonDeposited]
+	}
+	
+	
+}

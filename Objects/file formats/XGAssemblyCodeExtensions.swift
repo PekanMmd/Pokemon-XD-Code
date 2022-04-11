@@ -166,7 +166,7 @@ extension XGAssembly {
 		#endif
 	}
 
-	class func geckoCode(RAMOffset: Int, newASM asm: [XGASM]) -> String {
+	class func geckoCode(RAMOffset: Int, asm: [XGASM]) -> String {
 		return asm.asGeckoCode(RAMOffset: RAMOffset)
 	}
 

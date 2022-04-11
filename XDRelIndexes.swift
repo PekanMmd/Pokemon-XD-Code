@@ -88,27 +88,45 @@ enum CommonIndexes : Int {
 	case PokefaceTextures = 76
 	case NumberOfPokefaceTextures = 77
 
+	case MsgPalettes = 82
+	case NumberOfMsgPalettes = 83
 	case CharacterModels = 84
 	case NumberOfCharacterModels = 85
 	case PokemonStats = 88
 	case NumberOfPokemon = 89
 	case Natures = 94
 	case NumberOfNatures = 95
-	case Multipliers = 96 //1 byte numerator, 1 byte denominator
-	case NumberOfMultipliers = 97
-	
+	case NatureMultipliers = 96 //1 byte numerator, 1 byte denominator
+	case NumberOfNatureMultipliers = 97
+	case PurificationChamberData = 98
+	case NumberOfPurificationChamberData = 99
+	case Ribbons = 100
+	case NumberOfRibbons = 101
 	case SoundsMetaData = 102
 	case NumberOfSounds = 103
-	case BGM = 104
-	case NumberOfBGM = 105
-
+	case SoundFiles = 104
+	case NumberOfSoundFiles = 105
+	
+	case SoundTestBGM = 108
+	case NumberOfSoundTestBGM = 109
+	case SoundTestEnvironmentSounds = 110
+	case NumberOfSoundTestEnvironmentSounds = 111
+	case SoundTestCries = 112
+	case NumberOfSoundTestCries = 113
+	case SoundTestSoundEffects = 114
+	case NumberOfSoundTestSoundEffects = 115
+	case TableResData = 118 // pointers added at runtime
+	case NumberOfTableResData = 119
+	case TutorialData = 120
+	case NumberOfTutorialData = 121
 	case MirorBData = 122
 	case NumberOfMirorBDataEntries = 123 // Only 1 entry
-
 	case Moves = 124
 	case NumberOfMoves = 125
 	case TutorMoves = 126
 	case NumberOfTutorMoves = 127
+	case WorldMapLocations = 128
+	case NumberOfWorldMapLocations = 129
 	case Types = 130
 	case NumberOfTypes = 131
 
