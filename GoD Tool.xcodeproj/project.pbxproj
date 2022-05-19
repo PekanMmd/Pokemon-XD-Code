@@ -4853,6 +4853,28 @@
 		D93BF61627D8201800C545BA /* benchmark_toolchains.py in Resources */ = {isa = PBXBuildFile; fileRef = D93BEDE227D8201500C545BA /* benchmark_toolchains.py */; };
 		D9469EE527961ACB00907BEA /* XGThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4721829D7A001C41D3 /* XGThreadManager.swift */; };
 		D9469EE627961B1E00907BEA /* XGThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4721829D7A001C41D3 /* XGThreadManager.swift */; };
+		D948B59B28276AC80089679D /* GoDContextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4C2182B1DC001C41D3 /* GoDContextViewController.swift */; };
+		D948B59D2828AC600089679D /* PBRNArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B59C2828AC600089679D /* PBRNArchive.swift */; };
+		D948B59E2828AC600089679D /* PBRNArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B59C2828AC600089679D /* PBRNArchive.swift */; };
+		D948B59F2828AC600089679D /* PBRNArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B59C2828AC600089679D /* PBRNArchive.swift */; };
+		D948B5A1282B43A80089679D /* GoDOffsetIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5A0282B43A80089679D /* GoDOffsetIO.swift */; };
+		D948B5A2282B43A80089679D /* GoDOffsetIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5A0282B43A80089679D /* GoDOffsetIO.swift */; };
+		D948B5A3282B43A80089679D /* GoDOffsetIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5A0282B43A80089679D /* GoDOffsetIO.swift */; };
+		D948B5A4282B43A80089679D /* GoDOffsetIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5A0282B43A80089679D /* GoDOffsetIO.swift */; };
+		D948B5A5282B43A80089679D /* GoDOffsetIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5A0282B43A80089679D /* GoDOffsetIO.swift */; };
+		D948B5A6282B43A80089679D /* GoDOffsetIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5A0282B43A80089679D /* GoDOffsetIO.swift */; };
+		D948B5A7282B43A80089679D /* GoDOffsetIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5A0282B43A80089679D /* GoDOffsetIO.swift */; };
+		D948B5A8282B43A80089679D /* GoDOffsetIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5A0282B43A80089679D /* GoDOffsetIO.swift */; };
+		D948B5A9282B43A80089679D /* GoDOffsetIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5A0282B43A80089679D /* GoDOffsetIO.swift */; };
+		D948B5AB282BD7810089679D /* XGBattleSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5AA282BD7810089679D /* XGBattleSequence.swift */; };
+		D948B5AC282BD7810089679D /* XGBattleSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5AA282BD7810089679D /* XGBattleSequence.swift */; };
+		D948B5AD282BD7810089679D /* XGBattleSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5AA282BD7810089679D /* XGBattleSequence.swift */; };
+		D948B5AE282BD7810089679D /* XGBattleSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5AA282BD7810089679D /* XGBattleSequence.swift */; };
+		D948B5AF282BD7810089679D /* XGBattleSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5AA282BD7810089679D /* XGBattleSequence.swift */; };
+		D948B5B0282BD7810089679D /* XGBattleSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948B5AA282BD7810089679D /* XGBattleSequence.swift */; };
+		D9C02E7C280CF58B00D00B1B /* FlagStructTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C02E7B280CF58B00D00B1B /* FlagStructTables.swift */; };
+		D9C02E7D280CF58B00D00B1B /* FlagStructTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C02E7B280CF58B00D00B1B /* FlagStructTables.swift */; };
+		D9C02E7E280CF58B00D00B1B /* FlagStructTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C02E7B280CF58B00D00B1B /* FlagStructTables.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -7457,6 +7479,10 @@
 		D93BEDE027D8201500C545BA /* toolchain.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = toolchain.py; sourceTree = "<group>"; };
 		D93BEDE127D8201500C545BA /* convert-to-bgra */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "convert-to-bgra"; sourceTree = "<group>"; };
 		D93BEDE227D8201500C545BA /* benchmark_toolchains.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = benchmark_toolchains.py; sourceTree = "<group>"; };
+		D948B59C2828AC600089679D /* PBRNArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRNArchive.swift; sourceTree = "<group>"; };
+		D948B5A0282B43A80089679D /* GoDOffsetIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDOffsetIO.swift; sourceTree = "<group>"; };
+		D948B5AA282BD7810089679D /* XGBattleSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleSequence.swift; sourceTree = "<group>"; };
+		D9C02E7B280CF58B00D00B1B /* FlagStructTables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagStructTables.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -7830,6 +7856,7 @@
 				1C56F761260C1EA000CF1DEE /* CharacterModelTable.swift */,
 				1C56F817260D8F6100CF1DEE /* DeckTables.swift */,
 				1C25E5BC26D3357500F050DC /* EreaderTables.swift */,
+				D9C02E7B280CF58B00D00B1B /* FlagStructTables.swift */,
 				1C56F6F4260BF40C00CF1DEE /* InteractionPointTable.swift */,
 				1C56F726260BF7B600CF1DEE /* ItemsTable.swift */,
 				1CA3E606262467D200E5089A /* MirorBDataTable.swift */,
@@ -8043,10 +8070,12 @@
 		1CB33AB022B8F7FC00F81C29 /* helper data types */ = {
 			isa = PBXGroup;
 			children = (
-				B2F5EBEC1F49A1FE0075C6D2 /* XGMutableData.swift */,
-				B2EAFEFD20BDA43A009FC947 /* XGStack.swift */,
+				D948B5AA282BD7810089679D /* XGBattleSequence.swift */,
 				B24A50FC21D2D724009C707C /* GoDDataTable.swift */,
 				B24A50FE21D314D4009C707C /* GoDDataTableEntry.swift */,
+				B2F5EBEC1F49A1FE0075C6D2 /* XGMutableData.swift */,
+				D948B5A0282B43A80089679D /* GoDOffsetIO.swift */,
+				B2EAFEFD20BDA43A009FC947 /* XGStack.swift */,
 			);
 			name = "helper data types";
 			path = "Objects/helper data types";
@@ -9361,6 +9390,7 @@
 				B24A511021D40130009C707C /* PBRConstant.swift */,
 				B24A50D621D12CDA009C707C /* PBRItem.swift */,
 				B24A50D721D12CDA009C707C /* PBRMove.swift */,
+				D948B59C2828AC600089679D /* PBRNArchive.swift */,
 				1CC362AF24BA5560005D7B4A /* PBRPatcher.swift */,
 				B24A50D321D12CDA009C707C /* PBRPokemonStats.swift */,
 				B24A510E21D3FF4C009C707C /* PBRScript.swift */,
@@ -14140,6 +14170,7 @@
 				1C16CE13253BC4A800907D78 /* XGTrainerModels.swift in Sources */,
 				1C20002D25A9585400A7CF7D /* XGTHP.swift in Sources */,
 				1C16CBDD253BC3AD00907D78 /* XGFoundationExtensions.swift in Sources */,
+				D9C02E7D280CF58B00D00B1B /* FlagStructTables.swift in Sources */,
 				1C16CDDB253BC49600907D78 /* GoDTextureFormats.swift in Sources */,
 				1C16CCE3253BC43E00907D78 /* XGExpRate.swift in Sources */,
 				D93BEF6D27D8201600C545BA /* string.swift in Sources */,
@@ -14249,6 +14280,7 @@
 				1C16CE1D253BC4AC00907D78 /* XGUnicodeCharacters.swift in Sources */,
 				1C56F9F726105EE300CF1DEE /* PKXWZXTables.swift in Sources */,
 				1C16CCCD253BC43200907D78 /* XGEffectivenessValues.swift in Sources */,
+				D948B5A2282B43A80089679D /* GoDOffsetIO.swift in Sources */,
 				1C16CC1C253BC3D300907D78 /* XDExtensions.swift in Sources */,
 				1CA3E4AA261F3D6A00E5089A /* PKXModel.swift in Sources */,
 				1C16CD87253BC47F00907D78 /* XGPokemon.swift in Sources */,
@@ -14270,6 +14302,7 @@
 				1C16CED7253BC53400907D78 /* XGRelocationTable.swift in Sources */,
 				1C16D098253BC87900907D78 /* XGGiftPokemon.swift in Sources */,
 				1C16CAC3253B86F100907D78 /* main.swift in Sources */,
+				D948B5AC282BD7810089679D /* XGBattleSequence.swift in Sources */,
 				1C56F763260C1EA000CF1DEE /* CharacterModelTable.swift in Sources */,
 				1C16CD73253BC47300907D78 /* XGMoveTypes.swift in Sources */,
 				1C16CE4C253BC4CA00907D78 /* XGEvolution.swift in Sources */,
@@ -14389,6 +14422,7 @@
 				1C56F77F260CC9F800CF1DEE /* PokemonTable.swift in Sources */,
 				1C16D10D253BC8A000907D78 /* XGStarterPokemon.swift in Sources */,
 				1C16CEC5253BC52600907D78 /* XGLZSS.swift in Sources */,
+				D948B5AF282BD7810089679D /* XGBattleSequence.swift in Sources */,
 				1CEC205226EA9FA200A886E9 /* XXH32.swift in Sources */,
 				1C56F9A4261035C600CF1DEE /* TypesTable.swift in Sources */,
 				1C16CEA9253BC51500907D78 /* XGFsys.swift in Sources */,
@@ -14420,6 +14454,7 @@
 				1CA3E5892623BAEF00E5089A /* GamesAndLangauages.swift in Sources */,
 				1C16D0FB253BC89B00907D78 /* XGRoom.swift in Sources */,
 				1C16D132253BC8AB00907D78 /* CMTrainer.swift in Sources */,
+				D948B5A5282B43A80089679D /* GoDOffsetIO.swift in Sources */,
 				1C75109D25CCAC9100EAB706 /* GoDDataTableEntry.swift in Sources */,
 				1C16CF80253BC56D00907D78 /* GoDShellManager.swift in Sources */,
 				1C56F971261022B300CF1DEE /* ItemsTable.swift in Sources */,
@@ -14552,6 +14587,7 @@
 				1CCFFF66255501BE0082BFE2 /* PBRAbilities.swift in Sources */,
 				1CCFFE412554FFD70082BFE2 /* XGExpRate.swift in Sources */,
 				1C56F865260DB42800CF1DEE /* PBRStringManager.swift in Sources */,
+				D948B5A8282B43A80089679D /* GoDOffsetIO.swift in Sources */,
 				1CCFFF64255501BE0082BFE2 /* PBRExpr.swift in Sources */,
 				D93BEF7327D8201600C545BA /* string.swift in Sources */,
 				1CCFFE0F2554FFBA0082BFE2 /* XGASM.swift in Sources */,
@@ -14603,6 +14639,7 @@
 				1CCFFF80255501E50082BFE2 /* PBRStringTable.swift in Sources */,
 				1CCFFF88255501E50082BFE2 /* PBRTextureContainingFormats.swift in Sources */,
 				1CCFFF8C255501E50082BFE2 /* PBRTrainerPokemon.swift in Sources */,
+				D948B59E2828AC600089679D /* PBRNArchive.swift in Sources */,
 				1CCFFF3D255501790082BFE2 /* GoDTexture.swift in Sources */,
 				1C716AAC2603EBFA000F1456 /* StructTablesList.swift in Sources */,
 				1CCFFEB9255500FC0082BFE2 /* XGAssemblyCode.swift in Sources */,
@@ -14801,12 +14838,14 @@
 				B2C1EE8F20C8F6C800D7C2F7 /* GoDJSONPopUpButton.swift in Sources */,
 				B208E3DF20C4CC8800D298BF /* GoDImageExtensions.swift in Sources */,
 				1C20005B25B31AAD00A7CF7D /* XGFiles.swift in Sources */,
+				D948B5B0282BD7810089679D /* XGBattleSequence.swift in Sources */,
 				B208E3DE20C4CC7F00D298BF /* NSViewExtensions.swift in Sources */,
 				B22A1C46218202DD001C41D3 /* GoDGiftViewController.swift in Sources */,
 				D93BEF6827D8201600C545BA /* deflate.swift in Sources */,
 				1C56F6FA260BF40D00CF1DEE /* InteractionPointTable.swift in Sources */,
 				D93BEF8327D8201600C545BA /* debug.swift in Sources */,
 				1CEC20DD26F2E30400A886E9 /* PKXModel.swift in Sources */,
+				D948B5A6282B43A80089679D /* GoDOffsetIO.swift in Sources */,
 				1C4EF5E626CC2E7C0040B800 /* GoDFiltersViewController.swift in Sources */,
 				B22A1C41218201AD001C41D3 /* CMGiftPokemonManager.swift in Sources */,
 				1C6D6A9A27433D230095223E /* CMPartyPokemon.swift in Sources */,
@@ -14926,6 +14965,7 @@
 				B20EEA3A21E920F400E87D01 /* PBREvolutionMethods.swift in Sources */,
 				B20EEA6B21E921EB00E87D01 /* GoDTableCellView.swift in Sources */,
 				B20EEE9A21EF78EA00E87D01 /* XGPNGBlock.swift in Sources */,
+				D948B59F2828AC600089679D /* PBRNArchive.swift in Sources */,
 				B20EEA8921EF771A00E87D01 /* NSViewExtensions.swift in Sources */,
 				1CE349EB27121E7800B803FD /* GoDDesign.swift in Sources */,
 				1CC362B124BA5560005D7B4A /* PBRPatcher.swift in Sources */,
@@ -15037,6 +15077,7 @@
 				B20EEA6321E9214D00E87D01 /* PBRScriptClass.swift in Sources */,
 				B20EEEB121EF79E300E87D01 /* GoDTableViewController.swift in Sources */,
 				D93BEF3527D8201600C545BA /* error.swift in Sources */,
+				D948B5A9282B43A80089679D /* GoDOffsetIO.swift in Sources */,
 				B20EEA4121E920F400E87D01 /* PBRMoveEffectTypes.swift in Sources */,
 				1CE1A77D2326AA0D005141D8 /* XGSettings.swift in Sources */,
 				1CB33AAB22B7906600F81C29 /* EnumerableDocumentable.swift in Sources */,
@@ -15080,6 +15121,7 @@
 				B20EEA7221E9226800E87D01 /* GoDPopUpButton.swift in Sources */,
 				1C56F51F2604D86C00CF1DEE /* PBRCommonStructTable.swift in Sources */,
 				B20EEEAB21EF79A700E87D01 /* GoDOpenGL.swift in Sources */,
+				D948B59B28276AC80089679D /* GoDContextViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -15119,6 +15161,7 @@
 				B24A50EB21D12CDA009C707C /* PBRStringTable.swift in Sources */,
 				1CD3007D2704D438003CCAD2 /* DolphinSettings.swift in Sources */,
 				D93BEF3C27D8201600C545BA /* targets.swift in Sources */,
+				D948B59D2828AC600089679D /* PBRNArchive.swift in Sources */,
 				1C20003225A9585400A7CF7D /* XGTHP.swift in Sources */,
 				B24A510F21D3FF4C009C707C /* PBRScript.swift in Sources */,
 				1C91546C2701C52C004BA0E6 /* GoDProcess.swift in Sources */,
@@ -15155,6 +15198,7 @@
 				B24A50E321D12CDA009C707C /* PBRTrainerModels.swift in Sources */,
 				D93BEF7B27D8201600C545BA /* os.swift in Sources */,
 				1C12C3A125C242AC0062FA65 /* XGGeneralExtensions.swift in Sources */,
+				D948B5A7282B43A80089679D /* GoDOffsetIO.swift in Sources */,
 				1C7169832602AF3A000F1456 /* GoDStruct.swift in Sources */,
 				1C716AD22603FFD7000F1456 /* XGAssemblyCodeExtensions.swift in Sources */,
 				1CEC209626EAA30B00A886E9 /* HashExtensions.swift in Sources */,
@@ -15251,6 +15295,7 @@
 				1C13D3AE2646264900ED313D /* CMTrainersTable.swift in Sources */,
 				1C6AB4E8270B89E60069D209 /* EcardCoder.swift in Sources */,
 				1C6D6A9227433A8C0095223E /* CMProcessSetup.swift in Sources */,
+				D948B5A4282B43A80089679D /* GoDOffsetIO.swift in Sources */,
 				1CA3E5B32623DB5A00E5089A /* XGDayCareStatus.swift in Sources */,
 				1C71A4D4266911BC00034154 /* CMSExpr.swift in Sources */,
 				1C56F6F8260BF40D00CF1DEE /* InteractionPointTable.swift in Sources */,
@@ -15300,6 +15345,7 @@
 				B2562F4E21349600004180F1 /* XGStringManager.swift in Sources */,
 				B2562F592134973A004180F1 /* XGAbilities.swift in Sources */,
 				1CEC205A26EA9FA200A886E9 /* XXH3-Bit64.swift in Sources */,
+				D948B5AE282BD7810089679D /* XGBattleSequence.swift in Sources */,
 				1CC5DD3322C50EA500DC2736 /* XGBattleField.swift in Sources */,
 				B2562F8C213498DE004180F1 /* XGNature.swift in Sources */,
 				1C716B142604194C000F1456 /* main.swift in Sources */,
@@ -15603,6 +15649,7 @@
 				B2F5ECA21F49A1FF0075C6D2 /* XGMutableData.swift in Sources */,
 				D93BEF9027D8201600C545BA /* inflate.swift in Sources */,
 				1C42FED426C72FD70032ADE1 /* WZXModel.swift in Sources */,
+				D9C02E7C280CF58B00D00B1B /* FlagStructTables.swift in Sources */,
 				B2D1DF5D1F68DBF60023A876 /* GoDTextureFormats.swift in Sources */,
 				B2F5ECE41F49A1FF0075C6D2 /* XGUtility.swift in Sources */,
 				B2F5ECBA1F49A1FF0075C6D2 /* XGScriptClassFunctionsData.swift in Sources */,
@@ -15652,8 +15699,10 @@
 				D93BEF6327D8201600C545BA /* deflate.swift in Sources */,
 				1CE3498C2710D34700B803FD /* DiscordPlaysOrre.swift in Sources */,
 				B2F9B2951FA4A04200E1489E /* XGRoom.swift in Sources */,
+				D948B5A1282B43A80089679D /* GoDOffsetIO.swift in Sources */,
 				B2F5EC7E1F49A1FF0075C6D2 /* XGDemoStarterPokemon.swift in Sources */,
 				1C71697D2602AF3A000F1456 /* GoDStruct.swift in Sources */,
+				D948B5AB282BD7810089679D /* XGBattleSequence.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -15664,6 +15713,7 @@
 				B208E75D20C4DD2D00D298BF /* XDRelIndexes.swift in Sources */,
 				B2F5ECB01F49A1FF0075C6D2 /* XGPokemonStats.swift in Sources */,
 				B2F5EC8F1F49A1FF0075C6D2 /* XGISO.swift in Sources */,
+				D9C02E7E280CF58B00D00B1B /* FlagStructTables.swift in Sources */,
 				1C56F79F260D2D2F00CF1DEE /* NatureTable.swift in Sources */,
 				B29E56011FA63836006BE597 /* XGInteractionPoint.swift in Sources */,
 				1CA88806272789F200C1A08C /* XGShadowAggression.swift in Sources */,
@@ -15887,8 +15937,10 @@
 				1C71685125DF31A3000F1456 /* GoDStructTable.swift in Sources */,
 				B247ED42217E5D6B0034CAF5 /* XDSExtensions.swift in Sources */,
 				B2560A9A214CA25200137C37 /* XGRandomiser.swift in Sources */,
+				D948B5AD282BD7810089679D /* XGBattleSequence.swift in Sources */,
 				D93BEF9227D8201600C545BA /* inflate.swift in Sources */,
 				B2D1DF551F6872740023A876 /* GoDTexture.swift in Sources */,
+				D948B5A3282B43A80089679D /* GoDOffsetIO.swift in Sources */,
 				B2FEC0891F6DADAE00AC263D /* GoDSpotViewController.swift in Sources */,
 				1CE1A7792326AA0D005141D8 /* XGSettings.swift in Sources */,
 				1C71697F2602AF3A000F1456 /* GoDStruct.swift in Sources */,

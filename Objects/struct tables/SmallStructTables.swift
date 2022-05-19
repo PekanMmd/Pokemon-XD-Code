@@ -104,7 +104,7 @@ let flagsStruct = GoDStruct(name: "Flags", format: [
 	.short(name: "Flag ID", description: "", type: .uintHex)
 ])
 
-let flagsTable = CommonStructTable(index: .Flags, properties: flagsStruct)
+let flagsTable = CommonStructTable(index: .GeneralFlags, properties: flagsStruct)
 #endif
 
 #if GAME_XD
@@ -150,7 +150,6 @@ let SoundsMetaDataTable = CommonStructTable(index: .SoundsMetaData, properties: 
 }
 #endif
 
-#if GAME_COLO
 let aiWeightEffectsStruct = GoDStruct(name: "AI Weight Effect", format: [
 	.word(name: "Effect", description: "", type: .int),
 	.word(name: "Task Name ID", description: "", type: .msgID(file: nil)),
@@ -158,9 +157,7 @@ let aiWeightEffectsStruct = GoDStruct(name: "AI Weight Effect", format: [
 	.word(name: "Reason Name ID", description: "", type: .msgID(file: nil)),
 	.word(name: "Unknown", description: "", type: .uint)
 ])
-
 let aiWeightEffectsTable = CommonStructTable(index: .AIWeightEffects, properties: aiWeightEffectsStruct)
-#endif
 
 #if GAME_XD
 let rgbaStruct = GoDStruct(name: "RGBA Colour", format: [
@@ -170,4 +167,14 @@ let rgbaStruct = GoDStruct(name: "RGBA Colour", format: [
 	.byte(name: "Alpha", description: "", type: .uintHex),
 ])
 let msgPalettesTable = CommonStructTable(index: .MsgPalettes, properties: rgbaStruct)
+
+
+// Some pokemon use a different animation other than their idle animation in the summary screen.
+// When showing a pokemon in the summary/pc this array is checked to see if that species should use
+// a different animation id. Anything not in the list defaults to animation 0
+let pokemonMenuAnimationsStruct = GoDStruct(name: "Pokemon Menu Animations", format: [
+	.byte(name: "Animation ID", description: "The animation ID to use in the summary screen", type: .uint),
+	.short(name: "Species ID", description: "The pokemon species this applies to", type: .pokemonID)
+])
+let pokemonMenuAnimationsTable = CommonStructTable(index: .PokemonMenuAnimations, properties: pokemonMenuAnimationsStruct)
 #endif

@@ -11,7 +11,7 @@ extension XDProcess {
 
 	// An optional location which gets called after the health and safety screen.
 	// This should give the game an early opportunity to clear the instruction
-	// cache without relying in hitting a breakpoint first.
+	// cache without relying on hitting a breakpoint first.
 	var cacheClearInitialInjectionPoint: Int? {
 		switch region {
 		case .US: return nil
@@ -80,9 +80,9 @@ extension XDProcess {
 
 	func getFlag(_ id: Int) -> Int? {
 		// Based on Ghidra decomp
-		guard id < CommonIndexes.NumberOfFlags.value else { return nil }
+		guard id < CommonIndexes.NumberOfGeneralFlags.value else { return nil }
 
-		let flagsStart = CommonIndexes.Flags.startOffset + kRELtoRAMOffsetDifference
+		let flagsStart = CommonIndexes.GeneralFlags.startOffset + kRELtoRAMOffsetDifference
 		let metaDataStart = CommonIndexes.FlagsMetaData.startOffset + kRELtoRAMOffsetDifference
 		let flagOffset = flagsStart + (id * 6)
 		guard let unknown1 = read2Bytes(atAddress: flagOffset + 2),

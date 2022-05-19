@@ -29,7 +29,7 @@ var tradeShadowPokemonShininessRAMOffset: Int {
 	switch region {
 	case .US: return 0x152bfe
 	case .EU: return 0x1544c2
-	case .JP: return 0x14AE86
+	case .JP: return 0x14df26
 	case .OtherGame: return 0
 	}
 }

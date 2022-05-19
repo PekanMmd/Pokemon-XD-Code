@@ -173,6 +173,11 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Tools" id="cLm-M8-bxX">
                                     <items>
+                                        <menuItem title="Context Tool" keyEquivalent="C" id="VhN-WP-Gtv">
+                                            <connections>
+                                                <segue destination="7el-NF-4Ww" kind="show" id="XAF-d8-xMn"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Hex Calculator" keyEquivalent="H" id="Bq2-kU-Mvf">
                                             <connections>
                                                 <action selector="showHexCalculator:" target="Voe-Tx-rLC" id="M97-WT-9gQ"/>
@@ -367,6 +372,14 @@
                 <customObject id="hOH-e9-vdb" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="857" y="1154"/>
+        </scene>
+        <!--ValueContext-->
+        <scene sceneID="qNA-5Y-Ab2">
+            <objects>
+                <controllerPlaceholder storyboardName="ValueContext" id="7el-NF-4Ww" sceneMemberID="viewController"/>
+                <customObject id="81S-VC-C7u" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="474" y="266"/>
         </scene>
         <!--Help-->
         <scene sceneID="aeD-pQ-RIr">

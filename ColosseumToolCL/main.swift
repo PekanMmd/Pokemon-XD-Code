@@ -11,6 +11,69 @@ import AppKit
 
 ToolProcess.loadISO(exitOnFailure: true)
 
+// Alolan Marowak is boosted by thick club
+let thickClubOffset = 0x232660 - kDolToRAMOffsetDifference
+let alolawakId = 253
+let asm: ASM = [
+	.cmplwi(.r30, 65),
+	.bne_f(0, 0x20),
+	.cmplwi(.r31, 104),
+	.beq_f(0, 0x14),
+	.cmplwi(.r31, 105),
+	.beq_f(0, 0xc),
+	.cmplwi(.r31, alolawakId.unsigned),
+	.bne_f(0, 0x8),
+]
+asm.asGeckoCode(RAMOffset: 0x232660).println()
+thickClubOffset.hexString().println()
+
+//let face = XGFiles.fsys("poke_face")
+//let body = XGFiles.fsys("poke_body")
+//let faceFsys = face.fsysData
+//let bodyFsys = body.fsysData
+//
+//for i in 0 ..< bodyFsys.numberOfEntries {
+//	let name = bodyFsys.filenames[i]
+//	let id = bodyFsys.identifierForFile(index: i)
+//	print("\(name.spaceToLength(12)) \(id.hexString())")
+//}
+
+//print(faceFsys.numberOfEntries)
+//print(bodyFsys.numberOfEntries)
+//
+//let dittoFace = XGFiles.nameAndFsysName("face132.gtx", face.fileName.removeFileExtensions()).data!
+//let dittoBody = XGFiles.nameAndFsysName("body132.gtx", body.fileName.removeFileExtensions()).data!
+//let dittoBodyShiny = XGFiles.nameAndFsysName("body132_c.gtx", body.fileName.removeFileExtensions()).data!
+//
+//var nextFaceID = 0xC000
+//var nextBodyID = 0xD000
+//
+//func getFaceID() -> Int {
+//	let id = nextFaceID
+//	nextFaceID += 1
+//	return id
+//}
+//func getBodyID() -> Int {
+//	let id = nextBodyID
+//	nextBodyID += 1
+//	return id
+//}
+//for i in 1 ... 100 {
+//	dittoFace.file = .nameAndFolder("extra_face_\(i).gtx", dittoFace.file.folder)
+//	dittoBody.file = .nameAndFolder("extra_body_\(i).gtx", dittoBody.file.folder)
+//	dittoBodyShiny.file = .nameAndFolder("extra_body_\(i)_c.gtx", dittoBodyShiny.file.folder)
+//	faceFsys.addFile(dittoFace, fileType: .gtx, compress: true, shortID: getFaceID())
+//	bodyFsys.addFile(dittoBody, fileType: .gtx, compress: true, shortID: getBodyID())
+//	bodyFsys.addFile(dittoBodyShiny, fileType: .gtx, compress: true, shortID: getBodyID())
+//}
+//print(faceFsys.numberOfEntries)
+//print(bodyFsys.numberOfEntries)
+
+//faceFsys.save()
+//bodyFsys.save()
+
+
+
 //let ws = NSWorkspace.shared
 //let apps = ws.runningApplications
 //

@@ -555,7 +555,24 @@ class XGMutableData {
 	}
 }
 
+extension XGMutableData: GoDReadable {
+	func read(atAddress address: UInt, length: UInt) -> XGMutableData? {
+		if (Int(address) + Int(length) > self.length) {
+			return nil
+		}
+		return getSubDataFromOffset(Int(address), length: Int(length))
+	}
+}
 
+extension XGMutableData: GoDWritable {
+	func write(_ data: XGMutableData, atAddress address: UInt) -> Bool {
+		if (Int(address) + data.length > length) {
+			return false
+		}
+		replaceData(data: data, atOffset: Int(address))
+		return true
+	}
+}
 
 
 

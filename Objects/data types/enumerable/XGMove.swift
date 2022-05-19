@@ -8,7 +8,7 @@
 
 import Foundation
 
-let kNumberOfMoves				= CommonIndexes.NumberOfMoves.value //0x0177
+var kNumberOfMoves: Int { CommonIndexes.NumberOfMoves.value } //0x165 colo / 0x177 xd
 let kSizeOfMoveData				= 0x38
 
 let kPriorityOffset				= 0x00

@@ -52,8 +52,8 @@ enum CommonIndexes : Int {
 	case Battles = 50
 	case NumberOfBattles = 51
 	
-	case BGM = 52
-	case NumberOfBGM = 53
+	case SoundFiles = 52
+	case NumberOfSoundFiles = 53
 	
 	case AIWeightEffects = 56
 	case NumberOfAIWeightEffects = 57
@@ -76,8 +76,8 @@ enum CommonIndexes : Int {
 	case TreasureBoxData = 60
 	case NumberTreasureBoxes = 61
 
-	case Multipliers = 70
-	case NumberOfMultipliers = 71
+	case NatureMultipliers = 70
+	case NumberOfNatureMultipliers = 71
 	case CharacterModels = 72
 	case NumberOfCharacterModels = 73
 	

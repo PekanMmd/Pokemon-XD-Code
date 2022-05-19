@@ -510,6 +510,7 @@ extension String {
 		return substring(from: startIndex, to: extensionIndex)
 	}
 	
+	/// includes preceding .
 	var fileExtensions: String {
 		let extensionIndex = firstIndex(of: ".") ?? endIndex
 		

@@ -26,36 +26,44 @@ class GoDContextViewController: GoDViewController {
 				
 				if value > 0 {
 					
-					if value < CommonIndexes.NumberOfMoves.value {
-						text += "\n\("Move:".spaceToLength(20)) \(XGMoves.index(value).name.string)"
+					if value < kNumberOfMoves {
+						text += "\n\("Move:".spaceToLength(20)) \(XGMoves.index(value).name.unformattedString)"
 					}
-					if value <= CommonIndexes.NumberOfPokemon.value {
-						text += "\n\("Pokemon:".spaceToLength(20)) \(XGPokemon.index(value).name.string)"
+					if value <= kNumberOfPokemon {
+						text += "\n\("Pokemon:".spaceToLength(20)) \(XGPokemon.index(value).name.unformattedString)"
 						
 						if value >= 277 && value <= 386 {
-							text += "\n\("Pokemon national index:".spaceToLength(20)) \(XGPokemon.index(value).name.string)"
+							text += "\n\("Pokemon national index:".spaceToLength(20)) \(XGPokemon.index(value).name.unformattedString)"
 						}
 					}
 					
 					if value <= kNumberOfAbilities {
-						text += "\n\("Ability:".spaceToLength(20)) \(XGAbilities.index(value).name.string)"
+						text += "\n\("Ability:".spaceToLength(20)) \(XGAbilities.index(value).name.unformattedString)"
 					}
 					
 					if value <= kNumberOfItems {
-						text += "\n\("Item:".spaceToLength(20)) \(XGItems.index(value).name.string)"
+						text += "\n\("Item:".spaceToLength(20)) \(XGItems.index(value).name.unformattedString)"
 					}
+					#if !GAME_PBR
 					if value > kNumberOfItems && value < 0x250 {
-						text += "\n\("Item script index:".spaceToLength(20)) \(XGItems.index(value).name.string)"
+						text += "\n\("Item script index:".spaceToLength(20)) \(XGItems.index(value).name.unformattedString)"
 					}
+					#endif
 					
 					for i in 1 ..< kNumberOfItems {
 						let item = XGItems.index(i).data
 						if item.holdItemID == value {
-							text += "\n\("Item hold id:".spaceToLength(20)) \(item.name.string)"
+							text += "\n\("Item hold id:".spaceToLength(20)) \(item.name.unformattedString)"
 						}
+						#if !GAME_PBR
 						if item.inBattleUseID == value {
-							text += "\n\("Item battle usage id:".spaceToLength(20)) \(item.name.string)"
+							text += "\n\("Item battle usage id:".spaceToLength(20)) \(item.name.unformattedString)"
 						}
+						#else
+						if item.subID == value {
+							text += "\n\("Item sub id:".spaceToLength(20)) \(item.name.unformattedString)"
+						}
+						#endif
 					}
 					
 					loadAllStrings()

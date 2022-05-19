@@ -39,7 +39,9 @@ class XGISO: NSObject {
 	}
 	#else
 	var allFileNames: [String] {
-		XGFolders.ISOFiles.files.map { $0.fileName }.sorted()
+		(XGFolders.ISOFiles.files.map { $0.fileName }
+		+ XGFolders.Arc.files.map { $0.fileName })
+		.sorted()
 	}
 	#endif
 
@@ -310,6 +312,8 @@ class XGISO: NSObject {
 			if let data = file.data {
 				if file == .dol {
 					data.file = .nameAndFolder(file.fileName, .Sys)
+				} else if file.fileType == .narc {
+					data.file = .nameAndFolder(file.fileName, .Arc)
 				} else {
 					data.file = .nameAndFolder(file.fileName, .ISOFiles)
 				}
@@ -319,7 +323,15 @@ class XGISO: NSObject {
 	}
 
 	func dataForFile(filename: String) -> XGMutableData? {
-		let folder = filename == XGFiles.dol.fileName ? XGFolders.Sys : XGFolders.ISOFiles
+		let folder: XGFolders
+		if filename == XGFiles.dol.fileName {
+			folder = XGFolders.Sys
+		} else if filename.fileExtensions == ".narc" {
+			folder = XGFolders.Arc
+		} else {
+			folder = XGFolders.ISOFiles
+		}
+		
 		let file = XGFiles.nameAndFolder(filename, folder)
 		if !file.exists {
 			XGUtility.decompileISO()
@@ -861,7 +873,6 @@ class XGISO: NSObject {
 		importFiles([.GSFsys])
 		#endif
 		printg("File added to ISO.")
-
 	}
 
 	func save() {

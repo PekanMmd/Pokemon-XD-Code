@@ -246,7 +246,7 @@ extension XGAssembly {
 		}
 
 		if game == .XD {
-			replaceRamASM(RAMOffset: 0x0a5158, newASM: [.li(.r3, 0)])
+			replaceRamASM(RAMOffset: 0x0a5158, newASM: [.li(.r0, 0)])
 		} else {
 			replaceRamASM(RAMOffset: 0x022b04, newASM: [.nop])
 		}

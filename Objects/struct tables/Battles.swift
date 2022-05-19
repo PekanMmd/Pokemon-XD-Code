@@ -158,3 +158,29 @@ let battleTypesTable = CommonStructTable(index: .BattleTypes, properties: battle
 	return "Battle Type \(index)"
 }
 #endif
+
+private let aiRolesEnd: [GoDStructProperties] = game == .Colosseum ? [] : [
+	.byte(name: "Misc 3", description: "", type: .byteRange),
+	.byte(name: "Misc 4", description: "", type: .byteRange),
+]
+
+let pokemonAIRolesStruct = GoDStruct(name: "Pokemon AI Roles", format: [
+	.word(name: "Name ID", description: "", type: .msgID(file: nil)),
+	.word(name: "Unknown 1", description: "", type: .uint),
+	.subStruct(name: "Move Type Weights", description: "How much more/less likely this role is to use a certain type of move", property: GoDStruct(name: "AI Role Weights", format: [
+		.byte(name: "No Effect", description: "", type: .byteRange),
+		.byte(name: "Attack", description: "", type: .byteRange),
+		.byte(name: "Healing", description: "", type: .byteRange),
+		.byte(name: "Stat Decrease", description: "", type: .byteRange),
+		.byte(name: "Stat Increase", description: "", type: .byteRange),
+		.byte(name: "Status", description: "", type: .byteRange),
+		.byte(name: "Field", description: "", type: .byteRange),
+		.byte(name: "Affect Opponent's Move", description: "", type: .byteRange),
+		.byte(name: "OHKO", description: "", type: .byteRange),
+		.byte(name: "Multi-turn", description: "", type: .byteRange),
+		.byte(name: "Misc", description: "", type: .byteRange),
+		.byte(name: "Misc 2", description: "", type: .byteRange)
+	] + aiRolesEnd))
+])
+
+let pokemonAIRolesTable = CommonStructTable(index: .AIPokemonRoles, properties: pokemonAIRolesStruct)

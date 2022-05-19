@@ -54,6 +54,7 @@ class DolphinProcess: ProcessIO {
 
 	private init(process: GoDProcess) {
 		self.process = process
+		#if os(macOS)
 		let appleScriptUser = "sudo -H -u `logname`" // username.isEmpty ? "" : "sudo -H -u " + username
 		let saveStateScript =
 		"""
@@ -69,6 +70,9 @@ class DolphinProcess: ProcessIO {
 		"""
 		saveStateScript.save(toFile: saveStateScriptFile)
 		loadStateScript.save(toFile: loadStateScriptFile)
+		#else
+		canUseSavedStates = false
+		#endif
 		load()
 	}
 
@@ -89,15 +93,17 @@ class DolphinProcess: ProcessIO {
 	}
 
 	// MARK: - State Saves
-	let canUseSavedStates = true
+	private(set) var canUseSavedStates = true
 	private let saveStateScriptFile = XGFiles.nameAndFolder("Dolphin Save States.sh", .Resources)
 	private let loadStateScriptFile = XGFiles.nameAndFolder("Dolphin Load States.sh", .Resources)
 
 	func saveStateToSlot(_ slot: Int) {
+		guard canUseSavedStates else { return }
 		GoDShellManager.run(.file(saveStateScriptFile), args: [slot.string])
 	}
 
 	func loadStateFromSlot(_ slot: Int) {
+		guard canUseSavedStates else { return }
 		GoDShellManager.run(.file(loadStateScriptFile), args: [slot.string])
 	}
 

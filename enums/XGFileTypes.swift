@@ -44,7 +44,15 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 	case sdir = 0x86
 	case pool = 0x88
 
+	// archive formats
 	case fsys = 0x90
+	case narc = 0x91
+	case arc  = 0x92
+	
+	// compression formats
+	case szs  = 0x93
+	case yaz0 = 0x94
+	case lzss = 0x95
 
 	// these aren't refernced in .fsys archives or are only used by this tool
 	case raw  = 0xf0
@@ -52,18 +60,17 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 	case thp  = 0xf2
 	case json = 0xf3
 	case txt  = 0xf4
-	case lzss = 0xf5
-	case tpl  = 0xf6
-	case bmp  = 0xf7
-	case jpeg = 0xf8
-	case png  = 0xf9
-	case gif  = 0xfa
-	case tex0 = 0xfb
-	case xds  = 0xfc
-	case ups  = 0xfd
-	case iso  = 0xfe
-	case nkit = 0xff
-	case csv  = 0x100
+	case tpl  = 0xf5
+	case bmp  = 0xf6
+	case jpeg = 0xf7
+	case png  = 0xf8
+	case gif  = 0xf9
+	case tex0 = 0xfa
+	case xds  = 0xfb
+	case ups  = 0xfc
+	case iso  = 0xfd
+	case nkit = 0xfe
+	case csv  = 0xff
 	
 	case unknown = 0xffff
 	
@@ -118,6 +125,10 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 		case .raw : return ".raw"
 		case .nkit: return ".nkit"
 		case .ups : return ".ups"
+		case .arc : return ".arc"
+		case .narc: return ".narc"
+		case .szs : return ".szs"
+		case .yaz0: return ".yaz0"
 		case .unknown: return ".bin"
 		}
 	}
@@ -172,6 +183,13 @@ enum XGFileTypes: Int, Codable, CaseIterable {
 			A patch format which is used to edit the data in a predetermined file. It's useful for distributing ROM hacks as you don't need to distribute any copy righted data. The patching program takes the original game and the modded game and calculates the difference between them. The player can apply the patch file to their own copy of the original game to apply the same differences to it and as a result recreate the mod.
 			To apply a ups patch to a file you can use this website: https://www.marcrobledo.com/RomPatcher.js/
 			Or you can use this program on windows: https://www.romhacking.net/utilities/606/
+			"""
+		case .arc, .narc: return """
+			An archive format containing multiple files a bit like a .zip file.
+			The contents may optionally be compressed.
+			"""
+		case .yaz0, .szs: return """
+			A compression format commonly used in Nintendo games.
 			"""
 		case .unknown: return nil
 		}

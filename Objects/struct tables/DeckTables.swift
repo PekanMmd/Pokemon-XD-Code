@@ -128,16 +128,7 @@ class DeckPokemonStructTable: GoDStructTableFormattable {
 			.byte(name: "Level", description: "", type: .uint),
 			.byte(name: "Happiness", description: "", type: .uint),
 			.short(name: "Item", description: "", type: .itemID),
-			.bitArray(name: "Unknown Flags", description: "", bitFieldNames: [
-				"Unknown Flag 1",
-				"Unknown Flag 2",
-				"Unknown Flag 3",
-				"Unknown Flag 4",
-				"Unknown Flag 5",
-				"Unknown Flag 6",
-				"Unknown Flag 7",
-				"Unknown Flag 8"
-			]),
+			.byte(name: "AI Role", description: "", type: .indexOfEntryInTable(table: pokemonAIRolesTable, nameProperty: nil)),
 			.byte(name: "Unknown", description: "", type: .uintHex),
 			.subStruct(name: "IVs", description: "", property: statsStructByte),
 			.subStruct(name: "EVs", description: "", property: statsStructByte),
@@ -211,4 +202,3 @@ let shadowPokemonTable = GoDStructTable(file: XGDecks.DeckDarkPokemon.file, prop
 } numberOfEntriesInFile: { (_) -> Int in
 	return XGDecks.DeckDarkPokemon.DDPKEntries
 }
-

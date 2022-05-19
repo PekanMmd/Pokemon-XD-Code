@@ -82,7 +82,7 @@ var shadowPokemonShininessRAMOffset: Int {
 	switch region {
 	case .US: return 0x1fc2b2
 	case .EU: return 0x1fdfe6
-	case .JP: return -1
+	case .JP: return 0x1f6f76
 	case .OtherGame: return 0
 	}
 }
@@ -424,11 +424,6 @@ class XGPatcher {
 	
 	class func removeType9Dependencies() {
 
-		guard game == .XD else {
-			printg("This patch has not been implemented for Pokemon Colosseum.")
-			return
-		}
-
 		guard region == .US else {
 			printg("This patch has not been implemented for this game region:", region.name)
 			return
@@ -544,61 +539,53 @@ class XGPatcher {
 			printg("This patch has not been implemented for Colosseum yet.")
 			return
 		}
-
-		guard region != .JP else {
-			printg("This patch has not been implemented for this game region:", region.name)
-			return
-		}
 		
-		if XGFiles.dol.exists {
-
-			let codeStartOffset: Int = {
-				switch region {
-				case .US: return 0x1fa930
-				case .EU: return 0x1fc664
-				case .JP: return -1
-				case .OtherGame: return 0
-				}
-			}()
-
-			let getTrainerData: Int = {
-				switch region {
-				case .US: return 0x1cefb4
-				case .EU: return 0x1d0a8c
-				case .JP: return -1
-				case .OtherGame: return 0
-				}
-			}()
-
-			let trainerGetTID: Int = {
-				switch region {
-				case .US: return 0x14e118
-				case .EU: return 0x14f9dc
-				case .JP: return -1
-				case .OtherGame: return 0
-				}
-			}()
-
-			let TIDRerollOffset: Int = {
-				switch region {
-				case .US: return 0x1fa9c8
-				case .EU: return 0x1fc6fc
-				case .JP: return -1
-				case .OtherGame: return 0
-				}
-			}()
-
-			XGAssembly.replaceRamASM(RAMOffset: codeStartOffset, newASM: [
-				.li(.r3, 0),
-				.li(.r4, 2),
-				.bl(getTrainerData),
-				.bl(trainerGetTID)
-			])
-
-			XGAssembly.replaceRamASM(RAMOffset: TIDRerollOffset, newASM: [
-				.b_f(0, 0x2c)
-			])
-		}
+		let codeStartOffset: Int = {
+			switch region {
+			case .US: return 0x1fa930
+			case .EU: return 0x1fc664
+			case .JP: return 0x1f55f4
+			case .OtherGame: return 0
+			}
+		}()
+		
+		let getTrainerData: Int = {
+			switch region {
+			case .US: return 0x1cefb4
+			case .EU: return 0x1d0a8c
+			case .JP: return 0x1c9e54
+			case .OtherGame: return 0
+			}
+		}()
+		
+		let trainerGetTID: Int = {
+			switch region {
+			case .US: return 0x14e118
+			case .EU: return 0x14f9dc
+			case .JP: return 0x149460
+			case .OtherGame: return 0
+			}
+		}()
+		
+		let TIDRerollOffset: Int = {
+			switch region {
+			case .US: return 0x1fa9c8
+			case .EU: return 0x1fc6fc
+			case .JP: return 0x1f568c
+			case .OtherGame: return 0
+			}
+		}()
+		
+		XGAssembly.replaceRamASM(RAMOffset: codeStartOffset, newASM: [
+			.li(.r3, 0),
+			.li(.r4, 2),
+			.bl(getTrainerData),
+			.bl(trainerGetTID)
+		])
+		
+		XGAssembly.replaceRamASM(RAMOffset: TIDRerollOffset, newASM: [
+			.b_f(0, 0x2c)
+		])
 	}
 	
 	class func replaceShinyGlitch() {
@@ -835,11 +822,6 @@ class XGPatcher {
 
 		guard game == .XD else {
 			printg("This patch is for Pokemon XD: Gale of Darkness only.")
-			return
-		}
-
-		guard region != .JP else {
-			printg("This patch has not been implemented for this game region:", region.name)
 			return
 		}
 		

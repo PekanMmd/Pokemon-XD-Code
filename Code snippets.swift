@@ -7989,7 +7989,30 @@ import Foundation
 //}
 //outText.save(toFile: outFile)
 
-
+// Map battle sequence command addresses to function names from symbol map
+//let NXXJRam = XGFiles.nameAndFolder("NXXJ RAM.raw", .Documents).data!
+//let NXXJMap = XGFiles.nameAndFolder("NXXJ.map", .Documents).text
+//let mapLines = NXXJMap.split(separator: "\n").filter({ str in
+//	return String(str).contains(" 4 ") && String(str).contains("fightSeq")
+//}).map { str -> (name: String, address: Int) in
+//	let string = String(str).replacingOccurrences(of: "  0", with: "0").replacingOccurrences(of: "  ", with: " ")
+//	let parts = string.split(separator: " ")
+//	let virtualAddress = String(parts[2]).hexValue ?? 0
+//	let name = String(parts[5])
+//	return (name: name, address: virtualAddress)
+//
+//}
+//
+//let battleSequenceSwitchTableRamOffset = 0x02f582c
+//
+//for i in 0 ..< 253 {
+//	let nextCommandOffset = NXXJRam.read4Bytes(atAddress: battleSequenceSwitchTableRamOffset + (i * 4))!
+//	if let commandInfo = mapLines.first(where: { info in
+//		info.address == nextCommandOffset
+//	}) {
+//		printg((i + 1).hexString().spaceLeftToLength(5), commandInfo.name)
+//	}
+//}
 
 
 

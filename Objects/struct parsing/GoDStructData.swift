@@ -533,6 +533,7 @@ class GoDStructData: CustomStringConvertible {
 							rawValue = enumerableRawValue(rawValueString, type: XGEvolutionMethods.self)
 						case .moveTarget:
 							rawValue = enumerableRawValue(rawValueString, type: XGMoveTargets.self)
+						#if !GAME_PBR
 						case .statusEffect:
 							rawValue = enumerableRawValue(rawValueString, type: XGStatusEffects.self)
 						case .dayCareStatus:
@@ -551,6 +552,7 @@ class GoDStructData: CustomStringConvertible {
 							rawValue = enumerableRawValue(rawValueString, type: XGTrainerController.self)
 						case .itemPocket:
 							rawValue = enumerableRawValue(rawValueString, type: XGBagSlots.self)
+						#endif
 						case .scriptFunction(scriptFile: let scriptFile):
 							rawValue = scriptFile.scriptData.ftbl.firstIndex(where: { functionInfo in
 								functionInfo.name.simplified == rawValueString.simplified
@@ -573,11 +575,9 @@ class GoDStructData: CustomStringConvertible {
 //						case .pkxPokemonID:
 //						case .textureFormat:
 //						case .paletteFormat:
-						#if !GAME_COLO
+						#if GAME_XD
 						case .deckID:
 							rawValue = enumerableRawValue(rawValueString, type: XGDecks.self)
-						#endif
-						#if GAME_XD
 						case .battleBingoMysteryPanelType:
 							rawValue = enumerableRawValue(rawValueString, type: XGBattleBingoItem.self)
 						#endif

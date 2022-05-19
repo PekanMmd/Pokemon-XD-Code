@@ -488,7 +488,7 @@ class XDProcess: ProcessIO {
 			clearUnusedFunctionsInRAM()
 		}
 
-		guard let offsetValue = process.readWord(atAddress: start + 4)?.int else { return nil }
+		guard let offsetValue = process.readU32(atAddress: start + 4)?.int else { return nil }
 		var offset = offsetValue
 		if offset != 0xFFFFFFFF {
 			if offset >= 0x80000000 {
@@ -613,7 +613,7 @@ class XDProcess: ProcessIO {
 
 	private func checkIfUnusedFunctionsInDolWereCleared() -> Bool {
 		guard let start = kRAMFreeSpaceStart else { return false }
-		return process.readWord(atAddress: start) == 0x0DE1E7ED
+		return process.readU32(atAddress: start) == 0x0DE1E7ED
 	}
 
 	private func clearJITCache() {
@@ -759,7 +759,7 @@ class XDProcess: ProcessIO {
 		}
 
 		for address in addresses {
-			guard let overwrittenInstruction = readWord(atAddress: address) else {
+			guard let overwrittenInstruction = readU32(atAddress: address) else {
 				continue
 			}
 			write([
