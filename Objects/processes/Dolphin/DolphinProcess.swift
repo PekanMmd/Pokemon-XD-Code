@@ -207,7 +207,7 @@ class DolphinProcess: ProcessIO {
 			if let region = lastRegion {
 				address = region.virtualAddress + region.size
 			}
-			lastRegion = process.getNextRegion(fromOffset: vm_address_t(address))
+			lastRegion = process.getNextRegion(fromOffset: address)
 			if let regionInfo = lastRegion,
 			   regionInfo.size == kMEMSize,
 			   process.readVirtualMemory(at: 0, length: 4, relativeToRegion: regionInfo)?.string == region.identifier {

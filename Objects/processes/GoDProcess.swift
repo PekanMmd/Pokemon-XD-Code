@@ -138,7 +138,7 @@ class GoDProcess {
 		return kret == KERN_SUCCESS
 	}
 
-	func getNextRegion(fromOffset offset: vm_address_t) -> VMRegionInfo? {
+	func getNextRegion(fromOffset offset: UInt) -> VMRegionInfo? {
 		guard let task = self.task else {
 			printg("Couldn't scan virtual memory for unloaded process")
 			return nil
