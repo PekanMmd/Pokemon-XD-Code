@@ -16,13 +16,10 @@ class DolphinProcess: ProcessIO {
 
 	/// Settings don't seem to work atm
 	convenience init?(isoFile: XGFiles? = nil, dolphinFile: XGFiles? = nil, settings: [(key: DolphinSystems, value: String)] = []) {
-		#warning("TODO: get default paths for windows and linux")
-		let dolphinApp = dolphinFile ?? XGFiles.path("/Applications/Dolphin.app")
-		let dolphinExecutable = XGFiles.path(dolphinApp.path + "/Contents/MacOS/Dolphin")
-
+		
 		let iso = isoFile ?? XGFiles.iso
 		guard iso.exists else { return nil }
-
+		
 		var args = "--exec=\(iso.path.escapedPath)"
 		// Settings as command line args don't work and I don't know why
 		#warning("TODO: figure out why dolphin settings set through command line aren't working")
@@ -43,19 +40,28 @@ class DolphinProcess: ProcessIO {
 			args += " " + "--config=\(key)=\(value)".replacingOccurrences(of: " ", with: "\\ ")
 		}
 		
-		// remove the code signing entitlements from the Dolphin app to enable debugging
+		#if os(macOS)
+		let dolphinApp = dolphinFile ?? XGFiles.path("/Applications/Dolphin.app")
+		let dolphinExecutable = XGFiles.path(dolphinApp.path + "/Contents/MacOS/Dolphin")
 		GoDShellManager.stripEntitlements(appFile: dolphinApp)
+		#elseif os(Linux)
+		let dolphinExecutable = XGFiles.path("/usr/local/bin/dolphin-emu")
+		#elseif os(Windows)
+		#warning("TODO: get default path for windows")
+		let dolphinExecutable = XGFiles.path("C:/Dolphin/Dolphin.exe")
+		#endif
 		
 		guard let process = GoDShellManager.runAsync(.file(dolphinExecutable), args: args) else {
 			return nil
 		}
+		
 		self.init(process: process)
 	}
 
 	private init(process: GoDProcess) {
 		self.process = process
 		#if os(macOS)
-		let appleScriptUser = "sudo -H -u `logname`" // username.isEmpty ? "" : "sudo -H -u " + username
+		let appleScriptUser = "sudo -H -u `logname`"
 		let saveStateScript =
 		"""
 		#!/bin/bash
