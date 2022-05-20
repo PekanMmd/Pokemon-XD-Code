@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreFoundation
 
 final class xxHash {
     
