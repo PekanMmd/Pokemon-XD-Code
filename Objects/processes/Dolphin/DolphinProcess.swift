@@ -115,8 +115,7 @@ class DolphinProcess: ProcessIO {
 
 	// MARK: - IO
 	func read(atAddress address: UInt, length: UInt) -> XGMutableData? {
-		guard validate(),
-			  let mem1 = RAMInfo?.mem1 else {
+		guard let mem1 = RAMInfo?.mem1 else {
 			return nil
 		}
 		let virtualAddress = address >= 0x80_000_000 ? address - 0x80_000_000 : address
@@ -125,8 +124,7 @@ class DolphinProcess: ProcessIO {
 
 	@discardableResult
 	func write(_ data: XGMutableData, atAddress address: UInt) -> Bool {
-		guard validate(),
-			  let mem1 = RAMInfo?.mem1,
+		guard let mem1 = RAMInfo?.mem1,
 			  let mem2 = RAMInfo?.mem2 else {
 			return false
 		}
@@ -166,11 +164,7 @@ class DolphinProcess: ProcessIO {
 					var shouldContinue = true
 					while let self = self,
 						  self.isRunning && shouldContinue {
-						if self.validate() {
-							shouldContinue = onUpdate?(self) ?? false
-						} else {
-							shouldContinue = false
-						}
+						shouldContinue = onUpdate?(self) ?? false
 					}
 				}
 				process.await()
@@ -192,9 +186,8 @@ class DolphinProcess: ProcessIO {
 	}
 
 	private func validate() -> Bool {
-		if !memIsValid {
-			load()
-		}
+		if memIsValid { return true }
+		load()
 		return memIsValid
 	}
 

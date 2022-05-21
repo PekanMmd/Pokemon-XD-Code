@@ -11,7 +11,7 @@ import Foundation
 
 ToolProcess.loadISO(exitOnFailure: true)
 
-
+DiscordPlaysOrre().launch()
 
 
 
