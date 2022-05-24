@@ -76,8 +76,8 @@ class XGThreadManager {
 		}
 	}
 
-	func runInBackgroundSync(_ closure: @escaping () -> Void) {
-		let dispatchQueue = DispatchQueue(label: "GoDBackgroundQueueSync", qos: .background)
+	func runInBackgroundSync(queue: String = "", _ closure: @escaping () -> Void) {
+		let dispatchQueue = DispatchQueue(label: "GoDBackgroundQueueSync_\(queue)", qos: .background)
 		dispatchQueue.sync {
 			closure()
 		}

@@ -222,8 +222,8 @@ class DiscordPlaysOrre {
 				}
 			case "auto_demo":
 				process.inputHandler.input([
-					.init(duration: 3),
-					.init(duration: 0.5, A: true),
+					GCPad(duration: 3),
+					GCPad(duration: 0.5, A: true),
 				])
 			case "title":
 				if let savedStates = self?.saveSlotsState,
@@ -709,7 +709,7 @@ class DiscordPlaysOrre {
 		setup.onMirorRadarActivatedPokespot = setup.onMirorRadarActivatedColosseum
 		#endif
 
-		setup.launch(processType: .Dolphin(dolphinFile: nil, isoFile: nil)) { (process) in
+		setup.launch(processType: .Dolphin(dolphinFile: nil)) { (process) in
 
 			print("Launched Dolphin Process")
 
@@ -724,7 +724,7 @@ class DiscordPlaysOrre {
 			var lastInputEndTime = Date(timeIntervalSinceNow: 0)
 
 			XGThreadManager.manager.runInBackgroundAsync(queue: 2) { [weak self] in
-				while process.isRunning {
+				while process.isRunning, self?.processState != .finished {
 					guard let self = self else { return }
 
 					if self.processState.acceptInputs || self.processState.acceptOverrides {
@@ -734,8 +734,9 @@ class DiscordPlaysOrre {
 						}
 						let sleepDuration = XGSettings.current.inputPollDuration > 0 ? XGSettings.current.inputPollDuration * 1000 : 10_000_000
 						usleep(sleepDuration)
-						GoDNetworkingManager.get(self.updatesURL + getInputEndpoint()) { (controller: GCPad?) in
-							if let pad = controller {
+						GoDNetworkingManager.get(self.updatesURL + getInputEndpoint()) { (result: Result<GCPad, NetworkingErrors>) in
+							switch result {
+							case .success(let pad):
 								switch pad.tag {
 								case "terminate":
 									self.shouldRelaunchOnDolphinClosed = false
@@ -796,6 +797,11 @@ class DiscordPlaysOrre {
 										lastInputEndTime = Date(timeIntervalSinceNow: updatedPad.duration)
 									}
 								}
+							// If the request fails, slow the poll rate slightly
+							case .failure(.requestFailed):
+								sleep(5)
+							default:
+								sleep(1)
 							}
 						}
 					} else {
@@ -842,10 +848,11 @@ class DiscordPlaysOrre {
 				}
 			}
 
-			return true
+		} onLaunchFailed: { error in
+
+			printg("Failed to launch Dolphin Process")
 
 		} onFinish: { [weak self] in
-
 			printg("Finished running XD Process")
 
 			if self?.shouldRelaunchOnDolphinClosed == true {
@@ -856,7 +863,6 @@ class DiscordPlaysOrre {
 				printg("Closing tool")
 				ToolProcess.terminate()
 			}
-
 		}
 	}
 }

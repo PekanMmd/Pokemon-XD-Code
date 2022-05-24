@@ -10,7 +10,12 @@ import Foundation
 class XDProcess: ProcessIO {
 
 	enum ProcessType {
-		case Dolphin(dolphinFile: XGFiles?, isoFile: XGFiles?), GeckoUSB
+		case Dolphin(dolphinFile: XGFiles?), GeckoUSB
+		var name: String {
+			switch self {
+			case .Dolphin: return "Dolphin Emulator"; case .GeckoUSB: return "Gecko USB"
+			}
+		}
 	}
 
 	var r13GlobalPointer: Int?
@@ -25,8 +30,8 @@ class XDProcess: ProcessIO {
 	convenience init?(processType: ProcessType) {
 		var process: ProcessIO?
 		switch processType {
-		case .Dolphin(let dolphinFile, let isoFile):
-			process = DolphinProcess(isoFile: isoFile, dolphinFile: dolphinFile)
+		case .Dolphin(let dolphinFile):
+			process = DolphinProcess(isoFile: XGFiles.iso, dolphinFile: dolphinFile)
 		case .GeckoUSB:
 			break
 		}
@@ -97,18 +102,18 @@ class XDProcess: ProcessIO {
 	}
 
 	// MARK: - Launch
-	func begin(onStart: ((ProcessIO) -> Bool)?, onUpdate: ((ProcessIO) -> Bool)?, onFinish: ((ProcessIO?) -> Void)?) {
-		process.begin(onStart: onStart, onUpdate: onUpdate, onFinish: onFinish)
+	func begin(onStart: ((ProcessIO) -> Void)?, onLaunchFailed: ((String?) -> Void)?) {
+		process.begin(onStart: onStart, onLaunchFailed: onLaunchFailed)
 	}
 
 	func begin(autoSkipWarningScreen: Bool = true,
-			   onStart: ((XDProcess) -> Bool)?,
+			   onStart: ((XDProcess) -> Void)?,
+			   onLaunchFailed: ((String?) -> Void)?,
 			   onFinish: (() -> Void)?,
 			   callbacks: XDProcessSetup) {
 
 		guard region == .US else {
-			printg("Couldn't launch XD process for region:", region.name)
-			onFinish?()
+			onLaunchFailed?("Couldn't launch \(game.name) process for region: " + region.name)
 			return
 		}
 
@@ -165,315 +170,304 @@ class XDProcess: ProcessIO {
 		]
 		#endif
 		for (callback, breakPoint) in breakPoints {
-			if let _ = callback {
+			if callback != nil {
 				enabledBreakPoints.append(breakPoint)
 			}
 		}
 
-		var inputTimer: Timer?
-		let inputLoop = { (timer: Timer) in
-			XGThreadManager.manager.runInBackgroundAsyncNamed(queue: "XD_Process_inputs") { [weak self] in
-				if let process = self {
-					process.writeControllers()
-					process.elapseTime()
-				} else {
-					return
-				}
-			}
-		}
-
 		begin { [weak self] (process) in
-			guard let self = self else { return false }
+			guard let self = self else { return }
 
 			self.setupRAMForInjection(enabledBreakPoints: enabledBreakPoints)
+			
+			onStart?(self)
+			
+			XGThreadManager.manager.runInBackgroundAsyncNamed(queue: "XD_Process_inputs") { [weak self] in
+				while let self = self, self.isRunning {
+					self.writeControllers()
+					self.elapseTime()
+					usleep(1_000)
+				}
+			}
 			if autoSkipWarningScreen {
-				sleep(8)
+				sleep(3)
 				self.inputHandler.input([
 					GCPad(duration: 0.5, A: true, tag: "write:origin"),
 					GCPad(duration: 2, tag: "write:origin"),
 					GCPad(duration: 0.5, A: true, tag: "write:origin"),
 				])
-
 			}
-
-			inputTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: inputLoop)
-
-			return onStart?(self) ?? true
-
-		} onUpdate: { [weak self] (process) -> Bool in
-			guard let self = self else { return false }
+			
 			var shouldContinue = true
+			while self.isRunning && shouldContinue {
+				if !self.checkBreakPointPending(),
+				   let breakPointType = self.getBreakPointType() {
 
-			if !self.checkBreakPointPending(),
-			   let breakPointType = self.getBreakPointType() {
+					self.markBreakPointPending()
+					self.updatePlayerInputState()
 
-				self.markBreakPointPending()
-				self.updatePlayerInputState()
+					var registers = self.getBreakPointRegisters()
+					self.r13GlobalPointer = registers[13]
+					let state = XDGameState(process: self)
 
-				var registers = self.getBreakPointRegisters()
-				self.r13GlobalPointer = registers[13]
-				let state = XDGameState(process: self)
+					var context = BreakPointContext()
+					var forcedReturnValue: Int?
 
-				var context = BreakPointContext()
-				var forcedReturnValue: Int?
+					switch breakPointType {
 
-				switch breakPointType {
+					case .onFrameAdvance:
+						if let callback = callbacks.onFrame {
+							shouldContinue = callback(self, state)
+						}
+					case .onWillRenderFrame:
+						if let callback = callbacks.onWillRender {
+							let c = RenderFrameBufferContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onDidRNGRoll:
+						if let callback = callbacks.onRNGRoll {
+							let c = RNGRollContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onStepCount:
+						if let callback = callbacks.onStep {
+							shouldContinue = callback(self, state)
+						}
+					case .onDidReadOrWriteSave:
+						if let callback = callbacks.onDidReadOrWriteSave {
+							let c = SaveReadOrWriteContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onWillWriteSave:
+						if let callback = callbacks.onWillWriteSave {
+							shouldContinue = callback(self, state)
+						}
 
-				case .onFrameAdvance:
-					if let callback = callbacks.onFrame {
-						shouldContinue = callback(self, state)
-					}
-				case .onWillRenderFrame:
-					if let callback = callbacks.onWillRender {
-						let c = RenderFrameBufferContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onDidRNGRoll:
-					if let callback = callbacks.onRNGRoll {
-						let c = RNGRollContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onStepCount:
-					if let callback = callbacks.onStep {
-						shouldContinue = callback(self, state)
-					}
-				case .onDidReadOrWriteSave:
-					if let callback = callbacks.onDidReadOrWriteSave {
-						let c = SaveReadOrWriteContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onWillWriteSave:
-					if let callback = callbacks.onWillWriteSave {
-						shouldContinue = callback(self, state)
+					case .onWillChangeMap:
+						if let callback = callbacks.onWillChangeMap {
+							let c = MapWillChangeContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					#if GAME_XD
+					case .onDidChangeMap:
+						if let callback = callbacks.onDidChangeMapOrMenu {
+							let c = MapOrMenuDidChangeContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					#else
+					case .onDidChangeMap:
+						if let callback = callbacks.onDidChangeMapOrMenu {
+							let c = MapOrMenuDidChangeContext(process: self, registers: registers, isMenu: false)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onDidChangeMenuMap:
+						if let callback = callbacks.onDidChangeMapOrMenu {
+							let c = MapOrMenuDidChangeContext(process: self, registers: registers, isMenu: true)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					#endif
+
+					#if GAME_XD
+
+					case .onDidConfirmMoveSelection:
+						if let callback = callbacks.onMoveSelectionConfirmed {
+							let c = BattleMoveSelectionContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onDidConfirmTurnSelection:
+						if let callback = callbacks.onTurnSelectionConfirmed {
+							let c = BattleTurnSelectionContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onWillUseMove:
+						if let callback = callbacks.onWillUseMove {
+							let c = WillUseMoveContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onMoveEnd:
+						if let callback = callbacks.onMoveDidEnd {
+							shouldContinue = callback(self, state)
+						}
+					case .onWillCallPokemon:
+						if let callback = callbacks.onWillCallPokemon {
+							let c = WillCallPokemonContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onPokemonWillSwitchIntoBattle:
+						if let callback = callbacks.onPokemonWillSwitchIn {
+							let c = PokemonSwitchInContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onShadowPokemonEncountered:
+						if let callback = callbacks.onShadowPokemonEncountered {
+							let c = ShadowPokemonEncounterContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onShadowPokemonFled:
+						if let callback = callbacks.onShadowPokemonFled {
+							let c = ShadowPokemonFledContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onShadowPokemonDidEnterReverseMode:
+						if let callback = callbacks.onPokemonDidEnterReverseMode {
+							let c = ReverseModeContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onWillUseItem:
+						if let callback = callbacks.onWillUseItem {
+							let c = UseItemContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onWillUseCologne:
+						if let callback = callbacks.onWillUseCologne {
+							let c = UseCologneContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onWillUseTM:
+						if let callback = callbacks.onWillUseTM {
+							let c = WillUseTMContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onDidUseTM:
+						if let callback = callbacks.onDidUseTM {
+							let c = DidUseTMContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onWillGainExp:
+						if let callback = callbacks.onWillGainExp {
+							let c = ExpGainContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onWillEvolve:
+						if let callback = callbacks.onWillEvolve {
+							let c = WillEvolveContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onDidEvolve:
+						if let callback = callbacks.onDidEvolve {
+							let c = DidEvolveContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onDidPurification:
+						if let callback = callbacks.onPurification {
+							let c = DidPurifyContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onWillStartBattle:
+						if let callback = callbacks.onBattleStart {
+							let c = BattleStartContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onDidEndBattle:
+						if let callback = callbacks.onBattleEnd {
+							let c = BattleEndContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onBattleWhiteout:
+						if let callback = callbacks.onTeamWhiteOut {
+							shouldContinue = callback(self, state)
+						}
+					case .onBattleTurnStart:
+						if let callback = callbacks.onTurnStart {
+							let c = TurnStartContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onBattleTurnEnd:
+						if let callback = callbacks.onTurnEnd {
+							shouldContinue = callback(self, state)
+						}
+					case .onBattleDamageOrHealing:
+						if let callback = callbacks.onBattleDamageOrHealing {
+							let c = BattleDamageHealingContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onPokemonDidFaint:
+						if let callback = callbacks.onPokemonFainted {
+							let c = PokemonFaintedContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onWillAttemptPokemonCapture:
+						if let callback = callbacks.onPokeballThrow {
+							let c = CaptureAttemptContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onDidSucceedPokemonCapture:
+						if let callback = callbacks.onCaptureSucceeded {
+							let c = CaptureAttemptedContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onDidFailPokemonCapture:
+						if let callback = callbacks.onCaptureFailed {
+							let c = CaptureAttemptedContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onMirorRadarActiveAtColosseum:
+						if let callback = callbacks.onMirorRadarActivatedColosseum {
+							shouldContinue = callback(self, state)
+						}
+					case .onMirorRadarActiveAtPokespot:
+						if let callback = callbacks.onMirorRadarActivatedPokespot {
+							shouldContinue = callback(self, state)
+						}
+					case .onMirorRadarLostSignal:
+						if let callback = callbacks.onMirorRadarSignalLost {
+							shouldContinue = callback(self, state)
+						}
+					case .onSpotMonitorActivated:
+						if let callback = callbacks.onSpotMonitorActivated {
+							shouldContinue = callback(self, state)
+						}
+					case .onWildBattleGenerated:
+						if let callback = callbacks.onWildBattleGenerated {
+							let c = WildBattleContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onWillGetFlag:
+						if let callback = callbacks.onWillGetFlag {
+							let c = GetFlagContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+							forcedReturnValue = c.getForcedReturnValue()
+						}
+					case .onWillSetFlag:
+						if let callback = callbacks.onWillSetFlag {
+							let c = SetFlagContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onReceivedGiftPokemon:
+						if let callback = callbacks.onReceiveGiftPokemon {
+							let c = ReceiveGiftPokemonContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onPrint:
+						if let callback = callbacks.onPrint {
+							let c = PrintContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					#endif
+					default:
+						shouldContinue = true
 					}
 
-				case .onWillChangeMap:
-					if let callback = callbacks.onWillChangeMap {
-						let c = MapWillChangeContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
+					if let value = forcedReturnValue {
+						registers[3] = value
 					}
-				#if GAME_XD
-				case .onDidChangeMap:
-					if let callback = callbacks.onDidChangeMapOrMenu {
-						let c = MapOrMenuDidChangeContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				#else
-				case .onDidChangeMap:
-					if let callback = callbacks.onDidChangeMapOrMenu {
-						let c = MapOrMenuDidChangeContext(process: self, registers: registers, isMenu: false)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onDidChangeMenuMap:
-					if let callback = callbacks.onDidChangeMapOrMenu {
-						let c = MapOrMenuDidChangeContext(process: self, registers: registers, isMenu: true)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				#endif
 
-				#if GAME_XD
+					let updatedRegisters = context.getRegisters()
+					if  !updatedRegisters.isIdenticalTo(registers) {
+						self.setBreakPointRegisters(context.getRegisters())
+					}
+					state.write(process: self)
 
-				case .onDidConfirmMoveSelection:
-					if let callback = callbacks.onMoveSelectionConfirmed {
-						let c = BattleMoveSelectionContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
+					if forcedReturnValue != nil, breakPointType.forcedReturnValueAddress != nil {
+						self.forceReturnValueForBreakPoint()
+					} else {
+						self.clearBreakPoint()
 					}
-				case .onDidConfirmTurnSelection:
-					if let callback = callbacks.onTurnSelectionConfirmed {
-						let c = BattleTurnSelectionContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onWillUseMove:
-					if let callback = callbacks.onWillUseMove {
-						let c = WillUseMoveContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onMoveEnd:
-					if let callback = callbacks.onMoveDidEnd {
-						shouldContinue = callback(self, state)
-					}
-				case .onWillCallPokemon:
-					if let callback = callbacks.onWillCallPokemon {
-						let c = WillCallPokemonContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onPokemonWillSwitchIntoBattle:
-					if let callback = callbacks.onPokemonWillSwitchIn {
-						let c = PokemonSwitchInContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onShadowPokemonEncountered:
-					if let callback = callbacks.onShadowPokemonEncountered {
-						let c = ShadowPokemonEncounterContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onShadowPokemonFled:
-					if let callback = callbacks.onShadowPokemonFled {
-						let c = ShadowPokemonFledContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onShadowPokemonDidEnterReverseMode:
-					if let callback = callbacks.onPokemonDidEnterReverseMode {
-						let c = ReverseModeContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onWillUseItem:
-					if let callback = callbacks.onWillUseItem {
-						let c = UseItemContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onWillUseCologne:
-					if let callback = callbacks.onWillUseCologne {
-						let c = UseCologneContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onWillUseTM:
-					if let callback = callbacks.onWillUseTM {
-						let c = WillUseTMContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onDidUseTM:
-					if let callback = callbacks.onDidUseTM {
-						let c = DidUseTMContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onWillGainExp:
-					if let callback = callbacks.onWillGainExp {
-						let c = ExpGainContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onWillEvolve:
-					if let callback = callbacks.onWillEvolve {
-						let c = WillEvolveContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onDidEvolve:
-					if let callback = callbacks.onDidEvolve {
-						let c = DidEvolveContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onDidPurification:
-					if let callback = callbacks.onPurification {
-						let c = DidPurifyContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onWillStartBattle:
-					if let callback = callbacks.onBattleStart {
-						let c = BattleStartContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onDidEndBattle:
-					if let callback = callbacks.onBattleEnd {
-						let c = BattleEndContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onBattleWhiteout:
-					if let callback = callbacks.onTeamWhiteOut {
-						shouldContinue = callback(self, state)
-					}
-				case .onBattleTurnStart:
-					if let callback = callbacks.onTurnStart {
-						let c = TurnStartContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onBattleTurnEnd:
-					if let callback = callbacks.onTurnEnd {
-						shouldContinue = callback(self, state)
-					}
-				case .onBattleDamageOrHealing:
-					if let callback = callbacks.onBattleDamageOrHealing {
-						let c = BattleDamageHealingContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onPokemonDidFaint:
-					if let callback = callbacks.onPokemonFainted {
-						let c = PokemonFaintedContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onWillAttemptPokemonCapture:
-					if let callback = callbacks.onPokeballThrow {
-						let c = CaptureAttemptContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onDidSucceedPokemonCapture:
-					if let callback = callbacks.onCaptureSucceeded {
-						let c = CaptureAttemptedContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onDidFailPokemonCapture:
-					if let callback = callbacks.onCaptureFailed {
-						let c = CaptureAttemptedContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onMirorRadarActiveAtColosseum:
-					if let callback = callbacks.onMirorRadarActivatedColosseum {
-						shouldContinue = callback(self, state)
-					}
-				case .onMirorRadarActiveAtPokespot:
-					if let callback = callbacks.onMirorRadarActivatedPokespot {
-						shouldContinue = callback(self, state)
-					}
-				case .onMirorRadarLostSignal:
-					if let callback = callbacks.onMirorRadarSignalLost {
-						shouldContinue = callback(self, state)
-					}
-				case .onSpotMonitorActivated:
-					if let callback = callbacks.onSpotMonitorActivated {
-						shouldContinue = callback(self, state)
-					}
-				case .onWildBattleGenerated:
-					if let callback = callbacks.onWildBattleGenerated {
-						let c = WildBattleContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onWillGetFlag:
-					if let callback = callbacks.onWillGetFlag {
-						let c = GetFlagContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-						forcedReturnValue = c.getForcedReturnValue()
-					}
-				case .onWillSetFlag:
-					if let callback = callbacks.onWillSetFlag {
-						let c = SetFlagContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onReceivedGiftPokemon:
-					if let callback = callbacks.onReceiveGiftPokemon {
-						let c = ReceiveGiftPokemonContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				case .onPrint:
-					if let callback = callbacks.onPrint {
-						let c = PrintContext(process: self, registers: registers)
-						shouldContinue = callback(c, self, state); context = c
-					}
-				#endif
-				default:
-					shouldContinue = true
-				}
-
-				if let value = forcedReturnValue {
-					registers[3] = value
-				}
-
-				let updatedRegisters = context.getRegisters()
-				if  !updatedRegisters.isIdenticalTo(registers) {
-					self.setBreakPointRegisters(context.getRegisters())
-				}
-				state.write(process: self)
-
-				if forcedReturnValue != nil, breakPointType.forcedReturnValueAddress != nil {
-					self.forceReturnValueForBreakPoint()
-				} else {
-					self.clearBreakPoint()
 				}
 			}
-
-			return shouldContinue
-
-		} onFinish: { (process) in
-			inputTimer?.invalidate()
 			onFinish?()
+		} onLaunchFailed: { error in
+			onLaunchFailed?(error)
 		}
 	}
 
@@ -502,7 +496,7 @@ class XDProcess: ProcessIO {
 			offset += 1
 		}
 
-		let checkLength = numberOfBytes > 3 ? ((numberOfBytes / 4) + 1) * 4 : 16
+		let checkLength = numberOfBytes > 15 ? ((numberOfBytes / 4) + 1) * 4 : 16
 		var data: XGMutableData?
 		while offset + checkLength + 4 < end  {
 			data = process.read(atAddress: offset, length: checkLength)

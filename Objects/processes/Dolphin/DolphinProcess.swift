@@ -12,6 +12,7 @@ class DolphinProcess: ProcessIO {
 	let kMEMSize: UInt = 0x2_000_000
 
 	private let process: GoDProcess
+	private var gameIdentifier: String?
 	private var RAMInfo: (mem1: VMRegionInfo, mem2: VMRegionInfo)?
 
 	/// Settings don't seem to work atm
@@ -56,6 +57,9 @@ class DolphinProcess: ProcessIO {
 		}
 		
 		self.init(process: process)
+		
+		guard let isoData = iso.data else { return nil }
+		self.gameIdentifier = isoData.readString(atAddress: 0, charLength: .char, maxCharacters: 4)
 	}
 
 	private init(process: GoDProcess) {
@@ -148,9 +152,8 @@ class DolphinProcess: ProcessIO {
 	}
 
 	// MARK: - Launch
-	func begin(onStart: ((ProcessIO) -> Bool)?,
-			   onUpdate: ((ProcessIO) -> Bool)?,
-			   onFinish: ((ProcessIO?) -> Void)?) {
+	func begin(onStart: ((ProcessIO) -> Void)?,
+			   onLaunchFailed: ((String?) -> Void)?) {
 
 		// wait up to 15 seconds for the emulator to launch fully
 		var attemps = 0
@@ -159,36 +162,17 @@ class DolphinProcess: ProcessIO {
 			attemps += 1
 		}
 		if validate() {
-			if onStart?(self) ?? true {
-				DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) { [weak self] in
-					var shouldContinue = true
-					while let self = self,
-						  self.isRunning && shouldContinue {
-						shouldContinue = onUpdate?(self) ?? false
-					}
-				}
-				process.await()
-			}
+			sleep(5)
+			onStart?(self)
 		} else {
-			printg("Timed out waiting for Dolphin process.")
+			onLaunchFailed?("Timed out waiting for Dolphin to launch.")
 		}
-		onFinish?(self)
-		if isRunning {
-			process.terminate()
-			process.terminate()
-		}
-	}
-
-	private var memIsValid: Bool {
-		guard let mem1 = RAMInfo?.mem1,
-			  let data = process.readVirtualMemory(at: 0, length: 4, relativeToRegion: mem1) else { return false }
-		return data.string == region.identifier
 	}
 
 	private func validate() -> Bool {
-		if memIsValid { return true }
+		if RAMInfo?.mem1 != nil { return true }
 		load()
-		return memIsValid
+		return RAMInfo?.mem1 != nil
 	}
 
 	private func load() {
@@ -203,7 +187,7 @@ class DolphinProcess: ProcessIO {
 			lastRegion = process.getNextRegion(fromOffset: address)
 			if let regionInfo = lastRegion,
 			   regionInfo.size == kMEMSize,
-			   process.readVirtualMemory(at: 0, length: 4, relativeToRegion: regionInfo)?.string == region.identifier {
+			   process.readVirtualMemory(at: 0, length: 4, relativeToRegion: regionInfo)?.string == self.gameIdentifier {
 				memRegions.append(regionInfo)
 			}
 		} while lastRegion != nil && memRegions.count < 2

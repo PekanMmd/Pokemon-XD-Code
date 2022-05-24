@@ -30,13 +30,11 @@ protocol ProcessIO: GoDReadWritable {
 	/// appropriate so the object manipulating this process can perform IO requests.
 	///
 	/// Parameters:
-	/// **onStart** - The process should call this closure once when it has finished preparing for execution.
-	/// 			  The process should be ready to receive IO requests during this closure's execution.
-	/// **onUpdate** - The process should call this closure once every cycle of its run loop.
-	/// 			   The process should be ready to receive IO requests during this closure's execution.
-	/// **onFinish** - The process should call this closure once when it has stopped running.
-	/// 			   The process should not expect any IO requests during this closure's execution.
-	func begin(onStart: ((ProcessIO) -> Bool)?,
-					   onUpdate: ((ProcessIO) -> Bool)?,
-					   onFinish: ((ProcessIO?) -> Void)?)
+	/// **onStart**        - The process should call this closure once when it has finished preparing for execution.
+	/// 			         At this point it should be ready to receive IO requests.
+	/// **onLaunchFailed** - The process should call this closure once if it failed to prepare for execution.
+	/// 					 `onStart` should not be expected if the launch failed. The reason for the error can
+	/// 					 optionally be passed as the String argument
+	func begin(onStart: ((ProcessIO) -> Void)?,
+			   onLaunchFailed: ((String?) -> Void)?)
 }

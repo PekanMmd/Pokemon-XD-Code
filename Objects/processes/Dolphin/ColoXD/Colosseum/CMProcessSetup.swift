@@ -11,15 +11,17 @@ class XDProcessSetup {
 
 	func launch(processType: XDProcess.ProcessType,
 				autoSkipWarningScreen: Bool = true,
-				onStart: ((XDProcess) -> Bool)?,
+				onStart: ((XDProcess) -> Void)?,
+				onLaunchFailed: ((String?) -> Void)?,
 				onFinish: (() -> Void)?) {
-		guard let colosseum = XDProcess(processType: processType) else {
-			onFinish?()
+		guard let xd = XDProcess(processType: processType) else {
+			onLaunchFailed?("Unimplemented process type:" + processType.name)
 			return
 		}
 
-		colosseum.begin(autoSkipWarningScreen: autoSkipWarningScreen,
+		xd.begin(autoSkipWarningScreen: autoSkipWarningScreen,
 				 onStart: onStart,
+				 onLaunchFailed: onLaunchFailed,
 				 onFinish: onFinish,
 				 callbacks: self)
 	}
