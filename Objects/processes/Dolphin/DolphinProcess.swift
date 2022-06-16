@@ -21,40 +21,43 @@ class DolphinProcess: ProcessIO {
 		let iso = isoFile ?? XGFiles.iso
 		guard iso.exists else { return nil }
 		
-		var args = "--exec=\(iso.path.escapedPath)"
 		// Settings as command line args don't work and I don't know why
 		#warning("TODO: figure out why dolphin settings set through command line aren't working")
-		settings.forEach { (setting) in
-			var value = setting.value
-			if ["yes", "true"].contains(value.lowercased()) {
-				value = "True"
-			}
-			if ["no", "false"].contains(value.lowercased()) {
-				value = "False"
-			}
-			if value.isHexInteger {
-				let integer = value.hexValue
-				value = integer.string
-			}
-			let key = setting.key.string
-
-			args += " " + "--config=\(key)=\(value)".replacingOccurrences(of: " ", with: "\\ ")
-		}
+//		settings.forEach { (setting) in
+//			var value = setting.value
+//			if ["yes", "true"].contains(value.lowercased()) {
+//				value = "True"
+//			}
+//			if ["no", "false"].contains(value.lowercased()) {
+//				value = "False"
+//			}
+//			if value.isHexInteger {
+//				let integer = value.hexValue
+//				value = integer.string
+//			}
+//			let key = setting.key.string
+//
+//			args += " " + "--config=\(key)=\(value)".replacingOccurrences(of: " ", with: "\\ ")
+//		}
 		
 		#if os(macOS)
+		var args = "--exec=\(iso.path.escapedPath)"
 		let dolphinApp = dolphinFile ?? XGFiles.path("/Applications/Dolphin.app")
 		let dolphinExecutable = XGFiles.path(dolphinApp.path + "/Contents/MacOS/Dolphin")
-		GoDShellManager.stripEntitlements(appFile: dolphinApp)
-		#elseif os(Linux)
-		let dolphinExecutable = XGFiles.path("/usr/local/bin/dolphin-emu")
-		#elseif os(Windows)
-		#warning("TODO: get default path for windows")
-		let dolphinExecutable = XGFiles.path("C:/Dolphin/Dolphin.exe")
-		#endif
-		
 		guard let process = GoDShellManager.runAsync(.file(dolphinExecutable), args: args) else {
 			return nil
 		}
+		GoDShellManager.stripEntitlements(appFile: dolphinApp)
+		#elseif os(Linux)
+		var args = ["dolphin-emu-nogui", "--exec='" + iso.path + "'"]
+		guard let process = GoDShellManager.runAsync(.usrbin("vglrun"), args: args) else {
+			return nil
+		}
+		#elseif os(Windows)
+		#warning("TODO: get default path for windows")
+		let dolphinExecutable = XGFiles.path("C:/Dolphin/Dolphin.exe")
+		return nil
+		#endif
 		
 		self.init(process: process)
 		
@@ -77,6 +80,19 @@ class DolphinProcess: ProcessIO {
 		#!/bin/bash
 		SCRIPT='tell application "System Events" to tell application process "Dolphin" to click (every menu item of menu of menu item "Load State from Slot" of menu of menu item "Load State" of menu "Emulation" of menu bar 1 whose (name starts with "Load from Slot '$1' - "))'
 		\(appleScriptUser) osascript -e "${SCRIPT}"
+		"""
+		saveStateScript.save(toFile: saveStateScriptFile)
+		loadStateScript.save(toFile: loadStateScriptFile)
+		#elseif os(Linux)
+		let saveStateScript =
+		"""
+		#!/bin/bash
+		xdotool key shift+F'$1'
+		"""
+		let loadStateScript =
+		"""
+		#!/bin/bash
+		xdotool key F'$1'
 		"""
 		saveStateScript.save(toFile: saveStateScriptFile)
 		loadStateScript.save(toFile: loadStateScriptFile)

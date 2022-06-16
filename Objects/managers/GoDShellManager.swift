@@ -16,6 +16,7 @@ class GoDShellManager {
 		case gcitoolReplace
 		case pbrSaveTool
 		case appleScript
+		case xdotool
 		case standard(String)
 		case usrbin(String)
 		case file(XGFiles)
@@ -28,6 +29,7 @@ class GoDShellManager {
 			case .gcitool: return .tool("gcitool")
 			case .gcitoolReplace: return .tool("gcitool_replace")
 			case .pbrSaveTool: return .tool("pbrsavetool")
+			case .xdotool: return Commands.usrbin("xdotool").file
 			case .appleScript: return .nameAndFolder("osascript", XGFolders.path("/usr/bin"))
 			case .usrbin(let name): return .nameAndFolder(name, XGFolders.path("/usr/bin"))
 			case .file(let file): return file
