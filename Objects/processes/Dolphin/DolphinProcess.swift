@@ -49,7 +49,7 @@ class DolphinProcess: ProcessIO {
 		}
 		GoDShellManager.stripEntitlements(appFile: dolphinApp)
 		#elseif os(Linux)
-		var args = ["dolphin-emu-nogui", "--exec='" + iso.path + "'"]
+		var args = ["dolphin-emu", "--exec='" + iso.path + "'"]
 		guard let process = GoDShellManager.runAsync(.usrbin("vglrun"), args: args) else {
 			return nil
 		}
