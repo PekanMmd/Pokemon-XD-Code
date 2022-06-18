@@ -35,8 +35,8 @@ class XDProcess: ProcessIO {
 		case .GeckoUSB:
 			break
 		}
-		guard let process = process else { return nil }
-		self.init(process: process)
+		guard let proc = process else { return nil }
+		self.init(process: proc)
 	}
 
 	private init(process: ProcessIO) {
