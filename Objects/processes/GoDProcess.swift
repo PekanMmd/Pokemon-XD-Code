@@ -273,7 +273,7 @@ class GoDProcess {
 		if let regionInfo = region {
 			address += regionInfo.virtualAddress
 		}
-		let bytes = data.rawBytes
+		var bytes = data.rawBytes
 		let bytesWritten = pwrite(self.fileDescriptor, &bytes, Int(data.length), Int(address))
 		return bytesWritten != -1
 	}
