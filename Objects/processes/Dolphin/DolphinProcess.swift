@@ -49,7 +49,8 @@ class DolphinProcess: ProcessIO {
 		GoDShellManager.stripEntitlements(appFile: dolphinApp)
 		#elseif os(Linux)
 		var args = ["--exec='" + iso.path + "'"]
-		guard let process = GoDShellManager.runAsync(.file("/usr/games/dolphin-emu"), args: args) else {
+		let dolphinExecutable = XGFiles.path("/usr/games/dolphin-emu")
+		guard let process = GoDShellManager.runAsync(.file(dolphinExecutable), args: args) else {
 			return nil
 		}
 		#elseif os(Windows)
