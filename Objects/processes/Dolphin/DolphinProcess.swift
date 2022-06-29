@@ -21,8 +21,7 @@ class DolphinProcess: ProcessIO {
 		let iso = isoFile ?? XGFiles.iso
 		guard iso.exists else { return nil }
 		
-		// Settings as command line args don't work and I don't know why
-		#warning("TODO: figure out why dolphin settings set through command line aren't working")
+		// TODO: figure out why dolphin settings set through command line aren't working
 //		settings.forEach { (setting) in
 //			var value = setting.value
 //			if ["yes", "true"].contains(value.lowercased()) {
@@ -49,8 +48,8 @@ class DolphinProcess: ProcessIO {
 		}
 		GoDShellManager.stripEntitlements(appFile: dolphinApp)
 		#elseif os(Linux)
-		var args = ["dolphin-emu", "--exec='" + iso.path + "'"]
-		guard let process = GoDShellManager.runAsync(.usrbin("vglrun"), args: args) else {
+		var args = ["--exec='" + iso.path + "'"]
+		guard let process = GoDShellManager.runAsync(.file("/usr/games/dolphin-emu"), args: args) else {
 			return nil
 		}
 		#elseif os(Windows)
@@ -87,12 +86,12 @@ class DolphinProcess: ProcessIO {
 		let saveStateScript =
 		"""
 		#!/bin/bash
-		xdotool key shift+F'$1'
+		xdotool key shift+F$1
 		"""
 		let loadStateScript =
 		"""
 		#!/bin/bash
-		xdotool key F'$1'
+		xdotool key F$1
 		"""
 		saveStateScript.save(toFile: saveStateScriptFile)
 		loadStateScript.save(toFile: loadStateScriptFile)

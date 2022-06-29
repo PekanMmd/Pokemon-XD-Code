@@ -159,10 +159,12 @@ func randomiser() {
 	var randomiseTMs = false
 	var randomiseEvolutions = false
 	var randomiseTreasure = false
-
-	var randomiseShadowsOnly = false
-	var randomiseByBST = false
 	var randomiseBingo = false
+	var randomiseTypeMatchups = false
+	var randomiseShinyHues = false
+
+	var randomiseByBST = false
+	
 
 	var options = [String]()
 	options += [
@@ -181,19 +183,21 @@ func randomiser() {
 		" 6: Randomize Pokemon Types",
 		" 7: Randomize Abilities",
 		" 8: Randomize Pokemon Base Stats",
-		" 9: Randomize Move Types"
+		" 9: Randomize Move Types",
+		"10: Randomize Type Matchups"
 	]
 
 	if game != .PBR {
 		options += [
-			"10: Randomize TM and Tutor Moves",
-			"11: Randomize Evolutions",
-			"12: Randomize Item Boxes"
+			"11: Randomize TM and Tutor Moves",
+			"12: Randomize Evolutions",
+			"13: Randomize Item Boxes",
+			"14: Randomize Shiny Hues",
 		]
 	}
 
 	if game == .XD {
-		options += ["13: Randomize Battle Bingo"]
+		options += ["15: Randomize Battle Bingo"]
 	}
 
 	while true {
@@ -211,14 +215,14 @@ func randomiser() {
 			prompt += ","
 		}
 		if randomiseObtainablePokemon {
-			prompt += "Obtainable pokemon"
+			prompt += "Obtainable Pokemon"
 			if randomiseByBST {
 				prompt += " (randomised to similar BSTs)"
 			}
 			prompt += ","
 		}
 		if randomiseUnobtainablePokemon {
-			prompt += "Unobtainable pokemon"
+			prompt += "Unobtainable Pokemon"
 			if randomiseByBST {
 				prompt += " (randomised to similar BSTs)"
 			}
@@ -228,13 +232,13 @@ func randomiser() {
 			prompt += " Moves,"
 		}
 		if randomiseTypes {
-			prompt += " Pokemon types,"
+			prompt += " Pokemon Types,"
 		}
 		if randomiseAbilities {
 			prompt += " Abilities,"
 		}
 		if randomiseStats {
-			prompt += " Pokemon stats,"
+			prompt += " Pokemon Stats,"
 		}
 		if randomiseEvolutions {
 			prompt += " Evolutions,"
@@ -244,6 +248,12 @@ func randomiser() {
 		}
 		if randomiseTreasure {
 			prompt += " Item Boxes,"
+		}
+		if randomiseShinyHues {
+			prompt += " Shiny Hues,"
+		}
+		if randomiseTypeMatchups {
+			prompt += " Type Matchups,"
 		}
 		if randomiseTMs {
 			prompt += " TMs"
@@ -294,9 +304,15 @@ func randomiser() {
 			if randomiseTMs {
 				XGRandomiser.randomiseTMs()
 			}
+			if randomiseTypeMatchups {
+				XGRandomiser.randomiseMoveTypes()
+			}
 			#if !GAME_PBR
 			if randomiseTreasure {
 				XGRandomiser.randomiseTreasureBoxes()
+			}
+			if randomiseShinyHues {
+				XGRandomiser.randomiseShinyHues()
 			}
 			#endif
 			#if GAME_XD
@@ -320,7 +336,6 @@ func randomiser() {
 			randomiseTMs = false
 			randomiseEvolutions = false
 			randomiseTreasure = false
-			randomiseShadowsOnly = false
 			randomiseByBST = false
 			randomiseBingo = false
 
@@ -496,26 +511,27 @@ func utilities() {
 		3: Increase NPC Pokemon levels by 10%
 		4: Increase NPC Pokemon levels by 20%
 		5: Increase NPC Pokemon levels by 50%
+		6: Set all Pokemon to fluctuating exp curve
 		"""
 		#endif
 
 		#if GAME_COLO
 		prompt += """
 
-		6: Decode Ereader Cards
+		7: Decode Ereader Cards
 		-      Place your decrypted E Reader cards in \(XGFolders.Decrypted.path)
 		-      then use this utility to output the decoded data for those cards in \(XGFolders.Decoded.path)
-		7: Encode Ereader Cards
+		8: Encode Ereader Cards
 		-      Place your edited E Reader cards in \(XGFolders.Decoded.path)
 		-      then use this utility to output the reencoded data for those cards in \(XGFolders.Decrypted.path)
-		8: Decrypt Ereader Cards
+		9: Decrypt Ereader Cards
 		-      Place your encrypted E Reader cards in \(XGFolders.Encrypted.path)
 		-      then use this utility to output the decrypted data for those cards in \(XGFolders.Decrypted.path)
-		9: Encrypt Ereader Cards
+		10: Encrypt Ereader Cards
 		-      Place your decrypted E Reader cards in \(XGFolders.Decrypted.path)
 		-      then use this utility to output the reencrypted data for those cards in \(XGFolders.Encrypted.path)
-		10: Decrypt and Decode Ereader Cards
-		11: Encode and Encrypt Ereader Cards
+		11: Decrypt and Decode Ereader Cards
+		12: Encode and Encrypt Ereader Cards
 		"""
 		#elseif GAME_PBR
 		prompt += """
@@ -536,14 +552,19 @@ func utilities() {
 		case "3": XGUtility.increasePokemonLevelsByPercentage(10)
 		case "4": XGUtility.increasePokemonLevelsByPercentage(20)
 		case "5": XGUtility.increasePokemonLevelsByPercentage(50)
+		case "6": XGPokemon.allPokemon().forEach { pokemon in
+			let stats = pokemon.stats
+			stats.levelUpRate = .slowest
+			stats.save()
+		}
 		#endif
 		#if GAME_COLO
-		case "6": XGUtility.decodeEReaderCards()
-		case "7": XGUtility.encodeEReaderCards()
-		case "8": XGUtility.decryptEReaderCards()
-		case "9": XGUtility.encryptEReaderCards()
-		case "10": XGUtility.decryptEReaderCards(); XGUtility.decodeEReaderCards()
-		case "11": XGUtility.encodeEReaderCards(); XGUtility.encryptEReaderCards()
+		case "7": XGUtility.decodeEReaderCards()
+		case "8": XGUtility.encodeEReaderCards()
+		case "9": XGUtility.decryptEReaderCards()
+		case "10": XGUtility.encryptEReaderCards()
+		case "11": XGUtility.decryptEReaderCards(); XGUtility.decodeEReaderCards()
+		case "12": XGUtility.encodeEReaderCards(); XGUtility.encryptEReaderCards()
 		#elseif GAME_PBR
 		case "3": XGPatcher.increasePokemonTotal(by: 1)
 		case "4": XGPatcher.increasePokemonTotal(by: 10)

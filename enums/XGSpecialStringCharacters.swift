@@ -139,7 +139,7 @@ enum XGSpecialCharacters: Int, CaseIterable {
 	case specialMSG				= 0x4D // loads another .msg string as the variable
 	case varPokemon4E			= 0x4E
 	case unused4F				= 0x4F
-	case pokemonSpeciesCry		= 0x50 // set var to a species to play it's cry as audio
+	case pokemonSpeciesCry		= 0x50 // set var to a species to play its cry as audio
 	case unused51				= 0x51
 	case unused52				= 0x52 // Apparently 2 bytes but not used in any US tables afaik)
 	case special53				= 0x53 // 2 bytes.

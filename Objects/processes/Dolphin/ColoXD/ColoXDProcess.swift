@@ -35,8 +35,8 @@ class XDProcess: ProcessIO {
 		case .GeckoUSB:
 			break
 		}
-		guard let proc = process else { return nil }
-		self.init(process: proc)
+		guard let process = process else { return nil }
+		self.init(process: process)
 	}
 
 	private init(process: ProcessIO) {
@@ -904,7 +904,7 @@ class XDProcess: ProcessIO {
 		}
 		let mirrorLength = 12
 		let allMirrorsLength = mirrorLength * 4
-		write(XGMutableData(length: 12 * 4), atAddress: programmaticControllerWriteOffset)
+		write(XGMutableData(length: allMirrorsLength), atAddress: programmaticControllerWriteOffset)
 		let loadControllerOffset = XGASM.loadImmediateShifted32bit(register: .r6, value: programmaticControllerWriteOffset.unsigned)
 
 		let patchedInputCopyFunction = programmaticControllerWriteOffset + allMirrorsLength

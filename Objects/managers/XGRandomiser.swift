@@ -11,7 +11,7 @@ class XGRandomiser: NSObject {
 
 	#if GAME_XD
 	class func randomiseBattleBingo() {
-		printg("randomising battle bingo...")
+		printg("Randomising battle bingo...")
 		for i in 0 ..< kNumberOfBingoCards {
 			let card = XGBattleBingoCard(index: i)
 			let starter = card.startingPokemon!
@@ -40,7 +40,7 @@ class XGRandomiser: NSObject {
 	#endif
 	
 	class func randomisePokemon(includeStarters: Bool = true, includeObtainableMons: Bool = true, includeUnobtainableMons: Bool = true, similarBST: Bool = false) {
-		printg("randomising pokemon species...")
+		printg("Randomising pokemon species...")
 
 		let cachedPokemonStats = XGPokemon.allPokemon().map{$0.stats}.filter{$0.catchRate > 0}
 		var speciesAlreadyUsed = [Int]()
@@ -275,7 +275,7 @@ class XGRandomiser: NSObject {
 	}
 	
 	class func randomiseMoves() {
-		printg("randomising pokemon moves...")
+		printg("Randomising pokemon moves...")
 
 		#if !GAME_PBR
 		for deck in MainDecksArray {
@@ -364,7 +364,7 @@ class XGRandomiser: NSObject {
 	
 	
 	class func randomiseAbilities() {
-		printg("randomising pokemon abilities...")
+		printg("Randomising pokemon abilities...")
 		for i in 1 ..< kNumberOfPokemon {
 			
 			if XGPokemon.index(i).nameID == 0 {
@@ -387,7 +387,7 @@ class XGRandomiser: NSObject {
 	}
 	
 	class func randomiseTypes() {
-		printg("randomising pokemon types...")
+		printg("Randomising pokemon types...")
 		for i in 1 ..< kNumberOfPokemon {
 			
 			if XGPokemon.index(i).nameID == 0 {
@@ -408,7 +408,7 @@ class XGRandomiser: NSObject {
 	}
 	
 	class func randomiseEvolutions() {
-		printg("randomising pokemon evolutions...")
+		printg("Randomising pokemon evolutions...")
 		for i in 1 ..< kNumberOfPokemon {
 			
 			let pokemon = XGPokemon.index(i)
@@ -430,9 +430,9 @@ class XGRandomiser: NSObject {
 	
 	class func randomiseTMs() {
 		if game == .PBR {
-			printg("randomising TMs...")
+			printg("Randomising TMs...")
 		} else {
-			printg("randomising TMs and Tutor Moves...")
+			printg("Randomising TMs and Tutor Moves...")
 		}
 		
 		var tmIndexes = [Int]()
@@ -456,7 +456,7 @@ class XGRandomiser: NSObject {
 	
 	
 	class func randomiseMoveTypes() {
-		printg("randomising move types...")
+		printg("Randomising move types...")
 		for move in allMovesArray() {
 			let m = move.data
 			m.type = XGMoveTypes.random()
@@ -466,7 +466,7 @@ class XGRandomiser: NSObject {
 	}
 	
 	class func randomisePokemonStats() {
-		printg("randomising pokemon stats...")
+		printg("Randomising pokemon stats...")
 		for mon in allPokemonArray() {
 			
 			let pokemon = mon.stats
@@ -551,7 +551,7 @@ class XGRandomiser: NSObject {
 
 	#if !GAME_PBR
 	static func randomiseTreasureBoxes() {
-		printg("randomising item boxes...")
+		printg("Randomising item boxes...")
 		for treasure in XGTreasure.allValues {
 			guard treasure.item.data.bagSlot.rawValue < XGBagSlots.keyItems.rawValue,
 				  treasure.item.data.price > 0 else {
@@ -563,39 +563,56 @@ class XGRandomiser: NSObject {
 			treasure.save()
 		}
 	}
-
-	private var entryPointsByWarp: [String: String] = [:
-
-	]
-
-	static func randomiseWarps() {
-
-		// First pass to set parse options
-		var warps = [XGInteractionPointInfo]()
-		var elevators = [XGInteractionPointInfo]()
-		var cutscenes = [XGInteractionPointInfo]()
-		for interactionPoint in XGInteractionPointData.allValues {
-//			guard interactionPoint.room?.map != .PokemonHQ,
-//				  guard interactionPoint.room?.name != "worldmap" else {
-//				continue
-//			}
-//
-//			let info = interactionPoint.info
-//
-//			switch info {
-//			case .Warp(let targetRoom, let targetEntryID, let sound):
-//
-//			case .Elevator(let elevatorID, let targetRoomID, let targetElevatorID, let direction):
-//
-//			case .CutsceneWarp(let targetRoom, let targetEntryID, cutsceneID: let cutsceneID, cameraFSYSID: let cameraFSYSID):
-//
-//			default:
-//				break
-//			}
+	#endif
+	
+	static func randomiseTypeMatchups() {
+		printg("Randomising type matchups...")
+		XGMoveTypes.allValues.forEach { type in
+			let data = type.data
+			data.effectivenessTable = data.effectivenessTable.shuffled()
+			data.save()
+		}
+	}
+	
+	#if !GAME_PBR
+	static func randomiseShinyHues() {
+		printg("Randomising the filters applied to shiny pokemon. This may take a while...")
+		for pokemon in XGPokemon.allValues {
+			let stats = pokemon.stats
+			let pkxFsysID = stats.pkxFSYSID
+			guard let fsys = XGISO.current.getFSYSNameWithGroupID(pkxFsysID) else {
+				continue
+			}
+			let fsysName = fsys.removeFileExtensions()
+			let fsysFile = XGFiles.fsys(fsysName)
+			let data = fsysFile.fsysData
+			data.files.forEachIndexed { index, file in
+				guard file.fileType == .pkx else { return }
+				guard let pkx = data.decompressedDataForFileWithIndex(index: index) else { return }
+				
+				let shinyStartOffset = game == .XD ? 0x70 : pkx.length - 0x14
+				let redShift = Int.random(in: 0 ... 3)
+				let greenShift = Int.random(in: 0 ... 3)
+				let blueShift = Int.random(in: 0 ... 3)
+				let redBase = Int.random(in: 0x3F ... 0xFF)
+				let greenBase = Int.random(in: 0x3F ... 0xFF)
+				let blueBase = Int.random(in: 0x3F ... 0xFF)
+				let byteStream = [
+					0, 0, 0, redShift,
+					0, 0, 0, greenShift,
+					0, 0, 0, blueShift,
+					0, 0, 0, 3,
+					redBase, greenBase, blueBase, 0x7F
+				]
+				pkx.replaceBytesFromOffset(shinyStartOffset, withByteStream: byteStream)
+				
+				data.replaceFileWithIndex(index, withData: XGLZSS.encode(data: pkx), saveWhenDone: false, allowExpansion: true)
+			}
+			XGISO.current.shiftAndReplaceFile(name: fsys, withData: data.data, save: false)
+			printg("Shiny Randomizer progress: \(String(format: "%.1f", Double(pokemon.index * 100) / Double(kNumberOfPokemon)))%")
 		}
 	}
 	#endif
-	
 }
 
 
