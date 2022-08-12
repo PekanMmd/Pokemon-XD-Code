@@ -158,6 +158,7 @@ class GoDShellManager {
 	
 	static func stripEntitlements(appPath: String) {
 		printg("Stripping entitlements from " + appPath)
+//		run(.usrbin("codesign"), args: "--remove-signature " + appPath, printOutput: true)
 		run(.usrbin("codesign"), args: "--force --deep -s - " + appPath, printOutput: true)
 	}
 	#endif

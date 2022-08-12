@@ -86,15 +86,15 @@ class XGPatcher {
 		let rentalPassStartOffset: Int
 		switch region {
 		case .EU: rentalPassStartOffset = 0x1317cc - kDolToRAMOffsetDifference
+		case .US: rentalPassStartOffset = 0x136690 - kDolToRAMOffsetDifference
 		case .JP: rentalPassStartOffset = -1
-		case .US: rentalPassStartOffset = -1
 		case .OtherGame: rentalPassStartOffset = -1
 		}
 		guard PBRTypeManager.typeMatchupDataDolOffset != rentalPassStartOffset + 8 else {
 			// already been moved
 			return
 		}
-		guard region == .EU else {
+		guard region != .JP else {
 			printg("Couldn't move type match ups table. Not implemented for region: \(region.name)")
 			return
 		}

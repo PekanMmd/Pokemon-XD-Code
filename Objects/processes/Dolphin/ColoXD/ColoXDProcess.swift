@@ -128,6 +128,8 @@ class XDProcess: ProcessIO {
 			(callbacks.onWillChangeMap, .onWillChangeMap),
 			(callbacks.onDidChangeMapOrMenu, .onDidChangeMap),
 			(callbacks.onDidChangeMapOrMenu, .onDidChangeMenuMap),
+			(callbacks.onDidPromptReleasePokemon, .onDidPromptReleasePokemon),
+			(callbacks.onDidReleasePokemon, .onDidReleasePokemon),
 		]
 		#if GAME_XD
 		breakPoints += [
@@ -178,7 +180,14 @@ class XDProcess: ProcessIO {
 		begin { [weak self] (process) in
 			guard let self = self else { return }
 
-			self.setupRAMForInjection(enabledBreakPoints: enabledBreakPoints)
+			self.setupRAMForInjection(
+				enabledBreakPoints: enabledBreakPoints,
+				skipCounts: [
+					.onFrameAdvance: callbacks.onFrameSkipCounter,
+					.onWillRenderFrame: callbacks.onWillRenderSkipCounter,
+					.onStepCount: callbacks.onStepSkipCounter
+				]
+			)
 			
 			onStart?(self)
 			
@@ -444,6 +453,16 @@ class XDProcess: ProcessIO {
 							shouldContinue = callback(c, self, state); context = c
 						}
 					#endif
+					case .onDidPromptReleasePokemon:
+						if let callback = callbacks.onDidPromptReleasePokemon {
+							let c = ConfirmPokemonReleaseContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
+					case .onDidReleasePokemon:
+						if let callback = callbacks.onDidReleasePokemon {
+							let c = PokemonReleaseContext(process: self, registers: registers)
+							shouldContinue = callback(c, self, state); context = c
+						}
 					default:
 						shouldContinue = true
 					}
@@ -661,7 +680,7 @@ class XDProcess: ProcessIO {
 
 	/// Dolphin's JIT cache means overwriting assembly won't have an effect on the game until the cache is cleared
 	/// We add some code that forces the cache to clear when we set a flag to say it's dirty
-	func setupRAMForInjection(enabledBreakPoints: [XDBreakPointTypes]) {
+	func setupRAMForInjection(enabledBreakPoints: [XDBreakPointTypes], skipCounts: [XDBreakPointTypes: Int]) {
 		guard let freeSpace = ASMfreeSpaceRAMPointer() else {
 			return
 		}
@@ -740,12 +759,12 @@ class XDProcess: ProcessIO {
 		write([.b(OSReport)], atAddress: GSLog)
 
 		for breakPointType in XDBreakPointTypes.allCases where breakPointType != .clear {
-			writeAssemblyforBreakPoint(withType: breakPointType, isEnabled: enabledBreakPoints.contains(breakPointType), cacheCheckFunction: cacheCheckFunction)
+			writeAssemblyforBreakPoint(withType: breakPointType, isEnabled: enabledBreakPoints.contains(breakPointType), cacheCheckFunction: cacheCheckFunction, skipCount: skipCounts[breakPointType] ?? 0)
 		}
 		setUpControllerMirrors()
 	}
 
-	private func writeAssemblyforBreakPoint(withType type: XDBreakPointTypes, isEnabled: Bool, cacheCheckFunction: Int) {
+	private func writeAssemblyforBreakPoint(withType type: XDBreakPointTypes, isEnabled: Bool, cacheCheckFunction: Int, skipCount: Int = 0) {
 		guard let freeSpace = ASMfreeSpaceRAMPointer(),
 			  let addresses = type.addresses,
 			  let breakPointDataStart = breakPointDataOffset else {
@@ -761,10 +780,11 @@ class XDProcess: ProcessIO {
 			], atAddress: address)
 
 			// Bear in mind r0 is lost in the process
+			// r10 is lost if a skip counter is used
 			// All other registers are preserved
 			// The value in r3 is stored in the r0 slot
 			let loadBreakPointOffset = XGASM.loadImmediateShifted32bit(register: .r3, value: breakPointDataStart.unsigned)
-			let loadIsEnabledOffset = XGASM.loadImmediateShifted32bit(register: .r3, value: freeSpace.unsigned)
+			let loadParametersOffsets = XGASM.loadImmediateShifted32bit(register: .r3, value: freeSpace.unsigned)
 
 			// This function lets other threads keep running if we keep a thread paused for a while.
 			// Can be used for things like letting the battle camera keep moving around dynamically
@@ -772,9 +792,31 @@ class XDProcess: ProcessIO {
 
 			let returnAddress = type.standardReturnOffset ?? address + 4
 			let preReturnInstruction: XGASM = type.standardReturnOffset != nil ? .nop : .raw(overwrittenInstruction)
+			
+			// This increments a counter each time the breakpoint is passed but only triggers
+			// the breakpoint at the specified number of passes.
+			// E.g. pause execution every 30th frame advance
+			let skipCount = min(skipCount, 0xFFFF) // cap skip count at UInt16's max value
+			let skipCountCode: ASM = skipCount <= 0 ? [] : [
+				loadParametersOffsets.0,
+				loadParametersOffsets.1,
+				.lhz(.r10, .r3, 2),
+				.cmplwi(.r10, skipCount.unsigned),
+				.bge_l("break"),
+				
+				.addi(.r10, .r10, 1),
+				.sth(.r10, .r3, 2),
+				.b_l("return"),
+				
+				.label("break"),
+				.li(.r10, 0),
+				.sth(.r10, .r3, 2),
+			]
 
 			write([
-				// this address is a flag for whether or not this break point is currently enabled
+				// first byte is a flag for whether or not this break point is currently enabled
+				// lower 2 bytes are a counter which can be used to determine how many times the breakpoint
+				// needs to be hit before it triggers
 				.raw(isEnabled ? 0x01000000 : 0x00),
 
 				// preserve link register state
@@ -790,8 +832,8 @@ class XDProcess: ProcessIO {
 				.beq_l("return"),
 
 				// get address where this break point's status is set
-				loadIsEnabledOffset.0,
-				loadIsEnabledOffset.1,
+				loadParametersOffsets.0,
+				loadParametersOffsets.1,
 
 				// check that this break point is currently enabled
 				.lbz(.r3, .r3, 0),
@@ -806,7 +848,11 @@ class XDProcess: ProcessIO {
 				.lhz(.r3, .r3, 2),
 				.cmpwi(.r3, 0),
 				.bne_l("return"),
-
+			]
+				  
+			+ skipCountCode +
+				  
+			[
 				// get address for general break point status
 				loadBreakPointOffset.0,
 				loadBreakPointOffset.1,

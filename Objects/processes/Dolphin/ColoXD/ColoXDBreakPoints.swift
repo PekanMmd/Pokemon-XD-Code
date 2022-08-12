@@ -7,8 +7,9 @@
 
 import Foundation
 
-enum XDBreakPointTypes: Int, CaseIterable {
+enum XDBreakPointTypes: Int, CaseIterable, Equatable {
 	case clear = 0
+	
 	case onFrameAdvance
 	case onWillRenderFrame
 	case onDidRNGRoll
@@ -62,6 +63,8 @@ enum XDBreakPointTypes: Int, CaseIterable {
 	case onPrint
 	case onSoftReset
 	case onInconsistentState
+	case onDidPromptReleasePokemon
+	case onDidReleasePokemon
 
 	case yield = 0x7FFE
 	case forcedReturn = 0x7FFF

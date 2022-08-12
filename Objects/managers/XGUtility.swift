@@ -768,20 +768,25 @@ class XGUtility {
 	}
 
 	class func increasePokemonLevelsByPercentage(_ percentage: Int) {
+		printg("Increasing npc pokemon levels by \(percentage)%")
 		#if GAME_COLO
 		for trainer in allTrainers() {
-			for mon in trainer.pokemon {
+			for mon in trainer.pokemon where mon.level > 0 {
 				mon.level = min(mon.level * (percentage + 100) / 100, 100)
 				mon.save()
 			}
 		}
 		#elseif GAME_XD
-		for trainer in allTrainers() where ![XGDecks.DeckBingo, .DeckVirtual, .DeckSample, .DeckImasugu].contains(trainer.deck) {
-			for pokemon in trainer.pokemon {
-				let mon = pokemon.data
-				mon.level = min(mon.level * (percentage + 100) / 100, 100)
-				mon.save()
+		for deck in [XGDecks.DeckStory, XGDecks.DeckHundred, XGDecks.DeckColosseum] {
+			for pokemon in deck.allActivePokemon where pokemon.level > 0 {
+				pokemon.level = min(pokemon.level * (percentage + 100) / 100, 100)
+				pokemon.save()
 			}
+		}
+		for pokemon in XGDecks.DeckDarkPokemon.allActivePokemon where pokemon.level > 0 {
+			pokemon.level = min(pokemon.level * (percentage + 100) / 100, 100)
+			pokemon.shadowBoostLevel = pokemon.level
+			pokemon.save()
 		}
 		#endif
 	}
@@ -797,6 +802,31 @@ class XGUtility {
 		return try? T.fromJSON(file: file)
 	}
 	
+	class func setupIronMonRules() {
+		printg("Setting up Ironmon rules")
+		XGRandomiser.randomisePokemon(
+			includeStarters: true,
+			includeObtainableMons: true,
+			includeUnobtainableMons: true,
+			similarBST: false
+		)
+		XGRandomiser.randomiseMoves()
+		XGRandomiser.randomiseAbilities()
+		XGRandomiser.randomisePokemonStats()
+		XGRandomiser.randomiseTMs()
+		#if !GAME_PBR
+		XGRandomiser.randomiseEvolutions(forIronmon: true)
+		XGPatcher.pokemonHaveMaxCatchRate()
+		printg("Setting mon growth rates to fluctuating")
+		XGPokemon.allPokemon().forEach { pokemon in
+			let stats = pokemon.stats
+			stats.levelUpRate = .slowest
+			stats.save()
+		}
+		XGUtility.increasePokemonLevelsByPercentage(50)
+		#endif
+		printg("Finished setting up Ironmon rules")
+	}
 }
 
 

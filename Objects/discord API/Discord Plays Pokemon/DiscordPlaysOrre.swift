@@ -190,11 +190,13 @@ class DiscordPlaysOrre {
 	func launch () {
 		let setup = XDProcessSetup()
 
+		setup.onFrameSkipCounter = 120
 		setup.onFrame = { [weak self] (process, state) in
 			self?.lastFrameAdvanceHeartBeat = Date(timeIntervalSinceNow: 0)
 			return true
 		}
 
+		setup.onWillRenderSkipCounter = 120
 		setup.onWillRender = { [weak self] (context, process, state) in
 			self?.lastRenderBufferHeartBeat = Date(timeIntervalSinceNow: 0)
 			return true
@@ -708,6 +710,20 @@ class DiscordPlaysOrre {
 		}
 		setup.onMirorRadarActivatedPokespot = setup.onMirorRadarActivatedColosseum
 		#endif
+		
+		setup.onDidPromptReleasePokemon = { [weak self] (context, process, state) -> Bool in
+			let nopes = [
+				"https://tenor.com/view/nope-nope-nope-never-finger-wag-gif-17348381",
+				"https://tenor.com/view/no-let-me-think-nope-no-way-hmm-no-gif-22904160",
+				"https://tenor.com/view/nah-nevermind-lemme-tell-you-something-listen-hear-me-out-gif-13222326",
+				"https://tenor.com/view/disney-hannah-montana-rico-no-moises-arias-gif-15850397"
+			]
+			if let nopeGif = nopes.randomElement() {
+				self?.postContext("> ❌ **You can't release Pokemon!**\n" + nopeGif)
+			}
+			context.shouldRelease = false
+			return true
+		}
 
 		setup.launch(processType: .Dolphin(dolphinFile: nil)) { (process) in
 
@@ -831,13 +847,13 @@ class DiscordPlaysOrre {
 					}
 					if let lastHeartBeat = self.lastRenderBufferHeartBeat {
 						let timeSinceLastHeartBeat =  Date(timeIntervalSinceNow: 0).timeIntervalSince1970 - lastHeartBeat.timeIntervalSince1970
-						if timeSinceLastHeartBeat >= 21 {
+						if timeSinceLastHeartBeat >= 30 {
 							self.shouldRelaunchOnDolphinClosed = false
 							process.terminate()
-						} else if timeSinceLastHeartBeat >= 14 {
+						} else if timeSinceLastHeartBeat >= 20 {
 							self.shouldRelaunchOnDolphinClosed = true
 							process.terminate()
-						} else if timeSinceLastHeartBeat >= 7,
+						} else if timeSinceLastHeartBeat >= 10,
 								  self.processState != .startup,
 								  self.processState != .none {
 							self.saveSlotsState.load(process: process)
@@ -858,7 +874,12 @@ class DiscordPlaysOrre {
 			if self?.shouldRelaunchOnDolphinClosed == true {
 				self?.shouldRelaunchOnDolphinClosed = false
 				printg("Process marked for relaunch")
+				#if !os(Linux)
 				DiscordPlaysOrre().launch()
+				#else
+				printg("Closing tool")
+				ToolProcess.terminate()
+				#endif
 			} else {
 				printg("Closing tool")
 				ToolProcess.terminate()

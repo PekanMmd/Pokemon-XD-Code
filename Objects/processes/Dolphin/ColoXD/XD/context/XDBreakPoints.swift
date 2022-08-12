@@ -253,6 +253,16 @@ extension XDBreakPointTypes {
 		case .onNewGameStart:
 			#warning("TODO: research this")
 			return nil
+		case .onDidPromptReleasePokemon:
+			switch region {
+			case .US: return [0x8005aa38]
+			default: return nil
+			}
+		case .onDidReleasePokemon:
+			switch region {
+			case .US: return [0x8005aa84]
+			default: return nil
+			}
 		case .onPrint:
 			switch region {
 			case .US: return [0x800abc80]
@@ -1018,6 +1028,36 @@ class WildBattleContext: BreakPointContext {
 
 	override func getRegisters() -> [Int: Int] {
 		return [26: trainerPointer]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class ConfirmPokemonReleaseContext: BreakPointContext {
+	var shouldRelease: Bool
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		shouldRelease = registers[3]?.boolean ?? false
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [3: shouldRelease ? 1 : 0]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class PokemonReleaseContext: BreakPointContext {
+	var pokemon: XDPartyPokemon
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		pokemon = XDPartyPokemon(file: process, offset: registers[3] ?? 0)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [3: pokemon.partyDataOffset]
 	}
 
 	required init(from decoder: Decoder) throws { fatalError("-") }

@@ -26,10 +26,13 @@ class XDProcessSetup {
 				 callbacks: self)
 	}
 
+	var onFrameSkipCounter = 0
 	var onFrame: ((XDProcess, XDGameState) -> Bool)? = nil
+	var onWillRenderSkipCounter = 0
 	var onWillRender: ((RenderFrameBufferContext, XDProcess, XDGameState) -> Bool)? = nil
-	var onRNGRoll: ((RNGRollContext, XDProcess, XDGameState) -> Bool)? = nil
+	var onStepSkipCounter = 0
 	var onStep: ((XDProcess, XDGameState) -> Bool)? = nil
+	var onRNGRoll: ((RNGRollContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onDidReadOrWriteSave: ((SaveReadOrWriteContext, XDProcess, XDGameState) -> Bool)? = nil
 	var onWillWriteSave: ((XDProcess, XDGameState) -> Bool)? = nil
 	var onWillChangeMap: ((MapWillChangeContext, XDProcess, XDGameState) -> Bool)? = nil
@@ -70,6 +73,8 @@ class XDProcessSetup {
 //	var onWillGetFlag: ((GetFlagContext, XDProcess, XDGameState) -> Bool)? = nil
 //	var onWillSetFlag: ((SetFlagContext, XDProcess, XDGameState) -> Bool)? = nil
 //	var onReceiveGiftPokemon: ((ReceiveGiftPokemonContext, XDProcess, XDGameState) -> Bool)? = nil
+	var onDidPromptReleasePokemon: ((ConfirmPokemonReleaseContext, XDProcess, XDGameState) -> Bool)? = nil
+	var onDidReleasePokemon: ((PokemonReleaseContext, XDProcess, XDGameState) -> Bool)? = nil
 //	var onReceiveItem: ((XDProcess, XDGameState) -> Bool)? = nil
 //	var onTeamHealed: ((XDProcess, XDGameState) -> Bool)? = nil
 //	var onNewGame: ((XDProcess, XDGameState) -> Bool)? = nil

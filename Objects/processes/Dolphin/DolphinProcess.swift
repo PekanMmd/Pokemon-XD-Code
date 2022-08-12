@@ -48,7 +48,7 @@ class DolphinProcess: ProcessIO {
 		}
 		GoDShellManager.stripEntitlements(appFile: dolphinApp)
 		#elseif os(Linux)
-		var args = ["--exec='" + iso.path + "'"]
+		var args = "--exec=\(iso.path.escapedPath)"
 		let dolphinExecutable = XGFiles.path("/usr/games/dolphin-emu")
 		guard let process = GoDShellManager.runAsync(.file(dolphinExecutable), args: args) else {
 			return nil

@@ -34,6 +34,7 @@ class GoDRandomiserViewController: GoDViewController {
 		}
 		if game == .Colosseum {
 			obtainables.title = "Shadow Pokemon"
+			shinyHues.isHidden = true
 		}
 		if game == .PBR {
 			obtainables.isHidden = true

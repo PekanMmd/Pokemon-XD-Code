@@ -289,8 +289,8 @@ class GoDProcess {
 					let addressRange = parts[0]
 					let addressParts = addressRange.split(separator: "-")
 					if addressParts.count > 1 {
-						let startAddress = UInt(String(addressParts[0]).hexStringToInt())
-						let endAddress = UInt(String(addressParts[1]).hexStringToInt())
+						let startAddress = String(addressParts[0]).hexStringToUInt()
+						let endAddress = String(addressParts[1]).hexStringToUInt()
 						if offset <= startAddress {
 							let length = endAddress - startAddress
 							return VMRegionInfo(virtualAddress: startAddress, size: length)
