@@ -207,11 +207,9 @@ class DiscordPlaysOrre {
 			// Don't continue any sequences from a previous room
 			process.inputHandler.clearPendingInput()
 
-			if self?.processState == .pc_menu {
-				self?.popState()
-				self?.currentParty = state.trainerState?.value
-				self?.currentShadowTable = state.shadowDataState
-			}
+			self?.popState()
+			self?.currentParty = state.trainerState?.value
+			self?.currentShadowTable = state.shadowDataState
 
 			switch context.newRoom.name {
 			case "pokemon_logo":
@@ -718,10 +716,12 @@ class DiscordPlaysOrre {
 				"https://tenor.com/view/nah-nevermind-lemme-tell-you-something-listen-hear-me-out-gif-13222326",
 				"https://tenor.com/view/disney-hannah-montana-rico-no-moises-arias-gif-15850397"
 			]
-			if let nopeGif = nopes.randomElement() {
+			if context.shouldRelease,
+			    let nopeGif = nopes.randomElement() {
 				self?.postContext("> ❌ **You can't release Pokemon!**\n" + nopeGif)
+				context.shouldRelease = false
 			}
-			context.shouldRelease = false
+			
 			return true
 		}
 
