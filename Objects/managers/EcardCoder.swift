@@ -46,6 +46,13 @@ enum EcardTableSections {
 	}
 }
 
+// The colosseum ROM contains 21 ereader cards carde_menu.fsys. These cards seem to gacve been
+// programmatically generated for the purpose of testing the ereader functionality.
+// It's very unlikely they were ever planned for any kind of release. The format of these cards
+// is a tiny bit different from the officially released cards which means the logic for decoding them
+// needs to be tweaked a little. In order to decode them the `MetaDataCardName` field should be
+// read as 160 bits rather than 192. After the `MetaDataBonusTrainer3Text3` field an extra text field
+// is present which must be read as well. It is also 720 bits/90 bytes like the preceding text fields.
 enum EcardFields: Int {
 	case CardTypeBattle = 0
 	case MetaDataUnknown1 = 1

@@ -166,7 +166,7 @@ extension XGAssembly {
 		#endif
 	}
 
-	class func geckoCode(RAMOffset: Int, newASM asm: [XGASM]) -> String {
+	class func geckoCode(RAMOffset: Int, asm: [XGASM]) -> String {
 		return asm.asGeckoCode(RAMOffset: RAMOffset)
 	}
 
@@ -236,7 +236,7 @@ extension XGAssembly {
 
 	class func infiniteUseTMs() {
 		guard game != .PBR else {
-			printg("This has not been implemented for Colosseum yet.")
+			printg("This patch doesn't exist for PBR.")
 			return
 		}
 
@@ -245,11 +245,28 @@ extension XGAssembly {
 			return
 		}
 
+		let RAMOffset: Int
+		
 		if game == .XD {
-			replaceRamASM(RAMOffset: 0x0a5158, newASM: [.li(.r3, 0)])
+			switch region {
+			case .US:
+				RAMOffset = 0xa5158
+			case .EU:
+				RAMOffset = 0xa61f0
+			default:
+				RAMOffset = 0
+			}
 		} else {
-			replaceRamASM(RAMOffset: 0x022b04, newASM: [.nop])
+			switch region {
+			case .US:
+				RAMOffset = 0x22b14
+			case .EU:
+				RAMOffset = 0x246fc
+			default:
+				RAMOffset = 0
+			}
 		}
+		replaceRamASM(RAMOffset: RAMOffset, newASM: [.li(.r0, 0)])
 	}
 
 	class func reduceSizeOfAbilityData() {

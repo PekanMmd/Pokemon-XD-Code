@@ -20,7 +20,7 @@ let kBattleBingoPokemonMoveOffset		= 0x06
 class XGBattleBingoPokemon: NSObject, Codable {
 	
 	var typeOnCard	= 0x0
-	var species				= XGPokemon.index(0)
+	var species		= XGPokemon.index(0)
 	var ability		= 0x0
 	var nature		= XGNatures.hardy
 	var gender		= XGGenders.male

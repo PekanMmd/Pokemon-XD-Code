@@ -147,15 +147,10 @@ extension XGUtility {
 	}
 
 	class func copyDDPKToCommon() {
-		let deckFolder = XGFiles.fsys("deck_archive").folder
 		let commonFolder = XGFiles.fsys("common").folder
-		if deckFolder.exists {
-			for file in deckFolder.files where file.fileName.contains("DeckData_DarkPokemon") {
-				if let data = file.data {
-					data.file = .nameAndFolder(file.fileName, commonFolder)
-					data.save()
-				}
-			}
+		if let shadowData = XGFiles.deck(.DeckDarkPokemon).data {
+			shadowData.file = .nameAndFolder(shadowData.file.fileName.replacingOccurrences(of: "_EU", with: ""), commonFolder)
+			shadowData.save()
 		}
 	}
 

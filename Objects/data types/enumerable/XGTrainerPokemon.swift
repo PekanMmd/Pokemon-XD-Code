@@ -17,6 +17,7 @@ let kPokemonIndexOffset		= 0x00
 let kPokemonLevelOffset		= 0x02
 let kPokemonHappinessOffset	= 0x03
 let kPokemonItemOffset		= 0x04
+let kPokemonAIRoleOffset	= 0x06
 let kFirstPokemonIVOffset	= 0x08
 let kFirstPokemonEVOffset	= 0x0E
 let kFirstPokemonMoveOffset	= 0x14
@@ -48,22 +49,23 @@ let kPurificationExperienceOffset = 0xA // Should always be 0. The value gets in
 
 final class XGTrainerPokemon : NSObject, Codable {
 	
-	var deckData			= XGDeckPokemon.dpkm(0, XGDecks.DeckStory)
+	var deckData		= XGDeckPokemon.dpkm(0, XGDecks.DeckStory)
 	
-	var species				= XGPokemon.index(0)
+	var species			= XGPokemon.index(0)
 	var level			= 0x0
 	var happiness		= 0x0
-	var item				= XGItems.index(0)
-	var nature				= XGNatures.hardy
-	var gender				= XGGenders.male
-	var IVs			= 0x0 // All IVs will be the same. Not much point in varying them.
-	var EVs			= [0,0,0,0,0,0]
-	var moves				= [XGMoves](repeating: XGMoves.index(0), count: kNumberOfPokemonMoves)
+	var item			= XGItems.index(0)
+	var AIRole			= 0
+	var nature			= XGNatures.hardy
+	var gender			= XGGenders.male
+	var IVs				= 0x0 // All IVs will be the same. Not much point in varying them.
+	var EVs				= [0,0,0,0,0,0]
+	var moves			= [XGMoves](repeating: XGMoves.index(0), count: kNumberOfPokemonMoves)
 	
-	var ability		= 0x0 {
+	var ability			= 0x0 {
 		didSet {
 			if ![0,1].contains(ability) {
-				ability = 0xFF // set to random in colosseum
+				ability = 0
 			}
 		}
 	}
@@ -71,7 +73,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 	var shadowCatchRate 	= 0x0
 	var shadowCounter		= 0x0
 	var ShadowDataInUse 	= false
-	var shadowMoves				= [XGMoves](repeating: XGMoves.index(0), count: kNumberOfPokemonMoves)
+	var shadowMoves			= [XGMoves](repeating: XGMoves.index(0), count: kNumberOfPokemonMoves)
 	var shadowFleeValue 	= 0x0
 	
 	var shadowAggression = XGShadowAggression.none
@@ -94,27 +96,19 @@ final class XGTrainerPokemon : NSObject, Codable {
 	}
 	
 	var startOffset : Int {
-		get {
-			return deckData.pokemonDeck.DPKMDataOffset + (deckData.DPKMIndex * kSizeOfPokemonData)
-		}
+		return deckData.pokemonDeck.DPKMDataOffset + (deckData.DPKMIndex * kSizeOfPokemonData)
 	}
 	
 	var shadowStartOffset : Int {
-		get {
-			return XGDecks.DeckDarkPokemon.DDPKDataOffset + (deckData.index * kSizeOfShadowData)
-		}
+		return XGDecks.DeckDarkPokemon.DDPKDataOffset + (deckData.index * kSizeOfShadowData)
 	}
 	
 	var isShadowPokemon : Bool {
-		get {
-			return deckData.isShadow
-		}
+		return deckData.isShadow
 	}
 	
 	var isSet : Bool {
-		get {
-			return deckData.isSet
-		}
+		return deckData.isSet
 	}
 	
 	init(DeckData: XGDeckPokemon) {
@@ -131,6 +125,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 		happiness		= data.getByteAtOffset(start + kPokemonHappinessOffset)
 		let item		= data.get2BytesAtOffset(start + kPokemonItemOffset)
 		self.item		= .index(item)
+		self.AIRole 	= data.getByteAtOffset(start + kPokemonAIRoleOffset)
 		IVs				= data.getByteAtOffset(start + kFirstPokemonIVOffset)
 		
 		let pid = data.getByteAtOffset(start + kPokemonPIDOffset)
@@ -212,6 +207,7 @@ final class XGTrainerPokemon : NSObject, Codable {
 		
 		data.replace2BytesAtOffset(start + kPokemonIndexOffset, withBytes: species.index)
 		data.replace2BytesAtOffset(start + kPokemonItemOffset, withBytes: item.index)
+		data.replaceByteAtOffset(start + kPokemonAIRoleOffset, withByte: AIRole)
 		data.replaceByteAtOffset(start + kPokemonHappinessOffset, withByte: happiness)
 		data.replaceByteAtOffset(start + kPokemonLevelOffset, withByte: isShadowPokemon ? shadowBoostLevel : level)
 		// The shadow pokemon's level is often increased here to make shadow pokemon more powerful (hence the + by their level)

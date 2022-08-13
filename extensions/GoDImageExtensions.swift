@@ -11,7 +11,7 @@ import Cocoa
 
 extension XGFiles {
 	var image: NSImage {
-		if !self.exists, settings.verbose {
+		if !self.exists, XGSettings.current.verbose {
 			printg("Image file doesn't exist:", self.path)
 		}
 		return NSImage(contentsOfFile: self.path) ?? NSImage()

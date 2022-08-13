@@ -43,6 +43,13 @@ class PBRStringManager {
 		return nil
 	}
 
+	static func replaceString(id: Int, withString string: String, save: Bool = true) -> Bool {
+		if let (tableID, index) = tableIDAndIndexForStringWithID(id) {
+			return getStringTableWithId(tableID)?.replaceString(XGString(string: string, file: nil, sid: index), save: save) ?? false
+		}
+		return false
+	}
+
 	/// Returns the ID of the new string if successful
 	static func addString(_ string: String, toTableWithID id: Int = 1, save: Bool = true) -> Int? {
 		if let table = getStringTableWithId(id), let messageTableData = messageDataTableFile.data {

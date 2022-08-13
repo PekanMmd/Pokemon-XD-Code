@@ -26,8 +26,8 @@ typealias FTBL = (codeOffset: Int, end: Int, name: String, index: Int)
 typealias GIRI = (groupID: Int, resourceID: Int)
 typealias VECT = (x: Float, y: Float, z: Float)
 
-let currentXDSVersion: Float = 1.3
-let minXDSVersionCompatibilty: Float = 1.3
+let currentXDSVersion: Float = 2.0
+let minXDSVersionCompatibilty: Float = 2.0
 
 class XGScript: NSObject {
 	
@@ -203,7 +203,7 @@ class XGScript: NSObject {
 		
 		var done = false
 		var current = self.code.count - 1
-		while !done {
+		while !done && current > 0 {
 			if current == 0 {
 				done = true
 			} else if self.code[current].opCode == .return_op {

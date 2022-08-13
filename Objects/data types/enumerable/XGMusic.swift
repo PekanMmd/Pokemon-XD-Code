@@ -44,7 +44,7 @@ final class XGMusic: Codable {
 		self.index = index
 		let rel = XGFiles.common_rel.data!
 		
-		let start = CommonIndexes.BGM.startOffset + (index * kSizeOfMusicData)
+		let start = CommonIndexes.SoundFiles.startOffset + (index * kSizeOfMusicData)
 		self.fsysID = rel.get2BytesAtOffset(start + 2)
 		self.ishID = rel.getWordAtOffset(start + 4)
 		self.isdID = rel.getWordAtOffset(start + 8)
@@ -120,7 +120,7 @@ extension XGMusic: XGEnumerable {
 	
 	static var allValues: [XGMusic] {
 		var values = [XGMusic]()
-		for i in 0 ..< CommonIndexes.NumberOfBGM.value {
+		for i in 0 ..< CommonIndexes.NumberOfSoundFiles.value {
 			values.append(XGMusic(index: i))
 		}
 		return values

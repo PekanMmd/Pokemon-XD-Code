@@ -27,7 +27,7 @@ let multipliersStruct = GoDStruct(name: "Multiplier", format: [
 	.byte(name: "Denominator", description: "The bottom part of the fraction", type: .uint)
 ])
 
-let multipliersTable = CommonStructTable(index: .Multipliers, properties: multipliersStruct) { (index, data) -> String? in
+let multipliersTable = CommonStructTable(index: .NatureMultipliers, properties: multipliersStruct) { (index, data) -> String? in
 	if let numerator: Int = data.get("Numerator"),
 	   let denominator: Int = data.get("Denominator") {
 		if denominator == 100 {
@@ -104,7 +104,7 @@ let flagsStruct = GoDStruct(name: "Flags", format: [
 	.short(name: "Flag ID", description: "", type: .uintHex)
 ])
 
-let flagsTable = CommonStructTable(index: .Flags, properties: flagsStruct)
+let flagsTable = CommonStructTable(index: .GeneralFlags, properties: flagsStruct)
 #endif
 
 #if GAME_XD
@@ -120,7 +120,7 @@ let SoundsStruct = GoDStruct(name: "Sounds", format: [
 ])
 #endif
 
-let SoundsTable = CommonStructTable(index: .BGM, properties: SoundsStruct) { (index, data) -> String? in
+let SoundsTable = CommonStructTable(index: .SoundFiles, properties: SoundsStruct) { (index, data) -> String? in
 	#if GAME_XD
 	if let fsysID: Int = data.get("Fsys ID"), let fsysName = XGISO.current.getFSYSNameWithGroupID(fsysID) {
 		return fsysName
@@ -150,7 +150,6 @@ let SoundsMetaDataTable = CommonStructTable(index: .SoundsMetaData, properties: 
 }
 #endif
 
-#if GAME_COLO
 let aiWeightEffectsStruct = GoDStruct(name: "AI Weight Effect", format: [
 	.word(name: "Effect", description: "", type: .int),
 	.word(name: "Task Name ID", description: "", type: .msgID(file: nil)),
@@ -158,6 +157,24 @@ let aiWeightEffectsStruct = GoDStruct(name: "AI Weight Effect", format: [
 	.word(name: "Reason Name ID", description: "", type: .msgID(file: nil)),
 	.word(name: "Unknown", description: "", type: .uint)
 ])
-
 let aiWeightEffectsTable = CommonStructTable(index: .AIWeightEffects, properties: aiWeightEffectsStruct)
+
+#if GAME_XD
+let rgbaStruct = GoDStruct(name: "RGBA Colour", format: [
+	.byte(name: "Red", description: "", type: .uintHex),
+	.byte(name: "Green", description: "", type: .uintHex),
+	.byte(name: "Blue", description: "", type: .uintHex),
+	.byte(name: "Alpha", description: "", type: .uintHex),
+])
+let msgPalettesTable = CommonStructTable(index: .MsgPalettes, properties: rgbaStruct)
+
+
+// Some pokemon use a different animation other than their idle animation in the summary screen.
+// When showing a pokemon in the summary/pc this array is checked to see if that species should use
+// a different animation id. Anything not in the list defaults to animation 0
+let pokemonMenuAnimationsStruct = GoDStruct(name: "Pokemon Menu Animations", format: [
+	.byte(name: "Animation ID", description: "The animation ID to use in the summary screen", type: .uint),
+	.short(name: "Species ID", description: "The pokemon species this applies to", type: .pokemonID)
+])
+let pokemonMenuAnimationsTable = CommonStructTable(index: .PokemonMenuAnimations, properties: pokemonMenuAnimationsStruct)
 #endif

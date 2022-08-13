@@ -52,7 +52,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "--iso /Users/starsmomodu/Documents/Revolution\ Tool/PBR.iso"
+            argument = "--iso /Users/stars/Documents/GoD\ Tool/PBR.iso"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

@@ -29,8 +29,15 @@ class PKXModel {
 	lazy var shinyFilter: (modifiers: (red: Int, green: Int, blue: Int, unused: Int), colour: XGColour) = {
 		let shinyStartOffset = game == .XD ? 0x70 : data.length - 0x14
 		let mods = data.getWordStreamFromOffset(shinyStartOffset, length: 16).map{$0.int}
-		let rawColour = data.getWordAtOffset(shinyStartOffset + 0x10)
-		return (modifiers: (red: mods[0], green: mods[1], blue: mods[2], unused: mods[3]), colour: XGColour(raw: rawColour, format: nil))
+		var rawColour = data.getWordAtOffset(shinyStartOffset + 16)
+		if game == .Colosseum {
+			// ARGB
+			rawColour = ((rawColour & 0xFF000000) >> 24) + ((rawColour & 0xFFFFFF) << 8)
+		}
+		return (
+			modifiers: (red: mods[0], green: mods[1], blue: mods[2], unused: 0),
+			colour: XGColour(raw: rawColour, format:.RGBA32)
+		)
 	}()
 
 	lazy var particleData: XGMutableData? = {

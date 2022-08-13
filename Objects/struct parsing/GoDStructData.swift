@@ -446,6 +446,14 @@ class GoDStructData: CustomStringConvertible {
 			}
 			return nil
 		}
+		
+		func enumerableRawValue<T: XGEnumerable>(_ string: String, type: T.Type) -> Int? {
+			let values = T.allValues.filter{ $0.enumerableName.simplified == string.simplified }
+			guard let value = values.first else {
+				return nil
+			}
+			return value.enumerableValue?.integerValue
+		}
 
 		func splitCSV(_ csvText: String) -> [String] {
 			var separatedValues = [String]()
@@ -494,7 +502,92 @@ class GoDStructData: CustomStringConvertible {
 					}
 
 					let rawValueString = rawValues.pop()
-					guard let rawValue = integerRawValue(rawValueString) else {
+					var rawValue = integerRawValue(rawValueString)
+					if rawValue == nil {
+						switch property.type {
+						case .pokemonID:
+							rawValue = enumerableRawValue(rawValueString, type: XGPokemon.self)
+						case .moveID:
+							rawValue = enumerableRawValue(rawValueString, type: XGMoves.self)
+						case .itemID:
+							rawValue = enumerableRawValue(rawValueString, type: XGItems.self)
+						case .abilityID:
+							rawValue = enumerableRawValue(rawValueString, type: XGAbilities.self)
+						case .natureID:
+							rawValue = enumerableRawValue(rawValueString, type: XGNatures.self)
+						case .genderID:
+							rawValue = enumerableRawValue(rawValueString, type: XGGenders.self)
+						case .typeID:
+							rawValue = enumerableRawValue(rawValueString, type: XGMoveTypes.self)
+						case .moveCategory:
+							rawValue = enumerableRawValue(rawValueString, type: XGMoveCategories.self)
+						case .typeEffectiveness:
+							rawValue = enumerableRawValue(rawValueString, type: XGAbilities.self)
+						case .shininess:
+							rawValue = enumerableRawValue(rawValueString, type: XGShinyValues.self)
+						case .genderRatio:
+							rawValue = enumerableRawValue(rawValueString, type: XGGenderRatios.self)
+						case .expRate:
+							rawValue = enumerableRawValue(rawValueString, type: XGExpRate.self)
+						case .evolutionMethod:
+							rawValue = enumerableRawValue(rawValueString, type: XGEvolutionMethods.self)
+						case .moveTarget:
+							rawValue = enumerableRawValue(rawValueString, type: XGMoveTargets.self)
+						#if !GAME_PBR
+						case .statusEffect:
+							rawValue = enumerableRawValue(rawValueString, type: XGStatusEffects.self)
+						case .dayCareStatus:
+							rawValue = enumerableRawValue(rawValueString, type: XGDayCareStatus.self)
+						case .battleStyle:
+							rawValue = enumerableRawValue(rawValueString, type: XGBattleStyles.self)
+						case .battleType:
+							rawValue = enumerableRawValue(rawValueString, type: XGBattleTypes.self)
+						case .roomID:
+							rawValue = enumerableRawValue(rawValueString, type: XGRoom.self)
+						case .battleFieldID:
+							rawValue = enumerableRawValue(rawValueString, type: XGBattleField.self)
+						case .colosseumRound:
+							rawValue = enumerableRawValue(rawValueString, type: XGColosseumRounds.self)
+						case .playerController:
+							rawValue = enumerableRawValue(rawValueString, type: XGTrainerController.self)
+						case .itemPocket:
+							rawValue = enumerableRawValue(rawValueString, type: XGBagSlots.self)
+						#endif
+						case .scriptFunction(scriptFile: let scriptFile):
+							rawValue = scriptFile.scriptData.ftbl.firstIndex(where: { functionInfo in
+								functionInfo.name.simplified == rawValueString.simplified
+							})
+//						case .contestAppeal:
+//						case .eggGroup:
+//						case .trainerClassID:
+//						case .trainerModelID:
+//						case .skinTone:
+//						case .interactionMethod:
+//						case .scriptMarker:
+//						case .languageID:
+//						case .gameID:
+//						case .regionID:
+//						case .indexOfEntryInTable(table: let table, nameProperty: let nameProperty):
+//						case .fsysID:
+//						case .fsysFileIdentifier(fsysName: let fsysName):
+//						case .fsysFileType:
+//						case .pkxTrainerID:
+//						case .pkxPokemonID:
+//						case .textureFormat:
+//						case .paletteFormat:
+						#if GAME_XD
+						case .deckID:
+							rawValue = enumerableRawValue(rawValueString, type: XGDecks.self)
+						case .battleBingoMysteryPanelType:
+							rawValue = enumerableRawValue(rawValueString, type: XGBattleBingoItem.self)
+						#endif
+							
+						default:
+							rawValue = nil
+						}
+					}
+					
+					guard let rawValue = rawValue else {
 						printg("Couldn't decode csv file: \(originalFile.path) row: \(row). Invalid CSV data.")
 						printg("Expected number, hex number or indexed value for property \(property.name). Got \(rawValueString).")
 						printg("Expectation Examples: 150 | 0x96 | Mewtwo (150) | Mewtwo (0x96) ")
@@ -636,7 +729,7 @@ class GoDStructData: CustomStringConvertible {
 
 	func save(writeData: Bool = true) {
 		guard startOffset >= 0 else {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("Couldn't save struct data at offset \(startOffset) to file:", fileData.file.path)
 			}
 			return

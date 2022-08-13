@@ -11,7 +11,8 @@ let patches: [XGDolPatches] = [
 	.freeSpaceInDol,
 	.gen7CritRatios,
 	.disableRentalPassChecksums,
-	.disableBlurEffect
+	.disableBlurEffect,
+	.pokemonDeckPokeballField
 ]
 
 enum XGDolPatches: Int {
@@ -23,6 +24,7 @@ enum XGDolPatches: Int {
 	case disableBlurEffect
 	case unlockSaveFileBoxes
 	case moveTypeMatchupsTable
+	case pokemonDeckPokeballField
 	case add1PokemonEntry
 	case add10PokemonEntries
 	case add100PokemonEntries
@@ -36,6 +38,7 @@ enum XGDolPatches: Int {
 		case .disableRentalPassChecksums: return "Disable legality checks on battle passes"
 		case .disableBlurEffect: return "Remove the blur effect from the games rendering"
 		case .moveTypeMatchupsTable: return "Move type matchups table to a large area so more matchups can be added. The tool does this automatically when editing type matchups."
+		case .pokemonDeckPokeballField: return "Allows you to set a custom pokeball on battle pass pokemon decks"
 		case .add1PokemonEntry: return "Add 1 extra pokemon slot to the game"
 		case .add10PokemonEntries: return "Add 10 extra pokemon slots to the game"
 		case .add100PokemonEntries: return "Add 100 extra pokemon slots to the game"
@@ -83,15 +86,15 @@ class XGPatcher {
 		let rentalPassStartOffset: Int
 		switch region {
 		case .EU: rentalPassStartOffset = 0x1317cc - kDolToRAMOffsetDifference
+		case .US: rentalPassStartOffset = 0x136690 - kDolToRAMOffsetDifference
 		case .JP: rentalPassStartOffset = -1
-		case .US: rentalPassStartOffset = -1
 		case .OtherGame: rentalPassStartOffset = -1
 		}
 		guard PBRTypeManager.typeMatchupDataDolOffset != rentalPassStartOffset + 8 else {
 			// already been moved
 			return
 		}
-		guard region == .EU else {
+		guard region != .JP else {
 			printg("Couldn't move type match ups table. Not implemented for region: \(region.name)")
 			return
 		}
@@ -246,7 +249,25 @@ class XGPatcher {
 		default:
 			return
 		}
+	}
 
+	static func pokemonDecksUsePokeballField() {
+		guard region != .JP else {
+			printg("Couldn't set pokemon decks to use pokeball field for game region \(region.name)")
+			return
+		}
+
+		let address: Int
+		switch region {
+		case .US: address = 0x8017d860
+		case .EU: address = 0x80178f20
+		case .JP: address = -1
+		case .OtherGame: address = -1
+		}
+
+		XGAssembly.replaceRamASM(RAMOffset: address, newASM: [
+			.lbz(.r0, .r26, 10)
+		])
 	}
 
 	static func isClassSplitImplemented() -> Bool {
@@ -309,7 +330,7 @@ class XGPatcher {
 
 	static func reimplementHardcodedNameIDsForPokemonEnum() {
 		guard region != .JP else {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("Couldn't update hardcoded name ids for pokemon enum for region:", region.name)
 			}
 			return
@@ -339,7 +360,7 @@ class XGPatcher {
 
 		if let dol = XGFiles.dol.data {
 			guard dol.get4BytesAtOffset(branchOffset - kDolToRAMOffsetDifference) == 0x3864000a else {
-				if settings.verbose {
+				if XGSettings.current.verbose {
 					printg("Hardcoded name IDs for pokemon enum already updated")
 				}
 				return
@@ -721,6 +742,7 @@ class XGPatcher {
 		case .disableRentalPassChecksums: XGPatcher.disableRentalPassChecksums()
 		case .disableBlurEffect: XGPatcher.disableBlurEffect()
 		case .moveTypeMatchupsTable: XGPatcher.moveTypeMatchupsTableToPassValidationFunction()
+		case .pokemonDeckPokeballField: XGPatcher.pokemonDecksUsePokeballField()
 		case .add1PokemonEntry: XGPatcher.increasePokemonTotal(by: 1)
 		case .add10PokemonEntries: XGPatcher.increasePokemonTotal(by: 10)
 		case .add100PokemonEntries: XGPatcher.increasePokemonTotal(by: 100)

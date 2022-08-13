@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -58,9 +58,14 @@
                                                 <action selector="addFileToISO:" target="Voe-Tx-rLC" id="1cc-ft-5JM"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Extract ISO" keyEquivalent="e" id="sFy-YC-dJ9">
+                                        <menuItem title="Extract ISO Files" keyEquivalent="e" id="sFy-YC-dJ9">
                                             <connections>
                                                 <action selector="extractISO:" target="Voe-Tx-rLC" id="ZWr-I0-cbr"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Extract &amp; Decode ISO" keyEquivalent="d" id="tK3-jF-ey2">
+                                            <connections>
+                                                <action selector="extractAndDecodeISO:" target="Voe-Tx-rLC" id="7s7-Qj-t7L"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="View ISO Files" keyEquivalent="i" id="c5N-Dm-vqH">

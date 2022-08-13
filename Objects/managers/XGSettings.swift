@@ -8,13 +8,15 @@
 import Foundation
 
 private let settingsFile = XGFiles.nameAndFolder("Settings.json", XGFolders.Documents)
-var settings = XGSettings.load()
 
 class XGSettings {
+
+	static var current = XGSettings.load()
+
 	var verbose = false
 	var increaseFileSizes = true
 	var enableExperimentalFeatures = false
-	var inputDuration = 0.2 // How long a button press lasts by default when input into Dolphin
+	var inputDuration = 0.18 // How long a button press lasts by default when input into Dolphin
 	var inputPollDuration: UInt32 = 500 // How often to poll for new inputs (ms)
 	
 	private struct Settings: Codable {
@@ -58,6 +60,7 @@ class XGSettings {
 	}
 	
 	func save() {
+		guard XGISO.inputISOFile != nil else { return }
 		let settingsData = Settings(verbose: verbose,
 									increaseFileSizes: increaseFileSizes,
 									enableExperimentalFeatures: enableExperimentalFeatures,
@@ -68,11 +71,11 @@ class XGSettings {
 	}
 
 	static func reload() {
-		settings = load()
+		XGSettings.current = load()
 	}
 	
 	fileprivate static func load() -> XGSettings {
-		if settingsFile.exists {
+		if XGISO.inputISOFile != nil, settingsFile.exists {
 			do {
 				let loadedSettings = try Settings.fromJSON(file: settingsFile)
 				let settings = XGSettings(settings: loadedSettings)

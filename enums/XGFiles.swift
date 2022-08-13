@@ -35,7 +35,15 @@ var loadableFiles: [String] {
 }
 #else
 var loadableFiles: [String] {
-		[XGFiles.dol.path, XGFiles.fsys("common").path]
+	var paths = [XGFiles.dol.path, XGFiles.fsys("common").path]
+	if XGFolders.ISOExport("deck").exists {
+		paths += XGFolders.ISOExport("deck").files.filter {
+			return $0.fileType == .bin
+		}.map {
+			$0.path
+		}
+	}
+	return paths
 }
 #endif
 
@@ -66,6 +74,7 @@ indirect enum XGFiles {
 	case boot
 	case saveData
 	case decryptedSaveData
+	case narc(String)
 	case indexAndFsysName(Int, String)
 	#endif
 	case pokeFace(Int)
@@ -167,6 +176,7 @@ indirect enum XGFiles {
 		case .boot:	return "boot.bin"
 		case .saveData: return "PbrSaveData"
 		case .decryptedSaveData: return "PbrSaveData_decrypted_current"
+		case .narc(let s): return s + ".narc"
 		case .indexAndFsysName(let index, let name): return XGFiles.fsys(name).fsysData.fileNameForFileWithIndex(index: index) ?? "-"
 		#endif
 		}
@@ -180,6 +190,7 @@ indirect enum XGFiles {
 		case .boot				: return .Sys
 		case .saveData			: return .SaveFiles
 		case .decryptedSaveData	: return .SaveFiles
+		case .narc(let s)		: return XGFiles.fsys(s).folder
 		case .indexAndFsysName(_, let fsysName): return XGFiles.fsys(fsysName).folder
 		#else
 		case .dol				: return .ISOExport("Start")
@@ -199,7 +210,7 @@ indirect enum XGFiles {
 		case .toc				: return .ISOExport("TOC")
 		case .log				: return .Logs
 		case .json				: return .JSON
-		case .eCardDecrypted		: return .EreaderCards
+		case .eCardDecrypted	: return .EreaderCards
 		case .eCardDecoded		: return .EreaderCards
 		case .wit      		    : return .Wiimm
 		case .wimgt      		: return .Wiimm
@@ -301,7 +312,7 @@ indirect enum XGFiles {
 		}
 
 		#if GAME_PBR
-		let loadableFileFormats: [XGFileTypes] = [.bin, .dckp, .dckt, .dcka, .msg]
+		let loadableFileFormats: [XGFileTypes] = [.bin, .dckp, .dckt, .dcka, .msg, .narc]
 		if loadableFileFormats.contains(self.fileType) {
 			if let data = loadedFiles[self.path] {
 				return data
@@ -377,6 +388,15 @@ indirect enum XGFiles {
 		if self != .common_rel {
 			return 0
 		}
+		if isDemo {
+			switch region {
+			case .JP: return 0xFB710
+			case .US:
+				assertionFailure("Check for us offset")
+				return 0x0
+			default: return 0x0
+			}
+		}
 		return CommonIndexes.Script.startOffset
 		#endif
 
@@ -407,6 +427,9 @@ indirect enum XGFiles {
 		#else
 		if self != .common_rel {
 			return fileSize
+		}
+		if isDemo {
+			return 0x3D20
 		}
 		return CommonIndexes.Script.length
 		#endif
@@ -619,6 +642,7 @@ indirect enum XGFolders {
 	case ISOFiles
 	case ISODump
 	case Sys
+	case Arc
 	#endif
 	
 	var name: String {
@@ -648,8 +672,9 @@ indirect enum XGFolders {
 		case .nameAndFolder(let s, _): return s
 		#if GAME_PBR
 		case .Sys				: return "sys"
-		case .ISOFiles				: return "files"
-		case .ISODump         		: return "Dump"
+		case .Arc				: return "arcDat"
+		case .ISOFiles			: return "files"
+		case .ISODump         	: return "Dump"
 		case .DATA              : return "DATA"
 		#endif
 		}
@@ -687,6 +712,7 @@ indirect enum XGFolders {
 		case .ISODump  	: path = XGISO.inputISOFile == nil ? documentsPath : XGFolders.ISOExport("").path
 		case .DATA      : path = XGFolders.ISODump.path
 		case .Sys, .ISOFiles: path = XGFolders.DATA.exists ? XGFolders.DATA.path : XGFolders.ISODump.path
+		case .Arc		: path = XGFolders.ISOFiles.path
 		#endif
 		default: path = documentsPath
 
@@ -930,7 +956,17 @@ extension XGFiles: Codable {
 	}
 }
 
-
+extension XGFiles: GoDReadWritable {
+	func read(atAddress address: UInt, length: UInt) -> XGMutableData? {
+		return self.data?.read(atAddress: address, length: length)
+	}
+	
+	func write(_ data: XGMutableData, atAddress address: UInt) -> Bool {
+		return self.data?.write(data, atAddress: address) ?? false
+	}
+	
+	
+}
 
 
 

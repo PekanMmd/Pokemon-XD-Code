@@ -148,7 +148,9 @@ func applyPatches() {
 func randomiser() {
 	var isInitialRandomisation = true
 
-	var randomisePokemon = false
+	var randomiseStarters = false
+	var randomiseObtainablePokemon = false
+	var randomiseUnobtainablePokemon = false
 	var randomiseMoves = false
 	var randomiseTypes = false
 	var randomiseAbilities = false
@@ -157,39 +159,51 @@ func randomiser() {
 	var randomiseTMs = false
 	var randomiseEvolutions = false
 	var randomiseTreasure = false
-
-	var randomiseShadowsOnly = false
-	var randomiseByBST = false
 	var randomiseBingo = false
+	var randomiseTypeMatchups = false
+	var randomiseShinyHues = false
+
+	var randomiseByBST = false
+	
 
 	var options = [String]()
 	options += [
-		game == .PBR ? " 1: Randomize Rental and Colosseum Pokemon"
-			: " 1: Randomize All Trainer/Wild Pokemon"
+		game == .PBR ? " 1: Randomize Rental Pokemon"
+			: " 1: Randomize Starter Pokemon"
 	]
 	options += [
-		game == .PBR ? " 2: Setting - Randomize Rental Pass Pokemon Only"
-			: " 2: Setting - Randomize Shadow Pokemon Only"
+		game == .PBR ? " 2: -"
+			: " 2: Randomize Obtainable Pokemon"
 	]
+	
 	options += [
-		" 3: Setting - Randomize Pokemon Using Similar BST",
-		" 4: Randomize Moves",
-		" 5: Randomize Pokemon Types",
-		" 6: Randomize Abilities",
-		" 7: Randomize Pokemon Base Stats",
-		" 8: Randomize Move Types"
+		" 3: Randomize NPC Trainer Pokemon (unobtainable)",
+		" 4: Setting - Randomize Pokemon Using Similar Base Stat Total (BST)",
+		" 5: Randomize Moves",
+		" 6: Randomize Pokemon Types",
+		" 7: Randomize Abilities",
+		" 8: Randomize Pokemon Base Stats",
+		" 9: Randomize Move Types",
+		"10: Randomize Type Matchups"
 	]
 
 	if game != .PBR {
 		options += [
-			" 9: Randomize TM and Tutor Moves",
-			"10: Randomize Evolutions",
-			"11: Randomize Item Boxes"
+			"11: Randomize TM and Tutor Moves",
+			"12: Randomize Evolutions",
+			"13: Randomize Item Boxes",
+		]
+	} else {
+		options += [
+			"11: Randomize TMs"
 		]
 	}
 
 	if game == .XD {
-		options += ["12: Randomize Battle Bingo"]
+		options += [
+			"14: Randomize Shiny Hues",
+			"15: Randomize Battle Bingo"
+		]
 	}
 
 	while true {
@@ -199,13 +213,24 @@ func randomiser() {
 		}
 		prompt += "\n"
 		prompt += "Options selected: "
-		if randomisePokemon {
-			prompt += "Pokemon"
+		if randomiseStarters {
+			prompt += "Starter pokemon"
 			if randomiseByBST {
-				prompt += " randomised to similar BSTs"
+				prompt += " (randomised to similar BSTs)"
 			}
-			if randomiseShadowsOnly {
-				prompt += game == .PBR ? " (Rentals only)" : " (Shadows only)"
+			prompt += ","
+		}
+		if randomiseObtainablePokemon {
+			prompt += "Obtainable Pokemon"
+			if randomiseByBST {
+				prompt += " (randomised to similar BSTs)"
+			}
+			prompt += ","
+		}
+		if randomiseUnobtainablePokemon {
+			prompt += "Unobtainable Pokemon"
+			if randomiseByBST {
+				prompt += " (randomised to similar BSTs)"
 			}
 			prompt += ","
 		}
@@ -213,13 +238,13 @@ func randomiser() {
 			prompt += " Moves,"
 		}
 		if randomiseTypes {
-			prompt += " Pokemon types,"
+			prompt += " Pokemon Types,"
 		}
 		if randomiseAbilities {
 			prompt += " Abilities,"
 		}
 		if randomiseStats {
-			prompt += " Pokemon stats,"
+			prompt += " Pokemon Stats,"
 		}
 		if randomiseEvolutions {
 			prompt += " Evolutions,"
@@ -229,6 +254,12 @@ func randomiser() {
 		}
 		if randomiseTreasure {
 			prompt += " Item Boxes,"
+		}
+		if randomiseShinyHues {
+			prompt += " Pokemon Colours,"
+		}
+		if randomiseTypeMatchups {
+			prompt += " Type Matchups,"
 		}
 		if randomiseTMs {
 			prompt += " TMs"
@@ -250,13 +281,13 @@ func randomiser() {
 			#if !GAME_PBR
 			if isInitialRandomisation {
 				XGUtility.deleteSuperfluousFiles()
-				settings.increaseFileSizes = true
+				XGSettings.current.increaseFileSizes = true
 				isInitialRandomisation = false
 			}
 			#endif
 
-			if randomisePokemon {
-				XGRandomiser.randomisePokemon(limitToMainMons: randomiseShadowsOnly, similarBST: randomiseByBST)
+			if randomiseStarters || randomiseObtainablePokemon || randomiseUnobtainablePokemon {
+				XGRandomiser.randomisePokemon(includeStarters: randomiseStarters, includeObtainableMons: randomiseObtainablePokemon, includeUnobtainableMons: randomiseUnobtainablePokemon, similarBST: randomiseByBST)
 			}
 			if randomiseMoves {
 				XGRandomiser.randomiseMoves()
@@ -270,21 +301,27 @@ func randomiser() {
 			if randomiseStats {
 				XGRandomiser.randomisePokemonStats()
 			}
-			if randomiseEvolutions {
-				XGRandomiser.randomiseEvolutions()
-			}
 			if randomiseMoveTypes {
 				XGRandomiser.randomiseMoveTypes()
 			}
 			if randomiseTMs {
 				XGRandomiser.randomiseTMs()
 			}
+			if randomiseTypeMatchups {
+				XGRandomiser.randomiseTypeMatchups()
+			}
 			#if !GAME_PBR
 			if randomiseTreasure {
 				XGRandomiser.randomiseTreasureBoxes()
 			}
+			if randomiseEvolutions {
+				XGRandomiser.randomiseEvolutions()
+			}
 			#endif
 			#if GAME_XD
+			if randomiseShinyHues {
+				XGRandomiser.randomiseShinyHues()
+			}
 			if randomiseBingo {
 				XGRandomiser.randomiseBattleBingo()
 			}
@@ -294,7 +331,9 @@ func randomiser() {
 
 			displayAlert(title: "Randomisation complete", description: "The ISO is now ready.")
 
-			randomisePokemon = false
+			randomiseStarters = false
+			randomiseObtainablePokemon = false
+			randomiseUnobtainablePokemon = false
 			randomiseMoves = false
 			randomiseTypes = false
 			randomiseAbilities = false
@@ -303,8 +342,10 @@ func randomiser() {
 			randomiseTMs = false
 			randomiseEvolutions = false
 			randomiseTreasure = false
-			randomiseShadowsOnly = false
 			randomiseByBST = false
+			randomiseTreasure = false
+			randomiseTypeMatchups = false
+			randomiseShinyHues = false
 			randomiseBingo = false
 
 			continue
@@ -318,7 +359,7 @@ func randomiser() {
 		switch index {
 		case 0:
 			if isInitialRandomisation {
-				if randomisePokemon || randomiseMoves || randomiseTypes || randomiseAbilities || randomiseStats || randomiseMoveTypes || randomiseTMs || randomiseEvolutions || randomiseBingo {
+				if randomiseStarters || randomiseObtainablePokemon || randomiseUnobtainablePokemon || randomiseMoves || randomiseTypes || randomiseAbilities || randomiseStats || randomiseMoveTypes || randomiseTypeMatchups || randomiseTMs || randomiseEvolutions || randomiseTreasure || randomiseShinyHues || randomiseBingo {
 					if readInput("You haven't run the randomiser yet, are you sure you want to leave? Y/N").lowercased() == "n" {
 						printg("Don't forget to enter 'start' after you enter your randomiser options.")
 						continue
@@ -326,27 +367,24 @@ func randomiser() {
 				}
 			}
 			return
-		case 1: randomisePokemon.toggle()
-		case 2:
-			randomiseShadowsOnly.toggle()
-			if randomiseShadowsOnly && !randomisePokemon {
-				randomisePokemon.toggle()
-			}
-		case 3:
-			randomiseByBST.toggle()
-			if randomiseByBST && !randomisePokemon {
-				randomisePokemon.toggle()
-			}
-		case 4: randomiseMoves.toggle()
-		case 5: randomiseTypes.toggle()
-		case 6: randomiseAbilities.toggle()
-		case 7: randomiseStats.toggle()
-		case 8: randomiseMoveTypes.toggle()
-		case 9: randomiseTMs.toggle()
-		case 10: randomiseEvolutions.toggle()
-		case 11: randomiseTreasure.toggle()
+		case 1: randomiseStarters.toggle()
+		case 2: randomiseObtainablePokemon.toggle()
+		case 3: randomiseUnobtainablePokemon.toggle()
+		case 4: randomiseByBST.toggle()
+		case 5: randomiseMoves.toggle()
+		case 6: randomiseTypes.toggle()
+		case 7: randomiseAbilities.toggle()
+		case 8: randomiseStats.toggle()
+		case 9: randomiseMoveTypes.toggle()
+		case 10: randomiseTypeMatchups.toggle()
+		case 11: randomiseTMs.toggle()
+		#if !GAME_PBR
+		case 12: randomiseEvolutions.toggle()
+		case 13: randomiseTreasure.toggle()
+		#endif
 		#if GAME_XD
-		case 12: randomiseBingo.toggle()
+		case 14: randomiseShinyHues.toggle()
+		case 15: randomiseBingo.toggle()
 		#endif
 		default: printg("Invalid option:", input); continue
 		}
@@ -476,43 +514,46 @@ func utilities() {
 
 		0: Back to main menu
 
-		1: Extract all textures
-		2: Extract all textures with Dolphin filenames
+		1: Set up Ironmon rules
+
+		2: Extract all textures
+		3: Extract all textures with Dolphin filenames
 		"""
 
 		#if !GAME_PBR
 		prompt += """
 
-		3: Increase NPC Pokemon levels by 10%
-		4: Increase NPC Pokemon levels by 20%
-		5: Increase NPC Pokemon levels by 50%
+		4: Increase NPC Pokemon levels by 10%
+		5: Increase NPC Pokemon levels by 20%
+		6: Increase NPC Pokemon levels by 50%
+		7: Set all Pokemon to fluctuating exp curve
 		"""
 		#endif
 
 		#if GAME_COLO
 		prompt += """
 
-		6: Decode Ereader Cards
+		8: Decode Ereader Cards
 		-      Place your decrypted E Reader cards in \(XGFolders.Decrypted.path)
 		-      then use this utility to output the decoded data for those cards in \(XGFolders.Decoded.path)
-		7: Encode Ereader Cards
+		9: Encode Ereader Cards
 		-      Place your edited E Reader cards in \(XGFolders.Decoded.path)
 		-      then use this utility to output the reencoded data for those cards in \(XGFolders.Decrypted.path)
-		8: Decrypt Ereader Cards
+		10: Decrypt Ereader Cards
 		-      Place your encrypted E Reader cards in \(XGFolders.Encrypted.path)
 		-      then use this utility to output the decrypted data for those cards in \(XGFolders.Decrypted.path)
-		9: Encrypt Ereader Cards
+		11: Encrypt Ereader Cards
 		-      Place your decrypted E Reader cards in \(XGFolders.Decrypted.path)
 		-      then use this utility to output the reencrypted data for those cards in \(XGFolders.Encrypted.path)
-		10: Decrypt and Decode Ereader Cards
-		11: Encode and Encrypt Ereader Cards
+		12: Decrypt and Decode Ereader Cards
+		13: Encode and Encrypt Ereader Cards
 		"""
 		#elseif GAME_PBR
 		prompt += """
 
-		3: Increase number of pokemon slots in the game by 1
-		4: Increase number of pokemon slots in the game by 10
-		5: Increase number of pokemon slots in the game by 100
+		4: Increase number of pokemon slots in the game by 1
+		5: Increase number of pokemon slots in the game by 10
+		6: Increase number of pokemon slots in the game by 100
 		"""
 		#endif
 
@@ -520,24 +561,30 @@ func utilities() {
 		switch input {
 		case "": continue
 		case "0": return
-		case "1": XGUtility.extractAllTextures(forDolphin: false)
-		case "2": XGUtility.extractAllTextures(forDolphin: true)
+		case "1": XGUtility.setupIronMonRules()
+		case "2": XGUtility.extractAllTextures(forDolphin: false)
+		case "3": XGUtility.extractAllTextures(forDolphin: true)
 		#if !GAME_PBR
-		case "3": XGUtility.increasePokemonLevelsByPercentage(10)
-		case "4": XGUtility.increasePokemonLevelsByPercentage(20)
-		case "5": XGUtility.increasePokemonLevelsByPercentage(50)
+		case "4": XGUtility.increasePokemonLevelsByPercentage(10)
+		case "5": XGUtility.increasePokemonLevelsByPercentage(20)
+		case "6": XGUtility.increasePokemonLevelsByPercentage(50)
+		case "7": XGPokemon.allPokemon().forEach { pokemon in
+			let stats = pokemon.stats
+			stats.levelUpRate = .slowest
+			stats.save()
+		}
 		#endif
 		#if GAME_COLO
-		case "6": XGUtility.decodeEReaderCards()
-		case "7": XGUtility.encodeEReaderCards()
-		case "8": XGUtility.decryptEReaderCards()
-		case "9": XGUtility.encryptEReaderCards()
-		case "10": XGUtility.decryptEReaderCards(); XGUtility.decodeEReaderCards()
-		case "11": XGUtility.encodeEReaderCards(); XGUtility.encryptEReaderCards()
+		case "8": XGUtility.decodeEReaderCards()
+		case "9": XGUtility.encodeEReaderCards()
+		case "10": XGUtility.decryptEReaderCards()
+		case "11": XGUtility.encryptEReaderCards()
+		case "12": XGUtility.decryptEReaderCards(); XGUtility.decodeEReaderCards()
+		case "13": XGUtility.encodeEReaderCards(); XGUtility.encryptEReaderCards()
 		#elseif GAME_PBR
-		case "3": XGPatcher.increasePokemonTotal(by: 1)
-		case "4": XGPatcher.increasePokemonTotal(by: 10)
-		case "5": XGPatcher.increasePokemonTotal(by: 100)
+		case "4": XGPatcher.increasePokemonTotal(by: 1)
+		case "5": XGPatcher.increasePokemonTotal(by: 10)
+		case "6": XGPatcher.increasePokemonTotal(by: 100)
 		#endif
 		default: invalidOption(input)
 		}

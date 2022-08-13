@@ -109,12 +109,12 @@ class XGMutableData {
 	@discardableResult
 	func writeToFile(_ file: XGFiles) -> Bool {
 		if data.write(to: file) {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("data successfully written to file:", file.path)
 			}
 			return true
 		} else {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("data failed to be written to file:", file.path)
 			}
 			return false
@@ -123,6 +123,15 @@ class XGMutableData {
 
 	func duplicated() -> XGMutableData {
 		return XGMutableData(byteStream: rawBytes, file: file)
+	}
+	
+	var isNull: Bool {
+		for byte in byteStream {
+			if byte != 0 {
+				return false
+			}
+		}
+		return true
 	}
 
 	//MARK: - Get Bytes
@@ -473,6 +482,14 @@ class XGMutableData {
 		
 		return offsets
 	}
+	
+	func search(for data: XGMutableData, fromOffset: Int = 0) -> Int? {
+		let searchRange: Range<Data.Index> = fromOffset ..< self.length
+		guard let resultRange = self.data.range(of: data.data, options: [], in: searchRange) else {
+			return nil
+		}
+		return Int(resultRange.startIndex)
+	}
 
 	// MARK: - Strings
 
@@ -538,7 +555,24 @@ class XGMutableData {
 	}
 }
 
+extension XGMutableData: GoDReadable {
+	func read(atAddress address: UInt, length: UInt) -> XGMutableData? {
+		if (Int(address) + Int(length) > self.length) {
+			return nil
+		}
+		return getSubDataFromOffset(Int(address), length: Int(length))
+	}
+}
 
+extension XGMutableData: GoDWritable {
+	func write(_ data: XGMutableData, atAddress address: UInt) -> Bool {
+		if (Int(address) + data.length > length) {
+			return false
+		}
+		replaceData(data: data, atOffset: Int(address))
+		return true
+	}
+}
 
 
 

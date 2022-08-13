@@ -738,7 +738,7 @@ indirect enum XDSExpr {
 					return functionPointerWithName(function.name)
 				}
 				
-				return functionPointerWithName("CurrentScript.\(functionIndex)")
+				return functionPointerWithName("This.\(functionIndex)")
 			} else if scriptIdentifier == 0 {
 				return "Null"
 			} else {
@@ -813,7 +813,7 @@ indirect enum XDSExpr {
 			return macroWithName("INTEGER_\(c.asInt)")
 		case .float:
 			return macroWithName("FLOAT_\(c.asFloat)")
-		case .integerFloatOverload:
+		case .number:
 			if c.type.index == XDSConstantTypes.float.index {
 				return stringFromMacroImmediate(c: c, t: .float, isCommonScript: isCommonScript)
 			}
@@ -888,6 +888,8 @@ indirect enum XDSExpr {
 			return macroWithName("BIT_MASK_\(c.asInt.hexString())")
 		case .camIdentifier:
 			return macroWithName("CAM_\(c.asInt.hexString())")
+		case .cameraType:
+			return macroWithName("CAM_TYPE_\(c.asInt.hexString())")
 		}
 	}
 	
@@ -1018,7 +1020,7 @@ indirect enum XDSExpr {
 		case .scriptFunctionMacro(let x):
 			return [XDSExpr.functionPointerWithName(x)]
 		case .scriptFunctionId(let scriptType, let scriptID):
-			return [XDSExpr.functionPointerWithName((scriptType == 0x596 ? "Common" : "CurrentScript") + ".\(scriptID)")]
+			return [XDSExpr.functionPointerWithName((scriptType == 0x596 ? "Common" : "This") + ".\(scriptID)")]
 			
 		// compound statements
 		case .function(let def, let es):

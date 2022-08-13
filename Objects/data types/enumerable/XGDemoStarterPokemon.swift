@@ -59,14 +59,14 @@ final class XGDemoStarterPokemon: NSObject, XGGiftPokemon, GoDCodable {
 	var index		= 0
 
 	var level		= 0
-	var species			= XGPokemon.index(0)
+	var species		= XGPokemon.index(0)
 
 	var exp: Int {
 		get {
 			return species.expRate.expForLevel(level)
 		}
 		set {
-			
+			// ignore since it'll be calculated anyway
 		}
 	}
 	

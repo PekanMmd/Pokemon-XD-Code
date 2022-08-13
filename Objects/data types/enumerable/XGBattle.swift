@@ -19,7 +19,7 @@ let kBattlePokemonPerPlayerOffset = 0x3
 let kBattleUnknown1Offset = 0x4 // 1 in story, 0 otherwise. could be whether or not to receive prize money or black out etc.
 let kBattleFieldOffset = 0x6
 let kBattleBattleCDIDOffset = 0x8 // 2 bytes, set programmatically so is always 0 in the game files
-let kBattleBGMOffset = 0x12
+let kBattleBGMOffset = 0x10
 let kBattleUnknown2Offset = 0x17
 let kBattleColosseumRoundOffset = 0x1b
 
@@ -192,7 +192,7 @@ final class XGBattle: Codable {
 		
 		self.trainersPerSide = data.getByteAtOffset(startOffset + kBattleTrainersPerSideOffset)
 		self.pokemonPerPlayer = data.getByteAtOffset(startOffset + kBattlePokemonPerPlayerOffset)
-		self.BGMusicID = data.get2BytesAtOffset(startOffset + kBattleBGMOffset)
+		self.BGMusicID = data.get4BytesAtOffset(startOffset + kBattleBGMOffset)
 		self.unknown = data.getByteAtOffset(startOffset + kBattleUnknown1Offset) == 1
 		self.unknown2 = data.getByteAtOffset(startOffset + kBattleUnknown2Offset)
 		
@@ -236,7 +236,7 @@ final class XGBattle: Codable {
 		data.replaceByteAtOffset(startOffset + kBattleUnknown2Offset, withByte: self.unknown2)
 		
 		data.replace2BytesAtOffset(startOffset + kBattleFieldOffset, withBytes: self.battleField.index)
-		data.replace2BytesAtOffset(startOffset + kBattleBGMOffset, withBytes: self.BGMusicID)
+		data.replace4BytesAtOffset(startOffset + kBattleBGMOffset, withBytes: self.BGMusicID)
 		
 		data.replace2BytesAtOffset(startOffset + kBattlePlayer1DeckIDOffset, withBytes: (self.p1Deck ?? .DeckDarkPokemon).id)
 		data.replace2BytesAtOffset(startOffset + kBattlePlayer1TrainerIDOffset, withBytes: self.p1TID)

@@ -35,16 +35,24 @@ extension GoDReadable {
 		return read(atAddress: address, length: 4)?.get4BytesAtOffset(0)
 	}
 
-	func readChar(atAddress address: Int) -> UInt8? {
+	func readU8(atAddress address: Int) -> UInt8? {
 		return read(atAddress: address, length: 1)?.getCharAtOffset(0)
 	}
 
-	func readShort(atAddress address: Int) -> UInt16? {
+	func readU16(atAddress address: Int) -> UInt16? {
 		return read(atAddress: address, length: 2)?.getHalfAtOffset(0)
 	}
 
-	func readWord(atAddress address: Int) -> UInt32? {
+	func readU32(atAddress address: Int) -> UInt32? {
 		return read(atAddress: address, length: 4)?.getWordAtOffset(0)
+	}
+	
+	func readBool(atAddress address: Int) -> Bool? {
+		switch read(atAddress: address, length: 1)?.getByteAtOffset(0) {
+		case .none: return nil
+		case .some(0): return false
+		default: return true
+		}
 	}
 
 	func readString(atAddress address: Int, charLength: ByteLengths = .char, maxCharacters: Int? = nil) -> String {
@@ -58,18 +66,18 @@ extension GoDReadable {
 
 		while nextChar != 0x00 && nextChar != nil && (maxCharacters == nil || characterCounter < maxCharacters!) {
 			switch charLength {
-			case .char: currChar = Int(readChar(atAddress: currentOffset) ?? 0)
-			case .short: currChar = Int(readShort(atAddress: currentOffset) ?? 0)
-			case .word: currChar = Int(readWord(atAddress: currentOffset) ?? 0)
+			case .char: currChar = Int(readU8(atAddress: currentOffset) ?? 0)
+			case .short: currChar = Int(readU16(atAddress: currentOffset) ?? 0)
+			case .word: currChar = Int(readU32(atAddress: currentOffset) ?? 0)
 			}
 			currentOffset += charLength.rawValue
 			characterCounter += 1
 
 			string.append(.unicode(currChar ?? 0))
 			switch charLength {
-			case .char: nextChar = Int(readChar(atAddress: currentOffset) ?? 0)
-			case .short: nextChar = Int(readShort(atAddress: currentOffset) ?? 0)
-			case .word: nextChar = Int(readWord(atAddress: currentOffset) ?? 0)
+			case .char: nextChar = Int(readU8(atAddress: currentOffset) ?? 0)
+			case .short: nextChar = Int(readU16(atAddress: currentOffset) ?? 0)
+			case .word: nextChar = Int(readU32(atAddress: currentOffset) ?? 0)
 			}
 		}
 
@@ -91,7 +99,7 @@ extension GoDWritable {
 
 	@discardableResult
 	func write8(_ value: Int, atAddress address: Int) -> Bool {
-		return write(UInt8(value & 0xFFFF), atAddress: address)
+		return write(UInt8(value & 0xFF), atAddress: address)
 	}
 
 	@discardableResult

@@ -352,4 +352,40 @@ class XGAssembly {
 		replaceASM(startOffset: off1, newASM: ins1)
 		replaceASM(startOffset: off2, newASM: ins2)
 	}
+	
+	class func createC2GeckoCode(asm: ASM, atRAMAddress address: Int) -> [UInt32] {
+		let offset = (address & 0xFFFFFF).unsigned
+		var instructions = ASM()
+		// replace bl instructions with bla
+		asm.forEach { instruction in
+			switch instruction {
+			case .b(let offset):
+				instructions.append(.ba(offset))
+			case .bl(let offset):
+				instructions.append(.bla(offset))
+			default:
+				instructions.append(instruction)
+			}
+		}
+		var values = instructions.wordStreamAtRAMOffset(address)
+		if values.count % 2 == 0 {
+			values.append(XGASM.nop.code)
+		}
+		values.append(0)
+		return [
+			0xC2000000 | offset,
+			values.count.unsigned / 2
+		] + values
+	}
+
+	class func createC2GeckoCodeString(asm: ASM, atRAMAddress address: Int) -> String {
+		let code = createC2GeckoCode(asm: asm, atRAMAddress: address)
+		var codeText = ""
+		for i in 0 ..< (code.count / 2) {
+			let leftCode = code[i * 2]
+			let rightCode = code[(i * 2) + 1]
+			codeText += "\(leftCode.hex()) \(rightCode.hex())\n"
+		}
+		return codeText
+	}
 }

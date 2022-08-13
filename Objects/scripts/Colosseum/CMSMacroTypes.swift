@@ -157,7 +157,7 @@ indirect enum CMSMacroTypes {
 		case .model: return XGFsys(file: .fsys("people_archive")).identifiers
 		case .move: return allPokemonArray().map{ $0.index }
 		case .room: return XGRoom.allValues.map{ $0.roomID }.sorted()
-		case .flag: return CMSFlags.allCases.map{ $0.rawValue }
+		case .flag: return XDSFlags.allCases.map{ $0.rawValue }
 		case .ability: return Array(0 ..< kNumberOfAbilities)
 		case .battleResult: return Array(0 ... 3)
 		case .shadowStatus: return Array(0 ... 4)
@@ -187,7 +187,7 @@ indirect enum CMSMacroTypes {
 			switch value.integerValue >> 16 {
 			case 0: return "Null"
 			case 0x596: return "Common.\(value.integerValue & 0xFFFF)"
-			case 0x100: return "CurrentScript.\(value.integerValue & 0xFFFF)"
+			case 0x100: return "This.\(value.integerValue & 0xFFFF)"
 			default: return "Error(Invalid macro value)"
 			}
 		case .integer, .float:
@@ -196,7 +196,7 @@ indirect enum CMSMacroTypes {
 		case .null:
 			return "Null"
 		case .flag:
-			if let flag = CMSFlags(rawValue: value.integerValue) {
+			if let flag = XDSFlags(rawValue: value.integerValue) {
 				return macroWithName("FLAG_" + flag.name.underscoreSimplified.uppercased() + "_\(value.integerValue)")
 			}
 			for shadow in CMShadowData.allValues {

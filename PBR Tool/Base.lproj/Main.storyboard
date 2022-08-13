@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -60,9 +60,14 @@
                                                 <action selector="addFileToISO:" target="Voe-Tx-rLC" id="Oay-1U-5lp"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Extract ISO" keyEquivalent="e" id="MXV-pI-Myr">
+                                        <menuItem title="Extract ISO Files" keyEquivalent="e" id="MXV-pI-Myr">
                                             <connections>
                                                 <action selector="extractISO:" target="Voe-Tx-rLC" id="eMR-ZZ-6bw"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Extract &amp; Decode ISO" keyEquivalent="d" id="PhS-Kg-ojo">
+                                            <connections>
+                                                <action selector="extractAndDecodeISO:" target="Voe-Tx-rLC" id="Mdv-gW-Lum"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="View ISO Files" keyEquivalent="i" id="yg4-p4-LQb">
@@ -100,6 +105,12 @@
                                                     </menuItem>
                                                 </items>
                                             </menu>
+                                        </menuItem>
+                                        <menuItem title="Enable Experimental Features" id="vzC-Sa-uFr">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="enableExperimentalFeatures:" target="Voe-Tx-rLC" id="Q92-GP-3BO"/>
+                                            </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="t2I-9m-EE3"/>
                                         <menuItem title="Cut" keyEquivalent="x" id="P25-Sp-wdi">
@@ -162,6 +173,11 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Tools" id="cLm-M8-bxX">
                                     <items>
+                                        <menuItem title="Context Tool" keyEquivalent="C" id="VhN-WP-Gtv">
+                                            <connections>
+                                                <segue destination="7el-NF-4Ww" kind="show" id="XAF-d8-xMn"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Hex Calculator" keyEquivalent="H" id="Bq2-kU-Mvf">
                                             <connections>
                                                 <action selector="showHexCalculator:" target="Voe-Tx-rLC" id="M97-WT-9gQ"/>
@@ -218,7 +234,11 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="PBR_Tool" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="PBR_Tool" customModuleProvider="target">
+                    <connections>
+                        <outlet property="experimentalFeaturesMenuItem" destination="vzC-Sa-uFr" id="jp5-F6-OOy"/>
+                    </connections>
+                </customObject>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -352,6 +372,14 @@
                 <customObject id="hOH-e9-vdb" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="857" y="1154"/>
+        </scene>
+        <!--ValueContext-->
+        <scene sceneID="qNA-5Y-Ab2">
+            <objects>
+                <controllerPlaceholder storyboardName="ValueContext" id="7el-NF-4Ww" sceneMemberID="viewController"/>
+                <customObject id="81S-VC-C7u" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="474" y="266"/>
         </scene>
         <!--Help-->
         <scene sceneID="aeD-pQ-RIr">

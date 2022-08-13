@@ -56,7 +56,7 @@ final class XGRoom: NSObject, Codable {
 	}
 	
 	var mapName: String {
-		return getStringSafelyWithID(id: nameID).string
+		return XGFiles.common_rel.stringTable.stringWithID(nameID)?.string ?? getStringSafelyWithID(id: nameID).string
 	}
 
 	var fsysFilename: String? {

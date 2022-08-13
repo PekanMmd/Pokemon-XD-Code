@@ -7858,9 +7858,161 @@ import Foundation
 // Then each loop overwrite those addresses so the msg id that gets used will match the current pokemon's nature
 // Bonus, reset them when summary screen is closed
 
+//// Use output from dolmatch program by mparisi to copy the symbols from one symbol map to a new symbol map for another dol
+//
+//// RAM Dumps which include the dol file
+//let gxxj = XGFiles.nameAndFolder("GXXP01.raw", .Documents).data!
+//let nxxj = XGFiles.nameAndFolder("NXXJ01.raw", .Documents).data!
+//
+//var matchMap = XGFiles.nameAndFolder("matches.txt", .Documents).text.split(separator: "\n")
+//let nxMap = XGFiles.nameAndFolder("NXXJ01.map", .Documents).text.split(separator: "\n")
+//let outFile = XGFiles.nameAndFolder("GXXP01.map", .Documents)
+//var outText = ""
+//var isInDataSection = false
+//var lastDataMatchOffset = 0x0
+//for line in nxMap {
+//	if line.starts(with: ".rodata") {
+//		isInDataSection = true
+//	}
+//
+//	if !line.starts(with: " ") {
+//		outText += "\n\n"
+//	}
+//
+//	guard !line.starts(with: "  UNUSED") else {
+//		continue
+//	}
+//	guard line.starts(with: "  0") else {
+//		outText += line + "\n"
+//		continue
+//	}
+//
+//	var newLine = String(line).replacingOccurrences(of: "\t", with: " ")
+//	let parts = line.replacingOccurrences(of: "    ", with: "  0 ").replacingOccurrences(of: "  ", with: " ").split(separator: " ").map { String($0) }
+//	let symbolLength = ("0x" + parts[1]).integerValue ?? 0
+//	let virtualAddress = parts[2]
+//	let fileOffset = parts[3]
+//	let alignment = parts[4]
+//
+//	guard alignment != "1",
+//		  alignment != "0" else {
+//		continue
+//	}
+//
+//	let symbolName = parts[5]
+//
+//	for part in parts where part.contains("\\") {
+//		if let finalPathComponent = part.split(separator: "\\").last {
+//			newLine = newLine.replacingOccurrences(of: part, with: String(finalPathComponent))
+//		}
+//	}
+//
+//	if !isInDataSection {
+//		if let matchLineIndex = matchMap.firstIndex(where: { matchLine in
+//			let line = String(matchLine)
+//			return line.contains(symbolName)
+//		}) {
+//			let matchLine = String(matchMap[matchLineIndex])
+//			let matchParts = matchLine.split(separator: " ")
+//			let matchReleaseAddress = String(matchParts[2])
+//			newLine = newLine.replacingOccurrences(of: virtualAddress, with: matchReleaseAddress)
+//			newLine = newLine.replacingOccurrences(of: fileOffset, with: "00000000")
+//			outText += newLine + "\n"
+//
+//			matchMap.remove(at: matchLineIndex)
+//		}
+//	} else {
+//		guard !symbolName.starts(with: "*"),
+//			  !symbolName.starts(with: "."),
+//			  symbolLength > 0 else {
+//				  continue
+//			  }
+//
+//		// Subtract 0x80000000 from the virtual address by removing leading digit
+//		let nxRamOffset = ("0x" + virtualAddress.substring(from: 1, to: virtualAddress.length)).integerValue ?? 0
+//		guard nxRamOffset > 0 else {
+//			continue
+//		}
+//		let subData = nxxj.getSubDataFromOffset(nxRamOffset, length: symbolLength)
+//		if !subData.isNull,
+//		   let matchOffset = gxxj.search(for: subData, fromOffset: lastDataMatchOffset) {
+//			lastDataMatchOffset = matchOffset + symbolLength
+//			var matchOffsetString = matchOffset.hex()
+//			while matchOffsetString.length < 7 {
+//				matchOffsetString = "0" + matchOffsetString
+//			}
+//			matchOffsetString = "8" + matchOffsetString
+//			newLine = newLine.replacingOccurrences(of: virtualAddress, with: matchOffsetString)
+//			newLine = newLine.replacingOccurrences(of: fileOffset, with: "00000000")
+//			outText += newLine + "\n"
+//		}
+//	}
+//}
+//outText.save(toFile: outFile)
 
+// For the official symbols which had previously been named, append the modders determined name to the symbol name
+// so we can still search for them using the pevious terms we used; especially since a lot of official names are broken english/japanese
+// Any which aren't matched in the official map don't need to be added in as we can load the official map in dolphin after loading
+// the previous map and then save the new combined map
 
+//let officialMap = XGFiles.nameAndFolder("GXXE01.map", .Documents).text.split(separator: "\n")
+//var moddersMap = XGFiles.nameAndFolder("modders.map", .Documents).text.split(separator: "\n").filter { str in
+//	return !str.contains("zz_0") && !str.contains("?")
+//}
+//let outFile = XGFiles.nameAndFolder("GXXE01 combined.map", .Documents)
+//var outText = ""
+//
+//for line in officialMap {
+//	var outLine = String(line)
+//
+//	guard outLine.starts(with: "  0") else {
+//		outText += outLine + "\n"
+//		continue
+//	}
+//
+//	let officialParts = outLine.split(separator: " ").map { String($0) }
+//	let virtualAddress = officialParts[2]
+//
+//	if let matchLineIndex = moddersMap.firstIndex(where: { matchLine in
+//		let line = String(matchLine)
+//		return line.contains(virtualAddress)
+//	}) {
+//		let matchLine = String(moddersMap[matchLineIndex])
+//		let matchParts = matchLine.split(separator: " ")
+//		let matchModdersName = String(matchParts[4])
+//		outLine = outLine + " (\(matchModdersName.replacingOccurrences(of: "zz_", with: "")))"
+//
+//		moddersMap.remove(at: matchLineIndex)
+//	}
+//
+//	outText += outLine + "\n"
+//}
+//outText.save(toFile: outFile)
 
+// Map battle sequence command addresses to function names from symbol map
+//let NXXJRam = XGFiles.nameAndFolder("NXXJ RAM.raw", .Documents).data!
+//let NXXJMap = XGFiles.nameAndFolder("NXXJ.map", .Documents).text
+//let mapLines = NXXJMap.split(separator: "\n").filter({ str in
+//	return String(str).contains(" 4 ") && String(str).contains("fightSeq")
+//}).map { str -> (name: String, address: Int) in
+//	let string = String(str).replacingOccurrences(of: "  0", with: "0").replacingOccurrences(of: "  ", with: " ")
+//	let parts = string.split(separator: " ")
+//	let virtualAddress = String(parts[2]).hexValue ?? 0
+//	let name = String(parts[5])
+//	return (name: name, address: virtualAddress)
+//
+//}
+//
+//let battleSequenceSwitchTableRamOffset = 0x02f582c
+//
+//for i in 0 ..< 253 {
+//	let nextCommandOffset = NXXJRam.read4Bytes(atAddress: battleSequenceSwitchTableRamOffset + (i * 4))!
+//	if let commandInfo = mapLines.first(where: { info in
+//		info.address == nextCommandOffset
+//	}) {
+//		printg((i + 1).hexString().spaceLeftToLength(5), commandInfo.name)
+//	}
+//}
 
 
 

@@ -8,7 +8,16 @@
 
 import Foundation
 
-let kClassPatchOffsets	  = [0x13B78C,0x226574,0x226FE0,0x212750,0x214740]
+let kClassPatchOffsets: [Int] = {
+	switch region {
+	case .US:
+		return [0x8013e82c,0x80229614,0x8022A080,0x802157F0,0x802177e0]
+	case .EU:
+		return [0x801400f0,0x8022b458,0x8022bec4,0x80217634]
+	default:
+		return []
+	}
+}()
 let kNopInstruction		  : UInt32 = XGASM.nop.code
 let kBranchInstruction1	  : UInt32 = 0x40820024
 let kBranchInstruction2   : UInt32 = 0x40820014
@@ -32,15 +41,33 @@ let kCounterBranch		  : UInt32 = 0x4BE5B975
 let kCounterBranchOrigin1 : UInt32 = 0x4BFE5789
 let kCounterBranchOrigin2 : UInt32 = 0x4BE34C49
 
-let kBetaStartersFirstOffset  = 0x1CBCC8
+let kBetaStartersFirstOffset: Int = {
+	switch region {
+	case .US: return 0x1CBCC8 // in dol
+	case .EU: return 0x1d083c - kDolToRAMOffsetDifference // in ram
+	default: return 0
+	}
+}()
 
 let kBetaStartersInstruction1 : UInt32 = 0x4BF8390D
 let kBetaStartersInstruction2 : UInt32 = 0x7FE3FB78
-let kBetaStartersInstruction3 : UInt32 = 0x4BF83A2D
+let kBetaStartersInstruction3 : UInt32 = {
+	switch region {
+	case .US: return 0x4BF83A2D
+	case .EU: return 0x4BF8381D
+	default: return 0x0
+	}
+}()
 
 let kOriginalStartersInstruction1 : UInt32 = 0x90C10038
 let kOriginalStartersInstruction2 : UInt32 = 0x9001003C
-let kOriginalStartersInstruction3 : UInt32 = 0x4BF83D71
+let kOriginalStartersInstruction3 : UInt32 = {
+	switch region {
+	case .US: return 0x4BF83D71
+	case .EU: return 0x4bf83b61
+	default: return 0x0
+	}
+}()
 
 let kNameRaterOffset1 = 0x149DE4
 let kNameRaterOffset2 = 0x149DE8
@@ -82,7 +109,7 @@ var shadowPokemonShininessRAMOffset: Int {
 	switch region {
 	case .US: return 0x1fc2b2
 	case .EU: return 0x1fdfe6
-	case .JP: return -1
+	case .JP: return 0x1f6f76
 	case .OtherGame: return 0
 	}
 }
@@ -112,7 +139,8 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.allSingleBattles,
 	.allDoubleBattles,
 	.type9IndependentApply,
-	.maxPokespotEntries
+	.maxPokespotEntries,
+	.preventPokemonRelease
 ] : [
 	.physicalSpecialSplitApply,
 	.disableSaveCorruption,
@@ -172,6 +200,7 @@ enum XGDolPatches: Int {
 	case removeColbtlRegionLock
 	case disableSaveCorruption
 	case maxPokespotEntries
+	case preventPokemonRelease
 	
 	var name: String {
 		switch self {
@@ -212,6 +241,7 @@ enum XGDolPatches: Int {
 		case .removeColbtlRegionLock: return "Modify the ASM so it allows any region's colbtl.bin to be imported. Trades will be locked to whichever region's colbtl.bin was imported."
 		case .disableSaveCorruption: return "Disables some save file checks to prevent the save from being corrupted."
 		case .maxPokespotEntries: return "Change the max number of pokemon per pokespot from 3 to 100"
+		case .preventPokemonRelease: return "Disables the ability to release Pokemon"
 		}
 	}	
 }
@@ -288,20 +318,22 @@ class XGPatcher {
 		
 		if game == .XD {
 
-			guard region == .US else {
+			guard region != .JP else {
 				printg("This patch has not been implemented for this game region:", region.name)
 				return
 			}
 			
 			let dol = XGFiles.dol.data!
 			for offset in kClassPatchOffsets {
-				dol.replaceWordAtOffset(offset, withBytes: kNopInstruction)
+				dol.replaceWordAtOffset(offset - kDolToRAMOffsetDifference, withBytes: kNopInstruction)
 			}
 			
-			dol.replaceWordAtOffset(kMirrorCoatOffset1, withBytes: kNopInstruction)
-			dol.replaceWordAtOffset(kMirrorCoatOffset2, withBytes: kMirrorCoatBranch)
-			dol.replaceWordAtOffset(kCounterOffset1, withBytes: kNopInstruction)
-			dol.replaceWordAtOffset(kCounterOffset2, withBytes: kCounterBranch)
+			if region == .US {
+				dol.replaceWordAtOffset(kMirrorCoatOffset1, withBytes: kNopInstruction)
+				dol.replaceWordAtOffset(kMirrorCoatOffset2, withBytes: kMirrorCoatBranch)
+				dol.replaceWordAtOffset(kCounterOffset1, withBytes: kNopInstruction)
+				dol.replaceWordAtOffset(kCounterOffset2, withBytes: kCounterBranch)
+			}
 			dol.save()
 			
 		} else if game == .Colosseum {
@@ -424,11 +456,6 @@ class XGPatcher {
 	
 	class func removeType9Dependencies() {
 
-		guard game == .XD else {
-			printg("This patch has not been implemented for Pokemon Colosseum.")
-			return
-		}
-
 		guard region == .US else {
 			printg("This patch has not been implemented for this game region:", region.name)
 			return
@@ -478,7 +505,7 @@ class XGPatcher {
 			return
 		}
 
-		guard region == .US else {
+		guard region != .JP else {
 			printg("This patch has not been implemented for this game region:", region.name)
 			return
 		}
@@ -502,7 +529,7 @@ class XGPatcher {
 			return
 		}
 
-		guard region == .US else {
+		guard region != .JP else {
 			printg("This patch has not been implemented for this game region:", region.name)
 			return
 		}
@@ -544,67 +571,64 @@ class XGPatcher {
 			printg("This patch has not been implemented for Colosseum yet.")
 			return
 		}
-
-		guard region != .JP else {
-			printg("This patch has not been implemented for this game region:", region.name)
-			return
-		}
 		
-		if XGFiles.dol.exists {
-
-			let codeStartOffset: Int = {
-				switch region {
-				case .US: return 0x1fa930
-				case .EU: return 0x1fc664
-				case .JP: return -1
-				case .OtherGame: return 0
-				}
-			}()
-
-			let getTrainerData: Int = {
-				switch region {
-				case .US: return 0x1cefb4
-				case .EU: return 0x1d0a8c
-				case .JP: return -1
-				case .OtherGame: return 0
-				}
-			}()
-
-			let trainerGetTID: Int = {
-				switch region {
-				case .US: return 0x14e118
-				case .EU: return 0x14f9dc
-				case .JP: return -1
-				case .OtherGame: return 0
-				}
-			}()
-
-			let TIDRerollOffset: Int = {
-				switch region {
-				case .US: return 0x1fa9c8
-				case .EU: return 0x1fc6fc
-				case .JP: return -1
-				case .OtherGame: return 0
-				}
-			}()
-
-			XGAssembly.replaceRamASM(RAMOffset: codeStartOffset, newASM: [
-				.li(.r3, 0),
-				.li(.r4, 2),
-				.bl(getTrainerData),
-				.bl(trainerGetTID)
-			])
-
-			XGAssembly.replaceRamASM(RAMOffset: TIDRerollOffset, newASM: [
-				.b_f(0, 0x2c)
-			])
-		}
+		let codeStartOffset: Int = {
+			switch region {
+			case .US: return 0x1fa930
+			case .EU: return 0x1fc664
+			case .JP: return 0x1f55f4
+			case .OtherGame: return 0
+			}
+		}()
+		
+		let getTrainerData: Int = {
+			switch region {
+			case .US: return 0x1cefb4
+			case .EU: return 0x1d0a8c
+			case .JP: return 0x1c9e54
+			case .OtherGame: return 0
+			}
+		}()
+		
+		let trainerGetTID: Int = {
+			switch region {
+			case .US: return 0x14e118
+			case .EU: return 0x14f9dc
+			case .JP: return 0x149460
+			case .OtherGame: return 0
+			}
+		}()
+		
+		let TIDRerollOffset: Int = {
+			switch region {
+			case .US: return 0x1fa9c8
+			case .EU: return 0x1fc6fc
+			case .JP: return 0x1f568c
+			case .OtherGame: return 0
+			}
+		}()
+		
+		XGAssembly.replaceRamASM(RAMOffset: codeStartOffset, newASM: [
+			.li(.r3, 0),
+			.li(.r4, 2),
+			.bl(getTrainerData),
+			.bl(trainerGetTID)
+		])
+		
+		XGAssembly.replaceRamASM(RAMOffset: TIDRerollOffset, newASM: [
+			.b_f(0, 0x2c)
+		])
 	}
 	
 	class func replaceShinyGlitch() {
 
 		guard region != .JP else {
 			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
+		
+		guard game == .XD else {
+			printg("This patch has not been implemented for Pokemon Colosseum")
 			return
 		}
 
@@ -832,11 +856,6 @@ class XGPatcher {
 			printg("This patch is for Pokemon XD: Gale of Darkness only.")
 			return
 		}
-
-		guard region != .JP else {
-			printg("This patch has not been implemented for this game region:", region.name)
-			return
-		}
 		
 		if let dol = XGFiles.dol.data {
 			dol.replace2BytesAtOffset(shadowPokemonShininessRAMOffset - kDolToRAMOffsetDifference, withBytes: to.rawValue)
@@ -940,6 +959,7 @@ class XGPatcher {
 	}
 
 	class func pokemonHaveMaxCatchRate() {
+		printg("Setting all mons to have max catch rate")
 		#warning("TODO: set via the ASM instead of updating data tables")
 		for mon in allPokemonArray().map({ $0.stats }).filter({ $0.catchRate > 0 }) {
 			mon.catchRate = 255
@@ -1195,6 +1215,26 @@ class XGPatcher {
 		}
 	}
 	
+	static func preventPokemonRelease() {
+		guard game == .XD else {
+			printg("Path not implemented for this game:", game.name)
+				return
+		}
+		guard region == .US else {
+			printg("Patch is currently not available for this region:", region.name)
+			return
+		}
+		let offset: Int
+		switch region {
+		case .US: offset = 0x8005aa38
+		case .EU: offset = -1
+		case .JP: offset = -1
+		case .OtherGame: offset = -1
+		}
+		
+		XGAssembly.replaceRamASM(RAMOffset: offset, newASM: [.li(.r0, 0)])
+	}
+	
 	class func applyPatch(_ patch: XGDolPatches) {
 		
 		switch patch {
@@ -1235,6 +1275,7 @@ class XGPatcher {
 		case .removeColbtlRegionLock		: XGPatcher.unlockColbtlBin()
 		case .disableSaveCorruption			: XGPatcher.preventSaveFileCorruption()
 		case .maxPokespotEntries			: XGPatcher.setMaxPokespotEntriesPerSpot(to: 100)
+		case .preventPokemonRelease			: XGPatcher.preventPokemonRelease()
 		}
 		
 		printg("patch applied: ", patch.name, "\nDon't forget to rebuild the ISO after.")

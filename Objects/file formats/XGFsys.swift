@@ -345,7 +345,7 @@ final class XGFsys {
 	func decompressedDataForFileWithFiletype(type: XGFileTypes) -> XGMutableData? {
 		if let index = indexForFileType(type: type) {
 			if index < 0 || index > self.numberOfEntries {
-				if settings.verbose {
+				if XGSettings.current.verbose {
 					printg(self.fileName + " - file type: " + type.fileExtension + " doesn't exists.")
 				}
 				return nil
@@ -358,7 +358,7 @@ final class XGFsys {
 	func dataForFileWithFiletype(type: XGFileTypes) -> XGMutableData? {
 		if let index = indexForFileType(type: type) {
 			if index < 0 || index > self.numberOfEntries {
-				if settings.verbose {
+				if XGSettings.current.verbose {
 					printg(self.fileName + " - file type: " + type.fileExtension + " doesn't exists.")
 				}
 				return nil
@@ -482,17 +482,21 @@ final class XGFsys {
 			return
 		}
 		
-		var newFile = newFile
 		guard let newFileData = newFile.data, newFileData.length > 3 else {
 			printg("skipping fsys import: \(newFile.fileName) to \(self.fileName)\nInsufficient data.")
 			return
 		}
+		
+		shiftAndReplaceFileWithIndex(index, withData: newFileData, save: save)
+	}
 
+	func shiftAndReplaceFileWithIndex(_ index: Int, withData newData: XGMutableData, save: Bool) {
+		var newFileData = newData
 		if isFileCompressed(index: index) && (newFileData.getWordAtOffset(0) != kLZSSbytes) {
-			newFile = newFile.compress()
+			newFileData = XGLZSS.encode(data: newFileData)
 		}
 		
-		var fileEnd = startOffsetForFile(index) + newFile.fileSize
+		var fileEnd = startOffsetForFile(index) + newFileData.length
 		let nextStart = index < self.numberOfEntries - 1 ? startOffsetForFile(index + 1) : dataEnd
 		
 		let shift = fileEnd > nextStart
@@ -516,7 +520,7 @@ final class XGFsys {
 				self.setFilesize(self.data.length)
 			}
 			
-			fileEnd = startOffsetForFile(index) + newFile.fileSize
+			fileEnd = startOffsetForFile(index) + newFileData.length
 			var expansionRequired = 0
 			let newNextStart = index < self.numberOfEntries - 1 ? startOffsetForFile(index + 1) : dataEnd
 			
@@ -539,7 +543,7 @@ final class XGFsys {
 			}
 		}
 		
-		replaceFileWithIndex(index, withFile: newFile, saveWhenDone: save)
+		replaceFileWithIndex(index, withData: newFileData, saveWhenDone: save)
 	}
 	
 	func replaceFileWithIndex(_ index: Int, withFile newFile: XGFiles, saveWhenDone: Bool) {
@@ -551,7 +555,7 @@ final class XGFsys {
 		replaceFileWithIndex(index, withData: data, saveWhenDone: saveWhenDone)
 	}
 
-	func replaceFileWithIndex(_ index: Int, withData newData: XGMutableData, saveWhenDone: Bool) {
+	func replaceFileWithIndex(_ index: Int, withData newData: XGMutableData, saveWhenDone: Bool, allowExpansion: Bool = false) {
 		guard index < self.numberOfEntries else {
 			printg("skipping fsys import: \(data.file.fileName) to \(self.file.path)\nindex doesn't exist:", index)
 			return
@@ -564,17 +568,38 @@ final class XGFsys {
 		
 		let fileStart = startOffsetForFile(index)
 		let fileEnd = fileStart + newData.length
+		let nextStart = index < self.numberOfEntries - 1 ? startOffsetForFile(index + 1) : dataEnd
 		
-		if index < self.numberOfEntries - 1, fileEnd > startOffsetForFile(index + 1) {
-			printg(file.fileName)
-			printg("file too large to replace: ", newData.file.path)
-			return
-		}
-		
-		if fileEnd > self.dataEnd {
-			printg(file.fileName)
-			printg("file too large to replace: ", newData.file.path)
-			return
+		if allowExpansion {
+			var expansionRequired = 0
+			if fileEnd > nextStart {
+				expansionRequired = fileEnd - nextStart
+				while expansionRequired % 16 != 0 {
+					expansionRequired += 1
+				}
+			}
+			
+			if expansionRequired > 0 {
+				if index < numberOfEntries - 1 {
+					for i in index + 1 ..< numberOfEntries {
+						setStartOffsetForFile(index: i, newStart: startOffsetForFile(i) + expansionRequired)
+					}
+				}
+				data.insertRepeatedByte(byte: 0, count: expansionRequired, atOffset: nextStart)
+				setFilesize(data.length)
+			}
+		} else {
+			if index < self.numberOfEntries - 1, fileEnd > startOffsetForFile(index + 1) {
+				printg(file.fileName)
+				printg("file too large to replace: ", newData.file.path)
+				return
+			}
+			
+			if fileEnd > self.dataEnd {
+				printg(file.fileName)
+				printg("file too large to replace: ", newData.file.path)
+				return
+			}
 		}
 		
 		eraseDataForFile(index: index)
@@ -844,7 +869,7 @@ final class XGFsys {
 	func extractFilesToFolder(folder: XGFolders, extract: Bool = true, decode: Bool, overwrite: Bool = false) {
 		if extract {
 			for i in 0 ..< self.numberOfEntries {
-				if settings.verbose, let filename = fileNameForFileWithIndex(index: i) {
+				if XGSettings.current.verbose, let filename = fileNameForFileWithIndex(index: i) {
 					printg("extracting file: \(filename) from \(self.file.path)")
 				}
 				if let fileData = extractDataForFileWithIndex(index: i) {
@@ -859,7 +884,7 @@ final class XGFsys {
 		// decode certain file types
 		if decode {
 			for file in folder.files where filenames.contains(file.fileName)  {
-				if settings.verbose {
+				if XGSettings.current.verbose {
 					printg("decoding file: \(file.fileName)")
 				}
 
@@ -899,7 +924,7 @@ final class XGFsys {
 				let fileContainsScript = file.fileType == .scd
 				#endif
 
-				if fileContainsScript, (game != .Colosseum || settings.enableExperimentalFeatures)  { // TODO allow colosseum scripts once less buggy
+				if fileContainsScript, (game != .Colosseum || XGSettings.current.enableExperimentalFeatures)  { // TODO allow colosseum scripts once less buggy
 					let xdsFile = XGFiles.nameAndFolder(file.fileName + XGFileTypes.xds.fileExtension, folder)
 					if !xdsFile.exists || overwrite {
 						let scriptText = file.scriptData.getXDSScript()
@@ -914,7 +939,7 @@ final class XGFsys {
 						let table = file.stringTable
 						table.writeJSON(to: msgFile)
 					}
-					if file == .common_rel && game == .Colosseum && region != .JP && settings.enableExperimentalFeatures {
+					if file == .common_rel && game == .Colosseum && region != .JP && XGSettings.current.enableExperimentalFeatures {
 						let msgFile2 = XGFiles.nameAndFolder("common2.json", file.folder)
 						if !msgFile2.exists {
 							let table = XGStringTable.common_rel2()
@@ -926,7 +951,7 @@ final class XGFsys {
 							table.writeJSON(to: msgFile3)
 						}
 					}
-					if file == .dol && game == .XD && region != .JP && settings.enableExperimentalFeatures {
+					if file == .dol && game == .XD && region != .JP && XGSettings.current.enableExperimentalFeatures {
 						let msgFile2 = XGFiles.nameAndFolder("Start2.json", file.folder)
 						if !msgFile2.exists {
 							let table = XGStringTable.dol2()

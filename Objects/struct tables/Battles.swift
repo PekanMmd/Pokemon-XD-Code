@@ -64,13 +64,13 @@ var battleStruct: GoDStruct {
 		.byte(name: "Is Story Battle", description: "", type: .bool),
 		.short(name: "Battle Field ID", description: "", type: .battleFieldID),
 		.short(name: "Battle CD ID", description: "Set programmatically at run time so is always set to 0 in the game files", type: .uint),
-		.word(name: "Unknown 1", description: "", type: .uintHex),
+		.word(name: "Battle Identifier String", description: "", type: .msgID(file: .dol)),
 		.word(name: "BGM ID", description: "", type: .uintHex),
 		.word(name: "Unknown 2", description: "", type: .uintHex)
 		]
 	+ (region == .EU ? [.array(name: "Unknown Values", description: "Only exist in the PAL version", property: .word(name: "", description: "", type: .uintHex), count: 4)] : [])
 	+ [
-		.word(name: "Colosseum Round", description: "", type: .colosseumRound),
+		.word(name: "Colosseum Round", description: "wzx id for intro text", type: .colosseumRound),
 		.array(name: "Players", description: "", property: .subStruct(name: "Battle Player", description: "", property: GoDStruct(name: "Battle Player", format: [
 			.short(name: "Deck ID", description: "", type: .deckID),
 			.short(name: "Trainer ID", description: "Use deck 0, id 5000 for the player's team", type: .uint),
@@ -158,3 +158,29 @@ let battleTypesTable = CommonStructTable(index: .BattleTypes, properties: battle
 	return "Battle Type \(index)"
 }
 #endif
+
+private let aiRolesEnd: [GoDStructProperties] = game == .Colosseum ? [] : [
+	.byte(name: "Misc 3", description: "", type: .byteRange),
+	.byte(name: "Misc 4", description: "", type: .byteRange),
+]
+
+let pokemonAIRolesStruct = GoDStruct(name: "Pokemon AI Roles", format: [
+	.word(name: "Name ID", description: "", type: .msgID(file: nil)),
+	.word(name: "Unknown 1", description: "", type: .uint),
+	.subStruct(name: "Move Type Weights", description: "How much more/less likely this role is to use a certain type of move", property: GoDStruct(name: "AI Role Weights", format: [
+		.byte(name: "No Effect", description: "", type: .byteRange),
+		.byte(name: "Attack", description: "", type: .byteRange),
+		.byte(name: "Healing", description: "", type: .byteRange),
+		.byte(name: "Stat Decrease", description: "", type: .byteRange),
+		.byte(name: "Stat Increase", description: "", type: .byteRange),
+		.byte(name: "Status", description: "", type: .byteRange),
+		.byte(name: "Field", description: "", type: .byteRange),
+		.byte(name: "Affect Opponent's Move", description: "", type: .byteRange),
+		.byte(name: "OHKO", description: "", type: .byteRange),
+		.byte(name: "Multi-turn", description: "", type: .byteRange),
+		.byte(name: "Misc", description: "", type: .byteRange),
+		.byte(name: "Misc 2", description: "", type: .byteRange)
+	] + aiRolesEnd))
+])
+
+let pokemonAIRolesTable = CommonStructTable(index: .AIPokemonRoles, properties: pokemonAIRolesStruct)

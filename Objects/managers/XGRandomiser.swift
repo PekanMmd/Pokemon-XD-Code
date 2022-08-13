@@ -11,7 +11,7 @@ class XGRandomiser: NSObject {
 
 	#if GAME_XD
 	class func randomiseBattleBingo() {
-		printg("randomising battle bingo...")
+		printg("Randomising battle bingo...")
 		for i in 0 ..< kNumberOfBingoCards {
 			let card = XGBattleBingoCard(index: i)
 			let starter = card.startingPokemon!
@@ -39,8 +39,8 @@ class XGRandomiser: NSObject {
 	}
 	#endif
 	
-	class func randomisePokemon(limitToMainMons: Bool = false, similarBST: Bool = false) {
-		printg("randomising pokemon species...")
+	class func randomisePokemon(includeStarters: Bool = true, includeObtainableMons: Bool = true, includeUnobtainableMons: Bool = true, similarBST: Bool = false) {
+		printg("Randomising pokemon species...")
 
 		let cachedPokemonStats = XGPokemon.allPokemon().map{$0.stats}.filter{$0.catchRate > 0}
 		var speciesAlreadyUsed = [Int]()
@@ -155,9 +155,9 @@ class XGRandomiser: NSObject {
 			return newSpecies
 		}
 
-		if !limitToMainMons {
-			#if !GAME_PBR
-			for gift in XGGiftPokemonManager.allNonShadowGiftPokemon() {
+		#if !GAME_PBR
+		if includeStarters {
+			for gift in XGGiftPokemonManager.allStarterGiftPokemon() {
 
 				var pokemon = gift
 				pokemon.species = randomise(oldSpecies: pokemon.species, checkDuplicates: true)
@@ -170,7 +170,28 @@ class XGRandomiser: NSObject {
 				pokemon.save()
 
 			}
+		}
+		
+		if includeObtainableMons {
+			
+			#if GAME_XD
+			let gifts = XGGiftPokemonManager.nonShadowGiftPokemon()
+			#else
+			let gifts = XGGiftPokemonManager.allNonStarterGiftPokemon()
 			#endif
+			for gift in gifts {
+
+				var pokemon = gift
+				pokemon.species = randomise(oldSpecies: pokemon.species, checkDuplicates: true)
+				let moves = pokemon.species.movesForLevel(pokemon.level)
+				pokemon.move1 = moves[0]
+				pokemon.move2 = moves[1]
+				pokemon.move3 = moves[2]
+				pokemon.move4 = moves[3]
+
+				pokemon.save()
+
+			}
 
 			#if GAME_XD
 			for p in 0 ... 3 {
@@ -184,38 +205,37 @@ class XGRandomiser: NSObject {
 					pokemon.save()
 				}
 			}
+			
+			let tradeShadowPokemon = XGTradeShadowPokemon()
+			tradeShadowPokemon.species = randomise(oldSpecies: tradeShadowPokemon.species, checkDuplicates: true, shadowID: tradeShadowPokemon.shadowID)
+			let moves = tradeShadowPokemon.species.movesForLevel(tradeShadowPokemon.level)
+			tradeShadowPokemon.move1 = moves[0]
+			tradeShadowPokemon.move2 = moves[1]
+			tradeShadowPokemon.move3 = moves[2]
+			tradeShadowPokemon.move4 = moves[3]
+			tradeShadowPokemon.save()
 			#endif
 		}
-
-		#if GAME_XD
-		let tradeShadowPokemon = XGTradeShadowPokemon()
-		tradeShadowPokemon.species = randomise(oldSpecies: tradeShadowPokemon.species, checkDuplicates: true, shadowID: tradeShadowPokemon.shadowID)
-		let moves = tradeShadowPokemon.species.movesForLevel(tradeShadowPokemon.level)
-		tradeShadowPokemon.move1 = moves[0]
-		tradeShadowPokemon.move2 = moves[1]
-		tradeShadowPokemon.move3 = moves[2]
-		tradeShadowPokemon.move4 = moves[3]
-		tradeShadowPokemon.save()
-		#endif
-
-		#if !GAME_PBR
+		
 		var decks = MainDecksArray
 		var additionalPokemon = [XGTrainerPokemon]()
-		#endif
+
 
 		#if GAME_XD
 		decks += [XGDecks.DeckDarkPokemon]
-		additionalPokemon = limitToMainMons ? [] : [
+		additionalPokemon = includeUnobtainableMons ? [] : [
 			XGDeckPokemon.dpkm(1, .DeckVirtual).data,
 			XGDeckPokemon.dpkm(2, .DeckVirtual).data
 		]
 		#endif
 
-		#if !GAME_PBR
 		var mons = additionalPokemon
 		for deck in decks {
 			for pokemon in deck.allActivePokemon {
-				if limitToMainMons && !pokemon.isShadowPokemon {
+				if !includeUnobtainableMons && !pokemon.isShadowPokemon {
+					continue
+				}
+				if !includeObtainableMons && pokemon.isShadowPokemon {
 					continue
 				}
 				mons.append(pokemon)
@@ -232,7 +252,10 @@ class XGRandomiser: NSObject {
 
 		#if GAME_PBR
 		for index in allPokemonDeckFileIndexes {
-			guard !limitToMainMons || index == rentalPassDeckIndex else {
+			if !includeStarters && index == rentalPassDeckIndex {
+				continue
+			}
+			if !includeUnobtainableMons && index != rentalPassDeckIndex {
 				continue
 			}
 			let file = XGFiles.indexAndFsysName(index, "deck")
@@ -252,7 +275,7 @@ class XGRandomiser: NSObject {
 	}
 	
 	class func randomiseMoves() {
-		printg("randomising pokemon moves...")
+		printg("Randomising pokemon moves...")
 
 		#if !GAME_PBR
 		for deck in MainDecksArray {
@@ -341,7 +364,7 @@ class XGRandomiser: NSObject {
 	
 	
 	class func randomiseAbilities() {
-		printg("randomising pokemon abilities...")
+		printg("Randomising pokemon abilities...")
 		for i in 1 ..< kNumberOfPokemon {
 			
 			if XGPokemon.index(i).nameID == 0 {
@@ -352,8 +375,20 @@ class XGRandomiser: NSObject {
 			if pokemon.nameID > 0 {
 				let p = XGPokemonStats(index: pokemon.index)
 				
+				if p.ability1.name.string.simplified == "wonderguard"
+					|| p.ability2.name.string.simplified == "wonderguard" {
+					continue
+				}
+				
 				p.ability1 = XGAbilities.random()
 				if p.ability2.index > 0 {
+					p.ability2 = XGAbilities.random()
+				}
+				
+				while p.ability1.name.string.simplified == "wonderguard" {
+					p.ability1 = XGAbilities.random()
+				}
+				while p.ability2.name.string.simplified == "wonderguard" {
 					p.ability2 = XGAbilities.random()
 				}
 				
@@ -364,7 +399,7 @@ class XGRandomiser: NSObject {
 	}
 	
 	class func randomiseTypes() {
-		printg("randomising pokemon types...")
+		printg("Randomising pokemon types...")
 		for i in 1 ..< kNumberOfPokemon {
 			
 			if XGPokemon.index(i).nameID == 0 {
@@ -384,20 +419,50 @@ class XGRandomiser: NSObject {
 		printg("done!")
 	}
 	
-	class func randomiseEvolutions() {
-		printg("randomising pokemon evolutions...")
+	class func randomiseEvolutions(forIronmon: Bool = false) {
+		printg("Randomising pokemon evolutions...")
 		for i in 1 ..< kNumberOfPokemon {
 			
 			let pokemon = XGPokemon.index(i)
 			if pokemon.nameID > 0 {
+				
 				let p = XGPokemonStats(index: pokemon.index)
 				let m = p.evolutions
-				for n in m {
-					if n.evolvesInto > 0 {
-						n.evolvesInto = XGPokemon.random().index
+				
+				if forIronmon {
+					for n in m {
+						if n.evolvesInto > 0 {
+							let currentEvo = XGPokemon.index(n.evolvesInto).stats
+							let options = XGPokemon.allPokemon().filter {
+								let stats = $0.stats
+								let bstRatio = Double(stats.baseStatTotal) / Double(currentEvo.baseStatTotal)
+								return stats.nameID > 0
+								&& stats.catchRate > 0
+								&& stats.index != currentEvo.index
+								&& (stats.type1.index == currentEvo.type1.index
+									|| stats.type1.index == currentEvo.type2.index
+									|| stats.type2.index == currentEvo.type1.index
+									|| stats.type2.index == currentEvo.type2.index)
+								&& (0.80 <= bstRatio || bstRatio <= 1.15)
+							}
+							if options.count > 0 {
+								n.evolvesInto = (options.randomElement() ?? options[0]).index
+							}
+						}
 					}
+					p.evolutions = m
+				} else {
+					for n in m {
+						if n.evolvesInto > 0 {
+							var newEvolution = XGPokemon.random()
+							while newEvolution.stats.catchRate == 0 {
+								newEvolution = XGPokemon.random()
+							}
+							n.evolvesInto = newEvolution.index
+						}
+					}
+					p.evolutions = m
 				}
-				p.evolutions = m
 				
 				p.save()
 			}
@@ -407,9 +472,9 @@ class XGRandomiser: NSObject {
 	
 	class func randomiseTMs() {
 		if game == .PBR {
-			printg("randomising TMs...")
+			printg("Randomising TMs...")
 		} else {
-			printg("randomising TMs and Tutor Moves...")
+			printg("Randomising TMs and Tutor Moves...")
 		}
 		
 		var tmIndexes = [Int]()
@@ -433,7 +498,7 @@ class XGRandomiser: NSObject {
 	
 	
 	class func randomiseMoveTypes() {
-		printg("randomising move types...")
+		printg("Randomising move types...")
 		for move in allMovesArray() {
 			let m = move.data
 			m.type = XGMoveTypes.random()
@@ -443,7 +508,7 @@ class XGRandomiser: NSObject {
 	}
 	
 	class func randomisePokemonStats() {
-		printg("randomising pokemon stats...")
+		printg("Randomising pokemon stats...")
 		for mon in allPokemonArray() {
 			
 			let pokemon = mon.stats
@@ -528,6 +593,7 @@ class XGRandomiser: NSObject {
 
 	#if !GAME_PBR
 	static func randomiseTreasureBoxes() {
+		printg("Randomising item boxes...")
 		for treasure in XGTreasure.allValues {
 			guard treasure.item.data.bagSlot.rawValue < XGBagSlots.keyItems.rawValue,
 				  treasure.item.data.price > 0 else {
@@ -541,6 +607,269 @@ class XGRandomiser: NSObject {
 	}
 	#endif
 	
+	static func randomiseTypeMatchups() {
+		printg("Randomising type matchups...")
+		XGMoveTypes.allValues.forEach { type in
+			let data = type.data
+			data.effectivenessTable = data.effectivenessTable.shuffled()
+			data.save()
+		}
+	}
+	
+	#if !GAME_PBR
+	static func randomiseShinyHues() {
+		
+		printg("Applying patch to randomise colours of pokemon models...")
+		guard game == .XD else {
+			// The code doesn't affect anything in colosseum.
+			printg("This randomiser option hasn't been implemented for this game yet:", game.name)
+			return
+		}
+		
+		guard region == .US else {
+			printg("This randomiser option hasn't been implemented for your game region:", region.name)
+			return
+		}
+		let forceShinyModelRAMOffset: Int
+		let forceShinyInstruction: XGASM = game == .Colosseum ? .li(.r28, 1) : .li(.r29, 1)
+		if game == .Colosseum {
+			switch region {
+			case .US:
+				forceShinyModelRAMOffset = 0x801de1ac
+			default:
+				forceShinyModelRAMOffset = 0x0
+			}
+		} else {
+			switch region {
+			case .US:
+				forceShinyModelRAMOffset = 0x801d8e3c
+			default:
+				forceShinyModelRAMOffset = 0x0
+			}
+		}
+		
+		XGAssembly.replaceRamASM(RAMOffset: forceShinyModelRAMOffset, newASM: [forceShinyInstruction])
+		
+		if let freeSpace = XGAssembly.ASMfreeSpaceRAMPointer() {
+			let speciesContainingRegister: XGRegisters = game == .Colosseum ? .r26 : .r27
+			let resultRegister: XGRegisters = game == .Colosseum ? .r30 : .r29
+			let resultOffset = game == .Colosseum ? 0x3C : 0x00
+			let secondaryResultOffset = resultOffset + (game == .Colosseum ? 0x11 : 0x10)
+			let branchOffset: Int
+			let getTrainerDataOffset: Int
+			let getTIDOffset: Int
+			let replacedInstruction: XGASM
+			if game == .Colosseum {
+				replacedInstruction = .lbz(.r0, .r30, 0x4F)
+				switch region {
+				case .US:
+					branchOffset = 0x801dce28
+					getTrainerDataOffset = 0x80129280
+					getTIDOffset = 0x8012ac3c
+				default:
+					branchOffset = 0x0
+					getTrainerDataOffset = 0x0
+					getTIDOffset = 0x0
+				}
+			} else {
+				replacedInstruction = .lwz(.r30, .r26, 0x94)
+				switch region {
+				case .US:
+					branchOffset = 0x801d9104
+					getTrainerDataOffset = 0x801cefb4
+					getTIDOffset = 0x8014e118
+				default:
+					branchOffset = 0x0
+					getTrainerDataOffset = 0x0
+					getTIDOffset = 0x0
+				}
+			}
+			
+			XGAssembly.replaceRamASM(RAMOffset: branchOffset, newASM: [.b(freeSpace)])
+			XGAssembly.replaceRamASM(RAMOffset: freeSpace, newASM: [
+				replacedInstruction,
+				
+				// get tid
+				.li(.r3, 0),
+				.li(.r4, 2),
+				.bl(getTrainerDataOffset),
+				.bl(getTIDOffset),
+				
+				// multiply species by tid to get seed
+				.mullw(.r3, speciesContainingRegister, .r3),
+				
+				// calculate r,g,b, r2, g2, b2 from seed
+				.mr(.r4, .r3),// r
+				.srawi(.r4, .r4, 0),
+				.mr(.r5, .r3),// g
+				.srawi(.r5, .r5, 4),
+				.mr(.r6, .r3),// b
+				.srawi(.r6, .r6, 8),
+				
+				.mr(.r7, .r3),// r2
+				.srawi(.r7, .r7, 8),
+				.mr(.r8, .r3),// g2
+				.srawi(.r8, .r8, 16),
+				.mr(.r9, .r3),// b2
+				.srawi(.r9, .r9, 24),
+				
+				// r
+				.li(.r3, 9),
+				.divw(.r3, .r4, .r3),
+				.mulli(.r3, .r3, 9),
+				.sub(.r4, .r4, .r3),
+				
+				// g
+				.li(.r3, 9),
+				.divw(.r3, .r5, .r3),
+				.mulli(.r3, .r3, 9),
+				.sub(.r5, .r5, .r3),
+				
+				// b
+				.li(.r3, 9),
+				.divw(.r3, .r6, .r3),
+				.mulli(.r3, .r3, 9),
+				.sub(.r6, .r6, .r3),
+				
+				// r
+				.cmpwi(.r4, 0),
+				.beq_l("r3"),
+				.cmpwi(.r4, 2),
+				.ble_l("r0"),
+				.cmpwi(.r4, 5),
+				.ble_l("r1"),
+				.b_l("r2"),
+				
+				.label("r0"),
+				.li(.r3, 0),
+				.b_l("r_end"),
+				.label("r1"),
+				.li(.r3, 1),
+				.b_l("r_end"),
+				.label("r2"),
+				.li(.r3, 2),
+				.b_l("r_end"),
+				.label("r3"),
+				.li(.r3, 3),
+				.label("r_end"),
+				.stw(.r3, resultRegister, resultOffset),
+				
+				// g
+				.cmpwi(.r5, 0),
+				.beq_l("g3"),
+				.cmpwi(.r5, 2),
+				.ble_l("g0"),
+				.cmpwi(.r5, 5),
+				.ble_l("g1"),
+				.b_l("g2"),
+				
+				.label("g0"),
+				.li(.r3, 0),
+				.b_l("g_end"),
+				.label("g1"),
+				.li(.r3, 1),
+				.b_l("g_end"),
+				.label("g2"),
+				.li(.r3, 2),
+				.b_l("g_end"),
+				.label("g3"),
+				.li(.r3, 3),
+				.label("g_end"),
+				.stw(.r3, resultRegister, resultOffset + 4),
+				
+				// b
+				.cmpwi(.r6, 0),
+				.beq_l("b3"),
+				.cmpwi(.r6, 2),
+				.ble_l("b0"),
+				.cmpwi(.r6, 5),
+				.ble_l("b1"),
+				.b_l("b2"),
+			
+				.label("b0"),
+				.li(.r3, 0),
+				.b_l("b_end"),
+				.label("b1"),
+				.li(.r3, 1),
+				.b_l("b_end"),
+				.label("b2"),
+				.li(.r3, 2),
+				.b_l("b_end"),
+				.label("b3"),
+				.li(.r3, 3),
+				.label("b_end"),
+				.stw(.r3, resultRegister, resultOffset + 8),
+				
+				.label("secondary_start"),
+				
+				.andi_(.r7, .r7, 1),
+				.andi_(.r8, .r8, 1),
+				.andi_(.r9, .r9, 1),
+				
+				.cmpw(.r7, .r8),
+				.bne_l("create_secondaries"),
+				.cmpw(.r7, .r9),
+				.bne_l("create_secondaries"),
+				
+				// if all are equal 50% chance to change one
+				.cmpwi(.r6, 4),
+				.bgt_l("create_secondaries"),
+				.li(.r3, 3),
+				.divw(.r3, .r6, .r3),
+				.mulli(.r3, .r3, 3),
+				.sub(.r6, .r6, .r3),
+				
+				.li(.r3, 1),
+				.cmpwi(.r6, 0),
+				.bne_l("check_1"),
+				.sub(.r7, .r3, .r7),
+				.b_l("create_secondaries"),
+				
+				.label("check_1"),
+				.cmpwi(.r6, 1),
+				.bne_l("check_2"),
+				.sub(.r8, .r3, .r8),
+				.b_l("create_secondaries"),
+				
+				.label("check_2"),
+				.sub(.r9, .r3, .r9),
+				
+				.label("create_secondaries"),
+				
+				.cmpwi(.r7, 0),
+				.bne_l("r_h"),
+				.li(.r7, 0x80),
+				.b_l("g_set"),
+				.label("r_h"),
+				.li(.r7, 0xD0),
+				
+				.label("g_set"),
+				.cmpwi(.r8, 0),
+				.bne_l("g_h"),
+				.li(.r8, 0x80),
+				.b_l("b_set"),
+				.label("g_h"),
+				.li(.r8, 0xD0),
+				
+				.label("b_set"),
+				.cmpwi(.r9, 0),
+				.bne_l("b_h"),
+				.li(.r9, 0x80),
+				.b_l("store_secondaries"),
+				.label("b_h"),
+				.li(.r9, 0xD0),
+				
+				.label("store_secondaries"),
+				
+				.stb(.r7, resultRegister, secondaryResultOffset),
+				.stb(.r8, resultRegister, secondaryResultOffset + 1),
+				.stb(.r9, resultRegister, secondaryResultOffset + 2),
+				
+				.b(branchOffset + 4)
+			])
+		}
+	}
+	#endif
 }
 
 

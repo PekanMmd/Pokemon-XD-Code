@@ -63,6 +63,7 @@ extension XGUtility {
 				poke.save(writeRelOnCompletion: false)
 			}
 		}
+		XGFiles.common_rel.data?.save()
 	}
 
 	class func updateValidItems() {

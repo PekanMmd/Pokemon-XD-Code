@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="c64-dF-HXy">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="c64-dF-HXy">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Type Editor-->
         <scene sceneID="taU-gM-Sph">
             <objects>
-                <viewController title="Type Editor" id="c64-dF-HXy" customClass="GoDTypeViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Type Editor" id="c64-dF-HXy" customClass="GoDTypeViewController" customModule="PBR_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="aje-fz-fPh">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="516"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="T0k-0W-ify" customClass="GoDContainerView" customModule="Colosseum_Tool" customModuleProvider="target">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="T0k-0W-ify" customClass="GoDContainerView" customModule="PBR_Tool" customModuleProvider="target">
                                 <rect key="frame" x="210" y="10" width="420" height="496"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8mI-Mf-UPc">
@@ -55,15 +56,15 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iHs-tS-KYc" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="18" y="357" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iHs-tS-KYc" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="17" y="356" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="VPS-8F-sHr"/>
                                             <constraint firstAttribute="width" constant="120" id="bjx-ec-dtZ"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="NiL-l9-9Xb" id="zr7-YY-baA">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="mCr-Uy-6iP">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="NiL-l9-9Xb"/>
@@ -84,15 +85,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NUL-Ym-HFg" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="148" y="357" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NUL-Ym-HFg" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="147" y="356" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="9GO-up-Eyd"/>
                                             <constraint firstAttribute="width" constant="120" id="hCC-LO-qzK"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="EL9-wY-h3r" id="YQm-Jt-V4P">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="kW9-TE-xK1">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="EL9-wY-h3r"/>
@@ -113,15 +114,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7hS-14-598" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="278" y="357" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7hS-14-598" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="277" y="356" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="6QI-tt-yNw"/>
                                             <constraint firstAttribute="width" constant="120" id="uZQ-o8-NTE"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="QeS-ce-u9j" id="iGd-ZN-RNv">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="rTX-RD-vQ3">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="QeS-ce-u9j"/>
@@ -142,15 +143,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OaI-v1-0Au" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="18" y="297" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OaI-v1-0Au" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="17" y="296" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="0m0-GS-Oru"/>
                                             <constraint firstAttribute="width" constant="120" id="zLT-VU-cAA"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9FZ-2e-u5k" id="ENV-wD-5Dv">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="bMe-mf-UYn">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="9FZ-2e-u5k"/>
@@ -171,15 +172,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cit-tv-kXx" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="148" y="297" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cit-tv-kXx" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="147" y="296" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="120" id="NID-VB-Rrx"/>
                                             <constraint firstAttribute="height" constant="20" id="hL0-0d-XJS"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="zQ8-db-hR1" id="B00-Up-wzC">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="3UR-L2-XFc">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="zQ8-db-hR1"/>
@@ -200,15 +201,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xQA-2U-OqE" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="278" y="297" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xQA-2U-OqE" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="277" y="296" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="4Yh-Kc-gib"/>
                                             <constraint firstAttribute="width" constant="120" id="PKY-if-wGo"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Ogr-vA-WLH" id="pqf-k0-ScD">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="BOx-dR-Pkq">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="Ogr-vA-WLH"/>
@@ -229,15 +230,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JlA-yo-nyf" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="18" y="237" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JlA-yo-nyf" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="17" y="236" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="eug-cH-vhX"/>
                                             <constraint firstAttribute="width" constant="120" id="qb7-m7-IxX"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Yq2-mD-LDN" id="DwX-Fq-Apv">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="Q0X-2x-iQG">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="Yq2-mD-LDN"/>
@@ -258,15 +259,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qgM-nE-Kuj" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="148" y="237" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qgM-nE-Kuj" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="147" y="236" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="UHc-8I-axG"/>
                                             <constraint firstAttribute="width" constant="120" id="zbW-KF-C1v"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ave-my-sv3" id="uJV-Ie-R57">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="IDY-Ob-UcR">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="ave-my-sv3"/>
@@ -287,15 +288,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XSx-VN-m1X" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="278" y="237" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XSx-VN-m1X" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="277" y="236" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="QGg-bE-Upi"/>
                                             <constraint firstAttribute="width" constant="120" id="zFa-wh-izh"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Cch-e5-TTh" id="Czu-kk-ss5">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="cyJ-so-kmG">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="Cch-e5-TTh"/>
@@ -316,15 +317,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2ou-vK-bzS" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="18" y="177" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2ou-vK-bzS" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="17" y="176" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="120" id="9TF-XZ-xL4"/>
                                             <constraint firstAttribute="height" constant="20" id="rUc-hG-1cw"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="s3b-yN-aLY" id="PvP-sG-Lca">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="9kT-lL-pUC">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="s3b-yN-aLY"/>
@@ -345,15 +346,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Y5-et-rtf" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="148" y="177" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Y5-et-rtf" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="147" y="176" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="64w-1Q-Sfy"/>
                                             <constraint firstAttribute="width" constant="120" id="PEq-dG-VTv"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="GQv-Fe-QXh" id="Hlb-pT-Yph">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="Yyq-sv-ETK">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="GQv-Fe-QXh"/>
@@ -374,15 +375,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="V8b-h1-cpo" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="278" y="177" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="V8b-h1-cpo" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="277" y="176" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="CzX-iB-8yg"/>
                                             <constraint firstAttribute="width" constant="120" id="x9q-29-F0b"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="akP-YR-ES8" id="ImQ-Qz-Ej6">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="YAS-l7-RTe">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="akP-YR-ES8"/>
@@ -403,15 +404,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kx0-Ju-PIo" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="18" y="117" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kx0-Ju-PIo" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="17" y="116" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="72B-Ub-RQS"/>
                                             <constraint firstAttribute="width" constant="120" id="PND-1b-otT"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Csh-XA-Axs" id="4eQ-j7-Gz8">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="mmj-5f-9lp">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="Csh-XA-Axs"/>
@@ -432,15 +433,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="srg-xK-LBw" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="148" y="117" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="srg-xK-LBw" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="147" y="116" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="XaP-yI-VeK"/>
                                             <constraint firstAttribute="width" constant="120" id="pC3-uS-LzV"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="cbJ-6P-oUM" id="bAK-1T-ErB">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="VIV-ln-uir">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="cbJ-6P-oUM"/>
@@ -461,15 +462,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NgM-EI-QEs" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="278" y="117" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NgM-EI-QEs" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="277" y="116" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="7Z1-oW-NXA"/>
                                             <constraint firstAttribute="width" constant="120" id="n9s-25-VLX"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="34w-Vq-Mdy" id="j72-pE-3Sv">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="Zic-Gs-5GF">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="34w-Vq-Mdy"/>
@@ -490,15 +491,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fLs-ZB-ebI" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="18" y="57" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fLs-ZB-ebI" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="17" y="56" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="120" id="1dN-qr-fnI"/>
                                             <constraint firstAttribute="height" constant="20" id="3Rg-Nt-RAl"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="gTB-xn-VHE" id="17Z-xu-UrH">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="NDS-hL-Ee2">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="gTB-xn-VHE"/>
@@ -519,15 +520,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qSa-7W-9el" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="148" y="57" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qSa-7W-9el" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="147" y="56" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="OeC-Cn-MXX"/>
                                             <constraint firstAttribute="width" constant="120" id="djs-f3-Rce"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="sc6-4C-kFT" id="eWq-iZ-eNA">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="lVU-JD-7s8">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="sc6-4C-kFT"/>
@@ -548,15 +549,15 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Svc-cM-Tkv" customClass="GoDEffectivenessPopUpButton" customModule="Colosseum_Tool" customModuleProvider="target">
-                                        <rect key="frame" x="278" y="57" width="125" height="24"/>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Svc-cM-Tkv" customClass="GoDEffectivenessPopUpButton" customModule="PBR_Tool" customModuleProvider="target">
+                                        <rect key="frame" x="277" y="56" width="127" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="120" id="CWs-7p-Kyk"/>
                                             <constraint firstAttribute="height" constant="20" id="HxH-hO-cjF"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Ubw-tt-ol7" id="rXt-FW-nhh">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" size="8" name=".AppleSystemUIFont"/>
+                                            <font key="font" metaFont="system" size="8"/>
                                             <menu key="menu" title="Super Effective" id="tLN-pQ-aFu">
                                                 <items>
                                                     <menuItem title="Item 1" state="on" id="Ubw-tt-ol7"/>
@@ -578,7 +579,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="l81-b6-xEY">
-                                        <rect key="frame" x="84" y="409" width="73" height="18"/>
+                                        <rect key="frame" x="83" y="409" width="72" height="18"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="70" id="DgF-XC-AJL"/>
                                         </constraints>
@@ -591,8 +592,8 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hqt-rg-hec">
-                                        <rect key="frame" x="174" y="409" width="73" height="18"/>
-                                        <buttonCell key="cell" type="radio" title="  Special" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="ZcY-gj-zco">
+                                        <rect key="frame" x="173" y="409" width="72" height="18"/>
+                                        <buttonCell key="cell" type="radio" title="Special" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="ZcY-gj-zco">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
@@ -601,7 +602,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tk2-L1-Eaz">
-                                        <rect key="frame" x="264" y="409" width="73" height="18"/>
+                                        <rect key="frame" x="263" y="409" width="72" height="18"/>
                                         <buttonCell key="cell" type="radio" title=" Neither" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="wYd-pi-mM5">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -611,7 +612,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NSB-II-D6f">
-                                        <rect key="frame" x="144" y="13" width="132" height="31"/>
+                                        <rect key="frame" x="143" y="13" width="134" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="120" id="DkY-pS-SFF"/>
                                             <constraint firstAttribute="height" constant="20" id="U3Y-CA-yZ0"/>

@@ -48,6 +48,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 		#endif
 
+		experimentalFeaturesMenuItem.isEnabled = false
+
 		var countDownDate: Date?
 		var posterFile: XGFiles?
 		var musicScriptFile: XGFiles?
@@ -169,10 +171,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			return
 		}
 
+		defer {
+			updateExperimentalMenuItem()
+		}
+
 		if let isoFile = files.first(where: {$0.fileType == .iso && $0.exists}) {
 			printg("opening ISO:", isoFile.path)
 			guard XGISO.loadISO(file: isoFile) else {
-				updateExperimentalMenuItem()
 				return
 			}
 			homeViewController.reload()
@@ -219,6 +224,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 
 	@IBAction func addFileToISO(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
 		let panel = NSOpenPanel()
 		panel.allowsMultipleSelection = false
 		panel.canChooseDirectories = false
@@ -246,13 +254,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		guard homeViewController.checkRequiredFiles() else {
 			return
 		}
-		#if GAME_XD
+		#if !GAME_PBR
 		GoDCountDownViewController.launch(endDate: startDate ?? .init(timeIntervalSinceNow: 0),
 										  image: posterFile,
 										  musicScript: musicScriptFile,
 										  isFullScreen: true) { countdownVC in
 			XGThreadManager.manager.runInBackgroundAsync(queue: 3) {
-				DiscordPlaysPokemonXD().launch()
+				DiscordPlaysOrre().launch()
 			}
 		}
 		#endif
@@ -297,30 +305,41 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func enableExperimentalFeatures(_ sender: Any) {
-		settings.enableExperimentalFeatures = !settings.enableExperimentalFeatures
-		settings.save()
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		XGSettings.current.enableExperimentalFeatures = !XGSettings.current.enableExperimentalFeatures
+		XGSettings.current.save()
 		updateExperimentalMenuItem()
 	}
 
 	func updateExperimentalMenuItem() {
-		experimentalFeaturesMenuItem.title = settings.enableExperimentalFeatures ? "Disable Experimental Features" : "Enable Experimental Features"
+		experimentalFeaturesMenuItem.title = XGSettings.current.enableExperimentalFeatures ? "Disable Experimental Features" : "Enable Experimental Features"
 		experimentalFeaturesMenuItem.isEnabled = XGISO.inputISOFile != nil
-		specialUtilities.isHidden = !settings.enableExperimentalFeatures
 	}
 
 	@IBAction func setVerboseLogs(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
 		printg("Set verbose logs")
-		settings.verbose = true
-		settings.save()
+		XGSettings.current.verbose = true
+		XGSettings.current.save()
 	}
 	
 	@IBAction func setFastLogs(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
 		printg("Set fast logs")
-		settings.verbose = false
-		settings.save()
+		XGSettings.current.verbose = false
+		XGSettings.current.save()
 	}
 	
 	@IBAction func deleteLogs(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
 		printg("Deleting logs...")
 		for file in XGFolders.Logs.files where file.fileType == .txt {
 			file.delete()
@@ -335,7 +354,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		printg("extracting iso")
 
 		XGFolders.setUpFolderFormat()
-		XGUtility.extractAllFiles()
+		XGUtility.extractAllFiles(decode: false)
+		
+		printg("extraction complete")
+		displayAlert(title: "ISO Extraction Complete", description: "Done.")
+	}
+	
+	@IBAction func extractAndDecodeISO(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		printg("extracting iso")
+
+		XGFolders.setUpFolderFormat()
+		XGUtility.extractAllFiles(decode: true)
 		
 		printg("extraction complete")
 		displayAlert(title: "ISO Extraction Complete", description: "Done.")

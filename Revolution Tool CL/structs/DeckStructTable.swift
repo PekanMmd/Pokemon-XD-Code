@@ -72,11 +72,11 @@ let deckTrainerStruct = GoDStruct(name: "Trainer Deck", format: [
 
 let deckPokemonStruct = GoDStruct(name: "Pokemon Deck", format: [
 	.short(name: "ID", description: "", type: .int),
-	.bitArray(name: "Flags", description: "The 12th flag determines if the pokemon uses its second ability id or not", bitFieldNames: [
+	.bitArray(name: "Flags", description: "", bitFieldNames: [
 		"unknown 1", "unknown 2", "unknown 3", "unknown 4",
 		"Use second ability slot", "unknown 6", "unknown 7", "unknown 8",
-		"unknown 9", "unknown 10", "Uses predetermined Unown form", "Nature is Random",
-		"unknown 13", "unknown 14", "unknown 15", "unknown 16",
+		"unknown 9", "Use Random IVs", "Use random form", "Use Random Nature",
+		"Use random gender", "unknown 14", "unknown 15", "unknown 16",
 	]),
 	.short(name: "Minimum Level", description: "", type: .int),
 	.short(name: "Species", description: "", type: .pokemonID),
@@ -109,7 +109,7 @@ let deckPokemonStruct = GoDStruct(name: "Pokemon Deck", format: [
 	.short(name: "Unknown 5", description: "", type: .uint),
 	.array(name: "Moves", description: "", property: .short(name: "Move", description: "", type: .moveID), count: 4),
 	.array(name: "Items", description: "Potential items the pokemon may hold", property: .short(name: "Item", description: "", type: .itemID), count: 4),
-	.word(name: "Unknown 6", description: "", type: .uint),
+	.byte(name: "Unknown 6", description: "", type: .uint),
 	.word(name: "Unknown 7", description: "", type: .uint)
 ])
 

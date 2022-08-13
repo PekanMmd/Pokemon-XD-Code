@@ -30,4 +30,4 @@ let pokespotStruct = GoDStruct(name: "Pokespot", format: [
 	.word(name: "Unknown Pointer", description: "Filled in at run time, 0 in the ROM data", type: .pointer),
 ])
 
-let pokespotsTable = CommonStructTable(index: .pokespots, properties: pokespotStruct)
+let pokespotsTable = CommonStructTable(index: .Pokespots, properties: pokespotStruct)

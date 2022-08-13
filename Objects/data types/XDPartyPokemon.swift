@@ -50,7 +50,17 @@ let kPartyPokemonIVDEFOffset = 170
 let kPartyPokemonIVSPAOffset = 171
 let kPartyPokemonIVSPDOffset = 172
 let kPartyPokemonIVSPEOffset = 173
-let kPartyPokemonShadowIDOffset = 187
+let kPartyPokemonCoolnessOffset = 174
+let kPartyPokemonBeautyOffset = 175
+let kPartyPokemonCutenessOffset = 176
+let kPartyPokemonClevernessOffset = 177
+let kPartyPokemonToughnessOffset = 178
+let kPartyPokemonCoolMedalOffset = 179
+let kPartyPokemonBeautyMedalOffset = 180
+let kPartyPokemonCuteMedalOffset = 181
+let kPartyPokemonCleverMedalOffset = 182
+let kPartyPokemonToughMedalOffset = 183
+let kPartyPokemonShadowIDOffset = 186
 
 let kBattlePokemonCurrentType1Offset = 0x808
 let kBattlePokemonCurrentType2Offset = 0x80a
@@ -284,7 +294,7 @@ class XDPartyPokemon: Codable {
 			IVspecialAttack = file.readByte(atAddress: offset + kPartyPokemonIVSPAOffset) ?? 0
 			IVspecialDefense = file.readByte(atAddress: offset + kPartyPokemonIVSPDOffset) ?? 0
 			IVspeed = file.readByte(atAddress: offset + kPartyPokemonIVSPEOffset) ?? 0
-			shadowID = file.readByte(atAddress: offset + kPartyPokemonShadowIDOffset) ?? 0
+			shadowID = file.read2Bytes(atAddress: offset + kPartyPokemonShadowIDOffset) ?? 0
 		}
 	}
 
@@ -334,7 +344,7 @@ class XDPartyPokemon: Codable {
 			file.write8(IVspecialAttack, atAddress: writeOffset + kPartyPokemonIVSPAOffset)
 			file.write8(IVspecialDefense, atAddress: writeOffset + kPartyPokemonIVSPDOffset)
 			file.write8(IVspeed, atAddress: writeOffset + kPartyPokemonIVSPEOffset)
-			file.write8(shadowID, atAddress: writeOffset + kPartyPokemonShadowIDOffset)
+			file.write16(shadowID, atAddress: writeOffset + kPartyPokemonShadowIDOffset)
 		}
 	}
 }

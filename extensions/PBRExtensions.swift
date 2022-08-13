@@ -60,7 +60,7 @@ extension XGUtility {
             printg("ISO doesn't exist:", XGFiles.iso.path)
             return nil
         }
-        let verbose = settings.verbose ? " -v " : ""
+		let verbose = XGSettings.current.verbose ? " -v " : ""
 		let overwriteFlag = overwrite ? " -o" : ""
 		let args = "extract --raw\(verbose)\(overwriteFlag) \(XGFiles.iso.path.escapedPath) \(XGFolders.ISODump.path.escapedPath)"
         let output = GoDShellManager.run(.wit, args: args, printOutput: printOutput)
@@ -115,7 +115,7 @@ extension XGUtility {
 		disableAntiModChecks()
 
         printg("compiling ISO...\nThis will overwrite the existing ISO")
-        let verbose = settings.verbose ? "-v " : ""
+		let verbose = XGSettings.current.verbose ? "-v " : ""
         let overwrite = "-o"
 		let args = "copy \(overwrite) \(verbose) \(XGFolders.ISODump.path.escapedPath) \(XGFiles.iso.path.escapedPath)"
         return GoDShellManager.run(.wit, args: args, printOutput: printOutput)

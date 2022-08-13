@@ -24,25 +24,45 @@ class PBRTypeManager {
 		switch region {
 		case .EU: return 0x401348
 		case .JP: return -1
-		case .US: return -1
+		case .US: return 0x3F22A0
 		case .OtherGame: return -1
 		}
 	}
 
 	static var typeMatchupDataDolOffset: Int? {
+		guard region != .JP else {
+			return nil
+		}
 		guard let dol = XGFiles.dol.data else {
 			printg("Dol file not found")
 			return nil
 		}
+		
+		// TODO: update all pointers
+		// US pointer locations
+//		803c1e70
+//		803c1eb0
+//		803c1edc
+//		803c1f1c
+//		803c2150
+//		803c25d4
+//		803c2ee0
+//		803c2f20
 
-		let dataTableOffsetInstructionsStartOffset = 0x3be7c4 - kDolToRAMOffsetDifference
-		let instruction1 = dol.getWordAtOffset(dataTableOffsetInstructionsStartOffset)
-		let instruction2 = dol.getWordAtOffset(dataTableOffsetInstructionsStartOffset + 4)
+		let dataTableOffsetInstructionsStartOffset: Int
+		switch region {
+		case .EU: dataTableOffsetInstructionsStartOffset = 0x3be7c4
+		case .US: dataTableOffsetInstructionsStartOffset = 0x3f61a0
+		case .JP: dataTableOffsetInstructionsStartOffset = -1
+		case .OtherGame: dataTableOffsetInstructionsStartOffset = -1
+		}
+		let instruction1 = dol.getWordAtOffset(dataTableOffsetInstructionsStartOffset - kDolToRAMOffsetDifference)
+		let instruction2 = dol.getWordAtOffset(dataTableOffsetInstructionsStartOffset + 4 - kDolToRAMOffsetDifference)
 
 		// use 0xFFF for first mask to remove the leading 8 in the offset.
 		let dataTableRAMOffset = ((instruction1 & 0xFFF) << 16) + (instruction2 & 0xFFFF)
 
-		let isInDataSection = dataTableRAMOffset >= 0x3e1e60
+		let isInDataSection = dataTableRAMOffset >= 0x3e1e60 // TODO: get precise value for non pal regions
 		let offsetDifference = isInDataSection ? kDolTableToRAMOffsetDifference : kDolToRAMOffsetDifference
 		return Int(dataTableRAMOffset) - offsetDifference
 	}
@@ -92,7 +112,9 @@ class PBRTypeManager {
 			return false
 		}
 
-		if let currentOffset = typeMatchupDataDolOffset, currentOffset == typeMatchUpOriginalLocation, region == .EU {
+		if region != .JP,
+		   let currentOffset = typeMatchupDataDolOffset,
+			currentOffset == typeMatchUpOriginalLocation {
 			XGPatcher.moveTypeMatchupsTableToPassValidationFunction()
 		}
 
@@ -169,14 +191,18 @@ class PBRTypeManager {
 			return
 		}
 
-		let isInDataSection = offset >= 0x3ddf60
-		let offsetDifference = isInDataSection ? kDolTableToRAMOffsetDifference : kDolToRAMOffsetDifference
-		let RAMOffset = UInt32(offset + offsetDifference) + 0x80000000
+		let RAMOffset = UInt32(offset + kDolToRAMOffsetDifference) + 0x80000000
 
 		// It takes 2 instructions to load the address into a register
 		let offsetInstructionsR4 = XGASM.loadImmediateShifted32bit(register: .r4, value: RAMOffset)
 
-		let r4Offsets: [UInt32] = [0x803be7c4, 0x803be804, 0x803be830, 0x803be870] // in RAM
+		let r4Offsets: [UInt32]  // in RAM
+		switch region {
+		case .EU: r4Offsets = [0x803be7c4, 0x803be804, 0x803be830, 0x803be870]
+		case .US: r4Offsets = [0x803c1e70, 0x803c1eb0, 0x803c1edc, 0x803c1f1c]
+		default: r4Offsets = []
+		}
+		
 		for offset in r4Offsets {
 			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference
 			XGAssembly.replaceASM(startOffset: adjustedOffset, newASM: [
@@ -185,7 +211,13 @@ class PBRTypeManager {
 			])
 		}
 
-		let r4OffsetsWithGap: [UInt32] = [0x803bf834] // in RAM
+		let r4OffsetsWithGap: [UInt32] // in RAM
+		switch region {
+		case .EU: r4OffsetsWithGap = [0x803bf834]
+		case .US: r4OffsetsWithGap = [0x803c2ee0]
+		default: r4OffsetsWithGap = []
+		}
+		
 		for offset in r4OffsetsWithGap {
 			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference
 			XGAssembly.replaceASM(startOffset: adjustedOffset, newASM: [
@@ -198,7 +230,13 @@ class PBRTypeManager {
 
 		let offsetInstructionsR7 = XGASM.loadImmediateShifted32bit(register: .r7, value: RAMOffset)
 
-		let r7OffsetsWithGap: [UInt32] = [0x803bf874] // in RAM
+		let r7OffsetsWithGap: [UInt32] // in RAM
+		switch region {
+		case .EU: r7OffsetsWithGap = [0x803bf874]
+		case .US: r7OffsetsWithGap = [0x803c2f20]
+		default: r7OffsetsWithGap = []
+		}
+		
 		for offset in r7OffsetsWithGap {
 			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference
 			XGAssembly.replaceASM(startOffset: adjustedOffset, newASM: [
@@ -211,7 +249,13 @@ class PBRTypeManager {
 
 		let offsetInstructionsR17 = XGASM.loadImmediateShifted32bit(register: .r17, value: RAMOffset)
 
-		let r17OffsetsWithGap: [UInt32] = [0x803beaa4, 0x803bef28] // in RAM
+		let r17OffsetsWithGap: [UInt32] // in RAM
+		switch region {
+		case .EU: r17OffsetsWithGap = [0x803beaa4, 0x803bef28]
+		case .US: r17OffsetsWithGap = [0x803c2150, 0x803c25d4]
+		default: r17OffsetsWithGap = []
+		}
+		
 		for offset in r17OffsetsWithGap {
 			let adjustedOffset = Int(offset - 0x80000000) - kDolToRAMOffsetDifference
 			XGAssembly.replaceASM(startOffset: adjustedOffset, newASM: [

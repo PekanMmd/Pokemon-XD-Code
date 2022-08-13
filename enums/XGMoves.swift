@@ -183,7 +183,7 @@ func allMoves() -> [String : XGMoves] {
 let moves = allMoves()
 
 func move(_ name: String) -> XGMoves {
-	if settings.verbose && (moves[name.simplified] == nil) { printg("couldn't find: " + name) }
+	if XGSettings.current.verbose && (moves[name.simplified] == nil) { printg("couldn't find: " + name) }
 	return moves[name.simplified] ?? .index(0)
 }
 

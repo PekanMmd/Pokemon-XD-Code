@@ -8,7 +8,7 @@
 
 import Foundation
 
-let versionNumber = "V2.5.2"
+let versionNumber = "V2.8.0"
 var fileDecodingMode = false
 
 var toolName: String {
@@ -37,7 +37,7 @@ let documentsFolderName = "GoD Tool"
 let game = XGGame.XD
 let console = Console.ngc
 var isDemo: Bool {
-	return  XGFiles.iso.exists && region != .OtherGame && XGISO.current.allFileNames.count < 200 // 166 in vanilla demo
+	return  XGFiles.iso.exists && XGFiles.iso.fileSize < 0xBE00000
 }
 
 #elseif GAME_COLO
@@ -45,7 +45,9 @@ var isDemo: Bool {
 let documentsFolderName = "CM Tool"
 let game = XGGame.Colosseum
 let console = Console.ngc
-let isDemo = false
+var isDemo: Bool {
+	return  XGFiles.iso.exists && XGFiles.iso.fileSize < 0xBE00000
+}
 
 #elseif GAME_PBR
 

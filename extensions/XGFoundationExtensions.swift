@@ -510,6 +510,7 @@ extension String {
 		return substring(from: startIndex, to: extensionIndex)
 	}
 	
+	/// includes preceding .
 	var fileExtensions: String {
 		let extensionIndex = firstIndex(of: ".") ?? endIndex
 		
@@ -622,7 +623,11 @@ extension String {
 	}
 	
 	func hexStringToInt() -> Int {
-		return Int(strtoul(self, nil, 16)) // converts hex string to uint and then cast as Int
+		return Int(hexStringToUInt())
+	}
+	
+	func hexStringToUInt() -> UInt {
+		return strtoul(self, nil, 16)
 	}
 	
 	var isHexInteger: Bool {

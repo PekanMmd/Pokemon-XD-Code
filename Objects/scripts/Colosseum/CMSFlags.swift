@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CMSFlags: Int, Codable, CaseIterable {
+enum XDSFlags: Int, Codable, CaseIterable {
 
 	case none = 0
 

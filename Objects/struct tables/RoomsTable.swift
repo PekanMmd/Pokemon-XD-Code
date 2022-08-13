@@ -101,3 +101,21 @@ let doorStruct = GoDStruct(name: "Door", format: [
 ])
 
 let doorsTable = CommonStructTable(index: .Doors, properties: doorStruct)
+
+
+#if GAME_XD
+let worldMapLocationStruct = GoDStruct(name: "World Map Location", format: [
+	.short(name: "Camera ID", description: "", type: .uint), // index of world map camera table
+	.short(name: "Character ID", description: "", type: .uintHex),
+	.word(name: "Availability Flag", description: "Is available once this flag is set", type: .flagID),
+	.word(name: "Unknown ID", description: "", type: .uintHex),
+	.word(name: "Mini Model Identifier", description: "", type: .uintHex),
+	.word(name: "Image Texture ID", description: "", type: .uintHex),
+	.word(name: "Move Demo Model", description: "", type: .uintHex),
+	.word(name: "Name ID", description: "", type: .msgID(file: .dol)),
+	.word(name: "Room ID", description: "The room to warp to", type: .roomID),
+	.word(name: "Unused Text ID", description: "", type: .msgID(file: .nameAndFsysName("world_map.msg", "world_map"))),
+])
+
+let worldMapLocationsTable = CommonStructTable(index: .WorldMapLocations, properties: doorStruct)
+#endif

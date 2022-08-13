@@ -140,7 +140,7 @@ enum XGResources {
 			break
 		}
 
-		if settings.verbose {
+		if XGSettings.current.verbose {
 			printg("Copying resource:", srcPath, "to:", dstPath)
 		}
 

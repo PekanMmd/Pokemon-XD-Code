@@ -6,54 +6,73 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
+enum NetworkingErrors: Error {
+	case badRequestURL
+	case badRequestJSON
+	case requestFailed(Error)
+	case unknownRequestFailure
+	case failedToDecodeJSON
+}
 
 class GoDNetworkingManager {
 	private enum HTTPMethods: String {
 		case GET, POST
 	}
-
-	private struct Dummy: Codable {}
-
+	
 	static func get(_ urlString: String) -> Data? {
 		guard let url = URL(string: urlString) else { return nil }
 		return try? Data(contentsOf: url)
 	}
 
-	static func get<T: Codable>(_ url: String, json: Encodable? = nil, completion: ((T?) -> Void)?) {
-		request(method: .GET, urlString: url, json: nil, completion: completion)
+	static func get<T: Decodable>(_ url: String, json: Encodable? = nil, completion: ((Result<T, NetworkingErrors>) -> Void)?) {
+		request(method: .GET, urlString: url, json: json, completion: completion)
 	}
 
 	static func post(_ url: String, json: Encodable) {
 		request(method: .POST, urlString: url, json: json)
 	}
 
-	static func post<T: Codable>(_ url: String, json: Encodable, completion: ((T?) -> Void)?) {
+	static func post<T: Decodable>(_ url: String, json: Encodable, completion: ((Result<T, NetworkingErrors>) -> Void)?) {
 		request(method: .POST, urlString: url, json: json, completion: completion)
 	}
 
 	private static func request(method: HTTPMethods, urlString: String, json: Encodable?) {
-		#warning("TODO: Find a cleaner alternative")
-		request(method: method, urlString: urlString, json: json, completion: {(dummy: Dummy?) in return })
+		request(method: method, urlString: urlString, json: json, completion: { (result: Result<Int, NetworkingErrors>) -> Void in return })
 	}
 
-	private static func request<T: Codable>(method: HTTPMethods, urlString: String, json: Encodable?, completion: ((T?) -> Void)?) {
+	private static func request<T: Decodable>(method: HTTPMethods, urlString: String, json: Encodable?, completion: ((Result<T, NetworkingErrors>) -> Void)?) {
 
-		guard let url = URL(string: urlString) else { completion?(nil); return }
+		guard let url = URL(string: urlString) else {
+			completion?(.failure(.badRequestURL)); return
+		}
 		var request = URLRequest(url: url)
 		request.httpMethod = method.rawValue
-		request.httpBody = try? json?.JSONRepresentation()
+		if let json = json {
+			guard let jsonData = try? json.JSONRepresentation() else {
+				completion?(.failure(.badRequestJSON))
+				return
+			}
+			request.httpBody = jsonData
+		}
 
 		let task = URLSession.shared.dataTask(with: request) { data, response, error in
 			guard let data = data, error == nil else {
-				printg("Failed to make \(method.rawValue) request to:", urlString)
-				if settings.verbose {
-					printg(error?.localizedDescription ?? "No data")
+				if let error = error {
+					completion?(.failure(.requestFailed(error)))
+				} else {
+					completion?(.failure(.unknownRequestFailure))
 				}
-				completion?(nil)
 				return
 			}
-			let responseJSON = try? T.fromJSON(data: data)
-			completion?(responseJSON)
+			if let responseJSON = try? T.fromJSON(data: data) {
+				completion?(.success(responseJSON))
+			} else {
+				completion?(.failure(.failedToDecodeJSON))
+			}
 		}
 
 		task.resume()

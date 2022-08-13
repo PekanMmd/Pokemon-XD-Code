@@ -255,7 +255,7 @@ func allAbilities() -> [String : XGAbilities] {
 let abilities = allAbilities()
 
 func ability(_ name: String) -> XGAbilities {
-	if settings.verbose && (abilities[name.simplified] == nil) { printg("couldn't find: " + name) }
+	if XGSettings.current.verbose && (abilities[name.simplified] == nil) { printg("couldn't find: " + name) }
 	return abilities[name.simplified] ?? .index(0)
 }
 

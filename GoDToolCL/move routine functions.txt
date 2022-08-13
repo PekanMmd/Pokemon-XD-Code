@@ -3,7 +3,7 @@ move routine pointers in ram = 0x802f8af8
 00: check if move should work
 01: determine adjusted accuracy							WORD: offset HALF: parameter (-1 include lock on status effect, -2 unknown)
 02: pokemon used move message
-03: unknown
+03: pokemon used move message 2
 04: decrease pp
 05: check for critical hit
 06: calculate move damage

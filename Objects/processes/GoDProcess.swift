@@ -8,8 +8,8 @@
 import Foundation
 #if canImport(Darwin)
 import Darwin
-#elseif canImport(glibc)
-import glibc
+#elseif canImport(Glibc)
+import Glibc
 #endif
 
 struct VMRegionInfo {
@@ -17,7 +17,6 @@ struct VMRegionInfo {
 	let size: UInt
 }
 
-#warning("TODO: Investigate using glibc on Linux")
 #if canImport(Darwin)
 class GoDProcess {
 	private let process: Process
@@ -76,7 +75,7 @@ class GoDProcess {
 
 	func readVirtualMemory(at offset: UInt, length: UInt, relativeToRegion region: VMRegionInfo? = nil) -> XGMutableData? {
 		guard let task = self.task, let baseAddress = self.baseAddress else {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("Couldn't read virtual memory for unloaded process")
 			}
 			return nil
@@ -88,7 +87,7 @@ class GoDProcess {
 		var sizeRead: mach_msg_type_number_t = 0
 		var kret = vm_read(task, relativeToAddress + offset, length, &pointer, &sizeRead)
 		guard kret == KERN_SUCCESS else {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("Couldn't read virtual memory for process: \(pid). Length: \(length)")
 				printg(kret == KERN_INVALID_ADDRESS ? "Invalid Address" : "KRETURN:\(kret)")
 			}
@@ -111,7 +110,7 @@ class GoDProcess {
 	@discardableResult
 	func writeVirtualMemory(at offset: UInt, data: XGMutableData, relativeToRegion region: VMRegionInfo? = nil) -> Bool {
 		guard let task = self.task, let baseAddress = self.baseAddress else {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("Couldn't write virtual memory for unloaded process")
 			}
 			return false
@@ -127,7 +126,7 @@ class GoDProcess {
 		
 		let kret = vm_write(task, relativeToAddress + offset, pointer, count.unsigned)
 		if kret != KERN_SUCCESS {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("Couldn't write virtual memory for process: \(pid).", kret)
 				if kret == KERN_INVALID_ADDRESS {
 					print("Invalid Address")
@@ -138,7 +137,7 @@ class GoDProcess {
 		return kret == KERN_SUCCESS
 	}
 
-	func getNextRegion(fromOffset offset: vm_address_t) -> VMRegionInfo? {
+	func getNextRegion(fromOffset offset: UInt) -> VMRegionInfo? {
 		guard let task = self.task else {
 			printg("Couldn't scan virtual memory for unloaded process")
 			return nil
@@ -154,7 +153,7 @@ class GoDProcess {
 
 		let kret = mach_vm_region(task, &address, &size, VM_REGION_BASIC_INFO, &info, &count, &object_name)
 		guard kret == KERN_SUCCESS else {
-			if settings.verbose {
+			if XGSettings.current.verbose {
 				printg("Couldn't load base address for task: \(task).")
 				printg("Error no:", kret)
 			}
@@ -214,14 +213,118 @@ class GoDProcess {
 
 		let kret = mach_vm_region(task, &address, &size, VM_REGION_BASIC_INFO, &info, &count, &object_name);
 		guard kret == KERN_SUCCESS else {
-			printg("Couldn't load base address for task: \(task). Make sure the application is runinng and the tool is running with root permissions.")
+			printg("Couldn't load base address for task: \(task). Make sure the application is running and the tool is running with root permissions.")
 			return nil
 		}
 
 		return UInt(address)
 	}
 }
+#elseif canImport(Glibc) && os(Linux)
+class GoDProcess {
+	private let process: Process
+	private let fileDescriptor: Int32
 
+	var pid: Int32 {
+		return process.processIdentifier
+	}
+
+	var isRunning: Bool {
+		return process.isRunning
+	}
+
+	init(process: Process) {
+		self.process = process
+		self.fileDescriptor = open("/proc/\(process.processIdentifier)/mem", O_RDWR)
+	}
+
+	func await() {
+		process.waitUntilExit()
+		close(self.fileDescriptor)
+	}
+
+	func terminate() {
+		process.terminate()
+		close(self.fileDescriptor)
+	}
+
+	func pause() {
+		process.suspend()
+	}
+
+	func resume() {
+		process.resume()
+	}
+
+	func readVirtualMemory(at offset: UInt, length: UInt, relativeToRegion region: VMRegionInfo? = nil) -> XGMutableData? {
+		var address = offset
+		if let regionInfo = region {
+			address += regionInfo.virtualAddress
+		}
+		var buffer = [UInt8](repeating: 0, count: Int(length))
+		let bytesRead = pread(self.fileDescriptor, &buffer, Int(length), Int(address))
+		let data = XGMutableData(byteStream: buffer)
+		return data
+	}
+	
+	@discardableResult
+	func writeVirtualMemory(at offset: UInt, data: XGMutableData, relativeToRegion region: VMRegionInfo? = nil) -> Bool {
+		var address = offset
+		if let regionInfo = region {
+			address += regionInfo.virtualAddress
+		}
+		var bytes = data.rawBytes
+		let bytesWritten = pwrite(self.fileDescriptor, &bytes, Int(data.length), Int(address))
+		return bytesWritten != -1
+	}
+	
+	func getNextRegion(fromOffset offset: UInt) -> VMRegionInfo? {
+		let processFile = XGFiles.path("/proc/\(pid)/maps")
+		if processFile.exists {
+			let text = processFile.text
+			let lines = text.split(separator: "\n")
+			for line in lines {
+				let parts = line.split(separator: " ")
+				if parts.count > 0 {
+					let addressRange = parts[0]
+					let addressParts = addressRange.split(separator: "-")
+					if addressParts.count > 1 {
+						let startAddress = String(addressParts[0]).hexStringToUInt()
+						let endAddress = String(addressParts[1]).hexStringToUInt()
+						if offset <= startAddress {
+							let length = endAddress - startAddress
+							return VMRegionInfo(virtualAddress: startAddress, size: length)
+						}
+					}
+				}
+			}
+		} else {
+			print("file doesn't exist:", processFile.path)
+		}
+		return nil
+	}
+	
+	func getRegions(maxOffset: UInt) -> [VMRegionInfo] {
+		var regions = [VMRegionInfo]()
+		
+		var totalSize: UInt = 0
+		var lastRegion: VMRegionInfo?
+		
+		repeat {
+			var searchFromAddres: UInt = 0
+			if let region = lastRegion {
+				searchFromAddres = region.virtualAddress + region.size
+			}
+			lastRegion = getNextRegion(fromOffset: searchFromAddres)
+			if let region = lastRegion {
+				regions.append(region)
+				totalSize += region.size
+			}
+		} while lastRegion != nil && totalSize < maxOffset
+		
+		return regions
+	}
+}
 #else
 class GoDProcess {
 	private let process: Process

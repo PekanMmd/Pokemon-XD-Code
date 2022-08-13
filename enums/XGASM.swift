@@ -102,7 +102,9 @@ enum XGASM {
 	case andi_(XGRegisters, XGRegisters, UInt32)
 	
 	case b(Int)
+	case ba(Int)
 	case bl(Int)
+	case bla(Int)
 	case blr
 	case beq(Int)
 	case bne(Int)
@@ -488,6 +490,10 @@ enum XGASM {
 			return XGASM.bgt_f(offset, target).code
 		case .bge(let target):
 			return XGASM.bge_f(offset, target).code
+		case .ba(let t):
+			return XGASM.b_f(0, t).code + 2
+		case .bla(let t):
+			return XGASM.b_f(0, t).code + 3
 			
 		// nop
 		case .nop:
@@ -533,6 +539,21 @@ enum XGASM {
 		return (shift, add)
 	}
 	
+	static func mod(_ targetRegister: XGRegisters, _ valueRegister: XGRegisters, _ divisorRegister: XGRegisters) -> ASM {
+		guard targetRegister != divisorRegister else {
+			printg("Couldn't create assembly for mod operation. Target register is the same as divisor register.")
+			return []
+		}
+		guard targetRegister != valueRegister else {
+			printg("Couldn't create assembly for mod operation. Target register is the same as value register.")
+			return []
+		}
+		return [
+			.divw(targetRegister, valueRegister, divisorRegister),
+			.mullw(targetRegister, targetRegister, divisorRegister),
+			.sub(targetRegister, valueRegister, targetRegister)
+		]
+	}
 }
 
 

@@ -36,25 +36,32 @@ enum XGFileTypes: Int, CaseIterable {
 	// all arbitrary values
 	case dol  = 0x80
 
+	// archive formats
 	case fsys = 0x90
+	case narc = 0x91
+	case arc  = 0x92
+	
+	// compression formats
+	case szs  = 0x93
+	case yaz0 = 0x94
+	case lzss = 0x95
 
 	case raw  = 0xf0
 	case gci  = 0xf1
 	case thp  = 0xf2
 	case json = 0xf3
 	case txt  = 0xf4
-	case lzss = 0xf5
-	case tpl  = 0xf6
-	case bmp  = 0xf7
-	case jpeg = 0xf8
-	case png  = 0xf9
-	case tex0 = 0xfa
-	case xds  = 0xfb
-	case toc  = 0xfc
-	case ups  = 0xfd
-	case iso  = 0xfe
-	case nkit = 0xff
-	case csv  = 0x100
+	case tpl  = 0xf5
+	case bmp  = 0xf6
+	case jpeg = 0xf7
+	case png  = 0xf8
+	case tex0 = 0xf9
+	case xds  = 0xfa
+	case toc  = 0xfb
+	case ups  = 0xfc
+	case iso  = 0xfd
+	case nkit = 0xfe
+	case csv  = 0xff
 	
 	case unknown = 0xffff
 
@@ -124,6 +131,10 @@ enum XGFileTypes: Int, CaseIterable {
 		case .nkit: return ".nkit"
 		case .ups : return ".ups"
 		case .csv: return ".csv"
+		case .arc : return ".arc"
+		case .narc: return ".narc"
+		case .szs : return ".szs"
+		case .yaz0: return ".yaz0"
 		}
 	}
 
@@ -155,7 +166,7 @@ enum XGFileTypes: Int, CaseIterable {
 		case .json: return "A common format which comes from JavaScript. Used by programmers to represent data in a human readable way. The tool can output various types of information as `.json` files which can either be edited by hand or input into other people's programs and tools for editing. https://en.wikipedia.org/wiki/JSON"
 		case .csv : return "A common format used for storing simple spreadsheets. `\(toolName)` dumps various data tables as these kinds of spreadsheets which can be imported into Microsoft Excel or Google Sheets for editing. https://en.wikipedia.org/wiki/Comma-separated_values"
 		case .thp : return "A video format which is commonly used. It's not very efficient but there are many tools which can view and create them. http://wiki.tockdom.com/wiki/THP_(File_Format)"
-		case .nkit: return "A compressed gamecube/wii `.iso` file which has unnecessary data scrubbed to make the file size smaller. These files usually have a file type of `.nkit.iso`. They aren't supported by `\(toolName)` so you should convert them to a regular iso using this tool first: https://vimm.net/vault/?p=nkit\nDrag and drop the `.nkit` iso onto the program called `ConvertToIso` and you'll find the converted `iso` in the folder called `Processed`."
+		case .nkit: return "A compressed gamecube/wii `.iso` file which has unnecessary data scrubbed to make the file size smaller. These files usually have a file type of `.nkit.iso`. They aren't supported by `\(toolName)` so you should convert them to a regular iso using this tool first: https://gbatemp.net/download/nkit.36157/download\nDrag and drop the `.nkit` iso onto the program called `ConvertToIso` and you'll find the converted `iso` in the folder called `Processed`."
 		case .unknown: return nil
 		case .sdr: return "A custom 3d model format specific to PBR. There is a blender plugin for importing these files to blender and exporting models in blender to `.sdr` files: https://github.com/bgsamm/pbr-models-import-export"
 		case .odr: return "A custom 3d model format specific to PBR. Similar to `.sdr` but only containing some object data. Used for things like accessories for trainer customisation. There is a blender plugin for importing these files to blender: https://github.com/bgsamm/pbr-models-import-export"
@@ -171,6 +182,13 @@ enum XGFileTypes: Int, CaseIterable {
 			A patch format which is used to edit the data in a predetermined file. It's useful for distributing ROM hacks as you don't need to distribute any copy righted data. The patching program takes the original game and the modded game and calculates the difference between them. The player can apply the patch file to their own copy of the original game to apply the same differences to it and as a result recreate the mod.
 			To apply a ups patch to a file you can use this website: https://www.marcrobledo.com/RomPatcher.js/
 			Or you can use this program on windows: https://www.romhacking.net/utilities/606/
+			"""
+		case .arc, .narc: return """
+			An archive format containing multiple files a bit like a .zip file.
+			The contents may optionally be compressed.
+			"""
+		case .yaz0, .szs: return """
+			A compression format commonly used in Nintendo games.
 			"""
 		case .pkx, .dat, .rdat, .ccd, .gci, .raw, .dats, .cam: return nil
 		}

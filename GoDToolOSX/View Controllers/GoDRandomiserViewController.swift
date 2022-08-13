@@ -9,7 +9,9 @@ import Cocoa
 
 class GoDRandomiserViewController: GoDViewController {
 
-	@IBOutlet var pspecies: NSButton!
+	@IBOutlet var starters: NSButton!
+	@IBOutlet var obtainables: NSButton!
+	@IBOutlet var unobtainables: NSButton!
 	@IBOutlet var pmoves: NSButton!
 	@IBOutlet var ptypes: NSButton!
 	@IBOutlet var pabilities: NSButton!
@@ -18,9 +20,10 @@ class GoDRandomiserViewController: GoDViewController {
 	@IBOutlet var mtypes: NSButton!
 	@IBOutlet var tmmoves: NSButton!
 	@IBOutlet var bbingo: NSButton!
-	@IBOutlet weak var items: NSButton!
-	@IBOutlet weak var randomiseShadowsOnly: NSButton!
-	@IBOutlet weak var randomiseByBST: NSButton!
+	@IBOutlet var items: NSButton!
+	@IBOutlet var typeMatchups: NSButton!
+	@IBOutlet var shinyHues: NSButton!
+	@IBOutlet var randomiseByBST: NSButton!
 	@IBOutlet var removeTrades: NSButton!
 
 
@@ -29,16 +32,25 @@ class GoDRandomiserViewController: GoDViewController {
 		if game != .XD {
 			bbingo.isHidden = true
 		}
+		if game == .Colosseum {
+			obtainables.title = "Shadow Pokemon"
+			shinyHues.isHidden = true
+		}
 		if game == .PBR {
-			randomiseShadowsOnly.title = "Only Randomise Rental Pass Pokemon"
+			obtainables.isHidden = true
+			obtainables.state = .off
+			starters.title = "Rental Pass Pokemon"
 			removeTrades.isHidden = true
 			items.isHidden = true
+			shinyHues.isHidden = true
 		}
     }
 	
 	@IBAction func randomise(_ sender: Any) {
 
-		let species = pspecies.state == .on
+		let starter = starters.state == .on
+		let obtainable = obtainables.state == .on
+		let unobtainable = unobtainables.state == .on
 		let moves = pmoves.state == .on
 		let types = ptypes.state == .on
 		let abilities = pabilities.state == .on
@@ -47,8 +59,9 @@ class GoDRandomiserViewController: GoDViewController {
 		let moveTypes = mtypes.state == .on
 		let tms = tmmoves.state == .on
 		let boxes = items.state == .on
+		let matchups = typeMatchups.state == .on
+		let hues = shinyHues.state == .on
 		let tradeEvos = removeTrades.state == .on
-		let limit = randomiseShadowsOnly.state == .on
 		let bst = randomiseByBST.state == .on
 
 		#if GAME_XD
@@ -66,8 +79,8 @@ class GoDRandomiserViewController: GoDViewController {
 		XGThreadManager.manager.runInBackgroundAsync {
 			XGUtility.deleteSuperfluousFiles()
 
-			if species {
-				XGRandomiser.randomisePokemon(limitToMainMons: limit, similarBST: bst)
+			if starter || obtainable || unobtainable {
+				XGRandomiser.randomisePokemon(includeStarters: starter, includeObtainableMons: obtainable, includeUnobtainableMons: unobtainable, similarBST: bst)
 			}
 			if moves {
 				XGRandomiser.randomiseMoves()
@@ -90,6 +103,9 @@ class GoDRandomiserViewController: GoDViewController {
 			if tms {
 				XGRandomiser.randomiseTMs()
 			}
+			if matchups {
+				XGRandomiser.randomiseTypeMatchups()
+			}
 
 			#if GAME_XD
 			if bingo {
@@ -99,6 +115,9 @@ class GoDRandomiserViewController: GoDViewController {
 			#if !GAME_PBR
 			if boxes {
 				XGRandomiser.randomiseTreasureBoxes()
+			}
+			if hues {
+				XGRandomiser.randomiseShinyHues()
 			}
 			if tradeEvos {
 				XGPatcher.removeTradeEvolutions()

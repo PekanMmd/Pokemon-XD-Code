@@ -71,7 +71,9 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		roomsTable,
 		SoundsTable,
 		pokemonStatsTable,
-		pokeFacesTable
+		pokeFacesTable,
+		aiWeightEffectsTable,
+		pokemonAIRolesTable
 
 	]
 
@@ -81,8 +83,6 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		battleStylesTable,
 		trainerAITable,
 		battleTypesTable,
-		aiWeightEffectsTable,
-		pokemonAIRolesTable
 	]
 	tables += coloTables
 	#elseif GAME_XD
@@ -100,7 +100,10 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		tutorMovesTable,
 		mirorBDataTable,
 		typesTable,
-		SoundsMetaDataTable
+		SoundsMetaDataTable,
+		worldMapLocationsTable,
+		msgPalettesTable,
+		pokemonMenuAnimationsTable
 	]
 	tables += xdTables
 	#endif
