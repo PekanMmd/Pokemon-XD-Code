@@ -7,7 +7,9 @@
 //
 
 import Foundation
+#if !os(Windows)
 import CoreFoundation
+#endif
 
 final class xxHash {
     
@@ -46,11 +48,15 @@ extension xxHash.Common {
 extension xxHash.Common {
     
     static func endian() -> Endian {
+		#if !os(Windows)
         if CFByteOrderGetCurrent() == Int(CFByteOrderLittleEndian.rawValue) {
             return Endian.little
         }
         
         return Endian.big
+		#else
+		return Endian.little
+		#endif
     }
     
     
