@@ -186,6 +186,7 @@ extension XGImage {
 	}
 }
 
+#if !USE_WIMGT
 extension XGImage {
 	private typealias PNGColor = PNG.RGBA<UInt8>
 	
@@ -215,6 +216,7 @@ extension XGImage {
 		return XGImage(width: size.x, height: size.y, pixels: pixels)
 	}
 }
+#endif
 
 #if canImport(Cocoa)
 extension XGImage {

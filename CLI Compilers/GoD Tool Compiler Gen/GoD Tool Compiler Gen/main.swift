@@ -191,7 +191,7 @@ for version in versions {
     + "swiftc -emit-executable -DENV_OSX -DGAME_XD -o ./out/GoD\\ Tool\\ CLI"
     
     windowsCompiler += "echo \"Compiling GoD Tool. This may take a while...\"\n"
-    + "swiftc -emit-executable  -DENV_WINDOWS -DNO_INTRINSICS -DGAME_XD -o .\\out\\GoD-Tool.exe"
+    + "swiftc -emit-executable  -DENV_WINDOWS -DNO_INTRINSICS -DUSE_WIMGT -DGAME_XD -o .\\out\\GoD-Tool.exe"
     
     for file in GoDSources {
         osxCompiler += " ../" + file.replacingOccurrences(of: " ", with: "\\ ")
@@ -223,7 +223,7 @@ for version in versions {
     
     // MARK: - Add Colosseum swiftc compiler to scripts
     osxColoCompiler += "echo \"Compiling Colosseum Tool. This may take a while...\"\nswiftc -emit-executable -DENV_OSX -DGAME_COLO -o ./out/Colosseum\\ Tool\\ CLI "
-    windowsColoCompiler += "\necho \"Compiling Colosseum Tool. This may take a while...\"\nswiftc -emit-executable  -DENV_WINDOWS -DNO_INTRINSICS -DGAME_COLO -o .\\out\\Colosseum-Tool.exe"
+    windowsColoCompiler += "\necho \"Compiling Colosseum Tool. This may take a while...\"\nswiftc -emit-executable  -DENV_WINDOWS -DNO_INTRINSICS -DUSE_WIMGT -DGAME_COLO -o .\\out\\Colosseum-Tool.exe"
     
     for file in ColoSources {
         osxColoCompiler += " ../" + file.replacingOccurrences(of: " ", with: "\\ ")
@@ -253,7 +253,7 @@ for version in versions {
     
     // MARK: - Add PBR swiftc compiler to scripts
     osxPBRCompiler += "echo \"Compiling PBR Tool. This may take a while...\"\nswiftc -emit-executable -DENV_OSX -DGAME_PBR -o ./out/PBR\\ Tool\\ CLI"
-    windowsPBRCompiler += "echo \"Compiling PBR Tool. This may take a while...\"\nswiftc -emit-executable  -DENV_WINDOWS -DNO_INTRINSICS -DGAME_PBR -o .\\out\\PBR-Tool.exe"
+    windowsPBRCompiler += "echo \"Compiling PBR Tool. This may take a while...\"\nswiftc -emit-executable  -DENV_WINDOWS -DNO_INTRINSICS -DUSE_WIMGT -DGAME_PBR -o .\\out\\PBR-Tool.exe"
     
     for file in PBRSources {
         osxPBRCompiler += " ../" + file.replacingOccurrences(of: " ", with: "\\ ")
