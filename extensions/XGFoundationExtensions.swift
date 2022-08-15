@@ -627,7 +627,7 @@ extension String {
 	}
 	
 	func hexStringToUInt() -> UInt {
-		return strtoul(self, nil, 16)
+		return UInt(strtoul(self, nil, 16))
 	}
 	
 	var isHexInteger: Bool {
