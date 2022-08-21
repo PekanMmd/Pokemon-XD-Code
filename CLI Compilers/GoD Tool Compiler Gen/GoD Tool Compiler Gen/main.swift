@@ -168,8 +168,7 @@ for version in versions {
     + "mkdir " + GoDAssetsFolder + "\n"
     + "mkdir " + GoDWiimmsAssetsFolder + "\n"
     
-    var windowsCompiler = "set SWIFTFLAGS=-sdk %SDKROOT% -resource-dir %SDKROOT%\\usr\\lib\\swift -I %SDKROOT%\\usr\\lib\\swift -L %SDKROOT%\\usr\\lib\\swift\\windows\n"
-    + "echo \"Copying GoD Tool Assets. This may take a while...\"\n"
+    var windowsCompiler = "echo \"Copying GoD Tool Assets. This may take a while...\"\n"
     + "mkdir " + GoDAssetsSubFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
     + "mkdir " + GoDAssetsFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
     + "mkdir " + GoDWiimmsAssetsFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
@@ -192,7 +191,7 @@ for version in versions {
     + "swiftc -emit-executable -DENV_OSX -DGAME_XD -o ./out/GoD\\ Tool\\ CLI"
     
     windowsCompiler += "echo \"Compiling GoD Tool. This may take a while...\"\n"
-    + "swiftc %SWIFTFLAGS% -emit-executable -DENV_WINDOWS -DGAME_XD -o .\\out\\GoD-Tool.exe"
+    + "swiftc -emit-executable  -DENV_WINDOWS -DNO_INTRINSICS -DUSE_WIMGT -DGAME_XD -o .\\out\\GoD-Tool.exe"
     
     for file in GoDSources {
         osxCompiler += " ../" + file.replacingOccurrences(of: " ", with: "\\ ")
@@ -206,7 +205,7 @@ for version in versions {
     + "mkdir " + ColoAssetsFolder + "\n"
     + "mkdir " + ColoWiimmsAssetsFolder + "\n"
     
-    var windowsColoCompiler = "set SWIFTFLAGS=-sdk %SDKROOT% -resource-dir %SDKROOT%\\usr\\lib\\swift -I %SDKROOT%\\usr\\lib\\swift -L %SDKROOT%\\usr\\lib\\swift\\windows\necho \"Copying Colosseum Tool Assets. This may take a while...\"\n"
+    var windowsColoCompiler = "echo \"Copying Colosseum Tool Assets. This may take a while...\"\n"
     + "mkdir " + ColoAssetsSubFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
     + "mkdir " + ColoAssetsFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
     + "mkdir " + ColoWiimmsAssetsFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
@@ -224,7 +223,7 @@ for version in versions {
     
     // MARK: - Add Colosseum swiftc compiler to scripts
     osxColoCompiler += "echo \"Compiling Colosseum Tool. This may take a while...\"\nswiftc -emit-executable -DENV_OSX -DGAME_COLO -o ./out/Colosseum\\ Tool\\ CLI "
-    windowsColoCompiler += "\necho \"Compiling Colosseum Tool. This may take a while...\"\nswiftc %SWIFTFLAGS% -emit-executable -DENV_WINDOWS -DGAME_COLO -o .\\out\\Colosseum-Tool.exe"
+    windowsColoCompiler += "\necho \"Compiling Colosseum Tool. This may take a while...\"\nswiftc -emit-executable  -DENV_WINDOWS -DNO_INTRINSICS -DUSE_WIMGT -DGAME_COLO -o .\\out\\Colosseum-Tool.exe"
     
     for file in ColoSources {
         osxColoCompiler += " ../" + file.replacingOccurrences(of: " ", with: "\\ ")
@@ -238,7 +237,7 @@ for version in versions {
     + "mkdir " + PBRAssetsFolder + "\n"
     + "mkdir " + PBRWiimmsAssetsFolder + "\n"
     
-    var windowsPBRCompiler = "set SWIFTFLAGS=-sdk %SDKROOT% -resource-dir %SDKROOT%\\usr\\lib\\swift -I %SDKROOT%\\usr\\lib\\swift -L %SDKROOT%\\usr\\lib\\swift\\windows\necho \"Copying PBR Tool Assets. This may take a while...\"\n"
+    var windowsPBRCompiler = "echo \"Copying PBR Tool Assets. This may take a while...\"\n"
     + "mkdir " + PBRAssetsSubFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
     + "mkdir " + PBRAssetsFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
     + "mkdir " + PBRWiimmsAssetsFolder.replacingOccurrences(of: "/", with: "\\") + "\n"
@@ -254,7 +253,7 @@ for version in versions {
     
     // MARK: - Add PBR swiftc compiler to scripts
     osxPBRCompiler += "echo \"Compiling PBR Tool. This may take a while...\"\nswiftc -emit-executable -DENV_OSX -DGAME_PBR -o ./out/PBR\\ Tool\\ CLI"
-    windowsPBRCompiler += "\necho \"Compiling PBR Tool. This may take a while...\"\nswiftc %SWIFTFLAGS% -emit-executable -DENV_WINDOWS -DGAME_PBR -o .\\out\\PBR-Tool.exe"
+    windowsPBRCompiler += "echo \"Compiling PBR Tool. This may take a while...\"\nswiftc -emit-executable  -DENV_WINDOWS -DNO_INTRINSICS -DUSE_WIMGT -DGAME_PBR -o .\\out\\PBR-Tool.exe"
     
     for file in PBRSources {
         osxPBRCompiler += " ../" + file.replacingOccurrences(of: " ", with: "\\ ")

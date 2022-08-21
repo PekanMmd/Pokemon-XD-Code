@@ -107,8 +107,20 @@ enum CommonIndexes : Int {
 
 	var index: Int {
 		switch self {
-		case .StringTable1: return region == .JP ? 95 : 98
-		case .Script: return region == .JP ? 96 : 101
+		case .StringTable1:
+			switch region {
+			case .EU: return 99
+			case .US: return 98
+			case .JP: return 95
+			default: return self.rawValue
+			}
+		case .Script:
+			switch region {
+			case .EU: return 98
+			case .US: return 101
+			case .JP: return 96
+			default: return self.rawValue
+			}
 		default: return self.rawValue
 		}
 	}
