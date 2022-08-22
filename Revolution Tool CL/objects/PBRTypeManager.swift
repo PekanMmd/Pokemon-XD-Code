@@ -52,7 +52,7 @@ class PBRTypeManager {
 		let dataTableOffsetInstructionsStartOffset: Int
 		switch region {
 		case .EU: dataTableOffsetInstructionsStartOffset = 0x3be7c4
-		case .US: dataTableOffsetInstructionsStartOffset = 0x3f61a0
+		case .US: dataTableOffsetInstructionsStartOffset = 0x3c1e70
 		case .JP: dataTableOffsetInstructionsStartOffset = -1
 		case .OtherGame: dataTableOffsetInstructionsStartOffset = -1
 		}
@@ -108,7 +108,7 @@ class PBRTypeManager {
 
 	@discardableResult
 	static func updateTypeMatchupDolData(allowSizeIncrease: Bool) -> Bool {
-		guard let dol = XGFiles.dol.data, let startOffset = typeMatchupDataDolOffset, let currentTable = currentMatchupTable else {
+		guard let dol = XGFiles.dol.data else {
 			return false
 		}
 
@@ -116,6 +116,11 @@ class PBRTypeManager {
 		   let currentOffset = typeMatchupDataDolOffset,
 			currentOffset == typeMatchUpOriginalLocation {
 			XGPatcher.moveTypeMatchupsTableToPassValidationFunction()
+		}
+		
+		guard let startOffset = typeMatchupDataDolOffset,
+			  let currentTable = currentMatchupTable else {
+			return false
 		}
 
 		var newTable = [PBRTypeMatchup]()
