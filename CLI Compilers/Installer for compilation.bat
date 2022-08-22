@@ -12,3 +12,8 @@ del /q vs_community.exe
 pip install six
 
 winget install Swift.Toolchain 
+
+:: Undocumented extra step due to apparent error in toolchain's default folder structure
+mkdir C:\Library\Developer\Toolchains\unknown-Asserts-development.xctoolchain\usr\lib\swift\windows
+mkdir C:\Library\Developer\Toolchains\unknown-Asserts-development.xctoolchain\usr\lib\swift\windows\x86_64
+copy C:\Library\Developer\Platforms\Windows.platform\Developer\SDKs\Windows.sdk\usr\lib\swift\windows\x86_64 C:\Library\Developer\Toolchains\unknown-Asserts-development.xctoolchain\usr\lib\swift\windows\x86_64
