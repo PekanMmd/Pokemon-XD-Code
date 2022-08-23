@@ -1,30 +1,26 @@
 #!/usr/bin/env bash
 
     #####################################################################
-    ##                 __            __ _ ___________                  ##
-    ##                 \ \          / /| |____   ____|                 ##
-    ##                  \ \        / / | |    | |                      ##
-    ##                   \ \  /\  / /  | |    | |                      ##
-    ##                    \ \/  \/ /   | |    | |                      ##
-    ##                     \  /\  /    | |    | |                      ##
-    ##                      \/  \/     |_|    |_|                      ##
+    ##                    _______ _______ _______                      ##
+    ##                   |  ___  |____   |  ___  |                     ##
+    ##                   | |   |_|    / /| |   |_|                     ##
+    ##                   | |_____    / / | |_____                      ##
+    ##                   |_____  |  / /  |_____  |                     ##
+    ##                    _    | | / /    _    | |                     ##
+    ##                   | |___| |/ /____| |___| |                     ##
+    ##                   |_______|_______|_______|                     ##
     ##                                                                 ##
-    ##                        Wiimms ISO Tools                         ##
-    ##                      https://wit.wiimm.de/                      ##
-    ##                                                                 ##
-    #####################################################################
-    ##                                                                 ##
-    ##   This file is part of the WIT project.                         ##
-    ##   Visit https://wit.wiimm.de/ for project details and sources.  ##
-    ##                                                                 ##
-    ##   Copyright (c) 2009-2021 by Dirk Clemens <wiimm@wiimm.de>      ##
+    ##                        Wiimms SZS Tools                         ##
+    ##                      http://szs.wiimm.de/                       ##
     ##                                                                 ##
     #####################################################################
     ##                                                                 ##
-    ##   This file installs the distribution on a windows system.      ##
+    ##   This file is part of the SZS project.                         ##
+    ##   Visit http://szs.wiimm.de/ for project details and sources.   ##
+    ##                                                                 ##
+    ##   Copyright (c) 2011-2019 by Dirk Clemens <wiimm@wiimm.de>      ##
     ##                                                                 ##
     #####################################################################
-
 
 #------------------------------------------------------------------------------
 # simple cygwin check
@@ -38,10 +34,9 @@ fi
 #------------------------------------------------------------------------------
 # pre definitions
 
-BIN_FILES="wit wwt wdf wfuse"
-WDF_LINKS="wdf-cat wdf-dump"
-SHARE_FILES="titles.txt titles-de.txt titles-es.txt titles-fr.txt titles-it.txt titles-ja.txt titles-ko.txt titles-nl.txt titles-pt.txt titles-ru.txt titles-zhcn.txt titles-zhtw.txt system-menu.txt magic.txt"
-WIN_INSTALL_PATH="Wiimm/WIT"
+BIN_FILES="wszst wbmgt wimgt wkclt wkmpt wstrt "
+SHARE_FILES=""
+WIN_INSTALL_PATH="Wiimm/SZS"
 
 #------------------------------------------------------------------------------
 # setup
@@ -65,7 +60,7 @@ CDEST="$CYGWIN_PROG_PATH/$WIN_INSTALL_PATH"
 #------------------------------------------------------------------------------
 # remove application pathes
 
-for tool in $BIN_FILES $WDF_LINKS
+for tool in $BIN_FILES
 do
     key="/machine/SOFTWARE/Microsoft/Windows/CurrentVersion/App Paths/$tool.exe"
     if regtool check "$key" >/dev/null 2>&1
@@ -78,9 +73,9 @@ do
 done
 
 #------------------------------------------------------------------------------
-# remove WIT path to environment 'Path'
+# add WIT path to environment 'Path'
 
-echo "* remove WIT path from environment 'Path'"
+echo "* add SZS path to environment 'Path'"
 
 function set_path()
 {
