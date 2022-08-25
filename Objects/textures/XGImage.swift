@@ -138,6 +138,9 @@ extension XGImage {
 	}
 
 	func writePNGData(toFile file: XGFiles) {
+		if XGSettings.current.verbose {
+			printg("Saving image to \(file.path)")
+		}
 		#if canImport(Cocoa)
 		pngData.write(to: file)
 		#elseif USE_WIMGT
@@ -150,7 +153,10 @@ extension XGImage {
 			return
 		}
 		let args = "decode -o \(tex0File.path.escapedPath) -d \(file.path.escapedPath)"
-		GoDShellManager.run(.wimgt, args: args)
+		let output = GoDShellManager.run(.wimgt, args: args, printOutput: false)
+		if XGSettings.current.verbose {
+			printg(output)
+		}
 		tex0File.delete()
 		#else
 		encodePNG(toFile: file)
