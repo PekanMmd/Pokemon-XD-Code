@@ -111,10 +111,28 @@ class DeckPokemonStructTable: GoDStructTableFormattable {
 					(name: "Gender", type: .genderID, numberOfBits: 2, firstBitIndexLittleEndian: 1, mod: nil, div: nil, scale: nil),
 					(name: "Nature", type: .natureID, numberOfBits: 5, firstBitIndexLittleEndian: 3, mod: nil, div: nil, scale: nil),
 				]),
-				.byte(name: "Unknown 2", description: "", type: .uintHex),
+				.bitArray(name: "Combo Partner", description: "Which pokemon should be used as a combo", bitFieldNames: [
+					"Can Fill Combo A Role 1",
+					"Can Fill Combo A Role 2",
+					"Can Fill Combo B Role 1",
+					"Can Fill Combo B Role 2",
+					nil,
+					nil,
+					nil,
+					nil
+				]),
 			] : [
 				.byte(name: "Unused", description: "", type: .null),
-				.byte(name: "Unknown 2", description: "", type: .uintHex),
+				.bitArray(name: "Combo Partner", description: "Which pokemon should be used as a combo", bitFieldNames: [
+					"Can Fill Combo A Role 1",
+					"Can Fill Combo A Role 2",
+					"Can Fill Combo B Role 1",
+					"Can Fill Combo B Role 2",
+					nil,
+					nil,
+					nil,
+					nil
+				]),
 				.bitMask(name: "Mini PID", description: "", length: .char, values: [
 					(name: "Use species second ability", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 0, mod: nil, div: nil, scale: nil),
 					(name: "Gender", type: .genderID, numberOfBits: 2, firstBitIndexLittleEndian: 1, mod: nil, div: nil, scale: nil),
@@ -129,7 +147,7 @@ class DeckPokemonStructTable: GoDStructTableFormattable {
 			.byte(name: "Happiness", description: "", type: .uint),
 			.short(name: "Item", description: "", type: .itemID),
 			.byte(name: "AI Role", description: "", type: .indexOfEntryInTable(table: pokemonAIRolesTable, nameProperty: nil)),
-			.byte(name: "Unknown", description: "", type: .uintHex),
+			.byte(name: "Is Key Strategic Pokemon", description: "", type: .uint),
 			.subStruct(name: "IVs", description: "", property: statsStructByte),
 			.subStruct(name: "EVs", description: "", property: statsStructByte),
 			.array(name: "Moves", description: "", property:
@@ -141,6 +159,76 @@ class DeckPokemonStructTable: GoDStructTableFormattable {
 		deck.addPokemonEntries(count: count)
 	}
 }
+
+let trainerAIStruct = GoDStruct(name: "Trainer AI", format: [
+	.bitMask(name: "Pokemon Selection Flags", description: "", length: .char, values: [
+		(name: "Randomly selects next pokemon", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 7, mod: nil, div: nil, scale: nil),
+		(name: "Avoids pokemon with same weaknesses", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 6, mod: nil, div: nil, scale: nil),
+		(name: "Sends pokemon out in order", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 5, mod: nil, div: nil, scale: nil),
+		(name: "Sends boss pokemon out last", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 4, mod: nil, div: nil, scale: nil),
+		(name: "Factors in ace pokemon flag", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 3, mod: nil, div: nil, scale: nil),
+		(name: "Factors in types", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 2, mod: nil, div: nil, scale: nil),
+		(name: "Factors in abilities", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 1, mod: nil, div: nil, scale: nil),
+		(name: "Factors in damage calc", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 0, mod: nil, div: nil, scale: nil)
+	]),
+	.bitMask(name: "Move Selection Flags", description: "", length: .char, values: [
+		(name: "Selects random defence", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 7, mod: nil, div: nil, scale: nil),
+		(name: "Selects moves randomly", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 6, mod: nil, div: nil, scale: nil),
+		(name: "Factors in move weighting", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 5, mod: nil, div: nil, scale: nil),
+		(name: "Factors in pokemon role", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 4, mod: nil, div: nil, scale: nil),
+		(name: "Factors move accuracy", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 3, mod: nil, div: nil, scale: nil),
+		(name: "Factors in move's risk flag", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 2, mod: nil, div: nil, scale: nil),
+		(name: "Factors in pokemon's status conditions", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 1, mod: nil, div: nil, scale: nil)
+	]),
+	.short(name: "Padding", description: "", type: .null),
+	.bitMask(name: "Atk Stat Stages", description: "6 is neutral, 12 is +6, 0 is -6", length: .char, values: [
+		(name: "Max Atk Stages", type: .shiftedInt(midPoint: 6), numberOfBits: 4, firstBitIndexLittleEndian: 4, mod: nil, div: nil, scale: nil),
+		(name: "Min Atk Stages", type: .shiftedInt(midPoint: 6), numberOfBits: 4, firstBitIndexLittleEndian: 0, mod: nil, div: nil, scale: nil)
+	]),
+	.bitMask(name: "Def Stat Stages", description: "6 is neutral, 12 is +6, 0 is -6", length: .char, values: [
+		(name: "Max Def Stages", type: .shiftedInt(midPoint: 6), numberOfBits: 4, firstBitIndexLittleEndian: 4, mod: nil, div: nil, scale: nil),
+		(name: "Min Def Stages", type: .shiftedInt(midPoint: 6), numberOfBits: 4, firstBitIndexLittleEndian: 0, mod: nil, div: nil, scale: nil)
+	]),
+	.bitMask(name: "Sp.Atk Stat Stages", description: "6 is neutral, 12 is +6, 0 is -6", length: .char, values: [
+		(name: "Max Sp.Atk Stages", type: .shiftedInt(midPoint: 6), numberOfBits: 4, firstBitIndexLittleEndian: 4, mod: nil, div: nil, scale: nil),
+		(name: "Min Sp.Atk Stages", type: .shiftedInt(midPoint: 6), numberOfBits: 4, firstBitIndexLittleEndian: 0, mod: nil, div: nil, scale: nil)
+	]),
+	.bitMask(name: "Sp.Def Stat Stages", description: "6 is neutral, 12 is +6, 0 is -6", length: .char, values: [
+		(name: "Max Sp.Def Stages", type: .shiftedInt(midPoint: 6), numberOfBits: 4, firstBitIndexLittleEndian: 4, mod: nil, div: nil, scale: nil),
+		(name: "Min Sp.Def Stages", type: .shiftedInt(midPoint: 6), numberOfBits: 4, firstBitIndexLittleEndian: 0, mod: nil, div: nil, scale: nil)
+	]),
+	.bitMask(name: "Speed Stat Stages", description: "6 is neutral, 12 is +6, 0 is -6", length: .char, values: [
+		(name: "Max Speed Stages", type: .shiftedInt(midPoint: 6), numberOfBits: 4, firstBitIndexLittleEndian: 4, mod: nil, div: nil, scale: nil),
+		(name: "Min Speed Stages", type: .shiftedInt(midPoint: 6), numberOfBits: 4, firstBitIndexLittleEndian: 0, mod: nil, div: nil, scale: nil)
+	]),
+	.bitMask(name: "Accuracy Stat Stages", description: "6 is neutral, 12 is +6, 0 is -6 (unused)", length: .char, values: [
+		(name: "Max Accuracy Stages", type: .shiftedInt(midPoint: 6), numberOfBits: 4, firstBitIndexLittleEndian: 4, mod: nil, div: nil, scale: nil),
+		(name: "Min Accuracy Stages", type: .shiftedInt(midPoint: 6), numberOfBits: 4, firstBitIndexLittleEndian: 0, mod: nil, div: nil, scale: nil)
+	]),
+	.bitMask(name: "Evasion Stat Stages", description: "6 is neutral, 12 is +6, 0 is -6", length: .char, values: [
+		(name: "Max Evasion Stages", type: .shiftedInt(midPoint: 6), numberOfBits: 4, firstBitIndexLittleEndian: 4, mod: nil, div: nil, scale: nil),
+		(name: "Min Evasion Stages", type: .shiftedInt(midPoint: 6), numberOfBits: 4, firstBitIndexLittleEndian: 0, mod: nil, div: nil, scale: nil)
+	]),
+	.byte(name: "Padding", description: "", type: .null),
+	.byte(name: "Max Stat stages", description: "", type: .shiftedInt(midPoint: 42)),
+	.byte(name: "Min Stat stages", description: "", type: .shiftedInt(midPoint: 42)),
+	.byte(name: "Switch rate", description: "", type: .percentage),
+	.byte(name: "Item use rate", description: "", type: .percentage),
+	.byte(name: "Attacking move rate", description: "", type: .percentage),
+	.byte(name: "KO rate", description: "", type: .percentage),
+	.byte(name: "Low HP rate", description: "", type: .percentage),
+	.byte(name: "Last PP rate", description: "", type: .percentage),
+	.byte(name: "Speciality pokemon type 1", description: "", type: .typeID),
+	.byte(name: "Speciality pokemon type 2", description: "", type: .typeID),
+	.byte(name: "Speciality pokemon type 1 rate", description: "", type: .percentage),
+	.byte(name: "Speciality pokemon type 2 rate", description: "", type: .percentage),
+	.short(name: "Speciality move type 1", description: "", type: .typeID),
+	.short(name: "Speciality move type 2", description: "", type: .typeID),
+	.byte(name: "Speciality move type 1 rate", description: "", type: .percentage),
+	.byte(name: "Speciality move type 2 rate", description: "", type: .percentage),
+	.byte(name: "Correction Value", description: "", type: .uint)
+	
+])
 
 class DeckAIStructTable: GoDStructTableFormattable {
 	var file: XGFiles
@@ -163,10 +251,10 @@ class DeckAIStructTable: GoDStructTableFormattable {
 		numberOfEntriesInFile = { _ -> Int in
 			return deck.DTAIEntries
 		}
+		
+		
 
-		properties = GoDStruct(name: "Trainer AI", format: [
-			.array(name: "Unknown Values", description: "", property: .byte(name: "Unknown", description: "", type: .uintHex), count: 32)
-		])
+		properties = trainerAIStruct
 	}
 
 	func addEntries(count: Int) {
@@ -177,20 +265,20 @@ class DeckAIStructTable: GoDStructTableFormattable {
 let shadowPokemonStruct = GoDStruct(name: "Shadow Pokemon", format: [
 	.byte(name: "Miror B weighting", description: "Determines how likely this pokemon is to appear when encountering Miror B. Set to 0 for it to never trigger nor appear with Miror B.", type: .uintHex),
 	.byte(name: "Catch Rate", description: "Overrides the base catch rate for the species", type: .uint),
-	.byte(name: "Shadow Boost Level", description: "The hidden level the pokemon has before you catch it", type: .uint),
+	.byte(name: "Level", description: "The level the shadow pokemon will be once caught", type: .uint),
 	.bitArray(name: "Status Flags", description: "", bitFieldNames: [
 		"Shadow ID Is Being Used",
-		"Unknown Flag 2",
-		"Unknown Flag 3",
-		"Unknown Flag 4",
-		"Unknown Flag 5",
-		"Unknown Flag 6",
-		"Unknown Flag 7",
-		"Unknown Flag 8",
+		nil,
+		nil,
+		nil,
+		nil,
+		nil,
+		nil,
+		nil
 	]),
 	.word(name: "Pokemon Index In Story Deck", description: "The ID in Deck Story for the pokemon that this shadow ID is attached to", type: .indexOfEntryInTable(table: DeckPokemonStructTable(deck: .DeckStory), nameProperty: "Species")),
 	.short(name: "Heart Guage", description: "Determines how long it takes to purify the pokemon", type: .uint),
-	.short(name: "Padding", description: "", type: .null),
+	.short(name: "Bonus Exp", description: "Set in game as exp accumulates", type: .null),
 	.array(name: "Shadow Moves", description: "", property:
 		.short(name: "Move", description: "", type: .moveID), count: 4),
 	.byte(name: "Aggression", description: "The lower the value, the more likely it is to enter reverse mode", type: .uintHex),

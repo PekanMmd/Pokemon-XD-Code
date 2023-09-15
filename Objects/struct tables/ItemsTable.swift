@@ -20,8 +20,8 @@ let itemsStruct = GoDStruct(name: "Item", format: [
 	.word(name: "Name ID", description: "", type: .msgID(file: .common_rel)),
 	.word(name: "Description ID", description: "", type: .msgID(file: .typeAndFsysName(.msg, "pocket_menu"))),
 	.word(name: "Parameter", description: "Determines effectiveness of item", type: .uint),
-	.word(name: "Function Pointer", description: "Offset of ASM function the item triggers. This is set at run time but if you set it in the game file for an item that doesn't normally get set then it will keep that value.", type: .uintHex),
-	.word(name: "Function Pointer 2", description: "Offset of ASM function the item triggers. This is set at run time but if you set it in the game file for an item that doesn't normally get set then it will keep that value.", type: .uintHex),
+	.word(name: "Field Function Pointer", description: "Offset of ASM function the item triggers in the overworld. This is set at run time but if you set it in the game file for an item that doesn't normally get set then it will keep that value.", type: .uintHex),
+	.word(name: "Battle Function Pointer", description: "Offset of ASM function the item triggers during battle. This is set at run time but if you set it in the game file for an item that doesn't normally get set then it will keep that value.", type: .uintHex),
 	.array(name: "Happiness effects", description: "Determines how much a pokemon's happiness changes when consuming this item. The amount varies based on the current happiness in 2 tiers.", property: .byte(name: "Happiness Effect", description: "", type: .int), count: 3)
 ])
 

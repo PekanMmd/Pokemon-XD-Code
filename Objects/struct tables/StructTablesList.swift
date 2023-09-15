@@ -19,14 +19,17 @@ var structTablesList: [GoDStructTableFormattable] {
 
 	#if GAME_XD
 	tables += [
-		wzxTable
+		wzxTable,
+		menuDataTable
 	]
 	#else
 	tables += [
+		textureRenderingTable,
 		validItemsTable,
 		validItemsTable2,
 		itemsTable,
 		typesTable,
+		scriptBuiltInFunctionsTable
 	]
 	#endif
 
