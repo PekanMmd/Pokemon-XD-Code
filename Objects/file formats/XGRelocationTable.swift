@@ -18,12 +18,64 @@ class XGCommon: XGRelocationTable {
 	convenience init() {
 		self.init(file: .common_rel)
 	}
+	
+	func getPointer(symbol: CommonIndexes) -> Int {
+		return pointers[symbol.index]?.dataPointer ?? -1
+	}
+	
+	func getPointerAddresses(symbol: CommonIndexes) -> [Int] {
+		return pointers[symbol.index]?.addresses ?? []
+	}
+
+	func getSymbolLength(symbol: CommonIndexes) -> Int {
+		return symbolLengths[symbol.index] ?? 0
+	}
+
+	func getValueAtPointer(symbol: CommonIndexes) -> Int {
+		let startOffset = getPointer(index: symbol.index)
+		return data.get4BytesAtOffset(startOffset)
+	}
+
+	func setValueAtPointer(symbol: CommonIndexes, newValue value: Int) {
+		let startOffset = getPointer(index: symbol.index)
+		data.replaceWordAtOffset(startOffset, withBytes: value.unsigned)
+	}
+	
+	func expandSymbol(_ symbol: CommonIndexes, by byteCount: Int, save: Bool = false) {
+		expandSymbolWithIndex(symbol.index, by: byteCount)
+	}
 }
 
 var pocket = XGPocket()
 class XGPocket : XGRelocationTable {
 	convenience init() {
 		self.init(file: .pocket_menu)
+	}
+	
+	func getPointer(symbol: PocketIndexes) -> Int {
+		return pointers[symbol.index]?.dataPointer ?? -1
+	}
+	
+	func getPointerAddresses(symbol: PocketIndexes) -> [Int] {
+		return pointers[symbol.index]?.addresses ?? []
+	}
+
+	func getSymbolLength(symbol: PocketIndexes) -> Int {
+		return symbolLengths[symbol.index] ?? 0
+	}
+
+	func getValueAtPointer(symbol: PocketIndexes) -> Int {
+		let startOffset = getPointer(index: symbol.index)
+		return data.get4BytesAtOffset(startOffset)
+	}
+
+	func setValueAtPointer(symbol: PocketIndexes, newValue value: Int) {
+		let startOffset = getPointer(index: symbol.index)
+		data.replaceWordAtOffset(startOffset, withBytes: value.unsigned)
+	}
+	
+	func expandSymbol(_ symbol: PocketIndexes, by byteCount: Int, save: Bool = false) {
+		expandSymbolWithIndex(symbol.index, by: byteCount)
 	}
 }
 
@@ -216,6 +268,10 @@ class XGRelocationTable {
 	func getPointer(index: Int) -> Int {
 		return pointers[index]?.dataPointer ?? -1
 	}
+	
+	func getPointerAddresses(index: Int) -> [Int] {
+		return pointers[index]?.addresses ?? []
+	}
 
 	func getSymbolLength(index: Int) -> Int {
 		return symbolLengths[index] ?? 0
@@ -270,10 +326,6 @@ class XGRelocationTable {
 			return
 		}
 		insertBytes(count: byteCount, at: pointerInfo.dataPointer - sectionForInsertion.sectionDataOffset + symbolLength, relativeToSectionWithID: pointerInfo.section, save: save)
-	}
-
-	func expandSymbol(_ symbol: CommonIndexes, by byteCount: Int, save: Bool = false) {
-		expandSymbolWithIndex(symbol.index, by: byteCount)
 	}
 
 	func idForSymbol(withAddress address: Int) -> Int? {

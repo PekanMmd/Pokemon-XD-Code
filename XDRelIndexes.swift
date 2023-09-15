@@ -210,10 +210,16 @@ enum CommonIndexes : Int {
 enum PocketIndexes : Int {
 	case MartStartIndexes  = 0
 	case numberOfMarts = 1
-	case MartGreetings = 2
-	case numberOfMartGreetingSections = 3 // 0x4c bytes each
+	case CouponCounterDialog = 2
+	case numberofCouponCounterDialog = 3 // 0x4c bytes each
 	case MartItems = 4
 	case numberOfMartItems = 5
+	case MartGreetings = 6
+	case numberOfMartGreetingSections = 7 // 0x4c bytes each
+	
+	var index: Int {
+		return rawValue
+	}
 	
 	var startOffset : Int {
 		return pocket.getPointer(index: self.rawValue)
