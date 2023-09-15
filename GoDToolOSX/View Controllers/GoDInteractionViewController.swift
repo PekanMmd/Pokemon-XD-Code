@@ -111,7 +111,7 @@ class GoDInteractionViewController: GoDTableViewController {
 				case kIPElevatorValue: info = .Elevator(elevatorID: 0, targetRoomID: 0xAF, targetElevatorID: 0, direction: .up)
 				case kIPTextValue: info = .Text(stringID: 0)
 				case kIPCutsceneValue: info = .CutsceneWarp(targetRoom: 0xAF, targetEntryID: 0, cutsceneID: 0, cameraFSYSID: 0)
-				case kIPPCValue: info = .PC(roomID: 0xAF, unknown: 0)
+				case kIPPCValue: info = .PC(currentRoomID: 0xAF, unknown: 0)
 				default:
 					if scriptTypePopUp.indexOfSelectedItem == 1 {
 						info = .CommonScript(scriptIndex: scriptIndex, parameter1: 0, parameter2: 0, parameter3: 0, parameter4: 0)
@@ -421,7 +421,7 @@ class GoDInteractionViewController: GoDTableViewController {
 
 			case kIPPCValue:
 				let targetRoom = self.targetRoom.selectedValue.roomID
-				ip.info = .PC(roomID: targetRoom, unknown: self.field1.stringValue.integerValue ?? 0)
+				ip.info = .PC(currentRoomID: targetRoom, unknown: self.field1.stringValue.integerValue ?? 0)
 
 			default:
 				let p1 = self.field1.stringValue.integerValue ?? 0

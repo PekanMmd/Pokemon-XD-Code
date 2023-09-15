@@ -145,22 +145,13 @@ enum XGPokemon: XGIndexedValue {
 		
 		var moves = [XGMoves](repeating: XGMoves.index(0), count: 4)
 		
-		func hasMove(_ move: XGMoves) -> Bool {
-			for aMove in moves {
-				if move == aMove {
-					return true
-				}
-			}
-			return false
-		}
-		
 		let levelUpMoves = XGPokemonStats(index: self.index).levelUpMoves
 		
 		var moveSlot = 0
 		for move in levelUpMoves {
 			if (move.level <= pokeLevel) && (move.move.index > 0) {
 				
-				if hasMove(move.move) {
+				if moves.contains(where: { $0 == move.move }) {
 					continue
 				}
 				

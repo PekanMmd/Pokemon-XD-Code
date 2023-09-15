@@ -23,7 +23,7 @@ class XGMapRel: XGRelocationTable {
 		return scriptFile.exists ? scriptFile.scriptData : nil
 	}
 
-	convenience init(file: XGFiles, checkScript: Bool) {
+	convenience init(file: XGFiles, checkScript: Bool = false) {
 		self.init(file: file)
 
 		let data = file.data

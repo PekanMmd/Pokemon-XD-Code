@@ -173,6 +173,17 @@ class XGTrainerPokemon {
 			data.setByte(24 + i, to: EVs[i])
 		}
 	}
+	
+	func randomiserMoveset() -> [XGMoves] {
+		var moves = species.movesForLevel(minLevel)
+		for i in 0 ..< 3 {
+			if moves[i].index == 0 {
+				moves[i] = .randomMove(.offensive, .tm)
+			}
+		}
+		moves[3] = .randomMove(.offensive, .tm)
+		return moves
+	}
 }
 
 
