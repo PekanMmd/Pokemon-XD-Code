@@ -413,8 +413,8 @@ import Foundation
 //let cdol = XGFiles.dol.data!
 //
 ////crit multipliers
-//let critOffsets = [0x8020dd7c,0x8020dd8c,0x8020dd9c,0x801f0968]
-//let critValues : [UInt32] = [0x38800003,0x38800002,0x38800002,0x38800002]
+//let critOffsets = [0x8020dd7c,0x8020dd8c,0x8020dd9c,0x801f0968,0x802155f8,0x80217018,0x80217028,0x80217038]
+//let critValues : [UInt32] = [0x38800003,0x38800002,0x38800002,0x38800002,0x28000003,0x38800003,0x38800002,0x38800002]
 //
 //for i in 0 ..< critOffsets.count {
 //	cdol.replaceWordAtOffset(critOffsets[i] - kDolToRAMOffsetDifference, withBytes: critValues[i])
@@ -8014,7 +8014,29 @@ import Foundation
 //	}
 //}
 
-
+//// Hide battle UI
+//let menuDataTableRAMOffset = {
+//	switch region {
+//	case .US: return 0x802FC8F0
+//	case .EU: return 0x802FDFB0
+//	default: return 0
+//	}
+//}()
+//let functionCallRAMOffsets = {
+//	switch region {
+//	case .US: return [0x802390CC, 0x802130f8, 0x80213174]
+//	case .EU: return [0x8023afcc, 0x80214f3c, 0x80214fb8]
+//	default: return []
+//	}
+//}()
+//
+//for windowID in [0x37, 0x38, 0x40, 0x41, 0x42, 0x44] {
+//	let offset = menuDataTableRAMOffset + (windowID * 0x1c)
+//	XGAssembly.geckoCode(RAMOffset: offset, asm: ASM(repeating: .raw(0), count: 0x1c / 4)).println()
+//}
+//for functionCallRAMOffset in functionCallRAMOffsets {
+//	XGAssembly.geckoCode(RAMOffset: functionCallRAMOffset, asm: [.nop]).println()
+//}
 
 
 
