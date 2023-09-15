@@ -125,6 +125,12 @@ extension Array where Element == Bool {
 	
 }
 extension Array {
+	
+	enum ArrayPermutationError: Error {
+		case PermutationCountMismatch
+		case ArrayIndexOutOfBounds
+	}
+	
 	func forEachIndexed(_ closure: (Int,Element) -> Void) {
 		for i in 0 ..< self.count {
 			closure(i, self[i])
@@ -137,6 +143,75 @@ extension Array {
 			s.push($0)
 		}
 		return s
+	}
+	
+	func permuted(by permutations: [Int]) throws -> Array<Element> {
+		guard self.count > 0 else { return [] }
+		guard permutations.count == self.count else {
+			throw ArrayPermutationError.PermutationCountMismatch
+		}
+		var result = [Element](repeating: self[0], count: count)
+		permutations.forEachIndexed { fromIndex, toIndex in
+			result[toIndex] = self[fromIndex]
+		}
+		return result
+	}
+	
+	func reversePermuted(by permutations: [Int]) throws -> Array<Element> {
+		guard self.count > 0 else { return [] }
+		guard permutations.count == self.count else {
+			throw ArrayPermutationError.PermutationCountMismatch
+		}
+		guard !permutations.contains(where: {
+			($0 < 0) || ($0 >= count)
+		}) else {
+			throw ArrayPermutationError.ArrayIndexOutOfBounds
+		}
+		var result = [Element](repeating: self[0], count: count)
+		permutations.forEachIndexed { fromIndex, toIndex in
+			result[fromIndex] = self[toIndex]
+		}
+		return result
+	}
+}
+
+enum SequenceSelectionTieBreaker {
+	case random, first
+}
+extension Array where Element: Equatable & Hashable {
+	
+	func mode(tieBreaker: SequenceSelectionTieBreaker = .random) -> Element? {
+		guard count > 0 else { return nil }
+		guard count > 1 else { return self[0] }
+		
+		var dict = [Element: Int]()
+		var order = [Element]()
+		forEach { element in
+			if let count = dict[element] {
+				dict[element] = count + 1
+			} else {
+				dict[element] = 1
+			}
+			order.addUnique(element)
+		}
+		guard let max = dict.enumerated().map(\.element).sorted(by: { $0.value > $1.value }).first?.value else {
+			return nil
+		}
+		let options = dict.filter { _, value in return value == max }
+		
+		if options.count <= 1 { return options.first?.key }
+		else {
+			switch tieBreaker {
+			case .random:
+				return options.randomElement()?.key
+			case .first:
+				return order.first(where: { element in
+					options.contains(where: { key, _ in
+						element == key
+					})
+				})
+			}
+		}
 	}
 }
 
@@ -238,6 +313,14 @@ extension Int {
 	
 	var string: String {
 		return String(self)
+	}
+	
+	func zeroExtendedString(_ minLength: Int) -> String {
+		var string = self.string
+		while string.count < minLength {
+			string = "0" + string
+		}
+		return string
 	}
 	
 	var unsigned : UInt32 {
@@ -618,8 +701,11 @@ extension String {
 		return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(self.first!)
 	}
 	
-	func save(toFile file: XGFiles) {
+	func save(toFile file: XGFiles, isExecutable: Bool = false) {
 		XGUtility.saveString(self, toFile: file)
+		if isExecutable {
+			file.setExecutable()
+		}
 	}
 	
 	func hexStringToInt() -> Int {
@@ -754,20 +840,20 @@ extension String {
 	}
 
 	/// includes from, excludes to
-	func substring(from: Int, to: Int) -> String {
+	func substring(from: Int = 0, to: Int? = nil) -> String {
 		
-		if to <= from {
+		if (to ?? self.length) <= from {
 			return ""
 		}
-		if from > self.count {
+		if from > self.length {
 			return ""
 		}
-		if to <= 0 {
+		if (to ?? self.length) <= 0 {
 			return ""
 		}
 		
-		let f = from < 0 ? 0 : from
-		let t = to > self.length ? self.length : to
+		let f = max(0, from)
+		let t = min((to ?? self.length), self.length)
 		
 		let start = self.index(self.startIndex, offsetBy: f)
 		let end = self.index(self.startIndex, offsetBy: t)

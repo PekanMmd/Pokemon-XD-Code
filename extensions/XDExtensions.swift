@@ -161,7 +161,6 @@ extension XGUtility {
 		updateValidItems()
 		updateHealingItems()
 		updateFunctionalItems()
-		updateTutorMoves()
 		updatePokeSpots()
 		updateShadowMonitor()
 		copyDDPKToCommon()
@@ -464,8 +463,29 @@ extension XGUtility {
 		
 	}
 	
+	class func updateXD001Purification() {
+		let offsets: [Int] = {
+			switch region {
+			case .US:
+				return [0x800a53a2, 0x8020f40e, 0x802261de, 0x80232fae, 0x8028cde2, 0x8028d7ce, 0x8028d912]
+			case .EU:
+				return [0x800a64a6, 0x80211252, 0x80228022, 0x80234df2, 0x8028ed1e, 0x8028f70a, 0x8028f84e]
+			case .JP:
+				return [0x800a183a, 0x80209e66, 0x80220b86, 0x8022d94a, 0x8028780a, 0x802881f6, 0x8028833a]
+			case .OtherGame:
+				return []
+			}
+		}()
+		guard let dol = XGFiles.dol.data else { return }
+		let xd001ID = XGTrainerPokemon(DeckData: .ddpk(73)).species.index
+		offsets.forEach { offset in
+			dol.replace2BytesAtOffset(offset - kDolToRAMOffsetDifference, withBytes: xd001ID)
+		}
+		dol.save()
+	}
 	
 	class func updateTutorMoves() {
+		// Update function for matching tutor move indexes to position in stats struct
 
 		guard region != .OtherGame else {
 			return
@@ -505,7 +525,6 @@ extension XGUtility {
 			let tmove = XGTMs.tutor(i).move
 			let offset = offsets[i-1] + offsetDifference
 			
-			dol.replaceWordAtOffset(offset + 6, withBytes: kNopInstruction)
 			dol.replace2BytesAtOffset(offset, withBytes: tmove.index)
 		}
 		
