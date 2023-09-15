@@ -157,6 +157,7 @@ enum XGTMs {
 			if let rel = XGFiles.common_rel.data {
 				rel.replace2BytesAtOffset(startOffset + kTutorMoveMoveIndexOffset, withBytes: move.index)
 				rel.save()
+				XGUtility.updateTutorMoves()
 			}
 		}
 	}
@@ -202,7 +203,15 @@ enum XGTMs {
 		item.descriptionString.duplicateWithString(XGTMs.createItemDescriptionForMove(self.move)).replace()
 	}
 	
-	static func allTMs() -> [XGTMs] {
+	static var allTMs: [XGTMs] {
+		var tms = [XGTMs]()
+		for i in 1 ... kNumberOfTMs {
+			tms.append(.tm(i))
+		}
+		return tms
+	}
+	
+	static var allTMsAndHMs: [XGTMs] {
 		var tms = [XGTMs]()
 		for i in 1 ... kNumberOfTMsAndHMs {
 			tms.append(.tm(i))
@@ -299,7 +308,7 @@ extension XGTMs: XGEnumerable {
 	}
 	
 	static var allValues: [XGTMs] {
-		return XGTMs.allTMs() + XGTMs.allTutors()
+		return XGTMs.allTMs + XGTMs.allTutors()
 	}
 }
 

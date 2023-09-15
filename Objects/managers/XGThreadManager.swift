@@ -55,6 +55,13 @@ class SafeArray<T> {
 		array = mutation(array)
 		lock.signal()
 	}
+	
+	var randomElement: T? {
+		lock.wait()
+		let result = array.randomElement()
+		lock.signal()
+		return result
+	}
 }
 
 class XGThreadManager {

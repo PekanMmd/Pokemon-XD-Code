@@ -12,8 +12,8 @@ let kNumberOfGiftPokemon = 6
 class XGGiftPokemonManager {
 	class func giftWithID(_ id: Int) -> XGGiftPokemon {
 		switch id {
-		case 1: return XGDemoStarterPokemon(index: 0) // demo vaporeon
-		case 2: return XGDemoStarterPokemon(index: 1) // demo jolteon
+		case 1: return XGDemoStarterPokemon(index: 0) // espeon
+		case 2: return XGDemoStarterPokemon(index: 1) // umbreon
 		case 3: return CMGiftPokemon(index: 0) // duking's plusle
 		case 4: return CMGiftPokemon(index: 1) // mt battle ho-oh
 		case 5: return CMGiftPokemon(index: 3) // colosseum pikachu

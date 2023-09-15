@@ -12,6 +12,14 @@ enum ByteLengths: Int {
 	case char = 1
 	case short = 2
 	case word = 4
+	
+	var mask: Int {
+		switch self {
+		case .char: return 0xFF
+		case .short: return 0xFFFF
+		case .word: return 0xFFFFFFFF
+		}
+	}
 }
 
 class XGMutableData {

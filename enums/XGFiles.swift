@@ -377,7 +377,7 @@ indirect enum XGFiles {
 
 	#if !GAME_PBR
 	var mapData: XGMapRel {
-		return XGMapRel(file: self)
+		return XGMapRel(file: self, checkScript: false)
 	}
 	#endif
 
@@ -590,6 +590,13 @@ indirect enum XGFiles {
 			}
 		}
 		return .unknown
+	}
+	
+	func setExecutable() {
+		if self.exists {
+			let fm = FileManager.default
+			try? fm.setAttributes([FileAttributeKey.posixPermissions: 0o777], ofItemAtPath: path)
+		}
 	}
 
 	static var commonStringTableFile: XGFiles {
