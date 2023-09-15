@@ -1516,7 +1516,7 @@ class XGPatcher {
 			return
 		}
 		if game == .XD {
-			let offset = {
+			let offset: Int = {
 				switch region {
 				case .US:
 					return 0x80205eb4
