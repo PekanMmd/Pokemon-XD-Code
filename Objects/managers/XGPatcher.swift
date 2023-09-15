@@ -129,23 +129,31 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.allowShinyShadowPokemon,
 	.shinyLockShadowPokemon,
 	.alwaysShinyShadowPokemon,
+	.gen6CritMultipliers,
+	.gen7CritRatios,
 	.tradeEvolutions,
 	.removeItemEvolutions,
 	.enableDebugLogs,
 	.pokemonCanLearnAnyTM,
 	.pokemonHaveMaxCatchRate,
 	.removeEVCap,
-	.gen7CritRatios,
 	.allSingleBattles,
 	.allDoubleBattles,
 	.type9IndependentApply,
 	.maxPokespotEntries,
-	.preventPokemonRelease
+	.preventPokemonRelease,
+	.completeStrategyMemo,
+	.disableBattleAnimations
 ] : [
 	.physicalSpecialSplitApply,
 	.disableSaveCorruption,
+	.addSoftReset,
+	.loadPCFromAnywhere,
+	.removeShinyLocksFromGiftPokemon,
 	.allowFemaleStarters,
 	.infiniteTMs,
+	.gen6CritMultipliers,
+	.gen7CritRatios,
 	.tradeEvolutions,
 	.removeItemEvolutions,
 	.allowShinyStarters,
@@ -155,7 +163,6 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.noTypeIconForLockedMoves,
 	.pokemonCanLearnAnyTM,
 	.pokemonHaveMaxCatchRate,
-	.gen7CritRatios,
 	.allSingleBattles,
 	.allDoubleBattles,
 	.removeColbtlRegionLock
@@ -192,6 +199,7 @@ enum XGDolPatches: Int {
 	case pokemonCanLearnAnyTM
 	case pokemonHaveMaxCatchRate
 	case removeEVCap
+	case gen6CritMultipliers
 	case gen7CritRatios
 	case allSingleBattles
 	case allDoubleBattles
@@ -201,6 +209,11 @@ enum XGDolPatches: Int {
 	case disableSaveCorruption
 	case maxPokespotEntries
 	case preventPokemonRelease
+	case completeStrategyMemo
+	case addSoftReset
+	case loadPCFromAnywhere
+	case removeShinyLocksFromGiftPokemon
+	case disableBattleAnimations
 	
 	var name: String {
 		switch self {
@@ -235,6 +248,7 @@ enum XGDolPatches: Int {
 		case .pokemonCanLearnAnyTM: return "Any pokemon can learn any TM"
 		case .pokemonHaveMaxCatchRate: return "All pokemon have the maximum catch rate of 255"
 		case .removeEVCap: return "Allow pokemon to have an EV total above 510"
+		case .gen6CritMultipliers: return "Gen 6+ critical hit multiplier (1.5x)"
 		case .gen7CritRatios: return "Gen 7+ critical hit probablities"
 		case .allSingleBattles: return "Set all battles to single battles"
 		case .allDoubleBattles: return "Set all battles to double battles"
@@ -242,6 +256,11 @@ enum XGDolPatches: Int {
 		case .disableSaveCorruption: return "Disables some save file checks to prevent the save from being corrupted."
 		case .maxPokespotEntries: return "Change the max number of pokemon per pokespot from 3 to 100"
 		case .preventPokemonRelease: return "Disables the ability to release Pokemon"
+		case .completeStrategyMemo: return "All pokemon will be viewable in the strategy memo immediately"
+		case .addSoftReset: return "Adds the ability to soft reset using B + X + Start button combo"
+		case .loadPCFromAnywhere: return "Press R in the overworld to open the PC menu from anywhere (Make sure you don't softlock yourself)"
+		case .removeShinyLocksFromGiftPokemon: return "Remove shiny locks from gift pokemon (espeon, umbreon, plusle, pikachu, celebi, hooh)"
+		case .disableBattleAnimations: return "Disables attack animations during battles"
 		}
 	}	
 }
@@ -866,6 +885,67 @@ class XGPatcher {
 		}
 	}
 	
+	class func gen6CritMultipliers() {
+		if region != .US {
+			printg("This patch has not been implemented for this game region:", region.name)
+			return
+		}
+		
+		let entryPoint1: (entryPoint: Int, source: XGRegisters, destination: XGRegisters, next: XGRegisters)? = {
+			if game == .XD {
+				switch region {
+				case .US: return (0x8020dafc,.r31,.r27,.r26)
+				default: return nil
+				}
+			}
+			if game == .Colosseum {
+				switch region {
+				case .US: return (0x80227d14,.r31,.r27,.r25)
+				default: return nil
+				}
+			}
+			
+			return nil
+		}()
+		let entryPoint2: (entryPoint: Int, source: XGRegisters, destination: XGRegisters, next: XGRegisters)? = {
+			if game == .Colosseum {
+				switch region {
+				case .US: return (0x80211640,.r25,.r25,.r14)
+				default: return nil
+				}
+			}
+			
+			return nil
+		}()
+
+		let criticalHitConstant = 2
+		for constants in [entryPoint1, entryPoint2] {
+			if let constants, let freespace = XGAssembly.ASMfreeSpaceRAMPointer() {
+				let entryPoint = constants.entryPoint
+				XGAssembly.replaceRamASM(RAMOffset: entryPoint, newASM: [
+					.b(freespace),
+					.nop,
+					.mr(.r3, constants.next)
+				])
+				XGAssembly.replaceRamASM(RAMOffset: freespace, newASM: [
+					.cmpwi(.r3, criticalHitConstant),
+					.bne_l("is not critical hit"),
+					
+					.label("is critical hit"),
+					.mulli(constants.destination, constants.source, 3),
+					.srawi(constants.destination, constants.destination, 1),
+					.b_l("end"),
+					
+					.label("is not critical hit"),
+					.mr(constants.destination, constants.source),
+					
+					.label("end"),
+					.b(constants.entryPoint + 4)
+				])
+			}
+		}
+	}
+	
 	class func gen7CritRatios() {
 		if region == .EU || (game == .XD && region != .US) {
 			printg("This patch has not been implemented for this game region:", region.name)
@@ -1217,7 +1297,7 @@ class XGPatcher {
 	
 	static func preventPokemonRelease() {
 		guard game == .XD else {
-			printg("Path not implemented for this game:", game.name)
+			printg("Patch not implemented for this game:", game.name)
 				return
 		}
 		guard region == .US else {
@@ -1235,6 +1315,223 @@ class XGPatcher {
 		XGAssembly.replaceRamASM(RAMOffset: offset, newASM: [.li(.r0, 0)])
 	}
 	
+	static func completeStrategyMemo() {
+		guard game == .XD else {
+			printg("Patch not implemented for this game:", game.name)
+				return
+		}
+		guard region == .US else {
+			printg("Patch is currently not available for this region:", region.name)
+			return
+		}
+		
+		let getPokemonIDAtIndexFunctionRAMOffset = 0x80234b0c
+		XGAssembly.replaceRamASM(RAMOffset: getPokemonIDAtIndexFunctionRAMOffset, newASM: [
+			.addi(.r3, .r4, 1),
+			.blr
+		])
+
+		let getPokemonCountFunctionRAMOffset = 0x80234b6c
+		XGAssembly.replaceRamASM(RAMOffset: getPokemonCountFunctionRAMOffset, newASM: [
+			.li(.r3, 0x19e),
+			.blr
+		])
+
+
+		let getPokemonPIDFunctionRAMOffset = 0x80234a64
+		XGAssembly.replaceRamASM(RAMOffset: getPokemonPIDFunctionRAMOffset, newASM: [
+			.li(.r3, 0),
+			.blr
+		])
+
+
+		let getPokemonTIDFunctionRAMOffset = 0x802349bc
+		XGAssembly.replaceRamASM(RAMOffset: getPokemonTIDFunctionRAMOffset, newASM: [
+			.li(.r3, 0),
+			.blr
+		])
+
+		// Must disable sort as it isn't coded in a way that works with more than the default number of pokemon
+		// Likely not allocating enough memory for the sort
+		let memoSortFunctionRAMOffset = 0x80055948
+		XGAssembly.replaceRamASM(RAMOffset: memoSortFunctionRAMOffset, newASM: [
+			.blr
+		])
+	}
+	
+	static func addSoftReset() {
+		guard game == .Colosseum else {
+			printg("Patch not implemented for this game:", game.name)
+			return
+		}
+		
+		let resetBranchOffset: Int = {
+			switch region {
+			case .US: return 0x80005c50
+			case .EU: return 0x80005d48
+			case .JP: return 0x80005bcc
+			case .OtherGame: return -1
+			}
+		}()
+		let asm: ASM = [
+			.b_f(0, 0x1c)
+		]
+		XGAssembly.replaceRamASM(RAMOffset: resetBranchOffset, newASM: asm)
+		
+		let resetCheckOffset: Int = {
+			switch region {
+			case .US: return 0x80005c6c
+			case .EU: return 0x80005d64
+			case .JP: return 0x80005be8
+			case .OtherGame: return -1
+			}
+		}()
+		let gsGetInput: Int = {
+			switch region {
+			case .US: return 0x800f7bc4
+			case .EU: return 0x800fb244
+			case .JP: return 0x800f588c
+			case .OtherGame: return -1
+			}
+		}()
+		let asm2: ASM = [
+			.li(.r3, 1),
+			.bl(gsGetInput),
+			.andi_(.r0, .r3, 0x1600),
+			.cmpwi(.r0, 0x1600),
+			.nop
+		]
+		XGAssembly.replaceRamASM(RAMOffset: resetCheckOffset, newASM: asm2)
+	}
+	
+	static func pressButtonCombinationToGoToPC(_ buttonCombination: [ControllerButtons]) {
+		guard game == .Colosseum else {
+			printg("Patch not implemented for this game:", game.name)
+			return
+		}
+		guard !buttonCombination.isEmpty, let freeSpace = XGAssembly.ASMfreeSpaceRAMPointer() else {
+			return
+		}
+		let buttonMask = buttonCombination.map(\.rawValue).reduce(0, |)
+		
+		let processEventsInjectionOffset: Int = {
+			switch region {
+			case .US: return 0x8012eda8
+			case .EU: return 0x80132fd4
+			case .JP: return 0x8012c4e4
+			default: return -1
+			}
+		}()
+		let runScriptAddress: Int = {
+			switch region {
+			case .US: return 0x8012bad0
+			case .EU: return 0x8012fcfc
+			case .JP: return 0x8012920c
+			default: return -1
+			}
+		}()
+		let gsGetInput: Int = {
+			switch region {
+			case .US: return 0x800f7bc4
+			case .EU: return 0x800fb244
+			case .JP: return 0x800f588c
+			default: return -1
+			}
+		}()
+		let getCurrentRoomID: Int = {
+			switch region {
+			case .US: return 0x800ff56c
+			case .EU: return 0x80102a80
+			case .JP: return 0x800fcf5c
+			default: return -1
+			}
+		}()
+		let asm: ASM = [
+			.bl(gsGetInput),
+			.mr(.r31, .r3),
+			.cmpwi(.r3, buttonMask),
+			.bne_f(0, 8),
+			.b(freeSpace),
+			.rlwinm_(.r0, .r31, 0, 19, 21),
+		]
+		print(XGAssembly.geckoCode(RAMOffset: processEventsInjectionOffset, asm: asm))
+
+		let lastWarpPointAddress: UInt32 = {
+			switch region {
+			case .US: return 0x80408378
+			case .EU: return 0x804557f8
+			case .JP: return 0x803f4A38
+			default: return 0x0
+			}
+		}()
+		
+		let loadLastWarpPointInstructions = XGASM.loadImmediateShifted32bit(register: .r5, value: lastWarpPointAddress)
+		let asm2: ASM = [
+			.bl(getCurrentRoomID),
+			.mr(.r4, .r3),
+			// get most recent warp point
+			loadLastWarpPointInstructions.0,
+			loadLastWarpPointInstructions.1,
+			.lwz(.r5, .r5, 0xc),
+			.li(.r6, 0),
+			.li(.r7, 0),
+			.lis(.r3, 0x596),
+			.addi(.r3, .r3, 13),
+			.bl(runScriptAddress),
+			.b(processEventsInjectionOffset + 0x14)
+		]
+		print(XGAssembly.geckoCode(RAMOffset: freeSpace, asm: asm2))
+	}
+	
+	static func removeShinyLocks() {
+		if game == .Colosseum {
+			let espeon = XGDemoStarterPokemon(index: 0)
+			espeon.shinyValue = .random
+			espeon.save()
+			let umbreon = XGDemoStarterPokemon(index: 1)
+			umbreon.shinyValue = .random
+			umbreon.save()
+			let plusle = CMGiftPokemon(index: 0)
+			plusle.shinyValue = .random
+			plusle.save()
+			let hooh = CMGiftPokemon(index: 1)
+			hooh.shinyValue = .random
+			hooh.save()
+			let celebi = CMGiftPokemon(index: 2)
+			celebi.shinyValue = .random
+			celebi.save()
+			let pikachu = CMGiftPokemon(index: 3)
+			pikachu.shinyValue = .random
+			pikachu.save()
+		}
+	}
+	
+	static func disableBattleAnimations() {
+		guard game == .XD else {
+			printg("Patch not implemented for this game:", game.name)
+			return
+		}
+		guard region == .US else {
+			printg("Patch not implemented for this game region:", region.name)
+			return
+		}
+		if game == .XD {
+			let offset = {
+				switch region {
+				case .US:
+					return 0x80205eb4
+				case .EU:
+					return 0
+				case .JP:
+					return 0
+				case .OtherGame:
+					return 0
+				}
+			}()
+			XGAssembly.replaceRamASM(RAMOffset: offset, newASM: [.nop])
+		}
+	}
+		
 	class func applyPatch(_ patch: XGDolPatches) {
 		
 		switch patch {
@@ -1268,6 +1565,7 @@ class XGPatcher {
 		case .pokemonCanLearnAnyTM			: XGPatcher.pokemonCanLearnAnyTM()
 		case .pokemonHaveMaxCatchRate		: XGPatcher.pokemonHaveMaxCatchRate()
 		case .removeEVCap					: XGPatcher.removeEVCap()
+		case .gen6CritMultipliers			: XGPatcher.gen6CritMultipliers()
 		case .gen7CritRatios				: XGPatcher.gen7CritRatios()
 		case .allDoubleBattles				: XGPatcher.setAllBattlesTo(.double)
 		case .allSingleBattles				: XGPatcher.setAllBattlesTo(.single)
@@ -1276,6 +1574,11 @@ class XGPatcher {
 		case .disableSaveCorruption			: XGPatcher.preventSaveFileCorruption()
 		case .maxPokespotEntries			: XGPatcher.setMaxPokespotEntriesPerSpot(to: 100)
 		case .preventPokemonRelease			: XGPatcher.preventPokemonRelease()
+		case .completeStrategyMemo			: XGPatcher.completeStrategyMemo()
+		case .addSoftReset					: XGPatcher.addSoftReset()
+		case .loadPCFromAnywhere			: XGPatcher.pressButtonCombinationToGoToPC([.R])
+		case .removeShinyLocksFromGiftPokemon : XGPatcher.removeShinyLocks()
+		case .disableBattleAnimations		: XGPatcher.disableBattleAnimations()
 		}
 		
 		printg("patch applied: ", patch.name, "\nDon't forget to rebuild the ISO after.")
