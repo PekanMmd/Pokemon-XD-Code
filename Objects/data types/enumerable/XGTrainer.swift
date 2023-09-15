@@ -119,7 +119,7 @@ final class XGTrainer: NSObject, Codable {
 		get {
 			
 			let trainerLength = 30
-			let pokemonLength = 20
+			let pokemonLength = 30
 			let trainerTab = "".spaceToLength(trainerLength)
 			
 			var string = ""
@@ -160,6 +160,35 @@ final class XGTrainer: NSObject, Codable {
 			for p in mons {
 				if p.isSet {
 					string += p.item.name.string.spaceToLength(pokemonLength)
+				}
+			}
+			string += "\n" + trainerTab
+			
+			for p in mons {
+				if p.isSet {
+					string += p.nature.string.spaceToLength(pokemonLength)
+				}
+			}
+			string += "\n" + trainerTab
+			
+			for p in mons {
+				if p.isSet {
+					var EVs = "EVs: |"
+					for ev in p.EVs {
+						EVs += ev.zeroExtendedString(2) + "|"
+					}
+					string += EVs.spaceToLength(pokemonLength)
+				}
+			}
+			string += "\n" + trainerTab
+			
+			for p in mons {
+				if p.isSet {
+					var IVs = "IVs: |"
+					for _ in 1 ... 6 {
+						IVs += p.IVs.zeroExtendedString(2) + "|"
+					}
+					string += IVs.spaceToLength(pokemonLength)
 				}
 			}
 			string += "\n" + trainerTab
