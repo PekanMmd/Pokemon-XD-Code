@@ -193,6 +193,12 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="My5-pk-g6t"/>
+                                        <menuItem title="Setup Ironmon" id="rtv-Po-vAZ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="ironmon:" target="Voe-Tx-rLC" id="bXQ-z3-MhR"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Increase NPC Levels" id="CU8-zD-hWH">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Increase NPC Levels" id="r5s-oO-KTp">

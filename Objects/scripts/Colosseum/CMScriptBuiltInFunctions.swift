@@ -49,6 +49,8 @@ enum CMSOperators: CustomStringConvertible {
 	}
 }
 
+// script function look up table in us colosseum ram 0x802e1cf0, each entry is 12 bytes
+
 var ScriptBuiltInFunctions : [Int : (name: String, parameterTypes: [CMSMacroTypes?]?, returnType: CMSMacroTypes?, hint: String)] = [
 	2: (name: "randomNumberMod", parameterTypes: [.integer], returnType: .integer, hint: "generates a random number between 0 and the parameter-1"),
 	3: (name: "threadRunScriptInBackground", parameterTypes: [.scriptFunction, .integer, .integer, .integer, .integer], returnType: .integer, hint: "script function, arg1, arg2, arg3, arg4"),
@@ -68,7 +70,7 @@ var ScriptBuiltInFunctions : [Int : (name: String, parameterTypes: [CMSMacroType
 	31: (name: "playerProcessEvents", parameterTypes: nil, returnType: nil, hint: ""),
 	32: (name: "playerLockMovement", parameterTypes: nil, returnType: nil, hint: ""),
 	33: (name: "playerFreeMovement", parameterTypes: nil, returnType: nil, hint: ""),
-	34: (name: "playerTriggerScript", parameterTypes: [.scriptFunction, .integer, .integer, .integer, .integer], returnType: nil, hint: "script function, arg 1, arg 2, arg 3, arg 4"),
+	34: (name: "triggerScriptFunction", parameterTypes: [.scriptFunction, .integer, .integer, .integer, .integer], returnType: nil, hint: "script function, arg 1, arg 2, arg 3, arg 4"),
 
 	40: (name: "cameraSetPosition", parameterTypes: [.float, .float, .float], returnType: nil, hint: "x, y, z"),
 	41: (name: "cameraSetRotationAboutAxes", parameterTypes: [.float, .float, .float], returnType: nil, hint: "x, y, z"),
@@ -121,7 +123,7 @@ var ScriptBuiltInFunctions : [Int : (name: String, parameterTypes: [CMSMacroType
 
 	119: (name: "playerReceiveItem", parameterTypes: [.item, .integer], returnType: .battleResult, hint: "item id, quantity"),
 
-	128: (name: "mapSetReturnMap", parameterTypes: nil, returnType: nil, hint: "unk, current map id, unk"),
+	128: (name: "mapSetReturnMap", parameterTypes: [.room, .room, .integer], returnType: nil, hint: "current map id, previous map id, warp point index"),
 
 	131: (name: "characterSurpriseAnimation", parameterTypes: [.groupID, .resourceID, .bool], returnType: nil, hint: "group id, resource id, unk"),
 	132: (name: "dialogSetMessageVar", parameterTypes: [.integer, .integer], returnType: nil, hint: "msg var, value"),
@@ -147,6 +149,11 @@ var ScriptBuiltInFunctions : [Int : (name: String, parameterTypes: [CMSMacroType
 
 	198: (name: "menuEnterTradingMenu", parameterTypes: nil, returnType: nil, hint: ""),
 	199: (name: "menuDisplayCustomMenu", parameterTypes: [.array(.msgID), .integer, .integer, .integer, .integerIndex], returnType: nil, hint: "msg ids array, length, x, y, start index"),
+	
+	204: (name: "promptDNAKeyCode", parameterTypes: [.integer, .integer, .integer], returnType: .pokemon, hint: "input is 3 correct sample ids in order"),
+	205: (name: "getDNASampleSepcies", parameterTypes: [.integer], returnType: .pokemon, hint: ""),
+	
+	208: (name: "promptDNASampleSelection", parameterTypes: nil, returnType: nil, hint: ""),
 
 	217: (name: "playerReceiveGiftPokemon", parameterTypes: [.integer], returnType: .integerIndex, hint: "gift pokemon id"),
 	218: (name: "soundPlayPokemonCry", parameterTypes: [.pokemon], returnType: nil, hint: ""),

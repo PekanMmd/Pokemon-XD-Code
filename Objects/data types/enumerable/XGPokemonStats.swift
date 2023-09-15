@@ -50,8 +50,7 @@ let kModelDictionaryModelOffset = 0x4
 
 /* Tutor moves order:
  *
- * Use the appropriate dol patcher function to set them to the correct order
- *
+ *  tutor move index        index in stats struct
  *  1: body slam			tm8
  *  2: double edge			tm11
  *  3: seismic toss			tm3
@@ -119,7 +118,7 @@ final class XGPokemonStats: NSObject, Codable {
 	var genderRatio = XGGenderRatios.maleOnly
 	
 	var catchRate		= 0x0
-	var baseExp		= 0x0
+	var baseExp			= 0x0
 	var baseHappiness	= 0x0
 	
 	var type1			= XGMoveTypes.normal
@@ -148,7 +147,7 @@ final class XGPokemonStats: NSObject, Codable {
 	var hpYield				= 0x0
 	var speedYield			= 0x0
 	var attackYield			= 0x0
-	var defenseYield			= 0x0
+	var defenseYield		= 0x0
 	var specialAttackYield	= 0x0
 	var specialDefenseYield	= 0x0
 
@@ -276,8 +275,12 @@ final class XGPokemonStats: NSObject, Codable {
 			self.learnableTMs.append(rel.getByteAtOffset(startOffset + kFirstTMOffset + i) == 1)
 		}
 		
+		tutorMoves = [Bool]()
 		for i in 0 ..< kNumberOfTutorMoves  {
-			self.tutorMoves.append(rel.getByteAtOffset(startOffset + kFirstTutorMoveOffset + i) == 1)
+			tutorMoves.append(rel.getByteAtOffset(startOffset + kFirstTutorMoveOffset + i) == 1)
+		}
+		if let permutedTMs = try? tutorMoves.permuted(by: XGPokemonStats.tutorMovePermutations()) {
+			tutorMoves = permutedTMs
 		}
 		
 		for i in 0 ..< kNumberOfLevelUpMoves {
@@ -357,7 +360,9 @@ final class XGPokemonStats: NSObject, Codable {
 		currentOffset = startOffset + kFirstTutorMoveOffset
 		
 		for i in 0 ..< kNumberOfTutorMoves {
-			rel.replaceByteAtOffset(currentOffset + i, withByte: tutorMoves[i] ? 1 : 0)
+			if let permutedTMs = try? tutorMoves.reversePermuted(by: XGPokemonStats.tutorMovePermutations()) {
+				rel.replaceByteAtOffset(currentOffset + i, withByte: permutedTMs[i] ? 1 : 0)
+			}
 		}
 		
 		for i in 0 ..< kNumberOfLevelUpMoves {
@@ -380,6 +385,37 @@ final class XGPokemonStats: NSObject, Codable {
 		}
 		
 		rel.save()
+	}
+	
+	static func checkIfTutorMovesPermutationWasChanged() -> Bool {
+		// Old projects like XG had the permutations removed
+		guard let dol = XGFiles.dol.data else { return false }
+
+		let firstUSOffset = 0x1C2EA6
+		let firstOffset: Int
+		switch region {
+		case .US: firstOffset = firstUSOffset
+		case .JP: firstOffset = 0x1BE3B6
+		case .EU: firstOffset = 0x1C47A2
+		case .OtherGame: firstOffset = 0
+		}
+
+		let offsetDifference = firstOffset - firstUSOffset
+		let offset = 0x1C2ECA + offsetDifference
+		let value = dol.get4BytesAtOffset(offset + 6)
+		if value == kNopInstruction {
+			return true
+		}
+
+		return false
+	}
+	
+	static func tutorMovePermutations() -> [Int] {
+		if checkIfTutorMovesPermutationWasChanged() {
+			return Array(0...11)
+		} else {
+			return [7,10,2,0,5,1,4,3,6,9,11,8]
+		}
 	}
 	
 }

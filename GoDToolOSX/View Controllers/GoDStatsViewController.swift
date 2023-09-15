@@ -517,29 +517,11 @@ class GoDStatsViewController: GoDTableViewController {
 		func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
 			return 30
 		}
-
-		private func tutorMoveForIndex(_ index: Int) -> Int {
-			switch index {
-			case 0: return 8
-			case 1: return 11
-			case 2: return 3
-			case 3: return 1
-			case 4: return 6
-			case 5: return 2
-			case 6: return 5
-			case 7: return 4
-			case 8: return 7
-			case 9: return 10
-			case 10: return 12
-			case 11: return 9
-			default: return index
-			}
-		}
 		
 		func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 			
 			let isTM = row < kNumberOfTMsAndHMs
-			let tm = isTM ? XGTMs.tm(row + 1) : XGTMs.tutor(tutorMoveForIndex(row - kNumberOfTMsAndHMs))
+			let tm = isTM ? XGTMs.tm(row + 1) : XGTMs.tutor(row - kNumberOfTMsAndHMs + 1)
 			
 			let cell = (tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "cell"), owner: self) ?? GoDTableCellView(title: "", colour: GoDDesign.colourBlack(), fontSize: 12, width: self.width)) as! GoDTableCellView
 			

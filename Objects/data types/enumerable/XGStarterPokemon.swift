@@ -18,17 +18,48 @@ var kEeveeStartOffset: Int {
 	}
 }
 
-let kStarterSpeciesOffset		= 0x02
-let kStarterLevelOffset			= 0x0B
-let kStarterMove1Offset			= 0x12
-let kStarterMove2Offset			= 0x16
-let kStarterMove3Offset			= 0x1A
-let kStarterMove4Offset			= 0x1E
-let kStarterExpValueOffset		= 0x66
+let kStarterSpeciesOffset		 = 0x02
+let kStarterLevelOffset			 = 0x0B
+let kStarterMove1Offset			 = 0x12
+let kStarterMove2Offset			 = 0x16
+let kStarterMove3Offset			 = 0x1A
+let kStarterMove4Offset			 = 0x1E
+let kStarterExpValueOffset		 = 0x66
+
+var kStarterGenderInstructionRAMOffset: Int {
+	guard game == .XD else { return 0 }
+	switch region {
+	case .US: return 0x801cebdc
+	case .JP: return -1
+	case .EU: return 0x801d06b0
+	case .OtherGame: return 0
+	}
+}
+var kStarterNatureInstructionRAMOffset: Int {
+	guard game == .XD else { return 0 }
+	switch region {
+	case .US: return 0x801cebe4
+	case .JP: return -1
+	case .EU: return 0x801d06b8
+	case .OtherGame: return 0
+	}
+}
+var kStarterShininessInstructionRAMOffset: Int {
+	guard game == .XD else { return 0 }
+	switch region {
+	case .US: return 0x801cebec
+	case .JP: return -1
+	case .EU: return 0x801d06c0
+	case .OtherGame: return 0
+	}
+}
 
 final class XGStarterPokemon: NSObject, XGGiftPokemon, GoDCodable {
-	
+
 	var level			= 0
+	var shinyValue		= XGShinyValues.random
+	var gender			= XGGenders.random
+	var nature			= XGNatures.random
 
 	var species			= XGPokemon.index(0)
 	var move1			= XGMoves.index(0)
@@ -46,17 +77,10 @@ final class XGStarterPokemon: NSObject, XGGiftPokemon, GoDCodable {
 	}
 	
 	var giftType		= "Starter Pokemon"
-	
-	// unused
-	var index			= 0
-	var shinyValue			= XGShinyValues.random
-	private(set) var gender	= XGGenders.random
-	private(set) var nature	= XGNatures.random
+	var index			= 0 // unused
 		
 	var startOffset : Int {
-		get {
-			return kEeveeStartOffset
-		}
+		return kEeveeStartOffset
 	}
 	
 	override init() {
@@ -68,7 +92,6 @@ final class XGStarterPokemon: NSObject, XGGiftPokemon, GoDCodable {
 			let start = startOffset
 			
 			level = dol.getByteAtOffset(start + kStarterLevelOffset)
-//			exp	  = dol.get2BytesAtOffset(start + kStarterExpValueOffset)
 			
 			let species = dol.get2BytesAtOffset(start + kStarterSpeciesOffset)
 			self.species = .index(species)

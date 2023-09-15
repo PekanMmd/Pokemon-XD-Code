@@ -945,7 +945,7 @@ class XGISO: NSObject {
 	
 	func getFSYSForIdentifier(id: UInt32, filterNamesWith filter: String? = nil) -> XGFsys? {
 		#if !GAME_PBR
-		for file in self.allFileNames where file.contains(".fsys") && file.contains(filter ?? "") {
+		for file in self.allFileNames where file.contains(".fsys") && filter == nil ? true : file.contains(filter ?? "") {
 			if let start = self.locationForFile(file) {
 				let entries = self.data.get4BytesAtOffset(start + kNumberOfEntriesOffset)
 

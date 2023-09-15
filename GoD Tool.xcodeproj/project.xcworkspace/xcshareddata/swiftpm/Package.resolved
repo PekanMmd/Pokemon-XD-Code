@@ -1,0 +1,86 @@
+{
+  "pins" : [
+    {
+      "identity" : "mimetype",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SketchMaster2001/MimeType.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "102b3769ea8dc7ed0bd50b932bdd21cd4e89215c"
+      }
+    },
+    {
+      "identity" : "swift-atomics",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-atomics.git",
+      "state" : {
+        "revision" : "919eb1d83e02121cdb434c7bfc1f0c66ef17febe",
+        "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "swift-collections",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-collections.git",
+      "state" : {
+        "revision" : "f504716c27d2e5d4144fa4794b12129301d17729",
+        "version" : "1.0.3"
+      }
+    },
+    {
+      "identity" : "swift-log",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-log.git",
+      "state" : {
+        "revision" : "6fe203dc33195667ce1759bf0182975e4653ba1c",
+        "version" : "1.4.4"
+      }
+    },
+    {
+      "identity" : "swift-nio",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-nio.git",
+      "state" : {
+        "revision" : "bc4c55b9f9584f09eb971d67d956e28d08caa9d0",
+        "version" : "2.43.1"
+      }
+    },
+    {
+      "identity" : "swift-nio-ssl",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-nio-ssl.git",
+      "state" : {
+        "revision" : "ba7c0d7f82affc518147ea61d240330bf7f7ea9b",
+        "version" : "2.22.1"
+      }
+    },
+    {
+      "identity" : "swift-nio-transport-services",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-nio-transport-services.git",
+      "state" : {
+        "revision" : "b6e37a0d442745760d6ed0195d8f283d3ce0414a",
+        "version" : "1.14.1"
+      }
+    },
+    {
+      "identity" : "swiftcord",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/StarsMmd/Swiftcord",
+      "state" : {
+        "branch" : "main",
+        "revision" : "13f76515bdda2d0a6d667d15f559aa9c7b6b0dcc"
+      }
+    },
+    {
+      "identity" : "websocket-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/websocket-kit",
+      "state" : {
+        "branch" : "main",
+        "revision" : "2d9d2188a08eef4a869d368daab21b3c08510991"
+      }
+    }
+  ],
+  "version" : 2
+}

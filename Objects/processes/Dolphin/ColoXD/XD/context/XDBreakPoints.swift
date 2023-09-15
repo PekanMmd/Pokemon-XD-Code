@@ -297,7 +297,7 @@ extension XDBreakPointTypes {
 		switch self {
 		case .onWillGetFlag:
 			switch region {
-			case .US: return 0x801a03a0
+			case .US: return 0x801a0394
 			default: return nil
 		}
 		default:

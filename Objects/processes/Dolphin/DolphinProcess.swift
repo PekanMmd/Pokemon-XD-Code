@@ -19,7 +19,7 @@ class DolphinProcess: ProcessIO {
 	convenience init?(isoFile: XGFiles? = nil, dolphinFile: XGFiles? = nil, settings: [(key: DolphinSystems, value: String)] = []) {
 		
 		let iso = isoFile ?? XGFiles.iso
-		guard iso.exists else { return nil }
+		guard iso.exists, let isoData = iso.data else { return nil }
 		
 		// TODO: figure out why dolphin settings set through command line aren't working
 //		settings.forEach { (setting) in
@@ -43,10 +43,10 @@ class DolphinProcess: ProcessIO {
 		var args = "--exec=\(iso.path.escapedPath)"
 		let dolphinApp = dolphinFile ?? XGFiles.path("/Applications/Dolphin.app")
 		let dolphinExecutable = XGFiles.path(dolphinApp.path + "/Contents/MacOS/Dolphin")
+		GoDShellManager.stripEntitlements(appFile: dolphinApp)
 		guard let process = GoDShellManager.runAsync(.file(dolphinExecutable), args: args) else {
 			return nil
 		}
-		GoDShellManager.stripEntitlements(appFile: dolphinApp)
 		#elseif os(Linux)
 		var args = "--exec=\(iso.path.escapedPath)"
 		let dolphinExecutable = XGFiles.path("/usr/games/dolphin-emu")
@@ -60,9 +60,9 @@ class DolphinProcess: ProcessIO {
 		#endif
 		
 		self.init(process: process)
-		
-		guard let isoData = iso.data else { return nil }
 		self.gameIdentifier = isoData.readString(atAddress: 0, charLength: .char, maxCharacters: 4)
+		
+		
 	}
 
 	private init(process: GoDProcess) {
@@ -81,8 +81,12 @@ class DolphinProcess: ProcessIO {
 		SCRIPT='tell application "System Events" to tell application process "Dolphin" to click (every menu item of menu of menu item "Load State from Slot" of menu of menu item "Load State" of menu "Emulation" of menu bar 1 whose (name starts with "Load from Slot '$1' - "))'
 		\(appleScriptUser) osascript -e "${SCRIPT}"
 		"""
-		saveStateScript.save(toFile: saveStateScriptFile)
-		loadStateScript.save(toFile: loadStateScriptFile)
+		if !saveStateScriptFile.exists {
+			saveStateScript.save(toFile: saveStateScriptFile, isExecutable: true)
+		}
+		if !loadStateScriptFile.exists {
+			loadStateScript.save(toFile: loadStateScriptFile, isExecutable: true)
+		}
 		#elseif os(Linux)
 		let saveStateScript =
 		"""
@@ -94,8 +98,12 @@ class DolphinProcess: ProcessIO {
 		#!/bin/bash
 		xdotool key F$1
 		"""
-		saveStateScript.save(toFile: saveStateScriptFile)
-		loadStateScript.save(toFile: loadStateScriptFile)
+		if !saveStateScriptFile.exists {
+			saveStateScript.save(toFile: saveStateScriptFile, isExecutable: true)
+		}
+		if !loadStateScriptFile.exists {
+			loadStateScript.save(toFile: loadStateScriptFile, isExecutable: true)
+		}
 		#else
 		canUseSavedStates = false
 		#endif

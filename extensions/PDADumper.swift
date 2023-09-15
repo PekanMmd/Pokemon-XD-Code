@@ -32,6 +32,7 @@ class PDADumper {
 	}
 
 	class func dumpData(forXG: Bool = false) {
+		#warning("TODO: add ability to look up a file by its identifier")
 		var data = [String: AnyObject]()
 
 		#if GAME_PBR
@@ -148,15 +149,22 @@ class PDADumper {
 
 				var lums = [String]()
 				for lum in stats.levelUpMoves where lum.level > 0 {
-					lums.append("Lv. \(lum.level) - \(lum.move.name.unformattedString)")
+					lums.append("Lv.\(lum.level): \(lum.move.name.unformattedString)")
 				}
 				updatedObject["moves"] = lums as AnyObject
 
 				var TMs = [String]()
+				var HMs = [String]()
+				var tutorMoves = [String]()
 				stats.learnableTMs.forEachIndexed { (index, learnable) in
 					if learnable {
 						let tm = XGTMs.tm(index + 1)
-						TMs.append("\(tm.enumerableName) - \(tm.enumerableValue ?? "-")")
+						let description = tm.enumerableValue ?? "-"
+						if index < kNumberOfTMs {
+							TMs.append(description)
+						} else {
+							HMs.append(description)
+						}
 					}
 				}
 				#if GAME_XD
@@ -164,10 +172,13 @@ class PDADumper {
 					if learnable {
 						let tm = XGTMs.tutor(index + 1)
 						TMs.append("\(tm.enumerableName) - \(tm.enumerableValue ?? "-")")
+						tutorMoves.append(tm.enumerableValue ?? "-")
 					}
 				}
 				#endif
 				updatedObject["TMs"] = TMs as AnyObject
+				updatedObject["HMs"] = HMs as AnyObject
+				updatedObject["tutors"] = tutorMoves as AnyObject
 
 				var faceImages = [String]()
 				var bodyImages = [String]()
@@ -256,6 +267,13 @@ class PDADumper {
 				updatedObject["name"] = name.unformattedString as AnyObject
 				updatedObject["entryName"] = entryName as AnyObject
 				updatedObject["tabletype"] = "move" as AnyObject
+				
+				if let tm = XGTMs.allTMs.first(where: {
+					$0.move.index == index
+				}) {
+					updatedObject["tm"] = tm.enumerableName as AnyObject
+				}
+				
 				data[entryName] = updatedObject as AnyObject
 			}
 		}
@@ -311,6 +329,92 @@ class PDADumper {
 				object["entryName"] = entryName as AnyObject
 				data[entryName] = object as AnyObject
 			}
+		}
+		XGAbilities.allValues.forEach { (ability) in
+			let name = ability.name.unformattedString
+			let description = ability.adescription
+			if ability.name.id > 0, description.id > 0 {
+				var object = [String: AnyObject]()
+				let entryName = name.simplified
+				object["name"] = "\(name)"  as AnyObject
+				object["description"] = description.unformattedString as AnyObject
+				object["tabletype"] = "ability" as AnyObject
+				object["entryName"] = entryName as AnyObject
+				
+				let pokemon = XGPokemon.allValues
+					.filter {
+						let stats = $0.stats
+						return (stats.ability1.index == ability.index || stats.ability2.index == ability.index)
+						&& stats.catchRate > 0
+					}
+					.map(\.name)
+					.map(\.unformattedString)
+				var pokemonString = "-"
+				if pokemon.count > 0 {
+					pokemonString = pokemon.joined(separator: ", ")
+				}
+				object["pokemon"] = pokemonString as AnyObject
+				
+				data[entryName] = object as AnyObject
+			}
+		}
+		XGMoveTypes.allValues.map(\.data).forEach { type in
+			let name = type.name.unformattedString
+			var entryName = name.simplified
+			if (entryName == "fight") { entryName = "fighting" }
+			if (entryName == "electr") { entryName = "electric" }
+			if (entryName == "psychc") { entryName = "psychic" }
+			entryName += "type"
+			
+			var strongAgainst = [String]()
+			var weakAgainst = [String]()
+			var noEffectAgainst = [String]()
+			var resists = [String]()
+			var weakTo = [String]()
+			var noEffectFrom = [String]()
+			type.effectivenessTable.forEachIndexed { index, effectiveness in
+				let defensiveType = XGMoveTypes.index(index).data
+				switch effectiveness {
+				case .ineffective:
+					noEffectAgainst.append(defensiveType.name.unformattedString)
+				case .notVeryEffective:
+					weakAgainst.append(defensiveType.name.unformattedString)
+				case .superEffective:
+					strongAgainst.append(defensiveType.name.unformattedString)
+				default:
+					return
+				}
+			}
+			XGMoveTypes.allValues.map(\.data).forEach { offensiveType in
+				let defensiveTypeIndex = type.index
+				if defensiveTypeIndex < offensiveType.effectivenessTable.count {
+					let effectiveness = offensiveType.effectivenessTable[defensiveTypeIndex]
+					switch effectiveness {
+					case .ineffective:
+						noEffectFrom.append(offensiveType.name.unformattedString)
+					case .notVeryEffective:
+						resists.append(offensiveType.name.unformattedString)
+					case .superEffective:
+						weakTo.append(offensiveType.name.unformattedString)
+					default:
+						return
+					}
+				}
+			}
+			var object = [String: AnyObject]()
+			object["name"] = "\(name)"  as AnyObject
+			object["strongAgainst"] = strongAgainst as AnyObject
+			object["weakAgainst"] = weakAgainst as AnyObject
+			object["noEffectAgainst"] = noEffectAgainst as AnyObject
+			object["resists"] = resists as AnyObject
+			object["weakTo"] = weakTo as AnyObject
+			object["noEffectFrom"] = noEffectFrom as AnyObject
+			object["tabletype"] = "type" as AnyObject
+			object["entryName"] = entryName as AnyObject
+			if !XGPatcher.isClassSplitImplemented() {
+				object["category"] = type.category.string as AnyObject
+			}
+			data[entryName] = object as AnyObject
 		}
 		#if !GAME_PBR
 		var trainers = [String: [AnyObject]]()

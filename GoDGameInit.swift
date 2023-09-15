@@ -8,7 +8,7 @@
 
 import Foundation
 
-let versionNumber = "V2.8.1"
+let versionNumber = "V2.9.0"
 var fileDecodingMode = false
 
 var toolName: String {

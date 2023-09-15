@@ -276,7 +276,7 @@ indirect enum GoDStructPropertyTypes {
 	case uint, uintHex // unsigned int (only positive values)
 	case int // signed int (positive or negative values)
 	case float, percentage, angle, bool, bitMask, null
-	case byteRange
+	case byteRange, shiftedInt(midPoint: Int)
 	case pokemonID, moveID, itemID, abilityID, natureID, genderID, typeID
 	case moveCategory, typeEffectiveness, moveEffectID, shininess
 	case genderRatio, expRate, evolutionMethod, moveTarget, statusEffect, dayCareStatus
@@ -630,6 +630,8 @@ indirect enum GoDStructValues: CustomStringConvertible {
 				} else {
 					return "-" + String(format: "%.1f", Double(0x80 - rawValue) / 128 * 100) + "%"
 				}
+			case .shiftedInt(let midPoint):
+				return (rawValue >= midPoint ? "+" : "") + (rawValue - midPoint).string
 			case .bitMask:
 				valueString = rawValue.binary()
 				valueString += " (\(rawValue))"

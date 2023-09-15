@@ -7,7 +7,7 @@
 
 import Foundation
 
-private let settingsFile = XGFiles.nameAndFolder("Settings.json", XGFolders.Documents)
+let settingsFile = XGFiles.nameAndFolder("Settings.json", XGFolders.Documents)
 
 class XGSettings {
 
@@ -16,24 +16,29 @@ class XGSettings {
 	var verbose = false
 	var increaseFileSizes = true
 	var enableExperimentalFeatures = false
-	var inputDuration = 0.18 // How long a button press lasts by default when input into Dolphin
-	var inputPollDuration: UInt32 = 500 // How often to poll for new inputs (ms)
+	var dppInputDuration: Double = 0.18 // How long a button press lasts by default when input into Dolphin
+	var dppInputChannelID: UInt64?
+	var dppUpdatesChannelID: UInt64?
+	var dppControllerBotID: String?
 	
 	private struct Settings: Codable {
 		
 		var verbose: Bool?
 		var increaseFileSizes: Bool?
 		var enableExperimentalFeatures: Bool?
-		var inputDuration: Double?
-		var inputPollDuration: UInt32?
-		var username: String?
+		var dppInputDuration: Double?
+		var dppInputChannelID: UInt64?
+		var dppUpdatesChannelID: UInt64?
+		var dppControllerBotID: String?
 		
 		enum CodingKeys: String, CodingKey {
 			case verbose = "Verbose Logs"
 			case increaseFileSizes = "Increase File Sizes"
 			case enableExperimentalFeatures = "Enable Experimental Features"
-			case inputDuration = "The default duration (seconds) for button inputs when running Dolphin"
-			case inputPollDuration = "The length of time (milliseconds) after which to poll for new inputs when running Dolphin"
+			case dppInputDuration = "The default duration (seconds) for button inputs when running Dolphin"
+			case dppInputChannelID = "The discord channel id where dpp players input commands"
+			case dppUpdatesChannelID = "The discord channel id where dpp important updates are posted"
+			case dppControllerBotID = "The bot token for the controller input for dpp"
 		}
 	}
 	
@@ -50,12 +55,20 @@ class XGSettings {
 			self.enableExperimentalFeatures = experimental
 		}
 
-		if let duration = settings.inputDuration {
-			self.inputDuration = duration
+		if let duration = settings.dppInputDuration {
+			self.dppInputDuration = duration
 		}
 
-		if let duration = settings.inputPollDuration {
-			self.inputPollDuration = duration
+		if let inputChannel = settings.dppInputChannelID {
+			self.dppInputChannelID = inputChannel
+		}
+		
+		if let updatesChannel = settings.dppUpdatesChannelID {
+			self.dppUpdatesChannelID = updatesChannel
+		}
+		
+		if let botToken = settings.dppControllerBotID {
+			self.dppControllerBotID = botToken
 		}
 	}
 	
@@ -64,8 +77,10 @@ class XGSettings {
 		let settingsData = Settings(verbose: verbose,
 									increaseFileSizes: increaseFileSizes,
 									enableExperimentalFeatures: enableExperimentalFeatures,
-									inputDuration: inputDuration,
-									inputPollDuration: inputPollDuration
+									dppInputDuration: dppInputDuration,
+									dppInputChannelID: dppInputChannelID,
+									dppUpdatesChannelID: dppUpdatesChannelID,
+									dppControllerBotID: dppControllerBotID
 									)
 		settingsData.writeJSON(to: settingsFile)
 	}

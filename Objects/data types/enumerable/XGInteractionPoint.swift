@@ -83,7 +83,7 @@ enum XGInteractionPointInfo {
 	case Text(stringID: Int)
 	case Elevator(elevatorID: Int, targetRoomID: Int, targetElevatorID: Int, direction: XGElevatorDirections)
 	case CutsceneWarp(targetRoom: Int, targetEntryID: Int, cutsceneID: Int, cameraFSYSID: Int)
-	case PC(roomID: Int, unknown: Int) // parameters are unused
+	case PC(currentRoomID: Int, unknown: Int) // parameters are unused in XD
 
 	case CurrentScript(scriptIndex: Int, parameter1: Int, parameter2: Int, parameter3: Int, parameter4: Int) // index into current map's script
 	case CommonScript(scriptIndex: Int, parameter1: Int, parameter2: Int, parameter3: Int, parameter4: Int) // for any other function in common.rel
@@ -295,7 +295,7 @@ final class XGInteractionPointData: NSObject {
 			case kIPPCValue:
 				let roomID = rel.get2BytesAtOffset(startOffset + kIPPCRoomIDOffset)
 				let unknown = rel.getByteAtOffset(startOffset + kIPPCUnknownOffset)
-				self.info = .PC(roomID: roomID, unknown: unknown)
+				self.info = .PC(currentRoomID: roomID, unknown: unknown)
 			default:
 				let parameter1 = rel.get4BytesAtOffset(startOffset + kIPScriptParameter1Offset)
 				let parameter2 = rel.get4BytesAtOffset(startOffset + kIPScriptParameter2Offset)

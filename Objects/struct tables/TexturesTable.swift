@@ -101,3 +101,36 @@ let pokeFacesTable = CommonStructTable(index: .PokefaceTextures, properties: pok
 	}
 	return "Pokeface \(index)" + suffix
 }
+
+#if GAME_COLO
+let textureRenderingStruct = GoDStruct(name: "Texture Rendering Info", format: [
+	.bitMask(name: "Flags", description: "", length: .char, values:
+	[
+		(name: "Unknown Flag 1", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 7, mod: nil, div: nil, scale: nil),
+		(name: "Is Terminator", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 6, mod: nil, div: nil, scale: nil),
+		(name: "Unknown Value 2", type: .uint, numberOfBits: 2, firstBitIndexLittleEndian: 4, mod: nil, div: nil, scale: nil),
+	]),
+	.byte(name: "Alpha", description: "", type: .uint),
+	.short(name: "X Position", description: "", type: .int),
+	.short(name: "Y Position", description: "", type: .int),
+	.short(name: "Width", description: "", type: .int),
+	.short(name: "Height", description: "", type: .int),
+	.short(name: "Texture table index", description: "", type: .int),
+	.array(name: "Unknowns", description: "", property: .byte(name: "Unknown", description: "", type: .uintHex), count: 8),
+	.word(name: "Function pointer", description: "Calculated at run time", type: .uintHex),
+	.short(name: "Next Entry Index", description: "Index into this table", type: .uintHex)
+])
+
+var textureRenderingTable: GoDStructTable {
+	return GoDStructTable(file: .dol, properties: textureRenderingStruct) { (file) -> Int in
+		switch region {
+		case .US: return 0x2ef0a8 - kDolTableToRAMOffsetDifference
+		default: return 0
+		}
+	} numberOfEntriesInFile: { (file) -> Int in
+		return 0x12d2
+	} nameForEntry: { (index, data) -> String? in
+		return nil
+	}
+}
+#endif

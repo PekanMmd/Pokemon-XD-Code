@@ -42,7 +42,14 @@ class XGRandomiser: NSObject {
 	class func randomisePokemon(includeStarters: Bool = true, includeObtainableMons: Bool = true, includeUnobtainableMons: Bool = true, similarBST: Bool = false) {
 		printg("Randomising pokemon species...")
 
-		let cachedPokemonStats = XGPokemon.allPokemon().map{$0.stats}.filter{$0.catchRate > 0}
+		var cachedPokemonStats = XGPokemon.allPokemon().map{$0.stats}.filter{$0.catchRate > 0}
+		#if GAME_PBR
+		if let eggId = cachedPokemonStats.first(where: { stats in
+			stats.index > 1 && stats.nameID == 10
+		})?.index {
+			cachedPokemonStats = cachedPokemonStats.filter{$0.index < eggId}
+		}
+		#endif
 		var speciesAlreadyUsed = [Int]()
 		var shadowPokemonByID = [Int: XGPokemon]()
 
@@ -265,10 +272,14 @@ class XGRandomiser: NSObject {
 				mon.species = randomise(oldSpecies: mon.species, checkDuplicates: index == rentalPassDeckIndex)
 				// For rental mons, use their last 4 level up moves at level 55 to make the movesets decent
 				// without too many super high level moves which tend to be quite bad anyway
-				mon.moves = index == rentalPassDeckIndex ? mon.species.movesForLevel(55) : XGMoves.inGameRandomMoveset()
+				mon.moves = index == rentalPassDeckIndex ? mon.species.movesForLevel(55) : mon.randomiserMoveset()
 				mon.save()
 			}
 		}
+		#endif
+		
+		#if GAME_XD
+		XGUtility.updateXD001Purification()
 		#endif
 
 		printg("done!")
@@ -605,6 +616,38 @@ class XGRandomiser: NSObject {
 			treasure.save()
 		}
 	}
+	
+	static func randomiseShops() {
+		printg("Randomising shops...")
+		guard let data = pocket.data else {
+			return
+		}
+		let itemCount = pocket.getValueAtPointer(symbol: .numberOfMartItems)
+		let startOffset = pocket.getPointer(symbol: .MartItems)
+		let itemPool = XGItems.allItems()
+			.filter { $0.index > 0 }
+			.filter { let data = $0.data; return data.bagSlot != .battleCDs && data.price > 0 }
+		for i in 0 ..< itemCount {
+			let currentOffset = startOffset + (i * 2)
+			let currentValue = data.get2BytesAtOffset(currentOffset)
+			if currentValue > 0 {
+				let currentItem = XGItems.index(currentValue).data
+				if currentItem.bagSlot != .battleCDs {
+					if let newItem = itemPool.randomElement() {
+						data.replace2BytesAtOffset(currentOffset, withBytes: newItem.index)
+					}
+				}
+			}
+		}
+		data.save()
+		
+		XGItem.allValues.forEach { item in
+			if item.price > 0 {
+				item.couponPrice = item.price * 10
+				item.save()
+			}
+		}
+	}
 	#endif
 	
 	static func randomiseTypeMatchups() {
@@ -620,11 +663,11 @@ class XGRandomiser: NSObject {
 	static func randomiseShinyHues() {
 		
 		printg("Applying patch to randomise colours of pokemon models...")
-		guard game == .XD else {
-			// The code doesn't affect anything in colosseum.
-			printg("This randomiser option hasn't been implemented for this game yet:", game.name)
-			return
-		}
+//		guard game == .XD else {
+//			// The code doesn't affect anything in colosseum.
+//			printg("This randomiser option hasn't been implemented for this game yet:", game.name)
+//			return
+//		}
 		
 		guard region == .US else {
 			printg("This randomiser option hasn't been implemented for your game region:", region.name)
@@ -653,8 +696,8 @@ class XGRandomiser: NSObject {
 		if let freeSpace = XGAssembly.ASMfreeSpaceRAMPointer() {
 			let speciesContainingRegister: XGRegisters = game == .Colosseum ? .r26 : .r27
 			let resultRegister: XGRegisters = game == .Colosseum ? .r30 : .r29
-			let resultOffset = game == .Colosseum ? 0x3C : 0x00
-			let secondaryResultOffset = resultOffset + (game == .Colosseum ? 0x11 : 0x10)
+			let resultOffset = game == .Colosseum ? 0x38 : 0x00
+			let secondaryResultOffset = resultOffset + 0x10
 			let branchOffset: Int
 			let getTrainerDataOffset: Int
 			let getTIDOffset: Int
@@ -687,7 +730,6 @@ class XGRandomiser: NSObject {
 			
 			XGAssembly.replaceRamASM(RAMOffset: branchOffset, newASM: [.b(freeSpace)])
 			XGAssembly.replaceRamASM(RAMOffset: freeSpace, newASM: [
-				replacedInstruction,
 				
 				// get tid
 				.li(.r3, 0),
@@ -864,6 +906,8 @@ class XGRandomiser: NSObject {
 				.stb(.r7, resultRegister, secondaryResultOffset),
 				.stb(.r8, resultRegister, secondaryResultOffset + 1),
 				.stb(.r9, resultRegister, secondaryResultOffset + 2),
+				
+				replacedInstruction,
 				
 				.b(branchOffset + 4)
 			])

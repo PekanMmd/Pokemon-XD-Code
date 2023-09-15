@@ -106,9 +106,17 @@ enum XGTMs {
 		
 	}
 	
-	static func allTMs() -> [XGTMs] {
+	static var allTMs: [XGTMs] {
 		var tms = [XGTMs]()
 		for i in 1 ... kNumberOfTMs {
+			tms.append(.tm(i))
+		}
+		return tms
+	}
+	
+	static var allTMsAndHMs: [XGTMs] {
+		var tms = [XGTMs]()
+		for i in 1 ... kNumberOfTMsAndHMs {
 			tms.append(.tm(i))
 		}
 		return tms
@@ -216,7 +224,7 @@ extension XGTMs: XGEnumerable {
 	}
 	
 	static var allValues: [XGTMs] {
-		return allTMs()
+		return allTMs
 	}
 }
 

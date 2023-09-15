@@ -217,7 +217,7 @@ class GoDTexture {
 		} else {
 			if self.format == .RGBA32 {
 
-				// rg and ba values of rgba32 are separated within blocks so must restructure first
+				// ar and gb values of rgba32 are separated within blocks so must restructure first
 				let pix = self.data.getShortStreamFromOffset(textureStart, length: textureLength)
 				var mergedPixels = [UInt32]()
 				let blockCount = pix.count / 32 // 64 bytes per block, 4 pixelsperrow x 4 pixelspercolumn x 4 bytesperpixel
@@ -225,10 +225,10 @@ class GoDTexture {
 				for i in 0 ..< blockCount {
 					let blockStart = i * 32
 					for j in 0 ..< 16 {
-						let rg = pix[blockStart + j]
-						let ba = pix[blockStart + j + 16]
-						let rgba = (UInt32(rg) << 16) + UInt32(ba)
-						mergedPixels.append(rgba)
+						let ar = pix[blockStart + j]
+						let gb = pix[blockStart + j + 16]
+						let argb = (UInt32(ar) << 16) + UInt32(gb)
+						mergedPixels.append(argb)
 					}
 				}
 

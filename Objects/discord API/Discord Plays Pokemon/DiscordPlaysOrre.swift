@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import Swiftcord
 
-class DiscordPlaysOrre {
+class DiscordPlaysOrre: DiscordPlaysOrreEventsHandler {
 
 	class SaveSlotsState: Codable {
 		private static let file = XGFiles.nameAndFolder("DPP Continuity.json", .Documents)
@@ -34,11 +35,14 @@ class DiscordPlaysOrre {
 			sleep(2)
 		}
 
-		func loadPrevious(process: XDProcess) {
+		func loadPrevious(process: XDProcess, rewindCount: Int) {
 			guard latestSaveSlot > 0 else {
 				return
 			}
-			let previousSlot = latestSaveSlot == 1 ? 7 : latestSaveSlot - 1
+			var previousSlot = latestSaveSlot
+			for _ in 0 ..< rewindCount {
+				previousSlot = previousSlot == 1 ? 7 : previousSlot - 1
+			}
 			process.inputHandler.clearPendingInput()
 			process.loadStateFromSlot(previousSlot)
 		}
@@ -58,21 +62,6 @@ class DiscordPlaysOrre {
 
 		private func incrementSlot() {
 			latestSaveSlot = latestSaveSlot == 7 ? 1 : latestSaveSlot + 1
-		}
-	}
-
-	struct XDStatusUpdate: Encodable {
-		let embeds: [DiscordEmbed]?
-		let text: String?
-		#if GAME_XD
-		var game = "XD"
-		#elseif GAME_COLO
-		var game = "CM"
-		#endif
-
-		init(text: String? = nil, embeds: [DiscordEmbed]? = nil) {
-			self.text = text
-			self.embeds = embeds
 		}
 	}
 
@@ -106,7 +95,6 @@ class DiscordPlaysOrre {
 
 	let saveSlotsState = SaveSlotsState.read() ?? SaveSlotsState()
 
-	let updatesURL = "http://localhost:8080"
 	private let processStateStack = XGStack<ProcessStates>()
 	var processState: ProcessStates {
 		return processStateStack.peek() ?? .none
@@ -116,6 +104,19 @@ class DiscordPlaysOrre {
 	var currentShadowTable: XDShadowDataState?
 	var lastFrameAdvanceHeartBeat: Date?
 	var lastRenderBufferHeartBeat: Date?
+	var process: XDProcess?
+	
+	let discordBot: SwiftcordClient
+	let discordListener: DiscordPlaysOrreEvents
+	
+	init(discordBotToken: String) {
+		discordListener = DiscordPlaysOrreEvents()
+		self.discordBot = DiscordBot.setup(
+			token: discordBotToken,
+			listener: discordListener
+		)
+		discordListener.eventsHandler = self
+	}
 
 	func pushState(_ state: ProcessStates) {
 		processStateStack.push(state)
@@ -130,8 +131,6 @@ class DiscordPlaysOrre {
 	func popState() {
 		processStateStack.pop()
 	}
-
-	var shouldRelaunchOnDolphinClosed = false
 
 	let mapsURLs = [
 		"S1_out" : ("https://cdn2.bulbagarden.net/upload/0/07/Outskirt_Stand.png", GoDDesign.colourOrange()),
@@ -158,36 +157,33 @@ class DiscordPlaysOrre {
 		"worldmap": ("https://cdn2.bulbagarden.net/upload/4/47/Orre.png", GoDDesign.colourYellow())
 	]
 
-	func postUpdate(_ text: String, embed: DiscordEmbed, skipContext: Bool = false) {
+	func postUpdate(_ text: String, embed: EmbedBuilder, skipContext: Bool = false) {
 		postUpdate(text, embeds: [embed], skipContext: skipContext)
 	}
 
-	func postUpdate(_ text: String, embeds: [DiscordEmbed]? = nil, skipContext: Bool = false) {
-		postInfo(endpoint: "update", text: text, embeds: embeds)
+	func postUpdate(_ text: String, embeds: [EmbedBuilder]? = nil, skipContext: Bool = false) {
+		postInfo(type: .update, text: text, embeds: embeds)
 		if !skipContext {
 			postContext(text, embeds: embeds)
 		}
 	}
 
-	func postContext(_ text: String, embed: DiscordEmbed) {
+	func postContext(_ text: String, embed: EmbedBuilder) {
 		postContext(text, embeds: [embed])
 	}
 
-	func postContext(_ text: String, embeds: [DiscordEmbed]? = nil) {
-		postInfo(endpoint: "context", text: text, embeds: embeds)
+	func postContext(_ text: String, embeds: [EmbedBuilder]? = nil) {
+		postInfo(type: .context, text: text, embeds: embeds)
 	}
 
-	func postInfo(endpoint: String, text: String, embeds: [DiscordEmbed]? = nil) {
+	func postInfo(type: DiscordPostTypes, text: String, embeds: [EmbedBuilder]? = nil) {
 		if processState.postUpdates {
-			XGThreadManager.manager.runInBackgroundAsync(queue: 1) { [weak self] in
-				if let updatesURL = self?.updatesURL {
-					GoDNetworkingManager.post(updatesURL + "/" + endpoint, json: XDStatusUpdate(text: text.replacingOccurrences(of: "é", with: "e"), embeds: embeds))
-				}
-			}
+			discordBot.postInfo(type: type, text: text, embeds: embeds)
 		}
 	}
 
 	func launch () {
+		
 		let setup = XDProcessSetup()
 
 		setup.onFrameSkipCounter = 120
@@ -207,9 +203,13 @@ class DiscordPlaysOrre {
 			// Don't continue any sequences from a previous room
 			process.inputHandler.clearPendingInput()
 
-			self?.popState()
-			self?.currentParty = state.trainerState?.value
-			self?.currentShadowTable = state.shadowDataState
+			if self?.processState == .pc_menu {
+				if let stateStack = self?.processStateStack, !stateStack.isEmpty {
+					self?.popState()
+				}
+				self?.currentParty = state.trainerState?.value
+				self?.currentShadowTable = state.shadowDataState
+			}
 
 			switch context.newRoom.name {
 			case "pokemon_logo":
@@ -343,9 +343,11 @@ class DiscordPlaysOrre {
 			   !context.nextRoom.name.contains("menu") {
 				if context.nextRoom.name != state.currentRoomState?.value?.name { // check previous room id.
 					if let info = self?.mapsURLs[context.nextRoom.name] {
-						let embed = DiscordEmbed(title: context.nextRoom.name,
-												 colour: info.1, imageUrl: info.0,
-												 fields: [.init(name: "📍Location", value: context.nextRoom.mapName, inline: false)])
+						let embed = EmbedBuilder()
+							.setTitle(title: context.nextRoom.name)
+							.setColor(color: info.1)
+							.setThumbnail(url: info.0)
+							.addField("📍Location", value: context.nextRoom.mapName)
 						self?.postContext("> \(emoji) Now entering: **" + context.nextRoom.mapName + "**", embeds: [embed])
 					} else {
 						self?.postContext(announcementText)
@@ -356,7 +358,6 @@ class DiscordPlaysOrre {
 			return true
 		}
 
-		#if GAME_XD
 		setup.onPurification = { [weak self] (context, process, state) -> Bool in
 			if context.pokemon.species.index > 0 {
 				let pokemon = context.pokemon
@@ -422,8 +423,9 @@ class DiscordPlaysOrre {
 					pokemon.nickname = evolvedForm.name.string
 				}
 				pokemon.speciesName = evolvedForm.name.string
+				let imageURL = PokeAPI.getImageURL(for: pokemon.speciesName)
 				var embed = pokemon.discordEmbed(fieldTypes: [.types, .level, .nature, .ability, .moves])
-				embed.thumbnail?.url = "pokemon:" + evolvedForm.name.string
+					.setThumbnail(url: imageURL, height: nil, width: nil)
 				self?.postUpdate("> <:evolution:897055856657575957> " + name + " is evolving into **" + evolvedForm.name.string.titleCased + "**!", embed: embed)
 			}
 			return true
@@ -449,18 +451,28 @@ class DiscordPlaysOrre {
 				case .colosseum_orre_final: fallthrough
 				case .mt_battle: fallthrough
 				case .mt_battle_final:
+					#if GAME_XD
 					if battle.p1TID == 5000,
 					   let opponent = battle.p2Trainer {
 						let imageName = "trainer_\(opponent.trainerModel.rawValue)"
 						let imageURL = "https://raw.githubusercontent.com/StarsMmd/PDA-Assets/main/xd/" + imageName + ".png"
-						var embeds = [DiscordEmbed(title: opponent.trainerClass.name.unformattedString.titleCased + " " + opponent.name.string.titleCased, colour: GoDDesign.colourWhite(), imageUrl: imageURL, fields: nil)]
+						var embeds = [
+							EmbedBuilder()
+								.setTitle(title: opponent.trainerClass.name.unformattedString.titleCased + " " + opponent.name.string.titleCased)
+								.setColor(color: GoDDesign.colourWhite())
+								.setThumbnail(url: imageURL)
+						]
 						opponent.pokemon.forEach { (pokemon) in
 							let species = pokemon.pokemon
 							guard species.index > 0 else { return }
-							embeds.append(DiscordEmbed(title: species.name.string.titleCased,
-													   colour: colour(forType: species.type1) ?? 0,
-													   imageUrl: "pokemon:" + species.name.string,
-													   fields: [.init(name: "Level", value: pokemon.level.string, inline: false)]))
+							let imageURL = PokeAPI.getImageURL(for: species.name.string)
+							embeds.append(
+								EmbedBuilder()
+									.setTitle(title: species.name.string.titleCased)
+									.setColor(color: colour(forType: species.type1) ?? 0)
+									.setThumbnail(url: imageURL)
+									.addField("Level", value: pokemon.level.string, isInline: false)
+							)
 						}
 						self?.postContext("> <:pokeballicon:896975942738673735> Battle!\n" + battle.title, embeds: embeds)
 
@@ -479,6 +491,42 @@ class DiscordPlaysOrre {
 						default: break
 						}
 					}
+					#else
+					if battle.p1Trainer?.isPlayer == true,
+					   let opponent = battle.p2Trainer {
+						let imageName = "trainer_\(opponent.trainerModel.rawValue)"
+						let imageURL = "https://raw.githubusercontent.com/StarsMmd/PDA-Assets/main/colo/" + imageName + ".png"
+						let trainerEmbed = EmbedBuilder()
+							.setTitle(title: opponent.trainerClass.name.unformattedString.titleCased + " " + opponent.name.string.titleCased)
+							.setColor(color: GoDDesign.colourWhite())
+							.setThumbnail(url: imageURL, height: nil, width: nil)
+						var embeds = [trainerEmbed]
+						opponent.pokemon.forEach { (pokemon) in
+							let species = pokemon.species
+							guard species.index > 0 else { return }
+							let imageURL = PokeAPI.getImageURL(for: species.name.string)
+							let embed = EmbedBuilder()
+								.setTitle(title: species.name.string.titleCased)
+								.setColor(color: colour(forType: species.type1) ?? 0)
+								.setThumbnail(url: imageURL, height: nil, width: nil)
+								.addField("Level", value: pokemon.level.string, isInline: false)
+						}
+						self?.postContext("> <:pokeballicon:896975942738673735> Battle!\n" + battle.title, embeds: embeds)
+
+						let opponent = battle.p2Trainer?.trainerModel
+						switch opponent {
+						case .mirorB: self?.postUpdate("https://lparchive.org/Pokemon-Colosseum-(by-Crosspeice)/Update%2005/90-ypepNe7.gif")
+						case .venus: self?.postUpdate("https://lparchive.org/Pokemon-Colosseum-(by-Crosspeice)/Update%2008/220-3F8HvpH.gif")
+						case .gonzap: self?.postUpdate("https://lparchive.org/Pokemon-Colosseum-(by-Crosspeice)/Update%2012/125-Gonzap.gif")
+						case .dakim: self?.postUpdate("https://lparchive.org/Pokemon-Colosseum-(by-Crosspeice)/Update%2007/10-f6AaZve.gif")
+						case .ein: self?.postUpdate("https://lparchive.org/Pokemon-Colosseum-(by-Crosspeice)/Update%2010/194-Ein.gif")
+						case .nascour: self?.postUpdate("https://lparchive.org/Pokemon-Colosseum-(by-Crosspeice)/Update%2013/108-nMFXlqn.gif")
+						case .fein: self?.postUpdate("https://tenor.com/view/among-us-digibyte-dgb-meme-button-gif-18569623")
+						case .evice: self?.postUpdate("https://lparchive.org/Pokemon-Colosseum-(by-Crosspeice)/Update%2013/175-ofMsDO6.gif")
+						default: break
+						}
+					}
+					#endif
 				default: break
 				}
 			}
@@ -496,23 +544,12 @@ class DiscordPlaysOrre {
 			return true
 		}
 
-		setup.onWildBattleGenerated = { [weak self] (context, process, state) -> Bool in
-			if let trainer = context.trainer {
-				let monsCount = trainer.partyPokemon.count
-				if monsCount > 0,
-				   let mon = trainer.partyPokemon[0] {
-					self?.postContext("> <:researchencounter:882358521243504710>  A wild **" + mon.species.name.string.titleCased + "** appeared!",
-									  embed: mon.discordEmbed(fieldTypes: [.types, .level, .catchRate]))
-				}
-			}
-			return true
-		}
-
 		setup.onPokemonFainted = { [weak self] (context, process, state) -> Bool in
 			if context.defendingPokemon.species.index > 0 {
 				let defendingPokemon = context.defendingPokemon
-				var embed = defendingPokemon.discordEmbed(fieldTypes: [.hp, .status], storedShadowData: state.shadowDataState?.shadowData(pokemon: defendingPokemon))
-				embed.color = colour(named: "dark red") ?? 0
+				let embed = defendingPokemon.discordEmbed(fieldTypes: [.hp, .status], storedShadowData: state.shadowDataState?.shadowData(pokemon: defendingPokemon))
+					.setColor(color: colour(named: "dark red") ?? 0)
+				
 				if context.attackingPokemon.species.index > 0,
 				   context.attackingPokemon.PID != defendingPokemon.PID,
 				   context.attackingPokemon.TID != defendingPokemon.TID {
@@ -537,19 +574,19 @@ class DiscordPlaysOrre {
 			if moveList.last == "\n" {
 				moveList.removeLast()
 			}
-			let embed = DiscordEmbed(title: gift.giftType,
-									 colour: colour(forType: gift.species.type1) ?? 0,
-									 imageUrl: "pokemon:" + gift.species.name.string,
-									 fields: [
-										.init(name: "Pokemon", value: gift.species.name.string.titleCased, inline: false),
-										.init(name: "Moves", value: moveList, inline: false)
-									 ])
+			let imageURL = PokeAPI.getImageURL(for: gift.species.name.string)
+			let embed = EmbedBuilder()
+				.setTitle(title: gift.giftType)
+				.setColor(color: colour(forType: gift.species.type1) ?? 0)
+				.setThumbnail(url: imageURL)
+				.addField("Pokemon", value: gift.species.name.string.titleCased)
+				.addField("Moves", value: moveList)
+			
 			self?.postUpdate("> 🎁 **" + context.pokemon.species.name.string.titleCased + "** was received!", embed: embed)
 			self?.saveSlotsState.save(process: process)
 			self?.currentParty = state.trainerState?.value
 			return true
 		}
-		#endif
 
 		setup.onWillUseMove = { [weak self] (context, process, state) -> Bool in
 			if context.attackingPokemon.species.index > 0 {
@@ -561,7 +598,6 @@ class DiscordPlaysOrre {
 			return true
 		}
 
-		#if GAME_XD
 		setup.onBattleDamageOrHealing = { [weak self] (context, process, state) -> Bool in
 			let defendingPokemon = context.defendingPokemon
 			if defendingPokemon.species.index > 0,
@@ -593,16 +629,38 @@ class DiscordPlaysOrre {
 			if context.pokemon.species.index > 0 {
 				let pokemon = context.pokemon
 				let embed = pokemon.discordEmbed(fieldTypes: [.hp, .status, .types, .reverseMode], storedShadowData: state.shadowDataState?.shadowData(pokemon: pokemon))
-				self?.postContext("> 😡 " + pokemon.nickname.titleCased + " entered **\(game == .XD ? "Reverse Mode" : "Hyper Mode")**!", embed: embed)
+				if game == .XD {
+					self?.postContext("> 😡 " + pokemon.nickname.titleCased + " entered **Reverse Mode**!", embed: embed)
+				} else {
+					self?.postContext("> 😡 " + pokemon.nickname.titleCased + "'s emotions rose to a fever pitch!\nIt entered **Hyper Mode**!", embed: embed)
+				}
+				
 			}
 			return true
 		}
+		
+		setup.onDidPromptReleasePokemon = { [weak self] (context, process, state) -> Bool in
+			let nopes = [
+				"https://tenor.com/view/nope-nope-nope-never-finger-wag-gif-17348381",
+				"https://tenor.com/view/no-let-me-think-nope-no-way-hmm-no-gif-22904160",
+				"https://tenor.com/view/nah-nevermind-lemme-tell-you-something-listen-hear-me-out-gif-13222326",
+				"https://tenor.com/view/disney-hannah-montana-rico-no-moises-arias-gif-15850397"
+			]
+			if context.shouldRelease,
+				let nopeGif = nopes.randomElement() {
+				self?.postContext("> ❌ **You can't release Pokemon!**\n" + nopeGif)
+				context.shouldRelease = false
+			}
+			
+			return true
+		}
 
+		#if GAME_XD
 		setup.onWillSetFlag = { [weak self] (context, process, state) -> Bool in
 			if context.flagID == XDSFlags.story.rawValue {
 				if let storyFlag = XGStoryProgress(rawValue: context.value),
 				   storyFlag.rawValue <= XGStoryProgress.defeatedGreevil.rawValue {
-					let emoji = storyFlag == XGStoryProgress.defeatedGreevil ? "<a:goodmichael:896976065296232489>" : "📃"
+					let emoji = (game == .XD) && (storyFlag == XGStoryProgress.defeatedGreevil) ? "<a:goodmichael:896976065296232489>" : "📃"
 					self?.postUpdate("> \(emoji) **Progress \(storyFlag.progress)**: " + storyFlag.name
 										.replacingOccurrences(of: "_", with: " ").titleCased
 										.replacingOccurrences(of: "Pda", with: "PDA")
@@ -624,7 +682,11 @@ class DiscordPlaysOrre {
 					case .defeatedGreevil:
 						if let player = state.trainerState,
 						   let trainerData = player.value {
+							#if GAME_XD
 							self?.postUpdate("> <:pokeballicon:896975942738673735> Team Status:", embeds: trainerData.embeds(trainerModel: .michael1WithoutSnagMachine, shadowTable: state.shadowDataState))
+							#else
+							self?.postUpdate("> <:pokeballicon:896975942738673735> Team Status:", embeds: trainerData.embeds(trainerModel: .wes, shadowTable: state.shadowDataState))
+							#endif
 						}
 					default:
 						break
@@ -634,11 +696,21 @@ class DiscordPlaysOrre {
 			}
 			return true
 		}
-		#endif
-
-		#if GAME_XD
+		
+		setup.onWildBattleGenerated = { [weak self] (context, process, state) -> Bool in
+			if let trainer = context.trainer {
+				let monsCount = trainer.partyPokemon.count
+				if monsCount > 0,
+				   let mon = trainer.partyPokemon[0] {
+					self?.postContext("> <:researchencounter:882358521243504710>  A wild **" + mon.species.name.string.titleCased + "** appeared!",
+									  embed: mon.discordEmbed(fieldTypes: [.types, .level, .catchRate]))
+				}
+			}
+			return true
+		}
+		
 		setup.onSpotMonitorActivated = { [weak self] (process, state) -> Bool in
-			var embeds = [DiscordEmbed]()
+			var embeds = [EmbedBuilder]()
 			func addEmbedForSpawn(spot: XGPokeSpots, species: XGPokemon, snacks: Int) {
 				let colourName: String
 				let pokemonName = species.name.string.titleCased
@@ -663,16 +735,17 @@ class DiscordPlaysOrre {
 					?? XGPokeSpots.all.entries.first(where: { $0.pokemon.index == species.index })?.stepsPerSnack.string
 					?? "?"
 
-				embeds.append(DiscordEmbed(title: spotName,
-										   colour: colour(named: colourName) ?? 0,
-										   imageUrl: "pokemon:" + pokemonName,
-										   fields: [
-											DiscordEmbed.Field(name: pokemonName, value: types, inline: false),
-											DiscordEmbed.Field(name: "Snacks left", value: snacks.string, inline: true),
-											DiscordEmbed.Field(name: "Steps per snack", value: stepsPerSnack, inline: true),
-										   ]
-				))
+				let imageURL = PokeAPI.getImageURL(for: pokemonName)
+				let embed = EmbedBuilder()
+					.setTitle(title: spotName)
+					.setColor(color: colour(named: colourName) ?? 0)
+					.setThumbnail(url: imageURL)
+					.addField(pokemonName, value: types)
+					.addField("Snacks left", value: snacks.string)
+					.addField("Steps per snack", value: stepsPerSnack)
+				embeds.append(embed)
 			}
+			
 			if let spawn = state.flagsState?.getSpawnAtPokespot(.rock),
 			   let snacks = state.flagsState?.getSnacksAtPokespot(.rock),
 			   spawn.index > 0 {
@@ -697,10 +770,12 @@ class DiscordPlaysOrre {
 		setup.onMirorRadarActivatedColosseum = { [weak self] (process, state) -> Bool in
 			if let location = state.flagsState?.mirorBLocation?.mapName {
 				let emoji = "<a:mirorbxd:897190854941356072>"
-				let embed = DiscordEmbed(title: "Miror B!",
-										 colour: colour(named: "crimson") ?? 0,
-										 imageUrl: "https://raw.githubusercontent.com/StarsMmd/PDA-Assets/main/xd/trainer_43.png",
-										 fields: [.init(name: "📍Location", value: location, inline: false)])
+				let embed = EmbedBuilder()
+								.setTitle(title: "Miror B!")
+								.setColor(color: colour(named: "crimson") ?? 0)
+								.setThumbnail(url: "https://raw.githubusercontent.com/StarsMmd/PDA-Assets/main/xd/trainer_43.png")
+								.addField("📍Location", value: location)
+				
 				self?.postContext("> \(emoji) **Miror B.** has appeared!", embed: embed)
 			}
 			self?.saveSlotsState.save(process: process)
@@ -708,123 +783,26 @@ class DiscordPlaysOrre {
 		}
 		setup.onMirorRadarActivatedPokespot = setup.onMirorRadarActivatedColosseum
 		#endif
-		
-		setup.onDidPromptReleasePokemon = { [weak self] (context, process, state) -> Bool in
-			let nopes = [
-				"https://tenor.com/view/nope-nope-nope-never-finger-wag-gif-17348381",
-				"https://tenor.com/view/no-let-me-think-nope-no-way-hmm-no-gif-22904160",
-				"https://tenor.com/view/nah-nevermind-lemme-tell-you-something-listen-hear-me-out-gif-13222326",
-				"https://tenor.com/view/disney-hannah-montana-rico-no-moises-arias-gif-15850397"
-			]
-			if context.shouldRelease,
-			    let nopeGif = nopes.randomElement() {
-				self?.postContext("> ❌ **You can't release Pokemon!**\n" + nopeGif)
-				context.shouldRelease = false
-			}
-			
-			return true
-		}
 
 		setup.launch(processType: .Dolphin(dolphinFile: nil)) { (process) in
 
 			print("Launched Dolphin Process")
-
-			var overridePending = false
-			func getInputEndpoint() -> String {
-				defer {
-					overridePending = false
-				}
-				return overridePending ? "/override" : "/input"
-			}
-
-			var lastInputEndTime = Date(timeIntervalSinceNow: 0)
-
+			self.process = process
+			
+			// Process inputs
 			XGThreadManager.manager.runInBackgroundAsync(queue: 2) { [weak self] in
 				while process.isRunning, self?.processState != .finished {
 					guard let self = self else { return }
-
-					if self.processState.acceptInputs || self.processState.acceptOverrides {
-						guard XGSettings.current.inputPollDuration > 0 else {
-							sleep(5)
-							continue
+					let sleepDuration: UInt32 = 500_000
+					usleep(sleepDuration)
+					
+					if self.processState.acceptInputs {
+						if let input = discordListener.nextInput() {
+							process.inputHandler.input(input)
 						}
-						let sleepDuration = XGSettings.current.inputPollDuration > 0 ? XGSettings.current.inputPollDuration * 1000 : 10_000_000
-						usleep(sleepDuration)
-						GoDNetworkingManager.get(self.updatesURL + getInputEndpoint()) { (result: Result<GCPad, NetworkingErrors>) in
-							switch result {
-							case .success(let pad):
-								switch pad.tag {
-								case "terminate":
-									self.shouldRelaunchOnDolphinClosed = false
-									process.terminate()
-									return
-
-								case "reset":
-									self.shouldRelaunchOnDolphinClosed = true
-									process.terminate()
-									return
-
-								case "dump-ram":
-									let now = Date(timeIntervalSinceNow: 0).referenceString()
-									process.RAMDump(to: .nameAndFolder("RAM Dump " + now + ".bin", .Reference))
-
-								case "override-pending":
-									overridePending = true
-
-								case "reload-settings":
-									XGSettings.reload()
-
-								case "save-state":
-									self.saveSlotsState.save(process: process)
-
-								case "load-state":
-									self.saveSlotsState.load(process: process)
-
-								case "load-previous-state":
-									self.saveSlotsState.loadPrevious(process: process)
-
-								case "override":
-									process.inputHandler.input(pad)
-
-								case "team-status":
-									if self.processStateStack.contains(.inGame),
-									   let party = self.currentParty,
-									   let shadowData = self.currentShadowTable {
-										#if GAME_XD
-										self.postContext("> <:pokeballicon:896975942738673735> Team Status:", embeds: party.embeds(trainerModel: .michael1WithoutSnagMachine, shadowTable: shadowData))
-										#else
-										self.postContext("> <:pokeballicon:896975942738673735> Team Status:", embeds: party.embeds(trainerModel: .wes, shadowTable: shadowData))
-										#endif
-									}
-									fallthrough
-
-								default:
-									let timeSinceLastInputEnd =  Date(timeIntervalSinceNow: 0).timeIntervalSince1970 - lastInputEndTime.timeIntervalSince1970
-									guard timeSinceLastInputEnd >= 0 else {
-										return
-									}
-									if self.processState.acceptInputs && XGSettings.current.inputPollDuration > 0 {
-										var updatedPad = pad.disableButtons(self.processState.disabledButtons)
-										if self.processState == .pc_menu {
-											// The controls seems to be more sensitive in the pc menus
-											updatedPad.duration = updatedPad.duration * 0.8
-										}
-										process.inputHandler.input(updatedPad)
-										lastInputEndTime = Date(timeIntervalSinceNow: updatedPad.duration)
-									}
-								}
-							// If the request fails, slow the poll rate slightly
-							case .failure(.requestFailed):
-								sleep(5)
-							default:
-								sleep(1)
-							}
-						}
-					} else {
-						sleep(5)
 					}
+					discordListener.resetInput()
 				}
-				self?.pushState(.finished)
 			}
 
 			// Check heart beat
@@ -833,11 +811,7 @@ class DiscordPlaysOrre {
 					guard let self = self else { return }
 					if let lastHeartBeat = self.lastFrameAdvanceHeartBeat {
 						let timeSinceLastHeartBeat =  Date(timeIntervalSinceNow: 0).timeIntervalSince1970 - lastHeartBeat.timeIntervalSince1970
-						if timeSinceLastHeartBeat >= 21 {
-							self.shouldRelaunchOnDolphinClosed = false
-							process.terminate()
-						} else if timeSinceLastHeartBeat >= 14 {
-							self.shouldRelaunchOnDolphinClosed = true
+						if timeSinceLastHeartBeat >= 14 {
 							process.terminate()
 						} else if timeSinceLastHeartBeat >= 7,
 								  self.processState != .startup,
@@ -847,11 +821,7 @@ class DiscordPlaysOrre {
 					}
 					if let lastHeartBeat = self.lastRenderBufferHeartBeat {
 						let timeSinceLastHeartBeat =  Date(timeIntervalSinceNow: 0).timeIntervalSince1970 - lastHeartBeat.timeIntervalSince1970
-						if timeSinceLastHeartBeat >= 30 {
-							self.shouldRelaunchOnDolphinClosed = false
-							process.terminate()
-						} else if timeSinceLastHeartBeat >= 20 {
-							self.shouldRelaunchOnDolphinClosed = true
+						if timeSinceLastHeartBeat >= 20 {
 							process.terminate()
 						} else if timeSinceLastHeartBeat >= 10,
 								  self.processState != .startup,
@@ -863,6 +833,10 @@ class DiscordPlaysOrre {
 					sleep(3)
 				}
 			}
+			
+			Task {
+				self.discordBot.connect()
+			}
 
 		} onLaunchFailed: { error in
 
@@ -870,20 +844,60 @@ class DiscordPlaysOrre {
 
 		} onFinish: { [weak self] in
 			printg("Finished running XD Process")
-
-			if self?.shouldRelaunchOnDolphinClosed == true {
-				self?.shouldRelaunchOnDolphinClosed = false
-				printg("Process marked for relaunch")
-				#if !os(Linux)
-				DiscordPlaysOrre().launch()
+			printg("Closing tool")
+			ToolProcess.terminate()
+		}
+	}
+	
+	func reset() {
+		process?.terminate()
+	}
+	
+	func ramDump() {
+		let now = Date(timeIntervalSinceNow: 0).referenceString()
+		process?.RAMDump(to: .nameAndFolder("RAM Dump " + now + ".bin", .Reference))
+	}
+	
+	func saveState() {
+		if let process = process {
+			saveSlotsState.save(process: process)
+		}
+	}
+	
+	func loadState() {
+		if let process = process {
+			saveSlotsState.load(process: process)
+		}
+	}
+	
+	func rewindState(by: Int) {
+		if let process = process {
+			saveSlotsState.loadPrevious(process: process, rewindCount: by)
+		}
+	}
+	
+	func party() {
+		if let process = process {
+			if self.processStateStack.contains(.inGame),
+			   let party = self.currentParty,
+			   let shadowData = self.currentShadowTable {
+				#if GAME_XD
+				self.postContext("> <:pokeballicon:896975942738673735> Team Status:", embeds: party.embeds(trainerModel: .michael1WithoutSnagMachine, shadowTable: shadowData))
 				#else
-				printg("Closing tool")
-				ToolProcess.terminate()
+				self.postContext("> <:pokeballicon:896975942738673735> Team Status:", embeds: party.embeds(trainerModel: .wes, shadowTable: shadowData))
 				#endif
-			} else {
-				printg("Closing tool")
-				ToolProcess.terminate()
 			}
+		}
+	}
+	
+	func input(pad: GCPad) {
+		if self.processState.acceptInputs && XGSettings.current.dppInputDuration > 0 {
+			var updatedPad = pad.disableButtons(self.processState.disabledButtons)
+			if self.processState == .pc_menu {
+				// The controls seems to be more sensitive in the pc menus
+				updatedPad.duration = updatedPad.duration * 0.8
+			}
+			process?.inputHandler.input(updatedPad)
 		}
 	}
 }

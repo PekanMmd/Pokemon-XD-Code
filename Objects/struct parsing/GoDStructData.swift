@@ -605,6 +605,8 @@ class GoDStructData: CustomStringConvertible {
 							originalValue = 0x80 - Int(Double(rawValue.magnitude) * 0x80 / 100)
 						}
 						values.append(.value(property: property, rawValue: originalValue))
+					} else if case .shiftedInt(let midPoint) = property.type {
+						values.append(.value(property: property, rawValue: rawValue + midPoint))
 					} else {
 						values.append(.value(property: property, rawValue: rawValue))
 					}

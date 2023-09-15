@@ -28,12 +28,12 @@ extension XDBreakPointTypes {
 			}
 		case .onWillGetFlag:
 			switch region {
-			case .US: return nil
+			case .US: return [0x801906b0]
 			default: return nil
 			}
 		case .onWillSetFlag:
 			switch region {
-			case .US: return nil
+			case .US: return [0x8019077c]
 			default: return nil
 			}
 		case .onStepCount:
@@ -93,12 +93,12 @@ extension XDBreakPointTypes {
 			}
 		case .onPokemonWillSwitchIntoBattle:
 			switch region {
-			case .US: return nil
+			case .US: return [0x8020cff0]
 			default: return nil
 			}
 		case .onShadowPokemonEncountered:
 			switch region {
-			case .US: return nil
+			case .US: return [0x8022eaa8, 0x8022e9f0]
 			default: return nil
 			}
 		case .onShadowPokemonFled:
@@ -108,7 +108,7 @@ extension XDBreakPointTypes {
 			}
 		case .onShadowPokemonDidEnterReverseMode:
 			switch region {
-			case .US: return nil
+			case .US: return [0x8022f06c]
 			default: return nil
 			}
 		case .onWillUseItem:
@@ -137,81 +137,80 @@ extension XDBreakPointTypes {
 			default: return nil
 			}
 		case .onLevelUp:
-			#warning("TODO: find a good way to break on level up")
 			return nil
 		case .onWillEvolve:
 			switch region {
-			case .US: return nil
+			case .US: return [0x8012805c]
 			default: return nil
 			}
 		case .onDidEvolve:
 			switch region {
-			case .US: return nil
+			case .US: return [0x801280c8]
 			default: return nil
 			}
 		case .onDidPurification:
 			switch region {
-			case .US: return nil
+			case .US: return [0x8025ec8c]
 			default: return nil
 			}
 		case .onWillStartBattle:
 			switch region {
-			case .US: return nil
+			case .US: return [0x8020dad0]
 			default: return nil
 			}
 		case .onDidEndBattle:
 			switch region {
-			case .US: return nil
+			case .US: return [0x8020dd40]
 			default: return nil
 			}
 		case .onBattleWhiteout:
 			switch region {
-			case .US: return nil
+			case .US: return [0x8020b610]
 			default: return nil
 			}
 		case .onBattleTurnStart:
 			switch region {
-			case .US: return nil
+			case .US: return [0x8020bbfc]
 			default: return nil
 			}
 		case .onBattleTurnEnd:
 			switch region {
-			case .US: return nil
+			case .US: return [0x8020bc90]
 			default: return nil
 			}
 		case .onPokemonTurnStart:
 			switch region {
-			case .US: return nil
+			case .US: return [0x8020b804]
 			default: return nil
 			}
 		case .onPokemonTurnEnd:
 			switch region {
-			case .US: return nil
+			case .US: return [0x8020b90c]
 			default: return nil
 			}
 		case .onBattleDamageOrHealing:
 			switch region {
-			case .US: return nil
+			case .US: return [0x80226ef0]
 			default: return nil
 			}
 		case .onPokemonDidFaint:
 			switch region {
-			case .US: return nil
+			case .US: return [0x80224708]
 			default: return nil
 			}
 		case .onWillAttemptPokemonCapture:
 			switch region {
-			case .US: return nil
+			case .US: return [0x80213ff8]
 			default: return nil
 			}
 		case .onDidSucceedPokemonCapture:
 			switch region {
-			case .US: return nil
+			case .US: return [0x80214350]
 			default: return nil
 			}
 		case .onDidFailPokemonCapture:
 			switch region {
-			case .US: return nil
+			case .US: return [0x802143a8]
 			default: return nil
 			}
 		case .onMirorRadarActiveAtColosseum:
@@ -241,17 +240,14 @@ extension XDBreakPointTypes {
 			}
 		case .onReceivedGiftPokemon:
 			switch region {
-			case .US: return nil
+			case .US: return [0x801cadbc]
 			default: return nil
 			}
 		case .onReceivedItem:
-			#warning("TODO: research this")
 			return nil
 		case .onHealTeam:
-			#warning("TODO: research this")
 			return nil
 		case .onNewGameStart:
-			#warning("TODO: research this")
 			return nil
 		case .onDidPromptReleasePokemon:
 			switch region {
@@ -265,7 +261,7 @@ extension XDBreakPointTypes {
 			}
 		case .onPrint:
 			switch region {
-			case .US: return nil
+			case .US: return [0x8009c2e0]
 			default: return nil
 			}
 		case .onSoftReset:
@@ -295,7 +291,7 @@ extension XDBreakPointTypes {
 		switch self {
 		case .onWillGetFlag:
 			switch region {
-			case .US: return nil
+			case .US: return 0x8019074c
 			default: return nil
 		}
 		default:
@@ -340,45 +336,45 @@ class RNGRollContext: BreakPointContext {
 	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
-//class GetFlagContext: BreakPointContext {
-//	var flagID: Int
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		flagID = registers[3] ?? 0
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [3: flagID]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//
-//	func setReturnValue(_ to: Int) {
-//		forcedReturnValue = to
-//	}
-//
-//	func getForcedReturnValue() -> Int? {
-//		return forcedReturnValue
-//	}
-//}
-//
-//class SetFlagContext: BreakPointContext {
-//	var flagID: Int
-//	var value: Int
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		flagID = registers[3] ?? 0
-//		value = registers[4] ?? 0
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [3: flagID, 4: value]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
+class GetFlagContext: BreakPointContext {
+	var flagID: Int
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		flagID = registers[3] ?? 0
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [3: flagID]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+
+	func setReturnValue(_ to: Int) {
+		forcedReturnValue = to
+	}
+
+	func getForcedReturnValue() -> Int? {
+		return forcedReturnValue
+	}
+}
+
+class SetFlagContext: BreakPointContext {
+	var flagID: Int
+	var value: Int
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		flagID = registers[3] ?? 0
+		value = registers[4] ?? 0
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [3: flagID, 4: value]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
 
 class StepCounterContext: BreakPointContext {
 
@@ -598,398 +594,291 @@ class WillCallPokemonContext: BreakPointContext {
 	required init(from decoder: Decoder) throws { fatalError("-") }
 }
 
-//class PokemonSwitchInContext: BreakPointContext {
-//	var pokemon: XDBattlePokemon
-//	var trainer: XDTrainer?
-//	let trainerPointer: Int
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		pokemon = XDBattlePokemon(file: process, offset: registers[30] ?? 0)
-//		trainerPointer = registers[3] ?? 0
-//		trainer = XDTrainer(file: process, offset: trainerPointer)
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [3: trainerPointer, 30: pokemon.battleDataOffset]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class ShadowPokemonEncounterContext: BreakPointContext {
-//	var pokemon: XDBattlePokemon
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		pokemon = XDBattlePokemon(file: process, offset: registers[29] ?? 0)
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [29: pokemon.battleDataOffset]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class ShadowPokemonFledContext: BreakPointContext {
-//	var pokemon: XDPartyPokemon
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		pokemon = XDPartyPokemon(file: process, offset: registers[28] ?? 0)
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [28: pokemon.partyDataOffset]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class ReverseModeContext: BreakPointContext {
-//	var pokemon: XDBattlePokemon
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		pokemon = XDBattlePokemon(file: process, offset: registers[30] ?? 0)
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [30: pokemon.battleDataOffset]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class UseItemContext: BreakPointContext {
-//	var pokemon: XDBattlePokemon
-//	var item: XGItems
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		pokemon = XDBattlePokemon(file: process, offset: registers[5] ?? 0)
-//		item = .index(registers[6] ?? 0)
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [5: pokemon.battleDataOffset, 6: item.index]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class UseCologneContext: BreakPointContext {
-//	var partyPokemonIndex: Int
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		partyPokemonIndex = registers[31] ?? 0
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [31: partyPokemonIndex]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class WillUseTMContext: BreakPointContext {
-//	var tm: XGTMs
-//	var hmIndex: Int
-//	var item: XGItems
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		item = .index(registers[25] ?? 0)
-//		tm = .tm(registers[29] ?? 0)
-//		hmIndex = registers[30] ?? 0
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [25: item.index, 29: tm.index, 30: hmIndex]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class DidUseTMContext: BreakPointContext {
-//	var tm: XGTMs
-//	var hmIndex: Int
-//	var item: XGItems
-//	var partyPokemonIndex: Int
-//	var wasSuccessful: Bool
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		item = .index(registers[25] ?? 0)
-//		wasSuccessful = (registers[26] ?? 0) == 1
-//		partyPokemonIndex = registers[27] ?? 0
-//		tm = .tm(registers[29] ?? 0)
-//		hmIndex = registers[30] ?? 0
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [25: item.index, 29: tm.index, 30: hmIndex]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class ExpGainContext: BreakPointContext {
-//	let pokemon: XDBattlePokemon
-//	var exp: Int
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		pokemon = XDBattlePokemon(file: process, offset: registers[19] ?? 0)
-//		exp = registers[18] ?? 0
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [18: exp, 19: pokemon.battleDataOffset]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class WillEvolveContext: BreakPointContext {
-//	var pokemon: XDPartyPokemon
-//	let pokemonOffset: Int
-//	var evolvedForm: XGPokemon
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		pokemonOffset = registers[3] ?? 0
-//		pokemon = XDPartyPokemon(file: process, offset: pokemonOffset)
-//		evolvedForm = .index(registers[4] ?? 0)
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [3: pokemonOffset, 4: evolvedForm.index]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class DidEvolveContext: BreakPointContext {
-//	var pokemon: XDPartyPokemon
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		pokemon = XDPartyPokemon(file: process, offset: registers[27] ?? 0)
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [27: pokemon.partyDataOffset]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class DidPurifyContext: BreakPointContext {
-//	var pokemon: XDPartyPokemon
-//	let pokemonOffset: Int
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		pokemonOffset = registers[31] ?? 0
-//		pokemon = XDPartyPokemon(file: process, offset: pokemonOffset)
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [31: pokemonOffset]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class BattleStartContext: BreakPointContext {
-//	var battle: XGBattle?
-//	let battleID: Int
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		battleID = registers[3] ?? 0
-//		battle = XGBattle(index: battleID)
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [3: battleID]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class BattleEndContext: BreakPointContext {
-//	var result: XGBattleResult?
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		result = XGBattleResult(rawValue: registers[3] ?? 0) ?? .unknown1
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		var registers: [Int: Int] = [:]
-//		if let result = result {
-//			registers[3] = result.rawValue
-//		}
-//		return registers
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class TurnStartContext: BreakPointContext {
-//	var pokemon: XDPartyPokemon
-//	let pokemonPointer: Int
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		pokemonPointer = registers[3] ?? 0
-//		pokemon = XDPartyPokemon(file: process, offset: pokemonPointer)
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [3: pokemonPointer]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class BattleDamageHealingContext: BreakPointContext {
-//	var attackingPokemon: XDBattlePokemon
-//	var defendingPokemon: XDBattlePokemon
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		attackingPokemon = XDBattlePokemon(file: process, offset: registers[26] ?? 0)
-//		defendingPokemon = XDBattlePokemon(file: process, offset: registers[29] ?? 0)
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [26: attackingPokemon.battleDataOffset, 29: defendingPokemon.battleDataOffset]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class PokemonFaintedContext: BreakPointContext {
-//	var attackingPokemon: XDBattlePokemon
-//	var defendingPokemon: XDBattlePokemon
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		attackingPokemon = XDBattlePokemon(file: process, offset: registers[29] ?? 0)
-//		defendingPokemon = XDBattlePokemon(file: process, offset: registers[31] ?? 0)
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [29: attackingPokemon.battleDataOffset, 31: defendingPokemon.battleDataOffset]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class CaptureAttemptContext: BreakPointContext {
-//	var pokemon: XDPartyPokemon
-//	let pokemonOffset: Int
-//	var pokeball: XGItems
-//	var baseCatchRate: Int
-//	var shadowID: Int
-//	let shadowData: XGDeckPokemon
-//	let foeTrainer: XDTrainer
-//	var maxHP: Int
-//	var currentHP: Int
-//	var level: Int
-//	var roomType: Int
-//	var species: XGPokemon
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		species = .index(registers[19] ?? 0)
-//		maxHP = registers[20] ?? 0
-//		currentHP = registers[21] ?? 0
-//		level = registers[22] ?? 0
-//		roomType = registers[23] ?? 0
-//		pokemonOffset = registers[26] ?? 0
-//		pokemon = XDPartyPokemon(file: process, offset: pokemonOffset)
-//		pokeball = .index(registers[24] ?? 0)
-//		shadowID = registers[25] ?? 0
-//		shadowData = .ddpk(shadowID)
-//		baseCatchRate = registers[29] ?? 0
-//		foeTrainer = XDTrainer(file: process, offset: registers[30] ?? 0)
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [
-//			19: species.index,
-//			20: maxHP,
-//			21: currentHP,
-//			22: level,
-//			23: roomType,
-//			24: pokeball.index,
-//			25: shadowID,
-//			26: pokemonOffset,
-//			29: baseCatchRate
-//		]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class CaptureAttemptedContext: BreakPointContext {
-//	var pokemon: XDBattlePokemon
-//	let numberOfShakes: Int
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		pokemon = XDBattlePokemon(file: process, offset: registers[27] ?? 0)
-//		numberOfShakes = registers[28] ?? 0
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [27: pokemon.battleDataOffset, 28: numberOfShakes]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//
-//class ReceiveGiftPokemonContext: BreakPointContext {
-//	let pokemon: XGGiftPokemon
-//	var giftID: Int
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		giftID = registers[3] ?? 0
-//		pokemon = XGGiftPokemonManager.giftWithID(giftID)
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [3: giftID]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
-//class PrintContext: BreakPointContext {
-//	var offset: Int
-//	let string: String
-//
-//	override init(process: XDProcess, registers: [Int: Int]) {
-//		offset = registers[3] ?? 0
-//		string = offset > 0x80000000 ? process.readString(atAddress: offset, charLength: .char) : ""
-//		super.init()
-//	}
-//
-//	override func getRegisters() -> [Int: Int] {
-//		return [3: offset]
-//	}
-//
-//	required init(from decoder: Decoder) throws { fatalError("-") }
-//}
-//
+class PokemonSwitchInContext: BreakPointContext {
+	var pokemon: XDBattlePokemon
+	var trainer: XDTrainer?
+	let trainerPointer: Int
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		pokemon = XDBattlePokemon(file: process, offset: registers[4] ?? 0)
+		trainerPointer = registers[3] ?? 0
+		trainer = XDTrainer(file: process, offset: trainerPointer)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [3: trainerPointer, 4: pokemon.battleDataOffset]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class ShadowPokemonEncounterContext: BreakPointContext {
+	var pokemon: XDBattlePokemon
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		pokemon = XDBattlePokemon(file: process, offset: registers[29] ?? 0)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [29: pokemon.battleDataOffset]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class ReverseModeContext: BreakPointContext {
+	var pokemon: XDBattlePokemon
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		pokemon = XDBattlePokemon(file: process, offset: registers[30] ?? 0)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [30: pokemon.battleDataOffset]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class WillEvolveContext: BreakPointContext {
+	var pokemon: XDPartyPokemon
+	let pokemonOffset: Int
+	var evolvedForm: XGPokemon
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		pokemonOffset = registers[3] ?? 0
+		pokemon = XDPartyPokemon(file: process, offset: pokemonOffset)
+		evolvedForm = .index(registers[4] ?? 0)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [3: pokemonOffset, 4: evolvedForm.index]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class DidEvolveContext: BreakPointContext {
+	var pokemon: XDPartyPokemon
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		pokemon = XDPartyPokemon(file: process, offset: registers[27] ?? 0)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [27: pokemon.partyDataOffset]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class DidPurifyContext: BreakPointContext {
+	var pokemon: XDPartyPokemon
+	let pokemonOffset: Int
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		pokemonOffset = registers[31] ?? 0
+		pokemon = XDPartyPokemon(file: process, offset: pokemonOffset)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [31: pokemonOffset]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class BattleStartContext: BreakPointContext {
+	var battle: XGBattle?
+	let battleID: Int
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		battleID = registers[3] ?? 0
+		battle = XGBattle(index: battleID)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [3: battleID]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class BattleEndContext: BreakPointContext {
+	var result: XGBattleResult?
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		result = XGBattleResult(rawValue: registers[3] ?? 0) ?? .unknown1
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		var registers: [Int: Int] = [:]
+		if let result = result {
+			registers[3] = result.rawValue
+		}
+		return registers
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class TurnStartContext: BreakPointContext {
+	var pokemon: XDPartyPokemon
+	let pokemonPointer: Int
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		pokemonPointer = registers[3] ?? 0
+		pokemon = XDPartyPokemon(file: process, offset: pokemonPointer)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [3: pokemonPointer]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class BattleDamageHealingContext: BreakPointContext {
+	var attackingPokemon: XDBattlePokemon
+	var defendingPokemon: XDBattlePokemon
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		attackingPokemon = XDBattlePokemon(file: process, offset: registers[28] ?? 0)
+		defendingPokemon = XDBattlePokemon(file: process, offset: registers[22] ?? 0)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [28: attackingPokemon.battleDataOffset, 22: defendingPokemon.battleDataOffset]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class PokemonFaintedContext: BreakPointContext {
+	var attackingPokemon: XDBattlePokemon
+	var defendingPokemon: XDBattlePokemon
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		attackingPokemon = XDBattlePokemon(file: process, offset: registers[29] ?? 0)
+		defendingPokemon = XDBattlePokemon(file: process, offset: registers[31] ?? 0)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [29: attackingPokemon.battleDataOffset, 31: defendingPokemon.battleDataOffset]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class CaptureAttemptContext: BreakPointContext {
+	var pokemon: XDPartyPokemon
+	let pokemonOffset: Int
+	var pokeball: XGItems
+	var baseCatchRate: Int
+	var shadowID: Int
+	let shadowData: CMShadowData
+	let foeTrainer: XDTrainer
+	var maxHP: Int
+	var currentHP: Int
+	var level: Int
+	var roomType: Int
+	let species: XGPokemon
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		maxHP = registers[29] ?? 0
+		currentHP = registers[28] ?? 0
+		level = registers[21] ?? 0
+		roomType = registers[22] ?? 0
+		pokemonOffset = registers[25] ?? 0
+		pokemon = XDPartyPokemon(file: process, offset: pokemonOffset)
+		species = pokemon.species
+		pokeball = .index(registers[23] ?? 0)
+		shadowID = registers[24] ?? 0
+		shadowData = CMShadowData(index: shadowID)
+		baseCatchRate = registers[30] ?? 0
+		foeTrainer = XDTrainer(file: process, offset: registers[19] ?? 0)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [
+			29 : maxHP,
+			28 : currentHP,
+			21 : level,
+			22 : roomType,
+			23 : pokeball.index,
+			24 : shadowID,
+			25 : pokemonOffset,
+			30 : baseCatchRate
+		]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class CaptureAttemptedContext: BreakPointContext {
+	var pokemon: XDBattlePokemon
+	let numberOfShakes: Int
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		pokemon = XDBattlePokemon(file: process, offset: registers[27] ?? 0)
+		numberOfShakes = registers[28] ?? 0
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [26: pokemon.battleDataOffset, 27: numberOfShakes]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+
+class ReceiveGiftPokemonContext: BreakPointContext {
+	let pokemon: XGGiftPokemon
+	var giftID: Int
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		giftID = registers[3] ?? 0
+		pokemon = XGGiftPokemonManager.giftWithID(giftID)
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [3: giftID]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
+class PrintContext: BreakPointContext {
+	var offset: Int
+	let string: String
+
+	override init(process: XDProcess, registers: [Int: Int]) {
+		offset = registers[3] ?? 0
+		string = offset > 0x80000000 ? process.readString(atAddress: offset, charLength: .char) : ""
+		super.init()
+	}
+
+	override func getRegisters() -> [Int: Int] {
+		return [3: offset]
+	}
+
+	required init(from decoder: Decoder) throws { fatalError("-") }
+}
+
 //class WildBattleContext: BreakPointContext {
 //	var trainer: XDTrainer?
 //	let trainerPointer: Int

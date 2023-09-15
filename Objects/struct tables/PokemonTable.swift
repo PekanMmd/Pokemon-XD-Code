@@ -16,11 +16,18 @@ let HMProperties = (1 ... 8).map {
 }
 
 #if GAME_XD
-let tutorProperties = (1 ... 12).map {
-	return GoDStructProperties.byte(name: "TutorMove\(String(format: "%02d", $0)) " +  XGTMs.tutor($0).move.name.unformattedString, description: "", type: .bool)
+var tutorProperties: [GoDStructProperties] {
+	var tmsOrder = Array(1...12)
+	if !XGPokemonStats.checkIfTutorMovesPermutationWasChanged() {
+		tmsOrder = (try? tmsOrder.reversePermuted(by: XGPokemonStats.tutorMovePermutations())) ?? tmsOrder
+	}
+	return tmsOrder.map {
+		return GoDStructProperties.byte(name: "TutorMove\(String(format: "%02d", $0)) " +  XGTMs.tutor($0).move.name.unformattedString, description: "", type: .bool)
+	}
 }
 #endif
 
+#if GAME_XD
 let statsStructShort = GoDStruct(name: "Stats", format: [
 	.short(name: "HP", description: "", type: .uint),
 	.short(name: "Attack", description: "", type: .uint),
@@ -37,6 +44,24 @@ let statsStructByte = GoDStruct(name: "Byte Stats", format: [
 	.byte(name: "Sp.Def", description: "", type: .uint),
 	.byte(name: "Speed", description: "", type: .uint)
 ])
+#else
+let statsStructShort = GoDStruct(name: "Stats", format: [
+	.short(name: "HP", description: "", type: .int),
+	.short(name: "Attack", description: "", type: .int),
+	.short(name: "Defense", description: "", type: .int),
+	.short(name: "Sp.Atk", description: "", type: .int),
+	.short(name: "Sp.Def", description: "", type: .int),
+	.short(name: "Speed", description: "", type: .int)
+])
+let statsStructByte = GoDStruct(name: "Byte Stats", format: [
+	.byte(name: "HP", description: "", type: .int),
+	.byte(name: "Attack", description: "", type: .int),
+	.byte(name: "Defense", description: "", type: .int),
+	.byte(name: "Sp.Atk", description: "", type: .int),
+	.byte(name: "Sp.Def", description: "", type: .int),
+	.byte(name: "Speed", description: "", type: .int)
+])
+#endif
 
 let evolutionStruct = GoDStruct(name: "Evolution", format: [
 	.byte(name: "Evolution Method", description: "", type: .evolutionMethod),

@@ -66,7 +66,7 @@ enum XGSpecialCharacters: Int, CaseIterable {
 	case kanjiStart				= 0x04
 	case furiganaStart			= 0x05
 	case furiganaEnd			= 0x06
-	case changeFont				= 0x07 // 2bytes // 1=bold
+	case changeFont				= 0x07 // 2bytes // 1=bold, 2=superscript, 3=regular, 4=superscript
 	case changeColourSpecified	= 0x08 // 5bytes (rgba)
 	case pause					= 0x09 // 2 bytes (second byte determines duration, likely in tenths of a second)
 	case unused0A				= 0x0A

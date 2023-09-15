@@ -527,7 +527,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 //MARK: - Battle
 	42 : [
 		
-		("startScriptedBattle", 16, 4, [.objectName("Battle"), .battleID, .bool, .bool], .null, "(battle id, unknown, don't black out?)"),// # (bool isTrainer, bool don't black out, int battleID) (battleID list in reference folder)
+		("startScriptedBattle", 16, 4, [.objectName("Battle"), .battleID, .bool, .bool], .null, "(battle id, unknown, don't black out?)"),// # ( int battleID, bool isTrainer, bool don't black out) (battleID list in reference folder)
 		("startOpenBattle", 17, 2, [.objectName("Battle"), .battleID], .null, "returns battle result rather than automatically handling black out"),
 		("getBattleResult", 18, 1, [.objectName("Battle")], .battleResult, "1 = lose, 2 = win, 3 = tie"), // # sets last result to 2 if victory
 		("playBGMForCurrentBattle", 19, 2, [.objectName("Battle"), .bool], .null, ""),

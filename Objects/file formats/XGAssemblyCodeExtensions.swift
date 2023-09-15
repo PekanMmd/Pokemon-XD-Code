@@ -60,7 +60,9 @@ extension ASM {
 			let offset = 0x04000000 + UInt32((index * 4) + (RAMOffset & 0xFFFFFF))
 			codeText += "\(offset.hex()) \(code.hex())\n"
 		}
-
+		if !codeText.isEmpty {
+			codeText.removeLast()
+		}
 		return codeText
 	}
 
@@ -240,7 +242,7 @@ extension XGAssembly {
 			return
 		}
 
-		guard region == .US else {
+		guard region != .JP else {
 			printg("This has not yet been implemented for this region:", region.name)
 			return
 		}

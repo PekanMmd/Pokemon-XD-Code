@@ -29,7 +29,7 @@ enum XGTMs: XGIndexedValue {
 	}
 
 	var isHM: Bool {
-		return index > 92
+		return index > kNumberOfTMs
 	}
 
 	func replaceWithMove(_ move: XGMoves) {
@@ -39,6 +39,12 @@ enum XGTMs: XGIndexedValue {
 	}
 
 	static var allTMs: [XGTMs] {
+		(1 ... kNumberOfTMs).map { (index) -> XGTMs in
+			.tm(index)
+		}
+	}
+	
+	static var allTMsAndHNs: [XGTMs] {
 		(1 ... kNumberOfTMsAndHMs).map { (index) -> XGTMs in
 			.tm(index)
 		}
