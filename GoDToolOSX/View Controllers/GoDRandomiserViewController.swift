@@ -22,6 +22,7 @@ class GoDRandomiserViewController: GoDViewController {
 	@IBOutlet var bbingo: NSButton!
 	@IBOutlet var items: NSButton!
 	@IBOutlet var typeMatchups: NSButton!
+	@IBOutlet var shops: NSButton!
 	@IBOutlet var shinyHues: NSButton!
 	@IBOutlet var randomiseByBST: NSButton!
 	@IBOutlet var removeTrades: NSButton!
@@ -42,6 +43,7 @@ class GoDRandomiserViewController: GoDViewController {
 			starters.title = "Rental Pass Pokemon"
 			removeTrades.isHidden = true
 			items.isHidden = true
+			shops.isHidden = true
 			shinyHues.isHidden = true
 		}
     }
@@ -60,6 +62,7 @@ class GoDRandomiserViewController: GoDViewController {
 		let tms = tmmoves.state == .on
 		let boxes = items.state == .on
 		let matchups = typeMatchups.state == .on
+		let pokemarts = shops.state == .on
 		let hues = shinyHues.state == .on
 		let tradeEvos = removeTrades.state == .on
 		let bst = randomiseByBST.state == .on
@@ -115,6 +118,9 @@ class GoDRandomiserViewController: GoDViewController {
 			#if !GAME_PBR
 			if boxes {
 				XGRandomiser.randomiseTreasureBoxes()
+			}
+			if pokemarts {
+				XGRandomiser.randomiseShops()
 			}
 			if hues {
 				XGRandomiser.randomiseShinyHues()

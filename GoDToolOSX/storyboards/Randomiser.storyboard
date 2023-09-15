@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="bib-3E-KV4">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="bib-3E-KV4">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -11,11 +11,11 @@
             <objects>
                 <viewController title="Randomiser" id="bib-3E-KV4" customClass="GoDRandomiserViewController" customModule="Colosseum_Tool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="XxS-rD-gwb">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="459"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="505"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BHc-5O-PEr">
-                                <rect key="frame" x="198" y="412" width="182" height="18"/>
+                                <rect key="frame" x="198" y="458" width="182" height="18"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="180" id="Kt3-63-Ozk"/>
                                 </constraints>
@@ -25,56 +25,56 @@
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zd2-mB-C3a">
-                                <rect key="frame" x="8" y="366" width="182" height="18"/>
+                                <rect key="frame" x="8" y="412" width="182" height="18"/>
                                 <buttonCell key="cell" type="check" title="NPC Pokemon" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="2XJ-17-0zd">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DRo-Dc-sIh">
-                                <rect key="frame" x="198" y="320" width="182" height="18"/>
+                                <rect key="frame" x="198" y="366" width="182" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Abilities" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Hdx-E2-Y2q">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dl1-qm-izc">
-                                <rect key="frame" x="8" y="274" width="182" height="18"/>
+                                <rect key="frame" x="8" y="320" width="182" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Stats" bezelStyle="regularSquare" imagePosition="left" inset="2" id="MXW-O4-NOc">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w7a-JO-od0">
-                                <rect key="frame" x="8" y="182" width="182" height="18"/>
+                                <rect key="frame" x="8" y="228" width="182" height="18"/>
                                 <buttonCell key="cell" type="check" title="TM Moves" bezelStyle="regularSquare" imagePosition="left" inset="2" id="mwJ-Il-9I1">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Sy-E0-BfL">
-                                <rect key="frame" x="8" y="136" width="182" height="18"/>
-                                <buttonCell key="cell" type="check" title="Shiny Hues" bezelStyle="regularSquare" imagePosition="left" inset="2" id="fvI-nG-o3G">
+                                <rect key="frame" x="8" y="182" width="182" height="18"/>
+                                <buttonCell key="cell" type="check" title="Shop Items" bezelStyle="regularSquare" imagePosition="left" inset="2" id="fvI-nG-o3G">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5Jq-Yi-2jS">
-                                <rect key="frame" x="198" y="274" width="182" height="18"/>
+                                <rect key="frame" x="198" y="320" width="182" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Evolutions" bezelStyle="regularSquare" imagePosition="left" inset="2" id="TKt-D1-FON">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ggv-x8-P7o">
-                                <rect key="frame" x="8" y="228" width="182" height="18"/>
+                                <rect key="frame" x="8" y="274" width="182" height="18"/>
                                 <buttonCell key="cell" type="check" title="Move Types" bezelStyle="regularSquare" imagePosition="left" inset="2" id="TNM-ZD-7bp">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IdL-GV-3WZ">
-                                <rect key="frame" x="198" y="228" width="182" height="18"/>
+                                <rect key="frame" x="198" y="274" width="182" height="18"/>
                                 <buttonCell key="cell" type="check" title="Type Matchups" bezelStyle="regularSquare" imagePosition="left" inset="2" id="a9B-av-A4g">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -94,21 +94,21 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Meo-I9-p3a">
-                                <rect key="frame" x="8" y="320" width="182" height="18"/>
+                                <rect key="frame" x="8" y="366" width="182" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Types" bezelStyle="regularSquare" imagePosition="left" inset="2" id="ilM-ET-TiP">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="C41-co-vFw">
-                                <rect key="frame" x="198" y="366" width="182" height="18"/>
+                                <rect key="frame" x="198" y="412" width="182" height="18"/>
                                 <buttonCell key="cell" type="check" title="Pokemon Moves" bezelStyle="regularSquare" imagePosition="left" inset="2" id="imd-qM-0kN">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bt0-6S-ONl">
-                                <rect key="frame" x="198" y="182" width="182" height="18"/>
+                                <rect key="frame" x="198" y="228" width="182" height="18"/>
                                 <buttonCell key="cell" type="check" title="Item Boxes" bezelStyle="regularSquare" imagePosition="left" inset="2" id="VEZ-f8-8nH">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -129,7 +129,7 @@
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="m8a-C3-nFY">
-                                <rect key="frame" x="8" y="412" width="182" height="18"/>
+                                <rect key="frame" x="8" y="458" width="182" height="18"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="180" id="ZYJ-Rh-iX5"/>
                                 </constraints>
@@ -139,8 +139,15 @@
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Lap-fR-qLo">
-                                <rect key="frame" x="198" y="136" width="182" height="18"/>
+                                <rect key="frame" x="198" y="182" width="182" height="18"/>
                                 <buttonCell key="cell" type="check" title="Battle Bingo" bezelStyle="regularSquare" imagePosition="left" inset="2" id="AU1-bv-GO3">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6lC-6A-WDI">
+                                <rect key="frame" x="8" y="136" width="182" height="18"/>
+                                <buttonCell key="cell" type="check" title="Shiny Hues" bezelStyle="regularSquare" imagePosition="left" inset="2" id="k4H-Qx-21Y">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -153,6 +160,7 @@
                             <constraint firstItem="IdL-GV-3WZ" firstAttribute="centerY" secondItem="Ggv-x8-P7o" secondAttribute="centerY" id="773-0v-POY"/>
                             <constraint firstItem="IdL-GV-3WZ" firstAttribute="trailing" secondItem="BHc-5O-PEr" secondAttribute="trailing" id="9jz-ag-pUW"/>
                             <constraint firstItem="w7a-JO-od0" firstAttribute="top" secondItem="Ggv-x8-P7o" secondAttribute="bottom" constant="30" id="BNE-IH-LEf"/>
+                            <constraint firstItem="6lC-6A-WDI" firstAttribute="top" secondItem="6Sy-E0-BfL" secondAttribute="bottom" constant="30" id="CTz-jm-rdl"/>
                             <constraint firstItem="C41-co-vFw" firstAttribute="centerY" secondItem="zd2-mB-C3a" secondAttribute="centerY" id="EFt-RO-82T"/>
                             <constraint firstItem="zd2-mB-C3a" firstAttribute="trailing" secondItem="m8a-C3-nFY" secondAttribute="trailing" id="EVy-hn-fvm"/>
                             <constraint firstItem="DRo-Dc-sIh" firstAttribute="leading" secondItem="C41-co-vFw" secondAttribute="leading" id="Ekt-aJ-qd2"/>
@@ -163,6 +171,7 @@
                             <constraint firstItem="m8a-C3-nFY" firstAttribute="top" secondItem="XxS-rD-gwb" secondAttribute="top" constant="30" id="IJg-Xg-A4e"/>
                             <constraint firstItem="Bt0-6S-ONl" firstAttribute="bottom" secondItem="w7a-JO-od0" secondAttribute="bottom" id="Iq3-NQ-GDm"/>
                             <constraint firstItem="m8a-C3-nFY" firstAttribute="top" secondItem="XxS-rD-gwb" secondAttribute="top" constant="30" id="J3s-Z6-Y21"/>
+                            <constraint firstItem="6lC-6A-WDI" firstAttribute="leading" secondItem="m8a-C3-nFY" secondAttribute="leading" id="K5b-7R-V47"/>
                             <constraint firstItem="vwE-9L-6yi" firstAttribute="top" secondItem="zrR-sC-KC2" secondAttribute="bottom" constant="10" id="KAs-Ii-SUo"/>
                             <constraint firstItem="w7a-JO-od0" firstAttribute="trailing" secondItem="m8a-C3-nFY" secondAttribute="trailing" id="KLr-SC-sNL"/>
                             <constraint firstItem="BHc-5O-PEr" firstAttribute="bottom" secondItem="m8a-C3-nFY" secondAttribute="bottom" id="Kzg-JY-L6W"/>
@@ -178,6 +187,7 @@
                             <constraint firstItem="zd2-mB-C3a" firstAttribute="top" secondItem="m8a-C3-nFY" secondAttribute="bottom" constant="30" id="Sha-7E-yWG"/>
                             <constraint firstItem="5Jq-Yi-2jS" firstAttribute="trailing" secondItem="BHc-5O-PEr" secondAttribute="trailing" id="UxQ-UB-Ljw"/>
                             <constraint firstItem="DRo-Dc-sIh" firstAttribute="trailing" secondItem="BHc-5O-PEr" secondAttribute="trailing" id="ZVA-pQ-U9Y"/>
+                            <constraint firstItem="6lC-6A-WDI" firstAttribute="trailing" secondItem="m8a-C3-nFY" secondAttribute="trailing" id="a8G-zm-1Xx"/>
                             <constraint firstItem="Lap-fR-qLo" firstAttribute="bottom" secondItem="6Sy-E0-BfL" secondAttribute="bottom" id="akT-RO-HQh"/>
                             <constraint firstItem="6Sy-E0-BfL" firstAttribute="leading" secondItem="m8a-C3-nFY" secondAttribute="leading" id="bTx-Br-r9B"/>
                             <constraint firstItem="zrR-sC-KC2" firstAttribute="centerX" secondItem="XxS-rD-gwb" secondAttribute="centerX" id="dnI-g9-Jsd"/>
@@ -186,7 +196,6 @@
                             <constraint firstAttribute="trailing" secondItem="BHc-5O-PEr" secondAttribute="trailing" constant="10" id="fBy-Vx-DaF"/>
                             <constraint firstItem="Meo-I9-p3a" firstAttribute="trailing" secondItem="m8a-C3-nFY" secondAttribute="trailing" id="icY-8H-MCQ"/>
                             <constraint firstItem="bOX-gC-QF6" firstAttribute="top" secondItem="vwE-9L-6yi" secondAttribute="bottom" constant="25" id="kO2-8O-jtj"/>
-                            <constraint firstItem="zrR-sC-KC2" firstAttribute="top" secondItem="6Sy-E0-BfL" secondAttribute="bottom" constant="30" id="khK-3g-eRw"/>
                             <constraint firstItem="6Sy-E0-BfL" firstAttribute="trailing" secondItem="m8a-C3-nFY" secondAttribute="trailing" id="l4M-Z4-gd2"/>
                             <constraint firstItem="DRo-Dc-sIh" firstAttribute="centerY" secondItem="Meo-I9-p3a" secondAttribute="centerY" id="mEU-Fb-0TP"/>
                             <constraint firstItem="Lap-fR-qLo" firstAttribute="trailing" secondItem="BHc-5O-PEr" secondAttribute="trailing" id="nSX-I0-B7N"/>
@@ -199,6 +208,7 @@
                             <constraint firstItem="Meo-I9-p3a" firstAttribute="leading" secondItem="m8a-C3-nFY" secondAttribute="leading" id="uAD-8p-Lz4"/>
                             <constraint firstItem="dl1-qm-izc" firstAttribute="trailing" secondItem="m8a-C3-nFY" secondAttribute="trailing" id="w5j-jb-GxQ"/>
                             <constraint firstItem="BHc-5O-PEr" firstAttribute="leading" secondItem="m8a-C3-nFY" secondAttribute="trailing" constant="10" id="xjX-V4-fR1"/>
+                            <constraint firstItem="zrR-sC-KC2" firstAttribute="top" secondItem="6lC-6A-WDI" secondAttribute="bottom" constant="30" id="xkl-h2-r4a"/>
                         </constraints>
                     </view>
                     <connections>
@@ -213,7 +223,8 @@
                         <outlet property="ptypes" destination="Meo-I9-p3a" id="Drh-iv-hbx"/>
                         <outlet property="randomiseByBST" destination="zrR-sC-KC2" id="3dV-Wt-6Tm"/>
                         <outlet property="removeTrades" destination="vwE-9L-6yi" id="upz-KI-Afk"/>
-                        <outlet property="shinyHues" destination="6Sy-E0-BfL" id="ajY-n8-z3l"/>
+                        <outlet property="shinyHues" destination="6lC-6A-WDI" id="EMM-e3-8uG"/>
+                        <outlet property="shops" destination="6Sy-E0-BfL" id="3xg-W8-RwL"/>
                         <outlet property="starters" destination="m8a-C3-nFY" id="c7v-Mx-wfC"/>
                         <outlet property="tmmoves" destination="w7a-JO-od0" id="nMm-BL-faq"/>
                         <outlet property="typeMatchups" destination="IdL-GV-3WZ" id="PvR-kp-z2G"/>

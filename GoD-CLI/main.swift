@@ -161,6 +161,7 @@ func randomiser() {
 	var randomiseTreasure = false
 	var randomiseBingo = false
 	var randomiseTypeMatchups = false
+	var randomiseShops = false
 	var randomiseShinyHues = false
 
 	var randomiseByBST = false
@@ -192,6 +193,7 @@ func randomiser() {
 			"11: Randomize TM and Tutor Moves",
 			"12: Randomize Evolutions",
 			"13: Randomize Item Boxes",
+			"14: Randomize Shop items",
 		]
 	} else {
 		options += [
@@ -201,8 +203,8 @@ func randomiser() {
 
 	if game == .XD {
 		options += [
-			"14: Randomize Shiny Hues",
-			"15: Randomize Battle Bingo"
+			"15: Randomize Shiny Hues",
+			"16: Randomize Battle Bingo"
 		]
 	}
 
@@ -254,6 +256,9 @@ func randomiser() {
 		}
 		if randomiseTreasure {
 			prompt += " Item Boxes,"
+		}
+		if randomiseShops {
+			prompt += " Shop items,"
 		}
 		if randomiseShinyHues {
 			prompt += " Pokemon Colours,"
@@ -314,6 +319,9 @@ func randomiser() {
 			if randomiseTreasure {
 				XGRandomiser.randomiseTreasureBoxes()
 			}
+			if randomiseShops {
+				XGRandomiser.randomiseShops()
+			}
 			if randomiseEvolutions {
 				XGRandomiser.randomiseEvolutions()
 			}
@@ -344,6 +352,7 @@ func randomiser() {
 			randomiseTreasure = false
 			randomiseByBST = false
 			randomiseTreasure = false
+			randomiseShops = false
 			randomiseTypeMatchups = false
 			randomiseShinyHues = false
 			randomiseBingo = false
@@ -381,10 +390,11 @@ func randomiser() {
 		#if !GAME_PBR
 		case 12: randomiseEvolutions.toggle()
 		case 13: randomiseTreasure.toggle()
+		case 14: randomiseShops.toggle()
 		#endif
 		#if GAME_XD
-		case 14: randomiseShinyHues.toggle()
-		case 15: randomiseBingo.toggle()
+		case 15: randomiseShinyHues.toggle()
+		case 16: randomiseBingo.toggle()
 		#endif
 		default: printg("Invalid option:", input); continue
 		}
@@ -418,6 +428,10 @@ func singleDataTableMenu(forTable table: GoDStructTableFormattable) {
 						XGSaveManager(file: gciFile, saveType: .gciSaveData).save()
 					}
 				}
+			}
+			#else
+			if table.file == typeMatchupsStructTable.file {
+				PBRTypeManager.updateTypeMatchupDolData(allowSizeIncrease: false)
 			}
 			#endif
 		case "encode": table.encodeCSVData()
