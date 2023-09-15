@@ -52,8 +52,8 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "--iso /Users/stars/Documents/GoD\ Tool/Colosseum\ PAL.iso"
-            isEnabled = "NO">
+            argument = "--iso /Users/stars/Documents/GoD\ Tool/Colo.iso"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--launch-dpp-secs 0"
