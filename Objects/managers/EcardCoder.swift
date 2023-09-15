@@ -79,9 +79,9 @@ enum EcardFields: Int {
 	case MetaDataUnknown18 = 22
 	case MetaDataUnknown19 = 23
 	case MetaDataUnknown20 = 24
-	case MetaDataUnknown21 = 25
-	case MetaDataUnknown22 = 26
-	case MetaDataUnknown23 = 27
+	case EasyDifficultyItemReward = 25
+	case MediumDifficultyItemReward = 26
+	case HardDifficultyItemReward = 27
 	case MetaDataUnknown24 = 28
 	case MetaDataUnknown25 = 29
 	case MetaDataUnknown26 = 30
@@ -159,9 +159,9 @@ enum EcardFields: Int {
 		case .MetaDataUnknown18: return (4,1,1,97, .MetaData)
 		case .MetaDataUnknown19: return (4,1,1,98, .MetaData)
 		case .MetaDataUnknown20: return (4,1,1,99, .MetaData)
-		case .MetaDataUnknown21: return (10,2,1,100, .MetaData)
-		case .MetaDataUnknown22: return (10,2,1,102, .MetaData)
-		case .MetaDataUnknown23: return (10,2,1,104, .MetaData)
+		case .EasyDifficultyItemReward: return (10,2,1,100, .MetaData)
+		case .MediumDifficultyItemReward: return (10,2,1,102, .MetaData)
+		case .HardDifficultyItemReward: return (10,2,1,104, .MetaData)
 		case .MetaDataUnknown24: return (7,1,1,106, .MetaData)
 		case .MetaDataUnknown25: return (7,1,1,107, .MetaData)
 		case .MetaDataUnknown26: return (7,1,1,108, .MetaData)
@@ -215,7 +215,10 @@ enum EcardFields: Int {
 	}
 }
 
-let kEcardHeader = [0x00, 0x30, 0x01, 0x02, 0x00, 0x01, 0x08, 0x10, 0x00, 0x00, 0x10, 0x12, 0xF0, 0xD2, 0x01, 0x00, 0x00, 0x04, 0x10, 0xEC, 0xB2, 0x19, 0x00, 0x00, 0x00, 0x08, 0x4E, 0x49, 0x4E, 0x54, 0x45, 0x4E, 0x44, 0x4F, 0x00, 0x22, 0x00, 0x09, 0x22, 0x90, 0x0F, 0x02, 0x02, 0x00, 0x00, 0x00, 0x9B, 0x2B, 0x83, 0x7C, 0x83, 0x50, 0x83, 0x82, 0x83, 0x93, 0x83, 0x52, 0x83, 0x8D, 0x83, 0x56, 0x83, 0x41, 0x83, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+// Mostly fixed values and a few flags which we don't need to change. A few fields are checksums which need to be updated. Documentation on header format found here
+// https://web.archive.org/web/20090621131721/http://nocash.emubase.de/gbatek.htm#gbacartereader
+let kEcardHeader = [0x00, 0x30, 0x01, 0x02, 0x00, 0x01, 0x08, 0x10, 0x00, 0x00, 0x10, 0x12, 0xF0, 0xD2, 0x01, 0x00, 0x00, 0x04, 0x10, 0x00, 0x00, 0x19, 0x00, 0x00, 0x00, 0x08, 0x4E, 0x49, 0x4E, 0x54, 0x45, 0x4E, 0x44, 0x4F, 0x00, 0x22, 0x00, 0x09, 0x22, 0x90, 0x0F, 0x02, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x83, 0x7C, 0x83, 0x50, 0x83, 0x82, 0x83, 0x93, 0x83, 0x52, 0x83, 0x8D, 0x83, 0x56, 0x83, 0x41, 0x83, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+
 
 class EcardCoder {
 
@@ -340,9 +343,9 @@ class EcardCoder {
 				.MetaDataUnknown18,
 				.MetaDataUnknown19,
 				.MetaDataUnknown20,
-				.MetaDataUnknown21,
-				.MetaDataUnknown22,
-				.MetaDataUnknown23,
+				.EasyDifficultyItemReward,
+				.MediumDifficultyItemReward,
+				.HardDifficultyItemReward,
 				.MetaDataUnknown24,
 				.MetaDataUnknown25,
 				.MetaDataUnknown26,
@@ -537,9 +540,9 @@ class EcardCoder {
 				.MetaDataUnknown18,
 				.MetaDataUnknown19,
 				.MetaDataUnknown20,
-				.MetaDataUnknown21,
-				.MetaDataUnknown22,
-				.MetaDataUnknown23,
+				.EasyDifficultyItemReward,
+				.MediumDifficultyItemReward,
+				.HardDifficultyItemReward,
 				.MetaDataUnknown24,
 				.MetaDataUnknown25,
 				.MetaDataUnknown26,
@@ -624,6 +627,27 @@ class EcardCoder {
 			lastDummyValue += 1
 			if lastDummyValue == 256 { lastDummyValue = 0 }
 		}
+		
+		// Update header with checksum values
+		let headerLength = 0x30
+		let dataValues = output.getShortStreamFromOffset(headerLength, length: output.length - headerLength)
+		let dataChecksum = checksum(dataValues, +, .short, true)
+		output.replace2BytesAtOffset(0x13, withBytes: dataChecksum)
+
+		let headerChecksumOffsets = [12,13,16,17] + Array(38...45)
+		let headerChecksumValues = headerChecksumOffsets.map { offset in output.getByteAtOffset(offset) }
+		let headerChecksum = checksum(headerChecksumValues, ^, .char, false)
+		output.replaceByteAtOffset(0x2E, withByte: headerChecksum)
+		
+		let headerBytes = output.getByteStreamFromOffset(0, length: headerLength - 1)
+		let fragmentLength = 0x30
+		let fragmentCount = (output.length - headerLength) / fragmentLength
+		let fragments = (1 ... fragmentCount).map { fragmentIndex in
+			return output.getByteStreamFromOffset(fragmentIndex * fragmentLength, length: fragmentLength)
+		}
+		let fragmentSums = fragments.map { fragment in checksum(fragment, ^, .char, false) }
+		let globalChecksum = checksum(headerBytes + fragmentSums, +, .char, true)
+		output.replaceByteAtOffset(0x2F, withByte: globalChecksum)
 
 		return output
 	}
@@ -648,5 +672,10 @@ class EcardCoder {
 			"-o",
 			outputFile.path
 		])
+	}
+	
+	private static func checksum(_ values: [Int], _ operation: (Int, Int) -> Int, _ byteLength: ByteLengths, _ complement: Bool) -> Int {
+		let sum = values.reduce(0, operation) & byteLength.mask
+		return complement ? ~sum & byteLength.mask : sum
 	}
 }
