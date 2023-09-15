@@ -207,17 +207,15 @@ class XDSScriptCompiler: NSObject {
 			}
 		}
 		
-		if relFile != nil {
-			if relFile!.isValid {
+		if let relFile {
+			if relFile.isValid {
 				printg("saving characters...")
-				for character in characters {
+				for character in relFile.characters {
 					if XGSettings.current.verbose {
 						printg("saving character:", character.rid)
 					}
 					if character.gid > 0 && character.rid >= 0 {
-						if character.characterIndex < relFile!.characters.count {
-							character.save()
-						}
+						character.save()
 					}
 				}
 			}
@@ -316,7 +314,7 @@ class XDSScriptCompiler: NSObject {
 			}
 			
 			if let rel = relFile {
-				if !writeCharacterDataToRel(file: rel.data.file, ftbl: ftbl) {
+				if !writeCharacterDataToRel(file: rel, ftbl: ftbl) {
 					printg("failed to save character data")
 					printg(error)
 				}
@@ -643,9 +641,11 @@ class XDSScriptCompiler: NSObject {
 		return instructions
 	}
 	
-	private class func writeCharacterDataToRel(file: XGFiles, ftbl: [FTBL]) -> Bool {
+	private class func writeCharacterDataToRel(file rel: XGMapRel, ftbl: [FTBL]) -> Bool {
 		
-		let rel = XGMapRel(file: file, checkScript: false)
+		guard XDSScriptCompiler.characters.count > 0 else {
+			return true
+		}
 		
 		// cannot simply count characters as there's no guarantee the RIDs are consecutive
 		var maxRID = -1
@@ -653,14 +653,23 @@ class XDSScriptCompiler: NSObject {
 			maxRID = max(maxRID, character.rid)
 		}
 		if maxRID >= rel.characters.count {
-			// TODO: add space for extra characters
-			error = "Character resource id is larger than the file's maximum of \(rel.characters.count)"
-			return false
+			rel.setValueAtPointer(index: MapRelIndexes.NumberOfCharacters.rawValue, newValue: maxRID + 1)
+			let charactersNeeded = maxRID + 1 - rel.characters.count
+			let bytesNeeded = charactersNeeded * kSizeOfCharacter
+			rel.expandSymbolWithIndex(MapRelIndexes.FirstCharacter.rawValue, by: bytesNeeded)
+			rel.data.save()
+			var nextOffset = rel.characters.last.flatMap { $0.startOffset + kSizeOfCharacter } ?? rel.getPointer(index: MapRelIndexes.FirstCharacter.rawValue)
+			for _ in 0 ..< charactersNeeded {
+				let dummyCharacter = XGCharacter()
+				dummyCharacter.startOffset = nextOffset
+				nextOffset += kSizeOfCharacter
+				rel.characters.append(dummyCharacter)
+			}
 		}
 		
 		
 		for character in XDSScriptCompiler.characters  {
-			character.file = file
+			character.file = rel.data.file
 			character.characterIndex = character.rid
 			if character.rid >= 0 {
 				
@@ -677,6 +686,7 @@ class XDSScriptCompiler: NSObject {
 				
 				if character.gid > 0 && character.rid < rel.characters.count {
 					character.startOffset = rel.characters[character.rid].startOffset
+					rel.characters[character.rid] = character
 				} else if character.gid == 0 {
 					printg("error: can't write character data for player or party characters with group id of 0")
 					return false

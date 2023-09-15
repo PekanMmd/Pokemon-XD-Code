@@ -215,9 +215,9 @@ indirect enum CMSExpr {
 		case .CMSReturnResult(let expr):
 			return "return \(expr.text(script: script))"
 		case .callBuiltIn(let functionIndex, let exprs):
-			var text = "Standard.function\(functionIndex)("
+			var text = "function\(functionIndex)("
 			if let functionName = ScriptBuiltInFunctions[functionIndex]?.name {
-				text = "Standard.\(functionName)("
+				text = "\(functionName)("
 			}
 			for expr in exprs {
 				text += "\(expr.text(script: script)), "
@@ -339,16 +339,16 @@ indirect enum CMSExpr {
 			case 0:
 				return "Null"
 			case 0x596:
-				return "&Common.\(index)"
+				return "Common.function\(index)"
 			case 0x100:
-				return "&This.\(index)"
+				return "Script.function\(index)"
 			default:
-				return "&UnknownScript.\(index)"
+				return CMSExpr.error("Function call to unknown script: \(type), function: \(index)").text(script: script)
 			}
 		case .exit:
 			return "exit"
 		case .error(let text):
-			return "&Error(\(text))"
+			return ">>Error: \(text)"
 		}
 	}
 
@@ -386,7 +386,8 @@ indirect enum CMSExpr {
 		case .constant(.integer(let constant)):
 			switch type {
 			case .msgID:
-				return (.msgMacroConstant(getStringSafelyWithID(id: constant)), .msgID, [])
+				let string = script?.stringTable?.stringWithID(constant) ?? getStringSafelyWithID(id: constant)
+				return (.msgMacroConstant(string), .msgID, [])
 			case .scriptFunction:
 				return (.scriptFunctionConstant(constant >> 16, constant & 0xFFFF), .scriptFunction, [])
 			default:
