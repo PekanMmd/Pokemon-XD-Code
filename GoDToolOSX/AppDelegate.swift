@@ -55,6 +55,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		var musicScriptFile: XGFiles?
 		var iso: XGFiles?
 		var argsAreInvalid = false
+		var verbose = false
 
 		let args = CommandLine.arguments
 		for i in 0 ..< args.count {
@@ -102,7 +103,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			} else if arg == "-s" || arg == "--silent-logs" {
 				silentLogs = true
 			}
+			if arg == "-v" || arg == "--verbose" {
+				verbose = true
+			}
 		}
+		
 		if argsAreInvalid {
 			ToolProcess.terminate()
 		}
@@ -110,6 +115,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		if let isoFile = iso {
 			XGISO.loadISO(file: isoFile)
 		}
+		
+		XGSettings.current.verbose = verbose
 
 		if let date = countDownDate {
 			let timer = Timer(timeInterval: 2, repeats: false) { (t) in
@@ -250,17 +257,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 	}
 
-	func launchDPP(startDate: Date?, posterFile: XGFiles?, musicScriptFile: XGFiles? = nil) {
+	#if !GAME_PBR
+	lazy var discordDiscordPlaysOrre: DiscordPlaysOrre? = {
+		guard let botID = XGSettings.current.dppControllerBotID else {
+			displayAlert(title: "Missing bot token", description: "Missing setting for dpp bot token.\nCheck \(settingsFile.path)")
+			return nil
+		}
+		return DiscordPlaysOrre(discordBotToken: botID)
+	}()
+	#endif
+	
+	func launchDPP(startDate: Date? = nil, posterFile: XGFiles? = nil, musicScriptFile: XGFiles? = nil) {
 		guard homeViewController.checkRequiredFiles() else {
 			return
 		}
 		#if !GAME_PBR
-		GoDCountDownViewController.launch(endDate: startDate ?? .init(timeIntervalSinceNow: 0),
-										  image: posterFile,
-										  musicScript: musicScriptFile,
-										  isFullScreen: true) { countdownVC in
-			XGThreadManager.manager.runInBackgroundAsync(queue: 3) {
-				DiscordPlaysOrre().launch()
+		GoDCountDownViewController.launch(
+			endDate: startDate ?? .init(timeIntervalSinceNow: 0),
+			image: posterFile,
+			musicScript: musicScriptFile,
+			isFullScreen: true
+		) { countdownVC in
+			XGThreadManager.manager.runInBackgroundAsync(queue: 3) { [weak self] in
+				self?.discordDiscordPlaysOrre?.launch()
 			}
 		}
 		#endif
@@ -552,7 +571,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			displayAlert(title: "Texture Dump Finsihed", description: "Done.")
 		}
 	}
-
+	
+	@IBAction func ironmon(_ sender: Any) {
+		guard homeViewController.checkRequiredFiles() else {
+			return
+		}
+		XGUtility.setupIronMonRules()
+	}
 
 	@IBAction func increaseNPCLevelsBy10(_ sender: Any) {
 		guard homeViewController.checkRequiredFiles() else {

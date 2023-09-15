@@ -6,44 +6,7 @@
 //
 
 import Foundation
-
-struct DiscordEmbed: Encodable {
-	struct Thumbnail: Encodable {
-		var width = 0
-		var height = 0
-		var url: String
-	}
-
-	struct Author: Encodable {
-		var name: String
-	}
-
-	struct Field: Encodable {
-		var name: String
-		var value: String
-		var inline: Bool
-
-	}
-
-	let type = "rich"
-	var thumbnail: Thumbnail?
-	var color: Int?
-	var author: Author?
-	var fields: [Field]?
-
-	init(title: String, colour: XGColour, imageUrl: String? = nil, fields: [Field]? = nil) {
-		self.init(title: title, colour: colour.hex >> 8, imageUrl: imageUrl, fields: fields)
-	}
-
-	init(title: String, colour: Int, imageUrl: String? = nil, fields: [Field]? = nil) {
-		if let url = imageUrl {
-			self.thumbnail = Thumbnail(url: url)
-		}
-		color = colour
-		author = Author(name: title)
-		self.fields = fields
-	}
-}
+import Swiftcord
 
 extension XGPokemon {
 	fileprivate var imageURL: String? {
@@ -55,8 +18,8 @@ extension XDPartyPokemon {
 	enum EmbedFieldTypes {
 		case moves, IVs, level, item, ability, nature, types, heartGauge, catchRate, status, hp, reverseMode, pokeball
 	}
-	func discordEmbed(fieldTypes: [EmbedFieldTypes], storedShadowData: XDStoredShadowData? = nil) -> DiscordEmbed {
-		var fields: [DiscordEmbed.Field] = []
+	func discordEmbed(fieldTypes: [EmbedFieldTypes], storedShadowData: XDStoredShadowData? = nil) -> EmbedBuilder {
+		var fields: [EmbedBuilder.Field] = []
 
 		#if GAME_XD
 		let isShadowPokemon = (storedShadowData != nil && shadowID > 0 && !storedShadowData!.hasBeenPurified)
@@ -91,36 +54,36 @@ extension XDPartyPokemon {
 				if moveList.last == "\n" {
 					moveList.removeLast()
 				}
-				fields.append(.init(name: "Moves", value: moveList, inline: false))
+				fields.append(.init(name: "Moves", value: moveList, isInline: false))
 			case .IVs:
-				fields.append(.init(name: "IVs", value: "\(IVHP) ⎮ \(IVattack) ⎮ \(IVdefense) ⎮ \(IVspecialAttack) ⎮ \(IVspecialDefense) ⎮ \(IVspeed)", inline: false))
+				fields.append(.init(name: "IVs", value: "\(IVHP) ⎮ \(IVattack) ⎮ \(IVdefense) ⎮ \(IVspecialAttack) ⎮ \(IVspecialDefense) ⎮ \(IVspeed)", isInline: false))
 			case .item:
-				fields.append(.init(name: "Item", value: item.name.string.titleCased, inline: true))
+				fields.append(.init(name: "Item", value: item.name.string.titleCased, isInline: true))
 			case .heartGauge:
 				if let shadowData = storedShadowData {
-					fields.append(.init(name: "Heart Gauge", value: shadowData.heartGauage.string, inline: true))
+					fields.append(.init(name: "Heart Gauge", value: shadowData.heartGauage.string, isInline: true))
 				} else {
 					let shadowData = self.shadowDeckData.data
-					fields.append(.init(name: "Heart Gauge", value: shadowData.shadowCounter.string, inline: true))
+					fields.append(.init(name: "Heart Gauge", value: shadowData.shadowCounter.string, isInline: true))
 				}
 			case .pokeball:
-				fields.append(.init(name: "Pokeball", value: pokeballCaughtIn.emoji, inline: true))
+				fields.append(.init(name: "Pokeball", value: pokeballCaughtIn.emoji, isInline: true))
 			case .level:
 				let shadowData = self.shadowDeckData.data
 				let levelString = useBoostLevel ? shadowData.level.string + "+ (\(shadowData.shadowBoostLevel))" : level.string
-				fields.append(.init(name: "Level", value: levelString, inline: true))
+				fields.append(.init(name: "Level", value: levelString, isInline: true))
 			case .ability:
-				fields.append(.init(name: "Ability", value: ability.name.string.titleCased, inline: true))
+				fields.append(.init(name: "Ability", value: ability.name.string.titleCased, isInline: true))
 			case .nature:
-				fields.append(.init(name: "Nature", value: nature.string.titleCased, inline: true))
+				fields.append(.init(name: "Nature", value: nature.string.titleCased, isInline: true))
 			case .reverseMode:
 				overrideColour = colour(named: "firebrick")
 			case .types:
 				let emoji = species.type1 == species.type2 ? species.type1.emoji : species.type1.emoji + species.type2.emoji
-				fields.append(.init(name: "Type", value: emoji, inline: false))
+				fields.append(.init(name: "Type", value: emoji, isInline: false))
 			case .catchRate:
 				let catchRate = shadowID > 0 ? shadowDeckData.data.shadowCatchRate : species.stats.catchRate
-				fields.append(.init(name: "Catch Rate", value: catchRate.string, inline: true))
+				fields.append(.init(name: "Catch Rate", value: catchRate.string, isInline: true))
 			case .status:
 				let emoji: String?
 				if currentHP == 0 {
@@ -129,7 +92,7 @@ extension XDPartyPokemon {
 					emoji = status != .none ? status.emoji : nil
 				}
 				if let emoji = emoji {
-					fields.append(.init(name: "Status", value: emoji, inline: true))
+					fields.append(.init(name: "Status", value: emoji, isInline: true))
 				}
 			case .hp:
 				var hpPercentage = Double(currentHP) / Double(maxHP) * 100
@@ -153,7 +116,7 @@ extension XDPartyPokemon {
 				for _ in blockCount ..< 10 {
 					bar += "<:HPgrey:897918891370635274>"
 				}
-				fields.append(.init(name: "HP", value: bar + "\n\(currentHP)/\(maxHP)", inline: true))
+				fields.append(.init(name: "HP", value: bar + "\n\(currentHP)/\(maxHP)", isInline: true))
 			}
 		}
 		#else
@@ -181,11 +144,13 @@ extension XDPartyPokemon {
 		default: break
 		}
 
-		return DiscordEmbed(
-			title: speciesName.titleCased.spaceToLength(10),
-			colour: overrideColour ?? colour(forType: species.type1) ?? 0,
-			imageUrl: "pokemon:" + speciesName, // gc pad bot will automatically look up the pokemon's name
-			fields: fields)
+		let imageURL = PokeAPI.getImageURL(for: speciesName)
+		let embed = EmbedBuilder()
+			.setTitle(title: speciesName.titleCased.spaceToLength(10))
+			.setColor(color: overrideColour ?? colour(forType: species.type1) ?? 0)
+			.setThumbnail(url: imageURL)
+			.addFields(fields)
+		return embed
 	}
 }
 
@@ -281,12 +246,18 @@ extension XGNonVolatileStatusEffects {
 }
 
 extension XDTrainer {
-	func embeds(trainerModel: XGTrainerModels, shadowTable: XDShadowDataState?, useCompactVersion: Bool = false) -> [DiscordEmbed] {
+	func embeds(trainerModel: XGTrainerModels, shadowTable: XDShadowDataState?, useCompactVersion: Bool = false) -> [EmbedBuilder] {
 		let imageName = "trainer_\(trainerModel.rawValue)"
-		let imageURL = "https://raw.githubusercontent.com/StarsMmd/PDA-Assets/main/xd/" + imageName + ".png"
-		var embeds = [
-			DiscordEmbed(title: name?.titleCased ?? "???", colour: GoDDesign.colourWhite(), imageUrl: imageURL, fields: nil)
+		let imageURL = "https://raw.githubusercontent.com/StarsMmd/PDA-Assets/main/\(game == .XD ? "xd" : "colo")/" + imageName + ".png"
+		let trainerEmbed = EmbedBuilder()
+			.setTitle(title: name?.titleCased ?? "???")
+			.setColor(color: GoDDesign.colourWhite().hex)
+			.setImage(url: imageURL, height: nil, width: nil)
+		
+		var embeds: [EmbedBuilder] = [
+			trainerEmbed
 		]
+		
 		partyPokemon.forEach { (mon) in
 			guard let pokemon = mon,
 				pokemon.species.index > 0 else { return }
@@ -304,6 +275,7 @@ extension XDTrainer {
 }
 
 enum Emoji: String {
+	case success = "✅"
 	#if GAME_XD
 	case protagRun = "<a:michael_run:896978303892750416>"
 	case protagRide = "<a:michael_scooter:896976067464663061>"
