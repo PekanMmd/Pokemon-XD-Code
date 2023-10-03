@@ -63,6 +63,7 @@ var ScriptBuiltInFunctions : [Int : (name: String, parameterTypes: [CMSMacroType
 
 	23: (name: "dialogDisplayNameEntryMenu", parameterTypes: nil, returnType: nil, hint: ""),
 	24: (name: "dialogDisplayPCBoxMenu", parameterTypes: nil, returnType: nil, hint: ""),
+	25: (name: "openShopDialog", parameterTypes: [.martID], returnType: nil, hint: "mart id"),
 
 	28: (name: "transitionBegin", parameterTypes: [.transitionID, .float], returnType: nil, hint: "transition id, duration"),
 	29: (name: "transitionWait", parameterTypes: [.bool], returnType: nil, hint: ""),

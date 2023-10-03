@@ -768,7 +768,7 @@ class XGScript: CustomStringConvertible {
 				}
 			}
 
-			expressions.append(.function(.functionDefinition("function\(f)", (0 ..< argCount).map{"arg\($0)"}), functionExpressions.asArray))
+			expressions.append(.function(.functionDefinition("script\(f)", (0 ..< argCount).map{"arg\($0)"}), functionExpressions.asArray))
 		}
 
 		return compoundExpressions(expressions)

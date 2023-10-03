@@ -31,6 +31,7 @@ indirect enum CMSMacroTypes {
 	case shadowID
 	case treasureID
 	case battlefield
+	case martID
 	case integerMoney
 	case integerCoupons
 	case integerQuantity
@@ -111,6 +112,8 @@ indirect enum CMSMacroTypes {
 			return "Treasure"
 		case .battlefield:
 			return "BattleField"
+		case .martID:
+			return "Pokemart"
 		case .integerMoney:
 			return "Pokedollars"
 		case .integerCoupons:
@@ -334,6 +337,8 @@ indirect enum CMSMacroTypes {
 			}
 			let mid = fileDecodingMode ? "ITEM" : XGTreasure(index: value.integerValue).item.name.string.underscoreSimplified.uppercased()
 			return macroWithName("TREASURE_" + mid + String(format: "_%03d", value.integerValue))
+		case .martID:
+			return macroWithName("SHOP" + String(format: "_%02d", value.integerValue))
 		case .buttonInput:
 			switch value.integerValue {
 			case 0x1: return macroWithName("BUTTON_INPUT_D_PAD_LEFT")

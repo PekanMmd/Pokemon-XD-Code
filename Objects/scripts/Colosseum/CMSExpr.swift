@@ -339,9 +339,9 @@ indirect enum CMSExpr {
 			case 0:
 				return "Null"
 			case 0x596:
-				return "Common.function\(index)"
+				return "Common.script\(index)"
 			case 0x100:
-				return "Script.function\(index)"
+				return "script\(index)"
 			default:
 				return CMSExpr.error("Function call to unknown script: \(type), function: \(index)").text(script: script)
 			}

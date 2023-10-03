@@ -483,7 +483,7 @@ var ScriptClassFunctions : [Int : [(name: String, index: Int, parameterCount: In
 		("displayNameEntryMenu", 36, 3, [.objectName("Menu"), .integer, .integer], .null, "(forWhom, mode)"), //# (int forWhom, var target, int mode)
 		//# forWhom: 0 for Player, 1 for Sister, 2 for Poké. mode: 0 = enter Pokemon name, 1 = player name, 2 = sister name (not verified)
 		("commonScriptDisplayNameEntryMenu", 37, 3, [.objectName("Menu"), .integer, .integer], .null, "only use in common.rel's script"), //# used by the common script only. Don't use this otherwise
-		("displayPokemartMenu", 39, 2, [.objectName("Menu"), .integer], .null, "(mart id)"), //# (int pokemart id)
+		("displayShopMenu", 39, 2, [.objectName("Menu"), .integer], .null, "(mart id)"), //# (int pokemart id)
 		("displayPDAMenu", 41, 1, [.objectName("Menu")], .null, ""),
 		("openTradingMenu", 42, 1, [.objectName("Menu")], .bool, ""), // result is boolean true or false
 		("openItemMenu", 50, 1, [.objectName("Menu")], .null, ""),
