@@ -183,8 +183,8 @@ for version in versions {
     }
     osxCompiler += "cp ../tools/OSX/wiimm/* \(GoDWiimmsAssetsFolder)\n"
     osxCompiler += "cp ../tools/OSX/other/* \(GoDAssetsFolder)\n"
-    windowsCompiler += "copy ..\\tools\\Windows\\wiimm\\* \((GoDWiimmsAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
-    windowsCompiler += "copy ..\\tools\\Windows\\other\\* \((GoDAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
+    windowsCompiler += "copy ..\\tools\\Windows\\wiimm\\* \((GoDWiimmsAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\n"
+    windowsCompiler += "copy ..\\tools\\Windows\\other\\* \((GoDAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\n"
     
     
     // MARK: - Add XD swiftc compiler to scripts
@@ -218,9 +218,9 @@ for version in versions {
     osxColoCompiler += "cp ../tools/OSX/wiimm/* \(ColoWiimmsAssetsFolder)\n"
     osxColoCompiler += "cp ../tools/OSX/nedclib/* \(ColoNedclibAssetsFolder)\n"
     osxColoCompiler += "cp ../tools/OSX/other/* \(ColoAssetsFolder)\n"
-    windowsColoCompiler += "copy ..\\tools\\Windows\\wiimm\\* \((ColoWiimmsAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
-    windowsColoCompiler += "copy ..\\tools\\Windows\\nedclib\\* \((ColoNedclibAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
-    windowsColoCompiler += "copy ..\\tools\\Windows\\other\\* \((ColoAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
+    windowsColoCompiler += "copy ..\\tools\\Windows\\wiimm\\* \((ColoWiimmsAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\n"
+    windowsColoCompiler += "copy ..\\tools\\Windows\\nedclib\\* \((ColoNedclibAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\n"
+    windowsColoCompiler += "copy ..\\tools\\Windows\\other\\* \((ColoAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\n"
     
     // MARK: - Add Colosseum swiftc compiler to scripts
     osxColoCompiler += "echo \"Compiling Colosseum Tool. This may take a while...\"\nswiftc -emit-executable -DENV_OSX -DGAME_COLO -o ./out/Colosseum\\ Tool\\ CLI "
@@ -249,8 +249,8 @@ for version in versions {
     }
     osxPBRCompiler += "cp ../tools/OSX/wiimm/* \(PBRWiimmsAssetsFolder)\n"
     osxPBRCompiler += "cp ../tools/OSX/other/* \(PBRAssetsFolder)\n"
-    windowsPBRCompiler += "copy ..\\tools\\Windows\\wiimm\\* \((PBRWiimmsAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
-    windowsPBRCompiler += "copy ..\\tools\\Windows\\other\\* \((PBRAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\"\n"
+    windowsPBRCompiler += "copy ..\\tools\\Windows\\wiimm\\* \((PBRWiimmsAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\n"
+    windowsPBRCompiler += "copy ..\\tools\\Windows\\other\\* \((PBRAssetsFolder).replacingOccurrences(of: "/", with: "\\"))\n"
     
     // MARK: - Add PBR swiftc compiler to scripts
     osxPBRCompiler += "echo \"Compiling PBR Tool. This may take a while...\"\nswiftc -emit-executable -DENV_OSX -DGAME_PBR -o ./out/PBR\\ Tool\\ CLI"
