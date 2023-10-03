@@ -20,6 +20,7 @@ class XGSettings {
 	var dppInputChannelID: UInt64?
 	var dppUpdatesChannelID: UInt64?
 	var dppControllerBotID: String?
+	var dolphinPath: String?
 	
 	private struct Settings: Codable {
 		
@@ -30,6 +31,7 @@ class XGSettings {
 		var dppInputChannelID: UInt64?
 		var dppUpdatesChannelID: UInt64?
 		var dppControllerBotID: String?
+		var dolphinPath: String?
 		
 		enum CodingKeys: String, CodingKey {
 			case verbose = "Verbose Logs"
@@ -39,6 +41,7 @@ class XGSettings {
 			case dppInputChannelID = "The discord channel id where dpp players input commands"
 			case dppUpdatesChannelID = "The discord channel id where dpp important updates are posted"
 			case dppControllerBotID = "The bot token for the controller input for dpp"
+			case dolphinPath = "The path to the Dolphin emulator app"
 		}
 	}
 	
@@ -70,18 +73,24 @@ class XGSettings {
 		if let botToken = settings.dppControllerBotID {
 			self.dppControllerBotID = botToken
 		}
+		
+		if let dolphinPath = settings.dolphinPath {
+			self.dolphinPath = dolphinPath
+		}
 	}
 	
 	func save() {
 		guard XGISO.inputISOFile != nil else { return }
-		let settingsData = Settings(verbose: verbose,
-									increaseFileSizes: increaseFileSizes,
-									enableExperimentalFeatures: enableExperimentalFeatures,
-									dppInputDuration: dppInputDuration,
-									dppInputChannelID: dppInputChannelID,
-									dppUpdatesChannelID: dppUpdatesChannelID,
-									dppControllerBotID: dppControllerBotID
-									)
+		let settingsData = Settings(
+			verbose: verbose,
+			increaseFileSizes: increaseFileSizes,
+			enableExperimentalFeatures: enableExperimentalFeatures,
+			dppInputDuration: dppInputDuration,
+			dppInputChannelID: dppInputChannelID,
+			dppUpdatesChannelID: dppUpdatesChannelID,
+			dppControllerBotID: dppControllerBotID,
+			dolphinPath: dolphinPath
+		)
 		settingsData.writeJSON(to: settingsFile)
 	}
 

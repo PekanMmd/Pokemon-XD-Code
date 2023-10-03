@@ -20,44 +20,36 @@ class DolphinProcess: ProcessIO {
 		
 		let iso = isoFile ?? XGFiles.iso
 		guard iso.exists, let isoData = iso.data else { return nil }
-		
-		// TODO: figure out why dolphin settings set through command line aren't working
-//		settings.forEach { (setting) in
-//			var value = setting.value
-//			if ["yes", "true"].contains(value.lowercased()) {
-//				value = "True"
-//			}
-//			if ["no", "false"].contains(value.lowercased()) {
-//				value = "False"
-//			}
-//			if value.isHexInteger {
-//				let integer = value.hexValue
-//				value = integer.string
-//			}
-//			let key = setting.key.string
-//
-//			args += " " + "--config=\(key)=\(value)".replacingOccurrences(of: " ", with: "\\ ")
-//		}
+		let args = "--exec=\(iso.path.escapedPath)"
+		var dolphinFile = XGSettings.current.dolphinPath.flatMap { XGFiles.path($0) }
+		let hasNoPathSet = dolphinFile == nil
 		
 		#if os(macOS)
-		var args = "--exec=\(iso.path.escapedPath)"
 		let dolphinApp = dolphinFile ?? XGFiles.path("/Applications/Dolphin.app")
-		let dolphinExecutable = XGFiles.path(dolphinApp.path + "/Contents/MacOS/Dolphin")
+		dolphinFile = XGFiles.path(dolphinApp.path + "/Contents/MacOS/Dolphin")
 		GoDShellManager.stripEntitlements(appFile: dolphinApp)
-		guard let process = GoDShellManager.runAsync(.file(dolphinExecutable), args: args) else {
-			return nil
-		}
 		#elseif os(Linux)
-		var args = "--exec=\(iso.path.escapedPath)"
-		let dolphinExecutable = XGFiles.path("/usr/games/dolphin-emu")
-		guard let process = GoDShellManager.runAsync(.file(dolphinExecutable), args: args) else {
-			return nil
+		if dolphinFile == nil {
+			dolphinFile = XGFiles.path("/usr/games/dolphin-emu")
 		}
 		#elseif os(Windows)
-		#warning("TODO: get default path for windows")
-		let dolphinExecutable = XGFiles.path("C:/Dolphin/Dolphin.exe")
+		if dolphinFile == nil {
+			dolphinFile = XGFiles.path("C:/Program Files/Dolphin-x64/Dolphin.exe")
+		}
+		#else
 		return nil
 		#endif
+		
+		if hasNoPathSet, let dolphinFile {
+			XGSettings.current.dolphinPath = dolphinFile.path
+			XGSettings.current.save()
+			
+			printg("Path to Dolphin executable not set. Defaulting to:", dolphinFile.path,"\n Update the path in the tool settings by updating the text in ",settingsFile.path)
+		}
+		
+		guard let dolphinFile, let process = GoDShellManager.runAsync(.file(dolphinFile), args: args) else {
+			return nil
+		}
 		
 		self.init(process: process)
 		self.gameIdentifier = isoData.readString(atAddress: 0, charLength: .char, maxCharacters: 4)
