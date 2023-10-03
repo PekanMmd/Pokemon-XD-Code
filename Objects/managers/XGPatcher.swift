@@ -217,19 +217,19 @@ enum XGDolPatches: Int {
 	
 	var name: String {
 		switch self {
-		case .deleteUnusedFiles: return "Delete some unused files to free up some space in the ISO."
-		case .freeSpaceInDol: return "Create some space in \(XGFiles.dol.fileName) which is needed for other assembly patches."
-		case .physicalSpecialSplitApply : return "Apply the gen IV physical/special split and set moves to their default category."
-		case .physicalSpecialSplitRemove : return "Remove the physical/special split."
-		case .type9IndependentApply : return "Makes the battle engine treat the ??? type as regular type."
+		case .deleteUnusedFiles: return "Delete some unused files to free up some space in the ISO"
+		case .freeSpaceInDol: return "Create some space in \(XGFiles.dol.fileName) which is needed for other assembly patches"
+		case .physicalSpecialSplitApply : return "Apply the gen IV physical/special split and set moves to their default category"
+		case .physicalSpecialSplitRemove : return "Remove the physical/special split"
+		case .type9IndependentApply : return "Makes the battle engine treat the ??? type as regular type"
 		case .noTypeIconForLockedMoves : return "When a shadow pokemon has locked moves the move doesn't show the ??? type icon"
-		case .betaStartersApply : return "Allows the player to start with 2 pokemon."
-		case .betaStartersRemove : return "Revert to starting with 1 pokemon."
+		case .betaStartersApply : return "Allows the player to start with 2 pokemon"
+		case .betaStartersRemove : return "Revert to starting with 1 pokemon"
 		case .renameAllPokemonApply	: return "Allows the name rater to rename all pokemon - Crashes parts of game"
-		case .shinyChanceEditingApply : return "Removes shiny purification glitch by generating based on a fixed trainer ID."
-		case .shinyChanceEditingRemove : return "shininess will be determined by trainer ID as usual."
-		case .purgeUnusedText : return "Removes foreign language text from the US version."
-		case .decapitaliseNames : return "Decapitalises a lot of text."
+		case .shinyChanceEditingApply : return "Removes shiny purification glitch by generating based on a fixed trainer ID"
+		case .shinyChanceEditingRemove : return "shininess will be determined by trainer ID as usual"
+		case .purgeUnusedText : return "Removes foreign language text from the US version"
+		case .decapitaliseNames : return "Decapitalises a lot of text"
 		case .tradeEvolutions : return "Trade evolutions become level 40"
 		case .removeItemEvolutions : return "Evolution stone evolutions become level 40"
 		case .defaultMoveCategories: return "Sets the physical/special category for all moves to their expected values"
@@ -252,15 +252,15 @@ enum XGDolPatches: Int {
 		case .gen7CritRatios: return "Gen 7+ critical hit probablities"
 		case .allSingleBattles: return "Set all battles to single battles"
 		case .allDoubleBattles: return "Set all battles to double battles"
-		case .removeColbtlRegionLock: return "Modify the ASM so it allows any region's colbtl.bin to be imported. Trades will be locked to whichever region's colbtl.bin was imported."
-		case .disableSaveCorruption: return "Disables some save file checks to prevent the save from being corrupted."
+		case .removeColbtlRegionLock: return "Modify the ASM so it allows any region's colbtl.bin to be imported. Trades will be locked to whichever region's colbtl.bin was imported"
+		case .disableSaveCorruption: return "Disables some save file checks to prevent the save from being corrupted"
 		case .maxPokespotEntries: return "Change the max number of pokemon per pokespot from 3 to 100"
 		case .preventPokemonRelease: return "Disables the ability to release Pokemon"
 		case .completeStrategyMemo: return "All pokemon will be viewable in the strategy memo immediately"
 		case .addSoftReset: return "Adds the ability to soft reset using B + X + Start button combo"
 		case .loadPCFromAnywhere: return "Press R in the overworld to open the PC menu from anywhere (Make sure you don't softlock yourself)"
 		case .removeShinyLocksFromGiftPokemon: return "Remove shiny locks from gift pokemon (espeon, umbreon, plusle, pikachu, celebi, hooh)"
-		case .disableBattleAnimations: return "Disables attack animations during battles"
+		case .disableBattleAnimations: return "Disable attack animations during battles"
 		}
 	}	
 }
@@ -1454,7 +1454,7 @@ class XGPatcher {
 			.b(freeSpace),
 			.rlwinm_(.r0, .r31, 0, 19, 21),
 		]
-		print(XGAssembly.geckoCode(RAMOffset: processEventsInjectionOffset, asm: asm))
+		XGAssembly.replaceRamASM(RAMOffset: processEventsInjectionOffset, newASM: asm)
 
 		let lastWarpPointAddress: UInt32 = {
 			switch region {
@@ -1480,7 +1480,7 @@ class XGPatcher {
 			.bl(runScriptAddress),
 			.b(processEventsInjectionOffset + 0x14)
 		]
-		print(XGAssembly.geckoCode(RAMOffset: freeSpace, asm: asm2))
+		XGAssembly.replaceRamASM(RAMOffset: freeSpace, newASM: asm2)
 	}
 	
 	static func removeShinyLocks() {
