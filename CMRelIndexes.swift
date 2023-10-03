@@ -161,7 +161,7 @@ enum CommonIndexes : Int {
 
 enum PocketIndexes : Int {
 	case CouponCounterDialog = 0
-	case numberofCouponCounterDialog = 1
+	case numberOfCouponCounterDialog = 1
 	case MartItems = 2
 	case numberOfMartItems = 3
 	case MartStartIndexes = 4

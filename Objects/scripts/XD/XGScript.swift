@@ -406,12 +406,13 @@ class XGScript: NSObject {
 						let instr = self.code[i - 2]
 						if instr .opCode == .loadImmediate {
 							let mid = instr.parameter
-							let mart = XGPokemart(index: mid).items
-							desc += ">>\n"
-							for item in mart {
-								desc += item.name.string + "\n"
+							if let mart = XGPokemart.getMart(withIndex: mid)?.items {
+								desc += ">>\n"
+								for item in mart {
+									desc += item.name.string + "\n"
+								}
+								desc += "\n"
 							}
-							desc += "\n"
 						}
 						
 					}

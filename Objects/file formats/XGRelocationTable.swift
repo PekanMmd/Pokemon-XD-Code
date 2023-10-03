@@ -47,9 +47,48 @@ class XGCommon: XGRelocationTable {
 }
 
 var pocket = XGPocket()
-class XGPocket : XGRelocationTable {
+class XGPocket: XGRelocationTable {
+	var pokemarts = [XGPokemart]()
+	
 	convenience init() {
 		self.init(file: .pocket_menu)
+	}
+	
+	override init(data: XGMutableData) {
+		super.init(data: data)
+		
+		var itemsList = [XGItems]()
+		let numberOfItems = getValueAtPointer(symbol: .numberOfMartItems)
+		let itemListOffset = getPointer(symbol: .MartItems)
+		for i in 0 ..< numberOfItems {
+			let itemID = data.get2BytesAtOffset(itemListOffset + (i * 2))
+			itemsList.append(.index(itemID))
+		}
+		
+		let numberOfMarts = getValueAtPointer(symbol: .numberOfMarts)
+		let martListOffset = getPointer(symbol: .MartStartIndexes)
+		for i in 0 ..< numberOfMarts {
+			let infoOffset = martListOffset + (i * 4)
+			let type = XGShopDialogTypes(rawValue: data.getByteAtOffset(infoOffset)) ?? .shop
+			let subtype = XGShopTypes(rawValue: data.getByteAtOffset(infoOffset + 1)) ?? .shop
+			let firstItemIndex = data.get2BytesAtOffset(infoOffset + 2)
+			
+			var items = [XGItems]()
+			var reachedLastItem = false
+			var currentItemIndex = firstItemIndex
+			while !reachedLastItem, currentItemIndex < itemsList.count {
+				let nextItem = itemsList[currentItemIndex]
+				if nextItem.index == 0 {
+					reachedLastItem = true
+				} else {
+					items.append(nextItem)
+					currentItemIndex += 1
+				}
+			}
+			
+			let mart = XGPokemart(index: i, type: type, subtype: subtype, items: items)
+			pokemarts.append(mart)
+		}
 	}
 	
 	func getPointer(symbol: PocketIndexes) -> Int {
@@ -76,6 +115,47 @@ class XGPocket : XGRelocationTable {
 	
 	func expandSymbol(_ symbol: PocketIndexes, by byteCount: Int, save: Bool = false) {
 		expandSymbolWithIndex(symbol.index, by: byteCount)
+	}
+	
+	func save() {
+		var itemsList = [XGItems]()
+		var shopInfo = [(type: Int, subtype: Int, firstItemIndex: Int)]()
+		pokemarts.forEach { mart in
+			let type = mart.type.rawValue
+			let subtype = mart.subtype.rawValue
+			let firstItemIndex = itemsList.count
+			shopInfo.append((type, subtype, firstItemIndex))
+			itemsList += mart.items + [.index(0)]
+		}
+		
+		let requiredItemsLength = itemsList.count * 2
+		let currentItemsLength = getSymbolLength(symbol: .MartItems)
+		if currentItemsLength < requiredItemsLength {
+			expandSymbol(.MartItems, by: requiredItemsLength - currentItemsLength, save: false)
+		}
+		
+		let requiredInfoLength = shopInfo.count * 4
+		let currentInfoLength = getSymbolLength(symbol: .MartStartIndexes)
+		if currentInfoLength < requiredInfoLength {
+			expandSymbol(.MartStartIndexes, by: requiredInfoLength - currentInfoLength, save: false)
+		}
+		
+		setValueAtPointer(symbol: .numberOfMartItems, newValue: itemsList.count)
+		let itemsOffset = getPointer(symbol: .MartItems)
+		itemsList.forEachIndexed { index, item in
+			data.replace2BytesAtOffset(itemsOffset + (index * 2), withBytes: item.index)
+		}
+		
+		setValueAtPointer(symbol: .numberOfMarts, newValue: shopInfo.count)
+		let infoOffset = getPointer(symbol: .MartStartIndexes)
+		shopInfo.forEachIndexed { index, info in
+			let offset = infoOffset + (index * 4)
+			data.replaceByteAtOffset(offset, withByte: info.type)
+			data.replaceByteAtOffset(offset + 1, withByte: info.subtype)
+			data.replace2BytesAtOffset(offset + 2, withBytes: info.firstItemIndex)
+		}
+		
+		data.save()
 	}
 }
 
@@ -326,6 +406,8 @@ class XGRelocationTable {
 			return
 		}
 		insertBytes(count: byteCount, at: pointerInfo.dataPointer - sectionForInsertion.sectionDataOffset + symbolLength, relativeToSectionWithID: pointerInfo.section, save: save)
+		
+		symbolLengths[index] = symbolLength + byteCount
 	}
 
 	func idForSymbol(withAddress address: Int) -> Int? {
@@ -468,10 +550,3 @@ class XGRelocationTable {
 		parsePointers()
 	}
 }
-
-
-
-
-
-
-

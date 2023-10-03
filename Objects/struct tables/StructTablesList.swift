@@ -40,6 +40,7 @@ var structTablesList: [GoDStructTableFormattable] {
 
 var otherTableFormatsList: [GoDCodable.Type] {
 	var tables: [GoDCodable.Type] = [
+		XGPokemart.self,
 		XGDemoStarterPokemon.self,
 		CMGiftPokemon.self
 	]

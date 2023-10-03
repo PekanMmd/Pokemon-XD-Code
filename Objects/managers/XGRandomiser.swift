@@ -152,7 +152,12 @@ class XGRandomiser: NSObject {
 			}
 
 			let rand = Int.random(in: 0 ..< options.count)
-			let newSpecies = XGPokemon.index(options[rand].index)
+			var newSpecies = XGPokemon.index(options[rand].index)
+			if newSpecies.index == oldSpecies.index {
+				// If it randomises to the original mon then reroll one time
+				// If it manages to roll the original mon twice in a row then that's just rng
+				newSpecies = XGPokemon.index(options[rand].index)
+			}
 			if checkDuplicates {
 				strikeEvolutionLineForPokemon(index: newSpecies.index)
 			}
@@ -622,21 +627,38 @@ class XGRandomiser: NSObject {
 		guard let data = pocket.data else {
 			return
 		}
+		
+		func isElligible(_ item: XGItems) -> Bool {
+			let data = item.data
+			return data.bagSlot != .battleCDs
+				&& data.bagSlot != .keyItems
+				&& data.bagSlot != .colognes
+				&& data.price > 0
+		}
+		
 		let itemCount = pocket.getValueAtPointer(symbol: .numberOfMartItems)
 		let startOffset = pocket.getPointer(symbol: .MartItems)
 		let itemPool = XGItems.allItems()
 			.filter { $0.index > 0 }
-			.filter { let data = $0.data; return data.bagSlot != .battleCDs && data.price > 0 }
+			.filter(isElligible)
+		let pokeballPool = XGItems.pokeballs()
+			.filter { $0.index > 0 }
+			.filter(isElligible)
+		var isFirstItemOfShop = true
 		for i in 0 ..< itemCount {
 			let currentOffset = startOffset + (i * 2)
 			let currentValue = data.get2BytesAtOffset(currentOffset)
 			if currentValue > 0 {
-				let currentItem = XGItems.index(currentValue).data
-				if currentItem.bagSlot != .battleCDs {
-					if let newItem = itemPool.randomElement() {
+				let currentItem = XGItems.index(currentValue)
+				if isElligible(currentItem) {
+					let pool = isFirstItemOfShop && game == .Colosseum ? pokeballPool : itemPool
+					if let newItem = pool.randomElement() {
 						data.replace2BytesAtOffset(currentOffset, withBytes: newItem.index)
 					}
+					isFirstItemOfShop = false
 				}
+			} else {
+				isFirstItemOfShop = true
 			}
 		}
 		data.save()

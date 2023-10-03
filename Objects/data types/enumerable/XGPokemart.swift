@@ -8,49 +8,47 @@
 
 import Foundation
 
-final class XGPokemart: NSObject, Codable {
+enum XGShopDialogTypes: Int, Codable {
+	case pokemart, vendingMachine, shop, herbShop
+	#if GAME_XD
+	case herbShop2, battleCDs
+	#endif
+}
+
+enum XGShopTypes: Int, Codable {
+	case shop, vendingMachine, bonusDiscCoupons, brokenCoupons, pokeCoupons
+	#if GAME_XD
+	case battleCDs, herbShop
+	#endif
+}
+
+final class XGPokemart: GoDCodable {
+	let index: Int
+	var type: XGShopDialogTypes
+	var subtype: XGShopTypes
+	var items: [XGItems]
 	
-	var index = 0
-	
-	var items = [XGItems]()
-	var firstItemIndex = 0
-	var itemsStartOffset : Int {
-		get {
-			return PocketIndexes.MartItems.startOffset + (firstItemIndex * 2)
-		}
-	}
-	
-	init(index: Int) {
-		super.init()
-		
-		let data = pocket.data!
-		
+	init(index: Int, type: XGShopDialogTypes, subtype: XGShopTypes, items: [XGItems]) {
 		self.index = index
-		self.firstItemIndex = data.get2BytesAtOffset(PocketIndexes.MartStartIndexes.startOffset + (index * 4) + 2)
-		
-		var nextItemOffset = itemsStartOffset
-		var nextItem = data.get2BytesAtOffset(nextItemOffset)
-		while nextItem != 0 {
-			self.items.append(.index(nextItem))
-			nextItemOffset += 2
-			nextItem = data.get2BytesAtOffset(nextItemOffset)
-		}
+		self.type = type
+		self.subtype = subtype
+		self.items = items
 	}
 	
 	func save() {
-		let data = pocket.data!
-		data.replace2BytesAtOffset(PocketIndexes.MartStartIndexes.startOffset + (index * 4) + 2, withBytes: self.firstItemIndex)
-		
-		var nextItemOffset = itemsStartOffset
-		for item in self.items {
-			data.replace2BytesAtOffset(nextItemOffset, withBytes: item.scriptIndex)
-			nextItemOffset += 2
+		if index < pocket.pokemarts.count {
+			pocket.pokemarts[index] = self
+			pocket.save()
+		} else if index == pocket.pokemarts.count {
+			pocket.pokemarts.append(self)
+			pocket.save()
 		}
-		data.replace2BytesAtOffset(nextItemOffset, withBytes: 0)
-		
-		data.save()
 	}
-
+	
+	static func getMart(withIndex index: Int) -> XGPokemart? {
+		guard index < pocket.pokemarts.count else { return nil }
+		return pocket.pokemarts[index]
+	}
 }
 
 extension XGPokemart: XGEnumerable {
@@ -63,31 +61,31 @@ extension XGPokemart: XGEnumerable {
 	}
 	
 	static var className: String {
-		return "Pokemarts"
+		return "Shops"
 	}
 	
 	static var allValues: [XGPokemart] {
-		var values = [XGPokemart]()
-		for i in 0 ..< PocketIndexes.numberOfMarts.value {
-			values.append(XGPokemart(index: i))
-		}
-		return values
+		pocket.pokemarts
 	}
 }
 
 extension XGPokemart: XGDocumentable {
 	
 	var documentableName: String {
-		return "Mart \(self.index)"
+		return "Shop \(self.index)"
 	}
 	
 	static var DocumentableKeys: [String] {
-		return ["items"]
+		return ["type", "subtype", "items"]
 	}
 	
 	func documentableValue(for key: String) -> String {
 		switch key {
-		case "item":
+		case "type":
+			return type.rawValue.string
+		case "subtype":
+			return subtype.rawValue.string
+		case "items":
 			var itemsString = ""
 			for item in items {
 				itemsString += "\n" + item.name.string

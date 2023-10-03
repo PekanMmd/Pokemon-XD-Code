@@ -1167,13 +1167,14 @@ indirect enum XDSExpr {
 					
 					if params[1].isImmediate {
 						let martId = params[1].constants[0].value.int
-						let mart = XGPokemart(index: martId).items
-						var s = "\n/*"
-						for item in mart {
-							s += "\n * " + item.name.string
+						if let mart = XGPokemart.getMart(withIndex: martId)?.items {
+							var s = "\n/*"
+							for item in mart {
+								s += "\n * " + item.name.string
+							}
+							s += "\n */\n"
+							return .comment(s)
 						}
-						s += "\n */\n"
-						return .comment(s)
 					}
 				}
 				
@@ -1342,8 +1343,8 @@ indirect enum XDSExpr {
 			}
 			return macs
 		case .callStandardVoid(XGScriptClass.getClassNamed("Dialogue")!.index, 39, let es):
-			if es[1].isLoadImmediate {
-				let mart = XGPokemart(index: es[1].constants[0].asInt)
+			if es[1].isLoadImmediate,
+			   let mart = XGPokemart.getMart(withIndex: es[1].constants[0].asInt) {
 				return mart.items
 			}
 			return []
