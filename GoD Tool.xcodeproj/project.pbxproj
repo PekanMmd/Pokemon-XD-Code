@@ -5210,6 +5210,9 @@
 		D978D0762AB388530065FFA7 /* Base16.LowercaseDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = D978D00C2AB388530065FFA7 /* Base16.LowercaseDigits.swift */; };
 		D978D0772AB388530065FFA7 /* Base16.LowercaseDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = D978D00C2AB388530065FFA7 /* Base16.LowercaseDigits.swift */; };
 		D978D0782AB388530065FFA7 /* Base16.LowercaseDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = D978D00C2AB388530065FFA7 /* Base16.LowercaseDigits.swift */; };
+		D978D07C2ACDAD180065FFA7 /* XGPokemart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */; };
+		D978D07D2ACDAD180065FFA7 /* XGPokemart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */; };
+		D978D07E2ACDAD180065FFA7 /* XGPokemart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */; };
 		D98323A928F43FB10062F0A0 /* DiscordBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98323A828F43FB10062F0A0 /* DiscordBot.swift */; };
 		D98323AA28F43FB10062F0A0 /* DiscordBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98323A828F43FB10062F0A0 /* DiscordBot.swift */; };
 		D98323AB28F43FB10062F0A0 /* DiscordBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98323A828F43FB10062F0A0 /* DiscordBot.swift */; };
@@ -15154,6 +15157,7 @@
 				1C16CD13253BC45100907D78 /* XGGenderRatios.swift in Sources */,
 				1C16D134253BC8AE00907D78 /* XGTrainerClass.swift in Sources */,
 				D978D0352AB388530065FFA7 /* Base64.swift in Sources */,
+				D978D07D2ACDAD180065FFA7 /* XGPokemart.swift in Sources */,
 				D978D01A2AB388530065FFA7 /* CRC32.swift in Sources */,
 				1C16CF1A253BC55000907D78 /* XGPatcher.swift in Sources */,
 				1C16CD01253BC44E00907D78 /* XGFontColours.swift in Sources */,
@@ -15634,6 +15638,7 @@
 				1C71A4C026690C5700034154 /* CMScriptBuiltInFunctions.swift in Sources */,
 				1C71694125FF0DF8000F1456 /* GoDWindowController.swift in Sources */,
 				B208E76920C4F7E700D298BF /* CMTrainer.swift in Sources */,
+				D978D07E2ACDAD180065FFA7 /* XGPokemart.swift in Sources */,
 				1C20003125A9585400A7CF7D /* XGTHP.swift in Sources */,
 				B2C1EE8E20C8F6C800D7C2F7 /* GoDOriginalMovePopUpButton.swift in Sources */,
 				1C12C3E025C25AA40062FA65 /* XGColosseumRounds.swift in Sources */,
@@ -16254,6 +16259,7 @@
 				1C20002F25A9585400A7CF7D /* XGTHP.swift in Sources */,
 				1C11E338252BFD8A00026234 /* CMScriptOps.swift in Sources */,
 				1C71A4EA2669126800034154 /* CMSMacroTypes.swift in Sources */,
+				D978D07C2ACDAD180065FFA7 /* XGPokemart.swift in Sources */,
 				1C56F8F0260FD41400CF1DEE /* StructTablesList.swift in Sources */,
 				1C13D3AE2646264900ED313D /* CMTrainersTable.swift in Sources */,
 				D978CFA32AB3867D0065FFA7 /* PNG.Palette.swift in Sources */,
