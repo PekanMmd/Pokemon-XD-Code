@@ -132,7 +132,7 @@ class XGRandomiser: NSObject {
 			var bstRadius = 50
 			let oldBST = oldStats.baseStatTotal
 			func canLimitBST() -> Bool {
-				return (options.first(where: {($0.baseStatTotal >= oldBST - bstRadius) && ($0.baseStatTotal <= oldBST + bstRadius)}) != nil)
+				return (options.filter {($0.baseStatTotal >= oldBST - bstRadius) && ($0.baseStatTotal <= oldBST + bstRadius)}.count > 1)
 			}
 			while similarBST && !canLimitBST() && (bstRadius <= 600) {
 				bstRadius += 20
