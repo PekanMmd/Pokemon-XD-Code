@@ -779,7 +779,16 @@ class XGISO: NSObject {
 
 	#endif
 
-	func addFile(_ file: XGFiles, fsysID: Int?, save: Bool = true) {
+	func addFiles(_ files: [XGFiles], save: Bool = true) {
+		for i in 0 ..< files.count {
+			let file = files[i]
+			let isLast = i == (files.count - 1)
+			addFile(file, save: isLast)
+		}
+		
+	}
+	
+	func addFile(_ file: XGFiles, fsysID: Int? = nil, save: Bool = true) {
 		guard file.exists, let data = file.data else {
 			printg("File doesn't exist:", file.path)
 			return
@@ -802,6 +811,19 @@ class XGISO: NSObject {
 		guard !allFileNames.contains(filename) else {
 			printg("Could not add file: " + file.path + "\nA file with that name already exists.")
 			return
+		}
+		
+		if file.fileType == .fsys {
+			guard let newID = fsysID ?? GSFsys.shared.nextFreeFsysID() else {
+				displayAlert(title: "Failed", description: "Couldn't add file to ISO. Couldn't generate a new Fsys ID")
+				return
+			}
+			data.replace4BytesAtOffset(kFSYSGroupIDOffset, withBytes: newID)
+			GSFsys.shared.addEntry(id: newID, name: file.fileName)
+			printg("Added new fsys file: \(file.fileName) with FSYS id: \(newID)")
+			if save {
+				GSFsys.shared.data().save()
+			}
 		}
 
 		#if !GAME_PBR
@@ -857,15 +879,6 @@ class XGISO: NSObject {
 		data.file = .nameAndFolder(file.fileName, .ISOFiles)
 		data.save()
 		#endif
-
-		if file.fileType == .fsys {
-			let newID = fsysID ?? file.fsysData.groupID
-			GSFsys.shared.addEntry(id: newID, name: file.fileName)
-			if save {
-				GSFsys.shared.data().save()
-				printg("Added fsys archive to iso with id:", newID)
-			}
-		}
 
 		#if !GAME_PBR
 		importFiles([.GSFsys], save: save)

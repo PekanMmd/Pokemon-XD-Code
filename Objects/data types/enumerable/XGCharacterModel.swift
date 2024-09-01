@@ -117,55 +117,23 @@ final class XGCharacterModel: NSObject, Codable {
 }
 
 
-enum XGCharacterMovements : CustomStringConvertible {
+enum XGCharacterMovements: Int, Codable, CustomStringConvertible {
 	
-	case index(Int)
-	
-	var index : Int {
-		switch self {
-		case .index(let i):
-			return i
-		}
-	}
+	case none, randomWalk = 2, randomRotation = 3
 	
 	var description : String {
 		return self.name
 	}
 	
 	var name : String {
-		let m = XGCharacterMovements.movementsList[self.index]
-		if m != nil {
-			return m!
+		switch self {
+		case .none:
+			return "None"
+		case .randomWalk:
+			return "Random Walk"
+		case .randomRotation:
+			return "Random Rotation"
 		}
-		return "Unknown_\(self.index)"
-	}
-	
-	static var movementsList : [Int : String] {
-		return [
-			0x00 : "none",
-			0x0A : "Sit",
-			0x10 : "Stand Still",
-			0x12 : "Jog Down, Walk Up",
-			0x50 : "Walk Around",
-		]
-	}
-	
-}
-
-extension XGCharacterMovements: Codable {
-	enum CodingKeys: String, CodingKey {
-		case index
-	}
-	
-	init(from decoder: Decoder) throws {
-		let container = try decoder.container(keyedBy: CodingKeys.self)
-		let index = try container.decode(Int.self, forKey: .index)
-		self = XGCharacterMovements.index(index)
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(self.index, forKey: .index)
 	}
 }
 

@@ -8,9 +8,7 @@
 
 import Foundation
 
-let kFirstTrainerClassDataOffset	= CommonIndexes.TrainerClasses.startOffset
 let kSizeOfTrainerClassEntry		= 0x0C
-let kNumberOfTrainerClasses			= CommonIndexes.NumberOfTrainerClasses.value
 
 // Prize money is payout * max pokemon level * 2
 let kTrainerClassPayoutOffset		= 0x00
@@ -31,7 +29,7 @@ final class XGTrainerClass: NSObject, Codable {
 	
 	var startOffset : Int {
 		get {
-			return kFirstTrainerClassDataOffset + (self.index * kSizeOfTrainerClassEntry)
+			return CommonIndexes.TrainerClasses.startOffset + (self.index * kSizeOfTrainerClassEntry)
 		}
 	}
 	

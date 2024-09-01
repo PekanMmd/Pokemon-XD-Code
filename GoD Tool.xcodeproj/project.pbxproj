@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		1C04F5FD2642BE9E00BEA8EE /* PBR_face_495.png in Resources */ = {isa = PBXBuildFile; fileRef = 1C04F5FC2642BE9E00BEA8EE /* PBR_face_495.png */; };
 		1C0D8B972713607D00BC7D7F /* Discord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0D8B962713607D00BC7D7F /* Discord.swift */; };
-		1C0D8B992713607D00BC7D7F /* Discord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0D8B962713607D00BC7D7F /* Discord.swift */; };
 		1C0D8BAD2713804200BC7D7F /* ColoursByName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0D8BAC2713804200BC7D7F /* ColoursByName.swift */; };
 		1C0D8BAF2713804200BC7D7F /* ColoursByName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0D8BAC2713804200BC7D7F /* ColoursByName.swift */; };
 		1C0D8BC327144FF900BC7D7F /* XDStoredShadowData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0D8BC227144FF900BC7D7F /* XDStoredShadowData.swift */; };
@@ -4673,6 +4672,9 @@
 		B2FEC09F1F72955200AC263D /* GoDDDPKPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEC09E1F72955200AC263D /* GoDDDPKPopUpButton.swift */; };
 		B2FF6D3020BCB50F00A84637 /* GoDOpenGL.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FF6D2E20BCB50F00A84637 /* GoDOpenGL.swift */; };
 		D911505D279C3D1700B34EBE /* Code Snippets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D911505B279C3CFD00B34EBE /* Code Snippets.swift */; };
+		D92FEC632C17ECF7007F25C4 /* GoDInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D92FEC622C17ECF7007F25C4 /* GoDInputViewController.swift */; };
+		D92FEC642C17ECF7007F25C4 /* GoDInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D92FEC622C17ECF7007F25C4 /* GoDInputViewController.swift */; };
+		D92FEC652C17ECF7007F25C4 /* GoDInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D92FEC622C17ECF7007F25C4 /* GoDInputViewController.swift */; };
 		D9469EE527961ACB00907BEA /* XGThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4721829D7A001C41D3 /* XGThreadManager.swift */; };
 		D9469EE627961B1E00907BEA /* XGThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4721829D7A001C41D3 /* XGThreadManager.swift */; };
 		D948B59B28276AC80089679D /* GoDContextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22A1C4C2182B1DC001C41D3 /* GoDContextViewController.swift */; };
@@ -5213,6 +5215,13 @@
 		D978D07C2ACDAD180065FFA7 /* XGPokemart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */; };
 		D978D07D2ACDAD180065FFA7 /* XGPokemart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */; };
 		D978D07E2ACDAD180065FFA7 /* XGPokemart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28C4DAF1FA9E49200EED1C9 /* XGPokemart.swift */; };
+		D978D0812AD5B8830065FFA7 /* EmbedBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D978D0802AD5B8830065FFA7 /* EmbedBuilder.swift */; };
+		D978D0822AD5B8830065FFA7 /* EmbedBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D978D0802AD5B8830065FFA7 /* EmbedBuilder.swift */; };
+		D978D0842AD5B88C0065FFA7 /* EmbedBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D978D0802AD5B8830065FFA7 /* EmbedBuilder.swift */; };
+		D978D0852AD5B88C0065FFA7 /* EmbedBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D978D0802AD5B8830065FFA7 /* EmbedBuilder.swift */; };
+		D978D0862AD609930065FFA7 /* Discord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0D8B962713607D00BC7D7F /* Discord.swift */; };
+		D978D0872AD765B90065FFA7 /* DiscordPlaysOrre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE3498B2710D34700B803FD /* DiscordPlaysOrre.swift */; };
+		D978D0882AD765C00065FFA7 /* DiscordPlaysOrre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE3498B2710D34700B803FD /* DiscordPlaysOrre.swift */; };
 		D98323A928F43FB10062F0A0 /* DiscordBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98323A828F43FB10062F0A0 /* DiscordBot.swift */; };
 		D98323AA28F43FB10062F0A0 /* DiscordBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98323A828F43FB10062F0A0 /* DiscordBot.swift */; };
 		D98323AB28F43FB10062F0A0 /* DiscordBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98323A828F43FB10062F0A0 /* DiscordBot.swift */; };
@@ -5220,7 +5229,6 @@
 		D98323AF28F440550062F0A0 /* Swiftcord in Frameworks */ = {isa = PBXBuildFile; productRef = D98323AE28F440550062F0A0 /* Swiftcord */; };
 		D98323B728F441210062F0A0 /* Swiftcord in Frameworks */ = {isa = PBXBuildFile; productRef = D98323B628F441210062F0A0 /* Swiftcord */; };
 		D98323B928F441280062F0A0 /* Swiftcord in Frameworks */ = {isa = PBXBuildFile; productRef = D98323B828F441280062F0A0 /* Swiftcord */; };
-		D98323BB28F4412E0062F0A0 /* Swiftcord in Frameworks */ = {isa = PBXBuildFile; productRef = D98323BA28F4412E0062F0A0 /* Swiftcord */; };
 		D98323BD28F624CA0062F0A0 /* pokeAPI.json in Resources */ = {isa = PBXBuildFile; fileRef = D98323BC28F624CA0062F0A0 /* pokeAPI.json */; };
 		D98323BE28F624CA0062F0A0 /* pokeAPI.json in Resources */ = {isa = PBXBuildFile; fileRef = D98323BC28F624CA0062F0A0 /* pokeAPI.json */; };
 		D98323C028F624E60062F0A0 /* PokeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98323BF28F624E60062F0A0 /* PokeAPI.swift */; };
@@ -7894,6 +7902,7 @@
 		D923AE0628B536DF0012E14F /* wkmpt.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = wkmpt.exe; sourceTree = "<group>"; };
 		D923AE0728B536DF0012E14F /* titles-zhtw.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "titles-zhtw.txt"; sourceTree = "<group>"; };
 		D923AE0828B536DF0012E14F /* sendto-install.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = "sendto-install.bat"; sourceTree = "<group>"; };
+		D92FEC622C17ECF7007F25C4 /* GoDInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDInputViewController.swift; sourceTree = "<group>"; };
 		D948B59C2828AC600089679D /* PBRNArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRNArchive.swift; sourceTree = "<group>"; };
 		D948B5A0282B43A80089679D /* GoDOffsetIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoDOffsetIO.swift; sourceTree = "<group>"; };
 		D948B5AA282BD7810089679D /* XGBattleSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XGBattleSequence.swift; sourceTree = "<group>"; };
@@ -7955,6 +7964,7 @@
 		D978D00A2AB388530065FFA7 /* Base16.Values.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base16.Values.swift; sourceTree = "<group>"; };
 		D978D00B2AB388530065FFA7 /* Base16.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base16.swift; sourceTree = "<group>"; };
 		D978D00C2AB388530065FFA7 /* Base16.LowercaseDigits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base16.LowercaseDigits.swift; sourceTree = "<group>"; };
+		D978D0802AD5B8830065FFA7 /* EmbedBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbedBuilder.swift; sourceTree = "<group>"; };
 		D98323A828F43FB10062F0A0 /* DiscordBot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscordBot.swift; sourceTree = "<group>"; };
 		D98323BC28F624CA0062F0A0 /* pokeAPI.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pokeAPI.json; sourceTree = "<group>"; };
 		D98323BF28F624E60062F0A0 /* PokeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeAPI.swift; sourceTree = "<group>"; };
@@ -8027,7 +8037,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D98323BB28F4412E0062F0A0 /* Swiftcord in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8333,6 +8342,7 @@
 				1C0D8B962713607D00BC7D7F /* Discord.swift */,
 				1C0D8BAC2713804200BC7D7F /* ColoursByName.swift */,
 				1C0D8B952713605F00BC7D7F /* Discord Plays Pokemon */,
+				D978D07F2AD5B85F0065FFA7 /* Stubs */,
 			);
 			path = "discord API";
 			sourceTree = "<group>";
@@ -11247,6 +11257,7 @@
 				B2C1EEA220C96B6800D7C2F7 /* GoDHelpViewController.swift */,
 				B247ED4A2180C1150034CAF5 /* GoDHexCalculatorViewController.swift */,
 				B2F5F88E1F49CD050075C6D2 /* GoDHomeViewController.swift */,
+				D92FEC622C17ECF7007F25C4 /* GoDInputViewController.swift */,
 				B23349FD223431AA00FC20A6 /* GoDInteractionViewController.swift */,
 				B22A1C5A218337FE001C41D3 /* GoDISOViewController.swift */,
 				B2A677D51F7FECF700214526 /* GoDItemViewController.swift */,
@@ -11515,6 +11526,14 @@
 			path = Base16;
 			sourceTree = "<group>";
 		};
+		D978D07F2AD5B85F0065FFA7 /* Stubs */ = {
+			isa = PBXGroup;
+			children = (
+				D978D0802AD5B8830065FFA7 /* EmbedBuilder.swift */,
+			);
+			path = Stubs;
+			sourceTree = "<group>";
+		};
 		D98323B528F441210062F0A0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -11684,7 +11703,6 @@
 			);
 			name = "GoD Tool";
 			packageProductDependencies = (
-				D98323BA28F4412E0062F0A0 /* Swiftcord */,
 			);
 			productName = GoDToolOSX;
 			productReference = B2F5EBA51F49A1980075C6D2 /* GoD Tool.app */;
@@ -15525,6 +15543,7 @@
 				1CC362C124BFDC53005D7B4A /* GoDEnumerablePopUpButtons.swift in Sources */,
 				D978CF272AB3867D0065FFA7 /* PNG.Background.swift in Sources */,
 				B208E74320C4D5B500D298BF /* XGEvolutionMethods.swift in Sources */,
+				D978D0822AD5B8830065FFA7 /* EmbedBuilder.swift in Sources */,
 				B23349FC22320AB600FC20A6 /* GoDTextureImporterViewController.swift in Sources */,
 				B208E78920C85F9E00D298BF /* CMTrainerPokemon.swift in Sources */,
 				B2C65B18218375D9007349CA /* GoDTypeViewController.swift in Sources */,
@@ -15719,6 +15738,7 @@
 				1C71A54B2671064F00034154 /* CMSExtensions.swift in Sources */,
 				D978CFB72AB3867D0065FFA7 /* PNG.FormattingError.swift in Sources */,
 				B208E76220C4DD8300D298BF /* CMTrainerModels.swift in Sources */,
+				D92FEC642C17ECF7007F25C4 /* GoDInputViewController.swift in Sources */,
 				1C56F767260C1EA000CF1DEE /* CharacterModelTable.swift in Sources */,
 				1C6D6AA4274346CE0095223E /* CMStoredShadowData.swift in Sources */,
 				B208E77820C8575000D298BF /* XGCharacter.swift in Sources */,
@@ -15870,6 +15890,7 @@
 				D978CF8D2AB3867D0065FFA7 /* PNG.Header.swift in Sources */,
 				D978CF3C2AB3867D0065FFA7 /* PNG.Chromaticity.swift in Sources */,
 				1C37441224056F190089D3BA /* GoDShellManager.swift in Sources */,
+				D92FEC652C17ECF7007F25C4 /* GoDInputViewController.swift in Sources */,
 				1C7400C62640705200DFC63C /* PokemonModelsTable.swift in Sources */,
 				D978CFDE2AB3867D0065FFA7 /* PNG.Chunk.swift in Sources */,
 				1CEC207A26EA9FA200A886E9 /* XXH3-Common.swift in Sources */,
@@ -15878,6 +15899,7 @@
 				D978CE882AB3867C0065FFA7 /* LZ77.Inflator.swift in Sources */,
 				D978CF722AB3867D0065FFA7 /* PNG.TimeModified.swift in Sources */,
 				B20EEEA821EF799C00E87D01 /* GoDTableViewDelegate.swift in Sources */,
+				D978D0872AD765B90065FFA7 /* DiscordPlaysOrre.swift in Sources */,
 				D978CF4E2AB3867D0065FFA7 /* PNG.Transparency.swift in Sources */,
 				B20EEA6421E9214D00E87D01 /* PBRScriptClassData.swift in Sources */,
 				B20EEA6621E9214D00E87D01 /* PBRStringTable.swift in Sources */,
@@ -16155,6 +16177,7 @@
 				1CEC205D26EA9FA200A886E9 /* XXH3-Bit64.swift in Sources */,
 				B24A50FA21D2C6D8009C707C /* PBRMoveTypes.swift in Sources */,
 				B24A507C21D126BB009C707C /* XGPNGBlock.swift in Sources */,
+				D978D0882AD765C00065FFA7 /* DiscordPlaysOrre.swift in Sources */,
 				D978CF942AB3867D0065FFA7 /* PNG.ColorRendering.swift in Sources */,
 				1CE1A77C2326AA0D005141D8 /* XGSettings.swift in Sources */,
 				D978D0252AB388530065FFA7 /* Base64.Digits.swift in Sources */,
@@ -16263,6 +16286,7 @@
 				1C56F8F0260FD41400CF1DEE /* StructTablesList.swift in Sources */,
 				1C13D3AE2646264900ED313D /* CMTrainersTable.swift in Sources */,
 				D978CFA32AB3867D0065FFA7 /* PNG.Palette.swift in Sources */,
+				D978D0842AD5B88C0065FFA7 /* EmbedBuilder.swift in Sources */,
 				1C6AB4E8270B89E60069D209 /* EcardCoder.swift in Sources */,
 				1C6D6A9227433A8C0095223E /* CMProcessSetup.swift in Sources */,
 				D978CF5B2AB3867D0065FFA7 /* PNG.Gamma.swift in Sources */,
@@ -16600,6 +16624,7 @@
 				D978CFD62AB3867D0065FFA7 /* PNG.Chunk.swift in Sources */,
 				1CEC206026EA9FA200A886E9 /* XXH3.swift in Sources */,
 				1C70C9D12728CC700034CB18 /* ProcessIO.swift in Sources */,
+				D978D0852AD5B88C0065FFA7 /* EmbedBuilder.swift in Sources */,
 				D978CEC82AB3867C0065FFA7 /* PNG.DecodingError.swift in Sources */,
 				D978CFA92AB3867D0065FFA7 /* PNG.PhysicalDimensions.swift in Sources */,
 				B2560A99214CA25200137C37 /* XGRandomiser.swift in Sources */,
@@ -16821,6 +16846,7 @@
 				1C0D8BAF2713804200BC7D7F /* ColoursByName.swift in Sources */,
 				B205E0C91F60AE2400A5F075 /* GoDLevelPopUpButton.swift in Sources */,
 				D978CEDC2AB3867C0065FFA7 /* PNG.Context.swift in Sources */,
+				D978D0812AD5B8830065FFA7 /* EmbedBuilder.swift in Sources */,
 				1C524D01234B7F0800A9659A /* GoDEnumerablePopUpButton.swift in Sources */,
 				B2F5EC351F49A1FE0075C6D2 /* XGMaps.swift in Sources */,
 				1CEC205926EA9FA200A886E9 /* XXH3-Bit64.swift in Sources */,
@@ -17027,6 +17053,7 @@
 				1C4EF5CF26CC24AD0040B800 /* GoDCaseIterablePopUpButton.swift in Sources */,
 				B2F5ECD71F49A1FF0075C6D2 /* XGTradeShadowPokemon.swift in Sources */,
 				B2F5EC2C1F49A1FE0075C6D2 /* XGGenderRatios.swift in Sources */,
+				D92FEC632C17ECF7007F25C4 /* GoDInputViewController.swift in Sources */,
 				D978CF902AB3867D0065FFA7 /* PNG.ColorRendering.swift in Sources */,
 				B2F5EC231F49A1FE0075C6D2 /* XGFiles.swift in Sources */,
 				B2ACFBCF2249D0A100CC2F20 /* XGTextureMetaData.swift in Sources */,
@@ -17079,6 +17106,7 @@
 				B2445AFB209F52DA00B5404E /* XGMoveEffectTypes.swift in Sources */,
 				1CEC205026EA9FA200A886E9 /* XXH32.swift in Sources */,
 				D9E209572998947400B60864 /* ScriptTable.swift in Sources */,
+				D978D0862AD609930065FFA7 /* Discord.swift in Sources */,
 				B2560A79213D4DAC00137C37 /* GoDKeyCodes.swift in Sources */,
 				B27AA62E1F8648D1001D06CF /* GoDOriginalPokemonPopUpButton.swift in Sources */,
 				B2F5EC6B1F49A1FF0075C6D2 /* XGUnicodeCharacters.swift in Sources */,
@@ -17094,7 +17122,6 @@
 				B2F5EC291F49A1FE0075C6D2 /* XGFsys.swift in Sources */,
 				D978CFAB2AB3867D0065FFA7 /* PNG.PhysicalDimensions.swift in Sources */,
 				1CE3498E2710D34700B803FD /* DiscordPlaysOrre.swift in Sources */,
-				1C0D8B992713607D00BC7D7F /* Discord.swift in Sources */,
 				B2EAFEFF20BDA498009FC947 /* XGStack.swift in Sources */,
 				B2F5ECB31F49A1FF0075C6D2 /* XGPokeSpotPokemon.swift in Sources */,
 				1C0D8BC527144FF900BC7D7F /* XDStoredShadowData.swift in Sources */,
@@ -17160,7 +17187,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				OTHER_SWIFT_FLAGS = "-DGAME_XD -DENV_OSX";
@@ -17197,7 +17224,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_SWIFT_FLAGS = "-DGAME_XD -DENV_OSX";
@@ -17244,7 +17271,7 @@
 					"$(PROJECT_DIR)/tools/Linux/nedclib",
 					"$(PROJECT_DIR)/tools/Windows/nedclib",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				OTHER_SWIFT_FLAGS = "-DGAME_COLO -DENV_OSX";
@@ -17288,7 +17315,7 @@
 					"$(PROJECT_DIR)/tools/Linux/nedclib",
 					"$(PROJECT_DIR)/tools/Windows/nedclib",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_SWIFT_FLAGS = "-DGAME_COLO -DENV_OSX";
@@ -17330,7 +17357,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				OTHER_SWIFT_FLAGS = "-DGAME_PBR -DENV_OSX";
@@ -17367,7 +17394,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_SWIFT_FLAGS = "-DGAME_PBR -DENV_OSX";
@@ -17420,8 +17447,8 @@
 					"$(PROJECT_DIR)/tools/Linux/nedclib",
 					"$(PROJECT_DIR)/tools/Windows/nedclib",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.9.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 2.11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_SWIFT_FLAGS = "-DENV_OSX -DGAME_COLO -DGUI";
 				PRODUCT_BUNDLE_IDENTIFIER = "Stars.Colosseum-Tool";
@@ -17473,8 +17500,8 @@
 					"$(PROJECT_DIR)/tools/Linux/nedclib",
 					"$(PROJECT_DIR)/tools/Windows/nedclib",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.9.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 2.11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_SWIFT_FLAGS = "-DENV_OSX -DGAME_COLO -DGUI";
 				PRODUCT_BUNDLE_IDENTIFIER = "Stars.Colosseum-Tool";
@@ -17525,8 +17552,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.9.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 2.11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_SWIFT_FLAGS = "-DENV_OSX -DGAME_PBR -DGUI";
 				PRODUCT_BUNDLE_IDENTIFIER = "Stars.PBR-Tool";
@@ -17573,8 +17600,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.9.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 2.11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_SWIFT_FLAGS = "-DENV_OSX -DGAME_PBR -DGUI";
 				PRODUCT_BUNDLE_IDENTIFIER = "Stars.PBR-Tool";
@@ -17617,7 +17644,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_SWIFT_FLAGS = "-DENV_OSX -DGAME_PBR";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -17656,7 +17683,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_SWIFT_FLAGS = "-DENV_OSX -DGAME_PBR";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -17989,8 +18016,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.9.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 2.11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_SWIFT_FLAGS = "-DENV_OSX -DGAME_XD -DGUI";
@@ -18049,8 +18076,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.9.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 2.11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_SWIFT_FLAGS = "-DENV_OSX -DGAME_XD -DGUI";
 				PRODUCT_BUNDLE_IDENTIFIER = Stars.GoDToolOSX;
@@ -18182,11 +18209,6 @@
 			productName = Swiftcord;
 		};
 		D98323B828F441280062F0A0 /* Swiftcord */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D98323AD28F440550062F0A0 /* XCRemoteSwiftPackageReference "Swiftcord" */;
-			productName = Swiftcord;
-		};
-		D98323BA28F4412E0062F0A0 /* Swiftcord */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D98323AD28F440550062F0A0 /* XCRemoteSwiftPackageReference "Swiftcord" */;
 			productName = Swiftcord;

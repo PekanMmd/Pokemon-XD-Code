@@ -14,11 +14,16 @@ var structTablesList: [GoDStructTableFormattable] {
 		TMsTable,
 		pkxTrainerModelsTable,
 		pkxPokemonModelsTable,
+		shinyPKXPokemonModelsTable,
+		unownPKXModelsTable,
+		wzxMoveTable,
 		statusEffectsTable
 	]
 
 	#if GAME_XD
 	tables += [
+		deoxysPKXModelsTable,
+		deoxysShinyPKXModelsTable,
 		wzxTable,
 		menuDataTable
 	]
@@ -64,6 +69,7 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		treasureTable,
 		battlesTable,
 		battlefieldsTable,
+		battleTypesTable,
 		characterModelsTable,
 		interactionPointsTable,
 		movesTable,
@@ -86,7 +92,6 @@ var commonStructTablesList: [GoDStructTableFormattable] {
 		shadowPokemonTable,
 		battleStylesTable,
 		trainerAITable,
-		battleTypesTable,
 	]
 	tables += coloTables
 	#elseif GAME_XD

@@ -8,7 +8,7 @@
 
 import Foundation
 
-let kClassPatchOffsets: [Int] = {
+var kClassPatchOffsets: [Int] {
 	switch region {
 	case .US:
 		return [0x8013e82c,0x80229614,0x8022A080,0x802157F0,0x802177e0]
@@ -17,7 +17,7 @@ let kClassPatchOffsets: [Int] = {
 	default:
 		return []
 	}
-}()
+}
 let kNopInstruction		  : UInt32 = XGASM.nop.code
 let kBranchInstruction1	  : UInt32 = 0x40820024
 let kBranchInstruction2   : UInt32 = 0x40820014
@@ -40,34 +40,6 @@ let kCounterOffset2		  = 0x002DFDDC
 let kCounterBranch		  : UInt32 = 0x4BE5B975
 let kCounterBranchOrigin1 : UInt32 = 0x4BFE5789
 let kCounterBranchOrigin2 : UInt32 = 0x4BE34C49
-
-let kBetaStartersFirstOffset: Int = {
-	switch region {
-	case .US: return 0x1CBCC8 // in dol
-	case .EU: return 0x1d083c - kDolToRAMOffsetDifference // in ram
-	default: return 0
-	}
-}()
-
-let kBetaStartersInstruction1 : UInt32 = 0x4BF8390D
-let kBetaStartersInstruction2 : UInt32 = 0x7FE3FB78
-let kBetaStartersInstruction3 : UInt32 = {
-	switch region {
-	case .US: return 0x4BF83A2D
-	case .EU: return 0x4BF8381D
-	default: return 0x0
-	}
-}()
-
-let kOriginalStartersInstruction1 : UInt32 = 0x90C10038
-let kOriginalStartersInstruction2 : UInt32 = 0x9001003C
-let kOriginalStartersInstruction3 : UInt32 = {
-	switch region {
-	case .US: return 0x4BF83D71
-	case .EU: return 0x4bf83b61
-	default: return 0x0
-	}
-}()
 
 let kNameRaterOffset1 = 0x149DE4
 let kNameRaterOffset2 = 0x149DE8
@@ -120,6 +92,7 @@ let patches: [XGDolPatches] = game == .XD ? [
 	.physicalSpecialSplitRemove,
 	.disableSaveCorruption,
 	.infiniteTMs,
+	.expAll,
 	.allowFemaleStarters,
 	.betaStartersApply,
 	.betaStartersRemove,
@@ -214,6 +187,7 @@ enum XGDolPatches: Int {
 	case loadPCFromAnywhere
 	case removeShinyLocksFromGiftPokemon
 	case disableBattleAnimations
+	case expAll
 	
 	var name: String {
 		switch self {
@@ -261,6 +235,7 @@ enum XGDolPatches: Int {
 		case .loadPCFromAnywhere: return "Press R in the overworld to open the PC menu from anywhere (Make sure you don't softlock yourself)"
 		case .removeShinyLocksFromGiftPokemon: return "Remove shiny locks from gift pokemon (espeon, umbreon, plusle, pikachu, celebi, hooh)"
 		case .disableBattleAnimations: return "Disable attack animations during battles"
+		case .expAll: return "All party pokemon gain exp without having to battle"
 		}
 	}	
 }
@@ -501,44 +476,36 @@ class XGPatcher {
 	}
 	
 	// Changes the starters from eevee to the beta jolteon and vaporeon which can be edited.
-	
-	class func areBetaStartersEnabled() -> Bool {
-		guard game == .XD else {
-			printg("This patch is for Pokemon XD: Gale of Darkness only.")
-			return true
-		}
-
-		guard region == .US else {
-			printg("This patch has not been implemented for this game region:", region.name)
-			return false
-		}
-
-		let dol = XGFiles.dol.data!
-		return dol.getWordAtOffset(kBetaStartersFirstOffset) == kBetaStartersInstruction1
-	}
-	
 	class func enableBetaStarters() {
 
 		guard game == .XD else {
 			printg("This patch is for Pokemon XD: Gale of Darkness only.")
 			return
 		}
-
-		guard region != .JP else {
-			printg("This patch has not been implemented for this game region:", region.name)
-			return
-		}
 		
-		let dol = XGFiles.dol.data!
+		let codeStartOffset: Int = {
+			switch region {
+			case .US: return 0x801CED68
+			case .EU: return 0x801D083C
+			case .JP: return 0x801C9C0C
+			default: return 0
+			}
+		}()
 		
-		let instructions = [kBetaStartersInstruction1, kBetaStartersInstruction2, kBetaStartersInstruction3]
+		let demoStarterFunctionRAMOffsets: (Int,Int) = {
+			switch region {
+			case .US: return (0x80152674,0x8015279C)
+			case .EU: return (0x80153f38,0x80154060)
+			case .JP: return (0x8014D99C, 0x8014DAC4)
+			default: return (0,0)
+			}
+		}()
 		
-		for i in 0 ..< 3 {
-			let offset = i * 4
-			dol.replaceWordAtOffset(kBetaStartersFirstOffset + offset, withBytes: instructions[i])
-		}
-		
-		dol.save()
+		XGAssembly.replaceRamASM(RAMOffset: codeStartOffset, newASM: [
+			.bl(demoStarterFunctionRAMOffsets.0),
+			.mr(.r3, .r31),
+			.bl(demoStarterFunctionRAMOffsets.1),
+		])
 	}
 	
 	class func disableBetaStarters() {
@@ -547,22 +514,30 @@ class XGPatcher {
 			printg("This patch is for Pokemon XD: Gale of Darkness only.")
 			return
 		}
-
-		guard region != .JP else {
-			printg("This patch has not been implemented for this game region:", region.name)
-			return
-		}
 		
-		let dol = XGFiles.dol.data!
+		let codeStartOffset: Int = {
+			switch region {
+			case .US: return 0x801CED68
+			case .EU: return 0x801D083C
+			case .JP: return 0x801C9C0C
+			default: return 0
+			}
+		}()
 		
-		let instructions = [kOriginalStartersInstruction1, kOriginalStartersInstruction2, kOriginalStartersInstruction3]
+		let starterFunctionRAMOffset: Int = {
+			switch region {
+			case .US: return 0x80152AE0
+			case .EU: return 0x801543A4
+			case .JP: return 0x8014DE08
+			default: return 0
+			}
+		}()
 		
-		for i in 0 ..< 3 {
-			let offset = i * 4
-			dol.replaceWordAtOffset(kBetaStartersFirstOffset + offset, withBytes: instructions[i])
-		}
-		
-		dol.save()
+		XGAssembly.replaceRamASM(RAMOffset: codeStartOffset, newASM: [
+			.stw(.r6, .sp, 0x38),
+			.stw(.r0, .sp, 0x3C),
+			.bl(starterFunctionRAMOffset)
+		])
 	}
 	
 	// Clashes with move tutor somehow
@@ -788,7 +763,7 @@ class XGPatcher {
 			}
 		}
 		
-		for i in 0 ..< kNumberOfTrainerClasses {
+		for i in 0 ..< CommonIndexes.NumberOfTrainerClasses.value {
 			let name = XGTrainerClasses(rawValue: i)!.name
 			if !name.duplicateWithString(name.string.capitalized).replace() {
 				printg("Couldn't decapitalise name: \(name)")
@@ -1531,6 +1506,39 @@ class XGPatcher {
 			XGAssembly.replaceRamASM(RAMOffset: offset, newASM: [.nop])
 		}
 	}
+	
+	class func expAll() {
+		guard game == .XD else {
+			printg("Patch not implemented for this game:", game.name)
+			return
+		}
+		guard region == .US else {
+			printg("Patch not implemented for this game region:", region.name)
+			return
+		}
+
+		// skip exp split
+		let expSplitRAMOffset = 0x80212c94
+		XGAssembly.replaceRamASM(RAMOffset: expSplitRAMOffset, newASM: [
+			.nop,
+			.rlwinm(.r3, .r0, 31, 17, 31),
+			.mr(.r0, .r3)
+		])
+
+		// skip battle participation check
+		let expParticipationRAMOffset = 0x80212dec
+		XGAssembly.replaceRamASM(RAMOffset: expParticipationRAMOffset, newASM: [
+			.nop
+		])
+
+		// skip exp gain messages
+		let expGainRAMOffset = 0x80212f6c
+		XGAssembly.replaceRamASM(RAMOffset: expGainRAMOffset, newASM: [
+			.nop,
+			.mr(.r27, .r3),
+			.nop
+		])
+	}
 		
 	class func applyPatch(_ patch: XGDolPatches) {
 		
@@ -1579,6 +1587,7 @@ class XGPatcher {
 		case .loadPCFromAnywhere			: XGPatcher.pressButtonCombinationToGoToPC([.R])
 		case .removeShinyLocksFromGiftPokemon : XGPatcher.removeShinyLocks()
 		case .disableBattleAnimations		: XGPatcher.disableBattleAnimations()
+		case .expAll						: XGPatcher.expAll()
 		}
 		
 		printg("patch applied: ", patch.name, "\nDon't forget to rebuild the ISO after.")

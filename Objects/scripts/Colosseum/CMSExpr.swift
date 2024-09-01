@@ -425,19 +425,24 @@ indirect enum CMSExpr {
 			var returnType: CMSMacroTypes?
 			var newSubs = [CMSExpr]()
 			var newConstants = [CMSExpr]()
-			for i in 0 ..< subs.count {
-				if let data = ScriptBuiltInFunctions[index],
-				   let paramTypes = data.parameterTypes,
-				   i < paramTypes.count,
-				   paramTypes[i] != nil {
-					let (newSub, _, newConstantValues) = subs[i].updateMacroTypes(withType: paramTypes[i], script: script)
-					newSubs.append(newSub)
-					newConstants += newConstantValues
-				} else {
-					let (newSub, _, newConstantValues) = subs[i].updateMacroTypes(script: script)
-					newSubs.append(newSub)
-					newConstants += newConstantValues
+			var paramTypes = [CMSMacroTypes?](repeating: nil, count: subs.count)
+			if let data = ScriptBuiltInFunctions[index] {
+				if data.name == "setMessageVariable",
+				   subs.count > 1 {
+					paramTypes[0] = .msgVar
+					if case .constant(let variableID) = subs[0] {
+						paramTypes[1] = CMSMSGVarTypes.macroForVarType(variableID.integerValue)
+					}
+				} else if let types = data.parameterTypes {
+					paramTypes = types
 				}
+			}
+			
+			for i in 0 ..< subs.count {
+				let type = i < paramTypes.count ? paramTypes[i] : nil
+				let (newSub, _, newConstantValues) = subs[i].updateMacroTypes(withType: type, script: script)
+				newSubs.append(newSub)
+				newConstants += newConstantValues
 			}
 
 			returnType = ScriptBuiltInFunctions[index]?.returnType

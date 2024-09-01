@@ -653,7 +653,7 @@ class XGRandomiser: NSObject {
 				if isElligible(currentItem) {
 					let pool = isFirstItemOfShop && game == .Colosseum ? pokeballPool : itemPool
 					if let newItem = pool.randomElement() {
-						data.replace2BytesAtOffset(currentOffset, withBytes: newItem.index)
+						data.replace2BytesAtOffset(currentOffset, withBytes: newItem.scriptIndex)
 					}
 					isFirstItemOfShop = false
 				}
@@ -697,6 +697,7 @@ class XGRandomiser: NSObject {
 		}
 		let forceShinyModelRAMOffset: Int
 		let forceShinyInstruction: XGASM = game == .Colosseum ? .li(.r28, 1) : .li(.r29, 1)
+		
 		if game == .Colosseum {
 			switch region {
 			case .US:

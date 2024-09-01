@@ -8,7 +8,8 @@
 import Foundation
 
 enum XGContestCategories: Int, Codable, CaseIterable {
-	case cool = 0
+	case none = 0
+	case cool
 	case beauty
 	case cute
 	case smart
@@ -16,6 +17,8 @@ enum XGContestCategories: Int, Codable, CaseIterable {
 	
 	var name: String {
 		switch self {
+		case .none:
+			return "None"
 		case .cool:
 			return "Cool"
 		case .beauty:

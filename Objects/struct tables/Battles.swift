@@ -121,33 +121,35 @@ let battleStylesTable = CommonStructTable(index: .BattleStyles, properties: batt
 	}
 	return "Battle Style \(index)"
 }
+#endif
 
 let battleTypesStruct = GoDStruct(name: "Battle Types", format: [
-	.byte(name: "Flag 1", description: "", type: .bool),
-	.byte(name: "Flag 2", description: "", type: .bool),
-	.byte(name: "Flag 3", description: "", type: .bool),
-	.byte(name: "Flag 4", description: "", type: .bool),
-	.byte(name: "Can Use Items", description: "", type: .bool),
-	.byte(name: "Flag 6", description: "", type: .bool),
-	.byte(name: "Flag 7", description: "", type: .bool),
-	.byte(name: "Flag 8", description: "", type: .bool),
-	.byte(name: "Flag 9", description: "", type: .bool),
-	.byte(name: "Flag 10", description: "", type: .bool),
-	.byte(name: "Flag 11", description: "", type: .bool),
-	.byte(name: "Flag 12", description: "", type: .bool),
-	.byte(name: "Flag 13", description: "", type: .bool),
-	.byte(name: "Flag 14", description: "", type: .bool),
-	.byte(name: "Flag 15", description: "", type: .bool),
-	.byte(name: "Flag 16", description: "", type: .bool),
-	.byte(name: "Flag 17", description: "", type: .bool),
-	.byte(name: "Flag 18", description: "", type: .bool),
-	.byte(name: "Flag 19", description: "", type: .bool),
-	.byte(name: "Flag 20", description: "", type: .bool),
-	.byte(name: "Flag 21", description: "", type: .bool),
-	.byte(name: "Flag 22", description: "", type: .bool),
-	.byte(name: "Flag 23", description: "", type: .bool),
-	.byte(name: "Flag 24", description: "", type: .bool),
-	.byte(name: "Flag 25", description: "", type: .bool),
+	.byte(name: "Revert Changes After Battle", description: "The players teams and items go back to how they were before the battle", type: .bool),
+	.byte(name: "Enable Gym Badge Boosts", description: "Enables stat boosts based on gym badges from the GBA games", type: .bool),
+	.byte(name: "Count Pokemon As Seen", description: "In the Dex/Strategy Memo", type: .bool),
+	.byte(name: "Count Pokemon as Caught", description: "In the Dex/Strategy Memo", type: .bool),
+	.byte(name: "Enable Trainer Items", description: "", type: .bool),
+	.byte(name: "Can Call Pokemon", description: "", type: .bool),
+	.byte(name: "Can Run", description: "", type: .bool),
+	.byte(name: "Can Draw", description: "", type: .bool),
+	.byte(name: "Pokemon Gain Exp", description: "", type: .bool),
+	.byte(name: "Awards Prize Money", description: "", type: .bool),
+	.byte(name: "Add prize money to pool", description: "Adds the prize money value to a flag which can be awarded later. Used for colosseum challenges to award all the money at the end.", type: .bool),
+	.byte(name: "Pay Day Flag", description: "Whether the move pay day can double the prize money", type: .bool),
+	.byte(name: "Enable Friendship Gain", description: "", type: .bool),
+	.byte(name: "Can Trigger Pokerus", description: "Unused", type: .bool),
+	.byte(name: "Enable Critical Hits", description: "", type: .bool),
+	.byte(name: "Enable Rui AI Flag", description: "", type: .bool),
+	.byte(name: game == .XD ? "Enable Aura Reader Shadow Pokemon Reveal" : "Enable Rui Shadow Pokemon Reveal", description: "", type: .bool),
+	.byte(name: "Enable Soul Dew Effect", description: "", type: .bool),
+	.byte(name: "Boost Exp Gain", description: "increases exp gain by 50%", type: .bool),
+	.byte(name: "Is Boss Battle", description: "", type: .bool),
+	.byte(name: "Can Steal Items", description: "with the move thief", type: .bool),
+	.byte(name: "Enable Pickup", description: "", type: .bool),
+	.byte(name: game == .XD ? "Enable Reverse Mode" : "Enable Hyper Mode", description: "", type: .bool),
+	.byte(name: "Enable Full HUD layout", description: "", type: .bool),
+	.byte(name: "Display Opponent Dialog", description: "", type: .bool),
+	.byte(name: "Enable Battle Rules", description: "Whether rules like sleep clause and battle timers are checked", type: .bool),
 	.word(name: "Name ID", description: "", type: .msgID(file: .common_rel))
 ])
 
@@ -157,7 +159,6 @@ let battleTypesTable = CommonStructTable(index: .BattleTypes, properties: battle
 	}
 	return "Battle Type \(index)"
 }
-#endif
 
 private let aiRolesEnd: [GoDStructProperties] = game == .Colosseum ? [] : [
 	.byte(name: "Misc 3", description: "", type: .byteRange),

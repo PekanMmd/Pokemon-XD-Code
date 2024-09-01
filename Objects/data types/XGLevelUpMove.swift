@@ -9,6 +9,7 @@
 import Foundation
 
 let kNumberOfLevelUpMoves = 0x13
+let kNumberOfEggMoves = 0x8
 let kSizeOfLevelUpData = 0x4
 
 let kLevelUpMoveLevelOffset = 0x0 // 1 byte

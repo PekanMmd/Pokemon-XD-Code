@@ -2086,7 +2086,7 @@ class XGScript: NSObject {
 							}
 						}
 
-						let movement = (character.movementType ?? .index(0)).index
+						let movement = (character.movementType ?? .none).rawValue
 						if movement > 0 {
 							str += "MovementID: " + movement.string + " "
 						}

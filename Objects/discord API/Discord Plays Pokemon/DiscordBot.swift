@@ -5,6 +5,7 @@
 //  Created by Stars Momodu on 10/10/2022.
 //
 
+#if !GUI && os(macOS)
 import Foundation
 import Swiftcord
 import Darwin
@@ -196,6 +197,12 @@ extension EmbedBuilder {
 	}
 }
 
+extension EmbedBuilder {
+	func setColor(color: XGColour) -> Self {
+		return setColor(color: color.hex >> 8)
+	}
+}
+
 extension Message {
 	func addReaction(_ emoji: Emoji) {
 		Task {
@@ -300,3 +307,4 @@ actor AtomicList<T> {
 		}
 	}
 }
+#endif

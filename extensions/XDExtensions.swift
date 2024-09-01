@@ -182,36 +182,55 @@ extension XGUtility {
 		}
 	}
 
-	class func getPotentialMewTutorMovePairs() -> [(move1: XGMoves, move2: XGMoves)] {
+	class func getMewTutorTemplateMoves() -> [[XGMewTutorMoveSlot]] {
 		guard region == .US else { return [] }
 
 		let startOffset = 0x4198fc
-		let endOffset = startOffset + 0x1d4
+		let endOffset = startOffset + 0x1f4
 		guard let dol = XGFiles.dol.data else {
 			return []
 		}
 
 		var currentOffset = startOffset
-		var pairs = [(move1: XGMoves, move2: XGMoves)]()
+		var sets = [[XGMewTutorMoveSlot]]()
 
 		while currentOffset < endOffset {
-			let move1 = XGMoves.index(dol.get2BytesAtOffset(currentOffset + 4))
-			let move2 = XGMoves.index(dol.get2BytesAtOffset(currentOffset + 6))
-			pairs.append((move1: move1, move2: move2))
+			var currentSet = [XGMewTutorMoveSlot]()
+			for i in 0 ..< 4 {
+				let offset = currentOffset + (i * 2) + 4
+				let moveIndex = dol.get2BytesAtOffset(offset)
+				let move = XGMewTutorMoveSlot.from(index: moveIndex)
+				currentSet.append(move)
+			}
+			if !currentSet.isEmpty {
+				sets.append(currentSet)
+			}
 			currentOffset += 12
 		}
 
-		return pairs
+		return sets
 	}
+	
+	class func getMewTutorFillMoves() -> [(XGMoves, XGMewTutorMoveFlags)] {
+		guard region == .US else { return [] }
 
-	class func saveMewTutorMovePairs() {
-		let moves = getPotentialMewTutorMovePairs()
-		var s = "XD Mew Tutor Move Pairs:\t\(moves.count) pairs\n\n"
-		for (m1, m2) in moves {
-			s += "\(m1), \(m2)\n"
+		let startOffset = 0x419780
+		let endOffset = startOffset + 0x178
+		guard let dol = XGFiles.dol.data else {
+			return []
 		}
 
-		saveString(s, toFile: .nameAndFolder("Mew Tutor Moves.txt", .Reference))
+		var currentOffset = startOffset
+		var moves = [(XGMoves, XGMewTutorMoveFlags)]()
+
+		while currentOffset < endOffset {
+			let move = XGMoves.index(dol.get2BytesAtOffset(currentOffset))
+			let flags = XGMewTutorMoveFlags.from(id: dol.getByteAtOffset(currentOffset + 3))
+			moves.append((move, flags))
+			currentOffset += 4
+		}
+
+		return moves
 	}
 	
 	//MARK: - Obtainable pokemon

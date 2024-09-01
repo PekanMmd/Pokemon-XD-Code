@@ -68,27 +68,6 @@ let tutorMoveStruct = GoDStruct(name: "Tutor Move", format: [
 
 let tutorMovesTable = CommonStructTable(index: .TutorMoves, properties: tutorMoveStruct)
 
-let wzxStruct = GoDStruct(name: "WZX Animation", format: [
-	.word(name: "Fsys ID", description: "", type: .fsysID),
-	.word(name: "WZX File ID", description: "", type: .fsysFileIdentifier(fsysName: nil))
-])
-
-let wzxTable = GoDStructTable(file: .dol, properties: wzxStruct) { (_) -> Int in
-	switch region {
-	case .US: return 0x40d0f0
-	case .EU: return 0x447a08
-	case .JP: return 0x3ea7a0
-	case .OtherGame: return -1
-	}
-} numberOfEntriesInFile: { (_) -> Int in
-	0x577
-} nameForEntry: { (index, data) -> String? in
-	if let fsysID: Int = data.get("Fsys ID"), let fsysName = XGISO.current.getFSYSNameWithGroupID(fsysID) {
-		return fsysName
-	}
-	return nil
-}
-
 let flagsStruct = GoDStruct(name: "Flags", format: [
 	.bitArray(name: "Unknown Flags", description: "", bitFieldNames: [
 		"Unknown 1",

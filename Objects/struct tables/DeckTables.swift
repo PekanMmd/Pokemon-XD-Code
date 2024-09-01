@@ -58,10 +58,10 @@ class DeckTrainerStructTable: GoDStructTableFormattable {
 			.short(name: "AI Index", description: "", type:
 				.indexOfEntryInTable(table: DeckAIStructTable(deck: deck), nameProperty: nil)),
 			.short(name: "Padding 4", description: "", type: .null),
-			.array(name: "Unknown Values", description: "", property:
-				.short(name: "", description: "", type: .uintHex), count: 4),
-			.array(name: "Unknown Values 2", description: "", property:
-				.byte(name: "", description: "", type: .uintHex), count: 4)
+			.array(name: "Combo IDs", description: "", property:
+				.short(name: "Combo ID", description: "", type: .uintHex), count: 4),
+			.array(name: "Active Combos", description: "", property:
+				.byte(name: "Combo", description: "", type: .uintHex), count: 4)
 		])
 	}
 
@@ -137,6 +137,9 @@ class DeckPokemonStructTable: GoDStructTableFormattable {
 					(name: "Use species second ability", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 0, mod: nil, div: nil, scale: nil),
 					(name: "Gender", type: .genderID, numberOfBits: 2, firstBitIndexLittleEndian: 1, mod: nil, div: nil, scale: nil),
 					(name: "Nature", type: .natureID, numberOfBits: 5, firstBitIndexLittleEndian: 3, mod: nil, div: nil, scale: nil),
+				]),
+				.bitMask(name: "Settings", description: "", length: .char, values: [
+					(name: "Use Random Nature and Gender", type: .bool, numberOfBits: 1, firstBitIndexLittleEndian: 7, mod: nil, div: nil, scale: nil)
 				]),
 				.byte(name: "Use Random Nature and Gender", description: "", type: .bool)
 			]

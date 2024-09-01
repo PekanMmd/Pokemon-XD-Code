@@ -28,3 +28,8 @@ let scriptBuiltInFunctionsTable = GoDStructTable(
 		return ScriptBuiltInFunctions[index]?.name
 	}
 #endif
+
+let scriptFunctionStruct = GoDStruct(name: "Script Function", format: [
+	.short(name: "Script ID", description: "", type: .scriptMarker),
+	.short(name: "Function Index", description: "", type: .int)
+])

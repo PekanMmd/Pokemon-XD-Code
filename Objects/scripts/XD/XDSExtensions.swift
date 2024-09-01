@@ -58,12 +58,12 @@ extension XDSScriptCompiler {
 		
 		while !stack.isEmpty {
 			
-			if leftBrackets.contains(stack.peek()!) {
+			if scope != .string && leftBrackets.contains(stack.peek()!) {
 				bracketLevel += 1
 				bracketStack.push(stack.peek()!)
 			}
 			
-			if bracketLevel > 0 {
+			if scope != .string && bracketLevel > 0 {
 				if rightBrackets.contains(stack.peek()!) {
 					bracketLevel -= 1
 				}
@@ -82,7 +82,7 @@ extension XDSScriptCompiler {
 			
 			// replace newlines and tabs with regular spaces if within brackets
 			// replace with semi colons if within curly braces
-			if bracketLevel > 0 {
+			if scope != .string && bracketLevel > 0 {
 				if stack.peek() == "\n" || stack.peek() == "\t" {
 					stack.pop()
 					if bracketStack.peek() == "{" {
@@ -561,7 +561,7 @@ extension XDSScriptCompiler {
 		var passiveScriptName = ""
 		
 		var model = XGCharacterModel(index: 0)
-		var movementType = XGCharacterMovements.index(0)
+		var movementType = XGCharacterMovements.none
 		var characterID = 0
 		
 		var gid = -1
@@ -601,7 +601,7 @@ extension XDSScriptCompiler {
 				
 			case "MovementID:":
 				if let val = nextToken.integerValue {
-					movementType = .index(val)
+					movementType = .init(rawValue: val) ?? .randomWalk
 				} else {
 					error = "Invalid \(token) value: '\(nextToken)'"
 					return false

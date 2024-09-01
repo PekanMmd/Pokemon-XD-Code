@@ -127,7 +127,9 @@ class XGCharacter : NSObject, Codable {
 		if self.passiveScriptIndex > 0xff {
 			isValid = false
 		}
-		self.movementType = .index(data.getByteAtOffset(startOffset + kMovementOffset))
+		
+		let movementID = data.getByteAtOffset(startOffset + kMovementOffset) >> 5
+		self.movementType = .init(rawValue: movementID) ?? XGCharacterMovements.none
 		
 		self.xCoordinate = data.getWordAtOffset(startOffset + kXOffset).hexToSignedFloat()
 		self.yCoordinate = data.getWordAtOffset(startOffset + kYOffset).hexToSignedFloat()
@@ -164,7 +166,7 @@ class XGCharacter : NSObject, Codable {
 			data.replace2BytesAtOffset(startOffset + kPassiveScriptIndexOffset, withBytes: self.passiveScriptIndex)
 			data.replaceByteAtOffset(startOffset + kHasPassiveScriptOffset, withByte: self.hasPassiveScript ? 1 : 0)
 			data.replace2BytesAtOffset(startOffset + kScriptIndexOffset, withBytes: self.scriptIndex)
-			data.replaceByteAtOffset(startOffset + kMovementOffset, withByte: self.movementType.index)
+			data.replaceByteAtOffset(startOffset + kMovementOffset, withByte: self.movementType.rawValue << 5)
 			
 			data.replaceWordAtOffset(startOffset + kXOffset, withBytes: self.xCoordinate.bitPattern)
 			data.replaceWordAtOffset(startOffset + kYOffset, withBytes: self.yCoordinate.bitPattern)

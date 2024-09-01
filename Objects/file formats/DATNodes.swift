@@ -165,6 +165,33 @@ class DATNodes {
 		rootNodeTypeData.set("Pointer", to: .pointer(property: .subStruct(name: "Root Node \(typeName)", description: "", property: subStruct.properties), rawValue: pointer, value: subStruct))
 		return rootNodeTypeData
 	}
+	
+	func pointerArray(offset: Int, count: Int?) -> [Int] {
+		guard validate(offset: offset) else { return [] }
+		var values = [Int]()
+		var counter = 0
+		var currentOffset = offset
+
+		while true {
+			if let count = count, counter >= count {
+				break
+			}
+			if !validate(offset: currentOffset) {
+				break
+			}
+			if count == nil && isNullData(offset: currentOffset, length: 4) {
+				break
+			}
+
+			let pointer = data.get4BytesAtOffset(currentOffset)
+			values.append(pointer)
+
+			currentOffset += 4
+			counter += 1
+		}
+		
+		return values
+	}
 
 	func substructArray(offset: Int, count: Int?, entryLength: Int, propertyFunction: (Int) -> GoDStructData) -> GoDStructData {
 		guard validate(offset: offset) else { return .staticString("Error") }
@@ -209,7 +236,7 @@ class DATNodes {
 			return GoDStruct(name: "Scene Data", format: [
 				.word(name: "Model Sets Array", description: "", type: .pointer),
 				.word(name: "Camera Set", description: "", type: .pointer),
-				.word(name: "Light Set", description: "", type: .pointer),
+				.word(name: "Light Sets Array", description: "", type: .pointer),
 				.word(name: "Fog Data", description: "", type: .pointer)
 			])
 		}
@@ -226,8 +253,8 @@ class DATNodes {
 		}
 
 		if let pointer: Int = sceneData.get("Light Set") {
-			let set = loadNode(offset: pointer, function: lightSet)
-			sceneData.set("Light Set", to: .pointer(property: .subStruct(name: "Light Set", description: "", property: set.properties), rawValue: pointer, value: set))
+			let array = loadNode(offset: pointer, function: lightSetsArray)
+			sceneData.set("Light Sets Array", to: .pointer(property: .subStruct(name: "Light Sets Array", description: "", property: array.properties), rawValue: pointer, value: array))
 		}
 
 		if let pointer: Int = sceneData.get("Fog Data") {
@@ -246,7 +273,7 @@ class DATNodes {
 		return .staticString("Camera Set Not Implemented")
 	}
 
-	func lightSet(offset: Int) -> GoDStructData {
+	func lightSetsArray(offset: Int) -> GoDStructData {
 		return .staticString("Light Set Not Implemented")
 	}
 
@@ -275,9 +302,9 @@ class DATNodes {
 	func modelSet(offset: Int) -> GoDStructData {
 		let modelSetStruct = GoDStruct(name: "Model Set", format: [
 			.word(name: "Joint", description: "", type: .pointer),
-			.word(name: "Animated Joint", description: "", type: .pointer),
-			.word(name: "Animated Material Joint", description: "", type: .pointer),
-			.word(name: "Animated Shape Joint", description: "", type: .pointer)
+			.word(name: "Animated Joints", description: "", type: .pointer),
+			.word(name: "Animated Material Joints", description: "", type: .pointer),
+			.word(name: "Animated Shape Joints", description: "", type: .pointer)
 		])
 		let modelSet = loadStruct(properties: modelSetStruct, offset: offset)
 
@@ -286,19 +313,19 @@ class DATNodes {
 			modelSet.set("Joint", to: .pointer(property: .subStruct(name: "Joint", description: "", property: joint.properties), rawValue: pointer, value: joint))
 		}
 
-		if let pointer: Int = modelSet.get("Animated Joint") {
+		if let pointer: Int = modelSet.get("Animated Joints") {
 			let joint = loadNode(offset: pointer, function: animatedJoint)
-			modelSet.set("Animated Joint", to: .pointer(property: .subStruct(name: "Animated Joint", description: "", property: joint.properties), rawValue: pointer, value: joint))
+			modelSet.set("Animated Joints", to: .pointer(property: .subStruct(name: "Animated Joints", description: "", property: joint.properties), rawValue: pointer, value: joint))
 		}
 
-		if let pointer: Int = modelSet.get("Animated Material Joint") {
+		if let pointer: Int = modelSet.get("Animated Material Joints") {
 			let joint = loadNode(offset: pointer, function: animatedMaterialJoint)
-			modelSet.set("Animated Material Joint", to: .pointer(property: .subStruct(name: "Animated Material Joint", description: "", property: joint.properties), rawValue: pointer, value: joint))
+			modelSet.set("Animated Material Joints", to: .pointer(property: .subStruct(name: "Animated Material Joints", description: "", property: joint.properties), rawValue: pointer, value: joint))
 		}
 
-		if let pointer: Int = modelSet.get("Animated Shape Joint") {
+		if let pointer: Int = modelSet.get("Animated Shape Joints") {
 			let joint = loadNode(offset: pointer, function: shapeAnimatedJoint)
-			modelSet.set("Animated Shape Joint", to: .pointer(property: .subStruct(name: "Animated Shape Joint", description: "", property: joint.properties), rawValue: pointer, value: joint))
+			modelSet.set("Animated Shape Joints", to: .pointer(property: .subStruct(name: "Animated Shape Joints", description: "", property: joint.properties), rawValue: pointer, value: joint))
 		}
 
 		return modelSet
@@ -522,8 +549,13 @@ class DATNodes {
 				let shapeSetData = loadNode(offset: pointer, function: shapeSet)
 				pobjData.set("Variable Object", to: .pointer(property: .subStruct(name: "Shape Set", description: "", property: shapeSetData.properties), rawValue: pointer, value: shapeSetData))
 			default:
-				let envelopes = substructArray(offset: pointer, count: nil, entryLength: 8, propertyFunction: envelope)
-				pobjData.set("Variable Object", to: .pointer(property: .subStruct(name: envelopes.properties.name, description: "", property: envelopes.properties), rawValue: pointer, value: envelopes))
+				let envelopePointers = pointerArray(offset: pointer, count: nil)
+				var envelopes = [GoDStructData]()
+				for envelopePointer in envelopePointers {
+					let envelopeList = self.envelopeList(offset: envelopePointer)
+					envelopes.append(envelopeList)
+				}
+				pobjData.set("Variable Object", to: .value(property: .word(name: "pointer", description: "", type: .pointer), rawValue: pointer))
 			}
 		}
 
@@ -599,6 +631,11 @@ class DATNodes {
 		}
 
 		return shapeSetData
+	}
+	
+	func envelopeList(offset: Int) -> GoDStructData {
+		let list = substructArray(offset: offset, count: nil, entryLength: 8, propertyFunction: envelope)
+		return list
 	}
 
 	func envelope(offset: Int) -> GoDStructData {

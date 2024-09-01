@@ -45,6 +45,7 @@ indirect enum CMSMacroTypes {
 	case transitionID
 	case yesNoIndex
 	case buttonInput
+	case msgVar
 	case fileIdentifier
 
 	case array(CMSMacroTypes)
@@ -140,6 +141,8 @@ indirect enum CMSMacroTypes {
 			return "YesNoIndex"
 		case .buttonInput:
 			return "ButtonInput"
+		case .msgVar:
+			return "MessageVariable"
 		case .fileIdentifier:
 			return "FileIdentifier"
 		case .array(let subType):
@@ -149,7 +152,7 @@ indirect enum CMSMacroTypes {
 
 	static var autocompletableTypes: [CMSMacroTypes] {
 		return [
-			.pokemon, .item, .model, .move, .room, .flag, .ability, .battleResult, .shadowStatus, .shadowID, .battlefield, .giftPokemon, .region, .language, .transitionID, .scriptFunction, .buttonInput
+			.pokemon, .item, .model, .move, .room, .flag, .ability, .battleResult, .shadowStatus, .shadowID, .battlefield, .giftPokemon, .region, .language, .transitionID, .scriptFunction, .buttonInput, .msgVar
 		]
 	}
 
@@ -172,6 +175,7 @@ indirect enum CMSMacroTypes {
 		case .transitionID: return Array(2 ... 5)
 		case .scriptFunction: return (0 ..< XGFiles.common_rel.scriptData.ftbl.count).map { 0x596_0000 + $0 }
 		case .buttonInput: return (0 ..< 12).map{ Int(pow(2.0, Double($0))) }.filter{ $0 != 0x80 }
+		case .msgVar: return XGSpecialCharacters.allCases.map { $0.rawValue }
 		default: return []
 		}
 	}
@@ -447,12 +451,73 @@ indirect enum CMSMacroTypes {
 			}
 
 			return macroWithName("FILE_" + value.integerValue.hex())
+			
+		case .msgVar:
+			if let sp = XGSpecialCharacters(rawValue: value.integerValue) {
+				var text = sp.string
+				if text == "\n" {
+					text = "New Line"
+				} else {
+					text.removeFirst() // [
+					text.removeLast() // ]
+				}
+				if text.isHexInteger {
+					return macroWithName("MSG_VAR_" + text.hexValue.hexString())
+				}
+				return macroWithName("MSG_VAR_" + text.underscoreSimplified.uppercased())
+			} else {
+				printg("warning unknown msg var:", value.integerValue)
+				return macroWithName("UNKNOWN_MSG_VAR_\(value.integerValue)")
+			}
 
 		case .array(let subType):
 			return subType.textForValue(value, script: script)
 
 		case .invalid:
 			return "INVALID_\(value.integerValue)"
+		}
+	}
+}
+
+enum CMSMSGVarTypes {
+	// incomplete but unnecessary. full list in xgspecialstringcharacter
+	
+	static func macroForVarType(_ type: Int) -> CMSMacroTypes? {
+		switch type {
+			
+		case 0x0f: fallthrough
+		case 0x10: fallthrough
+		case 0x11: fallthrough
+		case 0x12: fallthrough
+			
+		case 0x16: fallthrough
+		case 0x17: fallthrough
+		case 0x18: fallthrough
+		case 0x19: return .pokemon
+			
+		case 0x1a: fallthrough
+		case 0x1b: fallthrough
+		case 0x1c: fallthrough
+		case 0x1d: return .ability
+			
+		case 0x1e: fallthrough
+			
+		case 0x20: fallthrough
+		case 0x21: return .pokemon
+			
+		case 0x28: return .move
+			
+		case 0x29: fallthrough
+		case 0x2d: fallthrough
+		case 0x2e: return .item
+			
+		case 0x2f: return nil // item quantity
+			
+		case 0x4d: return .msgID
+			
+		case 0x4e: return .pokemon
+			
+		default: return nil
 		}
 	}
 }

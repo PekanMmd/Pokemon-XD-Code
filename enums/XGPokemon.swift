@@ -143,6 +143,157 @@ enum XGPokemon: CustomStringConvertible {
 		return moves
 	}
 	
+	func randomShadowMoveset(atLevel level: Int) -> [XGMoves] {
+		// Chooses 4 moves from all the different ways the mon can learn moves (level up, tms, egg moves)
+		// to create a more interesting moveset similar to the movesets shadows have in colo/xd.
+		
+		let stats = self.stats
+		let levelMoveset = movesForLevel(level)
+		let levelUpMoves = stats.levelUpMoves
+			.map(\.move)
+			.filter { $0.index > 0 }
+		let futureLevelUpMoves = stats.levelUpMoves
+			.filter { $0.level > level }
+			.map(\.move)
+			.filter { $0.index > 0 }
+		let eggMoves = stats.eggMoves.filter { $0.index > 0 }
+		let tms = stats.learnableTMs
+			.enumerated()
+			.compactMap { (index, canLearn) -> XGMoves? in
+				guard canLearn, index < kNumberOfTMsAndHMs else { return nil }
+				return XGTMs.tm(index + 1).move
+			}
+		let damagingTMs = tms.filter { $0.data.basePower > 0 }
+		#if GAME_XD
+		let tutorMoves = stats.tutorMoves
+			.enumerated()
+			.compactMap { (index, canLearn) -> XGMoves? in
+				guard canLearn, index < kNumberOfTutorMoves else { return nil }
+				return XGTMs.tutor(index + 1).move
+			}
+		#endif
+		let specialMoves: [XGMoves] = [
+			move("refresh"),
+			move("heal bell"),
+			move("follow me"),
+			move("sing"),
+			move("sweet kiss"),
+			move("charm"),
+			move("helping hand"),
+			move("baton pass"),
+			move("morning sun")
+		].compactMap {
+			// filter out any moves that don't exist in case the game is modded
+			return $0
+		}
+		
+		var allMoves = [XGMoves]()
+		var allStatusMoves = [XGMoves]()
+		for move in levelUpMoves + eggMoves + tms {
+			allMoves.addUnique(move)
+			if move.data.basePower == 0 {
+				allStatusMoves.addUnique(move)
+			}
+		}
+		
+		#if GAME_XD
+		for move in tutorMoves {
+			allMoves.addUnique(move)
+			if move.data.basePower == 0 {
+				allStatusMoves.addUnique(move)
+			}
+		}
+		#endif
+		
+		let pool1 = levelMoveset.count > 0 ? levelMoveset : levelUpMoves
+		let pool2 = specialMoves.count > 4 ? specialMoves : allStatusMoves
+		let pool3 = damagingTMs.count > 0 ? damagingTMs : tms
+		var pool4 = eggMoves + futureLevelUpMoves
+		#if GAME_XD
+		if pool4.count < 3 { pool4 += tutorMoves.count > 1 ? tutorMoves : levelUpMoves }
+		#else
+		if pool4.count < 3 { pool4 += levelUpMoves }
+		#endif
+		
+		var moves = [XGMoves]()
+		func rollMove(fromPool pool: [XGMoves], useFilters: Bool) -> XGMoves {
+			var subpool = pool
+			if useFilters {
+				if Bool.random() {
+					// STAB
+					let stabPool = subpool.filter {
+						let moveType = $0.type
+						return (moveType == stats.type1) || (moveType == stats.type2)
+					}
+					if stabPool.count > 0 {
+						subpool = stabPool
+					}
+				}
+				
+				if Int.random(in: 0 ..< 3) != 0 {
+					// damaging
+					let damagingPool = subpool.filter {
+						$0.data.basePower > 0
+					}
+					if damagingPool.count > 3 {
+						subpool = damagingPool
+					}
+				}
+			}
+			guard subpool.count > 0 else { return .index(0) }
+			guard subpool.count > 1 else { return subpool[0] }
+
+			var rollCount = 0
+			while rollCount < 100 {
+				if let randomMove = subpool.randomElement(),
+				   !moves.contains(randomMove){
+					return randomMove
+				}
+				rollCount += 1
+			}
+			return .index(0)
+		}
+		
+		func rollMoveset() {
+			moves = []
+			[pool1, pool3, pool4].forEach {
+				moves.append(rollMove(fromPool: $0, useFilters: true))
+			}
+			moves.shuffle()
+			moves.insert(rollMove(fromPool: pool2, useFilters: false), at: 1)
+			
+			for i in 0 ..< 4 {
+				if moves[i].index == 0 {
+					moves[i] = rollMove(fromPool: allMoves, useFilters: false)
+				}
+			}
+			
+			moves.sort { (m1, m2) in
+				m1.index != 0
+			}
+		}
+		
+		func isMovesetValid() -> Bool {
+			return moves.contains(where: {
+				let moveType = $0.type
+				return (moveType == stats.type1) || (moveType == stats.type2)
+			}) && moves.contains(where: {
+				$0.data.basePower > 0
+			})
+		}
+		
+		var rollNumber = 0
+		while rollNumber < 100 {
+			rollMoveset()
+			if isMovesetValid() {
+				return moves
+			}
+			rollNumber += 1
+		}
+		
+		return moves
+	}
+	
 	static func random() -> XGPokemon {
 		var rand = 0
 		while (rand == 0) || (XGPokemon.index(rand).catchRate == 0) {
@@ -225,6 +376,8 @@ extension XGPokemon: XGEnumerable {
 		return XGPokemon.allPokemon()
 	}
 }
+
+
 
 
 

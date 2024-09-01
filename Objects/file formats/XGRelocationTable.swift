@@ -143,7 +143,7 @@ class XGPocket: XGRelocationTable {
 		setValueAtPointer(symbol: .numberOfMartItems, newValue: itemsList.count)
 		let itemsOffset = getPointer(symbol: .MartItems)
 		itemsList.forEachIndexed { index, item in
-			data.replace2BytesAtOffset(itemsOffset + (index * 2), withBytes: item.index)
+			data.replace2BytesAtOffset(itemsOffset + (index * 2), withBytes: item.scriptIndex)
 		}
 		
 		setValueAtPointer(symbol: .numberOfMarts, newValue: shopInfo.count)

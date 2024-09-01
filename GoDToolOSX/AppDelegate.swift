@@ -235,7 +235,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			return
 		}
 		let panel = NSOpenPanel()
-		panel.allowsMultipleSelection = false
+		panel.allowsMultipleSelection = true
 		panel.canChooseDirectories = false
 		panel.canChooseFiles = true
 		panel.canDownloadUbiquitousContents = false
@@ -249,15 +249,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 					let files = urls.map { (fileurl) -> XGFiles in
 						return fileurl.file
 					}.filter{$0.fileType != .unknown}
-					files.forEach { (file) in
-						XGISO.current.addFile(file, fsysID: nil, save: true)
-					}
+					XGISO.current.addFiles(files, save: true)
 				}
 			}
 		}
 	}
 
-	#if !GAME_PBR
+	#if !GUI && os(macOS) && !GAME_PBR
 	lazy var discordDiscordPlaysOrre: DiscordPlaysOrre? = {
 		guard let botID = XGSettings.current.dppControllerBotID else {
 			displayAlert(title: "Missing bot token", description: "Missing setting for dpp bot token.\nCheck \(settingsFile.path)")
@@ -265,6 +263,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 		return DiscordPlaysOrre(discordBotToken: botID)
 	}()
+	#else
+	let discordDiscordPlaysOrre: DiscordPlaysOrre? = nil
 	#endif
 	
 	func launchDPP(startDate: Date? = nil, posterFile: XGFiles? = nil, musicScriptFile: XGFiles? = nil) {

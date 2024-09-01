@@ -194,6 +194,7 @@ func randomiser() {
 			"12: Randomize Evolutions",
 			"13: Randomize Item Boxes",
 			"14: Randomize Shop items",
+			"15: Randomize Shiny Hues"
 		]
 	} else {
 		options += [
@@ -203,7 +204,6 @@ func randomiser() {
 
 	if game == .XD {
 		options += [
-			"15: Randomize Shiny Hues",
 			"16: Randomize Battle Bingo"
 		]
 	}
@@ -507,12 +507,7 @@ func addFile() {
 		} else {
 			let file = XGFiles.path(input)
 			if file.exists {
-				if let uniqueID = GSFsys.shared.nextFreeFsysID() {
-					XGISO.current.addFile(file, fsysID: uniqueID)
-					printg("Done. Added file with new Fsys id: \(uniqueID)")
-				} else {
-					displayAlert(title: "Failed", description: "Couldn't add file to ISO. Couldn't genereate a new Fsys ID")
-				}
+				XGISO.current.addFile(file, fsysID: nil)
 			} else {
 				displayAlert(title: "Failed", description: "File doesn't exist: \(file.path)")
 			}

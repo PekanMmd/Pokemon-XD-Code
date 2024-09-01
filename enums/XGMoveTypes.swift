@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum XGMoveTypes : XGIndexedValue {
+enum XGMoveTypes: XGIndexedValue {
 	
 	case index(Int)
 	

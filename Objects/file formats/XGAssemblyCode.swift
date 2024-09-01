@@ -59,6 +59,11 @@ let kDolToISOOffsetDifference: Int = {
 	}
 }()
 
+let kDOLRAMToISOOffsetDifference: Int = {
+	// add this value to a start.dol RAM offset to get it's offset in the ISO
+	kDolToISOOffsetDifference - kDolToRAMOffsetDifference
+}()
+
 var kRELtoRAMOffsetDifference: Int {
 	if region == .US {
 		if game == .XD {

@@ -156,35 +156,39 @@ class GoDViewController: NSViewController {
 		self.addConstraintAlignCenterY(view1: view1, view2: view2)
 	}
 	
-	@objc func addConstraintAlignLeftEdges(view1: NSView, view2: NSView) {
-		self.mainView.addConstraint(NSLayoutConstraint(item: view1, attribute: .left, relatedBy: .equal, toItem: view2, attribute: .left, multiplier: 1, constant: 0))
+	@objc func addConstraintAlignLeftEdges(view1: NSView, view2: NSView, constant: CGFloat = 0) {
+		self.mainView.addConstraint(NSLayoutConstraint(item: view1, attribute: .left, relatedBy: .equal, toItem: view2, attribute: .left, multiplier: 1, constant: constant))
 	}
 	
-	@objc func addConstraintAlignRightEdges(view1: NSView, view2: NSView) {
-		self.mainView.addConstraint(NSLayoutConstraint(item: view1, attribute: .right, relatedBy: .equal, toItem: view2, attribute: .right, multiplier: 1, constant: 0))
+	@objc func addConstraintAlignRightEdges(view1: NSView, view2: NSView, constant: CGFloat = 0) {
+		self.mainView.addConstraint(NSLayoutConstraint(item: view1, attribute: .right, relatedBy: .equal, toItem: view2, attribute: .right, multiplier: 1, constant: constant))
 	}
 	
-	@objc func addConstraintAlignTopEdges(view1: NSView, view2: NSView) {
-		self.mainView.addConstraint(NSLayoutConstraint(item: view1, attribute: .top, relatedBy: .equal, toItem: view2, attribute: .top, multiplier: 1, constant: 0))
+	@objc func addConstraintAlignTopEdges(view1: NSView, view2: NSView, constant: CGFloat = 0) {
+		self.mainView.addConstraint(NSLayoutConstraint(item: view1, attribute: .top, relatedBy: .equal, toItem: view2, attribute: .top, multiplier: 1, constant: constant))
 	}
 	
-	@objc func addConstraintAlignBottomEdges(view1: NSView, view2: NSView) {
-		self.mainView.addConstraint(NSLayoutConstraint(item: view1, attribute: .bottom, relatedBy: .equal, toItem: view2, attribute: .bottom, multiplier: 1, constant: 0))
+	@objc func addConstraintAlignTopEdge(view1: NSView, toBottomEdgeOf view2: NSView, constant: CGFloat = 0) {
+		self.mainView.addConstraint(NSLayoutConstraint(item: view1, attribute: .top, relatedBy: .equal, toItem: view2, attribute: .bottom, multiplier: 1, constant: constant))
 	}
 	
-	@objc func addConstraintAlignTopAndBottomEdges(view1: NSView, view2: NSView) {
-		self.addConstraintAlignTopEdges(view1: view1, view2: view2)
-		self.addConstraintAlignBottomEdges(view1: view1, view2: view2)
+	@objc func addConstraintAlignBottomEdges(view1: NSView, view2: NSView, constant: CGFloat = 0) {
+		self.mainView.addConstraint(NSLayoutConstraint(item: view1, attribute: .bottom, relatedBy: .equal, toItem: view2, attribute: .bottom, multiplier: 1, constant: constant))
 	}
 	
-	@objc func addConstraintAlignLeftAndRightEdges(view1: NSView, view2: NSView) {
-		self.addConstraintAlignLeftEdges(view1: view1, view2: view2)
-		self.addConstraintAlignRightEdges(view1: view1, view2: view2)
+	@objc func addConstraintAlignTopAndBottomEdges(view1: NSView, view2: NSView, constant: CGFloat = 0) {
+		self.addConstraintAlignTopEdges(view1: view1, view2: view2, constant: constant)
+		self.addConstraintAlignBottomEdges(view1: view1, view2: view2, constant: -constant)
 	}
 	
-	@objc func addConstraintAlignAllEdges(view1: NSView, view2: NSView) {
-		self.addConstraintAlignLeftAndRightEdges(view1: view1, view2: view2)
-		self.addConstraintAlignTopAndBottomEdges(view1: view1, view2: view2)
+	@objc func addConstraintAlignLeftAndRightEdges(view1: NSView, view2: NSView, constant: CGFloat = 0) {
+		self.addConstraintAlignLeftEdges(view1: view1, view2: view2, constant: constant)
+		self.addConstraintAlignRightEdges(view1: view1, view2: view2, constant: -constant)
+	}
+	
+	@objc func addConstraintAlignAllEdges(view1: NSView, view2: NSView, constant: CGFloat = 0) {
+		self.addConstraintAlignLeftAndRightEdges(view1: view1, view2: view2, constant: constant)
+		self.addConstraintAlignTopAndBottomEdges(view1: view1, view2: view2, constant: constant)
 	}
 	
 	@objc func addConstraintHeight(view: NSView, height: NSNumber) {

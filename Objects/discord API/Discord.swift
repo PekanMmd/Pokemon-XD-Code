@@ -5,6 +5,7 @@
 //  Created by Stars Momodu on 10/10/2021.
 //
 
+#if !GUI && os(macOS)
 import Foundation
 import Swiftcord
 
@@ -284,3 +285,4 @@ enum Emoji: String {
 	case protagRide = "<a:michael_scooter:896976067464663061>"
 	#endif
 }
+#endif

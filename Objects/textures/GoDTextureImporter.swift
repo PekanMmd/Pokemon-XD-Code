@@ -345,20 +345,29 @@ class GoDTextureImporter {
 		
 		for block in pixels {
 			
-			for i in 0 ..< block.length {
-				
-				let raw = block[i].representation(format: texture.format)
-				
-				if texture.BPP == 16 {
-					bytes.append(raw >> 8)
-					bytes.append(raw %  0x100)
-				} else if texture.BPP == 32 {
-					bytes.append(raw >> 24)
-					bytes.append(raw >> 16 & 0xFF)
-					bytes.append(raw >> 8 & 0xFF)
-					bytes.append(raw & 0xFF)
-				} else {
-					bytes.append(raw)
+			if texture.BPP == 4 {
+				for i in 0 ..< (block.length / 2) {
+					
+					let raw1 = block[i * 2].representation(format: texture.format)
+					let raw2 = block[(i * 2) + 1].representation(format: texture.format)
+					bytes.append((raw1 << 4) | raw2)
+				}
+			} else {
+				for i in 0 ..< block.length {
+					
+					let raw = block[i].representation(format: texture.format)
+					
+					if texture.BPP == 16 {
+						bytes.append(raw >> 8)
+						bytes.append(raw %  0x100)
+					} else if texture.BPP == 32 {
+						bytes.append(raw >> 24)
+						bytes.append(raw >> 16 & 0xFF)
+						bytes.append(raw >> 8 & 0xFF)
+						bytes.append(raw & 0xFF)
+					} else {
+						bytes.append(raw)
+					}
 				}
 			}
 		}

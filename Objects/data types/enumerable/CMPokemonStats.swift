@@ -28,6 +28,7 @@ let kAbility1Offset			= 0x32
 let kAbility2Offset			= 0x33
 
 let kFirstTMOffset			= 0x34
+let kFirstEggMoveOffset		= 0x74
 let kFirstEVYieldOffset		= 0x90 // 1 byte between each one.
 let kFirstEvolutionOffset	= 0x9C
 let kFirstLevelUpMoveOffset	= 0xBA
@@ -110,6 +111,7 @@ final class XGPokemonStats: NSObject, Codable {
 	var specialDefense	= 0x0
 	
 	var levelUpMoves	= [XGLevelUpMove]()
+	var eggMoves		= [XGMoves]()
 	var learnableTMs	= [Bool]()
 	var tutorMoves		= [Bool]()
 	var evolutions		= [XGEvolution]()
@@ -255,6 +257,12 @@ final class XGPokemonStats: NSObject, Codable {
 			self.levelUpMoves.append(XGLevelUpMove(level: level, move: move))
 		}
 		
+		for i in 0 ..< kNumberOfEggMoves {
+			let currentOffset = startOffset + kFirstEggMoveOffset + (i * 2)
+			let moveIndex  = rel.get2BytesAtOffset(currentOffset)
+			self.eggMoves.append(.index(moveIndex))
+		}
+		
 		for i in 0 ..< kNumberOfEvolutions {
 			
 			let currentOffset = startOffset + kFirstEvolutionOffset + (i * kSizeOfEvolutionData)
@@ -328,6 +336,12 @@ final class XGPokemonStats: NSObject, Codable {
 			
 			rel.replaceByteAtOffset(currentOffset + kLevelUpMoveLevelOffset, withByte: lev)
 			rel.replace2BytesAtOffset(currentOffset + kLevelUpMoveIndexOffset, withBytes: mov)
+		}
+		
+		for i in 0 ..< eggMoves.count {
+			let currentOffset = startOffset + kFirstEggMoveOffset + (i * 2)
+			let moveIndex  = eggMoves[i].index
+			rel.replace2BytesAtOffset(currentOffset, withBytes: moveIndex)
 		}
 		
 		for i in 0 ..< kNumberOfEvolutions {

@@ -20,7 +20,7 @@ let kPokemonNatureOffset	= 0x02
 let kPokemonShadowIDOffset	= 0x03
 let kPokemonLevelOffset		= 0x04
 let kPokemonPriorityOffset	= 0x05
-let kPokemonHappinessOffset	= 0x08
+let kPokemonHappinessOffset	= 0x09
 let kPokemonSpeciesOffset	= 0x0A
 let kPokemonPokeballOffset	= 0x0D
 let kPokemonItemOffset		= 0x12
@@ -183,6 +183,7 @@ class XGTrainerPokemon : NSObject, Codable {
 		data.replace2BytesAtOffset(start + kPokemonSpeciesOffset, withBytes: species.index)
 		data.replaceWordAtOffset(start + kPokemonNameIDOffset, withBytes: UInt32(species.nameID))
 		data.replace2BytesAtOffset(start + kPokemonItemOffset, withBytes: item.index)
+		data.replaceByteAtOffset(start + kPokemonHappinessOffset - 1, withByte: 0)
 		data.replaceByteAtOffset(start + kPokemonHappinessOffset, withByte: happiness)
 		data.replaceByteAtOffset(start + kPokemonLevelOffset, withByte: level)
 		

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Swiftcord
 
 let coloursByName = [
 	"lightsalmon": 0xFFA07A,
@@ -184,10 +183,4 @@ func colour(forType type: XGMoveTypes) -> Int? {
 	default: break
 	}
 	return colour(named: colourName)
-}
-
-extension EmbedBuilder {
-	func setColor(color: XGColour) -> Self {
-		return setColor(color: color.hex >> 8)
-	}
 }

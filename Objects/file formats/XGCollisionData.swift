@@ -61,7 +61,6 @@ class XGCollisionData: NSObject {
 		self.file = file
 		
 		guard let data = file.data else {
-			XGFolders.nameAndFolder("Test", .Documents).createDirectory()
 			return
 		}
 		

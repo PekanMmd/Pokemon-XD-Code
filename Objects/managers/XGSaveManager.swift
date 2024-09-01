@@ -22,11 +22,11 @@ let kSaveFilePCItemsOffset = game == .Colosseum ? 0x797C : 0x1f9c8
 let kSaveFileNumberOfItemsInPC = 235
 let kSaveFileBagItemsOffset = game == .Colosseum ? -1 : 0x124b0 // find for colo
 
-let kSaveFilePlayerNameOffset = game == .Colosseum ? 0x78 : 0x11fe8
-let kSaveFilePlayerSIDOffset = game == .Colosseum ? 0xA4 : 0x12014
-let kSaveFilePlayerTIDOffset = game == .Colosseum ? 0xA6 : 0x12016
-let kSaveFilePartyPokemonStartOffset = game == .Colosseum ? 0xa8 : 0x12018
-let kSaveFilePCBoxesStartOffset = game == .Colosseum ? 0xb90 : 0x14168
+let kSaveFilePlayerNameOffset = game == .Colosseum ? 0x78 : 0x148
+let kSaveFilePlayerSIDOffset = game == .Colosseum ? 0xA4 : 0x174
+let kSaveFilePlayerTIDOffset = game == .Colosseum ? 0xA6 : 0x176
+let kSaveFilePartyPokemonStartOffset = game == .Colosseum ? 0xa8 : 0x178
+let kSaveFilePCBoxesStartOffset = game == .Colosseum ? 0xb90 : 0xad8
 let kSaveFileRegisteredPokemonStartOffset = game == .Colosseum ? 0x19744 : -1 // find for xd
 let kNumberOfPurifyChambers = 9
 let kNumberOfPurifyChamberPokemon = 5

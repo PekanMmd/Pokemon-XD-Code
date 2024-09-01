@@ -8,26 +8,26 @@
 
 import Foundation
 
-protocol XGIndexedValue {
+protocol XGIndexedValue: Equatable {
 	var index : Int { get }
 }
 
-func ==(lhs: XGIndexedValue, rhs: XGIndexedValue) -> Bool {
+func ==<T: XGIndexedValue>(lhs: T, rhs: T) -> Bool {
 	return lhs.index == rhs.index
 }
-func !=(lhs: XGIndexedValue, rhs: XGIndexedValue) -> Bool {
+func !=<T: XGIndexedValue>(lhs: T, rhs: T) -> Bool {
 	return lhs.index != rhs.index
 }
-func ==(lhs: XGIndexedValue, rhs: Int) -> Bool {
+func ==(lhs: any XGIndexedValue, rhs: Int) -> Bool {
 	return lhs.index == rhs
 }
-func !=(lhs: XGIndexedValue, rhs: Int) -> Bool {
+func !=(lhs: any XGIndexedValue, rhs: Int) -> Bool {
 	return lhs.index != rhs
 }
-func ==(lhs: Int, rhs: XGIndexedValue) -> Bool {
+func ==(lhs: Int, rhs: any XGIndexedValue) -> Bool {
 	return lhs == rhs.index
 }
-func !=(lhs: Int, rhs: XGIndexedValue) -> Bool {
+func !=(lhs: Int, rhs: any XGIndexedValue) -> Bool {
 	return lhs != rhs.index
 }
 

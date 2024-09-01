@@ -104,7 +104,23 @@ class PKXModel {
 	var pkxMetaDataPokemonAnimationNames: [String] {
 		if gameFormat == .XD {
 			return [
-				""
+				"Idle",
+				"Status 1",
+				"Physical 1",
+				"Physical 2",
+				"Physical 3",
+				"Physical 4",
+				"Status 2",
+				"Physical 5",
+				"Damage",
+				"Damage",
+				"Faint",
+				"Idle",
+				"Special",
+				"Idle",
+				"Idle",
+				"Idle",
+				"Take Flight",
 			]
 		} else {
 			return [

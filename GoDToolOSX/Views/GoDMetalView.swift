@@ -414,7 +414,8 @@ class GoDMetalView: NSView {
 			return
 		}
 		isRendering = true
-		circumnavigate(x: -x/100 * cameraSpeed, y: y/100 * cameraSpeed)
+		metalManager.cameraPosition.v0 += -x/100 * cameraSpeed
+		metalManager.cameraPosition.v1 += y/100 * cameraSpeed
 		metalManager.render()
 		isRendering = false
 	}

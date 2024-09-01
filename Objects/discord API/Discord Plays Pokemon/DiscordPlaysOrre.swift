@@ -5,6 +5,7 @@
 //  Created by Stars Momodu on 08/10/2021.
 //
 
+#if !GUI && os(macOS)
 import Foundation
 import Swiftcord
 
@@ -901,3 +902,8 @@ class DiscordPlaysOrre: DiscordPlaysOrreEventsHandler {
 		}
 	}
 }
+#else
+class DiscordPlaysOrre {
+	func launch () {}
+}
+#endif

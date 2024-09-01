@@ -13,7 +13,7 @@ let kLastShadowMoveIndex	= game == .XD ? 0x176 : 0x164
 
 let shadowMovesUseHMFlag	= XGMove(index: kFirstShadowMoveIndex).HMFlag
 
-enum XGMoves : CustomStringConvertible {
+enum XGMoves: CustomStringConvertible, Equatable {
 	
 	case index(Int)
 	
@@ -233,7 +233,100 @@ extension XGMoves: XGEnumerable {
 	}
 }
 
+enum XGMewTutorMoveSlot {
+	case move(XGMoves)
+	case any
+	case physical
+	case special
+	case offensive
+	case consistent
+	case inconsistent
+	case risky
+	case invalid(id: Int)
+	
+	var string: String {
+		switch self {
+		case .move(let move):
+			return move.name.string
+		case .any:
+			return "ANY"
+		case .physical:
+			return "PHYSICAL"
+		case .special:
+			return "SPECIAL"
+		case .offensive:
+			return "OFFENSIVE"
+		case .consistent:
+			return "CONSISTENT"
+		case .inconsistent:
+			return "INCONSISTENT"
+		case .risky:
+			return "RISKY"
+		case .invalid(let id):
+			return "INVALID_\(id.hexString())"
+		}
+	}
+	
+	static func from(index: Int) -> XGMewTutorMoveSlot {
+		guard index < 0x8000 else {
+			switch index {
+			case 0x8001:
+				return .risky
+			case 0x8002:
+				return .consistent
+			case 0x8004:
+				return .special
+			case 0x8008:
+				return .physical
+			case 0x800C:
+				return .offensive
+			case 0x800F:
+				return .any
+			case 0x8102:
+				return .inconsistent
+			default:
+				return .invalid(id: index)
+			}
+		}
+		
+		return .move(.index(index))
+	}
+}
 
+struct XGMewTutorMoveFlags {
+	let physical: Bool
+	let special: Bool
+	let consistent: Bool
+	let punch: Bool
+	
+	var string: String {
+		guard physical || special || consistent || punch else {
+			return "NONE"
+		}
+		var flags = [String]()
+		if physical { flags.append("PHYS")}
+		if special { flags.append("SPEC")}
+		if consistent { flags.append("CONS")}
+		if punch { flags.append("PUNCH")}
+		return flags.joined(separator: "|")
+	}
+	
+	init(physical: Bool, special: Bool, consistent: Bool, punch: Bool) {
+		self.physical = physical
+		self.special = special
+		self.consistent = consistent
+		self.punch = punch
+	}
+	
+	static func from(id: Int) -> XGMewTutorMoveFlags {
+		return .init(
+			physical: (id & 0x8).boolean,
+			special: (id & 0x4).boolean,
+			consistent: (id & 0x2).boolean,
+			punch: (id & 0x1).boolean
+		)
+	}
+}
 
 
 

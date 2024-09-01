@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="bxX-wC-pW7">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="bxX-wC-pW7">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -32,17 +32,17 @@
                                         </connections>
                                     </button>
                                     <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZaN-Nt-34m">
-                                        <rect key="frame" x="10" y="10" width="330" height="144"/>
+                                        <rect key="frame" x="10" y="10" width="330" height="124"/>
                                         <clipView key="contentView" id="PzL-xZ-RXI">
-                                            <rect key="frame" x="0.0" y="0.0" width="330" height="144"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="330" height="124"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" smartInsertDelete="YES" id="zTF-RS-VU7">
-                                                    <rect key="frame" x="0.0" y="0.0" width="330" height="144"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="330" height="124"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                    <size key="minSize" width="330" height="144"/>
+                                                    <size key="minSize" width="330" height="124"/>
                                                     <size key="maxSize" width="463" height="10000000"/>
                                                     <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 </textView>
@@ -54,12 +54,12 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="uIH-f7-zGQ">
-                                            <rect key="frame" x="314" y="0.0" width="16" height="144"/>
+                                            <rect key="frame" x="314" y="0.0" width="16" height="124"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RPc-NA-bVM">
-                                        <rect key="frame" x="8" y="154" width="334" height="20"/>
+                                        <rect key="frame" x="8" y="134" width="334" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="bO8-oa-QWN"/>
                                         </constraints>
@@ -152,7 +152,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0MI-Yz-bZJ">
-                                        <rect key="frame" x="128" y="187" width="94" height="32"/>
+                                        <rect key="frame" x="128" y="167" width="94" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="80" id="8RB-Yx-3zR"/>
                                             <constraint firstAttribute="height" constant="20" id="Q1y-gY-OfF"/>
@@ -165,9 +165,21 @@
                                             <action selector="delete:" target="bxX-wC-pW7" id="z1H-PG-UcE"/>
                                         </connections>
                                     </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HRn-nf-NHE">
+                                        <rect key="frame" x="193" y="197" width="144" height="32"/>
+                                        <buttonCell key="cell" type="push" title="Add new file" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cDD-yi-zJZ">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="addFile:" target="bxX-wC-pW7" id="nMI-rw-MFq"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="HRn-nf-NHE" firstAttribute="height" secondItem="GQb-a5-MRy" secondAttribute="height" id="4Km-y9-yrO"/>
                                     <constraint firstAttribute="trailing" secondItem="ZaN-Nt-34m" secondAttribute="trailing" constant="10" id="5Hw-9S-f3o"/>
+                                    <constraint firstItem="HRn-nf-NHE" firstAttribute="leading" secondItem="GQb-a5-MRy" secondAttribute="leading" id="9pU-AR-dXU"/>
                                     <constraint firstItem="cd3-cr-x8P" firstAttribute="leading" secondItem="J4c-eK-bUW" secondAttribute="leading" constant="20" id="9tA-Zk-yXN"/>
                                     <constraint firstItem="rkH-Ai-vWy" firstAttribute="trailing" secondItem="9O9-JT-xa4" secondAttribute="trailing" id="BF3-Qw-rxp"/>
                                     <constraint firstItem="tQn-Gq-XCD" firstAttribute="leading" secondItem="ww0-GG-60h" secondAttribute="trailing" constant="20" id="CQr-gh-XL5"/>
@@ -183,10 +195,12 @@
                                     <constraint firstItem="rkH-Ai-vWy" firstAttribute="top" secondItem="9O9-JT-xa4" secondAttribute="bottom" constant="10" id="T0L-G2-X3g"/>
                                     <constraint firstItem="449-BS-yMe" firstAttribute="top" secondItem="cd3-cr-x8P" secondAttribute="top" id="ThO-cn-Skp"/>
                                     <constraint firstItem="GQb-a5-MRy" firstAttribute="trailing" secondItem="upR-aa-OyI" secondAttribute="trailing" id="WgN-dT-yXZ"/>
-                                    <constraint firstItem="0MI-Yz-bZJ" firstAttribute="top" secondItem="GQb-a5-MRy" secondAttribute="bottom" constant="20" id="Xyy-Bd-8gW"/>
                                     <constraint firstItem="tQn-Gq-XCD" firstAttribute="bottom" secondItem="ww0-GG-60h" secondAttribute="bottom" id="YLB-c6-OgY"/>
                                     <constraint firstItem="RPc-NA-bVM" firstAttribute="leading" secondItem="ZaN-Nt-34m" secondAttribute="leading" id="bdh-B6-pL9"/>
+                                    <constraint firstItem="0MI-Yz-bZJ" firstAttribute="top" secondItem="HRn-nf-NHE" secondAttribute="bottom" constant="10" id="e8R-ya-zTM"/>
                                     <constraint firstItem="RPc-NA-bVM" firstAttribute="trailing" secondItem="ZaN-Nt-34m" secondAttribute="trailing" id="fUd-Cl-E50"/>
+                                    <constraint firstItem="HRn-nf-NHE" firstAttribute="trailing" secondItem="GQb-a5-MRy" secondAttribute="trailing" id="gFK-BW-UHL"/>
+                                    <constraint firstItem="HRn-nf-NHE" firstAttribute="top" secondItem="GQb-a5-MRy" secondAttribute="bottom" constant="10" id="gnF-mT-Od7"/>
                                     <constraint firstItem="tQn-Gq-XCD" firstAttribute="top" secondItem="ww0-GG-60h" secondAttribute="top" id="iUT-lY-Ftd"/>
                                     <constraint firstItem="9O9-JT-xa4" firstAttribute="leading" secondItem="cd3-cr-x8P" secondAttribute="leading" id="iZC-k7-oZh"/>
                                     <constraint firstItem="cd3-cr-x8P" firstAttribute="top" secondItem="ww0-GG-60h" secondAttribute="bottom" constant="30" id="ikc-at-ZzF"/>
@@ -213,6 +227,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="addFileButton" destination="HRn-nf-NHE" id="uS2-sz-ajO"/>
                         <outlet property="filename" destination="ww0-GG-60h" id="IoC-fJ-vY3"/>
                         <outlet property="filesText" destination="zTF-RS-VU7" id="FNT-7U-eXK"/>
                         <outlet property="filesize" destination="tQn-Gq-XCD" id="0tG-Sw-VJh"/>

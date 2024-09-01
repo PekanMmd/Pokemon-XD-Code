@@ -65,6 +65,25 @@ class GoDISOViewController: GoDTableViewController {
 		self.importFsysFiles(shouldImport: false, encode: true)
 	}
 	
+	@IBAction func addFile(_ sender: Any) {
+		let panel = NSOpenPanel()
+		panel.allowsMultipleSelection = false
+		panel.canChooseDirectories = false
+		panel.canChooseFiles = true
+		panel.canDownloadUbiquitousContents = false
+		panel.canResolveUbiquitousConflicts = false
+		panel.isAccessoryViewDisclosed = false
+		panel.resolvesAliases = true
+		panel.begin { (result) in
+			if result == .OK {
+				let urls = panel.urls
+				if let url = urls.first {
+					self.addFile(withUrl: url)
+				}
+			}
+		}
+	}
+	
 	@IBAction func delete(_ sender: Any) {
 		if !currentFile.exists {
 			printg("exporting file in case of accidental deletion \(currentFile.fileName)")
@@ -79,6 +98,9 @@ class GoDISOViewController: GoDTableViewController {
 	@IBOutlet var filename: NSTextField!
 	@IBOutlet var filesize: NSTextField!
 	
+	@IBOutlet weak var addFileButton: NSButton!
+	
+	
 	var currentFile = XGFiles.dol
 
     override func viewDidLoad() {
@@ -86,6 +108,7 @@ class GoDISOViewController: GoDTableViewController {
         title = "ISO Explorer"
 		table.setBackgroundColour(GoDDesign.colourClear())
 		filesText.setBackgroundColour(GoDDesign.colourClear())
+		addFileButton.isHidden = true
 		setMetaData()
 		filteredFileNames = allFileNames
 		table.reloadData()
@@ -161,6 +184,7 @@ class GoDISOViewController: GoDTableViewController {
 		if row >= 0 {
 			let name = filteredFileNames[row]
 			self.currentFile = .nameAndFolder(name, .ISOExport(name.removeFileExtensions()))
+			addFileButton.isHidden = currentFile.fileType != .fsys
 			self.setMetaData()
 		}
 	}
@@ -185,6 +209,38 @@ class GoDISOViewController: GoDTableViewController {
 				file.simplified.contains(String(searchTerm).simplified)
 			})
 		})
+	}
+	
+	private func addFile(withUrl url: URL) {
+		let input = GoDInputViewController()
+		input.setText(
+			title: "Input file identifier",
+			text: "Select a unique identifier for the new file. Use 4 hexadecimal digits.") { id in
+				if self.isExporting {
+					return
+				}
+				self.isExporting = true
+				guard self.currentFile.fileType == .fsys else { return }
+				if let identifier = id?.hexValue, identifier > 0, identifier < 0x10000 {
+					let fsys = self.currentFile.fsysData
+					if fsys.files.count == 0 {
+						self.dismiss(input)
+						GoDAlertViewController.displayAlert(title: "Error", text: "Adding files to an empty fsys archive is unsupported.")
+					} else {
+						let newFile = XGFiles.path(url.path)
+						fsys.addFile(newFile, fileType: newFile.fileType, compress: true, shortID: identifier)
+						fsys.save()
+						XGUtility.importFileToISO(self.currentFile, encode: false, save: true)
+						self.dismiss(input)
+						self.setMetaData()
+					}
+				} else {
+					self.dismiss(input)
+					GoDAlertViewController.displayAlert(title: "Invalid file identifier", text: "File identifier must be a unique number between 1-4 hexadecimal digits.")
+				}
+				self.isExporting = false
+			}
+		presentAsModalWindow(input)
 	}
 }
 
